@@ -60,10 +60,17 @@ bhl_exec() {
         envargs+=(--env "$v=${!v:-}")
     done
 
+    # Node-local scratch only exists on some partitions (the GPU nodes have it,
+    # generic `share` nodes may not). Binding it unconditionally aborts the
+    # container on those nodes, so make it optional -- the MuJoCo evaluator is
+    # CPU-only and deliberately runs wherever there is a free core.
+    local scratchbind=()
+    [ -d "/scratch/$USER" ] && scratchbind=(--bind "/scratch/$USER")
+
     apptainer exec --nv --cleanenv \
         --home "$HOME_OVERRIDE" \
         --bind /nfs/hpc/share/$USER \
-        --bind /scratch/$USER \
+        "${scratchbind[@]}" \
         --env UV_PROJECT_ENVIRONMENT="$UV_PROJECT_ENVIRONMENT" \
         --env UV_CACHE_DIR="$UV_CACHE_DIR" \
         --env UV_PYTHON_INSTALL_DIR="$UV_PYTHON_INSTALL_DIR" \
