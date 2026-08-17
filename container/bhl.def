@@ -1,0 +1,63 @@
+Bootstrap: docker
+From: ubuntu:22.04
+
+# Berkeley Humanoid Lite - Isaac Sim 5.1 / Isaac Lab 2.3.2 runtime base.
+#
+# This image deliberately contains NO Python packages. It provides only:
+#   - glibc 2.35 (the OSU login node is Rocky 8 / glibc 2.28, too old for Isaac Sim)
+#   - the X / GL / Vulkan userspace Isaac Sim links against
+#   - ffmpeg, for policy rollout video capture
+#   - uv, which manages Python 3.11 and the venv on shared storage
+#
+# The venv lives outside the image (on Lustre) so the BHL extension can be
+# pip-installed editable and iterated on without rebuilding the container.
+# The NVIDIA driver + Vulkan ICD come from the host at runtime via `--nv`.
+
+%post
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -qq
+
+    apt-get install -y --no-install-recommends \
+        build-essential cmake git curl wget ca-certificates \
+        xz-utils unzip pkg-config \
+        libatomic1 libgomp1 \
+        libgl1 libglu1-mesa libegl1 libgles2 libglvnd0 libglx0 \
+        libvulkan1 \
+        libglib2.0-0 libsm6 libice6 libxext6 libxrender1 libx11-6 \
+        libxrandr2 libxinerama1 libxcursor1 libxi6 libxt6 libxkbcommon0 \
+        libxcb1 libxcb-glx0 libxcb-keysyms1 libxcb-image0 libxcb-shm0 \
+        libxcb-icccm4 libxcb-sync1 libxcb-xfixes0 libxcb-shape0 \
+        libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xkb1 \
+        libfontconfig1 libfreetype6 libjpeg8 libpng16-16 \
+        libasound2 libnss3 libxcomposite1 libxdamage1 libxtst6 \
+        ffmpeg \
+        && rm -rf /var/lib/apt/lists/*
+
+    # uv: manages the Python 3.11 toolchain and resolves against the repo uv.lock
+    export UV_INSTALL_DIR=/opt/uv
+    mkdir -p /opt/uv
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    # Symlink into a default PATH dir: %environment's PATH export is clobbered
+    # by /etc/profile under a login shell, so don't depend on it.
+    ln -sf /opt/uv/uv /usr/local/bin/uv
+    ln -sf /opt/uv/uvx /usr/local/bin/uvx
+    /usr/local/bin/uv --version
+
+%environment
+    export PATH=/opt/uv:$PATH
+    # Isaac Sim refuses to launch headless without explicit EULA acknowledgement.
+    export OMNI_KIT_ACCEPT_EULA=YES
+    export ACCEPT_EULA=Y
+    # Force the NVIDIA Vulkan ICD supplied by the host driver via --nv.
+    export __NV_PRIME_RENDER_OFFLOAD=1
+    export MESA_LOADER_DRIVER_OVERRIDE=""
+
+%labels
+    Project    bhl-robustness-ladder
+    IsaacSim   5.1.0
+    IsaacLab   2.3.2.post1
+    Python     3.11
+
+%help
+    Runtime base for Berkeley Humanoid Lite robustness experiments.
+    Run with:  apptainer exec --nv --bind /nfs/hpc/share/$USER bhl.sif <cmd>

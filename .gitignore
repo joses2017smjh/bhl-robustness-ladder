@@ -1,0 +1,27 @@
+# Environment artifacts live outside the tree, but guard against strays.
+.venv/
+venv/
+.uv-cache/
+.uv-python/
+.cache/
+.home/
+
+# Container image (293MB) is a build product of container/bhl.def
+*.sif
+
+# Training output
+logs/
+runs/
+outputs/
+checkpoints/
+*.pt
+*.onnx
+
+# Results: keep aggregated CSV + plots, drop raw per-step dumps
+results/raw/
+results/**/*.npz
+
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
