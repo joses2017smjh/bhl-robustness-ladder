@@ -28,19 +28,51 @@ setup_node_cache() {
     mkdir -p "$OV_CACHE" "$CUDA_CACHE_PATH"
 }
 
-# Run a command inside the container with the GPU and all paths wired up.
-# --cleanenv is required: the host exports an lmod bash function that errors
-# inside the image and a PATH that shadows the image's own tools.
+# The interpreter to invoke. Calling the venv's python directly is more robust
+# than `uv run`, which re-resolves the project and can silently fall back to an
+# ephemeral environment when run from an unexpected cwd.
+PY=$UV_PROJECT_ENVIRONMENT/bin/python
+
+# Run a script inside the container with the GPU and all paths wired up.
+#   bhl_exec <script.sh> [args...]
+#
+# Takes a script path rather than a command string: Isaac Lab invocations nest
+# three levels of quoting otherwise, which is how the first attempt broke.
+#
+# --cleanenv is required (the host exports an lmod bash function that errors
+# inside the image, plus a PATH that shadows the image's tools). HOME must be
+# set with --home, not --env: Apptainer explicitly refuses APPTAINERENV_HOME.
+#
+# Because --cleanenv wipes the host environment, ANY variable an inner script
+# needs must be forwarded explicitly. Forgetting this killed a 9-job array in
+# one second with "TASK: unbound variable", so job parameters are forwarded
+# from a declared list rather than ad hoc.
+#
+# Hydra overrides are passed as a FILE PATH (OVERRIDE_FILE), never inline:
+# Apptainer's --env splits values on commas, so a range like [0.8,0.8] is
+# parsed as two malformed key=value pairs and the exec is rejected outright.
+BHL_FORWARD_VARS="TASK EXPERIMENT RUN_NAME SEED NUM_ENVS MAX_ITER OVERRIDE_FILE TRAIN_SCRIPT"
+
 bhl_exec() {
+    local envargs=()
+    local v
+    for v in $BHL_FORWARD_VARS; do
+        envargs+=(--env "$v=${!v:-}")
+    done
+
     apptainer exec --nv --cleanenv \
+        --home "$HOME_OVERRIDE" \
         --bind /nfs/hpc/share/$USER \
         --bind /scratch/$USER \
         --env UV_PROJECT_ENVIRONMENT="$UV_PROJECT_ENVIRONMENT" \
         --env UV_CACHE_DIR="$UV_CACHE_DIR" \
         --env UV_PYTHON_INSTALL_DIR="$UV_PYTHON_INSTALL_DIR" \
         --env XDG_CACHE_HOME="$XDG_CACHE_HOME" \
-        --env HOME="$HOME_OVERRIDE" \
         --env OV_CACHE="${OV_CACHE:-$XDG_CACHE_HOME/ov}" \
         --env CUDA_CACHE_PATH="${CUDA_CACHE_PATH:-$XDG_CACHE_HOME/nv}" \
-        "$SIF" bash -c "$1"
+        --env UPSTREAM="$UPSTREAM" \
+        --env REPO="$REPO" \
+        --env PY="$PY" \
+        "${envargs[@]}" \
+        "$SIF" bash "$@"
 }
