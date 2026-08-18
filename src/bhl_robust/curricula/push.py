@@ -67,3 +67,47 @@ def push_velocity_levels(
     env.event_manager.set_term_cfg(term_name, term_cfg)
 
     return magnitude
+
+
+def push_levels_adaptive(
+    env,
+    env_ids,
+    term_name: str = "push_robot",
+    step: float = 0.02,
+    min_magnitude: float = 0.0,
+    max_magnitude: float = 1.0,
+    fall_rate_target: float = 0.20,
+) -> float:
+    """Raise the push only while the policy is actually surviving it.
+
+    The fixed linear ramp in `push_velocity_levels` has a structural flaw that
+    pass 1 exposed: the schedule advances on wall-clock training progress
+    regardless of whether the policy is coping. Once the magnitude outran the
+    robot's ability to recover, the ramp kept climbing and drove a policy that
+    had reached reward 24.7 down to ~3.
+
+    This is the same feedback principle Isaac Lab already uses for terrain
+    levels (`terrain_levels_vel`), applied to disturbance magnitude: promote
+    when the recent fall rate is below target, demote when it is well above.
+    The magnitude becomes an outcome of competence rather than of iteration
+    count, so the curriculum cannot outrun the policy. It also means the
+    converged magnitude is itself a measurement -- roughly "the largest shove
+    this machine can learn to reject" -- which a fixed ramp cannot report.
+
+    Returns the current magnitude, logged each iteration by the manager.
+    """
+    # `terminated` excludes time-outs, so for this task it is the fall signal.
+    terminated = env.termination_manager.terminated[env_ids]
+    fall_rate = float(terminated.float().mean()) if len(env_ids) else 0.0
+
+    magnitude = getattr(env, "_bhl_push_magnitude", min_magnitude)
+    if fall_rate < fall_rate_target:
+        magnitude = min(max_magnitude, magnitude + step)
+    elif fall_rate > 2.0 * fall_rate_target:
+        magnitude = max(min_magnitude, magnitude - step)
+    env._bhl_push_magnitude = magnitude
+
+    term_cfg = env.event_manager.get_term_cfg(term_name)
+    term_cfg.params["velocity_range"] = {"x": (-magnitude, magnitude), "y": (-magnitude, magnitude)}
+    env.event_manager.set_term_cfg(term_name, term_cfg)
+    return magnitude

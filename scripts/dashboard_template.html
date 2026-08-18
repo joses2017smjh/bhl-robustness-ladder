@@ -1,0 +1,376 @@
+<title>Robustness Ladder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --ground:#fbfcfd; --panel:#ffffff; --rail:#f3f6f9;
+  --line:#dde5ec; --line-soft:#eaeff4;
+  --ink:#0d1520; --ink-2:#55606b; --ink-3:#8b959f;
+  --accent:#2a78d6; --accent-soft:#e8f1fc;
+  --good:#1baf7a; --bad:#e34948; --warn:#eda100;
+  --b1:#86b6ef; --b2:#5598e7; --b3:#2a78d6; --b4:#1c5cab; --b5:#104281;
+  --o1:#ef9a6e; --o2:#e5783f; --o3:#d05f26; --o4:#a94a1c; --o5:#7d3512;
+  --shadow:0 1px 2px rgba(13,21,32,.05),0 8px 24px -12px rgba(13,21,32,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --ground:#14171a; --panel:#1b1f23; --rail:#181c20;
+    --line:#2b3238; --line-soft:#22282d;
+    --ink:#e8eef4; --ink-2:#98a4b0; --ink-3:#6d7883;
+    --accent:#3987e5; --accent-soft:#17293f;
+    --good:#199e70; --bad:#e66767; --warn:#c98500;
+    --b1:#9ec5f4; --b2:#6da7ec; --b3:#3987e5; --b4:#256abf; --b5:#184f95;
+    --o1:#f7c0a8; --o2:#ee9670; --o3:#dd6c3a; --o4:#b1501f; --o5:#833a14;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --ground:#14171a; --panel:#1b1f23; --rail:#181c20;
+  --line:#2b3238; --line-soft:#22282d;
+  --ink:#e8eef4; --ink-2:#98a4b0; --ink-3:#6d7883;
+  --accent:#3987e5; --accent-soft:#17293f;
+  --good:#199e70; --bad:#e66767; --warn:#c98500;
+  --b1:#9ec5f4; --b2:#6da7ec; --b3:#3987e5; --b4:#256abf; --b5:#184f95;
+  --o1:#f7c0a8; --o2:#ee9670; --o3:#dd6c3a; --o4:#b1501f; --o5:#833a14;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:15px; line-height:1.5;
+}
+.wrap{max-width:1280px;margin:0 auto;padding:28px 24px 56px}
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:baseline;justify-content:space-between;margin-bottom:6px}
+h1{font-size:23px;font-weight:700;letter-spacing:-.015em;margin:0;text-wrap:balance}
+.sub{color:var(--ink-2);font-size:14px;margin:4px 0 22px;max-width:74ch}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3)}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;margin-bottom:22px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.tile .k{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3)}
+.tile .v{font-size:25px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:3px;letter-spacing:-.02em}
+.tile .n{font-size:12.5px;color:var(--ink-2);margin-top:1px}
+
+.app{display:grid;grid-template-columns:264px 1fr;gap:18px;align-items:start}
+@media(max-width:900px){.app{grid-template-columns:1fr}}
+
+.rail{background:var(--rail);border:1px solid var(--line);border-radius:12px;padding:14px;position:sticky;top:16px}
+.rail h2{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 9px;font-family:"IBM Plex Mono",monospace;font-weight:500}
+.grp{margin-bottom:16px}
+.grp:last-child{margin-bottom:4px}
+.run{display:flex;align-items:center;gap:9px;width:100%;padding:5px 7px;border-radius:7px;
+  border:1px solid transparent;background:none;cursor:pointer;text-align:left;color:var(--ink-2);
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;transition:background .12s,color .12s}
+.run:hover{background:var(--accent-soft);color:var(--ink)}
+.run:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.run[aria-pressed="true"]{color:var(--ink);font-weight:500}
+.run .sw{width:13px;height:13px;border-radius:3px;flex:none;border:2px solid currentColor;background:transparent}
+.run[aria-pressed="true"] .sw{background:var(--c);border-color:var(--c)}
+.run[aria-pressed="false"] .sw{border-color:var(--ink-3);opacity:.5}
+.run .n{margin-left:auto;font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.seg{display:inline-flex;background:var(--rail);border:1px solid var(--line);border-radius:9px;padding:2px;gap:2px}
+.seg button{border:0;background:none;color:var(--ink-2);font:inherit;font-size:13px;padding:5px 11px;
+  border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--ink);font-weight:500;box-shadow:var(--shadow)}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.ghost{margin-left:auto;border:1px solid var(--line);background:var(--panel);color:var(--ink-2);
+  font:inherit;font-size:12.5px;padding:6px 12px;border-radius:8px;cursor:pointer}
+.ghost:hover{color:var(--ink)}
+.ghost:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+.plot{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px 8px 4px;position:relative}
+svg{display:block;width:100%;height:auto;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);
+  border-radius:9px;box-shadow:var(--shadow);padding:9px 11px;font-size:12.5px;min-width:150px;
+  opacity:0;transition:opacity .1s;z-index:5}
+.tip .th{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);margin-bottom:5px}
+.tip .r{display:flex;align-items:center;gap:7px;margin-top:2px;font-variant-numeric:tabular-nums}
+.tip .r i{width:9px;height:9px;border-radius:2px;flex:none;display:block}
+.tip .r b{margin-left:auto;font-weight:600}
+.empty{padding:52px 16px;text-align:center;color:var(--ink-3);font-size:14px}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:right;padding:7px 10px;border-bottom:1px solid var(--line-soft)}
+th:first-child,td:first-child{text-align:left;font-family:"IBM Plex Mono",monospace}
+th{color:var(--ink-3);font-weight:500;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase}
+.scroll{overflow-x:auto}
+.note{color:var(--ink-3);font-size:12.5px;margin-top:10px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Berkeley Humanoid Lite &middot; sim2sim robustness</div>
+      <h1>Robustness Ladder</h1>
+    </div>
+    <div class="eyebrow" id="stamp"></div>
+  </header>
+  <p class="sub">Every PPO run trained on the OSU COE cluster. Click a run to isolate it &mdash;
+    the y-axis rescales to whatever is showing, so a collapsed run and a healthy one can each be read
+    at their own scale.</p>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="app">
+    <aside class="rail" id="rail"></aside>
+    <div>
+      <div class="bar">
+        <div class="seg" id="metric"></div>
+        <div class="seg" id="view"></div>
+        <button class="ghost" id="reset">Show all</button>
+      </div>
+      <div class="plot" id="plot">
+        <svg id="svg" viewBox="0 0 900 460" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="tip" id="tip"></div>
+      </div>
+      <div class="scroll" id="tableWrap" hidden></div>
+      <p class="note" id="note"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = __DATA__;
+const METRICS = [
+  {k:"reward",    label:"Mean reward",   fmt:v=>v.toFixed(1)},
+  {k:"fall_frac", label:"Fall rate",     fmt:v=>v.toFixed(3)},
+  {k:"ep_len",    label:"Episode length",fmt:v=>v.toFixed(0)},
+  {k:"push_mps",  label:"Push magnitude",fmt:v=>v.toFixed(2)},
+];
+const BLUE=["--b1","--b2","--b3","--b4","--b5"], ORANGE=["--o1","--o2","--o3","--o4","--o5"];
+
+// A run's colour encodes its rung, not its position in the list: randomization
+// strength and push ceiling are both magnitudes, so each experiment gets its
+// own single-hue ordinal ramp.
+const DR_ORDER=["0.0","0.5","1.0","1.5","2.0"];
+function meta(label){
+  if(label.startsWith("dr-")){
+    const rest=label.slice(3).replace(/-s\d+$/,"");
+    const scale={off:"0.0",default:"1.0",aggressive:"2.0"}[rest] ?? rest.replace(/^s/,"");
+    return {group:"DR ladder", rung:scale, sort:parseFloat(scale),
+            colour:`var(${BLUE[Math.max(0,DR_ORDER.indexOf(scale))]})`,
+            name:`s = ${scale}`};
+  }
+  if(label.startsWith("push-")){
+    const rest=label.slice(5).replace(/-s\d+$/,"");
+    const ceil=rest.startsWith("c")?rest.slice(1):null;
+    const idx=ceil?({ "0.2":0,"0.4":1,"0.6":2 }[ceil] ?? 2):(rest==="curriculum"?3:4);
+    return {group:"Push recovery", rung:ceil??rest, sort:ceil?parseFloat(ceil):(rest==="curriculum"?9:10),
+            colour:`var(${ORANGE[idx]})`,
+            name:ceil?`ceiling ${ceil} m/s`:rest};
+  }
+  return {group:"Other", rung:"", sort:99, colour:"var(--ink-3)", name:label};
+}
+
+const RUNS = Object.keys(DATA.curves).map(l=>({label:l, ...meta(l),
+  seed:(l.match(/-s(\d+)$/)||[])[1] ?? "", summary:DATA.summary.find(s=>s.label===l)||{}}))
+  .sort((a,b)=>a.group.localeCompare(b.group)||a.sort-b.sort||a.seed.localeCompare(b.seed));
+
+let metric="reward", view="chart";
+let on=new Set(RUNS.map(r=>r.label));
+
+/* ---------- summary tiles ---------- */
+function tiles(){
+  const done=RUNS.filter(r=>r.summary.complete).length;
+  const rung=s=>{const v=RUNS.filter(r=>r.group==="DR ladder"&&r.rung===s&&r.summary.final_reward!=null)
+      .map(r=>r.summary.final_reward); return v.length? (v.reduce((a,b)=>a+b,0)/v.length):null;};
+  const r0=rung("0.0"), r1=rung("1.0"), r2=rung("2.0");
+  const cells=[
+    ["Runs trained", RUNS.length, `${done} finished 6,000 iters`],
+    ["No randomization", r0?r0.toFixed(1):"–", "s = 0.0 mean reward"],
+    ["Repo default", r1?r1.toFixed(1):"–", `s = 1.0 · ${r0&&r1?((1-r1/r0)*100).toFixed(0)+"% below s=0":""}`],
+    ["Double-width", r2?r2.toFixed(1):"–", "s = 2.0 · past the cliff"],
+  ];
+  document.getElementById("tiles").innerHTML = cells.map(([k,v,n])=>
+    `<div class="tile"><div class="k">${k}</div><div class="v">${v}</div><div class="n">${n}</div></div>`).join("");
+}
+
+/* ---------- control rail ---------- */
+function rail(){
+  const groups=[...new Set(RUNS.map(r=>r.group))];
+  document.getElementById("rail").innerHTML = groups.map(g=>{
+    const rs=RUNS.filter(r=>r.group===g);
+    return `<div class="grp"><h2>${g}</h2>`+rs.map(r=>{
+      const fr=r.summary.final_reward;
+      return `<button class="run" data-run="${r.label}" aria-pressed="${on.has(r.label)}"
+        style="--c:${r.colour}"><span class="sw"></span><span>${r.name}<span style="color:var(--ink-3)"> ·s${r.seed}</span></span>
+        <span class="n">${fr!=null?fr.toFixed(1):"–"}</span></button>`;
+    }).join("")+`</div>`;
+  }).join("");
+  document.querySelectorAll(".run").forEach(b=>b.onclick=e=>{
+    const l=b.dataset.run;
+    // Plain click isolates; ctrl/meta-click adds to the selection.
+    if(e.metaKey||e.ctrlKey){ on.has(l)?on.delete(l):on.add(l); }
+    else { on = (on.size===1 && on.has(l)) ? new Set(RUNS.map(r=>r.label)) : new Set([l]); }
+    sync();
+  });
+}
+
+/* ---------- chart ---------- */
+const W=900,H=460,M={l:64,r:132,t:22,b:52};
+let animY=null, raf=null;
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+function visible(){ return RUNS.filter(r=>on.has(r.label) && (DATA.curves[r.label]||{})[metric]?.length); }
+
+function domain(){
+  const vs=visible(); let x1=0,y0=Infinity,y1=-Infinity;
+  vs.forEach(r=>DATA.curves[r.label][metric].forEach(([x,y])=>{
+    if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y;}));
+  if(!isFinite(y0)){y0=0;y1=1;}
+  const pad=(y1-y0)*0.08||0.5;
+  y0=Math.min(y0-pad, metric==="fall_frac"?0:y0-pad); y1=y1+pad;
+  if(metric!=="reward"&&y0<0)y0=0;
+  return {x0:0,x1:x1||1,y0,y1};
+}
+
+function ticks(lo,hi,n=5){
+  const span=hi-lo, raw=span/n, mag=Math.pow(10,Math.floor(Math.log10(raw)));
+  const step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=raw)||mag*10;
+  const out=[]; for(let v=Math.ceil(lo/step)*step; v<=hi+1e-9; v+=step) out.push(+v.toFixed(6));
+  return out;
+}
+
+function draw(){
+  const svg=document.getElementById("svg"), vs=visible(), d=domain();
+  if(!animY) animY={y0:d.y0,y1:d.y1};
+  const target=d;
+  // Animating the y-domain (rather than snapping) is what makes a rescale
+  // legible: you can see which way the axis moved when runs are isolated.
+  cancelAnimationFrame(raf);
+  const from={...animY}, t0=performance.now(), DUR=matchMedia("(prefers-reduced-motion:reduce)").matches?0:260;
+  const tick=now=>{
+    const p=DUR?Math.min(1,(now-t0)/DUR):1, e=1-Math.pow(1-p,3);
+    animY={y0:lerp(from.y0,target.y0,e), y1:lerp(from.y1,target.y1,e)};
+    paint(svg,vs,{...d,...animY});
+    if(p<1) raf=requestAnimationFrame(tick);
+  };
+  raf=requestAnimationFrame(tick);
+}
+
+function paint(svg,vs,d){
+  const sx=v=>M.l+(v-d.x0)/((d.x1-d.x0)||1)*(W-M.l-M.r);
+  const sy=v=>M.t+(1-(v-d.y0)/((d.y1-d.y0)||1))*(H-M.t-M.b);
+  const mf=METRICS.find(m=>m.k===metric);
+  let o="";
+  if(!vs.length){
+    svg.innerHTML=`<text x="${W/2}" y="${H/2}" text-anchor="middle" fill="var(--ink-3)"
+      font-family="IBM Plex Sans" font-size="14">No runs selected &mdash; pick one from the list</text>`;
+    return;
+  }
+  ticks(d.y0,d.y1).forEach(v=>{
+    o+=`<line x1="${M.l}" y1="${sy(v).toFixed(1)}" x2="${W-M.r}" y2="${sy(v).toFixed(1)}"
+      stroke="var(--line-soft)" stroke-width="1"/>
+      <text x="${M.l-10}" y="${(sy(v)+4).toFixed(1)}" text-anchor="end" font-size="11.5"
+      fill="var(--ink-3)" font-family="IBM Plex Mono">${mf.fmt(v)}</text>`;
+  });
+  ticks(0,d.x1,5).forEach(v=>{
+    o+=`<text x="${sx(v).toFixed(1)}" y="${H-M.b+21}" text-anchor="middle" font-size="11.5"
+      fill="var(--ink-3)" font-family="IBM Plex Mono">${v.toLocaleString()}</text>`;
+  });
+  o+=`<line x1="${M.l}" y1="${H-M.b}" x2="${W-M.r}" y2="${H-M.b}" stroke="var(--line)" stroke-width="1"/>
+   <text x="${(M.l+(W-M.r))/2}" y="${H-8}" text-anchor="middle" font-size="12" fill="var(--ink-2)"
+   font-family="IBM Plex Sans">PPO iteration</text>
+   <text transform="translate(16,${(M.t+(H-M.b))/2}) rotate(-90)" text-anchor="middle" font-size="12"
+   fill="var(--ink-2)" font-family="IBM Plex Sans">${mf.label}</text>`;
+
+  const ends=[];
+  vs.forEach(r=>{
+    const pts=DATA.curves[r.label][metric];
+    o+=`<path d="M${pts.map(([x,y])=>`${sx(x).toFixed(1)},${sy(y).toFixed(1)}`).join(" L")}"
+      fill="none" stroke="${r.colour}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    const last=pts[pts.length-1];
+    ends.push({y:sy(last[1]), x:sx(last[0]), r});
+  });
+  // Direct labels only when few enough to read; the rail is the legend otherwise.
+  if(ends.length<=6){
+    ends.sort((a,b)=>a.y-b.y);
+    for(let i=1;i<ends.length;i++) if(ends[i].y-ends[i-1].y<15) ends[i].y=ends[i-1].y+15;
+    ends.forEach(e=>{
+      o+=`<circle cx="${(e.x+8).toFixed(1)}" cy="${(e.y-4).toFixed(1)}" r="3.5" fill="${e.r.colour}"/>
+       <text x="${(e.x+17).toFixed(1)}" y="${e.y.toFixed(1)}" font-size="11.5" fill="var(--ink-2)"
+       font-family="IBM Plex Mono">${e.r.name} ·s${e.r.seed}</text>`;
+    });
+  }
+  o+=`<line id="cross" x1="0" y1="${M.t}" x2="0" y2="${H-M.b}" stroke="var(--accent)" stroke-width="1"
+    opacity="0" stroke-dasharray="3 3"/>
+    <rect id="hit" x="${M.l}" y="${M.t}" width="${W-M.l-M.r}" height="${H-M.t-M.b}" fill="transparent"/>`;
+  svg.innerHTML=o;
+  hover(svg,vs,d,sx,sy);
+}
+
+function hover(svg,vs,d,sx,sy){
+  const hit=svg.querySelector("#hit"), cross=svg.querySelector("#cross"), tip=document.getElementById("tip");
+  const plot=document.getElementById("plot");
+  hit.addEventListener("pointerleave",()=>{cross.setAttribute("opacity","0");tip.style.opacity=0;});
+  hit.addEventListener("pointermove",ev=>{
+    const box=svg.getBoundingClientRect(), scale=W/box.width;
+    const px=(ev.clientX-box.left)*scale;
+    const xv=d.x0+(px-M.l)/((W-M.l-M.r))*(d.x1-d.x0);
+    cross.setAttribute("x1",px); cross.setAttribute("x2",px); cross.setAttribute("opacity",".7");
+    const mf=METRICS.find(m=>m.k===metric);
+    const rows=vs.map(r=>{
+      const pts=DATA.curves[r.label][metric];
+      let best=pts[0], bd=Infinity;
+      for(const p of pts){const dd=Math.abs(p[0]-xv); if(dd<bd){bd=dd;best=p;}}
+      return {r,v:best[1],x:best[0]};
+    }).sort((a,b)=>b.v-a.v).slice(0,8);
+    tip.innerHTML=`<div class="th">iteration ${Math.round(rows[0]?.x??0).toLocaleString()}</div>`+
+      rows.map(o=>`<div class="r"><i style="background:${o.r.colour}"></i>
+        <span>${o.r.name} ·s${o.r.seed}</span><b>${mf.fmt(o.v)}</b></div>`).join("");
+    tip.style.opacity=1;
+    const left=ev.clientX-plot.getBoundingClientRect().left+16;
+    tip.style.left=Math.min(left, plot.clientWidth-tip.offsetWidth-10)+"px";
+    tip.style.top=Math.max(8, ev.clientY-plot.getBoundingClientRect().top-tip.offsetHeight/2)+"px";
+  });
+}
+
+/* ---------- table view (identity never by colour alone) ---------- */
+function table(){
+  const vs=visible();
+  document.getElementById("tableWrap").innerHTML=
+    `<table><thead><tr><th>Run</th><th>Experiment</th><th>Iterations</th>
+     <th>Final reward</th><th>Fall rate</th><th>Status</th></tr></thead><tbody>`+
+    vs.map(r=>{const s=r.summary;return `<tr><td>${r.label}</td><td>${r.group}</td>
+      <td>${(s.iters||0).toLocaleString()}</td><td>${s.final_reward??"–"}</td>
+      <td>${s.final_fall??"–"}</td><td>${s.complete?"complete":"training"}</td></tr>`;}).join("")+
+    `</tbody></table>`;
+}
+
+function segs(){
+  document.getElementById("metric").innerHTML=METRICS.map(m=>
+    `<button data-m="${m.k}" aria-pressed="${m.k===metric}">${m.label}</button>`).join("");
+  document.getElementById("view").innerHTML=["chart","table"].map(v=>
+    `<button data-v="${v}" aria-pressed="${v===view}">${v[0].toUpperCase()+v.slice(1)}</button>`).join("");
+  document.querySelectorAll("#metric button").forEach(b=>b.onclick=()=>{metric=b.dataset.m;animY=null;sync();});
+  document.querySelectorAll("#view button").forEach(b=>b.onclick=()=>{view=b.dataset.v;sync();});
+}
+
+function sync(){
+  document.querySelectorAll(".run").forEach(b=>b.setAttribute("aria-pressed",on.has(b.dataset.run)));
+  document.querySelectorAll("#metric button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.m===metric));
+  document.querySelectorAll("#view button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===view));
+  document.getElementById("plot").hidden = view!=="chart";
+  document.getElementById("tableWrap").hidden = view!=="table";
+  const n=visible().length;
+  document.getElementById("note").textContent =
+    `${n} of ${RUNS.length} runs shown. Click a run to isolate it; ctrl/⌘-click to add. `+
+    `Curves are downsampled with a trailing mean; the y-axis fits only what is visible.`;
+  if(view==="chart") draw(); else table();
+}
+
+document.getElementById("reset").onclick=()=>{on=new Set(RUNS.map(r=>r.label));animY=null;sync();};
+document.getElementById("stamp").textContent=DATA.stamp||"";
+tiles(); rail(); segs(); sync();
+addEventListener("resize",()=>{if(view==="chart")draw();});
+</script>

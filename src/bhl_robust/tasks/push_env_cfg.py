@@ -20,7 +20,7 @@ from berkeley_humanoid_lite.tasks.locomotion.velocity.config.biped.env_cfg impor
 )
 from berkeley_humanoid_lite.tasks.locomotion.velocity import mdp
 
-from bhl_robust.curricula.push import push_velocity_levels
+from bhl_robust.curricula.push import push_velocity_levels, push_levels_adaptive
 
 
 # Peak push magnitude, m/s applied instantaneously to the base. 1.5 m/s on a
@@ -94,3 +94,32 @@ class BipedPushCurriculumCfg(BerkeleyHumanoidLiteBipedEnvCfg):
         super().__post_init__()
         # Start at zero so the curriculum, not this literal, sets the schedule.
         self.events.push_robot.params["velocity_range"] = {"x": (0.0, 0.0), "y": (0.0, 0.0)}
+
+
+@configclass
+class PushAdaptiveCurriculumsCfg(CurriculumsCfg):
+    """Magnitude gated on measured fall rate rather than on iteration count."""
+
+    push_levels = CurrTerm(
+        func=push_levels_adaptive,
+        params={
+            "term_name": "push_robot",
+            "step": 0.02,
+            "min_magnitude": 0.0,
+            "max_magnitude": 1.0,
+            "fall_rate_target": 0.20,
+        },
+    )
+
+
+@configclass
+class BipedPushAdaptiveCfg(BerkeleyHumanoidLiteBipedEnvCfg):
+    """Adaptive arm: the curriculum cannot outrun the policy."""
+
+    events: PushEventsCfg = PushEventsCfg()
+    curriculum: PushAdaptiveCurriculumsCfg = PushAdaptiveCurriculumsCfg()
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.events.push_robot.params["velocity_range"] = {"x": (0.0, 0.0), "y": (0.0, 0.0)}
+        self.events.push_robot.interval_range_s = (5.0, 9.0)
