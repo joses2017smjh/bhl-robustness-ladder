@@ -1,37 +1,37 @@
 #!/bin/bash
-# Serve the training curves for all runs.
+# Serve the training curves for every run.
 #
-# Runs on the LOGIN node, outside the container: uv's managed CPython is a
-# portable standalone build, so it works on the login node's glibc 2.28 even
-# though Isaac Sim itself cannot.
+# Runs INSIDE the Apptainer image. TensorBoard's Rust data server is linked
+# against GLIBC_2.29 and the login node ships 2.28, so running it natively there
+# starts a web server that cannot actually read the event files:
+#     tensorboard_data_server/bin/server: version `GLIBC_2.29' not found
+# The container provides glibc 2.35, which makes this work on any host.
 #
-# In VS Code Remote, the forwarded port is picked up automatically -- just open
-# the Ports panel. Over plain ssh, tunnel it yourself:
-#     ssh -N -L 6006:localhost:6006 sanchej7@submit-b.hpc.engr.oregonstate.edu
+# Access, once it is serving on <host>:6006 --
+#   from your laptop:   ssh -N -L 6006:localhost:6006 <user>@submit-b.hpc.engr.oregonstate.edu
+#   in VS Code Remote:  Ports panel -> Forward a Port -> 6006
+#   in an OnDemand desktop session: just open http://localhost:6006 in its browser
 #
 # Usage: ./scripts/tensorboard.sh [port]
 
 set -euo pipefail
-
 PORT=${1:-6006}
-WORKSPACE=/nfs/hpc/share/$USER/Humanoid_Lite
-LOGDIR=$WORKSPACE/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped
 
-if [ ! -d "$LOGDIR" ]; then
-    echo "No runs yet at $LOGDIR" >&2
-    exit 1
-fi
+REPO=/nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder
+source "$REPO/slurm/_env.sh"
 
-echo "runs found:"
-ls -1 "$LOGDIR" | sed 's/^/  /'
+LOGDIR=$UPSTREAM/logs/rsl_rl/biped
+[ -d "$LOGDIR" ] || { echo "no runs yet at $LOGDIR" >&2; exit 1; }
+
+echo "runs:"; ls -1 "$LOGDIR" | grep -v isaaclab | sed 's/^/  /'
 echo
-echo "serving on http://localhost:$PORT"
-echo "  Curriculum/push_levels  -> the push ramp (experiment 1)"
-echo "  Train/mean_reward       -> per-rung learning curves (experiment 2)"
-echo
+echo "serving on http://$(hostname -s):$PORT  (forward port $PORT to view)"
 
-exec "$WORKSPACE/venv/bin/tensorboard" \
-    --logdir "$LOGDIR" \
-    --port "$PORT" \
-    --bind_all \
-    --reload_multifile true
+cat > "$WORKSPACE/.tb_inner.sh" <<INNER
+#!/bin/bash
+exec "\$UV_PROJECT_ENVIRONMENT/bin/tensorboard" \\
+    --logdir "$LOGDIR" --port $PORT --bind_all --reload_multifile true
+INNER
+chmod +x "$WORKSPACE/.tb_inner.sh"
+
+bhl_exec "$WORKSPACE/.tb_inner.sh"
