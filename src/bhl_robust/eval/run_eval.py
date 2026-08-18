@@ -47,6 +47,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--seeds", type=int, default=5)
     p.add_argument("--push-speed", type=float, default=0.0,
                    help=">0 enables the push protocol (experiment 1 scoring)")
+    p.add_argument("--terrain-difficulty", type=float, default=0.0,
+                   help="0 = flat, 1 = matches the hardest training terrain")
+    p.add_argument("--terrain-seed", type=int, default=12345,
+                   help="height-field seed; held fixed across policies so every "
+                        "policy is scored on the identical ground")
     p.add_argument("--onnx", type=Path, default=None,
                    help="override the checkpoint path inside the deploy YAML")
     p.add_argument("--video-dir", type=Path, default=None,
@@ -64,15 +69,19 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ERROR: policy not found: {onnx_path}", file=sys.stderr)
         return 2
 
-    scene = prepare_mjcf(args.upstream, args.cache_dir, args.variant)
+    rough = args.terrain_difficulty > 0.0
+    scene = prepare_mjcf(args.upstream, args.cache_dir, args.variant, terrain=rough)
 
     eval_cfg = EvalConfig(
         episode_s=args.episode_s,
         seeds=tuple(range(args.seeds)),
         push_speed=args.push_speed,
+        terrain_difficulty=args.terrain_difficulty,
+        terrain_seed=args.terrain_seed,
     )
 
-    env = HeadlessMujocoEnv(cfg, scene)
+    env = HeadlessMujocoEnv(cfg, scene, terrain_difficulty=args.terrain_difficulty,
+                            terrain_seed=args.terrain_seed)
     controller = RlController(cfg)
     controller.load_policy()
 
@@ -86,9 +95,13 @@ def main(argv: list[str] | None = None) -> int:
             recorder = None
             if args.video_dir is not None and seed == args.video_seed:
                 tag = f"vx{command[0]:+.1f}_vy{command[1]:+.1f}_wz{command[2]:+.1f}"
+                if rough:
+                    tag += f"_d{eval_cfg.terrain_difficulty:.2f}"
                 caption = f"{args.label}   cmd vx={command[0]:+.2f} vy={command[1]:+.2f} wz={command[2]:+.2f}"
                 if eval_cfg.push_speed > 0:
                     caption += f"   push {eval_cfg.push_speed:.2f} m/s"
+                if rough:
+                    caption += f"   terrain d={eval_cfg.terrain_difficulty:.2f}"
                 recorder = EpisodeRecorder(
                     env.mj_model,
                     args.video_dir / f"{args.label}__{tag}.mp4",

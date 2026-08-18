@@ -34,14 +34,22 @@ _VARIANTS = {
 # <global> clause is widened when the patched copy is materialised.
 OFFSCREEN_W, OFFSCREEN_H = 1920, 1080
 
+# Height-field asset injected when evaluating on rough ground. Dimensions must
+# agree with bhl_robust.eval.terrain_field (HALF_EXTENT, ELEVATION_M, GRID).
+HFIELD_NAME = "bhl_terrain"
 
-def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped") -> Path:
+
+def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
+                 terrain: bool = False) -> Path:
     """Materialise a loadable copy of the MJCF and return the scene path.
 
     Args:
         upstream: path to the Berkeley-Humanoid-Lite checkout.
         cache_dir: writable directory for the patched copy.
         variant: "biped" (12 DoF) or "humanoid" (22 DoF).
+        terrain: replace the flat floor plane with a height field. The elevation
+            data itself is written into `model.hfield_data` at load time, so one
+            patched XML serves every difficulty.
 
     Returns:
         Path to the patched scene XML, ready for `MjModel.from_xml_path`.
@@ -57,7 +65,7 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped") -> Pat
     if not mesh_dir.is_dir():
         raise FileNotFoundError(f"mesh directory missing: {mesh_dir}")
 
-    out_dir = cache_dir / f"mjcf_{variant}"
+    out_dir = cache_dir / (f"mjcf_{variant}_hfield" if terrain else f"mjcf_{variant}")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     scene_out = out_dir / scene_name
@@ -81,6 +89,22 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped") -> Pat
                 scene_xml,
                 count=1,
             )
+    if terrain:
+        from bhl_robust.eval.terrain_field import GRID, HALF_EXTENT, ELEVATION_M
+        # A geom of type "hfield" replaces the infinite plane. `size` is
+        # (x_radius, y_radius, z_elevation, z_base); z_base only has to be thick
+        # enough that the solid body beneath the surface is never penetrated.
+        hf = (f'<hfield name="{HFIELD_NAME}" nrow="{GRID}" ncol="{GRID}" '
+              f'size="{HALF_EXTENT} {HALF_EXTENT} {ELEVATION_M} 0.5"/>')
+        scene_xml = re.sub(r"(<asset>)", r"\1\n      " + hf, scene_xml, count=1)
+        scene_xml = re.sub(
+            r'<geom name="floor"[^/]*/>',
+            f'<geom name="floor" type="hfield" hfield="{HFIELD_NAME}" pos="0 0 0" '
+            f'material="groundplane"/>',
+            scene_xml, count=1)
+        if HFIELD_NAME not in scene_xml:
+            raise RuntimeError("failed to inject the height field into the scene XML")
+
     scene_out.write_text(scene_xml)
 
     xml = (mjcf_dir / robot_name).read_text()

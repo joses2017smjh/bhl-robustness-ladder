@@ -24,6 +24,12 @@ import torch
 
 from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController
 
+from bhl_robust.eval.terrain_field import (
+    HeightSampler,
+    build_height_field,
+    to_mujoco_data,
+)
+
 # Matches upstream's `bad_orientation` termination (limit_angle=0.78 rad), so a
 # fall in MuJoCo means the same thing it meant during Isaac Lab training.
 TILT_LIMIT_RAD = 0.78
@@ -55,6 +61,7 @@ class EpisodeResult:
     mean_tilt_rad: float
     pushes_applied: int = 0
     pushes_survived: int = 0
+    terrain_difficulty: float = 0.0
 
 
 @dataclass
@@ -75,6 +82,10 @@ class EvalConfig:
     # Initial-state perturbation, so seeds actually differ.
     init_joint_noise: float = 0.02
     init_vel_noise: float = 0.05
+    # Rough-ground protocol. 0.0 is exactly flat, so flat and rough evaluation
+    # share one code path and the flat rung is not a special case.
+    terrain_difficulty: float = 0.0
+    terrain_seed: int = 12345
     # Push protocol (disabled unless push_speed > 0).
     push_speed: float = 0.0
     push_interval_s: float = 3.0
@@ -84,10 +95,22 @@ class EvalConfig:
 class HeadlessMujocoEnv:
     """MuJoCo stepping with no viewer, no gamepad, and no realtime throttle."""
 
-    def __init__(self, cfg, scene_path: Path):
+    def __init__(self, cfg, scene_path: Path, terrain_difficulty: float = 0.0,
+                 terrain_seed: int = 12345):
         self.cfg = cfg
         self.mj_model = mujoco.MjModel.from_xml_path(str(scene_path))
         self.mj_model.opt.timestep = cfg.physics_dt
+
+        # Elevation is written into the model rather than baked into the XML, so
+        # one patched scene serves every difficulty.
+        self.terrain = None
+        if self.mj_model.nhfield > 0:
+            field = build_height_field(terrain_difficulty, terrain_seed)
+            # MuJoCo stores hfield data row-major with rows along +y and columns
+            # along +x; the generator indexes [x, y], hence the transpose.
+            self.mj_model.hfield_data[:] = to_mujoco_data(field).T.ravel()
+            self.terrain = HeightSampler(field)
+
         self.mj_data = mujoco.MjData(self.mj_model)
 
         self.num_joints = int(cfg.num_joints)
@@ -150,6 +173,9 @@ class HeadlessMujocoEnv:
     def reset(self, rng: np.random.Generator, cfg: EvalConfig) -> np.ndarray:
         mujoco.mj_resetData(self.mj_model, self.mj_data)
         self.mj_data.qpos[0:3] = self.cfg.default_base_position
+        # Spawn on the surface, plus a little clearance so the first contact
+        # solve is not resolving an initial interpenetration.
+        self.mj_data.qpos[2] = self.ground_z(0.0, 0.0) + (0.02 if self.terrain else 0.0)
         self.mj_data.qpos[3:7] = np.array([1.0, 0.0, 0.0, 0.0])
         self.mj_data.qpos[7:7 + self.num_joints] = (
             self.default_joint_positions
@@ -159,12 +185,28 @@ class HeadlessMujocoEnv:
         self.mj_data.qvel[0:2] = rng.normal(0.0, cfg.init_vel_noise, 2)
         mujoco.mj_forward(self.mj_model, self.mj_data)
         self._spawn_z = float(self.mj_data.qpos[2])
+        self._spawn_clearance = self._spawn_z - self.ground_z()
         return self.robot_observations(command=(0.0, 0.0, 0.0))
+
+    def ground_z(self, x: float | None = None, y: float | None = None) -> float:
+        """Terrain surface height under a point (0.0 on flat ground)."""
+        if self.terrain is None:
+            return 0.0
+        if x is None:
+            x, y = (float(v) for v in self.mj_data.qpos[0:2])
+        return self.terrain(x, y)
 
     @property
     def sink_m(self) -> float:
-        """How far the root has dropped below its spawn height."""
-        return self._spawn_z - float(self.mj_data.qpos[2])
+        """How far the root has dropped relative to the ground beneath it.
+
+        Measured against the LOCAL surface, not the spawn height: on rough
+        ground the root rises and falls with the terrain, so an absolute
+        reference would score a robot walking up a rise as having climbed and
+        one walking downhill as having fallen.
+        """
+        clearance = float(self.mj_data.qpos[2]) - self.ground_z()
+        return self._spawn_clearance - clearance
 
     def push(self, speed: float, rng: np.random.Generator) -> None:
         """Instantaneous velocity kick, matching training's push_by_setting_velocity."""
@@ -291,4 +333,5 @@ def run_episode(
         mean_tilt_rad=mean(tilts),
         pushes_applied=pushes_applied,
         pushes_survived=pushes_survived,
+        terrain_difficulty=cfg.terrain_difficulty,
     )
