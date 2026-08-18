@@ -1,56 +1,49 @@
 #!/bin/bash
-# Domain-randomization fidelity ladder: three rungs, expressed purely as Hydra
-# overrides of upstream's EventsCfg. No code fork is needed because BHL's
-# train.py is decorated with @hydra_task_config.
+# Domain-randomization fidelity ladder, parameterised by a scale factor.
 #
-# "DR" here means randomization of *physics parameters* only. Initial-state
-# randomization (reset_base pose/velocity, reset_robot_joints) is held constant
-# across all three rungs, so the ladder isolates one variable.
+# Every DR range in upstream's EventsCfg is (center +/- half_width). A rung of
+# scale s uses (center +/- s*half_width), so:
+#     s=0.0  no randomization at all
+#     s=1.0  exactly upstream's shipped values
+#     s=2.0  double-width
 #
-# Rung definitions:
-#   off        - every physics parameter pinned to its nominal value
-#   default    - upstream's shipped ranges, unmodified
-#   aggressive - roughly 2x the default half-width on every axis
+# Expressing rungs on a continuous axis rather than as three named presets is
+# what turns this from three points into a retention curve, and it lets the
+# cliff be located rather than merely hit. The first pass used s=0/1/2 and
+# found s=2 unlearnable (reward 4.6 vs 48 at s=0, 69% falling), so the
+# interesting region is between 1 and 2.
 #
-# Usage: dr_overrides <off|default|aggressive>
+# Initial-state randomization (reset_base, reset_robot_joints) is deliberately
+# held constant across rungs so the ladder isolates one variable.
+#
+# Usage: dr_overrides_scale <scale>
 
+dr_overrides_scale() {
+    awk -v s="$1" 'BEGIN {
+        # Two kinds of parameter, scaled differently:
+        #  - absolute physical quantities (friction, gain multipliers) scale
+        #    around their CENTER, so s=0 pins them to the nominal value;
+        #  - additive offsets (mass delta, joint offset, external wrench) scale
+        #    their ENDPOINTS from zero, so s=0 means "no offset applied".
+        # Scaling mass around its center would silently add a constant +0.5 kg
+        # at s=0 and break agreement with the already-trained s=0 runs.
+        printf "env.events.physics_material.params.static_friction_range=[%.4f,%.4f] ",  0.8 - s*0.4, 0.8 + s*0.4
+        printf "env.events.physics_material.params.dynamic_friction_range=[%.4f,%.4f] ", 0.8 - s*0.4, 0.8 + s*0.4
+        printf "env.events.add_base_mass.params.mass_distribution_params=[%.4f,%.4f] ",  -1.0*s, 2.0*s
+        printf "env.events.add_all_joint_default_pos.params.pos_distribution_params=[%.4f,%.4f] ", -s*0.05, s*0.05
+        printf "env.events.scale_all_actuator_torque_constant.params.stiffness_distribution_params=[%.4f,%.4f] ", 1.0 - s*0.2, 1.0 + s*0.2
+        printf "env.events.scale_all_actuator_torque_constant.params.damping_distribution_params=[%.4f,%.4f] ",   1.0 - s*0.2, 1.0 + s*0.2
+        printf "env.events.base_external_force_torque.params.force_range=[%.4f,%.4f] ",  -s*2.0, s*2.0
+        printf "env.events.base_external_force_torque.params.torque_range=[%.4f,%.4f]\n", -s*2.0, s*2.0
+    }'
+}
+
+# Back-compat names used by the first pass.
 dr_overrides() {
     case "$1" in
-    off)
-        echo "env.events.physics_material.params.static_friction_range=[0.8,0.8] \
-              env.events.physics_material.params.dynamic_friction_range=[0.8,0.8] \
-              env.events.add_base_mass.params.mass_distribution_params=[0.0,0.0] \
-              env.events.add_all_joint_default_pos.params.pos_distribution_params=[0.0,0.0] \
-              env.events.scale_all_actuator_torque_constant.params.stiffness_distribution_params=[1.0,1.0] \
-              env.events.scale_all_actuator_torque_constant.params.damping_distribution_params=[1.0,1.0] \
-              env.events.base_external_force_torque.params.force_range=[0.0,0.0] \
-              env.events.base_external_force_torque.params.torque_range=[0.0,0.0]"
-        ;;
-    default)
-        # Upstream values, stated explicitly rather than omitted, so the run is
-        # self-documenting and a change upstream cannot silently move the rung.
-        echo "env.events.physics_material.params.static_friction_range=[0.4,1.2] \
-              env.events.physics_material.params.dynamic_friction_range=[0.4,1.2] \
-              env.events.add_base_mass.params.mass_distribution_params=[-1.0,2.0] \
-              env.events.add_all_joint_default_pos.params.pos_distribution_params=[-0.05,0.05] \
-              env.events.scale_all_actuator_torque_constant.params.stiffness_distribution_params=[0.8,1.2] \
-              env.events.scale_all_actuator_torque_constant.params.damping_distribution_params=[0.8,1.2] \
-              env.events.base_external_force_torque.params.force_range=[-2.0,2.0] \
-              env.events.base_external_force_torque.params.torque_range=[-2.0,2.0]"
-        ;;
-    aggressive)
-        echo "env.events.physics_material.params.static_friction_range=[0.2,1.8] \
-              env.events.physics_material.params.dynamic_friction_range=[0.2,1.8] \
-              env.events.add_base_mass.params.mass_distribution_params=[-2.0,4.0] \
-              env.events.add_all_joint_default_pos.params.pos_distribution_params=[-0.10,0.10] \
-              env.events.scale_all_actuator_torque_constant.params.stiffness_distribution_params=[0.6,1.4] \
-              env.events.scale_all_actuator_torque_constant.params.damping_distribution_params=[0.6,1.4] \
-              env.events.base_external_force_torque.params.force_range=[-4.0,4.0] \
-              env.events.base_external_force_torque.params.torque_range=[-4.0,4.0]"
-        ;;
-    *)
-        echo "unknown DR level: $1" >&2
-        return 1
-        ;;
+        off)        dr_overrides_scale 0.0 ;;
+        default)    dr_overrides_scale 1.0 ;;
+        aggressive) dr_overrides_scale 2.0 ;;
+        *) echo "unknown DR level: $1" >&2; return 1 ;;
     esac
 }
