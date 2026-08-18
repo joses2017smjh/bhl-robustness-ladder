@@ -29,3 +29,7 @@ __pycache__/
 # Bulk rendered clips: ~500KB each and dozens per eval sweep. Download the
 # good ones for the portfolio rather than versioning them.
 results/video/
+
+# Raw per-step TensorBoard dump (~300k rows). curves.json is the derived,
+# downsampled artifact the charts and dashboard actually read.
+results/curves/training_curves.csv
