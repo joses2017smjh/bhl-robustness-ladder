@@ -104,7 +104,7 @@ def chart_dr_curves(mode):
     c = Chart(880, 430, dict(l=68, r=132, t=62, b=52), t)
     c.x0, c.x1, c.y0, c.y1 = 0, 6000, 0, 55
     c.title("Domain randomization: training reward by fidelity rung",
-            "Seed-averaged. Higher rung = wider randomization. s=0.5 and s=1.5 still training.")
+            "Seed-averaged over 3 seeds. Higher rung = wider randomization.")
     c.frame([0, 1500, 3000, 4500, 6000], [0, 10, 20, 30, 40, 50],
             "PPO iteration", "mean reward", xfmt=lambda v: f"{v:,}")
     for i, (scale, prefix) in enumerate(DR_RUNGS):
@@ -197,13 +197,60 @@ def chart_ladder(mode):
         o.extend(c.o)
 
     o.append(f'<text x="28" y="{H-12}" font-size="11.5" fill="{t["ink3"]}" font-family="{FONT}">'
-             f'The cliff sits between s=1.0 and s=1.5: reward falls ~4x and the fall rate goes from 0.04 to 0.51.</text>')
+             f'Reward declines smoothly across the whole range; stability does not. The fall rate is flat to '
+             f's=1.0, then knees upward.</text>')
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
             f'role="img">' + "".join(o) + "</svg>")
 
 
+def chart_push_sweep(mode):
+    """What a disturbance curriculum costs, as a function of its ceiling."""
+    t = THEME[mode]
+    c = Chart(880, 436, dict(l=76, r=170, t=72, b=82), t)
+    c.x0, c.x1, c.y0, c.y1 = -0.06, 1.62, 0, 40
+    c.title("Push recovery: what each disturbance ceiling costs",
+            "Final reward vs the curriculum's peak push magnitude. Each point is a seed.")
+    c.frame([0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4], [0, 10, 20, 30, 40],
+            "push ceiling (m/s)", "final mean reward", xfmt=lambda v: f"{v:g}")
+
+    base = [v["final_reward"] for l, v in summary.items()
+            if l.startswith("dr-default") and v["final_reward"] is not None and v["complete"]]
+    if base:
+        b = sum(base) / len(base)
+        c.add(f'<line x1="{c.m["l"]}" y1="{c.sy(b):.1f}" x2="{c.m["l"]+c.pw}" y2="{c.sy(b):.1f}" '
+              f'stroke="{t["ink3"]}" stroke-width="1" stroke-dasharray="4 4"/>')
+        c.add(f'<text x="{c.m["l"]+c.pw+8:.0f}" y="{c.sy(b)+4:.0f}" font-size="11.5" '
+              f'fill="{t["ink3"]}" font-family="{FONT}">no push ({b:.1f})</text>')
+
+    pts = []
+    for ceil, prefix in [(0.2, "push-c0.2"), (0.4, "push-c0.4"),
+                         (0.6, "push-c0.6"), (1.5, "push-curriculum")]:
+        vals = [v["final_reward"] for l, v in summary.items()
+                if l.rsplit("-s", 1)[0] == prefix and v["final_reward"] is not None and v["complete"]]
+        if not vals:
+            continue
+        for v in vals:
+            c.add(f'<circle cx="{c.sx(ceil):.1f}" cy="{c.sy(v):.1f}" r="4.5" '
+                  f'fill="{t["cat"][1]}" stroke="{t["cat"][1]}" stroke-width="2"/>')
+        pts.append((ceil, sum(vals) / len(vals)))
+    c.line(sorted(pts), t["cat"][1], width=2, opacity=0.55)
+
+    adapt = [v["final_reward"] for l, v in summary.items()
+             if l.startswith("push-adaptive") and v["final_reward"] is not None]
+    if adapt:
+        a = sum(adapt) / len(adapt)
+        c.add(f'<circle cx="{c.sx(0.865):.1f}" cy="{c.sy(a):.1f}" r="5.5" fill="none" '
+              f'stroke="{t["bad"]}" stroke-width="2.5"/>')
+        c.add(f'<text x="{c.sx(0.865)+11:.0f}" y="{c.sy(a)-9:.0f}" font-size="11.5" '
+              f'fill="{t["ink2"]}" font-family="{FONT}">adaptive converged here, 0.87 m/s</text>')
+
+    c.add(f'<text x="{c.m["l"]}" y="{c.h-12}" font-size="11.5" fill="{t["ink3"]}" '
+          f'font-family="{FONT}">0.2 m/s is essentially free; 1.5 m/s destroys the policy.</text>')
+    return c.render()
+
+
 for name, fn in [("dr_training_curves", chart_dr_curves), ("push_collapse", chart_push),
-                 ("dr_ladder_summary", chart_ladder)]:
+                 ("dr_ladder_summary", chart_ladder), ("push_sweep", chart_push_sweep)]:
     for mode in ("light", "dark"):
         p = OUT / f"{name}-{mode}.svg"
         p.write_text(fn(mode))

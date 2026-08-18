@@ -10,6 +10,7 @@ TAGS = {
     "Train/mean_episode_length": "ep_len",
     "Episode_Termination/base_orientation": "fall_frac",
     "Curriculum/push_levels": "push_mps",
+    "Curriculum/terrain_levels": "terrain_level",
 }
 rows = []
 for d in sorted(LOGROOT.iterdir()):

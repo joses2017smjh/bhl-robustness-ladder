@@ -15,9 +15,9 @@ and — necessarily — the instrument to measure them.
 
 | | Experiment | Question | Status |
 |---|---|---|---|
-| 1 | **Push recovery** | Can a disturbance curriculum buy shove-rejection, and how much? | pass 1 done, pass 2 training |
-| 2 | **DR fidelity ladder** | How does performance trade off against randomization strength? | 5-rung curve, filling in |
-| 3 | **Rough terrain** | Does a terrain curriculum transfer to a robot this weak? | training; MuJoCo terrain evaluation built |
+| 1 | **Push recovery** | Can a disturbance curriculum buy shove-rejection, and how much? | **done** — 0.2 m/s is free; adaptive reaches 0.87 m/s |
+| 2 | **DR fidelity ladder** | How does performance trade off against randomization strength? | **done** — 5-rung curve, 3 seeds each |
+| 3 | **Rough terrain** | Does a terrain curriculum transfer to a robot this weak? | trained; curriculum reaches level 1.4 / 9 |
 
 ---
 
@@ -42,48 +42,99 @@ ships; `s = 0` pins every physics parameter to nominal.
 | rung | final reward (3 seeds) | fall rate | learns? |
 |---|---|---|---|
 | `s = 0.0` no randomization | 49.4 / 49.3 / 48.9 | 0.015 | yes |
-| `s = 0.5` | 34.3 / 35.7 / 36.1 * | 0.065 * | yes |
+| `s = 0.5` | 44.2 / 45.0 / 44.5 | 0.015 | yes |
 | `s = 1.0` repo default | 32.9 / 34.8 / 33.2 | 0.041 | yes |
-| `s = 1.5` | 8.3 * | 0.506 * | **degrading** |
-| `s = 2.0` double-width | 4.6 / 4.3 / 4.5 | 0.68 | **no** |
+| `s = 1.5` | 16.0 / 15.7 / 16.5 | 0.211 | yes, degraded |
+| `s = 2.0` double-width | 4.6 / 4.3 / 4.5 | 0.686 | **no** |
 
-<sub>* still training — values are at ~1,000 of 6,000 iterations.</sub>
+**The two panels tell different stories, and that is the result.** Reward
+declines smoothly and almost linearly across the whole range — there is no
+cliff in performance. *Stability* is the one with a knee: the fall rate is
+essentially flat out to the repo default (0.015 → 0.015 → 0.041) and then turns
+sharply upward (0.21 at `s = 1.5`, 0.69 at `s = 2.0`).
 
-**The cliff sits between `s = 1.0` and `s = 1.5`.** Reward drops roughly 4× and
-the fall rate goes from 0.04 to 0.51. Notably, upstream's shipped default sits
-just *below* that edge — which is a more interesting finding than a smooth
-tradeoff would have been.
+So the honest reading is that randomization buys robustness at a steady,
+predictable cost in reward right up until `s ≈ 1.5`, past which the policy stops
+reliably standing up at all. Upstream's shipped default sits comfortably inside
+the stable region.
+
+> **Correction:** an earlier version of this README claimed the cliff sat
+> between `s = 1.0` and `s = 1.5`. That was read off partially-trained runs
+> (~1,000 of 6,000 iterations), where `s = 1.5` was showing reward 8.3. Fully
+> trained it reaches 16.0, and the decline is smooth. The conclusion changed
+> once the runs finished.
 
 > **Reading these numbers honestly:** training reward is *not* a performance
 > ranking across rungs. A policy trained under heavier randomization is solving
 > a strictly harder problem, so lower reward is expected and means nothing on
-> its own. The real deliverable is **retention through sim2sim**, which is what
-> the MuJoCo harness below measures. The curve above locates where training
-> *breaks*; it does not yet say which rung transfers best.
+> its own. The real deliverable is **retention through sim2sim**, which the
+> MuJoCo harness below measures.
 
-### Push recovery — a negative result, and what it taught
+### Push recovery — the sweep found the answer
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="results/charts/push_sweep-dark.svg">
+  <img alt="Final reward falls with push ceiling: 33 at 0.2 m/s, 29 at 0.4, 22 at 0.6, 3 at 1.5." src="results/charts/push_sweep-light.svg">
+</picture>
+
+| ceiling | final reward | fall rate | cost vs no push |
+|---|---|---|---|
+| none (baseline) | 33.0 | 0.041 | — |
+| 0.2 m/s | 33.0 / 34.4 | 0.037 | **free** |
+| 0.4 m/s | 29.1 | 0.050 | −12% |
+| 0.6 m/s | 22.1 / 23.0 | 0.100 | −32% |
+| 1.5 m/s (pass 1) | 2.9 / 3.1 / 3.2 | 0.928 | destroyed |
+
+Pass 1 asserted a ceiling of 1.5 m/s and destroyed the policy. The sweep shows
+why that was such a bad guess: **0.2 m/s of shove rejection is essentially free**,
+and the cost stays modest to 0.6 m/s. 1.5 m/s is not a hard setting, it is off
+the end of the map.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="results/charts/push_collapse-dark.svg">
   <img alt="Push curriculum reward rises to 24.7 by iteration 1599 then collapses to about 3." src="results/charts/push_collapse-light.svg">
 </picture>
 
-Pass 1 ramped the push to **1.5 m/s**. The curriculum arm learned to walk —
-reward 24.7 by iteration 1,599 — and then the ramp destroyed it, ending at ~3.0
-with **93% of episodes terminating on bad orientation**. The fixed-magnitude
-control never learned at all (~2.5 throughout).
+The pass-1 trace above is kept because it localises the failure. The curriculum
+arm learned to walk (reward 24.7 by iteration 1,599) and then the ramp destroyed
+it, while the fixed-magnitude control never learned at all (~2.9 throughout).
+The fixed arm failing confirms the curriculum was the right *idea*; the
+curriculum arm peaking then collapsing shows the **ceiling**, not the schedule,
+was what was wrong.
 
-That pair is informative rather than merely disappointing:
+**The adaptive arm is the strongest result here.** Instead of a fixed schedule,
+it raises the push only while the measured fall rate stays under 20% — the same
+feedback principle Isaac Lab uses for terrain levels. It converged at
+**0.85–0.88 m/s**, roughly *twice* the magnitude at which the naive time-based
+ramp collapsed, and it reports that number as an outcome rather than requiring
+it to be guessed. The caveat is that it ran into its own 1.0 m/s safety cap
+(peak 1.000), so 0.87 is a lower bound on what this robot could tolerate, not a
+measured ceiling.
 
-- The fixed arm failing confirms the curriculum was the right *idea* — full-strength
-  shoves from step zero knock the robot over before a gait exists, so it never
-  collects the data that would teach recovery.
-- The curriculum arm peaking *then* collapsing shows the ceiling, not the schedule,
-  was wrong. Collapse begins as the ramp passes ≈0.7 m/s.
+### Rough terrain — it walks, but the curriculum stalls low
 
-Pass 2 therefore treats the ceiling as the variable and sweeps it
-(0.2 / 0.4 / 0.6 m/s), which answers "how much disturbance can this machine
-learn to reject" instead of asserting one number.
+| arm | final reward | fall rate | terrain level reached (of 9) |
+|---|---|---|---|
+| bumpy (noise + slopes + obstacles) | 18.6 / 18.6 / 18.2 | 0.10 | **1.44 / 1.45 / 1.42** |
+| smooth (no obstacles) | 17.1 / 17.7 | 0.12 | 1.21 / 1.28 |
+
+The curriculum machinery works — environments are promoted and demoted, and the
+level metric moves — but it plateaus at roughly **level 1.4 of 9**. The robot
+learns to walk on mildly rough ground and then stops progressing. Given 6 Nm
+joints and no height sensing, that is a believable ceiling rather than a bug,
+and the level it stalls at is the measurement.
+
+Two honest caveats:
+
+- The obstacles did **not** turn out to be the limiter. The arm *with* obstacles
+  reaches a slightly higher level than the arm without, which is the opposite of
+  what I expected when I flagged obstacles as the risky choice.
+- **That ablation is confounded, and I would not report it as clean.** Removing
+  the obstacles redistributed their 20% share into more rough ground and slope
+  (rough 0.40 → 0.50, each slope 0.20 → 0.25), so "smooth" is not "bumpy minus
+  obstacles" — it is also *rougher on average*. A correct ablation holds the
+  other proportions fixed and replaces the obstacle share with flat ground. The
+  two smooth seeds also stopped slightly short of 6,000 iterations.
 
 ### Terrain transfer — the baseline to beat
 
