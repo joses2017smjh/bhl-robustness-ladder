@@ -25,3 +25,7 @@ __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 .DS_Store
+
+# Bulk rendered clips: ~500KB each and dozens per eval sweep. Download the
+# good ones for the portfolio rather than versioning them.
+results/video/
