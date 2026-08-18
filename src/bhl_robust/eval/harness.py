@@ -202,6 +202,7 @@ def run_episode(
     command: tuple[float, float, float],
     seed: int,
     cfg: EvalConfig,
+    recorder=None,
 ) -> EpisodeResult:
     """Roll out one episode and return its metrics."""
     rng = np.random.default_rng(seed)
@@ -228,21 +229,35 @@ def run_episode(
     pushes_applied = 0
     pushes_survived = 0
     pending_push_step: int | None = None
+    push_flash = 0
 
     for t in range(n_steps):
         if push_every and t > settle_steps and t % push_every == 0:
             env.push(cfg.push_speed, rng)
             pushes_applied += 1
             pending_push_step = t
+            push_flash = 8   # ~0.3s of border highlight so the shove is visible
 
         actions = controller.update(obs)
         env.step(actions)
         obs = env.robot_observations(command)
 
         tilt = env.tilt_rad
-        if tilt > TILT_LIMIT_RAD or env.sink_m > MAX_SINK_M:
+        fell_now = tilt > TILT_LIMIT_RAD or env.sink_m > MAX_SINK_M
+
+        if recorder is not None:
+            flash = "fall" if fell_now else ("push" if push_flash > 0 else None)
+            recorder.capture(env.mj_data, flash)
+            push_flash = max(0, push_flash - 1)
+
+        if fell_now:
             fell = True
             survival_steps = t
+            if recorder is not None:
+                # Hold on the fall for ~0.6s; otherwise the clip cuts the
+                # instant the robot tips and the failure is unreadable.
+                for _ in range(15):
+                    recorder.capture(env.mj_data, "fall")
             break
 
         if pending_push_step is not None and t - pending_push_step >= recovery_steps:

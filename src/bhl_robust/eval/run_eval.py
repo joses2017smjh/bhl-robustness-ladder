@@ -31,6 +31,7 @@ from bhl_robust.eval.harness import (
     run_episode,
 )
 from bhl_robust.eval.mjcf_assets import prepare_mjcf
+from bhl_robust.eval.video import EpisodeRecorder, ffmpeg_available
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -48,6 +49,10 @@ def main(argv: list[str] | None = None) -> int:
                    help=">0 enables the push protocol (experiment 1 scoring)")
     p.add_argument("--onnx", type=Path, default=None,
                    help="override the checkpoint path inside the deploy YAML")
+    p.add_argument("--video-dir", type=Path, default=None,
+                   help="render MP4s here (requires MUJOCO_GL=egl and a GPU)")
+    p.add_argument("--video-seed", type=int, default=0,
+                   help="only this seed is filmed, so one clip per command")
     args = p.parse_args(argv)
 
     cfg = OmegaConf.load(args.deploy_cfg)
@@ -71,10 +76,39 @@ def main(argv: list[str] | None = None) -> int:
     controller = RlController(cfg)
     controller.load_policy()
 
+    if args.video_dir and not ffmpeg_available():
+        print("ERROR: --video-dir given but ffmpeg is not on PATH", file=sys.stderr)
+        return 2
+
     rows: list[dict] = []
     for command in eval_cfg.commands:
         for seed in eval_cfg.seeds:
-            res = run_episode(env, controller, command, seed, eval_cfg)
+            recorder = None
+            if args.video_dir is not None and seed == args.video_seed:
+                tag = f"vx{command[0]:+.1f}_vy{command[1]:+.1f}_wz{command[2]:+.1f}"
+                caption = f"{args.label}   cmd vx={command[0]:+.2f} vy={command[1]:+.2f} wz={command[2]:+.2f}"
+                if eval_cfg.push_speed > 0:
+                    caption += f"   push {eval_cfg.push_speed:.2f} m/s"
+                recorder = EpisodeRecorder(
+                    env.mj_model,
+                    args.video_dir / f"{args.label}__{tag}.mp4",
+                    fps=1.0 / env.cfg.policy_dt,
+                    caption=caption,
+                )
+
+            res = run_episode(env, controller, command, seed, eval_cfg, recorder=recorder)
+
+            if recorder is not None:
+                err = recorder.close()
+                outcome = "FELL" if res.fell else "OK"
+                final = recorder.path.with_name(
+                    recorder.path.stem + f"__{outcome}" + recorder.path.suffix)
+                if err:
+                    print(f"  ffmpeg failed: {err}", file=sys.stderr)
+                else:
+                    recorder.path.rename(final)
+                    print(f"  video -> {final.name} ({recorder.n_frames} frames)")
+
             row = {"label": args.label, **asdict(res)}
             rows.append(row)
             print(

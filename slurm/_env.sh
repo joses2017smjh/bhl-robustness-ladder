@@ -51,7 +51,7 @@ PY=$UV_PROJECT_ENVIRONMENT/bin/python
 # Hydra overrides are passed as a FILE PATH (OVERRIDE_FILE), never inline:
 # Apptainer's --env splits values on commas, so a range like [0.8,0.8] is
 # parsed as two malformed key=value pairs and the exec is rejected outright.
-BHL_FORWARD_VARS="TASK EXPERIMENT RUN_NAME SEED NUM_ENVS MAX_ITER OVERRIDE_FILE TRAIN_SCRIPT"
+BHL_FORWARD_VARS="TASK EXPERIMENT RUN_NAME SEED NUM_ENVS MAX_ITER OVERRIDE_FILE TRAIN_SCRIPT DEPLOY_CFG CACHE_DIR OUT_CSV LABEL EPISODE_S N_SEEDS PUSH_SPEED VIDEO_DIR MUJOCO_GL PYOPENGL_PLATFORM OMP_NUM_THREADS"
 
 bhl_exec() {
     local envargs=()

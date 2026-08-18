@@ -29,6 +29,12 @@ _VARIANTS = {
 }
 
 
+# MuJoCo's offscreen framebuffer defaults to 640x480 and rendering above that
+# raises rather than downscaling. Video is written at 960x540, so the scene's
+# <global> clause is widened when the patched copy is materialised.
+OFFSCREEN_W, OFFSCREEN_H = 1920, 1080
+
+
 def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped") -> Path:
     """Materialise a loadable copy of the MJCF and return the scene path.
 
@@ -57,8 +63,25 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped") -> Pat
     scene_out = out_dir / scene_name
     robot_out = out_dir / robot_name
 
-    # Scene file only <include>s the robot; copy verbatim.
-    shutil.copyfile(mjcf_dir / scene_name, scene_out)
+    # Scene file only <include>s the robot, but its <global> clause caps the
+    # offscreen framebuffer, so it needs one edit rather than a plain copy.
+    scene_xml = (mjcf_dir / scene_name).read_text()
+    if "offwidth" not in scene_xml:
+        scene_xml, n = re.subn(
+            r"(<global\b[^/>]*)(/?>)",
+            rf'\1 offwidth="{OFFSCREEN_W}" offheight="{OFFSCREEN_H}"\2',
+            scene_xml,
+            count=1,
+        )
+        if n == 0:
+            # No <global> to extend; add a <visual> block of our own.
+            scene_xml = re.sub(
+                r"(<mujoco[^>]*>)",
+                rf'\1\n  <visual><global offwidth="{OFFSCREEN_W}" offheight="{OFFSCREEN_H}"/></visual>',
+                scene_xml,
+                count=1,
+            )
+    scene_out.write_text(scene_xml)
 
     xml = (mjcf_dir / robot_name).read_text()
 
