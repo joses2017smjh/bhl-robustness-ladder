@@ -249,9 +249,60 @@ def chart_push_sweep(mode):
     return c.render()
 
 
+def chart_terrain_retention(mode):
+    """Fall rate vs MuJoCo ground roughness, one line per training regime."""
+    import csv as _csv
+    t = THEME[mode]
+    path = Path("results/terrain_retention.csv")
+    if not path.exists():
+        return None
+    data = {}
+    for r in _csv.DictReader(path.open()):
+        data.setdefault(r["policy"], []).append((float(r["difficulty"]), float(r["fall_rate"])))
+    for k in data: data[k].sort()
+
+    c = Chart(880, 440, dict(l=76, r=210, t=76, b=78), t)
+    c.x0, c.x1, c.y0, c.y1 = -0.03, 1.03, -0.02, 1.02
+    c.title("Terrain transfer: what actually buys robustness to rough ground",
+            "Sim2sim. Training and evaluation terrain come from different generators.")
+    c.frame([0, 0.2, 0.4, 0.6, 0.8, 1.0], [0, 0.25, 0.5, 0.75, 1.0],
+            "MuJoCo terrain difficulty", "fall rate",
+            xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:.2f}")
+
+    # Three regimes, ordered worst -> best, drawn on the ordinal ramp so the
+    # ordering is legible without reading the labels.
+    series = [
+        ("dr-off-s0",        "no randomization",      t["ramp"][0]),
+        ("dr-default-s0",    "randomization only",    t["ramp"][2]),
+        ("terrain-bumpy-s0", "trained on terrain",    t["ramp"][4]),
+    ]
+    ends = []
+    for key, name, colour in series:
+        pts = data.get(key)
+        if not pts: continue
+        c.line(pts, colour, width=2)
+        for x, y in pts:
+            c.add(f'<circle cx="{c.sx(x):.1f}" cy="{c.sy(y):.1f}" r="4" fill="{colour}"/>')
+        ends.append([c.sy(pts[-1][1]), c.sx(pts[-1][0]), name, colour])
+    ends.sort()
+    for i in range(1, len(ends)):
+        if ends[i][0] - ends[i-1][0] < 16: ends[i][0] = ends[i-1][0] + 16
+    for y, x, name, colour in ends:
+        c.add(f'<circle cx="{x+9:.0f}" cy="{y-4:.0f}" r="3.5" fill="{colour}"/>'
+              f'<text x="{x+17:.0f}" y="{y:.0f}" font-size="11.5" fill="{t["ink2"]}" '
+              f'font-family="{FONT}">{esc(name)}</text>')
+    c.add(f'<text x="{c.m["l"]}" y="{c.h-14}" font-size="11.5" fill="{t["ink3"]}" '
+          f'font-family="{FONT}">Randomization alone carries the robot to d~0.4 without ever seeing '
+          f'terrain. Past that, terrain training is what holds.</text>')
+    return c.render()
+
+
 for name, fn in [("dr_training_curves", chart_dr_curves), ("push_collapse", chart_push),
-                 ("dr_ladder_summary", chart_ladder), ("push_sweep", chart_push_sweep)]:
+                 ("dr_ladder_summary", chart_ladder), ("push_sweep", chart_push_sweep), ("terrain_retention", chart_terrain_retention)]:
     for mode in ("light", "dark"):
+        svg = fn(mode)
+        if svg is None:
+            continue
         p = OUT / f"{name}-{mode}.svg"
-        p.write_text(fn(mode))
+        p.write_text(svg)
         print(f"  {p}  ({p.stat().st_size//1024} KB)")
