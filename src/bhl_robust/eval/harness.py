@@ -28,6 +28,13 @@ from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController
 # fall in MuJoCo means the same thing it meant during Isaac Lab training.
 TILT_LIMIT_RAD = 0.78
 
+# The MJCF root frame sits at z~0 with the body geometry offset upward, so
+# qpos[2] is NOT a standing height -- it reads ~0.0 while fully upright. An
+# absolute height threshold therefore fires on the first step of every episode.
+# Falls are detected by tilt (as in training) plus this relative sink, measured
+# against the spawn height.
+MAX_SINK_M = 0.25
+
 
 @dataclass
 class EpisodeResult:
@@ -151,7 +158,13 @@ class HeadlessMujocoEnv:
         self.mj_data.qvel[:] = 0.0
         self.mj_data.qvel[0:2] = rng.normal(0.0, cfg.init_vel_noise, 2)
         mujoco.mj_forward(self.mj_model, self.mj_data)
+        self._spawn_z = float(self.mj_data.qpos[2])
         return self.robot_observations(command=(0.0, 0.0, 0.0))
+
+    @property
+    def sink_m(self) -> float:
+        """How far the root has dropped below its spawn height."""
+        return self._spawn_z - float(self.mj_data.qpos[2])
 
     def push(self, speed: float, rng: np.random.Generator) -> None:
         """Instantaneous velocity kick, matching training's push_by_setting_velocity."""
@@ -227,7 +240,7 @@ def run_episode(
         obs = env.robot_observations(command)
 
         tilt = env.tilt_rad
-        if tilt > TILT_LIMIT_RAD or env.base_height < 0.1:
+        if tilt > TILT_LIMIT_RAD or env.sink_m > MAX_SINK_M:
             fell = True
             survival_steps = t
             break

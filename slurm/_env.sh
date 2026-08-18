@@ -83,3 +83,18 @@ bhl_exec() {
         "${envargs[@]}" \
         "$SIF" bash "$@"
 }
+
+# When this shell is itself inside a Slurm allocation (e.g. an Open OnDemand
+# interactive session), srun/sbatch inherit SLURM_JOB_ID and try to run as a
+# STEP of that job rather than submitting new work -- failing with
+# "Job step's --cpus-per-task value exceeds that of job". Strip the inherited
+# job context before submitting.
+slurm_clean() {
+    env -u SLURM_JOB_ID -u SLURM_JOBID -u SLURM_NODELIST -u SLURM_NODEID \
+        -u SLURM_TASKS_PER_NODE -u SLURM_CPUS_ON_NODE -u SLURM_JOB_CPUS_PER_NODE \
+        -u SLURM_TRES_PER_TASK -u SLURM_JOB_GPUS -u SLURM_GPUS_ON_NODE \
+        -u SLURM_JOB_NUM_NODES -u SLURM_MEM_PER_NODE -u SLURM_JOB_PARTITION \
+        -u SLURM_EXPORT_ENV -u SLURM_TASK_PID -u SLURM_LOCALID -u SLURM_PROCID \
+        -u SLURM_STEP_ID -u SLURM_STEPID -u SLURM_SUBMIT_DIR -u SLURMD_NODENAME \
+        "$@"
+}
