@@ -21,7 +21,7 @@ cat > "$WORKSPACE/.refresh_inner.sh" <<'INNER'
 #!/bin/bash
 set -euo pipefail
 cd "$REPO"
-"$PY" scripts/extract_curves.py "$UPSTREAM/logs/rsl_rl/biped" results/curves/training_curves.csv
+"$PY" scripts/extract_curves.py "$UPSTREAM/logs/rsl_rl/biped" "$UPSTREAM/logs/rsl_rl/humanoid" results/curves/training_curves.csv
 INNER
 chmod +x "$WORKSPACE/.refresh_inner.sh"
 bhl_exec "$WORKSPACE/.refresh_inner.sh"

@@ -35,6 +35,8 @@ def meta(label):
         return ("Push recovery", label[5:].rsplit("-s", 1)[0])
     if label.startswith("terrain-"):
         return ("Rough terrain", label[8:].rsplit("-s", 1)[0])
+    if label.startswith("arms-"):
+        return ("Arms (22 DoF)", label[5:].rsplit("-s", 1)[0])
     return ("other", None)
 
 summary = []

@@ -3,8 +3,8 @@ import csv, os, re, sys
 from pathlib import Path
 from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 
-LOGROOT = Path(sys.argv[1])
-OUT = Path(sys.argv[2])
+LOGROOTS = [Path(a) for a in sys.argv[1:-1]]
+OUT = Path(sys.argv[-1])
 TAGS = {
     "Train/mean_reward": "reward",
     "Train/mean_episode_length": "ep_len",
@@ -13,7 +13,8 @@ TAGS = {
     "Curriculum/terrain_levels": "terrain_level",
 }
 rows = []
-for d in sorted(LOGROOT.iterdir()):
+dirs = [d for root in LOGROOTS if root.is_dir() for d in sorted(root.iterdir())]
+for d in dirs:
     if not d.is_dir() or d.name == "isaaclab":
         continue
     label = re.sub(r"^[0-9-]+_[0-9-]+_", "", d.name)
