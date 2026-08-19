@@ -185,21 +185,32 @@ learned.
   <img alt="Fall rate vs terrain difficulty: no randomization fails immediately, randomization-only degrades past d=0.4, terrain-trained stays at zero." src="results/charts/terrain_retention-light.svg">
 </picture>
 
-| MuJoCo difficulty | no randomization | randomization only *(never saw terrain)* | trained on terrain |
-|---|---|---|---|
-| 0.00 (flat) | 0.233 | 0.000 | 0.000 |
-| 0.05 | 0.756 | 0.000 | 0.000 |
-| 0.10 | 0.878 | 0.000 | 0.000 |
-| 0.20 | 1.000 | 0.000 | 0.000 |
-| 0.40 | 1.000 | 0.033 | **0.000** |
+| MuJoCo difficulty | no randomization | randomization only *(never saw terrain)* | trained on terrain | terrain, no obstacles |
+|---|---|---|---|---|
+| 0.00 (flat) | 0.233 | 0.000 | 0.000 | 0.000 |
+| 0.05 | 0.756 | 0.000 | 0.000 | 0.000 |
+| 0.10 | 0.878 | 0.000 | 0.000 | 0.000 |
+| 0.20 | 1.000 | 0.000 | 0.000 | 0.000 |
+| 0.40 | 1.000 | 0.033 | 0.000 | 0.000 |
+| 0.60 | — | 0.122 | **0.000** | 0.017 |
+| 0.80 | — | 0.211 | **0.011** | 0.033 |
+| 1.00 | — | 0.378 | **0.033** | 0.067 |
 
-<sub>Fall rate, 90 episodes per cell (6 commands × 5 seeds × 3 policies).</sub>
+<sub>Fall rate. n = 90 episodes per cell (6 commands × 5 seeds × 3 policies);
+n = 60 for the no-obstacle ablation, which has 2 seeds. The `no randomization`
+column was not run above d = 0.40 — it is already at 100%.</sub>
 
 **Finding.** Plain domain randomization — with **zero terrain exposure** —
 carries the robot to roughly $d = 0.4$ on its own. A policy that has only ever
 walked on a flat plane, but trained with randomized friction, mass, and actuator
-gains, handles moderately rough ground it has never seen. Terrain training is
-what holds past that point.
+gains, handles moderately rough ground it has never seen.
+
+Terrain training is what holds past that point, and the gap widens with
+difficulty: at $d = 1.0$ the terrain policy falls in **3.3%** of episodes against
+the randomized-only policy's **37.8%**, an 11× reduction. Notably the
+no-obstacle ablation is consistently *worse* than the full terrain menu at high
+difficulty (6.7% vs 3.3%), which is the same direction as the terrain-level
+result below.
 
 The training-side curriculum is consistent with that: it plateaus at about
 **level 1.4 of 9**. The robot learns mildly rough ground and stops progressing —

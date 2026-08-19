@@ -272,9 +272,9 @@ def chart_terrain_retention(mode):
     # Three regimes, ordered worst -> best, drawn on the ordinal ramp so the
     # ordering is legible without reading the labels.
     series = [
-        ("dr-off-s0",        "no randomization",      t["ramp"][0]),
-        ("dr-default-s0",    "randomization only",    t["ramp"][2]),
-        ("terrain-bumpy-s0", "trained on terrain",    t["ramp"][4]),
+        ("dr-off",        "no randomization",   t["ramp"][0]),
+        ("dr-default",    "randomization only", t["ramp"][2]),
+        ("terrain-bumpy", "trained on terrain", t["ramp"][4]),
     ]
     ends = []
     for key, name, colour in series:
