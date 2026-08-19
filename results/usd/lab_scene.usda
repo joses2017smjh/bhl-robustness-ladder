@@ -1,0 +1,81 @@
+#usda 1.0
+(
+    "BHL lab eval scene: tile, carpet, cable, threshold, ramp"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "World"
+{
+    def Cube "floor" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        color3f[] primvars:displayColor = [(0.72, 0.72, 0.7)]
+        double size = 2
+        float3 xformOp:scale = (8, 4, 0.02)
+        double3 xformOp:translate = (2, 0, -0.02)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "carpet"
+    {
+        color3f[] primvars:displayColor = [(0.42, 0.28, 0.22)]
+        double size = 2
+        float3 xformOp:scale = (1.4, 3, 0.004)
+        double3 xformOp:translate = (0.6, 0, 0.004)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "cable" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "z"
+        double height = 5.2
+        color3f[] primvars:displayColor = [(0.1, 0.1, 0.1)]
+        double radius = 0.025
+        float xformOp:rotateX = 90
+        double3 xformOp:translate = (1.6, 0, 0.025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+    }
+
+    def Cube "threshold" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        color3f[] primvars:displayColor = [(0.48, 0.38, 0.26)]
+        double size = 2
+        float3 xformOp:scale = (0.07, 2.6, 0.038)
+        double3 xformOp:translate = (2.8, 0, 0.038)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "ramp" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        color3f[] primvars:displayColor = [(0.58, 0.58, 0.54)]
+        double size = 2
+        float xformOp:rotateY = -6.9
+        float3 xformOp:scale = (0.85, 2.4, 0.025)
+        double3 xformOp:translate = (4.3, 0, 0.085)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateY", "xformOp:scale"]
+    }
+
+    def Cube "landing" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        color3f[] primvars:displayColor = [(0.52, 0.52, 0.5)]
+        double size = 2
+        float3 xformOp:scale = (0.7, 2.4, 0.085)
+        double3 xformOp:translate = (5.7, 0, 0.085)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Xform "light"
+    {
+    }
+}
+

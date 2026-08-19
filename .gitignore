@@ -29,6 +29,11 @@ __pycache__/
 # Bulk rendered clips: ~500KB each and dozens per eval sweep. Download the
 # good ones for the portfolio rather than versioning them.
 results/video/
+docs/gifs/*.mp4
+docs/gifs/_frame_*.png
+
+# Generated USD crates can be large; the .usda lab scene is the readable one.
+results/usd/*.usdc
 
 # Raw per-step TensorBoard dump (~300k rows). curves.json is the derived,
 # downsampled artifact the charts and dashboard actually read.

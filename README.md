@@ -10,8 +10,8 @@ Upstream ships flat-ground locomotion with a fixed domain-randomization preset,
 no curriculum, and no way to score a policy. This repo adds three experiments —
 and, necessarily, the instrument to measure them.
 
-**36 policies trained** (6,000 PPO iterations each, 4,096 envs, 3 seeds per
-condition) · **~1,500 scored sim2sim episodes** · **288 rendered rollouts**
+**44 policies trained** (36 biped + 8 22-DoF, 6,000 PPO iterations, 4,096 envs) ·
+**~1,500 scored sim2sim episodes** · **288 rendered rollouts**
 
 **[▶ Explore every run interactively](https://claude.ai/code/artifact/de955af8-2236-4912-84fb-577e0a43ccbe)**
 — isolate a run, switch metrics, watch the axis rescale.
@@ -23,6 +23,12 @@ condition) · **~1,500 scored sim2sim episodes** · **288 rendered rollouts**
 | **1** | **Sim2sim transfer inverts the training-reward ranking.** The policy with the *highest* training reward falls 23% of the time in MuJoCo; the repo-default randomization falls **0%**. |
 | **2** | **0.2 m/s of shove-rejection is free.** A disturbance curriculum at that ceiling costs nothing measurable. A competence-gated curriculum reaches **0.87 m/s**. |
 | **3** | **Randomization alone buys most of terrain robustness.** A policy that has never seen rough ground handles it to d≈0.4; terrain training is what holds past that. |
+| **4** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD, and MJCF agree on mass, inertia, joint limits, damping, and collision primitives. |
+
+<p align="center">
+  <img src="docs/gifs/multi_race.gif" width="880" alt="Four policies in one MuJoCo world. Three stay up; the un-randomized robot is on the ground."><br>
+  <sub>Four policies, one world, identical 0.45 m/s shoves. This is not a split-screen composite — they share a solver and a clock. The un-randomized robot is the one on the ground.</sub>
+</p>
 
 ---
 
@@ -235,6 +241,48 @@ Two further caveats worth stating:
 
 ---
 
+## 4 · Asset consistency: is the sim2sim gap physics?
+
+**Question.** BHL describes the same robot three times. Isaac Lab trains from
+the USD; the sim2sim harness scores from the MJCF; the URDF is the nominal
+source both were converted from. Every number this project reports as a
+PhysX↔MuJoCo gap silently assumes those three agree. If they do not, part of
+the measured transfer inversion is asset drift — bookkeeping, not physics.
+
+Compared, per link and joint, at a 1% relative tolerance (5% on inertia):
+
+| | mass | principal inertia | joint limits | damping | collision geoms |
+|---|---|---|---|---|---|
+| biped, 12 DoF, 11.343 kg | URDF = MJCF, $\Delta=0$ | 0 mismatches | URDF = MJCF = USD | 0 mismatches | 7 box/cylinder, both sides |
+| humanoid, 22 DoF, 16.331 kg | URDF = MJCF, $\Delta=0$ | 0 mismatches | URDF = MJCF = USD | 0 mismatches | 11 box/cylinder, both sides |
+
+The raw diagonal inertia *looks* swapped on several links
+(`leg_*_knee_pitch` iyy↔izz). That is MuJoCo's convention, not a conversion
+bug: MuJoCo stores inertia in the body's principal frame (`body_iquat` holds
+the rotation) while URDF states it in the link frame. Sorted eigenvalues are
+frame-independent, and those agree. Publishing the raw diagonals would have
+been a false positive.
+
+Collision geometry is primitives on all three descriptions — visual meshes
+are `contype="0"`. That is an asset-optimization decision, not a loading
+quirk, and it is the one the collision-representation ablation (queued)
+reverses.
+
+**Finding.** The three descriptions agree. The transfer inversion in §1 is
+a physics-engine difference, not an unaccounted mass or limit mismatch. Both
+outcomes of this check would have been useful; this is the reassuring one.
+
+The evaluation height field is also now a USD asset
+(`results/usd/eval_terrain.usdc`) whose `difficulty` variant set is
+`d000…d100`. Same generator, same seed as the MuJoCo harness, but $d$ is a
+variant selection rather than a function argument. A composed lab floor —
+tile, carpet strip, cable, door threshold, ramp — lives next to it as
+`lab_scene.usda`. Depth-sensor work still wants materials and lighting; this
+is the geometry those artifacts would sit on. Camera rendering on this
+cluster remains blocked (Isaac Sim 5.1 RTX segfaults at driver 595.71.05).
+
+---
+
 ## How any of this is measured
 
 The obvious plan — "evaluate through the sim2sim path the repo already gives
@@ -346,10 +394,12 @@ src/bhl_robust/
   curricula/    push-magnitude ramp + adaptive rule
   terrains/     rough / slope / obstacle generators (no stairs)
   eval/         headless MuJoCo harness, MJCF repair, height fields, video
+  audit/        three-way URDF / USD / MJCF consistency
+  usd/          scripted OpenUSD stages (terrain variants, lab scene)
 scripts/        vendored train/play entrypoints, curves, charts, GIFs
 slurm/          sbatch scripts (OSU COE HPC, `gpu` partition)
 docs/           interactive run explorer + README GIFs
-results/        curves, charts, per-episode CSVs, aggregated tables
+results/        curves, charts, per-episode CSVs, aggregated tables, audit JSON
 ```
 
 ## Reproducing
@@ -369,6 +419,12 @@ sbatch slurm/14_terrain.sbatch           # rough terrain + ablation
 
 sbatch slurm/20_evaluate_all.sbatch      # export -> score -> render
 sbatch slurm/21_terrain_sweep.sbatch     # terrain retention curve
+sbatch slurm/30_arms.sbatch              # 22-DoF counterparts (8 runs)
+sbatch slurm/31_arms_eval.sbatch         # export + sim2sim the 22-DoF set
+sbatch slurm/32_convert_convex.sbatch    # URDF → USD, convex-decomp collision
+sbatch slurm/33_collision_train.sbatch   # mesh-collision ablation (after 32)
+sbatch slurm/34_multi_gif.sbatch         # four policies, one MuJoCo world
+sbatch slurm/40_assets.sbatch            # audit + USD stages (CPU, no GPU)
 sbatch slurm/90_tensorboard.sbatch       # live curves
 ```
 

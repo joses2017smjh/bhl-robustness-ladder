@@ -51,7 +51,20 @@ PY=$UV_PROJECT_ENVIRONMENT/bin/python
 # Hydra overrides are passed as a FILE PATH (OVERRIDE_FILE), never inline:
 # Apptainer's --env splits values on commas, so a range like [0.8,0.8] is
 # parsed as two malformed key=value pairs and the exec is rejected outright.
-BHL_FORWARD_VARS="TASK EXPERIMENT RUN_NAME SEED NUM_ENVS MAX_ITER OVERRIDE_FILE TRAIN_SCRIPT DEPLOY_CFG CACHE_DIR OUT_CSV LABEL EPISODE_S N_SEEDS PUSH_SPEED VIDEO_DIR MUJOCO_GL PYOPENGL_PLATFORM OMP_NUM_THREADS"
+BHL_FORWARD_VARS="TASK EXPERIMENT RUN_NAME SEED NUM_ENVS MAX_ITER OVERRIDE_FILE TRAIN_SCRIPT DEPLOY_CFG CACHE_DIR OUT_CSV LABEL EPISODE_S N_SEEDS PUSH_SPEED VIDEO_DIR MUJOCO_GL PYOPENGL_PLATFORM OMP_NUM_THREADS TERRAIN_D RUN_DIR VARIANT BHL_CONVEX_USD BHL_CONVEX_USD_DIR BENCH_OUT PYTHONPATH LD_LIBRARY_PATH"
+
+# Isaac Sim bundles OpenUSD as `pxr` inside an extscache wheel; it is not on
+# sys.path of a plain interpreter. libpython also has to be visible because
+# that extension is linked against it and uv's CPython is not in the default
+# linker path. Call this before any script that `import pxr`.
+setup_pxr() {
+    local libs py
+    libs=$(ls -d "$UV_PROJECT_ENVIRONMENT"/lib/python3.11/site-packages/isaacsim/extscache/omni.usd.libs-* 2>/dev/null | head -1)
+    py=$(ls -d "$UV_PYTHON_INSTALL_DIR"/cpython-3.11*-linux-x86_64-gnu/lib 2>/dev/null | head -1)
+    [ -n "$libs" ] || { echo "setup_pxr: omni.usd.libs not found" >&2; return 1; }
+    export PYTHONPATH="$REPO/src:$libs:${PYTHONPATH:-}"
+    export LD_LIBRARY_PATH="${py:+$py:}$libs/bin:$libs/lib:${LD_LIBRARY_PATH:-}"
+}
 
 bhl_exec() {
     local envargs=()
