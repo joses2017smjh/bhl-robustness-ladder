@@ -33,3 +33,7 @@ results/video/
 # Raw per-step TensorBoard dump (~300k rows). curves.json is the derived,
 # downsampled artifact the charts and dashboard actually read.
 results/curves/training_curves.csv
+
+# Paired README GIFs are figures, not bulk output -- keep them.
+!docs/gifs/
+!docs/gifs/*.gif
