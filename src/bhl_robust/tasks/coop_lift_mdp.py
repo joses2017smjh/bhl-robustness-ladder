@@ -93,7 +93,10 @@ def object_lift_progress(
     spawn = float(env.cfg.object_spawn_z)
     target = float(getattr(env, "_bhl_lift_h", env.cfg.lift_success_z))
     progress = (obj.data.root_pos_w[:, 2] - spawn) / max(target, 1e-3)
-    return progress.clamp(0.0, 1.0) * _pinch_weight(env)
+    progress = progress.clamp(0.0, 1.0)
+    if getattr(env.cfg, "gate_lift_on_pinch", True):
+        progress = progress * _pinch_weight(env)
+    return progress
 
 
 def object_is_lifted(
@@ -109,7 +112,9 @@ def object_is_lifted(
     """
     obj: RigidObject = env.scene[object_cfg.name]
     lifted = (obj.data.root_pos_w[:, 2] > (float(env.cfg.object_spawn_z) + minimal_height)).float()
-    return lifted * _pinch_weight(env)
+    if getattr(env.cfg, "gate_lift_on_pinch", True):
+        lifted = lifted * _pinch_weight(env)
+    return lifted
 
 
 def object_xy_drift_l2(
@@ -245,7 +250,7 @@ def lift_height_curriculum(
         z = obj.data.root_pos_w[env_ids, 2]
     high_enough = z > (spawn + height)
     d = getattr(env, "_bhl_pinch_d", None)
-    if d is None:
+    if (not getattr(env.cfg, "gate_lift_on_pinch", True)) or d is None:
         pinched = torch.ones_like(z, dtype=torch.bool)
     else:
         pinched = (d[idx] < 0.20)

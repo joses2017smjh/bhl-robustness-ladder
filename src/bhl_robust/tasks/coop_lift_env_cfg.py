@@ -405,6 +405,9 @@ class CoopLiftEnvCfg(ManagerBasedRLEnvCfg):
     contact_offset: float = 0.16
     object_spawn_z: float = 0.14
     lift_success_z: float = 0.04
+    # Strategy ablation flag. False recovers the first-run toss: height pays
+    # even when pinch is identically zero. Default is the DexPBT-style gate.
+    gate_lift_on_pinch: bool = True
 
     def __post_init__(self):
         self.decimation = 8

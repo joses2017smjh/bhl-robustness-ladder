@@ -361,6 +361,22 @@ cap with pinch identically zero — a toss, not a lift. The requeue is the
 policy above: squat-hold spawn, two-scale reach, clamp, pinch-gated height.
 Same three objects, seed 0. Seeds still wait until pinch is nonzero.
 
+The recipe has six knobs the first runs did not isolate. A cube-only array
+(seed 0, 4,000 iterations, same squat spawn) turns them off one at a time
+against the cube job already running:
+
+| arm | off | what it answers |
+|---|---|---|
+| ungated | pinch×height | was the ladder a toss because of standing spawn, or because height paid without contact? |
+| onesigma | coarse 0.40; fine σ=0.15 | two-scale vs Isaac Lab's single kernel, now that the hands start next to the cube |
+| noclamp | opposing-force term | is the clamp load-bearing, or do the reach kernels already force a side hold? |
+| pickfirst | lift weights | DexPBT stage 1: can a pinch form when height never pays? |
+| absolute | residual around squat | ULC / AdaptManip: PD residual vs raw joint targets |
+| noalive | still_alive | was dying-in-five-steps a standing-spawn artifact? |
+
+Tables wait until pinch on the control is nonzero. Extra seeds of a dead
+channel are still not worth the GPUs.
+
 ---
 
 ## How any of this is measured
@@ -516,6 +532,7 @@ sbatch slurm/34_multi_gif.sbatch         # four policies, one MuJoCo world
 sbatch slurm/35_pick_gif.sbatch          # kinematics check (not a policy)
 sbatch slurm/36_coop_lift.sbatch         # learned two-robot lift: cube, ladder, yoga ball
 sbatch slurm/37_arms_gifs.sbatch         # 22-DoF pair clips for §1–3
+sbatch slurm/38_coop_strategy.sbatch     # cube recipe ablations (one seed, one knob each)
 sbatch slurm/40_assets.sbatch            # audit + USD stages (CPU, no GPU)
 sbatch slurm/90_tensorboard.sbatch       # live curves
 ```
