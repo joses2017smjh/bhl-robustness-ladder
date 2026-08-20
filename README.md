@@ -398,16 +398,23 @@ learned PhysX.
 <details>
 <summary><b>Metric definitions</b></summary>
 
+<div>
+
 A fall reuses training's own `bad_orientation` threshold, so it means the same
 thing on both sides. Tilt is recovered from the base quaternion:
 
-$$\theta = \arccos\!\big(1 - 2(q_x^2+q_y^2)\big), \qquad \text{fall if } \theta > 0.78\ \text{rad}$$
+```math
+\theta = \arccos\bigl(1 - 2(q_x^2+q_y^2)\bigr), \qquad \text{fall if } \theta > 0.78 \text{ rad}
+```
 
 Velocity error is computed in the **yaw frame**, because that is the frame
 upstream rewards (`track_lin_vel_xy_yaw_frame_exp`); any other frame is not
 comparable to training:
 
-$$e_v = \big\lVert R_z(-\psi)\,\mathbf{v}_{\text{world}}\big|_{xy} - \mathbf{v}_{\text{cmd}}\big\rVert, \qquad \psi = \operatorname{atan2}\!\big(2(q_wq_z+q_xq_y),\,1-2(q_y^2+q_z^2)\big)$$
+```math
+e_v = \bigl\lVert \bigl(R_z(-\psi)\mathbf{v}_{\mathrm{world}}\bigr)_{xy} - \mathbf{v}_{\mathrm{cmd}}\bigr\rVert, \qquad
+\psi = \operatorname{atan2}\bigl(2(q_w q_z + q_x q_y), 1-2(q_y^2+q_z^2)\bigr)
+```
 
 On rough ground, sink is measured against the **local** surface height rather
 than the spawn height — an absolute reference would score a robot walking
@@ -416,6 +423,8 @@ so a policy that falls instantly cannot post a flatteringly small error.
 
 The protocol is identical for every policy: 6 commanded velocities × 5 seeds ×
 10 s episodes, on the same fixed terrain seed.
+
+</div>
 </details>
 
 <details>
