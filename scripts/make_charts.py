@@ -117,7 +117,14 @@ def chart_dr_curves(mode):
         c.add(f'<text x="{lx:.0f}" y="{ly:.0f}" font-size="12" fill="{t["ink2"]}" '
               f'font-family="{FONT}">{esc(lbl)}</text>')
     c.add(f'<text x="{c.m["l"]+8}" y="{c.m["t"]+16}" font-size="11.5" fill="{t["ink3"]}" '
-          f'font-family="{FONT}">dashed = run still in progress</text>')
+          f'font-family="{FONT}">dashed = 22-DoF (arm-deviation terms; y-scale not comparable to biped)</text>')
+    for scale, prefix, dash_i in [("0.0", "arms-dr0.0", 0), ("1.0", "arms-dr1.0", 2)]:
+        pts = mean_curve(prefix, "reward")
+        if not pts:
+            continue
+        c.line(pts, t["ramp"][dash_i], width=1.6, dash="6 3")
+        c.add(f'<text x="{c.sx(pts[-1][0])+8:.0f}" y="{c.sy(pts[-1][1])+4:.0f}" font-size="11" '
+              f'fill="{t["ink3"]}" font-family="{FONT}">22-DoF s={scale}</text>')
     return c.render()
 
 
@@ -137,6 +144,10 @@ def chart_push(mode):
         c.line(pts, t["cat"][i])
         if pts:
             ends.append([c.sy(pts[-1][1]) + 4, c.sx(pts[-1][0]) + 10, name, t["cat"][i]])
+    arms_pts = mean_curve("arms-push", "reward")
+    if arms_pts:
+        c.line(arms_pts, t["cat"][0], width=1.6, dash="6 3")
+        ends.append([c.sy(arms_pts[-1][1]) + 4, c.sx(arms_pts[-1][0]) + 10, "22-DoF adaptive", t["cat"][0]])
     ends.sort()
     for j in range(1, len(ends)):
         if ends[j][0] - ends[j - 1][0] < 16:

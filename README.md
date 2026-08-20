@@ -30,11 +30,6 @@ and, necessarily, the instrument to measure them.
   <sub>Four policies, one world, identical 0.45 m/s shoves. This is not a split-screen composite — they share a solver and a clock. The un-randomized robot is the one on the ground.</sub>
 </p>
 
-<p align="center">
-  <img src="docs/gifs/squat_pick.gif" width="880" alt="22-DoF humanoid squats, lifts an orange bin from the sides, and stands. Caption says scripted, not a policy."><br>
-  <sub>22-DoF, scripted — not a policy. There are no fingers, and the shoulders cannot adduct past ~36 cm, so the bin is a side-lift. A walking policy never does this.</sub>
-</p>
-
 ---
 
 ## 1 · Domain randomization: the fidelity ladder
@@ -65,6 +60,11 @@ agreement with the un-randomized rung.
   <sub>Identical strafe command in MuJoCo. Left <code>s=1.0</code>, right <code>s=0</code>. Neither policy ever saw MuJoCo during training.</sub>
 </p>
 
+<p align="center">
+  <img src="docs/gifs/arms_dr_pair.gif" width="880" alt="Same strafe comparison on the 22-DoF model."><br>
+  <sub>Same command, 22-DoF. The biped at <code>s=0</code> falls 23% in MuJoCo; the 22-DoF counterpart falls <b>0%</b> (n=60). Arms are not decoration on this ladder.</sub>
+</p>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="results/charts/dr_ladder_summary-dark.svg">
   <img alt="Reward declines smoothly with randomization scale while fall rate knees upward after s=1.0." src="results/charts/dr_ladder_summary-light.svg">
@@ -80,7 +80,10 @@ agreement with the un-randomized rung.
 
 <sub>90 episodes per rung (6 commands × 5 seeds × 3 policies). † `s=2.0` barely
 locomotes at all — 0.13 m in 10 s — so its low fall rate means "stands still",
-not "robust".</sub>
+not "robust". 22-DoF, same protocol, 2 seeds (n=60): <code>s=0</code> fall **0.000**
+(distance 2.11 m), <code>s=1</code> fall **0.000** (1.88 m). Training reward is
+not comparable across morphologies — the humanoid reward set adds arm-deviation
+penalties — so the number that transfers is the MuJoCo fall rate.</sub>
 
 **Finding.** The training column and the transfer column disagree, and that
 disagreement is the whole point. `s = 0` wins training by 49% and *loses*
@@ -124,6 +127,11 @@ $$m \leftarrow \mathrm{clip}\Big(m + \Delta\cdot\big[\mathbb{1}(\hat f < f^\star
 <p align="center">
   <img src="docs/gifs/push_pair.gif" width="880" alt="Left: push-trained policy staggering and recovering. Right: baseline policy knocked over by the same shove."><br>
   <sub>Identical 0.5 m/s shoves. Left trained with a push curriculum, right without. <b>0/6 falls vs 3/6.</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/gifs/arms_push_pair.gif" width="880" alt="Same shove comparison on the 22-DoF model."><br>
+  <sub>Same 0.5 m/s protocol, 22-DoF. Push-trained fall 0.15; DR-only 0.10; un-randomized 0.45 (n=60). The arms help the fragile rung more than they help the curriculum.</sub>
 </p>
 
 <picture>
@@ -189,6 +197,11 @@ learned.
 <p align="center">
   <img src="docs/gifs/terrain_pair.gif" width="880" alt="Left: terrain-trained policy walking over rough ground. Right: flat-trained policy falling on the same ground."><br>
   <sub>Identical rough ground at <code>d = 0.80</code>. Left trained on terrain, right flat-trained with the same randomization. <b>0/6 falls vs 3/6.</b></sub>
+</p>
+
+<p align="center">
+  <img src="docs/gifs/arms_terrain_pair.gif" width="880" alt="Same rough-ground comparison on the 22-DoF model."><br>
+  <sub>Same <code>d = 0.80</code> ground, 22-DoF. Scored flat and at <code>d = 0.20</code> so far: terrain-trained and DR-only both at 0% (n=60). The clip is the matched <code>d = 0.80</code> pair.</sub>
 </p>
 
 <picture>
@@ -288,38 +301,49 @@ cluster remains blocked (Isaac Sim 5.1 RTX segfaults at driver 595.71.05).
 
 ---
 
-## 5 · Cooperative lift: can two of them pick something up?
+## 5 · Cooperative lift: can two of them learn to pick something up?
 
 **Question.** The 22-DoF model has arms. A walking policy never uses them to
-lift, and a scripted squat only shows the kinematics are possible. Can two
-of these machines — 16 kg, 6 Nm, no fingers, shoulders that cannot adduct
-past ~36 cm — learn to lift a cube, a ladder, and a yoga ball together?
+lift. A scripted squat only shows the kinematics are possible — it is not
+the experiment. Can two of these machines — 16 kg, 6 Nm, no fingers,
+shoulders that cannot adduct past ~36 cm — *learn* a non-prehensile
+side-lift of a cube, a ladder, and a yoga ball?
 
-The sample-efficient version of that question, from the papers that actually
-train contact-rich multi-agent lifts (Isaac Lab's Franka lift, the 2025
-pinch-lift-move quadruped work, Dactyl-style in-grasp resets), is narrower
-than "walk over and pick it up":
+This is a policy, trained. The interpolated-joint clip is a kinematics
+check, same role as a reachability plot, and it lives in
+`docs/gifs/squat_pick.gif` for that reason only.
 
-- Spawn already in a pinch formation. Approaching on foot is a locomotion
-  task and starves the lift of on-policy contact.
-- One PPO for both robots. A pinch is one physical system; independent
-  learners spend their samples fighting.
-- Dense constellation reach (hand midpoint → designated contact point, tanh
-  kernel) always on; sparse lift bonus 15× heavier, matching Franka lift.
-  Progress-only is tossable; bonus-only is too sparse for 6 Nm legs.
+The recipe is the one contact-rich dual-arm papers actually train with
+(Isaac Lab Franka lift, DexPBT's single net for two arms, Dactyl in-grasp
+resets, COLA's proprioceptive collaborative carry), not a tour of every MARL
+variant:
+
+- Spawn already in the squat-hold the kinematics check uses. Walking up to
+  the object is a locomotion task and starves the lift of on-policy contact.
+- One PPO, 44 actions. A pinch is one physical system; two independent
+  learners spend the batch fighting. DexPBT uses the same single-net choice
+  at 46 DoF. The critic is privileged (object twist, both robots) — that is
+  the training-time teacher. The actor sees proprioception, object-in-root,
+  and PD tracking residual, which is the contact proxy a real motor current
+  would give. No depth maps: Isaac Sim 5.1's RTX renderer segfaults on this
+  cluster, so this is rigid-body first.
+- Hardware limits are physics. The URDF already refuses to adduct past
+  ~36 cm; an out-of-range PD target is clipped by the articulation. That is
+  what forces a side-clamp instead of a front grasp, not a penalty term.
+- Sequential reward: two-scale constellation reach, then opposing clamp
+  through the object, then height gated on pinch, with a tilt penalty so the
+  two robots have to lift together. Progress-only is a toss; bonus-only is
+  too sparse for 6 Nm.
 
 $$
-r_{\text{pinch}}=1-\tanh\!\left(\frac{\|m_A-c_A\|+\|m_B-c_B\|}{2\sigma}\right),\qquad
-r_{\text{lift}}=\mathrm{clip}\!\left(\frac{z-z_0}{h},0,1\right)+15\cdot\mathbf{1}[z>z_0+h]
+r_{\text{pinch}}=\sum_{\sigma\in\{0.40,\,0.12\}}\bigl(1-\tanh(d/\sigma)\bigr),\quad
+r_{\text{clamp}}=r_{\text{fine}}\cdot[-\widehat{v}_A\cdot\widehat{v}_B]_+,\quad
+r_{\text{lift}}=r_{\text{fine}}\cdot\Bigl(\mathrm{clip}\!\left(\tfrac{z-z_0}{h},0,1\right)+15\cdot\mathbf{1}[z>z_0+h]\Bigr)
 $$
 
 $h$ is competence-gated — the same promote/demote rule as the push curriculum
-in §2 — not a wall-clock ramp. The critic sees object velocity; the actor
-does not.
-
-The ladder is the outer envelope of a 6-foot ladder (1.5 m × 0.40 m × 0.08 m),
-not a 7 cm rail: this morphology cannot close a pinch that small. Three
-runs, seed 0, 4,000 iterations, 1,024 envs, RTX 8000.
+in §2. The first three runs used standing spawn and a single $\sigma=0.15$
+with ungated height. They finished:
 
 | object | mean reward | pinch | lift bonus | $h$ | fall | episode length |
 |---|---|---|---|---|---|---|
@@ -330,30 +354,12 @@ runs, seed 0, 4,000 iterations, 1,024 envs, RTX 8000.
 <sub>One seed. Pinch is the constellation term at iteration 3,999. Cube and ball
 are at 100% fall from iteration 100.</sub>
 
-**Finding.** The first recipe spawned in the right *XY*, standing. Hands started
-about half a metre above the contact points, so $\sigma=0.15$ was already in
-the flat part of $\tanh$ and pinch never moved. Cube and ball then learned the
-shortcut that living is expensive when the task term is zero: episode length
-collapsed from 24 steps to 5. The ladder *did* move the object — $h$ ran to
-its 22 cm cap — with pinch identically zero, which is the toss the
-progress-only warning was about. Height without a pinch is not a lift.
-
-That is the same kind of localisation §2 needed after the 1.5 m/s ramp: the
-idea (spawn in contact, one PPO, dense reach + sparse lift) was right, the
-kernel and the pose were not. Isaac Lab's Franka lift uses $\sigma=0.1$
-because the gripper already starts next to the cube, and it *gates* goal
-tracking on height; DexPBT does the same staging ($r_{\text{pick}}$, then
-$r_{\text{targ}}$ only once picked). The inverse on a floor object is: squat
-to the hold the GIF already uses, two-scale reach so spawn is on the slope
-of $\tanh$, and multiply height by pinch so a toss does not count.
-
-$$
-r_{\text{pinch}}=\sum_{\sigma\in\{0.40,\,0.12\}}\bigl(1-\tanh(d/\sigma)\bigr),\qquad
-r_{\text{lift}}=r_{\text{fine}}\cdot\Bigl(\mathrm{clip}\!\left(\tfrac{z-z_0}{h},0,1\right)+15\cdot\mathbf{1}[z>z_0+h]\Bigr)
-$$
-
-Same three objects, seed 0, queued overnight. Seeds still wait until pinch
-is nonzero.
+**Finding.** Standing spawn left the hands half a metre above the contact
+points, so $\sigma=0.15$ was already flat and pinch never moved. Cube and
+ball learned to die in five steps. The ladder moved the object to the 22 cm
+cap with pinch identically zero — a toss, not a lift. The requeue is the
+policy above: squat-hold spawn, two-scale reach, clamp, pinch-gated height.
+Same three objects, seed 0. Seeds still wait until pinch is nonzero.
 
 ---
 
@@ -498,8 +504,9 @@ sbatch slurm/31_arms_eval.sbatch         # export + sim2sim the 22-DoF set
 sbatch slurm/32_convert_convex.sbatch    # URDF → USD, convex-decomp collision
 sbatch slurm/33_collision_train.sbatch   # mesh-collision ablation (after 32)
 sbatch slurm/34_multi_gif.sbatch         # four policies, one MuJoCo world
-sbatch slurm/35_pick_gif.sbatch          # scripted 22-DoF squat-and-pick clip
-sbatch slurm/36_coop_lift.sbatch         # two 22-DoF robots: cube, ladder, yoga ball
+sbatch slurm/35_pick_gif.sbatch          # kinematics check (not a policy)
+sbatch slurm/36_coop_lift.sbatch         # learned two-robot lift: cube, ladder, yoga ball
+sbatch slurm/37_arms_gifs.sbatch         # 22-DoF pair clips for §1–3
 sbatch slurm/40_assets.sbatch            # audit + USD stages (CPU, no GPU)
 sbatch slurm/90_tensorboard.sbatch       # live curves
 ```

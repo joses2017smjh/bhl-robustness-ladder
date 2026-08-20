@@ -6,8 +6,11 @@ code path, three objects, no shared policy until a lift actually appears.
 
 Not a locomotion overlay. Velocity tracking, feet-air-time, and
 ``joint_deviation_arms`` all fight a squat-and-pinch, so they are absent.
-Spawn is the crouch-hold from the scripted GIF, not the standing default:
-XY formation without that pose left the tanh kernel saturated.
+Spawn is the crouch-hold from the kinematics GIF, not the standing default.
+The critic sees object twist and both robots; the actor sees proprioception,
+object-in-root, and PD tracking residual — asymmetric actor-critic, the
+training-time form of teacher-student. Joint limits are URDF walls, not
+reward terms, so the 36 cm adduction cap is physics.
 """
 from __future__ import annotations
 
@@ -186,6 +189,14 @@ class ObservationsCfg:
             func=coop.object_pos_in_root,
             params={"robot_cfg": SceneEntityCfg("robot_b")},
         )
+        track_err_a = ObsTerm(
+            func=coop.joint_target_error,
+            params={"asset_cfg": SceneEntityCfg("robot_a", joint_names=HUMANOID_LITE_JOINTS, preserve_order=True)},
+        )
+        track_err_b = ObsTerm(
+            func=coop.joint_target_error,
+            params={"asset_cfg": SceneEntityCfg("robot_b", joint_names=HUMANOID_LITE_JOINTS, preserve_order=True)},
+        )
         actions = ObsTerm(func=mdp.last_action)
 
         def __post_init__(self):
@@ -197,6 +208,7 @@ class ObservationsCfg:
         base_lin_vel_a = ObsTerm(func=mdp.base_lin_vel, params={"asset_cfg": SceneEntityCfg("robot_a")})
         base_lin_vel_b = ObsTerm(func=mdp.base_lin_vel, params={"asset_cfg": SceneEntityCfg("robot_b")})
         object_lin_vel = ObsTerm(func=coop.object_lin_vel_w)
+        object_ang_vel = ObsTerm(func=coop.object_ang_vel_w)
 
         def __post_init__(self):
             self.enable_corruption = False
@@ -229,9 +241,11 @@ class RewardsCfg:
     """Isaac Lab lift weights, two-scale constellation, pinch-gated height.
 
     Coarse reach is always on so a 0.5 m spawn gap still has a gradient.
-    Fine reach is the pinch. Height terms multiply by the pinch kernel —
+    Fine reach is the pinch. Clamp rewards opposing force through the object
+    (the fingerless grasp). Height terms multiply by the pinch kernel —
     without that gate the ladder run paid 3.4 for a toss (reaching 0).
     Sparse lift is 15x heavier than coarse reach, matching Franka lift.
+    Tilt penalty is how two robots stay synchronous; a toss spins.
     """
 
     reaching_coarse = RewTerm(
@@ -246,6 +260,14 @@ class RewardsCfg:
                 "robot_b_cfg": SceneEntityCfg("robot_b", body_names=_HANDS)},
         weight=1.0,
     )
+    opposing_clamp = RewTerm(
+        func=coop.opposing_clamp,
+        params={
+            "robot_a_cfg": SceneEntityCfg("robot_a", body_names=_HANDS),
+            "robot_b_cfg": SceneEntityCfg("robot_b", body_names=_HANDS),
+        },
+        weight=1.5,
+    )
     lift_progress = RewTerm(func=coop.object_lift_progress, weight=2.0)
     lifting_object = RewTerm(
         func=coop.object_is_lifted,
@@ -254,6 +276,7 @@ class RewardsCfg:
     )
     object_xy = RewTerm(func=coop.object_xy_drift_l2, weight=-0.8)
     object_vel = RewTerm(func=coop.object_lin_vel_l2, weight=-0.05)
+    object_tilt = RewTerm(func=coop.object_tilt_l2, weight=-1.5)
     still_alive = RewTerm(func=coop.still_alive, weight=1.0)
     termination_penalty = RewTerm(func=mdp.is_terminated, weight=-10.0)
     flat_a = RewTerm(
@@ -392,6 +415,9 @@ class CoopLiftEnvCfg(ManagerBasedRLEnvCfg):
         self.sim.physics_material = self.scene.terrain.physics_material
         self.sim.physx.gpu_max_rigid_patch_count = 20 * 2**15
         self.sim.physx.bounce_threshold_velocity = 0.01
+        # Joint limits live in the URDF. An out-of-range PD target is clipped
+        # by the articulation; the 36 cm adduction wall is physics, not a
+        # reward term.
         if self.scene.contact_a is not None:
             self.scene.contact_a.update_period = self.sim.dt
         if self.scene.contact_b is not None:

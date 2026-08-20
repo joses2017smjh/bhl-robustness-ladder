@@ -151,6 +151,61 @@ def object_lin_vel_w(
     return obj.data.root_lin_vel_w
 
 
+def object_ang_vel_w(
+    env: "ManagerBasedRLEnv",
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    obj: RigidObject = env.scene[object_cfg.name]
+    return obj.data.root_ang_vel_w
+
+
+def joint_target_error(
+    env: "ManagerBasedRLEnv",
+    asset_cfg: SceneEntityCfg,
+) -> torch.Tensor:
+    """PD tracking residual: commanded minus measured joint position.
+
+    On the robot this is motor-current / tracking error, the usual proxy for
+    contact when there are no fingers or tactile sensors. COLA / non-prehensile
+    lift papers use it so the policy knows it has a clamp from resistance,
+    not from a binary contact flag that will not exist on hardware.
+    """
+    robot: Articulation = env.scene[asset_cfg.name]
+    return robot.data.joint_pos[:, asset_cfg.joint_ids] - robot.data.joint_pos_target[:, asset_cfg.joint_ids]
+
+
+def opposing_clamp(
+    env: "ManagerBasedRLEnv",
+    robot_a_cfg: SceneEntityCfg,
+    robot_b_cfg: SceneEntityCfg,
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """1 when the two hand-midpoints pull on opposite sides of the object.
+
+    Non-prehensile lift needs opposing force, not two hands on the same face.
+    Gated on pinch so a far-away opposite pose does not pay.
+    """
+    obj: RigidObject = env.scene[object_cfg.name]
+    centre = obj.data.root_pos_w[:, :3]
+    va = centre - _hand_midpoint(env, robot_a_cfg)
+    vb = centre - _hand_midpoint(env, robot_b_cfg)
+    va = torch.nn.functional.normalize(va, dim=-1, eps=1e-6)
+    vb = torch.nn.functional.normalize(vb, dim=-1, eps=1e-6)
+    opposite = (-(va * vb).sum(dim=-1)).clamp(0.0, 1.0)
+    return opposite * _pinch_weight(env)
+
+
+def object_tilt_l2(
+    env: "ManagerBasedRLEnv",
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """Roll/pitch of the payload. Synchronous lift keeps this near zero."""
+    obj: RigidObject = env.scene[object_cfg.name]
+    q = obj.data.root_quat_w
+    up_z = 1.0 - 2.0 * (q[:, 1] * q[:, 1] + q[:, 2] * q[:, 2])
+    return torch.square(1.0 - up_z)
+
+
 def either_fallen(
     env: "ManagerBasedRLEnv",
     limit_angle: float,

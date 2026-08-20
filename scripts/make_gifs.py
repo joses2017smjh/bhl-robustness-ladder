@@ -14,6 +14,7 @@ instead of the pair collapsing to the length of the failure.
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -62,9 +63,21 @@ def pair_gif(left: Path, right: Path, out: Path, left_label: str, right_label: s
     return mb
 
 
+def existing_clip(path: Path) -> Path | None:
+    """Rollouts name the file OK or FELL after the fact. Accept either."""
+    if path.exists():
+        return path
+    name = path.name
+    swapped = re.sub(r"__OK\.mp4$", "__FELL.mp4", name)
+    if swapped == name:
+        swapped = re.sub(r"__FELL\.mp4$", "__OK.mp4", name)
+    alt = path.with_name(swapped)
+    return alt if alt.exists() else None
+
+
 if __name__ == "__main__":
     repo = Path(__file__).resolve().parents[1]
-    V, D, OUT = repo / "results/video", repo / "results/demo", repo / "docs/gifs"
+    V, D, A, OUT = repo / "results/video", repo / "results/demo", repo / "results/demo_arms", repo / "docs/gifs"
 
     pairs = [
         # Experiment 1 - domain randomization, flat sim2sim, same strafe command
@@ -84,13 +97,27 @@ if __name__ == "__main__":
          D / "flatDR-baseline__vx+0.3_vy+0.0_wz+0.0_d0.80__FELL.mp4",
          OUT / "terrain_pair.gif",
          "trained on terrain  -  WALKS", "flat-trained  -  FALLS"),
+
+        # 22-DoF counterparts, same three conditions, filmed by slurm/37_arms_gifs.
+        (A / "dr" / "arms-dr1.0-s0__vx+0.0_vy+0.2_wz+0.0__OK.mp4",
+         A / "dr" / "arms-dr0.0-s0__vx+0.0_vy+0.2_wz+0.0__FELL.mp4",
+         OUT / "arms_dr_pair.gif",
+         "22-DoF  s=1.0  -  WALKS", "22-DoF  s=0  -  FALLS"),
+        (A / "push" / "arms-push-s0__vx+0.3_vy+0.0_wz+0.0__OK.mp4",
+         A / "push" / "arms-dr1.0-s0__vx+0.3_vy+0.0_wz+0.0__FELL.mp4",
+         OUT / "arms_push_pair.gif",
+         "22-DoF  push-trained  -  RECOVERS", "22-DoF  no push training  -  FALLS"),
+        (A / "terrain" / "arms-terrain-s0__vx+0.3_vy+0.0_wz+0.0_d0.80__OK.mp4",
+         A / "terrain" / "arms-dr1.0-s0__vx+0.3_vy+0.0_wz+0.0_d0.80__FELL.mp4",
+         OUT / "arms_terrain_pair.gif",
+         "22-DoF  terrain-trained  -  WALKS", "22-DoF  flat-trained  -  FALLS"),
     ]
 
     total = 0.0
     for left, right, out, ll, rl in pairs:
-        if not left.exists() or not right.exists():
-            print(f"  SKIP {out.name}: missing {'left' if not left.exists() else 'right'} clip",
-                  file=sys.stderr)
+        left, right = existing_clip(left), existing_clip(right)
+        if left is None or right is None:
+            print(f"  SKIP {out.name}: missing clip", file=sys.stderr)
             continue
         total += pair_gif(left, right, out, ll, rl)
     print(f"total {total:.1f} MB")
