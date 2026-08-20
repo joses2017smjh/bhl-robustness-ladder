@@ -30,6 +30,11 @@ and, necessarily, the instrument to measure them.
   <sub>Four policies, one world, identical 0.45 m/s shoves. This is not a split-screen composite — they share a solver and a clock. The un-randomized robot is the one on the ground.</sub>
 </p>
 
+<p align="center">
+  <img src="docs/gifs/squat_pick.gif" width="880" alt="22-DoF humanoid squats, lifts an orange bin from the sides, and stands. Caption says scripted, not a policy."><br>
+  <sub>22-DoF, scripted — not a policy. There are no fingers, and the shoulders cannot adduct past ~36 cm, so the bin is a side-lift. A walking policy never does this.</sub>
+</p>
+
 ---
 
 ## 1 · Domain randomization: the fidelity ladder
@@ -283,6 +288,75 @@ cluster remains blocked (Isaac Sim 5.1 RTX segfaults at driver 595.71.05).
 
 ---
 
+## 5 · Cooperative lift: can two of them pick something up?
+
+**Question.** The 22-DoF model has arms. A walking policy never uses them to
+lift, and a scripted squat only shows the kinematics are possible. Can two
+of these machines — 16 kg, 6 Nm, no fingers, shoulders that cannot adduct
+past ~36 cm — learn to lift a cube, a ladder, and a yoga ball together?
+
+The sample-efficient version of that question, from the papers that actually
+train contact-rich multi-agent lifts (Isaac Lab's Franka lift, the 2025
+pinch-lift-move quadruped work, Dactyl-style in-grasp resets), is narrower
+than "walk over and pick it up":
+
+- Spawn already in a pinch formation. Approaching on foot is a locomotion
+  task and starves the lift of on-policy contact.
+- One PPO for both robots. A pinch is one physical system; independent
+  learners spend their samples fighting.
+- Dense constellation reach (hand midpoint → designated contact point, tanh
+  kernel) always on; sparse lift bonus 15× heavier, matching Franka lift.
+  Progress-only is tossable; bonus-only is too sparse for 6 Nm legs.
+
+$$
+r_{\text{pinch}}=1-\tanh\!\left(\frac{\|m_A-c_A\|+\|m_B-c_B\|}{2\sigma}\right),\qquad
+r_{\text{lift}}=\mathrm{clip}\!\left(\frac{z-z_0}{h},0,1\right)+15\cdot\mathbf{1}[z>z_0+h]
+$$
+
+$h$ is competence-gated — the same promote/demote rule as the push curriculum
+in §2 — not a wall-clock ramp. The critic sees object velocity; the actor
+does not.
+
+The ladder is the outer envelope of a 6-foot ladder (1.5 m × 0.40 m × 0.08 m),
+not a 7 cm rail: this morphology cannot close a pinch that small. Three
+runs, seed 0, 4,000 iterations, 1,024 envs, RTX 8000.
+
+| object | mean reward | pinch | lift bonus | $h$ | fall | episode length |
+|---|---|---|---|---|---|---|
+| cube | −0.45 | 0.0002 | 0.00 | 0.04 | **1.00** | 5.0 |
+| ladder | 7.92 | **0.0000** | 3.41 | 0.22 (cap) | 0.74 | 80 |
+| yoga ball | −0.44 | 0.0015 | 0.00 | 0.04 | **1.00** | 5.0 |
+
+<sub>One seed. Pinch is the constellation term at iteration 3,999. Cube and ball
+are at 100% fall from iteration 100.</sub>
+
+**Finding.** The first recipe spawned in the right *XY*, standing. Hands started
+about half a metre above the contact points, so $\sigma=0.15$ was already in
+the flat part of $\tanh$ and pinch never moved. Cube and ball then learned the
+shortcut that living is expensive when the task term is zero: episode length
+collapsed from 24 steps to 5. The ladder *did* move the object — $h$ ran to
+its 22 cm cap — with pinch identically zero, which is the toss the
+progress-only warning was about. Height without a pinch is not a lift.
+
+That is the same kind of localisation §2 needed after the 1.5 m/s ramp: the
+idea (spawn in contact, one PPO, dense reach + sparse lift) was right, the
+kernel and the pose were not. Isaac Lab's Franka lift uses $\sigma=0.1$
+because the gripper already starts next to the cube, and it *gates* goal
+tracking on height; DexPBT does the same staging ($r_{\text{pick}}$, then
+$r_{\text{targ}}$ only once picked). The inverse on a floor object is: squat
+to the hold the GIF already uses, two-scale reach so spawn is on the slope
+of $\tanh$, and multiply height by pinch so a toss does not count.
+
+$$
+r_{\text{pinch}}=\sum_{\sigma\in\{0.40,\,0.12\}}\bigl(1-\tanh(d/\sigma)\bigr),\qquad
+r_{\text{lift}}=r_{\text{fine}}\cdot\Bigl(\mathrm{clip}\!\left(\tfrac{z-z_0}{h},0,1\right)+15\cdot\mathbf{1}[z>z_0+h]\Bigr)
+$$
+
+Same three objects, seed 0, queued overnight. Seeds still wait until pinch
+is nonzero.
+
+---
+
 ## How any of this is measured
 
 The obvious plan — "evaluate through the sim2sim path the repo already gives
@@ -424,6 +498,8 @@ sbatch slurm/31_arms_eval.sbatch         # export + sim2sim the 22-DoF set
 sbatch slurm/32_convert_convex.sbatch    # URDF → USD, convex-decomp collision
 sbatch slurm/33_collision_train.sbatch   # mesh-collision ablation (after 32)
 sbatch slurm/34_multi_gif.sbatch         # four policies, one MuJoCo world
+sbatch slurm/35_pick_gif.sbatch          # scripted 22-DoF squat-and-pick clip
+sbatch slurm/36_coop_lift.sbatch         # two 22-DoF robots: cube, ladder, yoga ball
 sbatch slurm/40_assets.sbatch            # audit + USD stages (CPU, no GPU)
 sbatch slurm/90_tensorboard.sbatch       # live curves
 ```
