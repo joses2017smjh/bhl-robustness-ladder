@@ -385,6 +385,7 @@ class CurriculumCfg:
             "success_rate_target": 0.35,
         },
     )
+    stage_lift = CurrTerm(func=coop.stage_lift_on_pinch)
 
 
 @configclass
@@ -408,6 +409,13 @@ class CoopLiftEnvCfg(ManagerBasedRLEnvCfg):
     # Strategy ablation flag. False recovers the first-run toss: height pays
     # even when pinch is identically zero. Default is the DexPBT-style gate.
     gate_lift_on_pinch: bool = True
+    # Ablation flags. Default is the full recipe; hydra turns these off one
+    # at a time. Privileged critic and PD-residual obs are deleted in
+    # __post_init__ so the actor/critic widths stay consistent.
+    privileged_critic: bool = True
+    actor_track_error: bool = True
+    stage_lift_on_pinch: bool = False
+    clock_lift_height: bool = False
 
     def __post_init__(self):
         self.decimation = 8
@@ -425,6 +433,17 @@ class CoopLiftEnvCfg(ManagerBasedRLEnvCfg):
             self.scene.contact_a.update_period = self.sim.dt
         if self.scene.contact_b is not None:
             self.scene.contact_b.update_period = self.sim.dt
+        if not self.privileged_critic:
+            self.observations.critic.object_lin_vel = None
+            self.observations.critic.object_ang_vel = None
+            self.observations.critic.base_lin_vel_a = None
+            self.observations.critic.base_lin_vel_b = None
+        if not self.actor_track_error:
+            self.observations.policy.track_err_a = None
+            self.observations.policy.track_err_b = None
+        if self.stage_lift_on_pinch:
+            self.rewards.lift_progress.weight = 0.0
+            self.rewards.lifting_object.weight = 0.0
 
 
 @configclass

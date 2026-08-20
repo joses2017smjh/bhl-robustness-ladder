@@ -242,6 +242,17 @@ def lift_height_curriculum(
     obj: RigidObject = env.scene["object"]
     height = getattr(env, "_bhl_lift_h", min_height)
     spawn = float(env.cfg.object_spawn_z)
+    if getattr(env.cfg, "clock_lift_height", False):
+        # Wall-clock ramp: ignore competence. Same shape as the push
+        # curriculum that destroyed the policy past 0.7 m/s.
+        t = float(getattr(env, "common_step_counter", 0))
+        frac = min(1.0, t / 72000.0)
+        height = min_height + (max_height - min_height) * frac
+        env._bhl_lift_h = height
+        term_cfg = env.reward_manager.get_term_cfg(term_name)
+        term_cfg.params["minimal_height"] = height
+        env.reward_manager.set_term_cfg(term_name, term_cfg)
+        return height
     if env_ids is None or len(env_ids) == 0:
         idx = slice(None)
         z = obj.data.root_pos_w[:, 2]
@@ -265,3 +276,28 @@ def lift_height_curriculum(
     term_cfg.params["minimal_height"] = height
     env.reward_manager.set_term_cfg(term_name, term_cfg)
     return height
+
+
+def stage_lift_on_pinch(
+    env: "ManagerBasedRLEnv",
+    env_ids: Sequence[int],
+    progress_weight: float = 2.0,
+    bonus_weight: float = 15.0,
+    enter: float = 0.40,
+) -> float:
+    """DexPBT staging: keep lift weights at 0 until the pinch kernel is on.
+
+    No-op unless ``env.cfg.stage_lift_on_pinch``. Once the batch-mean pinch
+    weight clears ``enter``, lift progress and the sparse bonus turn on and
+    stay on. That is ``r_pick`` then ``r_targ``, not pick-only for 4,000 iters.
+    """
+    if not getattr(env.cfg, "stage_lift_on_pinch", False):
+        return 1.0
+    rate = float(_pinch_weight(env).mean())
+    staged = bool(getattr(env, "_bhl_lift_staged", False) or rate >= enter)
+    env._bhl_lift_staged = staged
+    for name, weight in (("lift_progress", progress_weight), ("lifting_object", bonus_weight)):
+        cfg = env.reward_manager.get_term_cfg(name)
+        cfg.weight = weight if staged else 0.0
+        env.reward_manager.set_term_cfg(name, cfg)
+    return float(staged)

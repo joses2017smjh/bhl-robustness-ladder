@@ -361,18 +361,31 @@ cap with pinch identically zero — a toss, not a lift. The requeue is the
 policy above: squat-hold spawn, two-scale reach, clamp, pinch-gated height.
 Same three objects, seed 0. Seeds still wait until pinch is nonzero.
 
-The recipe has six knobs the first runs did not isolate. A cube-only array
-(seed 0, 4,000 iterations, same squat spawn) turns them off one at a time
-against the cube job already running:
+The recipe has sixteen independently switchable pieces. Standing spawn is
+already measured (dead). Single-net vs two independent learners is not a
+hydra switch — that is a different trainer, and DexPBT's result at 46 DoF
+was that the two-net version spent the batch fighting. A factorial of the
+rest is 2^14 runs; this is one-at-a-time against the cube job already
+running, seed 0, 4,000 iterations, squat spawn.
 
-| arm | off | what it answers |
-|---|---|---|
-| ungated | pinch×height | was the ladder a toss because of standing spawn, or because height paid without contact? |
-| onesigma | coarse 0.40; fine σ=0.15 | two-scale vs Isaac Lab's single kernel, now that the hands start next to the cube |
-| noclamp | opposing-force term | is the clamp load-bearing, or do the reach kernels already force a side hold? |
-| pickfirst | lift weights | DexPBT stage 1: can a pinch form when height never pays? |
-| absolute | residual around squat | ULC / AdaptManip: PD residual vs raw joint targets |
-| noalive | still_alive | was dying-in-five-steps a standing-spawn artifact? |
+| arm | job | off | what it answers |
+|---|---|---|---|
+| ungated | 38 / 0 | pinch×height | toss from spawn, or from height without contact? |
+| onesigma | 38 / 1 | two-scale → σ=0.15 | two-scale vs Isaac Lab's single kernel in pinch formation |
+| noclamp | 38 / 2 | opposing-force | is clamp load-bearing? |
+| pickfirst | 38 / 3 | lift weights | DexPBT stage 1, never staged |
+| absolute | 38 / 4 | residual around squat | PD residual vs raw joint targets |
+| noalive | 38 / 5 | still_alive | was die-in-five-steps a standing-spawn artifact? |
+| notilt | 39 / 0 | object tilt | do they have to lift together? |
+| nodrift | 39 / 1 | xy hold | is the toss a carry? |
+| bonusonly | 39 / 2 | dense lift progress | sparse-only too thin for 6 Nm? |
+| progressonly | 39 / 3 | sparse lift bonus | progress-only a toss? |
+| coarseonly | 39 / 4 | fine σ=0.12 | does the pinch kernel do anything the coarse one does not? |
+| fixedh | 39 / 5 | competence on *h* | frozen 4 cm vs promote/demote |
+| clockh | 39 / 6 | competence → wall clock | the schedule that does not look at success |
+| nopriv | 39 / 7 | critic object twist | training-time teacher |
+| notrack | 39 / 8 | actor PD residual | contact proxy from motor tracking |
+| staged | 39 / 9 | simultaneous lift | DexPBT *r_pick* then *r_targ* |
 
 Tables wait until pinch on the control is nonzero. Extra seeds of a dead
 channel are still not worth the GPUs.
@@ -532,7 +545,8 @@ sbatch slurm/34_multi_gif.sbatch         # four policies, one MuJoCo world
 sbatch slurm/35_pick_gif.sbatch          # kinematics check (not a policy)
 sbatch slurm/36_coop_lift.sbatch         # learned two-robot lift: cube, ladder, yoga ball
 sbatch slurm/37_arms_gifs.sbatch         # 22-DoF pair clips for §1–3
-sbatch slurm/38_coop_strategy.sbatch     # cube recipe ablations (one seed, one knob each)
+sbatch slurm/38_coop_strategy.sbatch     # cube recipe ablations, first six knobs
+sbatch slurm/39_coop_ablate.sbatch       # remaining ten knobs (tilt, staging, critic, …)
 sbatch slurm/40_assets.sbatch            # audit + USD stages (CPU, no GPU)
 sbatch slurm/90_tensorboard.sbatch       # live curves
 ```
