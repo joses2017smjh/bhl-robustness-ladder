@@ -703,6 +703,13 @@ worth writing down once:
 | `dgx2` | V100 32G, **sm_70** | **unusable** — the pinned torch ships sm_75…sm_120 and no Volta PTX, so it is `no kernel image is available` |
 | `share`, `eecs3`, `mime4` | M60 | **el8, glibc 2.28** — the wall this container exists to get over |
 
+One more trap, found by watching a job land rather than by reading the config:
+`--constraint=el9` is not sufficient. `preempt` is architecturally mixed, and an
+el9 node there handed a job a **GTX 1080 (sm_61)** — below the cubin floor, same
+failure as the V100. Jobs now name the architectures they can actually run on
+(`a40|rtx8000|l40s|h100|h200|…`), which excludes sm_61 and sm_70 and, because
+those tags happen to exist only on el9 nodes, subsumes the OS check as well.
+
 `slurm/54_partition_probe.sbatch` is the check: OS, driver, `arch_list`, a real
 matmul, and warp init. It is two minutes and it is the difference between
 scheduling onto a node and discovering at hour three that the architecture was

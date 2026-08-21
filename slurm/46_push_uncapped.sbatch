@@ -2,7 +2,7 @@
 #SBATCH --job-name=push-uncap
 #SBATCH --account=eecs
 #SBATCH --partition=gpu,dgxh,ampere
-#SBATCH --constraint=el9
+#SBATCH --constraint="a40|rtx8000|l40s|h100|h200|h200-70g"
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=48G
 #SBATCH --gres=gpu:1
@@ -10,6 +10,10 @@
 #SBATCH --array=0-1
 #SBATCH --output=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%A_%a.out
 #SBATCH --error=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%A_%a.out
+
+# sm_75 or newer AND >=32 GB. The el9 tag is not enough: preempt mixes in
+# GTX 1080 (sm_61) and V100 (sm_70), both below the pinned torch's cubin floor,
+# and the 11 GB cards cannot hold this run's env count.
 
 # Raise the adaptive curriculum's own safety cap from 1.0 to 2.0 m/s.
 #

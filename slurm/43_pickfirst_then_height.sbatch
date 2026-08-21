@@ -2,13 +2,17 @@
 #SBATCH --job-name=coop-stage
 #SBATCH --account=eecs
 #SBATCH --partition=gpu,dgxh,ampere
-#SBATCH --constraint=el9
+#SBATCH --constraint="a40|rtx8000|l40s|h100|h200|h200-70g"
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=48G
 #SBATCH --gres=gpu:1
 #SBATCH --time=12:00:00
 #SBATCH --output=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%j.out
 #SBATCH --error=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%j.out
+
+# sm_75 or newer AND >=32 GB. The el9 tag is not enough: preempt mixes in
+# GTX 1080 (sm_61) and V100 (sm_70), both below the pinned torch's cubin floor,
+# and the 11 GB cards cannot hold this run's env count.
 
 # pickfirst THEN height -- the run section 5 already names as the next one worth
 # a GPU, and the third of the three dead arms from 39.

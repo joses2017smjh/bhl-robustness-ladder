@@ -2,13 +2,16 @@
 #SBATCH --job-name=coll-eval
 #SBATCH --account=eecs
 #SBATCH --partition=gpu,eecs,dgxh,ampere,preempt
-#SBATCH --constraint=el9
+#SBATCH --constraint="a40|rtx8000|l40s|h100|h200|h200-70g|rtx6000|rtx2080|t4"
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --gres=gpu:1
 #SBATCH --time=04:00:00
 #SBATCH --output=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%j.out
 #SBATCH --error=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%j.out
+
+# sm_75 or newer, any VRAM -- eval starts SimulationApp briefly then runs on CPU.
+# Excludes GTX 1080 (sm_61) and V100 (sm_70), which el9 alone would let through.
 
 # Score the two convex-mesh policies in MuJoCo. Section 4 currently ends on
 # "these two policies have not been scored in MuJoCo yet", which leaves its own
