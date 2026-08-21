@@ -64,3 +64,23 @@ SMOOTH_TERRAINS_CFG = BUMPY_TERRAINS_CFG.replace(
         "slope_down": BUMPY_TERRAINS_CFG.sub_terrains["slope_down"].replace(proportion=0.25),
     }
 )
+
+# The correct obstacle ablation. `SMOOTH_TERRAINS_CFG` above redistributed the
+# obstacles' 20% share into more rough ground and steeper slopes, so "smooth" is
+# also *rougher on average* -- the comparison confounds "no obstacles" with
+# "more of everything else". This one holds every other proportion fixed and
+# replaces the obstacle share with flat ground, so the only difference from
+# BUMPY is that one fifth of the tiles have nothing to step over.
+FLATFILL_TERRAINS_CFG = BUMPY_TERRAINS_CFG.replace(
+    sub_terrains={
+        "rough": BUMPY_TERRAINS_CFG.sub_terrains["rough"],
+        "slope_up": BUMPY_TERRAINS_CFG.sub_terrains["slope_up"],
+        "slope_down": BUMPY_TERRAINS_CFG.sub_terrains["slope_down"],
+        # A pyramid slope with a zero slope range is a flat tile that still
+        # participates in the curriculum's row/column layout, so the generator
+        # produces the same grid shape as BUMPY with one component neutralised.
+        "flat": terrain_gen.HfPyramidSlopedTerrainCfg(
+            proportion=0.20, slope_range=(0.0, 0.0), platform_width=2.0, border_width=0.25,
+        ),
+    }
+)

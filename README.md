@@ -25,6 +25,7 @@ below — and, necessarily, the instrument to measure them.
 | **3** | **Randomization alone buys most of terrain robustness.** A policy that has never seen rough ground handles it to d≈0.4; terrain training is what holds past that. |
 | **4** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD, and MJCF agree on mass, inertia, limits, damping, and collision primitives. Training on convex-mesh collision instead of those primitives does not move reward or fall past seed noise. |
 | **5** | **A pinch is learnable; paying for height prevents it.** Squat spawn moved the pinch off zero. Height never left 4 cm. The recipe that closed the hands is DexPBT stage 1: never pay for a lift. |
+| **6** | **Depth never needed the renderer.** Isaac Sim 5.1's RTX renderer really does segfault here — and ray-cast depth costs **1.6%** of throughput at 4,096 envs, validated to 2.9% against closed-form geometry. |
 
 <p align="center">
   <img src="docs/gifs/multi_race.gif" width="880" alt="Four policies in one MuJoCo world. Three stay up; the un-randomized robot is on the ground."><br>
@@ -316,9 +317,14 @@ The evaluation height field is also now a USD asset
 `d000…d100`. Same generator, same seed as the MuJoCo harness, but $d$ is a
 variant selection rather than a function argument. A composed lab floor —
 tile, carpet strip, cable, door threshold, ramp — lives next to it as
-`lab_scene.usda`. Depth-sensor work still wants materials and lighting; this
-is the geometry those artifacts would sit on. Camera rendering on this
-cluster remains blocked (Isaac Sim 5.1 RTX segfaults at driver 595.71.05).
+`lab_scene.usda`.
+
+<p align="center">
+  <img src="docs/gifs/multi_lab.gif" width="880" alt="Four policies walking a composed lab floor: tile, carpet strip, cable, door threshold, ramp."><br>
+  <sub>The same four policies on the composed lab floor, no shove. Tile, carpet
+  strip, cable, door threshold, ramp — the geometry a depth sensor would be
+  pointed at. §6 puts one there.</sub>
+</p>
 
 ---
 
@@ -346,8 +352,8 @@ variant:
   at 46 DoF. The critic is privileged (object twist, both robots) — that is
   the training-time teacher. The actor sees proprioception, object-in-root,
   and PD tracking residual, which is the contact proxy a real motor current
-  would give. No depth maps: Isaac Sim 5.1's RTX renderer segfaults on this
-  cluster, so this is rigid-body first.
+  would give. No vision, deliberately: this is a contact problem first, and
+  §6 shows depth was never the thing blocking it.
 - Hardware limits are physics. The URDF already refuses to adduct past
   ~36 cm; an out-of-range PD target is clipped by the articulation. That is
   what forces a side-clamp instead of a front grasp, not a penalty term.
@@ -476,6 +482,99 @@ hover are still not worth the GPUs.
 
 ---
 
+## 6 · Depth without a renderer
+
+**Question.** Every vision experiment here was parked behind one sentence:
+Isaac Sim 5.1's RTX renderer segfaults on this cluster. Is that actually a
+blocker for depth, or only for *rendered* depth?
+
+The crash is real and it is not a configuration mistake. It reproduces in an
+empty scene, from a pure Isaac Sim script with Isaac Lab out of the picture,
+inside `omni.usd.create_hydra_engine`:
+
+```
+libomni.usd.so!omni::usd::UsdManager::createHydraEngine
+  libomni.hydra.rtx.plugin.so
+    libcarb.scenerenderer-rtx.plugin.so
+      librtx.scenedb.plugin.so        <-- SIGSEGV, ~400 ms in
+```
+
+Things that were ruled out, each by a run: the GPUs are Quadro RTX 8000
+(Turing, 72 RT cores — the hardware is right); `--nv` does inject
+`libnvoptix`, `libnvidia-rtcore` and the Vulkan ICD; adding the driver
+libraries apptainer's `nvliblist.conf` is too old to know about changes
+nothing; nor does single-GPU, nor dropping the viewport extension. Isaac Sim
+**6.0.1**, installed alongside in its own venv, gets through the same call
+without dying — consistent with the driver/Kit mismatch (5.1's own
+`driver-requirements.json` recommends 535.161.7; this cluster runs 595.71.05).
+So the renderer is upgradeable, not broken forever.
+
+**But depth never needed it.** `RayCasterCamera` arranges a pinhole ray bundle
+and intersects it with the scene mesh in warp on the GPU. It returns
+`distance_to_image_plane` — a real depth image — and never creates a Hydra
+engine, never loads the RTX plugins, and does not even want `--enable_cameras`.
+
+<p align="center">
+  <img src="docs/gifs/depth_pair.gif" width="880" alt="Left: the terrain policy walking rough ground at difficulty 1.0. Right: its own 64x64 egocentric depth image, near in blue, far in red."><br>
+  <sub>Left, the scored episode at <code>d = 1.00</code>. Right, the robot's own
+  64×64 depth image, 0.25 m blue to 3.5 m red — the resolution and range the
+  policy in <code>48_depth_train</code> consumes. Watch the horizon band buckle
+  as the ground does. This one is MuJoCo's offscreen depth buffer, not Isaac
+  Lab's ray-caster: a different renderer, a different projection, a different
+  simulator. Two independent paths agreeing is the argument this repo makes
+  everywhere else.</sub>
+</p>
+
+**Validation first.** Warp ray-casting fails in a specific, quiet way: name the
+wrong prim in `mesh_prim_paths` and it returns all-NaN rather than an error, so
+a training run learns from a constant and the reward curve looks fine
+throughout. On flat ground the answer is closed-form — camera at height $h$,
+optical axis pitched $\theta$ below horizontal, normalised image coordinate
+$y_n$ increasing downward:
+
+$$Z(u,v) = \frac{h}{\sin\theta + y_n\cos\theta}$$
+
+Measured against that: **100% finite pixels, 2.9% mean relative error** over
+3,136 pixels (`scripts/bench/depth_validate.py`). The row-flipped hypothesis
+comes in at 102% error, which is what fixes the image convention rather than
+assuming it.
+
+**And it is free.** The reason tiled RTX cameras kill locomotion training is
+throughput; a perceptive policy needs on the order of $10^8$ env-steps.
+
+| | envs | env-steps/s | ms/step |
+|---|---|---|---|
+| physics only | 2,048 | 13,971 | 146.6 |
+| + depth 32×32 | 2,048 | 13,989 | 146.4 |
+| + depth 64×64 | 2,048 | 13,956 | 146.7 |
+| physics only | 4,096 | **21,844** | 187.5 |
+| + depth 48×48 | 4,096 | **21,490** | 190.6 |
+
+**Finding.** Geometric depth costs **1.6% of throughput at 4,096 envs**, and
+nothing measurable at 2,048. The vision experiment was never blocked on the
+renderer — it was blocked on the assumption that depth has to be rendered.
+
+What is genuinely given up is material and lighting: specular dropout, IR
+pattern failure on dark surfaces, edge fattening. That matters less than it
+sounds, because clean *rendered* depth is not realistic either — both paths
+need a degradation model on top, and exact geometry is the better starting
+point for one. Two limits are structural rather than cosmetic, and worth
+stating plainly: rays hit only the meshes named in `mesh_prim_paths`, so the
+robot sees terrain and never itself, and there is no sensor-noise model beyond
+a Gaussian on range.
+
+The depth-conditioned policy is queued (`48_depth_train`): 64×64 average-pooled
+to 16×16 before the MLP, because 4,096 raw numbers against 45 of proprioception
+would make the first layer almost entirely depth weights. A CNN trunk is the
+real answer and is not what rsl-rl's default actor is.
+
+The same ray-caster, arranged as a ground grid instead of a pinhole, is the
+privileged height-scan teacher in `50_scan_teacher` — the run that splits §3's
+"6 Nm joints **and** no height sensing" into the two hypotheses it actually
+contains.
+
+---
+
 ## How any of this is measured
 
 The obvious plan — "evaluate through the sim2sim path the repo already gives
@@ -595,7 +694,7 @@ src/bhl_robust/
   tasks/        overlay env configs registering new gym task ids
   curricula/    push-magnitude ramp + adaptive rule
   terrains/     rough / slope / obstacle generators (no stairs)
-  eval/         headless MuJoCo harness, MJCF repair, height fields, video
+  eval/         headless MuJoCo harness, MJCF repair, height fields, video, depth
   audit/        three-way URDF / USD / MJCF consistency
   usd/          scripted OpenUSD stages (terrain variants, lab scene)
 scripts/        vendored train/play entrypoints, curves, charts, GIFs
@@ -632,6 +731,24 @@ sbatch slurm/37_arms_gifs.sbatch         # 22-DoF pair clips for §1–3
 sbatch slurm/38_coop_strategy.sbatch     # cube recipe ablations, first six knobs
 sbatch slurm/39_coop_ablate.sbatch       # remaining ten knobs (tilt, staging, critic, …)
 sbatch slurm/40_assets.sbatch            # audit + USD stages (CPU, no GPU)
+
+# closing the debts this README names
+sbatch slurm/41_collision_eval.sbatch    # sim2sim the two convex-mesh policies (§4)
+sbatch slurm/42_coop_reruns.sbatch       # nopriv / notrack, now the hydra bug is fixed
+sbatch slurm/43_pickfirst_then_height.sbatch  # staged lift: pinch first, then height
+sbatch slurm/44_coop_seeds.sbatch        # seeds 1-2 x control/pickfirst/notilt/nodrift
+sbatch slurm/45_terrain_ablation_fixed.sbatch # obstacle share -> flat, other proportions held
+sbatch slurm/46_push_uncapped.sbatch     # adaptive push with m_max 1.0 -> 2.0
+sbatch slurm/47_arms_terrain_sweep.sbatch     # 22-DoF retention, d = 0.40 .. 1.00
+
+# depth, and what it is for
+sbatch slurm/49_depth_clip.sbatch        # validate + benchmark + paired RGB|depth clip
+sbatch slurm/48_depth_train.sbatch       # depth-conditioned rough-terrain locomotion
+sbatch slurm/50_scan_teacher.sbatch      # privileged height-scan teacher (§3 plateau)
+sbatch slurm/51_scan_distill.sbatch      # --dependency=afterok:<50>; blind recurrent student
+sbatch slurm/52_checkpoint_sweep.sbatch  # transfer vs iteration, eval only
+sbatch slurm/53_symmetry.sbatch          # left-right symmetry augmentation
+
 sbatch slurm/90_tensorboard.sbatch       # live curves
 ```
 

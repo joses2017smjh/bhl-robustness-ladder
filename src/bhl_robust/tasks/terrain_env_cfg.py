@@ -18,7 +18,8 @@ from berkeley_humanoid_lite.tasks.locomotion.velocity.config.biped.env_cfg impor
 )
 from berkeley_humanoid_lite.tasks.locomotion.velocity import mdp
 
-from bhl_robust.terrains.bumpy import BUMPY_TERRAINS_CFG, SMOOTH_TERRAINS_CFG
+from bhl_robust.terrains.bumpy import (BUMPY_TERRAINS_CFG, FLATFILL_TERRAINS_CFG,
+                                       SMOOTH_TERRAINS_CFG)
 
 
 @configclass
@@ -55,3 +56,17 @@ class BipedSmoothEnvCfg(BipedBumpyEnvCfg):
     def __post_init__(self):
         super().__post_init__()
         self.scene.terrain.terrain_generator = SMOOTH_TERRAINS_CFG
+
+
+@configclass
+class BipedFlatFillEnvCfg(BipedBumpyEnvCfg):
+    """Corrected obstacle ablation: obstacle share replaced by flat ground.
+
+    `BipedSmoothEnvCfg` removed the obstacles and redistributed their 20% into
+    rough and slope, which made the ablation arm rougher on average and left the
+    result unquotable. Here every other proportion is held fixed.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.scene.terrain.terrain_generator = FLATFILL_TERRAINS_CFG

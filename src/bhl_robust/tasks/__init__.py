@@ -6,7 +6,8 @@ direct class references, matching upstream's pattern.
 
 import gymnasium as gym
 
-from . import push_env_cfg, terrain_env_cfg, arms_env_cfg, collision_env_cfg, coop_lift_env_cfg
+from . import (push_env_cfg, terrain_env_cfg, arms_env_cfg, collision_env_cfg,
+               coop_lift_env_cfg, depth_env_cfg, scan_env_cfg)
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.biped import agents
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.humanoid import agents as arm_agents
 
@@ -123,5 +124,38 @@ gym.register(
     kwargs={
         "env_cfg_entry_point": coop_lift_env_cfg.CoopLiftBallCfg,
         "rsl_rl_cfg_entry_point": _COOP_PPO,
+    },
+)
+
+# --- depth-conditioned locomotion -----------------------------------------
+gym.register(
+    id="Velocity-BHL-Biped-Depth-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": depth_env_cfg.BipedDepthEnvCfg,
+        "rsl_rl_cfg_entry_point": _PPO_CFG,
+    },
+)
+
+gym.register(
+    id="Velocity-BHL-Biped-Scan-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": scan_env_cfg.BipedScanEnvCfg,
+        # PPO on the privileged group; distillation on the blind one. Same env.
+        "rsl_rl_cfg_entry_point": scan_env_cfg.ScanTeacherPPORunnerCfg,
+        "rsl_rl_distillation_cfg_entry_point": scan_env_cfg.ScanStudentDistillCfg,
+    },
+)
+
+gym.register(
+    id="Velocity-BHL-Biped-FlatFill-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": terrain_env_cfg.BipedFlatFillEnvCfg,
+        "rsl_rl_cfg_entry_point": _PPO_CFG,
     },
 )

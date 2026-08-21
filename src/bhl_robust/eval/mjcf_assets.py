@@ -38,9 +38,23 @@ OFFSCREEN_W, OFFSCREEN_H = 1920, 1080
 # agree with bhl_robust.eval.terrain_field (HALF_EXTENT, ELEVATION_M, GRID).
 HFIELD_NAME = "bhl_terrain"
 
+# Egocentric depth camera, injected into the base body on request. Pose and
+# field of view are matched to the Isaac Lab ray-cast camera in
+# bhl_robust.tasks.depth_env_cfg so the two depth paths see the same thing:
+# 12 cm forward, 30 cm up, pitched 20 deg down, 60.5 deg vertical FOV.
+#
+# MuJoCo cameras look down their own -Z with +Y up, so the rotation is given as
+# `xyaxes` (camera +X then camera +Y) rather than a quaternion: +X is the
+# robot's -Y (image right), +Y is world up tilted back by 20 deg.
+EGO_CAM_NAME = "ego_depth"
+EGO_CAM = (
+    f'<camera name="{EGO_CAM_NAME}" mode="fixed" pos="0.12 0 0.30" '
+    'xyaxes="0 -1 0  0.342 0 0.940" fovy="60.5"/>'
+)
+
 
 def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
-                 terrain: bool = False) -> Path:
+                 terrain: bool = False, ego_camera: bool = False) -> Path:
     """Materialise a loadable copy of the MJCF and return the scene path.
 
     Args:
@@ -50,6 +64,9 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
         terrain: replace the flat floor plane with a height field. The elevation
             data itself is written into `model.hfield_data` at load time, so one
             patched XML serves every difficulty.
+        ego_camera: add a base-mounted depth camera (`EGO_CAM_NAME`). Off by
+            default -- an extra camera changes nothing physical, but the scored
+            runs and the depth clips should not share a cache directory.
 
     Returns:
         Path to the patched scene XML, ready for `MjModel.from_xml_path`.
@@ -66,6 +83,8 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
         raise FileNotFoundError(f"mesh directory missing: {mesh_dir}")
 
     out_dir = cache_dir / (f"mjcf_{variant}_hfield" if terrain else f"mjcf_{variant}")
+    if ego_camera:
+        out_dir = out_dir.with_name(out_dir.name + "_ego")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     scene_out = out_dir / scene_name
@@ -117,6 +136,16 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
     )
     # ...and flatten the phantom `merged/` prefix.
     xml, n_mesh = re.subn(r'file="merged/', 'file="', xml)
+
+    if ego_camera:
+        xml, n_cam = re.subn(
+            r'(<body name="base"[^>]*>)',
+            r"\1\n      " + EGO_CAM,
+            xml,
+            count=1,
+        )
+        if n_cam == 0:
+            raise RuntimeError(f'no <body name="base"> in {robot_name}; upstream layout changed')
 
     if n_dir == 0:
         raise RuntimeError(f"no meshdir attribute found in {robot_name}; upstream layout changed")

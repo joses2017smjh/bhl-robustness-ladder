@@ -1,7 +1,14 @@
-"""Training entrypoint for the robustness overlays.
+"""Distillation entrypoint: privileged height-scan teacher -> blind student.
 
-VENDORED from external/Berkeley-Humanoid-Lite/scripts/rsl_rl/train.py @984741a
-with exactly three additions, each marked `# [overlay]` below:
+Same file as `scripts/train.py` with two differences, both forced by rsl-rl 3.x
+keeping distillation on a separate runner and a separate agent entry point:
+`rsl_rl_distillation_cfg_entry_point` instead of `rsl_rl_cfg_entry_point`, and
+`DistillationRunner` instead of `OnPolicyRunner`. The teacher weights are loaded
+through the normal resume path -- `--load_run <teacher>` -- because the student
+and teacher live in one checkpoint from rsl-rl's point of view.
+
+Vendored from external/Berkeley-Humanoid-Lite/scripts/rsl_rl/train.py @984741a
+with the same overlay additions marked `# [overlay]` below:
   1. sys.path wiring for upstream's local `cli_args` module and this repo's src/
   2. `import bhl_robust.tasks`, which registers the overlay task ids. It must
      land after AppLauncher starts SimulationApp, since the configs it pulls in
@@ -66,7 +73,7 @@ import pickle
 import torch
 from datetime import datetime
 
-from rsl_rl.runners import OnPolicyRunner
+from rsl_rl.runners import DistillationRunner
 
 from isaaclab.envs import (
     DirectMARLEnv,
@@ -77,7 +84,7 @@ from isaaclab.envs import (
 )
 from isaaclab.utils.dict import print_dict
 from isaaclab.utils.io import dump_yaml
-from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper
+from isaaclab_rl.rsl_rl import RslRlBaseRunnerCfg, RslRlVecEnvWrapper
 from isaaclab_tasks.utils import get_checkpoint_path
 from isaaclab_tasks.utils.hydra import hydra_task_config
 
@@ -109,8 +116,8 @@ def dump_pickle(filename: str, data: object):
         pickle.dump(data, f)
 
 
-@hydra_task_config(args_cli.task, "rsl_rl_cfg_entry_point")
-def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agent_cfg: RslRlOnPolicyRunnerCfg):
+@hydra_task_config(args_cli.task, "rsl_rl_distillation_cfg_entry_point")
+def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agent_cfg: RslRlBaseRunnerCfg):
     """Train with RSL-RL agent."""
     # override configurations with non-hydra CLI arguments
     agent_cfg = cli_args.update_rsl_rl_cfg(agent_cfg, args_cli)
@@ -181,7 +188,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     env = RslRlVecEnvWrapper(env)
 
     # create runner from rsl-rl
-    runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=log_dir, device=agent_cfg.device)
+    runner = DistillationRunner(env, agent_cfg.to_dict(), log_dir=log_dir, device=agent_cfg.device)
     # write git state to logs
     runner.add_git_repo_to_log(__file__)
     # save resume path before creating a new log_dir
