@@ -42,6 +42,12 @@ DIFFS="0.40 0.60 0.80 1.00"
 for run in "$LOGROOT"/*/; do
     name=$(basename "$run"); [ "$name" = isaaclab ] && continue
     label=$(echo "$name" | sed 's/^[0-9-]*_[0-9-]*_//')
+    # Skip validation/smoke runs. `_val-arms` is a 2-iteration gate check with
+    # model_0 and model_2 as its only checkpoints; scoring it burns GPU hours to
+    # produce a 100% fall rate that means "untrained", not "fragile", and it
+    # lands in results/ looking like a real row. 21_terrain_sweep filters by an
+    # explicit case; this is the same idea stated as a prefix.
+    case "$label" in _*) echo "skip smoke run: $label"; continue ;; esac
     ls "$run"/model_*.pt >/dev/null 2>&1 || continue
 
     if [ ! -f "$run/exported/policy.onnx" ]; then
