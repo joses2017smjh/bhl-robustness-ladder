@@ -39,6 +39,8 @@ def meta(label):
         return ("Arms (22 DoF)", label[5:].rsplit("-s", 1)[0])
     if label.startswith("coll-"):
         return ("Collision representation", label[5:].rsplit("-s", 1)[0])
+    if label.startswith("coop-"):
+        return ("Cooperative lift", label[5:].rsplit("-s", 1)[0])
     return ("other", None)
 
 summary = []
@@ -46,10 +48,12 @@ for label in sorted(curves):
     rw, fl = by.get((label, "reward"), []), by.get((label, "fall_frac"), [])
     grp, key = meta(label)
     tail = lambda s: round(st.mean(v for _, v in s[-25:]), 3) if s else None
+    last = rw[-1][0] if rw else 0
+    need = 3900 if label.startswith("coop-") else 5900
     summary.append({"label": label, "group": grp, "key": key,
-                    "iters": rw[-1][0] if rw else 0,
+                    "iters": last,
                     "final_reward": tail(rw), "final_fall": tail(fl),
-                    "complete": bool(rw and rw[-1][0] >= 5900)})
+                    "complete": bool(rw and last >= need)})
 
 Path("results/curves/curves.json").write_text(json.dumps({"curves": curves, "summary": summary}))
 print(f"{len(curves)} runs -> results/curves/curves.json")

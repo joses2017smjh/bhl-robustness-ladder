@@ -1,11 +1,13 @@
 """Training entrypoint for the robustness overlays.
 
 VENDORED from external/Berkeley-Humanoid-Lite/scripts/rsl_rl/train.py @984741a
-with exactly two additions, both marked `# [overlay]` below:
+with exactly three additions, each marked `# [overlay]` below:
   1. sys.path wiring for upstream's local `cli_args` module and this repo's src/
   2. `import bhl_robust.tasks`, which registers the overlay task ids. It must
      land after AppLauncher starts SimulationApp, since the configs it pulls in
      import isaaclab at module scope.
+  3. `apply_strategy_flags` after hydra returns, so CoopLift ablation flags
+     that `__post_init__` already consumed still change the constructed env.
 
 Vendoring rather than patching keeps external/ pristine and re-pinnable.
 """
@@ -136,6 +138,11 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     if agent_cfg.run_name:
         log_dir += f"_{agent_cfg.run_name}"
     log_dir = os.path.join(log_root_path, log_dir)
+
+    # [overlay] Hydra writes CoopLift flags after @configclass __post_init__.
+    # Re-apply so nopriv/notrack/staged actually change the constructed env.
+    from bhl_robust.tasks.coop_lift_env_cfg import apply_strategy_flags
+    apply_strategy_flags(env_cfg)
 
     # create isaac environment
     env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)

@@ -293,6 +293,16 @@ def stage_lift_on_pinch(
     """
     if not getattr(env.cfg, "stage_lift_on_pinch", False):
         return 1.0
+    # ``_pinch_weight`` is 1.0 when the reach term has not run this step.
+    # Curriculum can fire on reset before that, which latched staging on
+    # at iteration 0 for the overnight ``staged`` arm — it became the
+    # control. Missing *d* is "not yet a pinch", not "already pinched".
+    if getattr(env, "_bhl_pinch_d", None) is None and not getattr(env, "_bhl_lift_staged", False):
+        for name in ("lift_progress", "lifting_object"):
+            cfg = env.reward_manager.get_term_cfg(name)
+            cfg.weight = 0.0
+            env.reward_manager.set_term_cfg(name, cfg)
+        return 0.0
     rate = float(_pinch_weight(env).mean())
     staged = bool(getattr(env, "_bhl_lift_staged", False) or rate >= enter)
     env._bhl_lift_staged = staged

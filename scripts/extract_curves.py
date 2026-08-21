@@ -9,8 +9,12 @@ TAGS = {
     "Train/mean_reward": "reward",
     "Train/mean_episode_length": "ep_len",
     "Episode_Termination/base_orientation": "fall_frac",
+    "Episode_Termination/fallen": "fall_frac",
     "Curriculum/push_levels": "push_mps",
     "Curriculum/terrain_levels": "terrain_level",
+    "Episode_Reward/reaching_fine": "pinch",
+    "Episode_Reward/lifting_object": "lift_bonus",
+    "Curriculum/lift_height": "lift_h",
 }
 rows = []
 dirs = [d for root in LOGROOTS if root.is_dir() for d in sorted(root.iterdir())]

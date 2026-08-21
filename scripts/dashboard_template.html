@@ -146,6 +146,8 @@ const METRICS = [
   {k:"fall_frac", label:"Fall rate",     fmt:v=>v.toFixed(3)},
   {k:"ep_len",    label:"Episode length",fmt:v=>v.toFixed(0)},
   {k:"push_mps",  label:"Push magnitude",fmt:v=>v.toFixed(2)},
+  {k:"pinch",     label:"Pinch (fine)",  fmt:v=>v.toFixed(3)},
+  {k:"lift_bonus",label:"Lift bonus",    fmt:v=>v.toFixed(2)},
 ];
 const BLUE=["--b1","--b2","--b3","--b4","--b5"], ORANGE=["--o1","--o2","--o3","--o4","--o5"];
 
@@ -169,6 +171,27 @@ function meta(label){
             colour:`var(${ORANGE[idx]})`,
             name:ceil?`ceiling ${ceil} m/s`:rest};
   }
+  if(label.startsWith("arms-")){
+    const rest=label.slice(5).replace(/-s\d+$/,"");
+    return {group:"Arms (22 DoF)", rung:rest, sort:0, colour:"var(--b3)", name:rest};
+  }
+  if(label.startsWith("terrain-")){
+    const rest=label.slice(8).replace(/-s\d+$/,"");
+    return {group:"Rough terrain", rung:rest, sort:rest==="bumpy"?0:1, colour:"var(--b4)", name:rest};
+  }
+  if(label.startsWith("coll-")){
+    return {group:"Collision representation", rung:"convex", sort:0, colour:"var(--b4)", name:"convex mesh"};
+  }
+  if(label.startsWith("coop-")){
+    const rest=label.slice(5).replace(/-s\d+$/,"");
+    const order=["cube","ladder","ball","cube-pinch","ladder-pinch","ball-pinch",
+      "cube-pickfirst","cube-nodrift","cube-notilt","cube-bonusonly","cube-progressonly",
+      "cube-fixedh","cube-noalive","cube-onesigma","cube-clockh","cube-noclamp",
+      "cube-ungated","cube-absolute","cube-coarseonly","cube-nopriv","cube-notrack","cube-staged"];
+    const idx=Math.max(0, order.indexOf(rest));
+    const colour=rest.includes("ball")?`var(${ORANGE[Math.min(idx,4)]})`:`var(${BLUE[Math.min(idx%5,4)]})`;
+    return {group:"Cooperative lift", rung:rest, sort:idx<0?50:idx, colour, name:rest.replace(/-/g," ")};
+  }
   return {group:"Other", rung:"", sort:99, colour:"var(--ink-3)", name:label};
 }
 
@@ -186,7 +209,7 @@ function tiles(){
       .map(r=>r.summary.final_reward); return v.length? (v.reduce((a,b)=>a+b,0)/v.length):null;};
   const r0=rung("0.0"), r1=rung("1.0"), r2=rung("2.0");
   const cells=[
-    ["Runs trained", RUNS.length, `${done} finished 6,000 iters`],
+    ["Runs trained", RUNS.length, `${done} finished their budget`],
     ["No randomization", r0?r0.toFixed(1):"–", "s = 0.0 mean reward"],
     ["Repo default", r1?r1.toFixed(1):"–", `s = 1.0 · ${r0&&r1?((1-r1/r0)*100).toFixed(0)+"% below s=0":""}`],
     ["Double-width", r2?r2.toFixed(1):"–", "s = 2.0 · past the cliff"],

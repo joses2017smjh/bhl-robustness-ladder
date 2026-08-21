@@ -7,10 +7,10 @@ little authority to arrest a disturbance, so "how much can it take before it
 stops learning?" is a real question rather than a formality.
 
 Upstream ships flat-ground locomotion with a fixed domain-randomization preset,
-no curriculum, and no way to score a policy. This repo adds three experiments —
-and, necessarily, the instrument to measure them.
+no curriculum, and no way to score a policy. This repo adds the experiments
+below — and, necessarily, the instrument to measure them.
 
-**44 policies trained** (36 biped + 8 22-DoF, 6,000 PPO iterations, 4,096 envs) ·
+**68 policies trained** (36 biped + 8 22-DoF + 2 mesh-collision + 22 cooperative-lift) ·
 **~1,500 scored sim2sim episodes** · **288 rendered rollouts**
 
 **[▶ Explore every run interactively](https://claude.ai/code/artifact/de955af8-2236-4912-84fb-577e0a43ccbe)**
@@ -23,7 +23,8 @@ and, necessarily, the instrument to measure them.
 | **1** | **Sim2sim transfer inverts the training-reward ranking.** The policy with the *highest* training reward falls 23% of the time in MuJoCo; the repo-default randomization falls **0%**. |
 | **2** | **0.2 m/s of shove-rejection is free.** A disturbance curriculum at that ceiling costs nothing measurable. A competence-gated curriculum reaches **0.87 m/s**. |
 | **3** | **Randomization alone buys most of terrain robustness.** A policy that has never seen rough ground handles it to d≈0.4; terrain training is what holds past that. |
-| **4** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD, and MJCF agree on mass, inertia, joint limits, damping, and collision primitives. |
+| **4** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD, and MJCF agree on mass, inertia, limits, damping, and collision primitives. Training on convex-mesh collision instead of those primitives does not move reward or fall past seed noise. |
+| **5** | **A pinch is learnable; paying for height prevents it.** Squat spawn moved the pinch off zero. Height never left 4 cm. The recipe that closed the hands is DexPBT stage 1: never pay for a lift. |
 
 <p align="center">
   <img src="docs/gifs/multi_race.gif" width="880" alt="Four policies in one MuJoCo world. Three stay up; the un-randomized robot is on the ground."><br>
@@ -283,12 +284,32 @@ been a false positive.
 
 Collision geometry is primitives on all three descriptions — visual meshes
 are `contype="0"`. That is an asset-optimization decision, not a loading
-quirk, and it is the one the collision-representation ablation (queued)
+quirk, and it is the one the collision-representation ablation below
 reverses.
 
 **Finding.** The three descriptions agree. The transfer inversion in §1 is
 a physics-engine difference, not an unaccounted mass or limit mismatch. Both
 outcomes of this check would have been useful; this is the reassuring one.
+
+The colliding *geometry* is a separate question. Two seeds trained the s=1.0
+biped task with convex-decomposition meshes instead of the primitive
+boxes/cylinders, 6,000 iterations, otherwise identical:
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="results/charts/collision_mesh-dark.svg">
+  <img alt="Training reward vs iteration: convex-mesh collision tracks the primitive s=1.0 baseline." src="results/charts/collision_mesh-light.svg">
+</picture>
+
+| collision | training reward | training fall rate |
+|---|---|---|
+| primitives, s=1.0 (3 seeds) | 32.9 / 34.8 / 33.2 | 0.045 / 0.036 / 0.041 |
+| convex mesh (2 seeds) | 31.4 / 34.0 | 0.054 / 0.037 |
+
+Swapping the colliding geometry does not move training reward or fall rate
+past seed noise. The primitives were not the thing training reward was
+hiding. Whether they are the thing the *sim2sim* inversion was hiding is a
+different measurement — these two policies have not been scored in MuJoCo
+yet.
 
 The evaluation height field is also now a USD asset
 (`results/usd/eval_terrain.usdc`) whose `difficulty` variant set is
@@ -357,38 +378,101 @@ are at 100% fall from iteration 100.</sub>
 **Finding.** Standing spawn left the hands half a metre above the contact
 points, so $\sigma=0.15$ was already flat and pinch never moved. Cube and
 ball learned to die in five steps. The ladder moved the object to the 22 cm
-cap with pinch identically zero — a toss, not a lift. The requeue is the
-policy above: squat-hold spawn, two-scale reach, clamp, pinch-gated height.
-Same three objects, seed 0. Seeds still wait until pinch is nonzero.
+cap with pinch identically zero — a toss, not a lift.
 
-The recipe has sixteen independently switchable pieces. Standing spawn is
-already measured (dead). Single-net vs two independent learners is not a
-hydra switch — that is a different trainer, and DexPBT's result at 46 DoF
-was that the two-net version spent the batch fighting. A factorial of the
-rest is 2^14 runs; this is one-at-a-time against the cube job already
-running, seed 0, 4,000 iterations, squat spawn.
+The requeue is the recipe above: squat-hold spawn, two-scale reach, clamp,
+pinch-gated height. Same three objects, seed 0, 4,000 iterations. Pinch in
+this table is the fine kernel $1-\tanh(d/0.12)$ at iteration 3,999 — the
+term that is supposed to *be* the pinch.
 
-| arm | job | off | what it answers |
-|---|---|---|---|
-| ungated | 38 / 0 | pinch×height | toss from spawn, or from height without contact? |
-| onesigma | 38 / 1 | two-scale → σ=0.15 | two-scale vs Isaac Lab's single kernel in pinch formation |
-| noclamp | 38 / 2 | opposing-force | is clamp load-bearing? |
-| pickfirst | 38 / 3 | lift weights | DexPBT stage 1, never staged |
-| absolute | 38 / 4 | residual around squat | PD residual vs raw joint targets |
-| noalive | 38 / 5 | still_alive | was die-in-five-steps a standing-spawn artifact? |
-| notilt | 39 / 0 | object tilt | do they have to lift together? |
-| nodrift | 39 / 1 | xy hold | is the toss a carry? |
-| bonusonly | 39 / 2 | dense lift progress | sparse-only too thin for 6 Nm? |
-| progressonly | 39 / 3 | sparse lift bonus | progress-only a toss? |
-| coarseonly | 39 / 4 | fine σ=0.12 | does the pinch kernel do anything the coarse one does not? |
-| fixedh | 39 / 5 | competence on *h* | frozen 4 cm vs promote/demote |
-| clockh | 39 / 6 | competence → wall clock | the schedule that does not look at success |
-| nopriv | 39 / 7 | critic object twist | training-time teacher |
-| notrack | 39 / 8 | actor PD residual | contact proxy from motor tracking |
-| staged | 39 / 9 | simultaneous lift | DexPBT *r_pick* then *r_targ* |
+| object | mean reward | pinch | clamp | lift bonus | $h$ | fall | episode length |
+|---|---|---|---|---|---|---|---|
+| cube (control) | 9.16 | 0.081 | 0.057 | 0.66 | 0.047 | 0.140 | 185 |
+| ladder | 4.16 | **0.000** | 0.00 | 0.00 | 0.040 | 0.016 | 198 |
+| yoga ball | 1.57 | **0.202** | 0.270 | 2.09 | 0.044 | 0.683 | 138 |
 
-Tables wait until pinch on the control is nonzero. Extra seeds of a dead
-channel are still not worth the GPUs.
+<sub>One seed. Episode budget is 200 steps (8 s). Clamp is the weighted
+opposing-force term.</sub>
+
+Squat spawn moved the cube pinch off zero (0.0002 → 0.081) and they stopped
+dying in five steps (fall 1.00 → 0.14, length 5 → 185). Height did not. The
+competence gate stayed at the 4 cm floor. The ball formed more of a pinch
+(0.20) and still fell 68%. The ladder is the instructive one: gating height
+on pinch deleted the toss (lift bonus 3.41 → 0.00) and left pinch identically
+zero. They stand for the full episode and never close.
+
+The cube control is the baseline for the rest. One knob off at a time, seed
+0, 4,000 iterations, squat spawn. Pinch is the unweighted fine kernel so
+`onesigma` (weight 2.0 on that term) is comparable.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="results/charts/coop_ablation-dark.svg">
+  <img alt="Cube recipe ablation: pickfirst forms the pinch; ungated height pays for a toss." src="results/charts/coop_ablation-light.svg">
+</picture>
+
+| arm | off | pinch | clamp | lift bonus | fall | eplen | reward |
+|---|---|---|---|---|---|---|---|
+| **control** | — | 0.081 | 0.057 | 0.66 | 0.140 | 185 | 9.16 |
+| ungated | pinch×height | 0.008 | 0.000 | **2.77** | 0.685 | 125 | 5.49 |
+| onesigma | two-scale → σ=0.15 | 0.040 | 0.004 | 0.00 | 0.031 | 191 | 5.15 |
+| noclamp | opposing-force | 0.019 | 0.000 | 0.00 | 0.035 | 197 | 7.25 |
+| **pickfirst** | lift weights | **0.397** | **0.496** | 0.00 | **0.005** | **200** | 12.54 |
+| absolute | residual around squat | 0.008 | 0.001 | 0.00 | 0.026 | 197 | 6.84 |
+| noalive | still_alive | 0.087 | 0.084 | 0.89 | **0.941** | 75 | −0.93 |
+| notilt | object tilt | 0.215 | 0.204 | 1.82 | 0.294 | 168 | 17.0 |
+| nodrift | xy hold | 0.236 | 0.317 | 1.31 | 0.048 | 195 | 20.9 |
+| bonusonly | dense lift progress | 0.184 | 0.179 | 1.29 | 0.332 | 169 | 14.1 |
+| progressonly | sparse lift bonus | 0.173 | 0.146 | 0.00 | 0.046 | 196 | 8.20 |
+| coarseonly | fine σ=0.12 | **0.000** | 0.004 | 0.00 | 0.047 | 194 | 7.38 |
+| fixedh | competence on $h$ | 0.125 | 0.088 | 1.24 | 0.247 | 173 | 11.5 |
+| clockh | competence → wall clock | 0.024 | 0.013 | 0.00 | 0.055 | 197 | 7.23 |
+
+**Finding.** The arm that formed a pinch is the one that never paid for
+height. DexPBT stage 1 (`pickfirst`) reaches pinch 0.40 and clamp 0.50 —
+hands about 8 cm from the contact points, against the control's 19 cm — and
+finishes 4,000 iterations without falling. Height was not a sparse bonus
+waiting on a pinch. It was a competing objective that kept the control from
+closing.
+
+The rest of the ladder is consistent with that:
+
+- Ungated height recovers the toss: lift bonus 2.77, pinch 0.008, fall 69%.
+  The gate was load-bearing. Spawn was not the only reason the first ladder
+  run tossed.
+- Clamp is load-bearing for pinch formation (`noclamp` 0.019). Coarse-only
+  never pinches. Absolute joint targets never find the squat envelope.
+  `still_alive` is why squat spawn does not die in five steps (`noalive`
+  fall 94%).
+- A wall-clock ramp of $h$ to 22 cm kills the pinch the same way the
+  1.5 m/s push ramp killed the gait. Frozen 4 cm (`fixedh`) beats the
+  competence gate.
+- Two-scale still matters once the hands start next to the cube: `onesigma`
+  is half the control's kernel and never lifts. The coarse term is what
+  feeds clamp.
+- The penalties that were supposed to force a two-robot lift — tilt and
+  xy-hold — were fighting formation. Turning them off raises pinch and
+  reward.
+
+> **Correction.** An earlier version of this README claimed bonus-only is too
+> sparse for 6 Nm and progress-only is a toss. `bonusonly` pinch 0.18 exceeds
+> the control; `progressonly` pinch 0.17 with $h$ stuck at 4 cm is not a toss.
+> Those were hypotheses about the standing-spawn ladder run, not measurements
+> of squat spawn.
+
+Three flags — privileged critic, actor tracking residual, DexPBT staging —
+are consumed in `__post_init__`. Hydra applied them after that, so
+`nopriv` / `notrack` / `staged` are copies of the control (policy 194 /
+critic 206, bit-matching last metrics). Staging had a second bug: a missing
+pinch distance counted as fully pinched, so the latch fired at step 0.
+`pickfirst` is the staging result that actually ran: lift weights zero for
+the whole 4,000 iterations, via the reward-weight override. Both bugs are
+fixed in this commit; the three arms are not evidence.
+
+Seeds still wait. The next run that is worth a GPU is pickfirst *then*
+height — staging that actually zeros the lift weights in the constructed
+env, then turns them on once pinch clears 0.40. That is what
+`stage_lift_on_pinch` was written to do. Extra cube/ball seeds of a 4 cm
+hover are still not worth the GPUs.
 
 ---
 

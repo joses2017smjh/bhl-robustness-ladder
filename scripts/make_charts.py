@@ -308,8 +308,110 @@ def chart_terrain_retention(mode):
     return c.render()
 
 
+def chart_coop_ablation(mode):
+    """Cube recipe ablation: pinch kernel vs lift bonus, one arm per row."""
+    import csv as _csv
+    t = THEME[mode]
+    path = Path("results/coop_summary.csv")
+    if not path.exists():
+        return None
+    rows = []
+    for r in _csv.DictReader(path.open()):
+        if r.get("object") != "cube" or r.get("copy_of_control") == "1":
+            continue
+        if r.get("role") not in ("control", "ablation"):
+            continue
+        rows.append(r)
+    if not rows:
+        return None
+    rows.sort(key=lambda r: -float(r["pinch_raw"]))
+
+    W, H = 880, 520
+    n = len(rows)
+    top, bot = 72, 56
+    row_h = (H - top - bot) / n
+    PANELS = [
+        dict(left=200, width=300, key="pinch_raw", xmax=0.45, xlabel="pinch kernel  (1 − tanh(d / 0.12))",
+             xt=[0, 0.1, 0.2, 0.3, 0.4], xfmt=lambda v: f"{v:g}"),
+        dict(left=560, width=290, key="lift_bonus", xmax=3.2, xlabel="lift bonus (weighted)",
+             xt=[0, 1, 2, 3], xfmt=lambda v: f"{v:g}"),
+    ]
+    o = [f'<rect width="{W}" height="{H}" fill="{t["surface"]}"/>']
+    o.append(f'<text x="28" y="28" font-size="15.5" font-weight="600" fill="{t["ink"]}" '
+             f'font-family="{FONT}">Cube lift recipe: which knob actually forms a pinch</text>')
+    o.append(f'<text x="28" y="47" font-size="12.5" fill="{t["ink2"]}" font-family="{FONT}">'
+             f'Seed 0, squat spawn, 4,000 iterations. Control is the filled marker.</text>')
+
+    for P in PANELS:
+        c = Chart(W, H, dict(l=P["left"], r=W - P["left"] - P["width"], t=top, b=bot), t)
+        c.x0, c.x1, c.y0, c.y1 = 0, P["xmax"], n - 0.5, -0.5
+        # x ticks only; categorical y is drawn by hand.
+        for v in P["xt"]:
+            x = c.sx(v)
+            o.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{H-bot}" '
+                     f'stroke="{t["grid"]}" stroke-width="1"/>')
+            o.append(f'<text x="{x:.1f}" y="{H-bot+18}" text-anchor="middle" font-size="12" '
+                     f'fill="{t["ink3"]}" font-family="{FONT}">{esc(P["xfmt"](v))}</text>')
+        o.append(f'<line x1="{P["left"]}" y1="{H-bot}" x2="{P["left"]+P["width"]}" y2="{H-bot}" '
+                 f'stroke="{t["axis"]}" stroke-width="1"/>')
+        o.append(f'<text x="{P["left"]+P["width"]/2:.0f}" y="{H-14}" text-anchor="middle" '
+                 f'font-size="12.5" fill="{t["ink2"]}" font-family="{FONT}">{esc(P["xlabel"])}</text>')
+        for i, r in enumerate(rows):
+            y = top + (i + 0.5) * row_h
+            val = float(r[P["key"]])
+            x0 = P["left"]
+            x1 = P["left"] + (val / P["xmax"]) * P["width"]
+            is_ctrl = r["role"] == "control"
+            colour = t["ramp"][4] if r["arm"] == "pickfirst" else (t["ramp"][2] if is_ctrl else t["cat"][1])
+            o.append(f'<line x1="{x0:.1f}" y1="{y:.1f}" x2="{x1:.1f}" y2="{y:.1f}" '
+                     f'stroke="{colour}" stroke-width="2" opacity="0.55"/>')
+            fill = colour if is_ctrl or r["arm"] == "pickfirst" else t["surface"]
+            o.append(f'<circle cx="{x1:.1f}" cy="{y:.1f}" r="4.5" fill="{fill}" '
+                     f'stroke="{colour}" stroke-width="2"/>')
+            if P is PANELS[0]:
+                o.append(f'<text x="{P["left"]-12}" y="{y+4:.1f}" text-anchor="end" font-size="12" '
+                         f'fill="{t["ink"] if is_ctrl or r["arm"]=="pickfirst" else t["ink2"]}" '
+                         f'font-family="{FONT}">{esc(r["arm"])}</text>')
+
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
+            f'role="img">' + "".join(o) + "</svg>")
+
+
+def chart_collision(mode):
+    """Convex-mesh collision vs the primitive s=1.0 baseline, training reward."""
+    t = THEME[mode]
+    prim = mean_curve("dr-default", "reward")
+    mesh = mean_curve("coll-convex", "reward")
+    if not prim or not mesh:
+        return None
+    c = Chart(880, 400, dict(l=68, r=150, t=62, b=52), t)
+    c.x0, c.x1, c.y0, c.y1 = 0, 6000, 0, 40
+    c.title("Collision representation: mesh vs primitives, training reward",
+            "Same s=1.0 biped task. Two mesh seeds, three primitive seeds.")
+    c.frame([0, 1500, 3000, 4500, 6000], [0, 10, 20, 30, 40],
+            "PPO iteration", "mean reward", xfmt=lambda v: f"{v:,}")
+    c.line(prim, t["ramp"][2])
+    c.line(mesh, t["cat"][1])
+    ends = [
+        [c.sy(prim[-1][1]) + 4, c.sx(prim[-1][0]) + 10, "primitives (s=1.0)", t["ramp"][2]],
+        [c.sy(mesh[-1][1]) + 4, c.sx(mesh[-1][0]) + 10, "convex mesh", t["cat"][1]],
+    ]
+    ends.sort()
+    if ends[1][0] - ends[0][0] < 16:
+        ends[1][0] = ends[0][0] + 16
+    for y, x, name, colour in ends:
+        c.add(f'<circle cx="{x-4:.0f}" cy="{y-4:.0f}" r="3.5" fill="{colour}"/>')
+        c.add(f'<text x="{x+4:.0f}" y="{y:.0f}" font-size="12" fill="{t["ink2"]}" '
+              f'font-family="{FONT}">{esc(name)}</text>')
+    c.add(f'<text x="{c.m["l"]}" y="{c.h-12}" font-size="11.5" fill="{t["ink3"]}" '
+          f'font-family="{FONT}">A wash at this sample. Mesh collision is not what training reward was hiding.</text>')
+    return c.render()
+
+
 for name, fn in [("dr_training_curves", chart_dr_curves), ("push_collapse", chart_push),
-                 ("dr_ladder_summary", chart_ladder), ("push_sweep", chart_push_sweep), ("terrain_retention", chart_terrain_retention)]:
+                 ("dr_ladder_summary", chart_ladder), ("push_sweep", chart_push_sweep),
+                 ("terrain_retention", chart_terrain_retention),
+                 ("coop_ablation", chart_coop_ablation), ("collision_mesh", chart_collision)]:
     for mode in ("light", "dark"):
         svg = fn(mode)
         if svg is None:

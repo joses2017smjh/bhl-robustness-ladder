@@ -39,6 +39,32 @@ from berkeley_humanoid_lite_assets.robots.berkeley_humanoid_lite import (
 
 from . import coop_lift_mdp as coop
 
+
+def apply_strategy_flags(cfg) -> None:
+    """Re-apply hydra-overridable flags that ``__post_init__`` already consumed.
+
+    Isaac Lab's hydra overlay writes onto the constructed cfg *after*
+    ``@configclass.__post_init__``. ``nopriv`` / ``notrack`` / ``staged``
+    therefore trained as copies of the control: the dumped yaml had the
+    flags, the observation widths and lift weights did not. Call this
+    again after hydra (see ``scripts/train.py``) so a requeue is real.
+    No-op on locomotion cfgs.
+    """
+    if not hasattr(cfg, "privileged_critic"):
+        return
+    if not cfg.privileged_critic:
+        cfg.observations.critic.object_lin_vel = None
+        cfg.observations.critic.object_ang_vel = None
+        cfg.observations.critic.base_lin_vel_a = None
+        cfg.observations.critic.base_lin_vel_b = None
+    if not cfg.actor_track_error:
+        cfg.observations.policy.track_err_a = None
+        cfg.observations.policy.track_err_b = None
+    if cfg.stage_lift_on_pinch:
+        cfg.rewards.lift_progress.weight = 0.0
+        cfg.rewards.lifting_object.weight = 0.0
+
+
 _HANDS = ["arm_left_hand_link", "arm_right_hand_link"]
 _YAW_M90 = (0.70710678, 0.0, 0.0, -0.70710678)
 _YAW_P90 = (0.70710678, 0.0, 0.0, 0.70710678)
@@ -410,8 +436,11 @@ class CoopLiftEnvCfg(ManagerBasedRLEnvCfg):
     # even when pinch is identically zero. Default is the DexPBT-style gate.
     gate_lift_on_pinch: bool = True
     # Ablation flags. Default is the full recipe; hydra turns these off one
-    # at a time. Privileged critic and PD-residual obs are deleted in
-    # __post_init__ so the actor/critic widths stay consistent.
+    # at a time. Privileged critic, PD-residual obs, and DexPBT staging are
+    # applied in ``apply_strategy_flags`` — once from ``__post_init__`` and
+    # again after hydra, because Isaac Lab writes overlays onto the already-
+    # constructed cfg. Overnight, ``nopriv`` / ``notrack`` / ``staged`` trained
+    # as copies of the control without that second call.
     privileged_critic: bool = True
     actor_track_error: bool = True
     stage_lift_on_pinch: bool = False
@@ -433,17 +462,7 @@ class CoopLiftEnvCfg(ManagerBasedRLEnvCfg):
             self.scene.contact_a.update_period = self.sim.dt
         if self.scene.contact_b is not None:
             self.scene.contact_b.update_period = self.sim.dt
-        if not self.privileged_critic:
-            self.observations.critic.object_lin_vel = None
-            self.observations.critic.object_ang_vel = None
-            self.observations.critic.base_lin_vel_a = None
-            self.observations.critic.base_lin_vel_b = None
-        if not self.actor_track_error:
-            self.observations.policy.track_err_a = None
-            self.observations.policy.track_err_b = None
-        if self.stage_lift_on_pinch:
-            self.rewards.lift_progress.weight = 0.0
-            self.rewards.lifting_object.weight = 0.0
+        apply_strategy_flags(self)
 
 
 @configclass
