@@ -699,6 +699,7 @@ worth writing down once:
 | `ampere` | A40 46G, sm_86 | works, 2 GPUs/user |
 | `dgxh` | H100 80G in `3g.40gb` MIG slices, sm_90 | works **once the device mask is forwarded** |
 | `eecs` | RTX 2080 11G, sm_75 | too small for the 1,024-env coop runs; eval only |
+| `preempt` | L40S 46G, sm_89 (+ the A40s, + an H200) | works — 24 L40S on `cn-gpu10..12`, but `PreemptMode=REQUEUE` with `GraceTime=0`, so eval only until training can resume from its last checkpoint |
 | `dgx2` | V100 32G, **sm_70** | **unusable** — the pinned torch ships sm_75…sm_120 and no Volta PTX, so it is `no kernel image is available` |
 | `share`, `eecs3`, `mime4` | M60 | **el8, glibc 2.28** — the wall this container exists to get over |
 
@@ -706,6 +707,13 @@ worth writing down once:
 matmul, and warp init. It is two minutes and it is the difference between
 scheduling onto a node and discovering at hour three that the architecture was
 never supported.
+
+One subtlety it now reports correctly, because the first version got it wrong:
+membership in `arch_list` is not the test. Cubins are forward-compatible across
+*minor* revisions within a major version, so the sm_86 binary runs fine on an
+sm_89 L40S even though `sm_89` is not in the list. Dropping below the lowest
+major is what fails — sm_70 against a floor of sm_75. The matmul is the test;
+the list is only context for reading the failure.
 </details>
 
 ---

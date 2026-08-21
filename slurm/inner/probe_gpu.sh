@@ -10,11 +10,21 @@ try:
     import torch
     d = torch.cuda.get_device_properties(0)
     cap = f"sm_{d.major}{d.minor}"
-    arch_ok = cap in [a.replace("sm_", "sm_") for a in torch.cuda.get_arch_list()]
+    archs = torch.cuda.get_arch_list()
+    # Exact membership in arch_list is NOT the test, and reporting it as one is
+    # actively misleading: cubins are forward-compatible across minor revisions
+    # within a major version, so an sm_86 binary runs on an sm_89 L40S even
+    # though "sm_89" never appears in the list. What does not work is going
+    # below the lowest major -- sm_70 against a floor of sm_75 -- which is why
+    # the V100 nodes fail with "no kernel image is available". The matmul is
+    # the real test; the list is only context for reading a failure.
+    same_major = [a for a in archs if a.startswith(f"sm_{d.major}")]
+    note = "exact" if cap in archs else (
+        f"minor-compat via {min(same_major)}" if same_major else "NO COMPATIBLE CUBIN")
     x = torch.randn(4096, 4096, device="cuda")
     _ = (x @ x).sum().item()
     line.append(f"torch {torch.__version__} | {d.name} {d.total_memory//2**20}MiB {cap} "
-                f"| arch_list={torch.cuda.get_arch_list()} | supported={arch_ok} | matmul OK")
+                f"| arch_list={archs} | cubin={note} | matmul OK")
 except Exception as e:
     line.append(f"TORCH FAIL {type(e).__name__}: {e}")
 try:
