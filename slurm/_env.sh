@@ -22,10 +22,21 @@ mkdir -p "$UV_CACHE_DIR" "$UV_PYTHON_INSTALL_DIR" "$XDG_CACHE_HOME" "$HOME_OVERR
 
 # Isaac Sim writes large shader/ext caches at runtime. On Lustre these are
 # painfully slow, so point them at node-local scratch inside each job.
+# Node-local scratch is not universal across partitions: the `gpu` nodes have
+# /scratch, and some of the partitions this project now spills onto do not (or
+# do not let this user write there). Falling back to Lustre is slower but works;
+# aborting the job because a cache directory is missing does not.
 setup_node_cache() {
-    export OV_CACHE=/scratch/$USER/ov-cache
-    export CUDA_CACHE_PATH=/scratch/$USER/nv-computecache
-    mkdir -p "$OV_CACHE" "$CUDA_CACHE_PATH"
+    local base=/scratch/$USER
+    if mkdir -p "$base/ov-cache" "$base/nv-computecache" 2>/dev/null; then
+        export OV_CACHE=$base/ov-cache
+        export CUDA_CACHE_PATH=$base/nv-computecache
+    else
+        echo "note: /scratch/$USER unavailable on $(hostname), caching to Lustre" >&2
+        export OV_CACHE=$XDG_CACHE_HOME/ov
+        export CUDA_CACHE_PATH=$XDG_CACHE_HOME/nv
+        mkdir -p "$OV_CACHE" "$CUDA_CACHE_PATH"
+    fi
 }
 
 # The interpreter to invoke. Calling the venv's python directly is more robust
@@ -70,8 +81,20 @@ bhl_exec() {
     local envargs=()
     local v
     for v in $BHL_FORWARD_VARS; do
-        envargs+=(--env "$v=${!v:-}")
+        # Forward only variables that are actually set to something. Passing an
+        # empty value is not the same as not passing it: `--env OMP_NUM_THREADS=`
+        # makes libgomp abort on "Invalid value", and `--env CUDA_VISIBLE_DEVICES=`
+        # tells CUDA there are no devices at all. Every inner script reads these
+        # as `${VAR:-}`, so unset is the safe default.
+        [ -n "${!v:-}" ] && envargs+=(--env "$v=${!v}")
     done
+    # Slurm's device mask has to cross into the container. Apptainer --cleanenv
+    # drops it, which is harmless on a node whose GPUs are all identical and
+    # whole, and wrong on a MIG-partitioned one: the dgxh H100s are 3g.40gb
+    # slices, and without the mask torch enumerates devices that do not exist
+    # and dies in _check_capability before anything runs.
+    [ -n "${CUDA_VISIBLE_DEVICES:-}" ] && envargs+=(--env "CUDA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES")
+    [ -n "${SLURM_JOB_GPUS:-}" ] && envargs+=(--env "SLURM_JOB_GPUS=$SLURM_JOB_GPUS")
 
     # Node-local scratch only exists on some partitions (the GPU nodes have it,
     # generic `share` nodes may not). Binding it unconditionally aborts the

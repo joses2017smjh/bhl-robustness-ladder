@@ -23,7 +23,7 @@ below — and, necessarily, the instrument to measure them.
 | **1** | **Sim2sim transfer inverts the training-reward ranking.** The policy with the *highest* training reward falls 23% of the time in MuJoCo; the repo-default randomization falls **0%**. |
 | **2** | **0.2 m/s of shove-rejection is free.** A disturbance curriculum at that ceiling costs nothing measurable. A competence-gated curriculum reaches **0.87 m/s**. |
 | **3** | **Randomization alone buys most of terrain robustness.** A policy that has never seen rough ground handles it to d≈0.4; terrain training is what holds past that. |
-| **4** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD, and MJCF agree on mass, inertia, limits, damping, and collision primitives. Training on convex-mesh collision instead of those primitives does not move reward or fall past seed noise. |
+| **4** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD, and MJCF agree on mass, inertia, limits, damping, and collision primitives. Swapping those primitives for convex meshes moves neither training reward nor **sim2sim fall rate** past seed noise. |
 | **5** | **A pinch is learnable; paying for height prevents it.** Squat spawn moved the pinch off zero. Height never left 4 cm. The recipe that closed the hands is DexPBT stage 1: never pay for a lift. |
 | **6** | **Depth never needed the renderer.** Isaac Sim 5.1's RTX renderer really does segfault here — and ray-cast depth costs **1.6%** of throughput at 4,096 envs, validated to 2.9% against closed-form geometry. |
 
@@ -308,9 +308,27 @@ boxes/cylinders, 6,000 iterations, otherwise identical:
 
 Swapping the colliding geometry does not move training reward or fall rate
 past seed noise. The primitives were not the thing training reward was
-hiding. Whether they are the thing the *sim2sim* inversion was hiding is a
-different measurement — these two policies have not been scored in MuJoCo
-yet.
+hiding. Whether they were the thing the *sim2sim* inversion was hiding is a
+different measurement, and it has now been made — both policies scored
+through the same MuJoCo protocol as every rung in §1:
+
+| MuJoCo condition | convex mesh, 2 seeds | primitives, s=1.0 |
+|---|---|---|
+| flat | 0.000 / 0.000 | 0.000 |
+| terrain $d = 0.20$ | 0.000 / 0.000 | 0.000 |
+| terrain $d = 0.60$ | 0.033 / 0.133 | 0.122 |
+
+<sub>Fall rate, 30 episodes per cell. The $d = 0.60$ comparison is against the
+*randomization-only* column of §3, because these policies trained on flat
+ground with s = 1.0 and had never seen terrain either.</sub>
+
+**Finding.** Null, in both halves. The mesh seeds bracket the primitive
+baseline at the one difficulty where anything falls at all (0.033 and 0.133
+against 0.122), and a two-seed spread that wide is the seed noise, not the
+collision representation. So §4 is a clean two-part negative: the three
+descriptions of the robot agree, **and** the choice between primitive and
+convex-mesh collision moves neither training nor transfer. The sim2sim
+inversion in §1 is not hiding in the colliding geometry.
 
 The evaluation height field is also now a USD asset
 (`results/usd/eval_terrain.usdc`) whose `difficulty` variant set is

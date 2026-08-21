@@ -1,7 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=scan-teach
 #SBATCH --account=eecs
-#SBATCH --partition=gpu
+#SBATCH --partition=gpu,dgxh,ampere
+#SBATCH --constraint=el9
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=48G
 #SBATCH --gres=gpu:1

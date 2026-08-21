@@ -1,7 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=coop-seeds
 #SBATCH --account=eecs
-#SBATCH --partition=gpu
+#SBATCH --partition=gpu,dgxh,ampere
+#SBATCH --constraint=el9
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=48G
 #SBATCH --gres=gpu:1

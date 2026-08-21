@@ -1,7 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=coll-eval
 #SBATCH --account=eecs
-#SBATCH --partition=gpu
+#SBATCH --partition=gpu,eecs,dgxh,ampere,preempt
+#SBATCH --constraint=el9
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
 #SBATCH --gres=gpu:1
