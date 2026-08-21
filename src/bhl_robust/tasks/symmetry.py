@@ -52,9 +52,16 @@ def _mirror_joints(x: torch.Tensor) -> torch.Tensor:
 
 
 def mirror_obs(obs: torch.Tensor) -> torch.Tensor:
-    """Reflect a 45-dim observation about the robot's sagittal plane."""
-    if obs.shape[-1] < OBS_DIM:
-        raise ValueError(f"expected at least {OBS_DIM} observation dims, got {obs.shape[-1]}")
+    """Reflect a 45- or 48-dim observation about the robot's sagittal plane."""
+    if not isinstance(obs, torch.Tensor):
+        raise TypeError(
+            f"mirror_obs needs a tensor, got {type(obs).__name__}. A TensorDict "
+            "indexes batch dims, so feature slicing on one corrupts the batch.")
+    if obs.shape[-1] not in (OBS_DIM, OBS_DIM + 3):
+        raise ValueError(
+            f"unknown observation width {obs.shape[-1]}; this mirror knows the "
+            f"{OBS_DIM}-dim policy group and the {OBS_DIM + 3}-dim critic group. "
+            "Mirroring an unknown layout would silently scramble it.")
     out = obs.clone()
     out[..., 0:3] = obs[..., 0:3] * _CMD_SIGN.to(obs.device, obs.dtype)
     out[..., 3:6] = obs[..., 3:6] * _ANGVEL_SIGN.to(obs.device, obs.dtype)
@@ -76,9 +83,23 @@ def mirror_act(act: torch.Tensor) -> torch.Tensor:
 def bhl_symmetry(env=None, obs=None, actions=None, obs_type: str = "policy"):
     """rsl-rl `data_augmentation_func` hook.
 
-    rsl-rl calls this with either tensor set to None depending on what it is
-    augmenting, and expects the original stacked with its mirror along dim 0.
+    `obs` is a **TensorDict keyed by observation group**, not a flat tensor.
+    That distinction is the whole reason this function exists in this shape: a
+    TensorDict indexes its *batch* dimensions, so `obs[..., 0:3] = x` silently
+    overwrites the first three samples of the batch instead of the first three
+    features of every sample. It does not raise, the shapes stay valid, and the
+    reported symmetry loss still falls -- on corrupted data. The first version
+    of this file did exactly that and trained for 3,768 iterations stuck at
+    reward 6 against a control's 33, with spikes to -9e5.
+
+    So: mirror each group's tensor explicitly, and refuse anything whose width
+    is not a layout this function actually knows.
     """
-    obs_out = torch.cat([obs, mirror_obs(obs)], dim=0) if obs is not None else None
+    obs_out = None
+    if obs is not None:
+        mirrored = obs.clone()
+        for key in obs.keys():
+            mirrored[key] = mirror_obs(obs[key])
+        obs_out = torch.cat([obs, mirrored], dim=0)
     act_out = torch.cat([actions, mirror_act(actions)], dim=0) if actions is not None else None
     return obs_out, act_out
