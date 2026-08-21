@@ -680,6 +680,32 @@ Cluster-specific traps that each cost a debugging cycle:
 - TensorBoard's data server needs `GLIBC_2.29`; on the login node it serves a
   page while silently reading nothing.
 - numpy's C extension will not import on the login node at all.
+- `--cleanenv` also drops Slurm's `CUDA_VISIBLE_DEVICES`. Harmless on a node
+  whose GPUs are whole and identical; fatal on a MIG-partitioned one, where
+  torch then enumerates a slice that does not exist and dies in
+  `_check_capability` before the first kernel. The mask is forwarded explicitly.
+- Forwarding a variable as empty is not the same as not forwarding it.
+  `--env OMP_NUM_THREADS=` makes libgomp abort on "Invalid value"; only
+  non-empty values are passed now.
+
+**Which partitions this actually runs on.** The `gpu` partition caps one user at
+8 GPUs, which is what everything queues behind. Four others accept the account,
+and their per-user caps are separate — but most of them do not work, for reasons
+worth writing down once:
+
+| partition | GPU | verdict |
+|---|---|---|
+| `gpu` | RTX 8000 48G, sm_75 | the baseline |
+| `ampere` | A40 46G, sm_86 | works, 2 GPUs/user |
+| `dgxh` | H100 80G in `3g.40gb` MIG slices, sm_90 | works **once the device mask is forwarded** |
+| `eecs` | RTX 2080 11G, sm_75 | too small for the 1,024-env coop runs; eval only |
+| `dgx2` | V100 32G, **sm_70** | **unusable** — the pinned torch ships sm_75…sm_120 and no Volta PTX, so it is `no kernel image is available` |
+| `share`, `eecs3`, `mime4` | M60 | **el8, glibc 2.28** — the wall this container exists to get over |
+
+`slurm/54_partition_probe.sbatch` is the check: OS, driver, `arch_list`, a real
+matmul, and warp init. It is two minutes and it is the difference between
+scheduling onto a node and discovering at hour three that the architecture was
+never supported.
 </details>
 
 ---
@@ -772,9 +798,13 @@ sbatch slurm/90_tensorboard.sbatch       # live curves
 
 ## Hardware
 
-OSU COE HPC, `gpu` partition: Quadro RTX 8000 (48 GB, driver 595.71.05),
-Rocky 9.8. One GPU per run; 6,000 PPO iterations at 4,096 envs takes ≈3 h on
-flat ground, ≈8 h on generated terrain.
+OSU COE HPC, Rocky 9. One GPU per run; 6,000 PPO iterations at 4,096 envs takes
+≈3 h on flat ground, ≈8 h on generated terrain. Jobs are submitted against
+`gpu,dgxh,ampere` (RTX 8000 48 GB / H100 40 GB MIG / A40 46 GB) rather than one
+partition, because a single per-user GPU cap is what the queue actually binds
+on; the eval-only jobs add `eecs` and `preempt`. Driver 595.71.05 on the RTX and
+A40 nodes, 610.43.02 on the H100s. See the environment section for which
+partitions are unusable and why.
 
 ## License
 
