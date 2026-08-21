@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=depth-clip
 #SBATCH --account=eecs
-#SBATCH --partition=gpu,eecs,dgxh,ampere,preempt
+#SBATCH --partition=gpu,eecs,dgxh,ampere
 #SBATCH --constraint="a40|rtx8000|l40s|h100|h200|h200-70g|rtx6000|rtx2080|t4"
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G

@@ -22,7 +22,7 @@ below — and, necessarily, the instrument to measure them.
 |---|---|
 | **1** | **Sim2sim transfer inverts the training-reward ranking.** The policy with the *highest* training reward falls 23% of the time in MuJoCo; the repo-default randomization falls **0%**. |
 | **2** | **0.2 m/s of shove-rejection is free.** A disturbance curriculum at that ceiling costs nothing measurable. A competence-gated curriculum reaches **0.87 m/s**. |
-| **3** | **Randomization alone buys most of terrain robustness.** A policy that has never seen rough ground handles it to d≈0.4; terrain training is what holds past that. |
+| **3** | **Randomization alone buys most of terrain robustness — and arms buy more.** A blind biped that never saw rough ground handles it to d≈0.4; the 22-DoF version reaches d≈0.6 and falls **11.7%** at d=1.0 against the biped's **37.8%**. |
 | **4** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD, and MJCF agree on mass, inertia, limits, damping, and collision primitives. Swapping those primitives for convex meshes moves neither training reward nor **sim2sim fall rate** past seed noise. |
 | **5** | **A pinch is learnable; paying for height prevents it.** Squat spawn moved the pinch off zero. Height never left 4 cm. The recipe that closed the hands is DexPBT stage 1: never pay for a lift. |
 | **6** | **Depth never needed the renderer.** Isaac Sim 5.1's RTX renderer really does segfault here — and ray-cast depth costs **1.6%** of throughput at 4,096 envs, validated to 2.9% against closed-form geometry. |
@@ -101,6 +101,33 @@ transferring policy tested. That is a genuinely good default.
 > **Correction.** An earlier version of this README reported a "cliff between
 > $s=1.0$ and $s=1.5$". That was read off partially-trained runs where $s=1.5$
 > sat at reward 8.3; fully trained it reaches 16.0 and the decline is smooth.
+
+**Does the ranking also invert *within* a run?** If it did, "take the last
+checkpoint" would be the wrong deployment rule and training reward could not
+tell you so. Six checkpoints of four policies, scored through the same harness:
+
+| iteration | 1000 | 2000 | 3000 | 4000 | 5000 | 5999 |
+|---|---|---|---|---|---|---|
+| `s = 0` none | 0.167 | 0.200 | 0.167 | 0.167 | 0.200 | **0.100** |
+| `s = 1.0` default | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| `s = 2.0` | 0.167 | 0.167 | 0.167 | 0.167 | 0.167 | 0.167 |
+| terrain | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+
+<sub>Fall rate, 30 episodes per cell. Distance walked over the same
+checkpoints: the default rung goes 1.70 → 1.97 m by iteration 3,000 and then
+sits there; the terrain rung goes 0.43 → 1.63 m by 4,000 and sits there.</sub>
+
+**Finding — a negative one.** It does not invert. Fall rate is flat across
+training for every rung, and where it moves at all ($s = 0$) the *last*
+checkpoint is the best one. Final-iteration selection is fine here.
+
+What the sweep does show is that transfer saturates early: both surviving rungs
+reach their final fall rate by iteration 1,000 and their final distance by
+3,000–4,000, while training reward is still climbing. The last two thousand
+iterations buy reward and nothing measurable in MuJoCo. Two caveats keep this
+from being stronger than it is — three of the four rungs sit on the 0.000 floor,
+where a 30-episode cell cannot resolve an improvement, and $s = 2.0$ is flat at
+0.167 only because it barely locomotes (0.07–0.09 m) at every checkpoint.
 
 ---
 
@@ -203,7 +230,7 @@ learned.
 
 <p align="center">
   <img src="docs/gifs/arms_terrain_pair.gif" width="880" alt="Same rough-ground comparison on the 22-DoF model."><br>
-  <sub>Same <code>d = 0.80</code> ground, 22-DoF. Scored flat and at <code>d = 0.20</code> so far: terrain-trained and DR-only both at 0% (n=60). The clip is the matched <code>d = 0.80</code> pair.</sub>
+  <sub>Same <code>d = 0.80</code> ground, 22-DoF. The clip is the matched <code>d = 0.80</code> pair; the full retention curve is below.</sub>
 </p>
 
 <picture>
@@ -237,6 +264,31 @@ the randomized-only policy's **37.8%**, an 11× reduction. Notably the
 no-obstacle ablation is consistently *worse* than the full terrain menu at high
 difficulty (6.7% vs 3.3%), which is the same direction as the terrain-level
 result below.
+
+**The arms change this result, and by a lot.** The same sweep on the 22-DoF
+model, same protocol, same fixed terrain seed:
+
+| MuJoCo difficulty | no randomization | randomization only | trained on terrain | push-trained |
+|---|---|---|---|---|
+| 0.20 | 0.017 | 0.000 | 0.000 | 0.000 |
+| 0.40 | 0.433 | 0.000 | 0.000 | 0.000 |
+| 0.60 | 0.717 | 0.000 | 0.000 | 0.000 |
+| 0.80 | 0.933 | 0.083 | **0.000** | 0.050 |
+| 1.00 | 1.000 | 0.117 | **0.000** | 0.033 |
+
+<sub>Fall rate, n = 60 per cell (6 commands × 5 seeds × 2 seeds of policy).</sub>
+
+At $d = 1.0$ the 22-DoF randomization-only policy falls **11.7%** against the
+biped's **37.8%**, and the 22-DoF terrain policy does not fall at all where the
+biped falls 3.3%. Randomization alone carries the humanoid to $d \approx 0.6$
+rather than the biped's $\approx 0.4$. Arms are not decoration on this ladder:
+a humanoid sheds angular momentum by swinging them, which a 12-DoF biped cannot
+do, and rough ground is exactly the disturbance that strategy answers. Upstream
+penalises arm deviation, so this is that penalty *failing* to suppress the
+strategy — which is the outcome the arm experiments were run to find out.
+
+The push-trained arm is the other surprise: at 3.3% it is closer to the terrain
+policy than to the randomization-only one, on ground it never trained on.
 
 The training-side curriculum is consistent with that: it plateaus at about
 **level 1.4 of 9**. The robot learns mildly rough ground and stops progressing —

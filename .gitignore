@@ -20,6 +20,11 @@ checkpoints/
 # Results: keep aggregated CSV + plots, drop raw per-step dumps
 results/raw/
 results/**/*.npz
+# `checkpoints/` above is for training output and is unanchored, so it also
+# swallowed results/checkpoints -- the per-iteration transfer scores, which are
+# aggregated CSVs like every other results/ subdirectory and belong in the repo.
+!results/checkpoints/
+!results/checkpoints/*.csv
 
 __pycache__/
 *.py[cod]
