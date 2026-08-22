@@ -50,6 +50,8 @@ same proportion §6's locomotion policy saw.
 
 from __future__ import annotations
 
+import copy
+
 import torch
 import torch.nn.functional as F
 
@@ -190,17 +192,33 @@ class CoopLiftDepthCfg(CoopLiftCubeCfg):
         apply_depth_flags(self)
 
 
-def apply_depth_flags(cfg) -> None:
-    """Re-apply `drop_object_pose` after hydra, for the reason §5 documents.
+# Captured once at import, while the terms still exist. Dropping an observation
+# term is destructive -- setting the field to `None` discards the only reference
+# to it -- and hydra's override lands *after* `__post_init__` has already done
+# the dropping. So `drop_object_pose=false` could set the flag but never get the
+# terms back, and the first submission of `58_coop_depth` was about to train
+# `depthboth` as a bit-identical copy of `depthswap`: the validator caught it as
+# `obs_width: 316 against replay's 322`. This is the same class of bug §5
+# documents for `nopriv`/`notrack`, which is why the validator asserts widths.
+_PRISTINE_OBJECT_TERMS = {
+    "object_pos_a": ObservationsCfg.PolicyCfg().object_pos_a,
+    "object_pos_b": ObservationsCfg.PolicyCfg().object_pos_b,
+}
 
-    Isaac Lab's hydra overlay writes onto the constructed cfg *after*
-    `__post_init__`, which is how `nopriv` / `notrack` / `staged` once trained as
-    bit-identical copies of the control. `scripts/train.py` calls this a second
-    time so `drop_object_pose=false` produces a different policy width rather
-    than a different yaml.
+
+def apply_depth_flags(cfg) -> None:
+    """Make the policy's object-pose terms match `drop_object_pose`, either way.
+
+    Idempotent and reversible, so it is safe to call in `__post_init__` and
+    again after hydra. Restoring puts each term back in its own dataclass field,
+    and field order is fixed by declaration, so the rebuilt observation vector
+    has the same layout the checkpoint was trained with rather than the same
+    contents in a new order.
     """
-    if not getattr(cfg, "drop_object_pose", False):
-        return
-    if getattr(cfg.observations.policy, "object_pos_a", None) is not None:
-        cfg.observations.policy.object_pos_a = None
-        cfg.observations.policy.object_pos_b = None
+    drop = getattr(cfg, "drop_object_pose", False)
+    policy = cfg.observations.policy
+    for name, pristine in _PRISTINE_OBJECT_TERMS.items():
+        if drop:
+            setattr(policy, name, None)
+        elif getattr(policy, name, None) is None:
+            setattr(policy, name, copy.deepcopy(pristine))

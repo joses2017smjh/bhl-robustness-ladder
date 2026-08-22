@@ -46,14 +46,23 @@ VLOG=$REPO/results/coop_depth_validate.log
 # same file here, and Slurm opens them as two descriptors with independent
 # offsets, so a burst on stderr can land under what stdout already wrote and
 # vanish. That is why attempt two looked identical to attempt one.
-NUM_ENVS=4 bhl_exec "$REPO/slurm/inner/coop_depth_validate.sh" >"$VLOG" 2>&1 || {
-    echo "FATAL: sensor validation failed; last 60 lines of $VLOG:"
-    tail -60 "$VLOG"
+NUM_ENVS=4 bhl_exec "$REPO/slurm/inner/coop_depth_validate.sh" >"$VLOG" 2>&1 || true
+grep -E "CHECK|PASS|FAIL|RESULT" "$VLOG" || true
+
+# The gate reads the probe's verdict out of the log rather than trusting its exit
+# status, because `SimulationApp.close()` terminates the interpreter itself and
+# the `raise SystemExit(1)` after it never reaches the shell. Attempt three exited
+# 0 with four failed assertions and started training on a control arm that was a
+# duplicate of the treatment. So: every arm must print a RESULT, and every RESULT
+# must say ALL PASS.
+arms=$(grep -c "^RESULT" "$VLOG" || true)
+good=$(grep -c "^RESULT | ALL PASS" "$VLOG" || true)
+echo "validation: $good of $arms arms passed"
+if [ "$arms" -lt 2 ] || [ "$good" -ne "$arms" ]; then
+    echo "FATAL: sensor validation did not pass for both arms; not training."
+    grep -E "^FAIL|^RESULT" "$VLOG" || true
     exit 1
-}
-grep -E "CHECK|PASS|FAIL|RESULT" "$VLOG"
-# The probe's exit status gates the training below: this sensor family fails
-# silently, and a wrong target list would otherwise burn two GPU-days.
+fi
 
 # The override file lives on Lustre, not in /tmp: `bhl_exec` runs --cleanenv in
 # a container whose /tmp is its own, and the inner script reads this by path.
