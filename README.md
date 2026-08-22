@@ -28,6 +28,7 @@ below — and, necessarily, the instrument to measure them.
 | **5** | **Ordering, not the objective.** Zeroing the lift reward until a pinch forms, then enabling it, gets pinch **0.30**, a clamp, a lift bonus and the highest reward of any arm. The single-seed "pinch 0.40 vs 0.08" it replaces did **not** survive three seeds. |
 | **6** | **Depth never needed the renderer.** Isaac Sim 5.1's RTX renderer really does segfault here — and ray-cast depth costs **1.6%** of throughput at 4,096 envs, validated to 2.9% against closed-form geometry. It trains: **+11%** terrain level over blind. |
 | **7** | **Symmetry augmentation buys nothing detectable.** 35.4 against a control spanning 32.9–34.8, one seed. |
+| **8** | **Only the 22-DoF model crosses the lab floor upright.** Three of four biped policies end at a **2.5 cm cable** (9% of leg length); two of four humanoid policies clear the whole course. The same recipe that falls at $x=1.66$ on 12 DoF finishes on 22 — though one arm is *worse* with arms. |
 
 <p align="center">
   <img src="docs/gifs/multi_race.gif" width="880" alt="Four policies in one MuJoCo world. Three stay up; the un-randomized robot is on the ground."><br>
@@ -821,6 +822,72 @@ failure mode here is silence rather than an error.
 
 ---
 
+## 8 · Do the arms buy stability? Walk the lab floor and see
+
+**Question.** §1–3 train the 22-DoF humanoid and the 12-DoF biped side by side
+and score them on flat ground, pushes and generated terrain, where the arms read
+as a wash. §6 points a depth camera at a composed lab floor — tile, carpet
+strip, cable, door threshold, ramp — because that is the geometry a depth sensor
+would be aimed at. Nobody had asked whether either morphology *crosses* it.
+
+The clip that existed showed four policies on that floor and was read as
+answering this. It was not: the camera tracks the pack, so for the second a loop
+lasts a robot stalled against a threshold and a robot walking look identical.
+Worse, the scene was wrong. `_LAB_WORLD` wrote its eulers in radians while
+omitting `<compiler angle="radian">`, and MuJoCo's default is degrees — so
+`euler="1.5708 0 0"` was 1.57°, not 90°. The cable stayed a 5.2 m vertical pole
+instead of lying across the lane, and the ramp stayed a flat slab. Three of four
+policies were stopping on geometry that was not what it claimed to be.
+
+With the units fixed the course is stated rather than eyeballed, ray-cast down
+the centre line at $y=0$ and given as a fraction of the 28 cm leg:
+
+| feature | span (m) | top | as leg fraction |
+|---|---|---|---|
+| carpet | −0.20 → 0.80 | 0.8 cm | 3% |
+| cable | 0.89 → 0.91 | 2.5 cm | 9% |
+| threshold | 1.63 → 1.77 | 4.0 cm | 14% |
+| ramp | 2.30 → 3.60 | 10.5 cm | 37% |
+
+Clearing the course means walking off the far edge of the last feature, so the
+finish line is $x = 4.70$. Both morphologies get 24 s at a 0.4 m/s command,
+identical scene, identical seed (`scripts/bench/lab_traverse.py`).
+
+| policy | 12-DoF peak $x$ | 12-DoF outcome | 22-DoF peak $x$ | 22-DoF outcome |
+|---|---|---|---|---|
+| randomized | 1.66 | fell on cable, 6.0 s | **8.84** | **finished** |
+| no-randomization | 1.18 | fell on cable, 3.4 s | 0.85 | stalled past carpet |
+| push-trained | 1.46 | fell on cable, 13.8 s | 1.64 | fell on cable, 5.9 s |
+| terrain-trained | 5.31 | fell on landing, 17.4 s | **5.61** | **finished** |
+
+**Finding.** No 12-DoF policy finishes upright; two of four 22-DoF policies
+cross the whole course. Three of the four biped runs end at the **2.5 cm
+cable** — 9% of leg length, an obstacle a third the height of the ramp they
+never reach. The sharpest single comparison is `randomized`, the same recipe on
+both bodies: it falls at the cable at $x = 1.66$ on 12 DoF and finishes on 22.
+
+Two things keep this from being "arms are free stability", and both are in the
+table. The 12-DoF `terrain-trained` policy reached $x = 5.31$, *past* the finish
+line, and fell on the landing afterwards — so the biped is not stopped dead by
+the course, it fails to stay upright through it, and the bench reports a fall
+ahead of a finish by design. And `no-randomization` is **worse** with arms
+(stalled at 0.85 versus falling at 1.18): more mass higher up, with no policy
+trained to use it, is a liability. What the arms buy is recoverable
+perturbation, not a higher step.
+
+<p align="center">
+  <img src="docs/gifs/multi_lab.gif" width="880" alt="Four 22-DoF policies crossing the composed lab floor. The hero policy is orange-shelled with black joints; its egocentric depth image runs along the bottom."><br>
+  <sub>The four 22-DoF policies on the composed floor, no shove. The hero run
+  (<code>terrain-trained</code>) wears the orange shell and black joints; a
+  fallen robot darkens and the frame takes a red outline, held for the rest of
+  the clip. Along the bottom is that robot's own 64×64 egocentric depth,
+  near-to-far — the same sensor §6 validated, pointed at the same geometry.
+  Watch the cable arrive as a thin near band before the two policies that clear
+  it change stride.</sub>
+</p>
+
+---
+
 ## How any of this is measured
 
 The obvious plan — "evaluate through the sim2sim path the repo already gives
@@ -1036,6 +1103,13 @@ sbatch slurm/51_scan_distill.sbatch      # --dependency=afterok:<50>; blind recu
 sbatch slurm/52_checkpoint_sweep.sbatch  # transfer vs iteration, eval only
 sbatch slurm/53_symmetry.sbatch          # left-right symmetry augmentation
 sbatch slurm/54_partition_probe.sbatch   # OS/driver/arch check before using a new partition
+
+# arms, carrying, and vision inside the lift loop
+sbatch slurm/55_lab_arms.sbatch          # lab-floor traversal, 12 vs 22 DoF (§8)
+sbatch slurm/56_carry_gifs.sbatch        # coop-lift sim2sim scores + 2/3/4-robot clips (§5)
+sbatch slurm/57_rtx_probe.sbatch         # Isaac Sim 6.0.1 RTX cost, measured not assumed (§6)
+sbatch slurm/58_coop_depth.sbatch        # payload-tracking depth in the lift loop (§9)
+sbatch slurm/59_coop_vision.sbatch       # --dependency=afterok:<58>; blind vs sighted lift
 
 sbatch slurm/90_tensorboard.sbatch       # live curves
 sbatch slurm/91_refresh_docs.sbatch      # re-derive curves, charts, explorer

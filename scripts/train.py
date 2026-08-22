@@ -141,8 +141,13 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
 
     # [overlay] Hydra writes CoopLift flags after @configclass __post_init__.
     # Re-apply so nopriv/notrack/staged actually change the constructed env.
+    from bhl_robust.tasks.coop_depth_env_cfg import apply_depth_flags
     from bhl_robust.tasks.coop_lift_env_cfg import apply_strategy_flags
     apply_strategy_flags(env_cfg)
+    # Same failure mode, same fix, for the depth arm's `drop_object_pose`: an
+    # override that only reached the dumped yaml would train a policy identical
+    # to the sighted control and label it as the blind one.
+    apply_depth_flags(env_cfg)
 
     # [overlay] Symmetry augmentation. `symmetry_cfg` defaults to None on the
     # algorithm cfg, and hydra cannot set attributes on a None node, so the

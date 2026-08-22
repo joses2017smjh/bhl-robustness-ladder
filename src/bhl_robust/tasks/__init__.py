@@ -7,7 +7,8 @@ direct class references, matching upstream's pattern.
 import gymnasium as gym
 
 from . import (push_env_cfg, terrain_env_cfg, arms_env_cfg, collision_env_cfg,
-               coop_lift_env_cfg, depth_env_cfg, scan_env_cfg)
+               coop_lift_env_cfg, coop_depth_env_cfg, depth_env_cfg,
+               scan_env_cfg)
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.biped import agents
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.humanoid import agents as arm_agents
 
@@ -123,6 +124,18 @@ gym.register(
     disable_env_checker=True,
     kwargs={
         "env_cfg_entry_point": coop_lift_env_cfg.CoopLiftBallCfg,
+        "rsl_rl_cfg_entry_point": _COOP_PPO,
+    },
+)
+# Vision inside the lift loop. `MultiMeshRayCasterCamera` tracks the payload's
+# transform, which the static-mesh `RayCasterCamera` of §6 cannot do — so this
+# is depth of a scene whose interesting object moves, without the RTX renderer.
+gym.register(
+    id="CoopLift-BHL-Cube-Depth-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": coop_depth_env_cfg.CoopLiftDepthCfg,
         "rsl_rl_cfg_entry_point": _COOP_PPO,
     },
 )

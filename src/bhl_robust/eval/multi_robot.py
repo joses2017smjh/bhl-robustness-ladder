@@ -20,6 +20,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
+from bhl_robust.eval.livery import apply_livery
 from bhl_robust.eval.mjcf_assets import prepare_mjcf
 
 # Distinct tints so a four-robot shot is readable without reading a caption.
@@ -62,7 +63,14 @@ _FLAT_WORLD = """<mujoco model="bhl-multi">
 # whether a terrain policy generalizes to composed geometry or only to the
 # noise distribution it was scored on.
 _LAB_WORLD = """<mujoco model="bhl-lab">
-  <statistic center="2.5 0 0.4" extent="5.5"/>
+  <!-- angle="radian" is load-bearing. MuJoCo's default is DEGREES, and the
+       first version of this scene omitted the tag while writing its eulers in
+       radians. `euler="1.5708 0 0"` was therefore 1.57 degrees, not 90: the
+       cable stayed a 5.2 m vertical pole instead of lying across the lane, and
+       the ramp stayed a flat slab. Three of four policies were stopping on
+       geometry that was not what it claimed to be. -->
+  <compiler angle="radian"/>
+  <statistic center="1.8 0 0.4" extent="4.2"/>
   <visual>
     <headlight diffuse="0.65 0.65 0.65" ambient="0.32 0.32 0.32" specular="0 0 0"/>
     <rgba haze="0.18 0.22 0.28 1"/>
@@ -82,19 +90,36 @@ _LAB_WORLD = """<mujoco model="bhl-lab">
   <worldbody>
     <light pos="1.5 0 3.2" dir="0 0 -1" directional="true"/>
     <geom name="floor" size="0 0 0.05" type="plane" material="tile"/>
+    <!-- Heights are set against the robot, not against a real building. BHL's
+         leg is 0.12 m thigh + 0.16 m shank = 0.28 m, and it trained on discrete
+         obstacles capped at 4 cm (14% of leg length). Blind legged locomotion
+         is reliable to roughly 10-20% of leg length; the first version of this
+         scene ran 27-61%, which is why nothing crossed it.
+
+         Spacing is set against the *clip*, not the building either. These
+         policies make about 0.28 m/s of real ground speed against a 0.40 m/s
+         command, so the 6.4 m course the heights were first fixed on took
+         ~24 s to walk -- and a GIF long enough to show it is too large for
+         GitHub to inline. Every height and grade below is unchanged; only the
+         gaps between features are shorter, which puts the whole course inside
+         a 16 s clip. -->
     <!-- visual-only carpet strip: friction is not the claim, the geometry is -->
-    <geom name="carpet" type="box" size="1.4 3.0 0.004" pos="0.6 0 0.004"
+    <geom name="carpet" type="box" size="0.50 2.60 0.004" pos="0.30 0 0.004"
           material="carpet" contype="0" conaffinity="0"/>
-    <!-- cable run across the lane -->
-    <geom name="cable" type="cylinder" size="0.025 2.6" pos="1.6 0 0.025"
+    <!-- cable run across the lane: 2.5 cm, 9% of leg length -->
+    <geom name="cable" type="cylinder" size="0.0125 2.6" pos="0.90 0 0.0125"
           euler="1.5708 0 0" rgba="0.10 0.10 0.10 1"/>
-    <!-- door threshold -->
-    <geom name="threshold" type="box" size="0.07 2.6 0.038" pos="2.8 0 0.038"
+    <!-- door threshold at exactly the training obstacle ceiling, 4 cm = 14% -->
+    <geom name="threshold" type="box" size="0.07 2.6 0.02" pos="1.70 0 0.02"
           rgba="0.48 0.38 0.26 1"/>
-    <!-- ramp then a short landing -->
-    <geom name="ramp" type="box" size="0.85 2.4 0.025" pos="4.3 0 0.085"
-          euler="0 -0.12 0" rgba="0.58 0.58 0.54 1"/>
-    <geom name="landing" type="box" size="0.70 2.4 0.085" pos="5.7 0 0.085"
+    <!-- a real wedge: 3.7 deg over 1.3 m, leading edge 2 cm off the floor,
+         summit 10.5 cm. Training saw slopes to 15 deg, so the grade is far
+         inside the envelope; only the lip is a step at all. -->
+    <geom name="ramp" type="box" size="0.65 2.4 0.010" pos="2.95 0 0.0525"
+          euler="0 -0.0653 0" rgba="0.58 0.58 0.54 1"/>
+    <!-- landing flush with the ramp summit and overlapping it, so the exit off
+         the wedge is not a second step -->
+    <geom name="landing" type="box" size="0.60 2.4 0.0525" pos="4.10 0 0.0525"
           rgba="0.52 0.52 0.50 1"/>
   </worldbody>
 </mujoco>
@@ -118,8 +143,14 @@ class Slot:
     body_id: int
 
 
-def colorize_robots(model: mujoco.MjModel, n: int) -> None:
-    """Tint every geom that belongs to robot i with PALETTE[i]."""
+def colorize_robots(model: mujoco.MjModel, n: int, hero: int | None = None) -> None:
+    """Tint every geom that belongs to robot i with PALETTE[i].
+
+    `hero` instead gets the orange-shell/black-joint livery. A flat tint is the
+    right label when the question is which robot fell, and the wrong one when
+    the question is what a single robot's legs are doing — so the robot that
+    finishes the course is painted to be watched, and the rest stay labels.
+    """
     for g in range(model.ngeom):
         b = int(model.geom_bodyid[g])
         name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, b) or ""
@@ -127,12 +158,30 @@ def colorize_robots(model: mujoco.MjModel, n: int) -> None:
             if name.startswith(f"r{i}_"):
                 model.geom_rgba[g] = PALETTE[i % len(PALETTE)]
                 break
+    if hero is not None:
+        n_shell, n_joint = apply_livery(model, f"r{hero}_")
+        if n_shell == 0 or n_joint == 0:
+            raise RuntimeError(
+                f"livery partition is degenerate for r{hero}_ "
+                f"({n_shell} shell, {n_joint} joint geoms); the asset's "
+                "collision groups changed"
+            )
 
 
 def build_multi(upstream: Path, cache_dir: Path, n: int, labels: list[str],
-                variant: str = "biped", spacing: float = 1.1, world: str = "flat"):
-    """Compose `n` robots into one model. Returns (model, slots)."""
-    scene = prepare_mjcf(upstream, cache_dir, variant)
+                variant: str = "biped", spacing: float = 1.1, world: str = "flat",
+                ego_camera: bool = False, hero: int | None = None):
+    """Compose `n` robots into one model. Returns (model, slots).
+
+    With `ego_camera`, each robot carries the base-mounted depth camera from
+    `prepare_mjcf`. MjSpec prefixes attached bodies, so the cameras come out as
+    `r0_ego_depth`, `r1_ego_depth`, ... and a renderer can be pointed at any one
+    of them to show what that particular policy is walking into.
+
+    `hero` is the slot index painted in the orange/black livery instead of a
+    flat palette tint.
+    """
+    scene = prepare_mjcf(upstream, cache_dir, variant, ego_camera=ego_camera)
     robot_xml = scene.parent / ("berkeley_humanoid_lite_biped.xml" if variant == "biped"
                                 else "berkeley_humanoid_lite.xml")
 
@@ -181,7 +230,7 @@ def build_multi(upstream: Path, cache_dir: Path, n: int, labels: list[str],
             qpos_adr=int(model.jnt_qposadr[jid]), qvel_adr=int(model.jnt_dofadr[jid]),
             body_id=int(bid),
         ))
-    colorize_robots(model, n)
+    colorize_robots(model, n, hero=hero)
     return model, slots
 
 
