@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:1
-#SBATCH --time=12:00:00
+#SBATCH --time=1-12:00:00
 #SBATCH --output=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%j.out
 #SBATCH --error=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%j.out
 
@@ -25,6 +25,12 @@
 #   both  keep both                               -- separates "vision suffices"
 #                                                     from "vision is present"
 # The §5 control is the already-trained `coop-cube-staged-r2-s0`.
+#
+# 36 h, not the 12 h default. Two 4,000-iteration trainings run back to back in
+# one allocation, and §5's blind coop runs took ~3.5 h each with no cameras
+# attached; these carry two ray-cast depth cameras per environment. `ampere` and
+# `dgxh` allow 2 days, so 12 h was leaving the second arm to be truncated by the
+# wall clock for no reason at all.
 
 set -euo pipefail
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
