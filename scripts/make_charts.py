@@ -408,10 +408,59 @@ def chart_collision(mode):
     return c.render()
 
 
+
+def chart_plateau(mode):
+    """Terrain curriculum level: does knowing the ground move the plateau?
+
+    The whole argument of section 3 is a comparison of four curves that all
+    flatten. A table states the endpoints; the chart shows that the privileged
+    arm flattens at the same place and at the same time as the blind one, which
+    is the part that makes it a torque result rather than a sensing one.
+    """
+    t = THEME[mode]
+    blind = mean_curve("terrain-bumpy", "terrain_level")
+    scan = mean_curve("scan-teacher", "terrain_level")
+    depth = mean_curve("depth-bumpy", "terrain_level")
+    flat = mean_curve("terrain-flatfill", "terrain_level")
+    if not blind or not scan or not depth:
+        return None
+    c = Chart(880, 400, dict(l=68, r=182, t=62, b=52), t)
+    c.x0, c.x1, c.y0, c.y1 = 0, 6000, 0, 2.0
+    c.title("The terrain plateau is torque, not sensing",
+            "Curriculum level reached, seed-averaged. 9 levels available; none of them get past 1.6.")
+    c.frame([0, 1500, 3000, 4500, 6000], [0, 0.5, 1.0, 1.5, 2.0],
+            "PPO iteration", "terrain level", xfmt=lambda v: f"{v:,}",
+            yfmt=lambda v: f"{v:.1f}")
+    series = [
+        (depth, t["cat"][1], "depth, forward 64x64"),
+        (blind, t["ramp"][2], "blind (baseline)"),
+        (scan, t["cat"][0], "privileged height scan"),
+        (flat, t["ink3"], "blind, no obstacles"),
+    ]
+    ends = []
+    for s, colour, name in series:
+        if not s:
+            continue
+        c.line(s, colour)
+        ends.append([c.sy(s[-1][1]) + 4, c.sx(s[-1][0]) + 10, name, colour])
+    ends.sort()
+    for i in range(1, len(ends)):
+        if ends[i][0] - ends[i - 1][0] < 16:
+            ends[i][0] = ends[i - 1][0] + 16
+    for y, x, name, colour in ends:
+        c.add(f'<circle cx="{x-4:.0f}" cy="{y-4:.0f}" r="3.5" fill="{colour}"/>')
+        c.add(f'<text x="{x+4:.0f}" y="{y:.0f}" font-size="12" fill="{t["ink2"]}" '
+              f'font-family="{FONT}">{esc(name)}</text>')
+    c.add(f'<text x="{c.m["l"]}" y="{c.h-12}" font-size="11.5" fill="{t["ink3"]}" '
+          f'font-family="{FONT}">An exact height map of the ground underfoot lands on the blind curve. '
+          f'Looking ahead is what moves it.</text>')
+    return c.render()
+
 for name, fn in [("dr_training_curves", chart_dr_curves), ("push_collapse", chart_push),
                  ("dr_ladder_summary", chart_ladder), ("push_sweep", chart_push_sweep),
                  ("terrain_retention", chart_terrain_retention),
-                 ("coop_ablation", chart_coop_ablation), ("collision_mesh", chart_collision)]:
+                 ("coop_ablation", chart_coop_ablation), ("collision_mesh", chart_collision),
+                 ("terrain_plateau", chart_plateau)]:
     for mode in ("light", "dark"):
         svg = fn(mode)
         if svg is None:

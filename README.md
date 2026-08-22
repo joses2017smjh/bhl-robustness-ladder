@@ -329,6 +329,11 @@ them is the point of the next four rows:
 | `scan-student` distilled, recurrent, blind | nothing, but has memory | 1.570 (3,000 iters) |
 | **`depth-bumpy`** 64×64 forward depth | **ahead, out to 6 m** | **1.601 / 1.598** |
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="results/charts/terrain_plateau-dark.svg">
+  <img alt="Terrain curriculum level vs iteration: the privileged height-scan curve lands on the blind curve; only the forward depth camera rises above it." src="results/charts/terrain_plateau-light.svg">
+</picture>
+
 **Finding — the plateau is torque, not sensing.** Handing the policy an exact
 height map of the ground beneath it does not move the curriculum at all: 1.35
 mean against the blind baseline's 1.44. Perfect terrain knowledge buys nothing,
