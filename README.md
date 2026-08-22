@@ -10,8 +10,8 @@ Upstream ships flat-ground locomotion with a fixed domain-randomization preset,
 no curriculum, and no way to score a policy. This repo adds the experiments
 below — and, necessarily, the instrument to measure them.
 
-**68 policies trained** (36 biped + 8 22-DoF + 2 mesh-collision + 22 cooperative-lift) ·
-**~1,500 scored sim2sim episodes** · **288 rendered rollouts**
+**89 policies trained** (48 biped + 8 22-DoF + 33 cooperative-lift) ·
+**6,348 scored sim2sim episodes** · **288 rendered rollouts**
 
 **[▶ Explore every run interactively](https://claude.ai/code/artifact/de955af8-2236-4912-84fb-577e0a43ccbe)**
 — isolate a run, switch metrics, watch the axis rescale.
@@ -21,11 +21,13 @@ below — and, necessarily, the instrument to measure them.
 | | Finding |
 |---|---|
 | **1** | **Sim2sim transfer inverts the training-reward ranking.** The policy with the *highest* training reward falls 23% of the time in MuJoCo; the repo-default randomization falls **0%**. |
-| **2** | **0.2 m/s of shove-rejection is free.** A disturbance curriculum at that ceiling costs nothing measurable. A competence-gated curriculum reaches **0.87 m/s**. |
+| **2** | **0.2 m/s of shove-rejection is free — and the competence-gated ceiling was an artifact.** Uncapped, the adaptive rule does not converge: it oscillates between ~0 and **1.8 m/s** with a median of 0.22. |
 | **3** | **Randomization alone buys most of terrain robustness — and arms buy more.** A blind biped that never saw rough ground handles it to d≈0.4; the 22-DoF version reaches d≈0.6 and falls **11.7%** at d=1.0 against the biped's **37.8%**. |
+| **3b** | **The terrain plateau is torque, not sensing.** A privileged, exact height map of the ground underfoot does not move the curriculum (1.35 vs blind 1.44). Looking *ahead* with depth does (1.60). |
 | **4** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD, and MJCF agree on mass, inertia, limits, damping, and collision primitives. Swapping those primitives for convex meshes moves neither training reward nor **sim2sim fall rate** past seed noise. |
-| **5** | **A pinch is learnable; paying for height prevents it.** Squat spawn moved the pinch off zero. Height never left 4 cm. The recipe that closed the hands is DexPBT stage 1: never pay for a lift. |
-| **6** | **Depth never needed the renderer.** Isaac Sim 5.1's RTX renderer really does segfault here — and ray-cast depth costs **1.6%** of throughput at 4,096 envs, validated to 2.9% against closed-form geometry. |
+| **5** | **Ordering, not the objective.** Zeroing the lift reward until a pinch forms, then enabling it, gets pinch **0.30**, a clamp, a lift bonus and the highest reward of any arm. The single-seed "pinch 0.40 vs 0.08" it replaces did **not** survive three seeds. |
+| **6** | **Depth never needed the renderer.** Isaac Sim 5.1's RTX renderer really does segfault here — and ray-cast depth costs **1.6%** of throughput at 4,096 envs, validated to 2.9% against closed-form geometry. It trains: **+11%** terrain level over blind. |
+| **7** | **Symmetry augmentation buys nothing detectable.** 35.4 against a control spanning 32.9–34.8, one seed. |
 
 <p align="center">
   <img src="docs/gifs/multi_race.gif" width="880" alt="Four policies in one MuJoCo world. Three stay up; the un-randomized robot is on the ground."><br>
@@ -194,9 +196,32 @@ modest to 0.6. The adaptive rule is the strongest version — it converged at
 collapsed, and reports that number as an *outcome* rather than requiring it to
 be guessed.
 
-> **Caveat.** The adaptive arm hit its own $m_{\max}=1.0$ safety cap (peak
-> 1.000), so 0.87 m/s is a **lower bound** on what this robot could tolerate,
-> not a measured ceiling.
+**Raising the cap does not turn the bound into a ceiling — it shows there
+isn't one.** The adaptive arm was rerun with $m_{\max}$ at 2.0 instead of 1.0,
+two seeds, everything else identical:
+
+| | peak $m$ | median $m$ over last 1,500 iters | p10 → p90 | final reward |
+|---|---|---|---|---|
+| capped, $m_{\max}=1.0$ | 1.000 (pinned) | 0.87 | — | 14.2 / 14.4 |
+| uncapped, $m_{\max}=2.0$ | **1.79 / 1.86** | **0.22 / 0.24** | 0.004 → 1.56 | 24.0 / 9.0 |
+
+**Finding.** Without the cap the rule does not converge — it *oscillates*. It
+climbs past 1.5 m/s, the gait breaks, the fall rate blows through $2f^\star$,
+and the rule drives $m$ back to nearly zero before climbing again. Across the
+whole run it spends 23–25% of iterations above 1.0 m/s and 47–48% below
+0.1 m/s. That is a limit cycle, not a competence estimate.
+
+So the published 0.87 m/s was never a lower bound being approached from below.
+It was the *cap flattening an oscillation* — clip a signal that swings between 0
+and 1.8 at 1.0 and its mean sits high and looks like convergence. The honest
+statement is that this robot can transiently absorb ~1.8 m/s but cannot hold a
+gait against sustained shoves anywhere near it, and the competence rule as
+written has no fixed point in between.
+
+> **Correction.** An earlier version of this README reported the adaptive
+> curriculum as having "converged to 0.87 m/s" and called that a lower bound on
+> tolerable disturbance. Both halves were wrong: it had not converged, and the
+> number was an artifact of the safety cap rather than a property of the robot.
 
 ---
 
@@ -291,9 +316,53 @@ The push-trained arm is the other surprise: at 3.3% it is closer to the terrain
 policy than to the randomization-only one, on ground it never trained on.
 
 The training-side curriculum is consistent with that: it plateaus at about
-**level 1.4 of 9**. The robot learns mildly rough ground and stops progressing —
-believable for 6 Nm joints with no height sensing. The level it stalls at is
-itself the measurement.
+**level 1.4 of 9**. The robot learns mildly rough ground and stops progressing.
+The README used to attribute that to "6 Nm joints with no height sensing",
+which is two hypotheses in one sentence. They are separable, and separating
+them is the point of the next four rows:
+
+| arm | what it knows about the ground | terrain level @ 6,000 |
+|---|---|---|
+| `terrain-bumpy` blind | nothing | 1.443 / 1.446 / 1.417 |
+| `terrain-flatfill` blind, corrected ablation | nothing | 1.393 / 1.290 |
+| **`scan-teacher`** privileged 11×7 height grid | **exact, underfoot** | **1.413 / 1.288** |
+| `scan-student` distilled, recurrent, blind | nothing, but has memory | 1.570 (3,000 iters) |
+| **`depth-bumpy`** 64×64 forward depth | **ahead, out to 6 m** | **1.601 / 1.598** |
+
+**Finding — the plateau is torque, not sensing.** Handing the policy an exact
+height map of the ground beneath it does not move the curriculum at all: 1.35
+mean against the blind baseline's 1.44. Perfect terrain knowledge buys nothing,
+which leaves joint authority as the thing that runs out. An 11.3 kg robot with
+6 Nm joints stalls at level ~1.4 of 9 *even when it can see the ground exactly*,
+and that is a hardware claim rather than an observation-design one.
+
+What does move it is looking **ahead** rather than down: the forward depth
+camera reaches 1.60, an 11% gain over blind, and the recurrent distilled student
+reaches 1.57 without any exteroception at all — in half the iterations — so
+memory of what its own feet have already felt substitutes for part of what the
+scan was supposed to provide.
+
+> **Caveat, and it is a real one.** The depth and student arms change network
+> input width (301 and recurrent, against 45 feedforward), so their gain is not
+> cleanly attributable to information rather than capacity. The *scan* arm is
+> the clean comparison — same MLP, same pipeline, 122 dims instead of 45 — and
+> it shows no gain, which is what makes the torque conclusion the load-bearing
+> one. Two seeds each; the scan seeds disagree by 0.12, which is most of the
+> effect anyone would want to claim.
+
+**The corrected obstacle ablation.** `terrain-smooth` removed the discrete
+obstacles and redistributed their 20% share into rough ground and slope, so it
+was also *rougher on average* — and it reached 1.244. `terrain-flatfill` holds
+every other proportion fixed and fills the obstacle share with flat ground:
+**1.393 / 1.290**, mean 1.342, against the full menu's 1.435. So roughly half
+of the old ablation's apparent 0.19-level penalty was the confound and half was
+real: removing obstacles properly costs about 0.09 levels.
+
+That said, `terrain-flatfill`'s own two seeds differ by 0.103 — *more* than the
+effect being claimed — so this is two seeds telling a directionally consistent
+story and not a measurement. The earlier flat claim that "obstacles were not the
+limiter" is too strong; they contribute, modestly, and the honest version is
+that the curriculum stalls at ~1.4 whether or not they are present.
 
 > **Correction.** An earlier version used the $s=0$ policy as the terrain
 > baseline and reported flat-trained policies "collapsing between d = 0.05 and
@@ -302,14 +371,8 @@ itself the measurement.
 
 Two further caveats worth stating:
 
-- The obstacles were **not** the limiter — the arm *with* obstacles reaches a
-  slightly higher terrain level than the arm without, the opposite of what I
-  expected when flagging them as the risky choice.
-- **That ablation is confounded and should not be quoted as clean.** Removing
-  the obstacles redistributed their 20% share into more rough ground and slope
-  (rough 0.40 → 0.50, each slope 0.20 → 0.25), so "smooth" is also *rougher on
-  average* rather than "bumpy minus obstacles". A correct ablation holds the
-  other proportions fixed and replaces the obstacle share with flat ground.
+- The obstacles contribute but are not the limiter: 1.342 against 1.435, where
+  the confounded version read 1.244 and made them look twice as costly.
 
 ---
 
@@ -503,12 +566,40 @@ The cube control is the baseline for the rest. One knob off at a time, seed
 | fixedh | competence on $h$ | 0.125 | 0.088 | 1.24 | 0.247 | 173 | 11.5 |
 | clockh | competence → wall clock | 0.024 | 0.013 | 0.00 | 0.055 | 197 | 7.23 |
 
-**Finding.** The arm that formed a pinch is the one that never paid for
-height. DexPBT stage 1 (`pickfirst`) reaches pinch 0.40 and clamp 0.50 —
-hands about 8 cm from the contact points, against the control's 19 cm — and
-finishes 4,000 iterations without falling. Height was not a sparse bonus
-waiting on a pinch. It was a competing objective that kept the control from
-closing.
+**Finding, at one seed.** The arm that formed a pinch is the one that never
+paid for height. DexPBT stage 1 (`pickfirst`) reaches pinch 0.40 and clamp
+0.50 — hands about 8 cm from the contact points, against the control's 19 cm —
+and finishes 4,000 iterations without falling.
+
+**That finding does not survive three seeds.** Seeds 1 and 2 were run for the
+four arms the section leans on, and the pinch channel turns out to be dominated
+by seed:
+
+| arm | pinch, 3 seeds | mean | fall, 3 seeds | mean |
+|---|---|---|---|---|
+| control | 0.081 / 0.179 / 0.016 | 0.092 | 0.140 / 0.278 / 0.040 | 0.152 |
+| **pickfirst** | 0.397 / 0.205 / 0.044 | **0.215** | 0.005 / 0.033 / 0.045 | **0.028** |
+| notilt | 0.215 / 0.241 / 0.113 | 0.190 | 0.294 / 0.324 / 0.327 | 0.315 |
+| nodrift | 0.236 / 0.178 / 0.113 | 0.176 | 0.048 / 0.386 / 0.616 | 0.350 |
+
+`pickfirst` spans **0.044 to 0.397** and the control spans **0.016 to 0.179**.
+Those ranges overlap, and the published "0.40 against 0.081" was the best
+pickfirst seed against a middling control seed. On the mean, pickfirst is still
+ahead (0.215 vs 0.092) and still ahead of every other arm — but at n=3 with
+that spread, the pinch column cannot carry the section's headline.
+
+**What does survive is the fall rate.** `pickfirst` falls 0.005 / 0.033 / 0.045
+— worst seed 4.5% — against `notilt` 29–33% and `nodrift` 5–62%. Those are
+cleanly separated, three seeds out of three. Not paying for height does not
+reliably buy a *pinch*; it reliably buys a policy that stays upright for the
+whole episode. And the two arms with the highest reward, `notilt` (12.4) and
+`nodrift` (12.6), are buying it by falling roughly a third of the time.
+
+> **Correction.** An earlier version of this README said "the arm that formed a
+> pinch is the one that never paid for height" and quoted pinch 0.397 against
+> 0.081 as the evidence. Three seeds show that gap is inside seed noise. The
+> claim that survives is narrower: never paying for height produces the only
+> arm that reliably does not fall.
 
 The rest of the ladder is consistent with that:
 
@@ -535,20 +626,38 @@ The rest of the ladder is consistent with that:
 > Those were hypotheses about the standing-spawn ladder run, not measurements
 > of squat spawn.
 
-Three flags — privileged critic, actor tracking residual, DexPBT staging —
-are consumed in `__post_init__`. Hydra applied them after that, so
-`nopriv` / `notrack` / `staged` are copies of the control (policy 194 /
-critic 206, bit-matching last metrics). Staging had a second bug: a missing
-pinch distance counted as fully pinched, so the latch fired at step 0.
-`pickfirst` is the staging result that actually ran: lift weights zero for
-the whole 4,000 iterations, via the reward-weight override. Both bugs are
-fixed in this commit; the three arms are not evidence.
+**The three dead arms, rerun.** Privileged critic, actor tracking residual and
+DexPBT staging are consumed in `__post_init__`, and hydra applied them after
+that, so `nopriv` / `notrack` / `staged` originally trained as bit-identical
+copies of the control (policy 194 / critic 206). Staging had a second bug: a
+missing pinch distance counted as fully pinched, so the latch fired at step 0.
+Both are fixed, and all three ran for real:
 
-Seeds still wait. The next run that is worth a GPU is pickfirst *then*
-height — staging that actually zeros the lift weights in the constructed
-env, then turns them on once pinch clears 0.40. That is what
-`stage_lift_on_pinch` was written to do. Extra cube/ball seeds of a 4 cm
-hover are still not worth the GPUs.
+| arm | pinch | clamp | lift bonus | fall | eplen | reward |
+|---|---|---|---|---|---|---|
+| control (3-seed mean) | 0.092 | — | — | 0.152 | 185 | 8.71 |
+| `nopriv` no privileged critic | 0.050 | 0.021 | 0.09 | 0.072 | 192 | 7.89 |
+| `notrack` no PD-residual obs | 0.013 | 0.003 | 0.00 | 0.015 | 196 | 7.15 |
+| **`staged` pinch-then-height** | **0.298** | **0.305** | **0.93** | 0.053 | 197 | **18.46** |
+
+`nopriv` (0.050) and `notrack` (0.013) both sit *below* the control's mean —
+consistent with the privileged critic and the tracking residual being
+load-bearing — but both also sit inside the control's own three-seed range of
+0.016–0.179, so at one seed each this is suggestive and not settled. It is at
+least now a measurement rather than a copy of the control.
+
+**`staged` is the section's answer.** Zeroing the lift weights in the
+constructed env and turning them on once the batch-mean pinch clears 0.40 gets
+a pinch (0.298, above the control's mean and every other arm's), a clamp
+(0.305), *and* a nonzero lift bonus (0.93) while falling 5% of the time and
+running near-full 197-step episodes. Its reward of 18.46 is the highest of any
+cube arm. So height is learnable from a formed pinch — the ordering was the
+problem, not the objective.
+
+What it does **not** do is lift to a height: the competence gate stayed pinned
+at the 4 cm floor in every arm including this one. They close on the cube and
+raise it a few centimetres. One seed, and the seed spread above is wide enough
+that it needs two more before the number is quotable.
 
 ---
 
@@ -633,15 +742,77 @@ stating plainly: rays hit only the meshes named in `mesh_prim_paths`, so the
 robot sees terrain and never itself, and there is no sensor-noise model beyond
 a Gaussian on range.
 
-The depth-conditioned policy is queued (`48_depth_train`): 64×64 average-pooled
-to 16×16 before the MLP, because 4,096 raw numbers against 45 of proprioception
-would make the first layer almost entirely depth weights. A CNN trunk is the
-real answer and is not what rsl-rl's default actor is.
+**And it trains.** `48_depth_train` ran the full 6,000 iterations on rough
+terrain, two seeds, 64×64 average-pooled to 16×16 before the MLP — because
+4,096 raw numbers against 45 of proprioception would make the first layer
+almost entirely depth weights. A CNN trunk is the real answer and is not what
+rsl-rl's default actor is.
 
-The same ray-caster, arranged as a ground grid instead of a pinhole, is the
-privileged height-scan teacher in `50_scan_teacher` — the run that splits §3's
-"6 Nm joints **and** no height sensing" into the two hypotheses it actually
-contains.
+| | terrain level @ 6,000 | final reward |
+|---|---|---|
+| blind `terrain-bumpy`, 3 seeds | 1.443 / 1.446 / 1.417 | — |
+| **depth-conditioned, 2 seeds** | **1.601 / 1.598** | 23.2 / 22.1 |
+
+An 11% higher terrain level than blind, and the two seeds agree to three
+decimal places — which is a tighter spread than the blind baseline's own. §3
+reads that result against the privileged height scan, which does *not* help,
+and draws the conclusion the pair supports: what buys terrain progress on this
+robot is seeing ground it has not reached yet, not knowing the ground it is
+standing on.
+
+---
+
+## 7 · Symmetry augmentation
+
+**Question.** BHL is bilaterally symmetric and nothing in upstream's training
+exploits that. Symmetric gaits are more torque-efficient, and torque is exactly
+what this robot does not have — so the hypothesis is that mirroring buys more
+here than it would on a strong machine.
+
+rsl-rl will mirror each batch, but only given a robot-specific map.
+`bhl_robust.tasks.symmetry` is that map: a sagittal reflection, so the $y$
+component of a vector and the roll/yaw components of a rotation flip while pitch
+does not, and the two leg blocks swap.
+
+| arm | final reward | note |
+|---|---|---|
+| `s = 1.0` control, 3 seeds | 32.9 / 34.8 / 33.2 | no symmetry |
+| data augmentation | — | diverged at iteration 2,152 (reward 32.1 when it did) |
+| augmentation + mirror loss | **35.36** | full 6,000 iterations |
+
+**Finding — no measurable gain.** 35.36 against a control spanning 32.9–34.8 is
+at the top of the range and inside it. At one seed this is not a result, and the
+honest summary is that symmetry augmentation costs nothing and buys nothing
+detectable on this task. The augmentation-only arm hit upstream's
+`noise_std_type="scalar"` divergence (issue 6 below) at iteration 2,152, healthy
+at reward 32.1 up to that point.
+
+<details>
+<summary><b>The bug this experiment actually produced</b></summary>
+
+<div>
+
+The first attempt trained 3,768 iterations stuck at reward **6** against the
+control's 33, with spikes to **−9×10⁵**, then died on the same divergence. The
+divergence was the symptom.
+
+rsl-rl hands the augmentation hook a **TensorDict keyed by observation group**,
+not a flat tensor (`ppo.py` reads `obs_batch.batch_size[0]`). A TensorDict
+indexes its *batch* dimensions, so `out[..., 0:3] = ...` overwrote the first
+three **samples of the batch** instead of the first three **features of every
+sample**. Nothing raised, shapes stayed valid, and the logged symmetry loss fell
+the whole time — on corrupted data.
+
+The joint map itself was correct, which was worth establishing rather than
+assuming: 200 random joint configurations through MuJoCo forward kinematics,
+requiring the mirrored pose to swap the feet and negate their $y$. Worst error
+0.00000 m. An involution test passes on a wrong sign that happens to be its own
+inverse; a kinematic test does not. `mirror_obs` now refuses a TensorDict
+outright and refuses any observation width it does not recognise, because the
+failure mode here is silence rather than an error.
+
+</div>
+</details>
 
 ---
 
@@ -859,9 +1030,16 @@ sbatch slurm/50_scan_teacher.sbatch      # privileged height-scan teacher (§3 p
 sbatch slurm/51_scan_distill.sbatch      # --dependency=afterok:<50>; blind recurrent student
 sbatch slurm/52_checkpoint_sweep.sbatch  # transfer vs iteration, eval only
 sbatch slurm/53_symmetry.sbatch          # left-right symmetry augmentation
+sbatch slurm/54_partition_probe.sbatch   # OS/driver/arch check before using a new partition
 
 sbatch slurm/90_tensorboard.sbatch       # live curves
+sbatch slurm/91_refresh_docs.sbatch      # re-derive curves, charts, explorer
 ```
+
+Every job above declares `--partition=gpu,dgxh,ampere` (eval adds `eecs` and
+`preempt`) and an explicit GPU-architecture constraint. One partition's per-user
+GPU cap is what the queue actually binds on, and `--constraint=el9` is not
+enough on its own — see the environment section.
 
 ## Hardware
 
