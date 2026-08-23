@@ -34,11 +34,21 @@ JOINT_RGBA = (0.094, 0.094, 0.106, 1.0)
 # consistent instead of introducing a third hue.
 PAYLOAD_RGBA = (0.165, 0.471, 0.839, 1.0)
 
-# Feet are shells by the collision-primitive rule, and are painted dark anyway.
-# At 880 px an orange foot merges with the shank above it and with its own
-# contact shadow, so the one thing the clip is meant to show — where the foot
-# lands — is the thing that disappears.
-_DARK_SHELLS = ("ankle_roll",)
+# Shells that are painted dark anyway, overriding the collision-primitive rule.
+#
+# The naming convention is that a body carries the name of the joint proximal to
+# it, so `knee_pitch` is the shank and `base` is the torso. Painting those two
+# dark and letting the foot come out orange puts the bright colour on the
+# extremities -- feet, thighs, upper arms, forearms -- and the dark on the
+# central mass, which is the read the crew clips want: at 880 px you are
+# tracking where four feet land, not where a torso is.
+#
+# The cost is real and is the reason the first version did the opposite: an
+# orange foot sits against an orange thigh across a dark shank, so the leg reads
+# as two bright segments rather than one, and a foot at the bottom of its swing
+# is close enough to its own contact shadow to lose an edge. Flip `_DARK_SHELLS`
+# back to `("ankle_roll",)` for the old scheme.
+_DARK_SHELLS = ("knee_pitch", "base")
 
 
 def _shell_bodies(model: mujoco.MjModel) -> set[int]:
