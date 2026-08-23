@@ -214,6 +214,50 @@ produces the only arm that reliably stays upright. Ordering the reward — pinch
 first, height second — then gets a pinch, a clamp, a lift bonus and the highest
 reward of any arm, with height still pinned at 4 cm.
 
+### Giving them eyes made it worse
+
+The obvious next move is to put a camera on the lift. A ray-cast depth camera
+per robot tracks the payload's transform, so the cube stays visible as it moves
+— no RTX renderer needed. Two arms: depth *replacing* the privileged object
+pose, and depth *added alongside* it.
+
+<p align="center">
+  <img src="docs/gifs/carry_2.gif" width="430" alt="Blind policy: two robots closed on the cube, both upright.">
+  <img src="docs/gifs/carry_vision_swap_2.gif" width="430" alt="Depth-conditioned policy: one robot face-down on the floor, fall outline on the frame."><br>
+  <sub>Same task, same 4,000 iterations. Left blind, right with depth replacing
+  the object pose. The red outline is a fall, held for the rest of the clip.</sub>
+</p>
+
+| | pinch | held lift | fell |
+|---|---|---|---|
+| **blind** | **0.42 – 0.91** | **4.0 – 4.8 cm** | **0.12 – 0.25** |
+| depth replaces pose | 0.03 – 0.18 | 0.2 – 0.7 cm | 0.62 – 1.00 |
+| depth added alongside | 0.00 | −0.1 cm | 0.88 – 1.00 |
+
+**Finding.** Not a small regression — the sighted policies stop forming a pinch
+at all and fall in almost every episode. The reason is visible in the setup
+rather than the training: the actor is *already handed the exact object pose*.
+Depth here does not add information, it substitutes a 64-dim pooled image for a
+quantity the policy was being given exactly, and pools away the spatial
+precision a pinch depends on. Vision earns its place when the payload is unknown
+or occluded, which is a different experiment.
+
+### And the other two objects
+
+The recipe that lifts the cube was only ever run on the cube. Rerun on both:
+
+| object | pinch | lift bonus |
+|---|---|---|
+| cube | 0.298 | 0.93 |
+| yoga ball | 0.063 | 0.51 |
+| ladder | **0.000** | 0.00 |
+
+The ball partially transfers — it forms a pinch and lifts, where the older
+recipe did neither. The ladder is at pinch identically zero for the third
+recipe in a row, which stops being "we never retried it" and starts being a
+property of the object: long, thin and light puts the two contact points
+further apart than the shoulders can span, with nothing to squeeze against.
+
 [Read §5](docs/REPORT.md#5--cooperative-lift-can-two-of-them-learn-to-pick-something-up)
 
 ---
