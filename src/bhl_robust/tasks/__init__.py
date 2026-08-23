@@ -197,3 +197,19 @@ for _n, _cls in ((3, crew.Crew3DepthCfg), (4, crew.Crew4DepthCfg)):
         disable_env_checker=True,
         kwargs={"env_cfg_entry_point": _cls, "rsl_rl_cfg_entry_point": _COOP_PPO},
     )
+
+# --- harder payloads, and the only fair test of vision --------------------
+# Randomised mass/friction; and an "occluded" pair that withholds the exact
+# object pose so depth has something to contribute instead of duplicating a
+# quantity the policy was already handed.
+for _id, _cls in (
+    ("CoopLift-BHL-Cube-Random-v0", coop_hard_env_cfg.CoopLiftRandomCfg),
+    ("CoopLift-BHL-Cube-Occluded-v0", coop_hard_env_cfg.CoopLiftOccludedCfg),
+    ("CoopLift-BHL-Cube-Occluded-Depth-v0", coop_hard_env_cfg.CoopLiftOccludedDepthCfg),
+):
+    gym.register(
+        id=_id,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _cls, "rsl_rl_cfg_entry_point": _COOP_PPO},
+    )
