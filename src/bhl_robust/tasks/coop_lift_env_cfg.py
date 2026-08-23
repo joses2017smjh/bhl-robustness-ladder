@@ -458,10 +458,13 @@ class CoopLiftEnvCfg(ManagerBasedRLEnvCfg):
         # Joint limits live in the URDF. An out-of-range PD target is clipped
         # by the articulation; the 36 cm adduction wall is physics, not a
         # reward term.
-        if self.scene.contact_a is not None:
-            self.scene.contact_a.update_period = self.sim.dt
-        if self.scene.contact_b is not None:
-            self.scene.contact_b.update_period = self.sim.dt
+        # Every contact sensor in the scene, whichever naming it uses. The pair
+        # has contact_a/contact_b and a crew of N has contact_0..contact_N-1;
+        # hard-coding the pair's names made this method raise AttributeError the
+        # moment a crew config called super().__post_init__().
+        for _name, _sensor in vars(self.scene).items():
+            if _name.startswith("contact") and _sensor is not None:
+                _sensor.update_period = self.sim.dt
         apply_strategy_flags(self)
 
 
