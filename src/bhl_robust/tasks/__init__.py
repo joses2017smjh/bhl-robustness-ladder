@@ -6,6 +6,7 @@ direct class references, matching upstream's pattern.
 
 import gymnasium as gym
 
+from . import coop_crew_env_cfg  # noqa: F401
 from . import (push_env_cfg, terrain_env_cfg, arms_env_cfg, collision_env_cfg,
                coop_lift_env_cfg, coop_depth_env_cfg, depth_env_cfg,
                scan_env_cfg)
@@ -172,3 +173,21 @@ gym.register(
         "rsl_rl_cfg_entry_point": _PPO_CFG,
     },
 )
+
+# --- real crews: N robots, ONE payload ------------------------------------
+# The pair task replicated across independent crates is not a crew; these are.
+# Registered blind and sighted at each size, so "does vision help a lift" and
+# "does a bigger crew help a lift" are separable rather than confounded.
+for _n in (3, 4):
+    for _vision in (False, True):
+        _sfx = "-Depth" if _vision else ""
+        gym.register(
+            id=f"CoopLift-BHL-Cube-Crew{_n}{_sfx}-v0",
+            entry_point="isaaclab.envs:ManagerBasedRLEnv",
+            disable_env_checker=True,
+            kwargs={
+                "env_cfg_entry_point": coop_crew_env_cfg.make_crew_cfg(
+                    _n, "cube", vision=_vision),
+                "rsl_rl_cfg_entry_point": _COOP_PPO,
+            },
+        )

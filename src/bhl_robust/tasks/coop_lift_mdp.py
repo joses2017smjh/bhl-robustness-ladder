@@ -24,6 +24,8 @@ system; independent learners spend their samples fighting each other.
 """
 from __future__ import annotations
 
+import math
+
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
@@ -311,3 +313,108 @@ def stage_lift_on_pinch(
         cfg.weight = weight if staged else 0.0
         env.reward_manager.set_term_cfg(name, cfg)
     return float(staged)
+
+
+# --- N-robot crew ----------------------------------------------------------
+#
+# The two-robot terms above hard-code a pair: two contact points at
+# `centre +/- offset * axis`, and a clamp that is the dot product of two
+# vectors. Neither generalises by adding arguments, so the crew versions below
+# restate them on a ring. At n = 2 they are the same function: two points on a
+# ring 180 degrees apart *are* `centre +/- offset * axis`, and the force-closure
+# residual of two antiparallel unit vectors *is* `-v_a . v_b`.
+
+
+def crew_contact_points(env: "ManagerBasedRLEnv", object_cfg: SceneEntityCfg,
+                        n: int) -> torch.Tensor:
+    """`n` contact points evenly spaced on a horizontal ring around the payload.
+
+    Returns (num_envs, n, 3). Robot *i* is assigned point *i*, and the scene
+    places robot *i* at the same bearing, so the assignment is the identity and
+    no matching problem appears in the reward.
+    """
+    obj: RigidObject = env.scene[object_cfg.name]
+    centre = obj.data.root_pos_w[:, :3]
+    offset = float(env.cfg.contact_offset)
+    ang = torch.arange(n, device=centre.device, dtype=centre.dtype) * (2.0 * math.pi / n)
+    # Bearing 0 is +x. The pair case sits at +/- 90 degrees, i.e. on +/- y, which
+    # is where `contact_axis = (0, 1, 0)` put it.
+    ang = ang + math.pi / 2.0
+    ring = torch.stack([torch.cos(ang), torch.sin(ang), torch.zeros_like(ang)], dim=-1)
+    return centre.unsqueeze(1) + offset * ring.unsqueeze(0)
+
+
+def crew_reach(
+    env: "ManagerBasedRLEnv",
+    std: float,
+    robot_cfgs: Sequence[SceneEntityCfg],
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """1 - tanh(mean hand-midpoint distance to each robot's own contact point)."""
+    pts = crew_contact_points(env, object_cfg, len(robot_cfgs))
+    d = torch.stack(
+        [torch.norm(_hand_midpoint(env, c) - pts[:, i], dim=-1)
+         for i, c in enumerate(robot_cfgs)],
+        dim=-1,
+    ).mean(dim=-1)
+    # Same cache the pair terms write, so the pinch gate and the height
+    # curriculum work unchanged on a crew.
+    env._bhl_pinch_d = d
+    return 1.0 - torch.tanh(d / std)
+
+
+def crew_force_closure(
+    env: "ManagerBasedRLEnv",
+    robot_cfgs: Sequence[SceneEntityCfg],
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """1 when the crew's inward pushes cancel, 0 when they all shove one way.
+
+    Each robot contributes a unit vector from its hands toward the payload
+    centre. If those sum to zero the payload is squeezed and not accelerated,
+    which is the whole content of "opposing" once there are more than two of
+    them. Gated on pinch, so standing in a tidy circle far away pays nothing.
+    """
+    obj: RigidObject = env.scene[object_cfg.name]
+    centre = obj.data.root_pos_w[:, :3]
+    v = torch.stack(
+        [torch.nn.functional.normalize(centre - _hand_midpoint(env, c), dim=-1, eps=1e-6)
+         for c in robot_cfgs],
+        dim=1,
+    )
+    residual = torch.norm(v.mean(dim=1), dim=-1)
+    return (1.0 - residual).clamp(0.0, 1.0) * _pinch_weight(env)
+
+
+def crew_spread(
+    env: "ManagerBasedRLEnv",
+    robot_cfgs: Sequence[SceneEntityCfg],
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """Penalty: variance of hand-to-payload distance across the crew.
+
+    Force closure is satisfied by a crew that is balanced but loose. This is the
+    term that says everyone has to be equally close, which for a non-prehensile
+    lift is what stops three robots carrying while the fourth trails.
+    """
+    obj: RigidObject = env.scene[object_cfg.name]
+    centre = obj.data.root_pos_w[:, :3]
+    d = torch.stack(
+        [torch.norm(centre - _hand_midpoint(env, c), dim=-1) for c in robot_cfgs], dim=-1
+    )
+    return d.var(dim=-1, unbiased=False)
+
+
+def any_fallen(
+    env: "ManagerBasedRLEnv",
+    limit_angle: float,
+    robot_names: Sequence[str],
+) -> torch.Tensor:
+    """Terminate if any crew member exceeds the loco tilt limit."""
+    out = None
+    for name in robot_names:
+        r: Articulation = env.scene[name]
+        tilt = torch.acos((-r.data.projected_gravity_b[:, 2]).clamp(-1.0, 1.0))
+        hit = tilt > limit_angle
+        out = hit if out is None else (out | hit)
+    return out
