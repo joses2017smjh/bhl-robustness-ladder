@@ -83,7 +83,11 @@ def _cfgclass(name: str, bases: tuple, ns: dict, extra_ann: dict | None = None):
     `extra_ann` carries the `None` overrides that delete pair terms, which have
     no value to infer a type from.
     """
-    ann = {k: type(v) for k, v in ns.items() if v is not None}
+    # Dunders are methods and machinery, not fields. Annotating `__post_init__`
+    # makes configclass count 25 annotations against 24 members and refuse the
+    # class outright.
+    ann = {k: type(v) for k, v in ns.items()
+           if v is not None and not k.startswith("__")}
     ann.update(extra_ann or {})
     return configclass(type(name, bases, {"__annotations__": ann, **ns}))
 

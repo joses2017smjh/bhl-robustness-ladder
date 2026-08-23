@@ -40,5 +40,29 @@ if [ -n "${OVERRIDE_FILE:-}" ] && [ -s "${OVERRIDE_FILE}" ]; then
     echo "overrides: $OVERRIDES"
 fi
 
+# The exit code of this python cannot be trusted, and that is not a guess.
+# scripts/train.py ends with `main(); simulation_app.close()`, main() is
+# Hydra-decorated, and Isaac Sim's shutdown hard-exits the interpreter. A config
+# error therefore prints a full traceback and returns 0 -- which is how four
+# dead crew-lift arms came back from Slurm marked COMPLETED, and how a gate that
+# ran this same script reported four PASSes in sixty-eight seconds.
+#
+# So the run is judged on evidence instead: a training job that never reached
+# its first iteration did not train, whatever it told the shell.
+LOG=$(mktemp "${TMPDIR:-/tmp}/bhl-train-XXXXXX.log")
 # shellcheck disable=SC2086
-$PY "$TRAIN_SCRIPT" "${ARGS[@]}" $OVERRIDES
+$PY "$TRAIN_SCRIPT" "${ARGS[@]}" $OVERRIDES 2>&1 | tee "$LOG"
+rc=${PIPESTATUS[0]}
+
+if grep -qE "Learning iteration" "$LOG"; then
+    iters=$(grep -cE "Learning iteration" "$LOG")
+    echo "train.sh: reached $iters logged iterations"
+else
+    echo "train.sh: FAILED -- no training iteration was ever logged" >&2
+    grep -hoE "^(ValueError|RuntimeError|TypeError|KeyError|AttributeError|ModuleNotFoundError): .{0,160}" \
+        "$LOG" | tail -3 >&2
+    rm -f "$LOG"
+    exit 1
+fi
+rm -f "$LOG"
+exit "$rc"

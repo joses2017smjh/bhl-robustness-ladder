@@ -19,7 +19,7 @@ source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
 setup_node_cache
 export OMP_NUM_THREADS=8
 export GATE_OUT=$REPO/results/crew_gate.txt
-export BHL_FORWARD_VARS="$BHL_FORWARD_VARS GATE_OUT"
+export BHL_FORWARD_VARS="$BHL_FORWARD_VARS GATE_OUT WORKSPACE"
 mkdir -p "$REPO/results"; rm -f "$GATE_OUT"
 
 echo "=== node: $(hostname) | $(date) ==="
