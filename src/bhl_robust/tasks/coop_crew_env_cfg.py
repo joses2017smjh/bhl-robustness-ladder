@@ -68,6 +68,26 @@ from .coop_depth_env_cfg import COOP_CAM_POOL, coop_depth_obs, make_coop_depth_c
 CREW_RADIUS = 0.48
 
 
+def _cfgclass(name: str, bases: tuple, ns: dict, extra_ann: dict | None = None):
+    """Build a configclass whose generated attributes are *real* dataclass fields.
+
+    This is not a style point. `@configclass` copies unannotated class
+    attributes onto the instance, so a class built without annotations works
+    perfectly under `parse_env_cfg` -- and then silently loses every generated
+    term when Hydra round-trips the config through `to_dict()` / `from_dict()`,
+    because that path only carries declared fields. The inherited pair fields,
+    which *are* annotated on the parent, reassert themselves, and training dies
+    on `robot_a` not existing in a scene full of `robot_0..N`.
+
+    Annotating from the value's runtime type covers the generated terms;
+    `extra_ann` carries the `None` overrides that delete pair terms, which have
+    no value to infer a type from.
+    """
+    ann = {k: type(v) for k, v in ns.items() if v is not None}
+    ann.update(extra_ann or {})
+    return configclass(type(name, bases, {"__annotations__": ann, **ns}))
+
+
 def _yaw_quat(theta: float) -> tuple[float, float, float, float]:
     """Quaternion for a yaw that points the robot's +x at the origin."""
     half = (theta + math.pi) / 2.0
@@ -145,8 +165,9 @@ def make_crew_cfg(n: int, kind: str = "cube", vision: bool = False):
     # carries four robots when the crew is two.
     for dead in ("robot_a", "robot_b", "contact_a", "contact_b"):
         scene_ns[dead] = None
-    SceneCls = configclass(type(f"CoopCrew{n}SceneCfg", (CoopLiftSceneCfg,),
-                                {"__annotations__": scene_ann, **scene_ns}))
+    SceneCls = _cfgclass(f"CoopCrew{n}SceneCfg", (CoopLiftSceneCfg,), scene_ns,
+                         {d: type(None) for d in
+                          ("robot_a", "robot_b", "contact_a", "contact_b")})
 
     # --- observations -----------------------------------------------------
     def _policy_terms():
@@ -181,10 +202,9 @@ def make_crew_cfg(n: int, kind: str = "cube", vision: bool = False):
         ns["actions"] = ObsTerm(func=mdp.last_action)
         return ns
 
-    PolicyCls = configclass(type(
-        f"CoopCrew{n}PolicyCfg", (ObsGroup,),
-        {"__annotations__": {}, **_policy_terms(),
-         "__post_init__": lambda self: setattr(self, "enable_corruption", True)}))
+    _pol = _policy_terms()
+    _pol["__post_init__"] = lambda self: setattr(self, "enable_corruption", True)
+    PolicyCls = _cfgclass(f"CoopCrew{n}PolicyCfg", (ObsGroup,), _pol)
 
     critic_ns = dict(_policy_terms())
     critic_ns["object_lin_vel"] = ObsTerm(func=coop.object_lin_vel_w)
@@ -192,10 +212,8 @@ def make_crew_cfg(n: int, kind: str = "cube", vision: bool = False):
     for i, r in enumerate(names):
         critic_ns[f"base_lin_vel_{i}"] = ObsTerm(
             func=mdp.base_lin_vel, params={"asset_cfg": SceneEntityCfg(r)})
-    CriticCls = configclass(type(
-        f"CoopCrew{n}CriticCfg", (ObsGroup,),
-        {"__annotations__": {}, **critic_ns,
-         "__post_init__": lambda self: setattr(self, "enable_corruption", False)}))
+    critic_ns["__post_init__"] = lambda self: setattr(self, "enable_corruption", False)
+    CriticCls = _cfgclass(f"CoopCrew{n}CriticCfg", (ObsGroup,), critic_ns)
 
     ObsCls = configclass(type(
         f"CoopCrew{n}ObsCfg", (object,),
@@ -211,8 +229,8 @@ def make_crew_cfg(n: int, kind: str = "cube", vision: bool = False):
     act_ns["joint_pos_a"] = None
     act_ns["joint_pos_b"] = None
     from .coop_lift_env_cfg import ActionsCfg as _PairActions
-    ActCls = configclass(type(f"CoopCrew{n}ActionsCfg", (_PairActions,),
-                              {"__annotations__": {}, **act_ns}))
+    ActCls = _cfgclass(f"CoopCrew{n}ActionsCfg", (_PairActions,), act_ns,
+                       {"joint_pos_a": type(None), "joint_pos_b": type(None)})
 
     # --- rewards ----------------------------------------------------------
     rew_ns = {
@@ -238,17 +256,18 @@ def make_crew_cfg(n: int, kind: str = "cube", vision: bool = False):
                  "base_contact_a", "base_contact_b"):
         rew_ns[dead] = None
     from .coop_lift_env_cfg import RewardsCfg as _PairRewards
-    RewCls = configclass(type(f"CoopCrew{n}RewardsCfg", (_PairRewards,),
-                              {"__annotations__": {}, **rew_ns}))
+    RewCls = _cfgclass(f"CoopCrew{n}RewardsCfg", (_PairRewards,), rew_ns,
+                       {d: type(None) for d in
+                        ("flat_a", "flat_b", "torques_a", "torques_b",
+                         "base_contact_a", "base_contact_b")})
 
     # --- terminations + events -------------------------------------------
     from .coop_lift_env_cfg import EventsCfg as _PairEvents
     from .coop_lift_env_cfg import TerminationsCfg as _PairTerms
-    TermCls = configclass(type(
+    TermCls = _cfgclass(
         f"CoopCrew{n}TermCfg", (_PairTerms,),
-        {"__annotations__": {},
-         "fallen": DoneTerm(func=coop.any_fallen,
-                            params={"limit_angle": 0.78, "robot_names": names})}))
+        {"fallen": DoneTerm(func=coop.any_fallen,
+                            params={"limit_angle": 0.78, "robot_names": names})})
 
     ev_ns = {}
     for i, r in enumerate(names):
@@ -264,8 +283,10 @@ def make_crew_cfg(n: int, kind: str = "cube", vision: bool = False):
                     "velocity_range": {}, "asset_cfg": SceneEntityCfg(r)})
     for dead in ("reset_joints_a", "reset_joints_b", "reset_root_a", "reset_root_b"):
         ev_ns[dead] = None
-    EvCls = configclass(type(f"CoopCrew{n}EventsCfg", (_PairEvents,),
-                             {"__annotations__": {}, **ev_ns}))
+    EvCls = _cfgclass(f"CoopCrew{n}EventsCfg", (_PairEvents,), ev_ns,
+                      {d: type(None) for d in
+                       ("reset_joints_a", "reset_joints_b",
+                        "reset_root_a", "reset_root_b")})
 
     # --- the env ----------------------------------------------------------
     def _post_init(self):
