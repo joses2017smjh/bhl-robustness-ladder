@@ -153,6 +153,39 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     # algorithm cfg, and hydra cannot set attributes on a None node, so the
     # whole object is attached here instead of being overridden field by field.
     # BHL_SYMMETRY=aug | loss | aug+loss | metrics.
+    # [overlay] Algorithm variants, env-selected for the same reason symmetry is:
+    # `policy` and `rnd_cfg` default to concrete objects or None on the agent
+    # cfg, and Hydra cannot construct a different class or attribute onto a None
+    # node from the command line.
+    #
+    # BHL_POLICY=recurrent swaps the MLP actor for an LSTM one. That is the
+    # right move exactly when the observation does not contain what the policy
+    # needs right now -- the occluded lift withholds the object pose, so what a
+    # robot saw two steps ago is the only thing that locates the payload.
+    #
+    # BHL_RND=<weight> adds a Random Network Distillation exploration bonus.
+    # The lift plateaus at a 4 cm hover across every recipe tried, and a
+    # plateau that survives fourteen reward ablations looks more like a policy
+    # that stopped exploring than one that is being mis-rewarded.
+    pol_mode = os.environ.get("BHL_POLICY", "").strip()
+    if pol_mode == "recurrent":
+        from isaaclab_rl.rsl_rl import RslRlPpoActorCriticRecurrentCfg
+        old_pol = agent_cfg.policy
+        agent_cfg.policy = RslRlPpoActorCriticRecurrentCfg(
+            init_noise_std=old_pol.init_noise_std,
+            actor_hidden_dims=old_pol.actor_hidden_dims,
+            critic_hidden_dims=old_pol.critic_hidden_dims,
+            activation=old_pol.activation,
+            rnn_type="lstm", rnn_hidden_dim=256, rnn_num_layers=1,
+        )
+        print("[overlay] policy: ActorCriticRecurrent (lstm, 256)")
+
+    rnd_w = os.environ.get("BHL_RND", "").strip()
+    if rnd_w:
+        from isaaclab_rl.rsl_rl import RslRlRndCfg
+        agent_cfg.algorithm.rnd_cfg = RslRlRndCfg(weight=float(rnd_w))
+        print(f"[overlay] RND exploration bonus, weight {rnd_w}")
+
     sym_mode = os.environ.get("BHL_SYMMETRY", "").strip()
     if sym_mode:
         from isaaclab_rl.rsl_rl import RslRlSymmetryCfg
