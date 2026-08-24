@@ -23,7 +23,7 @@ app = SimulationApp({"headless": True, "renderer": "RayTracedLighting",
 import numpy as np                                   # noqa: E402
 import omni.replicator.core as rep                   # noqa: E402
 import omni.usd                                      # noqa: E402
-from pxr import Gf, UsdGeom, UsdLux                  # noqa: E402
+from pxr import Gf, Sdf, UsdGeom, UsdLux, UsdShade   # noqa: E402
 
 try:
     from isaacsim.core.version import get_version
@@ -39,8 +39,25 @@ UsdGeom.Xform.Define(stage, "/World")
 cube = UsdGeom.Cube.Define(stage, "/World/cube")
 cube.CreateSizeAttr(60.0)
 UsdGeom.Xformable(cube).AddTranslateOp().Set(Gf.Vec3d(0.0, 0.0, 0.0))
+# A bare UsdGeom.Cube has no material, and an unshaded prim renders black no
+# matter how well the renderer works. The first version of this probe reported
+# "no image" on a frame whose DEPTH was correct to the centimetre, which is a
+# scene bug wearing a renderer bug's clothes.
+mat = UsdShade.Material.Define(stage, "/World/mat")
+shader = UsdShade.Shader.Define(stage, "/World/mat/surface")
+shader.CreateIdAttr("UsdPreviewSurface")
+shader.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(0.9, 0.45, 0.2))
+shader.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(0.5)
+mat.CreateSurfaceOutput().ConnectToSource(shader.ConnectableAPI(), "surface")
+UsdShade.MaterialBindingAPI(cube.GetPrim()).Bind(mat)
+
+# Aim the key light at the cube rather than leaving it on its default axis, and
+# add a dome so nothing depends on a single direction being right.
 light = UsdLux.DistantLight.Define(stage, "/World/key")
-light.CreateIntensityAttr(4000.0)
+light.CreateIntensityAttr(6000.0)
+UsdGeom.Xformable(light).AddRotateXYZOp().Set(Gf.Vec3f(-45.0, 0.0, 45.0))
+dome = UsdLux.DomeLight.Define(stage, "/World/dome")
+dome.CreateIntensityAttr(1200.0)
 
 cam = UsdGeom.Camera.Define(stage, "/World/cam")
 UsdGeom.Xformable(cam).AddTranslateOp().Set(Gf.Vec3d(0.0, -300.0, 0.0))
@@ -68,8 +85,15 @@ lines = [
 ]
 # A crashed renderer returns nothing; a broken one returns a flat frame. Both
 # have to fail, so the test is variance rather than existence.
-ok = c.std() > 1.0 and finite.mean() > 0.1
-lines.append(f"VERDICT | {'RTX RENDERS ON 6.0' if ok else 'RTX PRODUCED NO IMAGE'}")
+# Depth and colour are reported separately because they fail separately: an
+# unlit scene gives correct depth and a black frame, which is a scene problem,
+# while a dead renderer gives neither.
+depth_ok = finite.mean() > 0.1 and np.isfinite(d[finite]).all()
+rgb_ok = c.std() > 1.0
+ok = depth_ok and rgb_ok
+lines.append(f"VERDICT | depth={'OK' if depth_ok else 'DEAD'} "
+             f"rgb={'OK' if rgb_ok else 'BLACK'} -> "
+             f"{'RTX FULLY RENDERS ON 6.0' if ok else ('RTX GEOMETRY OK, SHADING NOT' if depth_ok else 'RTX DEAD')}")
 for ln in lines:
     print(ln, flush=True)
 with open(os.environ.get("BENCH_OUT", "/tmp/rtx60.txt"), "a") as f:

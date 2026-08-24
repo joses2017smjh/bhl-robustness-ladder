@@ -6,10 +6,16 @@ direct class references, matching upstream's pattern.
 
 import gymnasium as gym
 
+# Must run before anything imports an upstream config: on Isaac Lab 3.x those
+# configs import names the 3.x API removed, and the overlays inherit the
+# failure. No-op on 2.x.
+from bhl_robust import compat as _compat
+_compat.apply()
+
 from . import coop_crew_generated as crew  # noqa: F401
 from . import (push_env_cfg, terrain_env_cfg, arms_env_cfg, collision_env_cfg,
                coop_lift_env_cfg, coop_depth_env_cfg, coop_hard_env_cfg,
-               depth_env_cfg, scan_env_cfg)
+               depth_env_cfg, rgb_env_cfg, scan_env_cfg)
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.biped import agents
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.humanoid import agents as arm_agents
 
@@ -213,3 +219,17 @@ for _id, _cls in (
         disable_env_checker=True,
         kwargs={"env_cfg_entry_point": _cls, "rsl_rl_cfg_entry_point": _COOP_PPO},
     )
+
+# --- rendered colour, Isaac Sim 6.0 only ----------------------------------
+# Registers on either stack because TiledCameraCfg exists in both, but only
+# *runs* on 6.0: on 5.1 the RTX renderer segfaults before the first frame, which
+# is the entire reason section 6 uses ray-casting.
+gym.register(
+    id="Velocity-BHL-Biped-Rgb-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": rgb_env_cfg.BipedRgbEnvCfg,
+        "rsl_rl_cfg_entry_point": _PPO_CFG,
+    },
+)

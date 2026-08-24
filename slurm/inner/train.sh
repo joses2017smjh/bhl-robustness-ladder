@@ -30,6 +30,11 @@ ARGS=(
 )
 [ -n "${NUM_ENVS:-}" ] && ARGS+=(--num_envs "$NUM_ENVS")
 [ -n "${MAX_ITER:-}" ] && ARGS+=(--max_iterations "$MAX_ITER")
+# Rendered sensors need the camera-enabled experience file, which selects a
+# different Kit app and starts the RTX renderer. Ray-cast sensors must NOT set
+# it -- that is what keeps the depth work off the renderer that segfaults on
+# Isaac Sim 5.1. So it is opt-in per job rather than a default.
+[ "${ENABLE_CAMERAS:-0}" = "1" ] && ARGS+=(--enable_cameras)
 
 # Hydra overrides arrive as a file, one whitespace-separated blob, because
 # Apptainer's --env cannot carry a value containing commas. Word-splitting is

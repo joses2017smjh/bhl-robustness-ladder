@@ -1,0 +1,40 @@
+"""Compatibility shims that let the overlays import on Isaac Lab 3.x.
+
+This repo's standing rule is that `external/` stays pristine and re-pinnable, so
+upstream breakages get worked around rather than patched. The same rule applies
+here, and it has to, because the 2.x -> 3.x breakage is *in upstream's own
+imports*: `berkeley_humanoid_lite`'s env configs import
+`AdditiveUniformNoiseCfg`, Isaac Lab 3.x removed that name, and every overlay
+that imports an upstream config inherits the failure. Twelve of fifteen modules
+failed the port audit on that one symbol.
+
+Nothing here is speculative. Each shim exists because a specific import failed
+in `scripts/bench/port_audit.py`, and each is a no-op on 2.x, so importing this
+module on the v51 stack changes nothing about the runs that produced every
+published number.
+
+Call `apply()` before importing anything from `berkeley_humanoid_lite`.
+"""
+
+from __future__ import annotations
+
+
+def apply() -> list[str]:
+    """Install the shims. Returns the names of the ones that were needed."""
+    applied: list[str] = []
+
+    # `AdditiveUniformNoiseCfg` was `UniformNoiseCfg` with `operation="add"`,
+    # which is already the default; 3.x dropped the redundant alias rather than
+    # changing any behaviour. Restoring the name is therefore exact, not an
+    # approximation -- the shimmed class produces identical noise.
+    import isaaclab.utils.noise as _noise
+
+    if not hasattr(_noise, "AdditiveUniformNoiseCfg"):
+        _noise.AdditiveUniformNoiseCfg = _noise.UniformNoiseCfg
+        applied.append("AdditiveUniformNoiseCfg -> UniformNoiseCfg")
+
+    if not hasattr(_noise, "AdditiveGaussianNoiseCfg") and hasattr(_noise, "GaussianNoiseCfg"):
+        _noise.AdditiveGaussianNoiseCfg = _noise.GaussianNoiseCfg
+        applied.append("AdditiveGaussianNoiseCfg -> GaussianNoiseCfg")
+
+    return applied
