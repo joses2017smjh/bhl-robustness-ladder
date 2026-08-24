@@ -64,6 +64,28 @@ def _payload_events(events):
     return events
 
 
+def _hide_the_object(cfg):
+    """Withhold the object's pose and make its position genuinely unpredictable.
+
+    Randomising the payload's *scale* would have been the natural way to stop a
+    policy memorising its geometry, and it is not available: scale is authored at
+    the USD level, and Isaac Lab replicates one prototype across environments, so
+    per-env scale raises "Scene replication is enabled, which may affect
+    USD-level randomization". Turning replication off to get it would cost most
+    of the throughput this experiment needs.
+
+    Spawn position is the better lever anyway. Scale variation makes the object
+    *look* different; position variation makes its location genuinely unknown,
+    which is the specific thing a blind policy cannot recover and a camera can.
+    +/- 8 cm against a 28 cm cube is most of a cube-width of uncertainty, and the
+    yaw spread means the faces are not where a memorised reach would put them.
+    """
+    cfg.observations.policy.object_pos_a = None
+    cfg.observations.policy.object_pos_b = None
+    cfg.events.reset_object.params["pose_range"] = {
+        "x": (-0.08, 0.08), "y": (-0.08, 0.08), "yaw": (-0.5, 0.5)}
+
+
 @configclass
 class CoopLiftRandomCfg(CoopLiftCubeCfg):
     """Blind lift, randomised payload mass and friction."""
@@ -84,15 +106,7 @@ class CoopLiftOccludedCfg(CoopLiftCubeCfg):
     def __post_init__(self):
         super().__post_init__()
         _payload_events(self.events)
-        self.events.object_scale = EventTerm(
-            func=mdp.randomize_rigid_body_scale,
-            params={"asset_cfg": SceneEntityCfg("object"),
-                    "scale_range": {"x": (0.8, 1.25), "y": (0.8, 1.25), "z": (0.8, 1.25)}},
-            mode="prestartup",
-        )
-        # The whole point: the actor no longer knows where the object is.
-        self.observations.policy.object_pos_a = None
-        self.observations.policy.object_pos_b = None
+        _hide_the_object(self)
 
 
 @configclass
@@ -102,11 +116,4 @@ class CoopLiftOccludedDepthCfg(CoopLiftDepthCfg):
     def __post_init__(self):
         super().__post_init__()
         _payload_events(self.events)
-        self.events.object_scale = EventTerm(
-            func=mdp.randomize_rigid_body_scale,
-            params={"asset_cfg": SceneEntityCfg("object"),
-                    "scale_range": {"x": (0.8, 1.25), "y": (0.8, 1.25), "z": (0.8, 1.25)}},
-            mode="prestartup",
-        )
-        self.observations.policy.object_pos_a = None
-        self.observations.policy.object_pos_b = None
+        _hide_the_object(self)
