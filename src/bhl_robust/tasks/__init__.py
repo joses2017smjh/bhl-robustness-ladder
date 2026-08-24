@@ -8,8 +8,8 @@ import gymnasium as gym
 
 from . import coop_crew_generated as crew  # noqa: F401
 from . import (push_env_cfg, terrain_env_cfg, arms_env_cfg, collision_env_cfg,
-               coop_lift_env_cfg, coop_depth_env_cfg, depth_env_cfg,
-               scan_env_cfg)
+               coop_lift_env_cfg, coop_depth_env_cfg, coop_hard_env_cfg,
+               depth_env_cfg, scan_env_cfg)
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.biped import agents
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.humanoid import agents as arm_agents
 

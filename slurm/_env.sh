@@ -10,7 +10,25 @@ SIF=$WORKSPACE/container/bhl.sif
 # The venv is deliberately OUTSIDE the git tree. It is ~30GB, and uv bakes
 # absolute paths into it, so keeping it out means the repo can be moved,
 # cloned, or re-pinned without a 30-minute rebuild.
-export UV_PROJECT_ENVIRONMENT=$WORKSPACE/venv
+# Two parallel stacks, selected by BHL_STACK. The venv already lived outside the
+# git tree so the repo could be re-pinned without a rebuild; that same property
+# is what lets a second stack exist beside the first instead of replacing it.
+#
+#   v51 (default)  isaacsim 5.1.0 + isaaclab 2.3.2 + py3.11
+#                  Every published number in this repo. RTX segfaults; depth
+#                  comes from Warp ray-casting. Do not disturb it.
+#   v60            isaacsim 6.0.0.1 + isaaclab 3.0.0b2 + py3.12
+#                  The RTX renderer gets past the call that kills 5.1, which is
+#                  what makes RGB and rendered depth possible at all. Isaac Lab
+#                  3.0.0b2 is a BETA and its API moved from 2.x, so the task
+#                  overlays need porting before anything here is comparable to a
+#                  v51 number. Opt in per job: BHL_STACK=v60 sbatch ...
+BHL_STACK=${BHL_STACK:-v51}
+case "$BHL_STACK" in
+    v51) export UV_PROJECT_ENVIRONMENT=$WORKSPACE/venv ;;
+    v60) export UV_PROJECT_ENVIRONMENT=$WORKSPACE/venv-isaac60 ;;
+    *) echo "unknown BHL_STACK=$BHL_STACK (expected v51 or v60)" >&2; return 1 2>/dev/null || exit 1 ;;
+esac
 
 # /nfs/stak home has ~15GB free. Every cache goes to Lustre instead.
 export UV_CACHE_DIR=$WORKSPACE/.uv-cache
@@ -62,7 +80,7 @@ PY=$UV_PROJECT_ENVIRONMENT/bin/python
 # Hydra overrides are passed as a FILE PATH (OVERRIDE_FILE), never inline:
 # Apptainer's --env splits values on commas, so a range like [0.8,0.8] is
 # parsed as two malformed key=value pairs and the exec is rejected outright.
-BHL_FORWARD_VARS="TASK EXPERIMENT RUN_NAME SEED NUM_ENVS MAX_ITER OVERRIDE_FILE TRAIN_SCRIPT DEPLOY_CFG CACHE_DIR OUT_CSV LABEL EPISODE_S N_SEEDS PUSH_SPEED VIDEO_DIR MUJOCO_GL PYOPENGL_PLATFORM OMP_NUM_THREADS TERRAIN_D RUN_DIR VARIANT BHL_CONVEX_USD BHL_CONVEX_USD_DIR BENCH_OUT PYTHONPATH LD_LIBRARY_PATH DEPTH_ARGS BHL_SYMMETRY BHL_MIRROR_COEFF CKPT EXP LOAD_RUN WORLD"
+BHL_FORWARD_VARS="BHL_STACK TASK EXPERIMENT RUN_NAME SEED NUM_ENVS MAX_ITER OVERRIDE_FILE TRAIN_SCRIPT DEPLOY_CFG CACHE_DIR OUT_CSV LABEL EPISODE_S N_SEEDS PUSH_SPEED VIDEO_DIR MUJOCO_GL PYOPENGL_PLATFORM OMP_NUM_THREADS TERRAIN_D RUN_DIR VARIANT BHL_CONVEX_USD BHL_CONVEX_USD_DIR BENCH_OUT PYTHONPATH LD_LIBRARY_PATH DEPTH_ARGS BHL_SYMMETRY BHL_MIRROR_COEFF CKPT EXP LOAD_RUN WORLD"
 
 # Isaac Sim bundles OpenUSD as `pxr` inside an extscache wheel; it is not on
 # sys.path of a plain interpreter. libpython also has to be visible because

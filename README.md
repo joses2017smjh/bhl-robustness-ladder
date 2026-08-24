@@ -98,6 +98,15 @@ climbs until the gait breaks, drops to zero, and repeats.
   right flat-trained with the same randomization. <b>0/6 falls against 3/6.</b></sub>
 </p>
 
+<p align="center">
+  <img src="docs/gifs/arms_terrain_pair.gif" width="292" alt="22-DoF pair on rough ground.">
+  <img src="docs/gifs/arms_push_pair.gif" width="292" alt="22-DoF pair taking a shove.">
+  <img src="docs/gifs/arms_dr_pair.gif" width="292" alt="22-DoF pair strafing, randomized against un-randomized."><br>
+  <sub>The same three comparisons on the 22-DoF body: terrain, shove, strafe.
+  Arms are not decoration — at <code>d = 1.0</code> the humanoid falls
+  <b>11.7%</b> where the biped falls <b>37.8%</b>.</sub>
+</p>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="results/charts/terrain_retention-dark.svg">
   <img alt="Fall rate against terrain difficulty: no randomization fails immediately, randomization-only degrades past d=0.4, terrain-trained stays near zero." src="results/charts/terrain_retention-light.svg">
@@ -157,6 +166,15 @@ trained on it: **100% finite pixels, 2.9% mean relative error**. Warp returns
 all-NaN rather than an error when the mesh paths are wrong, so the check is not
 optional.
 
+**Why there is no RGB anywhere in this repo.** Not a preference. Colour needs
+the RTX renderer, and a Warp mesh query has no colour to return — depth was the
+only modality this cluster could produce. That constraint is being lifted rather
+than accepted: `isaaclab 3.0.0b2` pins `isaacsim 6.0.0.1` on Python 3.12, and a
+probe already showed 6.0 surviving the call that kills 5.1. It builds as a
+**second venv beside the locked 5.1 stack** (`BHL_STACK=v60`), because every
+published number here came from 5.1 and none of them should move to find out
+whether a renderer works.
+
 [Read §6](docs/REPORT.md#6--depth-without-a-renderer)
 
 ---
@@ -196,6 +214,14 @@ Can a pair *learn* a non-prehensile side-lift? One PPO, 44 actions, privileged
 critic — the recipe contact-rich dual-arm papers actually train with.
 
 <p align="center">
+  <img src="docs/gifs/squat_pick.gif" width="430" alt="Scripted interpolated-joint squat and pick, showing the kinematics are reachable.">
+  <img src="docs/gifs/carry_3.gif" width="430" alt="Three robots running the learned lift policy."><br>
+  <sub>Left is <b>not</b> a policy — it is a scripted joint interpolation, the
+  reachability check that says the pose exists. Right is the learned thing.
+  Everything below is the distance between those two clips.</sub>
+</p>
+
+<p align="center">
   <img src="docs/gifs/carry_2.gif" width="430" alt="Two 22-DoF robots closing on a cube from opposite sides.">
   <img src="docs/gifs/carry_4.gif" width="430" alt="Two pairs of robots running the same learned lift policy side by side."><br>
   <sub>Left, one pair. Right, two pairs running the same learned policy. They
@@ -226,6 +252,14 @@ pose, and depth *added alongside* it.
   <img src="docs/gifs/carry_vision_swap_2.gif" width="430" alt="Depth-conditioned policy: one robot face-down on the floor, fall outline on the frame."><br>
   <sub>Same task, same 4,000 iterations. Left blind, right with depth replacing
   the object pose. The red outline is a fall, held for the rest of the clip.</sub>
+</p>
+
+<p align="center">
+  <img src="docs/gifs/carry_vision_swap_3.gif" width="292" alt="Depth-swap policy, three robots.">
+  <img src="docs/gifs/carry_vision_both_2.gif" width="292" alt="Depth-alongside policy, two robots, both down.">
+  <img src="docs/gifs/carry_vision_both_4.gif" width="292" alt="Depth-alongside policy, four robots, all down."><br>
+  <sub>Not one unlucky rollout. Left, depth replacing the pose; centre and
+  right, depth added alongside it — the arm that never forms a pinch at all.</sub>
 </p>
 
 | | pinch | held lift | fell |
