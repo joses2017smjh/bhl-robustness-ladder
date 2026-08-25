@@ -144,5 +144,5 @@ class BipedSlipperyDepthEnvCfg(BipedDepthEnvCfg):
 
     def __post_init__(self):
         super().__post_init__()
-        self.events.physics_material.params["static_friction_range"] = (0.25, 0.40)
-        self.events.physics_material.params["dynamic_friction_range"] = (0.20, 0.35)
+        self.events.physics_material.params["static_friction_range"] = (0.25, 0.35)
+        self.events.physics_material.params["dynamic_friction_range"] = (0.18, 0.30)

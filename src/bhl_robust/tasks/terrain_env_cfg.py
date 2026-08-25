@@ -86,16 +86,18 @@ class BipedSlipperyEnvCfg(BipedBumpyEnvCfg):
 
     Friction is contact-combined by multiplication against the terrain's own
     1.0, so the robot-side range is the effective one. Upstream randomises it
-    over [0.4, 1.2]; pinning it to [0.25, 0.40] puts the whole distribution
-    below upstream's floor, which makes this a different regime rather than the
-    unlucky tail of the existing one. Dynamic sits under static, as it does for
-    real surfaces -- sliding friction below breakaway.
+    over [0.4, 1.2]; this pins it to [0.25, 0.35], strictly below upstream's
+    floor, which makes it a different regime rather than the unlucky tail of the
+    existing one. The first version stopped at 0.40 -- touching that floor
+    exactly -- and the gate rejected it, correctly: a range whose top sample is
+    the baseline's bottom sample is the tail, however it is described. Dynamic
+    sits under static, as it does for real surfaces: sliding below breakaway.
     """
 
     def __post_init__(self):
         super().__post_init__()
-        self.events.physics_material.params["static_friction_range"] = (0.25, 0.40)
-        self.events.physics_material.params["dynamic_friction_range"] = (0.20, 0.35)
+        self.events.physics_material.params["static_friction_range"] = (0.25, 0.35)
+        self.events.physics_material.params["dynamic_friction_range"] = (0.18, 0.30)
 
 
 @configclass
