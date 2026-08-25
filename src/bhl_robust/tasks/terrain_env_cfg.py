@@ -20,6 +20,7 @@ from berkeley_humanoid_lite.tasks.locomotion.velocity import mdp
 
 from bhl_robust.terrains.bumpy import (BUMPY_TERRAINS_CFG, FLATFILL_TERRAINS_CFG,
                                        SMOOTH_TERRAINS_CFG)
+from bhl_robust.terrains.stairs import STAIRS_TERRAINS_CFG
 
 
 @configclass
@@ -70,3 +71,42 @@ class BipedFlatFillEnvCfg(BipedBumpyEnvCfg):
     def __post_init__(self):
         super().__post_init__()
         self.scene.terrain.terrain_generator = FLATFILL_TERRAINS_CFG
+
+
+@configclass
+class BipedSlipperyEnvCfg(BipedBumpyEnvCfg):
+    """Uniformly low friction over the standard bumpy menu.
+
+    The material terrain of the pair. Geometry is byte-identical to
+    `BipedBumpyEnvCfg` -- the same generator, the same seed, the same height
+    field -- and only the contact friction moves. That is the design: a
+    ray-cast depth camera returns geometry and nothing else, so a terrain whose
+    only difficulty is material is a terrain where depth *must not* help. It is
+    the negative control for the depth claim, not a difficulty setting.
+
+    Friction is contact-combined by multiplication against the terrain's own
+    1.0, so the robot-side range is the effective one. Upstream randomises it
+    over [0.4, 1.2]; pinning it to [0.25, 0.40] puts the whole distribution
+    below upstream's floor, which makes this a different regime rather than the
+    unlucky tail of the existing one. Dynamic sits under static, as it does for
+    real surfaces -- sliding friction below breakaway.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.events.physics_material.params["static_friction_range"] = (0.25, 0.40)
+        self.events.physics_material.params["dynamic_friction_range"] = (0.20, 0.35)
+
+
+@configclass
+class BipedStairsEnvCfg(BipedBumpyEnvCfg):
+    """Stairs up and down, risers capped at 18% of leg length. Geometry terrain.
+
+    The other half of the depth pair: `slippery` is difficulty a depth camera
+    cannot see, this is difficulty that is nothing but geometry. If ray-cast
+    depth does not help here it does not help anywhere.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.scene.terrain.terrain_generator = STAIRS_TERRAINS_CFG

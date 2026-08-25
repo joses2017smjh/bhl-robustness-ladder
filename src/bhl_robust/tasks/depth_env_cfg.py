@@ -120,3 +120,29 @@ class BipedDepthEnvCfg(BipedBumpyEnvCfg):
     def __post_init__(self):
         super().__post_init__()
         self.scene.depth_cam = make_depth_camera_cfg(res=64)
+
+
+@configclass
+class BipedStairsDepthEnvCfg(BipedDepthEnvCfg):
+    """Stairs with the forward depth camera. Same sensor, different geometry."""
+
+    def __post_init__(self):
+        super().__post_init__()
+        from bhl_robust.terrains.stairs import STAIRS_TERRAINS_CFG
+        self.scene.terrain.terrain_generator = STAIRS_TERRAINS_CFG
+
+
+@configclass
+class BipedSlipperyDepthEnvCfg(BipedDepthEnvCfg):
+    """Low friction with the forward depth camera.
+
+    Geometry identical to the bumpy depth rung, so any difference between this
+    and `BipedDepthEnvCfg` is friction alone -- and the depth camera cannot see
+    friction. This arm existing is what makes "depth pays on geometry, not
+    material" falsifiable rather than asserted.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.events.physics_material.params["static_friction_range"] = (0.25, 0.40)
+        self.events.physics_material.params["dynamic_friction_range"] = (0.20, 0.35)

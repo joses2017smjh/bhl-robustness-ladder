@@ -233,3 +233,47 @@ gym.register(
         "rsl_rl_cfg_entry_point": _PPO_CFG,
     },
 )
+
+# --- terrain family: material terrains and geometry terrains ---------------
+# `slippery` shares its geometry with `bumpy` exactly and differs only in
+# contact friction, so it is the terrain on which ray-cast depth must show no
+# gain. That is the point of it: a negative control for the depth claim.
+gym.register(
+    id="Velocity-BHL-Biped-Slippery-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": terrain_env_cfg.BipedSlipperyEnvCfg,
+        "rsl_rl_cfg_entry_point": _PPO_CFG,
+    },
+)
+
+# Stairs, blind and with ray-cast depth. The geometry terrain, paired with
+# `slippery` above: depth must help here and must not help there.
+gym.register(
+    id="Velocity-BHL-Biped-Stairs-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": terrain_env_cfg.BipedStairsEnvCfg,
+        "rsl_rl_cfg_entry_point": _PPO_CFG,
+    },
+)
+gym.register(
+    id="Velocity-BHL-Biped-Stairs-Depth-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": depth_env_cfg.BipedStairsDepthEnvCfg,
+        "rsl_rl_cfg_entry_point": _PPO_CFG,
+    },
+)
+gym.register(
+    id="Velocity-BHL-Biped-Slippery-Depth-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": depth_env_cfg.BipedSlipperyDepthEnvCfg,
+        "rsl_rl_cfg_entry_point": _PPO_CFG,
+    },
+)
