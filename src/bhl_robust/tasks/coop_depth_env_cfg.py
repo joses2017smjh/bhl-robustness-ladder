@@ -215,6 +215,16 @@ def apply_depth_flags(cfg) -> None:
     has the same layout the checkpoint was trained with rather than the same
     contents in a new order.
     """
+    # Only act on configs that declare the flag. Without this guard the
+    # restore branch below *adds* `object_pos_a` and `object_pos_b` to any
+    # observation group that lacks them -- and train.py calls this on every
+    # task. A biped locomotion policy then carries two terms pointing at a
+    # `robot_a` its scene has never had, and dies on
+    # "scene entity 'robot_a' does not exist".
+    #
+    # That is the error four crew gates died on. It was never about the crew.
+    if not hasattr(cfg, "drop_object_pose"):
+        return
     drop = getattr(cfg, "drop_object_pose", False)
     policy = cfg.observations.policy
     for name, pristine in _PRISTINE_OBJECT_TERMS.items():
