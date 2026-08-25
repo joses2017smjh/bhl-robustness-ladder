@@ -1,6 +1,10 @@
 #!/bin/bash
 set -uo pipefail
 cd "$UPSTREAM"; export PYTHONPATH="$REPO/src:${PYTHONPATH:-}"
+# terrain_gate.py appends its verdicts to BENCH_OUT; the sbatch (cloned from the
+# algo gate) exports GATE_OUT. Both checks reported ALL PASS and the gate still
+# said FAILED, because it was counting verdicts in a file nothing had written.
+export BENCH_OUT="$GATE_OUT"
 export HYDRA_FULL_ERROR=1
 : > "$GATE_OUT"
 rc=0
