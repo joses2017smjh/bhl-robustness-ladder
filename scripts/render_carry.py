@@ -249,9 +249,12 @@ def main() -> None:
                         height=620, caption=cap,
                         pov=_POV_RES if args.pov else 0)
     rec._track_id = -1
-    rec.camera.distance = 2.3 + 0.55 * args.robots
+    # An x-straddling payload spreads the scene along x, not y, so the camera
+    # has to come round 90 degrees or the crew is framed end-on.
+    across_x = PAYLOADS[args.payload].axis == "x"
+    rec.camera.distance = (3.4 if across_x else 2.3) + 0.55 * args.robots
     rec.camera.elevation = -13.0
-    rec.camera.azimuth = 14.0
+    rec.camera.azimuth = 104.0 if across_x else 14.0
     rec.camera.lookat[:] = [0.0, 0.0, 0.30]
 
     n_c = len(crates)

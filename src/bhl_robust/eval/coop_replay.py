@@ -104,9 +104,15 @@ class Payload:
 
     Every field here is read off the Isaac config rather than re-tuned for
     MuJoCo, because the point of a replay is to run the trained policy against
-    the scene it was trained against. `pair_half_y` is the robots' spawn
+    the scene it was trained against. `pair_half` is the robots' spawn
     separation, which differs per object -- the ball is 65 cm across and the
     pair has to stand wider to get either side of it.
+
+    `axis` is which way the pair faces across the payload. The cube and the ball
+    are pinched across y, but the ladder is a 1.5 m plank and its config stands
+    the robots at x = +/-0.85 facing along x instead. That is not a detail the
+    replay can paper over: the contact points, the spawn yaws and the direction
+    each pair is placed in all follow from it.
     """
     name: str
     geom: int                 # mjtGeom
@@ -115,8 +121,13 @@ class Payload:
     friction: float           # dynamic; MuJoCo has one sliding coefficient
     spawn_z: float
     contact_offset: float
-    pair_half_y: float
+    pair_half: float
     lift_full: float          # gauge full-scale, the curriculum's height cap
+    axis: str = "y"           # which axis the pair straddles
+
+    @property
+    def contact_dir(self) -> np.ndarray:
+        return np.array([1.0, 0.0, 0.0]) if self.axis == "x" else CONTACT_AXIS
 
 
 # `CoopLiftEnvCfg`: 0.28 m box, side pinch across y, centre 0.14 m up.
@@ -125,7 +136,13 @@ CUBE = Payload("cube", mujoco.mjtGeom.mjGEOM_BOX, [0.14, 0.14, 0.14],
 # `CoopLiftBallCfg`: ~65 cm yoga ball, 0.7 kg, robots at y = +/-0.62.
 BALL = Payload("ball", mujoco.mjtGeom.mjGEOM_SPHERE, [0.33, 0.0, 0.0],
                0.7, 0.45, 0.33, 0.33, 0.62, 0.22)
-PAYLOADS = {p.name: p for p in (CUBE, BALL)}
+# `CoopLiftLadderCfg`: a 1.5 x 0.40 x 0.08 m plank, 1.1 kg, straddled across x
+# with the robots at x = +/-0.85. The 40 cm face is the only one the shoulders
+# could close on; the 8 cm rail is not a grasp this morphology can make, which
+# is the whole reason this object is in the set.
+LADDER = Payload("ladder", mujoco.mjtGeom.mjGEOM_BOX, [0.75, 0.20, 0.04],
+                 1.1, 1.1, 0.04, 0.75, 0.85, 0.22, axis="x")
+PAYLOADS = {p.name: p for p in (CUBE, BALL, LADDER)}
 # Clear air between one pair and the next, so a four-robot shot does not read as
 # four robots on one crate.
 PAIR_GAP = 0.95
@@ -310,24 +327,42 @@ def build_crew(upstream: Path, cache_dir: Path, n_robots: int,
     spec = mujoco.MjSpec.from_file(str(world_path))
 
     n_pairs = (n_robots + 1) // 2
-    pitch = 2.0 * pay.pair_half_y + PAIR_GAP
+    pitch = (2.0 * pay.size[1] + PAIR_GAP if pay.axis == "x"
+             else 2.0 * pay.pair_half + PAIR_GAP)
     # Centre the crew on y = 0 so the camera does not have to be re-aimed per
     # crew size.
     y_first = -0.5 * (n_pairs - 1) * pitch
 
-    ys, yaws, pair_of = [], [], []
+    xs, ys, yaws, pair_of = [], [], [], []
     for p in range(n_pairs):
         centre = y_first + p * pitch
         # Slot b sits at -y facing +y; slot a sits at +y facing -y, matching
         # robot_b / robot_a in the trained scene.
-        ys.append(centre - pay.pair_half_y); yaws.append(+np.pi / 2); pair_of.append(p)
-        if len(ys) < n_robots:
-            ys.append(centre + pay.pair_half_y); yaws.append(-np.pi / 2); pair_of.append(p)
+        if pay.axis == "x":
+            # Pairs still tile along y so one camera frames the crew, but the
+            # two robots of a pair stand either side of the plank in x.
+            #
+            # The negative-axis robot is appended FIRST, because the crate
+            # construction below reads members[0] as slot b and hands it the
+            # contact point at `centre - offset * axis`. Appending +x first
+            # gives each robot the other's contact point, which is a pinch
+            # target 1.5 m behind it.
+            xs.append(-pay.pair_half); ys.append(centre)
+            yaws.append(0.0); pair_of.append(p)
+            if len(ys) < n_robots:
+                xs.append(+pay.pair_half); ys.append(centre)
+                yaws.append(np.pi); pair_of.append(p)
+        else:
+            xs.append(0.0); ys.append(centre - pay.pair_half)
+            yaws.append(+np.pi / 2); pair_of.append(p)
+            if len(ys) < n_robots:
+                xs.append(0.0); ys.append(centre + pay.pair_half)
+                yaws.append(-np.pi / 2); pair_of.append(p)
 
-    for i, (y, yaw) in enumerate(zip(ys, yaws)):
+    for i, (x, y, yaw) in enumerate(zip(xs, ys, yaws)):
         child = mujoco.MjSpec.from_file(str(robot_xml))
         frame = spec.worldbody.add_frame()
-        frame.pos = [0.0, y, 0.0]
+        frame.pos = [x, y, 0.0]
         frame.quat = _yaw_quat(yaw)
         frame.attach_body(child.bodies[1], f"r{i}_", "")
 
@@ -386,7 +421,8 @@ def build_crew(upstream: Path, cache_dir: Path, n_robots: int,
         bid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, f"crate{p}")
         j = jid(f"crate{p}_free")
         members = [i for i in range(n_robots) if pair_of[i] == p]
-        # `pair_of` appends the -y robot first, so members[0] is slot b.
+        # `pair_of` appends the negative-axis robot first, so members[0] is
+        # slot b -- the one whose contact point is `centre - offset * axis`.
         slot_b = members[0]
         slot_a = members[1] if len(members) > 1 else members[0]
         crates.append(Crate(
@@ -510,24 +546,27 @@ class CrewRunner:
         self._pov.update_scene(self.d, camera=self._cams[i])
         return np.asarray(self._pov.render(), dtype=np.uint8)
 
-    # Display window for the depth panes, taken from the data rather than
-    # guessed. The sensor clips at DEPTH_RANGE = 6 m, but this camera is masked
-    # to the floor and the payload and sits 0.12 m in front of a base that
-    # stands 0.48 m from a crate whose face is 0.14 m off its centre, so what it
-    # actually sees is the payload at arm's length: over a cube rollout the
-    # finite depths run p1 = 0.038 m, median 0.102 m, p99 = 0.614 m. Two
-    # earlier windows (0-6 m, then 0.25-2.5 m) put every one of those pixels at
-    # full brightness and rendered the pane as a flat orange rectangle. This one
-    # spans p1 to p99; beyond it clamps dark, which is also where the two thirds
-    # of the ball frame that see nothing at all end up.
+    # Display mapping for the depth panes. Logarithmic, over the sensor's own
+    # clip range, because a linear window cannot serve these scenes at once:
+    # the cube fills the frame at a median of 0.10 m, the ball at 0.16 m, and
+    # the ladder -- whose robots stand 85 cm from a plank only 8 cm tall -- at
+    # 0.85 m with three quarters of the frame past 1.6 m. Two linear windows
+    # were tried and both failed, in opposite directions: 0-6 m and 0.25-2.5 m
+    # rendered the cube as a flat orange rectangle, and the 0.03-0.70 m window
+    # fitted to the cube rendered the ladder as a black one.
+    #
+    # Log spacing matches how range sensing actually degrades, spreads all
+    # three medians across the middle of the ramp, and stays a single fixed
+    # mapping -- so a given brightness means the same distance in every clip.
     POV_NEAR = 0.03
-    POV_FAR = 0.70
+    POV_FAR = DEPTH_RANGE
 
     def _false_colour(self, d: np.ndarray) -> np.ndarray:
-        """Metres to near-bright false colour, on the fixed display window."""
+        """Metres to near-bright false colour on the fixed log ramp."""
         d = np.nan_to_num(d, nan=DEPTH_RANGE, posinf=DEPTH_RANGE,
                           neginf=DEPTH_RANGE)
-        v = (d - self.POV_NEAR) / (self.POV_FAR - self.POV_NEAR)
+        d = np.clip(d, self.POV_NEAR, self.POV_FAR)
+        v = np.log(d / self.POV_NEAR) / np.log(self.POV_FAR / self.POV_NEAR)
         v = 1.0 - np.clip(v, 0.0, 1.0)
         img = np.empty((*v.shape, 3), dtype=np.uint8)
         img[..., 0] = np.clip(255 * v * 1.00, 0, 255)
@@ -710,8 +749,9 @@ class CrewRunner:
         """
         centre = self.d.xpos[c.body_id]
         off = c.payload.contact_offset
-        c_a = centre + off * CONTACT_AXIS
-        c_b = centre - off * CONTACT_AXIS
+        d = c.payload.contact_dir
+        c_a = centre + off * d
+        c_b = centre - off * d
         d_a = np.linalg.norm(self.hand_mid(c.slot_a) - c_a)
         if c.slot_b is None:
             return float(d_a)

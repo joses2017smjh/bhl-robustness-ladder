@@ -35,9 +35,10 @@ A policy that only works where it trained has learned PhysX, not locomotion.
 | **4** | **The terrain plateau is torque, not sensing.** An exact height map of the ground underfoot moves the curriculum **not at all**. Looking *ahead* does. |
 | **5** | **Depth never needed the RTX renderer.** Ray-cast depth costs **1.6%** of throughput at 4,096 envs and lifts terrain level **11%**. |
 | **6** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD and MJCF agree; swapping collision primitives for convex meshes moves neither reward nor transfer. |
-| **7** | **Two robots can form a pinch, but not a lift.** Ordering the reward — pinch first, height second — is what closes the hands. The staging latch then never fires in any of the nine follow-ups, so height never leaves its 4 cm floor. |
+| **7** | **Withholding the object's pose is what unlocked the lift.** Nine interventions left height on its 4 cm floor; hiding the pose reached **12.5 cm** and held it. The blind policy was never short of information — it was handed the answer. |
 | **8** | **Arms buy recoverable perturbation, not a higher step.** No 12-DoF policy crosses the lab floor; two of four 22-DoF policies do. |
-| **9** | **A gate with no control measures its own budget.** G-B2 rejected a 5 cm stair riser twice on a 300-iteration probe. The walkable-terrain control sits at the same pinned 0.0000 at iteration 300 and does not promote until past 1,500. |
+| **9** | **The fall detector cannot see a level collapse.** `bad_orientation` tests torso *orientation*, so a robot that sinks 34 cm with its torso level scores as upright — which is what the ladder pair does for twelve seeds out of twelve. |
+| **10** | **A gate with no control measures its own budget.** G-B2 rejected a 5 cm stair riser twice on a 300-iteration probe. The walkable-terrain control is *also* pinned at 0.0000 there. Re-run to 2,000 with 5 cm restored, the same probe **passes** at level 0.107. |
 
 Every claim below links into the [full technical report](docs/REPORT.md), which
 carries the protocols, the caveats, and the corrections.
@@ -226,7 +227,13 @@ critic — the recipe contact-rich dual-arm papers actually train with.
   <img src="docs/gifs/carry_2.gif" width="430" alt="Two 22-DoF robots closing on a cube from opposite sides.">
   <img src="docs/gifs/carry_4.gif" width="430" alt="Two pairs of robots running the same learned lift policy side by side."><br>
   <sub>Left, one pair. Right, two pairs running the same learned policy. They
-  close on the object and hold — the pinch forms, the lift does not.</sub>
+  close on the object and hold — the pinch forms, the lift does not. Each clip
+  runs the seed that stays upright longest out of twelve, picked by
+  <code>scripts/bench/pick_seed.py</code> rather than left at seed 0, so the
+  clip and the numbers below it are the same rollout. For one pair that is
+  <b>7.8 cm of lift, hands inside the pinch gate 98% of the time, both robots
+  still standing at 12 s</b> — four seconds past the trained horizon. The median
+  across all twelve seeds is 5.5 cm.</sub>
 </p>
 
 <picture>
@@ -252,7 +259,12 @@ pose, and depth *added alongside* it.
   <img src="docs/gifs/carry_2.gif" width="430" alt="Blind policy: two robots closed on the cube, both upright.">
   <img src="docs/gifs/carry_vision_swap_2.gif" width="430" alt="Depth-conditioned policy: one robot face-down on the floor, fall outline on the frame."><br>
   <sub>Same task, same 4,000 iterations. Left blind, right with depth replacing
-  the object pose. The red outline is a fall, held for the rest of the clip.</sub>
+  the object pose. The red outline is a fall, held for the rest of the clip.
+  The strip down the right of the sighted clip is <b>what that policy is
+  reading</b> — colour under the white rule for context, the raw 64×64 depth
+  frame under the orange, and under the blue the <b>8×8 vector it is actually
+  handed</b>. That bottom pane is the entire visual input: 64 numbers, pooled,
+  in place of an exact object pose.</sub>
 </p>
 
 <p align="center">
@@ -260,7 +272,11 @@ pose, and depth *added alongside* it.
   <img src="docs/gifs/carry_vision_both_2.gif" width="292" alt="Depth-alongside policy, two robots, both down.">
   <img src="docs/gifs/carry_vision_both_4.gif" width="292" alt="Depth-alongside policy, four robots, all down."><br>
   <sub>Not one unlucky rollout. Left, depth replacing the pose; centre and
-  right, depth added alongside it — the arm that never forms a pinch at all.</sub>
+  right, depth added alongside it — the arm that never forms a pinch at all.
+  Every one carries its own POV strip, and in every one the cube is plainly
+  visible in the depth panes for the whole clip. These policies are not
+  failing to see the payload. They are failing to act on 64 pooled numbers
+  where the blind arm was handed the pose exactly.</sub>
 </p>
 
 | | pinch | held lift | fell |
@@ -334,8 +350,11 @@ upright, and it lifts 5 cm. Cooperative lifting on this robot is not done.
   <img src="docs/gifs/carry_ball_transfer_pov.gif" width="440" alt="A cube-trained policy lifting a yoga ball it never saw in training, with the robot's colour and depth views alongside.">
   <img src="docs/gifs/carry_cube_pov.gif" width="440" alt="The same policy on the cube it was trained on, with the robot's colour and depth views alongside."><br>
   <sub>Right is the best rollout in the project: <b>7.8 cm of lift, hands inside
-  the pinch gate 98% of the time, neither robot down across the full 12 s</b> —
-  four seconds longer than the horizon it was trained on. Left is the same
+  the pinch gate 98% of the time, and the fall criterion never triggered across
+  the full 12 s</b> — four seconds longer than the horizon it was trained on.
+  "Never fell" is doing exact work there: the test is training's own
+  torso-orientation termination, and over those 12 s the base also settles about
+  14 cm, which is a deep crouch and not a fall, but is not standing either. Left is the same
   weights on a ball they have never seen, which reaches higher on its best seed
   and falls on eleven of twelve, and is why the table above reads medians. The
   strip on the right of each frame is that robot's own head camera, three views
@@ -360,48 +379,104 @@ becomes a property of the object: long, thin and light puts the two contact
 points further apart than the shoulders can span, with nothing to squeeze
 against.
 
-### Nine interventions, one number that never moved
+<p align="center">
+  <img src="docs/gifs/carry_ladder_pov.gif" width="620" alt="Two robots either side of a 1.5 m plank, never closing on it; the depth panes show the plank sitting untouched at the bottom of the frame."><br>
+  <sub>The third object, rendered for the first time. <b>Twelve seeds out of
+  twelve: 0.0 cm of lift, closest approach 39 cm, and the fall criterion never
+  triggered.</b> That last part is misleading on its own, and the clip is why
+  it is here: the pair sinks about 34 cm in the first two seconds and stays
+  down, torso level the whole way, which training's orientation test does not
+  score as a fall. They do not lift and they do not stay up — they subside. The
+  pair starts 1.7 m apart across a 1.5 m plank whose contact points are 75 cm
+  from its centre,
+  further apart than shoulders that cannot adduct past 36 cm can span. Note how
+  much darker the depth panes are here than in the cube clips: the same camera,
+  the same fixed ramp, a payload 8 cm tall seen from 85 cm away. Unlike every
+  other null in this section, this one is not a stability failure.</sub>
+</p>
 
-Height sat at exactly 4 cm — the curriculum's floor — in every *cube* arm ever
-run. So it got attacked from nine directions at once: twice the training, the
-tilt penalty halved and removed, an exploration bonus at two weights, a
+### Nine interventions, and the one that worked was taking the pose away
+
+Height sat at exactly 4 cm — the curriculum's floor — in every cube arm that had
+been run. So it got attacked from nine directions at once: twice the training,
+the tilt penalty halved and removed, an exploration bonus at two weights, a
 randomised payload, occlusion, and a recurrent policy.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="results/charts/coop_nine-dark.svg">
+  <img alt="Lift-height curriculum curves. Seven arms lie on top of each other at the 4 cm floor for up to 16,000 iterations; the occluded arm climbs to 12.5 cm and holds it." src="results/charts/coop_nine-light.svg">
+</picture>
 
 | arm | pinch | lift bonus | height |
 |---|---|---|---|
-| 16k iterations, seed 1 / 2 | 0.290 / 0.320 | 0.00 | **0.0400** |
-| tilt penalty × 0.5 | 0.223 | 0.00 | **0.0400** |
-| tilt penalty removed | 0.273 | 0.00 | **0.0400** |
-| exploration bonus 0.003 | 0.207 | 0.00 | **0.0400** |
-| exploration bonus 0.010 | 0.048 | 0.00 | **0.0400** |
-| randomised payload | 0.254 | 0.00 | **0.0400** |
-| occluded, depth | 0.020 | 0.00 | **0.0400** |
-| occluded, depth + LSTM | 0.254 | 0.00 | **0.0400** |
+| 16k iterations, seed 1 / 2 | 0.290 / 0.320 | 0.00 | 0.0400 |
+| tilt penalty × 0.5 | 0.223 | 0.00 | 0.0400 |
+| tilt penalty removed | 0.273 | 0.00 | 0.0400 |
+| exploration bonus 0.003 | 0.207 | 0.00 | 0.0400 |
+| exploration bonus 0.010 | 0.048 | 0.00 | 0.0400 |
+| randomised payload | 0.254 | 0.00 | 0.0400 |
+| **occluded, blind** | 0.397 peak | **0.53** | **0.1250** (sustained peak 0.1510) |
+| occluded, blind + LSTM | 0.408 peak | 3.19 peak, 0.00 final | 0.0947 peak, 0.0400 final |
 
-**Finding — the staging latch never fired in any of them.** `stage_lift` reads
-**0.0000** in all nine. The staged recipe holds the lift reward at zero until a
-pinch forms; the gate never opened, so the lift bonus is identically zero, so
-the height curriculum never observed a success, so it never promoted off its
-floor. Nine interventions all landed upstream of a switch that stayed off.
+**Finding — hiding the object is what moved the number.** Seven of the nine sit
+on the floor with `stage_lift` at 0.0000: the latch never fires, so the lift
+reward stays at zero, so the curriculum never sees a success. They all landed
+upstream of a switch that stayed off.
 
-> **Correction.** An earlier version of this section attributed that to the
-> latch's threshold being unreachable, comparing a best pinch of 0.32 against a
-> threshold of 0.40. Those are different quantities — 0.32 is an episode-mean
-> *reward* for a term carrying weight 2.0, and the threshold is read against an
-> instantaneous kernel in [0, 1]. The cube's original run settles it: the latch
-> fired there at the same reward figure. The mechanism above is right; that
-> particular piece of evidence for it was not.
+The occlusion arm is the exception, and it is the project's first sustained cube
+lift: the latch fires, holds, and the height curriculum climbs to a **15.1 cm
+sustained peak, ending at 12.5 cm after 16,000 iterations**. Not a spike — a
+level it reaches and stays at for thousands of iterations. (Heights here are
+read off a 133-iteration mean. The raw series touches 21.1 cm for a single
+iteration, which is not a number worth leading with.)
 
-That also retires an earlier explanation. `notilt` peaked at 15.9 cm and the
-tilt penalty looked like the cap; removing it entirely changes nothing here. And
-it explains why *every* arm reports the identical 0.0400 rather than a spread —
-a genuine plateau would scatter.
+The control for that is unusually clean, because the arm was accidentally run
+twice. The first run predates the `apply_depth_flags` fix, which was injecting
+`object_pos_a`/`object_pos_b` into every task's policy group — so the "occluded"
+arm was quietly handed the exact object pose after all. Same config, same 16,000
+iterations, same seed:
 
-The other result is the clearest positive in the section: under occlusion, a
-**recurrent policy recovers a pinch a feedforward one cannot** — 0.254 against
-0.020, a 12× gap. When the object's pose is withheld, memory of where it was
-substitutes for being told, which is the same argument §3 makes for the
-distilled scan student.
+| occluded-blind, 16k iters | pose | stage_lift | lift bonus | final height |
+|---|---|---|---|---|
+| before the fix | **restored by the bug** | 0.0000 | 0.00 | 0.0400 |
+| after the fix | **actually hidden** | 1.0000 | 0.53 | **0.1250** |
+
+Which lines up exactly with why depth made things worse two sections above. The
+blind policy was never short of information — it was handed the object pose
+exactly, and a pose it does not have to work for is a pose it never learns to
+close on. Take it away and the lift finally happens. **Occlusion was filed as a
+robustness stressor and turned out to be the curriculum.**
+
+The recurrent variant finds the same thing and cannot hold it: the highest lift
+bonus in the project, 3.19, and then a collapse back to the floor by iteration
+8,000 with the bonus at zero.
+
+One arm is still missing, and it is now the interesting one. `occluded, depth`
+and `occluded, depth + LSTM` have only ever run *before* the fix, which means
+neither was ever actually occluded — both are mislabelled repeats of the sighted
+experiment, and both are pinned at 0.0400. Depth-under-occlusion is the arm that
+says whether a camera helps once the privileged pose is gone, which is the one
+condition under which §"giving them eyes" predicts it should. It is running now,
+alongside two more seeds of the blind occluded arm, because a first sustained
+lift on one seed is a lead and not yet a result.
+
+It also retires an earlier explanation. `notilt` peaked at 15.9 cm and the tilt
+penalty looked like the cap; removing it entirely changes nothing. And the seven
+pinned arms reporting the *identical* 0.0400 rather than a spread was always the
+tell — a genuine plateau scatters, a switch that never flips does not.
+
+> **Corrections.** Two earlier readings of this section were wrong, and both are
+> worth stating because the same mistake produced them.
+>
+> The first blamed an unreachable staging threshold, comparing a best pinch of
+> 0.32 against a threshold of 0.40. Those are different quantities — 0.32 is an
+> episode-mean *reward* for a term carrying weight 2.0, and the threshold is
+> read against an instantaneous kernel in [0, 1].
+>
+> The second said the number never moved in any of the nine. It moved in two of
+> them, to 12.5 cm. That claim came from `tail -1` on a training log rather than
+> from the trainer's event file, and the log's last line was not the last
+> iteration. Both readings scraped a summary instead of reading the series.
 
 [Read §5](docs/REPORT.md#5--cooperative-lift-can-two-of-them-learn-to-pick-something-up)
 

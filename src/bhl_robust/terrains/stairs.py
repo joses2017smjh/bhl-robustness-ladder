@@ -33,8 +33,13 @@ it is *also* at 0.0000 at iteration 300 -- it does not clear the probe's own 0.0
 threshold until past iteration 1,500. The probe was measuring how long PPO had
 been running, and 5 cm was never actually rejected.
 
-The 3 cm menu is kept below as STAIRS_LOW_TERRAINS_CFG in case a longer probe
-does reject 5 cm, so the fallback is one import away rather than a re-derivation.
+Re-probed at 5 cm for 2,000 iterations, the curriculum reaches level 0.1073 --
+against 0.1345 for the control at the same iteration. The robot enters a 5 cm
+stair perfectly well; it just needs longer than 300 iterations to learn to walk
+at all, which is the thing the original probe was actually measuring.
+
+The 3 cm menu is kept below as STAIRS_LOW_TERRAINS_CFG, so a fallback is one
+import away rather than a re-derivation.
 """
 
 import isaaclab.terrains as terrain_gen
@@ -42,7 +47,7 @@ from isaaclab.terrains import TerrainGeneratorCfg
 
 # 0.12 m thigh + 0.16 m shank, the same number section 8 normalises on.
 LEG_LENGTH = 0.28
-MAX_RISER = 0.05          # 18% of leg length -- see G-B2 below
+MAX_RISER = 0.05          # 18% of leg length; G-B2 passes here
 TREAD_WIDTH = 0.32        # wider than the foot, so a step can be stood on
 
 STAIRS_TERRAINS_CFG = TerrainGeneratorCfg(

@@ -60,7 +60,9 @@ mkdir -p "$OV_CACHE" "$CUDA_CACHE_PATH"
 IDX=$SLURM_ARRAY_TASK_ID
 mkdir -p "$WORKSPACE/overrides"
 export OVERRIDE_FILE="$WORKSPACE/overrides/coop-next-${IDX}.txt"
-export TASK=CoopLift-BHL-Cube-v0 SEED=0 MAX_ITER=16000 NUM_ENVS=1024
+# Defaulted, not hardcoded, so a rerun can vary the seed from the sbatch line.
+export TASK=CoopLift-BHL-Cube-v0 SEED=${SEED:-0}
+export MAX_ITER=${MAX_ITER:-16000} NUM_ENVS=${NUM_ENVS:-1024}
 echo "env.stage_lift_on_pinch=true" > "$OVERRIDE_FILE"
 
 case $IDX in
@@ -69,9 +71,9 @@ case $IDX in
      echo "env.rewards.object_tilt.weight=-0.75" >> "$OVERRIDE_FILE" ;;
   4) export RUN_NAME=coop-tilt000-s0
      echo "env.rewards.object_tilt.weight=0.0" >> "$OVERRIDE_FILE" ;;
-  5) export TASK=CoopLift-BHL-Cube-Random-v0 RUN_NAME=coop-randpayload-s0 ;;
-  6) export TASK=CoopLift-BHL-Cube-Occluded-v0 RUN_NAME=coop-occluded-blind-s0 ;;
-  7) export TASK=CoopLift-BHL-Cube-Occluded-Depth-v0 RUN_NAME=coop-occluded-depth-s0
+  5) export TASK=CoopLift-BHL-Cube-Random-v0 RUN_NAME="coop-randpayload-s${SEED}" ;;
+  6) export TASK=CoopLift-BHL-Cube-Occluded-v0 RUN_NAME="coop-occluded-blind-s${SEED}" ;;
+  7) export TASK=CoopLift-BHL-Cube-Occluded-Depth-v0 RUN_NAME="coop-occluded-depth-s${SEED}"
      export NUM_ENVS=512 ;;
   *) echo "bad array index $IDX"; exit 1 ;;
 esac

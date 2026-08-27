@@ -456,11 +456,83 @@ def chart_plateau(mode):
           f'Looking ahead is what moves it.</text>')
     return c.render()
 
+
+NINE = [
+    ("coop-staged16k-s1", "2x training, seed 1"),
+    ("coop-staged16k-s2", "2x training, seed 2"),
+    ("coop-tilt050-s0", "tilt penalty halved"),
+    ("coop-tilt000-s0", "tilt penalty removed"),
+    ("coop-rnd003-s0", "RND 0.003"),
+    ("coop-rnd010-s0", "RND 0.010"),
+    ("coop-randpayload-s0", "randomised payload"),
+]
+
+
+def chart_nine(mode):
+    """The lift ceiling, and the one intervention that broke it.
+
+    Seven curves lie on top of each other on the curriculum's 4 cm floor, some
+    for 16,000 iterations. The occlusion arm is the same recipe with the
+    privileged object pose withheld, and it is the only one that climbs. Drawing
+    them together is the argument: nothing about the reward, the exploration
+    bonus or the training budget moved this number, and removing one observation
+    did.
+    """
+    t = THEME[mode]
+    flat = [(lbl, name) for lbl, name in NINE
+            if lbl in curves and "lift_h" in curves[lbl]]
+    occ = curves.get("coop-occluded-blind-s0", {}).get("lift_h", [])
+    lstm = curves.get("coop-occ-lstm-s0", {}).get("lift_h", [])
+    if len(flat) < 5 or not occ:
+        return None
+
+    c = Chart(880, 452, dict(l=72, r=210, t=64, b=76), t)
+    xmax = 16000
+    c.x0, c.x1, c.y0, c.y1 = 0, xmax, 0, 0.24
+    c.title("Nine interventions; the one that worked was taking the pose away",
+            "Lift-height curriculum. The floor is 4 cm, the cap is 22 cm.")
+    c.frame([0, 4000, 8000, 12000, 16000], [0, 0.05, 0.10, 0.15, 0.20],
+            "PPO iteration", "lift height (m)", xfmt=lambda v: f"{v:,.0f}",
+            yfmt=lambda v: f"{v:.2f}")
+
+    for lbl, _ in flat:
+        c.line(curves[lbl]["lift_h"], t["ink3"], width=1.4, opacity=0.5)
+    if lstm:
+        c.line(lstm, t["cat"][0], width=1.9, dash="6 4")
+    c.line(occ, t["cat"][1], width=2.6)
+
+    lx = c.m["l"] + c.pw + 12
+    notes = [(t["ink3"], f"{len(flat)} interventions"),
+             (t["cat"][0], "occluded + LSTM"),
+             (t["cat"][1], "occluded, blind")]
+    for i, (colour, name) in enumerate(notes):
+        y = c.m["t"] + 16 + i * 19
+        c.add(f'<rect x="{lx}" y="{y-7}" width="14" height="3" rx="1.5" fill="{colour}"/>')
+        c.add(f'<text x="{lx+20}" y="{y}" font-size="12" fill="{t["ink2"]}" '
+              f'font-family="{FONT}">{esc(name)}</text>')
+    # Figures quoted here are read off the plotted (downsampled) curve, which
+    # is a ~133-iteration mean. The raw series peaks at 0.2108 for a single
+    # iteration; a one-iteration maximum is not a number worth leading with.
+    for i, line in enumerate(["Hiding the object", "pose is the only",
+                              "change that moved", "this number: 15.1 cm",
+                              "peak, 12.1 cm at 16k.", "",
+                              "The LSTM finds it", "and cannot hold it."]):
+        if not line:
+            continue
+        c.add(f'<text x="{lx}" y="{c.m["t"]+92+i*15}" font-size="11" '
+              f'fill="{t["ink3"]}" font-family="{FONT}">{esc(line)}</text>')
+    c.add(f'<text x="{c.m["l"]}" y="{c.h-12}" font-size="11.5" fill="{t["ink3"]}" '
+          f'font-family="{FONT}">The seven flat arms never fire the staging latch: '
+          f'stage_lift reads 0.0000 in every one of them.</text>')
+    return c.render()
+
+
 for name, fn in [("dr_training_curves", chart_dr_curves), ("push_collapse", chart_push),
                  ("dr_ladder_summary", chart_ladder), ("push_sweep", chart_push_sweep),
                  ("terrain_retention", chart_terrain_retention),
                  ("coop_ablation", chart_coop_ablation), ("collision_mesh", chart_collision),
-                 ("terrain_plateau", chart_plateau)]:
+                 ("terrain_plateau", chart_plateau),
+                 ("coop_nine", chart_nine)]:
     for mode in ("light", "dark"):
         svg = fn(mode)
         if svg is None:
