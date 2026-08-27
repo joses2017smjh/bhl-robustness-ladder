@@ -1049,6 +1049,54 @@ won't load, so it has to be repaired regardless.
 
 ---
 
+## Corrections
+
+Claims this project published and then withdrew. They are kept rather than
+edited away, because a repo whose whole argument is "the measurement was
+wrong" cannot quietly fix its own measurements.
+
+**The lift's 4 cm ceiling was not an unreachable threshold.** The README
+attributed it to `stage_lift_on_pinch` holding the lift reward at zero until
+batch-mean pinch clears 0.40, against a best observed pinch of 0.32. Those two
+numbers are not comparable: 0.32 is `Episode_Reward/reaching_fine`, an
+episode-mean reward for a term carrying weight 2.0, while 0.40 is read against
+`_pinch_weight`, an instantaneous kernel in [0, 1]. The cube's own staged run
+latched (`stage_lift = 1.0`) at that same reward figure. The conclusion — that
+the latch never fired in the nine follow-up arms — is right, and `stage_lift =
+0.0000` in all nine is the evidence for it.
+
+**The ball's 21 cm lift is a single-engine result.** `CoopLiftBallCfg` is the
+only arm whose height curriculum ever promotes: 4 → 6 → 13 → 20.9 cm, against a
+22 cm cap, and that curriculum promotes only on repeated success. Replayed in
+MuJoCo the same weights are upright in 0 of 6 seeds at 2 s, mean fall 0.72 s.
+Put in the cube scene they fall at 0.77 s, so the collapse is in the weights,
+not the payload. It was published as "the lift that worked" before the replay
+was run.
+
+**The sphere-lifts-easier mechanism is not supported.** The cube-trained policy
+in an unseen ball scene reaches 9.1 cm against 6.1 cm on its own cube, which
+reads as the wedge argument confirmed by an independent engine and an
+independent policy. Both figures were maxima over six seeds. Over twelve the
+medians are 3.1 cm (ball) against 5.1 cm (cube), and the ball arm falls in
+eleven runs of twelve at a mean of 1.5 s. Peak height reached during a topple
+is not a lift.
+
+**G-B2 rejected a 5 cm stair riser twice, on no evidence.** The probe ran 300
+iterations of PPO on the stairs, found `Curriculum/terrain_levels` pinned at
+0.0000, and concluded the first riser was unenterable; the riser was dropped to
+3 cm and the second probe returned the same verdict. The `depth-bumpy` arm —
+same observation, same curriculum, terrain the robot demonstrably walks — is
+also at 0.0000 at iteration 300 and does not clear the gate's own 0.05
+threshold until past iteration 1,500. The probe was measuring its own budget.
+5 cm is restored; `scripts/bench/terrain_level.py` now returns INCONCLUSIVE
+rather than FAIL when the control has not promoted either.
+
+That probe also ran `bhl_exec … 2>&1 | tail -40`, which left exactly one
+`Curriculum/terrain_levels` line in a 43-line log, and the checker's `tail -1`
+reported that single line of unknown iteration as the final terrain level. This
+is the third time a `tail -N` has eaten the evidence in this repo. Verdicts now
+come from the trainer's TensorBoard event file, which a pipe cannot truncate.
+
 ## Repo layout
 
 ```

@@ -35,8 +35,9 @@ A policy that only works where it trained has learned PhysX, not locomotion.
 | **4** | **The terrain plateau is torque, not sensing.** An exact height map of the ground underfoot moves the curriculum **not at all**. Looking *ahead* does. |
 | **5** | **Depth never needed the RTX renderer.** Ray-cast depth costs **1.6%** of throughput at 4,096 envs and lifts terrain level **11%**. |
 | **6** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD and MJCF agree; swapping collision primitives for convex meshes moves neither reward nor transfer. |
-| **7** | **Two robots can form a pinch, but not a lift.** Ordering the reward — pinch first, height second — is what closes the hands. Height never leaves 4 cm. |
+| **7** | **Two robots can form a pinch, but not a lift.** Ordering the reward — pinch first, height second — is what closes the hands. The staging latch then never fires in any of the nine follow-ups, so height never leaves its 4 cm floor. |
 | **8** | **Arms buy recoverable perturbation, not a higher step.** No 12-DoF policy crosses the lab floor; two of four 22-DoF policies do. |
+| **9** | **A gate with no control measures its own budget.** G-B2 rejected a 5 cm stair riser twice on a 300-iteration probe. The walkable-terrain control sits at the same pinned 0.0000 at iteration 300 and does not promote until past 1,500. |
 
 Every claim below links into the [full technical report](docs/REPORT.md), which
 carries the protocols, the caveats, and the corrections.
@@ -332,14 +333,18 @@ upright, and it lifts 5 cm. Cooperative lifting on this robot is not done.
 <p align="center">
   <img src="docs/gifs/carry_ball_transfer_pov.gif" width="440" alt="A cube-trained policy lifting a yoga ball it never saw in training, with the robot's colour and depth views alongside.">
   <img src="docs/gifs/carry_cube_pov.gif" width="440" alt="The same policy on the cube it was trained on, with the robot's colour and depth views alongside."><br>
-  <sub>Left, the cube-trained policy on a ball it has never seen; right, the same
-  weights on their own cube. The ball run reaches higher on its best seed and
-  falls on eleven of twelve, which is why the table above reads medians. The
-  strip on the right of each frame is that robot's head camera: <b>colour above the orange rule, the
-  policy's own depth image below the blue one</b>, same camera, same instant.
-  The depth pane is masked to floor and payload because that is the target list
-  the ray-caster casts against — it is the tensor the network receives, not a
-  picture of the room.</sub>
+  <sub>Right is the best rollout in the project: <b>7.8 cm of lift, hands inside
+  the pinch gate 98% of the time, neither robot down across the full 12 s</b> —
+  four seconds longer than the horizon it was trained on. Left is the same
+  weights on a ball they have never seen, which reaches higher on its best seed
+  and falls on eleven of twelve, and is why the table above reads medians. The
+  strip on the right of each frame is that robot's own head camera, three views
+  from one pose at one instant: <b>colour</b> under the white rule, the
+  <b>raw 64x64 depth frame</b> under the orange, and under the blue the
+  <b>8x8 the network is actually handed</b>. The two depth panes are masked to
+  floor and payload because that is the target list the ray-caster casts
+  against — they are the tensor the policy receives, not a picture of the room,
+  and the gap between them is the resolution it does not get.</sub>
 </p>
 
 <p align="center">
@@ -460,7 +465,7 @@ external/Berkeley-Humanoid-Lite   upstream, pinned (submodule, unmodified)
 src/bhl_robust/
   tasks/        overlay env configs registering new gym task ids
   curricula/    push-magnitude ramp + adaptive rule
-  terrains/     rough / slope / obstacle generators (no stairs)
+  terrains/     rough / slope / obstacle / stairs generators
   eval/         headless MuJoCo harness, MJCF repair, height fields, depth, video
   audit/        three-way URDF / USD / MJCF consistency
   usd/          scripted OpenUSD stages (terrain variants, lab scene)

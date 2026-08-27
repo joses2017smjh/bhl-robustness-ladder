@@ -510,15 +510,18 @@ class CrewRunner:
         self._pov.update_scene(self.d, camera=self._cams[i])
         return np.asarray(self._pov.render(), dtype=np.uint8)
 
-    # Display window for the depth panes. The sensor clips at DEPTH_RANGE = 6 m,
-    # but a reaching task happens between the robot's own hands and about two
-    # metres out, and mapping 0-6 m onto the ramp puts the entire interesting
-    # range in the top fifth of it -- which is why the first cut of this strip
-    # came out a flat orange rectangle. The window is fixed rather than
-    # per-frame so that brightness means the same distance in every frame and
-    # across both panes; anything outside it clamps.
-    POV_NEAR = 0.25
-    POV_FAR = 2.50
+    # Display window for the depth panes, taken from the data rather than
+    # guessed. The sensor clips at DEPTH_RANGE = 6 m, but this camera is masked
+    # to the floor and the payload and sits 0.12 m in front of a base that
+    # stands 0.48 m from a crate whose face is 0.14 m off its centre, so what it
+    # actually sees is the payload at arm's length: over a cube rollout the
+    # finite depths run p1 = 0.038 m, median 0.102 m, p99 = 0.614 m. Two
+    # earlier windows (0-6 m, then 0.25-2.5 m) put every one of those pixels at
+    # full brightness and rendered the pane as a flat orange rectangle. This one
+    # spans p1 to p99; beyond it clamps dark, which is also where the two thirds
+    # of the ball frame that see nothing at all end up.
+    POV_NEAR = 0.03
+    POV_FAR = 0.70
 
     def _false_colour(self, d: np.ndarray) -> np.ndarray:
         """Metres to near-bright false colour, on the fixed display window."""
