@@ -286,18 +286,81 @@ The recipe that lifts the cube was only ever run on the cube. Rerun on both:
 | yoga ball | 0.063 | 0.51 |
 | ladder | **0.000** | 0.00 |
 
-The ball partially transfers — it forms a pinch and lifts, where the older
-recipe did neither. The ladder is at pinch identically zero for the third
-recipe in a row, which stops being "we never retried it" and starts being a
-property of the object: long, thin and light puts the two contact points
-further apart than the shoulders can span, with nothing to squeeze against.
+**The ball is the only arm whose height curriculum ever moved, and it did not
+survive the cross-check.** In PhysX it climbs 4 cm → 6 cm → 13 cm → **20.9 cm**,
+stopping just under the 22 cm cap; that curriculum promotes only on repeated
+success, so inside the trainer this is a real lift. Replayed in MuJoCo, the same
+weights fall over in **0.72 s**, in **0 of 6 seeds**, and — put in the cube scene
+instead — in 0 of 6 there too, at 0.77 s. The collapse travels with the weights,
+not the payload. The 21 cm is a single-engine number and this repo does not
+count those.
+
+**A geometry advantage looked real at six seeds and did not survive twelve.**
+The tempting story is mechanical: squeezing a sphere from two sides gives
+contact normals angled inward *and upward*, so the squeeze carries its own
+vertical component, where a cube's vertical faces give purely horizontal normals
+and every newton of lift has to come from friction. Drop the *cube*-trained
+policy into a ball scene it has never seen and the first six seeds agree — 9.1 cm
+against 6.1 cm on its own cube.
+
+Twelve seeds reverse it.
+
+| cube policy, 12 seeds | median lift | mean lift | max lift | upright at 12 s |
+|---|---|---|---|---|
+| in the **cube** scene | **5.1 cm** | **5.2 cm** | 7.8 cm | **6/12** |
+| in the **ball** scene | 3.1 cm | 3.7 cm | 9.1 cm | 1/12 |
+
+Both 6-seed figures were maxima, and the ball's distribution is the one with the
+long tail: a higher best, a lower middle, and a fall in eleven runs out of
+twelve at a mean of 1.5 s. A peak height reached during a topple is not a lift,
+and *peak* is the wrong statistic for a claim about lifting — the median says
+the ball is worse, and the upright count says it is much worse. **The wedge
+argument is not supported by this data.** It is left here as the hypothesis it
+is, and what the run actually shows is that a 65 cm sphere is harder to stand
+next to than a 28 cm box.
+
+| policy | scene | upright at 2 s | mean fall |
+|---|---|---|---|
+| ball | ball | 0/6 | 0.72 s |
+| ball | cube | 0/6 | 0.77 s |
+| cube | ball | 0/6 | 1.73 s |
+| cube | cube | **5/6** | **6.65 s** |
+
+Nothing here is a solved lift. The cube arm is the only one that reliably stays
+upright, and it lifts 5 cm. Cooperative lifting on this robot is not done.
+
+<p align="center">
+  <img src="docs/gifs/carry_ball_transfer_pov.gif" width="440" alt="A cube-trained policy lifting a yoga ball it never saw in training, with the robot's colour and depth views alongside.">
+  <img src="docs/gifs/carry_cube_pov.gif" width="440" alt="The same policy on the cube it was trained on, with the robot's colour and depth views alongside."><br>
+  <sub>Left, the cube-trained policy on a ball it has never seen; right, the same
+  weights on their own cube. The ball run reaches higher on its best seed and
+  falls on eleven of twelve, which is why the table above reads medians. The
+  strip on the right of each frame is that robot's head camera: <b>colour above the orange rule, the
+  policy's own depth image below the blue one</b>, same camera, same instant.
+  The depth pane is masked to floor and payload because that is the target list
+  the ray-caster casts against — it is the tensor the network receives, not a
+  picture of the room.</sub>
+</p>
+
+<p align="center">
+  <img src="docs/gifs/carry_ball_native_pov.gif" width="440" alt="The ball-trained policy toppling in MuJoCo without reaching the ball."><br>
+  <sub>The 21 cm arm, cross-checked. It falls at 0.72 s having never touched the
+  payload — the ball does not move a millimetre. This is what a single-engine
+  result looks like from the other engine.</sub>
+</p>
+
+The ladder is at pinch identically zero for the third recipe in a row, and its
+staging latch never fires at all. That stops being "we never retried it" and
+becomes a property of the object: long, thin and light puts the two contact
+points further apart than the shoulders can span, with nothing to squeeze
+against.
 
 ### Nine interventions, one number that never moved
 
-Height has sat at exactly 4 cm — the curriculum's floor — in every arm ever run.
-So it got attacked from nine directions at once: twice the training, the tilt
-penalty halved and removed, an exploration bonus at two weights, a randomised
-payload, occlusion, and a recurrent policy.
+Height sat at exactly 4 cm — the curriculum's floor — in every *cube* arm ever
+run. So it got attacked from nine directions at once: twice the training, the
+tilt penalty halved and removed, an exploration bonus at two weights, a
+randomised payload, occlusion, and a recurrent policy.
 
 | arm | pinch | lift bonus | height |
 |---|---|---|---|
@@ -310,12 +373,19 @@ payload, occlusion, and a recurrent policy.
 | occluded, depth | 0.020 | 0.00 | **0.0400** |
 | occluded, depth + LSTM | 0.254 | 0.00 | **0.0400** |
 
-**Finding — it was a threshold, not a plateau.** The staged recipe holds the
-lift reward at zero until the batch-mean pinch clears **0.40**. The best pinch
-any policy has ever reached is **0.32**. The gate never opens, so the lift bonus
-is identically zero, so the height curriculum never sees a success, so it never
-promotes off its 4 cm floor. Nine interventions all landed upstream of a
-constant that was never reachable.
+**Finding — the staging latch never fired in any of them.** `stage_lift` reads
+**0.0000** in all nine. The staged recipe holds the lift reward at zero until a
+pinch forms; the gate never opened, so the lift bonus is identically zero, so
+the height curriculum never observed a success, so it never promoted off its
+floor. Nine interventions all landed upstream of a switch that stayed off.
+
+> **Correction.** An earlier version of this section attributed that to the
+> latch's threshold being unreachable, comparing a best pinch of 0.32 against a
+> threshold of 0.40. Those are different quantities — 0.32 is an episode-mean
+> *reward* for a term carrying weight 2.0, and the threshold is read against an
+> instantaneous kernel in [0, 1]. The cube's original run settles it: the latch
+> fired there at the same reward figure. The mechanism above is right; that
+> particular piece of evidence for it was not.
 
 That also retires an earlier explanation. `notilt` peaked at 15.9 cm and the
 tilt penalty looked like the cap; removing it entirely changes nothing here. And

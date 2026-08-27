@@ -23,6 +23,18 @@ Tread width is the other half and is usually forgotten. A 6 Nm biped that
 cannot place a whole foot on a step is being asked to balance on an edge, which
 is a different and much harder task than climbing. 0.32 m is wider than the
 foot.
+
+**G-B2 settled the riser empirically and the first guess was still too tall.**
+The riser is 5 cm, 18% of leg length. It was briefly 3 cm, on the strength of an
+entry probe that ran 300 iterations, saw the terrain level pinned at 0.0000 and
+concluded the first step was a wall. That probe had no control. Run the same
+check against `depth-bumpy`, which is terrain this robot demonstrably walks, and
+it is *also* at 0.0000 at iteration 300 -- it does not clear the probe's own 0.05
+threshold until past iteration 1,500. The probe was measuring how long PPO had
+been running, and 5 cm was never actually rejected.
+
+The 3 cm menu is kept below as STAIRS_LOW_TERRAINS_CFG in case a longer probe
+does reject 5 cm, so the fallback is one import away rather than a re-derivation.
 """
 
 import isaaclab.terrains as terrain_gen
@@ -30,7 +42,7 @@ from isaaclab.terrains import TerrainGeneratorCfg
 
 # 0.12 m thigh + 0.16 m shank, the same number section 8 normalises on.
 LEG_LENGTH = 0.28
-MAX_RISER = 0.05          # 18% of leg length
+MAX_RISER = 0.05          # 18% of leg length -- see G-B2 below
 TREAD_WIDTH = 0.32        # wider than the foot, so a step can be stood on
 
 STAIRS_TERRAINS_CFG = TerrainGeneratorCfg(
@@ -65,8 +77,16 @@ STAIRS_TERRAINS_CFG = TerrainGeneratorCfg(
     },
 )
 
-# Fallback if G-B2 shows the curriculum pinned at level 0: 3 cm is 11% of leg
-# length, between the cable this robot falls on and the threshold it stalls at.
+# G-B2 rejected this 5 cm menu twice and was wrong both times. The probe ran 300
+# iterations and called a terrain level of 0 proof that the first riser was a
+# wall; the depth-bumpy control, on terrain the robot demonstrably walks, is
+# also at 0.0000 at iteration 300 and does not clear the gate's own 0.05
+# threshold until somewhere past iteration 1,500. The probe was measuring its
+# own budget. 5 cm is restored and the probe now runs long enough to mean
+# something -- see `scripts/bench/terrain_level.py`, which reads the trainer's
+# event file and refuses to return a verdict without that control column.
+#
+# The 3 cm menu is kept as the fallback the probe should have had to argue for.
 STAIRS_LOW_TERRAINS_CFG = STAIRS_TERRAINS_CFG.replace(
     sub_terrains={
         "stairs_up": STAIRS_TERRAINS_CFG.sub_terrains["stairs_up"].replace(

@@ -95,16 +95,37 @@ PHYSICS_DT = 0.005
 EPISODE_STEPS = 200       # episode_length_s 8.0
 TILT_LIMIT = 0.78
 
-# Cube task: 0.28 m box, side pinch across y, contact points +/-0.16 m from the
-# centre, spawned with its centre 0.14 m up (resting on the floor).
-CUBE_HALF = 0.14
-CUBE_MASS = 0.5
 CONTACT_AXIS = np.array([0.0, 1.0, 0.0])
-CONTACT_OFFSET = 0.16
-SPAWN_Z = 0.14
 
-# Half the pair's y separation, from `CoopLiftSceneCfg`: robots at y = +/-0.48.
-PAIR_HALF_Y = 0.48
+
+@dataclass(frozen=True)
+class Payload:
+    """One object's geometry, transcribed from its `CoopLift*Cfg`.
+
+    Every field here is read off the Isaac config rather than re-tuned for
+    MuJoCo, because the point of a replay is to run the trained policy against
+    the scene it was trained against. `pair_half_y` is the robots' spawn
+    separation, which differs per object -- the ball is 65 cm across and the
+    pair has to stand wider to get either side of it.
+    """
+    name: str
+    geom: int                 # mjtGeom
+    size: list                # mujoco geom size triple
+    mass: float
+    friction: float           # dynamic; MuJoCo has one sliding coefficient
+    spawn_z: float
+    contact_offset: float
+    pair_half_y: float
+    lift_full: float          # gauge full-scale, the curriculum's height cap
+
+
+# `CoopLiftEnvCfg`: 0.28 m box, side pinch across y, centre 0.14 m up.
+CUBE = Payload("cube", mujoco.mjtGeom.mjGEOM_BOX, [0.14, 0.14, 0.14],
+               0.5, 1.2, 0.14, 0.16, 0.48, 0.22)
+# `CoopLiftBallCfg`: ~65 cm yoga ball, 0.7 kg, robots at y = +/-0.62.
+BALL = Payload("ball", mujoco.mjtGeom.mjGEOM_SPHERE, [0.33, 0.0, 0.0],
+               0.7, 0.45, 0.33, 0.33, 0.62, 0.22)
+PAYLOADS = {p.name: p for p in (CUBE, BALL)}
 # Clear air between one pair and the next, so a four-robot shot does not read as
 # four robots on one crate.
 PAIR_GAP = 0.95
@@ -252,6 +273,7 @@ class Crate:
     slot_a: int               # robot on the +axis side
     slot_b: int | None        # None for a solo attempt
     spawn: np.ndarray
+    payload: "Payload" = None
 
 
 def _yaw_quat(yaw: float) -> list[float]:
@@ -259,7 +281,7 @@ def _yaw_quat(yaw: float) -> list[float]:
 
 
 def build_crew(upstream: Path, cache_dir: Path, n_robots: int,
-               ego_camera: bool = False):
+               ego_camera: bool = False, payload: str = "cube"):
     """Compose `n_robots` humanoids and one crate per pair into one model.
 
     Robots are laid out along +y, so a single camera frames the crew, and every
@@ -276,6 +298,9 @@ def build_crew(upstream: Path, cache_dir: Path, n_robots: int,
     """
     if n_robots < 2:
         raise ValueError("a crew is two or more robots")
+    if payload not in PAYLOADS:
+        raise ValueError(f"unknown payload {payload!r}; have {sorted(PAYLOADS)}")
+    pay = PAYLOADS[payload]
 
     scene = prepare_mjcf(upstream, cache_dir, "humanoid", ego_camera=ego_camera)
     robot_xml = scene.parent / "berkeley_humanoid_lite.xml"
@@ -285,7 +310,7 @@ def build_crew(upstream: Path, cache_dir: Path, n_robots: int,
     spec = mujoco.MjSpec.from_file(str(world_path))
 
     n_pairs = (n_robots + 1) // 2
-    pitch = 2.0 * PAIR_HALF_Y + PAIR_GAP
+    pitch = 2.0 * pay.pair_half_y + PAIR_GAP
     # Centre the crew on y = 0 so the camera does not have to be re-aimed per
     # crew size.
     y_first = -0.5 * (n_pairs - 1) * pitch
@@ -295,9 +320,9 @@ def build_crew(upstream: Path, cache_dir: Path, n_robots: int,
         centre = y_first + p * pitch
         # Slot b sits at -y facing +y; slot a sits at +y facing -y, matching
         # robot_b / robot_a in the trained scene.
-        ys.append(centre - PAIR_HALF_Y); yaws.append(+np.pi / 2); pair_of.append(p)
+        ys.append(centre - pay.pair_half_y); yaws.append(+np.pi / 2); pair_of.append(p)
         if len(ys) < n_robots:
-            ys.append(centre + PAIR_HALF_Y); yaws.append(-np.pi / 2); pair_of.append(p)
+            ys.append(centre + pay.pair_half_y); yaws.append(-np.pi / 2); pair_of.append(p)
 
     for i, (y, yaw) in enumerate(zip(ys, yaws)):
         child = mujoco.MjSpec.from_file(str(robot_xml))
@@ -310,17 +335,17 @@ def build_crew(upstream: Path, cache_dir: Path, n_robots: int,
         centre = y_first + p * pitch
         body = spec.worldbody.add_body()
         body.name = f"crate{p}"
-        body.pos = [0.0, centre, SPAWN_Z]
+        body.pos = [0.0, centre, pay.spawn_z]
         body.add_freejoint(name=f"crate{p}_free")
         g = body.add_geom()
         g.name = f"crate{p}_g"
-        g.type = mujoco.mjtGeom.mjGEOM_BOX
-        g.size = [CUBE_HALF, CUBE_HALF, CUBE_HALF]
-        g.mass = CUBE_MASS
-        # Isaac: static 1.4 / dynamic 1.2. MuJoCo has one sliding coefficient,
+        g.type = pay.geom
+        g.size = pay.size
+        g.mass = pay.mass
+        # Isaac gives static and dynamic; MuJoCo has one sliding coefficient,
         # so take the dynamic one -- the lift is a sliding-contact problem and
         # the static value would flatter it.
-        g.friction = [1.2, 0.005, 0.0001]
+        g.friction = [pay.friction, 0.005, 0.0001]
         g.rgba = PAYLOAD_RGBA
 
     model = spec.compile()
@@ -368,7 +393,8 @@ def build_crew(upstream: Path, cache_dir: Path, n_robots: int,
             body_id=int(bid),
             qpos_adr=int(model.jnt_qposadr[j]), qvel_adr=int(model.jnt_dofadr[j]),
             slot_a=slot_a, slot_b=(slot_b if len(members) > 1 else None),
-            spawn=np.array([0.0, y_first + p * pitch, SPAWN_Z]),
+            spawn=np.array([0.0, y_first + p * pitch, pay.spawn_z]),
+            payload=pay,
         ))
     return model, slots, crates
 
@@ -397,6 +423,7 @@ class CrewRunner:
         self._dep = None
         self._dep_opt = None
         self._cams: list[int] = []
+        self._pov = None
         if self.wants_depth:
             self._setup_depth()
 
@@ -441,7 +468,93 @@ class CrewRunner:
         pooled = d.reshape(DEPTH_RES // k, k, DEPTH_RES // k, k).mean(axis=(1, 3))
         return np.clip(pooled.ravel() / DEPTH_RANGE, 0.0, 1.0)
 
+    # ------------------------------------------------------------- robot POV
+
+    def enable_pov(self, res: int = 220) -> None:
+        """Open a colour renderer on the same camera the depth term reads.
+
+        The depth images the policy consumes are 64x64 and masked down to the
+        floor and the payload, because that is the target list the Isaac
+        ray-caster casts against. That is the correct input to show, but it is
+        not what a person means by "the robot's view" -- it has no robot in it.
+        So the POV strip renders twice from one camera pose: colour over the
+        full scene, and the policy's own masked depth beside it. The pair is
+        the honest answer to "what does it see" -- the left frame is the world
+        at that camera, the right frame is the tensor the network actually got.
+        """
+        self._pov = mujoco.Renderer(self.m, height=res, width=res)
+        if not self._cams:
+            self._setup_pov_cams()
+        if self._dep is None:
+            self._dep = mujoco.Renderer(self.m, height=DEPTH_RES, width=DEPTH_RES)
+            self._dep.enable_depth_rendering()
+            opt = mujoco.MjvOption()
+            opt.geomgroup[:] = 0
+            for g in DEPTH_GEOM_GROUPS:
+                opt.geomgroup[g] = 1
+            self._dep_opt = opt
+
+    def _setup_pov_cams(self) -> None:
+        for s in self.slots:
+            c = mujoco.mj_name2id(self.m, mujoco.mjtObj.mjOBJ_CAMERA,
+                                  s.prefix + EGO_CAM_NAME)
+            if c < 0:
+                raise RuntimeError(
+                    f"POV needs {s.prefix}{EGO_CAM_NAME}; "
+                    "build_crew needs ego_camera=True"
+                )
+            self._cams.append(int(c))
+
+    def pov_rgb(self, i: int) -> np.ndarray:
+        """Robot `i`'s forward colour view, whole scene, uint8 HxWx3."""
+        self._pov.update_scene(self.d, camera=self._cams[i])
+        return np.asarray(self._pov.render(), dtype=np.uint8)
+
+    # Display window for the depth panes. The sensor clips at DEPTH_RANGE = 6 m,
+    # but a reaching task happens between the robot's own hands and about two
+    # metres out, and mapping 0-6 m onto the ramp puts the entire interesting
+    # range in the top fifth of it -- which is why the first cut of this strip
+    # came out a flat orange rectangle. The window is fixed rather than
+    # per-frame so that brightness means the same distance in every frame and
+    # across both panes; anything outside it clamps.
+    POV_NEAR = 0.25
+    POV_FAR = 2.50
+
+    def _false_colour(self, d: np.ndarray) -> np.ndarray:
+        """Metres to near-bright false colour, on the fixed display window."""
+        d = np.nan_to_num(d, nan=DEPTH_RANGE, posinf=DEPTH_RANGE,
+                          neginf=DEPTH_RANGE)
+        v = (d - self.POV_NEAR) / (self.POV_FAR - self.POV_NEAR)
+        v = 1.0 - np.clip(v, 0.0, 1.0)
+        img = np.empty((*v.shape, 3), dtype=np.uint8)
+        img[..., 0] = np.clip(255 * v * 1.00, 0, 255)
+        img[..., 1] = np.clip(255 * v * 0.72, 0, 255)
+        img[..., 2] = np.clip(255 * v * 0.42, 0, 255)
+        return img
+
+    def pov_depth_rgb(self, i: int) -> np.ndarray:
+        """Robot `i`'s raw 64x64 depth image, false-coloured near-bright."""
+        return self._false_colour(self.depth_image(i))
+
+    def pov_depth_obs_rgb(self, i: int) -> np.ndarray:
+        """The 8x8 the network is actually handed, same colour mapping.
+
+        `depth_obs` pools 64x64 down to 8x8 and divides by the clip range, so
+        this is that vector reshaped and put back into metres. Showing it beside
+        the raw frame is the point of the strip: the gap between the two is the
+        resolution the policy does not get.
+        """
+        obs = self.depth_obs(i).reshape(DEPTH_RES // DEPTH_POOL,
+                                        DEPTH_RES // DEPTH_POOL)
+        return self._false_colour(obs * DEPTH_RANGE)
+
     def close(self) -> None:
+        if getattr(self, "_pov", None) is not None:
+            try:
+                self._pov.close()
+            except Exception:
+                pass
+            self._pov = None
         if self._dep is not None:
             try:
                 self._dep.close()
@@ -593,8 +706,9 @@ class CrewRunner:
         raw metres behind that number and is directly comparable across arms.
         """
         centre = self.d.xpos[c.body_id]
-        c_a = centre + CONTACT_OFFSET * CONTACT_AXIS
-        c_b = centre - CONTACT_OFFSET * CONTACT_AXIS
+        off = c.payload.contact_offset
+        c_a = centre + off * CONTACT_AXIS
+        c_b = centre - off * CONTACT_AXIS
         d_a = np.linalg.norm(self.hand_mid(c.slot_a) - c_a)
         if c.slot_b is None:
             return float(d_a)
@@ -606,4 +720,4 @@ class CrewRunner:
 
     def crate_lift(self, c: Crate) -> float:
         """Metres the crate has risen above its spawn height."""
-        return float(self.d.xpos[c.body_id][2] - SPAWN_Z)
+        return float(self.d.xpos[c.body_id][2] - c.payload.spawn_z)
