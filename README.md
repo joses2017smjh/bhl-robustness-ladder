@@ -292,6 +292,42 @@ recipe in a row, which stops being "we never retried it" and starts being a
 property of the object: long, thin and light puts the two contact points
 further apart than the shoulders can span, with nothing to squeeze against.
 
+### Nine interventions, one number that never moved
+
+Height has sat at exactly 4 cm — the curriculum's floor — in every arm ever run.
+So it got attacked from nine directions at once: twice the training, the tilt
+penalty halved and removed, an exploration bonus at two weights, a randomised
+payload, occlusion, and a recurrent policy.
+
+| arm | pinch | lift bonus | height |
+|---|---|---|---|
+| 16k iterations, seed 1 / 2 | 0.290 / 0.320 | 0.00 | **0.0400** |
+| tilt penalty × 0.5 | 0.223 | 0.00 | **0.0400** |
+| tilt penalty removed | 0.273 | 0.00 | **0.0400** |
+| exploration bonus 0.003 | 0.207 | 0.00 | **0.0400** |
+| exploration bonus 0.010 | 0.048 | 0.00 | **0.0400** |
+| randomised payload | 0.254 | 0.00 | **0.0400** |
+| occluded, depth | 0.020 | 0.00 | **0.0400** |
+| occluded, depth + LSTM | 0.254 | 0.00 | **0.0400** |
+
+**Finding — it was a threshold, not a plateau.** The staged recipe holds the
+lift reward at zero until the batch-mean pinch clears **0.40**. The best pinch
+any policy has ever reached is **0.32**. The gate never opens, so the lift bonus
+is identically zero, so the height curriculum never sees a success, so it never
+promotes off its 4 cm floor. Nine interventions all landed upstream of a
+constant that was never reachable.
+
+That also retires an earlier explanation. `notilt` peaked at 15.9 cm and the
+tilt penalty looked like the cap; removing it entirely changes nothing here. And
+it explains why *every* arm reports the identical 0.0400 rather than a spread —
+a genuine plateau would scatter.
+
+The other result is the clearest positive in the section: under occlusion, a
+**recurrent policy recovers a pinch a feedforward one cannot** — 0.254 against
+0.020, a 12× gap. When the object's pose is withheld, memory of where it was
+substitutes for being told, which is the same argument §3 makes for the
+distilled scan student.
+
 [Read §5](docs/REPORT.md#5--cooperative-lift-can-two-of-them-learn-to-pick-something-up)
 
 ---
