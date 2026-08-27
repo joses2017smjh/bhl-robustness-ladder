@@ -413,15 +413,10 @@ Upstream's sim2sim script constructs a gamepad, blocks on joystick input,
 requires a GUI, sleeps to hold realtime, and emits **no metric of any kind**. It
 is a thing to watch, not a thing to measure.
 
-```mermaid
-flowchart LR
-  A["Isaac Lab<br/>4096 envs · PPO"] -->|"6,000 iters"| B["checkpoint"]
-  B -->|"vendored play.py"| C["policy.onnx<br/>+ deploy.yaml"]
-  C --> D["MuJoCo harness<br/>headless · scripted"]
-  D --> E["per-episode CSV"]
-  D --> F["MP4 → paired GIFs"]
-  E --> G["curves + ladder charts"]
-```
+<p align="center">
+  <img src="docs/img/pipeline.svg" width="100%"
+       alt="Train in Isaac Lab at 4096 envs with PPO for 6000 iterations; export the checkpoint through the vendored play.py to policy.onnx and deploy.yaml; drive it in a headless scripted MuJoCo harness, which emits per-episode CSV that becomes curves and ladder charts, and MP4 that becomes paired GIFs.">
+</p>
 
 The harness drives the policy through upstream's **own** `RlController`, so
 observation construction is bit-identical to the sim2real deployment path. An

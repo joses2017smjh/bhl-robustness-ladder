@@ -914,15 +914,10 @@ observation construction is bit-identical to the sim2real deployment path. An
 evaluator that rebuilt the 45-dim observation vector independently would be
 measuring my reimplementation, not the transfer.
 
-```mermaid
-flowchart LR
-  A["Isaac Lab<br/>4096 envs · PPO"] -->|"6,000 iters"| B["checkpoint"]
-  B -->|"vendored play.py"| C["policy.onnx<br/>+ deploy.yaml"]
-  C --> D["MuJoCo harness<br/>headless · scripted"]
-  D --> E["per-episode CSV"]
-  D --> F["MP4 → paired GIFs"]
-  E --> G["curves + ladder charts"]
-```
+<p align="center">
+  <img src="../docs/img/pipeline.svg" width="100%"
+       alt="Train in Isaac Lab at 4096 envs with PPO for 6000 iterations; export the checkpoint through the vendored play.py to policy.onnx and deploy.yaml; drive it in a headless scripted MuJoCo harness, which emits per-episode CSV that becomes curves and ladder charts, and MP4 that becomes paired GIFs.">
+</p>
 
 Training and evaluation deliberately use **different simulators** — Isaac Lab
 (PhysX) to train, MuJoCo to score. That gap *is* the measurement: a policy that
