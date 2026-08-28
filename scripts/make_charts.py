@@ -489,8 +489,8 @@ def chart_nine(mode):
     c = Chart(880, 452, dict(l=72, r=210, t=64, b=76), t)
     xmax = 16000
     c.x0, c.x1, c.y0, c.y1 = 0, xmax, 0, 0.24
-    c.title("Nine interventions; the one that worked was taking the pose away",
-            "Lift-height curriculum. The floor is 4 cm, the cap is 22 cm.")
+    c.title("Nine interventions, and one seed that moved",
+            "Lift-height curriculum, 4 cm floor and 22 cm cap. Two further seeds of the lifting arm are flat.")
     c.frame([0, 4000, 8000, 12000, 16000], [0, 0.05, 0.10, 0.15, 0.20],
             "PPO iteration", "lift height (m)", xfmt=lambda v: f"{v:,.0f}",
             yfmt=lambda v: f"{v:.2f}")
@@ -513,17 +513,17 @@ def chart_nine(mode):
     # Figures quoted here are read off the plotted (downsampled) curve, which
     # is a ~133-iteration mean. The raw series peaks at 0.2108 for a single
     # iteration; a one-iteration maximum is not a number worth leading with.
-    for i, line in enumerate(["Hiding the object", "pose is the only",
-                              "change that moved", "this number: 15.1 cm",
-                              "peak, 12.1 cm at 16k.", "",
-                              "The LSTM finds it", "and cannot hold it."]):
+    for i, line in enumerate(["One occluded seed", "reaches 15.1 cm and",
+                              "holds near 13 cm.", "",
+                              "Seeds 1 and 2 of the", "same arm are flat, so",
+                              "this is a lead and", "not yet a result."]):
         if not line:
             continue
         c.add(f'<text x="{lx}" y="{c.m["t"]+92+i*15}" font-size="11" '
               f'fill="{t["ink3"]}" font-family="{FONT}">{esc(line)}</text>')
     c.add(f'<text x="{c.m["l"]}" y="{c.h-12}" font-size="11.5" fill="{t["ink3"]}" '
-          f'font-family="{FONT}">The seven flat arms never fire the staging latch: '
-          f'stage_lift reads 0.0000 in every one of them.</text>')
+          f'font-family="{FONT}">The flat arms never fire the staging latch: '
+          f'stage_lift reads 0.0000 in every one of them, replicate seeds included.</text>')
     return c.render()
 
 

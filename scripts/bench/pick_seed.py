@@ -54,10 +54,16 @@ def main() -> None:
         # planted spawn is reported beside it. A large drop with no fall is a
         # collapse the fall criterion is blind to, not a rollout that held.
         base0 = [float(run.d.xpos[s.body_id][2]) for s in slots]
+        # Peak lift stops accruing at the fall. A payload flung upward by a
+        # toppling robot is not a lift, and letting it count picked seed 4 of
+        # the ball transfer at "27.6 cm" -- a number the clip itself renders as
+        # 9.1 cm, because the recorder freezes on the fall and the sweep did
+        # not. Whatever the clip shows is what the sweep has to score.
         peak, fell, sink = 0.0, None, 0.0
         for t in range(args.steps):
             run.step()
-            peak = max(peak, max(run.crate_lift(c) for c in crates))
+            if fell is None:
+                peak = max(peak, max(run.crate_lift(c) for c in crates))
             sink = max(sink, max(z0 - float(run.d.xpos[s.body_id][2])
                                  for s, z0 in zip(slots, base0)))
             if fell is None and max(run.tilt(i) for i in range(len(slots))) > TILT_LIMIT:

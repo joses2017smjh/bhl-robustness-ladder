@@ -35,7 +35,7 @@ A policy that only works where it trained has learned PhysX, not locomotion.
 | **4** | **The terrain plateau is torque, not sensing.** An exact height map of the ground underfoot moves the curriculum **not at all**. Looking *ahead* does. |
 | **5** | **Depth never needed the RTX renderer.** Ray-cast depth costs **1.6%** of throughput at 4,096 envs and lifts terrain level **11%**. |
 | **6** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD and MJCF agree; swapping collision primitives for convex meshes moves neither reward nor transfer. |
-| **7** | **Withholding the object's pose is what unlocked the lift.** Nine interventions left height on its 4 cm floor; hiding the pose reached **12.5 cm** and held it. The blind policy was never short of information — it was handed the answer. |
+| **7** | **The only cube arm that ever lifted is a single seed, and it has not replicated.** Occlusion reached 13 cm where nine other interventions sat on the 4 cm floor — but two further seeds and the depth variant are all flat. |
 | **8** | **Arms buy recoverable perturbation, not a higher step.** No 12-DoF policy crosses the lab floor; two of four 22-DoF policies do. |
 | **9** | **The fall detector cannot see a level collapse.** `bad_orientation` tests torso *orientation*, so a robot that sinks 34 cm with its torso level scores as upright — which is what the ladder pair does for twelve seeds out of twelve. |
 | **10** | **A gate with no control measures its own budget.** G-B2 rejected a 5 cm stair riser twice on a 300-iteration probe. The walkable-terrain control is *also* pinned at 0.0000 there. Re-run to 2,000 with 5 cm restored, the same probe **passes** at level 0.107. |
@@ -395,7 +395,7 @@ against.
   other null in this section, this one is not a stability failure.</sub>
 </p>
 
-### Nine interventions, and the one that worked was taking the pose away
+### Nine interventions, one seed that moved, and no replication yet
 
 Height sat at exactly 4 cm — the curriculum's floor — in every cube arm that had
 been run. So it got attacked from nine directions at once: twice the training,
@@ -404,7 +404,7 @@ randomised payload, occlusion, and a recurrent policy.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="results/charts/coop_nine-dark.svg">
-  <img alt="Lift-height curriculum curves. Seven arms lie on top of each other at the 4 cm floor for up to 16,000 iterations; the occluded arm climbs to 12.5 cm and holds it." src="results/charts/coop_nine-light.svg">
+  <img alt="Lift-height curriculum curves. Seven arms lie on top of each other at the 4 cm floor for up to 16,000 iterations; one occluded seed climbs to 13 cm and holds it, while two further occluded seeds stay on the floor." src="results/charts/coop_nine-light.svg">
 </picture>
 
 | arm | pinch | lift bonus | height |
@@ -418,17 +418,33 @@ randomised payload, occlusion, and a recurrent policy.
 | **occluded, blind** | 0.397 peak | **0.53** | **0.1250** (sustained peak 0.1510) |
 | occluded, blind + LSTM | 0.408 peak | 3.19 peak, 0.00 final | 0.0947 peak, 0.0400 final |
 
-**Finding — hiding the object is what moved the number.** Seven of the nine sit
+**Finding — one seed lifted, and so far only that seed.** Seven of the nine sit
 on the floor with `stage_lift` at 0.0000: the latch never fires, so the lift
 reward stays at zero, so the curriculum never sees a success. They all landed
 upstream of a switch that stayed off.
 
-The occlusion arm is the exception, and it is the project's first sustained cube
-lift: the latch fires, holds, and the height curriculum climbs to a **15.1 cm
-sustained peak, ending at 12.5 cm after 16,000 iterations**. Not a spike — a
-level it reaches and stays at for thousands of iterations. (Heights here are
-read off a 133-iteration mean. The raw series touches 21.1 cm for a single
-iteration, which is not a number worth leading with.)
+One occlusion arm is the exception, and it is the only cube arm in the project
+that has ever lifted: the latch fires, holds, and the height curriculum climbs
+to a **15.1 cm sustained peak, ending near 13 cm after 16,000 iterations**. Not
+a spike — a level it holds for thousands of iterations. (Heights are read off a
+133-iteration mean; the raw series touches 21.1 cm for a single iteration, which
+is not a number worth leading with.)
+
+**It has not replicated.** Two further seeds of the same arm and the depth
+variant were queued precisely to test it, and all three are flat:
+
+| occluded arm, 16k iters | stage_lift | lift bonus | height |
+|---|---|---|---|
+| blind, seed 0 | **1.0000** | **0.67** | **0.1313** |
+| blind, seed 1 | 0.0000 | 0.00 | 0.0400 |
+| blind, seed 2 | 0.0000 | 0.00 | 0.0400 |
+| depth, seed 0 | 0.0000 | 0.00 | 0.0400 |
+
+Seed 1 is already past iteration 14,000 — well beyond the ~11,500 where seed 0
+took off — and has not moved. This project has been here before and wrote the
+rule down in §1: the single-seed "pinch 0.40 against 0.08" did not survive three
+seeds either. **One of three is a lead, not a result**, and it is reported here
+as one.
 
 The control for that is unusually clean, because the arm was accidentally run
 twice. The first run predates the `apply_depth_flags` fix, which was injecting
@@ -441,24 +457,22 @@ iterations, same seed:
 | before the fix | **restored by the bug** | 0.0000 | 0.00 | 0.0400 |
 | after the fix | **actually hidden** | 1.0000 | 0.53 | **0.1250** |
 
-Which lines up exactly with why depth made things worse two sections above. The
-blind policy was never short of information — it was handed the object pose
-exactly, and a pose it does not have to work for is a pose it never learns to
-close on. Take it away and the lift finally happens. **Occlusion was filed as a
-robustness stressor and turned out to be the curriculum.**
+The tempting reading — that the blind policy was never short of information, was
+handed the pose exactly, and only learns to close on it once the pose is taken
+away — lines up neatly with why depth made things worse two sections above. It
+is also exactly the kind of story that a single seed will happily tell you.
+Until seed 1 or seed 2 moves, the honest version is narrower: **occlusion is the
+only condition under which this task has ever been solved once.**
 
 The recurrent variant finds the same thing and cannot hold it: the highest lift
 bonus in the project, 3.19, and then a collapse back to the floor by iteration
 8,000 with the bonus at zero.
 
-One arm is still missing, and it is now the interesting one. `occluded, depth`
-and `occluded, depth + LSTM` have only ever run *before* the fix, which means
-neither was ever actually occluded — both are mislabelled repeats of the sighted
-experiment, and both are pinned at 0.0400. Depth-under-occlusion is the arm that
-says whether a camera helps once the privileged pose is gone, which is the one
-condition under which §"giving them eyes" predicts it should. It is running now,
-alongside two more seeds of the blind occluded arm, because a first sustained
-lift on one seed is a lead and not yet a result.
+Depth-under-occlusion has now run for real. Both earlier attempts predated the
+`apply_depth_flags` fix and so were never actually occluded; the repeat is in
+the table above, pinned at 0.0400 with a pinch reward of 0.019 — the worst in
+the section. A camera does not rescue this task even under the one condition
+where §"giving them eyes" predicts it might.
 
 It also retires an earlier explanation. `notilt` peaked at 15.9 cm and the tilt
 penalty looked like the cap; removing it entirely changes nothing. And the seven
