@@ -37,4 +37,39 @@ def apply() -> list[str]:
         _noise.AdditiveGaussianNoiseCfg = _noise.GaussianNoiseCfg
         applied.append("AdditiveGaussianNoiseCfg -> GaussianNoiseCfg")
 
+    # 3.x moved the physics engine out of the core package: `SimulationCfg.physx`
+    # became `SimulationCfg.physics`, typed as a generic `PhysicsCfg`, with the
+    # PhysX-specific fields living on `isaaclab_physx`'s `PhysxCfg` subclass.
+    # `bounce_threshold_velocity` and `gpu_max_rigid_patch_count` still exist and
+    # still mean the same thing; only the attribute path changed.
+    #
+    # Upstream's `velocity_env_cfg` writes `self.sim.physx.gpu_max_rigid_patch_count`
+    # at module scope, so without this every overlay that inherits from it dies
+    # on 3.x with `'SimulationCfg' object has no attribute 'physx'` -- which is
+    # what all nine redesigned tasks did.
+    #
+    # The property lazily installs a `PhysxCfg` the first time `.physx` is read,
+    # so existing `self.sim.physx.X = v` code works unchanged on both stacks and
+    # a config that never touches it keeps 3.x's default of `physics=None`.
+    try:
+        from isaaclab.sim.simulation_cfg import SimulationCfg
+    except Exception:                                            # pragma: no cover
+        SimulationCfg = None
+
+    if SimulationCfg is not None and not hasattr(SimulationCfg, "physx"):
+        from isaaclab_physx.physics.physx_manager_cfg import PhysxCfg
+
+        def _get_physx(self):
+            cur = getattr(self, "physics", None)
+            if not isinstance(cur, PhysxCfg):
+                cur = PhysxCfg()
+                self.physics = cur
+            return cur
+
+        def _set_physx(self, value):
+            self.physics = value
+
+        SimulationCfg.physx = property(_get_physx, _set_physx)
+        applied.append("SimulationCfg.physx -> .physics (PhysxCfg)")
+
     return applied
