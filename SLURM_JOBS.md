@@ -40,17 +40,6 @@ Constraint from the work order: `joint_deviation_arms` must be ablated in any
 |---|---|---|
 | — | — | not started |
 
-### B3 — ice / patchy friction terrain · `todo`
-Patchy friction on geometrically flat ground. `G-B3` has to ray-cast the patch
-boundary to prove the patch is invisible to the depth camera.
-
-**Never queued.** `src/bhl_robust/terrains/` holds only `bumpy.py` and
-`stairs.py`.
-
-| # | id | outcome |
-|---|---|---|
-| — | — | not started |
-
 ### Tier 1 / 2 / 3 MARL rows · `blocked` on B4
 24 + 6 + 8 jobs. Work order: do not queue a tier until its gate passes.
 `NUM_ENVS` identical across every arm (target 4096; if MARL OOMs, drop *every*
@@ -69,14 +58,38 @@ annotation, not `hasattr`.
 | 2 | `21077722` (v51) | inconclusive — Isaac Sim died during boot on kit DB lock contention with the running terrain arrays. Guard verified from source instead: `physx:` is annotated on 2.3.2, so the shim is skipped there. |
 | 1 | `21077723` (v60) | done — 4 shims applied, 36 task ids registered |
 
-### B4 — G-B4 gate · `todo`
-Design settled (see `docs/TASKS_V2.md`): four limb agents, MAPPO, with 2-agent
-and IPPO ablations. Gate must confirm the four action slices reassemble into
-exactly the 22-DoF vector the single-agent controller applies.
+### B4 — G-B4 gate · `running`
+Design settled (`docs/TASKS_V2.md`): four limb agents, MAPPO, with 2-agent and
+IPPO ablations. Code written: `limb_partition.py`, `tasks/limb_marl.py`,
+`scripts/train_marl.py`, `scripts/bench/marl_gate.py`.
+
+Offline half (coverage, round-trip, joint order) **passes** on both partitions
+and needs no GPU.
 
 | # | id | outcome |
 |---|---|---|
-| — | — | not started |
+| 2 | `21078987` | running — repointed at `Velocity-BHL-Arms-Bumpy-v0` |
+| 1 | `21078958` | FAIL — pointed at `Biped-Bumpy`, which actuates 12 leg joints, not 22: `Invalid action shape, expected: 12, received: 22`. The 22-DoF robot is the `Arms-*` task family. |
+
+### Tier 1 first block · `todo` (written, held on G-B4)
+`slurm/89_marl_train.sbatch` is written and deliberately not submitted: limb4+
+MAPPO, limb4+IPPO, limb2+MAPPO, and a single-agent PPO control, one variable
+moving per row. `joint_deviation_arms` is ablated in every row including the
+control, and `train_marl.py` refuses to start if the term is not found rather
+than assuming the ablation happened.
+
+| # | id | outcome |
+|---|---|---|
+| — | — | not submitted — G-B4 must pass first |
+
+### B3 — ice / patchy friction · `todo` (written, not wired)
+`terrains/ice.py` and `scripts/bench/ice_gate.py` written. G-B3 passes at the
+flush inset and correctly fails at a 5 mm one, so the gate can fail. Still to
+do: wire a task config and register the ids.
+
+| # | id | outcome |
+|---|---|---|
+| — | — | not queued |
 
 ### Base-height probe — is the floor-lift a training hack? · `running`
 The MuJoCo replay drops both cube arms ~41 cm in 0.2 s, before contact. PhysX
@@ -220,6 +233,9 @@ came from.
 | `21076944`–`21077235` | v2 nine-cell smoke |
 | `21077757` | v2 nine-cell training |
 | `21077722`, `21077723` | compat shim regression check |
+| `21078958`, `21078987` | G-B4 limb-partition gate |
+| `21078881` | base-height probe (attempt 4) |
+| `21078882` | occlusion replicates, final read |
 | `21076389` | MARL stack probe |
 | `21076607`, `21076614` | reach-envelope measurement |
 | `21076453`, `21076460`, `21077131`, `21077145` | posture / collapse diagnostics |
