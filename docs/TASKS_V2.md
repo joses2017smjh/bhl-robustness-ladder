@@ -131,3 +131,41 @@ could ever have passed. Feet are re-planted per posture now, and the criterion
 is descent from standing.
 
 No tier trains until its gate passes.
+
+---
+
+# B4 · Limb agents
+
+## The two design calls, and why they went the way they did
+
+**Partition: four agents, one per limb.** The robot's 22 DoF split cleanly as
+left arm 5, right arm 5, left leg 6, right leg 6 — `ARM_JOINTS` and
+`LEG_JOINTS` are already ordered that way, so the partition is a slice rather
+than a remapping. Four is also the literal reading of "an agent for each limb",
+and it is the interesting version of the question: a 2-way upper/lower split
+mostly reproduces the existing controller with a seam through it.
+
+A 2-agent arms/legs split runs as the ablation, because this project already
+knows the lift lives entirely in the arms while the legs do the standing, and
+that is exactly the credit-assignment boundary a 2-way split would test.
+
+**Algorithm: MAPPO, with IPPO as the ablation.** The single-agent baseline here
+is already an *asymmetric* actor-critic — the critic sees object twist and both
+robots, the actor sees proprioception. MAPPO is the direct generalisation of
+that: centralised critic, decentralised actors. Choosing IPPO instead would
+change two things at once, the agent count and the critic's information, and no
+row in the table would isolate either. IPPO then answers the narrower question
+of what the centralised critic is worth.
+
+**Ablation the work order requires:** `joint_deviation_arms` must be off in any
+22-DoF limb-agent run. It penalises arm deviation from the default pose, which
+is the same term §5 found fighting a squat-and-pinch — with a separate agent
+owning each arm, it would be a per-agent penalty for doing the task.
+
+## G-B4, before any of the 24 rows
+
+* Does a `DirectMARLEnv` with the four-limb partition construct, reset and step,
+  and does each agent receive its own action slice of the right width?
+* Do the four action slices reassemble into exactly the 22-DoF vector the
+  single-agent controller applies? If they do not, MAPPO is not being compared
+  against PPO — it is being compared against a different robot.
