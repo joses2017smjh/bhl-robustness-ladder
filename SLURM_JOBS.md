@@ -63,7 +63,17 @@ so the curve is recorded without entering the objective.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21076488` | running — 1,500 iters, spawn is ~0.55 m; does the curve sink and stay down? |
+| 2 | `21076968` | running — `base_height` moved to a curriculum term |
+| 1 | `21076488` | cancelled — logged 0.0000 for 1,300 iterations. The reward manager logs `weight x value`, so a weight-0.0 term reports zero by construction. |
+
+### Redesigned tasks (v2) — nine cells · `running`
+Three tasks with terminal success states, each blind/depth/rgb, all on v60.
+Gates G-T1, G-T2, G-T3 all pass.
+
+| # | id | outcome |
+|---|---|---|
+| 2 | `21076944` | queued — smoke test: do all nine construct, reset and step? |
+| 1 | `21076799`, `21076816`, `21076834`, `21076923` | gate iterations — the first two failed on gate bugs (knees bent with the root pinned; base origin compared against an absolute height), the last two pass 3/3 |
 
 ### Terrain PPO, seed 2 · `running`
 Third seed of all four cells, because n=2 is below this project's own bar.
@@ -155,7 +165,10 @@ came from.
 | `21066823`, `21066824`, `21066825`, `21066826` | occlusion replicates |
 | `21066607`, `21066637`, `21067084` | POV clips |
 | `21067057` | ladder clip |
-| `21076488` | base-height probe |
+| `21076488`, `21076968` | base-height probe |
+| `21076799`–`21076923` | v2 task gates |
+| `21076944` | v2 nine-cell smoke |
+| `21076792` | rsl-rl install on the v60 stack |
 | `21066624`, `21066817` | docs + charts refresh |
 
 Jobs named `orchard*`, `lh-*` and `interactive` are not from this workstream.

@@ -108,9 +108,11 @@ def base_height_mean(
     shins never puts its torso down either, so that cannot separate a squat
     from a collapse.
 
-    Registered at weight 0.0 so it is logged as `Episode_Reward/base_height`
-    without entering the objective. Measuring the thing first, and deciding
-    whether to penalise it second, keeps every published number comparable.
+    Registered as a *curriculum* term, not a reward term. The reward manager
+    logs `weight x value`, so the obvious trick -- a reward at weight 0.0, to
+    observe without optimising -- logs 0.0000 forever. It did, for 1,300
+    iterations, before that was noticed. Curriculum terms log their return value
+    directly and touch no gradient, which is the behaviour that was wanted.
     """
     a = env.scene[robot_a.name].data.root_pos_w[:, 2]
     b = env.scene[robot_b.name].data.root_pos_w[:, 2]

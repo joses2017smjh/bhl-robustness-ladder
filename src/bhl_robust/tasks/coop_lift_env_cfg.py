@@ -304,10 +304,6 @@ class RewardsCfg:
     object_vel = RewTerm(func=coop.object_lin_vel_l2, weight=-0.05)
     object_tilt = RewTerm(func=coop.object_tilt_l2, weight=-1.5)
     still_alive = RewTerm(func=coop.still_alive, weight=1.0)
-    # Weight 0.0: logged as Episode_Reward/base_height, never optimised.
-    # This task has no height constraint at all, and until now no record
-    # of how low the policies actually get.
-    base_height = RewTerm(func=coop.base_height_mean, weight=0.0)
     termination_penalty = RewTerm(func=mdp.is_terminated, weight=-10.0)
     flat_a = RewTerm(
         func=mdp.flat_orientation_l2,
@@ -416,6 +412,10 @@ class CurriculumCfg:
         },
     )
     stage_lift = CurrTerm(func=coop.stage_lift_on_pinch)
+    # Diagnostic only: logged as Curriculum/base_height, enters no gradient.
+    # This task has never constrained how low the robots get, and until now
+    # never recorded it either.
+    base_height = CurrTerm(func=coop.base_height_mean)
 
 
 @configclass
