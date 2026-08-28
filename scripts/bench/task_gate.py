@@ -39,6 +39,9 @@ def main() -> None:
                    help="the descent the current cube policies actually perform")
     p.add_argument("--tol", type=float, default=0.03)
     p.add_argument("--grid", type=int, default=5)
+    p.add_argument("--shelf-deck", type=float, default=0.38)
+    p.add_argument("--net-rim", type=float, default=0.60)
+    p.add_argument("--wall-contact", type=float, default=0.50)
     args = p.parse_args()
 
     model, slots, _ = build_crew(args.upstream, args.cache_dir, 2,
@@ -134,14 +137,35 @@ def main() -> None:
         print(f"      closest: hands {co[0][1]:.3f} m "
               f"(collapsed ceiling measured at {COLLAPSE_HAND_HI:.3f} m)")
 
+    # ---- G-T2: are the target interaction heights reachable standing? -----
+    # A payload you can pick up and then cannot place is a task gated on the
+    # shelf rather than on the policy. Each target is the height the payload's
+    # *centre* must reach, so the hands must reach it too.
+    reach_lo = min(h[1] for h in st)
+    reach_hi = max(h[1] for h in st)
+    targets = [
+        ("cube -> shelf slot", args.shelf_deck + 0.14),
+        ("ball -> net rim", args.net_rim),
+        ("plank -> wall contact", args.wall_contact),
+    ]
+    print(f"\nG-T2  standing hands span {reach_lo:.3f} .. {reach_hi:.3f} m "
+          f"with feet planted")
+    t2 = True
+    for name, z in targets:
+        ok = reach_lo - args.tol <= z <= reach_hi + args.tol
+        t2 &= ok
+        print(f"      {name:26} needs {z:.3f} m  {'ok' if ok else 'OUT OF REACH'}")
+
     print()
     t1 = len(ok_st) > 0
     t3 = len(ok_co) == 0
     print(f"G-T1 {'PASS' if t1 else 'FAIL'} | "
           f"{'a standing squat reaches the payload' if t1 else 'no standing posture reaches it -- GRASP_Z is wrong'}")
+    print(f"G-T2 {'PASS' if t2 else 'FAIL'} | "
+          f"{'every target height is reachable standing' if t2 else 'a target is outside the standing envelope'}")
     print(f"G-T3 {'PASS' if t3 else 'FAIL'} | "
           f"{'a collapsed robot cannot reach it' if t3 else 'a collapsed robot still reaches it -- raising the payload bought nothing'}")
-    raise SystemExit(0 if (t1 and t3) else 1)
+    raise SystemExit(0 if (t1 and t2 and t3) else 1)
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ _compat.apply()
 from . import coop_crew_generated as crew  # noqa: F401
 from . import (push_env_cfg, terrain_env_cfg, arms_env_cfg, collision_env_cfg,
                coop_lift_env_cfg, coop_depth_env_cfg, coop_hard_env_cfg,
-               depth_env_cfg, rgb_env_cfg, scan_env_cfg)
+               depth_env_cfg, rgb_env_cfg, scan_env_cfg, task_v2_env_cfg)
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.biped import agents
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.humanoid import agents as arm_agents
 
@@ -277,3 +277,25 @@ gym.register(
         "rsl_rl_cfg_entry_point": _PPO_CFG,
     },
 )
+
+
+# ---------------------------------------------------------------- v2 tasks
+# Three tasks with a terminal success state, each in blind / depth / rgb.
+# All nine are v60-only: the sighted arms need an RTX renderer that 5.1
+# segfaults in, and the blind arm runs on the same stack or it is not a
+# control for them.
+for _task, _variants in (
+    ("CubeToShelf", task_v2_env_cfg.CUBE_VARIANTS),
+    ("BallToNet", task_v2_env_cfg.BALL_VARIANTS),
+    ("PlankToWall", task_v2_env_cfg.PLANK_VARIANTS),
+):
+    for _vis, _cls in _variants.items():
+        gym.register(
+            id=f"TaskV2-BHL-{_task}-{_vis.capitalize()}-v0",
+            entry_point="isaaclab.envs:ManagerBasedRLEnv",
+            disable_env_checker=True,
+            kwargs={
+                "env_cfg_entry_point": _cls,
+                "rsl_rl_cfg_entry_point": coop_lift_env_cfg.CoopLiftPPORunnerCfg,
+            },
+        )
