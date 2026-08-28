@@ -54,6 +54,17 @@ arm to 2048 and re-run the single-agent controls at 2048 too — do not mix).
 |---|---|---|
 | — | — | not started |
 
+### Base-height probe — is the floor-lift a training hack? · `running`
+The MuJoCo replay drops both cube arms ~41 cm in 0.2 s, before contact. PhysX
+`base_contact` sits at -0.003, so the torso is not down in training — but a
+robot folded onto its shins never puts its torso down either, so that cannot
+separate a squat from a collapse. `base_height` is now a weight-0.0 reward term
+so the curve is recorded without entering the objective.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21076488` | running — 1,500 iters, spawn is ~0.55 m; does the curve sink and stay down? |
+
 ### Terrain PPO, seed 2 · `running`
 Third seed of all four cells, because n=2 is below this project's own bar.
 
@@ -144,6 +155,7 @@ came from.
 | `21066823`, `21066824`, `21066825`, `21066826` | occlusion replicates |
 | `21066607`, `21066637`, `21067084` | POV clips |
 | `21067057` | ladder clip |
+| `21076488` | base-height probe |
 | `21066624`, `21066817` | docs + charts refresh |
 
 Jobs named `orchard*`, `lh-*` and `interactive` are not from this workstream.

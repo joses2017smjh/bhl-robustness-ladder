@@ -86,6 +86,37 @@ def still_alive(env: "ManagerBasedRLEnv") -> torch.Tensor:
     return (~env.termination_manager.terminated).float()
 
 
+def base_height_mean(
+    env: "ManagerBasedRLEnv",
+    robot_a: SceneEntityCfg = SceneEntityCfg("robot_a"),
+    robot_b: SceneEntityCfg = SceneEntityCfg("robot_b"),
+) -> torch.Tensor:
+    """Mean base height of the pair, in metres. Diagnostic, not an objective.
+
+    Nothing in this task has ever constrained how low the robots get. Both fall
+    tests read orientation -- `either_fallen` on a tilt limit, and
+    `flat_orientation_l2` on projected gravity -- so a machine that sinks onto
+    its shins with a level torso is scored as upright and paid `still_alive`
+    for it. Getting low is also worth a lot: it puts the hands at the height of
+    a 28 cm cube, which is three reach terms and the 15.0-weight lift bonus.
+    The gradient points down and nothing pushes back.
+
+    In the MuJoCo replay both cube arms drop ~41 cm within 0.2 s, before they
+    touch the payload, and hold that pose for the rest of the episode. Whether
+    training does the same is unknown, because base height has never been
+    recorded -- `base_contact` sits near zero, but a robot folded onto its
+    shins never puts its torso down either, so that cannot separate a squat
+    from a collapse.
+
+    Registered at weight 0.0 so it is logged as `Episode_Reward/base_height`
+    without entering the objective. Measuring the thing first, and deciding
+    whether to penalise it second, keeps every published number comparable.
+    """
+    a = env.scene[robot_a.name].data.root_pos_w[:, 2]
+    b = env.scene[robot_b.name].data.root_pos_w[:, 2]
+    return 0.5 * (a + b)
+
+
 def object_lift_progress(
     env: "ManagerBasedRLEnv",
     object_cfg: SceneEntityCfg = SceneEntityCfg("object"),

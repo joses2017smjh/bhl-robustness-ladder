@@ -290,6 +290,45 @@ produces the only arm that reliably stays upright. Ordering the reward — pinch
 first, height second — then gets a pinch, a clamp, a lift bonus and the highest
 reward of any arm, with height still pinned at 4 cm.
 
+### The lift is performed from the floor
+
+Watching the clips rather than the scalars raises a question the tables never
+could: the robots appear to go down *first* and grab the cube afterwards. They
+do.
+
+| cube arm, MuJoCo | half of its descent | first pinch | first 1 cm of lift |
+|---|---|---|---|
+| staged | **t = 0.20 s** | t = 0.28 s | t = 0.52 s |
+| pinch-only | **t = 0.24 s** | t = 3.76 s | t = 0.60 s |
+
+Both drop ~41 cm within a fifth of a second, before any contact with the
+payload. The staged arm then holds one pose for the remaining 11 seconds — sink
+40.5 cm, pinch 0.076 m, lift 4.4 cm, all flat to three digits. The "best rollout
+in the project" is a controlled collapse into a static brace that happens to
+hold the cube 4 cm off the ground.
+
+**Nothing in the task charges for it.** Both fall tests read *orientation* only —
+`either_fallen` on a 0.78 rad limit and `flat_orientation_l2` on projected
+gravity — and there is **no base-height term anywhere in the rewards or the
+terminations**. Meanwhile getting low is worth a great deal: it puts the hands at
+the height of a 28 cm cube, which is `reaching_coarse` (1.0), `reaching_fine`
+(1.0) and `opposing_clamp` (1.5), and it unlocks `lift_progress` (2.0) and
+`lifting_object` (**15.0**, the largest weight in the task). The gradient points
+down and there is no counter-gradient. That is a reward specification that
+*permits* the behaviour by construction.
+
+**Whether training exploited it is not yet established, and the PhysX side
+argues against the strong version.** `base_contact_a/b` — which fires when the
+torso geom touches the ground — sits at **-0.003** across training, and
+`still_alive` at 0.98. In Isaac the torso is not on the floor. So the 41 cm
+collapse is either a sim2sim failure that MuJoCo exposes and PhysX does not, or
+a deep squat that MuJoCo exaggerates. Base contact cannot separate those,
+because a robot folded onto its shins never touches its torso down either.
+
+The test that would settle it is base height logged during training, which this
+project does not currently record — the term does not exist, which is the same
+reason the behaviour is unpenalised. It is being added.
+
 ### Giving them eyes made it worse
 
 The obvious next move is to put a camera on the lift. A ray-cast depth camera
@@ -395,8 +434,9 @@ upright, and it lifts 5 cm. Cooperative lifting on this robot is not done.
   the pinch gate 98% of the time, and the fall criterion never triggered across
   the full 12 s</b> — four seconds longer than the horizon it was trained on.
   "Never fell" is doing exact work there: the test is training's own
-  torso-orientation termination, and over those 12 s the base also settles about
-  14 cm, which is a deep crouch and not a fall, but is not standing either. Left is the same
+  torso-orientation termination, and the pair drops <b>41 cm in the first
+  0.2 s</b> — before touching the cube — then holds one static pose for the
+  remaining 11 s. See <a href="#the-lift-is-performed-from-the-floor">below</a>. Left is the same
   weights on a ball they have never seen, which reaches higher on its best seed
   and falls on eleven of twelve, and is why the table above reads medians. The
   strip on the right of each frame is that robot's own head camera, three views
