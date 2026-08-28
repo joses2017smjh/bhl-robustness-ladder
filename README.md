@@ -522,11 +522,13 @@ variant were queued precisely to test it, and all three are flat:
 | blind, seed 2 | 0.0000 | 0.00 | 0.0400 |
 | depth, seed 0 | 0.0000 | 0.00 | 0.0400 |
 
-Seed 1 is already past iteration 14,000 — well beyond the ~11,500 where seed 0
-took off — and has not moved. This project has been here before and wrote the
-rule down in §1: the single-seed "pinch 0.40 against 0.08" did not survive three
-seeds either. **One of three is a lead, not a result**, and it is reported here
-as one.
+All four have now run their full 16,000 iterations, so this is a finished
+comparison rather than a partial one. Seeds 1 and 2 never leave the floor, and
+never fire the latch, over the whole run — including well past the ~11,500 mark
+where seed 0 took off. This project has been here before and wrote the rule down
+in §1: the single-seed "pinch 0.40 against 0.08" did not survive three seeds
+either. **One of three is a lead, not a result**, and it is reported here as
+one.
 
 The control for that is unusually clean, because the arm was accidentally run
 twice. The first run predates the `apply_depth_flags` fix, which was injecting
