@@ -31,6 +31,21 @@ import torch  # noqa: E402
 
 import bhl_robust.tasks  # noqa: F401,E402  registers the ids
 
+def _clear_sim() -> None:
+    """Drop the SimulationContext between tasks.
+
+    Isaac Lab allows one context per process. Without this, the first task to
+    fail leaves its context standing and every later task reports "Simulation
+    context already exists" -- so a run that tested one task would look like a
+    run that tested nine, with eight identical and meaningless errors.
+    """
+    try:
+        from isaaclab.sim import SimulationContext
+        SimulationContext.clear_instance()
+    except Exception:                                            # noqa: BLE001
+        pass
+
+
 TASKS = [f"TaskV2-BHL-{t}-{v}-v0"
          for t in ("CubeToShelf", "BallToNet", "PlankToWall")
          for v in ("Blind", "Depth", "Rgb")]
@@ -58,6 +73,16 @@ def main() -> None:
         except Exception as e:                                   # noqa: BLE001
             bad += 1
             rows.append((tid, -1, False, f"{type(e).__name__}: {e}"[:88]))
+            if bad == 1:
+                # Full traceback for the first failure only. Nine identical
+                # truncated one-liners say nothing that one traceback does not,
+                # and the truncation hid the actual call site last time.
+                import traceback
+                print(f"\n--- first failure, {tid} ---")
+                traceback.print_exc()
+                print("--- end ---\n")
+        finally:
+            _clear_sim()
 
     print(f"\n{'task':38} {'obs':>5} {'success term':>13}  note")
     for tid, w, s, note in rows:

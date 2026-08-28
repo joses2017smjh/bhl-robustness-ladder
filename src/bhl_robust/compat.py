@@ -72,4 +72,53 @@ def apply() -> list[str]:
         SimulationCfg.physx = property(_get_physx, _set_physx)
         applied.append("SimulationCfg.physx -> .physics (PhysxCfg)")
 
+    # 3.x made asset data warp-first: `robot.data.root_quat_w` returns a
+    # `ProxyArray` rather than a `torch.Tensor`. ProxyArray is a deprecation
+    # bridge -- it forwards indexing, arithmetic and most torch functions, and
+    # carries a zero-copy `.torch` view -- so almost everything keeps working.
+    # What does not is `isaaclab.utils.math`, whose helpers are torch.jit
+    # scripted and reject anything that is not literally a Tensor. The result is
+    # that Isaac Lab's own math functions fail on Isaac Lab's own data:
+    #
+    #   quat_inv() Expected a value of type 'Tensor' for argument 'q'
+    #   but instead found type 'ProxyArray'.
+    #
+    # Coercing at each call site would mean touching every MDP term that ever
+    # reads an asset, in this repo and upstream. Wrapping the math module once
+    # fixes all of them, costs nothing on 2.x (no ProxyArray exists, so the
+    # unwrap is an identity check), and is zero-copy on 3.x.
+    try:
+        from isaaclab.utils.warp.proxy_array import ProxyArray
+    except Exception:                                            # pragma: no cover
+        ProxyArray = None
+
+    if ProxyArray is not None:
+        import functools
+        import isaaclab.utils.math as _math
+
+        def _unwrap(v):
+            return v.torch if isinstance(v, ProxyArray) else v
+
+        def _wrap(fn):
+            @functools.wraps(fn)
+            def inner(*a, **kw):
+                return fn(*[_unwrap(x) for x in a],
+                          **{k: _unwrap(v) for k, v in kw.items()})
+            return inner
+
+        n = 0
+        for name in dir(_math):
+            fn = getattr(_math, name, None)
+            if name.startswith("_") or not callable(fn):
+                continue
+            # Only the scripted ones are strict about the type, and only they
+            # need paying for. Wrapping plain Python helpers too would add a
+            # layer to every math call in the hot loop for nothing.
+            if type(fn).__name__ != "ScriptFunction":
+                continue
+            setattr(_math, name, _wrap(fn))
+            n += 1
+        if n:
+            applied.append(f"isaaclab.utils.math: unwrap ProxyArray on {n} scripted fns")
+
     return applied

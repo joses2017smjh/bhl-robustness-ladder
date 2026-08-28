@@ -20,6 +20,8 @@ import torch
 from isaaclab.assets import RigidObject
 from isaaclab.managers import SceneEntityCfg
 
+from bhl_robust.tasks.coop_lift_mdp import _t
+
 if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedRLEnv
 
@@ -33,7 +35,7 @@ def _obj_local(env: "ManagerBasedRLEnv", name: str = "object") -> torch.Tensor:
     silently, since env 0 is exactly the one a debug print shows.
     """
     obj: RigidObject = env.scene[name]
-    return obj.data.root_pos_w[:, :3] - env.scene.env_origins
+    return _t(obj.data.root_pos_w)[:, :3] - env.scene.env_origins
 
 
 def _held(env: "ManagerBasedRLEnv", key: str, now: torch.Tensor,
@@ -72,7 +74,7 @@ def cube_in_slot(
         & (p[:, 1].abs() < half)
         & (p[:, 2] > deck_z) & (p[:, 2] < deck_z + slot)
     )
-    still = obj.data.root_lin_vel_w.norm(dim=-1) < speed
+    still = _t(obj.data.root_lin_vel_w).norm(dim=-1) < speed
     return _held(env, "_bhl_slot_hold", inside & still, hold_steps)
 
 
@@ -119,7 +121,7 @@ def ball_toward_net(
     airborne = (p[:, 2] > 0.45).float()
     to_net = torch.stack([net_x - p[:, 0], -p[:, 1]], dim=-1)
     to_net = to_net / to_net.norm(dim=-1, keepdim=True).clamp_min(1e-6)
-    closing = (obj.data.root_lin_vel_w[:, :2] * to_net).sum(dim=-1)
+    closing = (_t(obj.data.root_lin_vel_w)[:, :2] * to_net).sum(dim=-1)
     return airborne * torch.tanh(closing.clamp_min(0.0) / std)
 
 
@@ -142,7 +144,7 @@ def plank_leaned(
     """
     obj: RigidObject = env.scene["object"]
     p = _obj_local(env, "object")
-    q = obj.data.root_quat_w
+    q = _t(obj.data.root_quat_w)
     # Long axis of the plank (its local x) in world coordinates.
     w, x, y, z = q[:, 0], q[:, 1], q[:, 2], q[:, 3]
     ax = torch.stack([1 - 2 * (y * y + z * z), 2 * (x * y + w * z),

@@ -41,14 +41,17 @@ if TYPE_CHECKING:
 
 def _hand_midpoint(env: "ManagerBasedRLEnv", robot_cfg: SceneEntityCfg) -> torch.Tensor:
     robot: Articulation = env.scene[robot_cfg.name]
-    return robot.data.body_pos_w[:, robot_cfg.body_ids, :].mean(dim=1)
+    return _t(robot.data.body_pos_w)[:, robot_cfg.body_ids, :].mean(dim=1)
 
 
 def _contact_points(env: "ManagerBasedRLEnv", object_cfg: SceneEntityCfg) -> tuple[torch.Tensor, torch.Tensor]:
     obj: RigidObject = env.scene[object_cfg.name]
-    axis = torch.tensor(env.cfg.contact_axis, device=obj.device, dtype=obj.data.root_pos_w.dtype)
+    # `.dtype` on 3.x asset data is the *warp* dtype (a ctypes array type),
+    # which torch.tensor rejects. Take it from the torch view instead.
+    _root = _t(obj.data.root_pos_w)
+    axis = torch.tensor(env.cfg.contact_axis, device=obj.device, dtype=_root.dtype)
     offset = float(env.cfg.contact_offset)
-    centre = obj.data.root_pos_w[:, :3]
+    centre = _root[:, :3]
     return centre + offset * axis, centre - offset * axis
 
 
@@ -71,6 +74,23 @@ def constellation_reach(
     return 1.0 - torch.tanh(d / std)
 
 
+def _t(v):
+    """Coerce Isaac Lab 3.x's warp-first asset data to a torch tensor.
+
+    3.x returns `ProxyArray` from `asset.data.*`. It forwards indexing and most
+    torch operations, so almost everything keeps working -- but its `.shape` is
+    the *warp* shape, and for a vec3f array that is `(num_envs,)`, not
+    `(num_envs, 3)`. The observation manager reads `.shape` to size each term,
+    strips the env dimension, and gets `()`, then refuses to concatenate a
+    scalar with the rest of the group.
+
+    So a term can be numerically correct and still fail to register. `.torch` is
+    a cached zero-copy view, and a no-op on 2.x where the data is already a
+    tensor, so this costs nothing on either stack.
+    """
+    return v.torch if hasattr(v, "torch") else v
+
+
 def _pinch_weight(env: "ManagerBasedRLEnv", std: float = 0.12) -> torch.Tensor:
     """Soft pinch in [0, 1]. 1 if the reach term has not run yet this step."""
     d = getattr(env, "_bhl_pinch_d", None)
@@ -88,9 +108,10 @@ def still_alive(env: "ManagerBasedRLEnv") -> torch.Tensor:
 
 def base_height_mean(
     env: "ManagerBasedRLEnv",
+    env_ids: Sequence[int],
     robot_a: SceneEntityCfg = SceneEntityCfg("robot_a"),
     robot_b: SceneEntityCfg = SceneEntityCfg("robot_b"),
-) -> torch.Tensor:
+) -> float:
     """Mean base height of the pair, in metres. Diagnostic, not an objective.
 
     Nothing in this task has ever constrained how low the robots get. Both fall
@@ -108,15 +129,23 @@ def base_height_mean(
     shins never puts its torso down either, so that cannot separate a squat
     from a collapse.
 
+    `env_ids` carries no default on purpose. The manager decides what to inject
+    by introspection: a second positional without a default is the env-id slice
+    it passes in, while one *with* a default becomes a parameter it expects the
+    config to supply -- and then refuses the term for not supplying it.
+
     Registered as a *curriculum* term, not a reward term. The reward manager
     logs `weight x value`, so the obvious trick -- a reward at weight 0.0, to
     observe without optimising -- logs 0.0000 forever. It did, for 1,300
     iterations, before that was noticed. Curriculum terms log their return value
     directly and touch no gradient, which is the behaviour that was wanted.
     """
-    a = env.scene[robot_a.name].data.root_pos_w[:, 2]
-    b = env.scene[robot_b.name].data.root_pos_w[:, 2]
-    return 0.5 * (a + b)
+    a = _t(env.scene[robot_a.name].data.root_pos_w)[:, 2]
+    b = _t(env.scene[robot_b.name].data.root_pos_w)[:, 2]
+    # A scalar, because the curriculum manager logs one number per term rather
+    # than a per-env vector -- the same shape `stage_lift` and `lift_height`
+    # return.
+    return float((0.5 * (a + b)).mean())
 
 
 def object_lift_progress(
@@ -188,7 +217,7 @@ def object_lin_vel_w(
     object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
 ) -> torch.Tensor:
     obj: RigidObject = env.scene[object_cfg.name]
-    return obj.data.root_lin_vel_w
+    return _t(obj.data.root_lin_vel_w)
 
 
 def object_ang_vel_w(
@@ -196,7 +225,7 @@ def object_ang_vel_w(
     object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
 ) -> torch.Tensor:
     obj: RigidObject = env.scene[object_cfg.name]
-    return obj.data.root_ang_vel_w
+    return _t(obj.data.root_ang_vel_w)
 
 
 def joint_target_error(
@@ -211,7 +240,8 @@ def joint_target_error(
     not from a binary contact flag that will not exist on hardware.
     """
     robot: Articulation = env.scene[asset_cfg.name]
-    return robot.data.joint_pos[:, asset_cfg.joint_ids] - robot.data.joint_pos_target[:, asset_cfg.joint_ids]
+    return (_t(robot.data.joint_pos)[:, asset_cfg.joint_ids]
+            - _t(robot.data.joint_pos_target)[:, asset_cfg.joint_ids])
 
 
 def opposing_clamp(
@@ -226,7 +256,7 @@ def opposing_clamp(
     Gated on pinch so a far-away opposite pose does not pay.
     """
     obj: RigidObject = env.scene[object_cfg.name]
-    centre = obj.data.root_pos_w[:, :3]
+    centre = _root[:, :3]
     va = centre - _hand_midpoint(env, robot_a_cfg)
     vb = centre - _hand_midpoint(env, robot_b_cfg)
     va = torch.nn.functional.normalize(va, dim=-1, eps=1e-6)
@@ -367,7 +397,7 @@ def crew_contact_points(env: "ManagerBasedRLEnv", object_cfg: SceneEntityCfg,
     no matching problem appears in the reward.
     """
     obj: RigidObject = env.scene[object_cfg.name]
-    centre = obj.data.root_pos_w[:, :3]
+    centre = _root[:, :3]
     offset = float(env.cfg.contact_offset)
     ang = torch.arange(n, device=centre.device, dtype=centre.dtype) * (2.0 * math.pi / n)
     # Bearing 0 is +x. The pair case sits at +/- 90 degrees, i.e. on +/- y, which
@@ -409,7 +439,7 @@ def crew_force_closure(
     them. Gated on pinch, so standing in a tidy circle far away pays nothing.
     """
     obj: RigidObject = env.scene[object_cfg.name]
-    centre = obj.data.root_pos_w[:, :3]
+    centre = _root[:, :3]
     v = torch.stack(
         [torch.nn.functional.normalize(centre - _hand_midpoint(env, c), dim=-1, eps=1e-6)
          for c in robot_cfgs],
@@ -431,7 +461,7 @@ def crew_spread(
     lift is what stops three robots carrying while the fourth trails.
     """
     obj: RigidObject = env.scene[object_cfg.name]
-    centre = obj.data.root_pos_w[:, :3]
+    centre = _root[:, :3]
     d = torch.stack(
         [torch.norm(centre - _hand_midpoint(env, c), dim=-1) for c in robot_cfgs], dim=-1
     )
