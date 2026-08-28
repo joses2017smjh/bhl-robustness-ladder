@@ -1,5 +1,10 @@
 """Measured reach geometry, and the one constant every redesigned task uses.
 
+Lives at package top level, not under `tasks/`, on purpose: `tasks/__init__.py`
+registers gym ids and pulls in isaaclab, which aborts unless Isaac Sim's
+SimulationApp was instantiated first. These are plain floats and the bench
+scripts that check them must not have to boot a simulator to read a number.
+
 The original three lift tasks put the payload on the floor -- cube centre at
 0.14 m, plank at 0.04 m. That is inside the reach of a robot that has already
 fallen over, and since nothing in the reward or the terminations refers to base

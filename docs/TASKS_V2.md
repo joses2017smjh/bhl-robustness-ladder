@@ -74,33 +74,60 @@ geometric rather than a matter of load.
 
 ---
 
-## Vision: three conditions per task
+## Vision: three conditions per task, all nine on one stack
 
-Every task runs blind, with depth, and with RGB. Nine cells.
+Every task runs blind, with depth, and with RGB. Nine cells, **all of them on
+`BHL_STACK=v60`.**
 
-| condition | sensor | stack |
-|---|---|---|
-| blind | privileged object pose | v51 |
-| depth | `RayCasterCamera`, 64×64 → 8×8 pooled | v51 |
-| **RGB** | `TiledCameraCfg`, RTX | **v60** |
+| condition | sensor |
+|---|---|
+| blind | privileged object pose |
+| depth | `TiledCameraCfg`, `distance_to_image_plane`, RTX |
+| RGB | `TiledCameraCfg`, `rgb`, RTX |
 
-RGB has never been run in this project — 5.1's RTX renderer segfaults on this
-cluster, which is why depth came from Warp ray-casting. 6.0 renders (measured:
-rgb std 24.4 across 1,902 unique colours), so the RGB arm runs on `BHL_STACK=v60`
-and its numbers do **not** go in a table with the v51 numbers. Isaac Sim changed
-major version underneath; that is a separate stack producing separate results.
+Rendering is solved and it is Isaac Sim doing it. The 6.0 probe is unambiguous —
+rgb 256×256, mean 222.2, **std 24.4 across 1,902 unique colours**, with depth
+correct to the unit in the same frame. Isaac Sim 5.1's RTX renderer segfaults on
+this cluster inside `omni.usd.create_hydra_engine`; 6.0 does not.
+
+What had never run was RGB *training*, and not for a rendering reason. Job
+`21036909` died after four minutes on both arms with `ModuleNotFoundError: No
+module named 'rsl_rl'` — the v60 venv was built with Isaac Sim and Isaac Lab and
+no RL library. Those two failures were filed against RGB; they were a missing
+package. `rsl-rl-lib==3.0.1` is installed there now and imports.
+
+**Running all nine cells on v60 is what makes the vision comparison mean
+anything.** An earlier plan put blind and depth on v51 and only RGB on v60,
+which would have made the headline comparison — does colour beat depth beat
+nothing — a comparison across two Isaac Sim major versions. Same stack for all
+three arms, and the question is about the sensor instead of the simulator. The
+v51 numbers stay where they are, as the record of the old tasks; nothing needs
+quarantining because nothing is mixed.
 
 ## Gates, before any of it trains
 
 The lesson from G-B2 is that a gate without a control measures its own budget.
 Each task gets a *kinematic* gate first, which needs no training at all:
 
-* **G-T1** — can a scripted standing robot place its hands on the payload at
-  `GRASP_Z` without its base dropping below 0.35 m? If not, the height is wrong
-  and every arm trained on it would measure the height.
-* **G-T2** — is the success volume actually enterable? Drive the payload there
-  kinematically and confirm the terminal condition fires.
-* **G-T3** — is the collapsed posture genuinely excluded? Replay a current
-  cube policy into the new scene; it should reach nothing.
+* **G-T1** — can a standing robot reach `GRASP_Z` with a squat rather than a
+  collapse? **PASS**: 96 of 625 swept postures put both hands within 3 cm of
+  0.30 m, the best of them descending **15.5 cm** from standing. That is knee
+  flexion, and it is well short of the 41 cm the current policies drop.
+* **G-T3** — is the collapsed posture excluded? **PASS**: of the postures
+  reachable from a base 41 cm down, **zero** get to 0.30 m.
+* **G-T2** — is the success volume enterable? Not yet run; needs the scene
+  furniture the three tasks add.
+
+Two of the three passing means the height is right before anything trains on
+it. Both took seconds, because they are forward kinematics and not policies.
+
+The gate was wrong twice before it was right, in ways worth recording. It first
+bent the knees with the root pinned in place, which lifts the feet off the floor
+instead of squatting, and so reported 0.30 m unreachable with a closest approach
+of 0.407 m — the arms-only figure, which is what you get when the legs are not
+really moving. It also compared the base body origin against an absolute
+threshold, in a frame whose origin sits 0.137 m *below* the feet, so no posture
+could ever have passed. Feet are re-planted per posture now, and the criterion
+is descent from standing.
 
 No tier trains until its gate passes.
