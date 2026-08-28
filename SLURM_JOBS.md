@@ -60,6 +60,24 @@ arm to 2048 and re-run the single-agent controls at 2048 too — do not mix).
 |---|---|---|
 | — | — | not started |
 
+### Compat shim regression check · `done`
+The physx shim fired on v51 and broke every v51 task. Guard now tests the
+annotation, not `hasattr`.
+
+| # | id | outcome |
+|---|---|---|
+| 2 | `21077722` (v51) | inconclusive — Isaac Sim died during boot on kit DB lock contention with the running terrain arrays. Guard verified from source instead: `physx:` is annotated on 2.3.2, so the shim is skipped there. |
+| 1 | `21077723` (v60) | done — 4 shims applied, 36 task ids registered |
+
+### B4 — G-B4 gate · `todo`
+Design settled (see `docs/TASKS_V2.md`): four limb agents, MAPPO, with 2-agent
+and IPPO ablations. Gate must confirm the four action slices reassemble into
+exactly the 22-DoF vector the single-agent controller applies.
+
+| # | id | outcome |
+|---|---|---|
+| — | — | not started |
+
 ### Base-height probe — is the floor-lift a training hack? · `running`
 The MuJoCo replay drops both cube arms ~41 cm in 0.2 s, before contact. PhysX
 `base_contact` sits at -0.003, so the torso is not down in training — but a
@@ -73,10 +91,17 @@ so the curve is recorded without entering the objective.
 | 2 | `21076968` | FAILED — `base_height expects optional parameters ['robot_a','robot_b'] but received []` |
 | 1 | `21076488` | cancelled — logged 0.0000 for 1,300 iterations. The reward manager logs `weight x value`, so a weight-0.0 term reports zero by construction. |
 
-### Redesigned tasks (v2) — nine cells · `todo` (built, not trained)
+### Redesigned tasks (v2) — nine cells · `running`
 Three tasks with terminal success states, each blind/depth/rgb, all on v60.
-Gates G-T1/G-T2/G-T3 pass and the nine-cell smoke passes. **No training queued
-yet** — that is the next step.
+Gates G-T1/G-T2/G-T3 pass, the nine-cell smoke passes, training is queued at
+seed 0. `NUM_ENVS=1024` for every cell and it must stay identical across them —
+if RGB OOMs, drop all nine to 512 rather than mixing.
+
+**Training**
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21077757` | running — 9-element array, seed 0, 8,000 iters. Seeds 1–2 follow once these produce a curve; 27 jobs launched at once would all fail the same way. |
 
 **Kinematic gates**
 
@@ -193,6 +218,8 @@ came from.
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |
 | `21076944`–`21077235` | v2 nine-cell smoke |
+| `21077757` | v2 nine-cell training |
+| `21077722`, `21077723` | compat shim regression check |
 | `21076389` | MARL stack probe |
 | `21076607`, `21076614` | reach-envelope measurement |
 | `21076453`, `21076460`, `21077131`, `21077145` | posture / collapse diagnostics |

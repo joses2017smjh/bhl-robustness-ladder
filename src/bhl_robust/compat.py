@@ -56,8 +56,23 @@ def apply() -> list[str]:
     except Exception:                                            # pragma: no cover
         SimulationCfg = None
 
-    if SimulationCfg is not None and not hasattr(SimulationCfg, "physx"):
-        from isaaclab_physx.physics.physx_manager_cfg import PhysxCfg
+    # Two guards, and both are load-bearing.
+    #
+    # `hasattr(SimulationCfg, "physx")` is False on 2.3.2 as well as on 3.x --
+    # `@configclass` gives the field a `default_factory`, so it never becomes a
+    # class attribute. Checking `hasattr` therefore fired the shim on the v51
+    # stack, which then tried to import a 3.x-only module and took down every
+    # v51 task with `ModuleNotFoundError: No module named 'isaaclab_physx'`.
+    # The annotation is the honest test of whether the field exists.
+    #
+    # And the import is guarded regardless, so a stack without isaaclab_physx
+    # is left alone instead of raising during `import bhl_robust.tasks`.
+    _has_field = "physx" in getattr(SimulationCfg, "__annotations__", {})
+    if SimulationCfg is not None and not _has_field:
+        try:
+            from isaaclab_physx.physics.physx_manager_cfg import PhysxCfg
+        except ModuleNotFoundError:
+            PhysxCfg = None
 
         def _get_physx(self):
             cur = getattr(self, "physics", None)
@@ -69,8 +84,9 @@ def apply() -> list[str]:
         def _set_physx(self, value):
             self.physics = value
 
-        SimulationCfg.physx = property(_get_physx, _set_physx)
-        applied.append("SimulationCfg.physx -> .physics (PhysxCfg)")
+        if PhysxCfg is not None:
+            SimulationCfg.physx = property(_get_physx, _set_physx)
+            applied.append("SimulationCfg.physx -> .physics (PhysxCfg)")
 
     # 3.x made asset data warp-first: `robot.data.root_quat_w` returns a
     # `ProxyArray` rather than a `torch.Tensor`. ProxyArray is a deprecation
