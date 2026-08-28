@@ -43,7 +43,11 @@ TERRAINS=(slippery stairs)
 VIS=(depth blind)
 T=${TERRAINS[$(( (IDX / 4) % 2 ))]}
 V=${VIS[$(( (IDX / 2) % 2 ))]}
-S=$(( IDX % 2 ))
+# SEED_OFFSET lets a third seed reuse the same index->arm mapping instead of
+# renumbering it: --array=0,2,4,6 --export=ALL,SEED_OFFSET=2 is one seed of
+# each of the four cells. Changing the arithmetic instead would silently
+# repoint every index in this file, including the ones already published.
+S=$(( IDX % 2 + ${SEED_OFFSET:-0} ))
 
 case "$T-$V" in
   slippery-depth) export TASK=Velocity-BHL-Biped-Slippery-Depth-v0 ;;

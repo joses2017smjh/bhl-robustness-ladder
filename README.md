@@ -33,7 +33,7 @@ A policy that only works where it trained has learned PhysX, not locomotion.
 | **2** | **0.2 m/s of shove-rejection is free** — and the "0.87 m/s ceiling" was an artifact of a safety cap. Uncapped, the curriculum oscillates 0 → 1.8 m/s and never converges. |
 | **3** | **Randomization alone buys most of terrain robustness.** A blind policy that never saw rough ground holds to d≈0.4. Arms push that to d≈0.6. |
 | **4** | **The terrain plateau is torque, not sensing.** An exact height map of the ground underfoot moves the curriculum **not at all**. Looking *ahead* does. |
-| **5** | **Depth never needed the RTX renderer.** Ray-cast depth costs **1.6%** of throughput at 4,096 envs and lifts terrain level **11%**. |
+| **5** | **Depth never needed the RTX renderer, and what it buys is retention.** It costs **1.6%** of throughput at 4,096 envs. On low friction, blind and sighted reach the same peak level and only the sighted one stays there — 0.66 against 0.23. |
 | **6** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD and MJCF agree; swapping collision primitives for convex meshes moves neither reward nor transfer. |
 | **7** | **The only cube arm that ever lifted is a single seed, and it has not replicated.** Occlusion reached 13 cm where nine other interventions sat on the 4 cm floor — but two further seeds and the depth variant are all flat. |
 | **8** | **Arms buy recoverable perturbation, not a higher step.** No 12-DoF policy crosses the lab floor; two of four 22-DoF policies do. |
@@ -167,6 +167,46 @@ Validated against the closed-form depth image of a flat plane before anything
 trained on it: **100% finite pixels, 2.9% mean relative error**. Warp returns
 all-NaN rather than an error when the mesh paths are wrong, so the check is not
 optional.
+
+### What depth actually buys: it holds the level, it does not raise it
+
+Two terrains, blind against depth, two seeds each, 6,000 iterations. Levels are
+the mean over the last 5% of training, not the last logged line — on one of
+these arms those two numbers differ by a factor of four, and the difference is
+the entire result.
+
+| terrain | | peak level | **final level** |
+|---|---|---|---|
+| low friction | blind | 0.68 / 0.67 | **0.29 / 0.17** |
+| low friction | **depth** | 0.67 / 0.72 | **0.61 / 0.70** |
+| 5 cm stairs | blind | 2.25 / 2.39 | 2.20 / 2.31 |
+| 5 cm stairs | **depth** | 2.70 / 2.65 | 2.68 / 2.52 |
+
+**Finding — on low friction, blind and sighted policies reach the same ceiling
+and only one of them stays there.** Both peak at ~0.68. The blind pair then
+regresses to 0.23; the depth pair holds 0.66. A final-value comparison reads as
+"depth is 2.9× better" and a peak comparison reads as "depth changes nothing";
+both are wrong, and the curve is the finding. Depth does not raise the ceiling
+here, it stops the fall-back from it.
+
+**And it inverts the prediction this repo wrote down.** `BipedSlipperyDepthEnvCfg`
+exists to test "depth pays on geometry, not material", on the reasoning that a
+camera cannot see friction. Depth's large effect is on friction, which it cannot
+see. Its effect on pure geometry — the stairs — is **+16%**, real and consistent
+across seeds but far smaller. The likely mechanism is that seeing the ground
+ahead buys foot placement that does not need friction margin, which is a
+geometric answer to a material problem; that is a hypothesis, not a result.
+
+Two seeds per cell, not three. The separation is wide and the seeds agree
+(no overlap between blind and depth on either terrain), but §1 of this project
+is a single-seed result that died on its third seed, so: **suggestive, and
+seeded to n=2.**
+
+Worth stating plainly, because it nearly did not get measured: the stairs rung
+runs at a **5 cm riser** only because the gate that rejected 5 cm was re-checked
+against a control. Both blind and sighted arms clear level 2.2 on it — this is
+easily the most learnable terrain in the project — and at the 3 cm the bad gate
+argued for, the rung would have measured a ramp.
 
 **Why there is no RGB anywhere in this repo.** Not a preference. Colour needs
 the RTX renderer, and a Warp mesh query has no colour to return — depth was the
