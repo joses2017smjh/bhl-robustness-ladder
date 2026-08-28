@@ -20,7 +20,10 @@ blind arm runs there too, or it would not be comparable to them.
 from __future__ import annotations
 
 import isaaclab.sim as sim_utils
+import torch.nn.functional as F
+from isaaclab.managers import ObservationTermCfg as ObsTerm
 from isaaclab.managers import RewardTermCfg as RewTerm
+from isaaclab.managers import SceneEntityCfg
 from isaaclab.managers import TerminationTermCfg as DoneTerm
 from isaaclab.sensors import TiledCameraCfg
 from isaaclab.utils import configclass
@@ -52,6 +55,32 @@ def _cam(prim: str, data_type: str) -> TiledCameraCfg:
     )
 
 
+CAM_POOL = 4          # 32x32 -> 8x8, the width section 6's depth arm used
+
+
+def cam_depth_obs(env, sensor_cfg: SceneEntityCfg, pool: int = CAM_POOL,
+                  clip: float = CAM_RANGE):
+    """One robot's rendered depth, pooled and scaled to roughly [0, 1]."""
+    d = env.scene[sensor_cfg.name].data.output["distance_to_image_plane"]
+    if d.ndim == 3:
+        d = d.unsqueeze(-1)
+    d = d.permute(0, 3, 1, 2).nan_to_num(nan=clip, posinf=clip)
+    return (F.avg_pool2d(d, pool).flatten(1) / clip).clamp(0.0, 1.0)
+
+
+def cam_rgb_obs(env, sensor_cfg: SceneEntityCfg, pool: int = CAM_POOL):
+    """One robot's colour view, pooled per channel and scaled to [0, 1].
+
+    Pooled to the same 8x8 grid as the depth arm and kept in three channels, so
+    colour carries 3x the numbers depth does at the same spatial resolution.
+    That asymmetry is the experiment: if RGB wins, the question is whether it
+    won on colour or merely on width.
+    """
+    c = env.scene[sensor_cfg.name].data.output["rgb"].float()
+    c = c.permute(0, 3, 1, 2)[:, :3]
+    return (F.avg_pool2d(c, pool).flatten(1) / 255.0).clamp(0.0, 1.0)
+
+
 @configclass
 class _TaskV2Base(CoopLiftEnvCfg):
     """Shared: payload on a plinth, success terminates, longer episode."""
@@ -66,11 +95,24 @@ class _TaskV2Base(CoopLiftEnvCfg):
         self.object_spawn_z = GRASP_Z
 
     def _add_cameras(self):
+        """Mount the cameras AND wire them into the observation.
+
+        Both halves matter. The first cut added the sensors and no observation
+        terms, so all three variants reported an identical 194-wide observation
+        -- the sighted arms carried cameras nothing ever read, and would have
+        trained as three copies of the blind arm while looking like a vision
+        experiment. The smoke test's obs column is what caught it.
+        """
         if self.vision == "blind":
             return
-        dt = "distance_to_image_plane" if self.vision == "depth" else "rgb"
+        depth = self.vision == "depth"
+        dt = "distance_to_image_plane" if depth else "rgb"
         self.scene.cam_a = _cam("robot_a", dt)
         self.scene.cam_b = _cam("robot_b", dt)
+        fn = cam_depth_obs if depth else cam_rgb_obs
+        for side in ("a", "b"):
+            setattr(self.observations.policy, f"cam_{side}",
+                    ObsTerm(func=fn, params={"sensor_cfg": SceneEntityCfg(f"cam_{side}")}))
 
 
 @configclass
