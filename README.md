@@ -41,7 +41,9 @@ A policy that only works where it trained has learned PhysX, not locomotion.
 | **10** | **A gate with no control measures its own budget.** G-B2 rejected a 5 cm stair riser twice on a 300-iteration probe. The walkable-terrain control is *also* pinned at 0.0000 there. Re-run to 2,000 with 5 cm restored, the same probe **passes** at level 0.107. |
 
 Every claim below links into the [full technical report](docs/REPORT.md), which
-carries the protocols, the caveats, and the corrections.
+carries the protocols, the caveats, and the corrections. What is currently
+running, what is still outstanding, and which Slurm id produced which number is
+tracked in [the job ledger](SLURM_JOBS.md).
 
 ---
 
