@@ -106,12 +106,7 @@ def still_alive(env: "ManagerBasedRLEnv") -> torch.Tensor:
     return (~env.termination_manager.terminated).float()
 
 
-def base_height_mean(
-    env: "ManagerBasedRLEnv",
-    env_ids: Sequence[int],
-    robot_a: SceneEntityCfg = SceneEntityCfg("robot_a"),
-    robot_b: SceneEntityCfg = SceneEntityCfg("robot_b"),
-) -> float:
+def base_height_mean(env: "ManagerBasedRLEnv", env_ids: Sequence[int]) -> float:
     """Mean base height of the pair, in metres. Diagnostic, not an objective.
 
     Nothing in this task has ever constrained how low the robots get. Both fall
@@ -129,10 +124,15 @@ def base_height_mean(
     shins never puts its torso down either, so that cannot separate a squat
     from a collapse.
 
-    `env_ids` carries no default on purpose. The manager decides what to inject
-    by introspection: a second positional without a default is the env-id slice
-    it passes in, while one *with* a default becomes a parameter it expects the
-    config to supply -- and then refuses the term for not supplying it.
+    The signature is exactly `(env, env_ids)` and takes no `SceneEntityCfg`
+    parameters, because the manager resolves those by introspection and then
+    demands the config declare them -- a `SceneEntityCfg` default is not treated
+    as a default at all. The robot names are fixed by the task, so looking them
+    up directly is both simpler and one less thing to keep in sync.
+
+    `env_ids` carries no default on purpose either: a second positional without
+    one is the env-id slice the manager injects, while one *with* a default
+    becomes another parameter it expects the config to supply.
 
     Registered as a *curriculum* term, not a reward term. The reward manager
     logs `weight x value`, so the obvious trick -- a reward at weight 0.0, to
@@ -140,8 +140,8 @@ def base_height_mean(
     iterations, before that was noticed. Curriculum terms log their return value
     directly and touch no gradient, which is the behaviour that was wanted.
     """
-    a = _t(env.scene[robot_a.name].data.root_pos_w)[:, 2]
-    b = _t(env.scene[robot_b.name].data.root_pos_w)[:, 2]
+    a = _t(env.scene["robot_a"].data.root_pos_w)[:, 2]
+    b = _t(env.scene["robot_b"].data.root_pos_w)[:, 2]
     # A scalar, because the curriculum manager logs one number per term rather
     # than a per-env vector -- the same shape `stage_lift` and `lift_height`
     # return.
@@ -256,7 +256,7 @@ def opposing_clamp(
     Gated on pinch so a far-away opposite pose does not pay.
     """
     obj: RigidObject = env.scene[object_cfg.name]
-    centre = _root[:, :3]
+    centre = _t(obj.data.root_pos_w)[:, :3]
     va = centre - _hand_midpoint(env, robot_a_cfg)
     vb = centre - _hand_midpoint(env, robot_b_cfg)
     va = torch.nn.functional.normalize(va, dim=-1, eps=1e-6)
@@ -397,7 +397,7 @@ def crew_contact_points(env: "ManagerBasedRLEnv", object_cfg: SceneEntityCfg,
     no matching problem appears in the reward.
     """
     obj: RigidObject = env.scene[object_cfg.name]
-    centre = _root[:, :3]
+    centre = _t(obj.data.root_pos_w)[:, :3]
     offset = float(env.cfg.contact_offset)
     ang = torch.arange(n, device=centre.device, dtype=centre.dtype) * (2.0 * math.pi / n)
     # Bearing 0 is +x. The pair case sits at +/- 90 degrees, i.e. on +/- y, which
@@ -439,7 +439,7 @@ def crew_force_closure(
     them. Gated on pinch, so standing in a tidy circle far away pays nothing.
     """
     obj: RigidObject = env.scene[object_cfg.name]
-    centre = _root[:, :3]
+    centre = _t(obj.data.root_pos_w)[:, :3]
     v = torch.stack(
         [torch.nn.functional.normalize(centre - _hand_midpoint(env, c), dim=-1, eps=1e-6)
          for c in robot_cfgs],
@@ -461,7 +461,7 @@ def crew_spread(
     lift is what stops three robots carrying while the fourth trails.
     """
     obj: RigidObject = env.scene[object_cfg.name]
-    centre = _root[:, :3]
+    centre = _t(obj.data.root_pos_w)[:, :3]
     d = torch.stack(
         [torch.norm(centre - _hand_midpoint(env, c), dim=-1) for c in robot_cfgs], dim=-1
     )

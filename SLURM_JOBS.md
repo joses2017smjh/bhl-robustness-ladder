@@ -7,6 +7,10 @@ more than once — one line on why the previous attempt did not count.
 attempt happens, drop the oldest row. The point is not a full audit trail; it is
 that no task silently disappears and no ID is unattributable.
 
+This file is updated **at submission**, as part of queuing a job, not afterwards
+and not on request. A ledger that is only current when someone thinks to ask for
+it does not do the job this one exists for.
+
 Status: `todo` · `running` · `done` · `blocked`
 
 Diagnostics that ran once, proved a point and were deleted are in
@@ -26,6 +30,8 @@ Lab's stock boilerplate, not this work.
 
 Stack verified present (`21076389`): `direct_marl_env.py` ships in isaaclab
 2.3.2, `isaaclab_rl/skrl.py` handles MARL, skrl 1.4.3 has IPPO and MAPPO.
+`21076792` installed `rsl-rl-lib==3.0.1` on the v60 venv, which had Isaac Sim
+and Isaac Lab and no RL library — the reason RGB training had never run.
 Open decisions: how the 22 DoF partition into limbs, and IPPO vs MAPPO.
 Constraint from the work order: `joint_deviation_arms` must be ablated in any
 22-DoF limb-agent run.
@@ -63,17 +69,36 @@ so the curve is recorded without entering the objective.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21076968` | running — `base_height` moved to a curriculum term |
+| 3 | `21077648` | running — `SceneEntityCfg` params dropped; the manager resolves those by introspection and then demands the config declare them |
+| 2 | `21076968` | FAILED — `base_height expects optional parameters ['robot_a','robot_b'] but received []` |
 | 1 | `21076488` | cancelled — logged 0.0000 for 1,300 iterations. The reward manager logs `weight x value`, so a weight-0.0 term reports zero by construction. |
 
-### Redesigned tasks (v2) — nine cells · `running`
+### Redesigned tasks (v2) — nine cells · `todo` (built, not trained)
 Three tasks with terminal success states, each blind/depth/rgb, all on v60.
-Gates G-T1, G-T2, G-T3 all pass.
+Gates G-T1/G-T2/G-T3 pass and the nine-cell smoke passes. **No training queued
+yet** — that is the next step.
+
+**Kinematic gates**
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21076944` | queued — smoke test: do all nine construct, reset and step? |
-| 1 | `21076799`, `21076816`, `21076834`, `21076923` | gate iterations — the first two failed on gate bugs (knees bent with the root pinned; base origin compared against an absolute height), the last two pass 3/3 |
+| 3 | `21076923` | **3/3 PASS** — G-T1 15.5 cm squat, G-T2 all targets reachable, G-T3 collapse excluded |
+| 2 | `21076834` | passed G-T1/G-T3; G-T2 did not exist yet |
+| 1 | `21076816` | FAIL — the gate bent the knees with the root pinned, which lifts the feet instead of squatting, and compared the base body origin against an absolute height in a frame whose origin sits 0.137 m below the feet |
+
+**Nine-cell smoke**
+
+| # | id | outcome |
+|---|---|---|
+| 3 | `21077235` | **9/9** — obs 194 blind / 322 depth / 578 rgb |
+| 2 | `21077210` | 9/9 "ok" but obs 194 on every one: cameras mounted, no observation term read them, so the sighted arms were copies of the blind one |
+| 1 | `21077181` | `NameError: _root` — an unbounded string replace hit five call sites in four other functions |
+
+Earlier smoke attempts, each cleared one Isaac Lab 3.x breakage and exposed the
+next: `21076944` `SimulationCfg.physx`, `21077015`/`21077044` warp `ProxyArray`
+vs `torch.jit`, `21077084` ProxyArray `.shape` sizing observation terms as `()`,
+`21077115` `.dtype` as a ctypes type, `21077139`/`21077158` curriculum `env_ids`
+signature.
 
 ### Terrain PPO, seed 2 · `running`
 Third seed of all four cells, because n=2 is below this project's own bar.
@@ -88,8 +113,8 @@ Does the one cube arm that ever lifted reproduce? So far: no.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21066826_6` | running — blind seed 2, flat at 0.0400 through 11,426 iters |
-| 2 | `21066825_6` | running — blind seed 1, flat at 0.0400 past 14,000 iters |
+| 3 | `21066826_6` | running — blind seed 2, flat at 0.0400 |
+| 2 | `21066825_6` | **done** — blind seed 1, flat at 0.0400 for all 16,000 iters. Does not replicate seed 0. |
 | 1 | `21066823_7` | done — depth-under-occlusion, first genuine run; flat |
 
 Superseded: `21066824` cancelled — `SEED` was hardcoded in the sbatch so
@@ -165,9 +190,12 @@ came from.
 | `21066823`, `21066824`, `21066825`, `21066826` | occlusion replicates |
 | `21066607`, `21066637`, `21067084` | POV clips |
 | `21067057` | ladder clip |
-| `21076488`, `21076968` | base-height probe |
+| `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |
-| `21076944` | v2 nine-cell smoke |
+| `21076944`–`21077235` | v2 nine-cell smoke |
+| `21076389` | MARL stack probe |
+| `21076607`, `21076614` | reach-envelope measurement |
+| `21076453`, `21076460`, `21077131`, `21077145` | posture / collapse diagnostics |
 | `21076792` | rsl-rl install on the v60 stack |
 | `21066624`, `21066817` | docs + charts refresh |
 
