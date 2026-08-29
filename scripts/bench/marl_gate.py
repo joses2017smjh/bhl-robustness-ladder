@@ -99,12 +99,18 @@ def online_checks() -> bool:
     kinds = [args_cli.partition] if args_cli.partition else list(PARTITIONS)
     for kind in kinds:
         try:
+            say = lambda m: print(f"    [{kind}] {m}", flush=True)
+            say("building cfg")
             cfg = gym.spec(args_cli.task).kwargs["env_cfg_entry_point"]()
             cfg.scene.num_envs = args_cli.num_envs
             ablated = ablate_arm_deviation(cfg)
+            say("gym.make")
             base = gym.make(args_cli.task, cfg=cfg, disable_env_checker=True)
+            say("wrapping")
             env = LimbMarlEnv(base, partition=kind)
+            say("reset")
             obs, _ = env.reset()
+            say("stepping")
 
             widths_ok = True
             for _ in range(args_cli.steps):
@@ -114,6 +120,7 @@ def online_checks() -> bool:
                 if tuple(joined.shape) != (env.num_envs, N_JOINTS):
                     widths_ok = False
                 obs, rew, term, trunc, _ = env.step(acts)
+            say("stepped ok")
 
             agents_ok = set(obs) == set(env.possible_agents)
             print(f"  {kind:8} agents={len(env.possible_agents)} "
@@ -123,18 +130,11 @@ def online_checks() -> bool:
             # would otherwise train with the penalty on and be reported as
             # having it off.
             ok &= widths_ok and agents_ok and bool(ablated)
-            env.close()
         except Exception as e:                                   # noqa: BLE001
             import traceback
             print(f"  {kind:8} FAIL {type(e).__name__}: {e}")
             traceback.print_exc()
             ok = False
-        finally:
-            try:
-                from isaaclab.sim import SimulationContext
-                SimulationContext.clear_instance()
-            except Exception:                                    # noqa: BLE001
-                pass
     return ok
 
 

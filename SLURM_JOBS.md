@@ -68,7 +68,8 @@ and needs no GPU.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21082868` | running — one partition per process, and the ablation now looks for the names upstream actually uses |
+| 4 | `21083178` | running — stage tracing added; redundant SimulationContext teardown removed |
+| 3 | `21082868` | FAILED — died silently after "Completed setting up the environment", no traceback. Suspect the `clear_instance()` + `app.close()` teardown, which is redundant now that it is one partition per process. |
 | 2 | `21078987` | TIMEOUT — limb4 **passed** (4 agents, 5/5/6/6, obs 75), then hung an hour building limb2 in the same process. Also reported `arm_ablation=TERM NOT FOUND`. |
 | 1 | `21078958` | FAIL — pointed at `Biped-Bumpy`, which actuates 12 leg joints, not 22: `Invalid action shape, expected: 12, received: 22`. |
 
@@ -117,7 +118,8 @@ if RGB OOMs, drop all nine to 512 rather than mixing.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21082869` | running — resubmitted after the import-order fix |
+| 3 | `21083180` | running — after installing the rsl-rl version Isaac Lab 3.0 actually pins |
+| 2 | `21082869` | FAILED, all 9 — `PPO.__init__() got an unexpected keyword argument 'optimizer'`. I had installed rsl-rl 3.0.1 on v60 to match v51; isaaclab_rl 3.0.0b2 pins **5.0.1**. |
 | 1 | `21077757` | FAILED, all 9 in ~20 s — `scripts/train.py` imported `berkeley_humanoid_lite.tasks` *before* applying the compat shim, so `AdditiveUniformNoiseCfg` was still missing on v60. The smoke test never caught it because it imports only `bhl_robust.tasks`. |
 
 **Kinematic gates**
@@ -142,7 +144,7 @@ vs `torch.jit`, `21077084` ProxyArray `.shape` sizing observation terms as `()`,
 `21077115` `.dtype` as a ctypes type, `21077139`/`21077158` curriculum `env_ids`
 signature.
 
-### Terrain PPO, seed 2 · `done`
+### Terrain PPO, seed 2 · `done` — all 4 arms COMPLETED, result holds at n=3
 Third seed of all four cells, because n=2 is below this project's own bar.
 
 | # | id | outcome |

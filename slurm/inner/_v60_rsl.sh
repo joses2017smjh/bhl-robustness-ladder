@@ -1,21 +1,27 @@
 #!/bin/bash
-# The one package that has kept RGB training from ever running.
+# Isaac Lab 3.0.0b2 pins rsl-rl-lib==5.0.1, not the 3.0.1 the v51 stack runs.
 #
-# RTX rendering on 6.0 was solved and measured: rgb 256x256, mean 222.2,
-# std 24.4, 1,902 unique colours. What was never done is training *with* it --
-# job 21036909 died in four minutes on `ModuleNotFoundError: No module named
-# 'rsl_rl'`, because the v60 venv was built with Isaac Sim and Isaac Lab but no
-# RL library. Both arms failed the same way and it was read as an RGB problem.
+# I installed 3.0.1 to match v51, on the assumption that matching the other
+# stack was the conservative choice. It is not: isaaclab_rl's setup.py names
+# the version it was written against, and 3.0.1's PPO has no `optimizer`
+# keyword, so all nine v2 arms died on
+#   TypeError: PPO.__init__() got an unexpected keyword argument 'optimizer'
+#
+# Worth recording for the results: v51 trains on rsl-rl 3.0.1 and v60 on 5.0.1,
+# so a v60 number and a v51 number differ by RL library as well as by simulator.
+# The nine v2 cells are all on v60 and internally comparable; nothing from them
+# belongs in a table with a v51 figure.
 set -euo pipefail
 V="$UV_PROJECT_ENVIRONMENT"
 echo "target venv: $V"
-"$V/bin/python" -c "import sys; print('python', sys.version.split()[0])"
-uv pip install --python "$V/bin/python" "rsl-rl-lib==3.0.1"
+uv pip install --python "$V/bin/python" "rsl-rl-lib==5.0.1" "onnxscript>=0.5"
 echo "=== verify ==="
 "$V/bin/python" - <<'PY'
-import rsl_rl, importlib.metadata as md
+import importlib.metadata as md, inspect
+from rsl_rl.algorithms import PPO
 print("rsl_rl", md.version("rsl-rl-lib"))
-from rsl_rl.runners import OnPolicyRunner
-from rsl_rl.modules import ActorCritic, ActorCriticRecurrent
-print("runners and modules import OK")
+sig = inspect.signature(PPO.__init__)
+print("PPO accepts 'optimizer':", "optimizer" in sig.parameters)
+from rsl_rl.runners import OnPolicyRunner  # noqa: F401
+print("runner imports OK")
 PY
