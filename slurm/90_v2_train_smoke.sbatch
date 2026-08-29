@@ -7,7 +7,7 @@
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:1
 #SBATCH --time=01:00:00
-#SBATCH --array=0-2
+#SBATCH --array=0-3
 #SBATCH --output=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%A_%a.out
 #SBATCH --error=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%A_%a.out
 
@@ -30,10 +30,15 @@ export OV_CACHE=/scratch/$USER/ov-cache-${SLURM_JOB_ID}
 export CUDA_CACHE_PATH=/scratch/$USER/nv-computecache-${SLURM_JOB_ID}
 mkdir -p "$OV_CACHE" "$CUDA_CACHE_PATH" "$WORKSPACE/overrides"
 
+# Arm 3 is the one-robot ball control, smoked alongside the vision conditions
+# because it is a different action-manager shape and could break on its own.
 VIS=(Blind Depth Rgb)
-V=${VIS[$SLURM_ARRAY_TASK_ID]}
-export TASK="TaskV2-BHL-CubeToShelf-${V}-v0"
-export RUN_NAME="_smoke-v2-${V,,}"
+if [ "$SLURM_ARRAY_TASK_ID" -eq 3 ]; then
+    export TASK="TaskV2-BHL-BallToNetSolo-Blind-v0" RUN_NAME="_smoke-v2-solo"
+else
+    V=${VIS[$SLURM_ARRAY_TASK_ID]}
+    export TASK="TaskV2-BHL-CubeToShelf-${V}-v0" RUN_NAME="_smoke-v2-${V,,}"
+fi
 export SEED=0 MAX_ITER=3 NUM_ENVS=64
 export OVERRIDE_FILE="$WORKSPACE/overrides/v2-smoke-${SLURM_ARRAY_TASK_ID}.txt"
 : > "$OVERRIDE_FILE"

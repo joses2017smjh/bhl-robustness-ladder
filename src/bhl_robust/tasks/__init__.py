@@ -288,6 +288,9 @@ for _task, _variants in (
     ("CubeToShelf", task_v2_env_cfg.CUBE_VARIANTS),
     ("BallToNet", task_v2_env_cfg.BALL_VARIANTS),
     ("PlankToWall", task_v2_env_cfg.PLANK_VARIANTS),
+    # The solo control decides whether the paired ball number is a cooperation
+    # result or one robot doing the job with an audience.
+    ("BallToNetSolo", task_v2_env_cfg.BALL_SOLO_VARIANTS),
 ):
     for _vis, _cls in _variants.items():
         gym.register(

@@ -58,7 +58,7 @@ annotation, not `hasattr`.
 | 2 | `21077722` (v51) | inconclusive — Isaac Sim died during boot on kit DB lock contention with the running terrain arrays. Guard verified from source instead: `physx:` is annotated on 2.3.2, so the shim is skipped there. |
 | 1 | `21077723` (v60) | done — 4 shims applied, 36 task ids registered |
 
-### B4 — G-B4 gate · `running`
+### B4 — G-B4 gate · `done`
 Design settled (`docs/TASKS_V2.md`): four limb agents, MAPPO, with 2-agent and
 IPPO ablations. Code written: `limb_partition.py`, `tasks/limb_marl.py`,
 `scripts/train_marl.py`, `scripts/bench/marl_gate.py`.
@@ -68,13 +68,13 @@ and needs no GPU.
 
 | # | id | outcome |
 |---|---|---|
-| 5 | `21090555` | running — verdict printed before teardown, hard exit after |
+| 5 | `21090555` | **PASS, both partitions** — limb4 4 agents 5/5/6/6, limb2 2 agents 10/12, obs 75, and the ablation clears `joint_deviation_shoulder` + `joint_deviation_elbow` |
 | 4 | `21083178` | TIMEOUT — but limb4 reached `stepped ok`. `simulation_app.close()` sat between the checks and the verdict print and hung for 80 minutes, so a run that had its answer was recorded as a timeout. |
 | 3 | `21082868` | FAILED — died silently after "Completed setting up the environment", no traceback. Suspect the `clear_instance()` + `app.close()` teardown, which is redundant now that it is one partition per process. |
 | 2 | `21078987` | TIMEOUT — limb4 **passed** (4 agents, 5/5/6/6, obs 75), then hung an hour building limb2 in the same process. Also reported `arm_ablation=TERM NOT FOUND`. |
 | 1 | `21078958` | FAIL — pointed at `Biped-Bumpy`, which actuates 12 leg joints, not 22: `Invalid action shape, expected: 12, received: 22`. |
 
-### Tier 1 first block · `todo` (written, held on G-B4)
+### Tier 1 first block · `running`
 `slurm/89_marl_train.sbatch` is written and deliberately not submitted: limb4+
 MAPPO, limb4+IPPO, limb2+MAPPO, and a single-agent PPO control, one variable
 moving per row. `joint_deviation_arms` is ablated in every row including the
@@ -83,7 +83,7 @@ than assuming the ablation happened.
 
 | # | id | outcome |
 |---|---|---|
-| — | — | not submitted — G-B4 must pass first |
+| 1 | `21091041` | running — limb4+MAPPO, limb4+IPPO, limb2+MAPPO, PPO control. v51, so unaffected by the v60 segfault. |
 
 ### B3 — ice / patchy friction · `todo` (written, not wired)
 `terrains/ice.py` and `scripts/bench/ice_gate.py` written. G-B3 passes at the
@@ -125,7 +125,8 @@ if RGB OOMs, drop all nine to 512 rather than mixing.
 
 | # | id | outcome |
 |---|---|---|
-| 7 | `21090547` | running — `handle_deprecated_rsl_rl_cfg` wired into `train.py` |
+| 8 | `21091042` | running — retry, plus a 4th arm smoking the one-robot ball control |
+| 7 | `21090547` | FAILED — **segfault** in Isaac Sim ~3 s in, before the env is built, on two different nodes (cn-gpu5, cn-gpu7) while the env smoke passed on cn-gpu6. Not a Python fault and not one bad node. |
 | 6 | `21083804` | FAILED — same `stochastic` error. `RslRlMLPModelCfg` still carries deprecated `stochastic`/`init_noise_std` fields; isaaclab_rl ships `handle_deprecated_rsl_rl_cfg` to strip them and our vendored `train.py` never called it. |
 | 5 | `21083755` | FAILED — `MLPModel.__init__() got an unexpected keyword argument 'stochastic'`. The actor needs `distribution_cfg`; without it the runner asks for a stochastic model the config never declared. Caught by the new **training-path** smoke, in 33 seconds. |
 | 4 | `21083690` | done — env smoke 9/9, obs 194/322/578. Note: this builds envs and never runs `train.py`, so it passed through all three training failures. |

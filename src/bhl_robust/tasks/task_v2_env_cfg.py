@@ -324,3 +324,33 @@ def _variants(base, name):
 CUBE_VARIANTS = _variants(CubeToShelfCfg, "CubeToShelf")
 BALL_VARIANTS = _variants(BallToNetCfg, "BallToNet")
 PLANK_VARIANTS = _variants(PlankToWallCfg, "PlankToWall")
+
+
+@configclass
+class BallToNetSoloCfg(BallToNetCfg):
+    """The control the ball task needs: one robot, same net, same ball.
+
+    The ball is r = 0.18 m, so its two contact points sit 0.36 m apart -- inside
+    a single robot's 0.355 m hand span, measured. That means one robot can
+    plausibly bracket it alone, and if it can, the two-robot result is not a
+    cooperation result at all. Section 5 learned this the expensive way: the
+    cube lift looked cooperative until a three-robot rollout put one robot on a
+    crate by itself and it lifted just as well.
+
+    So the solo arm is not an ablation to run if there is time. It is the arm
+    that decides whether the paired number means anything, and it should be read
+    before the paired number is quoted anywhere.
+
+    Implementation keeps robot_b in the scene but removes it from the action
+    manager, so the physics, the observation width and the reward terms are
+    untouched and the only difference is that nobody is driving the second
+    robot. Deleting it instead would change the observation layout and make the
+    two arms incomparable -- which is the mistake that would quietly turn this
+    control into a different experiment.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.actions.joint_pos_b = None
+
+BALL_SOLO_VARIANTS = _variants(BallToNetSoloCfg, "BallToNetSolo")
