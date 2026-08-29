@@ -296,6 +296,6 @@ for _task, _variants in (
             disable_env_checker=True,
             kwargs={
                 "env_cfg_entry_point": _cls,
-                "rsl_rl_cfg_entry_point": coop_lift_env_cfg.CoopLiftPPORunnerCfg,
+                "rsl_rl_cfg_entry_point": task_v2_env_cfg._V2_RUNNER,
             },
         )

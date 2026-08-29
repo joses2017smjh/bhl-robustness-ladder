@@ -55,6 +55,68 @@ def _cam(prim: str, data_type: str) -> TiledCameraCfg:
     )
 
 
+# --------------------------------------------------------------- rsl-rl 5.x
+# Isaac Lab 3.0 pins rsl-rl-lib 5.0.1, whose runner config is a different shape
+# from the 3.0.1 schema every v51 task uses. 5.x reads `cfg["actor"]["class_name"]`
+# and `cfg["critic"]`, where 2.x had a single `policy` carrying
+# `actor_hidden_dims` and `critic_hidden_dims`. Reusing `CoopLiftPPORunnerCfg`
+# here fails with `KeyError: 'class_name'` before a single iteration runs.
+#
+# So the v2 tasks get their own runner config rather than the v51 one being
+# migrated: v51 still trains against rsl-rl 3.0.1 and every published number in
+# this repo came from it. Two schemas, two configs, neither pretending to be the
+# other.
+#
+# Network shape is held identical to the v51 baseline -- [256, 256, 128] with
+# ELU -- so the v2 results differ from the old coop ones by task and stack, not
+# by capacity.
+try:
+    from isaaclab_rl.rsl_rl import (
+        RslRlMLPModelCfg,
+        RslRlOnPolicyRunnerCfg,
+        RslRlPpoAlgorithmCfg,
+    )
+
+    _HIDDEN = [256, 256, 128]
+
+    @configclass
+    class TaskV2PPORunnerCfg(RslRlOnPolicyRunnerCfg):
+        """PPO for the redesigned tasks, in the rsl-rl 5.x schema."""
+
+        num_steps_per_env = 24
+        max_iterations = 8000
+        save_interval = 200
+        experiment_name = "task_v2"
+        empirical_normalization = False
+        # The env exposes "policy" and "critic"; map them onto the sets 5.x
+        # names. Without this the runner cannot tell which group feeds which
+        # network, and the asymmetric actor-critic silently becomes symmetric.
+        obs_groups = {"policy": ["policy"], "critic": ["critic"]}
+        actor = RslRlMLPModelCfg(hidden_dims=_HIDDEN, activation="elu")
+        critic = RslRlMLPModelCfg(hidden_dims=_HIDDEN, activation="elu")
+        algorithm = RslRlPpoAlgorithmCfg(
+            num_learning_epochs=5,
+            num_mini_batches=4,
+            learning_rate=1.0e-3,
+            schedule="adaptive",
+            gamma=0.99,
+            lam=0.95,
+            entropy_coef=0.005,
+            desired_kl=0.01,
+            max_grad_norm=1.0,
+            value_loss_coef=1.0,
+            use_clipped_value_loss=True,
+            clip_param=0.2,
+        )
+
+    _V2_RUNNER = TaskV2PPORunnerCfg
+except ImportError:                                              # v51 stack
+    # RslRlMLPModelCfg does not exist on isaaclab_rl 2.x. The v2 tasks are
+    # v60-only anyway, so on v51 they register with the old runner and simply
+    # are not meant to be trained.
+    from bhl_robust.tasks.coop_lift_env_cfg import CoopLiftPPORunnerCfg as _V2_RUNNER
+
+
 CAM_POOL = 4          # 32x32 -> 8x8, the width section 6's depth arm used
 
 
