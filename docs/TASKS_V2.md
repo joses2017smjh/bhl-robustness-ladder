@@ -169,3 +169,67 @@ owning each arm, it would be a per-agent penalty for doing the task.
 * Do the four action slices reassemble into exactly the 22-DoF vector the
   single-agent controller applies? If they do not, MAPPO is not being compared
   against PPO — it is being compared against a different robot.
+
+---
+
+# The handled tote: making the lift physically possible
+
+Three sections of this project have now measured a pair of robots forming a good
+pinch and never lifting. The redesign above fixes *where* the payload sits. This
+fixes *what it is*, and it comes from finally sizing the task against the
+actuators instead of against intuition.
+
+## What the arms can actually do
+
+Static holding torque at the limiting arm joint — shoulder roll, moment arm
+0.257 m in the pinch pose, 4 Nm limit:
+
+| | mass, hanging |
+|---|---|
+| one arm | 1.59 kg |
+| one robot, two arms | 3.17 kg |
+| **a pair, four arms** | **6.35 kg** |
+
+The cube is **0.5 kg**. It is twelve times inside budget and has never been
+lifted once. **Mass was never the constraint**, which means every intervention
+aimed at making the lift easier by making the object lighter or the reward
+larger was aimed at the wrong thing.
+
+## What the constraint actually is
+
+With no fingers, a side pinch holds by friction, and friction needs inward
+normal force. That force's reaction pushes each robot *outward*, away from its
+own base of support. The harder a policy grips, the more it destabilises itself.
+That is the trade every arm in §5 was losing, and it explains the one behaviour
+that kept appearing: a braced collapse onto the floor is a stable way to
+generate squeeze, because the floor absorbs the reaction the legs cannot.
+
+**A handle deletes the trade.** The load hangs off the limb, gravity does the
+retaining, and the torque budget goes to holding instead of to fighting the
+robot's own grip reaction.
+
+## The design
+
+| | value | why |
+|---|---|---|
+| mass | **4.0 kg** | 1.26× one robot's ceiling, 0.63× a pair's |
+| handle bar | r = 15 mm, 200 mm long | inside one robot's 355 mm hand span |
+| standoff | **75 mm** | clearance under the bar for a ~50 mm hand to hook |
+| body | 0.30 × 0.26 × 0.24 m | narrow in y so a robot's hands straddle it |
+| grasp height | 0.30 m | the measured squat band, unchanged |
+
+**Mass is what enforces cooperation now, and that is the part worth keeping.**
+One robot at 3.17 kg physically cannot lift 4 kg however good its policy; a pair
+has a 1.6× margin. Compare the ball, whose cooperation was supposed to be
+enforced by geometry and was not — a 0.36 m ball fits inside one robot's 0.355 m
+hand span, so nothing ever stopped a single robot solving it. A physical ceiling
+is a guarantee; a span argument was an assumption, and it was wrong.
+
+## If this also fails
+
+Then the conclusion is a hardware one and should be written as such: 4 Nm
+shoulders with no fingers cannot do non-prehensile cooperative manipulation, and
+the fix is a gripper or a stronger shoulder rather than more iterations. That is
+a legitimate result — it is the same shape as §4's "the plateau is torque, not
+sensing" — but it should be reached by having removed every solvable obstacle
+first, which is what this tote is for.
