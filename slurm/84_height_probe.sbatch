@@ -28,7 +28,7 @@ mkdir -p "$WORKSPACE/overrides"
 export OVERRIDE_FILE="$WORKSPACE/overrides/height-probe.txt"
 echo "env.stage_lift_on_pinch=true" > "$OVERRIDE_FILE"
 export TASK=CoopLift-BHL-Cube-v0 RUN_NAME=_probe-height SEED=0
-export MAX_ITER=1500 NUM_ENVS=1024
+export MAX_ITER=${MAX_ITER:-6000} NUM_ENVS=1024
 
 echo "=== node: $(hostname) | base-height probe | $(date) ==="
 bhl_exec "$REPO/slurm/inner/train.sh"

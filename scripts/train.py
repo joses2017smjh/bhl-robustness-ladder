@@ -81,6 +81,14 @@ from isaaclab_rl.rsl_rl import RslRlOnPolicyRunnerCfg, RslRlVecEnvWrapper
 from isaaclab_tasks.utils import get_checkpoint_path
 from isaaclab_tasks.utils.hydra import hydra_task_config
 
+# [overlay] Shim BEFORE upstream's configs are imported, not after.
+# `berkeley_humanoid_lite.tasks` imports `AdditiveUniformNoiseCfg` at module
+# scope, which Isaac Lab 3.x removed. Importing it first and applying the shim
+# afterwards -- which is what this file used to do -- fails on the v60 stack
+# before the shim has run. It killed all nine v2 arms in twenty seconds each.
+from bhl_robust import compat as _bhl_compat  # noqa: E402
+_bhl_compat.apply()
+
 # Import extensions to set up environment tasks
 import berkeley_humanoid_lite.tasks  # noqa: F401
 

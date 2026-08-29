@@ -130,18 +130,33 @@ class LimbMarlEnv:
         return self.env.close()
 
 
-def ablate_arm_deviation(cfg) -> bool:
-    """Turn off `joint_deviation_arms`, as the work order requires.
+#: The arm-deviation penalty, under the names upstream actually uses.
+#:
+#: The work order calls it `joint_deviation_arms` and so does this repo's own
+#: `arms_env_cfg` docstring, but no such term exists: upstream splits it into
+#: `joint_deviation_shoulder` and `joint_deviation_elbow`. G-B4 reported
+#: "TERM NOT FOUND" against the wrong name and would have trained every Tier 1
+#: row with the penalty still on -- an ablation that silently does nothing is
+#: worse than one that fails, because the table would have carried a column
+#: claiming it happened.
+ARM_DEVIATION_TERMS = ("joint_deviation_shoulder", "joint_deviation_elbow",
+                       "joint_deviation_arms", "joint_deviation_arm")
 
-    It penalises the arms for leaving their default pose. With one agent owning
+
+def ablate_arm_deviation(cfg) -> list[str]:
+    """Turn off the arm-deviation penalties. Returns the names actually cleared.
+
+    They penalise the arms for leaving their default pose. With one agent owning
     each arm that is a per-agent penalty for moving at all, and section 5 already
-    found it fighting a squat-and-pinch. Returns whether a term was found, so a
-    caller can fail loudly rather than assume the ablation happened -- a silently
-    absent term would leave the penalty in place under a name nobody checked.
+    found this family of term fighting a squat-and-pinch. Returning the names
+    lets a caller fail loudly rather than assume the ablation happened.
     """
     rewards = getattr(cfg, "rewards", None)
-    for name in ("joint_deviation_arms", "joint_deviation_arm"):
-        if rewards is not None and getattr(rewards, name, None) is not None:
+    if rewards is None:
+        return []
+    cleared = []
+    for name in ARM_DEVIATION_TERMS:
+        if getattr(rewards, name, None) is not None:
             setattr(rewards, name, None)
-            return True
-    return False
+            cleared.append(name)
+    return cleared

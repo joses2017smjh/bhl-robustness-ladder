@@ -68,8 +68,9 @@ and needs no GPU.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21078987` | running — repointed at `Velocity-BHL-Arms-Bumpy-v0` |
-| 1 | `21078958` | FAIL — pointed at `Biped-Bumpy`, which actuates 12 leg joints, not 22: `Invalid action shape, expected: 12, received: 22`. The 22-DoF robot is the `Arms-*` task family. |
+| 3 | `21082868` | running — one partition per process, and the ablation now looks for the names upstream actually uses |
+| 2 | `21078987` | TIMEOUT — limb4 **passed** (4 agents, 5/5/6/6, obs 75), then hung an hour building limb2 in the same process. Also reported `arm_ablation=TERM NOT FOUND`. |
+| 1 | `21078958` | FAIL — pointed at `Biped-Bumpy`, which actuates 12 leg joints, not 22: `Invalid action shape, expected: 12, received: 22`. |
 
 ### Tier 1 first block · `todo` (written, held on G-B4)
 `slurm/89_marl_train.sbatch` is written and deliberately not submitted: limb4+
@@ -100,7 +101,9 @@ so the curve is recorded without entering the objective.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21077648` | running — `SceneEntityCfg` params dropped; the manager resolves those by introspection and then demands the config declare them |
+| 5 | `21082873` | running — extended to 6,000 iterations; 1,500 showed the trend but not the endpoint |
+| 4 | `21078881` | **done** — base height climbs to -0.105 by iteration ~350 then descends monotonically to -0.167 by 1,500, and is still falling |
+| 3 | `21077648` | FAILED — the physx shim fired on v51 and broke the import |
 | 2 | `21076968` | FAILED — `base_height expects optional parameters ['robot_a','robot_b'] but received []` |
 | 1 | `21076488` | cancelled — logged 0.0000 for 1,300 iterations. The reward manager logs `weight x value`, so a weight-0.0 term reports zero by construction. |
 
@@ -114,7 +117,8 @@ if RGB OOMs, drop all nine to 512 rather than mixing.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21077757` | running — 9-element array, seed 0, 8,000 iters. Seeds 1–2 follow once these produce a curve; 27 jobs launched at once would all fail the same way. |
+| 2 | `21082869` | running — resubmitted after the import-order fix |
+| 1 | `21077757` | FAILED, all 9 in ~20 s — `scripts/train.py` imported `berkeley_humanoid_lite.tasks` *before* applying the compat shim, so `AdditiveUniformNoiseCfg` was still missing on v60. The smoke test never caught it because it imports only `bhl_robust.tasks`. |
 
 **Kinematic gates**
 
@@ -138,12 +142,12 @@ vs `torch.jit`, `21077084` ProxyArray `.shape` sizing observation terms as `()`,
 `21077115` `.dtype` as a ctypes type, `21077139`/`21077158` curriculum `env_ids`
 signature.
 
-### Terrain PPO, seed 2 · `running`
+### Terrain PPO, seed 2 · `done`
 Third seed of all four cells, because n=2 is below this project's own bar.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21076264` | running — `_0 _2 _4` up, `_6` pending on `MaxGRESRunMinsPerUser` |
+| 2 | `21076264` | **done** (`_0` still finishing) — third seed does not overturn the result: depth 2.5x on friction, 1.10x on stairs, no blind/depth overlap in either cell |
 | 1 | `21076260` | cancelled — `--array=8-11` re-ran seeds 0 and 1, because the array maths is `S = IDX % 2`. Added `SEED_OFFSET`. |
 
 ### Occlusion replicates · `running`

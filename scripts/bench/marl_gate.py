@@ -27,6 +27,13 @@ parser.add_argument("--num_envs", type=int, default=8)
 parser.add_argument("--steps", type=int, default=4)
 parser.add_argument("--offline", action="store_true",
                     help="run only the simulator-free checks")
+parser.add_argument("--partition", type=str, default=None,
+                    choices=("limb4", "limb2"),
+                    help="check ONE partition. Isaac Sim does not survive "
+                         "tearing a scene down and building another in the same "
+                         "process -- the first version of this gate checked "
+                         "limb4, then hung for an hour on limb2 and was killed "
+                         "by the wall clock. One partition per process.")
 
 _known, _ = parser.parse_known_args()
 if not _known.offline:
@@ -89,7 +96,8 @@ def online_checks() -> bool:
 
     ok = True
     print(f"\nG-B4c  wrapped env on {args_cli.task}")
-    for kind in PARTITIONS:
+    kinds = [args_cli.partition] if args_cli.partition else list(PARTITIONS)
+    for kind in kinds:
         try:
             cfg = gym.spec(args_cli.task).kwargs["env_cfg_entry_point"]()
             cfg.scene.num_envs = args_cli.num_envs
@@ -110,8 +118,11 @@ def online_checks() -> bool:
             agents_ok = set(obs) == set(env.possible_agents)
             print(f"  {kind:8} agents={len(env.possible_agents)} "
                   f"act={env.num_actions} obs={env.num_observations[env.possible_agents[0]]} "
-                  f"state={env.num_states} arm_ablation={'yes' if ablated else 'TERM NOT FOUND'}")
-            ok &= widths_ok and agents_ok
+                  f"state={env.num_states} arm_ablation={ablated or 'NONE FOUND'}")
+            # An ablation that finds nothing is a failure, not a note. The row
+            # would otherwise train with the penalty on and be reported as
+            # having it off.
+            ok &= widths_ok and agents_ok and bool(ablated)
             env.close()
         except Exception as e:                                   # noqa: BLE001
             import traceback
