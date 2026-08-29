@@ -33,7 +33,7 @@ A policy that only works where it trained has learned PhysX, not locomotion.
 | **2** | **0.2 m/s of shove-rejection is free** — and the "0.87 m/s ceiling" was an artifact of a safety cap. Uncapped, the curriculum oscillates 0 → 1.8 m/s and never converges. |
 | **3** | **Randomization alone buys most of terrain robustness.** A blind policy that never saw rough ground holds to d≈0.4. Arms push that to d≈0.6. |
 | **4** | **The terrain plateau is torque, not sensing.** An exact height map of the ground underfoot moves the curriculum **not at all**. Looking *ahead* does. |
-| **5** | **Depth never needed the RTX renderer, and what it buys is retention.** It costs **1.6%** of throughput at 4,096 envs. On low friction, blind and sighted reach the same peak level and only the sighted one stays there — 0.66 against 0.23. |
+| **5** | **Depth never needed the RTX renderer, and what it buys is retention.** It costs **1.6%** of throughput at 4,096 envs. On low friction all six runs peak at ~0.68 and only the sighted three stay there — **0.65 against 0.26**, three seeds, no overlap. |
 | **6** | **The sim2sim gap is physics, not bookkeeping.** URDF, USD and MJCF agree; swapping collision primitives for convex meshes moves neither reward nor transfer. |
 | **7** | **The only cube arm that ever lifted is a single seed, and it has not replicated.** Occlusion reached 13 cm where nine other interventions sat on the 4 cm floor — but two further seeds and the depth variant are all flat. |
 | **8** | **Arms buy recoverable perturbation, not a higher step.** No 12-DoF policy crosses the lab floor; two of four 22-DoF policies do. |
@@ -177,32 +177,34 @@ the mean over the last 5% of training, not the last logged line — on one of
 these arms those two numbers differ by a factor of four, and the difference is
 the entire result.
 
-| terrain | | peak level | **final level** |
-|---|---|---|---|
-| low friction | blind | 0.68 / 0.67 | **0.29 / 0.17** |
-| low friction | **depth** | 0.67 / 0.72 | **0.61 / 0.70** |
-| 5 cm stairs | blind | 2.25 / 2.39 | 2.20 / 2.31 |
-| 5 cm stairs | **depth** | 2.70 / 2.65 | 2.68 / 2.52 |
+| terrain | | peak level | **final level** | mean |
+|---|---|---|---|---|
+| low friction | blind | 0.68 / 0.67 / 0.68 | **0.29 / 0.17 / 0.32** | 0.261 |
+| low friction | **depth** | 0.67 / 0.72 / 0.67 | **0.61 / 0.70 / 0.64** | **0.652** |
+| 5 cm stairs | blind | 2.25 / 2.39 / 2.36 | 2.20 / 2.31 / 2.32 | 2.276 |
+| 5 cm stairs | **depth** | 2.70 / 2.65 / 2.59 | 2.68 / 2.52 / 2.33 | **2.511** |
 
 **Finding — on low friction, blind and sighted policies reach the same ceiling
-and only one of them stays there.** Both peak at ~0.68. The blind pair then
-regresses to 0.23; the depth pair holds 0.66. A final-value comparison reads as
-"depth is 2.9× better" and a peak comparison reads as "depth changes nothing";
-both are wrong, and the curve is the finding. Depth does not raise the ceiling
-here, it stops the fall-back from it.
+and only one of them stays there.** All six runs peak between 0.67 and 0.68. The
+blind three then regress to a mean of 0.26; the depth three hold 0.65. A
+final-value comparison reads as "depth is 2.5× better" and a peak comparison
+reads as "depth changes nothing"; both are wrong, and the curve is the finding.
+Depth does not raise the ceiling here, it stops the fall-back from it.
 
 **And it inverts the prediction this repo wrote down.** `BipedSlipperyDepthEnvCfg`
 exists to test "depth pays on geometry, not material", on the reasoning that a
 camera cannot see friction. Depth's large effect is on friction, which it cannot
-see. Its effect on pure geometry — the stairs — is **+16%**, real and consistent
+see. Its effect on pure geometry — the stairs — is **+10%**, real and consistent
 across seeds but far smaller. The likely mechanism is that seeing the ground
 ahead buys foot placement that does not need friction margin, which is a
 geometric answer to a material problem; that is a hypothesis, not a result.
 
-Two seeds per cell, not three. The separation is wide and the seeds agree
-(no overlap between blind and depth on either terrain), but §1 of this project
-is a single-seed result that died on its third seed, so: **suggestive, and
-seeded to n=2.**
+**Three seeds per cell, and the third did not overturn it** — which is the test
+§1 of this project failed. Blind and depth do not overlap on final level in any
+cell: slippery 0.17–0.32 against 0.61–0.70, stairs 2.20–2.32 against 2.33–2.68.
+The stairs effect shrank from 1.16× at two seeds to **1.10×** at three, so the
+geometry win is real but smaller than the first pass suggested; the friction
+win held at **2.5×**.
 
 Worth stating plainly, because it nearly did not get measured: the stairs rung
 runs at a **5 cm riser** only because the gate that rejected 5 cm was re-checked
