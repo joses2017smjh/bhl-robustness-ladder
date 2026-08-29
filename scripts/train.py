@@ -226,6 +226,27 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     # wrap around environment for rsl-rl
     env = RslRlVecEnvWrapper(env)
 
+    # [overlay] Migrate the agent config to whatever rsl-rl is installed.
+    #
+    # isaaclab_rl ships `handle_deprecated_rsl_rl_cfg` for exactly this and
+    # Isaac Lab's own scripts call it; this file predates it, because on the
+    # v51 stack (rsl-rl 3.0.1) there was nothing to migrate. On v60 (5.0.1) the
+    # model configs still carry deprecated `stochastic` and `init_noise_std`
+    # fields, and passing them through lands on
+    #   MLPModel.__init__() got an unexpected keyword argument 'stochastic'
+    # before a single iteration runs. The helper strips or migrates them.
+    #
+    # Guarded, so the v51 stack -- where the helper does not exist -- is
+    # untouched and every published number stays reproducible.
+    try:
+        from importlib.metadata import version as _pkg_version
+
+        from isaaclab_rl.rsl_rl import handle_deprecated_rsl_rl_cfg
+
+        agent_cfg = handle_deprecated_rsl_rl_cfg(agent_cfg, _pkg_version("rsl-rl-lib"))
+    except ImportError:
+        pass
+
     # create runner from rsl-rl
     runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=log_dir, device=agent_cfg.device)
     # write git state to logs

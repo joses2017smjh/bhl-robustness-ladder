@@ -20,6 +20,7 @@ partition instead of the algorithm.
 from __future__ import annotations
 
 import argparse
+import os
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--task", type=str, default="Velocity-BHL-Arms-Bumpy-v0")
@@ -130,6 +131,10 @@ def online_checks() -> bool:
             # would otherwise train with the penalty on and be reported as
             # having it off.
             ok &= widths_ok and agents_ok and bool(ablated)
+            try:
+                env.close()
+            except Exception:                                    # noqa: BLE001
+                pass
         except Exception as e:                                   # noqa: BLE001
             import traceback
             print(f"  {kind:8} FAIL {type(e).__name__}: {e}")
@@ -142,9 +147,22 @@ def main() -> None:
     ok = offline_checks()
     if not args_cli.offline:
         ok &= online_checks()
-        simulation_app.close()
-    print(f"\nG-B4 {'PASS' if ok else 'FAIL'}")
-    raise SystemExit(0 if ok else 1)
+
+    # Verdict FIRST, then teardown. The previous run reached "stepped ok" and
+    # then produced nothing for eighty more minutes until the wall clock killed
+    # it: `simulation_app.close()` hung, and because it sat between the checks
+    # and the print, a passing run was recorded as a timeout. A gate that
+    # computes an answer and loses it to teardown is worse than one that fails.
+    print(f"\nG-B4 {'PASS' if ok else 'FAIL'}", flush=True)
+
+    if not args_cli.offline:
+        try:
+            simulation_app.close()
+        except Exception:                                        # noqa: BLE001
+            pass
+    # Hard exit rather than a clean return: Isaac Sim's teardown can block
+    # indefinitely, and the verdict is already on stdout.
+    os._exit(0 if ok else 1)
 
 
 if __name__ == "__main__":
