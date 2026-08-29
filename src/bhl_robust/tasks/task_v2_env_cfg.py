@@ -92,8 +92,22 @@ try:
         # names. Without this the runner cannot tell which group feeds which
         # network, and the asymmetric actor-critic silently becomes symmetric.
         obs_groups = {"policy": ["policy"], "critic": ["critic"]}
-        actor = RslRlMLPModelCfg(hidden_dims=_HIDDEN, activation="elu")
-        critic = RslRlMLPModelCfg(hidden_dims=_HIDDEN, activation="elu")
+        # The actor needs `distribution_cfg`; that is what makes it stochastic.
+        # Without it the runner still asks for a stochastic model and rsl-rl
+        # raises `MLPModel.__init__() got an unexpected keyword argument
+        # 'stochastic'` -- which reads like a version mismatch and is really a
+        # missing field. The critic is deterministic and takes none.
+        actor = RslRlMLPModelCfg(
+            hidden_dims=_HIDDEN,
+            activation="elu",
+            obs_normalization=False,
+            distribution_cfg=RslRlMLPModelCfg.GaussianDistributionCfg(init_std=1.0),
+        )
+        critic = RslRlMLPModelCfg(
+            hidden_dims=_HIDDEN,
+            activation="elu",
+            obs_normalization=False,
+        )
         algorithm = RslRlPpoAlgorithmCfg(
             num_learning_epochs=5,
             num_mini_batches=4,

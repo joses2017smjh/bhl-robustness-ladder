@@ -109,6 +109,11 @@ so the curve is recorded without entering the objective.
 | 1 | `21076488` | cancelled — logged 0.0000 for 1,300 iterations. The reward manager logs `weight x value`, so a weight-0.0 term reports zero by construction. |
 
 ### Redesigned tasks (v2) — nine cells · `running`
+`slurm/90_v2_train_smoke.sbatch` added: 3 iterations at 64 envs through the real
+training path, one arm per vision condition. The env smoke passed 9/9 during
+every one of the training failures because it never executes `train.py` — a gate
+that does not run the thing it gates is decoration.
+
 Three tasks with terminal success states, each blind/depth/rgb, all on v60.
 Gates G-T1/G-T2/G-T3 pass, the nine-cell smoke passes, training is queued at
 seed 0. `NUM_ENVS=1024` for every cell and it must stay identical across them —
@@ -118,7 +123,9 @@ if RGB OOMs, drop all nine to 512 rather than mixing.
 
 | # | id | outcome |
 |---|---|---|
-| 4 | `21083690` | running — smoke first, with a v60-native runner config in the rsl-rl 5.x schema |
+| 6 | `21083804` | running — actor given its `distribution_cfg` |
+| 5 | `21083755` | FAILED — `MLPModel.__init__() got an unexpected keyword argument 'stochastic'`. The actor needs `distribution_cfg`; without it the runner asks for a stochastic model the config never declared. Caught by the new **training-path** smoke, in 33 seconds. |
+| 4 | `21083690` | done — env smoke 9/9, obs 194/322/578. Note: this builds envs and never runs `train.py`, so it passed through all three training failures. |
 | 3 | `21083185` | FAILED, all 9 — `KeyError: 'class_name'`. rsl-rl 5.x reads `cfg["actor"]["class_name"]`; the v51 runner config sets only the 2.x `policy` field. |
 | 2 | `21082869` | FAILED, all 9 — `PPO.__init__() got an unexpected keyword argument 'optimizer'`. I had installed rsl-rl 3.0.1 on v60 to match v51; isaaclab_rl 3.0.0b2 pins **5.0.1**. |
 | 1 | `21077757` | FAILED, all 9 in ~20 s — `scripts/train.py` imported `berkeley_humanoid_lite.tasks` *before* applying the compat shim, so `AdditiveUniformNoiseCfg` was still missing on v60. The smoke test never caught it because it imports only `bhl_robust.tasks`. |
