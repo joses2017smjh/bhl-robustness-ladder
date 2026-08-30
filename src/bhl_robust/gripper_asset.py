@@ -34,8 +34,21 @@ GRIPPER_ASSET_DIR = os.environ.get(
     "BHL_GRIPPER_ASSET_DIR",
     "/nfs/hpc/share/sanchej7/Humanoid_Lite/assets/gripper",
 )
-GRIPPER_USD = os.path.join(GRIPPER_ASSET_DIR, "usd",
-                           "berkeley_humanoid_lite_gripper.usd")
+#: The converter nests its output one directory deep and writes `.usda`, not
+#: the `.usd` filename it is handed -- so the obvious path is wrong and
+#: `get_gripper_cfg()` would have raised FileNotFoundError on a conversion that
+#: had in fact succeeded. Resolved by search rather than by assumption.
+def _find_gripper_usd() -> str:
+    root = os.path.join(GRIPPER_ASSET_DIR, "usd")
+    for ext in (".usda", ".usd"):
+        for dirpath, _, files in os.walk(root):
+            for f in files:
+                if f.startswith("berkeley_humanoid_lite_gripper") and f.endswith(ext):
+                    return os.path.join(dirpath, f)
+    return os.path.join(root, "berkeley_humanoid_lite_gripper.usd")
+
+
+GRIPPER_USD = _find_gripper_usd()
 
 GRIPPER_JOINTS = ["arm_left_gripper_joint", "arm_right_gripper_joint"]
 
