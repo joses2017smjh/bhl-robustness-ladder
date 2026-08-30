@@ -156,7 +156,7 @@ def object_lift_progress(
     obj: RigidObject = env.scene[object_cfg.name]
     spawn = float(env.cfg.object_spawn_z)
     target = float(getattr(env, "_bhl_lift_h", env.cfg.lift_success_z))
-    progress = (obj.data.root_pos_w[:, 2] - spawn) / max(target, 1e-3)
+    progress = (_t(obj.data.root_pos_w)[:, 2] - spawn) / max(target, 1e-3)
     progress = progress.clamp(0.0, 1.0)
     if getattr(env.cfg, "gate_lift_on_pinch", True):
         progress = progress * _pinch_weight(env)
@@ -175,7 +175,7 @@ def object_is_lifted(
     gate, inverted: they gate carry on lift, we gate lift on pinch.
     """
     obj: RigidObject = env.scene[object_cfg.name]
-    lifted = (obj.data.root_pos_w[:, 2] > (float(env.cfg.object_spawn_z) + minimal_height)).float()
+    lifted = (_t(obj.data.root_pos_w)[:, 2] > (float(env.cfg.object_spawn_z) + minimal_height)).float()
     if getattr(env.cfg, "gate_lift_on_pinch", True):
         lifted = lifted * _pinch_weight(env)
     return lifted
@@ -187,8 +187,8 @@ def object_xy_drift_l2(
 ) -> torch.Tensor:
     """Keep the lift in place. Carry is a later phase; rewarding it now is a toss."""
     obj: RigidObject = env.scene[object_cfg.name]
-    spawn_xy = obj.data.default_root_state[:, :2] + env.scene.env_origins[:, :2]
-    return torch.sum(torch.square(obj.data.root_pos_w[:, :2] - spawn_xy), dim=-1)
+    spawn_xy = _t(obj.data.default_root_state)[:, :2] + env.scene.env_origins[:, :2]
+    return torch.sum(torch.square(_t(obj.data.root_pos_w)[:, :2] - spawn_xy), dim=-1)
 
 
 def object_lin_vel_l2(
@@ -196,7 +196,7 @@ def object_lin_vel_l2(
     object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
 ) -> torch.Tensor:
     obj: RigidObject = env.scene[object_cfg.name]
-    return torch.sum(torch.square(obj.data.root_lin_vel_w), dim=-1)
+    return torch.sum(torch.square(_t(obj.data.root_lin_vel_w)), dim=-1)
 
 
 def object_pos_in_root(
@@ -207,7 +207,7 @@ def object_pos_in_root(
     robot: Articulation = env.scene[robot_cfg.name]
     obj: RigidObject = env.scene[object_cfg.name]
     pos_b, _ = subtract_frame_transforms(
-        robot.data.root_pos_w, robot.data.root_quat_w, obj.data.root_pos_w[:, :3]
+        _t(robot.data.root_pos_w), _t(robot.data.root_quat_w), _t(obj.data.root_pos_w)[:, :3]
     )
     return pos_b
 
@@ -271,7 +271,7 @@ def object_tilt_l2(
 ) -> torch.Tensor:
     """Roll/pitch of the payload. Synchronous lift keeps this near zero."""
     obj: RigidObject = env.scene[object_cfg.name]
-    q = obj.data.root_quat_w
+    q = _t(obj.data.root_quat_w)
     up_z = 1.0 - 2.0 * (q[:, 1] * q[:, 1] + q[:, 2] * q[:, 2])
     return torch.square(1.0 - up_z)
 
@@ -285,8 +285,8 @@ def either_fallen(
     """Terminate if either robot exceeds the loco tilt limit (0.78 rad)."""
     a: Articulation = env.scene[robot_a_cfg.name]
     b: Articulation = env.scene[robot_b_cfg.name]
-    tilt_a = torch.acos((-a.data.projected_gravity_b[:, 2]).clamp(-1.0, 1.0))
-    tilt_b = torch.acos((-b.data.projected_gravity_b[:, 2]).clamp(-1.0, 1.0))
+    tilt_a = torch.acos((-_t(a.data.projected_gravity_b)[:, 2]).clamp(-1.0, 1.0))
+    tilt_b = torch.acos((-_t(b.data.projected_gravity_b)[:, 2]).clamp(-1.0, 1.0))
     return (tilt_a > limit_angle) | (tilt_b > limit_angle)
 
 
@@ -320,10 +320,10 @@ def lift_height_curriculum(
         return height
     if env_ids is None or len(env_ids) == 0:
         idx = slice(None)
-        z = obj.data.root_pos_w[:, 2]
+        z = _t(obj.data.root_pos_w)[:, 2]
     else:
         idx = env_ids
-        z = obj.data.root_pos_w[env_ids, 2]
+        z = _t(obj.data.root_pos_w)[env_ids, 2]
     high_enough = z > (spawn + height)
     d = getattr(env, "_bhl_pinch_d", None)
     if (not getattr(env.cfg, "gate_lift_on_pinch", True)) or d is None:
@@ -477,7 +477,7 @@ def any_fallen(
     out = None
     for name in robot_names:
         r: Articulation = env.scene[name]
-        tilt = torch.acos((-r.data.projected_gravity_b[:, 2]).clamp(-1.0, 1.0))
+        tilt = torch.acos((-_t(r.data.projected_gravity_b)[:, 2]).clamp(-1.0, 1.0))
         hit = tilt > limit_angle
         out = hit if out is None else (out | hit)
     return out

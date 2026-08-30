@@ -59,6 +59,21 @@ LOG=$(mktemp "${TMPDIR:-/tmp}/bhl-train-XXXXXX.log")
 $PY "$TRAIN_SCRIPT" "${ARGS[@]}" $OVERRIDES 2>&1 | tee "$LOG"
 rc=${PIPESTATUS[0]}
 
+# A degenerate episode length is a broken task wearing a working one's clothes.
+# The nine v2 arms logged 8,000 iterations each with mean_episode_length = 1.00
+# and Episode_Termination/fallen = 1.00 -- every episode ended on its first step
+# because a termination term read a warp ProxyArray as if it were a tensor. The
+# "did an iteration get logged" check passed all nine, for nine GPU-days.
+EPLEN=$(grep -oE "Mean episode length: [0-9.]+" "$LOG" | tail -1 | awk '{print $NF}')
+if [ -n "${EPLEN:-}" ]; then
+    if awk -v e="$EPLEN" 'BEGIN{exit !(e < 2.0)}'; then
+        echo "train.sh: FAILED -- mean episode length is ${EPLEN}; every episode is" \
+             "terminating immediately, so nothing is being learned" >&2
+        exit 1
+    fi
+    echo "train.sh: mean episode length ${EPLEN}"
+fi
+
 if grep -qE "Learning iteration" "$LOG"; then
     iters=$(grep -cE "Learning iteration" "$LOG")
     echo "train.sh: reached $iters logged iterations"
