@@ -69,6 +69,16 @@ LEG_JOINTS = [
     "leg_right_hip_pitch_joint", "leg_right_knee_pitch_joint",
     "leg_right_ankle_pitch_joint", "leg_right_ankle_roll_joint",
 ]
+#: One per hand, appended so indices 0..21 keep their meaning and a checkpoint
+#: trained on the welded-hand asset still maps onto the same joints.
+GRIPPER_JOINTS = [
+    "arm_left_gripper_joint", "arm_right_gripper_joint",
+]
+
+#: The welded-hand layout every published manipulation number was produced
+#: against. A 194-wide checkpoint is indexed by this and by nothing else.
+JOINTS_22 = ARM_JOINTS + LEG_JOINTS
+
 JOINTS = ARM_JOINTS + LEG_JOINTS
 NJ = len(JOINTS)
 
@@ -197,12 +207,16 @@ DEPTH_GEOM_GROUPS = (0, 1)
 # `PolicyCfg` and `depth_a` / `depth_b` on the override.
 OBS_FULL = 194
 OBS_NOTRACK = 150
+# With two gripper DoF per robot the joint-indexed terms each grow by two and
+# `last_action` by four: 6 + 6 + 48 + 48 + 6 + 48 + 48.
+OBS_FULL_GRIPPER = 210
 OBS_DEPTH_SWAP = 316      # full, minus object-in-root, plus two depth images
 OBS_DEPTH_BOTH = 322      # full, plus two depth images
 _OBS_LAYOUTS = {
     OBS_FULL: "projected gravity, base ang vel, joint pos, joint vel, "
               "object-in-root, PD tracking residual, previous action",
     OBS_NOTRACK: "as OBS_FULL without the PD tracking residual",
+    OBS_FULL_GRIPPER: "as OBS_FULL on the 24-DoF gripper asset",
     OBS_DEPTH_SWAP: "as OBS_FULL without object-in-root, then two 8x8 depth "
                     "images appended after previous action",
     OBS_DEPTH_BOTH: "as OBS_FULL, then two 8x8 depth images appended after "

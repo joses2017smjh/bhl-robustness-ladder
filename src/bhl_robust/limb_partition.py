@@ -40,15 +40,29 @@ LEG_JOINTS = [
     "leg_right_hip_pitch_joint", "leg_right_knee_pitch_joint",
     "leg_right_ankle_pitch_joint", "leg_right_ankle_roll_joint",
 ]
-JOINTS = ARM_JOINTS + LEG_JOINTS
-N_JOINTS = len(JOINTS)          # 22
+
+#: One per hand. Absent from the shipped asset, which welds both hands shut --
+#: see `docs/GRIPPER.md`. Appended rather than interleaved so the first 22
+#: indices keep their meaning and a 22-DoF checkpoint still maps onto the same
+#: joints it was trained on.
+GRIPPER_JOINTS = ["arm_left_gripper_joint", "arm_right_gripper_joint"]
+
+#: The layout the welded-hand results were produced against. Kept because every
+#: published manipulation number in this repo is indexed by it, and a checkpoint
+#: cannot be replayed against a joint list it never saw.
+JOINTS_22 = ARM_JOINTS + LEG_JOINTS
+
+JOINTS = ARM_JOINTS + LEG_JOINTS + GRIPPER_JOINTS
+N_JOINTS = len(JOINTS)          # 24
 
 
 def _idx(prefix: str) -> list[int]:
     return [i for i, j in enumerate(JOINTS) if j.startswith(prefix)]
 
 
-#: One agent per limb. 5 / 5 / 6 / 6, summing to 22.
+#: One agent per limb. 6 / 6 / 6 / 6, summing to 24 -- each arm agent owns its
+#: own gripper, which is the only assignment that makes sense: a limb that can
+#: reach for something and not close on it is not an agent for that limb.
 LIMB4 = {
     "arm_left": _idx("arm_left"),
     "arm_right": _idx("arm_right"),
