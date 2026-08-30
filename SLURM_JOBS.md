@@ -86,6 +86,20 @@ than assuming the ablation happened.
 | 2 | `21093567` | FAILED — `output with shape [4096, 1] doesn't match the broadcast shape [4096, 4096]`: the reward/done fan-out returns the wrong shape per agent |
 | 1 | `21091041` | PPO control **COMPLETED** (5:13); the three MARL rows failed on a missing `num_agents` property, since added |
 
+### Gripper: restore the two hand DoF the asset welds shut · `running`
+The hardware has two grippers (`docs/GRIPPER.md`); the shipped asset welds both
+hands, so no policy here has ever closed one. `scripts/add_gripper.py` writes a
+24-DoF copy into the workspace, leaving `external/` pristine. Checked before
+queuing: 24 actuated joints, fingertip sweeps 6.5 cm across the palm, hands
+mirrored.
+
+Once the USD lands, this re-runs §5, the nine v2 cells and Tier 1 — the terrain
+and locomotion rungs are unaffected, having never used arm contact.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21093986` | running — URDF to USD conversion; `get_gripper_cfg()` raises until it exists |
+
 ### B3 — ice / patchy friction · `todo` (written, not wired)
 `terrains/ice.py` and `scripts/bench/ice_gate.py` written. G-B3 passes at the
 flush inset and correctly fails at a 5 mm one, so the gate can fail. Still to
@@ -126,7 +140,7 @@ if RGB OOMs, drop all nine to 512 rather than mixing.
 
 | # | id | outcome |
 |---|---|---|
-| 10 | `21093843` | running — the nine cells, seed 0, 8,000 iters |
+| 10 | `21093953` | running — the nine cells, seed 0, 8,000 iters |
 | 9 | `21093566` | **training smoke 4/4** — 3 logged iterations each, incl. the solo ball control. Fix was pickling: `_variants()` built classes with `type()` so they were not module attributes and Hydra could not pickle them. |
 | 8 | `21091042` | FAILED — `_pickle.PicklingError` on the generated variant classes |
 | 7 | `21090547` | FAILED — **segfault** in Isaac Sim ~3 s in, before the env is built, on two different nodes (cn-gpu5, cn-gpu7) while the env smoke passed on cn-gpu6. Not a Python fault and not one bad node. |
@@ -249,6 +263,7 @@ came from.
 | `21066823`, `21066824`, `21066825`, `21066826` | occlusion replicates |
 | `21066607`, `21066637`, `21067084` | POV clips |
 | `21067057` | ladder clip |
+| `21093986` | gripper URDF to USD |
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |
 | `21076944`–`21077235` | v2 nine-cell smoke |
