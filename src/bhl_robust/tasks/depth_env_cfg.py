@@ -146,3 +146,20 @@ class BipedSlipperyDepthEnvCfg(BipedDepthEnvCfg):
         super().__post_init__()
         self.events.physics_material.params["static_friction_range"] = (0.25, 0.35)
         self.events.physics_material.params["dynamic_friction_range"] = (0.18, 0.30)
+
+
+@configclass
+class BipedIceDepthEnvCfg(BipedDepthEnvCfg):
+    """B3 with the forward depth camera: the strongest negative control.
+
+    The patches are flush with the floor, so the ray-caster returns the same
+    flat height field with or without them -- `scripts/bench/ice_gate.py` casts
+    the boundary and fails at a 5 mm proud patch rather than trusting the
+    config. Any advantage depth shows here cannot be "it sees the ice".
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        from bhl_robust.terrains.ice import ice_patches
+        for name, patch in ice_patches().items():
+            setattr(self.scene, name, patch)

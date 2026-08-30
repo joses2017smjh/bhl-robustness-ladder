@@ -83,7 +83,8 @@ than assuming the ablation happened.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21093567` | FAILED — `output with shape [4096, 1] doesn't match the broadcast shape [4096, 4096]`: the reward/done fan-out returns the wrong shape per agent |
+| 3 | `21100446` | running — G-B4 re-gate after the fan-out reshape |
+| 2 | `21093567` | FAILED — `output with shape [4096, 1] doesn't match the broadcast shape [4096, 4096]`. The env returns a flat `(num_envs,)`; skrl stores one column per agent, so the trailing axis was the whole fix. |
 | 1 | `21091041` | PPO control **COMPLETED** (5:13); the three MARL rows failed on a missing `num_agents` property, since added |
 
 ### Gripper: restore the two hand DoF the asset welds shut · `running`
@@ -100,7 +101,22 @@ and locomotion rungs are unaffected, having never used arm contact.
 |---|---|---|
 | 1 | `21093986` | running — URDF to USD conversion; `get_gripper_cfg()` raises until it exists |
 
-### B3 — ice / patchy friction · `todo` (written, not wired)
+### B3 — ice / patchy friction · `running`
+Wired and registered: `Velocity-BHL-Biped-Ice-v0`, `-Ice-Depth-v0`,
+`-IceVisible-v0`. G-B3 passes at the flush inset and fails at 5 mm, so the gate
+can fail.
+
+The depth arm is the strongest negative control this project has: the patches
+are flush, so the ray-caster returns the same flat height field either way. If
+depth still helps, the mechanism cannot be that it sees the ice. The visible arm
+separates that from "any camera helps once the patch is visible" — colouring the
+ice by default would have turned the rung into an RGB experiment.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21100447` | running — 3 iterations through the real training path, one per arm |
+
+### B3 — ice / patchy friction · superseded
 `terrains/ice.py` and `scripts/bench/ice_gate.py` written. G-B3 passes at the
 flush inset and correctly fails at a 5 mm one, so the gate can fail. Still to
 do: wire a task config and register the ids.
@@ -264,6 +280,9 @@ came from.
 | `21066607`, `21066637`, `21067084` | POV clips |
 | `21067057` | ladder clip |
 | `21093986` | gripper URDF to USD |
+| `21100282` | v2 finished-cell readout |
+| `21100446` | G-B4 re-gate |
+| `21100447` | B3 ice smoke |
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |
 | `21076944`–`21077235` | v2 nine-cell smoke |

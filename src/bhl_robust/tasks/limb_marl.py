@@ -126,10 +126,22 @@ class LimbMarlEnv:
         obs, rew, term, trunc, info = self.env.step(joined)
         self._last = self._policy(obs)
         o = self._fan_out(obs)
-        # One team reward and one shared done, copied per agent.
-        r = {a: rew for a in self.possible_agents}
-        t = {a: term for a in self.possible_agents}
-        u = {a: trunc for a in self.possible_agents}
+        # One team reward and one shared done, copied per agent -- each as
+        # (num_envs, 1), not (num_envs,).
+        #
+        # The single-agent env returns a flat (num_envs,) vector. skrl's
+        # multi-agent memory stores one column per agent and broadcasts a bare
+        # (4096,) against a (4096, 1) slot, which produces
+        #   output with shape [4096, 1] doesn't match the broadcast shape
+        #   [4096, 4096]
+        # and killed every Tier 1 MARL row in under a minute while the PPO
+        # control ran for five hours. The trailing axis is the whole fix.
+        def col(x):
+            return x.reshape(-1, 1)
+
+        r = {a: col(rew) for a in self.possible_agents}
+        t = {a: col(term) for a in self.possible_agents}
+        u = {a: col(trunc) for a in self.possible_agents}
         return o, r, t, u, info
 
     def state(self) -> torch.Tensor:

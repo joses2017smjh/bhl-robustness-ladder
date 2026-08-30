@@ -302,3 +302,19 @@ for _task, _variants in (
                 "rsl_rl_cfg_entry_point": task_v2_env_cfg._V2_RUNNER,
             },
         )
+
+# ------------------------------------------------------------------ B3: ice
+# Patchy friction on flat ground. The blind/depth pair is the negative control
+# for the depth claim; the visible arm separates "depth helps without seeing"
+# from "a camera helps once the patch can be seen".
+for _id, _cfg in (
+    ("Velocity-BHL-Biped-Ice-v0", terrain_env_cfg.BipedIceEnvCfg),
+    ("Velocity-BHL-Biped-Ice-Depth-v0", depth_env_cfg.BipedIceDepthEnvCfg),
+    ("Velocity-BHL-Biped-IceVisible-v0", terrain_env_cfg.BipedIceVisibleEnvCfg),
+):
+    gym.register(
+        id=_id,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG},
+    )

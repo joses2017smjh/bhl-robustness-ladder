@@ -112,3 +112,44 @@ class BipedStairsEnvCfg(BipedBumpyEnvCfg):
     def __post_init__(self):
         super().__post_init__()
         self.scene.terrain.terrain_generator = STAIRS_TERRAINS_CFG
+
+@configclass
+class BipedIceEnvCfg(BipedBumpyEnvCfg):
+    """B3: low-friction patches on flat ground, invisible to a depth camera.
+
+    The sharper version of the slippery rung. `BipedSlipperyEnvCfg` drops
+    friction *uniformly*, so a policy can adapt its whole gait once and be done.
+    Here the friction is patchy and the ground is flat, so the hazard has a
+    location and no geometry -- there is nothing for a depth camera to see, by
+    construction, and `scripts/bench/ice_gate.py` checks the patches sit flush
+    rather than trusting the number.
+
+    That makes it the strongest form of the negative control. Section 6 found
+    depth helping most on uniform low friction, 2.5x at three seeds, which
+    inverted the prediction that depth pays on geometry and not material. If
+    depth also helps here, the mechanism cannot be "it sees the hazard" -- there
+    is no hazard to see -- and the remaining explanation is that looking ahead
+    buys foot placement needing less friction margin everywhere.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        from bhl_robust.terrains.ice import ice_patches
+        for name, patch in ice_patches().items():
+            setattr(self.scene, name, patch)
+
+
+@configclass
+class BipedIceVisibleEnvCfg(BipedIceEnvCfg):
+    """The same patches, coloured so RGB can see them and depth still cannot.
+
+    Runs only as the arm that separates "depth helps without seeing" from "any
+    camera helps once the patch is visible". Colouring the ice by default would
+    have quietly turned the whole rung into an RGB experiment.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        from bhl_robust.terrains.ice import ice_patches
+        for name, patch in ice_patches(visible=True).items():
+            setattr(self.scene, name, patch)
