@@ -310,13 +310,29 @@ class PlankToWallCfg(_TaskV2Base):
 
 
 def _variants(base, name):
-    """blind / depth / rgb subclasses of one task."""
+    """blind / depth / rgb subclasses of one task.
+
+    Each class is bound into this module's namespace as well as returned.
+    Hydra pickles the env config, and pickle finds a class by looking up
+    `module.__qualname__` -- so a class built with `type()` and never assigned
+    anywhere fails with
+
+        Can't pickle <class '...CubeToShelfBlindCfg'>: attribute lookup
+        CubeToShelfBlindCfg on bhl_robust.tasks.task_v2_env_cfg failed
+
+    which is what killed every v2 training arm while the env smoke passed 9/9,
+    because building an env never pickles it.
+    """
     out = {}
     for v in ("blind", "depth", "rgb"):
-        cls = configclass(type(f"{name}{v.capitalize()}Cfg", (base,), {
+        cls_name = f"{name}{v.capitalize()}Cfg"
+        cls = configclass(type(cls_name, (base,), {
             "__doc__": f"{name}, {v} observation.",
             "vision": v,
+            "__module__": __name__,
+            "__qualname__": cls_name,
         }))
+        globals()[cls_name] = cls
         out[v] = cls
     return out
 

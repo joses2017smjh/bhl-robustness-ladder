@@ -83,7 +83,8 @@ than assuming the ablation happened.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21091041` | running — limb4+MAPPO, limb4+IPPO, limb2+MAPPO, PPO control. v51, so unaffected by the v60 segfault. |
+| 2 | `21093567` | FAILED — `output with shape [4096, 1] doesn't match the broadcast shape [4096, 4096]`: the reward/done fan-out returns the wrong shape per agent |
+| 1 | `21091041` | PPO control **COMPLETED** (5:13); the three MARL rows failed on a missing `num_agents` property, since added |
 
 ### B3 — ice / patchy friction · `todo` (written, not wired)
 `terrains/ice.py` and `scripts/bench/ice_gate.py` written. G-B3 passes at the
@@ -125,7 +126,9 @@ if RGB OOMs, drop all nine to 512 rather than mixing.
 
 | # | id | outcome |
 |---|---|---|
-| 8 | `21091042` | running — retry, plus a 4th arm smoking the one-robot ball control |
+| 10 | `21093843` | running — the nine cells, seed 0, 8,000 iters |
+| 9 | `21093566` | **training smoke 4/4** — 3 logged iterations each, incl. the solo ball control. Fix was pickling: `_variants()` built classes with `type()` so they were not module attributes and Hydra could not pickle them. |
+| 8 | `21091042` | FAILED — `_pickle.PicklingError` on the generated variant classes |
 | 7 | `21090547` | FAILED — **segfault** in Isaac Sim ~3 s in, before the env is built, on two different nodes (cn-gpu5, cn-gpu7) while the env smoke passed on cn-gpu6. Not a Python fault and not one bad node. |
 | 6 | `21083804` | FAILED — same `stochastic` error. `RslRlMLPModelCfg` still carries deprecated `stochastic`/`init_noise_std` fields; isaaclab_rl ships `handle_deprecated_rsl_rl_cfg` to strip them and our vendored `train.py` never called it. |
 | 5 | `21083755` | FAILED — `MLPModel.__init__() got an unexpected keyword argument 'stochastic'`. The actor needs `distribution_cfg`; without it the runner asks for a stochastic model the config never declared. Caught by the new **training-path** smoke, in 33 seconds. |

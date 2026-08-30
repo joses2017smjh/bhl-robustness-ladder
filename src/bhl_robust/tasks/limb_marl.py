@@ -73,6 +73,18 @@ class LimbMarlEnv:
         return self.env.unwrapped.max_episode_length
 
     @property
+    def num_agents(self) -> int:
+        """Live agent count, which skrl's trainer reads every step.
+
+        Distinct from `len(possible_agents)` in a general PettingZoo env, where
+        agents can drop out mid-episode. Here every limb is attached for the
+        whole episode, so the two are always equal -- but the trainer asks for
+        this name and got an AttributeError, which is how all three Tier 1 MARL
+        rows died in a minute while the PPO control ran for five hours.
+        """
+        return len(self.agents)
+
+    @property
     def num_actions(self) -> dict[str, int]:
         return dict(self._n_act)
 
