@@ -127,6 +127,25 @@ do: wire a task config and register the ids.
 |---|---|---|
 | — | — | not queued |
 
+### Gripper v2 variants · `running`
+The three v2 tasks on the 24-DoF asset, as separate ids rather than a flag, so
+the welded-hand arms stay runnable as their control. Actions and the
+joint-indexed observations move 22 -> 24 together; driving 22 of 24 joints would
+leave the grippers inert and the variant indistinguishable from its control.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21105363` | running — smoke through the real training path, 3 iters, blind/depth/rgb |
+
+### Cloth sorting — G-C1 throughput · `running`
+Decides RL against scripted demo. The folding repo's stack is CPU-only at one
+env per process; 6.0's Newton runs cloth on GPU, so the question is how many
+environments at once. At 1,024 this is an RL task, at 16 it is a demonstration.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21105364` | running — steps/s at 16 / 64 / 256 / 1024 envs |
+
 ### Base-height probe — is the floor-lift a training hack? · `running`
 The MuJoCo replay drops both cube arms ~41 cm in 0.2 s, before contact. PhysX
 `base_contact` sits at -0.003, so the torso is not down in training — but a
@@ -288,7 +307,10 @@ came from.
 | `21100282`, `21100621` | v2 readouts: results, then reward-term breakdown |
 | `21105209` | v2 spawn diagnostic — found the tilt convention |
 | `21100446` | G-B4 re-gate |
-| `21100447` | B3 ice smoke |
+| `21100447`, `21105232` | B3 ice smoke, then 6 rungs |
+| `21105363` | gripper v2 smoke |
+| `21105364` | G-C1 cloth throughput |
+| `21105320` | Tier 1 MARL rows |
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |
 | `21076944`–`21077235` | v2 nine-cell smoke |

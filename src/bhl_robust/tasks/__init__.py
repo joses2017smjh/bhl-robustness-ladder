@@ -291,6 +291,11 @@ for _task, _variants in (
     # The solo control decides whether the paired ball number is a cooperation
     # result or one robot doing the job with an audience.
     ("BallToNetSolo", task_v2_env_cfg.BALL_SOLO_VARIANTS),
+    # The same three tasks on the 24-DoF gripper asset. Separate ids, not a
+    # flag, so the welded-hand arms stay runnable as their control.
+    ("CubeToShelfGrip", task_v2_env_cfg.CUBE_GRIPPER_VARIANTS),
+    ("BallToNetGrip", task_v2_env_cfg.BALL_GRIPPER_VARIANTS),
+    ("PlankToWallGrip", task_v2_env_cfg.PLANK_GRIPPER_VARIANTS),
 ):
     for _vis, _cls in _variants.items():
         gym.register(

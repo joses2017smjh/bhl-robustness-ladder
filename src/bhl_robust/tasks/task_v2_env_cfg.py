@@ -370,3 +370,71 @@ class BallToNetSoloCfg(BallToNetCfg):
         self.actions.joint_pos_b = None
 
 BALL_SOLO_VARIANTS = _variants(BallToNetSoloCfg, "BallToNetSolo")
+
+# ---------------------------------------------------------------- grippers
+# The same three tasks on the 24-DoF asset, so the hands can actually close.
+#
+# Every manipulation result in this repo was produced by a robot whose hands are
+# welded shut (`docs/GRIPPER.md`), which is not a property of the machine -- the
+# hardware has two grippers and upstream drives them. These variants are the
+# first runs where a policy can perform the grasp the robot really does: lay the
+# open hand over the object, close, and let finger and palm retain it
+# geometrically rather than by friction.
+#
+# Separate ids rather than a flag, so the welded-hand arms stay runnable as the
+# control. "The same task with and without a working hand" is the comparison
+# that prices the asset bug, and it needs both sides.
+
+def _gripper_variant(base, name):
+    """One task on the gripper asset, blind/depth/rgb."""
+    out = {}
+    for v in ("blind", "depth", "rgb"):
+        cls_name = f"{name}Gripper{v.capitalize()}Cfg"
+
+        def _post(self, _v=v):
+            super(type(self), self).__post_init__()
+            from bhl_robust.gripper_asset import (
+                HUMANOID_LITE_GRIPPER_JOINT_ORDER, get_gripper_cfg,
+            )
+            from isaaclab.managers import SceneEntityCfg
+            cfg = get_gripper_cfg()
+            for side, robot in (("a", self.scene.robot_a), ("b", self.scene.robot_b)):
+                robot.spawn = cfg.spawn.replace()
+                jp = dict(robot.init_state.joint_pos)
+                jp.update({j: 0.0 for j in ("arm_left_gripper_joint",
+                                            "arm_right_gripper_joint")})
+                robot.init_state = robot.init_state.replace(joint_pos=jp)
+                robot.actuators = dict(cfg.actuators)
+            # Actions and the joint-indexed observations move 22 -> 24 together;
+            # driving 22 of 24 joints would leave the grippers inert and the
+            # variant indistinguishable from its control.
+            order = HUMANOID_LITE_GRIPPER_JOINT_ORDER
+            self.actions.joint_pos_a.joint_names = order
+            self.actions.joint_pos_b.joint_names = order
+            for grp in (self.observations.policy, self.observations.critic):
+                for term in ("joint_pos_a", "joint_vel_a", "track_err_a"):
+                    tc = getattr(grp, term, None)
+                    if tc is not None and "asset_cfg" in tc.params:
+                        tc.params["asset_cfg"] = SceneEntityCfg(
+                            "robot_a", joint_names=order, preserve_order=True)
+                for term in ("joint_pos_b", "joint_vel_b", "track_err_b"):
+                    tc = getattr(grp, term, None)
+                    if tc is not None and "asset_cfg" in tc.params:
+                        tc.params["asset_cfg"] = SceneEntityCfg(
+                            "robot_b", joint_names=order, preserve_order=True)
+
+        cls = configclass(type(cls_name, (base,), {
+            "__doc__": f"{name} on the 24-DoF gripper asset, {v} observation.",
+            "vision": v,
+            "__module__": __name__,
+            "__qualname__": cls_name,
+            "__post_init__": _post,
+        }))
+        globals()[cls_name] = cls
+        out[v] = cls
+    return out
+
+
+CUBE_GRIPPER_VARIANTS = _gripper_variant(CubeToShelfCfg, "CubeToShelf")
+BALL_GRIPPER_VARIANTS = _gripper_variant(BallToNetCfg, "BallToNet")
+PLANK_GRIPPER_VARIANTS = _gripper_variant(PlankToWallCfg, "PlankToWall")
