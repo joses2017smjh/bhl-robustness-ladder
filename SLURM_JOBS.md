@@ -144,7 +144,9 @@ environments at once. At 1,024 this is an RL task, at 16 it is a demonstration.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21105364` | running — steps/s at 16 / 64 / 256 / 1024 envs |
+| 3 | `21105721` | running — self-contained probe, local cloth USD, no external assets |
+| 2 | `21105405` | FAILED — Isaac Lab's cloth task pulls a table and sky from the Omniverse content server and one path 404s. The sorting task brings its own garments, so that dependency was never needed. |
+| 1 | `21105364` | FAILED — `'str' object is not callable`: Isaac Lab's tasks use a module-path string for `env_cfg_entry_point`, this repo's use a class |
 
 ### Base-height probe — is the floor-lift a training hack? · `running`
 The MuJoCo replay drops both cube arms ~41 cm in 0.2 s, before contact. PhysX
@@ -309,7 +311,8 @@ came from.
 | `21100446` | G-B4 re-gate |
 | `21100447`, `21105232` | B3 ice smoke, then 6 rungs |
 | `21105363` | gripper v2 smoke |
-| `21105364` | G-C1 cloth throughput |
+| `21105364`, `21105405`, `21105721` | G-C1 cloth throughput |
+| `21105399` | gripper v2 training, 9 cells |
 | `21105320` | Tier 1 MARL rows |
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |
