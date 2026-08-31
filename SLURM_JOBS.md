@@ -83,7 +83,7 @@ than assuming the ablation happened.
 
 | # | id | outcome |
 |---|---|---|
-| 4 | `21105252` | running — partition now sized from the env's action width |
+| 4 | `21105252` | **PASS, both partitions, both layouts** — 22 and 24 DoF, and the arm ablation clears both real terms |
 | 3 | `21100446` | FAIL — `Invalid action shape, expected: 22, received: 24`: extending the partition for the gripper broke the gate against the 22-DoF task |
 | 2 | `21093567` | FAILED — `output with shape [4096, 1] doesn't match the broadcast shape [4096, 4096]`. The env returns a flat `(num_envs,)`; skrl stores one column per agent, so the trailing axis was the whole fix. |
 | 1 | `21091041` | PPO control **COMPLETED** (5:13); the three MARL rows failed on a missing `num_agents` property, since added |
