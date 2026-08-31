@@ -276,6 +276,31 @@ def object_tilt_l2(
     return torch.square(1.0 - up_z)
 
 
+def _tilt_from_quat(robot) -> torch.Tensor:
+    """Angle between the robot's own up axis and world up, from the quaternion.
+
+    Not from `projected_gravity_b`. On Isaac Lab 3.x that quantity comes back as
+    [0, +/-1, 0] for these robots -- gravity along body y, not body -z -- so
+    `acos(-pg[:, 2])` evaluates to acos(0) = 1.5708 rad for every environment at
+    spawn, clears the 0.78 limit, and terminates every episode on its first
+    step. That is what made nine v2 arms train 8,000 iterations on one-step
+    episodes while reporting healthy iteration counts.
+
+    The two robots read +y and -y because they are yawed +/-90 degrees, which is
+    the tell: a yaw rotation cannot move gravity out of body z, so the quantity
+    was not the body-frame projection the 2.x convention promised.
+
+    Rotating the body's z axis into the world and taking its z component is
+    convention-independent, and it is the same definition `coop_replay.tilt`
+    uses -- arccos(R[2, 2]) -- so the trainer and the sim2sim judge now agree by
+    construction rather than by coincidence.
+    """
+    q = _t(robot.data.root_quat_w)
+    w, x, y, z = q[:, 0], q[:, 1], q[:, 2], q[:, 3]
+    up_z = 1.0 - 2.0 * (x * x + y * y)      # R[2, 2]
+    return torch.acos(up_z.clamp(-1.0, 1.0))
+
+
 def either_fallen(
     env: "ManagerBasedRLEnv",
     limit_angle: float,
@@ -285,8 +310,8 @@ def either_fallen(
     """Terminate if either robot exceeds the loco tilt limit (0.78 rad)."""
     a: Articulation = env.scene[robot_a_cfg.name]
     b: Articulation = env.scene[robot_b_cfg.name]
-    tilt_a = torch.acos((-_t(a.data.projected_gravity_b)[:, 2]).clamp(-1.0, 1.0))
-    tilt_b = torch.acos((-_t(b.data.projected_gravity_b)[:, 2]).clamp(-1.0, 1.0))
+    tilt_a = _tilt_from_quat(a)
+    tilt_b = _tilt_from_quat(b)
     return (tilt_a > limit_angle) | (tilt_b > limit_angle)
 
 
@@ -477,7 +502,7 @@ def any_fallen(
     out = None
     for name in robot_names:
         r: Articulation = env.scene[name]
-        tilt = torch.acos((-_t(r.data.projected_gravity_b)[:, 2]).clamp(-1.0, 1.0))
+        tilt = _tilt_from_quat(r)
         hit = tilt > limit_angle
         out = hit if out is None else (out | hit)
     return out

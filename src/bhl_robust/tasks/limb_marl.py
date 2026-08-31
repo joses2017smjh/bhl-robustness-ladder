@@ -26,7 +26,7 @@ from typing import Any
 
 import torch
 
-from bhl_robust.limb_partition import PARTITIONS, reassemble, validate
+from bhl_robust.limb_partition import partition_for, reassemble_n, validate
 
 
 class LimbMarlEnv:
@@ -40,8 +40,10 @@ class LimbMarlEnv:
     def __init__(self, env, partition: str = "limb4", share_obs: bool = True):
         self.env = env
         self.kind = partition
-        self.partition = PARTITIONS[partition]
-        validate(self.partition)
+        # Size the partition to the asset in use: 22 DoF with welded hands, 24
+        # with grippers. Assuming one broke the gate against the other.
+        self.n_dof = int(env.unwrapped.action_space.shape[-1])
+        self.partition = partition_for(partition, self.n_dof)
         self.share_obs = share_obs
         self.possible_agents = list(self.partition.keys())
         self.agents = list(self.possible_agents)
@@ -122,7 +124,7 @@ class LimbMarlEnv:
         return self._fan_out(obs), info
 
     def step(self, actions: dict[str, torch.Tensor]):
-        joined = reassemble(actions, self.partition)
+        joined = reassemble_n(actions, self.partition, self.n_dof)
         obs, rew, term, trunc, info = self.env.step(joined)
         self._last = self._policy(obs)
         o = self._fan_out(obs)

@@ -82,13 +82,21 @@ LIMB2 = {
 PARTITIONS = {"limb4": LIMB4, "limb2": LIMB2}
 
 
-def validate(partition: dict[str, list[int]]) -> None:
-    """Raise unless the partition covers 0..21 exactly once."""
+def validate(partition: dict[str, list[int]], n_dof: int | None = None) -> None:
+    """Raise unless the partition covers 0..n_dof-1 exactly once.
+
+    `n_dof` defaults to the partition's own span rather than to `N_JOINTS`.
+    Both layouts are live -- 22 with welded hands, 24 with grippers -- so
+    validating everything against the larger one reports the 22-DoF partition
+    as missing joints 22 and 23, which it is supposed to be missing.
+    """
     seen: list[int] = []
     for idx in partition.values():
         seen.extend(idx)
-    if sorted(seen) != list(range(N_JOINTS)):
-        missing = sorted(set(range(N_JOINTS)) - set(seen))
+    if n_dof is None:
+        n_dof = len(seen)
+    if sorted(seen) != list(range(n_dof)):
+        missing = sorted(set(range(n_dof)) - set(seen))
         dupes = sorted({i for i in seen if seen.count(i) > 1})
         raise ValueError(
             f"partition is not a partition of {N_JOINTS} joints: "
@@ -123,3 +131,50 @@ def agent_names(kind: str) -> list[str]:
 
 def action_widths(kind: str) -> dict[str, int]:
     return {k: len(v) for k, v in PARTITIONS[kind].items()}
+
+def _idx_in(names: list[str], prefix: str) -> list[int]:
+    return [i for i, j in enumerate(names) if j.startswith(prefix)]
+
+
+def partition_for(kind: str, n_dof: int) -> dict[str, list[int]]:
+    """The named partition, sized to the asset actually in use.
+
+    Both joint layouts are live: the welded-hand asset is 22 DoF and the gripper
+    asset is 24, and a task chooses one. A wrapper that assumed 24 asked a
+    22-DoF env for 24 actions and got `Invalid action shape, expected: 22,
+    received: 24` -- so the partition is derived from the env's own action
+    width rather than from a module constant.
+    """
+    if n_dof == N_JOINTS:
+        names = JOINTS
+    elif n_dof == len(JOINTS_22):
+        names = JOINTS_22
+    else:
+        raise ValueError(
+            f"no joint layout with {n_dof} DoF; known are "
+            f"{len(JOINTS_22)} (welded hands) and {N_JOINTS} (grippers)"
+        )
+    if kind == "limb4":
+        part = {
+            "arm_left": _idx_in(names, "arm_left"),
+            "arm_right": _idx_in(names, "arm_right"),
+            "leg_left": _idx_in(names, "leg_left"),
+            "leg_right": _idx_in(names, "leg_right"),
+        }
+    elif kind == "limb2":
+        part = {"arms": _idx_in(names, "arm_"), "legs": _idx_in(names, "leg_")}
+    else:
+        raise ValueError(f"unknown partition {kind!r}")
+    seen = sorted(i for v in part.values() for i in v)
+    if seen != list(range(n_dof)):
+        raise ValueError(f"{kind} does not partition {n_dof} DoF")
+    return part
+
+
+def reassemble_n(actions: dict, partition: dict[str, list[int]], n_dof: int):
+    """`reassemble` for an explicit DoF count."""
+    any_a = next(iter(actions.values()))
+    out = any_a.new_zeros((*any_a.shape[:-1], n_dof))
+    for name, idx in partition.items():
+        out[..., idx] = actions[name]
+    return out

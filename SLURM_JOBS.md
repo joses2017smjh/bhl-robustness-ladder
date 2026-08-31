@@ -83,7 +83,8 @@ than assuming the ablation happened.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21100446` | running — G-B4 re-gate after the fan-out reshape |
+| 4 | `21105246` | running — partition now sized from the env's action width |
+| 3 | `21100446` | FAIL — `Invalid action shape, expected: 22, received: 24`: extending the partition for the gripper broke the gate against the 22-DoF task |
 | 2 | `21093567` | FAILED — `output with shape [4096, 1] doesn't match the broadcast shape [4096, 4096]`. The env returns a flat `(num_envs,)`; skrl stores one column per agent, so the trailing axis was the whole fix. |
 | 1 | `21091041` | PPO control **COMPLETED** (5:13); the three MARL rows failed on a missing `num_agents` property, since added |
 
@@ -114,7 +115,8 @@ ice by default would have turned the rung into an RGB experiment.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21100447` | running — 3 iterations through the real training path, one per arm |
+| 2 | `21105232` | running — 6 rungs: blind/depth/visible x 2 seeds, 6,000 iters |
+| 1 | `21100447` | **smoke 3/3**, episode lengths 17.7–19.8 |
 
 ### B3 — ice / patchy friction · superseded
 `terrains/ice.py` and `scripts/bench/ice_gate.py` written. G-B3 passes at the
@@ -156,7 +158,9 @@ if RGB OOMs, drop all nine to 512 rather than mixing.
 
 | # | id | outcome |
 |---|---|---|
-| 11 | `21100627` | running — re-smoke after wrapping every ProxyArray read |
+| 13 | `21105231` | running — the nine cells, after the tilt fix |
+| 12 | `21105217` | **smoke 4/4**, episode length 13.5–18.0. `either_fallen` now derives tilt from the root quaternion. |
+| 11 | `21100627` | FAILED — guard caught it: `mean episode length is 1.00`. Wrapping ProxyArray reads was not the cause. |
 | 10 | `21093953` | **CANCELLED — the runs were degenerate.** 8,000 iterations each at `mean_episode_length = 1.00` and `Episode_Termination/fallen = 1.00`: `either_fallen` read `projected_gravity_b` as a tensor when 3.x returns a warp ProxyArray, so `[:, 2]` was not the z component and every episode ended on step one. Nine GPU-days. |
 | 9 | `21093566` | **training smoke 4/4** — 3 logged iterations each, incl. the solo ball control. Fix was pickling: `_variants()` built classes with `type()` so they were not module attributes and Hydra could not pickle them. |
 | 8 | `21091042` | FAILED — `_pickle.PicklingError` on the generated variant classes |

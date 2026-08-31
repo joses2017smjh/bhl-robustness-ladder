@@ -50,41 +50,46 @@ else:
 import torch  # noqa: E402
 
 from bhl_robust.limb_partition import (  # noqa: E402
-    JOINTS, N_JOINTS, PARTITIONS, reassemble, split, validate,
+    JOINTS, N_JOINTS, PARTITIONS, partition_for, reassemble, reassemble_n,
+    split, validate,
 )
 
 
 def offline_checks() -> bool:
     ok = True
-    print("G-B4a  partition coverage and round-trip")
-    for kind, part in PARTITIONS.items():
+    print("G-B4a  partition coverage and round-trip, both joint layouts")
+    for kind in ("limb4", "limb2"):
+      for n in (22, 24):
+        part = partition_for(kind, n)
         try:
-            validate(part)
+            validate(part, n)
         except ValueError as e:
             print(f"  {kind:8} FAIL {e}")
             ok = False
             continue
-        x = torch.randn(7, N_JOINTS)
-        back = reassemble(split(x, part), part)
+        x = torch.randn(7, n)
+        back = reassemble_n(split(x, part), part, n)
         exact = torch.equal(x, back)
         widths = {k: len(v) for k, v in part.items()}
-        print(f"  {kind:8} {'ok' if exact else 'ROUND-TRIP MISMATCH'}  "
+        print(f"  {kind:8} {n:2d} DoF {'ok' if exact else 'ROUND-TRIP MISMATCH'}  "
               f"widths={widths} sum={sum(widths.values())}")
         ok &= exact
 
     print("\nG-B4b  order is preserved, not merely membership")
-    for kind, part in PARTITIONS.items():
+    for kind in ("limb4", "limb2"):
+      for n in (22, 24):
+        part = partition_for(kind, n)
         # A marker per joint index; if reassemble concatenated in dict order
         # instead of scattering, this comes back permuted.
-        x = torch.arange(N_JOINTS, dtype=torch.float32).unsqueeze(0)
-        back = reassemble(split(x, part), part)
+        x = torch.arange(n, dtype=torch.float32).unsqueeze(0)
+        back = reassemble_n(split(x, part), part, n)
         exact = torch.equal(x, back)
         if not exact:
-            bad = [(i, JOINTS[i], int(back[0, i])) for i in range(N_JOINTS)
+            bad = [(i, JOINTS[i], int(back[0, i])) for i in range(n)
                    if int(back[0, i]) != i][:4]
-            print(f"  {kind:8} PERMUTED at {bad}")
+            print(f"  {kind:8} {n:2d} DoF PERMUTED at {bad}")
         else:
-            print(f"  {kind:8} ok")
+            print(f"  {kind:8} {n:2d} DoF ok")
         ok &= exact
     return ok
 
@@ -117,8 +122,8 @@ def online_checks() -> bool:
             for _ in range(args_cli.steps):
                 acts = {a: torch.zeros((env.num_envs, n), device=env.device)
                         for a, n in env.num_actions.items()}
-                joined = reassemble(acts, env.partition)
-                if tuple(joined.shape) != (env.num_envs, N_JOINTS):
+                joined = reassemble_n(acts, env.partition, env.n_dof)
+                if tuple(joined.shape) != (env.num_envs, env.n_dof):
                     widths_ok = False
                 obs, rew, term, trunc, _ = env.step(acts)
             say("stepped ok")
