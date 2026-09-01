@@ -296,7 +296,13 @@ class PlankToWallCfg(_TaskV2Base):
         # Two supports, not one plinth: a 1.5 m plank on a 0.26 m pedestal at
         # its centre would see-saw, and the task would be balancing rather than
         # lifting before a robot had touched it.
-        h = GRASP_Z - 0.04
+        # 1 mm of clearance under the plank. With its underside exactly on the
+        # support tops the contact solver resolved the touching pair as a
+        # penetration and ejected the plank 22 cm upward in the first five
+        # steps, with the policy outputting zeros -- so the task began in a
+        # state no policy produced and the success predicate fired on the
+        # tumble.
+        h = GRASP_Z - 0.04 - 0.001
         for i, x in enumerate((-0.55, 0.55)):
             setattr(self.scene, f"support_{i}",
                     furniture._box(f"support_{i}", (0.16, 0.30, h), (x, 0.0, h / 2.0)))

@@ -134,6 +134,7 @@ def plank_leaned(
     max_deg: float = 80.0,
     foot_gap: float = 0.30,
     contact_z: float = 0.50,
+    speed: float = 0.10,
     hold_steps: int = 12,
 ) -> torch.Tensor:
     """Plank standing against the wall at a leaning angle, and staying there.
@@ -156,10 +157,17 @@ def plank_leaned(
     swap = end_lo[:, 2] > end_hi[:, 2]
     hi_z = torch.where(swap, end_lo[:, 2], end_hi[:, 2])
     lo_x = torch.where(swap, end_hi[:, 0], end_lo[:, 0])
+    # Resting, not merely passing through the right pose. A tumbling plank
+    # satisfies angle, foot position and height for a frame or two on its way
+    # somewhere else -- with a zero action it did so in 3.1% of environments,
+    # which is a measurement of the spawn rather than of the policy. A leaned
+    # plank is stationary; that is most of what "leaned" means.
+    still = _t(obj.data.root_lin_vel_w).norm(dim=-1) < speed
     ok = (
         (tilt > min_deg) & (tilt < max_deg)
         & ((wall_x - lo_x).abs() < foot_gap + 0.35)
         & (hi_z > contact_z)
+        & still
     )
     return _held(env, "_bhl_lean_hold", ok, hold_steps)
 
