@@ -86,7 +86,8 @@ than assuming the ablation happened.
 | 4 | `21105252` | **PASS, both partitions, both layouts** — 22 and 24 DoF, and the arm ablation clears both real terms |
 | 3 | `21100446` | FAIL — `Invalid action shape, expected: 22, received: 24`: extending the partition for the gripper broke the gate against the 22-DoF task |
 | 2 | `21093567` | FAILED — `output with shape [4096, 1] doesn't match the broadcast shape [4096, 4096]`. The env returns a flat `(num_envs,)`; skrl stores one column per agent, so the trailing axis was the whole fix. |
-| 1 | `21091041` | PPO control **COMPLETED** (5:13); the three MARL rows failed on a missing `num_agents` property, since added |
+| 3 | `21105320` | **all 3 COMPLETED** — 144,000/144,000 timesteps, ~6 h each, checkpoints on disk. Reported FAILED by a guard that greps rsl-rl's "Learning iteration" while skrl prints a tqdm bar. |
+| 1 | `21091041` | PPO control COMPLETED (5:13); the three MARL rows failed on a missing `num_agents` property, since added |
 
 ### Gripper: restore the two hand DoF the asset welds shut · `running`
 The hardware has two grippers (`docs/GRIPPER.md`); the shipped asset welds both
@@ -144,7 +145,7 @@ environments at once. At 1,024 this is an RL task, at 16 it is a demonstration.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21105721` | running — self-contained probe, local cloth USD, no external assets |
+| 3 | `21105721` | **suspect** — 2.04M env-steps/s at 1,024 envs, but only 14% slower than 16 envs. Flat scaling means the cloth is probably not being simulated; not to be quoted until verified. |
 | 2 | `21105405` | FAILED — Isaac Lab's cloth task pulls a table and sky from the Omniverse content server and one path 404s. The sorting task brings its own garments, so that dependency was never needed. |
 | 1 | `21105364` | FAILED — `'str' object is not callable`: Isaac Lab's tasks use a module-path string for `env_cfg_entry_point`, this repo's use a class |
 
