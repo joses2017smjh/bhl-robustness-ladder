@@ -117,7 +117,7 @@ ice by default would have turned the rung into an RGB experiment.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21105232` | running — 6 rungs: blind/depth/visible x 2 seeds, 6,000 iters |
+| 2 | `21105232` | **5 of 6 done** — depth 1.519, blind 1.374, visible 1.299. Depth beats blind by 10.6% on a hazard it cannot see. |
 | 1 | `21100447` | **smoke 3/3**, episode lengths 17.7–19.8 |
 
 ### B3 — ice / patchy friction · superseded
@@ -137,7 +137,8 @@ leave the grippers inert and the variant indistinguishable from its control.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21105363` | running — smoke through the real training path, 3 iters, blind/depth/rgb |
+| 2 | `21105399` | **3 of 9 done** — grippers survive **~450 steps against 8** and reward **+14.3 against −0.79**. Task success still 0. |
+| 1 | `21105363` | smoke 3/3, episode lengths 7.3–7.4 |
 
 ### Cloth sorting — G-C1 throughput · `todo` (three probes, no number yet)
 Decides RL against scripted demo. Still undecided: three probes, none of which
@@ -184,7 +185,7 @@ if RGB OOMs, drop all nine to 512 rather than mixing.
 
 | # | id | outcome |
 |---|---|---|
-| 13 | `21105231` | running — the nine cells, after the tilt fix |
+| 13 | `21105231` | **7 of 9 done** — welded hands survive ~8 steps and never succeed; plank reports 0.39–0.43 success at 22-step episodes, which is not credible and is being checked (`21124909`) |
 | 12 | `21105217` | **smoke 4/4**, episode length 13.5–18.0. `either_fallen` now derives tilt from the root quaternion. |
 | 11 | `21100627` | FAILED — guard caught it: `mean episode length is 1.00`. Wrapping ProxyArray reads was not the cause. |
 | 10 | `21093953` | **CANCELLED — the runs were degenerate.** 8,000 iterations each at `mean_episode_length = 1.00` and `Episode_Termination/fallen = 1.00`: `either_fallen` read `projected_gravity_b` as a tensor when 3.x returns a warp ProxyArray, so `[:, 2]` was not the z component and every episode ended on step one. Nine GPU-days. |
