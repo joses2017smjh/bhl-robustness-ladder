@@ -139,14 +139,17 @@ leave the grippers inert and the variant indistinguishable from its control.
 |---|---|---|
 | 1 | `21105363` | running — smoke through the real training path, 3 iters, blind/depth/rgb |
 
-### Cloth sorting — G-C1 throughput · `running`
-Decides RL against scripted demo. The folding repo's stack is CPU-only at one
-env per process; 6.0's Newton runs cloth on GPU, so the question is how many
-environments at once. At 1,024 this is an RL task, at 16 it is a demonstration.
+### Cloth sorting — G-C1 throughput · `todo` (three probes, no number yet)
+Decides RL against scripted demo. Still undecided: three probes, none of which
+measured cloth. The next one has to build the deformable properly --
+`DeformableObjectCfg` with a Newton VBD solver, as
+`isaaclab_tasks/.../lift_franka_soft` does -- rather than spawning a mesh and
+assuming the solver picks it up.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21105721` | **suspect** — 2.04M env-steps/s at 1,024 envs, but only 14% slower than 16 envs. Flat scaling means the cloth is probably not being simulated; not to be quoted until verified. |
+| 4 | `21124738` | **verdict: the probe measured nothing.** `physics schemas on the cloth prim: NONE` — a `UsdFileCfg` loads the mesh as static geometry, it does not make it cloth. |
+| 3 | `21105721` | VOID — 2.04M env-steps/s at 1,024 envs, only 14% slower than at 16. The flat scaling was the tell. |
 | 2 | `21105405` | FAILED — Isaac Lab's cloth task pulls a table and sky from the Omniverse content server and one path 404s. The sorting task brings its own garments, so that dependency was never needed. |
 | 1 | `21105364` | FAILED — `'str' object is not callable`: Isaac Lab's tasks use a module-path string for `env_cfg_entry_point`, this repo's use a class |
 
