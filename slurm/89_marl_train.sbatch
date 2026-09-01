@@ -7,7 +7,7 @@
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:1
 #SBATCH --time=40:00:00
-#SBATCH --array=0-3
+#SBATCH --array=0-4
 #SBATCH --output=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%A_%a.out
 #SBATCH --error=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%A_%a.out
 
@@ -45,6 +45,12 @@ case $IDX in
   1) export BHL_PARTITION=limb4 BHL_ALGO=ippo  ;;
   2) export BHL_PARTITION=limb2 BHL_ALGO=mappo ;;
   3) export BHL_PARTITION=none  BHL_ALGO=ppo   ;;
+  # The control that actually controls. Row 3 routes through rsl-rl while every
+  # MARL row routes through skrl, so a difference against it prices the RL
+  # library as well as the split. limb1 is one agent owning all joints under the
+  # same trainer, models and hyperparameters as limb2 and limb4 -- the
+  # factorisation switched off, and nothing else.
+  4) export BHL_PARTITION=limb1 BHL_ALGO=ippo  ;;
   *) echo "bad array index $IDX" >&2; exit 1 ;;
 esac
 

@@ -24,7 +24,7 @@ parser.add_argument("--seed", type=int, default=0)
 parser.add_argument("--max_iterations", type=int, default=6000)
 parser.add_argument("--run_name", type=str, default="marl")
 parser.add_argument("--partition", type=str, default="limb4",
-                    choices=("limb4", "limb2"))
+                    choices=("limb4", "limb2", "limb1"))
 parser.add_argument("--algo", type=str, default="mappo", choices=("mappo", "ippo"))
 parser.add_argument("--ablate-arm-deviation", action="store_true")
 parser.add_argument("--rollouts", type=int, default=24)

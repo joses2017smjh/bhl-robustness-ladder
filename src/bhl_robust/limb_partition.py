@@ -154,7 +154,15 @@ def partition_for(kind: str, n_dof: int) -> dict[str, list[int]]:
             f"no joint layout with {n_dof} DoF; known are "
             f"{len(JOINTS_22)} (welded hands) and {N_JOINTS} (grippers)"
         )
-    if kind == "limb4":
+    if kind == "limb1":
+        # One agent owning every joint: not a factorisation at all, and that is
+        # the point. The PPO control routes through rsl-rl while every MARL row
+        # routes through skrl, so comparing them prices the RL library as well
+        # as the split. This runs the same trainer, the same models and the same
+        # hyperparameters as limb2 and limb4 with the partition switched off, so
+        # a difference against it is attributable to factorisation alone.
+        part = {"whole": list(range(n_dof))}
+    elif kind == "limb4":
         part = {
             "arm_left": _idx_in(names, "arm_left"),
             "arm_right": _idx_in(names, "arm_right"),
