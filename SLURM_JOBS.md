@@ -169,7 +169,16 @@ works.
 | 2 | `21146050` | running — task named directly; the previous version resolved it through a `..` chain and a log grep under `set -e` |
 | 1 | `21136321` | FAILED in 4 s with a 0-byte log — died before printing anything |
 
-### Plank spawn ejection · `running`
+### Plank cells, re-run on the fixed scene · `running`
+The six original plank cells measured a scene that ejected its own payload, and
+their gripper arms showed none of the survival effect the cube and ball arms did
+— episode length 11.6 against 428. Re-run at the 1.05 m stand-off.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21146058` | running — 3 welded + 3 gripper, 8,000 iters |
+
+### Plank spawn ejection · `done`
 `plank_leaned` no longer fires on a zero action (0.000 at every step, was 0.031
 at step 20) — the stationary requirement fixed the predicate. **Cause found, geometrically rather than by guess:** at x = ±0.85 the hands
 begin **18.7 cm inside** a plank spanning ±0.75 — hand reach is 0.25 m and the
