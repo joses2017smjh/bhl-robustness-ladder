@@ -209,6 +209,8 @@ def main() -> None:
                         f"{EPISODE_STEPS}")
     p.add_argument("--payload", default="cube", choices=sorted(PAYLOADS),
                    help="which object the policy was trained on")
+    p.add_argument("--gripper", action="store_true",
+                   help="24-DoF asset; required to replay a gripper checkpoint")
     p.add_argument("--pov", action="store_true",
                    help="append the robot's own colour and depth views")
     p.add_argument("--pov-robot", type=int, default=0,
@@ -222,7 +224,8 @@ def main() -> None:
     # index, so the physics of a blind replay is unaffected, and building the
     # scene before the checkpoint is read keeps the two independent.
     model, slots, crates = build_crew(args.upstream, args.cache_dir, args.robots,
-                                      ego_camera=True, payload=args.payload)
+                                      ego_camera=True, payload=args.payload,
+                                      gripper=args.gripper)
     actor = CoopActor(ckpt)
     run = CrewRunner(model, slots, crates, actor)
     if args.pov:

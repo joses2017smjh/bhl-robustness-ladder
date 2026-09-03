@@ -53,8 +53,33 @@ EGO_CAM = (
 )
 
 
+#: Finger geometry, matching `scripts/add_gripper.py` so the MuJoCo replay and
+#: the Isaac asset describe the same hand. Changing one without the other makes
+#: the sim2sim comparison a comparison of two robots.
+GRIPPER_PIVOT_Z = -0.110
+GRIPPER_FINGER = (0.020, 0.050, 0.070)
+GRIPPER_RANGE = (0.0, 1.20)
+GRIPPER_EFFORT = 2.0
+
+
+def _gripper_body(side: str, sign: float) -> str:
+    """One finger, hinged on the hand, closing across the palm."""
+    sx, sy, sz = (v / 2.0 for v in GRIPPER_FINGER)
+    return (
+        f'<body name="arm_{side}_finger_link" pos="0 0 {GRIPPER_PIVOT_Z}">'
+        f'<joint name="arm_{side}_gripper_joint" type="hinge" axis="0 {sign:g} 0" '
+        f'range="{GRIPPER_RANGE[0]} {GRIPPER_RANGE[1]}"/>'
+        f'<inertial pos="0 0 -0.035" mass="0.03" '
+        f'diaginertia="2.0e-5 1.5e-5 1.0e-5"/>'
+        f'<geom name="arm_{side}_finger_geom" type="box" '
+        f'size="{sx} {sy} {sz}" pos="0 0 -0.035" rgba="0.922 0.408 0.204 1"/>'
+        f'</body>'
+    )
+
+
 def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
-                 terrain: bool = False, ego_camera: bool = False) -> Path:
+                 terrain: bool = False, ego_camera: bool = False,
+                 gripper: bool = False) -> Path:
     """Materialise a loadable copy of the MJCF and return the scene path.
 
     Args:
@@ -67,6 +92,12 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
         ego_camera: add a base-mounted depth camera (`EGO_CAM_NAME`). Off by
             default -- an extra camera changes nothing physical, but the scored
             runs and the depth clips should not share a cache directory.
+        gripper: add one hinged finger per hand, giving the 24-DoF layout the
+            hardware actually has. The shipped MJCF welds both hands, so
+            without this the replay harness cannot load a 24-DoF checkpoint at
+            all -- which is why the gripper arms, the largest effect in the
+            project, had no clips. Geometry mirrors `scripts/add_gripper.py`;
+            the two must agree or trainer and judge describe different robots.
 
     Returns:
         Path to the patched scene XML, ready for `MjModel.from_xml_path`.
@@ -85,6 +116,8 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
     out_dir = cache_dir / (f"mjcf_{variant}_hfield" if terrain else f"mjcf_{variant}")
     if ego_camera:
         out_dir = out_dir.with_name(out_dir.name + "_ego")
+    if gripper:
+        out_dir = out_dir.with_name(out_dir.name + "_grip")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     scene_out = out_dir / scene_name
@@ -146,6 +179,42 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
         )
         if n_cam == 0:
             raise RuntimeError(f'no <body name="base"> in {robot_name}; upstream layout changed')
+
+    if gripper:
+        # A finger body inside each hand, plus a motor for it. The hand bodies
+        # are self-closing in the shipped XML (the fixed joint is a comment, not
+        # an element), so the finger is inserted just before each hand body's
+        # closing tag rather than appended after it.
+        for side, sign in (("left", +1.0), ("right", -1.0)):
+            tag = f'<body name="arm_{side}_hand_link"'
+            i = xml.find(tag)
+            if i < 0:
+                raise RuntimeError(
+                    f'no <body name="arm_{side}_hand_link"> in {robot_name}; '
+                    "the gripper patch assumes upstream's hand layout"
+                )
+            depth, j = 0, i
+            while j < len(xml):
+                if xml.startswith("<body", j):
+                    depth += 1
+                elif xml.startswith("</body>", j):
+                    depth -= 1
+                    if depth == 0:
+                        break
+                j += 1
+            if depth != 0:
+                raise RuntimeError(f"unbalanced <body> around arm_{side}_hand_link")
+            xml = xml[:j] + _gripper_body(side, sign) + xml[j:]
+
+        motors = "".join(
+            f'<motor class="berkeley-humanoid-lite" name="arm_{s}_gripper_joint" '
+            f'joint="arm_{s}_gripper_joint" '
+            f'forcerange="-{GRIPPER_EFFORT} {GRIPPER_EFFORT}"/>'
+            for s in ("left", "right")
+        )
+        xml, n_act = re.subn(r"(</actuator>)", motors + r"\1", xml, count=1)
+        if n_act == 0:
+            raise RuntimeError(f"no </actuator> in {robot_name}; cannot add gripper motors")
 
     if n_dir == 0:
         raise RuntimeError(f"no meshdir attribute found in {robot_name}; upstream layout changed")

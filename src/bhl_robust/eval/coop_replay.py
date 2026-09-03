@@ -314,7 +314,8 @@ def _yaw_quat(yaw: float) -> list[float]:
 
 
 def build_crew(upstream: Path, cache_dir: Path, n_robots: int,
-               ego_camera: bool = False, payload: str = "cube"):
+               ego_camera: bool = False, payload: str = "cube",
+               gripper: bool = False):
     """Compose `n_robots` humanoids and one crate per pair into one model.
 
     Robots are laid out along +y, so a single camera frames the crew, and every
@@ -335,7 +336,11 @@ def build_crew(upstream: Path, cache_dir: Path, n_robots: int,
         raise ValueError(f"unknown payload {payload!r}; have {sorted(PAYLOADS)}")
     pay = PAYLOADS[payload]
 
-    scene = prepare_mjcf(upstream, cache_dir, "humanoid", ego_camera=ego_camera)
+    # `gripper` switches the crew to the 24-DoF layout. Without it a 24-DoF
+    # checkpoint cannot be replayed at all, which is why the gripper arms --
+    # the largest effect in this project -- had no clips.
+    scene = prepare_mjcf(upstream, cache_dir, "humanoid",
+                         ego_camera=ego_camera, gripper=gripper)
     robot_xml = scene.parent / "berkeley_humanoid_lite.xml"
 
     world_path = cache_dir / "carry_world.xml"
