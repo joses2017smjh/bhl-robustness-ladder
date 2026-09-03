@@ -42,12 +42,14 @@ import isaaclab.sim as sim_utils  # noqa: E402
 
 
 def _localise(scene_cfg) -> list[str]:
-    """Replace every remote USD in the scene with a local cuboid.
+    """Drop every scene entry whose USD lives on a remote server.
 
-    Named by walk rather than by asset, so a different 404 tomorrow is handled
-    the same way. Anything the solver actually integrates -- the cloth, the
-    robot -- is not a plain UsdFileCfg on a URL, so this cannot silently remove
-    the thing being measured.
+    Found by walking for URL `usd_path`s rather than by naming the two assets
+    that 404'd today, so a different missing asset tomorrow is handled the same
+    way. The cloth is a DeformableObjectCfg with a procedural MeshRectangleCfg
+    spawner and no usd_path, so this cannot remove the thing being measured --
+    and the report prints what it dropped, so a scene gutted by accident is
+    visible rather than silent.
     """
     swapped = []
     for name in dir(scene_cfg):
@@ -57,16 +59,19 @@ def _localise(scene_cfg) -> list[str]:
         spawn = getattr(item, "spawn", None)
         path = getattr(spawn, "usd_path", None)
         if isinstance(path, str) and path.startswith(("http://", "https://", "omniverse://")):
-            # Visual only. Giving the replacement rigid_props made it a Newton
-            # physics body, and Isaac Lab's FrameView refuses those:
+            # Remove, do not substitute.
+            #
+            # The first attempt replaced the asset with a cuboid carrying
+            # rigid_props, which made it a Newton physics body and tripped
             #   FrameView prim '/World/envs/env_0/Table' is a Newton physics
             #   body. FrameView should only be used for non-physics frames.
-            # The asset being replaced was a decorative frame, so the
-            # substitute has to stay one.
-            item.spawn = sim_utils.CuboidCfg(
-                size=(0.6, 1.0, 0.05),
-                visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.4, 0.4, 0.45)),
-            )
+            # A visual-only cuboid avoids that but still guesses at what role
+            # the prim played. Deleting it makes no guess at all: whatever the
+            # asset was for, the solver now has one fewer body and the cloth is
+            # unaffected, which is the only thing being measured. The cloth
+            # itself is a DeformableObjectCfg with a procedural MeshRectangleCfg
+            # spawner, not a URL, so it cannot be removed by this.
+            setattr(scene_cfg, name, None)
             swapped.append(name)
     return swapped
 

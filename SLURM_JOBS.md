@@ -149,7 +149,8 @@ assuming the solver picks it up.
 
 | # | id | outcome |
 |---|---|---|
-| 6 | `21136231` | queued — substitute is visual-only now |
+| 7 | `21136400` | running — remote assets are **removed**, not substituted; the report names what it dropped |
+| 6 | `21136231` | cancelled before it ran — a visual-only substitute still guesses at the prim's role |
 | 5 | `21125073` | FAILED — my replacement carried `rigid_props`, so `FrameView` refused it: "prim '/World/envs/env_0/Table' is a Newton physics body" |
 | 4 | `21124738` | **verdict: the probe measured nothing.** `physics schemas on the cloth prim: NONE` — a `UsdFileCfg` loads the mesh as static geometry, it does not make it cloth. |
 | 3 | `21105721` | VOID — 2.04M env-steps/s at 1,024 envs, only 14% slower than at 16. The flat scaling was the tell. |
