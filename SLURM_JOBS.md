@@ -166,7 +166,8 @@ works.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21136321` | running — gripper vs welded on the same task, 400 frames each |
+| 2 | `21146050` | running — task named directly; the previous version resolved it through a `..` chain and a log grep under `set -e` |
+| 1 | `21136321` | FAILED in 4 s with a 0-byte log — died before printing anything |
 
 ### Plank spawn ejection · `running`
 `plank_leaned` no longer fires on a zero action (0.000 at every step, was 0.031
