@@ -150,8 +150,10 @@ BALL = Payload("ball", mujoco.mjtGeom.mjGEOM_SPHERE, [0.33, 0.0, 0.0],
 # with the robots at x = +/-0.85. The 40 cm face is the only one the shoulders
 # could close on; the 8 cm rail is not a grasp this morphology can make, which
 # is the whole reason this object is in the set.
+# pair_half is 1.05, not 0.85: at 0.85 the hands begin 18.7 cm inside a payload
+# spanning +/-0.75, which the contact solver resolves by ejecting it.
 LADDER = Payload("ladder", mujoco.mjtGeom.mjGEOM_BOX, [0.75, 0.20, 0.04],
-                 1.1, 1.1, 0.04, 0.75, 0.85, 0.22, axis="x")
+                 1.1, 1.1, 0.04, 0.75, 1.05, 0.22, axis="x")
 PAYLOADS = {p.name: p for p in (CUBE, BALL, LADDER)}
 # Clear air between one pair and the next, so a four-robot shot does not read as
 # four robots on one crate.

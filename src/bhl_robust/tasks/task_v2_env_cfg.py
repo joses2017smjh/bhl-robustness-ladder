@@ -38,7 +38,14 @@ CAM_RES = 32
 # Layout constants, all of them checked by G-T2 before anything trained on them.
 SHELF_X, SHELF_DECK, SHELF_SLOT = 1.2, 0.38, 0.34
 NET_X, NET_RIM, NET_MOUTH = 3.5, 0.60, 0.70
-WALL_X, WALL_CONTACT = 1.0, 0.50
+# The wall sits beyond both robots, not between them. With the pair at
+# x = +/-1.05 a wall at 1.0 would have been behind one of them.
+WALL_X, WALL_CONTACT = 2.4, 0.50
+#: Stand-off for the plank pair. At the ladder's original 0.85 the hands begin
+#: 18.7 cm inside a payload spanning +/-0.75, and the contact solver ejects it
+#: 22 cm upward before the policy acts -- which is what made plank_leaned fire
+#: on a zero action. 0.75 + 0.25 hand reach + 0.037 half-hand = 1.037.
+PLANK_STANDOFF = 1.05
 
 
 def _cam(prim: str, data_type: str) -> TiledCameraCfg:
@@ -280,8 +287,8 @@ class PlankToWallCfg(_TaskV2Base):
 
     def __post_init__(self):
         super().__post_init__()
-        self.scene.robot_a = _robot("{ENV_REGEX_NS}/robot_a", (-0.85, 0.0, 0.0), (1.0, 0.0, 0.0, 0.0))
-        self.scene.robot_b = _robot("{ENV_REGEX_NS}/robot_b", (0.85, 0.0, 0.0), (0.0, 0.0, 0.0, 1.0))
+        self.scene.robot_a = _robot("{ENV_REGEX_NS}/robot_a", (-PLANK_STANDOFF, 0.0, 0.0), (1.0, 0.0, 0.0, 0.0))
+        self.scene.robot_b = _robot("{ENV_REGEX_NS}/robot_b", (PLANK_STANDOFF, 0.0, 0.0), (0.0, 0.0, 0.0, 1.0))
         self.scene.object = _object(
             sim_utils.CuboidCfg(
                 size=(1.50, 0.40, 0.08),

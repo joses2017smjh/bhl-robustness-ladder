@@ -166,16 +166,21 @@ works.
 |---|---|---|
 | 1 | `21136321` | running — gripper vs welded on the same task, 400 frames each |
 
-### Plank spawn ejection · `todo`
+### Plank spawn ejection · `running`
 `plank_leaned` no longer fires on a zero action (0.000 at every step, was 0.031
-at step 20) — the stationary requirement fixed the predicate. **The ejection
-itself is not fixed:** the plank still rises 0.30 → 0.52 m in twenty steps with
-the policy outputting nothing, so 1 mm of support clearance was not the cause.
-The remaining suspect is the robots' arms interpenetrating the plank at spawn,
-since they stand at x = ±0.85 across a payload spanning ±0.75.
+at step 20) — the stationary requirement fixed the predicate. **Cause found, geometrically rather than by guess:** at x = ±0.85 the hands
+begin **18.7 cm inside** a plank spanning ±0.75 — hand reach is 0.25 m and the
+hand link is 74 mm across, so the near edge sits at 0.563 against a plank end at
+0.750. The contact solver resolves that overlap by ejecting the payload. Support
+clearance was never the issue.
+
+Stand-off is now 1.05 m, which clears the plank by 13 mm and still reaches the
+contact point with 50 mm to spare. The wall moved from x = 1.0 to 2.4, because
+at the new stand-off a wall at 1.0 would have been behind one of the robots.
 
 | # | id | outcome |
 |---|---|---|
+| 3 | `21136400` | running — recheck at the 1.05 m stand-off |
 | 2 | `21125100` | predicate fixed, ejection remains — plank still reaches 0.52 m unaided |
 | 1 | `21124909` | found it — 0.031 success with a zero action, plank launching 22 cm |
 
