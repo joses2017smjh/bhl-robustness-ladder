@@ -1,14 +1,14 @@
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1787946375.747745 4139120 descriptor_database.cc:633] File already exists in database: grpc/health/v1/health.proto
-W0000 00:00:1787946375.747797 4139120 message.cc:301] Protobuf GeneratedMessageFactory: File is already registered: grpc/health/v1/health.proto
+E0000 00:00:1787985318.265116  952098 descriptor_database.cc:633] File already exists in database: grpc/health/v1/health.proto
+W0000 00:00:1787985318.266659  952098 message.cc:301] Protobuf GeneratedMessageFactory: File is already registered: grpc/health/v1/health.proto
 Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaacsim/kit/data/Kit/IsaacLab/3.0/user.config.json'
-2026-08-28T19:46:14Z [Info] [carb] Logging to file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaacsim/kit/logs/Kit/IsaacLab/3.0/kit_20260828_124614.log
-2026-08-28T19:46:15Z [15ms] [Warning] [omni.ext.plugin] [ext: isaaclab_visualizers] Extensions config 'extension.toml' doesn't exist '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers' or '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers/config'
-2026-08-28T19:46:15Z [917ms] [Warning] [omni.perfmonitor.plugin]  PerfMonitorManager::onStart - error calling pthread_setaffinity_np
-2026-08-28T19:46:15Z [945ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
-2026-08-28T19:46:15Z [945ms] [Warning] [omni.rtx] CUDA_VISIBLE_DEVICES environment variable is set.
-2026-08-28T19:46:15Z [949ms] [Warning] [omni.rtx] Note CUDA device enumeration and Omniverse device enumeration are different.
-2026-08-28T19:46:15Z [949ms] [Warning] [omni.rtx] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
+2026-08-29T06:35:15Z [Info] [carb] Logging to file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaacsim/kit/logs/Kit/IsaacLab/3.0/kit_20260828_233515.log
+2026-08-29T06:35:15Z [22ms] [Warning] [omni.ext.plugin] [ext: isaaclab_visualizers] Extensions config 'extension.toml' doesn't exist '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers' or '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers/config'
+2026-08-29T06:35:19Z [3,992ms] [Warning] [omni.perfmonitor.plugin]  PerfMonitorManager::onStart - error calling pthread_setaffinity_np
+2026-08-29T06:35:19Z [4,025ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2026-08-29T06:35:19Z [4,031ms] [Warning] [omni.rtx] CUDA_VISIBLE_DEVICES environment variable is set.
+2026-08-29T06:35:19Z [4,031ms] [Warning] [omni.rtx] Note CUDA device enumeration and Omniverse device enumeration are different.
+2026-08-29T06:35:19Z [4,031ms] [Warning] [omni.rtx] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
 
 |---------------------------------------------------------------------------------------------|
 | Driver Version: 595.71.05     | Graphics API: Vulkan
@@ -17,33 +17,32 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |     |                                  |        |     |            | Device-ID | UUID       |
 |     |                                  |        |     |            | Bus-ID    |            |
 |---------------------------------------------------------------------------------------------|
-| 0   | NVIDIA A40                       | Yes: 0 |     | 46068   MB | 10de      | 0          |
-|     |                                  |        |     |            | 2235      | 93ad315f.. |
-|     |                                  |        |     |            | 25        |            |
+| 0   | Quadro RTX 8000                  | Yes: 0 |     | 78838   MB | 10de      | 0          |
+|     |                                  |        |     |            | 1e78      | 33cb3fc9.. |
+|     |                                  |        |     |            | 48        |            |
 |=============================================================================================|
 | OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel: 5.14.0-611.55.1.el9_7.x86_64
-| Processor: AMD EPYC 7F72 24-Core Processor
+| Processor: Intel(R) Xeon(R) Gold 6248R CPU @ 3.00GHz
 | Cores: 48 | Logical Cores: 48
 |---------------------------------------------------------------------------------------------|
-| Total Memory (MB): 257516 | Free Memory: 184136
-| Total Page/Swap (MB): 16383 | Free Page/Swap: 16383
+| Total Memory (MB): 772476 | Free Memory: 678818
+| Total Page/Swap (MB): 0 | Free Page/Swap: 0
 |---------------------------------------------------------------------------------------------|
-2026-08-28T19:46:16Z [1,727ms] [Warning] [omni.rtx] ECC is enabled on physical device 0
-2026-08-28T19:46:16Z [1,729ms] [Warning] [omni.rtx] IOMMU is enabled.
-2026-08-28T19:46:17Z [2,829ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
-2026-08-28T19:46:17Z [2,829ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
-2026-08-28T19:46:17Z [2,915ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
-2026-08-28T19:46:17Z [2,915ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
-2026-08-28T19:46:17Z [2,917ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
-2026-08-28T19:46:17Z [2,917ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
-2026-08-28T19:46:18Z [3,468ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
-2026-08-28T19:46:18Z [3,468ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
-2026-08-28T19:46:18Z [3,515ms] [Warning] [omni.log] Source: omni.hydra was already registered.
-2026-08-28T19:46:21Z [6,052ms] [Warning] [pxr.Semantics] pxr.Semantics is deprecated - please use Semantics instead
-2026-08-28T19:46:21Z [6,180ms] [Warning] [omni.replicator.core.scripts.extension] No material configuration file, adding configuration to material settings directly.
-2026-08-28T19:46:22Z [7,155ms] [Warning] [omni.rtx] Trying to initialize NGX without vkGetInstanceProcAddr and vkGetDeviceProcAddr pointer-to-functions.
-2026-08-28T19:46:22Z [7,155ms] [Error] [omni.rtx] Could not get NGX parameters block because NGX isn't enabled.
-2026-08-28T19:46:22Z [7,155ms] [Error] [omni.rtx] Failed to create NGX context.
+2026-08-29T06:35:20Z [5,359ms] [Warning] [omni.rtx] ECC is enabled on physical device 0
+2026-08-29T06:35:24Z [9,422ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-08-29T06:35:24Z [9,422ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-08-29T06:35:24Z [9,660ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-08-29T06:35:24Z [9,660ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-08-29T06:35:24Z [9,663ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-08-29T06:35:24Z [9,663ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-08-29T06:35:25Z [10,576ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
+2026-08-29T06:35:25Z [10,576ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
+2026-08-29T06:35:26Z [11,100ms] [Warning] [omni.log] Source: omni.hydra was already registered.
+2026-08-29T06:35:35Z [20,349ms] [Warning] [pxr.Semantics] pxr.Semantics is deprecated - please use Semantics instead
+2026-08-29T06:35:37Z [22,360ms] [Warning] [omni.replicator.core.scripts.extension] No material configuration file, adding configuration to material settings directly.
+2026-08-29T06:35:40Z [25,684ms] [Warning] [omni.rtx] Trying to initialize NGX without vkGetInstanceProcAddr and vkGetDeviceProcAddr pointer-to-functions.
+2026-08-29T06:35:40Z [25,685ms] [Error] [omni.rtx] Could not get NGX parameters block because NGX isn't enabled.
+2026-08-29T06:35:40Z [25,685ms] [Error] [omni.rtx] Failed to create NGX context.
 [ISAACLAB] AppLauncher initialization complete
 [INFO]: Base environment:
 	Environment device    : cuda:0
@@ -56,7 +55,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 [INFO]: Registered backend 'physx' for factory FrameView.
 [INFO]: Registered backend 'physx' for factory ContactSensor.
 [INFO]: Physics scene prim path: /physicsScene
-[INFO]: Time taken for scene creation Last: 0.411652 s, Mean: 0.411652 s, Std: 0.000000 s, N: 1
+[INFO]: Time taken for scene creation Last: 0.659112 s, Mean: 0.659112 s, Std: 0.000000 s, N: 1
 [INFO]: Scene manager:  <class InteractiveScene>
 	Number of environments: 4
 	Environment spacing   : 4.0
@@ -92,21 +91,21 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-2026-08-28T19:46:22Z [7,155ms] [Warning] [carb.scenerenderer-rtx.plugin] Failed to create NGX context.
-2026-08-28T19:46:22Z [7,799ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
-2026-08-28T19:46:25Z [10,722ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
-2026-08-28T19:46:25Z [10,760ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
-2026-08-28T19:46:27Z [12,128ms] [Warning] [omni.usd] Encountered USD Warnings but USD Diagnostics are currently muted. To view USD Warnings, please set the '/persistent/app/usd/muteUsdDiagnostics' setting to false in Preferences page.
-2026-08-28T19:46:29Z [14,163ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:29Z [14,163ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:29Z [14,191ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:29Z [14,192ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:29Z [14,200ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:29Z [14,200ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:29Z [14,267ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:29Z [14,267ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:29Z [14,276ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:29Z [14,277ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:40Z [25,685ms] [Warning] [carb.scenerenderer-rtx.plugin] Failed to create NGX context.
+2026-08-29T06:35:41Z [26,556ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-08-29T06:35:45Z [30,904ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
+2026-08-29T06:35:46Z [31,003ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-08-29T06:35:48Z [32,989ms] [Warning] [omni.usd] Encountered USD Warnings but USD Diagnostics are currently muted. To view USD Warnings, please set the '/persistent/app/usd/muteUsdDiagnostics' setting to false in Preferences page.
+2026-08-29T06:35:50Z [35,148ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:50Z [35,148ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:50Z [35,230ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:50Z [35,230ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:50Z [35,240ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:50Z [35,240ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:50Z [35,670ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:50Z [35,670ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:50Z [35,681ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:50Z [35,681ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
 [INFO]: Simulation parameters for joints in /World/envs/env_.*/robot_b:
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |                                                         Simulation Joint Information (Prim path: /World/envs/env_.*/robot_b)                                                         |
@@ -136,7 +135,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-[INFO]: Time taken for simulation start Last: 3.792473 s, Mean: 3.792473 s, Std: 0.000000 s, N: 1
+[INFO]: Time taken for simulation start Last: 5.342762 s, Mean: 5.342762 s, Std: 0.000000 s, N: 1
 [INFO] Command Manager:  <CommandManager> contains 0 active terms.
 +------------------------+
 |  Active Command Terms  |
@@ -282,31 +281,30 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 [INFO]: Physics scene prim path: /physicsScene
 [INFO]: Registered backend 'physx' for factory Renderer.
 [INFO]: Created new renderer for simulation: IsaacRtxRenderer
-2026-08-28T19:46:29Z [14,285ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:29Z [14,285ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:29Z [14,302ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:29Z [14,302ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:29Z [14,302ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:29Z [14,302ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:29Z [14,303ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:29Z [14,303ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:29Z [14,303ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:29Z [14,303ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:29Z [14,306ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:29Z [14,306ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:29Z [14,306ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:29Z [14,306ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:29Z [14,306ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:29Z [14,306ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:29Z [14,306ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:29Z [14,306ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:33Z [18,641ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
-2026-08-28T19:46:33Z [18,676ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
-2026-08-28T19:46:33Z [18,706ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
-2026-08-28T19:46:33Z [18,797ms] [Warning] [omni.kit.material.library.material_extensions] Could not initialize context menu integration: No module named 'omni.kit.context_menu'
-2026-08-28T19:46:34Z [19,980ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:34Z [19,980ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-[INFO]: Time taken for scene creation Last: 0.185767 s, Mean: 0.298710 s, Std: 0.159725 s, N: 2
+2026-08-29T06:35:50Z [35,690ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:50Z [35,690ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:50Z [35,712ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:35:50Z [35,712ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:35:50Z [35,712ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:35:50Z [35,712ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:35:50Z [35,713ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:35:50Z [35,713ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:35:50Z [35,713ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:35:50Z [35,713ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:35:50Z [35,716ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:35:50Z [35,717ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:35:50Z [35,717ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:35:50Z [35,717ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:35:50Z [35,717ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:35:50Z [35,718ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:35:50Z [35,718ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:35:50Z [35,718ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:35:55Z [40,881ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
+2026-08-29T06:35:55Z [40,916ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-08-29T06:35:55Z [40,950ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-08-29T06:35:57Z [42,678ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:57Z [42,678ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+[INFO]: Time taken for scene creation Last: 0.282359 s, Mean: 0.470736 s, Std: 0.266405 s, N: 2
 [INFO]: Scene manager:  <class InteractiveScene>
 	Number of environments: 4
 	Environment spacing   : 4.0
@@ -371,24 +369,24 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-2026-08-28T19:46:34Z [19,989ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:34Z [19,989ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:35Z [19,998ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:35Z [19,998ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:35Z [20,016ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:35Z [20,016ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:35Z [20,026ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:35Z [20,026ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:35Z [20,034ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:35Z [20,035ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:35Z [20,051ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:35Z [20,051ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:35Z [20,051ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:35Z [20,051ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:35Z [20,052ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:35:57Z [42,689ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:57Z [42,689ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:57Z [42,699ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:57Z [42,699ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:57Z [42,720ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:57Z [42,720ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:57Z [42,730ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:57Z [42,730ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:57Z [42,740ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:35:57Z [42,740ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:35:57Z [42,759ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:35:57Z [42,759ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:35:57Z [42,759ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:35:57Z [42,759ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:35:57Z [42,760ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
 [INFO]: Using renderer: IsaacRtxRenderer
 [INFO]: Using renderer: IsaacRtxRenderer
-[INFO]: Time taken for simulation start Last: 1.689265 s, Mean: 2.740869 s, Std: 1.487193 s, N: 2
+[INFO]: Time taken for simulation start Last: 2.134845 s, Mean: 3.738803 s, Std: 2.268340 s, N: 2
 [INFO] Command Manager:  <CommandManager> contains 0 active terms.
 +------------------------+
 |  Active Command Terms  |
@@ -536,27 +534,27 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 	Environment step-size : 0.04
 [INFO]: Physics scene prim path: /physicsScene
 [INFO]: Created new renderer for simulation: IsaacRtxRenderer
-2026-08-28T19:46:35Z [20,052ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:35Z [20,052ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:35Z [20,052ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:35Z [20,055ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:35Z [20,055ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:35Z [20,055ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:35Z [20,055ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:35Z [20,055ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:35Z [20,055ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:35Z [20,055ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:35Z [20,055ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:37Z [22,154ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
-2026-08-28T19:46:37Z [22,185ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
-2026-08-28T19:46:37Z [22,214ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
-2026-08-28T19:46:38Z [23,422ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:38Z [23,422ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:38Z [23,432ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:38Z [23,432ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:38Z [23,441ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:38Z [23,441ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-[INFO]: Time taken for scene creation Last: 0.166554 s, Mean: 0.254658 s, Std: 0.136300 s, N: 3
+2026-08-29T06:35:57Z [42,760ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:35:57Z [42,760ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:35:57Z [42,760ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:35:57Z [42,763ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:35:57Z [42,763ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:35:57Z [42,763ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:35:57Z [42,763ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:35:57Z [42,764ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:35:57Z [42,764ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:35:57Z [42,764ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:35:57Z [42,764ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:01Z [46,532ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
+2026-08-29T06:36:01Z [46,564ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-08-29T06:36:01Z [46,597ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-08-29T06:36:03Z [48,210ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:03Z [48,210ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:03Z [48,221ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:03Z [48,221ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:03Z [48,231ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:03Z [48,231ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+[INFO]: Time taken for scene creation Last: 0.185512 s, Mean: 0.375661 s, Std: 0.250206 s, N: 3
 [INFO]: Scene manager:  <class InteractiveScene>
 	Number of environments: 4
 	Environment spacing   : 4.0
@@ -621,30 +619,30 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-2026-08-28T19:46:38Z [23,459ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:38Z [23,459ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:38Z [23,469ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:38Z [23,469ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:38Z [23,477ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:38Z [23,477ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:38Z [23,493ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:38Z [23,493ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:38Z [23,493ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:38Z [23,493ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:38Z [23,494ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:38Z [23,494ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:38Z [23,494ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:38Z [23,494ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:38Z [23,497ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:38Z [23,497ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:38Z [23,497ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:38Z [23,497ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:38Z [23,497ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:38Z [23,497ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:38Z [23,497ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:03Z [48,252ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:03Z [48,252ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:03Z [48,263ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:03Z [48,263ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:03Z [48,272ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:03Z [48,272ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:03Z [48,291ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:03Z [48,291ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:03Z [48,291ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:03Z [48,291ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:03Z [48,292ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:03Z [48,292ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:03Z [48,292ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:03Z [48,292ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:03Z [48,296ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:03Z [48,296ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:03Z [48,296ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:03Z [48,296ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:03Z [48,297ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:03Z [48,297ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:03Z [48,297ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
 [INFO]: Using renderer: IsaacRtxRenderer
 [INFO]: Using renderer: IsaacRtxRenderer
-[INFO]: Time taken for simulation start Last: 1.508993 s, Mean: 2.330244 s, Std: 1.269532 s, N: 3
+[INFO]: Time taken for simulation start Last: 1.975179 s, Mean: 3.150928 s, Std: 1.899861 s, N: 3
 [INFO] Command Manager:  <CommandManager> contains 0 active terms.
 +------------------------+
 |  Active Command Terms  |
@@ -686,7 +684,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   1    | joint_pos_b  |         22 |
 +--------+--------------+------------+
 
-[INFO]: RTX streaming completed in 0.04 s.
+[INFO]: RTX streaming completed in 0.06 s.
 [INFO] Observation Manager: <ObservationManager> contains 2 groups.
 +-----------------------------------------------------------+
 | Active Observation Terms in Group: 'policy' (shape: (578,)) |
@@ -783,7 +781,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 +---------+----------------+
 
 [INFO]: Completed setting up the environment...
-[INFO]: RTX streaming completed in 0.37 s.
+[INFO]: RTX streaming completed in 0.77 s.
 [INFO]: SimulationContext cleared
 [INFO]: Base environment:
 	Environment device    : cuda:0
@@ -792,7 +790,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 	Rendering step-size   : 0.04
 	Environment step-size : 0.04
 [INFO]: Physics scene prim path: /physicsScene
-[INFO]: Time taken for scene creation Last: 0.171430 s, Mean: 0.233851 s, Std: 0.118815 s, N: 4
+[INFO]: Time taken for scene creation Last: 0.179852 s, Mean: 0.326709 s, Std: 0.226541 s, N: 4
 [INFO]: Scene manager:  <class InteractiveScene>
 	Number of environments: 4
 	Environment spacing   : 4.0
@@ -828,20 +826,21 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-2026-08-28T19:46:38Z [23,497ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:41Z [26,010ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
-2026-08-28T19:46:41Z [26,044ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
-2026-08-28T19:46:41Z [26,073ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
-2026-08-28T19:46:42Z [27,266ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:42Z [27,266ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:42Z [27,276ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:42Z [27,276ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:42Z [27,284ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:42Z [27,284ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:42Z [27,302ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:42Z [27,302ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:42Z [27,312ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:42Z [27,312ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:03Z [48,297ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:04Z [49,587ms] [Warning] [omni.kit.material.library.material_extensions] Could not initialize context menu integration: No module named 'omni.kit.context_menu'
+2026-08-29T06:36:06Z [51,582ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
+2026-08-29T06:36:06Z [51,613ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-08-29T06:36:06Z [51,645ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-08-29T06:36:08Z [53,239ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:08Z [53,240ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:08Z [53,250ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:08Z [53,250ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:08Z [53,260ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:08Z [53,260ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:08Z [53,281ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:08Z [53,281ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:08Z [53,291ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:08Z [53,291ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
 [INFO]: Simulation parameters for joints in /World/envs/env_.*/robot_b:
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |                                                         Simulation Joint Information (Prim path: /World/envs/env_.*/robot_b)                                                         |
@@ -871,7 +870,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-[INFO]: Time taken for simulation start Last: 1.395114 s, Mean: 2.096461 s, Std: 1.137141 s, N: 4
+[INFO]: Time taken for simulation start Last: 1.742834 s, Mean: 2.798905 s, Std: 1.703525 s, N: 4
 [INFO] Command Manager:  <CommandManager> contains 0 active terms.
 +------------------------+
 |  Active Command Terms  |
@@ -1017,30 +1016,30 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 	Environment step-size : 0.04
 [INFO]: Physics scene prim path: /physicsScene
 [INFO]: Created new renderer for simulation: IsaacRtxRenderer
-2026-08-28T19:46:42Z [27,320ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:42Z [27,320ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:42Z [27,337ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:42Z [27,337ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:42Z [27,337ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:42Z [27,337ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:42Z [27,337ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:42Z [27,337ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:42Z [27,337ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:42Z [27,337ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:42Z [27,340ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:42Z [27,340ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:42Z [27,340ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:42Z [27,340ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:42Z [27,341ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:42Z [27,341ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:42Z [27,341ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:42Z [27,341ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:43Z [28,879ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
-2026-08-28T19:46:43Z [28,912ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
-2026-08-28T19:46:43Z [28,940ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
-2026-08-28T19:46:45Z [30,160ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:45Z [30,160ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-[INFO]: Time taken for scene creation Last: 0.171975 s, Mean: 0.221476 s, Std: 0.106552 s, N: 5
+2026-08-29T06:36:08Z [53,300ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:08Z [53,300ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:08Z [53,319ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:08Z [53,319ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:08Z [53,319ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:08Z [53,319ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:08Z [53,320ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:08Z [53,320ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:08Z [53,320ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:08Z [53,320ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:08Z [53,323ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:08Z [53,323ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:08Z [53,323ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:08Z [53,323ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:08Z [53,324ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:08Z [53,324ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:08Z [53,324ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:08Z [53,324ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:10Z [55,036ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
+2026-08-29T06:36:10Z [55,066ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-08-29T06:36:10Z [55,100ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-08-29T06:36:11Z [56,681ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:11Z [56,681ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+[INFO]: Time taken for scene creation Last: 0.198173 s, Mean: 0.301002 s, Std: 0.204438 s, N: 5
 [INFO]: Scene manager:  <class InteractiveScene>
 	Number of environments: 4
 	Environment spacing   : 4.0
@@ -1105,24 +1104,24 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-2026-08-28T19:46:45Z [30,170ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:45Z [30,170ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:45Z [30,178ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:45Z [30,178ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:45Z [30,196ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:45Z [30,197ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:45Z [30,206ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:45Z [30,206ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:45Z [30,214ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:45Z [30,214ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:45Z [30,232ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:45Z [30,232ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:45Z [30,232ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:45Z [30,232ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:45Z [30,232ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:11Z [56,692ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:11Z [56,692ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:11Z [56,702ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:11Z [56,702ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:11Z [56,722ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:11Z [56,722ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:11Z [56,733ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:11Z [56,733ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:11Z [56,742ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:11Z [56,742ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:11Z [56,762ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:11Z [56,762ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:11Z [56,762ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:11Z [56,762ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:11Z [56,763ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
 [INFO]: Using renderer: IsaacRtxRenderer
 [INFO]: Using renderer: IsaacRtxRenderer
-[INFO]: Time taken for simulation start Last: 1.484146 s, Mean: 1.973998 s, Std: 1.022156 s, N: 5
+[INFO]: Time taken for simulation start Last: 1.844948 s, Mean: 2.608113 s, Std: 1.535743 s, N: 5
 [INFO] Command Manager:  <CommandManager> contains 0 active terms.
 +------------------------+
 |  Active Command Terms  |
@@ -1271,28 +1270,28 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 	Environment step-size : 0.04
 [INFO]: Physics scene prim path: /physicsScene
 [INFO]: Created new renderer for simulation: IsaacRtxRenderer
-2026-08-28T19:46:45Z [30,233ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:45Z [30,233ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:45Z [30,233ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:45Z [30,235ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:45Z [30,235ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:45Z [30,235ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:45Z [30,235ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:45Z [30,236ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:45Z [30,236ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:45Z [30,236ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:45Z [30,236ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:45Z [30,268ms] [Warning] [carb] Client omni.hydratexture.plugin has acquired [carb::settings::ISettings v1.1] 100 times. Consider accessing this interface with carb::getCachedInterface() (Performance warning)
-2026-08-28T19:46:47Z [32,040ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
-2026-08-28T19:46:47Z [32,067ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
-2026-08-28T19:46:47Z [32,097ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
-2026-08-28T19:46:48Z [33,377ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:48Z [33,377ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:48Z [33,387ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:48Z [33,387ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:48Z [33,396ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:48Z [33,396ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-[INFO]: Time taken for scene creation Last: 0.169312 s, Mean: 0.212782 s, Std: 0.097654 s, N: 6
+2026-08-29T06:36:11Z [56,763ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:11Z [56,764ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:11Z [56,764ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:11Z [56,766ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:11Z [56,766ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:11Z [56,766ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:11Z [56,766ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:11Z [56,767ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:11Z [56,767ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:11Z [56,767ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:11Z [56,767ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:11Z [56,802ms] [Warning] [carb] Client omni.hydratexture.plugin has acquired [carb::settings::ISettings v1.1] 100 times. Consider accessing this interface with carb::getCachedInterface() (Performance warning)
+2026-08-29T06:36:13Z [58,773ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
+2026-08-29T06:36:13Z [58,802ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-08-29T06:36:13Z [58,836ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-08-29T06:36:15Z [60,398ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:15Z [60,399ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:15Z [60,409ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:15Z [60,410ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:15Z [60,419ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:15Z [60,419ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+[INFO]: Time taken for scene creation Last: 0.194414 s, Mean: 0.283237 s, Std: 0.187961 s, N: 6
 [INFO]: Scene manager:  <class InteractiveScene>
 	Number of environments: 4
 	Environment spacing   : 4.0
@@ -1357,30 +1356,30 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-2026-08-28T19:46:48Z [33,414ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:48Z [33,414ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:48Z [33,424ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:48Z [33,424ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:48Z [33,432ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:48Z [33,432ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:48Z [33,450ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:48Z [33,450ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:48Z [33,450ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:48Z [33,450ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:48Z [33,450ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:48Z [33,451ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:48Z [33,451ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:48Z [33,451ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:48Z [33,453ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:48Z [33,453ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:48Z [33,453ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:48Z [33,453ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:48Z [33,454ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:48Z [33,454ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:48Z [33,454ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:15Z [60,440ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:15Z [60,440ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:15Z [60,450ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:15Z [60,450ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:15Z [60,460ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:15Z [60,460ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:15Z [60,480ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:15Z [60,480ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:15Z [60,480ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:15Z [60,480ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:15Z [60,481ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:15Z [60,481ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:15Z [60,481ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:15Z [60,481ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:15Z [60,484ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:15Z [60,484ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:15Z [60,484ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:15Z [60,484ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:15Z [60,485ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:15Z [60,485ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:15Z [60,485ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
 [INFO]: Using renderer: IsaacRtxRenderer
 [INFO]: Using renderer: IsaacRtxRenderer
-[INFO]: Time taken for simulation start Last: 1.494299 s, Mean: 1.894048 s, Std: 0.934984 s, N: 6
+[INFO]: Time taken for simulation start Last: 1.854734 s, Mean: 2.482550 s, Std: 1.407622 s, N: 6
 [INFO] Command Manager:  <CommandManager> contains 0 active terms.
 +------------------------+
 |  Active Command Terms  |
@@ -1422,7 +1421,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   1    | joint_pos_b  |         22 |
 +--------+--------------+------------+
 
-[INFO]: RTX streaming completed in 0.04 s.
+[INFO]: RTX streaming completed in 0.11 s.
 [INFO] Observation Manager: <ObservationManager> contains 2 groups.
 +-----------------------------------------------------------+
 | Active Observation Terms in Group: 'policy' (shape: (578,)) |
@@ -1520,7 +1519,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 +---------+----------------+
 
 [INFO]: Completed setting up the environment...
-[INFO]: RTX streaming completed in 0.07 s.
+[INFO]: RTX streaming completed in 0.52 s.
 [INFO]: SimulationContext cleared
 [INFO]: Base environment:
 	Environment device    : cuda:0
@@ -1529,7 +1528,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 	Rendering step-size   : 0.04
 	Environment step-size : 0.04
 [INFO]: Physics scene prim path: /physicsScene
-[INFO]: Time taken for scene creation Last: 0.139296 s, Mean: 0.202284 s, Std: 0.093372 s, N: 7
+[INFO]: Time taken for scene creation Last: 0.156714 s, Mean: 0.265163 s, Std: 0.178124 s, N: 7
 [INFO]: Scene manager:  <class InteractiveScene>
 	Number of environments: 4
 	Environment spacing   : 4.0
@@ -1565,21 +1564,21 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-2026-08-28T19:46:48Z [33,454ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:48Z [33,457ms] [Warning] [carb] Client omni.hydratexture.plugin has acquired [carb::dictionary::IDictionary v1.2] 100 times. Consider accessing this interface with carb::getCachedInterface() (Performance warning)
-2026-08-28T19:46:50Z [35,619ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
-2026-08-28T19:46:50Z [35,654ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
-2026-08-28T19:46:50Z [35,683ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
-2026-08-28T19:46:51Z [36,862ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:51Z [36,862ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:51Z [36,872ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:51Z [36,872ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:51Z [36,881ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:51Z [36,881ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:51Z [36,899ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:51Z [36,899ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:51Z [36,908ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:51Z [36,908ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:15Z [60,485ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:15Z [60,489ms] [Warning] [carb] Client omni.hydratexture.plugin has acquired [carb::dictionary::IDictionary v1.2] 100 times. Consider accessing this interface with carb::getCachedInterface() (Performance warning)
+2026-08-29T06:36:18Z [63,427ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
+2026-08-29T06:36:18Z [63,457ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-08-29T06:36:18Z [63,488ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-08-29T06:36:20Z [65,058ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:20Z [65,058ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:20Z [65,069ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:20Z [65,069ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:20Z [65,079ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:20Z [65,079ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:20Z [65,100ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:20Z [65,100ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:20Z [65,110ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:20Z [65,110ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
 [INFO]: Simulation parameters for joints in /World/envs/env_.*/robot_b:
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |                                                         Simulation Joint Information (Prim path: /World/envs/env_.*/robot_b)                                                         |
@@ -1609,7 +1608,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-[INFO]: Time taken for simulation start Last: 1.423332 s, Mean: 1.826803 s, Std: 0.871865 s, N: 7
+[INFO]: Time taken for simulation start Last: 1.736515 s, Mean: 2.375974 s, Std: 1.315552 s, N: 7
 [INFO] Command Manager:  <CommandManager> contains 0 active terms.
 +------------------------+
 |  Active Command Terms  |
@@ -1753,30 +1752,30 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 	Environment step-size : 0.04
 [INFO]: Physics scene prim path: /physicsScene
 [INFO]: Created new renderer for simulation: IsaacRtxRenderer
-2026-08-28T19:46:51Z [36,917ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:51Z [36,917ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:51Z [36,933ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:51Z [36,933ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:51Z [36,933ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:51Z [36,933ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:51Z [36,934ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:51Z [36,934ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:51Z [36,934ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:51Z [36,934ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:51Z [36,936ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:51Z [36,937ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:51Z [36,937ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:51Z [36,937ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:51Z [36,937ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:51Z [36,937ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:51Z [36,937ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:51Z [36,937ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:53Z [38,532ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
-2026-08-28T19:46:53Z [38,568ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
-2026-08-28T19:46:53Z [38,602ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
-2026-08-28T19:46:54Z [39,806ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:54Z [39,806ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-[INFO]: Time taken for scene creation Last: 0.150304 s, Mean: 0.195786 s, Std: 0.088377 s, N: 8
+2026-08-29T06:36:20Z [65,120ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:20Z [65,120ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:20Z [65,139ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:20Z [65,139ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:20Z [65,139ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:20Z [65,139ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:20Z [65,140ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:20Z [65,140ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:20Z [65,140ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:20Z [65,140ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:20Z [65,143ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:20Z [65,143ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:20Z [65,143ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:20Z [65,143ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:20Z [65,144ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:20Z [65,144ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:20Z [65,144ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:20Z [65,144ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:21Z [66,865ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
+2026-08-29T06:36:21Z [66,894ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-08-29T06:36:21Z [66,926ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-08-29T06:36:23Z [68,540ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:23Z [68,540ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+[INFO]: Time taken for scene creation Last: 0.172141 s, Mean: 0.253535 s, Std: 0.168158 s, N: 8
 [INFO]: Scene manager:  <class InteractiveScene>
 	Number of environments: 4
 	Environment spacing   : 4.0
@@ -1841,24 +1840,24 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-2026-08-28T19:46:54Z [39,816ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:54Z [39,816ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:54Z [39,825ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:54Z [39,825ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:54Z [39,844ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:54Z [39,844ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:54Z [39,853ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:54Z [39,853ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:54Z [39,861ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:54Z [39,861ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:54Z [39,880ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:54Z [39,880ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:54Z [39,880ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:54Z [39,880ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:54Z [39,881ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:23Z [68,551ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:23Z [68,551ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:23Z [68,560ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:23Z [68,561ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:23Z [68,582ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:23Z [68,582ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:23Z [68,593ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:23Z [68,593ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:23Z [68,602ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:23Z [68,603ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:23Z [68,623ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:23Z [68,623ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:23Z [68,623ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:23Z [68,623ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:23Z [68,624ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
 [INFO]: Using renderer: IsaacRtxRenderer
 [INFO]: Using renderer: IsaacRtxRenderer
-[INFO]: Time taken for simulation start Last: 1.484794 s, Mean: 1.784052 s, Std: 0.816197 s, N: 8
+[INFO]: Time taken for simulation start Last: 1.863003 s, Mean: 2.311852 s, Std: 1.231394 s, N: 8
 [INFO] Command Manager:  <CommandManager> contains 0 active terms.
 +------------------------+
 |  Active Command Terms  |
@@ -2005,27 +2004,27 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 	Environment step-size : 0.04
 [INFO]: Physics scene prim path: /physicsScene
 [INFO]: Created new renderer for simulation: IsaacRtxRenderer
-2026-08-28T19:46:54Z [39,881ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:54Z [39,881ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:54Z [39,881ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:54Z [39,883ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:54Z [39,883ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:54Z [39,884ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:54Z [39,884ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:54Z [39,884ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:54Z [39,884ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:54Z [39,884ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:54Z [39,884ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:56Z [41,721ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
-2026-08-28T19:46:56Z [41,756ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
-2026-08-28T19:46:56Z [41,785ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
-2026-08-28T19:46:58Z [43,040ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:58Z [43,041ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:58Z [43,050ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:58Z [43,050ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:58Z [43,059ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:58Z [43,059ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-[INFO]: Time taken for scene creation Last: 0.151518 s, Mean: 0.190867 s, Std: 0.083976 s, N: 9
+2026-08-29T06:36:23Z [68,624ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:23Z [68,624ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:23Z [68,624ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:23Z [68,627ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:23Z [68,627ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:23Z [68,627ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:23Z [68,627ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:23Z [68,628ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:23Z [68,628ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:23Z [68,628ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:23Z [68,628ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:25Z [70,655ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
+2026-08-29T06:36:25Z [70,684ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-08-29T06:36:25Z [70,716ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-08-29T06:36:27Z [72,329ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:27Z [72,329ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:27Z [72,340ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:27Z [72,340ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:27Z [72,349ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:27Z [72,349ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+[INFO]: Time taken for scene creation Last: 0.167739 s, Mean: 0.244002 s, Std: 0.159876 s, N: 9
 [INFO]: Scene manager:  <class InteractiveScene>
 	Number of environments: 4
 	Environment spacing   : 4.0
@@ -2090,30 +2089,30 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 |   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
 +-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
-2026-08-28T19:46:58Z [43,078ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:58Z [43,078ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:58Z [43,087ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:58Z [43,087ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:58Z [43,095ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
-2026-08-28T19:46:58Z [43,095ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
-2026-08-28T19:46:58Z [43,112ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:58Z [43,112ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:58Z [43,112ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:58Z [43,112ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:58Z [43,113ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
-2026-08-28T19:46:58Z [43,113ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
-2026-08-28T19:46:58Z [43,113ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
-2026-08-28T19:46:58Z [43,113ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
-2026-08-28T19:46:58Z [43,115ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:58Z [43,115ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:58Z [43,115ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
-2026-08-28T19:46:58Z [43,116ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
-2026-08-28T19:46:58Z [43,116ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
-2026-08-28T19:46:58Z [43,116ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
-2026-08-28T19:46:58Z [43,116ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:27Z [72,370ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:27Z [72,370ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:27Z [72,381ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:27Z [72,381ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:27Z [72,390ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-08-29T06:36:27Z [72,390ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-08-29T06:36:27Z [72,410ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:27Z [72,410ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:27Z [72,410ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:27Z [72,410ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:27Z [72,411ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-08-29T06:36:27Z [72,411ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-08-29T06:36:27Z [72,412ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-08-29T06:36:27Z [72,412ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-08-29T06:36:27Z [72,414ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:27Z [72,414ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:27Z [72,415ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-08-29T06:36:27Z [72,415ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:27Z [72,415ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-08-29T06:36:27Z [72,416ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-08-29T06:36:27Z [72,416ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
 [INFO]: Using renderer: IsaacRtxRenderer
 [INFO]: Using renderer: IsaacRtxRenderer
-[INFO]: Time taken for simulation start Last: 1.538776 s, Mean: 1.756799 s, Std: 0.767848 s, N: 9
+[INFO]: Time taken for simulation start Last: 1.944757 s, Mean: 2.271064 s, Std: 1.158344 s, N: 9
 [INFO] Command Manager:  <CommandManager> contains 0 active terms.
 +------------------------+
 |  Active Command Terms  |
@@ -2155,7 +2154,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 |   1    | joint_pos_b  |         22 |
 +--------+--------------+------------+
 
-[INFO]: RTX streaming completed in 0.04 s.
+[INFO]: RTX streaming completed in 0.06 s.
 [INFO] Observation Manager: <ObservationManager> contains 2 groups.
 +-----------------------------------------------------------+
 | Active Observation Terms in Group: 'policy' (shape: (578,)) |
@@ -2251,6 +2250,7 @@ Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaa
 +---------+----------------+
 
 [INFO]: Completed setting up the environment...
+[INFO]: RTX streaming completed in 0.04 s.
 [INFO]: SimulationContext cleared
 
 task                                     obs  success term  note
@@ -2265,4 +2265,4 @@ TaskV2-BHL-PlankToWall-Depth-v0          322          True  ok
 TaskV2-BHL-PlankToWall-Rgb-v0            578          True  ok
 
 9/9 built and stepped
-2026-08-28T19:46:58Z [43,116ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
+2026-08-29T06:36:27Z [72,416ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'

@@ -75,7 +75,7 @@ else:
         log(f"CHECK | {name}: riser 0 -> {hi*100:.1f} cm ({hi/LEG*100:.0f}% leg), "
             f"tread {sub.step_width*100:.0f} cm")
         for good, msg in (
-            (hi <= 0.05, f"{name} riser {hi*100:.1f} cm within the 5 cm ceiling"),
+            (hi <= 0.03, f"{name} riser {hi*100:.1f} cm within the 3 cm ceiling G-B2 settled on"),
             (sub.step_height_range[0] == 0.0, f"{name} starts at zero, so difficulty 0 is flat"),
             (sub.step_width >= 0.30, f"{name} tread {sub.step_width*100:.0f} cm fits a foot"),
         ):

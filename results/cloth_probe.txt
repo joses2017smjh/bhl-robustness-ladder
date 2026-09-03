@@ -1,0 +1,93 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1788473914.118009 3348438 descriptor_database.cc:633] File already exists in database: grpc/health/v1/health.proto
+W0000 00:00:1788473914.119799 3348438 message.cc:301] Protobuf GeneratedMessageFactory: File is already registered: grpc/health/v1/health.proto
+Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaacsim/kit/data/Kit/IsaacLab/3.0/user.config.json'
+2026-09-03T22:18:30Z [Info] [carb] Logging to file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaacsim/kit/logs/Kit/IsaacLab/3.0/kit_20260903_151830.log
+2026-09-03T22:18:30Z [22ms] [Warning] [omni.ext.plugin] [ext: isaaclab_visualizers] Extensions config 'extension.toml' doesn't exist '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers' or '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers/config'
+2026-09-03T22:18:34Z [4,684ms] [Warning] [omni.perfmonitor.plugin]  PerfMonitorManager::onStart - error calling pthread_setaffinity_np
+2026-09-03T22:18:34Z [4,717ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2026-09-03T22:18:34Z [4,723ms] [Warning] [omni.rtx] CUDA_VISIBLE_DEVICES environment variable is set.
+2026-09-03T22:18:34Z [4,723ms] [Warning] [omni.rtx] Note CUDA device enumeration and Omniverse device enumeration are different.
+2026-09-03T22:18:34Z [4,723ms] [Warning] [omni.rtx] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 595.71.05     | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | Quadro RTX 8000                  | Yes: 0 |     | 78838   MB | 10de      | 0          |
+|     |                                  |        |     |            | 1e78      | 33cb3fc9.. |
+|     |                                  |        |     |            | 48        |            |
+|=============================================================================================|
+| OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel: 5.14.0-611.55.1.el9_7.x86_64
+| Processor: Intel(R) Xeon(R) Gold 6248R CPU @ 3.00GHz
+| Cores: 48 | Logical Cores: 48
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 772476 | Free Memory: 676182
+| Total Page/Swap (MB): 0 | Free Page/Swap: 0
+|---------------------------------------------------------------------------------------------|
+2026-09-03T22:18:36Z [5,835ms] [Warning] [omni.rtx] ECC is enabled on physical device 0
+2026-09-03T22:18:40Z [9,869ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-09-03T22:18:40Z [9,869ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-09-03T22:18:40Z [10,112ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-09-03T22:18:40Z [10,112ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-09-03T22:18:40Z [10,114ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-09-03T22:18:40Z [10,114ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-09-03T22:18:41Z [11,062ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
+2026-09-03T22:18:41Z [11,062ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
+2026-09-03T22:18:41Z [11,572ms] [Warning] [omni.log] Source: omni.hydra was already registered.
+2026-09-03T22:18:50Z [20,792ms] [Warning] [pxr.Semantics] pxr.Semantics is deprecated - please use Semantics instead
+2026-09-03T22:18:52Z [22,790ms] [Warning] [omni.replicator.core.scripts.extension] No material configuration file, adding configuration to material settings directly.
+2026-09-03T22:18:56Z [26,125ms] [Warning] [omni.rtx] Trying to initialize NGX without vkGetInstanceProcAddr and vkGetDeviceProcAddr pointer-to-functions.
+2026-09-03T22:18:56Z [26,126ms] [Error] [omni.rtx] Could not get NGX parameters block because NGX isn't enabled.
+2026-09-03T22:18:56Z [26,126ms] [Error] [omni.rtx] Failed to create NGX context.
+[ISAACLAB] AppLauncher initialization complete
+  envs    steps/s   env-steps/s  note
+[INFO]: Parsing configuration from: isaaclab_tasks.manager_based.manipulation.lift_franka_soft.franka_cloth_env_cfg:FrankaClothEnvCfg
+[INFO]: Base environment:
+	Environment device    : cuda:0
+	Environment seed      : None
+	Physics step-size     : 0.016666666666666666
+	Rendering step-size   : 0.016666666666666666
+	Environment step-size : 0.016666666666666666
+[INFO]: Registered backend 'newton' for factory DeformableObject.
+[INFO]: Registered visual UsdGeom.Mesh at /World/envs/env_.*/Deformable/geometry/mesh.
+[INFO]: Registered UsdGeom.Mesh: 961 vertices.
+[INFO]: Registered backend 'newton' for factory FrameView.
+[INFO]: Registered backend 'newton' for factory FrameTransformer.
+[INFO]: FrameTransformer '/World/envs/env_.*/Robot/panda_link0': source='panda_link0', 1 target(s) registered
+[INFO]: Time taken for scene creation Last: 5.028422 s, Mean: 5.028422 s, Std: 0.000000 s, N: 1
+[INFO]: SimulationContext cleared
+Traceback (most recent call last):
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/scripts/bench/cloth_probe.py", line 99, in main
+    env = gym.make(args_cli.task, cfg=cfg, disable_env_checker=True)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/gymnasium/envs/registration.py", line 734, in make
+    env = env_creator(**env_spec_kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/envs/manager_based_rl_env.py", line 88, in __init__
+    super().__init__(cfg=cfg)
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/envs/manager_based_env.py", line 125, in __init__
+    self._init_sim()
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/envs/manager_based_env.py", line 176, in _init_sim
+    self.scene = InteractiveScene(self.cfg.scene)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/scene/interactive_scene.py", line 215, in __init__
+    self.clone_environments(copy_from_source=(not self.cfg.replicate_physics))
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/scene/interactive_scene.py", line 327, in clone_environments
+    self.cloner_cfg.physics_clone_fn(
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab_newton/cloner/newton_replicate.py", line 316, in newton_physics_replicate
+    builder, stage_info, site_index_map, world_xforms = _build_newton_builder_from_mapping(
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab_newton/cloner/newton_replicate.py", line 99, in _build_newton_builder_from_mapping
+    global_sites, proto_sites, world_sites = NewtonManager._cl_inject_sites(builder, protos)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab_newton/physics/newton_manager.py", line 856, in _cl_inject_sites
+    raise ValueError(
+ValueError: Site 'ft_4' with body_pattern '/World/envs/env_.*/Robot/panda_link0' matched no prototype bodies across 1 prototype(s). Check that the pattern matches a body label in the prototype builder.
+     8       FAIL                ValueError: Site 'ft_4' with body_pattern '/World/envs/env_.*/Robot/panda_link0' m
+2026-09-03T22:18:56Z [26,126ms] [Warning] [carb.scenerenderer-rtx.plugin] Failed to create NGX context.
+2026-09-03T22:18:57Z [26,965ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-09-03T22:19:01Z [30,945ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.

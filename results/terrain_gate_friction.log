@@ -1,0 +1,51 @@
+[INFO][AppLauncher]: Using device: cuda:0
+[INFO][AppLauncher]: Loading experience file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/apps/isaaclab.python.headless.kit
+[INFO]: Parsing configuration from: <class 'bhl_robust.tasks.terrain_env_cfg.BipedBumpyEnvCfg'>
+[INFO]: Parsing configuration from: <class 'bhl_robust.tasks.terrain_env_cfg.BipedSlipperyEnvCfg'>
+CHECK | bumpy    static=(0.4, 1.2) dynamic=(0.4, 1.2)
+CHECK | slippery static=(0.25, 0.35) dynamic=(0.18, 0.3)
+PASS  | slippery friction differs from bumpy
+PASS  | slippery max 0.35 is below bumpy min 0.4 -- a different regime, not the tail of the same one
+PASS  | dynamic friction does not exceed static
+[INFO]: Parsing configuration from: <class 'bhl_robust.tasks.depth_env_cfg.BipedSlipperyDepthEnvCfg'>
+PASS  | slippery and slippery-depth share one terrain menu
+VERDICT | ALL PASS
+Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/user.config.json'
+[Info] [carb] Logging to file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/logs/Kit/Isaac-Sim/5.1/kit_20260827_131429.log
+2026-08-27T20:14:29Z [5ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/5920b44d-27f4-4601-9516af85-3caae0d2.dmp'
+2026-08-27T20:14:29Z [8ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/0af54216-434e-4644-2265ed95-d221c0c0.dmp'
+2026-08-27T20:14:29Z [9ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/5933a686-58e4-4f89-bbce209c-084bcef8.dmp'
+2026-08-27T20:14:29Z [10ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/b39b435c-a21c-4f5e-d6f002ab-3afe0484.dmp'
+2026-08-27T20:14:29Z [12ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/46ef5fa7-9c0a-4092-be442aa9-59521f1f.dmp'
+2026-08-27T20:14:29Z [13ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/8f50649c-59c1-4132-d445fd83-d772859a.dmp'
+2026-08-27T20:14:29Z [15ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/c5ef1610-ef44-45e3-ff9c68bc-164e7944.dmp'
+2026-08-27T20:14:29Z [16ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/62a3bd3c-dc11-491b-81c2429b-f14cc2e2.dmp'
+2026-08-27T20:14:29Z [18ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/92807cd9-eedb-4309-78bfe58c-182d510a.dmp'
+2026-08-27T20:14:29Z [19ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/49dd57b6-8469-4851-dfd814a6-cc4a7c5a.dmp'
+2026-08-27T20:14:32Z [3,187ms] [Warning] [omni.usd_config.extension] Enable omni.materialx.libs extension to use MaterialX
+2026-08-27T20:14:35Z [5,546ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2026-08-27T20:14:36Z [6,642ms] [Warning] [carb] Acquiring non optional plugin interface which is not listed as dependency: [omni::physx::IPhysxBenchmarks v1.0] (plugin: <default plugin>), by client: omni.physics.physx.plugin. Add it to CARB_PLUGIN_IMPL_DEPS() macro of a client.
+2026-08-27T20:14:36Z [6,698ms] [Warning] [omni.isaac.dynamic_control] omni.isaac.dynamic_control is deprecated as of Isaac Sim 4.5. No action is needed from end-users.
+2026-08-27T20:14:51Z [21,613ms] [Warning] [carb.cudainterop.plugin] CUDA_VISIBLE_DEVICES environment variable is set.
+2026-08-27T20:14:51Z [21,613ms] [Warning] [carb.cudainterop.plugin] Note CUDA device enumeration and Omniverse device enumeration are different.
+2026-08-27T20:14:51Z [21,613ms] [Warning] [carb.cudainterop.plugin] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 595.71.05     | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | Quadro RTX 8000                  | Yes: 0 |     | 78838   MB | 10de      | 0          |
+|     |                                  |        |     |            | 1e78      | d981dc7e.. |
+|     |                                  |        |     |            | 8a        |            |
+|=============================================================================================|
+| OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel: 5.14.0-611.55.1.el9_7.x86_64
+| Processor: Intel(R) Xeon(R) Gold 6248R CPU @ 3.00GHz
+| Cores: 48 | Logical Cores: 48
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 772476 | Free Memory: 675601
+| Total Page/Swap (MB): 0 | Free Page/Swap: 0
+|---------------------------------------------------------------------------------------------|
+2026-08-27T20:14:52Z [22,552ms] [Warning] [gpu.foundation.plugin] ECC is enabled on physical device 0
