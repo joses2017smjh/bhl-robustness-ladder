@@ -180,7 +180,7 @@ at the new stand-off a wall at 1.0 would have been behind one of the robots.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21136400` | running — recheck at the 1.05 m stand-off |
+| 3 | `21136378` | running — recheck at the 1.05 m stand-off |
 | 2 | `21125100` | predicate fixed, ejection remains — plank still reaches 0.52 m unaided |
 | 1 | `21124909` | found it — 0.031 success with a zero action, plank launching 22 cm |
 
