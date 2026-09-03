@@ -19,9 +19,27 @@ A policy that only works where it trained has learned PhysX, not locomotion.
 </p>
 
 <p align="center">
-<b>89 policies trained</b> · <b>6,348 scored sim2sim episodes</b> · <b>288 rendered rollouts</b><br>
+<b>156 policies trained</b> · <b>6,348 scored sim2sim episodes</b> · <b>288 rendered rollouts</b> · <b>13 findings, 4 of them retractions</b><br>
 <a href="https://claude.ai/code/artifact/de955af8-2236-4912-84fb-577e0a43ccbe"><b>Explore every run interactively</b></a> — isolate a run, switch metrics, watch the axis rescale.
 </p>
+
+---
+
+## Reading this honestly
+
+Four of the thirteen findings below are **retractions of earlier findings in this
+same README**, and they are left in rather than edited away. A repo whose whole
+argument is "the measurement was wrong" cannot quietly fix its own measurements.
+
+| | |
+|---|---|
+| **settled** | 3 seeds, no overlap, read from event files — findings 1–6, 11 |
+| **suggestive** | 1–2 seeds, or a control still running — findings 10, 12 |
+| **retracted** | claimed here earlier, withdrawn on evidence — 7, 9, 13, and the wedge argument in §5 |
+
+Every number is read from the trainer's TensorBoard event file, never from a
+scraped log. That rule exists because four published claims were wrong when it
+did not.
 
 ---
 
