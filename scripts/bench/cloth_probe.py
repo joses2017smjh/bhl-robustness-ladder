@@ -41,39 +41,46 @@ import torch  # noqa: E402
 import isaaclab.sim as sim_utils  # noqa: E402
 
 
-def _localise(scene_cfg) -> list[str]:
-    """Drop every scene entry whose USD lives on a remote server.
+def _localise(scene_cfg) -> tuple[list[str], list[str]]:
+    """Drop only the scene entries whose remote USD does not resolve.
 
-    Found by walking for URL `usd_path`s rather than by naming the two assets
-    that 404'd today, so a different missing asset tomorrow is handled the same
-    way. The cloth is a DeformableObjectCfg with a procedural MeshRectangleCfg
-    spawner and no usd_path, so this cannot remove the thing being measured --
-    and the report prints what it dropped, so a scene gutted by accident is
-    visible rather than silent.
+    Three attempts died on this function being too clever. Substituting a cuboid
+    with `rigid_props` made the prim a Newton physics body and tripped
+    FrameView. Substituting a visual-only cuboid still guessed at the prim's
+    role. Deleting *every* remote asset removed the Franka itself, and the
+    scene's force-torque sites reference it:
+
+        Site 'ft_2' with body_pattern '.../Robot/panda_link0' matched no
+        prototype bodies
+
+    So: HEAD each remote URL and drop only the ones that 404. The table was
+    genuinely missing; the robot was never the problem. This makes no judgement
+    about what a prim is for -- only about whether it exists -- and it reports
+    both lists, so a scene gutted by accident is visible rather than silent.
     """
-    swapped = []
+    import urllib.request
+
+    dropped, kept = [], []
     for name in dir(scene_cfg):
         if name.startswith("_"):
             continue
         item = getattr(scene_cfg, name, None)
         spawn = getattr(item, "spawn", None)
         path = getattr(spawn, "usd_path", None)
-        if isinstance(path, str) and path.startswith(("http://", "https://", "omniverse://")):
-            # Remove, do not substitute.
-            #
-            # The first attempt replaced the asset with a cuboid carrying
-            # rigid_props, which made it a Newton physics body and tripped
-            #   FrameView prim '/World/envs/env_0/Table' is a Newton physics
-            #   body. FrameView should only be used for non-physics frames.
-            # A visual-only cuboid avoids that but still guesses at what role
-            # the prim played. Deleting it makes no guess at all: whatever the
-            # asset was for, the solver now has one fewer body and the cloth is
-            # unaffected, which is the only thing being measured. The cloth
-            # itself is a DeformableObjectCfg with a procedural MeshRectangleCfg
-            # spawner, not a URL, so it cannot be removed by this.
+        if not isinstance(path, str) or not path.startswith(("http://", "https://")):
+            continue
+        try:
+            req = urllib.request.Request(path, method="HEAD")
+            with urllib.request.urlopen(req, timeout=20) as r:
+                ok = 200 <= r.status < 400
+        except Exception:                                        # noqa: BLE001
+            ok = False
+        if ok:
+            kept.append(name)
+        else:
             setattr(scene_cfg, name, None)
-            swapped.append(name)
-    return swapped
+            dropped.append(name)
+    return dropped, kept
 
 
 def main() -> None:
@@ -88,7 +95,7 @@ def main() -> None:
     for n in args_cli.envs:
         try:
             cfg = parse_env_cfg(args_cli.task, device=app_launcher.device, num_envs=n)
-            swapped = _localise(cfg.scene)
+            dropped, kept = _localise(cfg.scene)
             env = gym.make(args_cli.task, cfg=cfg, disable_env_checker=True)
             env.reset()
             act = torch.zeros((n, env.unwrapped.action_space.shape[-1]),
@@ -102,7 +109,7 @@ def main() -> None:
             torch.cuda.synchronize()
             dt = time.time() - t0
             sps = args_cli.steps / dt
-            print(f"{n:6d} {sps:10.2f} {sps * n:13.0f}  localised={swapped}")
+            print(f"{n:6d} {sps:10.2f} {sps * n:13.0f}  dropped={dropped} kept={kept}")
             env.close()
         except Exception as e:                                   # noqa: BLE001
             print(f"{n:6d} {'FAIL':>10} {'':>13}  {type(e).__name__}: {str(e)[:70]}")

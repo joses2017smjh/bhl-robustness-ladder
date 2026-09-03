@@ -38,9 +38,9 @@ A policy that only works where it trained has learned PhysX, not locomotion.
 | **7** | **The only cube arm that ever lifted is a single seed, and it has not replicated.** Occlusion reached 13 cm where nine other interventions sat on the 4 cm floor — but two further seeds and the depth variant are all flat. |
 | **8** | **Arms buy recoverable perturbation, not a higher step.** No 12-DoF policy crosses the lab floor; two of four 22-DoF policies do. |
 | **9** | **The fall detector cannot see a level collapse.** `bad_orientation` tests torso *orientation*, so a robot that sinks 34 cm with its torso level scores as upright — which is what the ladder pair does for twelve seeds out of twelve. |
-| **10** | **The hands were welded shut.** Every manipulation result came from an asset whose grippers are `type="fixed"`. Restoring the two DoF the hardware has takes mean episode length from **8 to 450 steps**. |
-| **11** | **Depth helps on a hazard it cannot see.** On friction patches that are flush with the floor — ray-cast-verified — depth still beats blind by **10.6%**. Colouring them so a camera *could* see them made it worse. |
-| **12** | **Splitting the policy by limb helps, and two agents beat four.** Arms/legs reaches **+3.22** against one-per-limb's **+2.08**, on the credit-assignment boundary §5 identified. |
+| **10** | **The hands were welded shut.** Every manipulation result came from an asset whose grippers are `type="fixed"`. Restoring the two DoF the hardware has takes mean episode length from **6.3 to 427.7 steps**, six cells a side. |
+| **11** | **Depth helps on a hazard it cannot see.** On friction patches flush with the floor — ray-cast-verified — depth beats blind by **10.6%**, while colouring them so a camera *could* see them changes nothing (1.394 vs 1.374). |
+| **12** | **Splitting the policy at the arms/legs seam helps; splitting further does not.** limb2 finishes **47% above** a no-split control under the same trainer; limb4 lands on it. One seed. |
 | **13** | **A gate with no control measures its own budget.** G-B2 rejected a 5 cm stair riser twice on a 300-iteration probe. The walkable-terrain control is *also* pinned at 0.0000 there. Re-run to 2,000 with 5 cm restored, the same probe **passes** at level 0.107. |
 
 Every claim below links into the [full technical report](docs/REPORT.md), which
@@ -678,17 +678,26 @@ object, close, and let finger and palm retain it geometrically rather than by
 friction. Checked before anything trained on it — 24 actuated joints, fingertip
 sweeping 6.5 cm across the palm, hands mirrored.
 
-| same three tasks, same rewards | welded hands | **grippers** |
+Six cells a side, cube and ball, 8,000 iterations each, everything identical
+except the two hand DoF:
+
+| | welded hands (n=8) | **grippers (n=6)** |
 |---|---|---|
-| mean episode length | 8.0 | **449.9** |
-| mean reward | −0.79 | **+14.3** |
+| mean episode length | 6.3 | **427.7** |
+| mean reward | −0.71 | **+11.49** |
 | task success | 0 | 0 |
 
-**Fifty-six times the episode length for two joints.** The welded-hand arms fall
-over in eight steps; the gripper arms stay up for four hundred and fifty. Task
-success is still zero in both, so this is survival rather than completion — but
-the welded-hand arms were never going to complete anything, and that is now
-measured instead of argued.
+**Sixty-eight times the episode length for two joints.** The welded-hand arms
+fall over in six steps; the gripper arms stay up for four hundred and
+twenty-seven. Task success is still zero in both, so this is survival rather
+than completion — but the welded-hand arms were never going to complete
+anything, and that is now measured instead of argued.
+
+The plank cells are excluded from both columns and are not reported: they
+trained on a scene that ejected its own payload, and their gripper arms show
+none of this effect (episode length 11.6, reward −1.0). That is what a task
+looks like when the payload leaves before the policy can act, and it is being
+re-run now that the stand-off is fixed.
 
 The honest reading is that the manipulation ceiling this project spent six
 sections measuring was a property of the asset, and the number that moved when
@@ -712,17 +721,19 @@ field with or without the ice.
 | arm | terrain level (2 seeds) |
 |---|---|
 | **depth** | **1.519** |
+| visible ice | 1.394 |
 | blind | 1.374 |
-| visible ice | 1.299 |
 
 **Depth still wins, by 10.6%, on a hazard it provably cannot perceive.** That
 rules out "it sees the ice" as the mechanism and leaves the one this repo
 guessed at in §6: looking ahead buys foot placement that needs less friction
 margin everywhere, which is a geometric answer to a material problem.
 
-Colouring the patches so a camera *could* see them made it slightly worse, not
-better — which is the control on the control, and says the effect is not about
-hazard detection at all.
+Colouring the patches so a camera *could* see them changes essentially nothing —
+1.394 against blind's 1.374, well inside the spread between the two blind seeds.
+That is the control on the control, and it is the sharper half of the result:
+making the hazard **visible** does not help, while depth that **cannot see it**
+helps by 10.6%. Whatever depth is buying, it is not hazard detection.
 
 ---
 
@@ -734,29 +745,36 @@ checks that the four action slices reassemble into exactly the vector a
 single-agent policy would have emitted — including **order**, since concatenating
 in dict order passes a naive round-trip and still permutes the robot's joints.
 
-| arm | mean reward, first → final |
-|---|---|
-| **limb2 (arms / legs) + MAPPO** | −1.31 → **+3.22** |
-| limb4 (one per limb) + MAPPO | −2.59 → **+2.08** |
-| limb4 + IPPO | −2.56 → **+1.95** |
+| arm | mean reward, first → final | gain |
+|---|---|---|
+| **limb2 (arms / legs) + MAPPO** | −1.31 → **+3.22** | +4.53 |
+| **limb1 (no split, control)** | −0.65 → **+2.19** | +2.84 |
+| limb4 (one per limb) + MAPPO | −2.59 → +2.08 | +4.67 |
+| limb4 + IPPO | −2.56 → +1.95 | +4.51 |
 
-All three learn. **The two-agent arms/legs split beats one-agent-per-limb**,
-which is the opposite of what the design note argued when it called limb4 the
-headline and limb2 the ablation — and it lands on exactly the credit-assignment
+**The two-way split beats not splitting; the four-way split does not.** limb2
+finishes 47% above the control, while limb4 lands on it — 2.08 against 2.19.
+That is the opposite of what the design note argued when it called limb4 the
+headline and limb2 the ablation, and it lands on exactly the credit-assignment
 boundary §5 characterised, where the lift lives in the arms and the legs do the
-standing.
+standing. Splitting along that seam helps; splitting further does not.
 
-> **Caveat, and it is load-bearing.** The PPO control routes through rsl-rl while
-> every MARL row routes through skrl, so a difference against it prices the RL
-> library as well as the factorisation. That confound was built into the block
-> and not noticed until the numbers came back. A `limb1` control — one agent
-> owning every joint under the same trainer, models and hyperparameters — has
-> been run to fix it. Until it is read, the comparison above is between
-> factorisations, not against no factorisation at all.
+> **Two caveats, and both are load-bearing.**
 >
-> The two limb4 arms also start at −2.58 and limb2 at −1.31 on the same task and
-> seed, so their initial policies differ more than the partition alone explains.
-> Quoting limb2's margin without that would overstate it.
+> **The starting points are not equal, and they scale with agent count** — limb1
+> −0.65, limb2 −1.31, limb4 −2.59. More independent random policies coordinate
+> worse at initialisation, which is expected but means the *final* column and the
+> *gain* column disagree: limb4 gains the most (+4.67) and finishes lowest. The
+> claim above rests on final value, which is the quantity the task cares about,
+> but the disagreement is real and is why the gain column is printed.
+>
+> **This is one seed.** §1 of this project is a single-seed result that died on
+> its third seed, and the same standard applies here. Suggestive, not settled.
+>
+> The original PPO control is not in the table: it routes through rsl-rl while
+> every MARL row routes through skrl, so it prices the RL library as well as the
+> factorisation. `limb1` replaced it — one agent owning every joint under the
+> same trainer, models and hyperparameters.
 
 ---
 
