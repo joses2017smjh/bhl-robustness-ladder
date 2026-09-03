@@ -8,9 +8,13 @@ reports where. 156 policies, 6,348 scored sim2sim episodes, 13 findings — four
 of which retract earlier findings in this same repo.
 
 <p align="center">
-  <img src="docs/gifs/multi_race.gif" width="860" alt="Four policies in one MuJoCo world taking identical shoves; three stay up, the un-randomized one falls."><br>
-  <sub>Four policies, one world, identical 0.45 m/s shoves. Same solver, same
-  clock — not a composite. The un-randomized robot is the one on the ground.</sub>
+  <img src="docs/gifs/multi_lab.gif" width="860" alt="Four differently-coloured policies walking one obstacle course in a single MuJoCo world, with the hero robot's egocentric depth image along the bottom."><br>
+  <sub>Four policies, one world, one command — green randomized, red
+  un-randomized, blue push-trained, orange terrain-trained. Same solver, same
+  clock, not a composite. Along the bottom is the orange robot's own egocentric
+  depth, with a scrolling waterfall of the centre column: the ramp shows up in
+  the sensor before it reaches the feet. When a policy goes down it darkens and
+  the frame takes a red border — here it is the push-trained one, on the plank.</sub>
 </p>
 
 <p align="center">
