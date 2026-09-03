@@ -156,6 +156,16 @@ assuming the solver picks it up.
 | 2 | `21105405` | FAILED — Isaac Lab's cloth task pulls a table and sky from the Omniverse content server and one path 404s. The sorting task brings its own garments, so that dependency was never needed. |
 | 1 | `21105364` | FAILED — `'str' object is not callable`: Isaac Lab's tasks use a module-path string for `env_cfg_entry_point`, this repo's use a class |
 
+### Demo clips for the README · `running`
+The MuJoCo replay harness cannot render the gripper arms — it builds its crew
+from the 22-DoF MJCF and the gripper asset is a 24-DoF URDF. So the clips come
+from Isaac Sim 6.0, which is the stack those policies trained on and where RTX
+works.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21136321` | running — gripper vs welded on the same task, 400 frames each |
+
 ### Plank spawn ejection · `todo`
 `plank_leaned` no longer fires on a zero action (0.000 at every step, was 0.031
 at step 20) — the stationary requirement fixed the predicate. **The ejection
@@ -337,6 +347,7 @@ came from.
 | `21124909`, `21125100` | plank spawn diagnostics |
 | `21124719`, `21136232` | B3 + v2 readouts |
 | `21124302`, `21136243` | Tier 1 readouts |
+| `21136321` | gripper vs welded demo clips |
 | `21105320` | Tier 1 MARL rows |
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |
