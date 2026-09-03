@@ -11,8 +11,13 @@
 # glob for the task id; under `set -euo pipefail` that is several ways to fail
 # before printing anything. This names the task directly and lets train_play
 # pick the newest matching run.
+# cd to UPSTREAM, not REPO. train_play builds its log root as the *relative*
+# path logs/rsl_rl/<experiment>, and train.sh runs from UPSTREAM, so that is
+# where every run directory actually lives. Running this from REPO sent it
+# looking in $REPO/logs/rsl_rl/task_v2, which does not exist:
+#   FileNotFoundError: .../bhl-robustness-ladder/logs/rsl_rl/task_v2
 set -uo pipefail
-cd "$REPO"
+cd "$UPSTREAM"
 export PYTHONPATH="$REPO/src:${PYTHONPATH:-}"
 L="$UPSTREAM/logs/rsl_rl/task_v2"
 
@@ -22,11 +27,23 @@ record() {   # task run_glob label
     run=$(ls -dt "$L"/*"$glob" 2>/dev/null | head -1)
     if [ -z "$run" ]; then echo "SKIP $label: no run matching *$glob"; return; fi
     echo "=== $label  task=$task  run=$(basename "$run") ==="
-    "$PY" scripts/train_play.py \
+    local before after
+    before=$(find "$L" -name "*.mp4" 2>/dev/null | wc -l)
+    "$PY" "$REPO/scripts/train_play.py" \
         --task "$task" --num_envs 4 --headless --enable_cameras \
         --video --video_length "${VIDEO_LEN:-400}" \
-        --load_run "$(basename "$run")" \
-      && echo "  ok" || echo "  FAILED $label"
+        --load_run "$(basename "$run")" || true
+    after=$(find "$L" -name "*.mp4" 2>/dev/null | wc -l)
+    # Count the files, do not trust the exit code. train_play raised
+    # FileNotFoundError and still exited 0, because Hydra catches and
+    # simulation_app.close() hard-exits -- the same reason four dead crew arms
+    # once reported COMPLETED. The last run printed "ok" over a traceback.
+    if [ "$after" -gt "$before" ]; then
+        echo "  ok -- $(( after - before )) new mp4"
+    else
+        echo "  FAILED $label -- no video was written"
+        return 1
+    fi
 }
 
 record TaskV2-BHL-CubeToShelfGrip-Blind-v0 grip-cubetoshelfgrip-blind-s0 gripper_cube

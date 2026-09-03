@@ -166,7 +166,8 @@ works.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21146050` | running — task named directly; the previous version resolved it through a `..` chain and a log grep under `set -e` |
+| 3 | `21146513` | running — runs from `$UPSTREAM`, and counts mp4 files instead of trusting the exit code |
+| 2 | `21146050` | FAILED, reported COMPLETED — `FileNotFoundError: $REPO/logs/rsl_rl/task_v2`. train_play's log root is relative and train.sh runs from `$UPSTREAM`. It printed "ok" over the traceback because train_play exits 0 on failure. |
 | 1 | `21136321` | FAILED in 4 s with a 0-byte log — died before printing anything |
 
 ### Plank cells, re-run on the fixed scene · `running`
