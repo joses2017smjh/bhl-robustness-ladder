@@ -57,11 +57,14 @@ def _localise(scene_cfg) -> list[str]:
         spawn = getattr(item, "spawn", None)
         path = getattr(spawn, "usd_path", None)
         if isinstance(path, str) and path.startswith(("http://", "https://", "omniverse://")):
+            # Visual only. Giving the replacement rigid_props made it a Newton
+            # physics body, and Isaac Lab's FrameView refuses those:
+            #   FrameView prim '/World/envs/env_0/Table' is a Newton physics
+            #   body. FrameView should only be used for non-physics frames.
+            # The asset being replaced was a decorative frame, so the
+            # substitute has to stay one.
             item.spawn = sim_utils.CuboidCfg(
                 size=(0.6, 1.0, 0.05),
-                collision_props=sim_utils.CollisionPropertiesCfg(),
-                rigid_props=sim_utils.RigidBodyPropertiesCfg(
-                    disable_gravity=True, kinematic_enabled=True),
                 visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.4, 0.4, 0.45)),
             )
             swapped.append(name)

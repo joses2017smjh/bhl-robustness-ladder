@@ -38,7 +38,10 @@ A policy that only works where it trained has learned PhysX, not locomotion.
 | **7** | **The only cube arm that ever lifted is a single seed, and it has not replicated.** Occlusion reached 13 cm where nine other interventions sat on the 4 cm floor — but two further seeds and the depth variant are all flat. |
 | **8** | **Arms buy recoverable perturbation, not a higher step.** No 12-DoF policy crosses the lab floor; two of four 22-DoF policies do. |
 | **9** | **The fall detector cannot see a level collapse.** `bad_orientation` tests torso *orientation*, so a robot that sinks 34 cm with its torso level scores as upright — which is what the ladder pair does for twelve seeds out of twelve. |
-| **10** | **A gate with no control measures its own budget.** G-B2 rejected a 5 cm stair riser twice on a 300-iteration probe. The walkable-terrain control is *also* pinned at 0.0000 there. Re-run to 2,000 with 5 cm restored, the same probe **passes** at level 0.107. |
+| **10** | **The hands were welded shut.** Every manipulation result came from an asset whose grippers are `type="fixed"`. Restoring the two DoF the hardware has takes mean episode length from **8 to 450 steps**. |
+| **11** | **Depth helps on a hazard it cannot see.** On friction patches that are flush with the floor — ray-cast-verified — depth still beats blind by **10.6%**. Colouring them so a camera *could* see them made it worse. |
+| **12** | **Splitting the policy by limb helps, and two agents beat four.** Arms/legs reaches **+3.22** against one-per-limb's **+2.08**, on the credit-assignment boundary §5 identified. |
+| **13** | **A gate with no control measures its own budget.** G-B2 rejected a 5 cm stair riser twice on a 300-iteration probe. The walkable-terrain control is *also* pinned at 0.0000 there. Re-run to 2,000 with 5 cm restored, the same probe **passes** at level 0.107. |
 
 Every claim below links into the [full technical report](docs/REPORT.md), which
 carries the protocols, the caveats, and the corrections. What is currently
@@ -579,6 +582,181 @@ tell — a genuine plateau scatters, a switch that never flips does not.
 > iteration. Both readings scraped a summary instead of reading the series.
 
 [Read §5](docs/REPORT.md#5--cooperative-lift-can-two-of-them-learn-to-pick-something-up)
+
+---
+
+## Everything that was tested, and how it went
+
+Every clip below is a real rollout from a trained policy in MuJoCo, scored by
+the same harness that produced the numbers. Nothing here is a scripted
+animation except where it says so.
+
+### What works
+
+<p align="center">
+  <img src="docs/gifs/multi_race.gif" width="860" alt="Four policies in one MuJoCo world; three stay up, the un-randomized one falls."><br>
+  <sub><b>Randomization buys most of terrain robustness.</b> Four policies, one
+  world, one command. The un-randomized robot is the one on the ground.</sub>
+</p>
+
+<p align="center">
+  <img src="docs/gifs/dr_pair.gif" width="425" alt="Randomized policy walking; un-randomized policy falling.">
+  <img src="docs/gifs/depth_pair.gif" width="425" alt="Terrain policy crossing rough ground beside its own 64x64 depth image."><br>
+  <sub>Left: the same command on randomized and un-randomized policies. Right:
+  ray-cast depth at <b>1.6% of throughput</b> — the sensor that made §6 and the
+  ice rung possible without an RTX renderer.</sub>
+</p>
+
+<p align="center">
+  <img src="docs/gifs/push_pair.gif" width="425" alt="Push recovery, 12-DoF biped.">
+  <img src="docs/gifs/arms_push_pair.gif" width="425" alt="Push recovery with arms, 22 DoF."><br>
+  <sub><b>Arms buy recoverable perturbation.</b> Left 12 DoF, right 22. The arms
+  move angular momentum away from the legs — worth 0.2 m/s of shove rejection,
+  and it is free.</sub>
+</p>
+
+### What does not
+
+<p align="center">
+  <img src="docs/gifs/carry_cube_pov.gif" width="500" alt="Two robots holding a cube 7.8 cm off the floor with the robot's own camera views alongside."><br>
+  <sub><b>The best cooperative rollout in the project</b> — 7.8 cm of lift, hands
+  inside the pinch gate 98% of the time, twelve seconds without a fall. It is
+  also a controlled collapse: the pair drops 41 cm in the first 0.2 s, before
+  touching the cube. The strip is that robot's head camera — colour, raw depth,
+  and the 8×8 the network actually receives.</sub>
+</p>
+
+<p align="center">
+  <img src="docs/gifs/carry_ladder_pov.gif" width="425" alt="Two robots either side of a plank, never closing on it.">
+  <img src="docs/gifs/carry_ball_native_pov.gif" width="425" alt="The ball policy toppling without touching the payload."><br>
+  <sub>Left: the plank, <b>12 seeds out of 12 at 0.0 cm</b> — they do not fall and
+  they do not try; the contact points are further apart than shoulders that
+  cannot adduct past 36 cm can span. Right: the arm that reported 21 cm in
+  PhysX, cross-checked in MuJoCo — it falls at 0.72 s without moving the ball a
+  millimetre.</sub>
+</p>
+
+<p align="center">
+  <img src="docs/gifs/carry_vision_swap_2.gif" width="425" alt="Depth-conditioned policy with one robot face-down.">
+  <img src="docs/gifs/carry_vision_both_4.gif" width="425" alt="Depth-alongside policy, four robots, all down."><br>
+  <sub><b>Giving them eyes made it worse.</b> The cube is plainly visible in the
+  depth panes throughout. These policies are not failing to see it — they are
+  failing to act on 64 pooled numbers where the blind arm was handed the pose
+  exactly.</sub>
+</p>
+
+### The reachability check, which is not a policy
+
+<p align="center">
+  <img src="docs/gifs/squat_pick.gif" width="425" alt="Scripted joint interpolation through a squat and pick."><br>
+  <sub>A scripted joint interpolation, included because it is the control for
+  every failure above: <b>the pose exists and is reachable.</b> Everything the
+  learned policies could not do, they could not do for reasons other than
+  kinematics.</sub>
+</p>
+
+---
+
+## The hands were welded shut the whole time
+
+Every manipulation result above was produced by a robot that cannot close a
+hand. Upstream's own driver commands two grippers over serial — `bimanual.py`
+maps a `[0, 1]` target onto a raw `[0.2, 0.8]`, documents 0.2 open and 0.85
+closed, and `run_teleop.py` places them at `robot_actions[10]` and `[11]`. The
+simulation asset has neither: both hand joints are `type="fixed"`, and
+`arm_*_hand_link` is a rigid 74 × 69 × 136 mm block bolted to the elbow.
+
+So §5's whole arc — a pinch that forms and never lifts, nine interventions that
+move nothing, a policy that discovers a braced collapse because squeezing
+destabilises it — is the behaviour of a machine trying to hold things between
+two fixed blocks. Not a property of the robot. A property of the model.
+
+`scripts/add_gripper.py` writes a 24-DoF copy into the workspace, leaving
+`external/` pristine. One DoF per hand, the finger closing against the palm,
+which is the grasp the hardware actually performs: lay the open hand over the
+object, close, and let finger and palm retain it geometrically rather than by
+friction. Checked before anything trained on it — 24 actuated joints, fingertip
+sweeping 6.5 cm across the palm, hands mirrored.
+
+| same three tasks, same rewards | welded hands | **grippers** |
+|---|---|---|
+| mean episode length | 8.0 | **449.9** |
+| mean reward | −0.79 | **+14.3** |
+| task success | 0 | 0 |
+
+**Fifty-six times the episode length for two joints.** The welded-hand arms fall
+over in eight steps; the gripper arms stay up for four hundred and fifty. Task
+success is still zero in both, so this is survival rather than completion — but
+the welded-hand arms were never going to complete anything, and that is now
+measured instead of argued.
+
+The honest reading is that the manipulation ceiling this project spent six
+sections measuring was a property of the asset, and the number that moved when
+it was fixed is the largest single effect here.
+
+---
+
+## Ice: depth helps on a hazard it cannot see
+
+§6 found depth beating blind **2.5×** on uniformly low friction — a result that
+inverted this repo's own written prediction, since a ray-cast depth camera
+returns geometry and friction has none. The obvious explanation is that depth
+was seeing something incidental. This rung removes that possibility.
+
+Low-friction patches on ground that is geometrically **flat**. The patches sit
+exactly coplanar with the floor, and `scripts/bench/ice_gate.py` ray-casts the
+boundary to prove it rather than trusting the config — it passes at the flush
+inset and fails at a 5 mm proud patch. So the ray-caster returns the same height
+field with or without the ice.
+
+| arm | terrain level (2 seeds) |
+|---|---|
+| **depth** | **1.519** |
+| blind | 1.374 |
+| visible ice | 1.299 |
+
+**Depth still wins, by 10.6%, on a hazard it provably cannot perceive.** That
+rules out "it sees the ice" as the mechanism and leaves the one this repo
+guessed at in §6: looking ahead buys foot placement that needs less friction
+margin everywhere, which is a geometric answer to a material problem.
+
+Colouring the patches so a camera *could* see them made it slightly worse, not
+better — which is the control on the control, and says the effect is not about
+hazard detection at all.
+
+---
+
+## Limb agents: the split helps, and the two-way split helps more
+
+One agent per limb, under MAPPO, against the same task the single-agent PPO
+rungs use. `limb_partition.py` slices the 22 DoF as 5/5/6/6 by index, and G-B4
+checks that the four action slices reassemble into exactly the vector a
+single-agent policy would have emitted — including **order**, since concatenating
+in dict order passes a naive round-trip and still permutes the robot's joints.
+
+| arm | mean reward, first → final |
+|---|---|
+| **limb2 (arms / legs) + MAPPO** | −1.31 → **+3.22** |
+| limb4 (one per limb) + MAPPO | −2.59 → **+2.08** |
+| limb4 + IPPO | −2.56 → **+1.95** |
+
+All three learn. **The two-agent arms/legs split beats one-agent-per-limb**,
+which is the opposite of what the design note argued when it called limb4 the
+headline and limb2 the ablation — and it lands on exactly the credit-assignment
+boundary §5 characterised, where the lift lives in the arms and the legs do the
+standing.
+
+> **Caveat, and it is load-bearing.** The PPO control routes through rsl-rl while
+> every MARL row routes through skrl, so a difference against it prices the RL
+> library as well as the factorisation. That confound was built into the block
+> and not noticed until the numbers came back. A `limb1` control — one agent
+> owning every joint under the same trainer, models and hyperparameters — has
+> been run to fix it. Until it is read, the comparison above is between
+> factorisations, not against no factorisation at all.
+>
+> The two limb4 arms also start at −2.58 and limb2 at −1.31 on the same task and
+> seed, so their initial policies differ more than the partition alone explains.
+> Quoting limb2's margin without that would overstate it.
 
 ---
 
