@@ -86,7 +86,7 @@ than assuming the ablation happened.
 | 4 | `21105252` | **PASS, both partitions, both layouts** — 22 and 24 DoF, and the arm ablation clears both real terms |
 | 3 | `21100446` | FAIL — `Invalid action shape, expected: 22, received: 24`: extending the partition for the gripper broke the gate against the 22-DoF task |
 | 2 | `21093567` | FAILED — `output with shape [4096, 1] doesn't match the broadcast shape [4096, 4096]`. The env returns a flat `(num_envs,)`; skrl stores one column per agent, so the trailing axis was the whole fix. |
-| 4 | `21124513` | running — `limb1` control: one agent, all joints, same trainer as the MARL rows |
+| 4 | `21124513` | COMPLETED — `limb1` control, one agent under the same trainer; readout queued (`21136243`) |
 | 3 | `21105320` | **all 3 COMPLETED** — 144k timesteps each. limb2+MAPPO reaches +3.22, limb4+MAPPO +2.08, limb4+IPPO +1.95, all from about -2.6. Reported FAILED by a guard that greps rsl-rl's "Learning iteration" while skrl prints a tqdm bar. |
 | 1 | `21091041` | PPO control COMPLETED (5:13); the three MARL rows failed on a missing `num_agents` property, since added |
 
@@ -117,7 +117,7 @@ ice by default would have turned the rung into an RGB experiment.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21105232` | **5 of 6 done** — depth 1.519, blind 1.374, visible 1.299. Depth beats blind by 10.6% on a hazard it cannot see. |
+| 2 | `21105232` | **6 of 6 COMPLETED** — depth 1.519, blind 1.374, visible 1.299. Depth beats blind by 10.6% on a hazard it cannot see. |
 | 1 | `21100447` | **smoke 3/3**, episode lengths 17.7–19.8 |
 
 ### B3 — ice / patchy friction · superseded
@@ -137,7 +137,7 @@ leave the grippers inert and the variant indistinguishable from its control.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21105399` | **3 of 9 done** — grippers survive **~450 steps against 8** and reward **+14.3 against −0.79**. Task success still 0. |
+| 2 | `21105399` | **8 of 9 done** — grippers survive **~450 steps against 8**, reward **+14.3 against −0.79**. Task success still 0. |
 | 1 | `21105363` | smoke 3/3, episode lengths 7.3–7.4 |
 
 ### Cloth sorting — G-C1 throughput · `todo` (three probes, no number yet)
@@ -149,10 +149,25 @@ assuming the solver picks it up.
 
 | # | id | outcome |
 |---|---|---|
+| 6 | `21136231` | queued — substitute is visual-only now |
+| 5 | `21125073` | FAILED — my replacement carried `rigid_props`, so `FrameView` refused it: "prim '/World/envs/env_0/Table' is a Newton physics body" |
 | 4 | `21124738` | **verdict: the probe measured nothing.** `physics schemas on the cloth prim: NONE` — a `UsdFileCfg` loads the mesh as static geometry, it does not make it cloth. |
 | 3 | `21105721` | VOID — 2.04M env-steps/s at 1,024 envs, only 14% slower than at 16. The flat scaling was the tell. |
 | 2 | `21105405` | FAILED — Isaac Lab's cloth task pulls a table and sky from the Omniverse content server and one path 404s. The sorting task brings its own garments, so that dependency was never needed. |
 | 1 | `21105364` | FAILED — `'str' object is not callable`: Isaac Lab's tasks use a module-path string for `env_cfg_entry_point`, this repo's use a class |
+
+### Plank spawn ejection · `todo`
+`plank_leaned` no longer fires on a zero action (0.000 at every step, was 0.031
+at step 20) — the stationary requirement fixed the predicate. **The ejection
+itself is not fixed:** the plank still rises 0.30 → 0.52 m in twenty steps with
+the policy outputting nothing, so 1 mm of support clearance was not the cause.
+The remaining suspect is the robots' arms interpenetrating the plank at spawn,
+since they stand at x = ±0.85 across a payload spanning ±0.75.
+
+| # | id | outcome |
+|---|---|---|
+| 2 | `21125100` | predicate fixed, ejection remains — plank still reaches 0.52 m unaided |
+| 1 | `21124909` | found it — 0.031 success with a zero action, plank launching 22 cm |
 
 ### Base-height probe — is the floor-lift a training hack? · `running`
 The MuJoCo replay drops both cube arms ~41 cm in 0.2 s, before contact. PhysX
@@ -185,7 +200,7 @@ if RGB OOMs, drop all nine to 512 rather than mixing.
 
 | # | id | outcome |
 |---|---|---|
-| 13 | `21105231` | **7 of 9 done** — welded hands survive ~8 steps and never succeed; plank reports 0.39–0.43 success at 22-step episodes, which is not credible and is being checked (`21124909`) |
+| 13 | `21105231` | **9 of 9 COMPLETED** — welded hands survive ~8 steps, reward −0.79, success 0 |
 | 12 | `21105217` | **smoke 4/4**, episode length 13.5–18.0. `either_fallen` now derives tilt from the root quaternion. |
 | 11 | `21100627` | FAILED — guard caught it: `mean episode length is 1.00`. Wrapping ProxyArray reads was not the cause. |
 | 10 | `21093953` | **CANCELLED — the runs were degenerate.** 8,000 iterations each at `mean_episode_length = 1.00` and `Episode_Termination/fallen = 1.00`: `either_fallen` read `projected_gravity_b` as a tensor when 3.x returns a warp ProxyArray, so `[:, 2]` was not the z component and every episode ended on step one. Nine GPU-days. |
@@ -319,6 +334,9 @@ came from.
 | `21105363` | gripper v2 smoke |
 | `21105364`, `21105405`, `21105721` | G-C1 cloth throughput |
 | `21105399` | gripper v2 training, 9 cells |
+| `21124909`, `21125100` | plank spawn diagnostics |
+| `21124719`, `21136232` | B3 + v2 readouts |
+| `21124302`, `21136243` | Tier 1 readouts |
 | `21105320` | Tier 1 MARL rows |
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |
