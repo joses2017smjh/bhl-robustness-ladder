@@ -342,17 +342,39 @@ the height of a 28 cm cube, which is `reaching_coarse` (1.0), `reaching_fine`
 down and there is no counter-gradient. That is a reward specification that
 *permits* the behaviour by construction.
 
-**Whether training exploited it is not yet established, and the PhysX side
-argues against the strong version.** `base_contact_a/b` — which fires when the
-torso geom touches the ground — sits at **-0.003** across training, and
-`still_alive` at 0.98. In Isaac the torso is not on the floor. So the 41 cm
-collapse is either a sim2sim failure that MuJoCo exposes and PhysX does not, or
-a deep squat that MuJoCo exaggerates. Base contact cannot separate those,
-because a robot folded onto its shins never touches its torso down either.
+**Base contact argues against the strong version, and cannot settle it.**
+`base_contact_a/b` — which fires when the torso geom touches the ground — sits
+at **-0.003** across training, and `still_alive` at 0.98. In Isaac the torso is
+not on the floor. But a robot folded onto its shins never touches its torso down
+either, so base contact cannot separate a deep squat from a collapse.
 
-The test that would settle it is base height logged during training, which this
-project does not currently record — the term does not exist, which is the same
-reason the behaviour is unpenalised. It is being added.
+**Base height, logged during training, settles it: training does exploit it.**
+The term did not exist — the same reason the behaviour is unpenalised — so it
+was added as a *curriculum* term rather than a reward. A weight-0.0 reward logs
+`weight × value`, which is 0.0000 for 1,300 iterations no matter what the robot
+does; that mistake cost this measurement three attempts. Over 6,000 iterations
+on `coop_lift` (`21090556`):
+
+| iteration | base height |
+|---|---|
+| 0–50 | −0.131 |
+| ~350 | **−0.107** — the highest the torso ever gets |
+| 3,000 | −0.235 |
+| 5,900–6,000 | −0.229 |
+| minimum | −0.236 |
+
+The torso rises for roughly 350 iterations, then descends monotonically and
+**plateaus about 23 cm below nominal for the rest of training**. It is not
+drifting toward a limit it never reaches — it arrives and stays. An earlier
+1,500-iteration read (`21078881`) caught only the descent and could say no more
+than "still falling"; the full run shows where it lands.
+
+So the reward specification permits the behaviour, and the policy takes it. The
+hands reach cube height by lowering the robot rather than by raising the cube,
+which is what the MuJoCo replay shows from the outside as a 41 cm drop before
+contact. The 7.8 cm best rollout in §1 is the residue of that: what little
+height survives once the lift is measured against a torso that has already
+gone down.
 
 ### Giving them eyes made it worse
 
@@ -548,8 +570,13 @@ variant were queued precisely to test it, and all three are flat:
 | depth, seed 0 | 0.0000 | 0.00 | 0.0400 |
 
 All four have now run their full 16,000 iterations, so this is a finished
-comparison rather than a partial one. Seeds 1 and 2 never leave the floor, and
-never fire the latch, over the whole run — including well past the ~11,500 mark
+comparison rather than a partial one. The lifting seed differs from the other
+three in a second way that is worth naming: its **mean episode length is 51
+steps against ~195** for the three flat arms. Whatever it found, it found in
+episodes that end about a quarter of the way in — so the arm that lifts is also
+the arm that stops early, and the height is not being held for a full episode.
+
+Seeds 1 and 2 never leave the floor, and never fire the latch, over the whole run — including well past the ~11,500 mark
 where seed 0 took off. This project has been here before and wrote the rule down
 in §1: the single-seed "pinch 0.40 against 0.08" did not survive three seeds
 either. **One of three is a lead, not a result**, and it is reported here as
