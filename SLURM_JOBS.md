@@ -74,7 +74,7 @@ and needs no GPU.
 | 2 | `21078987` | TIMEOUT — limb4 **passed** (4 agents, 5/5/6/6, obs 75), then hung an hour building limb2 in the same process. Also reported `arm_ablation=TERM NOT FOUND`. |
 | 1 | `21078958` | FAIL — pointed at `Biped-Bumpy`, which actuates 12 leg joints, not 22: `Invalid action shape, expected: 12, received: 22`. |
 
-### Tier 1 first block · `running`
+### Tier 1 first block · `done`
 `slurm/89_marl_train.sbatch` is written and deliberately not submitted: limb4+
 MAPPO, limb4+IPPO, limb2+MAPPO, and a single-agent PPO control, one variable
 moving per row. `joint_deviation_arms` is ablated in every row including the
@@ -90,7 +90,7 @@ than assuming the ablation happened.
 | 3 | `21105320` | **all 3 COMPLETED** — 144k timesteps each. limb2+MAPPO reaches +3.22, limb4+MAPPO +2.08, limb4+IPPO +1.95, all from about -2.6. Reported FAILED by a guard that greps rsl-rl's "Learning iteration" while skrl prints a tqdm bar. |
 | 1 | `21091041` | PPO control COMPLETED (5:13); the three MARL rows failed on a missing `num_agents` property, since added |
 
-### Gripper: restore the two hand DoF the asset welds shut · `running`
+### Gripper: restore the two hand DoF the asset welds shut · `done`
 The hardware has two grippers (`docs/GRIPPER.md`); the shipped asset welds both
 hands, so no policy here has ever closed one. `scripts/add_gripper.py` writes a
 24-DoF copy into the workspace, leaving `external/` pristine. Checked before
@@ -102,9 +102,9 @@ and locomotion rungs are unaffected, having never used arm contact.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21093986` | running — URDF to USD conversion; `get_gripper_cfg()` raises until it exists |
+| 1 | `21093986` | **done** — `assets/gripper/usd/berkeley_humanoid_lite_gripper/berkeley_humanoid_lite_gripper.usda`. The MJCF path landed later (`aed84e1`), so the replay harness renders 24 DoF too: 22 actuators without the flag, 24 with, 48 for a two-robot crew. |
 
-### B3 — ice / patchy friction · `running`
+### B3 — ice / patchy friction · `done`
 Wired and registered: `Velocity-BHL-Biped-Ice-v0`, `-Ice-Depth-v0`,
 `-IceVisible-v0`. G-B3 passes at the flush inset and fails at 5 mm, so the gate
 can fail.
@@ -129,7 +129,7 @@ do: wire a task config and register the ids.
 |---|---|---|
 | — | — | not queued |
 
-### Gripper v2 variants · `running`
+### Gripper v2 variants · `done`
 The three v2 tasks on the 24-DoF asset, as separate ids rather than a flag, so
 the welded-hand arms stay runnable as their control. Actions and the
 joint-indexed observations move 22 -> 24 together; driving 22 of 24 joints would
@@ -137,7 +137,7 @@ leave the grippers inert and the variant indistinguishable from its control.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21105399` | **8 of 9 done** — grippers survive **~450 steps against 8**, reward **+14.3 against −0.79**. Task success still 0. |
+| 2 | `21105399` | **9 of 9 COMPLETED** — grippers survive **~450 steps against 8**, reward **+14.3 against −0.79**. Task success still 0 in every cell. |
 | 1 | `21105363` | smoke 3/3, episode lengths 7.3–7.4 |
 
 ### Cloth sorting — G-C1 throughput · `todo` (three probes, no number yet)
@@ -176,7 +176,7 @@ their gripper arms showed none of the survival effect the cube and ball arms did
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21146058` | running — 3 welded + 3 gripper, 8,000 iters |
+| 1 | `21146058` | running — 3 welded + 3 gripper, 8,000 iters. **Interim, from the event files at 1,076–6,489 iterations:** the stand-off fixed the ejection — episode length is 469–489 against 11.6 before — but the task itself is still dead. `lift_height` sits on its 0.04 m curriculum floor in all six arms (peak == tail == 0.0400, never promoted once), `success` is 0.0000, and `leaned` and `lifting_object` never fire. Reward ~13 is `still_alive` and posture. The robots learned to stand next to the plank for the full episode. The rgb arm also falls in 44% of episodes against 2–8% for the other five. |
 
 ### Plank spawn ejection · `done`
 `plank_leaned` no longer fires on a zero action (0.000 at every step, was 0.031
@@ -196,7 +196,7 @@ at the new stand-off a wall at 1.0 would have been behind one of the robots.
 | 2 | `21125100` | predicate fixed, ejection remains — plank still reaches 0.52 m unaided |
 | 1 | `21124909` | found it — 0.031 success with a zero action, plank launching 22 cm |
 
-### Base-height probe — is the floor-lift a training hack? · `running`
+### Base-height probe — is the floor-lift a training hack? · `done` — yes
 The MuJoCo replay drops both cube arms ~41 cm in 0.2 s, before contact. PhysX
 `base_contact` sits at -0.003, so the torso is not down in training — but a
 robot folded onto its shins never puts its torso down either, so that cannot
@@ -205,14 +205,14 @@ so the curve is recorded without entering the objective.
 
 | # | id | outcome |
 |---|---|---|
-| 6 | `21090556` | running — wall time raised to 12 h |
+| 6 | `21090556` | **done, and it settles the question** — 6,000 iterations on `coop_lift`. Base height rises to −0.107 by iteration ~350, then descends monotonically to −0.236 and plateaus near −0.229. The torso ends about 23 cm below nominal and stays there, so the policy is lowering its body, not raising the cube. Attempt 4 saw the first 1,500 iterations of this and could only say it was "still falling"; it lands. This is the training-side counterpart of the 41 cm drop the MuJoCo replay shows before contact. |
 | 5 | `21082873` | TIMEOUT at 4 h — 6,000 iterations at 1024 envs does not fit; not a code fault |
 | 4 | `21078881` | **done** — base height climbs to -0.105 by iteration ~350 then descends monotonically to -0.167 by 1,500, and is still falling |
 | 3 | `21077648` | FAILED — the physx shim fired on v51 and broke the import |
 | 2 | `21076968` | FAILED — `base_height expects optional parameters ['robot_a','robot_b'] but received []` |
 | 1 | `21076488` | cancelled — logged 0.0000 for 1,300 iterations. The reward manager logs `weight x value`, so a weight-0.0 term reports zero by construction. |
 
-### Redesigned tasks (v2) — nine cells · `running`
+### Redesigned tasks (v2) — nine cells · `done` — all nine trained, none succeeded
 `slurm/90_v2_train_smoke.sbatch` added: 3 iterations at 64 envs through the real
 training path, one arm per vision condition. The env smoke passed 9/9 during
 every one of the training failures because it never executes `train.py` — a gate
@@ -271,12 +271,12 @@ Third seed of all four cells, because n=2 is below this project's own bar.
 | 2 | `21076264` | **done** (`_0` still finishing) — third seed does not overturn the result: depth 2.5x on friction, 1.10x on stairs, no blind/depth overlap in either cell |
 | 1 | `21076260` | cancelled — `--array=8-11` re-ran seeds 0 and 1, because the array maths is `S = IDX % 2`. Added `SEED_OFFSET`. |
 
-### Occlusion replicates · `running`
+### Occlusion replicates · `done` — it does not replicate
 Does the one cube arm that ever lifted reproduce? So far: no.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21066826_6` | running — blind seed 2, flat at 0.0400 |
+| 3 | `21066826_6` | **done** — blind seed 2, flat: tail 0.0400, peak 0.0408 over 16,000 iterations, episode length 195. **1 of 4 blind seeds ever lifted**, and that one is the odd one out in a second way — its episodes run 51 steps against ~195 for the three flat seeds, so it lifts in runs that end early rather than in runs that go the distance. |
 | 2 | `21066825_6` | **done** — blind seed 1, flat at 0.0400 for all 16,000 iters. Does not replicate seed 0. |
 | 1 | `21066823_7` | done — depth-under-occlusion, first genuine run; flat |
 
