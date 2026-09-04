@@ -83,6 +83,52 @@ def _localise(scene_cfg) -> tuple[list[str], list[str]]:
     return dropped, kept
 
 
+def _strip_frame_transformers(cfg) -> list[str]:
+    """Remove FrameTransformer sensors and every manager term that reads them.
+
+    Attempt 8 got past the missing assets and died one layer deeper, in
+    `NewtonManager._cl_inject_sites`:
+
+        Site 'ft_4' with body_pattern '.../Robot/panda_link0' matched no
+        prototype bodies across 1 prototype(s)
+
+    The Franka is present -- the log registers it, and the transformer resolves
+    against the USD stage -- but Newton's prototype builder labels bodies
+    differently from the stage, so a FrameTransformer anchored on `panda_link0`
+    cannot be injected as a site when the scene is cloned. That is a property of
+    Isaac Lab 3.0.0b2's Newton cloner, not of anything this repo controls.
+
+    A frame transformer is a measurement device. It reports where the gripper
+    is; it applies no force and steps no solver. Throughput is unaffected by
+    removing it, so this probe removes it rather than working around the
+    cloner. Terms that *read* the sensor have to go with it or the manager
+    raises on an unresolvable `SceneEntityCfg`, so this walks terminations,
+    rewards and observations for references by name.
+    """
+    from isaaclab.sensors import FrameTransformerCfg
+
+    names = [
+        n for n in dir(cfg.scene)
+        if not n.startswith("_")
+        and isinstance(getattr(cfg.scene, n, None), FrameTransformerCfg)
+    ]
+    for n in names:
+        setattr(cfg.scene, n, None)
+
+    for group in ("terminations", "rewards", "observations", "events", "curriculum"):
+        mgr = getattr(cfg, group, None)
+        if mgr is None:
+            continue
+        for term_name in [n for n in dir(mgr) if not n.startswith("_")]:
+            term = getattr(mgr, term_name, None)
+            params = getattr(term, "params", None)
+            if not isinstance(params, dict):
+                continue
+            if any(getattr(v, "name", None) in names for v in params.values()):
+                setattr(mgr, term_name, None)
+    return names
+
+
 def main() -> None:
     if args_cli.task not in gym.registry:
         print(f"{args_cli.task} not registered")
@@ -96,6 +142,7 @@ def main() -> None:
         try:
             cfg = parse_env_cfg(args_cli.task, device=app_launcher.device, num_envs=n)
             dropped, kept = _localise(cfg.scene)
+            stripped = _strip_frame_transformers(cfg)
             env = gym.make(args_cli.task, cfg=cfg, disable_env_checker=True)
             env.reset()
             act = torch.zeros((n, env.unwrapped.action_space.shape[-1]),
@@ -109,7 +156,8 @@ def main() -> None:
             torch.cuda.synchronize()
             dt = time.time() - t0
             sps = args_cli.steps / dt
-            print(f"{n:6d} {sps:10.2f} {sps * n:13.0f}  dropped={dropped} kept={kept}")
+            print(f"{n:6d} {sps:10.2f} {sps * n:13.0f}  "
+                  f"dropped={dropped} kept={kept} stripped={stripped}")
             env.close()
         except Exception as e:                                   # noqa: BLE001
             print(f"{n:6d} {'FAIL':>10} {'':>13}  {type(e).__name__}: {str(e)[:70]}")

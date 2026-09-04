@@ -149,14 +149,13 @@ assuming the solver picks it up.
 
 | # | id | outcome |
 |---|---|---|
-| 8 | `21146031` | running — drop only the URLs that **404**, verified by HEAD |
+| 9 | `21153326` | running — strip the FrameTransformer sensors and the manager terms that read them. A frame transformer measures where the gripper is; it applies no force and steps no solver, so removing it cannot change a throughput number. |
+| 8 | `21146031` | FAILED — but it got further than any before it. The assets resolved, the Franka loaded, the VBD cloth registered at 961 vertices; it died in `NewtonManager._cl_inject_sites` with `Site 'ft_4' ... matched no prototype bodies`. Newton's prototype builder labels bodies differently from the USD stage, so `ee_frame`, anchored on `panda_link0`, cannot be injected as a site when the scene clones. That is Isaac Lab 3.0.0b2's cloner, not this repo. |
 | 7 | `21136400` | FAILED — dropping every remote asset removed the Franka, and the scene's force-torque sites reference it: `Site 'ft_2' ... matched no prototype bodies` |
 | 6 | `21136231` | cancelled before it ran — a visual-only substitute still guesses at the prim's role |
 | 5 | `21125073` | FAILED — my replacement carried `rigid_props`, so `FrameView` refused it: "prim '/World/envs/env_0/Table' is a Newton physics body" |
 | 4 | `21124738` | **verdict: the probe measured nothing.** `physics schemas on the cloth prim: NONE` — a `UsdFileCfg` loads the mesh as static geometry, it does not make it cloth. |
 | 3 | `21105721` | VOID — 2.04M env-steps/s at 1,024 envs, only 14% slower than at 16. The flat scaling was the tell. |
-| 2 | `21105405` | FAILED — Isaac Lab's cloth task pulls a table and sky from the Omniverse content server and one path 404s. The sorting task brings its own garments, so that dependency was never needed. |
-| 1 | `21105364` | FAILED — `'str' object is not callable`: Isaac Lab's tasks use a module-path string for `env_cfg_entry_point`, this repo's use a class |
 
 ### Demo clips for the README · `running`
 The MuJoCo replay harness cannot render the gripper arms — it builds its crew
@@ -166,9 +165,9 @@ works.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21146513` | running — runs from `$UPSTREAM`, and counts mp4 files instead of trusting the exit code |
+| 4 | `21153325` | running — `train_play.py` now runs `handle_deprecated_rsl_rl_cfg`, the migration `train.py` has had all along. Verified outside Slurm: the four deprecated keys are gone from both models and `distribution_cfg` survives. |
+| 3 | `21146513` | FAILED, reported COMPLETED — `TypeError: MLPModel.__init__() got an unexpected keyword argument 'stochastic'`. The path fix worked and exposed the real bug: `RslRlMLPModelCfg.to_dict()` still emits `stochastic`, `init_noise_std`, `state_dependent_std` and `noise_std_type`, and rsl-rl 5.0.1 splats the dict into a model that takes none of them. `train.py` migrates the cfg first; `train_play.py` never did, so **every v60 checkpoint trained fine and none could be replayed**. The mp4 count caught it. |
 | 2 | `21146050` | FAILED, reported COMPLETED — `FileNotFoundError: $REPO/logs/rsl_rl/task_v2`. train_play's log root is relative and train.sh runs from `$UPSTREAM`. It printed "ok" over the traceback because train_play exits 0 on failure. |
-| 1 | `21136321` | FAILED in 4 s with a 0-byte log — died before printing anything |
 
 ### Plank cells, re-run on the fixed scene · `running`
 The six original plank cells measured a scene that ejected its own payload, and
@@ -360,12 +359,13 @@ came from.
 | `21100446` | G-B4 re-gate |
 | `21100447`, `21105232` | B3 ice smoke, then 6 rungs |
 | `21105363` | gripper v2 smoke |
-| `21105364`, `21105405`, `21105721` | G-C1 cloth throughput |
+| `21105364`, `21105405`, `21105721`, `21124738`, `21125073`, `21136231`, `21136400`, `21146031`, `21153326` | G-C1 cloth throughput |
 | `21105399` | gripper v2 training, 9 cells |
 | `21124909`, `21125100` | plank spawn diagnostics |
+| `21146058` | plank cells re-run at the 1.05 m stand-off |
 | `21124719`, `21136232` | B3 + v2 readouts |
 | `21124302`, `21136243` | Tier 1 readouts |
-| `21136321` | gripper vs welded demo clips |
+| `21136321`, `21146050`, `21146513`, `21153325` | gripper vs welded demo clips |
 | `21105320` | Tier 1 MARL rows |
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |
@@ -381,7 +381,8 @@ came from.
 | `21076792` | rsl-rl install on the v60 stack |
 | `21066624`, `21066817` | docs + charts refresh |
 
-Jobs named `orchard*`, `lh-*` and `interactive` are not from this workstream.
+Jobs named `orchard*`, `lh-*`, `prune-*`, `ood-*` and `interactive` are not from
+this workstream.
 
 ---
 

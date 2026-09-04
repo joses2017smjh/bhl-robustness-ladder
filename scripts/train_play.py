@@ -117,6 +117,28 @@ def main():
     # wrap around environment for rsl-rl
     env = RslRlVecEnvWrapper(env)
 
+    # [overlay] Migrate the agent config to whatever rsl-rl is installed.
+    #
+    # The same migration train.py does. It was added there when the v2 tasks
+    # first trained and never mirrored here, so every v60 checkpoint trained
+    # fine and none of them could be replayed: `RslRlMLPModelCfg.to_dict()`
+    # still emits the deprecated `stochastic`, `init_noise_std` and
+    # `state_dependent_std` keys, and `construct_algorithm` splats the dict
+    # into `MLPModel.__init__`, which takes none of them. That is the
+    #   MLPModel.__init__() got an unexpected keyword argument 'stochastic'
+    # that killed three attempts at the gripper video.
+    #
+    # Guarded, so the v51 stack -- where the helper does not exist -- is
+    # untouched and every published number stays reproducible.
+    try:
+        from importlib.metadata import version as _pkg_version
+
+        from isaaclab_rl.rsl_rl import handle_deprecated_rsl_rl_cfg
+
+        agent_cfg = handle_deprecated_rsl_rl_cfg(agent_cfg, _pkg_version("rsl-rl-lib"))
+    except ImportError:
+        pass
+
     print(f"[INFO]: Loading model checkpoint from: {resume_path}")
     # load previously trained model
     ppo_runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=agent_cfg.device)
