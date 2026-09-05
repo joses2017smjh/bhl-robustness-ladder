@@ -179,6 +179,22 @@ their gripper arms showed none of the survival effect the cube and ball arms did
 |---|---|---|
 | 1 | `21146058` | **6 of 6 COMPLETED** (10:07–22:23). Read from the event files: the stand-off fixed the ejection — episode length is 354–491 against 11.6 before — and the task itself is still dead. `lift_height` sits on its 0.04 m curriculum floor in all six arms at the full 8,000 iterations, peak == tail == 0.0400, so it never promoted once across 48,000 arm-iterations. `success` is 0.0000 everywhere, and `leaned` and `lifting_object` never fire. Reward ~13 is `still_alive` and posture: the robots learned to stand next to the plank for the whole episode. The rgb arm falls in 42.6% of episodes against 1.9–7.7% for the other five. |
 
+### Occlusion clips · `done` — 2026-09-05, no job needed
+Rendered on CPU through the MuJoCo harness, which has never needed the queue.
+**The arm that lifted is the one that falls**: s0 (13 cm in Isaac) never forms a
+pinch — 0% in-gate, closest 0.251 m — and is down at 0.8 s, while s1 (flat in
+Isaac) stays upright and holds the pinch 96% of the episode. Same shape as the
+ball arm: a result that exists in one engine only.
+
+Needed two fixes first: `OBS_OCCLUDED = 188` (derived from the run's own
+`params/env.yaml` and cross-checked against `OBS_DEPTH_SWAP - 128`), and an
+adaptive H.264 encoder — this cluster's ffmpeg has no `libx264`, so every render
+was dying at the write after simulating the whole episode.
+
+| # | id | outcome |
+|---|---|---|
+| — | none (CPU) | `docs/gifs/occlusion_s0_lifted_pov.gif`, `occlusion_s1_flat_pov.gif` |
+
 ### Spawn-bug diagnosis probes · `done` — 2026-09-05
 Six probes in one afternoon. Recorded together because four of them are dead
 hypotheses, and each narrowed the next.
