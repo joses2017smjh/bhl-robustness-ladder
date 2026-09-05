@@ -179,80 +179,105 @@ def main():
     except Exception as exc:                                     # noqa: BLE001
         print(f"[WARN]: policy export failed, continuing to replay: {exc!r}")
 
-    # === export the yaml config for deployment ===
-    num_joints = len(env_cfg.scene.robot.init_state.joint_pos)
+    # [overlay] The deployment yaml is a sim2real artefact, not part of replay.
+    #
+    # Everything below assumes the locomotion scene it was written for: a single
+    # articulation named `robot`, a `joint_pos` action term, a velocity command.
+    # The cooperative and v2 tasks have none of those -- two robots named
+    # `robot_a` and `robot_b`, and no velocity command at all -- so on those
+    # tasks it raises
+    #   AttributeError: 'CoopLiftSceneCfg' object has no attribute 'robot'
+    # after the checkpoint has loaded and the video recorder has been attached,
+    # but before the rollout that would actually write a frame. Three of the
+    # five gripper-video attempts died in this stretch of the file, each on a
+    # different line of it.
+    #
+    # So it is best-effort, like the ONNX export above it. A task that cannot
+    # produce a deployment config still deserves to be replayed and recorded.
+    try:
+        # === export the yaml config for deployment ===
+        num_joints = len(env_cfg.scene.robot.init_state.joint_pos)
 
-    # we take the joint order defined from the init joint state entry
-    joint_names = [name for name in env_cfg.scene.robot.init_state.joint_pos.keys()]
-    init_joint_pos = [v for v in env_cfg.scene.robot.init_state.joint_pos.values()]
+        # we take the joint order defined from the init joint state entry
+        joint_names = [name for name in env_cfg.scene.robot.init_state.joint_pos.keys()]
+        init_joint_pos = [v for v in env_cfg.scene.robot.init_state.joint_pos.values()]
 
-    joint_kp = torch.zeros(num_joints, device=env.unwrapped.device)
-    joint_kd = torch.zeros(num_joints, device=env.unwrapped.device)
-    effort_limits = torch.zeros(num_joints, device=env.unwrapped.device)
+        joint_kp = torch.zeros(num_joints, device=env.unwrapped.device)
+        joint_kd = torch.zeros(num_joints, device=env.unwrapped.device)
+        effort_limits = torch.zeros(num_joints, device=env.unwrapped.device)
     
-    # extract the configurations from the actuator groups
-    for group in env_cfg.scene.robot.actuators.values():
-        # string util method expects a dict
-        match_expr_list = [expr for expr in group.joint_names_expr]
-        match_expr_dict = {expr: None for expr in match_expr_list}
+        # extract the configurations from the actuator groups
+        for group in env_cfg.scene.robot.actuators.values():
+            # string util method expects a dict
+            match_expr_list = [expr for expr in group.joint_names_expr]
+            match_expr_dict = {expr: None for expr in match_expr_list}
 
-        indicies, _, _ = string_utils.resolve_matching_names_values(match_expr_dict, joint_names, preserve_order=True)
-        joint_kp[indicies] = group.stiffness
-        joint_kd[indicies] = group.damping
-        effort_limits[indicies] = group.effort_limit
+            indicies, _, _ = string_utils.resolve_matching_names_values(match_expr_dict, joint_names, preserve_order=True)
+            joint_kp[indicies] = group.stiffness
+            joint_kd[indicies] = group.damping
+            effort_limits[indicies] = group.effort_limit
 
-    # extract the indices of the actuated joints
-    match_expr_list = {expr: None for expr in env_cfg.actions.joint_pos.joint_names}
-    action_indices, _, _ = string_utils.resolve_matching_names_values(match_expr_list, joint_names, preserve_order=True)
+        # extract the indices of the actuated joints
+        match_expr_list = {expr: None for expr in env_cfg.actions.joint_pos.joint_names}
+        action_indices, _, _ = string_utils.resolve_matching_names_values(match_expr_list, joint_names, preserve_order=True)
 
-    deploy_config = {
-        # === Policy configurations ===
-        "policy_checkpoint_path": f"{export_model_dir}/policy.onnx",
+        deploy_config = {
+            # === Policy configurations ===
+            "policy_checkpoint_path": f"{export_model_dir}/policy.onnx",
 
-        # === Networking configurations ===
-        "ip_robot_addr": "127.0.0.1",
-        "ip_policy_obs_port": 10000,
-        "ip_host_addr": "127.0.0.1",
-        "ip_policy_acs_port": 10001,
+            # === Networking configurations ===
+            "ip_robot_addr": "127.0.0.1",
+            "ip_policy_obs_port": 10000,
+            "ip_host_addr": "127.0.0.1",
+            "ip_policy_acs_port": 10001,
 
-        # === Physics configurations ===
-        "control_dt": 0.004,   # 250 Hz
-        "policy_dt": env_cfg.sim.dt * env_cfg.decimation,      # 25 Hz
-        "physics_dt": 0.0005,    # 2000 Hz
-        "cutoff_freq": 1000,
+            # === Physics configurations ===
+            "control_dt": 0.004,   # 250 Hz
+            "policy_dt": env_cfg.sim.dt * env_cfg.decimation,      # 25 Hz
+            "physics_dt": 0.0005,    # 2000 Hz
+            "cutoff_freq": 1000,
 
-        # === Articulation configurations ===
-        "num_joints": num_joints,
-        "joints": joint_names,
-        "joint_kp": joint_kp.tolist(),
-        "joint_kd": joint_kd.tolist(),
-        "effort_limits": effort_limits.tolist(),
-        "default_base_position": env_cfg.scene.robot.init_state.pos,
-        "default_joint_positions": init_joint_pos,
+            # === Articulation configurations ===
+            "num_joints": num_joints,
+            "joints": joint_names,
+            "joint_kp": joint_kp.tolist(),
+            "joint_kd": joint_kd.tolist(),
+            "effort_limits": effort_limits.tolist(),
+            "default_base_position": env_cfg.scene.robot.init_state.pos,
+            "default_joint_positions": init_joint_pos,
 
-        # === Observation configurations ===
-        "num_observations": env.observation_space["policy"].shape[-1],
-        "history_length": env_cfg.observations.policy.actions.history_length,
+            # === Observation configurations ===
+            "num_observations": env.observation_space["policy"].shape[-1],
+            "history_length": env_cfg.observations.policy.actions.history_length,
 
-        # === Command configurations ===
-        # sample a command
-        "command_velocity": env_cfg.observations.policy.velocity_commands.func(
-            env.unwrapped, env_cfg.observations.policy.velocity_commands.params["command_name"]
-            )[0].tolist(),
+            # === Command configurations ===
+            # sample a command
+            "command_velocity": env_cfg.observations.policy.velocity_commands.func(
+                env.unwrapped, env_cfg.observations.policy.velocity_commands.params["command_name"]
+                )[0].tolist(),
 
-        # === Action configurations ===
-        "num_actions": env.action_space.shape[-1],
-        "action_scale": env_cfg.actions.joint_pos.scale,
-        "action_indices": action_indices,
-        "action_limit_lower": -10000,
-        "action_limit_upper": 10000,
-    }
-    if not os.path.exists("configs"):
-        os.makedirs("configs")
-    OmegaConf.save(deploy_config, "configs/policy_latest.yaml")
+            # === Action configurations ===
+            "num_actions": env.action_space.shape[-1],
+            "action_scale": env_cfg.actions.joint_pos.scale,
+            "action_indices": action_indices,
+            "action_limit_lower": -10000,
+            "action_limit_upper": 10000,
+        }
+        if not os.path.exists("configs"):
+            os.makedirs("configs")
+        OmegaConf.save(deploy_config, "configs/policy_latest.yaml")
+    except Exception as exc:                                     # noqa: BLE001
+        print(f"[WARN]: deployment config export skipped ({exc!r}); replay continues")
+
 
     # reset environment
-    obs, _ = env.get_observations()
+    # [overlay] rsl-rl 3.0.1's wrapper returned `(obs, extras)`; 5.0.1's returns
+    # the TensorDict alone. Unpacking the 5.x return into two names does not
+    # raise -- a TensorDict with a "policy" and a "critic" group unpacks into
+    # those two *key strings* -- so `policy(obs)` would be handed the string
+    # "policy" and fail somewhere far from the cause. Detect the shape instead.
+    _obs = env.get_observations()
+    obs = _obs[0] if isinstance(_obs, tuple) else _obs
     timestep = 0
     # simulate environment
     while simulation_app.is_running():

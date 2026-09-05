@@ -14,12 +14,16 @@ texture from the Omniverse content server, neither of which affects solver
 throughput, and neither of which the sorting task would ever have used.
 
 Substitution is by walking the scene config for any `usd_path` that is a URL,
-rather than by naming the two assets that happened to fail today.
+rather than by naming the two assets that happened to fail today -- and by
+repointing them at a nucleus version that has the file, rather than deleting
+them. Isaac Lab 3.0.0b2 asks the 6.0 asset tree for files that only exist under
+5.0; the Franka is one of them.
 """
 
 from __future__ import annotations
 
 import argparse
+import re
 
 from isaaclab.app import AppLauncher
 
@@ -42,27 +46,43 @@ import isaaclab.sim as sim_utils  # noqa: E402
 
 
 def _localise(scene_cfg) -> tuple[list[str], list[str]]:
-    """Drop only the scene entries whose remote USD does not resolve.
+    """Repoint remote USDs at a nucleus version that actually has them.
 
-    Three attempts died on this function being too clever. Substituting a cuboid
-    with `rigid_props` made the prim a Newton physics body and tripped
-    FrameView. Substituting a visual-only cuboid still guessed at the prim's
-    role. Deleting *every* remote asset removed the Franka itself, and the
-    scene's force-torque sites reference it:
+    Nine attempts treated a 404 as "this asset is optional" and deleted it.
+    That was the wrong diagnosis. Isaac Lab 3.0.0b2 builds its asset URLs from
+    `ISAAC_NUCLEUS_DIR`, which points at the 6.0 tree, and several files it
+    references were never published there:
 
-        Site 'ft_2' with body_pattern '.../Robot/panda_link0' matched no
-        prototype bodies
+        .../Assets/Isaac/6.0/Isaac/IsaacLab/Robots/FrankaEmika/
+            panda_instanceable.usd            -> 404
+        .../Assets/Isaac/5.0/Isaac/IsaacLab/Robots/FrankaEmika/
+            panda_instanceable.usd            -> 200
 
-    So: HEAD each remote URL and drop only the ones that 404. The table was
-    genuinely missing; the robot was never the problem. This makes no judgement
-    about what a prim is for -- only about whether it exists -- and it reports
-    both lists, so a scene gutted by accident is visible rather than silent.
+    Same filename, same layout, same link names -- the file simply did not move
+    forward with the version bump. So the fix is to walk the version back until
+    the file resolves, rather than to remove the robot and measure a scene with
+    nothing in it. Anything that resolves nowhere is dropped and named, and an
+    articulation that resolves nowhere is left in place to fail loudly at load:
+    a missing prop is a hole in the scenery, a missing robot is a hole every
+    event and observation term falls through.
     """
     import time as _time
     import urllib.request
 
     from isaaclab.assets import ArticulationCfg
 
+    def _head(url: str) -> bool:
+        for attempt in range(3):
+            try:
+                req = urllib.request.Request(url, method="HEAD")
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    return 200 <= r.status < 400
+            except Exception:                                    # noqa: BLE001
+                if attempt < 2:
+                    _time.sleep(2 * (attempt + 1))
+        return False
+
+    fallbacks = ("5.0", "4.5")
     dropped, kept = [], []
     for name in dir(scene_cfg):
         if name.startswith("_"):
@@ -72,30 +92,21 @@ def _localise(scene_cfg) -> tuple[list[str], list[str]]:
         path = getattr(spawn, "usd_path", None)
         if not isinstance(path, str) or not path.startswith(("http://", "https://")):
             continue
-        # Never drop an articulation. A missing prop is a hole in the scenery;
-        # a missing robot is a hole every event and observation term falls
-        # through -- attempt 10 lost the Franka to a single slow HEAD and died
-        # on `The scene entity 'robot' does not exist`. If a robot's USD is
-        # genuinely unreachable the run should fail loudly at load, which it
-        # will, rather than quietly measuring a scene with no robot in it.
-        if isinstance(item, ArticulationCfg):
+        if _head(path):
             kept.append(name)
             continue
-        # Retry before condemning an asset. The decision here is permanent for
-        # the run, and one timeout against a slow content server is not
-        # evidence that a file is missing.
-        ok = False
-        for attempt in range(3):
-            try:
-                req = urllib.request.Request(path, method="HEAD")
-                with urllib.request.urlopen(req, timeout=20) as r:
-                    ok = 200 <= r.status < 400
+        moved = None
+        for ver in fallbacks:
+            candidate = re.sub(r"/Assets/Isaac/[0-9.]+/", f"/Assets/Isaac/{ver}/", path)
+            if candidate != path and _head(candidate):
+                moved = candidate
                 break
-            except Exception:                                    # noqa: BLE001
-                if attempt < 2:
-                    _time.sleep(2 * (attempt + 1))
-        if ok:
-            kept.append(name)
+        if moved:
+            spawn.usd_path = moved
+            kept.append(f"{name}@{moved.split('/Assets/Isaac/')[1].split('/')[0]}")
+        elif isinstance(item, ArticulationCfg):
+            # Unreachable robot: leave it and let the loader say so.
+            kept.append(f"{name}!UNRESOLVED")
         else:
             setattr(scene_cfg, name, None)
             dropped.append(name)

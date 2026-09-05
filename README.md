@@ -72,7 +72,8 @@ observation construction is bit-identical to the sim2real deployment path.
 
 ## Results
 
-Full table and evidence in [docs/FINDINGS.md](docs/FINDINGS.md).
+Full table and evidence in [docs/FINDINGS.md](docs/FINDINGS.md). Every clip,
+including the ones not used here, is in [docs/GALLERY.md](docs/GALLERY.md).
 
 **Where it wins**
 
