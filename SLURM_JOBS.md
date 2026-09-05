@@ -184,10 +184,7 @@ Noticed from the Isaac clip: the robots lie flat and clip the ground instead of
 resetting upright dozens of times, which is what ~8-step episodes should look
 like in a 300-step video.
 
-`_PINCH_ROOT_Z = -0.07` (`coop_lift_env_cfg.py:78`) spawns the root 7 cm below a
-ground plane the shipped asset expects to meet at z = 0, and the pinch pose puts
-the arms about 20 cm below the root on top of that. Measured against a working
-task rather than asserted:
+**Confirmed, measured against a working task rather than asserted:**
 
 | at reset | v2 CubeToShelf | 22-DoF locomotion (control) |
 |---|---|---|
@@ -212,8 +209,28 @@ being pushed out of the floor. It also weakens finding 10: some of the gripper's
 
 The locomotion half is untouched — it spawns at z = 0 and is the control here.
 
+Also at reset: both ankles are under the floor, and the hands sit at **-0.261
+and +0.138** — a 40 cm split in a pose that reads as symmetric in the source —
+while the payload waits at +0.300. The reach band says a standing robot's hands
+span 0.404-0.610 with the feet planted, so the spawn does not implement the
+geometry the tasks were designed around.
+
+**The cause is not yet established.** First hypothesis was the mirroring
+convention: every joint declares `axis="0 0 1"`, so symmetry depends on each
+joint's origin rotation, and by that reading the elbows, knees and ankles were
+all set the wrong way round. **Isaac disproved it on the next run** — the joint
+limits are the authority and they say the original signs were right:
+
+    'arm_right_elbow_pitch_joint': 0.900 not in [-1.571, -0.000]
+    'leg_right_knee_pitch_joint': -1.450 not in [-0.000, 2.443]
+
+So the corrected pose was invalid and is reverted. The next step is to sweep
+sign combinations that are *within* the limits and measure hand symmetry and
+foot clearance, rather than to reason from the URDF again.
+
 | # | id | outcome |
 |---|---|---|
+| 3 | `21186243` | hypothesis rejected — the "corrected" mirroring puts two joints outside their limits. Reverted. |
 | 2 | `21186214` | **confirmed with a control** — table above |
 | 1 | `21186202` | first measurement, suspect task only: 19 of 27 bodies below z=0. No control, so it could not yet distinguish a bug from this asset's frame convention. |
 
