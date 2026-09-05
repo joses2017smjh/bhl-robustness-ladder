@@ -27,13 +27,23 @@ record() {   # task run_glob label
     run=$(ls -dt "$L"/*"$glob" 2>/dev/null | head -1)
     if [ -z "$run" ]; then echo "SKIP $label: no run matching *$glob"; return; fi
     echo "=== $label  task=$task  run=$(basename "$run") ==="
-    local before after
-    before=$(find "$L" -name "*.mp4" 2>/dev/null | wc -l)
+    # Count files *newer than a marker*, not total files.
+    #
+    # RecordVideo writes to <run>/videos/play/rl-video-step-0.mp4 and overwrites
+    # whatever is already there, so a re-render leaves the count unchanged. The
+    # previous run reported "FAILED welded_cube -- no video was written" about a
+    # video it had just written, 78 MB, with a fresh mtime. A guard that lies in
+    # this direction is worse than no guard: it sends you debugging a success.
+    local marker before after
+    marker="$L/.render-marker-$$"
+    : > "$marker"
+    before=0
     "$PY" "$REPO/scripts/train_play.py" \
         --task "$task" --num_envs 4 --headless --enable_cameras \
         --video --video_length "${VIDEO_LEN:-400}" \
         --load_run "$(basename "$run")" || true
-    after=$(find "$L" -name "*.mp4" 2>/dev/null | wc -l)
+    after=$(find "$L" -name "*.mp4" -newer "$marker" 2>/dev/null | wc -l)
+    rm -f "$marker"
     # Count the files, do not trust the exit code. train_play raised
     # FileNotFoundError and still exited 0, because Hydra catches and
     # simulation_app.close() hard-exits -- the same reason four dead crew arms

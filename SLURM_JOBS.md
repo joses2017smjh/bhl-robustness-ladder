@@ -140,7 +140,7 @@ leave the grippers inert and the variant indistinguishable from its control.
 | 2 | `21105399` | **9 of 9 COMPLETED** — grippers survive **~450 steps against 8**, reward **+14.3 against −0.79**. Task success still 0 in every cell. |
 | 1 | `21105363` | smoke 3/3, episode lengths 7.3–7.4 |
 
-### Cloth sorting — G-C1 throughput · `todo` (three probes, no number yet)
+### Cloth sorting — G-C1 throughput · `done` — the answer is scripted, not RL
 Decides RL against scripted demo. Still undecided: three probes, none of which
 measured cloth. The next one has to build the deformable properly --
 `DeformableObjectCfg` with a Newton VBD solver, as
@@ -149,14 +149,14 @@ assuming the solver picks it up.
 
 | # | id | outcome |
 |---|---|---|
-| 10 | `21185828` | running — never drop an articulation, and retry a HEAD twice before condemning an asset |
+| 12 | `21185969` | **G-C1 answered, twelve attempts in.** Newton VBD cloth, 961-vertex mesh, `robot@5.0` resolved and nothing dropped: **182 env-steps/s at 8 envs, 177 at 32, 71 at 128**, and 512 envs overflows a signed 32-bit array dimension (7.3e9). Throughput *falls* with parallelism, so there is no scale to buy. A standard 8,000-iteration arm here is 786M env-steps: about **50 days** at cloth's peak rate against **6 minutes** at the rigid-body rate. RL on this is not a scheduling problem, it is a different project. **The sorting task gets scripted demos.** |
+| 11 | `21185935` | FAILED — the Franka resolved and the scene built for the first time, then `KeyError: 'ee_frame'` at the first step: `deformable_ee_distance` reads that sensor every step and attempt 9 had removed it. Removing it was a fix for a bug that no longer existed. |
+| 10 | `21185828` | FAILED, and it proved the point — `FileNotFoundError` on `.../Isaac/6.0/.../panda_instanceable.usd`. Not flakiness: Isaac Lab 3.0.0b2 asks the 6.0 asset tree for a file that was never published there. The identical file is served under 5.0 and 4.5. Nine attempts had read that 404 as "this asset is optional" and deleted the robot. |
 | 9 | `21153326` | FAILED — the site-injection fix worked and the localiser then ate the robot: `The scene entity 'robot' does not exist. Available entities: ['terrain', 'deformable', 'table', 'ground', 'sky_light', 'cube']`. One slow HEAD against the content server is enough to condemn an asset permanently for the run, and the Franka drew the short straw this time. The same URL loaded fine in attempt 8, so this is flakiness being treated as evidence. |
 | 8 | `21146031` | FAILED — but it got further than any before it. The assets resolved, the Franka loaded, the VBD cloth registered at 961 vertices; it died in `NewtonManager._cl_inject_sites` with `Site 'ft_4' ... matched no prototype bodies`. Newton's prototype builder labels bodies differently from the USD stage, so `ee_frame`, anchored on `panda_link0`, cannot be injected as a site when the scene clones. That is Isaac Lab 3.0.0b2's cloner, not this repo. |
 | 7 | `21136400` | FAILED — dropping every remote asset removed the Franka, and the scene's force-torque sites reference it: `Site 'ft_2' ... matched no prototype bodies` |
 | 6 | `21136231` | cancelled before it ran — a visual-only substitute still guesses at the prim's role |
 | 5 | `21125073` | FAILED — my replacement carried `rigid_props`, so `FrameView` refused it: "prim '/World/envs/env_0/Table' is a Newton physics body" |
-| 4 | `21124738` | **verdict: the probe measured nothing.** `physics schemas on the cloth prim: NONE` — a `UsdFileCfg` loads the mesh as static geometry, it does not make it cloth. |
-| 3 | `21105721` | VOID — 2.04M env-steps/s at 1,024 envs, only 14% slower than at 16. The flat scaling was the tell. |
 
 ### Demo clips for the README · `running`
 The MuJoCo replay harness cannot render the gripper arms — it builds its crew
@@ -360,13 +360,13 @@ came from.
 | `21100446` | G-B4 re-gate |
 | `21100447`, `21105232` | B3 ice smoke, then 6 rungs |
 | `21105363` | gripper v2 smoke |
-| `21105364`, `21105405`, `21105721`, `21124738`, `21125073`, `21136231`, `21136400`, `21146031`, `21153326`, `21185828` | G-C1 cloth throughput |
+| `21105364`–`21185969` (12 attempts) | G-C1 cloth throughput |
 | `21105399` | gripper v2 training, 9 cells |
 | `21124909`, `21125100` | plank spawn diagnostics |
 | `21146058` | plank cells re-run at the 1.05 m stand-off |
 | `21124719`, `21136232` | B3 + v2 readouts |
 | `21124302`, `21136243` | Tier 1 readouts |
-| `21136321`, `21146050`, `21146513`, `21153325`, `21185827` | gripper vs welded demo clips |
+| `21136321`–`21186009` (8 attempts) | gripper vs welded demo clips |
 | `21105320` | Tier 1 MARL rows |
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |

@@ -139,7 +139,16 @@ def main():
             "disable_logger": True,
         }
         print("[INFO] Recording videos during training.")
-        print_dict(video_kwargs, nesting=4)
+        # [overlay] print_dict is a debug banner and it can take the run down.
+        # It pretty-prints callables via `callable_to_string`, which reads the
+        # lambda's source line and does `.split("lambda")[1]` -- so whenever the
+        # recorded line number does not resolve to a line containing the word,
+        # it raises IndexError before a frame is rendered. That is a formatting
+        # helper deciding whether a video gets made.
+        try:
+            print_dict(video_kwargs, nesting=4)
+        except Exception as exc:                                 # noqa: BLE001
+            print(f"[WARN]: could not pretty-print video kwargs ({exc!r})")
         env = gym.wrappers.RecordVideo(env, **video_kwargs)
 
     # convert to single-agent instance if required by the RL algorithm
