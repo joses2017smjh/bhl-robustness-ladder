@@ -58,7 +58,10 @@ def _localise(scene_cfg) -> tuple[list[str], list[str]]:
     about what a prim is for -- only about whether it exists -- and it reports
     both lists, so a scene gutted by accident is visible rather than silent.
     """
+    import time as _time
     import urllib.request
+
+    from isaaclab.assets import ArticulationCfg
 
     dropped, kept = [], []
     for name in dir(scene_cfg):
@@ -69,12 +72,28 @@ def _localise(scene_cfg) -> tuple[list[str], list[str]]:
         path = getattr(spawn, "usd_path", None)
         if not isinstance(path, str) or not path.startswith(("http://", "https://")):
             continue
-        try:
-            req = urllib.request.Request(path, method="HEAD")
-            with urllib.request.urlopen(req, timeout=20) as r:
-                ok = 200 <= r.status < 400
-        except Exception:                                        # noqa: BLE001
-            ok = False
+        # Never drop an articulation. A missing prop is a hole in the scenery;
+        # a missing robot is a hole every event and observation term falls
+        # through -- attempt 10 lost the Franka to a single slow HEAD and died
+        # on `The scene entity 'robot' does not exist`. If a robot's USD is
+        # genuinely unreachable the run should fail loudly at load, which it
+        # will, rather than quietly measuring a scene with no robot in it.
+        if isinstance(item, ArticulationCfg):
+            kept.append(name)
+            continue
+        # Retry before condemning an asset. The decision here is permanent for
+        # the run, and one timeout against a slow content server is not
+        # evidence that a file is missing.
+        ok = False
+        for attempt in range(3):
+            try:
+                req = urllib.request.Request(path, method="HEAD")
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    ok = 200 <= r.status < 400
+                break
+            except Exception:                                    # noqa: BLE001
+                if attempt < 2:
+                    _time.sleep(2 * (attempt + 1))
         if ok:
             kept.append(name)
         else:

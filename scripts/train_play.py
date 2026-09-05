@@ -155,12 +155,29 @@ def main():
     # BHL PPO cfg sets empirical_normalization=False, so None is the correct
     # value here rather than a workaround.
     _normalizer = getattr(ppo_runner, "obs_normalizer", None)
-    export_policy_as_jit(
-        ppo_runner.alg.policy, _normalizer, path=export_model_dir, filename="policy.pt"
-    )
-    export_policy_as_onnx(
-        ppo_runner.alg.policy, normalizer=_normalizer, path=export_model_dir, filename="policy.onnx"
-    )
+    # [overlay] rsl-rl renamed the actor network between the two stacks this repo
+    # runs: 3.0.1 exposes it as `alg.policy`, 5.0.1 as `alg.actor`. Asking for
+    # the wrong one raises
+    #   AttributeError: 'PPO' object has no attribute 'policy'
+    # *after* the checkpoint has loaded and before a single frame is rendered,
+    # which is how the gripper video job failed once the config migration was
+    # in place. Ask for whichever exists rather than branching on a version.
+    _actor = getattr(ppo_runner.alg, "policy", None)
+    if _actor is None:
+        _actor = ppo_runner.alg.actor
+    # The export is a deployment artefact, not a precondition for replay. A
+    # video job should not die because ONNX tracing does not like a network
+    # shape, so failures here are reported and stepped over -- the rollout below
+    # is the thing this script is usually run for.
+    try:
+        export_policy_as_jit(
+            _actor, _normalizer, path=export_model_dir, filename="policy.pt"
+        )
+        export_policy_as_onnx(
+            _actor, normalizer=_normalizer, path=export_model_dir, filename="policy.onnx"
+        )
+    except Exception as exc:                                     # noqa: BLE001
+        print(f"[WARN]: policy export failed, continuing to replay: {exc!r}")
 
     # === export the yaml config for deployment ===
     num_joints = len(env_cfg.scene.robot.init_state.joint_pos)

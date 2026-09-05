@@ -149,7 +149,8 @@ assuming the solver picks it up.
 
 | # | id | outcome |
 |---|---|---|
-| 9 | `21153326` | running — strip the FrameTransformer sensors and the manager terms that read them. A frame transformer measures where the gripper is; it applies no force and steps no solver, so removing it cannot change a throughput number. |
+| 10 | `21185828` | running — never drop an articulation, and retry a HEAD twice before condemning an asset |
+| 9 | `21153326` | FAILED — the site-injection fix worked and the localiser then ate the robot: `The scene entity 'robot' does not exist. Available entities: ['terrain', 'deformable', 'table', 'ground', 'sky_light', 'cube']`. One slow HEAD against the content server is enough to condemn an asset permanently for the run, and the Franka drew the short straw this time. The same URL loaded fine in attempt 8, so this is flakiness being treated as evidence. |
 | 8 | `21146031` | FAILED — but it got further than any before it. The assets resolved, the Franka loaded, the VBD cloth registered at 961 vertices; it died in `NewtonManager._cl_inject_sites` with `Site 'ft_4' ... matched no prototype bodies`. Newton's prototype builder labels bodies differently from the USD stage, so `ee_frame`, anchored on `panda_link0`, cannot be injected as a site when the scene clones. That is Isaac Lab 3.0.0b2's cloner, not this repo. |
 | 7 | `21136400` | FAILED — dropping every remote asset removed the Franka, and the scene's force-torque sites reference it: `Site 'ft_2' ... matched no prototype bodies` |
 | 6 | `21136231` | cancelled before it ran — a visual-only substitute still guesses at the prim's role |
@@ -165,18 +166,18 @@ works.
 
 | # | id | outcome |
 |---|---|---|
-| 4 | `21153325` | running — `train_play.py` now runs `handle_deprecated_rsl_rl_cfg`, the migration `train.py` has had all along. Verified outside Slurm: the four deprecated keys are gone from both models and `distribution_cfg` survives. |
+| 5 | `21185827` | running — ask for `alg.policy` or `alg.actor`, whichever the installed rsl-rl has, and treat the ONNX/JIT export as non-fatal. The export is a deployment artefact; a replay job should not die for it. |
+| 4 | `21153325` | FAILED — and the config migration worked. It loaded the checkpoint and died one line later on `AttributeError: 'PPO' object has no attribute 'policy'`: rsl-rl 3.0.1 calls the actor `alg.policy`, 5.0.1 calls it `alg.actor`, and this file was written against 3.0.1. Still before any frame is drawn. |
 | 3 | `21146513` | FAILED, reported COMPLETED — `TypeError: MLPModel.__init__() got an unexpected keyword argument 'stochastic'`. The path fix worked and exposed the real bug: `RslRlMLPModelCfg.to_dict()` still emits `stochastic`, `init_noise_std`, `state_dependent_std` and `noise_std_type`, and rsl-rl 5.0.1 splats the dict into a model that takes none of them. `train.py` migrates the cfg first; `train_play.py` never did, so **every v60 checkpoint trained fine and none could be replayed**. The mp4 count caught it. |
-| 2 | `21146050` | FAILED, reported COMPLETED — `FileNotFoundError: $REPO/logs/rsl_rl/task_v2`. train_play's log root is relative and train.sh runs from `$UPSTREAM`. It printed "ok" over the traceback because train_play exits 0 on failure. |
 
-### Plank cells, re-run on the fixed scene · `running`
+### Plank cells, re-run on the fixed scene · `done` — ejection fixed, task still dead
 The six original plank cells measured a scene that ejected its own payload, and
 their gripper arms showed none of the survival effect the cube and ball arms did
 — episode length 11.6 against 428. Re-run at the 1.05 m stand-off.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21146058` | running — 3 welded + 3 gripper, 8,000 iters. **Interim, from the event files at 1,076–6,489 iterations:** the stand-off fixed the ejection — episode length is 469–489 against 11.6 before — but the task itself is still dead. `lift_height` sits on its 0.04 m curriculum floor in all six arms (peak == tail == 0.0400, never promoted once), `success` is 0.0000, and `leaned` and `lifting_object` never fire. Reward ~13 is `still_alive` and posture. The robots learned to stand next to the plank for the full episode. The rgb arm also falls in 44% of episodes against 2–8% for the other five. |
+| 1 | `21146058` | **6 of 6 COMPLETED** (10:07–22:23). Read from the event files: the stand-off fixed the ejection — episode length is 354–491 against 11.6 before — and the task itself is still dead. `lift_height` sits on its 0.04 m curriculum floor in all six arms at the full 8,000 iterations, peak == tail == 0.0400, so it never promoted once across 48,000 arm-iterations. `success` is 0.0000 everywhere, and `leaned` and `lifting_object` never fire. Reward ~13 is `still_alive` and posture: the robots learned to stand next to the plank for the whole episode. The rgb arm falls in 42.6% of episodes against 1.9–7.7% for the other five. |
 
 ### Plank spawn ejection · `done`
 `plank_leaned` no longer fires on a zero action (0.000 at every step, was 0.031
@@ -359,13 +360,13 @@ came from.
 | `21100446` | G-B4 re-gate |
 | `21100447`, `21105232` | B3 ice smoke, then 6 rungs |
 | `21105363` | gripper v2 smoke |
-| `21105364`, `21105405`, `21105721`, `21124738`, `21125073`, `21136231`, `21136400`, `21146031`, `21153326` | G-C1 cloth throughput |
+| `21105364`, `21105405`, `21105721`, `21124738`, `21125073`, `21136231`, `21136400`, `21146031`, `21153326`, `21185828` | G-C1 cloth throughput |
 | `21105399` | gripper v2 training, 9 cells |
 | `21124909`, `21125100` | plank spawn diagnostics |
 | `21146058` | plank cells re-run at the 1.05 m stand-off |
 | `21124719`, `21136232` | B3 + v2 readouts |
 | `21124302`, `21136243` | Tier 1 readouts |
-| `21136321`, `21146050`, `21146513`, `21153325` | gripper vs welded demo clips |
+| `21136321`, `21146050`, `21146513`, `21153325`, `21185827` | gripper vs welded demo clips |
 | `21105320` | Tier 1 MARL rows |
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |

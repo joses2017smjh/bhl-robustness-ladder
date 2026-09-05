@@ -90,7 +90,7 @@ Full table and evidence in [docs/FINDINGS.md](docs/FINDINGS.md).
 | | |
 |---|---|
 | Cooperative lift | best rollout is 7.8 cm, and the pair drops 41 cm before touching the cube |
-| Plank task | 0.0 cm across 12 seeds — contact points exceed the shoulder span |
+| Plank task | 0.0 cm across 18 seeds, 6 of them after the spawn bug was fixed — contact points exceed the shoulder span |
 | Vision on the lift | depth-conditioned policies fall in almost every episode; blind ones do not |
 | Task completion | **zero** success on all three redesigned tasks, gripper included |
 | Cloth throughput | eight probe attempts, still no number |
