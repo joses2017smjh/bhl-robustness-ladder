@@ -51,3 +51,6 @@ results/curves/training_curves.csv
 # Editor / IDE workspace state -- local to whoever opened the repo.
 .vscode/
 *.code-workspace
+
+# Migration staging; the archives live as GitHub Release assets, not in git.
+/runs/*.tar.zst
