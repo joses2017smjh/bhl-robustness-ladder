@@ -81,6 +81,17 @@ m = pd.read_csv("runs/manifest.csv")
 m[m.run.str.contains("ice")][["run", "iterations", "Curriculum/terrain_levels|tail5"]]
 ```
 
+## With more storage
+
+The tiering above assumed release assets. With a 2 TB Drive the dropped tier
+fits easily — 36 GB of full training logs, 36 GB for the other project, 2.2 GB
+of job logs, about 75 GB against 2 TB. [DRIVE_SETUP.md](DRIVE_SETUP.md) has the
+headless OAuth flow and `scripts/to_drive.sh` does the transfer.
+
+The venvs and container stay excluded even then. They are reproducible, and
+they are pinned to this cluster's driver — restoring them elsewhere produces
+something that does not run.
+
 ## What this does not save
 
 The environment. Isaac Sim 5.1 / 6.0, the driver pairing, and the cluster's
