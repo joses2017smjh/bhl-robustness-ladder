@@ -179,6 +179,44 @@ their gripper arms showed none of the survival effect the cube and ball arms did
 |---|---|---|
 | 1 | `21146058` | **6 of 6 COMPLETED** (10:07–22:23). Read from the event files: the stand-off fixed the ejection — episode length is 354–491 against 11.6 before — and the task itself is still dead. `lift_height` sits on its 0.04 m curriculum floor in all six arms at the full 8,000 iterations, peak == tail == 0.0400, so it never promoted once across 48,000 arm-iterations. `success` is 0.0000 everywhere, and `leaned` and `lifting_object` never fire. Reward ~13 is `still_alive` and posture: the robots learned to stand next to the plank for the whole episode. The rgb arm falls in 42.6% of episodes against 1.9–7.7% for the other five. |
 
+### v2 / coop spawn puts the robot through the floor · `open` — found 2026-09-05
+Noticed from the Isaac clip: the robots lie flat and clip the ground instead of
+resetting upright dozens of times, which is what ~8-step episodes should look
+like in a 300-step video.
+
+`_PINCH_ROOT_Z = -0.07` (`coop_lift_env_cfg.py:78`) spawns the root 7 cm below a
+ground plane the shipped asset expects to meet at z = 0, and the pinch pose puts
+the arms about 20 cm below the root on top of that. Measured against a working
+task rather than asserted:
+
+| at reset | v2 CubeToShelf | 22-DoF locomotion (control) |
+|---|---|---|
+| root z | **-0.0700** | +0.0000 |
+| lowest body | `arm_left_elbow_roll` @ **-0.2648** | `base` @ -0.0000 |
+| bodies below z=0 | **19 of 27** | **1 of 27** |
+| after 10 zero-action steps | 0 of 27 — extruded | 1 of 27 — stable |
+
+The control's single body is `base`, whose origin is the asset's reference point;
+it stays at 1 and the root drifts to -0.046 as the robot settles on its feet. The
+v2 robot is *extruded* by depenetration over about ten steps — the same failure
+class as the plank ejection, which was fixed for the plank only.
+
+`fallen` reads 0.0000 the whole way through, so nothing terminates on it.
+
+**What this puts in doubt.** Every coop_lift and v2 result: the cube, ball and
+plank arms, all nine v2 cells and all nine gripper cells — which is the whole
+"task success 0" column. Welded-hand arms die at ~8 steps, and extrusion takes
+about 10, so those episodes ended inside the window where the robot was still
+being pushed out of the floor. It also weakens finding 10: some of the gripper's
+6.3 -> 427.7 step gain may be surviving a broken spawn rather than having hands.
+
+The locomotion half is untouched — it spawns at z = 0 and is the control here.
+
+| # | id | outcome |
+|---|---|---|
+| 2 | `21186214` | **confirmed with a control** — table above |
+| 1 | `21186202` | first measurement, suspect task only: 19 of 27 bodies below z=0. No control, so it could not yet distinguish a bug from this asset's frame convention. |
+
 ### Plank spawn ejection · `done`
 `plank_leaned` no longer fires on a zero action (0.000 at every step, was 0.031
 at step 20) — the stationary requirement fixed the predicate. **Cause found, geometrically rather than by guess:** at x = ±0.85 the hands
