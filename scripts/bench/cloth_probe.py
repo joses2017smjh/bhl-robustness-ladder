@@ -31,6 +31,10 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--envs", type=int, nargs="+", default=[8, 32, 128, 512])
 parser.add_argument("--steps", type=int, default=40)
 parser.add_argument("--task", type=str, default="Isaac-Lift-Cloth-Franka-v0")
+parser.add_argument("--strip-frames", action="store_true",
+                    help="Remove FrameTransformer sensors and the manager terms "
+                         "that read them. Only needed if site injection fails "
+                         "for a reason other than an unresolved robot asset.")
 AppLauncher.add_app_launcher_args(parser)
 args_cli = parser.parse_args()
 args_cli.headless = True
@@ -172,7 +176,19 @@ def main() -> None:
         try:
             cfg = parse_env_cfg(args_cli.task, device=app_launcher.device, num_envs=n)
             dropped, kept = _localise(cfg.scene)
-            stripped = _strip_frame_transformers(cfg)
+            # Stripping the frame transformers is now opt-in, and off.
+            #
+            # Attempt 9 removed them to get past
+            #   Site 'ft_4' with body_pattern '.../Robot/panda_link0' matched no
+            #   prototype bodies
+            # on the theory that Newton's cloner labels bodies differently from
+            # the stage. Attempt 10 showed that was the wrong reading: the
+            # Franka's USD was 404ing, so the prototype had no panda_link0 to
+            # match and the site error was a symptom of the missing robot, not
+            # an independent bug. With the asset resolved the transformer should
+            # inject cleanly -- and keeping it means `deformable_ee_distance`,
+            # which reads `env.scene["ee_frame"]` every step, still resolves.
+            stripped = _strip_frame_transformers(cfg) if args_cli.strip_frames else []
             env = gym.make(args_cli.task, cfg=cfg, disable_env_checker=True)
             env.reset()
             act = torch.zeros((n, env.unwrapped.action_space.shape[-1]),

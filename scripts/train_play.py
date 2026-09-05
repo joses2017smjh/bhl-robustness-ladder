@@ -89,6 +89,38 @@ def main():
     )
     agent_cfg: RslRlOnPolicyRunnerCfg = cli_args.parse_rsl_rl_cfg(args_cli.task, args_cli)
 
+    # [overlay] Frame one environment instead of the whole grid.
+    #
+    # The default viewer sits far enough back to hold every env in shot, which
+    # for a 4-env replay puts four robots in the middle distance of a dark grid
+    # floor -- correct output, useless as a clip. `origin_type="env"` anchors the
+    # camera on one environment's origin, so eye and lookat are metres from that
+    # robot rather than from world zero.
+    #
+    # Overridable from the job script: BHL_VIEW_EYE / BHL_VIEW_LOOKAT as three
+    # metres separated by colons, BHL_VIEW_ENV as the index to follow.
+    #
+    # Colons, not commas. Both `sbatch --export` and Apptainer's `--env` split
+    # their arguments on commas, so "2.4,2.4,1.5" arrives as three separate
+    # broken assignments -- the same hazard slurm/_env.sh already documents for
+    # terrain ranges. Commas are still accepted for a value that reaches the
+    # script by some other route.
+    def _vec(name: str, default: tuple[float, float, float]):
+        raw = os.environ.get(name)
+        if not raw:
+            return default
+        parts = [float(x) for x in raw.replace(":", ",").split(",")]
+        if len(parts) != 3:
+            raise ValueError(f"{name} must be three numbers separated by ':', got {raw!r}")
+        return tuple(parts)
+
+    env_cfg.viewer.origin_type = "env"
+    env_cfg.viewer.env_index = int(os.environ.get("BHL_VIEW_ENV", "0"))
+    env_cfg.viewer.eye = _vec("BHL_VIEW_EYE", (2.2, 2.2, 1.4))
+    env_cfg.viewer.lookat = _vec("BHL_VIEW_LOOKAT", (0.0, 0.0, 0.5))
+    print(f"[INFO]: viewer eye={env_cfg.viewer.eye} lookat={env_cfg.viewer.lookat} "
+          f"origin=env[{env_cfg.viewer.env_index}]")
+
     # specify directory for logging experiments
     log_root_path = os.path.join("logs", "rsl_rl", agent_cfg.experiment_name)
     log_root_path = os.path.abspath(log_root_path)
