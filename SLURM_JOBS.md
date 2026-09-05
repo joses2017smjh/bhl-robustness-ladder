@@ -179,6 +179,23 @@ their gripper arms showed none of the survival effect the cube and ball arms did
 |---|---|---|
 | 1 | `21146058` | **6 of 6 COMPLETED** (10:07–22:23). Read from the event files: the stand-off fixed the ejection — episode length is 354–491 against 11.6 before — and the task itself is still dead. `lift_height` sits on its 0.04 m curriculum floor in all six arms at the full 8,000 iterations, peak == tail == 0.0400, so it never promoted once across 48,000 arm-iterations. `success` is 0.0000 everywhere, and `leaned` and `lifting_object` never fire. Reward ~13 is `still_alive` and posture: the robots learned to stand next to the plank for the whole episode. The rgb arm falls in 42.6% of episodes against 1.9–7.7% for the other five. |
 
+### Manipulation re-runs on the fixed spawn · `running` — queued 2026-09-05
+All 18 arms, re-trained with `plant_feet` in place. `RUN_PREFIX` keeps them out
+of the run labels of the buried arms they supersede, so the before/after is
+readable instead of concatenated.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21186402` | running — 9 v2 cells, `RUN_PREFIX=v2fix` |
+| 1 | `21186403` | running — 9 gripper cells, `RUN_PREFIX=gripfix` |
+
+**Queued with one bug fixed and one open.** The burial is fixed and verified;
+the 39 cm hand asymmetry is not. Started anyway because the burial was the
+dominant fault — 19 of 27 bodies underground and an extrusion lasting about ten
+steps, against a mean episode length of eight — and because blocking 18 runs on
+a fifth probe of a bug that has already survived four costs more than re-running
+if the asymmetry later turns out to matter. If it is fixed, these need redoing.
+
 ### v2 / coop spawn puts the robot through the floor · `open` — found 2026-09-05
 Noticed from the Isaac clip: the robots lie flat and clip the ground instead of
 resetting upright dozens of times, which is what ~8-step episodes should look
@@ -231,7 +248,7 @@ Cross-checked in MuJoCo with the *same* `PINCH_POSE`, on CPU:
    and translates the base onto the plane, precisely because it "does not trust
    that the two descriptions of the robot put their root frames in the same
    place". Isaac uses the hardcoded `_PINCH_ROOT_Z = -0.07` and does not.
-2. **The USD arms are not mirrored the way the MJCF's are.** Same joint values,
+2. **The pinch pose is asymmetric in Isaac and not in MuJoCo — still open.** Same joint values,
    symmetric in MuJoCo, 40 cm apart in Isaac. `21186283` swept every
    sign combination the joint limits allow: the best achievable split is
    **0.3519 m**, so no pose config can fix it. At the *default* arm pose Isaac
@@ -240,6 +257,20 @@ Cross-checked in MuJoCo with the *same* `PINCH_POSE`, on CPU:
 
 MuJoCo hands land at +0.58, inside the 0.404-0.610 band `reach_band.py` measured
 the tasks against. Isaac never put the robot in the pose the tasks assume.
+
+**Bug 1 is fixed.** `plant_feet` (`coop_lift_mdp.py`) measures the lowest body at
+reset and translates the root onto the plane, the way `CrewRunner.reset` has
+always done in MuJoCo. Verified `21186378`: **0 of 27 bodies below z = 0** at
+reset and after stepping, root settling at +0.18 rather than the assumed -0.07.
+
+**Bug 2 is open, and four hypotheses are dead.** Joint-sign mirroring read off
+the URDF origins (rejected: the limits forbid it, `21186243`); the spawn
+quaternion tipping the robot (rejected: `up_z = 1.000` at every rotation,
+`21186364`); a single mis-axed joint (rejected: the same ~0.5 m split appears
+whatever pair is driven and whatever the signs, `21186353`); the shipped USD
+being asymmetric (rejected: at zero arm angles it is symmetric to 4 dp,
+`21186390`). So the asset is fine and the same joint values mean different
+things to the two descriptions — where, is not yet established.
 
 **What this re-scopes.** Every MuJoCo-scored number used a correct spawn, so the
 sim2sim results stand: 7.8 cm best cube lift, plank 0.0 cm, pinch-gate 98%, the

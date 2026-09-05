@@ -38,7 +38,11 @@ T=${TASKS[$(( IDX / 3 ))]}
 V=${VIS[$(( IDX % 3 ))]}
 
 export TASK="TaskV2-BHL-${T}-${V}-v0"
-export RUN_NAME="v2-${T,,}-${V,,}-s${SEED:-0}"
+# RUN_PREFIX distinguishes a re-run from the arm it supersedes. The spawn fix
+# (plant_feet) changes what the robot starts on top of, so post-fix runs must
+# not land in the same run label as the buried ones -- the curve reader keys
+# on the timestamp-stripped label and would treat them as one arm.
+export RUN_NAME="${RUN_PREFIX:-v2}-${T,,}-${V,,}-s${SEED:-0}"
 export SEED=${SEED:-0} MAX_ITER=${MAX_ITER:-8000} NUM_ENVS=${NUM_ENVS:-1024}
 export OVERRIDE_FILE="$WORKSPACE/overrides/v2-${IDX}.txt"
 : > "$OVERRIDE_FILE"

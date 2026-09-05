@@ -38,7 +38,9 @@ T=${TASKS[$(( IDX / 3 ))]}
 V=${VIS[$(( IDX % 3 ))]}
 
 export TASK="TaskV2-BHL-${T}-${V}-v0"
-export RUN_NAME="grip-${T,,}-${V,,}-s${SEED:-0}"
+# See 87_task_v2_train.sbatch: RUN_PREFIX keeps a post-spawn-fix re-run out of
+# the run label of the buried arm it supersedes.
+export RUN_NAME="${RUN_PREFIX:-grip}-${T,,}-${V,,}-s${SEED:-0}"
 export SEED=${SEED:-0} MAX_ITER=${MAX_ITER:-8000} NUM_ENVS=${NUM_ENVS:-1024}
 export OVERRIDE_FILE="$WORKSPACE/overrides/v2-${IDX}.txt"
 : > "$OVERRIDE_FILE"
