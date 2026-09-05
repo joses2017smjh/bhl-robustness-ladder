@@ -27,8 +27,13 @@ Already pushed; nothing to do.
 | file | what it is |
 |---|---|
 | `runs/manifest.csv` | one row per run: iterations, checkpoint count, and the final / tail-mean / max of **every** scalar that run logged |
-| `runs/scalars.csv.gz` | every `(run, tag, step, value)` triple — the full curves |
 | `runs/params/<run>/*.yaml` | the env and agent config that produced each run |
+
+`runs/scalars.csv.gz` — every `(run, tag, step, value)` triple, the full curves —
+is a **release asset** rather than a git file: it lands around 200 MB and
+GitHub rejects any file over 100 MB. `manifest.csv` is the summary of it and is
+small enough to keep in the repo, which is why the summary is the thing that
+gets committed and the raw curves are the thing that gets downloaded.
 
 This is the tier that matters. `extract_curves.py` pulls a curated tag list for
 plotting; `archive_runs.py` pulls everything, because the CSV has to answer
@@ -43,6 +48,7 @@ enough for release assets (2 GB each):
 | `final-checkpoints.tar.zst` | the highest-iteration checkpoint from each of 212 runs |
 | `events-and-params.tar.zst` | all 212 raw TensorBoard event files, plus every `params/*.yaml` |
 | `slurm-logs.tar.zst` | every job's console output |
+| `scalars.csv.gz` | every `(run, tag, step, value)` triple across all 222 runs |
 
 One final checkpoint per run is 0.67 GB and is what "can I ever replay this
 policy again" depends on. Raw event files are kept as well as the CSV because a

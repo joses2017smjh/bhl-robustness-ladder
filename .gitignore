@@ -54,3 +54,5 @@ results/curves/training_curves.csv
 
 # Migration staging; the archives live as GitHub Release assets, not in git.
 /runs/*.tar.zst
+# Long-form curves outgrew GitHub's 100 MB per-file limit; it is a release asset.
+/runs/scalars.csv.gz
