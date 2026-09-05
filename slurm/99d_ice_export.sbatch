@@ -14,7 +14,7 @@
 # v60, because the sighted arms need an RTX renderer 5.1 segfaults in, and the
 # blind arm runs on the same stack or it is not their control.
 set -euo pipefail
-export BHL_STACK=v60 ENABLE_CAMERAS=1
+export BHL_STACK=v51 ENABLE_CAMERAS=1
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
 setup_node_cache
 export OV_CACHE=/scratch/$USER/ov-cache-${SLURM_JOB_ID}

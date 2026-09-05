@@ -16,7 +16,7 @@ run_one() {   # task run_glob label
     run=$(ls -dt "$L"/*"$glob" 2>/dev/null | head -1)
     if [ -z "$run" ]; then echo "SKIP $label: no run matching *$glob"; return; fi
     echo "=== $label  task=$task  run=$(basename "$run") ==="
-    local marker; marker=$(mktemp)
+    local marker marker2; marker=$(mktemp); marker2=$(mktemp)
     "$PY" "$REPO/scripts/train_play.py" \
         --task "$task" --num_envs 4 --headless --enable_cameras \
         --video --video_length "${VIDEO_LEN:-300}" \
@@ -28,12 +28,18 @@ run_one() {   # task run_glob label
          | xargs -r ls -t 2>/dev/null | head -1)
     echo "  video: $nv new mp4"
     [ -n "$nc" ] && echo "  newest export artefact: $nc"
-    rm -f "$marker"
+    rm -f "$marker" "$marker2"
     # Keep the deploy config under a name that says which arm it came from,
     # because train_play always writes configs/policy_latest.yaml.
-    if [ -f "$UPSTREAM/configs/policy_latest.yaml" ]; then
+    # Only if this run wrote it. train_play always writes the same filename, so
+    # an unconditional copy silently saves a previous arm's config under this
+    # arm's name -- which is how the first attempt "saved" a deploy config from
+    # a run that had just died with a KeyError.
+    if [ "$UPSTREAM/configs/policy_latest.yaml" -nt "$marker2" ] 2>/dev/null; then
         cp "$UPSTREAM/configs/policy_latest.yaml" "$REPO/results/deploy_${label}.yaml"
         echo "  saved results/deploy_${label}.yaml"
+    else
+        echo "  no deploy config written by this run"
     fi
 }
 

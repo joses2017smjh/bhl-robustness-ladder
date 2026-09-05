@@ -179,6 +179,30 @@ their gripper arms showed none of the survival effect the cube and ball arms did
 |---|---|---|
 | 1 | `21146058` | **6 of 6 COMPLETED** (10:07–22:23). Read from the event files: the stand-off fixed the ejection — episode length is 354–491 against 11.6 before — and the task itself is still dead. `lift_height` sits on its 0.04 m curriculum floor in all six arms at the full 8,000 iterations, peak == tail == 0.0400, so it never promoted once across 48,000 arm-iterations. `success` is 0.0000 everywhere, and `leaned` and `lifting_object` never fire. Reward ~13 is `still_alive` and posture: the robots learned to stand next to the plank for the whole episode. The rgb arm falls in 42.6% of episodes against 1.9–7.7% for the other five. |
 
+### Spawn-bug diagnosis probes · `done` — 2026-09-05
+Six probes in one afternoon. Recorded together because four of them are dead
+hypotheses, and each narrowed the next.
+
+| # | id | outcome |
+|---|---|---|
+| 7 | `21186390` | shipped USD measured directly: **symmetric to 4 dp** at zero arm angles. The asset is not the bug. |
+| 6 | `21186378` | **`plant_feet` verified** — 0 of 27 bodies below z = 0 at reset and after stepping, root at +0.18 |
+| 5 | `21186364` | spawn quaternion ruled out — `up_z = 1.000` at every rotation tested, so the robot is upright, not rolled |
+| 4 | `21186353` | one-joint-at-a-time: the same ~0.5 m split appears whatever pair is driven and whatever the signs. Not a single mis-axed joint. |
+| 3 | `21186283` | sign sweep: best achievable split **0.3519 m** against MuJoCo's 0.0000, which moves the cause off the config |
+| 2 | `21186214` | **the finding** — 19 of 27 bodies below z = 0 against 1 of 27 for the locomotion control |
+| 1 | `21186202` | first measurement, no control, so it could not yet separate a bug from a frame convention |
+
+### Ice clips — blocked on `--load_run` · `blocked` — 2026-09-05
+The B3 result (depth 1.519 vs blind 1.374 on a hazard it cannot see) still has
+no clip. `render_multi` needs a `deploy.yaml` per robot; the ice runs never got
+one because the export path was broken when they finished.
+
+| # | id | outcome |
+|---|---|---|
+| 2 | `21186615` | COMPLETED and **wrong** — both arms wrote byte-identical configs pointing at `2026-08-17_22-56-08_terrain-bumpy-s0`. `train_play` reads `agent_cfg.load_run`, and the `--load_run` flag does not reach it, so the export resolved to some other run entirely. Files deleted rather than kept: a deploy config under the wrong arm's name is how numbers get credited to the wrong job. |
+| 1 | `21186589` | FAILED — ran on v60 against v51 checkpoints: `KeyError: 'actor_state_dict'`. The ice arms are rsl-rl 3.0.1 and save `model_state_dict`. |
+
 ### Manipulation re-runs on the fixed spawn · `running` — queued 2026-09-05
 All 18 arms, re-trained with `plant_feet` in place. `RUN_PREFIX` keeps them out
 of the run labels of the buried arms they supersede, so the before/after is
