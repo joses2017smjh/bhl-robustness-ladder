@@ -47,6 +47,14 @@ def report(tag, u, robots):
               f"lowest body={names[zi[0]]!r} at z={zmin[0]:+.4f}")
         under = (bodies[..., 2] < 0.0).sum(dim=1)
         print(f"          bodies below z=0: {under.tolist()} of {len(names)}")
+        # Where the design says these should be: feet on the floor (z~0) and
+        # hands spanning 0.404-0.610 standing, reaching down to GRASP_Z=0.30.
+        for key in ("hand", "foot", "ankle"):
+            idx = [i for i, n in enumerate(names) if key in n.lower()]
+            if idx:
+                zs = bodies[0, idx, 2]
+                print(f"          {key:6}: " + "  ".join(
+                    f"{names[i]}={bodies[0,i,2]:+.3f}" for i in idx[:2]))
 
 for label, task, robots in TASKS:
     print(f"\n{'#'*66}\n# {label}: {task}\n{'#'*66}")
@@ -59,6 +67,9 @@ for label, task, robots in TASKS:
         env.reset()
         u = env.unwrapped
         report("at reset, before any step", u, robots)
+        if "object" in u.scene.keys():
+            print(f"  object z at reset: {_t(u.scene['object'].data.root_pos_w)[0,2]:+.4f}"
+                  f"   (GRASP_Z = 0.30)")
         zero = torch.zeros((4, u.action_space.shape[-1]), device=u.device)
         for i in range(1, 11):
             env.step(zero)
