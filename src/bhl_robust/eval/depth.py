@@ -18,6 +18,7 @@ The recorder deliberately implements the same `capture` / `close` interface as
 
 from __future__ import annotations
 
+import functools
 import subprocess
 from pathlib import Path
 
@@ -46,6 +47,29 @@ def _turbo(x: np.ndarray) -> np.ndarray:
     g = np.clip(1.5 - np.abs(4.0 * x - 2.0), 0.0, 1.0)
     b = np.clip(1.5 - np.abs(4.0 * x - 1.0), 0.0, 1.0)
     return (np.stack([r, g, b], axis=-1) * 255.0).astype(np.uint8)
+
+
+@functools.lru_cache(maxsize=1)
+def _h264_encoder() -> list[str]:
+    """Pick an H.264 encoder this ffmpeg build actually has.
+
+    The clips in docs/gifs were made where `libx264` was present; this cluster's
+    ffmpeg is built without it and fails with `Unknown encoder 'libx264'` after
+    the whole episode has been simulated -- the render is thrown away at the
+    write. Ask the binary instead of assuming, and fall back through the
+    encoders that produce an equivalent file.
+    """
+    try:
+        out = subprocess.run(["ffmpeg", "-hide_banner", "-encoders"],
+                             capture_output=True, text=True, timeout=30).stdout
+    except Exception:                                            # noqa: BLE001
+        out = ""
+    for enc, extra in (("libx264", ["-preset", "veryfast", "-crf", "23"]),
+                       ("libopenh264", ["-b:v", "4M"]),
+                       ("mpeg4", ["-q:v", "3"])):
+        if f" {enc} " in out:
+            return ["-c:v", enc, "-pix_fmt", "yuv420p", *extra]
+    return ["-pix_fmt", "yuv420p"]        # let ffmpeg choose
 
 
 class DepthPairRecorder:
@@ -101,8 +125,7 @@ class DepthPairRecorder:
                 f"drawtext=fontfile={FONT}:text='{safe}':x=24:y=24:"
                 f"fontsize=22:fontcolor=white:box=1:boxcolor=black@0.55:boxborderw=10"
             )]
-        cmd += ["-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "veryfast",
-                "-crf", "23", str(self.path)]
+        cmd += [*_h264_encoder(), str(self.path)]
         self._proc = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                                       stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         self.n_frames = 0

@@ -12,6 +12,7 @@ Frames are piped raw into ffmpeg rather than buffered, because a 10s episode at
 from __future__ import annotations
 
 import shutil
+import functools
 import subprocess
 from pathlib import Path
 
@@ -19,6 +20,29 @@ import mujoco
 import numpy as np
 
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+
+
+@functools.lru_cache(maxsize=1)
+def _h264_encoder() -> list[str]:
+    """Pick an H.264 encoder this ffmpeg build actually has.
+
+    The clips in docs/gifs were made where `libx264` was present; this cluster's
+    ffmpeg is built without it and fails with `Unknown encoder 'libx264'` after
+    the whole episode has been simulated -- the render is thrown away at the
+    write. Ask the binary instead of assuming, and fall back through the
+    encoders that produce an equivalent file.
+    """
+    try:
+        out = subprocess.run(["ffmpeg", "-hide_banner", "-encoders"],
+                             capture_output=True, text=True, timeout=30).stdout
+    except Exception:                                            # noqa: BLE001
+        out = ""
+    for enc, extra in (("libx264", ["-preset", "veryfast", "-crf", "23"]),
+                       ("libopenh264", ["-b:v", "4M"]),
+                       ("mpeg4", ["-q:v", "3"])):
+        if f" {enc} " in out:
+            return ["-c:v", enc, "-pix_fmt", "yuv420p", *extra]
+    return ["-pix_fmt", "yuv420p"]        # let ffmpeg choose
 
 
 class EpisodeRecorder:
@@ -57,8 +81,7 @@ class EpisodeRecorder:
                 f"drawtext=fontfile={FONT}:text='{safe}':x=24:y=24:"
                 f"fontsize=24:fontcolor=white:box=1:boxcolor=black@0.55:boxborderw=10"
             )]
-        cmd += ["-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "veryfast",
-                "-crf", "23", str(self.path)]
+        cmd += [*_h264_encoder(), str(self.path)]
 
         self._proc = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                                       stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)

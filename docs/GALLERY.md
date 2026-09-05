@@ -34,6 +34,8 @@ Tell me which names you want on the front page.
 | [`carry_vision_both_2`](#vision-made-it-worse) | MuJoCo | depth alongside object pose | **fails** |
 | [`carry_vision_both_3`](#vision-made-it-worse) | MuJoCo | same, three pairs — unused | **fails** |
 | [`carry_vision_both_4`](#vision-made-it-worse) | MuJoCo | same, four pairs | **fails** |
+| [`occlusion_s0_lifted_pov`](#the-occlusion-seed-cross-checked) | MuJoCo | occlusion, the seed that lifted | **fails in MuJoCo** |
+| [`occlusion_s1_flat_pov`](#the-occlusion-seed-cross-checked) | MuJoCo | occlusion, a flat sibling | holds the pinch, never lifts |
 | [`isaac/cubetoshelf_gripper`](#isaac-sim) | **Isaac Sim** | v2 CubeToShelf, 24-DoF gripper | **fails** — survives, never lifts |
 | [`isaac/cubetoshelf_welded`](#isaac-sim) | **Isaac Sim** | v2 CubeToShelf, welded hands | **fails** — ~8 steps |
 
@@ -95,6 +97,28 @@ Colour, raw 64×64 depth, and the 8×8 the network actually receives.
 | <img src="gifs/carry_vision_both_2.gif" width="420"> | **`carry_vision_both_2`** — two robots. |
 | <img src="gifs/carry_vision_swap_4.gif" width="420"> | **`carry_vision_swap_4`** — unused anywhere. |
 | <img src="gifs/carry_vision_both_3.gif" width="420"> | **`carry_vision_both_3`** — unused anywhere. |
+
+## The occlusion seed, cross-checked
+
+Finding 7 is that the only cube arm which ever lifted is a single seed that did
+not replicate. Replayed in the other engine it does worse than that: **the arm
+that lifted is the one that falls.**
+
+| | closest pinch | peak lift | in-pinch | fell |
+|---|---|---|---|---|
+| **s0** — reached 13 cm in Isaac | 0.251 m | 0.0 cm | **0%** | **yes, at 0.8 s** |
+| **s1** — flat at the 4 cm floor in Isaac | 0.167 m | 0.0 cm | **96%** | no |
+
+The seed that looked best in training never forms a pinch and goes down inside a
+second; the seed that looked like a failure stays up and holds the pinch for
+almost the whole episode. Same pattern as the ball arm in §1 — a result that
+exists in one engine and not the other.
+
+| | |
+|---|---|
+| <img src="gifs/occlusion_s0_lifted_pov.gif" width="420"> | **`occlusion_s0_lifted_pov`** — the 13 cm seed. Every pair down at 0.8 s. |
+| <img src="gifs/occlusion_s1_flat_pov.gif" width="420"> | **`occlusion_s1_flat_pov`** — the flat seed. Upright, pinch held 96% of the episode, 0.0 cm of lift. |
+
 
 ## Isaac Sim
 

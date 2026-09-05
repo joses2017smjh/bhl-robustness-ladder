@@ -569,6 +569,21 @@ variant were queued precisely to test it, and all three are flat:
 | blind, seed 2 | 0.0000 | 0.00 | 0.0400 |
 | depth, seed 0 | 0.0000 | 0.00 | 0.0400 |
 
+**Replayed in MuJoCo, the arm that lifted is the one that falls.** Both blind
+seeds were rendered through the sim2sim harness (`occlusion_s0_lifted_pov`,
+`occlusion_s1_flat_pov` in the [gallery](GALLERY.md)):
+
+| | closest pinch | peak lift | in-pinch | fell |
+|---|---|---|---|---|
+| s0 — reached 13 cm in Isaac | 0.251 m | 0.0 cm | **0%** | **yes, at 0.8 s** |
+| s1 — flat at the floor in Isaac | 0.167 m | 0.0 cm | **96%** | no |
+
+The seed that looked best in training never forms a pinch and is down inside a
+second. The seed that looked like a failure stays upright and holds the pinch
+for almost the whole episode. That is the §1 pattern again — a result that
+exists in one engine and not the other — and it is a stronger statement than
+"did not replicate": this one does not survive the engine it was not trained in.
+
 All four have now run their full 16,000 iterations, so this is a finished
 comparison rather than a partial one. The lifting seed differs from the other
 three in a second way that is worth naming: its **mean episode length is 51

@@ -214,6 +214,12 @@ OBS_NOTRACK = 150
 OBS_FULL_GRIPPER = 210
 OBS_DEPTH_SWAP = 316      # full, minus object-in-root, plus two depth images
 OBS_DEPTH_BOTH = 322      # full, plus two depth images
+# The occluded arms: the payload's pose is withheld and nothing replaces it, so
+# this is OBS_FULL minus object-in-root with no depth appended. Derived, not
+# guessed -- the run's own params/env.yaml lists eleven policy terms whose widths
+# sum to 6 + 6 + 44 + 44 + 44 + 44, and OBS_DEPTH_SWAP is documented as this
+# same layout plus two 8x8 images, which checks: 316 - 128 = 188.
+OBS_OCCLUDED = 188
 _OBS_LAYOUTS = {
     OBS_FULL: "projected gravity, base ang vel, joint pos, joint vel, "
               "object-in-root, PD tracking residual, previous action",
@@ -223,8 +229,12 @@ _OBS_LAYOUTS = {
                     "images appended after previous action",
     OBS_DEPTH_BOTH: "as OBS_FULL, then two 8x8 depth images appended after "
                     "previous action",
+    OBS_OCCLUDED: "as OBS_FULL without object-in-root and without depth -- the "
+                  "payload pose is withheld and nothing replaces it",
 }
 _DEPTH_LAYOUTS = (OBS_DEPTH_SWAP, OBS_DEPTH_BOTH)
+#: Layouts that withhold the payload pose from the policy.
+_NO_OBJECT_LAYOUTS = (OBS_DEPTH_SWAP, OBS_OCCLUDED)
 N_ACT = 2 * NJ
 
 
@@ -731,7 +741,7 @@ class CrewRunner:
             a[2], b[2],           # joint_pos_rel
             a[3], b[3],           # joint_vel_rel
         ]
-        if self.n_obs != OBS_DEPTH_SWAP:
+        if self.n_obs not in _NO_OBJECT_LAYOUTS:
             terms += [a[4], b[4]]  # object_pos_in_root
         if self.n_obs != OBS_NOTRACK:
             terms += [a[5], b[5]]  # track_err
