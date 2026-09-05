@@ -245,12 +245,29 @@ class CoopActor:
                  expect_act: int = N_ACT):
         import torch
 
-        sd = torch.load(str(checkpoint), map_location="cpu", weights_only=False)
-        sd = sd["model_state_dict"]
+        raw = torch.load(str(checkpoint), map_location="cpu", weights_only=False)
+        # Two checkpoint layouts, because this repo trains on two stacks.
+        #   rsl-rl 3.0.1  {"model_state_dict": {"actor.0.weight", ...}}
+        #   rsl-rl 5.0.1  {"actor_state_dict": {"mlp.0.weight", ...}}
+        # Read whichever is present rather than pinning a version: the v51 and
+        # v60 checkpoints are both live here, and a KeyError on
+        # 'model_state_dict' is a confusing way to say "this is the other one".
+        if "model_state_dict" in raw:
+            sd, prefix = raw["model_state_dict"], "actor."
+        elif "actor_state_dict" in raw:
+            sd, prefix = raw["actor_state_dict"], "mlp."
+        else:
+            raise RuntimeError(
+                f"{checkpoint.name} has none of the expected actor keys; "
+                f"top level is {sorted(raw)[:6]}"
+            )
         self.layers: list[tuple[np.ndarray, np.ndarray]] = []
         for i in (0, 2, 4, 6):
-            w = sd[f"actor.{i}.weight"].numpy().astype(np.float64)
-            b = sd[f"actor.{i}.bias"].numpy().astype(np.float64)
+            wk, bk = f"{prefix}{i}.weight", f"{prefix}{i}.bias"
+            if wk not in sd:
+                break          # 5.x nets are three hidden layers, not four
+            w = sd[wk].numpy().astype(np.float64)
+            b = sd[bk].numpy().astype(np.float64)
             self.layers.append((w, b))
         n_in = self.layers[0][0].shape[1]
         n_out = self.layers[-1][0].shape[0]
