@@ -215,7 +215,39 @@ while the payload waits at +0.300. The reach band says a standing robot's hands
 span 0.404-0.610 with the feet planted, so the spawn does not implement the
 geometry the tasks were designed around.
 
-**The cause is not yet established.** First hypothesis was the mirroring
+**Cause found: it is Isaac-only, and it is two bugs.**
+
+Cross-checked in MuJoCo with the *same* `PINCH_POSE`, on CPU:
+
+| at reset | Isaac | MuJoCo |
+|---|---|---|
+| left hand z | -0.261 | **+0.5804** |
+| right hand z | +0.138 | **+0.5804** |
+| hand split | **0.399 m** | **0.0000 m** |
+| ankles | -0.106 / -0.053 | +0.1917 / +0.1917 |
+| bodies below z=0 | 19 of 27 | 2 of 50 (`base` frames) |
+
+1. **No feet planting.** `CrewRunner.reset` measures the lowest collision geom
+   and translates the base onto the plane, precisely because it "does not trust
+   that the two descriptions of the robot put their root frames in the same
+   place". Isaac uses the hardcoded `_PINCH_ROOT_Z = -0.07` and does not.
+2. **The USD arms are not mirrored the way the MJCF's are.** Same joint values,
+   symmetric in MuJoCo, 40 cm apart in Isaac. `21186283` swept every
+   sign combination the joint limits allow: the best achievable split is
+   **0.3519 m**, so no pose config can fix it. At the *default* arm pose Isaac
+   is symmetric (+0.485 / +0.484 on the locomotion control), so the limits were
+   mirrored by the conversion and the axes were not.
+
+MuJoCo hands land at +0.58, inside the 0.404-0.610 band `reach_band.py` measured
+the tasks against. Isaac never put the robot in the pose the tasks assume.
+
+**What this re-scopes.** Every MuJoCo-scored number used a correct spawn, so the
+sim2sim results stand: 7.8 cm best cube lift, plank 0.0 cm, pinch-gate 98%, the
+fall rates. What was broken is *training* -- every Isaac-side metric was measured
+on robots that start buried with one arm through the floor. That is finding 10's
+6.3 -> 427.7 steps, the reward figures, and the task-success-0 column.
+
+**Earlier hypothesis, rejected and worth keeping.** First hypothesis was the mirroring
 convention: every joint declares `axis="0 0 1"`, so symmetry depends on each
 joint's origin rotation, and by that reading the elbows, knees and ankles were
 all set the wrong way round. **Isaac disproved it on the next run** — the joint
@@ -230,6 +262,8 @@ foot clearance, rather than to reason from the URDF again.
 
 | # | id | outcome |
 |---|---|---|
+| 5 | (CPU, no job) | MuJoCo cross-check: same pose, hands symmetric to 4 dp, feet planted. The bug does not exist there. |
+| 4 | `21186283` | **sign sweep: no combination works.** Every valid variant leaves a 0.35-0.40 m hand split against MuJoCo's 0.0000, which moves the cause from the config to the asset. |
 | 3 | `21186243` | hypothesis rejected — the "corrected" mirroring puts two joints outside their limits. Reverted. |
 | 2 | `21186214` | **confirmed with a control** — table above |
 | 1 | `21186202` | first measurement, suspect task only: 19 of 27 bodies below z=0. No control, so it could not yet distinguish a bug from this asset's frame convention. |
