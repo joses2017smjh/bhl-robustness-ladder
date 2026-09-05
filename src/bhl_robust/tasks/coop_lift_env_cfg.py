@@ -388,6 +388,19 @@ class EventsCfg:
             "velocity_range": {},
         },
     )
+    # After both root resets, and before anything reads a body position: sit each
+    # robot on the plane. Declaration order is execution order for a mode, so
+    # these have to stay below reset_root_a/b.
+    plant_feet_a = EventTerm(
+        func=coop.plant_feet,
+        mode="reset",
+        params={"asset_cfg": SceneEntityCfg("robot_a")},
+    )
+    plant_feet_b = EventTerm(
+        func=coop.plant_feet,
+        mode="reset",
+        params={"asset_cfg": SceneEntityCfg("robot_b")},
+    )
     reset_object = EventTerm(
         func=mdp.reset_root_state_uniform,
         mode="reset",

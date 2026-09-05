@@ -106,6 +106,46 @@ def still_alive(env: "ManagerBasedRLEnv") -> torch.Tensor:
     return (~env.termination_manager.terminated).float()
 
 
+
+def plant_feet(
+    env: "ManagerBasedRLEnv",
+    env_ids: Sequence[int],
+    asset_cfg: SceneEntityCfg,
+    clearance: float = 0.002,
+) -> None:
+    """Sit the robot on the plane instead of trusting a hardcoded root height.
+
+    `_PINCH_ROOT_Z = -0.07` is a pelvis drop derived on paper from the crouch
+    angles, and Isaac takes it literally. Measured, it spawns 19 of 27 bodies
+    below z = 0 with the hands 26 cm under the floor, against 1 of 27 for the
+    locomotion task on the same asset -- and then PhysX depenetration extrudes
+    the robot over the first ten steps, which is most of an 8-step episode.
+    Nothing terminates on it: both fall tests read orientation, and a robot
+    buried in the floor is perfectly upright.
+
+    The MuJoCo harness has never had this bug, because `CrewRunner.reset` poses
+    the joints, measures the lowest collision geom and translates the base onto
+    the plane -- explicitly declining to assume the two descriptions of the
+    robot put their root frames in the same place. This is that, for Isaac.
+
+    Measuring beats deriving here: the offset then holds for any pose, any
+    jitter and any asset revision, and a frame disagreement shows up as a robot
+    standing slightly high rather than one spawned inside the ground.
+    """
+    robot: Articulation = env.scene[asset_cfg.name]
+    # The joint and root resets have written to the sim but body_pos_w is only
+    # refreshed by a kinematics update; without this the measurement describes
+    # the *previous* episode's pose.
+    robot.update(dt=0.0)
+
+    bodies = _t(robot.data.body_pos_w)[env_ids]            # (n, bodies, 3)
+    origins = env.scene.env_origins[env_ids]               # (n, 3)
+    lowest = bodies[..., 2].min(dim=1).values - origins[:, 2]
+
+    root = _t(robot.data.root_state_w)[env_ids].clone()
+    root[:, 2] += clearance - lowest
+    robot.write_root_state_to_sim(root, env_ids=env_ids)
+
 def base_height_mean(env: "ManagerBasedRLEnv", env_ids: Sequence[int]) -> float:
     """Mean base height of the pair, in metres. Diagnostic, not an objective.
 
