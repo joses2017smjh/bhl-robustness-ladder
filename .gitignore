@@ -11,7 +11,12 @@ venv/
 
 # Training output
 logs/
-runs/
+# `runs/` was a scratch output directory; it is now the migrated record of
+# every training run, so the manifest and configs are tracked and only the
+# oversized curve dump is not.
+runs/*
+!runs/params/
+!runs/manifest.csv
 outputs/
 checkpoints/
 *.pt
