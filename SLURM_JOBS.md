@@ -141,11 +141,12 @@ leave the grippers inert and the variant indistinguishable from its control.
 | 1 | `21105363` | smoke 3/3, episode lengths 7.3–7.4 |
 
 ### Cloth sorting — G-C1 throughput · `done` — the answer is scripted, not RL
-Decides RL against scripted demo. Still undecided: three probes, none of which
-measured cloth. The next one has to build the deformable properly --
-`DeformableObjectCfg` with a Newton VBD solver, as
-`isaaclab_tasks/.../lift_franka_soft` does -- rather than spawning a mesh and
-assuming the solver picks it up.
+Decided RL against scripted demo, and the answer is **scripted**. Twelve probes;
+the first eleven measured something other than cloth or died before stepping.
+The design is `docs/CLOTH_SORT.md` -- 5 garments, 3 baskets, sweeping rather
+than picking because the robot has no fingers. It is not implemented and no
+policy was trained: the gate exists so that decision costs twelve short probes
+instead of weeks of GPU, and that is what it did.
 
 | # | id | outcome |
 |---|---|---|

@@ -1,5 +1,22 @@
 # Sorting garments into baskets
 
+> **Status: designed, gated, not built.** G-C1 ran twelve times and answered on
+> 2026-09-05: Newton VBD cloth does **182 env-steps/s at 8 envs, 177 at 32, 71
+> at 128**, and 512 envs overflows a signed 32-bit array dimension. Throughput
+> *falls* with parallelism, so there is no scale to buy. A standard
+> 8,000-iteration arm here is 786M env-steps — about **50 days** at cloth's peak
+> rate against **6 minutes** at the rigid-body rate.
+>
+> So this task gets **scripted demonstrations, not RL**, and nothing below has
+> been implemented: no task id is registered and no policy was trained. The
+> design stands as written; only the training method is settled against.
+>
+> The section below predicted the 5.1 particle path would be "roughly four
+> thousand times the wall clock" and expected 6.0's Newton solver to remove that
+> constraint. Measured, 6.0 is about **eleven thousand times** slower than the
+> rigid-body rate. It did not remove it.
+
+
 ## The stack question, which your folding repo already answered — for 5.1
 
 `IsaacSimFolding` pins Isaac Sim **5.1** because 6.0 removed PhysX's
