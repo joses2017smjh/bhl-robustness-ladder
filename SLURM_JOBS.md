@@ -20,6 +20,52 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 ## Open
 
+### Spawn orientation — SOLVED · `done` — 2026-09-06
+**The spawn quaternion was a roll, not a yaw. The robots have been lying down.**
+
+Measured from geometry rather than convention (`21196896`):
+
+| spawn | torso above ankles | hand split |
+|---|---|---|
+| old `(0.7071, 0, 0, -0.7071)` | **+0.028 m** — horizontal | **0.393 m** |
+| new `(0.7071, -+0.7071, 0, 0)` | **+0.224 m** — upright | **0.012 m** |
+
+That is the whole "arm asymmetry" that five hypotheses chased. Nothing was wrong
+with the arms, the asset or the pose — and the tell was in the Isaac clip, where
+the robots were visibly flat on the ground.
+
+**Second half: the asset is Y-up.** |R21| is 0.995-0.998 under the spawns that
+stand it up while R22 is ~0.08, and `_tilt_from_quat` used R22 — reporting 1.5
+rad of tilt for an upright robot, clearing the 0.78 limit and ending every
+episode on step one. It uses R21 now, and the corrected reading calls the old
+lying-down spawn fallen at 1.571 rad, which it always was. So
+`projected_gravity_b` returning `[0, +-1, 0]` was **correct**; this repo recorded
+it as an Isaac Lab 3.x defect and built a workaround.
+
+| # | id | outcome |
+|---|---|---|
+| 3 | `21196912` | **gate passes** — 300-iteration smoke, mean episode length **35.0**, against 5.0 leg-planted, 1.00 under the yaw probes and ~8 for the original welded arms |
+| 2 | `21196896`, `21196905` | up-axis from geometry: torso 22 cm above the ankles under the new quats, 2.8 cm under the old |
+| 1 | `21192744`–`21192782` | prior work, already correct and not read before five hypotheses were spent re-deriving it |
+
+### B3 ice clip — export solved, render blocked on depth obs · `open`
+`ENABLE_CAMERAS=1` was the v51 segfault, inherited from the cloth-probe sbatch
+and surviving the edit that removed `--enable_cameras` from the command line.
+Without it both arms export cleanly: distinct ONNX and deploy configs, 45
+observations blind and 301 depth, each pointing at its own run.
+
+What remains is that `render_multi` cannot drive a depth-conditioned policy.
+`--depth-of` controls the display strip, not the observation, so it fed 45
+values into a 301-wide policy. The ice depth arm wants a 64x64 ray-cast camera
+average-pooled 4x to 16x16 = 256, and MuJoCo's offscreen depth buffer is a
+different sensor from Isaac's ray-caster.
+
+| # | id | outcome |
+|---|---|---|
+| 3 | `21197107` | pipeline verified blind-vs-blind on a GPU node, exit 0, 12 MB gif — discarded, since a same-policy clip named `ice_pair` reads as the comparison it is not |
+| 2 | `21197056` | **both arms exported** — distinct ONNX, 45 and 301 obs |
+| 1 | `21197021` | export worked, then hung: the play loop had no exit without `--video`. `--play-steps` bounds it. |
+
 ### B4 — limb agents (DirectMARL + skrl) · `todo`
 Multiple agents per robot, one per limb, against the single-agent PPO controls.
 Gates all 24 Tier-1 rows, so nothing downstream can start until `G-B4` passes.
