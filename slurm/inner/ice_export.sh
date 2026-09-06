@@ -16,26 +16,33 @@ run_one() {   # task run_glob label
     run=$(ls -dt "$L"/*"$glob" 2>/dev/null | head -1)
     if [ -z "$run" ]; then echo "SKIP $label: no run matching *$glob"; return; fi
     echo "=== $label  task=$task  run=$(basename "$run") ==="
-    local marker marker2; marker=$(mktemp); marker2=$(mktemp)
+    local marker before_sum; marker=$(mktemp)
+    before_sum=$(md5sum "$UPSTREAM/configs/policy_latest.yaml" 2>/dev/null | cut -d" " -f1)
     "$PY" "$REPO/scripts/train_play.py" \
-        --task "$task" --num_envs 4 --headless --enable_cameras \
-        --video --video_length "${VIDEO_LEN:-300}" \
+        --task "$task" --num_envs 4 --headless \
         --load_run "$(basename "$run")" || true
     # Count artefacts, never the exit code -- train_play exits 0 on failure.
     local nv nc
     nv=$(find "$L" -name '*.mp4' -newer "$marker" 2>/dev/null | wc -l)
     nc=$(find "$UPSTREAM/configs" "$run" -name '*.yaml' -o -name '*.onnx' 2>/dev/null \
          | xargs -r ls -t 2>/dev/null | head -1)
-    echo "  video: $nv new mp4"
+    echo "  video: $nv new mp4 (none expected -- renderer disabled)"
+    if [ -f "$run/exported/policy.onnx" ]; then
+        echo "  ONNX:  $run/exported/policy.onnx"
+    else
+        echo "  ONNX:  NOT WRITTEN -- render_multi cannot use this arm"
+    fi
     [ -n "$nc" ] && echo "  newest export artefact: $nc"
-    rm -f "$marker" "$marker2"
+    rm -f "$marker"
     # Keep the deploy config under a name that says which arm it came from,
     # because train_play always writes configs/policy_latest.yaml.
     # Only if this run wrote it. train_play always writes the same filename, so
     # an unconditional copy silently saves a previous arm's config under this
     # arm's name -- which is how the first attempt "saved" a deploy config from
     # a run that had just died with a KeyError.
-    if [ "$UPSTREAM/configs/policy_latest.yaml" -nt "$marker2" ] 2>/dev/null; then
+    local after_sum
+    after_sum=$(md5sum "$UPSTREAM/configs/policy_latest.yaml" 2>/dev/null | cut -d" " -f1)
+    if [ -n "$after_sum" ] && [ "$after_sum" != "$before_sum" ]; then
         cp "$UPSTREAM/configs/policy_latest.yaml" "$REPO/results/deploy_${label}.yaml"
         echo "  saved results/deploy_${label}.yaml"
     else

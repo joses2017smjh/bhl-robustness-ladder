@@ -107,11 +107,19 @@ def still_alive(env: "ManagerBasedRLEnv") -> torch.Tensor:
 
 
 
+#: Height of the lowest leg body when this robot stands. Measured on the shipped
+#: locomotion task, which spawns at root z = 0 and walks: `leg_left_ankle_roll`
+#: sits at +0.1026 above the terrain. The foot sole extends below that body
+#: origin, which is why the number is not zero and why it has to be measured
+#: rather than assumed.
+SOLE_REF = 0.1026
+
+
 def plant_feet(
     env: "ManagerBasedRLEnv",
     env_ids: Sequence[int],
     asset_cfg: SceneEntityCfg,
-    clearance: float = 0.002,
+    clearance: float = 0.0,
 ) -> None:
     """Sit the robot on the plane instead of trusting a hardcoded root height.
 
@@ -140,10 +148,28 @@ def plant_feet(
 
     bodies = _t(robot.data.body_pos_w)[env_ids]            # (n, bodies, 3)
     origins = env.scene.env_origins[env_ids]               # (n, 3)
-    lowest = bodies[..., 2].min(dim=1).values - origins[:, 2]
+
+    # Legs only, and to a measured reference -- not the lowest body to zero.
+    #
+    # The first version of this drove the *lowest body of any kind* onto the
+    # plane. With the arm asymmetry still open the lowest body is a hand, so it
+    # hoisted the robot until the hand cleared the floor and left the feet 8-20
+    # cm in the air. Every arm then fell on every episode: mean episode length
+    # 5.0, fall rate 1.000, against 428 for the gripper arms before the change.
+    # "0 of 27 bodies below z = 0" was true and was the wrong question.
+    #
+    # SOLE_REF is where the lowest leg body sits when this robot is standing:
+    # measured at +0.1026 on the shipped locomotion task, whose robot spawns at
+    # root z = 0 and walks (`slurm/inner/_sole_ref.sh`). Driving the legs to
+    # that height reproduces a stance the asset is known to hold, and it is
+    # immune to whatever the arms are doing.
+    leg = [i for i, n in enumerate(robot.body_names) if "leg" in n.lower()]
+    if not leg:                       # not a legged asset; nothing to plant on
+        return
+    lowest_leg = bodies[:, leg, 2].min(dim=1).values - origins[:, 2]
 
     root = _t(robot.data.root_state_w)[env_ids].clone()
-    root[:, 2] += clearance - lowest
+    root[:, 2] += SOLE_REF + clearance - lowest_leg
     robot.write_root_state_to_sim(root, env_ids=env_ids)
 
 def base_height_mean(env: "ManagerBasedRLEnv", env_ids: Sequence[int]) -> float:
