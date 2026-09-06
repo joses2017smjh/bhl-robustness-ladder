@@ -363,8 +363,24 @@ def _tilt_from_quat(robot) -> torch.Tensor:
     """
     q = _t(robot.data.root_quat_w)
     w, x, y, z = q[:, 0], q[:, 1], q[:, 2], q[:, 3]
-    up_z = 1.0 - 2.0 * (x * x + y * y)      # R[2, 2]
-    return torch.acos(up_z.clamp(-1.0, 1.0))
+    # R[2, 1] -- the world-z component of the body *y* axis, not body z.
+    #
+    # This asset is authored Y-up. Measured (`slurm/inner/_updir.sh`): under the
+    # spawn quaternions that actually stand the robot up, |R21| is 0.995-0.998
+    # while R22 is 0.06 and -0.10. Using R22 reports 1.51-1.67 rad of tilt for a
+    # robot whose torso is 22 cm above its ankles, which clears the 0.78 limit
+    # and ends every episode on step one.
+    #
+    # It also means `projected_gravity_b` returning [0, +-1, 0] was correct all
+    # along. This file previously recorded that as an Isaac Lab 3.x defect --
+    # gravity lands on body y because body y is up.
+    up_z = 2.0 * (y * z + w * x)
+    # Absolute value: the two robots spawn 180 degrees apart about x, so one
+    # carries +y up and the other -y up, and a signed test would call one of
+    # them inverted at spawn. A biped cannot reach inversion without first
+    # passing 90 degrees, which terminates at the 0.78 limit, so the ambiguity
+    # is unreachable in a live episode.
+    return torch.acos(up_z.abs().clamp(-1.0, 1.0))
 
 
 def either_fallen(

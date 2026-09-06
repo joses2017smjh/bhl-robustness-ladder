@@ -45,6 +45,16 @@ WALL_X, WALL_CONTACT = 2.4, 0.50
 #: 18.7 cm inside a payload spanning +/-0.75, and the contact solver ejects it
 #: 22 cm upward before the policy acts -- which is what made plank_leaned fire
 #: on a zero action. 0.75 + 0.25 hand reach + 0.037 half-hand = 1.037.
+#: Spawn orientations that actually stand this robot up.
+#:
+#: The previous pair, (0.7071, 0, 0, -+0.7071), reads as a yaw in (w, x, y, z)
+#: and is not one for this asset: measured, it leaves the torso 2.8 cm above the
+#: ankles -- the robot lying down -- with the hands 39 cm apart in z. These put
+#: the torso 22 cm up and the hands within 1.5 cm, and they survive env.reset()
+#: rather than only a forced write (`21192782`).
+_FACE_A = (0.70710678, -0.70710678, 0.0, 0.0)
+_FACE_B = (0.70710678, 0.70710678, 0.0, 0.0)
+
 PLANK_STANDOFF = 1.05
 
 
@@ -246,8 +256,8 @@ class BallToNetCfg(_TaskV2Base):
 
     def __post_init__(self):
         super().__post_init__()
-        self.scene.robot_a = _robot("{ENV_REGEX_NS}/robot_a", (0.0, 0.47, 0.0), (0.7071, 0.0, 0.0, -0.7071))
-        self.scene.robot_b = _robot("{ENV_REGEX_NS}/robot_b", (0.0, -0.47, 0.0), (0.7071, 0.0, 0.0, 0.7071))
+        self.scene.robot_a = _robot("{ENV_REGEX_NS}/robot_a", (0.0, 0.47, 0.0), _FACE_A)
+        self.scene.robot_b = _robot("{ENV_REGEX_NS}/robot_b", (0.0, -0.47, 0.0), _FACE_B)
         self.scene.object = _object(
             sim_utils.SphereCfg(
                 radius=0.18,
