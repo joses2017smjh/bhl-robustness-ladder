@@ -159,17 +159,17 @@ instead of weeks of GPU, and that is what it did.
 | 6 | `21136231` | cancelled before it ran — a visual-only substitute still guesses at the prim's role |
 | 5 | `21125073` | FAILED — my replacement carried `rigid_props`, so `FrameView` refused it: "prim '/World/envs/env_0/Table' is a Newton physics body" |
 
-### Demo clips for the README · `running`
+### Demo clips for the README · `done` — 2026-09-05
 The MuJoCo replay harness cannot render the gripper arms — it builds its crew
 from the 22-DoF MJCF and the gripper asset is a 24-DoF URDF. So the clips come
 from Isaac Sim 6.0, which is the stack those policies trained on and where RTX
-works.
+works. Both gifs are in `docs/gifs/isaac/`.
 
 | # | id | outcome |
 |---|---|---|
-| 5 | `21185827` | running — ask for `alg.policy` or `alg.actor`, whichever the installed rsl-rl has, and treat the ONNX/JIT export as non-fatal. The export is a deployment artefact; a replay job should not die for it. |
-| 4 | `21153325` | FAILED — and the config migration worked. It loaded the checkpoint and died one line later on `AttributeError: 'PPO' object has no attribute 'policy'`: rsl-rl 3.0.1 calls the actor `alg.policy`, 5.0.1 calls it `alg.actor`, and this file was written against 3.0.1. Still before any frame is drawn. |
-| 3 | `21146513` | FAILED, reported COMPLETED — `TypeError: MLPModel.__init__() got an unexpected keyword argument 'stochastic'`. The path fix worked and exposed the real bug: `RslRlMLPModelCfg.to_dict()` still emits `stochastic`, `init_noise_std`, `state_dependent_std` and `noise_std_type`, and rsl-rl 5.0.1 splats the dict into a model that takes none of them. `train.py` migrates the cfg first; `train_play.py` never did, so **every v60 checkpoint trained fine and none could be replayed**. The mp4 count caught it. |
+| 5 | `21186009` | **done** — gripper and welded CubeToShelf clips written. ONNX export warned (`Policy does not have an actor/student module`) and was skipped; the rollout is what this job is for. |
+| 4 | `21185827` | FAILED — checkpoint loaded, then `AttributeError: 'CoopLiftSceneCfg' object has no attribute 'robot'`. The deploy-yaml stretch still assumed a locomotion scene. Wrapped as best-effort after this; the next run is the one that counted. |
+| 3 | `21153325` | FAILED — and the config migration worked. It loaded the checkpoint and died one line later on `AttributeError: 'PPO' object has no attribute 'policy'`: rsl-rl 3.0.1 calls the actor `alg.policy`, 5.0.1 calls it `alg.actor`, and this file was written against 3.0.1. Still before any frame is drawn. |
 
 ### Plank cells, re-run on the fixed scene · `done` — ejection fixed, task still dead
 The six original plank cells measured a scene that ejected its own payload, and
@@ -210,15 +210,24 @@ hypotheses, and each narrowed the next.
 | 2 | `21186214` | **the finding** — 19 of 27 bodies below z = 0 against 1 of 27 for the locomotion control |
 | 1 | `21186202` | first measurement, no control, so it could not yet separate a bug from a frame convention |
 
-### Ice clips — blocked on `--load_run` · `blocked` — 2026-09-05
+### Ice clips — blocked on v51 segfault / v60 ckpt format · `blocked` — 2026-09-06
 The B3 result (depth 1.519 vs blind 1.374 on a hazard it cannot see) still has
-no clip. `render_multi` needs a `deploy.yaml` per robot; the ice runs never got
-one because the export path was broken when they finished.
+no clip. No ice run has an ONNX or a `deploy.yaml`. Three more export attempts
+after the first diagnosis, and the diagnosis was wrong.
+
+`--load_run` **is** on the command line. `train_play` dies ~300 ms in with a
+segfault on the v51 stack — Isaac Sim 5.1's RTX path, cameras or not. The
+"byte-identical configs pointing at `terrain-bumpy-s0`" were a leftover
+`configs/policy_latest.yaml` copied after the crash; later jobs refuse to save
+when the file did not change. v60 cannot load the checkpoints either
+(`KeyError: 'actor_state_dict'` — rsl-rl 3 vs 5). Do not re-queue the same
+v51 job.
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21186615` | COMPLETED and **wrong** — both arms wrote byte-identical configs pointing at `2026-08-17_22-56-08_terrain-bumpy-s0`. `train_play` reads `agent_cfg.load_run`, and the `--load_run` flag does not reach it, so the export resolved to some other run entirely. Files deleted rather than kept: a deploy config under the wrong arm's name is how numbers get credited to the wrong job. |
-| 1 | `21186589` | FAILED — ran on v60 against v51 checkpoints: `KeyError: 'actor_state_dict'`. The ice arms are rsl-rl 3.0.1 and save `model_state_dict`. |
+| 3 | `21191527` | COMPLETED, no artefact — v51, no cameras. Segfault at 326 ms. Correctly refused to save a stale yaml. |
+| 2 | `21186615` / `21191514` | COMPLETED and **wrong yaml** — segfault, then a leftover `policy_latest.yaml` for `2026-08-17_22-56-08_terrain-bumpy-s0` was copied under the ice names. Deleted. |
+| 1 | `21186589` | FAILED — ran on v60 against v51 checkpoints: `KeyError: 'actor_state_dict'`. |
 
 ### Manipulation re-runs on the fixed spawn · `blocked` — cancelled 2026-09-05
 Cancelled after ~7 h each. Every arm that started reported **mean episode length
@@ -247,53 +256,49 @@ something else makes them unreproducible.
 | 2 | `21191526` | 400-iteration probe on the leg-planted spawn — did not recover |
 | 1 | `21186402`, `21186403` | cancelled at ~7 h — ep_len 5.0, fall 1.000 on all six that started |
 
-### Arm geometry — five hypotheses down, unresolved · `open`
-The 0.35-0.40 m hand split. What is now established, and the trap that voided
-two earlier measurements:
+### Arm geometry — the "yaw" is a roll · `done` — 2026-09-06
+The FACE+SYM 4-tuple is `(0.7071, −0.7071, 0, 0)` for robot_a and the opposite
+for robot_b (`21192773`). Those are now the defaults. `BHL_LEGACY_YAW=1`
+restores the rolled 4-tuples every FINDINGS number trained on. `plant_feet`
+stays off. Reset-verified (`21192782`): both robots FACE+SYM, Lz=Rz=−0.6084,
+toward=+1.00.
 
-* MuJoCo, same URDF and pose: hands at **+0.5804 / +0.5804**, feet planted, correct.
-* Isaac bare articulation, same pose: **-0.6069 / -0.6069**, symmetric to 4 dp.
-  So neither the asset nor the pose is asymmetric.
-* Isaac in-task, same pose: **-0.20 / +0.15**, and the root quaternion reads
-  `(0.7059, -0.0419, -0.0419, -0.7059)` where the config specifies
-  `(0.7071, 0, 0, -0.7071)` — a pure yaw with no tilt. `up_z` is 0.9930, so the
-  robot is 6.8 degrees off vertical at measurement time. That accounts for about
-  0.065 m of the split, not 0.35, and the *mean* hand height differs by 0.58 m
-  as well.
-
-**The measurement trap:** writing `joint_pos` into a config and reading
-`body_pos_w` without a sim step returns the *previous* kinematics. It voided the
-first bisection — "zero arms" and "PINCH_POSE" returned byte-identical numbers —
-and it means the earlier "the shipped USD is symmetric" result was measuring the
-default pose, not the pose it claimed. Any further probe here must force the
-state and step before reading, or it is measuring nothing.
+`plant_feet` failing to train is now less mysterious: it planted the legs of a
+robot lying on its side. The configured 4-tuple `(0.7071, 0, 0, −0.7071)` puts
+the identity pose's left/right Y onto world Z — a roll, not a yaw.
 
 | # | id | outcome |
 |---|---|---|
-| 5 | `21191769` | in-task vs bare, pose forced: split 0.3524, root tilted 6.8 deg off a spawn quat that specifies none |
-| 4 | `21191750` | arms hold the pose — worst drift 0.077 rad at reset, which is the jitter. Not sag. |
-| 3 | `21191737` | bare articulation symmetric under PINCH_POSE, zero arms, arms-only and legs-only |
-| 2 | `21191713` | **void** — joint config never applied; two different poses returned identical numbers |
-| 1 | `21191713`–`21186390` | see the diagnosis-probes section |
+| 8 | `21192782` | **PASS** — both robots FACE+SYM after env.reset(): Lz=Rz=−0.6084, toward=+1.00 |
+| 7 | `21192773` | **FACE+SYM** — `(0.707, −0.707, 0, 0)`: Lz=Rz=−0.6077, toward=+1.00 |
+| 6 | `21192744` | **the "yaw" is a roll** — identity −0.6077/−0.6077; configured −0.177/+0.177 |
 
+### Upright-spawn 400-iter probes · `running` — queued 2026-09-06
+Same cell and budget as `21191526` (CubeToShelf-Blind, 400 iterations, 1024
+envs, seed 0). That probe fell because plant_feet was planting a robot on its
+side. These two ask the question that probe could not:
 
-All 18 arms, re-trained with `plant_feet` in place. `RUN_PREFIX` keeps them out
-of the run labels of the buried arms they supersede, so the before/after is
-readable instead of concatenated.
+| arm | flag | question |
+|---|---|---|
+| `_0` | new yaw, plant_feet off | does standing up at spawn hold a gait? |
+| `_1` | new yaw, `BHL_PLANT_FEET=1` | does planting help once the robot is upright? |
+| grip | new yaw, 24-DoF, plant_feet off | does finding 10's survival gain survive the upright spawn? |
+
+Not the 18-cell re-run. `_0` is training (past iteration 18). `_1` died in 43 s
+on a node that could not write `/tmp/Assets` (`PermissionError`) — not a
+plant_feet bug. Requeued after pointing `TMPDIR` at scratch. The gripper cell
+is the overnight extra: finding 10 was measured on the rolled spawn.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21186402` | running — 9 v2 cells, `RUN_PREFIX=v2fix` |
-| 1 | `21186403` | running — 9 gripper cells, `RUN_PREFIX=gripfix` |
-
-**Queued with one bug fixed and one open.** The burial is fixed and verified;
-the 39 cm hand asymmetry is not. Started anyway because the burial was the
-dominant fault — 19 of 27 bodies underground and an extrusion lasting about ten
-steps, against a mean episode length of eight — and because blocking 18 runs on
-a fifth probe of a bug that has already survived four costs more than re-running
-if the asymmetry later turns out to matter. If it is fixed, these need redoing.
+| 3 | `21192899` | running — gripper CubeToShelf-Blind, 400 iter, new yaw (`yaw-cubetoshelfgrip-blind-s0`) |
+| 2 | `21192898` | running — `_1` requeue after TMPDIR-on-scratch |
+| 1 | `21192861` | `_0` running on cn-gpu7 (past iter 18) · `_1` FAILED 43 s, `/tmp/Assets` PermissionError |
 
 ### v2 / coop spawn puts the robot through the floor · `open` — found 2026-09-05
+**Bug 2 (hand split) is closed:** the configured yaw was a roll. Defaults
+changed 2026-09-06; `BHL_LEGACY_YAW=1` restores the old 4-tuples. Burial
+(bug 1, `_PINCH_ROOT_Z = -0.07`) is still there and `plant_feet` is still off.
 Noticed from the Isaac clip: the robots lie flat and clip the ground instead of
 resetting upright dozens of times, which is what ~8-step episodes should look
 like in a 300-step video.
@@ -584,6 +589,10 @@ came from.
 | `21124719`, `21136232` | B3 + v2 readouts |
 | `21124302`, `21136243` | Tier 1 readouts |
 | `21136321`–`21186009` (8 attempts) | gripper vs welded demo clips |
+| `21186402`, `21186403`, `21191526` | planted-spawn re-runs — cancelled; plant_feet now opt-in |
+| `21191713`–`21192782` | arm-geometry: the "yaw" was a roll; FACE+SYM 4-tuple now default |
+| `21192861`, `21192898`, `21192899` | upright-spawn 400-iter probes: welded yaw, welded yaw+plant, gripper yaw |
+| `21186589`, `21186615`, `21191514`, `21191527` | ice-export — v51 segfault / v60 ckpt mismatch |
 | `21105320` | Tier 1 MARL rows |
 | `21076488`, `21076968`, `21077648` | base-height probe |
 | `21076799`–`21076923` | v2 task gates |
