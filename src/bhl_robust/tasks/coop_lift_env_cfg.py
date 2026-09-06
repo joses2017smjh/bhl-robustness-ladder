@@ -14,6 +14,8 @@ reward terms, so the 36 cm adduction cap is physics.
 """
 from __future__ import annotations
 
+import os
+
 import isaaclab.sim as sim_utils
 from isaaclab.assets import ArticulationCfg, AssetBaseCfg, RigidObjectCfg
 from isaaclab.envs import ManagerBasedRLEnvCfg
@@ -388,19 +390,33 @@ class EventsCfg:
             "velocity_range": {},
         },
     )
-    # After both root resets, and before anything reads a body position: sit each
-    # robot on the plane. Declaration order is execution order for a mode, so
-    # these have to stay below reset_root_a/b.
-    plant_feet_a = EventTerm(
-        func=coop.plant_feet,
-        mode="reset",
-        params={"asset_cfg": SceneEntityCfg("robot_a")},
-    )
-    plant_feet_b = EventTerm(
-        func=coop.plant_feet,
-        mode="reset",
-        params={"asset_cfg": SceneEntityCfg("robot_b")},
-    )
+    # Foot planting is written, verified geometrically, and OFF.
+    #
+    # `plant_feet` puts the feet where the locomotion control has them (ankle
+    # +0.142 against its +0.143) and takes bodies-below-ground from 19 of 27 to
+    # 0-3. It still does not train: a 400-iteration probe went 9.1 -> 5.0 -> 5.0
+    # mean episode length with a fall rate of 1.000, against 428 steps for the
+    # gripper arms without it. Fixing the feet is not sufficient while the arms
+    # are wrong, and the arms are not yet understood -- the bare articulation
+    # holds this pose symmetrically (-0.6069 both hands) while the same pose in
+    # this task measures -0.20 and +0.15 with the root tilted 6.8 degrees off a
+    # spawn quaternion that specifies no tilt at all.
+    #
+    # Off by default so the published numbers reproduce: every result in
+    # docs/FINDINGS.md was trained on the un-planted spawn, and a task config
+    # that silently trains something else makes those numbers unreproducible.
+    # Set BHL_PLANT_FEET=1 to enable it for work on the spawn itself.
+    if os.environ.get("BHL_PLANT_FEET") == "1":
+        plant_feet_a = EventTerm(
+            func=coop.plant_feet,
+            mode="reset",
+            params={"asset_cfg": SceneEntityCfg("robot_a")},
+        )
+        plant_feet_b = EventTerm(
+            func=coop.plant_feet,
+            mode="reset",
+            params={"asset_cfg": SceneEntityCfg("robot_b")},
+        )
     reset_object = EventTerm(
         func=mdp.reset_root_state_uniform,
         mode="reset",
