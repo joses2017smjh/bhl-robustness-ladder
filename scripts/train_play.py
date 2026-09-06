@@ -31,6 +31,8 @@ import cli_args  # isort: skip
 
 # add argparse arguments
 parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
+parser.add_argument("--play-steps", type=int, default=0,
+                    help="stop after N steps when not recording video; 0 means run until the simulator is closed")
 parser.add_argument("--video", action="store_true", default=False, help="Record videos during training.")
 parser.add_argument("--video_length", type=int, default=200, help="Length of the recorded video (in steps).")
 parser.add_argument(
@@ -328,11 +330,19 @@ def main():
             actions = policy(obs)
             # env stepping
             obs, _, _, _ = env.step(actions)
+        timestep += 1
         if args_cli.video:
-            timestep += 1
             # Exit the play loop after recording one video
             if timestep == args_cli.video_length:
                 break
+        elif args_cli.play_steps and timestep >= args_cli.play_steps:
+            # [overlay] Without --video the loop had no exit at all: it ran until
+            # the job's walltime. That is fine for an interactive viewer and
+            # wrong for a batch export, where everything wanted -- the ONNX, the
+            # deployment yaml -- is written before the loop starts. An export job
+            # would burn its whole allocation after finishing its work.
+            print(f"[INFO]: played {timestep} steps, stopping")
+            break
 
     # close the simulator
     env.close()

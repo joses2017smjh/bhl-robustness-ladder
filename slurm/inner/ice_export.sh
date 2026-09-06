@@ -20,7 +20,7 @@ run_one() {   # task run_glob label
     before_sum=$(md5sum "$UPSTREAM/configs/policy_latest.yaml" 2>/dev/null | cut -d" " -f1)
     "$PY" "$REPO/scripts/train_play.py" \
         --task "$task" --num_envs 4 --headless \
-        --load_run "$(basename "$run")" || true
+        --play-steps 5 --load_run "$(basename "$run")" || true
     # Count artefacts, never the exit code -- train_play exits 0 on failure.
     local nv nc
     nv=$(find "$L" -name '*.mp4' -newer "$marker" 2>/dev/null | wc -l)

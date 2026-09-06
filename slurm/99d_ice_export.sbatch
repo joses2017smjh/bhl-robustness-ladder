@@ -14,7 +14,9 @@
 # v60, because the sighted arms need an RTX renderer 5.1 segfaults in, and the
 # blind arm runs on the same stack or it is not their control.
 set -euo pipefail
-export BHL_STACK=v51 ENABLE_CAMERAS=1
+# No ENABLE_CAMERAS: the export needs no renderer, and forcing RTX on is what
+# segfaulted v51 here three times. The ice arms trained fine on v51 without it.
+export BHL_STACK=v51
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
 setup_node_cache
 export OV_CACHE=/scratch/$USER/ov-cache-${SLURM_JOB_ID}
