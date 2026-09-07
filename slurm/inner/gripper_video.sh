@@ -56,8 +56,10 @@ record() {   # task run_glob label
     fi
 }
 
-record TaskV2-BHL-CubeToShelfGrip-Blind-v0 grip-cubetoshelfgrip-blind-s0 gripper_cube
-record TaskV2-BHL-CubeToShelf-Blind-v0     v2-cubetoshelf-blind-s0       welded_cube
+# The corrected-spawn arms. The pre-fix runs are still on disk under the old
+# labels and show robots lying in the floor, which is what they trained in.
+record TaskV2-BHL-CubeToShelf-Blind-v0     v2up-cubetoshelf-blind-s0        upright_welded
+record TaskV2-BHL-CubeToShelfGrip-Blind-v0 gripup-cubetoshelfgrip-blind-s0  upright_gripper
 
 echo "=== videos produced ==="
 find "$L" -name "*.mp4" -newermt "-3 hours" 2>/dev/null | head -10

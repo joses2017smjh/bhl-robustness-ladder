@@ -28,11 +28,16 @@ import bhl_robust.tasks  # noqa: F401
 from bhl_robust.tasks import coop_lift_env_cfg as C
 from bhl_robust.tasks.coop_lift_mdp import _t
 
-TASK = "TaskV2-BHL-CubeToShelf-Blind-v0"
+TASK = "TaskV2-BHL-PlankToWall-Blind-v0"
+# Rotation about x behaves as yaw on this Y-up asset: the cube pair uses
+# -+90 deg about x and both stand. The plank pair faces along -+x instead of
+# -+y, so it wants the two headings 90 deg away from those -- 0 and 180 about x.
+# Measured rather than derived, because deriving is what cost five hypotheses.
 CANDS = {
-    "old  a (0.7071, 0, 0, -0.7071)": (0.7071, 0.0, 0.0, -0.7071),
-    "new  a (0.7071, -0.7071, 0, 0)": (0.70710678, -0.70710678, 0.0, 0.0),
-    "new  b (0.7071, +0.7071, 0, 0)": (0.70710678, 0.70710678, 0.0, 0.0),
+    "plank old a (1, 0, 0, 0)":      (1.0, 0.0, 0.0, 0.0),
+    "plank old b (0, 0, 0, 1)":      (0.0, 0.0, 0.0, 1.0),
+    "cand 180x   (0, 1, 0, 0)":      (0.0, 1.0, 0.0, 0.0),
+    "cand -90x   (0.7071,-0.7071,0,0)": (0.70710678, -0.70710678, 0.0, 0.0),
 }
 print(f"{'spawn quat':34} {'R22':>7} {'R21':>7} {'tilt_now':>9} {'head-foot':>10} {'|dz|hands':>10}")
 for label, rot in CANDS.items():

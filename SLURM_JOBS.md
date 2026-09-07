@@ -20,6 +20,34 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 ## Open
 
+### Manipulation re-runs on the corrected spawn · `running` — 2026-09-07
+**The fix works.** Cube arms on the corrected spawn, against the same arms
+before it:
+
+| arm | ep_len | reward |
+|---|---|---|
+| `v2up-cubetoshelf-blind` | **258.9** | **+10.73** |
+| `v2up-cubetoshelf-depth` | 236.9 | +8.86 |
+| `gripup-cubetoshelfgrip-rgb` | 158.3 | +6.84 |
+| *(before the fix: welded cube)* | *~8* | *-0.79* |
+
+Task success is still 0 everywhere, so the finding that these tasks are not
+solved stands — but the robots are now standing up while failing, which is a
+different claim from the one the old numbers supported.
+
+**The plank arms are still broken and were cancelled.** Only the CubeToShelf and
+BallToNet spawns were corrected; PlankToWall still uses `(1,0,0,0)` and
+`(0,0,0,1)`, and the corrected tilt check now reads those as fallen — which they
+are. All three sat at `ep_len 1.0`, reward -0.401, fall 1.000. `21204960` is
+measuring which quaternions stand that pair up, the same way `21196896` did for
+the cube pair; it faces along -+x rather than -+y so it needs the two headings
+90 degrees away from the cube pair's.
+
+| # | id | outcome |
+|---|---|---|
+| 2 | `21199344`, `21199345` | 1 COMPLETED, 5 running, 3 NODE_FAIL at ~19 h (infrastructure), 1 CUDA illegal access, 1 abort, 6 plank cells cancelled |
+| 1 | `21186402`, `21186403` | cancelled — trained on the lying-down spawn |
+
 ### Spawn orientation — SOLVED · `done` — 2026-09-06
 **The spawn quaternion was a roll, not a yaw. The robots have been lying down.**
 
