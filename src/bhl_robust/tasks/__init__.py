@@ -323,3 +323,27 @@ for _id, _cfg in (
         disable_env_checker=True,
         kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG},
     )
+
+# ---------------------------------------------------------------- B5: the maze
+# Corridor navigation with a 2D lidar and a global-shutter stereo pair, on the
+# locomotion rung rather than the manipulation one -- locomotion is the half of
+# this project that works, and a new sensor rung belongs there.
+#
+# Four arms so each sensor can be credited only with what it could have seen:
+# the floor obstacles sit under the lidar plane, the corners are outside the
+# cameras' cone until the turn is made, and the blind arm is the control without
+# which a lidar number is a fact about the maze.
+from bhl_robust.tasks import maze_env_cfg  # noqa: E402
+
+for _id, _cfg in (
+    ("Velocity-BHL-Maze-Blind-v0", maze_env_cfg.MazeBlindEnvCfg),
+    ("Velocity-BHL-Maze-Lidar-v0", maze_env_cfg.MazeLidarEnvCfg),
+    ("Velocity-BHL-Maze-Stereo-v0", maze_env_cfg.MazeStereoEnvCfg),
+    ("Velocity-BHL-Maze-Both-v0", maze_env_cfg.MazeBothEnvCfg),
+):
+    gym.register(
+        id=_id,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG},
+    )
