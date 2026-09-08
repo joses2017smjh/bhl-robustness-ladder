@@ -107,12 +107,16 @@ def still_alive(env: "ManagerBasedRLEnv") -> torch.Tensor:
 
 
 
-#: Height of the lowest leg body when this robot stands. Measured on the shipped
-#: locomotion task, which spawns at root z = 0 and walks: `leg_left_ankle_roll`
-#: sits at +0.1026 above the terrain. The foot sole extends below that body
-#: origin, which is why the number is not zero and why it has to be measured
-#: rather than assumed.
-SOLE_REF = 0.1026
+#: Height of the lowest leg body when this robot stands, read from the MuJoCo
+#: harness -- the engine in this project that demonstrably spawns this robot
+#: correctly. After `CrewRunner.reset` plants the feet, `ankle_roll` sits at
+#: +0.1403 with only the base frame below ground, hands symmetric at +0.5804 and
+#: shoulders highest at +0.75.
+#:
+#: Taken from MuJoCo rather than derived in Isaac because four separate Isaac
+#: probes in this investigation silently failed to apply the rotation they were
+#: testing, returning byte-identical geometry for quaternions 90 degrees apart.
+SOLE_REF = 0.1403
 
 
 def plant_feet(
@@ -363,24 +367,8 @@ def _tilt_from_quat(robot) -> torch.Tensor:
     """
     q = _t(robot.data.root_quat_w)
     w, x, y, z = q[:, 0], q[:, 1], q[:, 2], q[:, 3]
-    # R[2, 1] -- the world-z component of the body *y* axis, not body z.
-    #
-    # This asset is authored Y-up. Measured (`slurm/inner/_updir.sh`): under the
-    # spawn quaternions that actually stand the robot up, |R21| is 0.995-0.998
-    # while R22 is 0.06 and -0.10. Using R22 reports 1.51-1.67 rad of tilt for a
-    # robot whose torso is 22 cm above its ankles, which clears the 0.78 limit
-    # and ends every episode on step one.
-    #
-    # It also means `projected_gravity_b` returning [0, +-1, 0] was correct all
-    # along. This file previously recorded that as an Isaac Lab 3.x defect --
-    # gravity lands on body y because body y is up.
-    up_z = 2.0 * (y * z + w * x)
-    # Absolute value: the two robots spawn 180 degrees apart about x, so one
-    # carries +y up and the other -y up, and a signed test would call one of
-    # them inverted at spawn. A biped cannot reach inversion without first
-    # passing 90 degrees, which terminates at the 0.78 limit, so the ambiguity
-    # is unreachable in a live episode.
-    return torch.acos(up_z.abs().clamp(-1.0, 1.0))
+    up_z = 1.0 - 2.0 * (x * x + y * y)      # R[2, 2]
+    return torch.acos(up_z.clamp(-1.0, 1.0))
 
 
 def either_fallen(

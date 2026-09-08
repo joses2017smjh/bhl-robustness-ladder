@@ -48,7 +48,60 @@ the cube pair; it faces along -+x rather than -+y so it needs the two headings
 | 2 | `21199344`, `21199345` | 1 COMPLETED, 5 running, 3 NODE_FAIL at ~19 h (infrastructure), 1 CUDA illegal access, 1 abort, 6 plank cells cancelled |
 | 1 | `21186402`, `21186403` | cancelled — trained on the lying-down spawn |
 
-### Spawn orientation — SOLVED · `done` — 2026-09-06
+### Spawn orientation — NOT solved, and the earlier "SOLVED" is retracted · `open`
+The robots spawn under the floor. That is visible in the first frames of every
+Isaac clip and it is the only thing in this investigation that has stayed true.
+
+**What is established.** MuJoCo spawns this same URDF correctly, measured:
+root z -0.0272, quat (0.7071, 0, 0, 0.7071), ankle +0.140, shoulder +0.737,
+base -0.027, **1 of 26 bodies below ground**. That is the reference.
+
+**What is retracted.** The 2026-09-06 entry claimed the spawn quaternion was a
+roll and that `(0.7071, -+0.7071, 0, 0)` fixed it. It did not. Those quaternions
+put 27 of 27 bodies below ground -- worse than the 19 of 27 they replaced -- and
+the clips published from them show robots that never appear on screen. The claim
+rested on a probe measuring torso-above-ankles, which is relative geometry and
+says nothing about absolute height.
+
+**Why no further probe is being run.** Six Isaac probes have now disagreed with
+each other and with the render:
+
+* four applied no rotation at all -- `_body_dump` and `_freefall` returned
+  byte-identical geometry for quaternions 90 degrees apart, twice
+* `_updir` used `base` as a proxy for "head"; base is this asset's
+  ground-reference frame, so `base - ankles > 0` reads upright for a robot lying
+  down
+* the in-task sweep found `(0, 0, 1, 0)` reproducing MuJoCo to 4 mm on every
+  number -- ankle +0.144 against +0.140, shoulder +0.737 against +0.737, 1 of 27
+  below -- and the render of that exact config shows **no robot at any frame**,
+  worse than what it replaced
+
+Each time the disagreement was resolved in favour of a conclusion that the next
+measurement broke. The pattern, not any single result, is the finding.
+
+**State of the tree.** Quaternions and `_tilt_from_quat` are back to what they
+were. Two MuJoCo-derived constants are kept because they are measured against
+the engine that works: `_PINCH_ROOT_Z = -0.0272` (was -0.07) and
+`SOLE_REF = 0.1403`. `plant_feet` stays opt-in and off.
+
+**The route that has not been tried.** MuJoCo does not find a magic quaternion;
+`CrewRunner.reset` poses the joints, measures the lowest **collision geom**, and
+translates the base onto the plane. `plant_feet` approximates that with body
+*origins*, which are not the same thing -- a foot's origin sits above its sole.
+Porting the geom-based version is the next real attempt, and it should be
+verified by looking at frame 0 before any number is quoted.
+
+| # | id | outcome |
+|---|---|---|
+| 6 | `21213903` | render of `(0,0,1,0)`: no robot visible at frames 0, 2, 6, 15, 40, 90 |
+| 5 | `21213882` | in-task sweep: `(0,0,1,0)` matches MuJoCo on every number; every yaw of it fails |
+| 4 | `21213809` | `_freefall` -- four quaternions, identical geometry. Void. |
+| 3 | `21213793` | `_body_dump` with rotation proven applied -- still identical across 90 degrees. Void. |
+| 2 | `21213697`, `21213698` | 27 of 27 below ground with the "fixed" quats; 8 of 27 with planting on |
+| 1 | (visual) | the user identified it from the clip: "spawns from under the ground, upside down" |
+
+### Spawn orientation — superseded by the entry above · `retracted`
+
 **The spawn quaternion was a roll, not a yaw. The robots have been lying down.**
 
 Measured from geometry rather than convention (`21196896`):

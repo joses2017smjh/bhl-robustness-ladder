@@ -29,6 +29,22 @@ from bhl_robust.tasks.coop_lift_mdp import _t
 # convention until a task that demonstrably works reports a smaller number --
 # the same mistake G-B2 made when it measured its own iteration budget and
 # called it a terrain verdict.
+# Candidate spawn quaternions, swept in-task. This probe's burial counts are the
+# only Isaac numbers in this investigation that matched what the render shows --
+# it said 27 of 27 below ground and the video's first frames are empty -- so it
+# is the one to sweep with.
+#
+# MuJoCo puts this robot's bodies up to 0.77 m *above* the root; Isaac puts them
+# 0.78 m below it. Same magnitude, opposite sign, so the USD wants a 180 degree
+# flip on top of the yaw the config already has.
+import itertools as _it
+QUATS = {
+    "stand only   180y": (0.0, 0.0, 1.0, 0.0),
+    "180y then yaw  90": (0.0, -0.70710678, 0.70710678, 0.0),
+    "180y then yaw 180": (0.0, -1.0, 0.0, 0.0),
+    "180y then yaw 270": (0.0, -0.70710678, -0.70710678, 0.0),
+}
+
 TASKS = [
     ("v2 CubeToShelf (suspect)", "TaskV2-BHL-CubeToShelf-Blind-v0", ("robot_a", "robot_b")),
     ("22-DoF locomotion (control)", "Velocity-BHL-Arms-PushAdaptive-v0", ("robot",)),
@@ -55,6 +71,44 @@ def report(tag, u, robots):
                 zs = bodies[0, idx, 2]
                 print(f"          {key:6}: " + "  ".join(
                     f"{names[i]}={bodies[0,i,2]:+.3f}" for i in idx[:2]))
+
+# Sweep the candidates on the suspect task before the usual two-task report.
+import gymnasium as _gym
+print(f"\n{'quaternion':32} {'below':>7} {'ankle':>8} {'shoulder':>9} {'base':>8}  verdict")
+for qlabel, rot in QUATS.items():
+    try:
+        cfg = _gym.spec(TASKS[0][1]).kwargs["env_cfg_entry_point"]()
+        cfg.scene.num_envs = 2
+        for r in (cfg.scene.robot_a, cfg.scene.robot_b):
+            r.init_state = r.init_state.replace(rot=rot)
+        e = _gym.make(TASKS[0][1], cfg=cfg, disable_env_checker=True)
+        e.reset(); uu = e.unwrapped
+        rr = uu.scene["robot_a"]; rr.update(dt=0.0)
+        rb = uu.scene["robot_b"]; rb.update(dt=0.0)
+        nm = rr.body_names
+        b = _t(rr.data.body_pos_w)[0]
+        org = uu.scene.env_origins[0]
+        h = lambda k: float(b[[i for i, n in enumerate(nm) if k in n], 2].mean() - org[2])
+        below = int(((b[:, 2] - org[2]) < 0).sum())
+        ank, sho, bas = h("ankle_roll"), h("shoulder_pitch"), h("base")
+        # facing: the two robots must look at each other across the payload,
+        # so their base-to-hand vectors should oppose in y.
+        bb = _t(rb.data.body_pos_w)[0]
+        nmb = rb.body_names
+        hy = lambda arr, nn, k: float(arr[[i for i, n in enumerate(nn) if k in n], 1].mean())
+        fa = hy(b, nm, "hand_link") - hy(b, nm, "base")
+        fb = hy(bb, nmb, "hand_link") - hy(bb, nmb, "base")
+        good = below <= 2 and ank < sho
+        print(f"{qlabel:32} {below:3d}/{len(nm):<3d} {ank:8.3f} {sho:9.3f} {bas:8.3f}"
+              f"  {'STANDS' if good else 'no':6}  face_a {fa:+.3f} face_b {fb:+.3f}")
+    except Exception as exc:
+        print(f"{qlabel:32}  failed: {str(exc)[:44]}")
+    finally:
+        try:
+            e.close()
+        except Exception:
+            pass
+print("\nMuJoCo reference: ankle +0.140, shoulder +0.737, base -0.027, 1 of 26 below.\n")
 
 for label, task, robots in TASKS:
     print(f"\n{'#'*66}\n# {label}: {task}\n{'#'*66}")

@@ -68,16 +68,35 @@ def apply_strategy_flags(cfg) -> None:
 
 
 _HANDS = ["arm_left_hand_link", "arm_right_hand_link"]
-_YAW_M90 = (0.70710678, 0.0, 0.0, -0.70710678)
-_YAW_P90 = (0.70710678, 0.0, 0.0, 0.70710678)
-_YAW_180 = (0.0, 0.0, 0.0, 1.0)
+# Root 4-tuples. Isaac Lab documents these as (w, x, y, z) yaws. Forced and
+# forwarded (21192744, 21192773) they are not:
+#
+#   (0.707, 0, 0, -0.707) "yaw -90"  -> hands at -0.177 / +0.177  (a roll)
+#   (0.707, -0.707, 0, 0) "roll -90" -> hands at -0.6077 / -0.6077, toward=+1
+#
+# The second is what actually stands robot_a up and faces it at the cube.
+# robot_b is the opposite 4-tuple. (0, 0, 0, 1) "yaw 180" inverts the robot
+# (Z=+0.608); (0, 1, 0, 0) is the upright 180. BHL_LEGACY_YAW=1 restores the
+# 4-tuples every FINDINGS number trained on.
+_S2 = 0.70710678
+if os.environ.get("BHL_LEGACY_YAW") == "1":
+    _YAW_M90 = (_S2, 0.0, 0.0, -_S2)
+    _YAW_P90 = (_S2, 0.0, 0.0, _S2)
+    _YAW_180 = (0.0, 0.0, 0.0, 1.0)
+else:
+    _YAW_M90 = (_S2, -_S2, 0.0, 0.0)
+    _YAW_P90 = (_S2, _S2, 0.0, 0.0)
+    _YAW_180 = (0.0, 1.0, 0.0, 0.0)
 
 # Crouch + side-hold from the scripted GIF. Standing spawn left hands ~0.5 m
 # above a floor object, which saturates a tanh(·/0.15) kernel. Pelvis drop is
 # the sagittal shortening of a 0.12 m thigh + 0.16 m shank at these angles,
 # not a guessed number; z of the caller's pos is ignored so every object
 # uses the same plant.
-_PINCH_ROOT_Z = -0.07
+#: MuJoCo plants this robot's root at -0.0272 for the pinch pose; Isaac was
+#: told -0.07, which is 4.3 cm lower. The value now comes from the engine that
+#: gets the spawn right rather than from a pelvis drop worked out on paper.
+_PINCH_ROOT_Z = -0.0272
 _PINCH_JOINT_POS = {
     **dict(HUMANOID_LITE_CFG.init_state.joint_pos),
     "leg_left_hip_pitch_joint": -0.85,
@@ -396,11 +415,11 @@ class EventsCfg:
     # +0.142 against its +0.143) and takes bodies-below-ground from 19 of 27 to
     # 0-3. It still does not train: a 400-iteration probe went 9.1 -> 5.0 -> 5.0
     # mean episode length with a fall rate of 1.000, against 428 steps for the
-    # gripper arms without it. Fixing the feet is not sufficient while the arms
-    # are wrong, and the arms are not yet understood -- the bare articulation
-    # holds this pose symmetrically (-0.6069 both hands) while the same pose in
-    # this task measures -0.20 and +0.15 with the root tilted 6.8 degrees off a
-    # spawn quaternion that specifies no tilt at all.
+    # gripper arms without it. That probe planted the legs of a robot lying
+    # on its side: the configured "yaw" 4-tuple was a roll (21192744). The
+    # FACE+SYM replacement is now the default (21192773, reset-verified
+    # 21192782). Planting an upright robot is a different experiment and
+    # still opt-in.
     #
     # Off by default so the published numbers reproduce: every result in
     # docs/FINDINGS.md was trained on the un-planted spawn, and a task config
