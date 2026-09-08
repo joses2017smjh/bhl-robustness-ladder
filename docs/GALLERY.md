@@ -36,6 +36,8 @@ Tell me which names you want on the front page.
 | [`carry_vision_both_4`](#vision-made-it-worse) | MuJoCo | same, four pairs | **fails** |
 | [`occlusion_s0_lifted_pov`](#the-occlusion-seed-cross-checked) | MuJoCo | occlusion, the seed that lifted | **fails in MuJoCo** |
 | [`occlusion_s1_flat_pov`](#the-occlusion-seed-cross-checked) | MuJoCo | occlusion, a flat sibling | holds the pinch, never lifts |
+| [`isaac/cubetoshelf_upright_welded`](#isaac-sim) | **Isaac Sim** | v2 CubeToShelf, corrected spawn | **first movement** — lift curriculum off its floor |
+| [`isaac/cubetoshelf_upright_gripper`](#isaac-sim) | **Isaac Sim** | same, 24-DoF gripper | **first movement** |
 | [`isaac/cubetoshelf_gripper`](#isaac-sim) | **Isaac Sim** | v2 CubeToShelf, 24-DoF gripper | **fails** — survives, never lifts |
 | [`isaac/cubetoshelf_welded`](#isaac-sim) | **Isaac Sim** | v2 CubeToShelf, welded hands | **fails** — ~8 steps |
 
@@ -135,6 +137,35 @@ stays alive for 427 steps against 8 while doing it.
 |---|---|
 | <img src="gifs/isaac/cubetoshelf_gripper.gif" width="420"> | **`isaac/cubetoshelf_gripper`** — `TaskV2-BHL-CubeToShelfGrip-Blind-v0`, the 24-DoF gripper asset. |
 | <img src="gifs/isaac/cubetoshelf_welded.gif" width="420"> | **`isaac/cubetoshelf_welded`** — `TaskV2-BHL-CubeToShelf-Blind-v0`, the shipped welded-hand asset. |
+
+### On the corrected spawn
+
+The two clips above were trained on a spawn quaternion that laid the robot on
+its side. These are the same tasks after it was fixed, and they are the first
+clips of this robot spawning upright in a v2 scene.
+
+| | start | tail |
+|---|---|---|
+| `Curriculum/base_height` | +0.684 | **+0.773** — rising, not collapsing |
+| `Curriculum/lift_height` | 0.0400 | **0.0478** — off the floor for the first time |
+| `Episode_Reward/lifting_object` | 0.0003 | **+1.212** |
+| `Episode_Termination/time_out` | 0.020 | **0.331** |
+| mean episode length | ~8 (before the fix) | **258.9** |
+
+Every earlier arm in this project sat on `lift_height = 0.0400` exactly, the
+curriculum's floor, and never promoted. This one does. **Task success is still
+0**, so the task is not solved — but the failure has changed shape, and it is
+now a robot standing up and failing rather than one lying in the floor.
+
+Watch them with that in mind: two thirds of episodes still end in a fall, so
+several seconds of these clips are robots tangled around a tipped cube. That is
+the honest state of the task, not a cherry-picked rollout.
+
+| | |
+|---|---|
+| <img src="gifs/isaac/cubetoshelf_upright_welded.gif" width="420"> | **`isaac/cubetoshelf_upright_welded`** — welded hands, corrected spawn. Mean episode length 258.9, reward +10.73. |
+| <img src="gifs/isaac/cubetoshelf_upright_gripper.gif" width="420"> | **`isaac/cubetoshelf_upright_gripper`** — the 24-DoF gripper on the same spawn. |
+
 
 Framing is still wide — the viewer camera is set from `BHL_VIEW_EYE` /
 `BHL_VIEW_LOOKAT` (colon-separated; both `sbatch --export` and Apptainer's
