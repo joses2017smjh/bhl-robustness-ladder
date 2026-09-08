@@ -36,8 +36,8 @@ Tell me which names you want on the front page.
 | [`carry_vision_both_4`](#vision-made-it-worse) | MuJoCo | same, four pairs | **fails** |
 | [`occlusion_s0_lifted_pov`](#the-occlusion-seed-cross-checked) | MuJoCo | occlusion, the seed that lifted | **fails in MuJoCo** |
 | [`occlusion_s1_flat_pov`](#the-occlusion-seed-cross-checked) | MuJoCo | occlusion, a flat sibling | holds the pinch, never lifts |
-| [`isaac/cubetoshelf_upright_welded`](#isaac-sim) | **Isaac Sim** | v2 CubeToShelf, corrected spawn | **first movement** — lift curriculum off its floor |
-| [`isaac/cubetoshelf_upright_gripper`](#isaac-sim) | **Isaac Sim** | same, 24-DoF gripper | **first movement** |
+| [`isaac/cubetoshelf_upright_welded`](#isaac-sim) | **Isaac Sim** | v2 CubeToShelf, corrected spawn | spawns underground, extruded upward — see retraction |
+| [`isaac/cubetoshelf_upright_gripper`](#isaac-sim) | **Isaac Sim** | same, 24-DoF gripper | spawns underground |
 | [`isaac/cubetoshelf_gripper`](#isaac-sim) | **Isaac Sim** | v2 CubeToShelf, 24-DoF gripper | **fails** — survives, never lifts |
 | [`isaac/cubetoshelf_welded`](#isaac-sim) | **Isaac Sim** | v2 CubeToShelf, welded hands | **fails** — ~8 steps |
 
@@ -138,11 +138,20 @@ stays alive for 427 steps against 8 while doing it.
 | <img src="gifs/isaac/cubetoshelf_gripper.gif" width="420"> | **`isaac/cubetoshelf_gripper`** — `TaskV2-BHL-CubeToShelfGrip-Blind-v0`, the 24-DoF gripper asset. |
 | <img src="gifs/isaac/cubetoshelf_welded.gif" width="420"> | **`isaac/cubetoshelf_welded`** — `TaskV2-BHL-CubeToShelf-Blind-v0`, the shipped welded-hand asset. |
 
-### On the corrected spawn
+### On the corrected *rotation* — and a spawn that is still wrong
 
-The two clips above were trained on a spawn quaternion that laid the robot on
-its side. These are the same tasks after it was fixed, and they are the first
-clips of this robot spawning upright in a v2 scene.
+**Retraction.** These were published as "the first clips of this robot spawning
+upright". They are not. Watch the first second: the robots are not visible at
+all, because they spawn **entirely underneath the floor** and are extruded
+upward by the physics solver over the following twenty frames.
+
+Measured at reset with the corrected rotation: **27 of 27 bodies below z = 0**,
+the lowest at -0.85 m. The rotation fix made the burial *worse* -- it was 19 of
+27 when the robot was lying on its side, because standing it upright put its
+full height below a root that sits at -0.07.
+
+The numbers below are real and were produced in that state, which is what makes
+them hard to interpret rather than simply good.
 
 | | start | tail |
 |---|---|---|
@@ -152,14 +161,13 @@ clips of this robot spawning upright in a v2 scene.
 | `Episode_Termination/time_out` | 0.020 | **0.331** |
 | mean episode length | ~8 (before the fix) | **258.9** |
 
-Every earlier arm in this project sat on `lift_height = 0.0400` exactly, the
-curriculum's floor, and never promoted. This one does. **Task success is still
-0**, so the task is not solved — but the failure has changed shape, and it is
-now a robot standing up and failing rather than one lying in the floor.
+Every earlier arm in this project sat on `lift_height = 0.0400` exactly and
+never promoted. This one does — but it does so while being pushed out of the
+ground for the first fifth of every episode, so what the promotion is measuring
+is not yet established. **Task success is still 0.**
 
-Watch them with that in mind: two thirds of episodes still end in a fall, so
-several seconds of these clips are robots tangled around a tipped cube. That is
-the honest state of the task, not a cherry-picked rollout.
+Two thirds of episodes still end in a fall, so several seconds of both clips are
+robots tangled around a tipped cube.
 
 | | |
 |---|---|
