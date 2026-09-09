@@ -48,6 +48,24 @@ the cube pair; it faces along -+x rather than -+y so it needs the two headings
 | 2 | `21199344`, `21199345` | 1 COMPLETED, 5 running, 3 NODE_FAIL at ~19 h (infrastructure), 1 CUDA illegal access, 1 abort, 6 plank cells cancelled |
 | 1 | `21186402`, `21186403` | cancelled — trained on the lying-down spawn |
 
+### B5 — maze with lidar and stereo · `running` — queued 2026-09-08
+Four arms, one variable: blind (control), lidar, stereo, both. 6,000 iterations
+at `NUM_ENVS=2048`, identical across all four — the stereo arms carry two
+ray-cast cameras and the blind arm none, so letting the cheap arm run wider
+would make throughput the variable instead of sensing.
+
+v60 with cameras enabled. Both sensors are ray-cast rather than RTX, so neither
+depends on the renderer that segfaults on 5.1; that was the reason the design
+chose ray-cast over an RGB camera.
+
+Smoke passed 4/4 (`21201598`): widths 45 / 81 / 557 / 593, stereo returning real
+depth at 0.61–6.00 m and 100% finite, lidar 30% finite as a horizontal 360° scan
+in a corridor should be.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21218766` | running — 4 arms, `slurm/93_maze_ppo.sbatch` |
+
 ### Spawn rotation — found and photographed; task env still disagrees · `open`
 **The rotation is settled, by picture.** `results/spawn_shots/` holds a spawn
 photograph per candidate, taken with no policy, no checkpoint and no reset
