@@ -7,6 +7,12 @@
 > 8,000-iteration arm here is 786M env-steps — about **50 days** at cloth's peak
 > rate against **6 minutes** at the rigid-body rate.
 >
+> **And that measurement is generous.** It was taken on Isaac Lab's Franka cloth
+> scene: **one** deformable of 961 vertices, moved by a 7-DoF single arm. This
+> design calls for **five** garments and a 22-DoF humanoid. The scene that
+> already fails the gate is several times lighter than the one the task needs,
+> so the verdict holds with room to spare rather than marginally.
+>
 > So this task gets **scripted demonstrations, not RL**, and nothing below has
 > been implemented: no task id is registered and no policy was trained. The
 > design stands as written; only the training method is settled against.
