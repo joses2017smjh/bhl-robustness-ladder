@@ -45,6 +45,24 @@ WALL_X, WALL_CONTACT = 2.4, 0.50
 #: 18.7 cm inside a payload spanning +/-0.75, and the contact solver ejects it
 #: 22 cm upward before the policy acts -- which is what made plank_leaned fire
 #: on a zero action. 0.75 + 0.25 hand reach + 0.037 half-hand = 1.037.
+#: The spawn rotation that stands this robot on the floor, confirmed by a
+#: photograph (`results/spawn_shots/`) and not only by numbers.
+#:
+#: `(0.7071, 0, 0, -+0.7071)` -- what this file used to pass, and what reads as a
+#: yaw in (w, x, y, z) -- lays the robot flat: 15 of 27 bodies below ground,
+#: ankles at -0.009, shoulders at -0.001, and a picture of a robot on its side.
+#: `(0, 0, 1, 0)` gives ankle +0.131, shoulder +0.735, 1 of 27 below, against
+#: MuJoCo's +0.140 / +0.737 / 1 of 26 for the same URDF -- and a picture of a
+#: robot standing.
+#:
+#: Both robots use it, so they face the same way. Every yaw of this pose, in
+#: either composition order, puts the robot back underground (15 or 27 of 27),
+#: which cannot happen to a rigid body under a genuine world-z yaw. Whatever
+#: these 4-tuples mean to this asset, they do not compose the way (w, x, y, z)
+#: world rotations should, so the heading cannot be set this way and is left
+#: alone rather than guessed at.
+_STAND_UP = (0.0, 0.0, 1.0, 0.0)
+
 PLANK_STANDOFF = 1.05
 
 
@@ -246,8 +264,8 @@ class BallToNetCfg(_TaskV2Base):
 
     def __post_init__(self):
         super().__post_init__()
-        self.scene.robot_a = _robot("{ENV_REGEX_NS}/robot_a", (0.0, 0.47, 0.0), (0.7071, 0.0, 0.0, -0.7071))
-        self.scene.robot_b = _robot("{ENV_REGEX_NS}/robot_b", (0.0, -0.47, 0.0), (0.7071, 0.0, 0.0, 0.7071))
+        self.scene.robot_a = _robot("{ENV_REGEX_NS}/robot_a", (0.0, 0.47, 0.0), _STAND_UP)
+        self.scene.robot_b = _robot("{ENV_REGEX_NS}/robot_b", (0.0, -0.47, 0.0), _STAND_UP)
         self.scene.object = _object(
             sim_utils.SphereCfg(
                 radius=0.18,

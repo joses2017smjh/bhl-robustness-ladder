@@ -48,6 +48,42 @@ the cube pair; it faces along -+x rather than -+y so it needs the two headings
 | 2 | `21199344`, `21199345` | 1 COMPLETED, 5 running, 3 NODE_FAIL at ~19 h (infrastructure), 1 CUDA illegal access, 1 abort, 6 plank cells cancelled |
 | 1 | `21186402`, `21186403` | cancelled — trained on the lying-down spawn |
 
+### Spawn rotation — found and photographed; task env still disagrees · `open`
+**The rotation is settled, by picture.** `results/spawn_shots/` holds a spawn
+photograph per candidate, taken with no policy, no checkpoint and no reset
+events between the config and the camera:
+
+| quaternion | ankle | shoulder | below | picture |
+|---|---|---|---|---|
+| `(0.7071, 0, 0, -0.7071)` — as configured | -0.009 | -0.001 | **15/27** | robot **lying flat** |
+| **`(0, 0, 1, 0)`** | **+0.131** | **+0.735** | **1/27** | robot **standing** |
+| MuJoCo, same URDF | +0.140 | +0.737 | 1/26 | — |
+
+So the configured 4-tuple lays this robot on the floor, which is what was
+reported from the clip on day one, and `(0, 0, 1, 0)` stands it up to within
+9 mm of MuJoCo on every measure.
+
+**Heading cannot be set.** Every yaw of that pose, in both composition orders,
+buries the robot again (15 or 27 of 27). A genuine world-z yaw cannot do that to
+a rigid body, so these 4-tuples do not compose as (w, x, y, z) world rotations
+for this asset. Both robots therefore use `(0, 0, 1, 0)` and face the same way;
+that is recorded as a limitation rather than papered over.
+
+**What is still wrong.** With that quaternion applied to the task config, the
+rendered episode shows **no robot anywhere in frame** -- full frame, native
+resolution, frames 2 / 10 / 40 -- while the standalone spawn under the identical
+quaternion photographs a robot standing on the floor. The one untested
+difference is the reset event pipeline (`reset_root_state_uniform`,
+`reset_joints_by_offset`), which the standalone probe does not run. That is the
+next thing to check, and nothing should be claimed fixed until an episode frame
+shows a robot.
+
+| # | id | outcome |
+|---|---|---|
+| 3 | `21218672` | task render with `(0,0,1,0)`: no robot in frame at 2 / 10 / 40 |
+| 2 | `21218650` | facing sweep: only `(0,0,1,0)` stands; all six yaws bury it |
+| 1 | `21218517`, `21218627` | **the photographs** — configured quat lies flat, `(0,0,1,0)` stands |
+
 ### Spawn orientation — NOT solved, and the earlier "SOLVED" is retracted · `open`
 The robots spawn under the floor. That is visible in the first frames of every
 Isaac clip and it is the only thing in this investigation that has stayed true.
