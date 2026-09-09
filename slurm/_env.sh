@@ -46,14 +46,16 @@ mkdir -p "$UV_CACHE_DIR" "$UV_PYTHON_INSTALL_DIR" "$XDG_CACHE_HOME" "$HOME_OVERR
 # aborting the job because a cache directory is missing does not.
 setup_node_cache() {
     local base=/scratch/$USER
-    if mkdir -p "$base/ov-cache" "$base/nv-computecache" 2>/dev/null; then
+    if mkdir -p "$base/ov-cache" "$base/nv-computecache" "$base/tmp" 2>/dev/null; then
         export OV_CACHE=$base/ov-cache
         export CUDA_CACHE_PATH=$base/nv-computecache
+        export TMPDIR=$base/tmp
     else
         echo "note: /scratch/$USER unavailable on $(hostname), caching to Lustre" >&2
         export OV_CACHE=$XDG_CACHE_HOME/ov
         export CUDA_CACHE_PATH=$XDG_CACHE_HOME/nv
-        mkdir -p "$OV_CACHE" "$CUDA_CACHE_PATH"
+        export TMPDIR=$XDG_CACHE_HOME/tmp
+        mkdir -p "$OV_CACHE" "$CUDA_CACHE_PATH" "$TMPDIR"
     fi
 }
 
@@ -80,7 +82,7 @@ PY=$UV_PROJECT_ENVIRONMENT/bin/python
 # Hydra overrides are passed as a FILE PATH (OVERRIDE_FILE), never inline:
 # Apptainer's --env splits values on commas, so a range like [0.8,0.8] is
 # parsed as two malformed key=value pairs and the exec is rejected outright.
-BHL_FORWARD_VARS="BHL_STACK ENABLE_CAMERAS BHL_POLICY BHL_RND TASK EXPERIMENT RUN_NAME SEED NUM_ENVS MAX_ITER OVERRIDE_FILE TRAIN_SCRIPT DEPLOY_CFG CACHE_DIR OUT_CSV LABEL EPISODE_S N_SEEDS PUSH_SPEED VIDEO_DIR MUJOCO_GL PYOPENGL_PLATFORM OMP_NUM_THREADS TERRAIN_D RUN_DIR VARIANT BHL_CONVEX_USD BHL_CONVEX_USD_DIR BENCH_OUT PYTHONPATH LD_LIBRARY_PATH DEPTH_ARGS BHL_SYMMETRY BHL_MIRROR_COEFF CKPT EXP LOAD_RUN WORLD SMOKE_ONLY BHL_PARTITION BHL_ALGO BHL_ABLATE_ARM_DEV GATE_OUT GATE_RUN GATE_CTRL PAYLOAD POV_ARGS CLIP_RUN CARRY_STEPS BHL_VIEW_EYE BHL_VIEW_LOOKAT BHL_VIEW_ENV"
+BHL_FORWARD_VARS="BHL_STACK ENABLE_CAMERAS BHL_POLICY BHL_RND TASK EXPERIMENT RUN_NAME SEED NUM_ENVS MAX_ITER OVERRIDE_FILE TRAIN_SCRIPT DEPLOY_CFG CACHE_DIR OUT_CSV LABEL EPISODE_S N_SEEDS PUSH_SPEED VIDEO_DIR MUJOCO_GL PYOPENGL_PLATFORM OMP_NUM_THREADS TERRAIN_D RUN_DIR VARIANT BHL_CONVEX_USD BHL_CONVEX_USD_DIR BENCH_OUT PYTHONPATH LD_LIBRARY_PATH DEPTH_ARGS BHL_SYMMETRY BHL_MIRROR_COEFF CKPT EXP LOAD_RUN WORLD SMOKE_ONLY BHL_PARTITION BHL_ALGO BHL_ABLATE_ARM_DEV GATE_OUT GATE_RUN GATE_CTRL PAYLOAD POV_ARGS CLIP_RUN CARRY_STEPS BHL_VIEW_EYE BHL_VIEW_LOOKAT BHL_VIEW_ENV BHL_PLANT_FEET BHL_LOAD_RUN BHL_LEGACY_YAW TMPDIR"
 
 # Isaac Sim bundles OpenUSD as `pxr` inside an extscache wheel; it is not on
 # sys.path of a plain interpreter. libpython also has to be visible because

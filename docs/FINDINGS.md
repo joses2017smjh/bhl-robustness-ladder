@@ -757,13 +757,49 @@ anything, and that is now measured instead of argued.
 
 The plank cells are excluded from both columns and are not reported: they
 trained on a scene that ejected its own payload, and their gripper arms show
-none of this effect (episode length 11.6, reward −1.0). That is what a task
-looks like when the payload leaves before the policy can act, and it is being
-re-run now that the stand-off is fixed.
+none of this effect (episode length 11.6, reward −1.0). Re-run at a 1.05 m
+stand-off (`21146058`): ejection is gone (episode length 354–491) and the task
+is still dead — `lift_height` never left its 0.04 m floor, success 0.0000 in
+all six arms.
+
+> **Caveat, and it is load-bearing for every Isaac-side manipulation number.**
+> The coop / v2 spawn puts **19 of 27 bodies under the floor**. Isaac uses a
+> hardcoded `_PINCH_ROOT_Z = -0.07` and does not plant the feet; MuJoCo does.
+> Depenetration takes about ten steps. Welded-hand episodes last ~8, so they
+> ended inside that extrusion. Finding 10's 6.3 → 427.7 is still a real
+> difference between the two assets — they trained on the same broken spawn —
+> but some of the gain may be surviving the spawn rather than having hands.
+> The MuJoCo-scored column is unaffected: 7.8 cm cube, 0.0 cm plank, pinch-gate,
+> fall rates. `plant_feet` is written, geometrically right (ankles +0.142
+> against the locomotion control's +0.143), and **off** (`BHL_PLANT_FEET=1`).
+> A 400-iteration probe on the planted spawn went 9.1 → 5.0 → 5.0 with fall
+> 1.000, and a later one on a "corrected" quaternion reached 258.9 — but **the
+> robots are not upright in either**. They spawn beneath the floor and are
+> extruded by the solver, which is visible in the first frames of every Isaac
+> clip and was spotted from the video, not from any measurement.
+>
+> Six probes have now contradicted each other and the render. Four applied no
+> rotation at all, returning byte-identical geometry for quaternions 90° apart.
+> One used `base` as a proxy for the head, and `base` is this asset's
+> ground-reference frame, so it reads a robot lying down as upright. The last
+> found `(0, 0, 1, 0)` reproducing MuJoCo to 4 mm on every number — ankle
+> +0.144 against +0.140, shoulder +0.737 against +0.737 — and the render of that
+> exact config shows no robot at any frame.
+>
+> Nothing is committed as a fix. The quaternions and `_tilt_from_quat` are as
+> they were; two constants measured against MuJoCo are kept
+> (`_PINCH_ROOT_Z = −0.0272`, `SOLE_REF = 0.1403`). `plant_feet` stays off, and
+> it plants **body origins** where MuJoCo plants the lowest **collision geom** —
+> a foot's origin sits above its sole, which is about the size of the error.
+>
+> **Every Isaac-side episode length and reward in this document is therefore
+> measured on a robot that is not standing. The MuJoCo-scored numbers — the
+> sim2sim results, the pinch rates, the lift heights — are unaffected.**
 
 The honest reading is that the manipulation ceiling this project spent six
 sections measuring was a property of the asset, and the number that moved when
-it was fixed is the largest single effect here.
+it was fixed is the largest single effect here — with the spawn caveat above
+on the Isaac-side survival numbers.
 
 ---
 

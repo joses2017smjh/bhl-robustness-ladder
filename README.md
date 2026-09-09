@@ -94,7 +94,8 @@ including the ones not used here, is in [docs/GALLERY.md](docs/GALLERY.md).
 | Plank task | 0.0 cm across 18 seeds, 6 of them after the spawn bug was fixed — contact points exceed the shoulder span |
 | Vision on the lift | depth-conditioned policies fall in almost every episode; blind ones do not |
 | Task completion | **zero** success on all three redesigned tasks, gripper included |
-| Cloth throughput | eight probe attempts, still no number |
+| Isaac spawn | **Robots spawn under the floor and are not upright.** Visible in the first frames of every Isaac clip. Six probes have contradicted each other and the render; no fix is committed. Isaac-side episode lengths are flagged. **MuJoCo-scored numbers are unaffected and stand** |
+| Cloth throughput | 182 env-steps/s at peak — ~50 days per RL arm. Scripted, not trained |
 | Seed counts | findings 10 and 12 rest on 1–2 seeds. §1 is a single-seed result that died on its third |
 
 Four findings are retractions of earlier claims here. They stay in: a repo whose
