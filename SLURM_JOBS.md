@@ -62,9 +62,53 @@ Smoke passed 4/4 (`21201598`): widths 45 / 81 / 557 / 593, stereo returning real
 depth at 0.61–6.00 m and 100% finite, lidar 30% finite as a horizontal 360° scan
 in a corridor should be.
 
+**Result, 4 of 4 COMPLETED at 6,000 iterations.** Read from the event files:
+
+| arm | ep_len | reward | terrain level |
+|---|---|---|---|
+| blind (control) | 400.5 | 12.362 | 0.5191 |
+| **lidar** | **432.2** | **15.416** | **0.7814** |
+| stereo | 323.2 | 7.677 | **0.0005** |
+| both | 355.5 | 9.501 | 0.0624 |
+
+**Lidar beats the blind control by 51% on terrain level** (0.78 against 0.52) and
+25% on reward. **Stereo is far worse than blind** — pinned at 0.0005, effectively
+never leaving level 0 — and it drags `both` down with it, from lidar's 0.78 to
+0.06. Adding the cameras to the lidar destroys the lidar advantage.
+
+The likely mechanism is width, and it is already documented in this repo:
+`depth_obs`'s docstring warns that fed raw to upstream's MLP the depth would be
+"99% of the input width and the first layer would be almost entirely depth
+weights". Stereo is **512 of 557** observations here, 92%. Lidar is 36 of 81,
+44%. This is the same shape as "giving them eyes made it worse" on the lift,
+now on locomotion.
+
+**What this is not.** `maze_env_cfg.py` defines no rewards, terminations or
+success terms of its own — it inherits the locomotion objective, and the maze
+walls, arrow plates and button sit in the scene as static geometry. So the four
+arms were scored on velocity tracking and the terrain curriculum with obstacles
+in the way, **not** on navigating a maze or reading an arrow. The comparison
+between sensors is sound because all four arms share the objective; the task
+described in `docs/MAZE_RIG.md` — approach, address, sweep, arrow-following — is
+designed and not yet implemented.
+
 | # | id | outcome |
 |---|---|---|
-| 1 | `21218766` | running — 4 arms, `slurm/93_maze_ppo.sbatch` |
+| 1 | `21218766` | **4 of 4 COMPLETED** (5:04–8:30) — table above |
+
+### Cloth sorting — reopened against a coarser mesh · `running` — 2026-09-09
+G-C1 measured 182 env-steps/s on a **961-vertex** cloth and closed the task as
+scripted-not-RL. This reopens it on the one axis that number leaves open: mesh
+resolution. `results/cloth_sort_bench.md` sweeps 64, 100, 144 and 256 vertices
+against a measured kinematic baseline of ~350 env-steps/s at 1 env.
+
+The bench file labels the unmeasured rows `planned_isaac` and
+"not yet measured", which is the right discipline — they are a plan, not data.
+
+| # | id | outcome |
+|---|---|---|
+| 2 | `21228030`–`21228033` | queued — c1 smoke, isaac eval, deform smoke, sort bench |
+| 1 | `21228029` | FAILED — "produced no summary line", so the guard caught it rather than passing an empty run |
 
 ### Spawn rotation — found and photographed; task env still disagrees · `open`
 **The rotation is settled, by picture.** `results/spawn_shots/` holds a spawn
@@ -321,13 +365,34 @@ leave the grippers inert and the variant indistinguishable from its control.
 | 2 | `21105399` | **9 of 9 COMPLETED** — grippers survive **~450 steps against 8**, reward **+14.3 against −0.79**. Task success still 0 in every cell. |
 | 1 | `21105363` | smoke 3/3, episode lengths 7.3–7.4 |
 
-### Cloth sorting — G-C1 throughput · `done` — the answer is scripted, not RL
-Decided RL against scripted demo, and the answer is **scripted**. Twelve probes;
-the first eleven measured something other than cloth or died before stepping.
-The design is `docs/CLOTH_SORT.md` -- 5 garments, 3 baskets, sweeping rather
-than picking because the robot has no fingers. It is not implemented and no
-policy was trained: the gate exists so that decision costs twelve short probes
-instead of weeks of GPU, and that is what it did.
+### Cloth sorting — rigid-to-deformable ladder · `open` — redesigned 2026-09-10
+G-C1 still stands and is not being re-run. End-to-end deformable RL stays
+rejected. The task is now a hierarchical ladder (`docs/CLOTH_SORT.md`): rigid
+proxy → one 8×8 Newton cloth → five-garment eval (Mode B). No 8,000-iter
+cloth job and no 2048-env cloth job were queued.
+
+Kinematic C0 / C1 / C4-BC / C5 ran on the login node (no Slurm id). Scripted
+C0, linear BC, and Mode-B C5 all score **1.00**. That is the planner, not
+Isaac, and not cloth. Cheap Isaac jobs were queued 2026-09-10: rigid smoke,
+3-iter rigid train smoke, 4-episode C0 eval, 8×8 deform smoke, throughput
+bench. None of those have numbers yet.
+
+| # | id | outcome |
+|---|---|---|
+| 5 | `21228033` | queued, afterok 21228029 — `95b` throughput bench (rigid 8→64, then 8×8/10×10 at 8 envs). Not training. |
+| 4 | `21228032` | queued, afterok 21228029 — `95f` 8×8 Newton smoke, 8 envs × 6 steps |
+| 3 | `21228031` | queued, afterok 21228029 — `95e` 4 scripted C0 episodes on the rigid proxy |
+| 2 | `21228030` | queued, afterok 21228029 — `95d` 3-iter `train.py` on `ClothSort-BHL-Rigid-Oracle-v0`, 64 envs |
+| 1 | `21228029` | queued — `95c` rigid construct/reset/step, 4 envs × 6 steps |
+| — | login node | 28 unit tests pass. C0 scripted 1.00 / 64 eps. C1 residual eval 1.00, worse efficiency than scripted (3.45 vs 1.05 sweeps under DR). C4 kinematic BC 1.00 / 64 eps, 1.14 sweeps. C5 Mode B scripted 1.00 / 32 eps, 5 sweeps. Cost gate exits 2 on 2048-env deformable. |
+
+### Cloth sorting — G-C1 throughput · `done` — the gate that forced the redesign
+Decided end-to-end cloth RL against any cheaper method, and the answer is
+**do not train on cloth**. Twelve probes; the first eleven measured something
+other than cloth or died before stepping. The original design is preserved in
+the history of `docs/CLOTH_SORT.md`. The gate exists so that decision costs
+twelve short probes instead of weeks of GPU, and that is what it did. The
+redesign above is the response, not a retraction of these numbers.
 
 | # | id | outcome |
 |---|---|---|
@@ -773,6 +838,7 @@ came from.
 | `21186402`, `21186403`, `21191526` | planted-spawn re-runs — cancelled; plant_feet now opt-in |
 | `21191713`–`21192782` | arm-geometry: the "yaw" was a roll; FACE+SYM 4-tuple now default |
 | `21192861`, `21192898`, `21192899` | upright-spawn 400-iter probes: welded yaw, welded yaw+plant, gripper yaw |
+| `21228029`–`21228033` | cloth-sort cheap Isaac: rigid smoke, 3-iter train smoke, C0 eval, 8×8 deform smoke, throughput bench |
 | `21186589`, `21186615`, `21191514`, `21191527` | ice-export — v51 segfault / v60 ckpt mismatch |
 | `21105320` | Tier 1 MARL rows |
 | `21076488`, `21076968`, `21077648` | base-height probe |
