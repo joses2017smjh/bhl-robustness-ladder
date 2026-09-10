@@ -15,7 +15,7 @@ mkdir -p "$REPO/docs/gifs" "$REPO/results/clips"
     --upstream "$UPSTREAM" --cache-dir "${CACHE_DIR:-/scratch/sanchej7/mjcf-ice}" \
     --out "$REPO/results/clips/ice_pair.mp4" \
     --gif "$REPO/docs/gifs/ice_pair.gif" \
-    --seconds 12 --vx 0.4 --world flat --gif-width 860
+    --seconds 12 --vx 0.4 --world flat --depth-of depth --gif-width 860
 rc=$?
 echo "render_multi exit: $rc"
 # Count the artefact, not the exit code.

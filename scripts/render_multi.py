@@ -27,7 +27,7 @@ import mujoco
 import numpy as np
 from omegaconf import OmegaConf
 
-from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController
+from bhl_robust.eval.depth_controller import DepthRlController
 from bhl_robust.eval.depth import FAR_M, NEAR_M, _turbo
 from bhl_robust.eval.livery import JOINT_RGBA, SHELL_RGBA
 from bhl_robust.eval.mjcf_assets import EGO_CAM_NAME
@@ -278,7 +278,14 @@ def main():
     cfgs = [OmegaConf.load(d) for d in args.deploy]
     model, slots = build_multi(
         args.upstream, args.cache_dir, n, args.labels, variant=args.variant,
-        world=args.world, ego_camera=depth_slot is not None, hero=hero,
+        world=args.world,
+        # Cameras whenever any policy consumes depth, not only when the
+        # display strip is asked for. --depth-of draws a picture; a
+        # depth-conditioned network needs the camera to exist either way.
+        ego_camera=(depth_slot is not None
+                    or any(c.num_observations > MultiRunner.PROPRIO_DIM
+                           for c in cfgs)),
+        hero=hero,
     )
 
     depth_cam = None
@@ -290,11 +297,18 @@ def main():
 
     ctrls = []
     for c in cfgs:
-        rc = RlController(c)
+        rc = DepthRlController(c)
         rc.load_policy()
         ctrls.append(rc)
 
     run = MultiRunner(model, slots, cfgs, ctrls)
+
+    # Feed depth to any policy that was trained with it. Without this the
+    # network gets the proprioceptive vector alone -- 45 numbers where the ice
+    # depth arm wants 301 -- and the run dies at the first inference instead of
+    # quietly producing a clip of a policy driven by the wrong input.
+    run.enable_depth_obs([c.num_observations for c in cfgs])
+
     rng = np.random.default_rng(args.seed)
     run.reset(rng)
 
@@ -340,7 +354,7 @@ def main():
         targets = []
         for i in range(n):
             obs = run.observe(i, command)
-            targets.append(ctrls[i].update(obs))
+            targets.append(ctrls[i].update(obs, run.depth_for(i)))
         run.step(targets)
 
         for i in range(n):

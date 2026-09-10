@@ -7,7 +7,7 @@
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:1
 #SBATCH --time=24:00:00
-#SBATCH --array=0-3
+#SBATCH --array=0-6
 #SBATCH --output=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%A_%a.out
 #SBATCH --error=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%A_%a.out
 
@@ -29,7 +29,7 @@ export OV_CACHE=/scratch/$USER/ov-cache-${SLURM_JOB_ID}
 export CUDA_CACHE_PATH=/scratch/$USER/nv-computecache-${SLURM_JOB_ID}
 mkdir -p "$OV_CACHE" "$CUDA_CACHE_PATH"
 
-ARMS=(Blind Lidar Stereo Both)
+ARMS=(Blind Lidar Stereo Both StereoP8 StereoP16 BothP16)
 A=${ARMS[$SLURM_ARRAY_TASK_ID]}
 export TASK="Velocity-BHL-Maze-${A}-v0"
 export RUN_NAME="${RUN_PREFIX:-maze}-${A,,}-s${SEED:-0}"

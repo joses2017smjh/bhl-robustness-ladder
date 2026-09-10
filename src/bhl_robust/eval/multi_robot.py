@@ -21,7 +21,7 @@ import mujoco
 import numpy as np
 
 from bhl_robust.eval.livery import apply_livery
-from bhl_robust.eval.mjcf_assets import prepare_mjcf
+from bhl_robust.eval.mjcf_assets import EGO_CAM_NAME, prepare_mjcf
 
 # Distinct tints so a four-robot shot is readable without reading a caption.
 # Order is the slot order passed to build_multi.
@@ -248,6 +248,11 @@ class MultiRunner:
         self.eff = np.asarray(c0.effort_limits, dtype=np.float32)
         self.qdefault = np.asarray(c0.default_joint_positions, dtype=np.float32)
         self.alive = [True] * len(slots)
+        # Depth is off until `enable_depth_obs` is called with the policies'
+        # observation widths; a blind crew never builds a renderer.
+        self._depth_r = None
+        self._depth_dim: dict[int, int] = {}
+        self._depth_pool: dict[int, int] = {}
 
     def reset(self, rng):
         mujoco.mj_resetData(self.m, self.d)
@@ -266,16 +271,95 @@ class MultiRunner:
             c.prev_actions[:] = 0.0
             c.policy_observations[:] = 0.0
 
+    # ---------------------------------------------------------------- depth
+
+    #: Matches `depth_env_cfg.CAM_RANGE`. A real depth sensor reports its
+    #: maximum beyond range rather than NaN, and the Isaac term clips the same
+    #: way, so the two agree on what "nothing there" looks like.
+    DEPTH_CLIP = 6.0
+    #: The ray-cast camera Isaac trains against is 64x64 before pooling.
+    DEPTH_RES = 64
+
+    def enable_depth_obs(self, widths):
+        """Attach a depth renderer per robot whose policy expects depth.
+
+        `widths[i]` is that robot's total observation width, read from its
+        deploy config. Anything wider than the proprioceptive vector is depth:
+        the ice arm is 301, which is 45 + 256, a 16x16 image.
+
+        This is what `render_multi` was missing. Its `--depth-of` drew a depth
+        strip along the bottom of the frame but never fed the network, so a
+        depth-conditioned policy got 45 numbers where it wanted 301 and the
+        renderer raised rather than producing a misleading clip.
+        """
+        import mujoco as _mj
+
+        self._depth_dim = {}
+        self._depth_pool = {}
+        for i, w in enumerate(widths):
+            extra = int(w) - self.PROPRIO_DIM
+            if extra <= 0:
+                continue
+            side = int(round(extra ** 0.5))
+            if side * side != extra:
+                raise ValueError(
+                    f"robot {i}: {extra} depth values is not a square image; "
+                    f"this replay only knows how to pool square depth")
+            self._depth_dim[i] = side
+            pool = self.DEPTH_RES // side
+            if pool * side != self.DEPTH_RES:
+                raise ValueError(
+                    f"robot {i}: cannot pool {self.DEPTH_RES} to {side} evenly")
+            self._depth_pool[i] = pool
+        print(f"[depth] widths={list(widths)} proprio={self.PROPRIO_DIM} "
+              f"-> depth arms {dict(self._depth_dim)} pools {dict(self._depth_pool)}")
+        if self._depth_dim and self._depth_r is None:
+            self._depth_r = _mj.Renderer(self.m, height=self.DEPTH_RES,
+                                         width=self.DEPTH_RES)
+            self._depth_r.enable_depth_rendering()
+
+    def _depth_obs(self, i):
+        """One robot's pooled depth, scaled exactly as `depth_obs` scales it."""
+        import mujoco as _mj
+
+        side, pool = self._depth_dim[i], self._depth_pool[i]
+        cam = _mj.mj_name2id(self.m, _mj.mjtObj.mjOBJ_CAMERA,
+                             f"{self.slots[i].prefix}{EGO_CAM_NAME}")
+        if cam < 0:
+            raise RuntimeError(
+                f"robot {i} has no {EGO_CAM_NAME}; build the crew with "
+                "ego_camera=True or the depth term cannot be filled")
+        self._depth_r.update_scene(self.d, camera=cam)
+        d = np.asarray(self._depth_r.render(), dtype=np.float32)
+        d = np.nan_to_num(d, nan=self.DEPTH_CLIP, posinf=self.DEPTH_CLIP)
+        # Average pool, matching torch's avg_pool2d, then scale to [0, 1].
+        d = d.reshape(side, pool, side, pool).mean(axis=(1, 3))
+        return np.clip(d.reshape(-1) / self.DEPTH_CLIP, 0.0, 1.0).astype(np.float32)
+
+    #: Width of the proprioceptive vector `observe` builds below.
+    PROPRIO_DIM = 45
+
     def observe(self, i, command):
         s = self.slots[i]
         sd = self.d.sensordata
-        return np.concatenate([
+        obs = np.concatenate([
             sd[s.quat_adr:s.quat_adr + 4],
             sd[s.gyro_adr:s.gyro_adr + 3],
             sd[s.jpos_adr], sd[s.jvel_adr],
             np.array([3.0], dtype=np.float32),
             np.asarray(command, dtype=np.float32),
         ]).astype(np.float32)
+        return obs
+
+    def depth_for(self, i):
+        """This robot's pooled depth, or None if its policy is blind.
+
+        Kept out of `observe` on purpose: upstream's controller parses that
+        vector by fixed offsets and assembles the observation itself, so depth
+        appended there would be read as joint data. It goes to the controller as
+        a separate argument instead.
+        """
+        return self._depth_obs(i) if i in self._depth_dim else None
 
     def tilt(self, i):
         s = self.slots[i]

@@ -193,3 +193,61 @@ class MazeBothEnvCfg(MazeBlindEnvCfg):
         self.scene.lidar = make_lidar_cfg()
         self.scene.stereo_l = make_stereo_cfg("left", res=64)
         self.scene.stereo_r = make_stereo_cfg("right", res=64)
+
+# --------------------------------------------------------------- pooling sweep
+#
+# The first four arms found stereo far *worse* than blind -- terrain level
+# 0.0005 against 0.5191 -- and dragging `both` down from lidar's 0.7814 to
+# 0.0624. Two explanations fit that and they have different consequences:
+#
+#   a) cameras genuinely do not help on this task
+#   b) the stereo term drowned the proprioception it was added to
+#
+# At pool=4 stereo is 512 of 557 observations, **92%**, against lidar's 36 of 81
+# (44%). `depth_obs` warns about exactly this: fed raw, depth would be "99% of
+# the input width and the first layer would be almost entirely depth weights".
+# So (b) is the more likely reading and it is testable by changing one number.
+#
+# The arm that decides it is `StereoP16`: 4x4 per eye is 32 of 77 observations,
+# **42%**, matched to lidar's 44%. Same information fraction, different sensor.
+# If that arm still sits at the floor, cameras do not help here. If it recovers,
+# the first result was an encoding artefact and should be reported as one.
+
+
+@configclass
+class MazeStereoP8EnvCfg(MazeStereoEnvCfg):
+    """8x8 per eye: 128 of 173 observations, 74%."""
+
+    def __post_init__(self):
+        super().__post_init__()
+        for grp in (self.observations.policy, self.observations.critic):
+            for term in ("stereo_l", "stereo_r"):
+                getattr(grp, term).params["pool"] = 8
+
+
+@configclass
+class MazeStereoP16EnvCfg(MazeStereoEnvCfg):
+    """4x4 per eye: 32 of 77 observations, 42% -- matched to lidar's 44%.
+
+    This is the arm that separates "cameras do not help" from "cameras were
+    drowned out", because it is the only one that holds the information
+    *fraction* fixed while changing the sensor.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        for grp in (self.observations.policy, self.observations.critic):
+            for term in ("stereo_l", "stereo_r"):
+                getattr(grp, term).params["pool"] = 16
+
+
+@configclass
+class MazeBothP16EnvCfg(MazeBothEnvCfg):
+    """Lidar plus the pooled stereo: does stereo still poison the lidar arm?"""
+
+    def __post_init__(self):
+        super().__post_init__()
+        for grp in (self.observations.policy, self.observations.critic):
+            for term in ("stereo_l", "stereo_r"):
+                getattr(grp, term).params["pool"] = 16
+

@@ -15,7 +15,8 @@ _compat.apply()
 from . import coop_crew_generated as crew  # noqa: F401
 from . import (push_env_cfg, terrain_env_cfg, arms_env_cfg, collision_env_cfg,
                coop_lift_env_cfg, coop_depth_env_cfg, coop_hard_env_cfg,
-               depth_env_cfg, rgb_env_cfg, scan_env_cfg, task_v2_env_cfg)
+               depth_env_cfg, rgb_env_cfg, scan_env_cfg, task_v2_env_cfg,
+               cloth_sort_env_cfg)
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.biped import agents
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.humanoid import agents as arm_agents
 
@@ -340,10 +341,33 @@ for _id, _cfg in (
     ("Velocity-BHL-Maze-Lidar-v0", maze_env_cfg.MazeLidarEnvCfg),
     ("Velocity-BHL-Maze-Stereo-v0", maze_env_cfg.MazeStereoEnvCfg),
     ("Velocity-BHL-Maze-Both-v0", maze_env_cfg.MazeBothEnvCfg),
+    # Pooling sweep: does coarser stereo recover, or do cameras simply not help?
+    ("Velocity-BHL-Maze-StereoP8-v0", maze_env_cfg.MazeStereoP8EnvCfg),
+    ("Velocity-BHL-Maze-StereoP16-v0", maze_env_cfg.MazeStereoP16EnvCfg),
+    ("Velocity-BHL-Maze-BothP16-v0", maze_env_cfg.MazeBothP16EnvCfg),
 ):
     gym.register(
         id=_id,
         entry_point="isaaclab.envs:ManagerBasedRLEnv",
         disable_env_checker=True,
         kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG},
+    )
+
+# ---------------------------------------------------------------- cloth-sort
+# Hierarchical rigid-to-deformable ladder. See docs/CLOTH_SORT.md.
+# Rigid ids are the training path. Deformable ids construct a Newton
+# MeshRectangle (default 8×8) and are cost-gated before any job. ActiveCloth
+# is Mode B: one live cloth plus four rigid proxies, not five live cloths.
+_CLOTH_PPO = cloth_sort_env_cfg.ClothSortPPORunnerCfg
+for _id, _cfg in (
+    ("ClothSort-BHL-Rigid-Oracle-v0", cloth_sort_env_cfg.ClothSortRigidEnvCfg),
+    ("ClothSort-BHL-RigidFive-Oracle-v0", cloth_sort_env_cfg.ClothSortRigidFiveEnvCfg),
+    ("ClothSort-BHL-Deformable-Oracle-v0", cloth_sort_env_cfg.ClothSortDeformableEnvCfg),
+    ("ClothSort-BHL-ActiveCloth-Oracle-v0", cloth_sort_env_cfg.ClothSortActiveDeformableEnvCfg),
+):
+    gym.register(
+        id=_id,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _CLOTH_PPO},
     )

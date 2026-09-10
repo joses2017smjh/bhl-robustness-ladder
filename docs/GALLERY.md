@@ -20,6 +20,7 @@ Tell me which names you want on the front page.
 | [`multi_race`](#four-policies-at-once) | MuJoCo | 4 policies, one shove | **works** |
 | [`multi_lab`](#four-policies-at-once) | MuJoCo | 4 policies, obstacle course + depth | **works** |
 | [`depth_pair`](#depth) | MuJoCo | ray-cast depth | **works** |
+| [`ice_pair`](#b3--ice) | MuJoCo | B3 — blind vs depth on flush friction patches | **works** — depth +10.6% |
 | [`squat_pick`](#the-cooperative-lift) | MuJoCo | scripted reachability control | n/a — scripted |
 | [`carry_2`](#the-cooperative-lift) | MuJoCo | cooperative cube lift | **fails** |
 | [`carry_3`](#the-cooperative-lift) | MuJoCo | learned vs scripted | **fails** |
@@ -68,6 +69,26 @@ Two policies, one command, one world. Left is the intervention, right the contro
 | | |
 |---|---|
 | <img src="gifs/depth_pair.gif" width="420"> | **`depth_pair`** — left the scored episode, right the robot's own 64×64 depth. MuJoCo's offscreen depth buffer, not Isaac's ray-caster. |
+
+## B3 — ice
+
+The strongest result in the repo, and until now the only one with no picture.
+Depth beats blind by **10.6%** (final curriculum level 1.519 against 1.374) on
+friction patches that are **flush with the floor** — ray-cast-verified, so the
+sensor cannot see them. Colouring them so a camera *could* see them changes
+nothing (1.394).
+
+It had no clip because `render_multi` could not drive a depth-conditioned
+policy: upstream's controller assembles the observation from raw pieces and
+knows nothing about depth, so a 301-wide network was handed 45 numbers and the
+run raised before drawing a frame. `DepthRlController` appends the term where
+Isaac puts it — after `prev_actions` — and the clip is the same harness that
+produced the numbers.
+
+| | |
+|---|---|
+| <img src="gifs/ice_pair.gif" width="640"> | **`ice_pair`** — green blind, red depth, identical command. Along the bottom is the depth robot's own egocentric view and a scrolling waterfall of the centre column. **14 MB.** |
+
 
 ## The cooperative lift
 
