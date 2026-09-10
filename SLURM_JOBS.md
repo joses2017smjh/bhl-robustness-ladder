@@ -48,6 +48,47 @@ the cube pair; it faces along -+x rather than -+y so it needs the two headings
 | 2 | `21199344`, `21199345` | 1 COMPLETED, 5 running, 3 NODE_FAIL at ~19 h (infrastructure), 1 CUDA illegal access, 1 abort, 6 plank cells cancelled |
 | 1 | `21186402`, `21186403` | cancelled — trained on the lying-down spawn |
 
+### B3 ice clip — DONE · `done` — 2026-09-10
+`render_multi` can now drive a depth-conditioned policy, and B3 has a picture:
+`docs/gifs/ice_pair.gif`, green blind against red depth on flush friction
+patches, with the depth panel and waterfall along the bottom.
+
+The blocker was that upstream's `RlController` parses raw pieces by fixed
+offsets and assembles the observation itself, so a 301-wide network was handed
+45 numbers. `DepthRlController` (workspace subclass; `external/` stays pristine)
+appends depth after `prev_actions`, which is where Isaac's declaration order
+puts it.
+
+**The guard was tightened after it nearly did the wrong thing.** It first
+accepted any square extra width — and the maze lidar arm is 45 + 36, with 36 a
+perfect 6×6. It was refused only because 64 does not pool evenly to 6, which is
+luck, not a guard. It now refuses by *sensor kind*: this replay renders one
+forward depth camera and nothing else, so lidar and stereo are refused by name
+rather than reshaped to fit.
+
+| # | id | outcome |
+|---|---|---|
+| 3 | `21234171` | regression after tightening the guard — still exit 0, 13 MB |
+| 2 | `21234053` | **exit 0, clip written** |
+| 1 | `21233950`, `21233969` | 45-into-301: depth appended in the wrong place, before the controller's own assembly |
+
+### B5 maze — stereo pooling sweep · `running` — 2026-09-10
+Does coarser stereo recover, or do cameras simply not help? At `pool=4` stereo
+is 512 of 557 observations (92%) against lidar's 36 of 81 (44%). `StereoP16`
+pools to 4×4 an eye — 32 of 77, **42%**, matched to lidar — so it holds the
+information fraction fixed and changes only the sensor.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21233916_[4-6]` | running — StereoP8, StereoP16, BothP16 |
+
+### Cloth sorting — jobs cancelled · `open`
+`21228030`–`21228033` (c1 smoke, isaac eval, deform smoke, sort bench) were all
+cancelled before running; `21228029` failed its own guard with "produced no
+summary line". So the mesh-resolution sweep that would reopen G-C1 has not
+produced a measurement yet — `results/cloth_sort_bench.md` still marks every
+Isaac row "not yet measured", which is accurate.
+
 ### B5 — maze with lidar and stereo · `running` — queued 2026-09-08
 Four arms, one variable: blind (control), lidar, stereo, both. 6,000 iterations
 at `NUM_ENVS=2048`, identical across all four — the stereo arms carry two
@@ -373,18 +414,246 @@ cloth job and no 2048-env cloth job were queued.
 
 Kinematic C0 / C1 / C4-BC / C5 ran on the login node (no Slurm id). Scripted
 C0, linear BC, and Mode-B C5 all score **1.00**. That is the planner, not
-Isaac, and not cloth. Cheap Isaac jobs were queued 2026-09-10: rigid smoke,
-3-iter rigid train smoke, 4-episode C0 eval, 8×8 deform smoke, throughput
-bench. None of those have numbers yet.
+Isaac, and not cloth.
+
+**The first Isaac attempt failed and took the other four with it.** `21228029`
+died at 37 s and the four `afterok` jobs sat in `DependencyNeverSatisfied`
+until they were cancelled, so the whole 2026-09-10 batch produced **no Isaac
+number at all**. Cause, from the traceback rather than the exit code: the
+scene built correctly — robot at 22 joints, table, baskets, garment, event
+manager — and `ActionManager._prepare_terms` then called
+`term_cfg.class_type(...)` on `None`. `SweepActionCfg` declared
+`class_type: type = None` and patched the attribute afterwards
+(`SweepActionCfg.class_type = SweepAction`), but `configclass` freezes field
+defaults when it builds the dataclass, so every *instance* still carried
+`None`. Reproduced against this stack's own `configclass` on the login node in
+seconds; `SweepAction` is now defined before its cfg and the default is the
+class itself.
+
+Two further things were fixed before re-queuing, both invisible to an exit
+code. `cloth_resolution` was assigned *after* construction in the bench and
+smoke, but the cloth mesh is spawned inside `__post_init__` — a "10×10" bench
+row would have been an 8×8 cloth wearing the wrong label. Resolution now goes
+through `build_cfg()`, which passes it to `__init__` and reads the spawned
+resolution back off the scene, and the CSV reports what the scene actually
+built. The bench also now chains on the deformable smoke rather than the rigid
+one, because it is the deformable cell it needs.
+
+Four static guards were added to `tests/test_cloth_sort.py` (34 tests, all
+passing). They parse the Isaac modules rather than importing them — the login
+node cannot bootstrap Kit — and each was verified to **fail** when its bug is
+reintroduced.
+
+**Attempt 2 got further and died one manager later.** `21233802` built the
+scene, built the action manager — the `class_type` fix held — reset, and
+failed on the first `env.step()` inside the *termination* manager:
+`NotImplementedError: "bitwise_and_cuda" not implemented for 'Float'`, from
+`_in_basket`. Python's `&` binds tighter than `<=`, so
+
+    (p[:,0]-cx).abs() <= hx & (p[:,1]-cy).abs() <= hy & ...
+
+is not a mask — it is a chained comparison against `hx & (...)`. The basket
+predicate has never once evaluated. Each comparison is parenthesised now.
+
+Fixing that exposed a second thing in the same predicate: it re-derived the
+basket box from `BASKET_INNER` using a **half**-extent for z, so the Isaac
+ceiling was 0.07 m where `layout.basket_aabb` — what the kinematic ladder
+scores against — uses the full 0.14 m. The two engines were scoring the same
+garment differently, which is exactly the drift `docs/CLOTH_SORT.md` claims
+cannot happen because both read one layout object. Both predicates now read
+`basket_aabb`.
+
+Also fixed, found while reading the step path rather than from a failure:
+`progress_to_basket` kept `_bhl_cloth_prev_dist` across episode boundaries, so
+the first step after a reset paid the policy for the garment teleporting back
+to spawn. That step is zeroed now. It would not have crashed anything — it
+would have quietly biased C1's reward toward whichever spawn landed nearer a
+basket.
 
 | # | id | outcome |
 |---|---|---|
-| 5 | `21228033` | queued, afterok 21228029 — `95b` throughput bench (rigid 8→64, then 8×8/10×10 at 8 envs). Not training. |
-| 4 | `21228032` | queued, afterok 21228029 — `95f` 8×8 Newton smoke, 8 envs × 6 steps |
-| 3 | `21228031` | queued, afterok 21228029 — `95e` 4 scripted C0 episodes on the rigid proxy |
-| 2 | `21228030` | queued, afterok 21228029 — `95d` 3-iter `train.py` on `ClothSort-BHL-Rigid-Oracle-v0`, 64 envs |
-| 1 | `21228029` | queued — `95c` rigid construct/reset/step, 4 envs × 6 steps |
-| — | login node | 28 unit tests pass. C0 scripted 1.00 / 64 eps. C1 residual eval 1.00, worse efficiency than scripted (3.45 vs 1.05 sweeps under DR). C4 kinematic BC 1.00 / 64 eps, 1.14 sweeps. C5 Mode B scripted 1.00 / 32 eps, 5 sweeps. Cost gate exits 2 on 2048-env deformable. |
+| 4 | `21233957`–`21233961` | **rigid smoke COMPLETED (0:20)** with the collider-only furniture, and **`95d` C1 training smoke COMPLETED** — 3 logged iterations, mean episode length **12.71 → 12.84 → 12.83** against 1.00 before the tilt fix, so the gate passes. **1,001 steps/s at 64 envs** is this task's first real Isaac rigid throughput. But `Episode_Termination/fallen = 1.0000` and `Episode_Reward/progress = 0.0000`: the robot topples in ~0.51 s every episode and the garment never moves. See the C0-falls entry below. |
+| 3 | `21233865`–`21233869` | **rigid smoke COMPLETED (0:22)** — both rigid ids construct, reset and step: 22 joints, 2 arms, action_dim 5. First Isaac cloth-sort cell ever to pass. Then: `95d` FAILED at 0:31, guard caught `mean episode length is 1.00`; `95e` COMPLETED but on that same broken predicate, so its numbers do not count; `95f` FAILED — `FrameView prim '/World/envs/env_0/table' is a Newton physics body`. |
+| 2 | `21233802` | FAILED at 1:14 — `bitwise_and_cuda` in `_in_basket`; got past construction, reset and the action manager. Dependents cancelled. |
+| 1 | `21228029` | FAILED at 0:37 — `SweepActionCfg.class_type` was `None`. Dependents never ran. |
+| — | login node | 43 unit tests pass (13 new: Isaac-wiring guards each verified to fail when its bug is reintroduced, plus spawn-relative tilt math). C0 scripted 1.00 / 64 eps. C1 residual eval 1.00, worse efficiency than scripted (3.45 vs 1.05 sweeps under DR). C4 kinematic BC 1.00 / 64 eps, 1.14 sweeps. C5 Mode B scripted 1.00 / 32 eps, 5 sweeps. Cost gate exits 2 on 2048-env deformable. |
+
+**Attempt 3 reached the training path and the guard earned its keep.** The
+rigid smoke passed. `95d` then failed in 31 seconds with `mean episode length
+is 1.00` — every episode terminating on step one, the same signature that
+trained nine v2 arms for 8,000 iterations on one-step episodes (`21093953`,
+nine GPU-days). This time it cost half a minute.
+
+Cause: `fallen` tested `R[2,2] < 0.70` against an absolute convention. The
+task spawns at `(0, 0, 1, 0)` — the quaternion the spawn photographs
+(`21218517`/`21218627`) show standing, matching MuJoCo to 9 mm — and that
+quaternion has `R[2,2] = -1`. So the predicate called a standing robot fallen
+at reset. Rather than re-litigate this repo's long-running argument about what
+this asset's up-axis is, the fall test is now measured **relative to the spawn
+pose**: it reads 0 at reset by construction, and a yaw jitter still reads 0
+because yaw is not tilt. The algebra lives in
+`bhl_robust.cloth.kinematics.relative_up_z` and is shared by the torch path
+and the numpy tests instead of being written twice.
+
+`95e` COMPLETED in the same batch and reported `success_rate 0.0`,
+`mean_steps_to_success 1.0`. **That is not a task result** — it is the same
+one-step termination, measured. It is being re-run and nothing is published
+from it.
+
+`95f` failed on `ValueError: FrameView prim '/World/envs/env_0/table' is a
+Newton physics body` — the same class as G-C1 attempt 5 (`21125073`). The
+table and basket walls carried `rigid_props`, which Newton promotes to a
+physics body that `AssetBaseCfg` refuses. They are collider-only now, **in the
+rigid scene as well as the deformable one**, so C0/C1 and C2/C3 are not
+quietly scoring different table physics. The maze, plinth, shelf and net keep
+`rigid_props` and are untouched; a test enforces that split.
+
+**Attempt 4: the rigid half runs, and the finding is that the robot falls
+over.** `95c` passed with the collider-only furniture. `95d` passed its gate —
+mean episode length **12.71 / 12.84 / 12.83** against 1.00 before the tilt fix
+— and `95e` independently ran 12.25 steps per episode against 1.0. The two
+agree, which is the point of running both.
+
+What they agree on is a negative result: `Episode_Termination/fallen =
+1.0000` and `Episode_Reward/progress = 0.0000`. The robot topples in about
+0.51 s of every episode and the garment never moves toward a basket. The
+layout is not the cause — the robot at x = −0.22 is clear of the table
+(x ≥ 0.17) and of the baskets (x ≤ 0.22), checked geometrically. The
+remaining hypothesis is that it cannot *hold* the pinch/squat pose: legs are
+position-controlled at stiffness 20 with a 6 Nm effort limit at hips −0.85 /
+knees 1.45, and FINDINGS already records the coop policy's torso descending to
+−0.23 m and plateauing rather than holding a squat. `slurm/95g` measures that
+directly — three leg poses, zero action, tilt and root height — before
+anything is changed. Decision rule 1 in `docs/CLOTH_SORT.md` says fix the
+geometry or the controller before training, so no C1 arm is queued.
+`21234084` is that probe, queued 2026-09-10.
+
+**`21233959`'s own numbers were not trustworthy either, and that is now
+fixed.** `eval_isaac.py` reported `success_rate` and `fall_rate` while
+assigning neither: `em.fell` was never written, and the success lookup did
+`"success" in tm._term_dones` where `_term_dones` is a
+`(num_envs, n_terms)` **tensor**, not a dict — that raises `RuntimeError`, and
+a bare `except Exception: pass` turned it into a silent `False`. Both rates
+were structurally pinned to 0.0 and could not have moved whatever the robot
+did. They read through the public `termination_manager.get_term()` now and
+raise if a term is missing. The `success_rate 0.0` in
+`results/cloth/isaac_c0_scripted.json` is therefore **not evidence of
+anything** and is superseded by the next eval.
+
+**The Newton cloth builds.** `21233960` got the deformable scene up for the
+first time: `Newton deformable object initialized`, 8 instances, and — the
+number that matters — **81 particles per body at `resolution=8`, not 64**.
+Isaac Lab's `MeshRectangleCfg(resolution=(n, n))` counts *cells*, so the mesh
+carries `(n+1)²` vertices. The bench was about to label that mesh "64
+vertices", which is the single number a cloth throughput row is compared on.
+`isaac_grid_counts` reports it correctly now and a test pins 8→81, 10→121,
+16→289.
+
+It then failed on the table again, still `FrameView prim ... is a Newton
+physics body` — so dropping `rigid_props` was **not** sufficient. Isaac Lab's
+own Newton cloth example
+(`lift_franka_soft/franka_cloth_env_cfg.py`) spawns its static `cube` with
+`collision_props` and **no `physics_material`**, and that binding was the only
+remaining difference. Collider-only boxes now carry neither. Fidelity note,
+recorded rather than buried: those boxes take the default surface material
+instead of 0.9/0.8, contact friction combines both surfaces, and the garment
+keeps its own randomized material — and it is applied to the rigid scene too,
+so C0/C1 and C2/C3 still compare like with like.
+
+`21234084` (spawn probe) failed on a device-mixing bug of mine — Isaac Lab 3.x
+returns some of these as warp ProxyArrays and some as cuda tensors. Fixed;
+requeued as `21234166`.
+
+| re-queued 2026-09-10 | |
+|---|---|
+| `21234165` | `95f` deformable smoke, collider-only furniture with no material |
+| `21234166` | `95g` spawn probe, device fix |
+| `21234167` | `95b` throughput bench, afterok 21234165 |
+
+**The deformable smoke passes.** `21234165`: all four ids construct, reset and
+step, including **both** Newton cells. Dropping `physics_material` was the
+missing piece. First BHL cloth numbers, 8 envs, 8×8 cloth (**81** vertices):
+
+| id | build | step throughput (unwarmed, 6 steps) |
+|---|---:|---:|
+| `ClothSort-BHL-Rigid-Oracle-v0` | 6.0 s | 140 env-steps/s |
+| `ClothSort-BHL-RigidFive-Oracle-v0` | 1.2 s | 145 env-steps/s |
+| `ClothSort-BHL-Deformable-Oracle-v0` | **56.5 s** | 375 env-steps/s |
+| `ClothSort-BHL-ActiveCloth-Oracle-v0` (Mode B) | 9.3 s | 86 env-steps/s |
+
+These are the smoke's own liveness figures — six unwarmed steps — not bench
+numbers, and they are labelled that way in the file. `21234167` is the warmed
+bench. The one comparison worth making already: G-C1's Franka scene, **961**
+vertices and a 7-DoF arm, managed 182 env-steps/s at 8 envs. An 81-vertex
+cloth under a 22-DoF humanoid is in the same range or better, which is the
+whole bet the redesign made — buy the fidelity down, not the parallelism up.
+
+**The spawn probe (`21234166`) rules out the squat.** Three leg poses,
+zero action, 60 steps:
+
+| pose | final tilt | root z | fell (>0.78 rad) |
+|---|---:|---:|---|
+| configured squat | 0.267 rad | −0.199 | **no** |
+| half squat | 0.045 rad | −0.108 | **no** |
+| default (no squat) | 0.142 rad | −0.139 | **no** |
+
+None of them falls. Tilt oscillates up to 0.44 rad and the root **sinks
+12–20 cm in every pose**, including the one with no squat at all — so the
+depth of the crouch is not the variable, and `21233958`'s
+`fallen = 1.0000` is not "the robot cannot hold a squat". What the probe shows
+is a robot with no balance control: position targets sag under gravity and it
+wobbles to within half the fall limit before the task does anything. Adding
+policy-driven arm motion on top of that is what carries it past 0.78 rad
+inside ~13 steps.
+
+That is a design question — this task needs a balance controller, or a
+stationary base, or a fall limit chosen for manipulation rather than
+locomotion — and it is not something to pick silently. **No C1 arm is queued
+and no cloth-sort success rate is claimed.**
+
+**The throughput bench landed, and it is the redesign's central claim.**
+`21234167`, warmed (3 throwaway steps, then 40 timed):
+
+| deformables | resolution | vertices | envs | env-steps/s |
+|---:|---|---:|---:|---:|
+| 0 | — | 0 | 8 | 128.6 |
+| 0 | — | 0 | 32 | 623.9 |
+| 0 | — | 0 | 64 | **1,117.6** |
+| 1 | 8×8 | **81** | 8 | **467.2** |
+| 1 | 10×10 | **121** | 8 | 438.3 |
+
+Against G-C1 (`21185969`) — Franka, 7 DoF, one **961**-vertex cloth — at the
+same 8 envs: **467 against 182**, a 2.6× speed-up while carrying three times
+the DoF. Bought entirely by dropping mesh resolution, which is what the
+redesign said to do. 8×8 → 10×10 costs 6%, so Stage 2 has room to go *up* in
+fidelity. Rigid scales near-linearly (128.6 → 623.9 → 1,117.6 over 8 → 32 →
+64), which is what makes Stage 1 the right place to learn.
+
+Two things this does **not** license. Every cloth row is at **8 envs** —
+G-C1's actual finding was that cloth throughput *falls* with parallelism
+(182 → 71 across 8 → 128) and nothing here tested that. And the Newton scene
+costs **56.5 s to build** against 1–6 s rigid.
+
+**The bench's CSV was wrong even though its markdown was right.**
+`csv.DictWriter` in append mode wrote this run's field order under the header
+the kinematic bench had already left on disk, so every Isaac value landed one
+or more columns off — `env_steps_per_s` was sitting under `cloth_resolution`.
+The markdown summary is generated from the dicts, so it read correctly, which
+is exactly what would have let this ship. Both benches now go through
+`append_rows_csv`, which unions the schema and rewrites the header, keeping
+existing rows. The 5 misaligned rows were recovered by field order (their
+values match the markdown table exactly) and the file re-emitted with all 17
+rows intact; the malformed original is kept at
+`/scratch/.../cloth_sort_bench.csv.malformed`. A test now reads the committed
+CSV and fails if any row has more fields than its header.
+
+Five GPU round-trips, each returning exactly one bug, every one of a class a
+parser or a login-node unit test can see — which is where they are caught now:
+50 tests, all offline. The guards in `tests/test_cloth_sort.py` are the response:
+they parse the Isaac modules on the login node, because Kit cannot bootstrap
+there and importing them is not an option. **No Isaac cloth-sort number
+exists yet.** The table in `docs/CLOTH_SORT.md` stays kinematic-only until one
+of these jobs writes a real env-steps/s.
 
 ### Cloth sorting — G-C1 throughput · `done` — the gate that forced the redesign
 Decided end-to-end cloth RL against any cheaper method, and the answer is
@@ -838,7 +1107,13 @@ came from.
 | `21186402`, `21186403`, `21191526` | planted-spawn re-runs — cancelled; plant_feet now opt-in |
 | `21191713`–`21192782` | arm-geometry: the "yaw" was a roll; FACE+SYM 4-tuple now default |
 | `21192861`, `21192898`, `21192899` | upright-spawn 400-iter probes: welded yaw, welded yaw+plant, gripper yaw |
-| `21228029`–`21228033` | cloth-sort cheap Isaac: rigid smoke, 3-iter train smoke, C0 eval, 8×8 deform smoke, throughput bench |
+| `21228029`–`21228033` | cloth-sort cheap Isaac, attempt 1 — died on `SweepActionCfg.class_type=None`, dependents never ran |
+| `21233802`–`21233806` | cloth-sort cheap Isaac, attempt 2 — `class_type` fixed, died on the `&` precedence bug in `_in_basket` |
+| `21233865`–`21233869` | cloth-sort cheap Isaac, attempt 3 — rigid smoke passed; tilt convention and Newton furniture found |
+| `21233957`–`21233961` | cloth-sort cheap Isaac, attempt 4 — spawn-relative tilt, collider-only cloth furniture |
+| `21234084`, `21234166` | cloth spawn-stability probe — three leg poses, zero action; none falls |
+| `21234165`, `21234167` | cloth deformable smoke (passes) and warmed throughput bench |
+| `21234259` | C0 Isaac eval re-run — **fall_rate 1.00, success 0.00** over 4 episodes, agreeing with the trainer's `fallen=1.0000` from a separate code path. The repaired metrics move. |
 | `21186589`, `21186615`, `21191514`, `21191527` | ice-export — v51 segfault / v60 ckpt mismatch |
 | `21105320` | Tier 1 MARL rows |
 | `21076488`, `21076968`, `21077648` | base-height probe |

@@ -279,6 +279,10 @@ class MultiRunner:
     DEPTH_CLIP = 6.0
     #: The ray-cast camera Isaac trains against is 64x64 before pooling.
     DEPTH_RES = 64
+    #: Pooled sizes this replay can actually produce: one forward depth camera
+    #: at 16x16 or 8x8. Listed explicitly so a term of the same width but a
+    #: different *kind* -- lidar sectors, a stereo pair -- is refused by name.
+    KNOWN_DEPTH_WIDTHS = frozenset({256, 64})
 
     def enable_depth_obs(self, widths):
         """Attach a depth renderer per robot whose policy expects depth.
@@ -300,11 +304,22 @@ class MultiRunner:
             extra = int(w) - self.PROPRIO_DIM
             if extra <= 0:
                 continue
-            side = int(round(extra ** 0.5))
-            if side * side != extra:
+            # Width alone does not identify a sensor, and guessing from it is how
+            # one sensor gets fed as another. The maze lidar arm is 45 + 36, and
+            # 36 is a perfect square -- 6x6 -- so a shape-only check would have
+            # accepted it and rendered a depth image into a lidar term. It is
+            # refused here only because 64 does not pool evenly to 6, which is
+            # luck rather than a guard. So: this replay renders *one forward
+            # depth camera* and nothing else, and anything whose width does not
+            # match that exact term is refused by name.
+            if extra not in self.KNOWN_DEPTH_WIDTHS:
                 raise ValueError(
-                    f"robot {i}: {extra} depth values is not a square image; "
-                    f"this replay only knows how to pool square depth")
+                    f"robot {i}: {w} observations means {extra} beyond "
+                    f"proprioception, which is not a forward depth camera "
+                    f"({sorted(self.KNOWN_DEPTH_WIDTHS)} are). A lidar ring or a "
+                    "stereo pair needs its own sensor model in this replay, not "
+                    "a depth image reshaped to fit.")
+            side = int(round(extra ** 0.5))
             self._depth_dim[i] = side
             pool = self.DEPTH_RES // side
             if pool * side != self.DEPTH_RES:
