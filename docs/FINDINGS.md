@@ -876,6 +876,44 @@ standing. Splitting along that seam helps; splitting further does not.
 
 ---
 
+## Maze: lidar helps, and stereo helps once it stops drowning the input
+
+*Provisional: one seed per arm. Seeds 1 and 2 of the five arms that matter are
+queued (`21247911`, `21247912`). This is not a numbered finding until they land,
+and it is written up now because it reverses a reading already committed.*
+
+B5 gives the robot an RPLIDAR C1 and a global-shutter stereo pair, both
+ray-cast, and trains four arms with one variable moving: blind control, lidar,
+stereo, both. 6,000 iterations at 2,048 envs each. The first reading was that
+lidar helps and **cameras hurt** — stereo pinned at terrain level 0.001, and
+adding it to lidar dragged lidar's 0.79 down to 0.06.
+
+The pooling sweep says the cameras were never the problem; their width was.
+Terrain level, mean of the last 50 of 6,000 iterations, read from event files:
+
+| arm | stereo share of the input | terrain level |
+|---|---:|---:|
+| blind (control) | 0% | 0.545 |
+| lidar | 0% | 0.794 |
+| stereo, 16×16 an eye | **92%** | **0.001** |
+| stereo, 8×8 an eye | 74% | 0.878 |
+| stereo, 4×4 an eye | **42%** | **1.027** |
+| stereo 4×4 + lidar | 28% | **1.203** |
+
+Shrink the stereo's share and the level climbs with it. Pooled hard enough,
+stereo beats lidar, and the two together reach **2.2× the blind control**. The
+mechanism is the one the lift already showed — *Giving them eyes made it
+worse* — and that `depth_obs` warns about: a sensor that is most of the input
+swamps the first layer of upstream's MLP.
+
+Two limits on what this is. It is one seed. And `maze_env_cfg` defines no maze
+objective: it inherits locomotion velocity tracking and the terrain curriculum,
+with walls, arrows and a button as static geometry. The sensor comparison is
+sound because all seven arms share that objective; it is not maze navigation,
+which `docs/MAZE_RIG.md` designs and nothing yet implements.
+
+---
+
 ## How any of this is measured
 
 Upstream's sim2sim script constructs a gamepad, blocks on joystick input,
@@ -922,12 +960,59 @@ The full job list, the partition map, and what each one produces are in the
 
 ---
 
+## Cloth-sort: the gate stands, and the scene was never reachable
+
+This is **not** finding 14. It is a design note, so the cloth lines in the
+README read as what they are.
+
+**The throughput gate stands, and the redesign it forced works.** G-C1
+(`21185969`): Newton cloth at 961 vertices under a 7-DoF Franka does 182
+env-steps/s at 8 envs and 71 at 128; an 8,000-iteration arm at 2,048 envs is
+about 50 days. End-to-end deformable RL is rejected. The redesign buys the
+fidelity down instead of the parallelism up, and that half has a measurement:
+the same 8 envs with an **81-vertex** cloth under the **22-DoF** humanoid do
+**467 env-steps/s** (`21234167`) — 2.6× G-C1 with three times the DoF.
+
+**The manipulation half does not exist yet, because the scene could not be
+touched.** Measured two ways, and they agree:
+
+<p align="center">
+  <img src="img/cloth_reach.png" width="900" alt="Plan view: the right hand's measured reach sits behind the robot, away from the table; even turned to face the table it stops short of the table edge. Side view: the hand never gets below 0.34 m, above the 0.30 m table top.">
+</p>
+
+
+- MuJoCo FK over the whole right arm, legs in the pinch squat the controller
+  holds: the hand's lowest point is **z = 0.339 m**, above the 0.30 m table
+  top, and its furthest reach at table height is **0.305 m** from the root. The
+  garment spawned **0.74 m** away.
+- In Isaac, under the spawn quaternion `(0, 0, 1, 0)`, the robot faces **−x** —
+  away from the table — with its arm geometry matching MuJoCo to 2–4 mm
+  (`21247910`). The right hand was 0.97 m from the garment.
+
+The kinematic ladder's **1.00** (C0, C1, C4-BC, C5) came from a model with no
+reach at all: a sweep was two planar points the hand was assumed to follow. It
+also let a plan it had flagged invalid move the garment. With a measured reach
+model (`bhl_robust.cloth.reach`, a 2 cm IK table from FK and damped least
+squares) **every kinematic cell scores 0.00 and every sweep is refused**. The
+Isaac cells agree for their own reasons: the robot falls in about 13 steps and
+never moves the garment.
+
+What is reachable is a patch on the robot's right: about 0.35 × 0.35 m, never
+crossing the midline, 0.34–0.54 m high. A layout inside it is the next step,
+and the ladder's own decision rule says so: fix the geometry before training.
+
+Full write-up: [docs/CLOTH_SORT.md](CLOTH_SORT.md). Ledger:
+[SLURM_JOBS.md](../SLURM_JOBS.md).
+
+---
+
 ## Repo layout
 
 ```
 external/Berkeley-Humanoid-Lite   upstream, pinned (submodule, unmodified)
 src/bhl_robust/
   tasks/        overlay env configs registering new gym task ids
+  cloth/        Isaac-free cloth-sort core (rigid-to-deformable ladder)
   curricula/    push-magnitude ramp + adaptive rule
   terrains/     rough / slope / obstacle / stairs generators
   eval/         headless MuJoCo harness, MJCF repair, height fields, depth, video

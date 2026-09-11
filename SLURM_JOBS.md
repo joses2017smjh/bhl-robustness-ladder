@@ -20,7 +20,34 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 ## Open
 
-### Manipulation re-runs on the corrected spawn · `running` — 2026-09-07
+### Manipulation re-runs on the corrected spawn · `done` — final numbers 2026-09-11
+**Final, from the event files** (mean of the last 50 logged iterations). Task
+success is **0 in every cell that trained**. Four cells reached 8,000
+iterations; the rest stopped early on node failures or were cancelled, and the
+iteration column says how far each got.
+
+| run | iters | ep_len | reward | fallen | success | `lift_height` |
+|---|---:|---:|---:|---:|---:|---:|
+| `v2up-cubetoshelf-blind` | 6,605 | **263.2** | **+12.00** | 0.655 | 0 | 0.048 |
+| `v2up-cubetoshelf-depth` | 4,931 | 244.8 | +7.77 | 0.738 | 0 | 0.050 |
+| `v2up-cubetoshelf-rgb` | 3,231 | 163.2 | +3.94 | 0.973 | 0 | 0.053 |
+| `v2up-balltonet-blind` | 8,000 | 50.5 | +1.92 | 1.000 | 0 | 0.147 |
+| `v2up-balltonet-rgb` | 8,000 | **326.0** | +7.57 | 0.498 | 0 | 0.044 |
+| `gripup-cubetoshelfgrip-blind` | 6,290 | 111.2 | +4.36 | 0.893 | 0 | 0.098 |
+| `gripup-cubetoshelfgrip-rgb` | 8,000 | 151.7 | +4.54 | 0.771 | 0 | 0.133 |
+| `gripup-balltonetgrip-blind` | 8,000 | 170.7 | +3.07 | 0.760 | 0 | **0.211** |
+| `gripup-balltonetgrip-depth` | 7,642 | 69.2 | +2.83 | 0.996 | 0 | 0.162 |
+| `gripup-balltonetgrip-rgb` | 7,403 | 251.8 | **+13.93** | 0.630 | 0 | 0.148 |
+| `v2up-planktowall-*` (3) | 1,661–6,057 | 1.0 | −0.40 | 1.000 | 0 | 0.040 |
+
+What the corrected spawn bought is survival and a moving lift curriculum —
+`lift_height` leaves its 0.04 m floor in every cube and ball cell, reaching
+0.21 m on the gripper ball arm — and not a single completed task. Two caveats
+travel with these numbers: they trained on the spawn recorded as corrected on
+2026-09-07, which the later spawn entries partly retract, so the README's
+Isaac-spawn caveat covers them; and the plank cells never had a corrected
+spawn at all.
+
 **The fix works.** Cube arms on the corrected spawn, against the same arms
 before it:
 
@@ -45,7 +72,7 @@ the cube pair; it faces along -+x rather than -+y so it needs the two headings
 
 | # | id | outcome |
 |---|---|---|
-| 2 | `21199344`, `21199345` | 1 COMPLETED, 5 running, 3 NODE_FAIL at ~19 h (infrastructure), 1 CUDA illegal access, 1 abort, 6 plank cells cancelled |
+| 2 | `21199344`, `21199345` | **final:** 4 COMPLETED at 8,000 (`21199344_3`, `_5`; `21199345_2`, `_3`), 3 NODE_FAIL at ~19 h (`21199344_0-2`), 3 FAILED (`21199344_4` and `21199345_1` at 2 min, `21199345_0` at 18 h), 5 CANCELLED (3 plank; `21199345_4`, `_5` at ~16 h) |
 | 1 | `21186402`, `21186403` | cancelled — trained on the lying-down spawn |
 
 ### B3 ice clip — DONE · `done` — 2026-09-10
@@ -72,7 +99,34 @@ rather than reshaped to fit.
 | 2 | `21234053` | **exit 0, clip written** |
 | 1 | `21233950`, `21233969` | 45-into-301: depth appended in the wrong place, before the controller's own assembly |
 
-### B5 maze — stereo pooling sweep · `running` — 2026-09-10
+### B5 maze — stereo pooling sweep · `done` — **it reverses the stereo result**, n=1
+**Stereo was never worse than blind. It was too wide.** All seven arms, read
+the same way from their event files (mean of the last 50 of 6,000 iterations):
+
+| arm | stereo pool | obs width | stereo share | ep_len | reward | terrain level |
+|---|---:|---:|---:|---:|---:|---:|
+| blind (control) | — | 45 | 0% | 413.5 | 12.96 | 0.545 |
+| lidar | — | 81 | 0% | 426.1 | 15.00 | 0.794 |
+| stereo | 4 → 16×16 / eye | 557 | **92%** | 320.8 | 7.88 | **0.001** |
+| both | 4 | 593 | 86% | 358.4 | 9.79 | 0.065 |
+| stereo P8 | 8 → 8×8 / eye | 173 | 74% | 433.7 | 15.98 | 0.878 |
+| stereo P16 | 16 → 4×4 / eye | 77 | **42%** | 439.0 | 17.56 | **1.027** |
+| both P16 | 16 | 113 | 28% | **444.3** | **17.59** | **1.203** |
+
+Shrink the stereo's share of the input and terrain level climbs with it:
+0.001 at 92%, 0.878 at 74%, 1.027 at 42%. Pooled to 4×4 an eye, stereo beats
+lidar (1.03 against 0.79), and stereo plus lidar is the best arm in the sweep
+at **2.2× the blind control**. So the committed reading of the first four arms
+— "stereo is far worse than blind", "adding the cameras destroys the lidar
+advantage" — was an input-width artefact, which is what `depth_obs`'s
+docstring warned about and what this sweep was built to test.
+
+**One seed**, like the result it reverses. Seeds 1 and 2 for blind, lidar,
+stereo, stereo P16 and both P16 are queued below; neither reading is a
+finding until they land. (The first four arms' numbers differ slightly from
+the table in the entry below, which quotes final-iteration values; the order
+is the same.)
+
 Does coarser stereo recover, or do cameras simply not help? At `pool=4` stereo
 is 512 of 557 observations (92%) against lidar's 36 of 81 (44%). `StereoP16`
 pools to 4×4 an eye — 32 of 77, **42%**, matched to lidar — so it holds the
@@ -80,16 +134,66 @@ information fraction fixed and changes only the sensor.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21233916_[4-6]` | running — StereoP8, StereoP16, BothP16 |
+| 4 | `21247917` | **rendered, not published.** All four Isaac clips show the maze and the velocity-command arrows riding on the robot's root — the camera follows it correctly — and **no robot**: the body never appears, at 0 s or at 8 s, in any arm. Same failure as the task-env spawn render in *Spawn rotation* below. Four identical corridors captioned as four policies would mislead, so B5 has no clip yet. Raw renders stay in `results/clips/` (gitignored, 120 MB each). |
+| 3 | `21247912_[0-2,5,6]` | queued 2026-09-11 — **seed 2** of Blind, Lidar, Stereo, StereoP16, BothP16, `%2` so other workstreams keep GPUs |
+| 2 | `21247911_[0-2,5,6]` | queued 2026-09-11 — **seed 1**, same five arms. The reversal below rests on one seed and so does the claim it reverses; this project's bar is n=3 |
+| 1 | `21233916_[4-6]` | **3 of 3 COMPLETED** (5:46–7:43) — table above |
 
-### Cloth sorting — jobs cancelled · `open`
+### Cloth sorting — the layout is unreachable · `open` — found 2026-09-11
+**No sweep in this scene could ever have touched the garment.** Two
+measurements, one per engine, and they agree:
+
+- **Reach, MuJoCo FK** over the full right-arm range, legs in the pinch squat
+  the controller holds: the hand's lowest point is **z = 0.339 m** — above the
+  0.30 m table top — and its furthest forward reach at table height is
+  **0.305 m** from the root. The garment spawned **0.74 m** away; the table's
+  near edge was 0.39 m; the basket centres 0.32 m. Nothing was in reach.
+- **Facing, Isaac** (`21247910`): the hands sit at (−0.208, **+0.192**) from
+  the root, where FK facing +x puts them at (+0.209, **−0.177**). Both axes flip,
+  so under `(0, 0, 1, 0)` the robot faces **−x** — away from the table — with its
+  geometry matching MuJoCo to 2–4 mm. The right hand was **0.97 m** from the
+  garment.
+
+The kinematic ladder never modelled reach: a sweep was two planar points and
+the hand was assumed to follow them. So its **1.00** in C0, C1, C4-BC and C5
+meant "a hand that could go anywhere would sort these", not that this robot
+can. It also moved garments on plans it had itself flagged invalid.
+
+`bhl_robust.cloth.reach` now carries the measured workspace — a 2 cm IK table
+built from MuJoCo FK plus damped least squares, 1,380 reachable voxels, in
+`assets/cloth/right_arm_ik_pinch.npz` — and the controller refuses a plan the
+hand cannot follow. **Under it every kinematic cell scores 0.00** (C0 64 eps,
+C1 64, C4-BC 64, C5 32; every sweep refused), written to
+`results/cloth/reach/`. The old files are left as they were. `ROBOT_YAW` is set
+to π from the Isaac measurement.
+
+The workspace that exists is a patch on the robot's **right side**: robot-frame
+x −0.12…+0.26, y −0.44…−0.08, hand-link heights 0.34–0.54 m, with the hand mesh
+hanging 2–13 cm below its link origin depending on the pose. It never crosses
+the midline. A layout redesigned inside that patch is the next step; the
+decision rule for this outcome says fix the geometry before training anything.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21247910` | **COMPLETED** — faces −x; right hand 0.97 m from the garment |
+| — | login node | FK reach map and IK table; kinematic ladder under reach: 0.00 in all four cells |
+
+### Cloth sorting — jobs cancelled · `superseded` by the ladder entry below
+Accurate when written, and overtaken the same day: the five cells were re-run
+through four fixes (`21233802` → `21234259`), and `results/cloth_sort_bench.md`
+now carries measured Isaac rows. Kept for the ids.
+
 `21228030`–`21228033` (c1 smoke, isaac eval, deform smoke, sort bench) were all
 cancelled before running; `21228029` failed its own guard with "produced no
 summary line". So the mesh-resolution sweep that would reopen G-C1 has not
 produced a measurement yet — `results/cloth_sort_bench.md` still marks every
 Isaac row "not yet measured", which is accurate.
 
-### B5 — maze with lidar and stereo · `running` — queued 2026-09-08
+### B5 — maze with lidar and stereo · `done` — its stereo conclusion is reversed above
+The four-arm result below stands as measured. Its explanation does not: the
+pooling sweep shows the stereo arm failing because its 512 depth values were
+92% of the input, not because stereo carries nothing useful here.
+
 Four arms, one variable: blind (control), lidar, stereo, both. 6,000 iterations
 at `NUM_ENVS=2048`, identical across all four — the stereo arms carry two
 ray-cast cameras and the blind arm none, so letting the cheap arm run wider
@@ -137,7 +241,13 @@ designed and not yet implemented.
 |---|---|---|
 | 1 | `21218766` | **4 of 4 COMPLETED** (5:04–8:30) — table above |
 
-### Cloth sorting — reopened against a coarser mesh · `running` — 2026-09-09
+### Cloth sorting — reopened against a coarser mesh · `superseded` by the ladder entry below
+The coarse-mesh question has an answer for two of its four meshes: **467
+env-steps/s at 8×8 (81 vertices) and 438 at 10×10 (121)**, 8 envs, against
+G-C1's 182 at 961 (`21234167`). 12×12 and 16×16 were not run. Note Isaac's
+`resolution` counts cells, so the bench file's planned "64 / 100 / 144 / 256
+vertices" are 81 / 121 / 169 / 289.
+
 G-C1 measured 182 env-steps/s on a **961-vertex** cloth and closed the task as
 scripted-not-RL. This reopens it on the one axis that number leaves open: mesh
 resolution. `results/cloth_sort_bench.md` sweeps 64, 100, 144 and 256 vertices
@@ -268,7 +378,7 @@ it as an Isaac Lab 3.x defect and built a workaround.
 | 2 | `21196896`, `21196905` | up-axis from geometry: torso 22 cm above the ankles under the new quats, 2.8 cm under the old |
 | 1 | `21192744`–`21192782` | prior work, already correct and not read before five hypotheses were spent re-deriving it |
 
-### B3 ice clip — export solved, render blocked on depth obs · `open`
+### B3 ice clip — export solved, render blocked on depth obs · `superseded` by *B3 ice clip — DONE*
 `ENABLE_CAMERAS=1` was the v51 segfault, inherited from the cloth-probe sbatch
 and surviving the edit that removed `--enable_cameras` from the command line.
 Without it both arms export cleanly: distinct ONNX and deploy configs, 45
@@ -788,7 +898,12 @@ the identity pose's left/right Y onto world Z — a roll, not a yaw.
 | 7 | `21192773` | **FACE+SYM** — `(0.707, −0.707, 0, 0)`: Lz=Rz=−0.6077, toward=+1.00 |
 | 6 | `21192744` | **the "yaw" is a roll** — identity −0.6077/−0.6077; configured −0.177/+0.177 |
 
-### Upright-spawn 400-iter probes · `running` — queued 2026-09-06
+### Upright-spawn 400-iter probes · `done` — all three failed the training gate
+**Final:** all three reached iteration 400 and `train.sh` failed them with
+`mean episode length is 1.00` — every episode ending on its first step, the
+same signature the spawn entries above chase. Nothing here was used; the spawn
+investigation superseded it.
+
 Same cell and budget as `21191526` (CubeToShelf-Blind, 400 iterations, 1024
 envs, seed 0). That probe fell because plant_feet was planting a robot on its
 side. These two ask the question that probe could not:
@@ -806,9 +921,9 @@ is the overnight extra: finding 10 was measured on the rolled spawn.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21192899` | running — gripper CubeToShelf-Blind, 400 iter, new yaw (`yaw-cubetoshelfgrip-blind-s0`) |
-| 2 | `21192898` | running — `_1` requeue after TMPDIR-on-scratch |
-| 1 | `21192861` | `_0` running on cn-gpu7 (past iter 18) · `_1` FAILED 43 s, `/tmp/Assets` PermissionError |
+| 3 | `21192899` | FAILED at 400 iterations — mean episode length 1.00 |
+| 2 | `21192898` | FAILED at 400 iterations — mean episode length 1.00 |
+| 1 | `21192861` | `_0` FAILED at 400 iterations, mean episode length 1.00 · `_1` FAILED 43 s, `/tmp/Assets` PermissionError |
 
 ### v2 / coop spawn puts the robot through the floor · `open` — found 2026-09-05
 **Bug 2 (hand split) is closed:** the configured yaw was a roll. Defaults
@@ -1107,6 +1222,10 @@ came from.
 | `21186402`, `21186403`, `21191526` | planted-spawn re-runs — cancelled; plant_feet now opt-in |
 | `21191713`–`21192782` | arm-geometry: the "yaw" was a roll; FACE+SYM 4-tuple now default |
 | `21192861`, `21192898`, `21192899` | upright-spawn 400-iter probes: welded yaw, welded yaw+plant, gripper yaw |
+| `21247910` | cloth hand/facing probe — robot faces −x, hand 0.97 m from the garment |
+| `21247911`, `21247912` | B5 maze replicates, seeds 1 and 2 of blind, lidar, stereo, stereo P16, both P16 |
+| `21247917` | B5 maze clips — blind, lidar, stereo P4, both P16 |
+| `21233916` | B5 stereo pooling sweep — P8, P16, both P16 |
 | `21228029`–`21228033` | cloth-sort cheap Isaac, attempt 1 — died on `SweepActionCfg.class_type=None`, dependents never ran |
 | `21233802`–`21233806` | cloth-sort cheap Isaac, attempt 2 — `class_type` fixed, died on the `&` precedence bug in `_in_basket` |
 | `21233865`–`21233869` | cloth-sort cheap Isaac, attempt 3 — rigid smoke passed; tilt convention and Newton furniture found |

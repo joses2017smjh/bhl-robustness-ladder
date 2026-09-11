@@ -159,6 +159,18 @@ stays alive for 427 steps against 8 while doing it.
 | <img src="gifs/isaac/cubetoshelf_gripper.gif" width="420"> | **`isaac/cubetoshelf_gripper`** — `TaskV2-BHL-CubeToShelfGrip-Blind-v0`, the 24-DoF gripper asset. |
 | <img src="gifs/isaac/cubetoshelf_welded.gif" width="420"> | **`isaac/cubetoshelf_welded`** — `TaskV2-BHL-CubeToShelf-Blind-v0`, the shipped welded-hand asset. |
 
+### Why there is no B5 maze clip
+
+B5's result — lidar 0.79, pooled stereo 1.03, both 1.20, against a blind 0.54 —
+has no picture, and not for want of trying. `slurm/97_maze_video.sbatch`
+rendered all four arms in Isaac with the camera following each robot's root.
+The camera follows correctly, and the velocity-command arrows ride along above
+the root, but **the robot never appears** — not at 0 s, not at 8 s, in any arm.
+Four identical corridors captioned as four policies would be a clip of
+nothing, so none is published. The MuJoCo replay cannot stand in: it renders one
+forward depth camera and refuses lidar rings and stereo pairs by name. Until the
+Isaac render shows a body, the maze table is the evidence.
+
 ### On the corrected *rotation* — and a spawn that is still wrong
 
 **Retraction.** These were published as "the first clips of this robot spawning

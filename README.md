@@ -61,7 +61,8 @@ only works where it trained has learned PhysX, not locomotion.
 
 | component | role |
 |---|---|
-| `src/bhl_robust/tasks/` | Isaac Lab env configs — terrain, push, depth, RGB, cooperative lift |
+| `src/bhl_robust/tasks/` | Isaac Lab env configs — terrain, push, depth, RGB, cooperative lift, cloth-sort |
+| `src/bhl_robust/cloth/` | Isaac-free cloth-sort core: garments, sweep primitive, kinematic C0–C5, cost gate |
 | `src/bhl_robust/eval/` | MuJoCo replay: MJCF patching, crew assembly, scoring, video |
 | `src/bhl_robust/curricula/` | push and terrain-level curricula upstream lacks |
 | `scripts/bench/` | gates. Each answers one question and refuses a verdict without a control |
@@ -80,6 +81,8 @@ including the ones not used here, is in [docs/GALLERY.md](docs/GALLERY.md).
 | | |
 |---|---|
 | Domain randomization | blind policy holds to terrain difficulty d≈0.4; randomized arms reach d≈0.6 |
+| Low-res cloth | **467 env-steps/s** at 81 vertices vs G-C1's 182 at 961 — 2.6× while carrying 3× the DoF, and 10×10 costs only 6% more |
+| Maze sensing *(n=1)* | lidar reaches terrain level **0.79** against blind **0.54**; stereo pooled to 4×4 an eye reaches **1.03**, and with lidar **1.20**. Unpooled stereo, 92% of the input, never leaves level 0 — width, not the sensor. Seeds 1–2 queued |
 | Depth on low friction | final curriculum level **0.65 vs 0.26** blind — 3 seeds, no overlap |
 | Depth on invisible hazards | **+10.6%** on friction patches flush with the floor, ray-cast-verified |
 | Ray-cast depth cost | **1.6%** of throughput at 4,096 envs, 2.9% mean error vs closed form |
@@ -95,7 +98,7 @@ including the ones not used here, is in [docs/GALLERY.md](docs/GALLERY.md).
 | Vision on the lift | depth-conditioned policies fall in almost every episode; blind ones do not |
 | Task completion | **zero** success on all three redesigned tasks, gripper included |
 | Isaac spawn | **Robots spawn under the floor and are not upright.** Visible in the first frames of every Isaac clip. Six probes have contradicted each other and the render; no fix is committed. Isaac-side episode lengths are flagged. **MuJoCo-scored numbers are unaffected and stand** |
-| Cloth throughput | 182 env-steps/s at peak — ~50 days per RL arm. Scripted, not trained |
+| Cloth sorting | **The scene was never reachable.** FK puts the hand's reach at table height at 0.305 m and its lowest point above the table top; the garment was 0.74 m away, and in Isaac the robot faces away from the table. The kinematic 1.00s had no reach model — under one, every cell scores **0.00**. Layout redesign next. See [docs/CLOTH_SORT.md](docs/CLOTH_SORT.md) |
 | Seed counts | findings 10 and 12 rest on 1–2 seeds. §1 is a single-seed result that died on its third |
 
 Four findings are retractions of earlier claims here. They stay in: a repo whose

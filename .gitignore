@@ -61,3 +61,8 @@ results/curves/training_curves.csv
 /runs/*.tar.zst
 # Long-form curves outgrew GitHub's 100 MB per-file limit; it is a release asset.
 /runs/scalars.csv.gz
+
+# Raw Isaac maze renders are ~120 MB each at 1280x720 -- over GitHub's 100 MB
+# file limit. The committed artefacts are the downscaled composite gif/mp4 in
+# docs/gifs; the raw clips stay on the cluster (slurm/97_maze_video.sbatch).
+results/clips/maze_*.mp4

@@ -18,6 +18,13 @@ transfer onto low-resolution cloth, and then onto a five-garment scene?
 Found while asking why no Isaac cell ever moved the garment, and it outranks
 every other result in this file.
 
+<p align="center">
+  <img src="img/cloth_reach.png" width="900" alt="Plan view: the right hand's measured reach sits behind the robot, away from the table; even turned to face the table it stops short of the table edge. Side view: the hand never gets below 0.34 m, above the 0.30 m table top.">
+</p>
+
+`scripts/cloth/plot_reach.py` draws it from the committed IK table and the
+layout constants; no simulator needed.
+
 **Reach, by forward kinematics** (MuJoCo, the same crew builder that measured
 the vertical reach band). Right arm over its full joint range, legs held in the
 pinch squat the controller commands:

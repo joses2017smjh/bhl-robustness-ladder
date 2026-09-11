@@ -118,6 +118,13 @@ def main():
 
     env_cfg.viewer.origin_type = "env"
     env_cfg.viewer.env_index = int(os.environ.get("BHL_VIEW_ENV", "0"))
+    # BHL_VIEW_FOLLOW=1 rides the camera on the robot's root instead of the env
+    # origin. A locomotion clip needs it: the policy walks off its env origin
+    # within seconds, and an origin-anchored camera then films an empty floor.
+    # Offsets stay world-frame, so the view does not spin when the robot turns.
+    if os.environ.get("BHL_VIEW_FOLLOW", "0") == "1":
+        env_cfg.viewer.origin_type = "asset_root"
+        env_cfg.viewer.asset_name = "robot"
     env_cfg.viewer.eye = _vec("BHL_VIEW_EYE", (2.2, 2.2, 1.4))
     env_cfg.viewer.lookat = _vec("BHL_VIEW_LOOKAT", (0.0, 0.0, 0.5))
     print(f"[INFO]: viewer eye={env_cfg.viewer.eye} lookat={env_cfg.viewer.lookat} "
