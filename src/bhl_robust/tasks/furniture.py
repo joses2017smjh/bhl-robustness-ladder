@@ -31,19 +31,42 @@ _STATIC = sim_utils.RigidBodyPropertiesCfg(
 
 def _box(prim: str, size: tuple[float, float, float],
          pos: tuple[float, float, float], rgb=FURNITURE_RGB,
-         rot: tuple[float, float, float, float] = (1.0, 0.0, 0.0, 0.0)) -> AssetBaseCfg:
-    """One static, collidable box."""
+         rot: tuple[float, float, float, float] = (1.0, 0.0, 0.0, 0.0),
+         collider_only: bool = False) -> AssetBaseCfg:
+    """One static, collidable box.
+
+    ``collider_only`` spawns plain collision geometry: no ``rigid_props`` and
+    no ``physics_material``. This is exactly the shape Isaac Lab's own Newton
+    cloth example uses for its static ``cube``
+    (``lift_franka_soft/franka_cloth_env_cfg.py``), and it is the only form
+    Newton does not register as a physics body -- ``AssetBaseCfg`` otherwise
+    dies with ``FrameView prim ... is a Newton physics body`` (21233868 and
+    21233960; 21125073 before them). Dropping ``rigid_props`` alone was not
+    enough: 21233960 still failed with the material bound.
+
+    **Fidelity note.** A collider-only box has no explicit friction, so it
+    takes the simulator default rather than 0.9/0.8. Contact friction combines
+    the two surfaces and the garment keeps its own per-garment (and
+    randomized) material, so the garment side still sets the behaviour. This
+    is applied to the rigid scene as well as the deformable one, so C0/C1 and
+    C2/C3 are not comparing different table surfaces.
+
+    Default stays False so the maze, plinth, shelf and net keep the exact
+    physics their published numbers were measured on.
+    """
+    spawn_kwargs = dict(
+        size=size,
+        collision_props=sim_utils.CollisionPropertiesCfg(),
+        visual_material=PreviewSurfaceCfg(diffuse_color=rgb),
+    )
+    if not collider_only:
+        spawn_kwargs["rigid_props"] = _STATIC
+        spawn_kwargs["physics_material"] = sim_utils.RigidBodyMaterialCfg(
+            static_friction=0.9, dynamic_friction=0.8, restitution=0.0)
     return AssetBaseCfg(
         prim_path=f"{{ENV_REGEX_NS}}/{prim}",
         init_state=AssetBaseCfg.InitialStateCfg(pos=pos, rot=rot),
-        spawn=sim_utils.CuboidCfg(
-            size=size,
-            rigid_props=_STATIC,
-            collision_props=sim_utils.CollisionPropertiesCfg(),
-            visual_material=PreviewSurfaceCfg(diffuse_color=rgb),
-            physics_material=sim_utils.RigidBodyMaterialCfg(
-                static_friction=0.9, dynamic_friction=0.8, restitution=0.0),
-        ),
+        spawn=sim_utils.CuboidCfg(**spawn_kwargs),
     )
 
 
@@ -174,4 +197,57 @@ def button(prim: str, pos: tuple[float, float, float]):
     rather than a picking one.
     """
     return _box(prim, (0.06, 0.16, 0.16), pos, rgb=BUTTON_RGB)
+
+
+# ---------------------------------------------------------- cloth-sort scene
+# Static table and open baskets. Geometry constants live in
+# ``bhl_robust.cloth.layout`` so the kinematic env and this scene cannot drift
+# apart; these helpers only spawn the colliders.
+
+BASKET_RGB = {
+    "socks": (0.20, 0.40, 0.75),
+    "shirts": (0.75, 0.25, 0.18),
+    "jackets": (0.20, 0.20, 0.22),
+}
+
+
+def cloth_table(prim: str = "table"):
+    """Table whose top is at ``GRASP_Z``. Thin, wide enough for five garments.
+
+    Collider-only in the rigid scene as well as the deformable one. Making it
+    a rigid body under PhysX and a plain collider under Newton would put a
+    physics difference between C0/C1 and C2/C3 and charge it to the cloth.
+    """
+    from bhl_robust.cloth import layout as L
+    hx, hy = L.TABLE_SIZE_XY[0] / 2.0, L.TABLE_SIZE_XY[1] / 2.0
+    h = L.TABLE_THICKNESS
+    cx, cy = L.TABLE_CENTER_XY
+    return _box(prim, (2 * hx, 2 * hy, h), (cx, cy, L.TABLE_TOP_Z - h / 2.0),
+                collider_only=True)
+
+
+def sorting_basket(basket_id: str, prim: str | None = None):
+    """Open-topped box under the table's front edge. Same idea as ``net``."""
+    from bhl_robust.cloth import layout as L
+    prim = prim or f"basket_{basket_id}"
+    inner = L.BASKET_INNER
+    wall = L.BASKET_WALL
+    x, y = L.BASKET_X, L.BASKET_Y[basket_id]
+    rgb = BASKET_RGB.get(basket_id, TARGET_RGB)
+    hx, hy, hz = inner[0] / 2.0, inner[1] / 2.0, inner[2]
+    t = wall
+    floor_z = t / 2.0
+    mid_z = hz / 2.0
+    return [
+        _box(f"{prim}_floor", (inner[0] + 2 * t, inner[1] + 2 * t, t),
+             (x, y, floor_z), rgb, collider_only=True),
+        _box(f"{prim}_xp", (t, inner[1], hz), (x + hx + t / 2.0, y, mid_z), rgb,
+             collider_only=True),
+        _box(f"{prim}_xn", (t, inner[1], hz), (x - hx - t / 2.0, y, mid_z), rgb,
+             collider_only=True),
+        _box(f"{prim}_yp", (inner[0], t, hz), (x, y + hy + t / 2.0, mid_z), rgb,
+             collider_only=True),
+        _box(f"{prim}_yn", (inner[0], t, hz), (x, y - hy - t / 2.0, mid_z), rgb,
+             collider_only=True),
+    ]
 
