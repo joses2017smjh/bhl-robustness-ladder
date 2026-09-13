@@ -168,3 +168,37 @@ ffmpeg -ss 5 -i out.mp4 -frames:v 1 frame.png
 Doing this here is what surfaced the spawn bug: the robots were lying in the
 floor, which no log line said and no metric caught — `fallen` read 0.0000
 throughout. See [FINDINGS](FINDINGS.md).
+
+## 10. No robot in the clip: the viewport draws a stale pose
+
+Symptom: the clip shows the scene — terrain, props, even the command arrows —
+and no robot, or a robot that never moves from its spawn. Every maze clip in
+`21247917` looked like this.
+
+Measured, not guessed (`21299608`, `scripts/bench/render_probe.py`): all of the
+robot's meshes load and compute `inherited` visibility, so it is not the asset.
+It is *which pose gets drawn*. With `use_fabric=True`, physics writes
+articulation poses to Fabric and USD keeps the spawn pose — the maze robot's
+USD base sat at (0, 0, 0) while physics had it at (−27.9, −76.4). The viewport
+render product, which is what `RecordVideo` records through `env.render()`,
+draws the body at that stale pose. On a flat task that is roughly where the
+robot is, which is why the TaskV2 clips always showed one. On a terrain task
+the robot is reset onto a terrain origin tens of metres from its env's grid
+origin, and a camera aimed at it films empty ground. `--disable_fabric` did not
+fix it in the probe either: the body was drawn back at the grid origin.
+
+**A camera sensor draws the body where physics has it**, fabric on. So record
+through one:
+
+```bash
+BHL_CAMERA_CLIP=1 BHL_CLIP_DIR=/path/to/frames \
+BHL_VIEW_EYE="1.8:1.8:1.1" BHL_VIEW_LOOKAT="0:0:0.3" \
+"$PY" scripts/train_play.py --task "$TASK" --num_envs 1 --headless \
+    --enable_cameras --video_length 400 --load_run "$RUN"
+ffmpeg -framerate 25 -i /path/to/frames/frame_%04d.png ...     # then section 8
+```
+
+`train_play.py` mounts one `CameraCfg` per env, aims it at that env's first
+articulation root every step (eye and look-at are world-frame offsets from the
+root), and writes PNGs — no `--video`, no `RecordVideo`. Gate on the frame
+count, per section 0. `slurm/inner/maze_video.sh` is the worked example.

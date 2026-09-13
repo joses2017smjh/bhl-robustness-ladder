@@ -876,41 +876,48 @@ standing. Splitting along that seam helps; splitting further does not.
 
 ---
 
-## Maze: lidar helps, and stereo helps once it stops drowning the input
+## Terrain sensing (the "maze" rung): stereo fails when it is most of the input, and wins when it is not
 
-*Provisional: one seed per arm. Seeds 1 and 2 of the five arms that matter are
-queued (`21247911`, `21247912`). This is not a numbered finding until they land,
-and it is written up now because it reverses a reading already committed.*
+*Three seeds per arm (`21218766`, `21233916`, `21247911`, `21247912`).*
 
 B5 gives the robot an RPLIDAR C1 and a global-shutter stereo pair, both
-ray-cast, and trains four arms with one variable moving: blind control, lidar,
-stereo, both. 6,000 iterations at 2,048 envs each. The first reading was that
-lidar helps and **cameras hurt** — stereo pinned at terrain level 0.001, and
-adding it to lidar dragged lidar's 0.79 down to 0.06.
+ray-cast, and trains one variable at a time: blind control, lidar, stereo,
+both. 6,000 iterations at 2,048 envs each. Terrain level, mean of the last 50
+iterations, read from event files:
 
-The pooling sweep says the cameras were never the problem; their width was.
-Terrain level, mean of the last 50 of 6,000 iterations, read from event files:
+| arm | stereo share of the input | seeds 0 / 1 / 2 | mean |
+|---|---:|---|---:|
+| blind (control) | 0% | 0.545 / 0.634 / 1.037 | 0.738 |
+| lidar | 0% | 0.794 / 0.814 / 0.971 | 0.860 |
+| stereo, 16×16 an eye | **92%** | 0.001 / 0.000 / 0.061 | **0.021** |
+| stereo, 4×4 an eye | **42%** | 1.027 / 1.139 / 1.207 | **1.124** |
+| stereo 4×4 + lidar | 28% | 1.203 / 0.972 / 1.170 | 1.115 |
 
-| arm | stereo share of the input | terrain level |
-|---|---:|---:|
-| blind (control) | 0% | 0.545 |
-| lidar | 0% | 0.794 |
-| stereo, 16×16 an eye | **92%** | **0.001** |
-| stereo, 8×8 an eye | 74% | 0.878 |
-| stereo, 4×4 an eye | **42%** | **1.027** |
-| stereo 4×4 + lidar | 28% | **1.203** |
+**The finding is width.** Fed at 16×16 an eye, stereo is 512 of 557 inputs and
+fails in every seed — below every blind seed. Pooled to 4×4, it succeeds in
+every seed, 53× higher. It is the same mechanism as *Giving them eyes made it
+worse* on the lift, and the one `depth_obs` warns about: a sensor that is most
+of the input swamps the first layer of upstream's MLP.
 
-Shrink the stereo's share and the level climbs with it. Pooled hard enough,
-stereo beats lidar, and the two together reach **2.2× the blind control**. The
-mechanism is the one the lift already showed — *Giving them eyes made it
-worse* — and that `depth_obs` warns about: a sensor that is most of the input
-swamps the first layer of upstream's MLP.
+**Pooled stereo beats blind on the mean** (+52%), but not cleanly: blind's best
+seed (1.037) sits above pooled stereo's worst (1.027). Adding lidar to it adds
+nothing.
 
-Two limits on what this is. It is one seed. And `maze_env_cfg` defines no maze
-objective: it inherits locomotion velocity tracking and the terrain curriculum,
-with walls, arrows and a button as static geometry. The sensor comparison is
-sound because all seven arms share that objective; it is not maze navigation,
-which `docs/MAZE_RIG.md` designs and nothing yet implements.
+**Retracted: "lidar beats blind by 51%".** That was seed 0 against the weakest
+blind seed. At three seeds lidar is +16% on the mean and blind's seed 2 beats
+every lidar seed. The blind control alone spans 0.55–1.04, which is the real
+lesson about this rung: its seed variance is larger than most sensor effects.
+
+**There was no maze in it, in two independent ways** (found 2026-09-13,
+`21299608`). The walls, arrows, obstacles and button are placed at each env's
+*grid* origin, but with a terrain generator the robots are reset onto *terrain*
+origins elsewhere, so the geometry was never where the robots trained. And
+both sensors ray-cast only the terrain mesh (`/World/ground`), so even a robot
+standing in a corridor could not have seen a wall. Both lidar and stereo were
+therefore reading terrain — which is why this rung behaves like the depth rung
+above. The comparison is sound as a terrain-perception result, since every arm
+shared it; maze navigation needs the maze moved into the terrain mesh and the
+sensors pointed at it.
 
 ---
 
@@ -977,14 +984,16 @@ the same 8 envs with an **81-vertex** cloth under the **22-DoF** humanoid do
 touched.** Measured two ways, and they agree:
 
 <p align="center">
-  <img src="img/cloth_reach.png" width="900" alt="Plan view: the right hand's measured reach sits behind the robot, away from the table; even turned to face the table it stops short of the table edge. Side view: the hand never gets below 0.34 m, above the 0.30 m table top.">
+  <img src="img/cloth_reach.png" width="900" alt="Plan view: cells where the right hand's fingertips can touch a 0.30 m table top sit on the robot's right, behind it as it actually faces; turned to face the table, they still stop short of the table edge.">
 </p>
 
 
-- MuJoCo FK over the whole right arm, legs in the pinch squat the controller
-  holds: the hand's lowest point is **z = 0.339 m**, above the 0.30 m table
-  top, and its furthest reach at table height is **0.305 m** from the root. The
-  garment spawned **0.74 m** away.
+- MuJoCo FK and IK over the whole right arm, legs in the pinch squat the
+  controller holds: the fingertips can touch a 0.30 m table top only on the
+  robot's right, and never more than **0.28 m forward** of the root. The table's
+  near edge was 0.39 m away and the garment **0.74 m**. *(An earlier version of
+  this line said the hand could not reach the table top at all; that measured
+  the hand-link origin, 13 cm above the fingertips.)*
 - In Isaac, under the spawn quaternion `(0, 0, 1, 0)`, the robot faces **−x** —
   away from the table — with its arm geometry matching MuJoCo to 2–4 mm
   (`21247910`). The right hand was 0.97 m from the garment.
@@ -997,8 +1006,8 @@ squares) **every kinematic cell scores 0.00 and every sweep is refused**. The
 Isaac cells agree for their own reasons: the robot falls in about 13 steps and
 never moves the garment.
 
-What is reachable is a patch on the robot's right: about 0.35 × 0.35 m, never
-crossing the midline, 0.34–0.54 m high. A layout inside it is the next step,
+What is reachable is a patch on the robot's right: fingertip contact on a 0.30 m table
+top spans about 0.30 m by 0.28 m and never crosses the robot's midline. A layout inside it is the next step,
 and the ladder's own decision rule says so: fix the geometry before training.
 
 Full write-up: [docs/CLOTH_SORT.md](CLOTH_SORT.md). Ledger:

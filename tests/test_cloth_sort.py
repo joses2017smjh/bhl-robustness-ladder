@@ -469,6 +469,32 @@ class ReachTests(unittest.TestCase):
             )
 
 
+class ContactTableTests(unittest.TestCase):
+    """The fingertip contact table the redesign is placed against."""
+
+    def setUp(self):
+        from bhl_robust.cloth.reach import load_contact
+        self.t = load_contact()
+
+    def test_built_at_the_measured_best_height(self):
+        self.assertAlmostEqual(self.t.table_top, 0.30, places=6)
+        self.assertGreaterEqual(int(self.t.contact_mask.sum()), 200)
+        self.assertGreater(int((self.t.contact_mask & self.t.hover_mask).sum()), 100)
+        self.assertEqual(len(self.t.joints), 5)
+
+    def test_contact_point_hangs_below_the_hand_link(self):
+        """The fingertips, not the link origin: that distinction is the correction."""
+        self.assertLess(float(self.t.p_hand[2]), -0.10)
+
+    def test_every_cell_clears_the_thigh_and_stays_right(self):
+        ix, iy = np.nonzero(self.t.contact_mask | self.t.hover_mask)
+        self.assertTrue(bool(np.all(self.t.y[iy] <= -0.18 + 1e-9)))
+
+    def test_old_table_edge_is_out_of_fingertip_reach(self):
+        ix, _ = np.nonzero(self.t.contact_mask)
+        self.assertLess(float(self.t.x[ix].max()), 0.39)
+
+
 class IsaacConfigWiringTests(unittest.TestCase):
     """Static guards over the Isaac task modules.
 

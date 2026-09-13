@@ -19,7 +19,7 @@ Found while asking why no Isaac cell ever moved the garment, and it outranks
 every other result in this file.
 
 <p align="center">
-  <img src="img/cloth_reach.png" width="900" alt="Plan view: the right hand's measured reach sits behind the robot, away from the table; even turned to face the table it stops short of the table edge. Side view: the hand never gets below 0.34 m, above the 0.30 m table top.">
+  <img src="img/cloth_reach.png" width="900" alt="Plan view: cells where the right hand's fingertips can touch a 0.30 m table top sit on the robot's right, behind it as it actually faces; turned to face the table, they still stop short of the table edge.">
 </p>
 
 `scripts/cloth/plot_reach.py` draws it from the committed IK table and the
@@ -27,7 +27,8 @@ layout constants; no simulator needed.
 
 **Reach, by forward kinematics** (MuJoCo, the same crew builder that measured
 the vertical reach band). Right arm over its full joint range, legs held in the
-pinch squat the controller commands:
+pinch squat the controller commands (heights are the hand-link *origin*; the
+fingertips hang about 13 cm lower):
 
 | hand-link height | furthest forward reach | lateral span there |
 |---|---:|---|
@@ -36,8 +37,13 @@ pinch squat the controller commands:
 | 0.45–0.50 m | +0.258 m | right side only |
 | 0.60–0.65 m | +0.289 m | right side only |
 
-The hand's lowest point is **0.339 m** — it cannot reach the 0.30 m table top
-at all — and at table height its horizontal reach tops out at **0.305 m**.
+**Corrected 2026-09-13.** This paragraph said the hand could not reach a 0.30 m
+table top at all. That measured the hand-link origin, whose lowest point is
+0.339 m; the fingertips hang about 13 cm below it. A contact table built on a
+hand-fixed contact point (`scripts/cloth/build_contact_table.py`) shows the
+fingertips **can** touch a 0.30 m top — but only on the robot's right, and never
+more than **0.28 m forward** of the root. Height was not what ruled the layout
+out; distance and facing were.
 
 | feature of the old layout | distance from the robot root |
 |---|---:|

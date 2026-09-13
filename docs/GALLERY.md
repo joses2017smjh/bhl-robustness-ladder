@@ -1,6 +1,6 @@
 # Every clip, with what made it
 
-**23 clips from MuJoCo, 2 from Isaac Sim.** Renderer is in the folder name:
+**23 clips from MuJoCo, 5 from Isaac Sim.** Renderer is in the folder name:
 `docs/gifs/` is MuJoCo, `docs/gifs/isaac/` is Isaac Sim. Every clip is a real
 scored episode from the harness that produced the numbers, except `squat_pick`,
 which says on its face that it is scripted.
@@ -21,6 +21,7 @@ Tell me which names you want on the front page.
 | [`multi_lab`](#four-policies-at-once) | MuJoCo | 4 policies, obstacle course + depth | **works** |
 | [`depth_pair`](#depth) | MuJoCo | ray-cast depth | **works** |
 | [`ice_pair`](#b3--ice) | MuJoCo | B3 — blind vs depth on flush friction patches | **works** — depth +10.6% |
+| [`isaac/terrain_sensors`](#terrain-sensing-the-b5-maze-rung) | Isaac Sim | B5 — blind, lidar, stereo at two widths | render only — the result is the table, not the clip |
 | [`squat_pick`](#the-cooperative-lift) | MuJoCo | scripted reachability control | n/a — scripted |
 | [`carry_2`](#the-cooperative-lift) | MuJoCo | cooperative cube lift | **fails** |
 | [`carry_3`](#the-cooperative-lift) | MuJoCo | learned vs scripted | **fails** |
@@ -159,17 +160,18 @@ stays alive for 427 steps against 8 while doing it.
 | <img src="gifs/isaac/cubetoshelf_gripper.gif" width="420"> | **`isaac/cubetoshelf_gripper`** — `TaskV2-BHL-CubeToShelfGrip-Blind-v0`, the 24-DoF gripper asset. |
 | <img src="gifs/isaac/cubetoshelf_welded.gif" width="420"> | **`isaac/cubetoshelf_welded`** — `TaskV2-BHL-CubeToShelf-Blind-v0`, the shipped welded-hand asset. |
 
-### Why there is no B5 maze clip
+### Terrain sensing (the B5 "maze" rung)
 
-B5's result — lidar 0.79, pooled stereo 1.03, both 1.20, against a blind 0.54 —
-has no picture, and not for want of trying. `slurm/97_maze_video.sbatch`
-rendered all four arms in Isaac with the camera following each robot's root.
-The camera follows correctly, and the velocity-command arrows ride along above
-the root, but **the robot never appears** — not at 0 s, not at 8 s, in any arm.
-Four identical corridors captioned as four policies would be a clip of
-nothing, so none is published. The MuJoCo replay cannot stand in: it renders one
-forward depth camera and refuses lidar rings and stereo pairs by name. Until the
-Isaac render shows a body, the maze table is the evidence.
+| | |
+|---|---|
+| <img src="gifs/isaac/terrain_sensors.gif" width="560"> | **`isaac/terrain_sensors`** — the four seed-0 policies, each followed by its own camera: blind, lidar, stereo fed at 16×16 an eye, and stereo pooled to 4×4. Labels are each clip's own terrain level (3-seed means are in FINDINGS). **Watch it for what the policies look like, not for the result**: over twelve seconds all four walk, because the difference is how far the terrain curriculum promoted them, which one clip on one patch cannot show. There are no walls in shot because there never were any near the robots — see FINDINGS. Denoised and cropped from 640×360 path-traced frames. **10 MB.** |
+
+**How the render got fixed.** The first attempt (`21247917`) filmed corridors
+and no robot. The viewport, which `RecordVideo` records, draws an articulation
+at its stale USD pose when fabric is on — here the env's grid origin, tens of
+metres from the terrain patch the robot walks on. A camera *sensor* draws the
+body where physics has it (`21299608`), so `train_play` now records through
+one; `docs/ISAAC_RENDER.md` §10 has the recipe.
 
 ### On the corrected *rotation* — and a spawn that is still wrong
 

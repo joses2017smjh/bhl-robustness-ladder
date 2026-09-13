@@ -66,3 +66,8 @@ results/curves/training_curves.csv
 # file limit. The committed artefacts are the downscaled composite gif/mp4 in
 # docs/gifs; the raw clips stay on the cluster (slurm/97_maze_video.sbatch).
 results/clips/maze_*.mp4
+# PNG frame dumps from the camera-sensor clip recorder; the gif is the artefact.
+results/clips/frames/
+# Render-probe frames (25 MB) and raw Isaac logs stay local; the JSON measurements are committed.
+results/render_probe/*.png
+results/render_probe/*.log

@@ -130,6 +130,27 @@ def main():
     print(f"[INFO]: viewer eye={env_cfg.viewer.eye} lookat={env_cfg.viewer.lookat} "
           f"origin=env[{env_cfg.viewer.env_index}]")
 
+    # [overlay] Camera-sensor clips (BHL_CAMERA_CLIP=1).
+    #
+    # The viewport render product is not a picture of the policy on this stack.
+    # With fabric on, articulation poses go to Fabric and the viewport draws the
+    # robot at its stale USD pose -- for a terrain task that is the env's grid
+    # origin, tens of metres from where physics put it -- so the maze clips
+    # (21247917) showed corridors and no robot. A camera *sensor* renders the
+    # body where physics has it (21299608; docs/ISAAC_RENDER.md section 10). So
+    # this mounts one per env, aims it at that env's first articulation root
+    # every frame, and writes PNG frames for ffmpeg to assemble.
+    clip_on = os.environ.get("BHL_CAMERA_CLIP", "0") == "1"
+    if clip_on:
+        import isaaclab.sim as sim_utils
+        from isaaclab.sensors import CameraCfg
+        clip_w, clip_h = (int(v) for v in os.environ.get("BHL_CLIP_SIZE", "640:360").split(":"))
+        env_cfg.scene.clip_cam = CameraCfg(
+            prim_path="{ENV_REGEX_NS}/clip_cam", height=clip_h, width=clip_w, data_types=["rgb"],
+            spawn=sim_utils.PinholeCameraCfg(focal_length=18.0),
+            offset=CameraCfg.OffsetCfg(pos=(0.0, 0.0, 2.0), rot=(1.0, 0.0, 0.0, 0.0), convention="world"),
+        )
+
     # specify directory for logging experiments
     log_root_path = os.path.join("logs", "rsl_rl", agent_cfg.experiment_name)
     log_root_path = os.path.abspath(log_root_path)
@@ -329,15 +350,39 @@ def main():
     _obs = env.get_observations()
     obs = _obs[0] if isinstance(_obs, tuple) else _obs
     timestep = 0
+    if clip_on:
+        from PIL import Image
+        clip_dir = os.environ.get("BHL_CLIP_DIR") or os.path.join(log_dir, "videos", "clip")
+        os.makedirs(clip_dir, exist_ok=True)
+        clip_every = max(1, int(os.environ.get("BHL_CLIP_EVERY", "2")))
+        clip_cam = env.unwrapped.scene["clip_cam"]
+        clip_art = next(iter(env.unwrapped.scene.articulations.values()))
+        dev = env.unwrapped.device
+        eye_off = torch.tensor(_vec("BHL_VIEW_EYE", (2.0, 2.0, 1.2)), device=dev)
+        look_off = torch.tensor(_vec("BHL_VIEW_LOOKAT", (0.0, 0.0, 0.3)), device=dev)
+        n_frames = 0
     # simulate environment
     while simulation_app.is_running():
         # run everything in inference mode
         with torch.inference_mode():
             # agent stepping
             actions = policy(obs)
+            if clip_on:
+                root = torch.as_tensor(clip_art.data.root_pos_w[:])[:, :3].to(dev)
+                clip_cam.set_world_poses_from_view(root + eye_off, root + look_off)
             # env stepping
             obs, _, _, _ = env.step(actions)
         timestep += 1
+        if clip_on:
+            if timestep % clip_every == 0:
+                rgb = torch.as_tensor(clip_cam.data.output["rgb"][:])[0, ..., :3]
+                Image.fromarray(rgb.detach().cpu().numpy().astype("uint8")).save(
+                    os.path.join(clip_dir, f"frame_{n_frames:04d}.png"))
+                n_frames += 1
+            if timestep >= args_cli.video_length:
+                print(f"[INFO]: wrote {n_frames} clip frames to {clip_dir}")
+                break
+            continue
         if args_cli.video:
             # Exit the play loop after recording one video
             if timestep == args_cli.video_length:

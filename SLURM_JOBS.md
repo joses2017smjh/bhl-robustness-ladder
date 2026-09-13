@@ -18,6 +18,46 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 ---
 
+## Project status — 2026-09-13
+
+**Done since the last status**
+
+- **Cloth-sort runs end to end in Isaac**, rigid and Newton cloth, after five
+  bugs a parser could see (all now guarded on the login node). Low-res cloth is
+  **467 env-steps/s** at 81 vertices against G-C1's 182 at 961.
+- **The old cloth layout was never reachable**, by distance and facing: the
+  fingertips touch a 0.30 m table only within 0.28 m forward, on the robot's
+  right, and the robot faces away from the table. The kinematic ladder now has a
+  reach model (0.00 on the old layout) and a fingertip contact table exists.
+- **Terrain-sensing ("maze") rung at n=3**: the stereo width effect replicates;
+  "lidar beats blind by 51%" is retracted (+16%); the rung's sensors only ever
+  saw terrain.
+- **Manipulation re-runs on the corrected spawn are final**: success 0 in all
+  ten cells that trained.
+- **Isaac renders fixed**: the viewport drew stale poses; a camera-sensor clip
+  recorder shows the robot where it is (`docs/ISAAC_RENDER.md` §10).
+
+**Rendered**
+
+- `docs/gifs/isaac/terrain_sensors.gif` — the first Isaac clip of trained
+  policies with the robot in shot.
+
+**Left, in order**
+
+1. **Cloth layout redesign** inside the measured contact region — table top
+   0.30 m on the robot's right, small garments, baskets off reachable edges —
+   plus a sweep action rebuilt on the contact table (one sweep per RL step, a
+   correct timer, reading the garment's pose) and a spawn at the planted squat
+   height. Then Isaac C0 scripted, C1, and the cloth cells.
+2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
+   sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
+   designs.
+3. **Isaac spawn for the coop/TaskV2 tasks**: robots still spawn under the
+   floor (`robot_a` bodies at z −0.806…−0.027 in `21299608`).
+4. **MARL**: remaining Tier 1 rows, Tier 2, Tier 3 — unblocked, not queued.
+
+---
+
 ## Open
 
 ### Manipulation re-runs on the corrected spawn · `done` — final numbers 2026-09-11
@@ -99,7 +139,40 @@ rather than reshaped to fit.
 | 2 | `21234053` | **exit 0, clip written** |
 | 1 | `21233950`, `21233969` | 45-into-301: depth appended in the wrong place, before the controller's own assembly |
 
-### B5 maze — stereo pooling sweep · `done` — **it reverses the stereo result**, n=1
+### B5 maze — stereo pooling sweep · `done` — n=3: the width effect replicates, lidar-over-blind does not
+**Replicated, 2026-09-13.** Seeds 1 and 2 of the five arms that matter are in
+(`21247911`, `21247912`, 10 of 10 COMPLETED). Terrain level, mean of the last
+50 of 6,000 iterations, from the event files:
+
+| arm | stereo share | seed 0 | seed 1 | seed 2 | mean |
+|---|---:|---:|---:|---:|---:|
+| blind (control) | 0% | 0.545 | 0.634 | 1.037 | 0.738 |
+| lidar | 0% | 0.794 | 0.814 | 0.971 | 0.860 |
+| stereo, 16×16 / eye | 92% | 0.001 | 0.000 | 0.061 | **0.021** |
+| stereo, 4×4 / eye | 42% | 1.027 | 1.139 | 1.207 | **1.124** |
+| stereo 4×4 + lidar | 28% | 1.203 | 0.972 | 1.170 | 1.115 |
+
+What holds at n=3:
+
+- **Wide stereo fails in every seed** (≤ 0.061), below every blind seed
+  (≥ 0.545). Robust.
+- **Pooled stereo succeeds in every seed** (≥ 1.027), 53× the wide arm — the
+  width effect is the finding, and it replicates cleanly.
+- **Pooled stereo beats blind on the mean** (1.12 against 0.74, +52%), but the
+  ranges touch: blind's best seed, 1.037, sits above pooled stereo's worst,
+  1.027. Say "on the mean", not "in every seed".
+- **Adding lidar to pooled stereo adds nothing** (1.115 against 1.124).
+
+What does **not** hold:
+
+- **"Lidar beats blind by 51%"** (`fe8f726`) was one seed against the weakest
+  blind seed. At n=3 it is **+16%** (0.86 against 0.74), and blind's seed 2
+  beats every lidar seed. Retracted as a claim; the mean is still recorded.
+
+Blind alone spans 0.55–1.04 across seeds. On this terrain, seed variance is
+larger than most of the sensor effects, which is the reason one-seed maze
+comparisons cannot be read.
+
 **Stereo was never worse than blind. It was too wide.** All seven arms, read
 the same way from their event files (mean of the last 50 of 6,000 iterations):
 
@@ -135,18 +208,57 @@ information fraction fixed and changes only the sensor.
 | # | id | outcome |
 |---|---|---|
 | 4 | `21247917` | **rendered, not published.** All four Isaac clips show the maze and the velocity-command arrows riding on the robot's root — the camera follows it correctly — and **no robot**: the body never appears, at 0 s or at 8 s, in any arm. Same failure as the task-env spawn render in *Spawn rotation* below. Four identical corridors captioned as four policies would mislead, so B5 has no clip yet. Raw renders stay in `results/clips/` (gitignored, 120 MB each). |
-| 3 | `21247912_[0-2,5,6]` | queued 2026-09-11 — **seed 2** of Blind, Lidar, Stereo, StereoP16, BothP16, `%2` so other workstreams keep GPUs |
-| 2 | `21247911_[0-2,5,6]` | queued 2026-09-11 — **seed 1**, same five arms. The reversal below rests on one seed and so does the claim it reverses; this project's bar is n=3 |
+| 3 | `21247912_[0-2,5,6]` | **5 of 5 COMPLETED** (4:23–6:01) — seed 2, table above |
+| 2 | `21247911_[0-2,5,6]` | **5 of 5 COMPLETED** (5:32–8:45) — seed 1, table above |
 | 1 | `21233916_[4-6]` | **3 of 3 COMPLETED** (5:46–7:43) — table above |
+
+### Isaac renders show no robot · `done` — cause found, camera-sensor recorder works, first clip published 2026-09-13
+**Found (`21299608`).** It is not the asset, not the renderer and not visibility:
+every robot mesh is loaded and computes `inherited` visibility. It is *which
+pose gets drawn*.
+
+- **The viewport draws the robot at its stale USD pose.** With fabric on,
+  physics writes articulation poses to Fabric, and USD keeps the spawn pose —
+  the maze robot's USD base stayed at (0, 0, 0) while physics had it at
+  (−27.9, −76.4). The viewport, which is what `train_play --video` records,
+  therefore draws the body at the env's grid origin, tens of metres from where
+  it walks, and a camera aimed at the robot films empty ground. That is every
+  robot-less clip since the spawn photographs.
+- **A camera *sensor* draws the body where physics has it**, fabric on: the
+  maze robot on its terrain patch, and the cloth robot next to its table —
+  visibly facing away from it, the reach finding in one frame.
+- **TaskV2 clips only ever showed robots because those robots barely move**:
+  USD spawn pose and physics pose nearly coincide. They also confirm the old
+  spawn bug is still live — `robot_a`'s bodies span z −0.806 … −0.027, all
+  under the floor.
+
+**And it changes B5.** The maze walls, arrows, obstacles and button sit at each
+env's *grid* origin; with a terrain generator the robots are reset onto
+*terrain* origins elsewhere, so the geometry was never where the robots
+trained. Independently, lidar and stereo ray-cast only `/World/ground`
+(`sensors_rig.make_lidar_cfg` / `make_stereo_cfg` defaults), so they could not
+have seen a wall anyway. **B5 is a terrain-perception comparison.** The stereo
+width result stands as that; nothing in it is about a maze.
+
+`train_play` now records clips through a camera sensor that follows the robot
+(`BHL_CAMERA_CLIP=1`, PNG frames, gif assembled on the login node);
+`docs/ISAAC_RENDER.md` §10 records why.
+
+| # | id | outcome |
+|---|---|---|
+| 3 | `21299952` | **COMPLETED** on cn-gpu6 — blind, 200 frames. All four arms rendered; composite published as `docs/gifs/isaac/terrain_sensors.gif` (10 MB) |
+| 2 | `21299873` | **the recorder works**: lidar, stereo P4 and stereo P16 each wrote 200 frames with the robot in shot. Blind died inside `SimulationApp._start_app` 4 s into Kit startup on cn-gpu7, before `train_play` ran a line — a node-side RTX start crash, not the recorder |
+| 1 | `21299608` | **COMPLETED** — viewport vs sensor × fabric vs USD on maze, cloth, TaskV2: cause above |
 
 ### Cloth sorting — the layout is unreachable · `open` — found 2026-09-11
 **No sweep in this scene could ever have touched the garment.** Two
 measurements, one per engine, and they agree:
 
 - **Reach, MuJoCo FK** over the full right-arm range, legs in the pinch squat
-  the controller holds: the hand's lowest point is **z = 0.339 m** — above the
-  0.30 m table top — and its furthest forward reach at table height is
-  **0.305 m** from the root. The garment spawned **0.74 m** away; the table's
+  the controller holds: the fingertips can touch a 0.30 m table top only on the
+  robot's right and never more than **0.28 m forward** of the root *(corrected
+  2026-09-13: this first said the hand could not reach the top at all, which was
+  the hand-link origin, 13 cm above the fingertips)*. The garment spawned **0.74 m** away; the table's
   near edge was 0.39 m; the basket centres 0.32 m. Nothing was in reach.
 - **Facing, Isaac** (`21247910`): the hands sit at (−0.208, **+0.192**) from
   the root, where FK facing +x puts them at (+0.209, **−0.177**). Both axes flip,
@@ -396,7 +508,13 @@ different sensor from Isaac's ray-caster.
 | 2 | `21197056` | **both arms exported** — distinct ONNX, 45 and 301 obs |
 | 1 | `21197021` | export worked, then hung: the play loop had no exit without `--video`. `--play-steps` bounds it. |
 
-### B4 — limb agents (DirectMARL + skrl) · `todo`
+### B4 — limb agents (DirectMARL + skrl) · `superseded` — the gate passed and Tier 1's first block trained
+Written before any of it happened, and kept for the design notes. **Status as of
+2026-09-13:** G-B4 passed on both partitions (`21090555`, *B4 — G-B4 gate*), and
+Tier 1's first block completed (`21105320`, `21124513`, *Tier 1 first block*):
+limb2 + MAPPO +3.22, limb4 + MAPPO +2.08, limb4 + IPPO +1.95, against a
+single-agent control. FINDINGS carries it as *Limb agents*.
+
 Multiple agents per robot, one per limb, against the single-agent PPO controls.
 Gates all 24 Tier-1 rows, so nothing downstream can start until `G-B4` passes.
 
@@ -416,7 +534,11 @@ Constraint from the work order: `joint_deviation_arms` must be ablated in any
 |---|---|---|
 | — | — | not started |
 
-### Tier 1 / 2 / 3 MARL rows · `blocked` on B4
+### Tier 1 / 2 / 3 MARL rows · `todo` — unblocked since G-B4 passed
+**Status as of 2026-09-13:** no longer blocked. G-B4 passed (`21090555`) and the
+first four Tier 1 rows ran (`21105320`, `21124513`). The remaining Tier 1 rows,
+Tier 2 and Tier 3 have not been queued.
+
 24 + 6 + 8 jobs. Work order: do not queue a tier until its gate passes.
 `NUM_ENVS` identical across every arm (target 4096; if MARL OOMs, drop *every*
 arm to 2048 and re-run the single-agent controls at 2048 too — do not mix).
@@ -1224,7 +1346,10 @@ came from.
 | `21192861`, `21192898`, `21192899` | upright-spawn 400-iter probes: welded yaw, welded yaw+plant, gripper yaw |
 | `21247910` | cloth hand/facing probe — robot faces −x, hand 0.97 m from the garment |
 | `21247911`, `21247912` | B5 maze replicates, seeds 1 and 2 of blind, lidar, stereo, stereo P16, both P16 |
-| `21247917` | B5 maze clips — blind, lidar, stereo P4, both P16 |
+| `21247917` | B5 maze clips — blind, lidar, stereo P4, both P16 (no robot in frame; not published) |
+| `21299608` | render probe — viewport draws stale USD pose; camera sensor draws the body |
+| `21299873` | B5 camera-sensor clips — blind, lidar, stereo P4, stereo P16 |
+| `21299952` | B5 camera-sensor clip — blind re-render |
 | `21233916` | B5 stereo pooling sweep — P8, P16, both P16 |
 | `21228029`–`21228033` | cloth-sort cheap Isaac, attempt 1 — died on `SweepActionCfg.class_type=None`, dependents never ran |
 | `21233802`–`21233806` | cloth-sort cheap Isaac, attempt 2 — `class_type` fixed, died on the `&` precedence bug in `_in_basket` |

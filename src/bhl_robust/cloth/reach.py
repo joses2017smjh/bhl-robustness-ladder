@@ -3,10 +3,11 @@
 Until this module existed the kinematic ladder had **no reach model**. A sweep
 was two planar points and the hand was assumed to travel between them, so
 kinematic C0 scoring 1.00 meant "if a hand could go anywhere, this plan sorts
-the garment" and nothing more. Measured by forward kinematics, the right hand
-of the pinch squat cannot get below z = 0.339 m -- above a 0.30 m table top --
-and never reaches more than 0.29 m forward of the root. The original layout put
-the garment 0.74 m away. Nothing in it was reachable.
+the garment" and nothing more. Measured by forward kinematics, the right hand's
+fingertips can touch a 0.30 m table top only on the robot's right and never more
+than 0.28 m forward of the root (``load_contact``); the hand-link origin itself
+bottoms out at 0.339 m. The original layout put the table edge 0.39 m away and
+the garment 0.74 m. Nothing in it was reachable.
 
 The table in ``assets/cloth/right_arm_ik_pinch.npz`` is built from MuJoCo FK
 and refined with damped least squares (``scripts/cloth/build_ik_table.py``):
@@ -146,3 +147,86 @@ def can_reach_xy(xy_world, z_lo: float, z_hi: float, table: ReachTable | None = 
     if hi < lo:
         return False
     return bool(t.mask[ix, iy, lo:hi + 1].any())
+
+
+# ------------------------------------------------------------------ contact
+
+_CONTACT_DEFAULT = Path(__file__).resolve().parents[3] / "assets" / "cloth" / "right_hand_contact_pinch.npz"
+
+
+@dataclass(frozen=True)
+class ContactTable:
+    """Joint angles that put the hand's *underside* at a table-relative height.
+
+    Built by ``scripts/cloth/build_contact_table.py``. A 2 cm robot-frame grid
+    in (x, y); per cell, one right-arm configuration that places a hand-fixed
+    contact point (``p_hand``, the median lowest mesh vertex over sweep poses)
+    at ``table_top + contact_clearance`` with no part of the hand below the
+    top, and one that holds it at ``table_top + hover_clearance``. Cells that
+    would crowd the robot's own right thigh are excluded.
+    """
+
+    x: np.ndarray
+    y: np.ndarray
+    table_top: float
+    contact_clearance: float
+    hover_clearance: float
+    contact_q: np.ndarray      # (nx, ny, 5)
+    contact_mask: np.ndarray   # (nx, ny)
+    hover_q: np.ndarray
+    hover_mask: np.ndarray
+    joints: tuple[str, ...]
+    p_hand: np.ndarray
+    step: float
+
+    @property
+    def contact_z(self) -> float:
+        return self.table_top + self.contact_clearance
+
+    @property
+    def hover_z(self) -> float:
+        return self.table_top + self.hover_clearance
+
+    def index(self, p_robot_xy) -> tuple[int, int] | None:
+        px, py = float(p_robot_xy[0]), float(p_robot_xy[1])
+        i = int(np.rint((px - self.x[0]) / self.step))
+        j = int(np.rint((py - self.y[0]) / self.step))
+        if 0 <= i < len(self.x) and 0 <= j < len(self.y):
+            return i, j
+        return None
+
+    def mask(self, phase: str) -> np.ndarray:
+        return self.contact_mask if phase == "contact" else self.hover_mask
+
+    def q(self, phase: str) -> np.ndarray:
+        return self.contact_q if phase == "contact" else self.hover_q
+
+
+@lru_cache(maxsize=4)
+def load_contact(path: str | None = None) -> ContactTable:
+    f = np.load(Path(path) if path else _CONTACT_DEFAULT, allow_pickle=False)
+    x = f["x"]
+    return ContactTable(
+        x=x, y=f["y"], table_top=float(f["table_top"]),
+        contact_clearance=float(f["contact_clearance"]), hover_clearance=float(f["hover_clearance"]),
+        contact_q=f["contact_q"], contact_mask=f["contact_mask"].astype(bool),
+        hover_q=f["hover_q"], hover_mask=f["hover_mask"].astype(bool),
+        joints=tuple(str(j) for j in f["joints"]), p_hand=f["p_hand"],
+        step=float(round(float(x[1] - x[0]), 6)),
+    )
+
+
+def sweep_cell_ok(xy_world, phase: str = "contact", table: ContactTable | None = None) -> bool:
+    """Can the hand's underside be put over this world (x, y) in this phase?"""
+    t = table or load_contact()
+    i = t.index(to_robot_frame((float(xy_world[0]), float(xy_world[1]), 0.0)))
+    return bool(i is not None and t.mask(phase)[i])
+
+
+def sweep_joints(xy_world, phase: str = "contact", table: ContactTable | None = None) -> dict[str, float] | None:
+    """Right-arm joint angles for this phase over this world (x, y), or None."""
+    t = table or load_contact()
+    i = t.index(to_robot_frame((float(xy_world[0]), float(xy_world[1]), 0.0)))
+    if i is None or not t.mask(phase)[i]:
+        return None
+    return {j: float(v) for j, v in zip(t.joints, t.q(phase)[i])}
