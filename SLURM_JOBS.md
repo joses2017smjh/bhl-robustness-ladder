@@ -18,19 +18,34 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 ---
 
-## Project status — 2026-09-13
+## Project status — 2026-09-14
 
 **Done since the last status**
 
+- **Pointed down, full-width stereo does not fail.** The corrected 16×16 arm
+  lands at terrain level **0.877 / 0.560 / 0.886** (mean 0.774) against 0.021 as
+  published — inside blind's 0.55–1.04. The "width effect" was the upward
+  camera. The 4×4 and 4×4 + lidar arms are still training.
+- **B3's ice was never under the robots** (`21328532`). Patches spawn at each
+  env's grid origin; robots reset onto terrain origins a median **72 m** away,
+  and collision filtering lets a robot touch only its own env's patches. 4.4%
+  could reach one in an episode at full commanded speed. "Depth helps on a hazard
+  it cannot see" (+10.6%) is retracted: it is §6's rough-terrain depth gain
+  (+10.9%) again.
+- **MARL first block final at n=3**: limb2 + MAPPO 2.53 against the limb1
+  control's 2.27 on the mean (+11%, not +47%), and limb2's seed 2 (1.80) is below
+  every control seed. Every skrl row survived 34–80 steps against rsl-rl PPO's
+  ~225: they ran skrl's default PPO settings, not the control's.
+- **Tier 1 MARL grid queued** on the biped split left leg | right leg, over
+  stairs / slippery / rough, seeds 0–1, with the control's PPO settings read from
+  its own config (`21328607`, `21328608`; gate `21328605` passed 9/9). Ice rows
+  wait on B3.
 - **The maze stereo pair looked 20° up, upside down, in every B5 run.** Isaac
   Lab 3.0 reads camera offsets `(x, y, z, w)`; the pose was written
   `(w, x, y, z)`. Measured (`21317022`): 14.8% of pixels saw terrain against
   77.5% corrected. Every stereo number in B5 is void; blind and lidar stand.
   Fixed for all five camera offsets (`3f7b679`); the three stereo arms re-run
   at n=3.
-- **MARL first block, seeds 1–2**: limb4 rows done; limb2's seed-0 lead has not
-  reproduced so far (seed 2 at 1.74 with 5% left, against 3.22). skrl never
-  logged terrain level; fixed for new runs.
 - **Cloth-sort runs end to end in Isaac**, rigid and Newton cloth, after five
   bugs a parser could see (all now guarded on the login node). Low-res cloth is
   **467 env-steps/s** at 81 vertices against G-C1's 182 at 961.
@@ -38,9 +53,9 @@ Diagnostics that ran once, proved a point and were deleted are in
   fingertips touch a 0.30 m table only within 0.28 m forward, on the robot's
   right, and the robot faces away from the table. The kinematic ladder now has a
   reach model (0.00 on the old layout) and a fingertip contact table exists.
-- **Terrain-sensing ("maze") rung at n=3**: the stereo width effect replicates;
-  "lidar beats blind by 51%" is retracted (+16%); the rung's sensors only ever
-  saw terrain.
+- **Terrain-sensing ("maze") rung at n=3** (2026-09-13): "lidar beats blind by
+  51%" is retracted (+16%); the rung's sensors only ever saw terrain. *Its
+  "width effect" is void too — see the corrected-stereo bullet above.*
 - **Manipulation re-runs on the corrected spawn are final**: success 0 in all
   ten cells that trained.
 - **Isaac renders fixed**: the viewport drew stale poses; a camera-sensor clip
@@ -78,17 +93,22 @@ Diagnostics that ran once, proved a point and were deleted are in
    sequential five-garment scene in Isaac; C1 training; C3–C5.
 2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
    sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
-   designs. *Before that, the terrain rung's stereo arms are re-running with the
-   cameras pointed down (`21317023`–`21317025`).*
+   designs. *Before that, the terrain rung's stereo arms finish re-running with
+   the cameras pointed down (`21317023`–`21317025`; 16×16 done, 0.774 at n=3).*
 3. **Isaac spawn for the coop/TaskV2 tasks**: robots still spawn under the
    floor (`robot_a` bodies at z −0.806…−0.027 in `21299608`). *Likely cause found,
    not yet probed:* on v60 the spawn tuple `(0.707, −0.707, 0, 0)` is read
    `(x, y, z, w)`, an upside-down robot facing the cube (R₂₂ = −1); the legacy
    `(0.707, 0, 0, −0.707)` is a −90° roll. The fix is `native_quat` on the intended
    `(w, x, y, z)` yaw, plus a spawn probe.
-4. **MARL**: first block seeds 1–2 running (`21302171`, `21302172`). Tier 2 and
-   Tier 1's PPO rows already exist; Tier 1's sixteen MARL rows need a 12-DoF
-   leg split and a gate; Tier 3 needs 22-DoF terrain tasks — *Tier 1 / 2 / 3*.
+4. **MARL**: first block done at n=3 — limb2's lead did not replicate. Tier 1's
+   MARL rows are running for stairs / slippery / rough (`21328607`, `21328608`;
+   gate `21328605` passed 9/9); ice waits on item 5. Tier 3 needs 22-DoF terrain
+   tasks and an arm ablation that reaches rsl-rl.
+5. **Put B3's ice where the robots are**: patches at the terrain origins, or moved
+   to `env_origins` at reset, on tiles flat enough that a flush patch stays flush;
+   re-probe with `scripts/bench/ice_placement_probe.py`; then the B3 PPO arms and
+   Tier 1's ice rows. Until then B3 and finding 11 stay retracted.
 
 ---
 
@@ -149,7 +169,44 @@ the cube pair; it faces along -+x rather than -+y so it needs the two headings
 | 2 | `21199344`, `21199345` | **final:** 4 COMPLETED at 8,000 (`21199344_3`, `_5`; `21199345_2`, `_3`), 3 NODE_FAIL at ~19 h (`21199344_0-2`), 3 FAILED (`21199344_4` and `21199345_1` at 2 min, `21199345_0` at 18 h), 5 CANCELLED (3 plank; `21199345_4`, `_5` at ~16 h) |
 | 1 | `21186402`, `21186403` | cancelled — trained on the lying-down spawn |
 
-### B3 ice clip — DONE · `done` — 2026-09-10
+### B3 ice — the patches were never under the robots · `retracted` — found 2026-09-14
+**Every B3 number was trained with the ice out of reach.** `terrains/ice.py`
+spawns each patch as an `AssetBaseCfg` under `{ENV_REGEX_NS}`, so it sits at its
+env's *grid* origin. With a terrain generator, Isaac Lab resets each robot onto a
+*terrain* origin (`scene.env_origins`), and GPU collision filtering lets a robot
+touch only its own env's prims. It is the fault that emptied the maze
+(`21299608`). G-B3 checked that a patch is flush; nothing checked where it is.
+
+Measured on the built scene at 4,096 envs on v51, the stack B3 trained on
+(`21328532`, `results/ice_placement_probe.txt`):
+
+| quantity | value |
+|---|---|
+| robot → its terrain origin | 0.38 m (reset noise) |
+| patch → its env's grid origin | 2.13 m (config offset 2.0, ±0.72) |
+| terrain origin → grid origin | median 71.9 m |
+| robot → nearest own patch | p10 25.0 m · median 71.9 m · p90 127.8 m |
+| reach in one episode | 15.0 m (20 s × 0.75 m/s, walking straight at it) |
+| on ice at spawn / could reach any own patch | 0.000 / 0.044 |
+
+What that voids: "depth beats blind by 10.6% on a hazard it cannot see", and
+"colouring the ice changes nothing" — 1.394 against 1.374 is two blind arms on
+the same bumpy ground. The three B3 arms trained on the bumpy menu, and the depth
+gain matches §6's rough-terrain one (+10.9%). The MuJoCo `ice_pair` clip shows
+those policies, not policies that learned ice. G-B3's flushness arithmetic
+stands, and so does uniform low friction (`slippery`): it randomises the robot's
+own contact material, which has no placement to get wrong.
+
+Fix, not built: patches at the terrain origins (global prims, or per-env
+kinematic bodies moved to `env_origins` at reset), on tiles flat enough that a
+flush patch stays flush as the curriculum promotes, then re-probe. Tier 1's ice
+rows are not queued until then — the work order's own fallback for B3.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21328532` | **ICE-PLACEMENT UNREACHABLE** (1:01) — table above |
+
+### B3 ice clip — DONE · `done` — 2026-09-10; the render works, the result it shows is retracted (entry above)
 `render_multi` can now drive a depth-conditioned policy, and B3 has a picture:
 `docs/gifs/ice_pair.gif`, green blind against red depth on flush friction
 patches, with the depth panel and waterfall along the bottom.
@@ -211,9 +268,24 @@ lidar are not re-run. Kit boots are serialised by `slurm/inner/v60_boot_gate.sh`
 instead of chaining six-hour runs end to end (fixed in `4474b83` after a short
 job left its lock behind for ten minutes).
 
+**16×16, pointed down, n=3** (mean of the last 50 of 6,000 iterations, event files):
+
+| arm | seed 0 | seed 1 | seed 2 | mean | as published |
+|---|---:|---:|---:|---:|---:|
+| blind (control, stands) | 0.545 | 0.634 | 1.037 | 0.738 | — |
+| lidar (stands) | 0.794 | 0.814 | 0.971 | 0.860 | — |
+| **stereo 16×16, corrected** | **0.877** | **0.560** | **0.886** | **0.774** | 0.021 |
+
+**At 92% of the input, stereo that looks at the ground trains like blind** — every
+seed inside blind's 0.55–1.04. The "width effect" (0.021 at 16×16 against 1.124 at
+4×4) was the camera pointing at the sky, not the width drowning proprioception.
+The 4×4 and 4×4 + lidar arms are mid-run and not results yet: 4×4 seed 1 reads
+1.206 at 5,137 iterations, 4×4 + lidar seed 2 0.839 at 5,078, 4×4 seed 0 0.428
+at 3,419.
+
 | # | id | outcome |
 |---|---|---|
-| 3 | `21317023`, `21317024`, `21317025` | running — seeds 0 / 1 / 2, `--array=2,5,6%1` (16×16, 4×4, 4×4 + lidar), 16 h limit, 2,048 envs as before |
+| 3 | `21317023`, `21317024`, `21317025` | seeds 0 / 1 / 2, `--array=2,5,6%1` (16×16, 4×4, 4×4 + lidar), 16 h limit, 2,048 envs as before — **16×16 COMPLETED in all three** (8:42, 5:41, 5:42; table above); 4×4 seeds 0–1 and 4×4 + lidar seed 2 running, three tasks pending |
 | 2 | `21317022` | **STEREO-PITCH PASS** (0:54) — table above |
 | 1 | `21302173_4`, `21302174` | **cancelled** — both trained the upward-looking pair: StereoP8 seed 1 at iteration 4,150 of 6,000 (terrain level 0.086 there), and seed 2 of Both and StereoP8 before it started. `21302173_3`, Both seed 1, had COMPLETED in 4:17 at terrain level 0.044 (last 50 iterations; seed 0 was 0.065) — void for the same reason |
 
@@ -777,43 +849,50 @@ Constraint from the work order: `joint_deviation_arms` must be ablated in any
 |---|---|---|
 | — | — | not started |
 
-### Tier 1 first block — seeds 1 and 2 · `running` — queued 2026-09-13
+### Tier 1 first block — seeds 1 and 2 · `done` — n=3: the limb2 lead does not replicate, and every skrl row ran untuned PPO
 The first block's five rows again at seeds 1 and 2, because the limb2 result was
 one seed. `slurm/89_marl_train.sbatch` unchanged: Arms-Bumpy, 22 DoF, 4,096 envs,
 6,000 iterations. A 3-iteration smoke of all five rows went first, and both
 seeds chained on it `afterok`.
 
-Mean total reward (`Reward / Total reward (mean)`, mean of the last 5% of
-points), from the event files. It is the statistic the seed-0 table in FINDINGS
-used, and it reproduces 3.22 / 2.19 / 2.08 / 1.95 exactly:
+**Final, from the event files** — mean of the last 5% of points, the statistic
+the seed-0 table in FINDINGS used (it reproduces 3.22 / 2.19 / 2.08 / 1.95
+exactly):
 
-| row | seed 0 | seed 1 | seed 2 | mean |
-|---|---:|---:|---:|---:|
-| limb4 + MAPPO | 2.078 | 1.787 | 2.638 | 2.168 |
-| limb4 + IPPO | 1.954 | 2.103 | 1.402 | 1.820 |
-| limb2 + MAPPO | 3.224 | *2.560 at 71%* | *1.744 at 95%* | — |
-| limb1 + IPPO (control) | 2.190 | pending | pending | — |
+| row | total reward s0 / s1 / s2 | mean | per-step reward | episode length, steps |
+|---|---|---:|---|---|
+| limb4 + MAPPO | 2.078 / 1.787 / 2.638 | 2.168 | 0.052 / 0.044 / 0.060 | 34 / 37 / 42 |
+| limb4 + IPPO | 1.954 / 2.103 / 1.402 | 1.820 | 0.047 / 0.051 / 0.032 | 38 / 37 / 35 |
+| limb2 + MAPPO | 3.224 / 2.562 / 1.798 | **2.528** | 0.043 / 0.036 / 0.038 | 65 / 62 / 45 |
+| limb1 + IPPO (control) | 2.190 / 2.403 / 2.228 | **2.274** | 0.026 / 0.030 / 0.028 | 80 / 78 / 74 |
+| PPO, rsl-rl, not arm-ablated | mean reward 3.84 / 3.57 / 3.74 | — | — | 227 / 221 / 223 |
 
-Too early for the headline, since limb2 and the control are unfinished. Two
-things are already visible:
-
-- **limb2's seed-0 lead has not reproduced so far.** Seed 2 sits at 1.74 with 5%
-  of training left — below every limb4 + MAPPO seed.
-- **The three statistics these runs log rank the rows differently.** Mean total
-  reward is episode length times per-step reward, and the two factors move
-  opposite ways with agent count. At seed 0, per-step reward runs limb4 + MAPPO
-  0.052 > limb4 + IPPO 0.047 > limb2 0.043 > limb1 0.026, while episode length
-  runs limb1 80 > limb2 65 > limb4 34–38 steps. More agents earn more per step
-  and fall sooner. Seeds 1–2 lean the same way, except limb4 + IPPO seed 2
-  (0.032). Which split looks best depends on which statistic is read, and none
-  of them is terrain level.
+- **limb2's lead does not replicate.** It is +11% over the control on the mean,
+  not +47%, and its seed 2 (1.80) sits below every control seed. limb4 + MAPPO
+  lands on the control (2.17); limb4 + IPPO is below it.
+- **The statistics disagree, and none of them is terrain level.** Total reward is
+  episode length times per-step reward, and the two move opposite ways with agent
+  count: by per-step reward every split beats the control, by episode length the
+  control beats every split.
+- **Every skrl row was a handicapped PPO.** They ran skrl's defaults beside an
+  rsl-rl control configured otherwise: entropy 0 against 0.008, a fixed learning
+  rate against the KL-adaptive schedule, 8 epochs × 2 mini-batches against 5 × 4,
+  gradient clip 0.5 against 1.0, no time-limit bootstrap, observation and value
+  normalisation rsl-rl does not use, and a [256, 256, 128] network against
+  [256, 128, 128]. The skrl control survives 74–80 steps where rsl-rl PPO survives
+  ~225 on the same task. Comparisons *between* skrl rows hold the handicap fixed;
+  none says what a limb split does to a tuned PPO. `train_marl.py --hparams rsl`,
+  the default for every run not named `marl-*`, now reads every one of those
+  settings from the task's own rsl-rl runner config.
 
 Found while reading these:
 
 - **No skrl run has ever logged terrain level.** skrl's trainer forwards
-  `infos["episode"]`; Isaac Lab reports the curriculum under `infos["log"]`, so it
-  was dropped silently. `train_marl.py` now sets `environment_info="log"`; rows
-  that start after that change log `Info / Curriculum/terrain_levels`.
+  `infos["episode"]`, and only one-element tensors; Isaac Lab reports the
+  curriculum under `infos["log"]` and `.item()`s it first. `environment_info="log"`
+  alone got 28 Info tags and still no terrain level (`21302171_4`, `21328444`);
+  `limb_marl.loggable` turns those scalars back into tensors, and G-B4t now
+  requires the tag.
 - **The PPO control, row 3, was never arm-ablated.** `BHL_ABLATE_ARM_DEV` is read
   only by the skrl branch of `marl_train.sh`; row 3 execs `train.sh`, which
   ignores it. The sbatch's "ablated in every row including the control" was never
@@ -823,11 +902,34 @@ Found while reading these:
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21302172` | seed 2 — rows 0, 1 COMPLETED (6:02, 5:26); rows 2, 3 running; row 4 pending (`%2`). Time limit cut 40 h → 14 h (longest first-block run: 6:08) to free the GPU-minute cap |
-| 2 | `21302171` | seed 1 — rows 0, 1 COMPLETED (6:09, 6:08); rows 2, 3 running; row 4 pending; same limit cut |
+| 3 | `21302172` | seed 2 — **5 of 5 COMPLETED** (4:20–6:02). Time limit cut 40 h → 14 h (longest first-block run: 6:08) to free the GPU-minute cap |
+| 2 | `21302171` | seed 1 — **5 of 5 COMPLETED** (4:59–6:09); same limit cut |
 | 1 | `21302170` | **smoke 5/5 COMPLETED** (1:17–1:20; seed 99, 3 iterations) — each skrl row ran 72 of 72 timesteps, PPO logged 3 iterations at episode length 17.9 |
 
-### Tier 1 / 2 / 3 MARL rows · `todo` — Tier 2 and Tier 1's PPO rows already exist; the MARL rows need a biped split, Tier 3 needs tasks
+### Tier 1 MARL grid — biped, left leg | right leg · `running` — G-B4t passed 9/9, 2026-09-14
+The work order's Tier 1 rows (`slurm/89b_marl_terrain.sbatch`): MAPPO and IPPO on
+the 12-DoF biped split left leg | right leg (`legs2`), plus a limb1 single-agent
+control on every terrain, with ray-cast depth, 4,096 envs, 6,000 iterations,
+seeds 0–1, run names `{row}-{terrain}-depth-s{seed}`. Stairs, slippery and rough;
+ice is out until B3's patches reach the robots. PPO settings and network are the
+rsl-rl control's (`--hparams rsl`). Array tasks serialise their Isaac boots on
+`.v51-boot.lock`.
+
+G-B4t (`slurm/88b_marl_terrain_gate.sbatch`) trains every row for two real
+iterations at full width and passes only on what the built env and trainer report
+about themselves: 2 agents × 6 joints with the left and right hip first (or
+1 × 12), MAPPO / IPPO objects matching the row, 301-wide observations with the
+depth term on every terrain and MAPPO's state equal to them, 48 of 48 timesteps,
+terrain level in the event file, and the rsl-rl settings. The action order is
+also checked inside `LimbMarlEnv` against the action term's own joint names.
+
+| # | id | outcome |
+|---|---|---|
+| 3 | `21328605` → `21328607`, `21328608` | **G-B4t PASS, 9 of 9** (6:50) — terrain level logged, rsl-rl settings confirmed (5 epochs × 4 mini-batches, entropy 0.008, KL-adaptive LR, [256, 128, 128]), observation 301 on all three terrains. Seeds 0 and 1 `--array=3-11%2`, chained `afterok`; seed 0's stairs MAPPO and IPPO rows running |
+| 2 | `21328445`, `21328446` | **cancelled** — `DependencyNeverSatisfied` after the gate failed; their ice rows had been held first, pending `21328532` |
+| 1 | `21328444` | **FAIL, correctly** (9:50). (i)–(iii) pass on all 12 rows: 2 agents of 6, left and right hip first, observation 301 = state with depth, trainer matches. (iv) fails on 9: no terrain level in the event file, because Isaac Lab `.item()`s curriculum scalars and skrl logs only tensors. The three rough rows loaded the `loggable` fix mid-gate and passed (iv) |
+
+### Tier 1 / 2 / 3 MARL rows · `todo` — Tier 2 and Tier 1's PPO rows already exist; Tier 1's MARL rows are queued (above); Tier 3 needs tasks
 **Audit, 2026-09-13**, against the work order's grid:
 
 - **Tier 2 (PPO, blind, on slippery / stairs / ice, 2 seeds) — covered.** Slippery
@@ -835,7 +937,8 @@ Found while reading these:
   0–1 (`21105232`), all at 4,096 envs and 6,000 iterations. Nothing to queue.
 - **Tier 1's eight PPO depth rows — covered** by the same three arrays and §6's
   rough depth (1.601 / 1.598).
-- **Tier 1's sixteen MARL rows — not started.** They are IPPO and MAPPO on the
+- **Tier 1's sixteen MARL rows — queued for three terrains** (*Tier 1 MARL grid*
+  above); ice waits on B3. As audited on 2026-09-13: they are IPPO and MAPPO on the
   **12-DoF biped at N=2** (left leg | right leg), depth on, over rough / slippery
   / stairs / ice. `partition_for` knows only the 22- and 24-DoF layouts. The
   "first block" that ran is the 22-DoF split on Arms-Bumpy — the work order's
@@ -910,7 +1013,7 @@ and locomotion rungs are unaffected, having never used arm contact.
 |---|---|---|
 | 1 | `21093986` | **done** — `assets/gripper/usd/berkeley_humanoid_lite_gripper/berkeley_humanoid_lite_gripper.usda`. The MJCF path landed later (`aed84e1`), so the replay harness renders 24 DoF too: 22 actuators without the flag, 24 with, 48 for a two-robot crew. |
 
-### B3 — ice / patchy friction · `done`
+### B3 — ice / patchy friction · `retracted` — the ice was out of the robots' reach (*B3 ice — the patches were never under the robots*)
 Wired and registered: `Velocity-BHL-Biped-Ice-v0`, `-Ice-Depth-v0`,
 `-IceVisible-v0`. G-B3 passes at the flush inset and fails at 5 mm, so the gate
 can fail.
@@ -1663,6 +1766,10 @@ came from.
 | `21302173`, `21302174` | B5 Both / StereoP8 seeds 1–2 — `_3` completed, `_4` and `21302174` cancelled (stereo looked up) |
 | `21317022` | stereo pitch probe — raw pose +20°, corrected −20° |
 | `21317023`, `21317024`, `21317025` | B5 stereo re-run, cameras pointed down — seeds 0 / 1 / 2 |
+| `21328444`, `21328605` | G-B4t, Tier 1 MARL terrain gate — failed on terrain-level logging, then re-run |
+| `21328445`, `21328446` | Tier 1 MARL grid, first submission — cancelled after the gate failed |
+| `21328607`, `21328608` | Tier 1 MARL grid — stairs / slippery / rough, seeds 0 and 1 |
+| `21328532` | B3 ice placement probe — patches a median 72 m from the robots |
 | `21300299`, `21300300`, `21300301` | cloth redesign: rigid smoke, Isaac C0 scripted (boot crash), C1 training smoke |
 | `21300348`, `21300493`, `21300494` | cloth redesign: C0 free base, C0 fixed base, C0 fixed-base clip |
 | `21300603`, `21300604`, `21300605` | cloth redesign with hand colliders: fixed-base C0, its clip, free-base C0 |

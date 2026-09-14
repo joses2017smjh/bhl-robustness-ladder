@@ -59,8 +59,8 @@ did not.
 | **8** | **Arms buy recoverable perturbation, not a higher step.** No 12-DoF policy crosses the lab floor; two of four 22-DoF policies do. |
 | **9** | **The fall detector cannot see a level collapse.** `bad_orientation` tests torso *orientation*, so a robot that sinks 34 cm with its torso level scores as upright — which is what the ladder pair does for twelve seeds out of twelve. |
 | **10** | **The hands were welded shut.** Every manipulation result came from an asset whose grippers are `type="fixed"`. Restoring the two DoF the hardware has takes mean episode length from **6.3 to 427.7 steps**, six cells a side. |
-| **11** | **Depth helps on a hazard it cannot see.** On friction patches flush with the floor — ray-cast-verified — depth beats blind by **10.6%**, while colouring them so a camera *could* see them changes nothing (1.394 vs 1.374). |
-| **12** | **Splitting the policy at the arms/legs seam helps; splitting further does not.** limb2 finishes **47% above** a no-split control under the same trainer; limb4 lands on it. One seed — and seeds 1–2, still running, have not reproduced the lead so far. |
+| **11** | **Retracted: "depth helps on a hazard it cannot see."** The friction patches spawned a median **72 m** from the robots they were meant for, and only 4.4% could have reached one in an episode. The +10.6% was measured on bumpy ground; it matches §6's rough-terrain depth gain. |
+| **12** | **Splitting the policy at the arms/legs seam did not replicate.** The seed-0 "47% above a no-split control" is **+11%** on the mean at three seeds, with one limb2 seed below every control seed — and every skrl row, control included, ran default PPO settings the rsl-rl baseline does not use. |
 | **13** | **A gate with no control measures its own budget.** G-B2 rejected a 5 cm stair riser twice on a 300-iteration probe. The walkable-terrain control is *also* pinned at 0.0000 there. Re-run to 2,000 with 5 cm restored, the same probe **passes** at level 0.107. |
 
 Every claim below links into the [full technical report](docs/REPORT.md), which
@@ -843,6 +843,17 @@ on the Isaac-side survival numbers.
 
 ## Ice: depth helps on a hazard it cannot see
 
+> **Retracted, 2026-09-14: the ice was never under the robots.** Each patch was
+> spawned at its env's *grid* origin, while Isaac Lab resets each robot onto a
+> *terrain* origin, and collision filtering lets a robot touch only its own env's
+> patches. Measured on the built scene (`21328532`): the nearest own patch is a
+> median **71.9 m** from the robot (p10 25 m), an episode reaches 15 m at full
+> commanded speed, and **4.4%** of robots could have reached one. Every arm below
+> trained on the bumpy menu. The depth gain, +10.6%, is §6's rough-terrain gain
+> (+10.9%) again, and "visible ice changes nothing" compares two blind arms on
+> the same ground. G-B3 proved the patches flush; nothing checked where they
+> were. The section is kept as written.
+
 §6 found depth beating blind **2.5×** on uniformly low friction — a result that
 inverted this repo's own written prediction, since a ray-cast depth camera
 returns geometry and friction has none. The obvious explanation is that depth
@@ -907,14 +918,19 @@ standing. Splitting along that seam helps; splitting further does not.
 > **This is one seed.** §1 of this project is a single-seed result that died on
 > its third seed, and the same standard applies here. Suggestive, not settled.
 >
-> **Seeds 1 and 2 are running, and so far the lead is not there** (2026-09-13,
-> `21302171`, `21302172`). limb4 + MAPPO lands at 2.08 / 1.79 / 2.64, limb4 +
-> IPPO at 1.95 / 2.10 / 1.40. limb2 is 2.56 at 71% of training and **1.74 at
-> 95%**, against seed 0's 3.22. The control has not run yet. The per-step reward
-> and episode length logged alongside rank the rows differently: more agents
-> earn more per step and fall sooner. So the table's mean total reward, their
-> product, is not a neutral judge. Final numbers, and terrain level (never
-> logged by skrl until now), go to the ledger when the rows land.
+> **At three seeds the lead is gone** (2026-09-14, `21302171`, `21302172`).
+> Mean total reward: limb2 + MAPPO **2.53** (3.22 / 2.56 / 1.80), limb1 control
+> **2.27** (2.19 / 2.40 / 2.23), limb4 + MAPPO 2.17, limb4 + IPPO 1.82. limb2 is
+> +11% on the mean, and its seed 2 is below every control seed.
+>
+> Two more reasons not to read this table as a verdict on limb splits. The
+> statistics disagree: per-step reward ranks every split above the control,
+> episode length ranks the control above every split, and mean total reward is
+> their product. And every skrl row ran skrl's default PPO settings — no entropy
+> bonus, fixed learning rate, different epochs, mini-batches, clipping and
+> network — where the rsl-rl baseline ran its own. The skrl control survives
+> 74–80 steps; rsl-rl PPO on the same task survives ~225. The Tier 1 grid now
+> queued reads the rsl-rl settings from the task's own config.
 >
 > The original PPO control is not in the table: it routes through rsl-rl while
 > every MARL row routes through skrl, so it prices the RL library as well as the
@@ -937,6 +953,11 @@ standing. Splitting along that seam helps; splitting further does not.
 > stereo arms are re-running at n=3 with the cameras pointed down (`21317023`–
 > `21317025`), and this section will be rewritten from those. The depth rung
 > above trains on 5.1 and is unaffected.
+>
+> **First corrected arm, 2026-09-14:** stereo at 16×16 an eye — 92% of the input,
+> the arm that "failed in every seed" — reaches **0.877 / 0.560 / 0.886** (mean
+> 0.774) pointed at the ground, inside blind's 0.55–1.04. Width did not drown the
+> proprioception; the camera was looking at the sky.
 
 *Three seeds per arm (`21218766`, `21233916`, `21247911`, `21247912`).*
 

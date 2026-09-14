@@ -20,7 +20,7 @@ Tell me which names you want on the front page.
 | [`multi_race`](#four-policies-at-once) | MuJoCo | 4 policies, one shove | **works** |
 | [`multi_lab`](#four-policies-at-once) | MuJoCo | 4 policies, obstacle course + depth | **works** |
 | [`depth_pair`](#depth) | MuJoCo | ray-cast depth | **works** |
-| [`ice_pair`](#b3--ice) | MuJoCo | B3 — blind vs depth on flush friction patches | **works** — depth +10.6% |
+| [`ice_pair`](#b3--ice) | MuJoCo | B3 — blind vs depth on flush friction patches | render works — **result retracted**: in training the ice was never under the robots |
 | [`isaac/terrain_sensors`](#terrain-sensing-the-b5-maze-rung) | Isaac Sim | B5 — blind, lidar, stereo at two widths | render only — the result is the table, not the clip |
 | [`isaac/cloth_sort_fixed_base`](#cloth-sorting-fixed-base-diagnostic) | Isaac Sim | cloth-sort C0, scripted sweep, rigid shirt proxy, **root pinned** | **works** — 32/32 on this layout; not cloth, not a standing robot |
 | [`squat_pick`](#the-cooperative-lift) | MuJoCo | scripted reachability control | n/a — scripted |
@@ -73,6 +73,12 @@ Two policies, one command, one world. Left is the intervention, right the contro
 | <img src="gifs/depth_pair.gif" width="420"> | **`depth_pair`** — left the scored episode, right the robot's own 64×64 depth. MuJoCo's offscreen depth buffer, not Isaac's ray-caster. |
 
 ## B3 — ice
+
+> **Retracted, 2026-09-14.** In Isaac training the patches spawned a median 72 m
+> from the robots, and 4.4% could have reached one in an episode
+> (`scripts/bench/ice_placement_probe.py`, FINDINGS *Ice*). These are policies
+> trained on bumpy ground, dropped onto ice in MuJoCo. The clip stays as a render
+> of `DepthRlController`; it is not evidence about ice.
 
 The strongest result in the repo, and until now the only one with no picture.
 Depth beats blind by **10.6%** (final curriculum level 1.519 against 1.374) on

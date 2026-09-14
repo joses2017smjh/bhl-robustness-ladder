@@ -10,10 +10,13 @@ The joint order is the one the observation and action vectors were built in:
 term passing `preserve_order=True`. So these are index slices into a fixed
 layout, not a remapping, and `reassemble` is exactly the inverse of `split`.
 
-The 22 joints here are the **arms** tasks (`Velocity-BHL-Arms-*`), not the
-biped ones. The biped overlays actuate 12 leg joints only, and pointing a
-four-limb partition at one of those fails with `Invalid action shape, expected:
-12, received: 22` -- which is how G-B4 found it, on its first online run.
+The 22 joints here are the **arms** tasks (`Velocity-BHL-Arms-*`). The biped
+overlays actuate the 12 leg joints only, in `LEG_JOINTS` order (upstream's
+`HUMANOID_LITE_LEG_JOINTS`, `preserve_order=True`), and pointing a four-limb
+partition at one of those fails with `Invalid action shape, expected: 12,
+received: 22` -- which is how G-B4 found it, on its first online run. The
+biped's own factorisation is `legs2`, left leg | right leg: the work order's
+Tier 1, which sidesteps the arm-deviation confound because there are no arms.
 
 That inverse property is the whole point. If the four agents' actions do not
 reassemble into precisely the vector a single-agent policy would have emitted,
@@ -149,10 +152,12 @@ def partition_for(kind: str, n_dof: int) -> dict[str, list[int]]:
         names = JOINTS
     elif n_dof == len(JOINTS_22):
         names = JOINTS_22
+    elif n_dof == len(LEG_JOINTS):
+        names = LEG_JOINTS
     else:
         raise ValueError(
-            f"no joint layout with {n_dof} DoF; known are "
-            f"{len(JOINTS_22)} (welded hands) and {N_JOINTS} (grippers)"
+            f"no joint layout with {n_dof} DoF; known are {len(LEG_JOINTS)} "
+            f"(biped), {len(JOINTS_22)} (welded hands) and {N_JOINTS} (grippers)"
         )
     if kind == "limb1":
         # One agent owning every joint: not a factorisation at all, and that is
@@ -171,8 +176,19 @@ def partition_for(kind: str, n_dof: int) -> dict[str, list[int]]:
         }
     elif kind == "limb2":
         part = {"arms": _idx_in(names, "arm_"), "legs": _idx_in(names, "leg_")}
+    elif kind == "legs2":
+        # The biped at N=2. On an arms layout it would leave ten joints with no
+        # agent, which the coverage check below refuses.
+        part = {"leg_left": _idx_in(names, "leg_left"),
+                "leg_right": _idx_in(names, "leg_right")}
     else:
         raise ValueError(f"unknown partition {kind!r}")
+    # An agent that owns no joints is not a limb. limb4 or limb2 on the 12-DoF
+    # biped would build one per arm with nothing to act on and still "cover"
+    # every joint, so coverage alone cannot catch it.
+    empty = [a for a, idx in part.items() if not idx]
+    if empty:
+        raise ValueError(f"{kind} on the {n_dof}-DoF layout leaves {empty} with no joints")
     seen = sorted(i for v in part.values() for i in v)
     if seen != list(range(n_dof)):
         raise ValueError(f"{kind} does not partition {n_dof} DoF")

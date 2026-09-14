@@ -1,0 +1,7 @@
+task Velocity-BHL-Biped-Ice-Depth-v0  envs 4096  patches per env 6  collision filtering True
+robot->terrain origin, mean 0.38 m
+patch 0 -> its env grid origin, mean 2.13 m (config offset (2.0, -0.72))
+terrain origin -> grid origin, median 71.9 m
+robot -> nearest own patch: p10 25.0 m  median 71.9 m  p90 127.8 m
+reach bound 15.0 m (20 s x 0.75 m/s)  on ice at spawn 0.000  could reach own ice 0.044
+ICE-PLACEMENT UNREACHABLE  median distance 71.9 m, reach 15.0 m, reachable fraction 0.044

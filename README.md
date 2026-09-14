@@ -83,10 +83,8 @@ including the ones not used here, is in [docs/GALLERY.md](docs/GALLERY.md).
 | Domain randomization | blind policy holds to terrain difficulty d≈0.4; randomized arms reach d≈0.6 |
 | Low-res cloth | **467 env-steps/s** at 81 vertices vs G-C1's 182 at 961 — 2.6× while carrying 3× the DoF, and 10×10 costs only 6% more |
 | Depth on low friction | final curriculum level **0.65 vs 0.26** blind — 3 seeds, no overlap |
-| Depth on invisible hazards | **+10.6%** on friction patches flush with the floor, ray-cast-verified |
 | Ray-cast depth cost | **1.6%** of throughput at 4,096 envs, 2.9% mean error vs closed form |
 | Restoring the grippers | mean episode length **6.3 → 427.7** steps, 6 cells a side |
-| Limb factorisation | arms/legs split finishes **47% above** a no-split control — one seed; seeds 1–2, still running, have not reproduced it so far |
 
 **Where it loses**
 
@@ -96,7 +94,9 @@ including the ones not used here, is in [docs/GALLERY.md](docs/GALLERY.md).
 | Plank task | 0.0 cm across 18 seeds, 6 of them after the spawn bug was fixed — contact points exceed the shoulder span |
 | Vision on the lift | depth-conditioned policies fall in almost every episode; blind ones do not |
 | Task completion | **zero** success on all three redesigned tasks, gripper included |
-| Stereo on terrain | **retracted** — the stereo pair looked 20° *up*, upside down, in every run: Isaac Lab 3.0 reads camera quaternions `(x, y, z, w)` and the pose was written `(w, x, y, z)`. 14.8% of pixels saw terrain, against 77.5% corrected. The "width effect" and "pooled stereo beats blind" are void; re-running at n=3. Lidar's **+16%** over blind stands, inside the blind spread |
+| Stereo on terrain | **retracted** — the stereo pair looked 20° *up*, upside down, in every run: Isaac Lab 3.0 reads camera quaternions `(x, y, z, w)` and the pose was written `(w, x, y, z)`. 14.8% of pixels saw terrain, against 77.5% corrected. Pointed down, full-width stereo reaches **0.77** at n=3 (published 0.02), inside the blind spread — the "width effect" was the camera. Lidar's **+16%** over blind stands, inside the blind spread |
+| Depth on invisible hazards | **retracted** — B3's friction patches spawned a median 72 m from the robots, and 4.4% could reach one in an episode, so the +10.6% was measured on bumpy ground. It matches the rough-terrain depth gain |
+| Limb factorisation | **did not replicate** — the arms/legs split's "47% above a no-split control" is +11% on the mean at n=3, with a seed below every control seed; and every skrl row ran PPO settings the rsl-rl baseline does not use |
 | Isaac spawn | **Robots spawn under the floor and are not upright.** Visible in the first frames of every Isaac clip. Six probes have contradicted each other and the render; no fix is committed. Isaac-side episode lengths are flagged. **MuJoCo-scored numbers are unaffected and stand** |
 | Cloth sorting | **The first scene was never reachable** — the garment sat 0.74 m away, the fingertips reach 0.28 m forward, and in Isaac the robot faced the other way. Redesigned inside a measured fingertip table; the kinematic ladder sorts at 1.00 in C0/C1/C4/C5. In Isaac the scripted sweep **sorts shirt, sock and jacket proxies 32 of 32 times on a fixed base** (root pinned). That took hand colliders (the shipped hands had none) and inverse-dynamics feedforward through the unchanged 4 N m arm drive: on bare position targets the fingertip ran 65–72 mm behind its schedule, and with feedforward 1.4–1.6 mm. With the root free the robot falls backward even with its arm still — the squat stance cannot stand. See [docs/CLOTH_SORT.md](docs/CLOTH_SORT.md) |
 | Seed counts | findings 10 and 12 rest on 1–2 seeds. §1 is a single-seed result that died on its third |

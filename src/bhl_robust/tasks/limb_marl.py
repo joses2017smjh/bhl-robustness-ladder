@@ -29,6 +29,24 @@ import torch
 from bhl_robust.limb_partition import partition_for, reassemble_n, validate
 
 
+def loggable(log, device) -> dict:
+    """Isaac Lab's `extras["log"]`, with every scalar made a 0-d tensor.
+
+    skrl's trainer writes an info entry only if it is a one-element tensor.
+    Isaac Lab hands the reward sums over as tensors but calls `.item()` on the
+    curriculum and termination entries, so `Curriculum/terrain_levels` -- the
+    work order's primary metric -- arrived as a float and was dropped, even
+    after `environment_info="log"` (`21302171_4` logged 28 Info tags, none of
+    them the terrain level). Converting here keeps the env untouched.
+    """
+    if not isinstance(log, dict):
+        return log
+    for k, v in list(log.items()):
+        if isinstance(v, (int, float)) and not isinstance(v, bool):
+            log[k] = torch.tensor(float(v), device=device)
+    return log
+
+
 class LimbMarlEnv:
     """Multi-agent view of a single-agent locomotion env, split by limb.
 
@@ -49,8 +67,47 @@ class LimbMarlEnv:
         self.agents = list(self.possible_agents)
 
         self._n_act = {a: len(i) for a, i in self.partition.items()}
+        self.joint_names = self._action_joint_names()
+        self._check_semantics()
         obs, _ = self.env.reset()
         self._obs_dim = int(self._policy(obs).shape[-1])
+
+    # ------------------------------------------------------------ semantics
+
+    #: The joint-name prefix every joint an agent owns must carry.
+    _PREFIX = {"arm_left": "arm_left", "arm_right": "arm_right",
+               "leg_left": "leg_left", "leg_right": "leg_right",
+               "arms": "arm_", "legs": "leg_"}
+
+    def _action_joint_names(self) -> list[str] | None:
+        """The joint order the env's action vector is actually in.
+
+        Read from the constructed action term rather than assumed from
+        `limb_partition`'s constants, so a task whose action term lists its
+        joints in another order is caught here instead of training a robot
+        whose "left leg" agent drives a right hip.
+        """
+        try:
+            mgr = self.env.unwrapped.action_manager
+            names = []
+            for term in mgr.active_terms:
+                names.extend(mgr.get_term(term)._joint_names)
+            return names if len(names) == self.n_dof else None
+        except Exception:                                        # noqa: BLE001
+            return None
+
+    def _check_semantics(self) -> None:
+        if self.joint_names is None:
+            raise RuntimeError("could not read the action term's joint names; "
+                               "refusing to assume the partition is semantic")
+        for agent, idx in self.partition.items():
+            prefix = self._PREFIX.get(agent)
+            if prefix is None:      # limb1's "whole" owns everything by definition
+                continue
+            wrong = [self.joint_names[i] for i in idx if not self.joint_names[i].startswith(prefix)]
+            if wrong:
+                raise RuntimeError(f"agent {agent} would drive {wrong}: the env's action "
+                                   f"order is not the layout {self.kind} was built for")
 
     # ------------------------------------------------------------- plumbing
 
@@ -126,6 +183,8 @@ class LimbMarlEnv:
     def step(self, actions: dict[str, torch.Tensor]):
         joined = reassemble_n(actions, self.partition, self.n_dof)
         obs, rew, term, trunc, info = self.env.step(joined)
+        if isinstance(info, dict) and "log" in info:
+            loggable(info["log"], self.device)
         self._last = self._policy(obs)
         o = self._fan_out(obs)
         # One team reward and one shared done, copied per agent -- each as

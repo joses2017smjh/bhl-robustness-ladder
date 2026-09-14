@@ -29,7 +29,7 @@ parser.add_argument("--steps", type=int, default=4)
 parser.add_argument("--offline", action="store_true",
                     help="run only the simulator-free checks")
 parser.add_argument("--partition", type=str, default=None,
-                    choices=("limb4", "limb2"),
+                    choices=("limb4", "limb2", "legs2", "limb1"),
                     help="check ONE partition. Isaac Sim does not survive "
                          "tearing a scene down and building another in the same "
                          "process -- the first version of this gate checked "
@@ -55,11 +55,19 @@ from bhl_robust.limb_partition import (  # noqa: E402
 )
 
 
+#: Every (partition, DoF) pair a job can train. The biped's 12 joints split
+#: only as legs2 or limb1; limb4 and limb2 there would build armless arm agents,
+#: which `partition_for` refuses -- checked below as a refusal, not skipped.
+LIVE = [("limb4", 22), ("limb4", 24), ("limb2", 22), ("limb2", 24),
+        ("limb1", 12), ("limb1", 22), ("legs2", 12)]
+REFUSED = [("limb4", 12), ("limb2", 12), ("legs2", 22)]
+
+
 def offline_checks() -> bool:
     ok = True
-    print("G-B4a  partition coverage and round-trip, both joint layouts")
-    for kind in ("limb4", "limb2"):
-      for n in (22, 24):
+    print("G-B4a  partition coverage and round-trip, every live joint layout")
+    for kind, n in LIVE:
+      if True:
         part = partition_for(kind, n)
         try:
             validate(part, n)
@@ -76,8 +84,8 @@ def offline_checks() -> bool:
         ok &= exact
 
     print("\nG-B4b  order is preserved, not merely membership")
-    for kind in ("limb4", "limb2"):
-      for n in (22, 24):
+    for kind, n in LIVE:
+      if True:
         part = partition_for(kind, n)
         # A marker per joint index; if reassemble concatenated in dict order
         # instead of scattering, this comes back permuted.
@@ -85,12 +93,21 @@ def offline_checks() -> bool:
         back = reassemble_n(split(x, part), part, n)
         exact = torch.equal(x, back)
         if not exact:
-            bad = [(i, JOINTS[i], int(back[0, i])) for i in range(n)
+            bad = [(i, int(back[0, i])) for i in range(n)
                    if int(back[0, i]) != i][:4]
             print(f"  {kind:8} {n:2d} DoF PERMUTED at {bad}")
         else:
             print(f"  {kind:8} {n:2d} DoF ok")
         ok &= exact
+
+    print("\nG-B4d  impossible pairs are refused, not silently built")
+    for kind, n in REFUSED:
+        try:
+            partition_for(kind, n)
+            print(f"  {kind:8} {n:2d} DoF BUILT -- should have been refused")
+            ok = False
+        except ValueError as e:
+            print(f"  {kind:8} {n:2d} DoF refused ok ({e})")
     return ok
 
 
@@ -102,7 +119,7 @@ def online_checks() -> bool:
 
     ok = True
     print(f"\nG-B4c  wrapped env on {args_cli.task}")
-    kinds = [args_cli.partition] if args_cli.partition else list(PARTITIONS)
+    kinds = [args_cli.partition] if args_cli.partition else ["limb4", "limb2"]
     for kind in kinds:
         try:
             say = lambda m: print(f"    [{kind}] {m}", flush=True)
@@ -135,7 +152,7 @@ def online_checks() -> bool:
             # An ablation that finds nothing is a failure, not a note. The row
             # would otherwise train with the penalty on and be reported as
             # having it off.
-            ok &= widths_ok and agents_ok and bool(ablated)
+            ok &= widths_ok and agents_ok and (bool(ablated) or env.n_dof < 22)
             try:
                 env.close()
             except Exception:                                    # noqa: BLE001
