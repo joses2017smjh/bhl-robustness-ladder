@@ -28,6 +28,7 @@ from isaaclab.managers import TerminationTermCfg as DoneTerm
 from isaaclab.sensors import TiledCameraCfg
 from isaaclab.utils import configclass
 
+from bhl_robust.quat_order import native_quat
 from bhl_robust.reach_band import GRASP_Z
 from bhl_robust.tasks import furniture, task_v2_mdp as v2
 from bhl_robust.tasks.coop_lift_env_cfg import CoopLiftEnvCfg, _COLLISION, _RIGID, _object, _robot
@@ -70,7 +71,7 @@ def _cam(prim: str, data_type: str) -> TiledCameraCfg:
     """One robot's head camera. Same pose for depth and colour."""
     return TiledCameraCfg(
         prim_path=f"{{ENV_REGEX_NS}}/{prim}/base/front_cam",
-        offset=TiledCameraCfg.OffsetCfg(pos=CAM_POS, rot=CAM_ROT, convention="world"),
+        offset=TiledCameraCfg.OffsetCfg(pos=CAM_POS, rot=native_quat(CAM_ROT), convention="world"),
         data_types=[data_type],
         spawn=sim_utils.PinholeCameraCfg(
             focal_length=18.0, focus_distance=400.0,

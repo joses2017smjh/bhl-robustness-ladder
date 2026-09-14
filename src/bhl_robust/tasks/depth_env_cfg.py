@@ -33,12 +33,15 @@ from isaaclab.sensors import RayCasterCameraCfg, patterns
 from isaaclab.utils import configclass
 from isaaclab.utils.noise import GaussianNoiseCfg
 
+from bhl_robust.quat_order import native_quat
 from bhl_robust.tasks.terrain_env_cfg import BipedBumpyEnvCfg
 
 # Forward-and-down, at chest height on the base -- the pose a head-mounted
 # depth sensor on this robot would actually have. 20 deg down-pitch about +Y in
 # world convention: (w, x, y, z) = (cos 10 deg, 0, sin 10 deg, 0) is 20 deg of
-# rotation, since a quaternion halves the angle.
+# rotation, since a quaternion halves the angle. Every OffsetCfg takes it
+# through `native_quat`: Isaac Lab 3.0 reads (x, y, z, w), and raw this tuple
+# points the camera 20 deg up there (see `quat_order.py`).
 CAM_POS = (0.12, 0.0, 0.30)
 CAM_ROT = (0.9848, 0.0, 0.1736, 0.0)
 CAM_RANGE = 6.0
@@ -51,7 +54,7 @@ def make_depth_camera_cfg(res: int = 64, mesh_paths: list[str] | None = None) ->
     return RayCasterCameraCfg(
         prim_path="{ENV_REGEX_NS}/robot/base",
         mesh_prim_paths=mesh_paths or ["/World/ground"],
-        offset=RayCasterCameraCfg.OffsetCfg(pos=CAM_POS, rot=CAM_ROT, convention="world"),
+        offset=RayCasterCameraCfg.OffsetCfg(pos=CAM_POS, rot=native_quat(CAM_ROT), convention="world"),
         data_types=["distance_to_image_plane"],
         # Beyond range a real depth sensor reports its maximum, not NaN. Without
         # this the sky is NaN and the first backward pass is NaN with it.

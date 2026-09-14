@@ -39,6 +39,8 @@ export SEED=${SEED:-0} MAX_ITER=${MAX_ITER:-6000}
 # cheap arm run wider would make throughput the variable instead of sensing.
 export NUM_ENVS=${NUM_ENVS:-2048}
 
+# Boots are serialised, runs are not: see v60_boot_gate.sh.
+source "$REPO/slurm/inner/v60_boot_gate.sh"; v60_boot_gate
 echo "=== node: $(hostname) | $RUN_NAME | task=$TASK | envs=$NUM_ENVS | $(date) ==="
 bhl_exec "$REPO/slurm/inner/train.sh"
 echo "=== done: $(date) ==="

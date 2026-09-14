@@ -61,6 +61,7 @@ from isaaclab.sensors import MultiMeshRayCasterCameraCfg, patterns
 from isaaclab.utils import configclass
 from isaaclab.utils.noise import GaussianNoiseCfg
 
+from bhl_robust.quat_order import native_quat
 from bhl_robust.tasks.coop_lift_env_cfg import CoopLiftCubeCfg, ObservationsCfg
 from bhl_robust.tasks.depth_env_cfg import (
     CAM_APERTURE,
@@ -105,7 +106,7 @@ def make_coop_depth_camera(robot: str, res: int = COOP_CAM_RES) -> MultiMeshRayC
             ),
         ],
         offset=MultiMeshRayCasterCameraCfg.OffsetCfg(
-            pos=CAM_POS, rot=CAM_ROT, convention="world"),
+            pos=CAM_POS, rot=native_quat(CAM_ROT), convention="world"),
         data_types=["distance_to_image_plane"],
         depth_clipping_behavior="max",
         max_distance=CAM_RANGE,

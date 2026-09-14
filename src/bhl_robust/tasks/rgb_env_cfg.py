@@ -43,6 +43,7 @@ from isaaclab.sensors import TiledCameraCfg
 from isaaclab.utils import configclass
 from isaaclab.utils.noise import GaussianNoiseCfg
 
+from bhl_robust.quat_order import native_quat
 from bhl_robust.tasks.depth_env_cfg import CAM_POS, CAM_RANGE, CAM_ROT
 from bhl_robust.tasks.terrain_env_cfg import BipedBumpyEnvCfg
 
@@ -61,7 +62,7 @@ def make_rgb_camera_cfg(res: int = RGB_RES) -> TiledCameraCfg:
     """
     return TiledCameraCfg(
         prim_path="{ENV_REGEX_NS}/robot/base/front_cam",
-        offset=TiledCameraCfg.OffsetCfg(pos=CAM_POS, rot=CAM_ROT, convention="world"),
+        offset=TiledCameraCfg.OffsetCfg(pos=CAM_POS, rot=native_quat(CAM_ROT), convention="world"),
         data_types=["rgb"],
         spawn=sim_utils.PinholeCameraCfg(
             focal_length=18.0, focus_distance=400.0,

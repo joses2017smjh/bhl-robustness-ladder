@@ -29,6 +29,8 @@ import torch
 from isaaclab.managers import SceneEntityCfg
 from isaaclab.sensors import RayCasterCfg, RayCasterCameraCfg, patterns
 
+from bhl_robust.quat_order import native_quat
+
 # --------------------------------------------------------------------- lidar
 
 #: RPLIDAR C1, from the datasheet.
@@ -97,6 +99,9 @@ STEREO_POS_L = (0.12, +STEREO_BASELINE / 2, 0.30)
 STEREO_POS_R = (0.12, -STEREO_BASELINE / 2, 0.30)
 #: Same 20 degree down-pitch as the existing depth rung, so the two are
 #: comparable and any difference is the sensor rather than where it points.
+#: Written (w, x, y, z); `native_quat` reorders it for the stack in use. Passed
+#: raw, v60 reads it as a half-turn and the pair looked 20 degrees *up*,
+#: upside down, for every maze run before 2026-09-14 (`quat_order.py`).
 STEREO_ROT = (0.9848, 0.0, 0.1736, 0.0)
 STEREO_RANGE = 6.0
 
@@ -111,7 +116,7 @@ def make_stereo_cfg(side: str, res: int = 64,
         mesh_prim_paths=mesh_paths or ["/World/ground"],
         offset=RayCasterCameraCfg.OffsetCfg(
             pos=STEREO_POS_L if side == "left" else STEREO_POS_R,
-            rot=STEREO_ROT, convention="world"),
+            rot=native_quat(STEREO_ROT), convention="world"),
         data_types=["distance_to_image_plane"],
         depth_clipping_behavior="max",
         max_distance=STEREO_RANGE,
