@@ -22,6 +22,15 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 **Done since the last status**
 
+- **The maze stereo pair looked 20° up, upside down, in every B5 run.** Isaac
+  Lab 3.0 reads camera offsets `(x, y, z, w)`; the pose was written
+  `(w, x, y, z)`. Measured (`21317022`): 14.8% of pixels saw terrain against
+  77.5% corrected. Every stereo number in B5 is void; blind and lidar stand.
+  Fixed for all five camera offsets (`3f7b679`); the three stereo arms re-run
+  at n=3.
+- **MARL first block, seeds 1–2**: limb4 rows done; limb2's seed-0 lead has not
+  reproduced so far (seed 2 at 1.74 with 5% left, against 3.22). skrl never
+  logged terrain level; fixed for new runs.
 - **Cloth-sort runs end to end in Isaac**, rigid and Newton cloth, after five
   bugs a parser could see (all now guarded on the login node). Low-res cloth is
   **467 env-steps/s** at 81 vertices against G-C1's 182 at 961.
@@ -51,10 +60,13 @@ Diagnostics that ran once, proved a point and were deleted are in
    height. Then Isaac C0 scripted, C1, and the cloth cells.
 2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
    sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
-   designs.
+   designs. *Before that, the terrain rung's stereo arms are re-running with the
+   cameras pointed down (`21317023`–`21317025`).*
 3. **Isaac spawn for the coop/TaskV2 tasks**: robots still spawn under the
    floor (`robot_a` bodies at z −0.806…−0.027 in `21299608`).
-4. **MARL**: remaining Tier 1 rows, Tier 2, Tier 3 — unblocked, not queued.
+4. **MARL**: first block seeds 1–2 running (`21302171`, `21302172`). Tier 2 and
+   Tier 1's PPO rows already exist; Tier 1's sixteen MARL rows need a 12-DoF
+   leg split and a gate; Tier 3 needs 22-DoF terrain tasks — *Tier 1 / 2 / 3*.
 
 ---
 
@@ -139,7 +151,51 @@ rather than reshaped to fit.
 | 2 | `21234053` | **exit 0, clip written** |
 | 1 | `21233950`, `21233969` | 45-into-301: depth appended in the wrong place, before the controller's own assembly |
 
-### B5 maze — stereo pooling sweep · `done` — n=3: the width effect replicates, lidar-over-blind does not
+### B5 maze — stereo re-run with the cameras pointing down · `running` — queued 2026-09-13
+**Every stereo number in the two B5 entries below was measured with the stereo
+pair looking 20° up, upside down.** The pose `(0.9848, 0, 0.1736, 0)` is 20° of
+down-pitch in Isaac Lab 2.3.2's `(w, x, y, z)`. B5 trains on the v60 stack, and
+Isaac Lab 3.0 reads a camera offset as `(x, y, z, w)`, where the same tuple is a
+half-turn about an axis 10° off +x. Nothing errors: both stacks accept any
+4-tuple. The cloth session's quaternion audit pointed at it; the probe measured
+it on the StereoP16 arm at reset, relative to the robot base (`21317022`,
+`results/stereo_pitch_probe.txt`):
+
+| camera | pitch | camera up, base z | pixels returning terrain | where the terrain is |
+|---|---:|---:|---:|---|
+| as trained (raw tuple) | **+20.0°** | −0.94, upside down | **14.8%** | the top rows of the image only |
+| corrected (`native_quat`) | −20.0° | +0.94 | 77.5% | the lower three-quarters |
+
+What that voids, and what it does not:
+
+- **Void:** every stereo and both arm — the width effect (0.021 at 16×16 against
+  1.124 at 4×4), "pooled stereo beats blind by 52%", "adding lidar adds nothing".
+  Those policies got a strip of distant terrain at the top of an inverted image
+  and range-clipped sky everywhere else. Whatever separated the widths, it was
+  not seeing the ground ahead.
+- **Stands:** blind (0.738) and lidar (0.860, +16%). Neither has a camera, and
+  the lidar offset carries no rotation.
+- **Unaffected:** the depth rung (§6, B2, B3). It trains on v51, where the tuple
+  means what it says.
+
+Fix (`3f7b679`): `bhl_robust/quat_order.py` probes the order from
+`matrix_from_quat`, and all five camera offsets go through `native_quat`
+(identity on v51); `tests/test_quat_order.py` guards the call shape. The v2 and
+RGB head cameras had the same fault on v60.
+
+Re-run: the three stereo arms FINDINGS reports at n=3 — 16×16, 4×4, 4×4 + lidar
+— at seeds 0–2, run names `mazefix-*`, gated `afterok` on the probe. Blind and
+lidar are not re-run. Kit boots are serialised by `slurm/inner/v60_boot_gate.sh`
+instead of chaining six-hour runs end to end (fixed in `4474b83` after a short
+job left its lock behind for ten minutes).
+
+| # | id | outcome |
+|---|---|---|
+| 3 | `21317023`, `21317024`, `21317025` | running — seeds 0 / 1 / 2, `--array=2,5,6%1` (16×16, 4×4, 4×4 + lidar), 16 h limit, 2,048 envs as before |
+| 2 | `21317022` | **STEREO-PITCH PASS** (0:54) — table above |
+| 1 | `21302173_4`, `21302174` | **cancelled** — both trained the upward-looking pair: StereoP8 seed 1 at iteration 4,150 of 6,000 (terrain level 0.086 there), and seed 2 of Both and StereoP8 before it started. `21302173_3`, Both seed 1, had COMPLETED in 4:17 at terrain level 0.044 (last 50 iterations; seed 0 was 0.065) — void for the same reason |
+
+### B5 maze — stereo pooling sweep · `retracted` for every stereo arm — the pair looked up (entry above); blind and lidar stand
 **Replicated, 2026-09-13.** Seeds 1 and 2 of the five arms that matter are in
 (`21247911`, `21247912`, 10 of 10 COMPLETED). Terrain level, mean of the last
 50 of 6,000 iterations, from the event files:
@@ -301,7 +357,7 @@ summary line". So the mesh-resolution sweep that would reopen G-C1 has not
 produced a measurement yet — `results/cloth_sort_bench.md` still marks every
 Isaac row "not yet measured", which is accurate.
 
-### B5 — maze with lidar and stereo · `done` — its stereo conclusion is reversed above
+### B5 — maze with lidar and stereo · `done` — its stereo numbers are void: the pair looked up on v60 (*stereo re-run* above)
 The four-arm result below stands as measured. Its explanation does not: the
 pooling sweep shows the stereo arm failing because its 512 depth values were
 92% of the input, not because stereo carries nothing useful here.
@@ -534,10 +590,75 @@ Constraint from the work order: `joint_deviation_arms` must be ablated in any
 |---|---|---|
 | — | — | not started |
 
-### Tier 1 / 2 / 3 MARL rows · `todo` — unblocked since G-B4 passed
-**Status as of 2026-09-13:** no longer blocked. G-B4 passed (`21090555`) and the
-first four Tier 1 rows ran (`21105320`, `21124513`). The remaining Tier 1 rows,
-Tier 2 and Tier 3 have not been queued.
+### Tier 1 first block — seeds 1 and 2 · `running` — queued 2026-09-13
+The first block's five rows again at seeds 1 and 2, because the limb2 result was
+one seed. `slurm/89_marl_train.sbatch` unchanged: Arms-Bumpy, 22 DoF, 4,096 envs,
+6,000 iterations. A 3-iteration smoke of all five rows went first, and both
+seeds chained on it `afterok`.
+
+Mean total reward (`Reward / Total reward (mean)`, mean of the last 5% of
+points), from the event files. It is the statistic the seed-0 table in FINDINGS
+used, and it reproduces 3.22 / 2.19 / 2.08 / 1.95 exactly:
+
+| row | seed 0 | seed 1 | seed 2 | mean |
+|---|---:|---:|---:|---:|
+| limb4 + MAPPO | 2.078 | 1.787 | 2.638 | 2.168 |
+| limb4 + IPPO | 1.954 | 2.103 | 1.402 | 1.820 |
+| limb2 + MAPPO | 3.224 | *2.560 at 71%* | *1.744 at 95%* | — |
+| limb1 + IPPO (control) | 2.190 | pending | pending | — |
+
+Too early for the headline, since limb2 and the control are unfinished. Two
+things are already visible:
+
+- **limb2's seed-0 lead has not reproduced so far.** Seed 2 sits at 1.74 with 5%
+  of training left — below every limb4 + MAPPO seed.
+- **The three statistics these runs log rank the rows differently.** Mean total
+  reward is episode length times per-step reward, and the two factors move
+  opposite ways with agent count. At seed 0, per-step reward runs limb4 + MAPPO
+  0.052 > limb4 + IPPO 0.047 > limb2 0.043 > limb1 0.026, while episode length
+  runs limb1 80 > limb2 65 > limb4 34–38 steps. More agents earn more per step
+  and fall sooner. Seeds 1–2 lean the same way, except limb4 + IPPO seed 2
+  (0.032). Which split looks best depends on which statistic is read, and none
+  of them is terrain level.
+
+Found while reading these:
+
+- **No skrl run has ever logged terrain level.** skrl's trainer forwards
+  `infos["episode"]`; Isaac Lab reports the curriculum under `infos["log"]`, so it
+  was dropped silently. `train_marl.py` now sets `environment_info="log"`; rows
+  that start after that change log `Info / Curriculum/terrain_levels`.
+- **The PPO control, row 3, was never arm-ablated.** `BHL_ABLATE_ARM_DEV` is read
+  only by the skrl branch of `marl_train.sh`; row 3 execs `train.sh`, which
+  ignores it. The sbatch's "ablated in every row including the control" was never
+  true, at any seed. FINDINGS already leaves row 3 out, because it prices the RL
+  library as well. Tier 3's PPO rows must be ablated, so the ablation has to
+  reach rsl-rl first.
+
+| # | id | outcome |
+|---|---|---|
+| 3 | `21302172` | seed 2 — rows 0, 1 COMPLETED (6:02, 5:26); rows 2, 3 running; row 4 pending (`%2`). Time limit cut 40 h → 14 h (longest first-block run: 6:08) to free the GPU-minute cap |
+| 2 | `21302171` | seed 1 — rows 0, 1 COMPLETED (6:09, 6:08); rows 2, 3 running; row 4 pending; same limit cut |
+| 1 | `21302170` | **smoke 5/5 COMPLETED** (1:17–1:20; seed 99, 3 iterations) — each skrl row ran 72 of 72 timesteps, PPO logged 3 iterations at episode length 17.9 |
+
+### Tier 1 / 2 / 3 MARL rows · `todo` — Tier 2 and Tier 1's PPO rows already exist; the MARL rows need a biped split, Tier 3 needs tasks
+**Audit, 2026-09-13**, against the work order's grid:
+
+- **Tier 2 (PPO, blind, on slippery / stairs / ice, 2 seeds) — covered.** Slippery
+  and stairs blind ran at seeds 0–2 (`21066022`, `21076264`), ice blind at seeds
+  0–1 (`21105232`), all at 4,096 envs and 6,000 iterations. Nothing to queue.
+- **Tier 1's eight PPO depth rows — covered** by the same three arrays and §6's
+  rough depth (1.601 / 1.598).
+- **Tier 1's sixteen MARL rows — not started.** They are IPPO and MAPPO on the
+  **12-DoF biped at N=2** (left leg | right leg), depth on, over rough / slippery
+  / stairs / ice. `partition_for` knows only the 22- and 24-DoF layouts. The
+  "first block" that ran is the 22-DoF split on Arms-Bumpy — the work order's
+  Tier 3 shape, not its Tier 1. Needs a `legs2` partition, a gate on each
+  terrain's depth task, terrain level from skrl (done), and a `limb1` control per
+  terrain, because the first block showed an rsl-rl PPO row prices the library
+  as well as the split.
+- **Tier 3 (PPO and MAPPO, ice and stairs, 2 seeds, 22 DoF at N=4, depth, arm
+  deviation ablated) — not started.** `Velocity-BHL-Arms-{Stairs,Ice}-Depth-v0`
+  do not exist, and the PPO rows cannot be ablated yet (above).
 
 24 + 6 + 8 jobs. Work order: do not queue a tier until its gate passes.
 `NUM_ENVS` identical across every arm (target 4096; if MARL OOMs, drop *every*
@@ -1350,6 +1471,11 @@ came from.
 | `21299608` | render probe — viewport draws stale USD pose; camera sensor draws the body |
 | `21299873` | B5 camera-sensor clips — blind, lidar, stereo P4, stereo P16 |
 | `21299952` | B5 camera-sensor clip — blind re-render |
+| `21302170` | MARL first block smoke — five rows, 3 iterations, seed 99 |
+| `21302171`, `21302172` | MARL first block, seeds 1 and 2 |
+| `21302173`, `21302174` | B5 Both / StereoP8 seeds 1–2 — `_3` completed, `_4` and `21302174` cancelled (stereo looked up) |
+| `21317022` | stereo pitch probe — raw pose +20°, corrected −20° |
+| `21317023`, `21317024`, `21317025` | B5 stereo re-run, cameras pointed down — seeds 0 / 1 / 2 |
 | `21233916` | B5 stereo pooling sweep — P8, P16, both P16 |
 | `21228029`–`21228033` | cloth-sort cheap Isaac, attempt 1 — died on `SweepActionCfg.class_type=None`, dependents never ran |
 | `21233802`–`21233806` | cloth-sort cheap Isaac, attempt 2 — `class_type` fixed, died on the `&` precedence bug in `_in_basket` |

@@ -159,7 +159,13 @@ def main() -> None:
     trainer = SequentialTrainer(
         env=env, agents=agent,
         cfg={"timesteps": args_cli.max_iterations * args_cli.rollouts,
-             "headless": True},
+             "headless": True,
+             # Isaac Lab reports its curriculum and per-term episode sums under
+             # infos["log"]; skrl's trainer forwards infos["episode"] by default
+             # and silently drops the rest. Every MARL run before this line
+             # logged no terrain level -- the work order's primary metric --
+             # so the split could only be compared on reward.
+             "environment_info": "log"},
     )
     trainer.train()
     env.close()

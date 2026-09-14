@@ -79,6 +79,14 @@ returning real depth (0.61–6.00 m, 100% finite). Lidar reads 30% finite, which
 is what a horizontal 360° scan in a corridor should look like — most rays hit
 nothing and clamp to "clear".
 
+**The stereo pose was wrong, and a range check could not show it** (found
+2026-09-13). The pair looked 20° *up*, upside down: B5 runs on Isaac Lab 3.0,
+which reads a camera offset as `(x, y, z, w)`, and `STEREO_ROT` was written
+`(w, x, y, z)`. A 0.61–6.00 m range and 100% finite values are what an
+upward camera over bumpy ground returns too. `native_quat` fixes the pose, and
+`scripts/bench/stereo_pitch_probe.py` checks the pose itself: pitch, up axis,
+and the fraction of pixels that hit terrain (14.8% as trained, 77.5% fixed).
+
 Not yet trained. The GPU cap here is 9 concurrent, and the 18 manipulation
 re-runs on the corrected spawn have it. Training these four is the next
 allocation, not a parallel one.

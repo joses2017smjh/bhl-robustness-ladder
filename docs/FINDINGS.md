@@ -60,7 +60,7 @@ did not.
 | **9** | **The fall detector cannot see a level collapse.** `bad_orientation` tests torso *orientation*, so a robot that sinks 34 cm with its torso level scores as upright — which is what the ladder pair does for twelve seeds out of twelve. |
 | **10** | **The hands were welded shut.** Every manipulation result came from an asset whose grippers are `type="fixed"`. Restoring the two DoF the hardware has takes mean episode length from **6.3 to 427.7 steps**, six cells a side. |
 | **11** | **Depth helps on a hazard it cannot see.** On friction patches flush with the floor — ray-cast-verified — depth beats blind by **10.6%**, while colouring them so a camera *could* see them changes nothing (1.394 vs 1.374). |
-| **12** | **Splitting the policy at the arms/legs seam helps; splitting further does not.** limb2 finishes **47% above** a no-split control under the same trainer; limb4 lands on it. One seed. |
+| **12** | **Splitting the policy at the arms/legs seam helps; splitting further does not.** limb2 finishes **47% above** a no-split control under the same trainer; limb4 lands on it. One seed — and seeds 1–2, still running, have not reproduced the lead so far. |
 | **13** | **A gate with no control measures its own budget.** G-B2 rejected a 5 cm stair riser twice on a 300-iteration probe. The walkable-terrain control is *also* pinned at 0.0000 there. Re-run to 2,000 with 5 cm restored, the same probe **passes** at level 0.107. |
 
 Every claim below links into the [full technical report](docs/REPORT.md), which
@@ -869,6 +869,15 @@ standing. Splitting along that seam helps; splitting further does not.
 > **This is one seed.** §1 of this project is a single-seed result that died on
 > its third seed, and the same standard applies here. Suggestive, not settled.
 >
+> **Seeds 1 and 2 are running, and so far the lead is not there** (2026-09-13,
+> `21302171`, `21302172`). limb4 + MAPPO lands at 2.08 / 1.79 / 2.64, limb4 +
+> IPPO at 1.95 / 2.10 / 1.40. limb2 is 2.56 at 71% of training and **1.74 at
+> 95%**, against seed 0's 3.22. The control has not run yet. The per-step reward
+> and episode length logged alongside rank the rows differently: more agents
+> earn more per step and fall sooner. So the table's mean total reward, their
+> product, is not a neutral judge. Final numbers, and terrain level (never
+> logged by skrl until now), go to the ledger when the rows land.
+>
 > The original PPO control is not in the table: it routes through rsl-rl while
 > every MARL row routes through skrl, so it prices the RL library as well as the
 > factorisation. `limb1` replaced it — one agent owning every joint under the
@@ -877,6 +886,19 @@ standing. Splitting along that seam helps; splitting further does not.
 ---
 
 ## Terrain sensing (the "maze" rung): stereo fails when it is most of the input, and wins when it is not
+
+> **Retracted for every stereo arm, 2026-09-13: the stereo pair was looking 20°
+> up, upside down.** This rung trains on Isaac Lab 3.0, which reads a camera
+> offset as `(x, y, z, w)`. The pose was written `(w, x, y, z)`, so the 20°
+> down-pitch became a half-turn. Measured on the trained configuration
+> (`21317022`): pitch **+20.0°** against the intended −20.0°, and **14.8%** of
+> pixels returning terrain against 77.5% once corrected. The width effect,
+> "pooled stereo beats blind" and "lidar adds nothing to stereo" below are
+> therefore about policies fed a strip of distant ground in an inverted image,
+> not about stereo. **Blind and lidar stand** — neither has a camera. The three
+> stereo arms are re-running at n=3 with the cameras pointed down (`21317023`–
+> `21317025`), and this section will be rewritten from those. The depth rung
+> above trains on 5.1 and is unaffected.
 
 *Three seeds per arm (`21218766`, `21233916`, `21247911`, `21247912`).*
 
