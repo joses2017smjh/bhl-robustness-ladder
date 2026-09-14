@@ -103,8 +103,8 @@ Diagnostics that ran once, proved a point and were deleted are in
    `(w, x, y, z)` yaw, plus a spawn probe.
 4. **MARL**: first block done at n=3 — limb2's lead did not replicate. Tier 1's
    MARL rows are running for stairs / slippery / rough (`21328607`, `21328608`;
-   gate `21328605` passed 9/9); ice waits on item 5. Tier 3 needs 22-DoF terrain
-   tasks and an arm ablation that reaches rsl-rl.
+   gate `21328605` passed 9/9); ice waits on item 5. Tier 3 on stairs is queued
+   behind its gate (`21328742` → `21328743`, `21328744`).
 5. **Put B3's ice where the robots are**: patches at the terrain origins, or moved
    to `env_origins` at reset, on tiles flat enough that a flush patch stays flush;
    re-probe with `scripts/bench/ice_placement_probe.py`; then the B3 PPO arms and
@@ -925,11 +925,32 @@ also checked inside `LimbMarlEnv` against the action term's own joint names.
 
 | # | id | outcome |
 |---|---|---|
-| 3 | `21328605` → `21328607`, `21328608` | **G-B4t PASS, 9 of 9** (6:50) — terrain level logged, rsl-rl settings confirmed (5 epochs × 4 mini-batches, entropy 0.008, KL-adaptive LR, [256, 128, 128]), observation 301 on all three terrains. Seeds 0 and 1 `--array=3-11%2`, chained `afterok`; seed 0's stairs MAPPO and IPPO rows running |
+| 3 | `21328605` → `21328607`, `21328608` | **G-B4t PASS, 9 of 9** (6:50) — terrain level logged, rsl-rl settings confirmed (5 epochs × 4 mini-batches, entropy 0.008, KL-adaptive LR, [256, 128, 128]), observation 301 on all three terrains. Seeds 0 and 1 `--array=3-11`, chained `afterok`; both seeds' stairs MAPPO and IPPO rows running. Throttle cut from `%2` to `%1` per seed at the per-user GPU cap, so the cloth chain gets slots |
 | 2 | `21328445`, `21328446` | **cancelled** — `DependencyNeverSatisfied` after the gate failed; their ice rows had been held first, pending `21328532` |
 | 1 | `21328444` | **FAIL, correctly** (9:50). (i)–(iii) pass on all 12 rows: 2 agents of 6, left and right hip first, observation 301 = state with depth, trainer matches. (iv) fails on 9: no terrain level in the event file, because Isaac Lab `.item()`s curriculum scalars and skrl logs only tensors. The three rough rows loaded the `loggable` fix mid-gate and passed (iv) |
 
-### Tier 1 / 2 / 3 MARL rows · `todo` — Tier 2 and Tier 1's PPO rows already exist; Tier 1's MARL rows are queued (above); Tier 3 needs tasks
+### Tier 3 — 22 DoF on stairs, depth, arm deviation off · `queued` — behind G-T3 `21328742`, 2026-09-14
+`Velocity-BHL-Arms-Stairs-Depth-v0` (`tasks/arms_terrain_env_cfg.py`): the arms
+robot on the biped stairs menu with the depth rung's camera and term, and
+`joint_deviation_shoulder` / `_elbow` cleared **in the task**. The first block
+ablated them only on the skrl path, and its PPO control kept them at every seed;
+in the task, PPO and MAPPO cannot differ on it, and `__post_init__` refuses to
+build if either term is missing. Ice waits on B3.
+
+Rows (`slurm/89c_arms_tier3.sbatch`): PPO on rsl-rl, MAPPO over four limb agents
+(5 / 5 / 6 / 6), and the limb1 skrl control, seeds 0–1, 4,096 envs, 6,000
+iterations. G-T3 (`88c_arms_tier3_gate.sbatch`) passes only if every row's reward
+table lacks both arm terms and keeps `joint_deviation_hip`, the observation is
+331 wide with depth (PPO's actor included), limb4's first joints are the two
+shoulders and the two hips, and the skrl rows log terrain level on the rsl-rl
+settings. The registration is guarded, so a failed import prints and leaves the
+id absent rather than breaking every queued job that imports the registry.
+
+| # | id | outcome |
+|---|---|---|
+| 1 | `21328742` → `21328743`, `21328744` | gate queued (at the per-user GPU cap); seed 0 `--array=0-2%1` `afterok`, seed 1 after seed 0 |
+
+### Tier 1 / 2 / 3 MARL rows · `todo` — Tier 2 and Tier 1's PPO rows already exist; Tier 1's MARL rows and Tier 3 on stairs are queued (above)
 **Audit, 2026-09-13**, against the work order's grid:
 
 - **Tier 2 (PPO, blind, on slippery / stairs / ice, 2 seeds) — covered.** Slippery
@@ -1770,6 +1791,8 @@ came from.
 | `21328445`, `21328446` | Tier 1 MARL grid, first submission — cancelled after the gate failed |
 | `21328607`, `21328608` | Tier 1 MARL grid — stairs / slippery / rough, seeds 0 and 1 |
 | `21328532` | B3 ice placement probe — patches a median 72 m from the robots |
+| `21328742` | G-T3, Tier 3 gate — 22 DoF, stairs, depth, arm deviation off |
+| `21328743`, `21328744` | Tier 3 on stairs — PPO, MAPPO limb4, limb1; seeds 0 and 1 |
 | `21300299`, `21300300`, `21300301` | cloth redesign: rigid smoke, Isaac C0 scripted (boot crash), C1 training smoke |
 | `21300348`, `21300493`, `21300494` | cloth redesign: C0 free base, C0 fixed base, C0 fixed-base clip |
 | `21300603`, `21300604`, `21300605` | cloth redesign with hand colliders: fixed-base C0, its clip, free-base C0 |

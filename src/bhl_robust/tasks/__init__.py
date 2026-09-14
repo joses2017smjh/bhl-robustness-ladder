@@ -353,6 +353,31 @@ for _id, _cfg in (
         kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG},
     )
 
+# ------------------------------------------------------------------ Tier 3
+# The 22-DoF robot on stairs with depth and the arm-deviation penalty ablated in
+# the task itself, so the rsl-rl PPO rows and the skrl MAPPO rows cannot differ
+# on it. Ice joins once B3's patches are where the robots are.
+#
+# Guarded: this registry is imported by every job in the shared tree, including
+# ones already queued on other experiments, and a new module that fails to
+# import must not take them down. The failure is printed, the id is simply
+# absent, and the Tier 3 gate refuses to pass without it.
+try:
+    from bhl_robust.tasks import arms_terrain_env_cfg  # noqa: E402
+
+    gym.register(
+        id="Velocity-BHL-Arms-Stairs-Depth-v0",
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={
+            "env_cfg_entry_point": arms_terrain_env_cfg.HumanoidStairsDepthEnvCfg,
+            "rsl_rl_cfg_entry_point": _ARM_PPO_CFG,
+        },
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] Tier 3 ids NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+
 # ---------------------------------------------------------------- cloth-sort
 # Hierarchical rigid-to-deformable ladder. See docs/CLOTH_SORT.md.
 # Rigid ids are the training path. Deformable ids construct a Newton
