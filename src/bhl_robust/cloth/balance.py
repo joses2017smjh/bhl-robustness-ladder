@@ -36,6 +36,10 @@ STANCE: dict[str, float] = {
 #: Root height with the soles flat on the floor in this stance (MuJoCo crew
 #: model), plus 1.5 mm so a reset never starts the feet inside the floor.
 ROOT_Z = -0.0765
+#: Where the root settles once standing: measured in Isaac, 21329076 (arm still,
+#: 36 s; the soles seat 2.2 mm). The layout's heights are built on this, not on
+#: the spawn height -- with 3 mm of contact clearance, 2 mm matters.
+SETTLED_ROOT_Z = -0.0787
 #: Settled leg torque / Kp, rad (``search.json`` ``feedforward_rad``).
 FEEDFORWARD: dict[str, float] = {
     "leg_left_hip_roll_joint": 0.0034, "leg_left_hip_yaw_joint": 0.01323,

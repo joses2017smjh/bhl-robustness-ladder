@@ -266,6 +266,13 @@ class ClothSortRigidEnvCfg(ManagerBasedRLEnvCfg):
         self.episode_length_s = 6 * MACRO_STEP_S
         self.sim.render_interval = self.decimation
         self.scene.robot.init_state.pos = (ROBOT_XY[0], ROBOT_XY[1], ROBOT_ROOT_Z)
+        # The stance the layout's heights are built for, held by the leg
+        # controller (bhl_robust.cloth.balance). The pinch squat cannot stand.
+        from bhl_robust.cloth import balance
+        self.scene.robot.init_state.joint_pos = {**self.scene.robot.init_state.joint_pos, **balance.STANCE}
+        self.actions.sweep.balance = {
+            "stance": dict(balance.STANCE), "feedforward": dict(balance.FEEDFORWARD), "gains": list(balance.GAINS),
+        }
         # Same pattern as the maze: attach static colliders after the
         # configclass is built so the scene dataclass does not have to name
         # every basket wall.
@@ -324,24 +331,13 @@ class ClothSortRigidFixedBaseEnvCfg(ClothSortRigidEnvCfg):
 
 @configclass
 class ClothSortRigidBalanceEnvCfg(ClothSortRigidEnvCfg):
-    """Diagnostic: the free-base robot in the knee-1.0 stance with its leg controller.
+    """The free-base balance probe of 21329076-078, kept under its id.
 
-    ``bhl_robust.cloth.balance``: the stance, gravity feedforward on the legs and
-    IMU ankle feedback that stood in the MuJoCo model reproducing this robot's
-    fall. The root stands ``balance.ROOT_RISE`` higher than the pinch squat and
-    the table is not moved, so the hand passes above the garment: this asks
-    whether the robot stays up while the arm sweeps, not whether it sorts.
+    It was the knee-1.0 stance with the leg controller while the layout still
+    stood at the pinch squat's heights, so the hand passed above the garment.
+    The stance and the controller are now every rigid cloth scene's, with the
+    table risen to match, so this is identical to ``ClothSortRigidEnvCfg``.
     """
-
-    def __post_init__(self):
-        super().__post_init__()
-        from bhl_robust.cloth import balance
-
-        self.scene.robot.init_state.pos = (ROBOT_XY[0], ROBOT_XY[1], balance.ROOT_Z)
-        self.scene.robot.init_state.joint_pos = {**self.scene.robot.init_state.joint_pos, **balance.STANCE}
-        self.actions.sweep.balance = {
-            "stance": dict(balance.STANCE), "feedforward": dict(balance.FEEDFORWARD), "gains": list(balance.GAINS),
-        }
 
 
 def _pin_root(cfg) -> None:

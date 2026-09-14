@@ -46,7 +46,7 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "src"))
 from bhl_robust.cloth.arm_fk import fk, hull_points, load_chain  # noqa: E402
 
-TABLE_TOP = 0.30
+from bhl_robust.cloth.layout import TABLE_TOP_Z as TABLE_TOP  # noqa: E402  risen with the stance
 CONTACT_CLEARANCE = 0.003
 HOVER_CLEARANCE = 0.070
 HIGH_CLEARANCE = 0.140

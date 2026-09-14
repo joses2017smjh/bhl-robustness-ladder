@@ -697,7 +697,8 @@ class ContactTableTests(unittest.TestCase):
         self.t = load_contact()
 
     def test_built_at_the_measured_best_height(self):
-        self.assertAlmostEqual(self.t.table_top, 0.30, places=6)
+        from bhl_robust.cloth.layout import TABLE_TOP_Z
+        self.assertAlmostEqual(self.t.table_top, TABLE_TOP_Z, places=6)
         self.assertGreaterEqual(int(self.t.contact_mask.sum()), 200)
         # The arm cannot lift the hand over most of the table on the same branch;
         # anchors are the edge band that can (78 when built).
@@ -908,6 +909,38 @@ class BalanceTests(unittest.TestCase):
         self.assertIn("up_axis(q, QUAT_ORDER)", src)
         self.assertIn("yaw_atan2_args(q, QUAT_ORDER)", src)
         self.assertIn("root_ang_vel_w", src)
+
+
+class StanceLayoutTests(unittest.TestCase):
+    """The layout's heights follow the stance; the solved arm configurations do not change."""
+
+    def test_heights_rise_with_the_settled_root(self):
+        from bhl_robust.cloth import balance, layout
+        from bhl_robust.cloth.arm_fk import load_chain
+        from bhl_robust.cloth.reach import load_contact
+        f = np.load(_REPO / "assets" / "cloth" / "right_hand_tip_table.npz")
+        self.assertAlmostEqual(layout.SOLVE_ROOT_Z, float(f["planted_root_z"]), places=12)
+        self.assertAlmostEqual(layout.STANDING_ROOT_Z, balance.SETTLED_ROOT_Z)
+        self.assertAlmostEqual(layout.TABLE_TOP_Z - layout.STANDING_ROOT_Z, 0.30 - layout.SOLVE_ROOT_Z, places=9)
+        self.assertAlmostEqual(load_contact().table_top, layout.TABLE_TOP_Z, places=9)
+        self.assertAlmostEqual(load_chain().root_z, layout.STANDING_ROOT_Z, places=9)
+        self.assertEqual(layout.ROBOT_ROOT_Z, balance.ROOT_Z)
+
+    def test_fingertip_cells_are_the_same_distance_above_the_table(self):
+        """A cell's hull, relative to the table top, is where it was solved."""
+        from bhl_robust.cloth.arm_fk import hull_points, load_chain
+        from bhl_robust.cloth.reach import load_contact
+        t, chain = load_contact(), load_chain()
+        ix, iy = np.nonzero(t.contact_mask)
+        low = hull_points(chain, t.contact_q[ix, iy])[..., 2].min(axis=1) - t.table_top
+        self.assertGreaterEqual(float(low.min()), -1e-9)
+        self.assertLessEqual(float(low.max()), t.contact_clearance + 0.0015)
+
+    def test_every_rigid_cloth_scene_stands_in_the_stance(self):
+        src = (_REPO / "src" / "bhl_robust" / "tasks" / "cloth_sort_env_cfg.py").read_text()
+        body = src[src.index("class ClothSortRigidEnvCfg"):src.index("class ClothSortRigidFiveEnvCfg")]
+        self.assertIn("balance.STANCE", body)
+        self.assertIn("self.actions.sweep.balance = ", body)
 
 
 class IsaacConfigWiringTests(unittest.TestCase):

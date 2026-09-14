@@ -28,6 +28,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
+from bhl_robust.cloth import balance as _balance
 from bhl_robust.cloth.garments import BASKET_IDS, BASKET_JACKETS, BASKET_SHIRTS, BASKET_SOCKS, GARMENTS
 from bhl_robust.reach_band import HAND_SPAN
 
@@ -39,14 +40,26 @@ ROBOT_XY = (-0.22, 0.0)
 #: -0.177). Both axes flip, so this is a half-turn, not a mirror: the robot
 #: faces **-x**.
 ROBOT_YAW = math.pi
-#: Root height of the pinch squat with the feet planted (MuJoCo, the reach
-#: table's ``planted_root_z``). The first cloth scene spawned the squat at the
-#: *standing* height, -0.027, and dropped it 11 cm at every reset.
-ROBOT_ROOT_Z = -0.137
+#: Root height of the pinch squat the reach, contact and fingertip tables were
+#: solved in (MuJoCo ``planted_root_z``). Every height those tables store is in
+#: that frame; ``reach.load_contact`` and ``arm_fk.load_chain`` shift them to
+#: the stance below.
+SOLVE_ROOT_Z = -0.1372496766232026
+#: The robot stands in ``balance.STANCE``, not the pinch squat: the squat's knees
+#: saturate and it falls backward in under a second (21317172), while this
+#: stance with its leg controller stands in Isaac (21329076-077). Was -0.137.
+ROBOT_ROOT_Z = _balance.ROOT_Z
+#: Where the root stands once settled, which is what the arm's reach hangs off.
+STANDING_ROOT_Z = _balance.SETTLED_ROOT_Z
+#: How far every height rises with the stance. The arm hangs off the root, so
+#: raising the table by the same amount keeps each fingertip cell's arm
+#: configuration exactly as solved.
+STANCE_RISE = STANDING_ROOT_Z - SOLVE_ROOT_Z
 
-#: Table top: the contact height with the most usable fingertip cells (252 of
-#: the heights 0.28-0.42 tried).
-TABLE_TOP_Z = 0.30
+#: Table top: 0.30 m above the floor in the squat frame, the contact height with
+#: the most usable fingertip cells (252 of the heights 0.28-0.42 tried); risen
+#: with the stance.
+TABLE_TOP_Z = 0.30 + STANCE_RISE
 TABLE_THICKNESS = 0.04
 
 #: Robot-frame rectangles, ((x_min, x_max), (y_min, y_max)).

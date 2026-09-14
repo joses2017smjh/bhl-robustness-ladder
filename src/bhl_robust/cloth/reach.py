@@ -252,11 +252,17 @@ class ContactTable:
 
 @lru_cache(maxsize=4)
 def load_contact(path: str | None = None) -> ContactTable:
+    from bhl_robust.cloth.layout import STANDING_ROOT_Z
+
     f = np.load(Path(path) if path else _CONTACT_DEFAULT, allow_pickle=False)
     x = f["x"]
     high = "high_q" in f.files
+    # Solved with the root at ``planted_root_z``; the robot stands at
+    # ``layout.STANDING_ROOT_Z``. The arm hangs off the root, so the table's
+    # heights move with it and every stored arm configuration stays valid.
+    rise = STANDING_ROOT_Z - float(f["planted_root_z"])
     return ContactTable(
-        x=x, y=f["y"], table_top=float(f["table_top"]),
+        x=x, y=f["y"], table_top=float(f["table_top"]) + rise,
         contact_clearance=float(f["contact_clearance"]), hover_clearance=float(f["hover_clearance"]),
         contact_q=f["contact_q"].astype(float), contact_mask=f["contact_mask"].astype(bool),
         hover_q=f["hover_q"].astype(float), hover_mask=f["hover_mask"].astype(bool),

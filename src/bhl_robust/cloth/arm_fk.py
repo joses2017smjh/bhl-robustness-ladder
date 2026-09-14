@@ -44,11 +44,15 @@ class ArmChain:
 
 @lru_cache(maxsize=2)
 def load_chain(path: str | None = None) -> ArmChain:
+    from bhl_robust.cloth.layout import STANDING_ROOT_Z
+
     f = np.load(Path(path) if path else _CHAIN_DEFAULT, allow_pickle=False)
     has = "mass" in f.files
+    # The chain is exported root-relative; its stored root_z is the squat it was
+    # checked in. The root stands where the layout's stance settles it.
     return ArmChain(
         joints=tuple(str(j) for j in f["joints"]), body_pos=f["body_pos"], body_rot=f["body_rot"],
-        hull=f["hull"], root_z=float(f["root_z"]), lower=f["lower"], upper=f["upper"],
+        hull=f["hull"], root_z=STANDING_ROOT_Z, lower=f["lower"], upper=f["upper"],
         mass=f["mass"] if has else None, com=f["com"] if has else None,
         inertia=f["inertia"] if has else None,
     )
