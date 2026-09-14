@@ -1,19 +1,19 @@
 # Sorting garments into baskets
 
-> **Status, 2026-09-14: all three garment classes sort in Isaac on a fixed base,
-> 32 of 32; the free-base squat cannot stand.** The first scene was never reachable —
-> the garment sat 0.74 m away, the fingertips reach 0.28 m forward, and in Isaac the
-> robot faced the other way. The layout is rebuilt in the robot's own frame, inside a
-> measured fingertip table. In Isaac the shipped hands turned out to collide with
-> nothing, and once they did, the arm could not follow its schedule on bare position
-> targets: the fingertip ran 65–72 mm behind and cut through the shirt before the sweep
-> began. With inverse-dynamics feedforward through the unchanged arm drive the
-> fingertip follows within 1.4–1.6 mm, and **with the root pinned the scripted sweep
-> sorts shirt, sock and jacket proxies 32 times in 32**, each with its first sweep (see
-> [In Isaac](#in-isaac-why-the-hand-did-not-sort-2026-09-13)). With the root free, the
-> robot falls backward in under a second **even with its arm held still**. The planted
-> pinch squat is not a stance it can hold, and the reach table and layout are built on
-> it. End-to-end deformable RL stays rejected.
+> **Status, 2026-09-14: all three garment classes sort in Isaac on a fixed base, 32 of 32,
+> and the free base now stands.** The first scene was never reachable — the garment sat
+> 0.74 m away, the fingertips reach 0.28 m forward, and in Isaac the robot faced the other
+> way. The layout is rebuilt in the robot's own frame, inside a measured fingertip table.
+> In Isaac the shipped hands turned out to collide with nothing, and once they did, the
+> arm could not follow its schedule on bare position targets: the fingertip ran 65–72 mm
+> behind. With inverse-dynamics feedforward through the unchanged arm drive it follows
+> within 1.4–1.6 mm, and **with the root pinned the scripted sweep sorts shirt, sock and
+> jacket proxies 32 times in 32** (see [In Isaac](#in-isaac-why-the-hand-did-not-sort-2026-09-13)).
+> The pinch squat that layout was built on cannot stand on a free base: its knees saturate.
+> **A knee-1.0 stance with a leg controller designed in MuJoCo stands in Isaac** — 2 of 2
+> with the arm still, 3 of 4 through six sweeps — but the table has not been raised to
+> it, so the free-base task does not sort yet. The first cloth rung (C2) is void so far:
+> Newton goes NaN when the hand pushes the cloth. End-to-end deformable RL stays rejected.
 
 This is an evidence-driven redesign. G-C1 answered that Newton cloth cannot
 carry the training workload. The research question moved with that measurement:
@@ -323,16 +323,22 @@ arm-still fall (pitch −17° at 0.5 s and −45° at 0.7 s, against Isaac's −
   scripted sweep. Its neighbours mostly fall with the arm moving, so it is narrow.
 
 That controller is `bhl_robust.cloth.balance`, applied by the Isaac sweep term to the leg
-targets, with the same gains and limits as the upstream actuator. Whether it stands in
-Isaac is the probe `ClothSort-BHL-RigidBalance-Oracle-v0` (`21329076`–`078`). If it does, the
-table rises with the root (+5.95 cm) and the fingertip table moves with it unchanged.
-Everything above is reproducible with `scripts/cloth/stance_mujoco.py all`.
+targets, with the same gains and limits as the upstream actuator. **In Isaac it stands.**
+The probe `ClothSort-BHL-RigidBalance-Oracle-v0` stood 2 of 2 episodes for 36 s with the arm
+still (worst tilt 1.65°, `21329076`). It stood 3 of 4 with the arm playing the scripted sweep
+six times (worst 11.5° in the traced episode, where the model predicted 11.3°; `21329077`).
+The table has not been raised for the new stance, so the hand passes above the garment and
+these probes cannot sort. Raising the table with the root (+5.95 cm) — the fingertip table
+moves with it unchanged — is what turns the probe into the free-base task. Everything
+above is reproducible with `scripts/cloth/stance_mujoco.py all`.
 
 **The first cloth rung (C2) on the fixed base is void so far.** One 8×8 Newton cloth: the
 success predicate fired 4 of 4 and the cloth did settle in the basket, but the arm's joint
 state went NaN mid-sweep (`21328765`, t = 2.83 s). A success in a blown-up simulation is not
-a sort. The eval now reports `success_rate_finite`, and the diagnosis runs are queued
-(larger MuJoCo-Warp constraint buffers; arm held still).
+a sort. The eval now reports `success_rate_finite`. Larger MuJoCo-Warp constraint buffers
+did not stop the NaN (`21328911`), and a still arm stays finite (`21328912`). Onset is always
+at the sample where the hand first moves the cloth, which points at the two-way
+cloth-to-arm coupling; a one-way run is queued (`21329213`).
 
 **Quaternion order.** Isaac Lab 3.0 stores quaternions `(x, y, z, w)`; 2.x stored
 `(w, x, y, z)`, and every literal and hand-written unpack in this repo assumed the

@@ -90,12 +90,12 @@ Diagnostics that ran once, proved a point and were deleted are in
 1. **Cloth, in Isaac on the redesigned layout** — *layout, garments, reach model,
    schedule action and planted spawn are done; the kinematic ladder sorts at 1.00*.
    *Fixed-base scripted C0 sorts 32/32 in Isaac for all three garment classes.*
-   Left: **the free base.** The pinch squat's knees saturate at 6 N m. A knee-1.0
-   stance with leg feedforward and IMU ankle feedback stands in a MuJoCo model
-   that reproduces Isaac's fall; the Isaac probe is queued (`21329076`–`078`). If it
-   stands, the table rises 6 cm with the root. **C2 on the fixed base is void so
-   far**: the Newton articulation went NaN mid-sweep (diagnosis `21328911`–`912`).
-   Then the sequential five-garment scene in Isaac, C1 training, and C3–C5.
+   *The free base now stands in Isaac* with a knee-1.0 stance and a leg controller:
+   2/2 with the arm still, 3/4 through six sweeps. Left: make that controller robust
+   to the arm (search running); raise the table 5.95 cm with the root, so the
+   free-base task can sort; C2 on the fixed base, void so far because Newton goes
+   NaN when the hand pushes the cloth (one-way coupling test `21329213`); then the
+   sequential five-garment scene in Isaac, C1 training, and C3–C5.
 2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
    sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
    designs. *Before that, the terrain rung's stereo arms finish re-running with
@@ -532,6 +532,20 @@ non-finite robot state and reports `success_rate_finite`, which scores such an e
 failure. The C2F clip renders only the floor grid; the camera-sensor recorder has not been
 made to work on Newton.
 
+**The free base stands in Isaac, 2026-09-14.** The MuJoCo-designed controller transfers
+(rows 28–29). With the arm still, 2 of 2 episodes stand 36 s at 1.65° worst tilt. With the
+arm playing the scripted sweep six times, 3 of 4 episodes stand; the traced one peaks at
+11.5°, against the model's 11.3°. It is narrow, as the model said, so a search with the arm
+sweeping inside the objective is running (`stance_mujoco.py robust`). The table has not
+been raised, so these probes cannot sort. Raising it by `balance.ROOT_RISE` (5.95 cm), and
+the fingertip table with it, is what turns the probe into the free-base task.
+
+**C2F diagnosis.** Larger MuJoCo-Warp buffers do not stop the NaN (row 26); a still arm
+stays finite (row 27). Onset is at the sample where the hand first moves the cloth, in
+every run. That points at the two-way cloth-to-rigid coupling. Row 31 changes only that,
+to one-way, where the cloth no longer pushes on the arm. For a 16 g cloth that is a small
+physical approximation, but it is one, and it will be stated.
+
 **The kinematic ladder under the v3 planner** (`results/cloth/redesign_v3/`; the
 `redesign/` files are the v1 numbers, kept). C0 scripted 1.00 (64 eps) and C5
 sequential 1.00 (32 eps), no plan refused. **C1 (REINFORCE linear residual) 0.56 and
@@ -547,11 +561,12 @@ starts. v1 accepted those sweeps.
 
 | # | id | outcome |
 |---|---|---|
+| 31 | `21329213` | queued, afterany `21329078` — C2F with `BHL_NEWTON_COUPLING=one_way` (the cloth no longer pushes back on the arm) and nothing else changed, 4 eps, trace (`isaac_c2f_v3_oneway.json`) |
 | 30 | `21329078` | queued, afterany `21329077` — clip, balance probe, arm sweeping (`results/clips/frames/cloth_c0b_sweep`), excludes dgxh-1 |
-| 29 | `21329077` | queued, afterany `21329076` — **balance probe, arm sweeping**: free base, knee-1.0 stance + leg controller, scripted sweep 6 cm above the table, 4 eps, trace (`isaac_c0b_sweep.json`) |
-| 28 | `21329076` | queued, afterany `21328912` — **balance probe, arm still**: free base, knee-1.0 stance + leg controller, 2 eps × 36 s, trace (`isaac_c0b_hold.json`) |
-| 27 | `21328912` | queued, afterany `21328911` — C2F, arm held still, preset buffers, 2 eps, trace (`isaac_c2f_hold.json`): does the arm go non-finite without moving? |
-| 26 | `21328911` | queued, afterany `21328766` — C2F with MuJoCo-Warp `njmax` 600 / `nconmax` 200 and nothing else changed, 4 eps, trace (`isaac_c2f_v3_bigbuf.json`) |
+| 29 | `21329077` | **COMPLETED — the free base stands through the arm's sweeps in 3 of 4 episodes** (fall 0.25). The traced episode stood all 6 sweeps (36 s) with worst tilt 11.5°, where MuJoCo predicted 11.3° and 7 of 8. Fingertip tracking on the moving base was 6 mm mean. The hand passes above the garment by design, so no sort |
+| 28 | `21329076` | **COMPLETED — the free base stands in Isaac**: knee-1.0 stance with the leg controller, arm still, 2 of 2 episodes × 36 s, no fall, no non-finite state. Trace: worst tilt 1.65°, root settles 2.2 mm, 0.9 cm of drift |
+| 27 | `21328912` | **COMPLETED — with the arm still, Newton stays finite** (2 eps, preset buffers). The blow-up needs the arm moving |
+| 26 | `21328911` | **COMPLETED — larger buffers do not fix it**: `njmax` 600 / `nconmax` 200, and NaN in 4 of 4 episodes at the same t = 2.83 s, the sample where the cloth first moves under the hand. `success_rate` 1.00, `success_rate_finite` 0.00 |
 | 25 | `21328766` | COMPLETED on dgxh-3 (which has Vulkan) — 24 frames, but **every frame shows only the floor grid**: no robot, table or cloth on camera. Its trace has the arm NaN from t = 2.83 s, as in row 24 |
 | 24 | `21328765` | COMPLETED — **void**: the success predicate fired 4/4 with the first sweep, and the cloth did settle in the shirts basket, but the arm's joint state went NaN at t = 2.83 s mid-sweep in the traced episode (see *C2F* above) |
 | 23 | `21317391` | **COMPLETED — the shirt sorts on camera**, 64 frames (3.2 s), cn-r-2. Published: `docs/gifs/isaac/cloth_sort_fixed_base.gif` |

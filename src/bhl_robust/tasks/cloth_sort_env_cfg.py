@@ -372,6 +372,11 @@ def _newton_cloth_physics():
         rigid.njmax = int(os.environ["BHL_NEWTON_NJMAX"])
     if os.environ.get("BHL_NEWTON_NCONMAX"):
         rigid.nconmax = int(os.environ["BHL_NEWTON_NCONMAX"])
+    # The preset couples two-way, so the cloth pushes back on the arm. Larger
+    # buffers did not stop the NaN (21328911) and a still arm stayed finite
+    # (21328912), so the next single-variable test is the coupling itself.
+    if os.environ.get("BHL_NEWTON_COUPLING"):
+        cfg.default.solver_cfg.coupling_mode = os.environ["BHL_NEWTON_COUPLING"]
     return cfg
 
 

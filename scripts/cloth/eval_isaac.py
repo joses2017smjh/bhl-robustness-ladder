@@ -245,6 +245,7 @@ def main() -> None:
     payload["success_rate_finite"] = float(np.mean(finite_success)) if finite_success else None
     payload["newton_njmax"] = os.environ.get("BHL_NEWTON_NJMAX") or "preset"
     payload["newton_nconmax"] = os.environ.get("BHL_NEWTON_NCONMAX") or "preset"
+    payload["newton_coupling"] = os.environ.get("BHL_NEWTON_COUPLING") or "preset"
     payload["rung"] = args_cli.rung
     payload["garment"] = spec.name
     payload["task"] = tid

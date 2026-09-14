@@ -1119,8 +1119,12 @@ On the free base the robot falls backward within a second — **with its arm hel
 too** (`21317172`). That was measured after correcting the fall test, which read Isaac
 Lab 3.0's `(x, y, z, w)` quaternions as `(w, x, y, z)`, the same misreading that pitched
 the maze stereo cameras up (`3f7b679`). The planted pinch squat the layout was built
-around is not a stance this robot holds. Until it stands on a free base, this stays a
-design note: a pinned humanoid that sorts rigid proxies is not yet the task.
+around is not a stance this robot holds: each knee needs 5.5–6.0 N m of its 6. A knee-1.0
+stance with leg gravity feedforward and IMU ankle feedback, found in a MuJoCo model that
+reproduces the fall, **stands in Isaac** — 2 of 2 with the arm still, 3 of 4 through six
+sweeps (`21329076`–`077`). The table is not yet raised to that stance, so the free base does
+not sort. Until it does, this stays a design note: a pinned humanoid that sorts rigid
+proxies is not yet the task.
 
 Full write-up: [docs/CLOTH_SORT.md](CLOTH_SORT.md). Ledger:
 [SLURM_JOBS.md](../SLURM_JOBS.md).

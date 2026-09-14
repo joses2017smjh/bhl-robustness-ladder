@@ -17,6 +17,9 @@ Isaac's actuator model: PD at 20 N m/rad, 2 N m s/rad, 6 N m on the legs and 10,
     stress    the deployed controller (bhl_robust.cloth.balance, through the same
               function the Isaac term mirrors): noisy resets, arm still and arm
               playing the scripted sweep schedule
+    robust    gain search with the arm sweeping in the objective: each gain set
+              over noisy resets with the scripted sweep playing, ranked by stands
+              then worst tilt (the Isaac probe fell 1 of 4 with the arm moving)
 
 Writes ``results/cloth/stance/<command>.json``. CPU only:
 
@@ -307,14 +310,62 @@ def cmd_stress(rig: Rig) -> dict:
     return {"gains": list(balance.GAINS), "root_z": balance.ROOT_Z, "schedule_valid": bool(sch.valid), **out}
 
 
+def cmd_robust(rig: Rig) -> dict:
+    from bhl_robust.cloth import balance, layout, schedule, scripted
+    from bhl_robust.cloth.garments import GARMENT_BY_NAME
+
+    q_st = pinch()
+    for j, v in balance.STANCE.items():
+        q_st[J[j]] = v
+    ff = np.zeros(len(q_st))
+    for j, v in balance.FEEDFORWARD.items():
+        ff[J[j]] = v
+    ap = [J["leg_left_ankle_pitch_joint"], J["leg_right_ankle_pitch_joint"]]
+    ar = [J["leg_left_ankle_roll_joint"], J["leg_right_ankle_roll_joint"]]
+    arm = [J[j] for j in schedule.load_contact().joints]
+    spec = GARMENT_BY_NAME["shirt_a"]
+    g = np.array(layout.default_spawn_xy(spec))
+    sch = schedule.build_schedule(g, spec, scripted.scripted_action(g, spec), DT, int(round(schedule.MACRO_STEP_S / DT)))
+
+    def controller(gains):
+        def f(t, d):
+            M = Rot.from_quat(d.qpos[rig.s.qpos_adr + 3:rig.s.qpos_adr + 7], scalar_first=True).as_matrix()
+            w = M @ d.qvel[rig.s.qvel_adr + 3:rig.s.qvel_adr + 6]
+            po, ro = balance.ankle_offsets(M[0, 2], M[1, 2], M[2, 2], w[0], w[1],
+                                           float(np.arctan2(M[1, 0], M[0, 0])), gains)
+            qt, vt = q_st + ff, np.zeros_like(q_st)
+            qt[ap] += po
+            qt[ar] += ro
+            k = min(int(round(t / DT)), len(sch.q_cmd) - 1)
+            qt[arm], vt[arm] = sch.q_cmd[k], sch.qd[k]
+            return qt, vt
+        return f
+
+    results = []
+    for gains in itertools.product((1.0, 1.5, 2.0, 2.5), (0.3, 0.45, 0.6), (1.5, 2.0, 3.0), (0.05, 0.15)):
+        rng = np.random.default_rng(11)          # the same resets for every gain set
+        worst, stood = [], 0
+        for _ in range(6):
+            q0 = q_st + rng.uniform(-0.04, 0.04, len(q_st))
+            _, w = rig.run(q0, balance.ROOT_Z, controller(gains), T=6.0, stop_deg=45.0)
+            worst.append(w)
+            stood += w < 30.0
+        results.append({"gains": list(gains), "stood": int(stood), "trials": 6, "worst_tilt_deg": worst,
+                        "max_tilt_stood_deg": max([w for w in worst if w < 30.0], default=None)})
+    results.sort(key=lambda r: (-r["stood"], r["max_tilt_stood_deg"] if r["max_tilt_stood_deg"] is not None else 99))
+    for r in results[:8]:
+        print(f"  gains {r['gains']}: stood {r['stood']}/6, max tilt among stands {r['max_tilt_stood_deg']}")
+    return {"current_gains": list(balance.GAINS), "results": results}
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("command", choices=("fall", "sole", "knees", "map", "search", "stress", "all"))
+    p.add_argument("command", choices=("fall", "sole", "knees", "map", "search", "stress", "robust", "all"))
     args = p.parse_args()
     rig = Rig()
     OUT.mkdir(parents=True, exist_ok=True)
     cmds = {"fall": cmd_fall, "sole": cmd_sole, "knees": cmd_knees, "map": cmd_map, "search": cmd_search,
-            "stress": cmd_stress}
+            "stress": cmd_stress, "robust": cmd_robust}
     for name in (cmds if args.command == "all" else [args.command]):
         print(f"== {name}")
         (OUT / f"{name}.json").write_text(json.dumps(cmds[name](rig), indent=1))
