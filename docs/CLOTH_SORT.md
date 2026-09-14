@@ -1,7 +1,7 @@
 # Sorting garments into baskets
 
-> **Status, 2026-09-14: all three garment classes sort in Isaac on a fixed base, 32 of 32,
-> and the free base now stands.** The first scene was never reachable — the garment sat
+> **Status, 2026-09-14: all three garment classes sort in Isaac on a fixed base, 32 of 32;
+> on a free base the robot stands and sorts jackets and socks, not yet shirts.** The first scene was never reachable — the garment sat
 > 0.74 m away, the fingertips reach 0.28 m forward, and in Isaac the robot faced the other
 > way. The layout is rebuilt in the robot's own frame, inside a measured fingertip table.
 > In Isaac the shipped hands turned out to collide with nothing, and once they did, the
@@ -10,10 +10,12 @@
 > within 1.4–1.6 mm, and **with the root pinned the scripted sweep sorts shirt, sock and
 > jacket proxies 32 times in 32** (see [In Isaac](#in-isaac-why-the-hand-did-not-sort-2026-09-13)).
 > The pinch squat that layout was built on cannot stand on a free base: its knees saturate.
-> **A knee-1.0 stance with a leg controller designed in MuJoCo stands in Isaac** — 2 of 2
-> with the arm still, 3 of 4 through six sweeps — but the table has not been raised to
-> it, so the free-base task does not sort yet. The first cloth rung (C2) is void so far:
-> Newton goes NaN when the hand pushes the cloth. End-to-end deformable RL stays rejected.
+> **A knee-1.0 stance with a leg controller designed in MuJoCo stands in Isaac**, and with
+> the layout raised to it **the free-standing robot sorts jacket proxies 8 of 8 and socks
+> 7 of 8, with no falls — but shirts only 1 of 8**, with 3 falls. The shirt is where the arm
+> reaches furthest forward, and the base tilts 7–8° under it. The first cloth rung (C2) is
+> void so far: Newton goes NaN when the hand pushes the cloth. End-to-end deformable RL
+> stays rejected.
 
 This is an evidence-driven redesign. G-C1 answered that Newton cloth cannot
 carry the training workload. The research question moved with that measurement:
@@ -117,7 +119,7 @@ top, and the cell clears the right thigh. **0.30 m has the most usable cells
 
 | | robot frame (x, y) | world centre | size |
 |---|---|---|---|
-| table, top 0.30 m | x −0.04…0.16, y −0.38…−0.20 | (−0.28, 0.29) | 0.20 × 0.18 m |
+| table, top 0.3586 m (0.30 m in the squat frame) | x −0.04…0.16, y −0.38…−0.20 | (−0.28, 0.29) | 0.20 × 0.18 m |
 | shirts basket, off the front edge | x 0.18…0.33, y −0.355…−0.205 | (−0.475, 0.28) | 0.15 × 0.15 m |
 | socks basket, off the outer edge | x 0.00…0.14, y −0.52…−0.40 | (−0.29, 0.46) | 0.14 × 0.12 m |
 | jackets basket, off the back edge | x −0.21…−0.055, y −0.41…−0.255 | (−0.088, 0.332) | 0.155 × 0.155 m |
@@ -128,8 +130,11 @@ the diagonal of each garment bound for it, plus 1 cm.
 
 `assert_layout` refuses a table cell outside the contact table, basket walls
 that overlap each other or the robot's right leg, a basket opening under the
-table, and an opening a garment could rest across. The robot spawns at the planted squat height, −0.137 m, instead of
-the standing height that dropped it 11 cm at every reset.
+table, and an opening a garment could rest across. The robot first spawned at the planted squat
+height, −0.137 m, instead of the standing height that dropped it 11 cm at every reset. That
+squat cannot stand on a free base (see [In Isaac](#in-isaac-why-the-hand-did-not-sort-2026-09-13)).
+Since `a4f438b` the robot stands in a knee-1.0 stance, and every height, the table's
+included, is raised by the settled root's 5.855 cm.
 
 **Garments are scaled to fit** (`garments.py`, `scale` 0.33–0.45, mass by
 area): the originals were the size of the whole workspace. The table holds one
@@ -328,9 +333,29 @@ The probe `ClothSort-BHL-RigidBalance-Oracle-v0` stood 2 of 2 episodes for 36 s 
 still (worst tilt 1.65°, `21329076`). It stood 3 of 4 with the arm playing the scripted sweep
 six times (worst 11.5° in the traced episode, where the model predicted 11.3°; `21329077`).
 The table has not been raised for the new stance, so the hand passes above the garment and
-these probes cannot sort. Raising the table with the root (+5.95 cm) — the fingertip table
-moves with it unchanged — is what turns the probe into the free-base task. Everything
-above is reproducible with `scripts/cloth/stance_mujoco.py all`.
+these probes cannot sort. Everything above is reproducible with
+`scripts/cloth/stance_mujoco.py all`.
+
+**The free-base task (`a4f438b`).** Every rigid cloth scene now stands in that stance, and
+every height — the table, the fingertip table, the arm's root — rises with the settled root
+(5.855 cm), so each arm configuration is exactly as solved relative to the table.
+
+| garment | base | success | falls | sweeps to success | plans refused |
+|---|---|---:|---:|---:|---:|
+| shirt | pinned (`21329263`) | **8/8** | 0 | 1.0 | 0% |
+| jacket | **free** (`21329262`) | **8/8** | 0 | 1.1 | 0% |
+| sock | **free** (`21329261`) | **7/8** | 0 | 1.1 | 29% |
+| shirt | **free** (`21329260`) | 1/8 | 3 | 2.0 | 39% |
+
+The shirt's basket is off the table's front edge, so its push has the arm reaching
+furthest forward. In its trace the base tilts 7–8° on every approach, and the fingertip
+lands 21 mm (mean) off its plan, against 1.4 mm on the pinned base. The MuJoCo model says
+stiffer ankle pitch gains (12 of 12 at 6.7° worst tilt, against 11.4°) and feeding the
+arm's centre-of-mass shift forward to the ankles (6.3° to 4.1°) buy balance margin. Neither
+places the hand: fingertip error against the table stays 15–19 mm. The body moves to
+counterbalance the arm, and tilt shifts the hand's height by more than the 3 mm contact
+clearance. Precise pushes on a free base need the arm corrected online from the measured
+base pose.
 
 **The first cloth rung (C2) on the fixed base is void so far.** One 8×8 Newton cloth: the
 success predicate fired 4 of 4 and the cloth did settle in the basket, but the arm's joint
@@ -847,8 +872,9 @@ Registered gym ids (imported after SimulationApp, like every other overlay):
 
 ## Layout numbers
 
-Robot at `(-0.22, 0)`, root z −0.137, facing **−x** as measured (`21247910`).
-Table top 0.30 m, centred at `(-0.28, 0.29)`, 0.20 × 0.18 m; baskets at
+Robot at `(-0.22, 0)`, facing **−x** as measured (`21247910`), in the knee-1.0 stance: spawned
+at root z −0.0765, settled at −0.0787. Table top 0.3586 m (0.30 m in the pinch-squat frame the
+tables were solved in, risen with the settled root), centred at `(-0.28, 0.29)`, 0.20 × 0.18 m; baskets at
 `(-0.475, 0.28)`, `(-0.29, 0.46)`, `(-0.088, 0.332)` — see *The redesign*.
 Constants live in `src/bhl_robust/cloth/layout.py`, defined in the robot frame,
 and are the same object the Isaac scene spawns from, so the two cannot drift by

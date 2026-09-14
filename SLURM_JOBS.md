@@ -90,12 +90,14 @@ Diagnostics that ran once, proved a point and were deleted are in
 1. **Cloth, in Isaac on the redesigned layout** — *layout, garments, reach model,
    schedule action and planted spawn are done; the kinematic ladder sorts at 1.00*.
    *Fixed-base scripted C0 sorts 32/32 in Isaac for all three garment classes.*
-   *The free base now stands in Isaac* with a knee-1.0 stance and a leg controller:
-   2/2 with the arm still, 3/4 through six sweeps. Left: make that controller robust
-   to the arm (search running); raise the table 5.95 cm with the root, so the
-   free-base task can sort; C2 on the fixed base, void so far because Newton goes
-   NaN when the hand pushes the cloth (one-way coupling test `21329213`); then the
-   sequential five-garment scene in Isaac, C1 training, and C3–C5.
+   *The free base now stands in Isaac* with a knee-1.0 stance and a leg controller
+   (2/2 with the arm still, 3/4 through six sweeps). The layout is raised to that
+   stance (`a4f438b`), and on it **the free-standing robot sorts jacket 8/8 and sock
+   7/8, shirt 1/8.** Left: the shirt, via stiffer ankle gains and the arm's
+   centre-of-mass feedforward, then online arm correction from the base pose; C2 on
+   the fixed base, void so far because Newton goes NaN when the hand pushes the
+   cloth (one-way coupling test `21329265`); then the sequential five-garment scene
+   in Isaac, C1 training, and C3–C5.
 2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
    sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
    designs. *Before that, the terrain rung's stereo arms finish re-running with
@@ -540,6 +542,32 @@ sweeping inside the objective is running (`stance_mujoco.py robust`). The table 
 been raised, so these probes cannot sort. Raising it by `balance.ROOT_RISE` (5.95 cm), and
 the fingertip table with it, is what turns the probe into the free-base task.
 
+**The stance is part of the layout now (`a4f438b`).** Every rigid cloth scene spawns in the
+knee-1.0 stance with the leg controller on. Heights rise with the root's *settled*
+height, −0.0787 as measured standing in Isaac, rather than the −0.0765 spawn: 5.855 cm
+above the squat the tables were solved in. The table top is 0.3586 m. The fingertip
+table and the arm chain are shifted by the same amount when loaded, so every stored arm
+configuration sits exactly where it was solved relative to the table. Kinematic C0 and
+C5 still sort 1.00. Rows 32–36 are the first free-base sorting runs and a fixed-base
+invariance check.
+
+**The free-standing robot sorts, 2026-09-14 — 16 of 24, and not the shirt.** Scripted sweep,
+balance stance with its leg controller, rigid proxies. **Jacket 8 of 8 and sock 7 of 8, with
+no falls; shirt 1 of 8, with 3 falls.** The same shirt on the pinned base sorts 8 of 8 on
+this layout, so the gap is the free base. The shirt's basket is off the front edge, where
+the arm reaches furthest forward. In the shirt trace the base tilts 7–8° on every approach
+and the fingertip lands 21 mm (mean) off its plan. What the MuJoCo model says comes next:
+- pitch kp 2.0 instead of 1.5 stands 12 of 12 over all three garments' sweeps, at 6.7°
+  worst tilt against 11.4° (`robust.json`, and a fresh-seed comparison);
+- feeding the arm's centre-of-mass shift forward to the ankles, from the schedule itself,
+  halves the tilt again (6.3° to 4.1°). The opposite sign falls every time, which settles
+  the sign.
+
+Neither fixes where the hand lands. Fingertip error against the table stays 15–19 mm,
+because the body moves to counterbalance the arm and tilt changes the hand's height by
+centimetres against a 3 mm contact clearance. Placing the hand precisely on a free base
+means correcting the arm online from the measured base pose.
+
 **C2F diagnosis.** Larger MuJoCo-Warp buffers do not stop the NaN (row 26); a still arm
 stays finite (row 27). Onset is at the sample where the hand first moves the cloth, in
 every run. That points at the two-way cloth-to-rigid coupling. Row 31 changes only that,
@@ -561,8 +589,15 @@ starts. v1 accepted those sweeps.
 
 | # | id | outcome |
 |---|---|---|
-| 31 | `21329213` | queued, afterany `21329078` — C2F with `BHL_NEWTON_COUPLING=one_way` (the cloth no longer pushes back on the arm) and nothing else changed, 4 eps, trace (`isaac_c2f_v3_oneway.json`) |
-| 30 | `21329078` | queued, afterany `21329077` — clip, balance probe, arm sweeping (`results/clips/frames/cloth_c0b_sweep`), excludes dgxh-1 |
+| 38 | `21329392` | queued, afterany `21329265` — clip, **free base, jacket**, stance layout (`results/clips/frames/cloth_c0_stance_jacket`), excludes dgxh-1 |
+| 37 | `21329265` | queued, afterany `21329264` — C2F with `BHL_NEWTON_COUPLING=one_way`, nothing else changed against rows 24/26 (the stance change leaves a pinned arm's geometry as it was), 4 eps, trace (`isaac_c2f_v3_oneway.json`) |
+| 36 | `21329264` | CANCELLED before it started — shirt is the garment that mostly fails on the free base, so the clip became the jacket (row 38) |
+| 35 | `21329263` | **COMPLETED — fixed base, shirt, on the stance layout: 8 of 8**, each with its first sweep. Matches rows 20–22, as it should: the arm's geometry against the table is unchanged |
+| 34 | `21329262` | **COMPLETED — free base, jacket: 8 of 8**, no falls, 1.1 sweeps to success, 0% refused |
+| 33 | `21329261` | **COMPLETED — free base, sock: 7 of 8**, no falls, 1.1 sweeps to success, 29% of plans refused |
+| 32 | `21329260` | **COMPLETED — free base, shirt: 1 of 8, 3 falls**, 39% refused. Trace: the base tilts 7–8° on every approach and the fingertip runs 21 mm (mean) off plan, against 1.4 mm pinned. The pushes were weak, and the third sweep tipped it over |
+| 31 | `21329213` | CANCELLED before it started, replaced by row 37 — it would have picked up `a4f438b` |
+| 30 | `21329078` | CANCELLED before it started — on `a4f438b` the hand no longer passes over the garment, so a "balance probe" clip would have been a sort clip; row 36 is that clip |
 | 29 | `21329077` | **COMPLETED — the free base stands through the arm's sweeps in 3 of 4 episodes** (fall 0.25). The traced episode stood all 6 sweeps (36 s) with worst tilt 11.5°, where MuJoCo predicted 11.3° and 7 of 8. Fingertip tracking on the moving base was 6 mm mean. The hand passes above the garment by design, so no sort |
 | 28 | `21329076` | **COMPLETED — the free base stands in Isaac**: knee-1.0 stance with the leg controller, arm still, 2 of 2 episodes × 36 s, no fall, no non-finite state. Trace: worst tilt 1.65°, root settles 2.2 mm, 0.9 cm of drift |
 | 27 | `21328912` | **COMPLETED — with the arm still, Newton stays finite** (2 eps, preset buffers). The blow-up needs the arm moving |

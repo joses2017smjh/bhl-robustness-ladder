@@ -1121,10 +1121,11 @@ Lab 3.0's `(x, y, z, w)` quaternions as `(w, x, y, z)`, the same misreading that
 the maze stereo cameras up (`3f7b679`). The planted pinch squat the layout was built
 around is not a stance this robot holds: each knee needs 5.5–6.0 N m of its 6. A knee-1.0
 stance with leg gravity feedforward and IMU ankle feedback, found in a MuJoCo model that
-reproduces the fall, **stands in Isaac** — 2 of 2 with the arm still, 3 of 4 through six
-sweeps (`21329076`–`077`). The table is not yet raised to that stance, so the free base does
-not sort. Until it does, this stays a design note: a pinned humanoid that sorts rigid
-proxies is not yet the task.
+reproduces the fall, **stands in Isaac** (`21329076`–`077`). With the layout raised to it,
+**the free-standing robot sorts jacket proxies 8 of 8 and socks 7 of 8 with no falls, and
+shirts 1 of 8** (`21329260`–`262`). The shirt needs the longest forward reach, and the base
+tilts and misplaces the hand under it. Scripted policy, rigid proxies, and one garment at a
+time: a design note still, but no longer a pinned robot.
 
 Full write-up: [docs/CLOTH_SORT.md](CLOTH_SORT.md). Ledger:
 [SLURM_JOBS.md](../SLURM_JOBS.md).
