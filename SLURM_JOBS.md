@@ -77,6 +77,9 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 **Rendered**
 
+- `docs/gifs/isaac/maze_stereo_fixed.gif` — the corrected 16×16 stereo policy walking,
+  with its left eye as B5 had it before the quaternion fix (20° up, a strip of
+  ground) beside the corrected eye (`21329137`).
 - `docs/gifs/isaac/terrain_sensors.gif` — the first Isaac clip of trained
   policies with the robot in shot.
 - `docs/gifs/isaac/cloth_sort_fixed_base.gif` — the scripted sweep pushing the shirt
@@ -287,9 +290,9 @@ at 3,419.
 
 | # | id | outcome |
 |---|---|---|
+| 4 | `21329137` | **clip COMPLETED** (4:09, cn-gpu6, dgxh-1 excluded for Vulkan) — `mazefix-stereo-s0` through the camera-sensor recorder, 200 frames, with the corrected left eye and a raw-tuple eye dumped per frame (`train_play.py --clip-sensors stereo_l --clip-raw-stereo`); `docs/gifs/isaac/maze_stereo_fixed.gif`. The long pending jobs were niced for ten minutes so it could take the next slot, then restored |
 | 3 | `21317023`, `21317024`, `21317025` | seeds 0 / 1 / 2, `--array=2,5,6%1` (16×16, 4×4, 4×4 + lidar), 16 h limit, 2,048 envs as before — **16×16 COMPLETED in all three** (8:42, 5:41, 5:42; table above); 4×4 seeds 0–1 and 4×4 + lidar seed 2 running, three tasks pending |
 | 2 | `21317022` | **STEREO-PITCH PASS** (0:54) — table above |
-| 1 | `21302173_4`, `21302174` | **cancelled** — both trained the upward-looking pair: StereoP8 seed 1 at iteration 4,150 of 6,000 (terrain level 0.086 there), and seed 2 of Both and StereoP8 before it started. `21302173_3`, Both seed 1, had COMPLETED in 4:17 at terrain level 0.044 (last 50 iterations; seed 0 was 0.065) — void for the same reason |
 
 ### B5 maze — stereo pooling sweep · `retracted` for every stereo arm — the pair looked up (entry above); blind and lidar stand
 **Replicated, 2026-09-13.** Seeds 1 and 2 of the five arms that matter are in
@@ -976,7 +979,7 @@ also checked inside `LimbMarlEnv` against the action term's own joint names.
 | 2 | `21328445`, `21328446` | **cancelled** — `DependencyNeverSatisfied` after the gate failed; their ice rows had been held first, pending `21328532` |
 | 1 | `21328444` | **FAIL, correctly** (9:50). (i)–(iii) pass on all 12 rows: 2 agents of 6, left and right hip first, observation 301 = state with depth, trainer matches. (iv) fails on 9: no terrain level in the event file, because Isaac Lab `.item()`s curriculum scalars and skrl logs only tensors. The three rough rows loaded the `loggable` fix mid-gate and passed (iv) |
 
-### Tier 3 — 22 DoF on stairs, depth, arm deviation off · `queued` — behind G-T3 `21328742`, 2026-09-14
+### Tier 3 — 22 DoF on stairs, depth, arm deviation off · `queued` — G-T3 passed 3/3, 2026-09-14
 `Velocity-BHL-Arms-Stairs-Depth-v0` (`tasks/arms_terrain_env_cfg.py`): the arms
 robot on the biped stairs menu with the depth rung's camera and term, and
 `joint_deviation_shoulder` / `_elbow` cleared **in the task**. The first block
@@ -995,7 +998,7 @@ id absent rather than breaking every queued job that imports the registry.
 
 | # | id | outcome |
 |---|---|---|
-| 1 | `21328742` → `21328743`, `21328744` | gate queued (at the per-user GPU cap); seed 0 `--array=0-2%1` `afterok`, seed 1 after seed 0 |
+| 1 | `21328742` → `21328743`, `21328744` | **G-T3 PASS, 3 of 3** (5:37): no shoulder or elbow deviation in any reward table, `joint_deviation_hip` present, observation 331 with depth (PPO's actor included), limb4's first joints the two shoulders and two hips, terrain level logged on the rsl-rl settings. Seed 0 `--array=0-2%1` pending at the per-user GPU cap, seed 1 after seed 0 |
 
 ### Tier 1 / 2 / 3 MARL rows · `todo` — Tier 2 and Tier 1's PPO rows already exist; Tier 1's MARL rows and Tier 3 on stairs are queued (above)
 **Audit, 2026-09-13**, against the work order's grid:
@@ -1840,6 +1843,7 @@ came from.
 | `21328532` | B3 ice placement probe — patches a median 72 m from the robots |
 | `21328742` | G-T3, Tier 3 gate — 22 DoF, stairs, depth, arm deviation off |
 | `21328743`, `21328744` | Tier 3 on stairs — PPO, MAPPO limb4, limb1; seeds 0 and 1 |
+| `21329137` | B5 corrected-stereo clip with before/after eye panels |
 | `21300299`, `21300300`, `21300301` | cloth redesign: rigid smoke, Isaac C0 scripted (boot crash), C1 training smoke |
 | `21300348`, `21300493`, `21300494` | cloth redesign: C0 free base, C0 fixed base, C0 fixed-base clip |
 | `21300603`, `21300604`, `21300605` | cloth redesign with hand colliders: fixed-base C0, its clip, free-base C0 |

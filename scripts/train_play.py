@@ -34,6 +34,13 @@ parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
 parser.add_argument("--play-steps", type=int, default=0,
                     help="stop after N steps when not recording video; 0 means run until the simulator is closed")
 parser.add_argument("--video", action="store_true", default=False, help="Record videos during training.")
+# [overlay] Sensor panels beside camera-sensor clips. CLI flags, not env vars, so
+# nothing new has to cross apptainer's --cleanenv.
+parser.add_argument("--clip-sensors", type=str, default="",
+                    help="colon-separated depth sensors to dump as PNGs with each clip frame")
+parser.add_argument("--clip-raw-stereo", action="store_true", default=False,
+                    help="also mount a stereo eye with STEREO_ROT passed raw -- the pose every "
+                         "B5 run on v60 had before 3f7b679 -- and dump it as stereo_raw")
 parser.add_argument("--video_length", type=int, default=200, help="Length of the recorded video (in steps).")
 parser.add_argument(
     "--disable_fabric", action="store_true", default=False, help="Disable fabric and use USD I/O operations."
@@ -150,6 +157,13 @@ def main():
             spawn=sim_utils.PinholeCameraCfg(focal_length=18.0),
             offset=CameraCfg.OffsetCfg(pos=(0.0, 0.0, 2.0), rot=(1.0, 0.0, 0.0, 0.0), convention="world"),
         )
+    clip_sensors = [s for s in args_cli.clip_sensors.split(":") if s]
+    if clip_on and args_cli.clip_raw_stereo:
+        from bhl_robust.sensors_rig import STEREO_ROT, make_stereo_cfg
+        raw_eye = make_stereo_cfg("left", res=64)
+        raw_eye.offset.rot = tuple(STEREO_ROT)
+        env_cfg.scene.stereo_raw = raw_eye
+        clip_sensors.append("stereo_raw")
 
     # specify directory for logging experiments
     log_root_path = os.path.join("logs", "rsl_rl", agent_cfg.experiment_name)
@@ -378,6 +392,13 @@ def main():
                 rgb = torch.as_tensor(clip_cam.data.output["rgb"][:])[0, ..., :3]
                 Image.fromarray(rgb.detach().cpu().numpy().astype("uint8")).save(
                     os.path.join(clip_dir, f"frame_{n_frames:04d}.png"))
+                for sname in clip_sensors:
+                    sensor = env.unwrapped.scene[sname]
+                    far = float(sensor.cfg.max_distance)
+                    d = torch.as_tensor(sensor.data.output["distance_to_image_plane"][:])[0, ..., 0]
+                    d = d.nan_to_num(nan=far, posinf=far).clamp(0.0, far)
+                    Image.fromarray((255.0 * (1.0 - d / far)).to(torch.uint8).cpu().numpy()).save(
+                        os.path.join(clip_dir, f"{sname}_{n_frames:04d}.png"))
                 n_frames += 1
             if timestep >= args_cli.video_length:
                 print(f"[INFO]: wrote {n_frames} clip frames to {clip_dir}")
