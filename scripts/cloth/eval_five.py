@@ -41,7 +41,7 @@ def main() -> None:
         from bhl_robust.cloth.garments import GARMENTS
         from bhl_robust.cloth.metrics import EpisodeMetrics, RunMetrics
         from bhl_robust.cloth.randomization import IDENTITY
-        from bhl_robust.cloth.scripted import scripted_action
+        from bhl_robust.cloth.scripted import scripted_for
         import time
         env = KinematicClothSortEnv(
             GARMENTS, domain_rand=IDENTITY, seed=args.seed, active_garment_mode=False,
@@ -54,7 +54,7 @@ def main() -> None:
             em = EpisodeMetrics(n_garments=env.n_garments)
             done = False
             while not done:
-                act = scripted_action(env.garment_xy(env._selected), env.selected_spec())
+                act = scripted_for(env)
                 _, _, done, info = env.step(act)
                 steps += 1
                 em.n_sweeps += 1

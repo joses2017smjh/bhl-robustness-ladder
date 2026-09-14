@@ -719,6 +719,44 @@ animation except where it says so.
 
 ---
 
+## The hands never collided with anything
+
+*Found 2026-09-13 while asking why a sweep that reaches the garment does not move
+it. This is not a new finding number; it qualifies several.*
+
+**The Berkeley Humanoid Lite asset has no collision geometry on its hands.** In
+the URDF each hand link has a `<visual>` and no `<collision>`. The USD converted
+from it has an empty `collisions` group on both hand links, and the MuJoCo crew
+model built from it gives the hand mesh `contype 0`. The links that do collide
+are the base, the shoulder-yaw and elbow-roll links, and the legs. So in both
+simulators a hand passes through whatever it meets, and anything the arms
+touched, they touched with a forearm.
+
+That changes what the manipulation numbers can mean, without changing the
+numbers:
+
+- **Cooperative lift and the v2 tasks** — cube, ball, plank; blind, depth, RGB —
+  could only ever contact the payload through the forearms, shoulders or legs.
+  "Hands inside the pinch gate 98% of the time" measures where the hands were,
+  not what they touched. For the welded-hand arms, task success 0 was physically
+  forced.
+- **The gripper variant** (`scripts/add_gripper.py`) adds finger links *with*
+  collision, so those arms could touch a payload with a finger — though still not
+  with a palm. Finding 10's survival gain is about balance and does not depend on
+  contact.
+- **The cloth sweep** made it concrete: on a fixed base the scripted hand comes
+  down onto the garment, and the garment moved 0.07 mm (`21300493`). The cloth
+  tasks now spawn a workspace overlay that adds a collider to each hand — first a
+  box around its visual mesh, now the mesh's 64-vertex convex hull, since the box's
+  bottom face was 3.5× the fingertip (`scripts/cloth/add_hand_colliders.py`);
+  upstream is untouched. With a collider the garment moves in every episode
+  (7.2 cm, `21300603`).
+
+The MuJoCo-scored lift heights stand as measured. What they measured is a pair of
+robots bracing a payload with their forearms.
+
+---
+
 ## The hands were welded shut the whole time
 
 Every manipulation result above was produced by a robot that cannot close a
@@ -1029,8 +1067,39 @@ Isaac cells agree for their own reasons: the robot falls in about 13 steps and
 never moves the garment.
 
 What is reachable is a patch on the robot's right: fingertip contact on a 0.30 m table
-top spans about 0.30 m by 0.28 m and never crosses the robot's midline. A layout inside it is the next step,
-and the ladder's own decision rule says so: fix the geometry before training.
+top spans about 0.30 m by 0.28 m and never crosses the robot's midline.
+
+**Redesigned inside it (2026-09-13).** A 0.20 × 0.18 m table sits on the robot's right
+with baskets off three of its edges, garments are scaled to fit, and five-garment runs
+present one garment at a time. Under the reach model the kinematic ladder sorts again —
+C0, C1, C4 and C5 all at 1.00 with no plan refused — and the Isaac sweep action plays a
+joint schedule built from a fingertip table.
+
+**In Isaac the garments now sort — on a fixed base, 32 of 32** (shirt 16, sock 8, jacket 8;
+`21317388`–`390`; root pinned, scripted, rigid proxies). Three things stood between the
+plan and the push, found in order on that fixed-base diagnostic:
+
+- the hands had no collision geometry (above): 0.07 mm of garment travel, then 7.2 cm
+  with a collider;
+- the schedule mixed IK branches, so a "vertical" descent swung the fingertip 7 cm into
+  the garment. It is now grown for continuity and replayed through forward kinematics
+  of the hand hull before it is accepted;
+- **the arm could not follow it.** The upstream arm drive is PD at 10 N m/rad and
+  2 N m s/rad with 4 N m. On bare position targets the fingertip ran 65–72 mm behind
+  its schedule (`21307211`), and the hand cut through the shirt before the sweep began.
+  An offline arm with the same drive reproduces Isaac's measured joints to 0.001 rad.
+  With inverse-dynamics feedforward sent through the *same* drive — a velocity target
+  and a torque-over-Kp offset, phases slowed where they would exceed the limit — that
+  arm follows the scripted schedules within 1.8 mm, and in Isaac the fingertip then ran
+  1.4–1.6 mm behind. That sorted 7 of 8; the eighth shirt came to rest across the
+  basket rims, and on baskets wider than every garment's diagonal all 32 sort.
+
+On the free base the robot falls backward within a second — **with its arm held still
+too** (`21317172`). That was measured after correcting the fall test, which read Isaac
+Lab 3.0's `(x, y, z, w)` quaternions as `(w, x, y, z)`, the same misreading that pitched
+the maze stereo cameras up (`3f7b679`). The planted pinch squat the layout was built
+around is not a stance this robot holds. Until it stands on a free base, this stays a
+design note: a pinned humanoid that sorts rigid proxies is not yet the task.
 
 Full write-up: [docs/CLOTH_SORT.md](CLOTH_SORT.md). Ledger:
 [SLURM_JOBS.md](../SLURM_JOBS.md).

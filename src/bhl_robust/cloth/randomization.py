@@ -18,7 +18,8 @@ class DomainRandomization:
     size_scale: tuple[float, float] = (0.85, 1.20)
     friction: tuple[float, float] = (0.35, 0.90)
     restitution: tuple[float, float] = (0.00, 0.05)
-    spawn_xy_jitter: float = 0.06
+    #: The redesigned table is 0.20 x 0.18 m; a 6 cm jitter would spawn garments off it.
+    spawn_xy_jitter: float = 0.02
     yaw_range: tuple[float, float] = (-0.60, 0.60)
     basket_xy_jitter: float = 0.03
     contact_offset_jitter: float = 0.03

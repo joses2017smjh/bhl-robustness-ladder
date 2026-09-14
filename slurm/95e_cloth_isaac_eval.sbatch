@@ -18,7 +18,9 @@ setup_node_cache
 export OV_CACHE=/scratch/$USER/ov-cache-${SLURM_JOB_ID}
 export CUDA_CACHE_PATH=/scratch/$USER/nv-computecache-${SLURM_JOB_ID}
 mkdir -p "$OV_CACHE" "$CUDA_CACHE_PATH" "$REPO/results/cloth"
-export RUNG=C0 NUM_ENVS=4 EVAL_EPISODES=4 EVAL_STEPS=80
-export BENCH_OUT="$REPO/results/cloth/isaac_c0_scripted.json"
+export RUNG=${RUNG:-C0} NUM_ENVS=${NUM_ENVS:-4} EVAL_EPISODES=${EVAL_EPISODES:-4} EVAL_STEPS=${EVAL_STEPS:-80}
+export BENCH_OUT="${BENCH_OUT:-$REPO/results/cloth/isaac_${RUNG,,}_scripted.json}"
+# Boots are serialised across every v60 job, not only this chain: v60_boot_gate.sh.
+source "$REPO/slurm/inner/v60_boot_gate.sh"; v60_boot_gate
 bhl_exec "$REPO/slurm/inner/cloth_isaac_eval.sh"
 echo "=== done: $(date) ==="

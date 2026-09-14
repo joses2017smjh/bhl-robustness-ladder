@@ -18,7 +18,7 @@ from __future__ import annotations
 import numpy as np
 
 from bhl_robust.cloth.garments import GarmentSpec
-from bhl_robust.cloth.layout import basket_center
+from bhl_robust.cloth.layout import HAND_RADIUS, basket_center
 from bhl_robust.cloth.sweep import SweepConfig, encode_physical
 
 
@@ -26,8 +26,13 @@ def scripted_physical(
     garment_xy: np.ndarray,
     spec: GarmentSpec,
     cfg: SweepConfig | None = None,
+    garment_yaw: float = 0.0,
 ) -> dict[str, float]:
-    """Physical sweep parameters that push ``spec`` toward its basket."""
+    """Physical sweep parameters that push ``spec`` toward its basket.
+
+    ``garment_yaw`` turns the proxy's footprint, so the hand starts behind the
+    garment's actual trailing edge once a push has rotated it.
+    """
     cfg = cfg or SweepConfig()
     g = np.asarray(garment_xy, dtype=float)[:2]
     target = basket_center(spec.target_basket)[:2]
@@ -39,13 +44,18 @@ def scripted_physical(
     else:
         direction = delta / dist
     angle = float(np.arctan2(direction[1], direction[0]))
-    # Start behind the garment so contact happens on the far side of the push.
-    start_offset = -direction * cfg.start_offset
+    # Start just behind the garment's trailing edge along the push. A fixed 12 cm
+    # put the hand inside the robot's own thigh on the redesigned table, which
+    # is 18 cm deep; the offset now follows the garment's size.
+    sx, sy = float(spec.proxy_size[0]), float(spec.proxy_size[1])
+    c, s = np.cos(garment_yaw), np.sin(garment_yaw)
+    half = 0.5 * (abs(direction @ (c, s)) * sx + abs(direction @ (-s, c)) * sy)
+    start_offset = -direction * (HAND_RADIUS + half + 0.01)
     # Overshoot a little so the garment is carried through the basket mouth
     # rather than stopping on the rim.
     # Aim at the basket centre. Adding a large overshoot is how garments
     # skipped the box and landed on the floor in the first C5 run.
-    distance = float(np.clip(dist, 0.15, cfg.max_distance))
+    distance = float(np.clip(dist, 0.10, cfg.max_distance))
     return {
         "dx_start": float(start_offset[0]),
         "dy_start": float(start_offset[1]),
@@ -59,13 +69,26 @@ def scripted_action(
     garment_xy: np.ndarray,
     spec: GarmentSpec,
     cfg: SweepConfig | None = None,
+    garment_yaw: float = 0.0,
 ) -> np.ndarray:
     """Normalised ``[-1, 1]^5`` action for the scripted policy."""
-    p = scripted_physical(garment_xy, spec, cfg)
+    p = scripted_physical(garment_xy, spec, cfg, garment_yaw)
     return encode_physical(
         p["dx_start"], p["dy_start"], p["sweep_angle"],
         p["sweep_distance"], p["sweep_speed"],
     )
+
+
+def scripted_for(env, cfg: SweepConfig | None = None) -> np.ndarray:
+    """Scripted action for a kinematic env's selected garment, its rotation included.
+
+    The kinematic scripts used to call ``scripted_action`` with the garment's
+    position alone. Under domain randomization (yaw +-0.6 rad) that started the
+    hand on a rotated garment, which the schedule refuses: kinematic C1 scored
+    0.70 and C4 0.56 on the v3 schedule, and scripted with the yaw scores 64/64.
+    """
+    i = env._selected
+    return scripted_action(env.garment_xy(i), env.selected_spec(), cfg, garment_yaw=env.garment_yaw(i))
 
 
 def pick_unsorted(sorted_mask: np.ndarray, positions: np.ndarray) -> int:

@@ -45,25 +45,47 @@ Diagnostics that ran once, proved a point and were deleted are in
   ten cells that trained.
 - **Isaac renders fixed**: the viewport drew stale poses; a camera-sensor clip
   recorder shows the robot where it is (`docs/ISAAC_RENDER.md` §10).
+- **Cloth sorts in Isaac for the first time — on a fixed base: 32 of 32 episodes**
+  on the widened baskets (shirt 16, sock 8, jacket 8; `21317388`–`390`), each with
+  its first sweep; 7 of 8 before the widening (`21317170`). Rigid proxies, scripted,
+  root pinned. Two fixes got it there.
+  The shipped hands had no collision geometry (hull overlay). And the arm could
+  not follow its schedule: bare position targets on a 10 N m/rad, 4 N m drive lag
+  0.2 s, and the fingertip ran 65–72 mm behind (`21307211`). Inverse-dynamics
+  feedforward through the same drive brought that to 1.4–1.6 mm in Isaac. The
+  eighth shirt landed across the basket rims; the baskets are now wider than
+  every garment's diagonal. **The free base falls backward even with the arm held
+  still** (`21317172`): the planted pinch squat is not a stance this robot can hold.
+- **Quaternion order, beyond the cameras**: the cloth fall test read Isaac Lab
+  3.0's `(x, y, z, w)` as `(w, x, y, z)` (fixed). The same misreading very likely
+  explains item 3's under-floor spawn.
 
 **Rendered**
 
 - `docs/gifs/isaac/terrain_sensors.gif` — the first Isaac clip of trained
   policies with the robot in shot.
+- `docs/gifs/isaac/cloth_sort_fixed_base.gif` — the scripted sweep pushing the shirt
+  proxy into its basket, root pinned (`21317391`).
 
 **Left, in order**
 
-1. **Cloth layout redesign** inside the measured contact region — table top
-   0.30 m on the robot's right, small garments, baskets off reachable edges —
-   plus a sweep action rebuilt on the contact table (one sweep per RL step, a
-   correct timer, reading the garment's pose) and a spawn at the planted squat
-   height. Then Isaac C0 scripted, C1, and the cloth cells.
+1. **Cloth, in Isaac on the redesigned layout** — *layout, garments, reach model,
+   schedule action and planted spawn are done; the kinematic ladder sorts at 1.00*.
+   *Fixed-base scripted C0 sorts 32/32 in Isaac for all three garment classes.*
+   Left: **a stance the free base can hold** — the pinch squat falls backward in
+   under a second with the arm still, so the reach table and layout will have to
+   follow a new leg pose; the first low-res cloth cell (C2) on the fixed base; the
+   sequential five-garment scene in Isaac; C1 training; C3–C5.
 2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
    sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
    designs. *Before that, the terrain rung's stereo arms are re-running with the
    cameras pointed down (`21317023`–`21317025`).*
 3. **Isaac spawn for the coop/TaskV2 tasks**: robots still spawn under the
-   floor (`robot_a` bodies at z −0.806…−0.027 in `21299608`).
+   floor (`robot_a` bodies at z −0.806…−0.027 in `21299608`). *Likely cause found,
+   not yet probed:* on v60 the spawn tuple `(0.707, −0.707, 0, 0)` is read
+   `(x, y, z, w)`, an upside-down robot facing the cube (R₂₂ = −1); the legacy
+   `(0.707, 0, 0, −0.707)` is a −90° roll. The fix is `native_quat` on the intended
+   `(w, x, y, z)` yaw, plus a spawn probe.
 4. **MARL**: first block seeds 1–2 running (`21302171`, `21302172`). Tier 2 and
    Tier 1's PPO rows already exist; Tier 1's sixteen MARL rows need a 12-DoF
    leg split and a gate; Tier 3 needs 22-DoF terrain tasks — *Tier 1 / 2 / 3*.
@@ -267,6 +289,171 @@ information fraction fixed and changes only the sensor.
 | 3 | `21247912_[0-2,5,6]` | **5 of 5 COMPLETED** (4:23–6:01) — seed 2, table above |
 | 2 | `21247911_[0-2,5,6]` | **5 of 5 COMPLETED** (5:32–8:45) — seed 1, table above |
 | 1 | `21233916_[4-6]` | **3 of 3 COMPLETED** (5:46–7:43) — table above |
+
+### Cloth sorting — redesigned inside the reach · `running` — fixed base sorts 32/32 in Isaac; the squat cannot stand, 2026-09-14
+**The layout is rebuilt in the robot frame, inside the fingertip contact table**
+(`assets/cloth/right_hand_contact_pinch.npz`): a 0.20 × 0.18 m table at 0.30 m on
+the robot's right, baskets off its front, outer and back edges, all clear of the
+right leg, every table cell checked reachable by `assert_layout`. Garments are
+scaled 0.33–0.45× to fit (mass by area); a five-garment scene presents them one
+at a time (Mode B, sequential), parking the rest. The robot now spawns at the
+planted squat height (−0.137) instead of dropping 11 cm.
+
+**Kinematic, under the reach model, 2026-09-13** (`results/cloth/redesign/`):
+
+| cell | success | plans refused | sweeps |
+|---|---:|---:|---:|
+| C0 scripted, 64 eps | **1.00** | 0% | 1.00 |
+| C5 scripted, sequential, 32 eps | **1.00** | 0% | 5.00 |
+| C1 learned residual, DR, 64 eps | **1.00** | 0% | 1.92 |
+| C4 linear BC, DR, 64 eps | **1.00** | 0% | 1.00 |
+
+On the old layout the same cells were 0.00 with every plan refused. So the
+redesigned task is solvable within the robot's measured reach — kinematically.
+Physics is the next question.
+
+**Balance is now the blocker, and it hides the manipulation question.** On the
+free base the robot falls within the first 4 s sweep in every episode
+(`21300301`). The zero-action probe had already shown the squat sinking 12–20 cm
+and wobbling; with an arm moving on top it goes over. So "does the sweep move the
+garment?" cannot be asked of the free-base task yet. A **fixed-base diagnostic
+task** (`ClothSort-BHL-RigidFixedBase-Oracle-v0`, root link pinned, legs still on
+their squat targets) asks it separately; the free-base task stays as it is.
+Raising the leg gains would misrepresent a 6 Nm actuator, so the real fix is a
+balance controller — the trained locomotion policy on the legs is the candidate.
+Random 5-D actions are also a sweep the hand can make only 7 times in 64, so C1
+gets a residual action mode (`ClothSort-BHL-RigidResidual-Oracle-v0`) around the
+scripted sweep.
+
+**The Isaac sweep action is rebuilt** on the same table
+(`bhl_robust.cloth.schedule`): one RL step executes one whole sweep — hover over
+an anchor, descend, glide, sweep, glide, lift — as a joint schedule played at the
+physics step, with the garment read through the robot's actual root pose. The
+old term latched a hand-tuned mapping every 40 ms, never read the garment, and
+its timer ran 8× fast. Macro step 4.0 s then (6.0 s since v3: decimation 1200
+rigid, 360 cloth; rigid episodes six sweeps, 36 s).
+
+**v2 sweep, built on what 21300604 showed (2026-09-13).** Four faults, one fix each,
+all checkable on a login node:
+
+- *Branch jumps.* `build_tip_table.py` grows the fingertip table cell by cell from the
+  table centre, seeding each solve from a solved neighbour: largest joint jump
+  between neighbours 0.28 rad, fingertip within 1.3 mm of the straight line between
+  cells. Over the table's interior the elbow is fully bent, so the hand can lift
+  clear only at 78 edge cells — those are the anchors.
+- *Descending onto the garment.* `schedule.py` routes the table-height glide around the
+  garment (A* on contact cells, shortened where a straight glide is clear) and replays
+  every candidate through numpy FK of the hand hull (`arm_fk.py`, equal to MuJoCo to
+  4e-16 m). It refuses any plan that touches the garment before the sweep, or where
+  the garment should be after it, or goes into the table. An independent MuJoCo
+  replay of the scripted shirt / sock / jacket schedules: hull 1.2–2.1 cm clear of
+  the garment on approach, lowest point 0.3027–0.3030 m, fingertip within 0.2 mm of
+  the sweep line.
+- *Riding up the edge.* Contact clearance 12 mm → 3 mm (a 1.5 cm garment side is now
+  12 mm of pushing face). Hand footprint radius 4 cm → 3.1 cm, measured.
+- *Box collider.* The hand tapers to a 1.7 × 3.0 cm fingertip; the Isaac collider is now
+  the mesh's convex hull (64 vertices, within 1.7 mm of the full hull) instead of its
+  5.9 × 7.4 cm bounding box.
+
+Also found: every quaternion read in the cloth MDP assumed `(w, x, y, z)`, but Isaac
+Lab 3.0 stores `(x, y, z, w)`. The fall test, the garment yaw and the robot-yaw
+correction are fixed. `coop_lift_mdp._tilt_from_quat` and `task_v2_mdp` make the same
+assumption; they belong to other experiments and are flagged, not changed.
+
+**v3: the arm could not follow the schedule (2026-09-13, night).** `21307211`'s trace
+settles where the v2 push went wrong. Forward kinematics of Isaac's *measured* joints
+lands on Isaac's hand link to 0.0 mm, so the plan's geometry and frames are right. But
+the fingertip ran **65–72 mm behind its schedule** (max 14 cm, joint errors to 0.66 rad).
+The upstream arm drive is PD at 10 N m/rad and 2 N m s/rad with a 4 N m limit, so bare
+position targets lag by Kd/Kp = 0.2 s and saturate at the schedule's 3 rad/s. The shirt
+first moved at 0.50 s, during the *approach*, when the lagging hand cut through it; it
+came to rest on the jackets basket's rim, and every later plan was rightly refused.
+
+A MuJoCo arm with the same drive reproduces Isaac's measured joints to 0.001 rad before
+contact, so it is a fair offline judge (a numpy copy, `arm_fk.simulate_pd`, matches to
+0.002 rad and is in the tests). The fix keeps the actuator — same gains, same 4 N m, no
+articulation change — and changes what it is sent. Each phase is re-timed to start and
+stop at rest (quintic; macro step 4 → 6 s). The position target carries the
+inverse-dynamics torque over Kp, and a velocity target cancels the damping drag
+(`arm_fk.inverse_dynamics`, equal to `mj_rne` to 3e-15 N m). A phase whose feedforward
+would need more than 3.4 N m is slowed, and the term refuses to start if the arm
+actuator is not the one the feedforward assumes. In the Isaac-calibrated arm the
+scripted shirt / sock / jacket schedules now track **within 1.8 mm** (bare targets:
+42–90 mm mean), with peak drive torque 3.6 N m. Every static table pose needs at most
+2.15 N m against gravity. The kinematic ladder still sorts at 1.00 (C0 64 eps, C5 32
+eps, 0% refused).
+
+With the corrected fall test the free base still falls, backward, within 1 s of the
+first arm move (`21307213`). Row 17 holds the arm still, to separate the squat itself
+from the arm's reaction torque.
+
+**In Isaac the feedforward works, and the shirt sorts: 7 of 8 on the fixed base**
+(`21317170`). The trace has the fingertip 1.4–1.6 mm behind its schedule on the sweep
+(2.6 mm at worst). The shirt first moved at 2.35 s, inside the sweep's window
+(2.07–2.88 s), where before it moved during the approach. Each of the seven sorted
+with its first sweep; no plan refused, no wrong basket, no falls. The failure was episode 0: the shirt was pushed in
+over the rims turned 68°, and at that angle a 10 × 8 cm shirt spans 12.2 cm across a
+12 cm opening. It came to rest on both rims at z 0.146, 6 mm above the success box, and
+no later sweep could reach it. So the baskets are widened until no garment can bridge
+its own: shirts 15 × 15 cm, jackets 15.5 × 15.5 cm (the jacket's diagonal is 13.9 cm;
+its old 12 × 10 cm opening would have caught most jackets), and socks keep 14 × 12 cm,
+shifted 2 cm. `assert_layout` now refuses any basket narrower than its garments'
+diagonal plus 1 cm. On the widened baskets the scripted schedule is valid 40/40 per
+garment under spawn jitter, and the kinematic C0 and C5 still sort at 1.00. Rows
+17–19 import the code when they start, so they run on the widened baskets; their
+questions (balance) do not depend on them.
+
+The v3 clip (row 16) died on `dgxh-1`, which has no Vulkan (`vkCreateInstance failed`,
+`ERROR_INCOMPATIBLE_DRIVER`), not on the code. The same clip code ran on cn-gpu5 and
+cn-gpu7. Queued clips now carry `--exclude=dgxh-1`.
+
+**Overnight, 2026-09-13/14: 32 of 32 on the widened baskets, and the squat is the
+blocker.** Fixed base, v3 schedule, widened baskets: shirt 16/16, sock 8/8, jacket 8/8,
+every one with its first sweep, no plan refused, no falls (rows 20–22). The clip sorts
+on camera (row 23; `docs/gifs/isaac/cloth_sort_fixed_base.gif`). On the free base the
+arm-still control falls in 2 of 2 episodes (row 17), and its trace follows the sweeping
+run's almost exactly: pitch −15° at 0.5 s, −48° at 0.75 s, on its back by 0.9 s. **The
+planted pinch squat is not a stance this robot can hold** with its legs on their targets.
+The arm is not what tips it. A free-base cloth task needs a stance that stands; the
+contact table and the layout are built on this one, so they will have to follow.
+
+**The kinematic ladder under the v3 planner** (`results/cloth/redesign_v3/`; the
+`redesign/` files are the v1 numbers, kept). C0 scripted 1.00 (64 eps) and C5
+sequential 1.00 (32 eps), no plan refused. **C1 (REINFORCE linear residual) 0.56 and
+C4 (linear BC) 0.56**, down from 1.00 under v1. Neither drop is the planner being
+wrong. The kinematic scripts never passed the garment's yaw to the scripted sweep, so
+under ±0.6 rad randomization it started the hand on the garment; with the yaw
+(`scripted.scripted_for`) scripted C1 is 64/64. BC fit on unrandomized scenes is 64/64
+there, but a linear map cannot express the yaw-dependent start: 138 of its sweeps
+start on the garment. The REINFORCE baseline was a fixed 2.0, so the residual
+random-walked 5–8 cm off the scripted start; a running-mean baseline still ends at
+0.56, because ±27° of angle exploration is coarse for a planner that refuses imprecise
+starts. v1 accepted those sweeps.
+
+| # | id | outcome |
+|---|---|---|
+| 23 | `21317391` | **COMPLETED — the shirt sorts on camera**, 64 frames (3.2 s), cn-r-2. Published: `docs/gifs/isaac/cloth_sort_fixed_base.gif` |
+| 22 | `21317390` | **COMPLETED — jacket 8 of 8**, each with its first sweep, 0% refused, no falls (`isaac_c0f_v3b_jacket.json`) |
+| 21 | `21317389` | **COMPLETED — sock 8 of 8**, each with its first sweep, 0% refused, no falls (`isaac_c0f_v3b_sock.json`) |
+| 20 | `21317388` | **COMPLETED — shirt 16 of 16 on the widened baskets**, each with its first sweep, 0% refused, no falls (`isaac_c0f_v3b_shirt.json`) |
+| 19 | `21317174` | **COMPLETED** — the free base falls on camera within 16 clip steps (0.8 s), garment untouched |
+| 18 | `21317173` | **COMPLETED — free base, v3: falls 4 of 4** on the first sweep; pitch −19° at 0.5 s, on its back by 0.85 s |
+| 17 | `21317172` | **COMPLETED — the squat falls with the arm held still**, 2 of 2 on the first macro step. Trace: pitch −15° at 0.5 s, −48° at 0.75 s, on its back by 0.9 s, the sweeping run's curve. The stance, not the arm |
+| 16 | `21317171` | **FAILED on `dgxh-1`: no Vulkan**, so no render product, and the first camera read raised `CUDA error: an illegal memory access`. Node, not code: the same clip code ran on cn-gpu5/7. No frames, no result. The clip is re-queued on the widened baskets (row 23) |
+| 15 | `21317170` | **COMPLETED — the shirt sorts: success 7 of 8 on the fixed base**, each with its first sweep, 0% refused, no wrong basket, no falls. Trace: fingertip 1.4–1.6 mm mean behind the schedule on the sweep, the shirt moved inside the sweep window. The one failure came to rest across both basket rims (see *v3* above) |
+| 14 | `21307214` | **COMPLETED — the free base falls on camera** within 0.7 s (14 clip steps), garment untouched |
+| 13 | `21307213` | **COMPLETED — with the corrected fall test the free base still falls**, 4 of 4 on the first sweep. Trace: body pitch grows from ~0.2 s into the first arm move (−17° at 0.5 s, −65° at 0.75 s, lying down by 1.0 s), tipping *backward*, away from the table |
+| 12 | `21307212` | **COMPLETED** — clip, fixed base, v2: the same failure on camera (480 frames; largest travel 13.6 cm, final distance 0.30 m) |
+| 11 | `21307211` | **COMPLETED — fixed base, v2: the garment moves the wrong way because the arm lags.** Success 0 of 4, fall 0, garment moved 4/4 (largest travel 12.3 cm), final distance 0.289 m, 67% of plans refused (all after the shirt left the table). Trace: measured-joint FK = Isaac's hand link to 0.0 mm; fingertip 65 / 72 / 59 mm mean behind the schedule on approach / sweep / retreat; the shirt moved at 0.50 s, 0.55 s before the sweep began, and ended on the jackets basket rim. See *v3* above |
+| 10 | `21300605` | COMPLETED — the fall test fired on the first sweep in 4 of 4 episodes, hand colliders or not. **Not yet a measured fall:** the test read Isaac Lab 3.0's `(x, y, z, w)` quaternions as `(w, x, y, z)`, which counts a 30° yaw as 30° of tilt and a 60° roll as none (`QuatOrderTests`). Pitch reads correctly, so it may still be a real fall. Re-measured in rows 13–14 with the probed order: **it does fall**, backward |
+| 9 | `21300604` | **COMPLETED — the clip shows why the push goes wrong** (480 frames, 1 env): the hand lands on the shirt's *far* corner, rides up its 1.5 cm edge, flips it at 1.4 s and leaves it at the table's far edge, 13 cm from spawn and 0.31 m from its basket. A MuJoCo replay of the same joint schedule, perfect tracking, finds the plan itself at fault: (1) hover and contact at one cell are different IK branches, so the 0.2 s descent swings the fingertip 7 cm toward the garment and back; (2) neighbouring glide cells flip branch too, 4 cm off the line; (3) the hand's tilt changes cell to cell, footprint 6–14 cm; (4) contact clearance 1.2 cm leaves 3 mm of a 1.5 cm garment's side to push. Fix in progress: continuity-seeded, hand-down contact table and an FK-checked schedule |
+| 8 | `21300603` | **COMPLETED — with hand colliders the hand pushes the garment**: moved in **4 of 4** episodes, **7.2 cm** mean largest travel (was 0.07 mm). Not sorting yet: success 0, the garment ends *further* from its basket (0.25 m vs 0.17 at spawn), and after the first sweep 54% of plans are refused — the push lands somewhere the next sweep cannot reach. The clip is next |
+| 7 | `21300494` | **the clip found it**: at 0.6–1.0 s the right hand comes down onto the table exactly where the garment is, and at 1.4 s lifts away with the garment unmoved. The contact table puts the Isaac hand on the garment; the hand passes through, because **the hand links have no collision geometry** — not in the URDF, the USD or the MuJoCo model (`add_hand_colliders.py` docstring) |
+| 6 | `21300493` | **COMPLETED — fixed base, and the garment still does not move.** No falls, full 6-sweep episodes, 0% of plans refused, success 0 — and the garment's largest displacement averaged **0.07 mm** over 4 episodes, measured this time. The contact-table arm configurations do not bring the Isaac hand into contact with the garment. Candidates: the 4 Nm arm not tracking the schedule, no collision shape on the hand in Isaac, or the hand passing over a 1.5 cm garment. The clip is next |
+| 5 | `21300348` | **COMPLETED — scripted C0 on the free base falls in the first sweep**: 4 of 4 episodes end at macro step 1 by `fallen`, success 0, **0% of plans refused** (the planner and schedule accept every scripted sweep). Its `max_garment_travel 0.0` is *not* a measurement: travel was only read between non-terminal steps and there were none; the eval now reports it as unmeasured |
+| 4 | `21300301` | **the robot falls inside the first sweep** — 64 envs, raw 5-D actions: mean episode length **1.00** macro step, `fallen = 1.0000`, progress 0, success 0, refused-plan reward −0.07; 11 macro steps/s (44 s of physics per wall second). The gate's "mean length > 2" fails, correctly |
+| 3 | `21300300` | **FAILED at Kit startup**, not in the task: it and `21300301` became eligible together when the smoke finished and both booted on cn-gpu6 in the same second. Two Kit instances starting at once share Kit's data directory inside the venv, which is the lock contention `21077722` already recorded. Isaac jobs now chain one after another instead of fanning out from one parent |
+| 1 | `21300299` | **COMPLETED** — both rigid ids construct, reset and step on the redesigned scene with the schedule action (22 joints, action_dim 5); 0.78 macro steps/s at 4 envs, each step 4 s of physics |
 
 ### Isaac renders show no robot · `done` — cause found, camera-sensor recorder works, first clip published 2026-09-13
 **Found (`21299608`).** It is not the asset, not the renderer and not visibility:
@@ -1476,6 +1663,12 @@ came from.
 | `21302173`, `21302174` | B5 Both / StereoP8 seeds 1–2 — `_3` completed, `_4` and `21302174` cancelled (stereo looked up) |
 | `21317022` | stereo pitch probe — raw pose +20°, corrected −20° |
 | `21317023`, `21317024`, `21317025` | B5 stereo re-run, cameras pointed down — seeds 0 / 1 / 2 |
+| `21300299`, `21300300`, `21300301` | cloth redesign: rigid smoke, Isaac C0 scripted (boot crash), C1 training smoke |
+| `21300348`, `21300493`, `21300494` | cloth redesign: C0 free base, C0 fixed base, C0 fixed-base clip |
+| `21300603`, `21300604`, `21300605` | cloth redesign with hand colliders: fixed-base C0, its clip, free-base C0 |
+| `21307211`–`21307214` | cloth v2 schedule + hull colliders: fixed-base C0, clip, free-base C0, clip |
+| `21317170`–`21317174` | cloth v3 feedforward: fixed-base C0 (7/8), clip (dgxh-1, no Vulkan), free-base arm-still control, free-base C0, clip |
+| `21317388`–`21317391` | cloth v3 on widened baskets, fixed base: shirt 16/16, sock 8/8, jacket 8/8, shirt clip |
 | `21233916` | B5 stereo pooling sweep — P8, P16, both P16 |
 | `21228029`–`21228033` | cloth-sort cheap Isaac, attempt 1 — died on `SweepActionCfg.class_type=None`, dependents never ran |
 | `21233802`–`21233806` | cloth-sort cheap Isaac, attempt 2 — `class_type` fixed, died on the `&` precedence bug in `_in_basket` |

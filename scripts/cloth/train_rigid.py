@@ -26,7 +26,7 @@ from bhl_robust.cloth.cost import report_cost
 from bhl_robust.cloth.env import make_env
 from bhl_robust.cloth.metrics import EpisodeMetrics, RunMetrics
 from bhl_robust.cloth.randomization import DomainRandomization
-from bhl_robust.cloth.scripted import scripted_action
+from bhl_robust.cloth.scripted import scripted_for
 from bhl_robust.cloth.sweep import ACTION_DIM
 
 
@@ -38,6 +38,7 @@ def _train(episodes: int, seed: int, lr: float) -> tuple[np.ndarray, RunMetrics]
     metrics = RunMetrics(physics="kinematic_rigid", policy="learned_residual", num_envs=1)
     t0 = time.perf_counter()
     steps = 0
+    baseline = None
     for ep in range(episodes):
         env.reset(seed=seed + ep)
         em = EpisodeMetrics(n_garments=env.n_garments)
@@ -45,7 +46,7 @@ def _train(episodes: int, seed: int, lr: float) -> tuple[np.ndarray, RunMetrics]
         done = False
         ret = 0.0
         while not done:
-            base = scripted_action(env.garment_xy(env._selected), env.selected_spec())
+            base = scripted_for(env)
             act = np.clip(base + theta + noise, -1.0, 1.0)
             _, rew, done, info = env.step(act)
             ret += rew
@@ -55,9 +56,13 @@ def _train(episodes: int, seed: int, lr: float) -> tuple[np.ndarray, RunMetrics]
             em.displacement_per_sweep.append(info.displacement)
             if info.all_correct and em.steps_to_success is None:
                 em.steps_to_success = em.n_sweeps
-        # REINFORCE on the residual. Baseline is 0; the scripted policy already
-        # gets most of the return, so the gradient is small unless it fails.
-        theta += lr * (ret - 2.0) * noise
+        # REINFORCE on the residual, against a running-mean baseline. It was a
+        # fixed 2.0, below what the scripted sweep usually returns, so every
+        # episode reinforced whatever noise it drew and the residual random-walked
+        # to 5-8 cm off the scripted start -- harmless while the planner accepted
+        # such sweeps, refused once it checked the retreat (kinematic C1 0.55).
+        baseline = ret if baseline is None else 0.9 * baseline + 0.1 * ret
+        theta += lr * (ret - baseline) * noise
         theta = np.clip(theta, -0.6, 0.6)
         em.success = env.all_correct
         em.correct_count = int(env.all_correct)
@@ -76,7 +81,7 @@ def _eval(theta: np.ndarray, episodes: int, seed: int) -> RunMetrics:
         em = EpisodeMetrics(n_garments=env.n_garments)
         done = False
         while not done:
-            base = scripted_action(env.garment_xy(env._selected), env.selected_spec())
+            base = scripted_for(env)
             act = np.clip(base + theta, -1.0, 1.0)
             _, _, done, info = env.step(act)
             em.n_sweeps += 1

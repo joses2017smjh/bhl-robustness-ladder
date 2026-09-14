@@ -52,19 +52,22 @@ class GarmentSpec:
             )
 
 
-#: Representative set. Sizes stay well under the 0.355 m hand span so a sweep
-#: contact is a push, not a pinch the morphology cannot perform.
+#: Scaled to fit a table the robot can reach. The first set -- sock 0.18 m,
+#: shirt 0.28 m, jacket 0.34 m -- was the size of the whole fingertip workspace,
+#: which spans roughly 0.36 x 0.26 m, so a shirt had nowhere on it to be pushed.
+#: Identities and the class-to-basket mapping are unchanged; ``scale`` is the
+#: linear factor from the original size, and mass scales with area.
 GARMENTS: tuple[GarmentSpec, ...] = (
-    GarmentSpec("sock_a", "sock", BASKET_SOCKS, (0.18, 0.10, 0.020), 0.04,
-                (0.20, 0.40, 0.75), 0.60),
-    GarmentSpec("sock_b", "sock", BASKET_SOCKS, (0.18, 0.10, 0.020), 0.04,
-                (0.30, 0.50, 0.85), 0.60),
-    GarmentSpec("shirt_a", "shirt", BASKET_SHIRTS, (0.28, 0.22, 0.020), 0.12,
-                (0.75, 0.22, 0.18), 0.55),
-    GarmentSpec("shirt_b", "shirt", BASKET_SHIRTS, (0.28, 0.22, 0.020), 0.12,
-                (0.85, 0.40, 0.16), 0.55),
-    GarmentSpec("jacket", "jacket", BASKET_JACKETS, (0.34, 0.26, 0.025), 0.22,
-                (0.16, 0.16, 0.20), 0.50),
+    GarmentSpec("sock_a", "sock", BASKET_SOCKS, (0.080, 0.045, 0.015), 0.008,
+                (0.20, 0.40, 0.75), 0.60, scale=0.45),
+    GarmentSpec("sock_b", "sock", BASKET_SOCKS, (0.080, 0.045, 0.015), 0.008,
+                (0.30, 0.50, 0.85), 0.60, scale=0.45),
+    GarmentSpec("shirt_a", "shirt", BASKET_SHIRTS, (0.100, 0.080, 0.015), 0.016,
+                (0.75, 0.22, 0.18), 0.55, scale=0.36),
+    GarmentSpec("shirt_b", "shirt", BASKET_SHIRTS, (0.100, 0.080, 0.015), 0.016,
+                (0.85, 0.40, 0.16), 0.55, scale=0.36),
+    GarmentSpec("jacket", "jacket", BASKET_JACKETS, (0.110, 0.085, 0.018), 0.024,
+                (0.16, 0.16, 0.20), 0.50, scale=0.33),
 )
 
 GARMENT_BY_NAME = {g.name: g for g in GARMENTS}

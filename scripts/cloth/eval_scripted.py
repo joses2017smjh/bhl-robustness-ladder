@@ -21,7 +21,7 @@ from bhl_robust.cloth.cost import report_cost
 from bhl_robust.cloth.env import KinematicClothSortEnv, make_env
 from bhl_robust.cloth.garments import GARMENTS
 from bhl_robust.cloth.metrics import EpisodeMetrics, RunMetrics
-from bhl_robust.cloth.scripted import scripted_action
+from bhl_robust.cloth.scripted import scripted_for
 
 
 def run_kinematic(rung: str, episodes: int, seed: int) -> RunMetrics:
@@ -34,7 +34,7 @@ def run_kinematic(rung: str, episodes: int, seed: int) -> RunMetrics:
         em = EpisodeMetrics(n_garments=env.n_garments)
         done = False
         while not done:
-            act = scripted_action(env.garment_xy(env._selected), env.selected_spec())
+            act = scripted_for(env)
             _, _, done, info = env.step(act)
             env_steps += 1
             em.n_sweeps += 1

@@ -11,6 +11,8 @@ from dataclasses import dataclass
 
 import numpy as np
 
+from bhl_robust.cloth.layout import CONTACT_HEIGHT, HAND_HEIGHT
+
 ACTION_DIM = 5
 ACTION_NAMES = (
     "dx_start",
@@ -35,9 +37,11 @@ ACTION_SCALE = {
 class SweepConfig:
     """Timing and geometry of one sweep execution."""
 
-    start_offset: float = 0.12
-    hand_height: float = 0.36
-    contact_height: float = 0.315
+    start_offset: float = 0.10
+    #: Heights of the hand's contact point, from the layout and the contact
+    #: table it was placed against -- not the old abstract 0.36 / 0.315.
+    hand_height: float = HAND_HEIGHT
+    contact_height: float = CONTACT_HEIGHT
     approach_duration: float = 0.40
     sweep_duration: float = 0.80
     retract_duration: float = 0.30

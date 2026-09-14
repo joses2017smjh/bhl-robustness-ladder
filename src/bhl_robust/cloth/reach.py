@@ -151,19 +151,26 @@ def can_reach_xy(xy_world, z_lo: float, z_hi: float, table: ReachTable | None = 
 
 # ------------------------------------------------------------------ contact
 
-_CONTACT_DEFAULT = Path(__file__).resolve().parents[3] / "assets" / "cloth" / "right_hand_contact_pinch.npz"
+_CONTACT_DEFAULT = Path(__file__).resolve().parents[3] / "assets" / "cloth" / "right_hand_tip_table.npz"
+#: The first contact table, kept for the record: cells solved independently, so
+#: neighbours -- and hover vs contact at one cell -- could sit on different IK
+#: branches, and a joint-space move between them left the planned line by up
+#: to 7 cm (21300604). Nothing loads it by default.
+CONTACT_V1 = Path(__file__).resolve().parents[3] / "assets" / "cloth" / "right_hand_contact_pinch.npz"
 
 
 @dataclass(frozen=True)
 class ContactTable:
-    """Joint angles that put the hand's *underside* at a table-relative height.
+    """Joint angles that put the hand's fingertip over a cell at a table-relative height.
 
-    Built by ``scripts/cloth/build_contact_table.py``. A 2 cm robot-frame grid
-    in (x, y); per cell, one right-arm configuration that places a hand-fixed
-    contact point (``p_hand``, the median lowest mesh vertex over sweep poses)
-    at ``table_top + contact_clearance`` with no part of the hand below the
-    top, and one that holds it at ``table_top + hover_clearance``. Cells that
-    would crowd the robot's own right thigh are excluded.
+    Built by ``scripts/cloth/build_tip_table.py``. A 2 cm robot-frame grid in
+    (x, y); per cell, one right-arm configuration with the fingertip (``p_hand``,
+    the centre of the hand hull's bottom face) over the cell and the hand's
+    lowest point at ``table_top + contact_clearance``; the same branch lifted to
+    ``hover_clearance`` and ``high_clearance`` where the arm allows it. Cells
+    were grown from the table centre with neighbour seeding, so adjacent cells
+    are joint-space neighbours and ``q_at`` can blend them. Cells that would
+    crowd the robot's own right thigh are excluded.
     """
 
     x: np.ndarray
@@ -178,6 +185,9 @@ class ContactTable:
     joints: tuple[str, ...]
     p_hand: np.ndarray
     step: float
+    high_clearance: float | None = None
+    high_q: np.ndarray | None = None
+    high_mask: np.ndarray | None = None
 
     @property
     def contact_z(self) -> float:
@@ -196,23 +206,65 @@ class ContactTable:
         return None
 
     def mask(self, phase: str) -> np.ndarray:
+        if phase == "high":
+            return self.high_mask if self.high_mask is not None else np.zeros_like(self.contact_mask)
         return self.contact_mask if phase == "contact" else self.hover_mask
 
     def q(self, phase: str) -> np.ndarray:
+        if phase == "high":
+            return self.high_q if self.high_q is not None else np.zeros_like(self.contact_q)
         return self.contact_q if phase == "contact" else self.hover_q
+
+    def q_at(self, p_robot_xy, phase: str = "contact", strict: bool = False) -> np.ndarray | None:
+        """Joint angles at a robot-frame (x, y), blended over the surrounding cells.
+
+        None unless the nearest cell is valid in this phase -- the same test as
+        ``sweep_cell_ok`` -- so interpolation never extends reach. Invalid corners
+        drop out of the bilinear weights, which near the edge of the region can
+        put the fingertip up to 1.3 cm from ``p``; ``strict`` instead returns None
+        unless every corner with weight is valid (fingertip within 1.3 mm).
+        A nearest-cell lookup steps the arm between 2 cm cells, which a
+        10 N m/rad arm plays back as a staircase.
+        """
+        k = self.index(p_robot_xy)
+        m = self.mask(phase)
+        if k is None or not m[k]:
+            return None
+        Q = self.q(phase)
+        fx = (float(p_robot_xy[0]) - float(self.x[0])) / self.step
+        fy = (float(p_robot_xy[1]) - float(self.y[0])) / self.step
+        i0, j0 = int(np.floor(fx)), int(np.floor(fy))
+        ax, ay = fx - i0, fy - j0
+        acc, wsum = np.zeros(Q.shape[-1]), 0.0
+        for di, wx in ((0, 1.0 - ax), (1, ax)):
+            for dj, wy in ((0, 1.0 - ay), (1, ay)):
+                i, j = i0 + di, j0 + dj
+                w = wx * wy
+                if w <= 1e-9:
+                    continue
+                if 0 <= i < len(self.x) and 0 <= j < len(self.y) and m[i, j]:
+                    acc += w * Q[i, j]
+                    wsum += w
+                elif strict:
+                    return None
+        return acc / wsum if wsum > 0 else np.asarray(Q[k], dtype=float)
 
 
 @lru_cache(maxsize=4)
 def load_contact(path: str | None = None) -> ContactTable:
     f = np.load(Path(path) if path else _CONTACT_DEFAULT, allow_pickle=False)
     x = f["x"]
+    high = "high_q" in f.files
     return ContactTable(
         x=x, y=f["y"], table_top=float(f["table_top"]),
         contact_clearance=float(f["contact_clearance"]), hover_clearance=float(f["hover_clearance"]),
-        contact_q=f["contact_q"], contact_mask=f["contact_mask"].astype(bool),
-        hover_q=f["hover_q"], hover_mask=f["hover_mask"].astype(bool),
+        contact_q=f["contact_q"].astype(float), contact_mask=f["contact_mask"].astype(bool),
+        hover_q=f["hover_q"].astype(float), hover_mask=f["hover_mask"].astype(bool),
         joints=tuple(str(j) for j in f["joints"]), p_hand=f["p_hand"],
         step=float(round(float(x[1] - x[0]), 6)),
+        high_clearance=float(f["high_clearance"]) if high else None,
+        high_q=f["high_q"].astype(float) if high else None,
+        high_mask=f["high_mask"].astype(bool) if high else None,
     )
 
 
@@ -226,7 +278,15 @@ def sweep_cell_ok(xy_world, phase: str = "contact", table: ContactTable | None =
 def sweep_joints(xy_world, phase: str = "contact", table: ContactTable | None = None) -> dict[str, float] | None:
     """Right-arm joint angles for this phase over this world (x, y), or None."""
     t = table or load_contact()
-    i = t.index(to_robot_frame((float(xy_world[0]), float(xy_world[1]), 0.0)))
-    if i is None or not t.mask(phase)[i]:
+    q = t.q_at(to_robot_frame((float(xy_world[0]), float(xy_world[1]), 0.0)), phase)
+    if q is None:
         return None
-    return {j: float(v) for j, v in zip(t.joints, t.q(phase)[i])}
+    return {j: float(v) for j, v in zip(t.joints, q)}
+
+
+def segment_on_contact(a, b, table: ContactTable | None = None, step: float = 0.01) -> bool:
+    """True if every point from ``a`` to ``b`` (world xy) is a contact cell."""
+    t = table or load_contact()
+    a, b = np.asarray(a, dtype=float)[:2], np.asarray(b, dtype=float)[:2]
+    n = max(2, int(np.ceil(np.linalg.norm(b - a) / step)) + 1)
+    return all(sweep_cell_ok(a + k * (b - a), "contact", t) for k in np.linspace(0.0, 1.0, n))

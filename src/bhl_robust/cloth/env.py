@@ -15,7 +15,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from bhl_robust.cloth.controller import default_pose, is_plan_valid
+from bhl_robust.cloth.controller import default_pose
 from bhl_robust.cloth.garments import (
     BASKET_IDS,
     GARMENTS,
@@ -28,13 +28,16 @@ from bhl_robust.cloth.layout import (
     HAND_RADIUS,
     ROBOT_XY,
     TABLE_TOP_Z,
+    basket_aabb,
     basket_center,
     garment_spawn_range,
+    parking_xy,
     table_aabb,
 )
 from bhl_robust.cloth.observations import ObservationSpec, pack_oracle
 from bhl_robust.cloth.randomization import IDENTITY, DomainRandomization
 from bhl_robust.cloth.rewards import RewardBreakdown, RewardWeights, compute_reward
+from bhl_robust.cloth.schedule import CHECK_DT, MACRO_STEP_S, build_schedule
 from bhl_robust.cloth.scripted import pick_unsorted
 from bhl_robust.cloth.success import rigid_outcome
 from bhl_robust.cloth.sweep import SweepConfig, decode_action, plan_sweep, segment_hits_disk
@@ -52,6 +55,10 @@ class _GarmentState:
     friction: float
     sorted_correct: bool = False
     sorted_wrong: bool = False
+    #: Waiting off the table for its turn (five-garment scene).
+    parked: bool = False
+    #: Where it goes on the table when its turn comes.
+    home: np.ndarray | None = None
 
 
 @dataclass
@@ -104,37 +111,30 @@ class KinematicClothSortEnv:
         if seed is not None:
             self._rng = np.random.default_rng(seed)
         spawn_lo, spawn_hi = garment_spawn_range()
+        centre = 0.5 * (spawn_lo + spawn_hi)
         self._states = []
-        # One garment sits on the table centre. Five garments sit in their
-        # target basket's y-lane so a scripted -x sweep is geometrically
-        # solvable; two shirts still share one basket, so the policy cannot
-        # succeed by memorising a 1-1 slot.
+        # The redesigned table holds one garment at a time: it is 0.20 x 0.18 m,
+        # the size of the robot's fingertip workspace. A five-garment scene
+        # therefore presents garments in turn -- the first on the table, the
+        # rest parked well clear -- and places the next when one is sorted.
+        # That is Mode B, sequential; it is not five garments on a table at once.
         for i, spec in enumerate(self.specs):
             dr = self.domain_rand.sample(self._rng)
-            if self.n_garments == 1:
-                y0 = 0.5 * (spawn_lo[1] + spawn_hi[1])
-            else:
-                y0 = float(basket_center(spec.target_basket)[1])
-                # Two items in one lane: offset them so they do not overlap.
-                siblings = [s for s in self.specs if s.target_basket == spec.target_basket]
-                if len(siblings) > 1:
-                    k = siblings.index(spec)
-                    y0 += (k - 0.5 * (len(siblings) - 1)) * 0.12
-            xy = np.array([
-                0.5 * (spawn_lo[0] + spawn_hi[0]) + dr["spawn_dx"],
-                y0 + dr["spawn_dy"],
-            ])
-            xy[0] = float(np.clip(xy[0], spawn_lo[0], spawn_hi[0]))
-            xy[1] = float(np.clip(xy[1], spawn_lo[1], spawn_hi[1]))
+            home = np.array([centre[0] + dr["spawn_dx"], centre[1] + dr["spawn_dy"]])
+            home[0] = float(np.clip(home[0], spawn_lo[0], spawn_hi[0]))
+            home[1] = float(np.clip(home[1], spawn_lo[1], spawn_hi[1]))
+            parked = i > 0
             size = np.array(spec.proxy_size) * dr["size_scale"]
             self._states.append(_GarmentState(
                 spec=spec,
-                xy=xy,
+                xy=np.array(parking_xy(i)) if parked else home.copy(),
                 z=TABLE_TOP_Z + 0.5 * size[2],
                 yaw=dr["yaw"],
                 mass=spec.mass * dr["mass_scale"],
                 size=size,
                 friction=dr["friction"],
+                parked=parked,
+                home=home,
             ))
         self._n_sweeps = 0
         self._done = False
@@ -151,14 +151,20 @@ class KinematicClothSortEnv:
         # different garment — that is what made C5 score 0.
         # Mode B: only the selected garment is "active". Others are frozen
         # proxies and cannot be displaced this sweep. Documented as such.
-        active = set(range(self.n_garments))
-        if self.active_garment_mode:
+        active = {i for i, st in enumerate(self._states) if not st.parked}
+        if self.active_garment_mode or self.n_garments > 1:
             active = {self._selected}
 
         prev_dist = self._distance_to_target(self._selected)
         params = decode_action(action)
-        plan = plan_sweep(self._states[self._selected].xy, params, self.sweep_cfg)
-        invalid = not is_plan_valid(plan)
+        sel = self._states[self._selected]
+        plan = plan_sweep(sel.xy, params, self.sweep_cfg)
+        # Refused exactly when the Isaac action term would refuse it: the same
+        # schedule, with its routes and hand-hull replay, not a cell check alone.
+        invalid = not build_schedule(
+            sel.xy, sel.spec, action, CHECK_DT, int(round(MACRO_STEP_S / CHECK_DT)),
+            cfg=self.sweep_cfg, garment_yaw=sel.yaw,
+        ).valid
         hit = False
         total_disp = 0.0
         # A trajectory the controller refuses does not execute, so it moves
@@ -244,8 +250,19 @@ class KinematicClothSortEnv:
 
     def _pick(self) -> int:
         done = np.array(
-            [s.sorted_correct or s.sorted_wrong for s in self._states], dtype=bool
+            [s.sorted_correct or s.sorted_wrong or s.parked for s in self._states], dtype=bool
         )
+        if done.all():
+            # Nothing unsorted on the table: bring the next parked garment on.
+            for st in self._states:
+                if st.parked and not (st.sorted_correct or st.sorted_wrong):
+                    st.parked = False
+                    st.xy = st.home.copy()
+                    st.z = TABLE_TOP_Z + 0.5 * st.size[2]
+                    break
+            done = np.array(
+                [s.sorted_correct or s.sorted_wrong or s.parked for s in self._states], dtype=bool
+            )
         return pick_unsorted(done, np.stack([s.xy for s in self._states]))
 
     def _distance_to_target(self, idx: int) -> float:
@@ -258,16 +275,15 @@ class KinematicClothSortEnv:
         if on_table:
             st.z = TABLE_TOP_Z + 0.5 * st.size[2]
             return
-        # Off the table: drop. If the CoM is above a basket, sit in it;
-        # otherwise rest on the floor. No bouncing back onto the table.
+        # Off the table: drop. If the CoM is over a basket's opening, it lands in
+        # that basket; otherwise it rests on the floor. The opening is the
+        # basket's own box -- this used a hard-coded 0.24 x 0.28 footprint that
+        # described no basket in either layout.
         st.z = 0.5 * st.size[2]
         for bid in BASKET_IDS:
-            c = basket_center(bid)
-            # Drop z to mid-basket when xy is inside the basket footprint so
-            # the AABB test (which includes z) can fire.
-            box_half = np.array([0.12, 0.14])
-            if np.all(np.abs(st.xy - c[:2]) <= box_half):
-                st.z = 0.5 * c[2] + 0.5 * st.size[2]
+            box = basket_aabb(bid)
+            if box.contains_xy(st.xy):
+                st.z = 0.5 * box.high[2] + 0.5 * st.size[2]
                 break
 
     def observation(self) -> np.ndarray:
@@ -315,6 +331,9 @@ class KinematicClothSortEnv:
 
     def selected_spec(self) -> GarmentSpec:
         return self._states[self._selected].spec
+
+    def garment_yaw(self, idx: int = 0) -> float:
+        return float(self._states[idx].yaw)
 
     def snapshot(self) -> list[dict]:
         return [

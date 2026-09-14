@@ -10,7 +10,7 @@ import numpy as np
 
 from bhl_robust.cloth.env import make_env
 from bhl_robust.cloth.metrics import EpisodeMetrics, RunMetrics
-from bhl_robust.cloth.scripted import scripted_action
+from bhl_robust.cloth.scripted import scripted_for
 from bhl_robust.cloth.sweep import ACTION_DIM
 
 
@@ -22,7 +22,7 @@ def collect_scripted(episodes: int = 64, seed: int = 0, rung: str = "C0"):
         obs = env.reset(seed=seed + ep)
         done = False
         while not done:
-            act = scripted_action(env.garment_xy(env._selected), env.selected_spec())
+            act = scripted_for(env)
             xs.append(obs.copy())
             ys.append(act.copy())
             obs, _, done, _ = env.step(act)

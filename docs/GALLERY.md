@@ -1,6 +1,6 @@
 # Every clip, with what made it
 
-**23 clips from MuJoCo, 5 from Isaac Sim.** Renderer is in the folder name:
+**23 clips from MuJoCo, 6 from Isaac Sim.** Renderer is in the folder name:
 `docs/gifs/` is MuJoCo, `docs/gifs/isaac/` is Isaac Sim. Every clip is a real
 scored episode from the harness that produced the numbers, except `squat_pick`,
 which says on its face that it is scripted.
@@ -22,6 +22,7 @@ Tell me which names you want on the front page.
 | [`depth_pair`](#depth) | MuJoCo | ray-cast depth | **works** |
 | [`ice_pair`](#b3--ice) | MuJoCo | B3 — blind vs depth on flush friction patches | **works** — depth +10.6% |
 | [`isaac/terrain_sensors`](#terrain-sensing-the-b5-maze-rung) | Isaac Sim | B5 — blind, lidar, stereo at two widths | render only — the result is the table, not the clip |
+| [`isaac/cloth_sort_fixed_base`](#cloth-sorting-fixed-base-diagnostic) | Isaac Sim | cloth-sort C0, scripted sweep, rigid shirt proxy, **root pinned** | **works** — 32/32 on this layout; not cloth, not a standing robot |
 | [`squat_pick`](#the-cooperative-lift) | MuJoCo | scripted reachability control | n/a — scripted |
 | [`carry_2`](#the-cooperative-lift) | MuJoCo | cooperative cube lift | **fails** |
 | [`carry_3`](#the-cooperative-lift) | MuJoCo | learned vs scripted | **fails** |
@@ -172,6 +173,12 @@ at its stale USD pose when fabric is on — here the env's grid origin, tens of
 metres from the terrain patch the robot walks on. A camera *sensor* draws the
 body where physics has it (`21299608`), so `train_play` now records through
 one; `docs/ISAAC_RENDER.md` §10 has the recipe.
+
+### Cloth sorting, fixed-base diagnostic
+
+| | |
+|---|---|
+| <img src="gifs/isaac/cloth_sort_fixed_base.gif" width="440"> | **`isaac/cloth_sort_fixed_base`** — `ClothSort-BHL-RigidFixedBase-Oracle-v0`, job `21317391`. The scripted sweep: the right hand descends at an anchor beside the table, glides around the red shirt proxy, and sweeps it off the front edge into the red shirts basket. **The robot's root is pinned and the shirt is a rigid 10 × 8 cm box.** With the root free this robot falls backward within a second even with its arm still (`21317172`), so this clip shows the manipulation half alone. On this layout shirt, sock and jacket sort 32 of 32 (`21317388`–`390`). The episode ends when the shirt's centre enters the basket, so the clip stops as it drops. Camera sensor, 640×360 path-traced, cropped and denoised. **3.9 MB.** |
 
 ### On the corrected *rotation* — and a spawn that is still wrong
 

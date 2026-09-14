@@ -1,0 +1,49 @@
+{
+  "train": {
+    "success_rate": 0.82,
+    "wrong_basket_rate": 0.0,
+    "mean_sweeps": 2.575,
+    "mean_steps_to_success": 1.8231707317073171,
+    "fall_rate": 0.0,
+    "invalid_trajectory_rate": 0.3300970873786408,
+    "invalid_per_episode": 0.85,
+    "env_steps_per_s": 289.7713769202721,
+    "real_time_factor": null,
+    "gpu_mem_mb": null,
+    "n_episodes": 200,
+    "physics": "kinematic_rigid",
+    "policy": "learned_residual",
+    "num_envs": 1,
+    "cloth_resolution": "n/a",
+    "n_deformables": 0,
+    "n_vertices": 0
+  },
+  "eval": {
+    "success_rate": 1.0,
+    "wrong_basket_rate": 0.0,
+    "mean_sweeps": 1.921875,
+    "mean_steps_to_success": 1.921875,
+    "fall_rate": 0.0,
+    "invalid_trajectory_rate": 0.0,
+    "invalid_per_episode": 0.0,
+    "env_steps_per_s": null,
+    "real_time_factor": null,
+    "gpu_mem_mb": null,
+    "n_episodes": 64,
+    "physics": "kinematic_rigid",
+    "policy": "learned_residual",
+    "num_envs": 1,
+    "cloth_resolution": "n/a",
+    "n_deformables": 0,
+    "n_vertices": 0
+  },
+  "theta": [
+    -0.4244053842557607,
+    -0.23186931062312807,
+    -0.1131731572409667,
+    -0.4323558487551035,
+    0.09027825834311785
+  ],
+  "backend": "kinematic",
+  "rung": "C1"
+}

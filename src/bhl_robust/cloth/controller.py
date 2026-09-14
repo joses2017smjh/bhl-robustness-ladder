@@ -16,7 +16,7 @@ import numpy as np
 
 from bhl_robust.cloth.kinematics import JOINT_LIMITS, clip_joint, is_valid_joints
 from bhl_robust.cloth.sweep import SweepPlan, hand_pose_at
-from bhl_robust.cloth.reach import HAND_DROP_MAX, can_reach_xy
+from bhl_robust.cloth.reach import segment_on_contact, sweep_joints
 from bhl_robust.limb_partition import JOINTS_22
 
 #: Crouch + side-hold from ``coop_lift_env_cfg._PINCH_JOINT_POS``. Copied, not
@@ -76,41 +76,46 @@ def _arm_offsets(xy: np.ndarray, z: float, plan: SweepPlan) -> dict[str, float]:
 
 
 def joints_at(plan: SweepPlan, t: float) -> dict[str, float]:
-    """Joint targets at time ``t`` into ``plan``, clipped to the safety walls."""
+    """Joint targets at time ``t`` into ``plan``, clipped to the safety walls.
+
+    The right arm comes from the contact table: the solved configuration that
+    puts the hand's contact point over this (x, y) at contact or hover height.
+    Before the table existed this used ``_arm_offsets``, a hand-tuned mapping
+    that did not put the hand anywhere in particular. Off the table the hold
+    pose is returned, and ``is_plan_valid`` has already refused such a plan.
+    """
     xy, z = hand_pose_at(plan, t)
     pose = default_pose()
-    pose.update(_arm_offsets(xy, z, plan))
+    phase = "contact" if z <= plan.contact_height + 1e-6 else "hover"
+    q = sweep_joints(xy, phase) or sweep_joints(xy, "contact")
+    if q:
+        pose.update(q)
     return {name: clip_joint(name, value) for name, value in pose.items()}
 
 
 def is_plan_valid(plan: SweepPlan, dt: float = 0.05, check_reach: bool = True) -> bool:
-    """Sample the trajectory; False if any sample needed clipping past a wall,
-    or if the hand cannot get over a waypoint at all.
+    """Would the controller execute this plan?
 
-    ``joints_at`` always clips. Validity is "the unclipped command was already
-    inside the walls", which is the thing we want to log as invalid_trajectory.
-
-    ``check_reach`` is the part this module went without. Joint walls alone
-    say nothing about *where* the hand ends up, so every plan in the original
-    layout passed while the garment it swept sat 0.74 m from a hand that
-    reaches 0.29 m. Each waypoint must now lie over the measured workspace
-    (``bhl_robust.cloth.reach``).
+    ``check_reach`` is what this module first went without: joint walls say
+    nothing about *where* the hand ends up, so every plan in the original
+    layout passed while its garment sat out of reach. A plan is reachable when
+    the whole sweep lies on cells where the hand's contact point can touch the
+    table. Getting the hand to the start and away from the end -- anchors,
+    routes around the garment, a hull replay -- is ``schedule.build_schedule``'s
+    job, and a schedule it cannot build is refused there.
     """
     if plan.distance > plan.sweep_duration * 2.5:
         # Speed/distance combination the arms cannot track.
         return False
     if plan.distance > 0.95 or plan.speed > 1.25:
         return False
+    if check_reach:
+        if not segment_on_contact(plan.start_xy, plan.end_xy):
+            return False
     t = 0.0
     while t <= plan.duration + 1e-9:
-        xy, z = hand_pose_at(plan, t)
-        pose = default_pose()
-        pose.update(_arm_offsets(xy, z, plan))
+        pose = joints_at(plan, t)
         if not is_valid_joints(pose):
-            return False
-        if z < 0.05:
-            return False
-        if check_reach and not can_reach_xy(xy, z, z + HAND_DROP_MAX):
             return False
         t += dt
     return True

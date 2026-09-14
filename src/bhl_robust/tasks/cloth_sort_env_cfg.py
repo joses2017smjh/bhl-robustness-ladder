@@ -11,6 +11,8 @@ addressing the table, same reasoning as the coop pinch spawn.
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import isaaclab.sim as sim_utils
 from isaaclab.assets import ArticulationCfg, AssetBaseCfg, RigidObjectCfg
 from isaaclab.envs import ManagerBasedRLEnvCfg
@@ -28,7 +30,7 @@ from isaaclab.utils.noise import AdditiveUniformNoiseCfg as Unoise
 import isaaclab.envs.mdp as mdp
 
 from bhl_robust.cloth.garments import BASKET_IDS, GARMENTS, GARMENT_BY_NAME, sibling_index
-from bhl_robust.cloth.layout import ROBOT_XY, TABLE_TOP_Z, default_spawn_xy
+from bhl_robust.cloth.layout import ROBOT_ROOT_Z, ROBOT_XY, TABLE_TOP_Z, default_spawn_xy, parking_xy
 from bhl_robust.cloth.randomization import DomainRandomization
 from bhl_robust.tasks import cloth_sort_mdp as cs
 from bhl_robust.tasks import furniture
@@ -39,6 +41,9 @@ from bhl_robust.tasks.task_v2_env_cfg import _V2_RUNNER
 #: re-run of a FINDINGS number, so it does not inherit the legacy yaw.
 _STAND_UP = (0.0, 0.0, 1.0, 0.0)
 
+#: Robot USD with convex-hull colliders on both hand links (see ClothSortRigidEnvCfg).
+HAND_COLLIDER_USD = Path(__file__).resolve().parents[3] / "assets" / "cloth" / "berkeley_humanoid_lite_hand_colliders.usda"
+
 _DR = DomainRandomization()
 
 
@@ -47,12 +52,10 @@ def _proxy(spec_name: str, prim: str,
     """Thin rigid rectangle standing in for one garment."""
     spec = GARMENT_BY_NAME[spec_name]
     if xy is None:
-        k, n = sibling_index(spec, GARMENTS if spec_name != "shirt_a" else (spec,))
-        # Single-garment C0/C1 sits on the table centre, not in a five-item lane.
-        if spec_name == "shirt_a" and prim == "garment_0":
-            xy = default_spawn_xy(spec, 0, 1)
-        else:
-            xy = default_spawn_xy(spec, k, n)
+        # garment_0 starts on the table; the others wait at their parking slot
+        # (the table holds one garment at a time -- see layout.default_spawn_xy).
+        index = int(prim.rsplit("_", 1)[-1]) if prim.startswith("garment_") else 0
+        xy = default_spawn_xy(spec) if index == 0 else parking_xy(index)
     z = TABLE_TOP_Z + 0.5 * spec.proxy_size[2]
     return RigidObjectCfg(
         prim_path=f"{{ENV_REGEX_NS}}/{prim}",
@@ -92,7 +95,7 @@ class ClothSortSceneCfg(InteractiveSceneCfg):
     )
     robot: ArticulationCfg = _robot(
         "{ENV_REGEX_NS}/robot",
-        (ROBOT_XY[0], ROBOT_XY[1], _PINCH_ROOT_Z),
+        (ROBOT_XY[0], ROBOT_XY[1], ROBOT_ROOT_Z),
         _STAND_UP,
     )
     garment_0: RigidObjectCfg = _proxy("shirt_a", "garment_0")
@@ -244,11 +247,25 @@ class ClothSortRigidEnvCfg(ManagerBasedRLEnvCfg):
     garment_name: str = "shirt_a"
 
     def __post_init__(self):
-        self.decimation = 8
-        self.episode_length_s = 12.0
+        # One RL step is one whole sweep (bhl_robust.cloth.schedule): the env
+        # runs MACRO_STEP_S of physics per step.
+        from bhl_robust.cloth.schedule import MACRO_STEP_S
+        # The shipped robot has no collision geometry on its hands -- URDF, USD
+        # and the MuJoCo model alike -- so a sweeping hand passed through the
+        # garment (21300493 moved it 0.07 mm; the clip shows the hand on it).
+        # This overlay sublayers the untouched upstream USD and adds a convex
+        # hull collider on each hand link, from its visual mesh. No joint, mass
+        # or visual changes. Built by scripts/cloth/add_hand_colliders.py.
+        self.scene.robot.spawn = self.scene.robot.spawn.replace(usd_path=str(HAND_COLLIDER_USD))
         self.sim.dt = 0.005
+        self.decimation = int(round(MACRO_STEP_S / self.sim.dt))
+        # Six sweeps, matching the kinematic env's cap for one garment. At 12 s
+        # an episode was three RL steps, and the training gate's "mean length
+        # > 2" would have failed a healthy env on any single fall. Derived, so a
+        # longer macro step does not quietly cut the episode to fewer sweeps.
+        self.episode_length_s = 6 * MACRO_STEP_S
         self.sim.render_interval = self.decimation
-        self.scene.robot.init_state.pos = (ROBOT_XY[0], ROBOT_XY[1], _PINCH_ROOT_Z)
+        self.scene.robot.init_state.pos = (ROBOT_XY[0], ROBOT_XY[1], ROBOT_ROOT_Z)
         # Same pattern as the maze: attach static colliders after the
         # configclass is built so the scene dataclass does not have to name
         # every basket wall.
@@ -275,6 +292,37 @@ class ClothSortRigidFiveEnvCfg(ClothSortRigidEnvCfg):
         self.rewards.success.params["garment"] = "sock_a"
         self.rewards.wrong_basket.params["garment"] = "sock_a"
         self.terminations.success = DoneTerm(func=cs.success_five)
+
+
+
+@configclass
+class ClothSortRigidResidualEnvCfg(ClothSortRigidEnvCfg):
+    """C1 on the rigid proxy with residual sweep actions around the scripted sweep."""
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.actions.sweep.residual_scale = 0.30
+
+
+
+@configclass
+class ClothSortRigidFixedBaseEnvCfg(ClothSortRigidEnvCfg):
+    """Diagnostic: the same scene with the robot's root link pinned.
+
+    Separates "does the sweep move the garment?" from "can the robot stay up
+    while it sweeps?". On the free base the robot falls inside the first 4 s
+    sweep of every episode (21300301), so the first question cannot be asked.
+    Here it cannot fall; what is left is the arm, the contact table and the
+    garment. The legs still hold their squat targets. This is a fixed-base
+    humanoid, and every result from it is labelled as one.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        sp = self.scene.robot.spawn
+        sp.articulation_props = sp.articulation_props.replace(fix_root_link=True)
+        # A pinned root is not teleported at reset.
+        self.events.reset_root = None
 
 
 def _newton_cloth_physics():
@@ -331,9 +379,11 @@ class ClothSortDeformableEnvCfg(ClothSortRigidEnvCfg):
         super().__post_init__()
         self.scene.num_envs = 8
         self.scene.replicate_physics = True
+        from bhl_robust.cloth.schedule import MACRO_STEP_S
         self.sim.dt = 1.0 / 60.0
-        self.decimation = 1
-        self.episode_length_s = 8.0
+        self.decimation = int(round(MACRO_STEP_S / self.sim.dt))
+        self.sim.render_interval = self.decimation
+        self.episode_length_s = 2 * MACRO_STEP_S
         try:
             self.scene.garment_0 = _deformable_garment(
                 self.garment_name, "garment_0", self.cloth_resolution,
@@ -379,8 +429,10 @@ class ClothSortActiveDeformableEnvCfg(ClothSortRigidFiveEnvCfg):
         super().__post_init__()
         self.scene.num_envs = 4
         self.scene.replicate_physics = True
+        from bhl_robust.cloth.schedule import MACRO_STEP_S
         self.sim.dt = 1.0 / 60.0
-        self.decimation = 1
+        self.decimation = int(round(MACRO_STEP_S / self.sim.dt))
+        self.sim.render_interval = self.decimation
         try:
             self.scene.garment_0 = _deformable_garment("sock_a", "garment_0", self.cloth_resolution)
             self.sim.physics = _newton_cloth_physics()
@@ -419,6 +471,25 @@ def spawned_cloth_resolution(cfg) -> int | None:
     if res is None:
         return None
     return int(res[0])
+
+
+def use_garment(cfg, name: str):
+    """Rebind a one-garment rigid cfg to another catalog garment.
+
+    The proxy, the sweep action (``garment_name``) and every term that names the
+    garment -- observation, rewards, success -- move together; a half-rebound cfg
+    would push a jacket and score a shirt. Refuses the five-garment scene.
+    """
+    if hasattr(cfg.scene, "garment_1"):
+        raise ValueError("use_garment is for one-garment scenes")
+    GARMENT_BY_NAME[name]
+    cfg.garment_name = name
+    cfg.scene.garment_0 = _proxy(name, "garment_0")
+    for group in (cfg.observations.policy, cfg.observations.critic):
+        group.rel_basket.params["garment"] = name
+    for term in (cfg.rewards.progress, cfg.rewards.success, cfg.rewards.wrong_basket, cfg.terminations.success):
+        term.params["garment"] = name
+    return cfg
 
 
 def build_cfg(cfg_cls, *, num_envs: int | None = None, device: str | None = None,

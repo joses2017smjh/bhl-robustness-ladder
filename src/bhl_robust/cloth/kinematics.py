@@ -66,27 +66,50 @@ def missing_or_extra_joints(joint_pos: dict[str, float]) -> tuple[list[str], lis
 
 # --------------------------------------------------------------- orientation
 
-def relative_up_z(q, q0):
+def _wxyz(q, order: str):
+    """Components of ``(..., 4)`` quaternions as ``(w, x, y, z)``, whatever the storage order."""
+    if order == "wxyz":
+        return q[..., 0], q[..., 1], q[..., 2], q[..., 3]
+    if order == "xyzw":
+        return q[..., 3], q[..., 0], q[..., 1], q[..., 2]
+    raise ValueError(f"quaternion order must be 'wxyz' or 'xyzw', got {order!r}")
+
+
+def relative_up_z(q, q0, order: str = "wxyz"):
     """``R[2, 2]`` of the rotation taking pose ``q0`` to pose ``q``.
 
     1.0 means "same tilt as the reference pose"; -1.0 means inverted. Both
-    arguments are ``(..., 4)`` quaternions in ``(w, x, y, z)``.
+    arguments are ``(..., 4)`` quaternions stored in ``order``. **Isaac Lab 3.0
+    stores ``(x, y, z, w)``** (``isaaclab.utils.math.matrix_from_quat``); 2.x
+    stored ``(w, x, y, z)``. The Isaac side must pass the order it probed
+    (``cloth_sort_mdp.QUAT_ORDER``): read as ``(w, x, y, z)``, an Isaac Lab 3.0
+    quaternion makes a 30 deg yaw look like 30 deg of tilt and a 60 deg roll
+    look like none, so ``fallen`` fired on spins and missed falls sideways.
 
-    Deliberately plain arithmetic — indexing, multiply, add — so the *same*
+    Deliberately plain arithmetic -- indexing, multiply, add -- so the *same*
     function serves the numpy tests here and the torch tensors in
     ``bhl_robust.tasks.cloth_sort_mdp``. A second copy of this algebra is
     exactly how a sign error survives.
 
-    Why relative rather than absolute: this asset's identity orientation is not
-    upright. The configured stand-up quaternion ``(0, 0, 1, 0)`` — the one the
-    spawn photographs show standing — has ``R[2, 2] = -1``, so an absolute
-    ``R[2,2] < 0.70`` fall test fires at reset and ends every episode on step
-    one (21233866). Measured against the spawn pose this reads 0 by
-    construction, whatever the identity frame means.
+    Why relative rather than absolute: measured against the spawn pose this
+    reads 0 by construction, whatever the asset's identity frame means. (The
+    absolute test that failed at reset in 21233866 read the spawn quaternion
+    ``(0, 0, 1, 0)`` as ``(w, x, y, z)`` -- a half-turn about y, ``R[2, 2] = -1``.
+    Stored ``(x, y, z, w)`` it is a half-turn about z, and upright.)
     """
-    w, x, y, z = q[..., 0], q[..., 1], q[..., 2], q[..., 3]
-    w0, x0, y0, z0 = q0[..., 0], q0[..., 1], q0[..., 2], q0[..., 3]
+    w, x, y, z = _wxyz(q, order)
+    w0, x0, y0, z0 = _wxyz(q0, order)
     # rel = q ⊗ conj(q0); only the x and y components are needed for R[2, 2].
     rx = -w * x0 + x * w0 - y * z0 + z * y0
     ry = -w * y0 + x * z0 + y * w0 - z * x0
     return 1.0 - 2.0 * (rx * rx + ry * ry)
+
+
+def yaw_atan2_args(q, order: str = "wxyz"):
+    """``(y, x)`` whose atan2 is the heading about world z of quaternions stored in ``order``.
+
+    Returned unevaluated so numpy (``np.arctan2``) and torch (``torch.atan2``)
+    callers share this one piece of algebra.
+    """
+    w, x, y, z = _wxyz(q, order)
+    return 2.0 * (w * z + x * y), 1.0 - 2.0 * (y * y + z * z)

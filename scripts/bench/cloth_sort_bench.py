@@ -26,7 +26,7 @@ sys.path.insert(0, str(_REPO / "src"))
 from bhl_robust.cloth.env import make_env
 from bhl_robust.cloth.metrics import append_rows_csv
 from bhl_robust.cloth.mesh import RESOLUTIONS, grid_counts
-from bhl_robust.cloth.scripted import scripted_action
+from bhl_robust.cloth.scripted import scripted_for
 
 
 def bench_kinematic(rung: str, steps: int, seed: int) -> dict:
@@ -39,7 +39,7 @@ def bench_kinematic(rung: str, steps: int, seed: int) -> dict:
         if done:
             env.reset(seed=seed + n)
             done = False
-        act = scripted_action(env.garment_xy(env._selected), env.selected_spec())
+        act = scripted_for(env)
         _, _, done, _ = env.step(act)
         n += 1
     elapsed = time.perf_counter() - t0

@@ -227,27 +227,21 @@ def cloth_table(prim: str = "table"):
 
 
 def sorting_basket(basket_id: str, prim: str | None = None):
-    """Open-topped box under the table's front edge. Same idea as ``net``."""
+    """Open-topped box off one edge of the cloth table, sized per basket."""
     from bhl_robust.cloth import layout as L
     prim = prim or f"basket_{basket_id}"
-    inner = L.BASKET_INNER
-    wall = L.BASKET_WALL
-    x, y = L.BASKET_X, L.BASKET_Y[basket_id]
+    box = L.basket_aabb(basket_id)
+    (x0, y0), (x1, y1) = box.low[:2], box.high[:2]
+    sx, sy, hz = float(x1 - x0), float(y1 - y0), L.BASKET_DEPTH
+    x, y = float(0.5 * (x0 + x1)), float(0.5 * (y0 + y1))
     rgb = BASKET_RGB.get(basket_id, TARGET_RGB)
-    hx, hy, hz = inner[0] / 2.0, inner[1] / 2.0, inner[2]
-    t = wall
-    floor_z = t / 2.0
-    mid_z = hz / 2.0
+    t = L.BASKET_WALL
+    floor_z, mid_z = t / 2.0, hz / 2.0
     return [
-        _box(f"{prim}_floor", (inner[0] + 2 * t, inner[1] + 2 * t, t),
-             (x, y, floor_z), rgb, collider_only=True),
-        _box(f"{prim}_xp", (t, inner[1], hz), (x + hx + t / 2.0, y, mid_z), rgb,
-             collider_only=True),
-        _box(f"{prim}_xn", (t, inner[1], hz), (x - hx - t / 2.0, y, mid_z), rgb,
-             collider_only=True),
-        _box(f"{prim}_yp", (inner[0], t, hz), (x, y + hy + t / 2.0, mid_z), rgb,
-             collider_only=True),
-        _box(f"{prim}_yn", (inner[0], t, hz), (x, y - hy - t / 2.0, mid_z), rgb,
-             collider_only=True),
+        _box(f"{prim}_floor", (sx + 2 * t, sy + 2 * t, t), (x, y, floor_z), rgb, collider_only=True),
+        _box(f"{prim}_xp", (t, sy, hz), (x + sx / 2.0 + t / 2.0, y, mid_z), rgb, collider_only=True),
+        _box(f"{prim}_xn", (t, sy, hz), (x - sx / 2.0 - t / 2.0, y, mid_z), rgb, collider_only=True),
+        _box(f"{prim}_yp", (sx, t, hz), (x, y + sy / 2.0 + t / 2.0, mid_z), rgb, collider_only=True),
+        _box(f"{prim}_yn", (sx, t, hz), (x, y - sy / 2.0 - t / 2.0, mid_z), rgb, collider_only=True),
     ]
 

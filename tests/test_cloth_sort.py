@@ -21,7 +21,7 @@ from bhl_robust.cloth.mesh import grid_counts, isaac_grid_counts, plane_faces, p
 from bhl_robust.cloth.observations import ObservationSpec, pack_oracle
 from bhl_robust.cloth.rewards import compute_reward
 from bhl_robust.cloth.robot import EXPECTED_ARMS, EXPECTED_JOINTS, assert_articulation
-from bhl_robust.cloth.scripted import pick_unsorted, scripted_action
+from bhl_robust.cloth.scripted import pick_unsorted, scripted_action, scripted_for
 from bhl_robust.cloth.success import deformable_outcome, rigid_outcome
 from bhl_robust.cloth.sweep import ACTION_DIM, decode_action, encode_physical, plan_sweep
 from bhl_robust.limb_partition import JOINTS_22
@@ -174,20 +174,22 @@ class EnvTests(unittest.TestCase):
         np.testing.assert_allclose(oa, ob)
         np.testing.assert_allclose(a.garment_xy(0), b.garment_xy(0))
 
-    def test_original_layout_cannot_be_swept(self):
-        """Scripted C0 scored 1.00 with no reach model. With one, it cannot move
-        the garment at all: every plan is refused and nothing is displaced."""
+    def test_scripted_sorts_one_garment_inside_the_reach(self):
+        """Under the reach model, on the redesigned layout, scripted C0 sorts.
+
+        On the original layout this same loop could not move the garment at all:
+        every plan was refused. That is pinned in ReachTests with the old
+        coordinates frozen.
+        """
         env = make_env("C0", seed=1)
         env.reset(seed=1)
-        start = env.garment_xy(0).copy()
-        done, invalid = False, 0
+        done, refused = False, 0
         while not done:
-            act = scripted_action(env.garment_xy(env._selected), env.selected_spec())
+            act = scripted_for(env)
             _, _, done, info = env.step(act)
-            invalid += int(info.reward.as_dict().get("invalid", 0) != 0)
-        self.assertFalse(env.all_correct)
-        np.testing.assert_allclose(env.garment_xy(0), start)
-        self.assertGreater(invalid, 0)
+            refused += int(info.invalid)
+        self.assertTrue(env.all_correct)
+        self.assertEqual(refused, 0)
 
     def test_wrong_sweep_can_miss(self):
         env = make_env("C0", seed=2)
@@ -204,17 +206,17 @@ class EnvTests(unittest.TestCase):
         snap = env.snapshot()
         self.assertEqual(len(snap), 5)
 
-    def test_original_five_garment_layout_cannot_be_swept(self):
+    def test_scripted_sorts_five_garments_in_turn(self):
+        """Five garments, one table's worth at a time: Mode B, sequential."""
         env = make_env("C5", seed=3)
         env.reset(seed=3)
-        starts = [env.garment_xy(i).copy() for i in range(env.n_garments)]
+        on_table = [not st.parked for st in env._states]
+        self.assertEqual(on_table, [True, False, False, False, False])
         done = False
         while not done:
-            act = scripted_action(env.garment_xy(env._selected), env.selected_spec())
+            act = scripted_for(env)
             _, _, done, _ = env.step(act)
-        self.assertFalse(env.all_correct)
-        for i, s0 in enumerate(starts):
-            np.testing.assert_allclose(env.garment_xy(i), s0)
+        self.assertTrue(env.all_correct)
 
     def test_pick_unsorted(self):
         mask = np.array([True, False, False])
@@ -261,20 +263,18 @@ class SpawnTests(unittest.TestCase):
         jacket = GARMENT_BY_NAME["jacket"]
         self.assertEqual(sibling_index(jacket), (0, 1))
 
-    def test_default_spawn_xy_lanes(self):
-        from bhl_robust.cloth.layout import default_spawn_xy
-        sock_a, sock_b = GARMENTS[0], GARMENTS[1]
-        xa, ya = default_spawn_xy(sock_a, 0, 2)
-        xb, yb = default_spawn_xy(sock_b, 1, 2)
-        self.assertAlmostEqual(xa, xb)
-        self.assertNotAlmostEqual(ya, yb)
-        shirt = GARMENT_BY_NAME["shirt_a"]
-        x1, y1 = default_spawn_xy(shirt, 0, 1)
-        spawn_lo, spawn_hi = garment_spawn_range()
-        self.assertGreaterEqual(x1, spawn_lo[0])
-        self.assertLessEqual(x1, spawn_hi[0])
-        self.assertGreaterEqual(y1, spawn_lo[1])
-        self.assertLessEqual(y1, spawn_hi[1])
+    def test_garments_start_on_the_table_and_the_rest_park_clear(self):
+        from bhl_robust.cloth.layout import all_basket_aabbs, default_spawn_xy, parking_xy
+        x, y = default_spawn_xy()
+        lo, hi = garment_spawn_range()
+        self.assertTrue(lo[0] <= x <= hi[0] and lo[1] <= y <= hi[1])
+        self.assertTrue(table_aabb().contains_xy((x, y)))
+        slots = {parking_xy(i) for i in range(1, 5)}
+        self.assertEqual(len(slots), 4)
+        for xy in slots:
+            self.assertFalse(table_aabb().contains_xy(xy))
+            for box in all_basket_aabbs().values():
+                self.assertFalse(box.contains_xy(xy))
 
 
 class AdaptTests(unittest.TestCase):
@@ -300,8 +300,10 @@ class SpawnRelativeTiltTests(unittest.TestCase):
     than a paraphrase of it.
     """
 
-    #: The quaternion the task actually spawns with. Photographed standing
-    #: (21218517 / 21218627); its absolute R[2,2] is -1.
+    #: The quaternion the task actually spawns with, as the 4-tuple in the cfg.
+    #: Photographed standing (21218517 / 21218627). Isaac Lab 3.0 stores it
+    #: (x, y, z, w): a half-turn about z. These wxyz cases run the algebra on
+    #: the same tuple read the old way; ``QuatOrderTests`` covers the real order.
     STAND_UP = np.array([[0.0, 0.0, 1.0, 0.0]])
 
     def test_zero_tilt_at_the_configured_spawn(self):
@@ -310,7 +312,11 @@ class SpawnRelativeTiltTests(unittest.TestCase):
         self.assertLess(float(np.arccos(np.clip(up, -1, 1))[0]), 1e-6)
 
     def test_absolute_convention_would_have_called_this_fallen(self):
-        """Guards the regression that ended every episode on step one."""
+        """Guards the regression that ended every episode on step one.
+
+        Read as (w, x, y, z) the spawn tuple is a half-turn about y, R[2, 2] = -1.
+        That misreading, not the asset, is what 21233866 hit.
+        """
         w, x, y, z = self.STAND_UP[0]
         absolute_r22 = 1.0 - 2.0 * (x * x + y * y)
         self.assertAlmostEqual(float(absolute_r22), -1.0, places=6)
@@ -354,6 +360,68 @@ class SpawnRelativeTiltTests(unittest.TestCase):
             return float(np.arccos(np.clip(relative_up_z(q, self.STAND_UP), -1, 1))[0])
         self.assertLess(tilt(0.60), 0.78)
         self.assertGreater(tilt(1.00), 0.78)
+
+
+class QuatOrderTests(unittest.TestCase):
+    """Isaac Lab 3.0 stores quaternions (x, y, z, w); the fall test must read them so."""
+
+    @staticmethod
+    def _xyzw(axis: str, angle: float, then=None) -> np.ndarray:
+        from scipy.spatial.transform import Rotation as Rot
+        r = Rot.from_euler(axis, angle)
+        if then is not None:
+            r = then * r
+        return r.as_quat(scalar_first=False)[None, :]
+
+    def setUp(self):
+        from scipy.spatial.transform import Rotation as Rot
+        self.spawn_rot = Rot.from_euler("z", np.pi)
+        self.spawn = self.spawn_rot.as_quat(scalar_first=False)[None, :]
+
+    def test_the_spawn_tuple_is_a_half_turn_about_z_in_xyzw(self):
+        np.testing.assert_allclose(np.abs(self.spawn), [[0.0, 0.0, 1.0, 0.0]], atol=1e-9)
+
+    def test_xyzw_reading_separates_yaw_from_tilt(self):
+        for label, q, want in (
+            ("yaw 30", self._xyzw("z", np.radians(30), then=self.spawn_rot), 0.0),
+            ("roll 60", self._xyzw("x", np.radians(60), then=self.spawn_rot), 60.0),
+            ("pitch 60", self._xyzw("y", np.radians(60), then=self.spawn_rot), 60.0),
+        ):
+            # A body-frame rotation after the spawn half-turn: spawn * r.
+            from scipy.spatial.transform import Rotation as Rot
+            axis = {"yaw 30": "z", "roll 60": "x", "pitch 60": "y"}[label]
+            ang = np.radians(30 if label == "yaw 30" else 60)
+            q = (self.spawn_rot * Rot.from_euler(axis, ang)).as_quat(scalar_first=False)[None, :]
+            got = np.degrees(np.arccos(np.clip(relative_up_z(q, self.spawn, order="xyzw"), -1, 1)))[0]
+            self.assertAlmostEqual(float(got), want, places=4, msg=label)
+
+    def test_the_old_reading_counted_yaw_and_missed_roll(self):
+        """Pins the bug: (x, y, z, w) data read as (w, x, y, z)."""
+        from scipy.spatial.transform import Rotation as Rot
+        yaw = (self.spawn_rot * Rot.from_euler("z", np.radians(30))).as_quat(scalar_first=False)[None, :]
+        roll = (self.spawn_rot * Rot.from_euler("x", np.radians(60))).as_quat(scalar_first=False)[None, :]
+        tilt = lambda q: float(np.degrees(np.arccos(np.clip(relative_up_z(q, self.spawn, order="wxyz"), -1, 1)))[0])
+        self.assertAlmostEqual(tilt(yaw), 30.0, places=4)
+        self.assertAlmostEqual(tilt(roll), 0.0, places=4)
+
+    def test_heading_helper_matches_scipy(self):
+        from scipy.spatial.transform import Rotation as Rot
+        from bhl_robust.cloth.kinematics import yaw_atan2_args
+        for ang in (0.3, -1.2, 2.9):
+            r = Rot.from_euler("z", ang)
+            got = np.arctan2(*yaw_atan2_args(r.as_quat(scalar_first=False)[None, :], "xyzw"))[0]
+            self.assertAlmostEqual(float(got), ang, places=6)
+            got = np.arctan2(*yaw_atan2_args(r.as_quat(scalar_first=True)[None, :], "wxyz"))[0]
+            self.assertAlmostEqual(float(got), ang, places=6)
+
+    def test_isaac_side_reads_quaternions_through_the_probed_order(self):
+        import re
+        src = (_REPO / "src" / "bhl_robust" / "tasks" / "cloth_sort_mdp.py").read_text()
+        self.assertIn("QUAT_ORDER = quat_order()", src)
+        self.assertIn("from bhl_robust.quat_order import quat_order", src)
+        self.assertIn("relative_up_z(q, q0, order=QUAT_ORDER)", src)
+        self.assertIsNone(re.search(r"w, x, y, z = q\[:, 0\]", src),
+                          "a hand-rolled (w, x, y, z) unpack is back in the cloth MDP")
 
 
 class MetricsTests(unittest.TestCase):
@@ -450,23 +518,175 @@ class ReachTests(unittest.TestCase):
         np.testing.assert_allclose(to_robot_frame(robot_to_world(p)), p, atol=1e-9)
 
     def test_nothing_in_the_original_layout_is_reachable(self):
-        """The finding, pinned: garment, table edge and baskets are all out of reach."""
-        from bhl_robust.cloth.layout import CONTACT_HEIGHT, TABLE_CENTER_XY, TABLE_SIZE_XY
-        from bhl_robust.cloth.reach import HAND_DROP_MAX, can_reach_xy
-        spec = one_garment()[0]
-        from bhl_robust.cloth.layout import default_spawn_xy
-        pts = {
-            "garment spawn": default_spawn_xy(spec, 0, 1),
-            "table centre": TABLE_CENTER_XY,
-            "table near edge": (TABLE_CENTER_XY[0] - TABLE_SIZE_XY[0] / 2, 0.0),
+        """The finding, pinned with the old coordinates frozen here.
+
+        The original scene put the garment at (0.52, 0), the table's near edge at
+        x = 0.17 and the basket centres at (0.10, +-0.34 / 0) -- world frame, robot
+        at (-0.22, 0) facing -x as measured. No fingertip contact cell covers any
+        of it; the redesign moved the scene, not the finding.
+        """
+        from bhl_robust.cloth.reach import sweep_cell_ok
+        old = {
+            "garment spawn": (0.52, 0.0),
+            "table centre": (0.52, 0.0),
+            "table near edge": (0.17, 0.0),
+            "basket socks": (0.10, 0.34),
+            "basket shirts": (0.10, 0.00),
+            "basket jackets": (0.10, -0.34),
         }
-        for bid in BASKET_IDS:
-            pts[f"basket {bid}"] = tuple(basket_center(bid)[:2])
-        for label, xy in pts.items():
-            self.assertFalse(
-                can_reach_xy(xy, CONTACT_HEIGHT, CONTACT_HEIGHT + HAND_DROP_MAX),
-                f"{label} at {xy} is reachable; the layout finding no longer holds",
-            )
+        for label, xy in old.items():
+            self.assertFalse(sweep_cell_ok(xy, "contact"),
+                             f"{label} at {xy} is reachable; the old-layout finding no longer holds")
+
+
+class HandColliderTests(unittest.TestCase):
+    """The shipped hands collide with nothing; the cloth tasks must use the overlay."""
+
+    ASSET = _REPO / "assets" / "cloth" / "berkeley_humanoid_lite_hand_colliders.usda"
+
+    def test_overlay_exists_and_adds_both_hand_colliders(self):
+        self.assertTrue(self.ASSET.exists(), "run scripts/cloth/add_hand_colliders.py")
+        text = self.ASSET.read_text()
+        self.assertIn("berkeley_humanoid_lite.usd", text, "overlay must sublayer the upstream USD")
+        for side in ("left", "right"):
+            self.assertIn(f'over "arm_{side}_hand_link"', text)
+        self.assertEqual(text.count('def Mesh "hand_collider"'), 2)
+        self.assertEqual(text.count('"PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"'), 2)
+        self.assertEqual(text.count('physics:approximation = "convexHull"'), 2)
+        self.assertNotIn('def Cube "hand_collider"', text, "the bounding box is back")
+
+    def test_collider_is_under_the_physx_hull_limit_and_keeps_the_fingertip(self):
+        import re
+        from bhl_robust.cloth.arm_fk import load_chain
+        text = self.ASSET.read_text()
+        blocks = re.findall(r"point3f\[\] points = \[(.*?)\]\n", text)
+        self.assertEqual(len(blocks), 2)
+        for b in blocks:
+            pts = np.array([[float(v) for v in t.split(",")] for t in re.findall(r"\(([^)]*)\)", b)])
+            self.assertLessEqual(len(pts), 64)
+            self.assertAlmostEqual(float(pts[:, 2].min()), float(load_chain().hull[:, 2].min()), places=4)
+
+    def test_upstream_urdf_really_has_no_hand_collision(self):
+        """Pins the reason the overlay exists; if upstream fixes it, revisit."""
+        import re
+        urdf = (_REPO / "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/"
+                "berkeley_humanoid/berkeley_humanoid_lite/urdf/berkeley_humanoid_lite.urdf").read_text()
+        for side in ("left", "right"):
+            m = re.search(rf'<link name="arm_{side}_hand_link">(.*?)</link>', urdf, re.S)
+            self.assertIsNotNone(m)
+            self.assertNotIn("<collision", m.group(1))
+
+    def test_cloth_scene_spawns_the_overlay(self):
+        src = (_REPO / "src" / "bhl_robust" / "tasks" / "cloth_sort_env_cfg.py").read_text()
+        self.assertIn("berkeley_humanoid_lite_hand_colliders.usda", src)
+        self.assertIn("usd_path=str(HAND_COLLIDER_USD)", src)
+
+
+class ScheduleTests(unittest.TestCase):
+    """The Isaac action term's schedule, checked where Kit cannot start."""
+
+    from bhl_robust.cloth.schedule import MACRO_STEP_S as _MACRO
+    DT = 0.005
+    STEPS = int(round(_MACRO / DT))
+
+    def test_scripted_sweep_builds_and_fits_the_macro_step(self):
+        from bhl_robust.cloth.layout import default_spawn_xy
+        from bhl_robust.cloth.schedule import MACRO_STEP_S, build_schedule, pinch_arm
+        for name in ("sock_a", "shirt_a", "jacket"):
+            spec = GARMENT_BY_NAME[name]
+            g = np.array(default_spawn_xy(spec))
+            s = build_schedule(g, spec, scripted_action(g, spec), self.DT, self.STEPS)
+            self.assertTrue(s.valid, f"{name}: {s.reason}")
+            self.assertEqual(s.q.shape, (self.STEPS, 5))
+            self.assertLessEqual(s.duration, MACRO_STEP_S)
+            pinch = pinch_arm(s.joints)
+            np.testing.assert_allclose(s.q[0], pinch, atol=1e-9)
+            np.testing.assert_allclose(s.q[-1], pinch, atol=1e-9)
+            self.assertGreater(float(np.abs(s.q - pinch).max()), 0.05, f"{name}: the arm never moved")
+
+    def test_scripted_schedule_keeps_the_hand_off_the_garment_until_the_sweep(self):
+        """Replay the commanded joints through FK of the hand hull (21300604's failure)."""
+        from bhl_robust.cloth.arm_fk import hand_point, hull_points, load_chain
+        from bhl_robust.cloth.layout import TABLE_TOP_Z, default_spawn_xy, table_top_rect
+        from bhl_robust.cloth.reach import load_contact
+        from bhl_robust.cloth.schedule import Rect, _world_xyz, build_schedule
+        chain, table = load_chain(), load_contact()
+        lo, hi = table_top_rect()
+        for name in ("sock_a", "shirt_a", "jacket"):
+            spec = GARMENT_BY_NAME[name]
+            g = np.array(default_spawn_xy(spec))
+            s = build_schedule(g, spec, scripted_action(g, spec), self.DT, self.STEPS)
+            self.assertTrue(s.valid, f"{name}: {s.reason}")
+            t0, t1 = s.sweep_window
+            times = np.arange(self.STEPS) * self.DT
+            rect = Rect(g, 0.0, 0.5 * np.array(spec.proxy_size[:2]))
+            pts = _world_xyz(hull_points(chain, s.q))
+            low = pts[..., 2] <= TABLE_TOP_Z + spec.proxy_size[2] + 0.005
+            gap = np.where(low, rect.distance(pts[..., :2].reshape(-1, 2)).reshape(low.shape), np.inf).min(axis=1)
+            self.assertGreater(float(gap[times < t0].min()), 0.005, f"{name}: hand reaches the garment early")
+            over = ((pts[..., 0] >= lo[0]) & (pts[..., 0] <= hi[0]) & (pts[..., 1] >= lo[1]) & (pts[..., 1] <= hi[1]))
+            self.assertGreater(float(np.where(over, pts[..., 2], np.inf).min()), TABLE_TOP_Z - 0.002,
+                               f"{name}: hand into the table")
+            tip = _world_xyz(hand_point(chain, s.q, table.p_hand))[:, :2]
+            u = (s.end_xy - s.start_xy) / np.linalg.norm(s.end_xy - s.start_xy)
+            during = (times >= t0) & (times <= t1)
+            off_line = np.abs(np.cross(u[None], tip[during] - s.start_xy[None]))
+            self.assertLess(float(off_line.max()), 0.003, f"{name}: fingertip leaves the sweep line")
+
+    def test_feedforward_is_inverse_dynamics_over_kp_and_fits_the_arm(self):
+        from bhl_robust.cloth.arm_fk import inverse_dynamics, load_chain
+        from bhl_robust.cloth.layout import default_spawn_xy
+        from bhl_robust.cloth import schedule as S
+        spec = GARMENT_BY_NAME["shirt_a"]
+        g = np.array(default_spawn_xy(spec))
+        s = S.build_schedule(g, spec, scripted_action(g, spec), self.DT, self.STEPS)
+        self.assertTrue(s.valid, s.reason)
+        np.testing.assert_allclose(s.qd, np.gradient(s.q, self.DT, axis=0), atol=1e-9)
+        self.assertLessEqual(s.tau_peak, S.TORQUE_BUDGET * S.ARM_EFFORT + 1e-9)
+        # Held still at the end: the offset is exactly gravity over Kp.
+        tail = inverse_dynamics(load_chain(), s.q[-1:], np.zeros((1, 5)), np.zeros((1, 5)))[0]
+        np.testing.assert_allclose(s.q_cmd[-1] - s.q[-1], tail / S.ARM_KP, atol=1e-6)
+        # Every phase starts and ends at rest: no velocity jump for the drive to chase.
+        self.assertLess(float(np.abs(s.qd[0]).max()), 1e-2)
+        self.assertLess(float(np.abs(s.qd[int(s.duration / self.DT) + 2:]).max()), 1e-2)
+        self.assertLessEqual(float(np.abs(s.qd).max()), S.MAX_JOINT_SPEED + 0.05)
+
+    def test_refused_plans_hold_the_pinch_with_gravity_compensation(self):
+        from bhl_robust.cloth.arm_fk import inverse_dynamics, load_chain
+        from bhl_robust.cloth import schedule as S
+        spec = GARMENT_BY_NAME["shirt_a"]
+        s = S.build_schedule(np.array([0.52, 0.0]), spec, scripted_action(np.array([0.52, 0.0]), spec),
+                             self.DT, self.STEPS)
+        self.assertFalse(s.valid)
+        pinch = S.pinch_arm(s.joints)
+        tau = inverse_dynamics(load_chain(), pinch[None], np.zeros((1, 5)), np.zeros((1, 5)))[0]
+        np.testing.assert_allclose(s.q_cmd, np.repeat((pinch + tau / S.ARM_KP)[None], self.STEPS, 0), atol=1e-9)
+        np.testing.assert_allclose(s.qd, 0.0)
+
+    def test_a_sweep_that_starts_on_the_garment_is_refused(self):
+        from bhl_robust.cloth.layout import default_spawn_xy
+        from bhl_robust.cloth.schedule import build_schedule
+        spec = GARMENT_BY_NAME["shirt_a"]
+        g = np.array(default_spawn_xy(spec))
+        on_top = encode_physical(0.0, 0.0, np.pi, 0.15, 0.4)
+        s = build_schedule(g, spec, on_top, self.DT, self.STEPS)
+        self.assertFalse(s.valid)
+        self.assertIn("garment", s.reason)
+
+    def test_unreachable_sweep_holds_the_pinch_pose(self):
+        from bhl_robust.cloth.schedule import build_schedule, pinch_arm
+        spec = GARMENT_BY_NAME["shirt_a"]
+        s = build_schedule(np.array([0.52, 0.0]), spec, scripted_action(np.array([0.52, 0.0]), spec),
+                           self.DT, self.STEPS)
+        self.assertFalse(s.valid)
+        np.testing.assert_allclose(s.q, np.repeat(pinch_arm(s.joints)[None], self.STEPS, 0))
+
+    def test_isaac_macro_step_matches_the_schedule(self):
+        """The env cfg derives decimation from MACRO_STEP_S; guard that link statically."""
+        src = (_REPO / "src" / "bhl_robust" / "tasks" / "cloth_sort_env_cfg.py").read_text()
+        self.assertIn("int(round(MACRO_STEP_S / self.sim.dt))", src)
+        self.assertNotIn("self.decimation = 8", src)
+        self.assertNotIn("self.decimation = 1\n", src)
 
 
 class ContactTableTests(unittest.TestCase):
@@ -479,8 +699,55 @@ class ContactTableTests(unittest.TestCase):
     def test_built_at_the_measured_best_height(self):
         self.assertAlmostEqual(self.t.table_top, 0.30, places=6)
         self.assertGreaterEqual(int(self.t.contact_mask.sum()), 200)
-        self.assertGreater(int((self.t.contact_mask & self.t.hover_mask).sum()), 100)
+        # The arm cannot lift the hand over most of the table on the same branch;
+        # anchors are the edge band that can (78 when built).
+        self.assertGreaterEqual(int((self.t.contact_mask & self.t.hover_mask).sum()), 60)
         self.assertEqual(len(self.t.joints), 5)
+
+    def test_neighbouring_cells_share_a_branch(self):
+        """Adjacent cells were separate IK solves; a joint move between them left the line."""
+        Q, M = self.t.contact_q, self.t.contact_mask
+        worst = 0.0
+        for i, j in zip(*np.nonzero(M)):
+            for a, b in ((i + 1, j), (i, j + 1), (i + 1, j + 1), (i + 1, j - 1)):
+                if 0 <= a < M.shape[0] and 0 <= b < M.shape[1] and M[a, b]:
+                    worst = max(worst, float(np.abs(Q[i, j] - Q[a, b]).max()))
+        self.assertLessEqual(worst, 0.30)
+
+    def test_contact_and_hover_at_an_anchor_are_one_vertical_move(self):
+        from bhl_robust.cloth.arm_fk import hand_point, load_chain
+        chain = load_chain()
+        s = np.linspace(0, 1, 11)[:, None]
+        for i, j in zip(*np.nonzero(self.t.contact_mask & self.t.hover_mask)):
+            qs = self.t.contact_q[i, j][None] * (1 - s) + self.t.hover_q[i, j][None] * s
+            tip = hand_point(chain, qs, self.t.p_hand)
+            wander = np.linalg.norm(tip[:, :2] - [self.t.x[i], self.t.y[j]], axis=1).max()
+            self.assertLessEqual(float(wander), 0.0101)
+
+    def test_contact_cells_hold_the_hand_just_above_the_table(self):
+        from bhl_robust.cloth.arm_fk import hull_points, load_chain
+        ix, iy = np.nonzero(self.t.contact_mask)
+        low = hull_points(load_chain(), self.t.contact_q[ix, iy])[..., 2].min(axis=1)
+        self.assertGreaterEqual(float(low.min()), self.t.table_top)
+        self.assertLessEqual(float(low.max()), self.t.table_top + self.t.contact_clearance + 0.0015)
+
+    def test_blended_joints_stay_on_contact_between_cells(self):
+        from bhl_robust.cloth.arm_fk import hand_point, hull_points, load_chain
+        chain = load_chain()
+        rng = np.random.default_rng(3)
+        ix, iy = np.nonzero(self.t.contact_mask)
+        n = 0
+        for k in rng.choice(len(ix), 60, replace=False):
+            p = np.array([self.t.x[ix[k]], self.t.y[iy[k]]]) + rng.uniform(-0.009, 0.009, 2)
+            q = self.t.q_at(p, "contact", strict=True)
+            if q is None:
+                continue
+            n += 1
+            tip = hand_point(chain, q[None], self.t.p_hand)[0]
+            self.assertLess(float(np.linalg.norm(tip[:2] - p)), 0.0015)
+            low = float(hull_points(chain, q[None])[0, :, 2].min())
+            self.assertGreater(low, self.t.table_top - 0.002)
+        self.assertGreater(n, 30)
 
     def test_contact_point_hangs_below_the_hand_link(self):
         """The fingertips, not the link origin: that distinction is the correction."""
@@ -493,6 +760,97 @@ class ContactTableTests(unittest.TestCase):
     def test_old_table_edge_is_out_of_fingertip_reach(self):
         ix, _ = np.nonzero(self.t.contact_mask)
         self.assertLess(float(self.t.x[ix].max()), 0.39)
+
+
+class ArmFkTests(unittest.TestCase):
+    def test_exported_chain_matched_mujoco(self):
+        f = np.load(_REPO / "assets" / "cloth" / "right_arm_chain.npz")
+        self.assertLess(float(f["fk_max_error"]), 1e-6)
+
+    def test_hull_reduction_is_tight_and_keeps_the_fingertip_face(self):
+        from bhl_robust.cloth.arm_fk import hull_excess, load_chain, reduce_hull
+        full = load_chain().hull
+        small = reduce_hull(full, 64)
+        self.assertLessEqual(len(small), 64)
+        self.assertLess(hull_excess(full, small), 0.003)
+        self.assertEqual(int((small[:, 2] <= full[:, 2].min() + 1e-3).sum()),
+                         int((full[:, 2] <= full[:, 2].min() + 1e-3).sum()))
+
+
+class ArmTrackingTests(unittest.TestCase):
+    """The arm Isaac simulates, in numpy, and what a schedule needs to make it follow."""
+
+    TRACE = _REPO / "results" / "cloth" / "isaac_c0f_v2_trace.json"
+
+    def test_numpy_pd_arm_reproduces_what_isaac_measured(self):
+        """21307211, plan 0, before the hand touched anything: same arm, same drive."""
+        import json
+        from bhl_robust.cloth.arm_fk import load_chain, simulate_pd
+        from bhl_robust.cloth import schedule as S
+        tr = json.load(open(self.TRACE))
+        samples = [x for x in tr["samples"] if x["plan"] == 0 and x["t"] < 0.45]
+        ks = np.array([x["k"] for x in samples])
+        q_isaac = np.array([x["q"] for x in samples])
+        target = np.array([x["q_target"] for x in samples])
+        full = np.arange(ks[-1] + 1)
+        cmd = np.stack([np.interp(full, ks, target[:, j]) for j in range(5)], axis=1)
+        sim = simulate_pd(load_chain(), q_isaac[0], cmd, np.zeros_like(cmd), tr["sim_dt"],
+                          S.ARM_KP, S.ARM_KD, S.ARM_EFFORT, S.ARM_ARMATURE, substeps=5)
+        self.assertLess(float(np.abs(sim[ks] - q_isaac).max()), 0.005)
+        # ...and that trajectory was far from its target: the finding the feedforward answers.
+        self.assertGreater(float(np.abs(target - q_isaac).max()), 0.3)
+
+    def test_feedforward_schedule_tracks_where_bare_targets_lag(self):
+        from bhl_robust.cloth.arm_fk import hand_point, load_chain, simulate_pd
+        from bhl_robust.cloth.layout import default_spawn_xy
+        from bhl_robust.cloth.reach import load_contact
+        from bhl_robust.cloth import schedule as S
+        chain, table = load_chain(), load_contact()
+        spec = GARMENT_BY_NAME["shirt_a"]
+        g = np.array(default_spawn_xy(spec))
+        dt = 0.005
+        s = S.build_schedule(g, spec, scripted_action(g, spec), dt, int(round(S.MACRO_STEP_S / dt)))
+        self.assertTrue(s.valid, s.reason)
+        n = int(np.ceil(s.sweep_window[1] / dt)) + 1           # approach and sweep: where the shirt was lost
+        gains = (S.ARM_KP, S.ARM_KD, S.ARM_EFFORT, S.ARM_ARMATURE)
+        ff = simulate_pd(chain, s.q[0], s.q_cmd[:n], s.qd[:n], dt, *gains, substeps=5)
+        err = np.linalg.norm(hand_point(chain, ff, table.p_hand) - hand_point(chain, s.q[:n], table.p_hand), axis=1)
+        self.assertLess(float(err.max()), 0.004, "the feedforward no longer makes the arm follow its schedule")
+        bare = simulate_pd(chain, s.q[0], s.q[:n], np.zeros((n, 5)), dt, *gains, substeps=5)
+        lag = np.linalg.norm(hand_point(chain, bare, table.p_hand) - hand_point(chain, s.q[:n], table.p_hand), axis=1)
+        self.assertGreater(float(lag.max()), 0.03)
+
+    def test_schedule_assumes_the_upstream_arm_actuator(self):
+        """ARM_* must be the "arms" group of the shipped HUMANOID_LITE_CFG, parsed from its source."""
+        import ast
+        from bhl_robust.cloth import schedule as S
+        src = (_REPO / "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/"
+               "berkeley_humanoid_lite_assets/robots/berkeley_humanoid_lite.py").read_text()
+        tree = ast.parse(src)
+        found = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Assign) and any(getattr(t, "id", "") == "HUMANOID_LITE_CFG" for t in node.targets):
+                for kw in node.value.keywords:
+                    if kw.arg == "actuators":
+                        for key, val in zip(kw.value.keys, kw.value.values):
+                            if getattr(key, "value", None) == "arms":
+                                found.append({k.arg: ast.literal_eval(k.value) for k in val.keywords
+                                              if k.arg in ("stiffness", "damping", "effort_limit", "armature")})
+        self.assertEqual(len(found), 1)
+        self.assertEqual(found[0], {"stiffness": S.ARM_KP, "damping": S.ARM_KD,
+                                    "effort_limit": S.ARM_EFFORT, "armature": S.ARM_ARMATURE})
+
+    def test_isaac_term_sends_the_feedforward_and_checks_the_actuator(self):
+        src = (_REPO / "src" / "bhl_robust" / "tasks" / "cloth_sort_mdp.py").read_text()
+        self.assertIn("torch.as_tensor(s.q_cmd", src)
+        self.assertIn("torch.as_tensor(s.qd", src)
+        self.assertIn("set_joint_velocity_target(vel)", src)
+        self.assertIn("self._check_arm_actuator()", src)
+        self.assertNotIn("torch.as_tensor(s.q,", src, "the term is sending bare position targets again")
+
+    def test_inverse_dynamics_matched_mujoco_when_exported(self):
+        f = np.load(_REPO / "assets" / "cloth" / "right_arm_chain.npz")
+        self.assertLess(float(f["id_max_error"]), 1e-6)
 
 
 class IsaacConfigWiringTests(unittest.TestCase):
