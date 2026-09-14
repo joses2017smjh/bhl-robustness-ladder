@@ -319,18 +319,60 @@ class ClothSortRigidFixedBaseEnvCfg(ClothSortRigidEnvCfg):
 
     def __post_init__(self):
         super().__post_init__()
-        sp = self.scene.robot.spawn
-        sp.articulation_props = sp.articulation_props.replace(fix_root_link=True)
-        # A pinned root is not teleported at reset.
-        self.events.reset_root = None
+        _pin_root(self)
+
+
+@configclass
+class ClothSortRigidBalanceEnvCfg(ClothSortRigidEnvCfg):
+    """Diagnostic: the free-base robot in the knee-1.0 stance with its leg controller.
+
+    ``bhl_robust.cloth.balance``: the stance, gravity feedforward on the legs and
+    IMU ankle feedback that stood in the MuJoCo model reproducing this robot's
+    fall. The root stands ``balance.ROOT_RISE`` higher than the pinch squat and
+    the table is not moved, so the hand passes above the garment: this asks
+    whether the robot stays up while the arm sweeps, not whether it sorts.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        from bhl_robust.cloth import balance
+
+        self.scene.robot.init_state.pos = (ROBOT_XY[0], ROBOT_XY[1], balance.ROOT_Z)
+        self.scene.robot.init_state.joint_pos = {**self.scene.robot.init_state.joint_pos, **balance.STANCE}
+        self.actions.sweep.balance = {
+            "stance": dict(balance.STANCE), "feedforward": dict(balance.FEEDFORWARD), "gains": list(balance.GAINS),
+        }
+
+
+def _pin_root(cfg) -> None:
+    """Pin the robot's root link to the world (a USD fixed joint), and stop resetting its pose."""
+    sp = cfg.scene.robot.spawn
+    sp.articulation_props = sp.articulation_props.replace(fix_root_link=True)
+    # A pinned root is not teleported at reset.
+    cfg.events.reset_root = None
 
 
 def _newton_cloth_physics():
-    """The Franka-cloth Newton/VBD preset. Imported lazily so v51 registration lives."""
+    """The Franka-cloth Newton/VBD preset. Imported lazily so v51 registration lives.
+
+    The preset caps MuJoCo-Warp's rigid constraint buffers at njmax 40 and
+    nconmax 20, sized for a Franka. A pinned humanoid sweeping over the table
+    went non-finite mid-sweep with them (21328765). ``BHL_NEWTON_NJMAX`` and
+    ``BHL_NEWTON_NCONMAX`` override them, so the next run changes one variable
+    and records which; unset, the preset is untouched.
+    """
+    import os
+
     from isaaclab_tasks.manager_based.manipulation.lift_franka_soft.franka_cloth_env_cfg import (
         PhysicsCfg,
     )
-    return PhysicsCfg()
+    cfg = PhysicsCfg()
+    rigid = cfg.default.solver_cfg.rigid_solver_cfg
+    if os.environ.get("BHL_NEWTON_NJMAX"):
+        rigid.njmax = int(os.environ["BHL_NEWTON_NJMAX"])
+    if os.environ.get("BHL_NEWTON_NCONMAX"):
+        rigid.nconmax = int(os.environ["BHL_NEWTON_NCONMAX"])
+    return cfg
 
 
 def _deformable_garment(spec_name: str, prim: str, resolution: int):
@@ -411,6 +453,24 @@ class ClothSortDeformableEnvCfg(ClothSortRigidEnvCfg):
             params={"asset_name": "garment_0", "garment": self.garment_name},
         )
         self.events.reset_garment = EventTerm(func=cs.skip_event, mode="reset")
+
+
+@configclass
+class ClothSortDeformableFixedBaseEnvCfg(ClothSortDeformableEnvCfg):
+    """C2 diagnostic: one low-res Newton cloth, the robot's root link pinned.
+
+    The rigid fixed-base diagnostic sorts every garment class (21317388-390)
+    while the free-base squat cannot stand, so the cloth rung is asked on the
+    same pinned robot first: does the sweep that sorts a rigid proxy move and
+    sort a cloth? Labelled a fixed-base result wherever it is reported. The
+    whole scene steps in Newton here, the robot included, so the arm's tracking
+    has to be re-measured rather than assumed from PhysX.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.scene.num_envs = 4
+        _pin_root(self)
 
 
 @configclass

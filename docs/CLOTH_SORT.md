@@ -305,6 +305,35 @@ would misrepresent a 6 N m actuator. So the free-base task needs a different sta
 balance controller on the legs, and because the fingertip table was solved with the legs
 in this squat, the reach table and the layout will have to follow a new stance.
 
+Why, measured offline: a MuJoCo robot with the same leg and arm drives reproduces Isaac's
+arm-still fall (pitch −17° at 0.5 s and −45° at 0.7 s, against Isaac's −15° and −39°).
+
+- **The knees cannot hold the squat.** Each needs 5.5–6.0 N m at knee 1.45 rad, at its
+  limit. The PD sags up to 0.3 rad, the pelvis drops 3 cm, and the centre of mass slides
+  back off the heels.
+- **The spawn also buries the toes.** At ankle −0.55 the sole is pitched 2.9° toe-down,
+  and the root at −0.137 puts the toe edge 2.5 cm into the floor. Correcting that alone
+  does not stop the fall.
+- **A shallower stance plus a leg controller stands, in that model.** At knee 1.0 a
+  flat-soled, level stance needs about 3.1 N m. But a 20 N m/rad ankle is softer than
+  gravity's toppling stiffness there (about 64 N m/rad), so it needs feedback. Leg
+  feedforward (settled torque over Kp) plus IMU ankle pitch and roll feedback stood 6 s
+  under Isaac's ±0.04 rad reset noise for 31 of 144 gain sets. The chosen set stands 8 of 8
+  resets for 10 s with the arm still (worst tilt 3.1°) and 7 of 8 with the arm playing the
+  scripted sweep. Its neighbours mostly fall with the arm moving, so it is narrow.
+
+That controller is `bhl_robust.cloth.balance`, applied by the Isaac sweep term to the leg
+targets, with the same gains and limits as the upstream actuator. Whether it stands in
+Isaac is the probe `ClothSort-BHL-RigidBalance-Oracle-v0` (`21329076`–`078`). If it does, the
+table rises with the root (+5.95 cm) and the fingertip table moves with it unchanged.
+Everything above is reproducible with `scripts/cloth/stance_mujoco.py all`.
+
+**The first cloth rung (C2) on the fixed base is void so far.** One 8×8 Newton cloth: the
+success predicate fired 4 of 4 and the cloth did settle in the basket, but the arm's joint
+state went NaN mid-sweep (`21328765`, t = 2.83 s). A success in a blown-up simulation is not
+a sort. The eval now reports `success_rate_finite`, and the diagnosis runs are queued
+(larger MuJoCo-Warp constraint buffers; arm held still).
+
 **Quaternion order.** Isaac Lab 3.0 stores quaternions `(x, y, z, w)`; 2.x stored
 `(w, x, y, z)`, and every literal and hand-written unpack in this repo assumed the
 latter. In the cloth task the fall test counted a 30° yaw as 30° of tilt and could
@@ -793,8 +822,10 @@ Registered gym ids (imported after SimulationApp, like every other overlay):
 | `ClothSort-BHL-Rigid-Oracle-v0` | C0 / C1, one rigid proxy |
 | `ClothSort-BHL-RigidResidual-Oracle-v0` | C1 with residual actions around the scripted sweep (`residual_scale` 0.30) |
 | `ClothSort-BHL-RigidFixedBase-Oracle-v0` | **diagnostic, fixed base** — root link pinned, to ask "does the sweep move the garment?" apart from balance |
+| `ClothSort-BHL-RigidBalance-Oracle-v0` | **balance probe** — free base in the knee-1.0 stance with the leg controller (`bhl_robust.cloth.balance`); the table is not raised, so the hand sweeps above the garment |
 | `ClothSort-BHL-RigidFive-Oracle-v0` | C5 rigid stand-in, Mode B |
 | `ClothSort-BHL-Deformable-Oracle-v0` | Stage 2: one 8×8 Newton `MeshRectangle` |
+| `ClothSort-BHL-DeformableFixedBase-Oracle-v0` | **diagnostic, fixed base** — the same cloth with the root link pinned; C2 asked apart from balance |
 | `ClothSort-BHL-ActiveCloth-Oracle-v0` | Mode B: 1 cloth + 4 rigid proxies |
 
 

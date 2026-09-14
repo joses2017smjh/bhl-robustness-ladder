@@ -105,6 +105,12 @@ def relative_up_z(q, q0, order: str = "wxyz"):
     return 1.0 - 2.0 * (rx * rx + ry * ry)
 
 
+def up_axis(q, order: str = "wxyz"):
+    """The body z axis in the world, ``(x, y, z)`` components, from quaternions stored in ``order``."""
+    w, x, y, z = _wxyz(q, order)
+    return 2.0 * (x * z + w * y), 2.0 * (y * z - w * x), 1.0 - 2.0 * (x * x + y * y)
+
+
 def yaw_atan2_args(q, order: str = "wxyz"):
     """``(y, x)`` whose atan2 is the heading about world z of quaternions stored in ``order``.
 

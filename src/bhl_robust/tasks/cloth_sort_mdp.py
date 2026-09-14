@@ -24,7 +24,7 @@ except ImportError:  # Isaac Lab 3.x moved some of these
 
 from bhl_robust.cloth.controller import PINCH_JOINT_POS
 from bhl_robust.cloth.garments import BASKET_IDS, GARMENT_BY_NAME, GarmentSpec
-from bhl_robust.cloth.kinematics import relative_up_z, yaw_atan2_args
+from bhl_robust.cloth.kinematics import relative_up_z, up_axis, yaw_atan2_args
 from bhl_robust.cloth.layout import (DEFORMABLE_SUCCESS_FRACTION, TABLE_TOP_Z, basket_aabb,
                                      basket_center)
 from bhl_robust.cloth.sweep import ACTION_DIM
@@ -123,6 +123,21 @@ class SweepAction(ActionTerm):
                 f"sweep action needs decimation {self._n_sub} (MACRO_STEP_S / dt) unless latched; "
                 f"got {env.cfg.decimation}")
         self._check_arm_actuator()
+        # balance: legs to a stance with gravity feedforward and IMU ankle
+        # feedback (bhl_robust.cloth.balance). Off by default; the pinch-squat
+        # tasks keep their leg targets.
+        self._balance = None
+        bal = getattr(cfg, "balance", None)
+        if bal:
+            for j, v in bal["stance"].items():
+                self._default[:, names.index(j)] = v
+            for j, v in bal["feedforward"].items():
+                self._default[:, names.index(j)] += v
+            self._ap = torch.tensor([names.index(f"leg_{side}_ankle_pitch_joint") for side in ("left", "right")],
+                                    device=env.device)
+            self._ar = torch.tensor([names.index(f"leg_{side}_ankle_roll_joint") for side in ("left", "right")],
+                                    device=env.device)
+            self._balance = tuple(float(g) for g in bal["gains"])
         # What the drive is sent: the schedule's position target with the
         # feedforward folded in, and its velocity target (schedule.feedforward).
         # Until a plan exists, a gravity-compensated pinch hold.
@@ -148,6 +163,11 @@ class SweepAction(ActionTerm):
         self.trace_samples: list[dict] = []
         self._n_plans = 0
         self._hand_idx = list(self._asset.body_names).index("arm_right_hand_link")
+        #: Physics steps each env spent with a non-finite joint state. Never
+        #: cleared by a reset, so an eval can read it across the step that ended
+        #: an episode: 21328765 scored a "sort" in a step where the arm had gone
+        #: NaN mid-sweep, and the reset that followed hid it.
+        self.nonfinite = torch.zeros(n, dtype=torch.long, device=env.device)
 
     def _check_arm_actuator(self) -> None:
         """Refuse to run with an arm actuator the schedule's feedforward was not computed for.
@@ -262,11 +282,30 @@ class SweepAction(ActionTerm):
         targets[:, self._arm_idx] = arm
         vel = self._vel.clone()
         vel[:, self._arm_idx] = self._sched_qd[rows, k]
+        if self._balance is not None:
+            pitch_off, roll_off = self._ankle_feedback()
+            targets[:, self._ap] += pitch_off.unsqueeze(1)
+            targets[:, self._ar] += roll_off.unsqueeze(1)
         self._asset.set_joint_position_target(targets)
         self._asset.set_joint_velocity_target(vel)
+        self.nonfinite += (~torch.isfinite(_t(self._asset.data.joint_pos)).all(dim=1)).long()
         if self.trace_on and int(self._k[0]) < self._n_sub and int(self._k[0]) % self.trace_every == 0:
             self._record(int(self._k[0]), arm[0], vel[0, self._arm_idx])
         self._k += 1
+
+    def _ankle_feedback(self) -> tuple[torch.Tensor, torch.Tensor]:
+        """``balance.ankle_offsets`` on tensors: tilt and tilt rate in the heading frame."""
+        kpp, kdp, kpr, kdr = self._balance
+        q = _t(self._asset.data.root_quat_w)
+        w = _t(self._asset.data.root_ang_vel_w)
+        ux, uy, uz = up_axis(q, QUAT_ORDER)
+        heading = torch.atan2(*yaw_atan2_args(q, QUAT_ORDER))
+        c, s = torch.cos(-heading), torch.sin(-heading)
+        hx, hy = c * ux - s * uy, s * ux + c * uy
+        wx, wy = c * w[:, 0] - s * w[:, 1], s * w[:, 0] + c * w[:, 1]
+        pitch = torch.atan2(hx, uz)
+        roll = torch.atan2(-hy, uz)
+        return kpp * pitch + kdp * wy, kpr * roll - kdr * wx
 
     def _record(self, k: int, target, vel_target) -> None:
         env, data = self._env, self._asset.data
@@ -318,6 +357,8 @@ class SweepActionCfg(ActionTermCfg):
     residual_scale: float = 0.0
     #: Ignore actions and hold the pinch pose: the arm-still control.
     hold: bool = False
+    #: Leg controller: {"stance", "feedforward", "gains"} (bhl_robust.cloth.balance), or None.
+    balance: dict | None = None
 
 
 def _unscale(x: torch.Tensor, lo: float, hi: float) -> torch.Tensor:

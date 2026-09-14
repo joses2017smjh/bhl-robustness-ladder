@@ -87,10 +87,12 @@ Diagnostics that ran once, proved a point and were deleted are in
 1. **Cloth, in Isaac on the redesigned layout** — *layout, garments, reach model,
    schedule action and planted spawn are done; the kinematic ladder sorts at 1.00*.
    *Fixed-base scripted C0 sorts 32/32 in Isaac for all three garment classes.*
-   Left: **a stance the free base can hold** — the pinch squat falls backward in
-   under a second with the arm still, so the reach table and layout will have to
-   follow a new leg pose; the first low-res cloth cell (C2) on the fixed base; the
-   sequential five-garment scene in Isaac; C1 training; C3–C5.
+   Left: **the free base.** The pinch squat's knees saturate at 6 N m. A knee-1.0
+   stance with leg feedforward and IMU ankle feedback stands in a MuJoCo model
+   that reproduces Isaac's fall; the Isaac probe is queued (`21329076`–`078`). If it
+   stands, the table rises 6 cm with the root. **C2 on the fixed base is void so
+   far**: the Newton articulation went NaN mid-sweep (diagnosis `21328911`–`912`).
+   Then the sequential five-garment scene in Isaac, C1 training, and C3–C5.
 2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
    sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
    designs. *Before that, the terrain rung's stereo arms finish re-running with
@@ -489,6 +491,44 @@ planted pinch squat is not a stance this robot can hold** with its legs on their
 The arm is not what tips it. A free-base cloth task needs a stance that stands; the
 contact table and the layout are built on this one, so they will have to follow.
 
+**Why the squat falls, 2026-09-14 (offline, MuJoCo).** A MuJoCo robot with Isaac's leg
+and arm drives (PD, 6 / 4 N m) reproduces Isaac's arm-still fall: pitch −17° at 0.5 s and
+−45° at 0.7 s against Isaac's −15° and −39°, down by 0.9 s in both. So the proxy can be
+used. Two things are wrong with the stance. (1) **The knees cannot hold it.** Each knee
+needs 5.5–6.0 N m in the pinch squat (knee 1.45 rad), at the 6 N m limit. The PD sags
+0.13–0.32 rad, the pelvis drops 3 cm, and the centre of mass slides back off the heels.
+(2) **The spawn buries the toes.** At ankle −0.55 the sole is pitched 2.9° toe-down, and
+the root at −0.137 puts the toe edge 2.5 cm into the floor. A flat sole needs ankle −0.60
+at root −0.119. Fixing (2) alone does not stop the fall; (1) does it. A quasi-static map
+over level, flat-soled stances gives about 3.1 N m peak at knee 1.0 (root −0.078, +5.9 cm)
+and about 2.5 N m at knee 0.4. Even there, a 20 N m/rad ankle is softer than gravity's
+toppling stiffness (about 64 N m/rad), so the stance needs gravity feedforward on the legs
+plus IMU feedback at the ankles. **With both, the knee-1.0 stance stands in the proxy.**
+Leg feedforward is the settled leg torques over Kp; ankle pitch and roll targets are
+driven by base tilt and tilt rate in the heading frame. Under Isaac's ±0.04 rad reset
+noise, 31 of 144 gain sets stood 6 s (`results/cloth/stance/search.json`). An earlier
+scratch search had found none: its feedforward was averaged over a window in which the
+robot was already rolling over. The set chosen (pitch 1.5 / 0.3, roll 2.0 / 0.05), run
+through the same function the Isaac term uses, stands 8 of 8 resets for 10 s with the arm
+still (worst tilt 3.1°) and 7 of 8 for 6 s with the arm playing the scripted sweep
+(`stress.json`). Its neighbours mostly fall with the arm moving, so it is narrow. It is
+`bhl_robust.cloth.balance`; `ClothSort-BHL-RigidBalance-Oracle-v0` runs it on the free base
+with the table unmoved, a balance probe with the hand passing 6 cm above the garment
+(rows 28–30). Everything here is reproducible with `scripts/cloth/stance_mujoco.py all`.
+
+**C2F — the first cloth rung on the fixed base: the success predicate fired, and the result
+is void.** One 8×8 Newton cloth shirt: the predicate fired in 4 of 4 episodes, each with its
+first sweep. The cloth's centre did travel along the sweep and settle in the shirts basket
+(z 0.016). But the trace has the arm's joint positions going **NaN at t = 2.83 s,
+mid-sweep**, and staying NaN; the clip trace has the same onset at the same time. A sort
+by a simulation that has blown up is not a sort. Under Newton the approach also tracked
+at 40 mm mean, against PhysX's 1.4. The Newton preset caps MuJoCo-Warp's constraint buffers
+at `njmax` 40 and `nconmax` 20, sized for a Franka. Row 26 raises them to 600/200 and changes
+nothing else; row 27 holds the arm still. The eval now counts physics steps with a
+non-finite robot state and reports `success_rate_finite`, which scores such an episode as a
+failure. The C2F clip renders only the floor grid; the camera-sensor recorder has not been
+made to work on Newton.
+
 **The kinematic ladder under the v3 planner** (`results/cloth/redesign_v3/`; the
 `redesign/` files are the v1 numbers, kept). C0 scripted 1.00 (64 eps) and C5
 sequential 1.00 (32 eps), no plan refused. **C1 (REINFORCE linear residual) 0.56 and
@@ -504,6 +544,13 @@ starts. v1 accepted those sweeps.
 
 | # | id | outcome |
 |---|---|---|
+| 30 | `21329078` | queued, afterany `21329077` — clip, balance probe, arm sweeping (`results/clips/frames/cloth_c0b_sweep`), excludes dgxh-1 |
+| 29 | `21329077` | queued, afterany `21329076` — **balance probe, arm sweeping**: free base, knee-1.0 stance + leg controller, scripted sweep 6 cm above the table, 4 eps, trace (`isaac_c0b_sweep.json`) |
+| 28 | `21329076` | queued, afterany `21328912` — **balance probe, arm still**: free base, knee-1.0 stance + leg controller, 2 eps × 36 s, trace (`isaac_c0b_hold.json`) |
+| 27 | `21328912` | queued, afterany `21328911` — C2F, arm held still, preset buffers, 2 eps, trace (`isaac_c2f_hold.json`): does the arm go non-finite without moving? |
+| 26 | `21328911` | queued, afterany `21328766` — C2F with MuJoCo-Warp `njmax` 600 / `nconmax` 200 and nothing else changed, 4 eps, trace (`isaac_c2f_v3_bigbuf.json`) |
+| 25 | `21328766` | COMPLETED on dgxh-3 (which has Vulkan) — 24 frames, but **every frame shows only the floor grid**: no robot, table or cloth on camera. Its trace has the arm NaN from t = 2.83 s, as in row 24 |
+| 24 | `21328765` | COMPLETED — **void**: the success predicate fired 4/4 with the first sweep, and the cloth did settle in the shirts basket, but the arm's joint state went NaN at t = 2.83 s mid-sweep in the traced episode (see *C2F* above) |
 | 23 | `21317391` | **COMPLETED — the shirt sorts on camera**, 64 frames (3.2 s), cn-r-2. Published: `docs/gifs/isaac/cloth_sort_fixed_base.gif` |
 | 22 | `21317390` | **COMPLETED — jacket 8 of 8**, each with its first sweep, 0% refused, no falls (`isaac_c0f_v3b_jacket.json`) |
 | 21 | `21317389` | **COMPLETED — sock 8 of 8**, each with its first sweep, 0% refused, no falls (`isaac_c0f_v3b_sock.json`) |

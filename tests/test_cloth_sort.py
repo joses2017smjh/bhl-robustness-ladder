@@ -853,6 +853,63 @@ class ArmTrackingTests(unittest.TestCase):
         self.assertLess(float(f["id_max_error"]), 1e-6)
 
 
+class BalanceTests(unittest.TestCase):
+    """The free-base stance controller, pinned to the MuJoCo search that found it."""
+
+    SEARCH = _REPO / "results" / "cloth" / "stance" / "search.json"
+
+    def test_constants_are_the_ones_the_search_stood_with(self):
+        import json
+        from bhl_robust.cloth import balance
+        from bhl_robust.eval.coop_replay import JOINTS
+        d = json.load(open(self.SEARCH))
+        st = d["stance"]
+        for side in ("left", "right"):
+            self.assertAlmostEqual(balance.STANCE[f"leg_{side}_hip_pitch_joint"], st["hip"])
+            self.assertAlmostEqual(balance.STANCE[f"leg_{side}_knee_pitch_joint"], st["knee"])
+            self.assertAlmostEqual(balance.STANCE[f"leg_{side}_ankle_pitch_joint"], st["ankle"])
+        ff = dict(zip(JOINTS, d["feedforward_rad"]))
+        for j, v in balance.FEEDFORWARD.items():
+            self.assertAlmostEqual(v, ff[j], places=4)
+        stood = {(r["pitch_kp"], r["pitch_kd"], r["roll_kp"], r["roll_kd"]) for r in d["results"] if r["worst_tilt_deg"] < 30}
+        self.assertIn(tuple(balance.GAINS), stood)
+        self.assertGreater(balance.ROOT_Z, st["root_z"], "the root must not start the soles inside the floor")
+
+    def test_tilt_is_read_in_the_heading_frame(self):
+        from bhl_robust.cloth.balance import ankle_offsets
+        th = 0.1
+        # Robot facing +x (the MuJoCo frame the gains were found in), leaning forward.
+        p0, r0 = ankle_offsets(np.sin(th), 0.0, np.cos(th), 0.0, 0.0, heading=0.0, gains=(1, 0, 1, 0))
+        # The same lean for a robot facing -x, as Isaac spawns it: toward world -x.
+        p1, r1 = ankle_offsets(-np.sin(th), 0.0, np.cos(th), 0.0, 0.0, heading=np.pi, gains=(1, 0, 1, 0))
+        self.assertAlmostEqual(p0, th, places=9)
+        self.assertAlmostEqual(p1, th, places=9)
+        self.assertAlmostEqual(r0, 0.0, places=9)
+        self.assertAlmostEqual(r1, 0.0, places=9)
+        # Lean toward the robot's right: world -y facing +x, world +y facing -x.
+        _, ra = ankle_offsets(0.0, -np.sin(th), np.cos(th), 0.0, 0.0, heading=0.0, gains=(1, 0, 1, 0))
+        _, rb = ankle_offsets(0.0, np.sin(th), np.cos(th), 0.0, 0.0, heading=np.pi, gains=(1, 0, 1, 0))
+        self.assertAlmostEqual(ra, th, places=9)
+        self.assertAlmostEqual(rb, th, places=9)
+
+    def test_up_axis_matches_scipy_in_both_orders(self):
+        from scipy.spatial.transform import Rotation as Rot
+        from bhl_robust.cloth.kinematics import up_axis
+        rng = np.random.default_rng(0)
+        for r in Rot.random(20, random_state=1):
+            want = r.as_matrix()[:, 2]
+            got = np.array(up_axis(r.as_quat(scalar_first=False)[None, :], "xyzw"))[:, 0]
+            np.testing.assert_allclose(got, want, atol=1e-9)
+            got = np.array(up_axis(r.as_quat(scalar_first=True)[None, :], "wxyz"))[:, 0]
+            np.testing.assert_allclose(got, want, atol=1e-9)
+
+    def test_isaac_term_reads_tilt_through_the_probed_order(self):
+        src = (_REPO / "src" / "bhl_robust" / "tasks" / "cloth_sort_mdp.py").read_text()
+        self.assertIn("up_axis(q, QUAT_ORDER)", src)
+        self.assertIn("yaw_atan2_args(q, QUAT_ORDER)", src)
+        self.assertIn("root_ang_vel_w", src)
+
+
 class IsaacConfigWiringTests(unittest.TestCase):
     """Static guards over the Isaac task modules.
 
@@ -1174,6 +1231,8 @@ class IsaacConfigWiringTests(unittest.TestCase):
             "ClothSort-BHL-RigidFive-Oracle-v0",
             "ClothSort-BHL-Deformable-Oracle-v0",
             "ClothSort-BHL-ActiveCloth-Oracle-v0",
+            "ClothSort-BHL-RigidFixedBase-Oracle-v0",
+            "ClothSort-BHL-DeformableFixedBase-Oracle-v0",
         ]
         for tid in ids:
             self.assertIn(tid, src, f"{tid} is documented but not registered")

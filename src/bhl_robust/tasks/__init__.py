@@ -387,9 +387,11 @@ _CLOTH_PPO = cloth_sort_env_cfg.ClothSortPPORunnerCfg
 for _id, _cfg in (
     ("ClothSort-BHL-Rigid-Oracle-v0", cloth_sort_env_cfg.ClothSortRigidEnvCfg),
     ("ClothSort-BHL-RigidFixedBase-Oracle-v0", cloth_sort_env_cfg.ClothSortRigidFixedBaseEnvCfg),
+    ("ClothSort-BHL-RigidBalance-Oracle-v0", cloth_sort_env_cfg.ClothSortRigidBalanceEnvCfg),
     ("ClothSort-BHL-RigidResidual-Oracle-v0", cloth_sort_env_cfg.ClothSortRigidResidualEnvCfg),
     ("ClothSort-BHL-RigidFive-Oracle-v0", cloth_sort_env_cfg.ClothSortRigidFiveEnvCfg),
     ("ClothSort-BHL-Deformable-Oracle-v0", cloth_sort_env_cfg.ClothSortDeformableEnvCfg),
+    ("ClothSort-BHL-DeformableFixedBase-Oracle-v0", cloth_sort_env_cfg.ClothSortDeformableFixedBaseEnvCfg),
     ("ClothSort-BHL-ActiveCloth-Oracle-v0", cloth_sort_env_cfg.ClothSortActiveDeformableEnvCfg),
 ):
     gym.register(

@@ -16,7 +16,7 @@ from pathlib import Path
 from isaaclab.app import AppLauncher
 
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument("--rung", default="C0", choices=("C0", "C0F", "C2", "C5"))
+parser.add_argument("--rung", default="C0", choices=("C0", "C0B", "C0F", "C2", "C2F", "C5"))
 parser.add_argument("--num_envs", type=int, default=4)
 parser.add_argument("--episodes", type=int, default=8)
 parser.add_argument("--max_steps", type=int, default=80)
@@ -48,15 +48,20 @@ from bhl_robust.tasks.cloth_sort_mdp import _local_pos  # noqa: E402
 
 TASK = {
     "C0": "ClothSort-BHL-Rigid-Oracle-v0",
+    # Free base in the knee-1.0 stance with the leg controller: a balance probe, not a sort.
+    "C0B": "ClothSort-BHL-RigidBalance-Oracle-v0",
     # Fixed base: diagnostic, labelled as such in every result it produces.
     "C0F": "ClothSort-BHL-RigidFixedBase-Oracle-v0",
     "C2": "ClothSort-BHL-Deformable-Oracle-v0",
+    "C2F": "ClothSort-BHL-DeformableFixedBase-Oracle-v0",
     "C5": "ClothSort-BHL-RigidFive-Oracle-v0",
 }
 GARMENT = {
     "C0": "shirt_a",
     "C0F": "shirt_a",
+    "C0B": "shirt_a",
     "C2": "shirt_a",
+    "C2F": "shirt_a",
     "C5": "sock_a",
 }
 
@@ -87,7 +92,7 @@ def _term_fired(tm, name: str) -> bool:
 
 def main() -> None:
     tid = TASK[args_cli.rung]
-    physics = "deformable" if args_cli.rung == "C2" else "rigid"
+    physics = "deformable" if args_cli.rung in ("C2", "C2F") else "rigid"
     n_env = args_cli.num_envs
     if physics == "deformable":
         n_env = min(n_env, 8)
@@ -109,7 +114,7 @@ def main() -> None:
     clip_on = os.environ.get("BHL_CAMERA_CLIP", "0") == "1"
     clip_dir = os.environ.get("BHL_CLIP_DIR", str(Path(args_cli.out or "clip").with_suffix("")) + "_frames")
     if args_cli.garment:
-        if args_cli.rung not in ("C0", "C0F"):
+        if args_cli.rung not in ("C0", "C0B", "C0F"):
             raise SystemExit("--garment applies to the one-garment rungs C0 and C0F")
         from bhl_robust.tasks.cloth_sort_env_cfg import use_garment
         use_garment(cfg, args_cli.garment)
@@ -149,6 +154,8 @@ def main() -> None:
     t0 = time.perf_counter()
     env_steps = 0
     fars: list[float] = []
+    nonfinite_eps: list[bool] = []
+    finite_success: list[bool] = []
     for ep in range(args_cli.episodes):
         env.reset()
         em = EpisodeMetrics(n_garments=5 if args_cli.rung == "C5" else 1)
@@ -160,6 +167,7 @@ def main() -> None:
         # sweep left the garment.
         g0 = _xy(env).copy()
         prev, far, measured = g0.copy(), 0.0, False
+        nonfinite0 = int(sweep.nonfinite[0].item())
         while not done and step < args_cli.max_steps:
             # Each env's own garment, read the way the sweep term reads it:
             # through the robot's actual root pose, with the garment's yaw. This
@@ -192,6 +200,9 @@ def main() -> None:
         tm = env.unwrapped.termination_manager
         em.success = _term_fired(tm, "success")
         em.fell = _term_fired(tm, "fallen")
+        ep_nonfinite = int(sweep.nonfinite[0].item()) - nonfinite0
+        nonfinite_eps.append(ep_nonfinite > 0)
+        finite_success.append(bool(em.success) and ep_nonfinite == 0)
         # Only a success has a time to success. This used to be set whenever the
         # episode ended, so a fall at step 1 reported "1 step to success".
         if em.success:
@@ -229,6 +240,11 @@ def main() -> None:
         payload["clip_dir"] = clip_dir
     if trace_path:
         payload["trace_file"] = trace_path
+    # A "success" in an episode whose robot state went non-finite is not a sort.
+    payload["nonfinite_episodes"] = int(sum(nonfinite_eps))
+    payload["success_rate_finite"] = float(np.mean(finite_success)) if finite_success else None
+    payload["newton_njmax"] = os.environ.get("BHL_NEWTON_NJMAX") or "preset"
+    payload["newton_nconmax"] = os.environ.get("BHL_NEWTON_NCONMAX") or "preset"
     payload["rung"] = args_cli.rung
     payload["garment"] = spec.name
     payload["task"] = tid
