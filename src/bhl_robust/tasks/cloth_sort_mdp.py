@@ -145,6 +145,7 @@ class SweepAction(ActionTerm):
         cmd = torch.as_tensor(hold_cmd[0], dtype=torch.float32, device=env.device)
         self._sched = cmd.view(1, 1, -1).repeat(n, self._n_sub, 1)
         self._sched_qd = torch.zeros_like(self._sched)
+        self._sched_ankle = torch.zeros(n, self._n_sub, 2, device=env.device)
         self._vel = torch.zeros_like(self._default)
         # hold=True: never plan; the arm stays in the pinch hold. The control for
         # "does the free base fall without the arm moving?".
@@ -253,6 +254,7 @@ class SweepAction(ActionTerm):
                                garment_yaw=float(yaw[i]))
             self._sched[i] = torch.as_tensor(s.q_cmd, dtype=torch.float32, device=self.device)
             self._sched_qd[i] = torch.as_tensor(s.qd, dtype=torch.float32, device=self.device)
+            self._sched_ankle[i] = torch.as_tensor(s.ankle_ff, dtype=torch.float32, device=self.device)
             self._invalid[i] = not s.valid
             self._k[i] = 0
             if i == 0:
@@ -284,8 +286,9 @@ class SweepAction(ActionTerm):
         vel[:, self._arm_idx] = self._sched_qd[rows, k]
         if self._balance is not None:
             pitch_off, roll_off = self._ankle_feedback()
-            targets[:, self._ap] += pitch_off.unsqueeze(1)
-            targets[:, self._ar] += roll_off.unsqueeze(1)
+            ff = self._sched_ankle[rows, k]
+            targets[:, self._ap] += (pitch_off + ff[:, 0]).unsqueeze(1)
+            targets[:, self._ar] += (roll_off + ff[:, 1]).unsqueeze(1)
         self._asset.set_joint_position_target(targets)
         self._asset.set_joint_velocity_target(vel)
         self.nonfinite += (~torch.isfinite(_t(self._asset.data.joint_pos)).all(dim=1)).long()

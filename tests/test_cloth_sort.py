@@ -874,6 +874,10 @@ class BalanceTests(unittest.TestCase):
             self.assertAlmostEqual(v, ff[j], places=4)
         stood = {(r["pitch_kp"], r["pitch_kd"], r["roll_kp"], r["roll_kd"]) for r in d["results"] if r["worst_tilt_deg"] < 30}
         self.assertIn(tuple(balance.GAINS), stood)
+        robust = json.load(open(self.SEARCH.parent / "robust.json"))
+        full = [r for r in robust["results"] if tuple(r["gains"]) == tuple(balance.GAINS)]
+        self.assertEqual(len(full), 1)
+        self.assertEqual(full[0]["stood"], full[0]["trials"], "the gains must stand every disturbed trial")
         self.assertGreater(balance.ROOT_Z, st["root_z"], "the root must not start the soles inside the floor")
 
     def test_tilt_is_read_in_the_heading_frame(self):
@@ -892,6 +896,26 @@ class BalanceTests(unittest.TestCase):
         _, rb = ankle_offsets(0.0, np.sin(th), np.cos(th), 0.0, 0.0, heading=np.pi, gains=(1, 0, 1, 0))
         self.assertAlmostEqual(ra, th, places=9)
         self.assertAlmostEqual(rb, th, places=9)
+
+    def test_arm_com_feedforward_leans_into_the_reach(self):
+        from bhl_robust.cloth.arm_fk import arm_com, load_chain
+        from bhl_robust.cloth.balance import arm_com_feedforward
+        from bhl_robust.cloth.layout import default_spawn_xy
+        from bhl_robust.cloth import schedule as S
+        chain = load_chain()
+        spec = GARMENT_BY_NAME["shirt_a"]
+        g = np.array(default_spawn_xy(spec))
+        s = S.build_schedule(g, spec, scripted_action(g, spec), 0.005, int(round(S.MACRO_STEP_S / 0.005)))
+        pinch = S.pinch_arm(s.joints)
+        np.testing.assert_allclose(s.ankle_ff[0], 0.0, atol=1e-9)
+        np.testing.assert_allclose(s.ankle_ff[-1], 0.0, atol=1e-9)
+        k = int(np.argmax(np.abs(s.ankle_ff[:, 0])))
+        dc = arm_com(chain, s.q[k][None])[0] - arm_com(chain, pinch[None])[0]
+        self.assertEqual(np.sign(s.ankle_ff[k, 0]), np.sign(dc[0]), "forward reach must feed forward a forward lean")
+        refused = S.build_schedule(np.array([0.52, 0.0]), spec, scripted_action(np.array([0.52, 0.0]), spec),
+                                   0.005, int(round(S.MACRO_STEP_S / 0.005)))
+        np.testing.assert_allclose(refused.ankle_ff, 0.0)
+        self.assertEqual(arm_com_feedforward(chain, pinch[None], pinch).shape, (1, 2))
 
     def test_up_axis_matches_scipy_in_both_orders(self):
         from scipy.spatial.transform import Rotation as Rot

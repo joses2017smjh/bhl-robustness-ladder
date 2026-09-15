@@ -292,6 +292,8 @@ def cmd_stress(rig: Rig) -> dict:
             if with_arm:
                 k = min(int(round(t / DT)), len(sch.q_cmd) - 1)
                 qt[arm], vt[arm] = sch.q_cmd[k], sch.qd[k]
+                qt[ap] += sch.ankle_ff[k, 0]
+                qt[ar] += sch.ankle_ff[k, 1]
             return qt, vt
         return f
 

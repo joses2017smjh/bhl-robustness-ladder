@@ -100,6 +100,9 @@ class Schedule:
     qd: np.ndarray | None = None
     #: Largest feedforward torque the schedule asks of any arm joint (N m).
     tau_peak: float = 0.0
+    #: Ankle (pitch, roll) target offsets for the arm's centre-of-mass shift,
+    #: ``(n_steps, 2)`` (``balance.arm_com_feedforward``); zero while holding.
+    ankle_ff: np.ndarray | None = None
 
 
 def pinch_arm(joints: tuple[str, ...]) -> np.ndarray:
@@ -413,7 +416,8 @@ def build_schedule(garment_xy, spec: GarmentSpec, action, dt: float, n_steps: in
     hold, hold_cmd, hold_qd = hold_command(t.joints, n_steps, arm)
 
     def refuse(reason: str) -> Schedule:
-        return Schedule(hold, t.joints, False, reason, q_cmd=hold_cmd, qd=hold_qd)
+        return Schedule(hold, t.joints, False, reason, q_cmd=hold_cmd, qd=hold_qd,
+                        ankle_ff=np.zeros((n_steps, 2)))
 
     g = np.asarray(garment_xy, dtype=float)[:2]
     plan = plan_sweep(g, decode_action(action), cfg or SweepConfig())
@@ -532,5 +536,8 @@ def build_schedule(garment_xy, spec: GarmentSpec, action, dt: float, n_steps: in
     if not (is_valid_joints({**PINCH_JOINT_POS, **hi_pose}) and is_valid_joints({**PINCH_JOINT_POS, **lo_pose})):
         return refuse("schedule leaves the joint walls")
     window = (float(ends[i_sweep - 1]) if i_sweep > 0 else 0.0, float(ends[i_sweep]))
+    from bhl_robust.cloth.balance import arm_com_feedforward
+    ankle_ff = arm_com_feedforward(arm, q, pinch)
     return Schedule(q, t.joints, True, "ok", start, end, float(ends[-1]), a_in, a_out,
-                    route_in, route_out, window, q_cmd=q_cmd, qd=qd, tau_peak=float(np.abs(tau).max()))
+                    route_in, route_out, window, q_cmd=q_cmd, qd=qd, tau_peak=float(np.abs(tau).max()),
+                    ankle_ff=ankle_ff)

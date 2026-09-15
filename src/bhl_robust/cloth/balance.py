@@ -50,8 +50,14 @@ FEEDFORWARD: dict[str, float] = {
     "leg_right_ankle_pitch_joint": 0.15638, "leg_right_ankle_roll_joint": -0.00346,
 }
 #: (pitch kp, pitch kd, roll kp, roll kd): rad of ankle target per rad of tilt,
-#: per rad/s of tilt rate.
-GAINS = (1.5, 0.3, 2.0, 0.05)
+#: per rad/s of tilt rate. Was (1.5, 0.3, 2.0, 0.05), which stood in Isaac but
+#: tilted 7-8 deg under the shirt's reach and fell 3 of 8 (21329260). With the
+#: arm sweeping inside the search objective, pitch kp 2.0 stood 12 of 12 over all
+#: three garments' sweeps at 6.7 deg worst tilt, against 11.4 (robust.json).
+GAINS = (2.0, 0.3, 2.0, 0.05)
+#: Leg and ankle drive stiffness of the upstream actuator (N m/rad), for turning
+#: a feedforward torque into a target offset.
+LEG_KP = 20.0
 #: How much higher the root stands than in the pinch squat the layout was built on.
 ROOT_RISE = ROOT_Z - (-0.137)
 
@@ -73,3 +79,23 @@ def ankle_offsets(up_x: float, up_y: float, up_z: float, w_x: float, w_y: float,
     pitch = math.atan2(ux, up_z)
     roll = math.atan2(-uy, up_z)
     return kpp * pitch + kdp * wy, kpr * roll - kdr * wx
+
+
+def arm_com_feedforward(chain, q_arm, q_pinch):
+    """Ankle (pitch, roll) target offsets, ``(N, 2)``, for the arm's centre-of-mass shift.
+
+    The schedule says in advance where the arm's mass goes. Moving it forward by
+    ``dx`` loads the ankles like a forward lean: ``m_arm g dx`` of torque, shared
+    by two ankles. Feeding that forward means the IMU loop only handles what was
+    not predicted. In the MuJoCo model it halved the tilt during the shirt's sweep
+    (6.3 to 4.1 deg), and the opposite sign fell every time. Signs follow
+    ``ankle_offsets``: forward is +pitch, toward the robot's right is +roll.
+    """
+    import numpy as np
+
+    from bhl_robust.cloth.arm_fk import arm_com
+
+    m_arm = float(chain.mass.sum())
+    dc = arm_com(chain, q_arm) - arm_com(chain, np.asarray(q_pinch, dtype=float)[None])[0]
+    scale = m_arm * 9.81 / (2.0 * LEG_KP)
+    return np.stack([scale * dc[:, 0], scale * -dc[:, 1]], axis=1)

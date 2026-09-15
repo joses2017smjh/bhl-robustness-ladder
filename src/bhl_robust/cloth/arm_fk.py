@@ -94,6 +94,23 @@ def hand_point(chain: ArmChain, q, p_hand) -> np.ndarray:
     return p + R @ np.asarray(p_hand, dtype=float)
 
 
+def arm_com(chain: ArmChain, q) -> np.ndarray:
+    """Centre of mass of the six arm bodies in the robot frame, ``(N, 3)``."""
+    if chain.mass is None:
+        raise ValueError("this arm chain has no inertials; re-run scripts/cloth/export_arm_chain.py")
+    q = np.atleast_2d(np.asarray(q, dtype=float))
+    n = q.shape[0]
+    p = np.zeros((n, 3))
+    p[:, 2] = chain.root_z
+    R = np.broadcast_to(np.eye(3), (n, 3, 3)).copy()
+    acc = np.zeros((n, 3))
+    for k in range(6):
+        p = p + R @ chain.body_pos[k]
+        R = R @ chain.body_rot[k] if k == 5 else R @ chain.body_rot[k] @ _rz(q[:, k])
+        acc += chain.mass[k] * (p + R @ chain.com[k])
+    return acc / float(chain.mass.sum())
+
+
 def inverse_dynamics(chain: ArmChain, q, qd, qdd, gravity=(0.0, 0.0, -9.81), armature=0.0) -> np.ndarray:
     """Joint torques ``(N, 5)`` that produce ``qdd`` at ``(q, qd)`` against gravity.
 
