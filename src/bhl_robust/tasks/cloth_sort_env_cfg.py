@@ -368,11 +368,13 @@ def _newton_cloth_physics():
         rigid.njmax = int(os.environ["BHL_NEWTON_NJMAX"])
     if os.environ.get("BHL_NEWTON_NCONMAX"):
         rigid.nconmax = int(os.environ["BHL_NEWTON_NCONMAX"])
-    # The preset couples two-way, so the cloth pushes back on the arm. Larger
-    # buffers did not stop the NaN (21328911) and a still arm stayed finite
-    # (21328912), so the next single-variable test is the coupling itself.
-    if os.environ.get("BHL_NEWTON_COUPLING"):
-        cfg.default.solver_cfg.coupling_mode = os.environ["BHL_NEWTON_COUPLING"]
+    # One-way coupling by default: the rigid solver does not feel the cloth, so a
+    # 16 g garment cannot push back on the arm. The preset's two-way coupling sent
+    # the articulation NaN whenever the hand pushed the cloth (21328765, 21328911,
+    # at the same instant each time); one-way, the same sweep sorted 4 of 4 with
+    # every step finite (21329265). A stated approximation, reported wherever a
+    # cloth result is. BHL_NEWTON_COUPLING=two_way restores the preset.
+    cfg.default.solver_cfg.coupling_mode = os.environ.get("BHL_NEWTON_COUPLING") or "one_way"
     return cfg
 
 
@@ -535,17 +537,22 @@ def spawned_cloth_resolution(cfg) -> int | None:
 
 
 def use_garment(cfg, name: str):
-    """Rebind a one-garment rigid cfg to another catalog garment.
+    """Rebind a one-garment cfg to another catalog garment.
 
-    The proxy, the sweep action (``garment_name``) and every term that names the
-    garment -- observation, rewards, success -- move together; a half-rebound cfg
-    would push a jacket and score a shirt. Refuses the five-garment scene.
+    The garment, the sweep action (``garment_name``) and every term that names
+    the garment -- observation, rewards, success -- move together; a
+    half-rebound cfg would push a jacket and score a shirt. A cloth scene gets a
+    Newton cloth of the new garment at the same resolution, not a rigid box.
+    Refuses the five-garment scene.
     """
     if hasattr(cfg.scene, "garment_1"):
         raise ValueError("use_garment is for one-garment scenes")
     GARMENT_BY_NAME[name]
     cfg.garment_name = name
-    cfg.scene.garment_0 = _proxy(name, "garment_0")
+    if isinstance(cfg, ClothSortDeformableEnvCfg):
+        cfg.scene.garment_0 = _deformable_garment(name, "garment_0", cfg.cloth_resolution)
+    else:
+        cfg.scene.garment_0 = _proxy(name, "garment_0")
     for group in (cfg.observations.policy, cfg.observations.critic):
         group.rel_basket.params["garment"] = name
     for term in (cfg.rewards.progress, cfg.rewards.success, cfg.rewards.wrong_basket, cfg.terminations.success):

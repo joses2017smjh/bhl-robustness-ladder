@@ -967,6 +967,20 @@ class StanceLayoutTests(unittest.TestCase):
         self.assertIn("self.actions.sweep.balance = ", body)
 
 
+class ClothCouplingTests(unittest.TestCase):
+    """Static guards on the Newton cloth scene: the coupling that sorts, and cloth stays cloth."""
+
+    SRC = (_REPO / "src" / "bhl_robust" / "tasks" / "cloth_sort_env_cfg.py").read_text()
+
+    def test_one_way_coupling_is_the_default(self):
+        self.assertIn('os.environ.get("BHL_NEWTON_COUPLING") or "one_way"', self.SRC)
+
+    def test_garment_switch_keeps_a_cloth_scene_cloth(self):
+        body = self.SRC[self.SRC.index("def use_garment"):self.SRC.index("def build_cfg")]
+        self.assertIn("isinstance(cfg, ClothSortDeformableEnvCfg)", body)
+        self.assertIn("_deformable_garment(name, \"garment_0\", cfg.cloth_resolution)", body)
+
+
 class IsaacConfigWiringTests(unittest.TestCase):
     """Static guards over the Isaac task modules.
 

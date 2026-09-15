@@ -114,8 +114,8 @@ def main() -> None:
     clip_on = os.environ.get("BHL_CAMERA_CLIP", "0") == "1"
     clip_dir = os.environ.get("BHL_CLIP_DIR", str(Path(args_cli.out or "clip").with_suffix("")) + "_frames")
     if args_cli.garment:
-        if args_cli.rung not in ("C0", "C0B", "C0F"):
-            raise SystemExit("--garment applies to the one-garment rungs C0 and C0F")
+        if args_cli.rung not in ("C0", "C0B", "C0F", "C2", "C2F"):
+            raise SystemExit("--garment applies to the one-garment rungs C0, C0F, C2 and C2F")
         from bhl_robust.tasks.cloth_sort_env_cfg import use_garment
         use_garment(cfg, args_cli.garment)
     if args_cli.policy == "hold":
@@ -245,7 +245,7 @@ def main() -> None:
     payload["success_rate_finite"] = float(np.mean(finite_success)) if finite_success else None
     payload["newton_njmax"] = os.environ.get("BHL_NEWTON_NJMAX") or "preset"
     payload["newton_nconmax"] = os.environ.get("BHL_NEWTON_NCONMAX") or "preset"
-    payload["newton_coupling"] = os.environ.get("BHL_NEWTON_COUPLING") or "preset"
+    payload["newton_coupling"] = (os.environ.get("BHL_NEWTON_COUPLING") or "one_way") if physics == "deformable" else "n/a"
     payload["rung"] = args_cli.rung
     payload["garment"] = spec.name
     payload["task"] = tid
