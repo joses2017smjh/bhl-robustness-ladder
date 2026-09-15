@@ -6,10 +6,13 @@
 set -uo pipefail
 cd "$REPO"; export PYTHONPATH="$REPO/src:${PYTHONPATH:-}"
 C=privileged; case "$RUN_NAME" in *-policy-*) C=policy ;; esac
+STD=log;  case "$RUN_NAME" in *-scalar-*) STD=scalar ;; esac
+LRS=kl;   case "$RUN_NAME" in *-fixedlr-*) LRS=fixed ;; esac
 LOG=$(mktemp "${TMPDIR:-/tmp}/bhl-ab-XXXXXX.log")
 "$PY" scripts/train_marl.py --task Velocity-BHL-Biped-Stairs-Depth-v0 --num_envs 4096 --seed 0 \
     --max_iterations "${MAX_ITER:-1500}" --run_name "$RUN_NAME" \
-    --partition "$BHL_PARTITION" --algo "$BHL_ALGO" --critic "$C" --hparams rsl --headless 2>&1 | tee "$LOG"
+    --partition "$BHL_PARTITION" --algo "$BHL_ALGO" --critic "$C" --std "$STD" --lr-schedule "$LRS" \
+    --hparams rsl --headless 2>&1 | tee "$LOG"
 last=$(grep -aoE "[0-9]+/[0-9]+ \[" "$LOG" | tail -1 || true)
 n=${last%%/*}; t=${last#*/}; t=${t%% *}
 [ -n "$last" ] && [ "$n" = "$t" ] || { echo "FAILED -- last progress '${last:-none}'" >&2; exit 1; }

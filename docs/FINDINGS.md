@@ -938,9 +938,13 @@ standing. Splitting along that seam helps; splitting further does not.
 > MAPPO against limb4 + IPPO (2.17 against 1.82) is two seeds' worth of one
 > method, and the work order's MAPPO-versus-IPPO question has not been asked
 > yet. Neither critic got the base linear velocity rsl-rl's critic reads. On the
-> Tier 1 stairs rows that capped velocity tracking at 0.53 against PPO's 1.52,
-> and they never left terrain level 0; that grid is paused while the critic fix
-> is A/B-tested.
+> Tier 1 stairs rows, velocity tracking stayed at 0.53 against PPO's 1.52 and
+> terrain level never left 0; that grid is paused. **Fixing the critic did not
+> fix it** (2026-09-15): a one-agent skrl MAPPO with PPO's own critic tracks at
+> 0.58 against PPO's 1.40 at 1,500 iterations. Its exploration noise collapses
+> to a third of rsl-rl's. Until a skrl one-agent control learns what rsl-rl's
+> PPO learns on the same task, no skrl row here, split or not, is evidence about
+> limb factorisation.
 >
 > The original PPO control is not in the table: it routes through rsl-rl while
 > every MARL row routes through skrl, so it prices the RL library as well as the
@@ -950,6 +954,23 @@ standing. Splitting along that seam helps; splitting further does not.
 ---
 
 ## Terrain sensing (the "maze" rung): stereo fails when it is most of the input, and wins when it is not
+
+> **Corrected, 2026-09-15 — the stereo arms re-run pointed at the ground, three
+> seeds each** (`21317023`–`21317025`; terrain level, mean of the last 50 of
+> 6,000 iterations):
+>
+> | arm | seeds 0 / 1 / 2 | mean |
+> |---|---|---:|
+> | blind (control) | 0.545 / 0.634 / 1.037 | 0.738 |
+> | lidar | 0.794 / 0.814 / 0.971 | 0.860 |
+> | stereo 16×16 an eye | 0.877 / 0.560 / 0.886 | 0.774 |
+> | **stereo 4×4 an eye** | **1.286 / 1.340 / 1.237** | **1.288** |
+> | stereo 4×4 + lidar | 1.063 / 1.065 / 1.079 | 1.069 |
+>
+> **Pooled stereo beats blind in every seed**, +75% on the mean. **Width still
+> matters**, but 16×16 trains like blind instead of failing. **Adding lidar to
+> pooled stereo costs**, lower than stereo alone in every seed. The rest of this
+> section is the upward-camera version, kept as written.
 
 > **Retracted for every stereo arm, 2026-09-13: the stereo pair was looking 20°
 > up, upside down.** This rung trains on Isaac Lab 3.0, which reads a camera

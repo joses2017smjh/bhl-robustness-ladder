@@ -36,6 +36,14 @@ parser.add_argument("--critic", type=str, default="privileged", choices=("privil
                     help="what MAPPO's centralised critic reads: the env's critic group, as "
                          "rsl-rl's PPO critic does (privileged), or the policy observation "
                          "every IPPO critic already has (policy; the first block)")
+parser.add_argument("--std", type=str, default="log", choices=("log", "scalar"),
+                    help="exploration noise as log-std (skrl's usual) or as the std itself, "
+                         "which is how rsl-rl parameterises it. With Adam the two move very "
+                         "differently: on stairs the log-std policy's noise fell to 0.13 by "
+                         "1,500 iterations where rsl-rl's was 0.42 (21330392).")
+parser.add_argument("--lr-schedule", type=str, default="kl", choices=("kl", "fixed"),
+                    help="kl: skrl's KLAdaptiveLR (steps once per update; reached its 1e-2 "
+                         "ceiling in ~30 iterations on stairs). fixed: the configured rate.")
 parser.add_argument("--rollouts", type=int, default=None, help="override the hparam set")
 parser.add_argument("--learning-rate", type=float, default=None, help="override the hparam set")
 parser.add_argument("--write-interval", type=int, default=60,
@@ -130,14 +138,22 @@ def rsl_matched(task: str):
 
 
 class Policy(GaussianMixin, Model):
-    def __init__(self, obs_space, act_space, device, n_act, hidden, act):
+    def __init__(self, obs_space, act_space, device, n_act, hidden, act, std="log"):
         Model.__init__(self, obs_space, act_space, device)
         GaussianMixin.__init__(self, clip_actions=False)
         self.net = _mlp(self.num_observations, hidden, n_act, act)
-        # log std 0 is rsl-rl's init_noise_std = 1.0.
-        self.log_std_parameter = nn.Parameter(torch.zeros(n_act))
+        self.std_mode = std
+        if std == "scalar":
+            # rsl-rl's noise_std_type="scalar": the std itself is the parameter,
+            # init_noise_std = 1.0, so an Adam step moves it additively.
+            self.std_parameter = nn.Parameter(torch.ones(n_act))
+        else:
+            # log std 0 is rsl-rl's init_noise_std = 1.0.
+            self.log_std_parameter = nn.Parameter(torch.zeros(n_act))
 
     def compute(self, inputs, role=""):
+        if self.std_mode == "scalar":
+            return self.net(inputs["states"]), torch.log(self.std_parameter.clamp_min(1e-6)), {}
         return self.net(inputs["states"]), self.log_std_parameter, {}
 
 
@@ -199,7 +215,11 @@ def main() -> None:
         hp["rollouts"] = args_cli.rollouts
     if args_cli.learning_rate is not None:
         hp["learning_rate"] = args_cli.learning_rate
+    if args_cli.lr_schedule == "fixed":
+        hp.pop("learning_rate_scheduler", None)
+        hp.pop("learning_rate_scheduler_kwargs", None)
     rollouts = hp["rollouts"]
+    print(f"[marl-gate] std={args_cli.std} lr_schedule={args_cli.lr_schedule}", flush=True)
     print(f"[marl-gate] hparams={args_cli.hparams} actor={actor_dims} critic={critic_dims} "
           f"act={act} normalize={normalize} "
           f"{ {k: (v.__name__ if isinstance(v, type) else v) for k, v in hp.items()} }", flush=True)
@@ -210,7 +230,7 @@ def main() -> None:
                                    num_envs=env.num_envs, device=device)
         models[a] = {
             "policy": Policy(obs_spaces[a], act_spaces[a], device,
-                             env.num_actions[a], actor_dims, act),
+                             env.num_actions[a], actor_dims, act, args_cli.std),
             # MAPPO's critic reads the shared state; IPPO's reads the agent's
             # own observation. That is the entire difference between the two
             # rows, which is why they are otherwise identical here.

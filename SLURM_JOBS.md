@@ -18,23 +18,27 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 ---
 
-## Project status — 2026-09-14
+## Project status — 2026-09-15
 
 **Done since the last status**
 
-- **The MARL grid was stopped: every skrl critic lacked what PPO's critic
-  reads.** On stairs the MAPPO and IPPO rows survived (episode length ~380) but
-  their velocity-tracking reward flattened at **0.53** where rsl-rl PPO reaches
-  **1.52**, and terrain level never left 0 in 6,000 iterations. `LimbMarlEnv`
-  gave the critic the noisy policy observation. rsl-rl's critic reads the
-  `critic` group, which adds base linear velocity and drops the noise. And since
-  every agent sees the full observation, MAPPO's "global state" was what IPPO's
-  critics already had, so the two rows were the same algorithm, in the first
-  block too. The critic is fixed; an A/B (`21330372`) decides before the grid
-  resumes.
-- **Pooled stereo, pointed down:** 4×4 an eye lands at **1.286 / 1.340** (seeds
-  0–1), 4×4 + lidar at 1.079 (seed 2). Seed 2 of 4×4 and seeds 0–1 of 4×4 + lidar
-  are still running.
+- **Maze stereo, cameras pointed down, n=3 — final.** Terrain level: 4×4 an eye
+  **1.288** (1.286 / 1.340 / 1.237), every seed above blind's best (0.738 mean,
+  1.037 best). 16×16 **0.774** trains like blind rather than failing. 4×4 + lidar
+  **1.069**, below 4×4 alone in every seed. Width still matters (16×16 below 4×4
+  in every seed), just nothing like the published 0.02-against-1.12.
+- **The MARL plateau is not the critic.** The critic A/B (`21330372`,
+  `21330392`) put PPO's privileged critic on a one-agent skrl MAPPO: at 1,500
+  iterations on stairs it tracks at **0.58** against rsl-rl PPO's **1.39–1.41**,
+  with terrain level still 0, barely above the old critic's 0.56. The critic
+  mismatch and MAPPO = IPPO were real bugs, but not the cause. The exploration
+  noise collapses instead — skrl std **0.13** against rsl-rl's **0.42** at 1,500
+  iterations, after skrl's KL-adaptive learning rate hit its 1e-2 ceiling within
+  ~30 iterations. A noise A/B (`21338294`) splits std parameterisation from the
+  LR schedule. The grid stays held.
+- **Tier 3 PPO seed 0** (22 DoF, stairs, depth, arm deviation off): terrain level
+  **4.49**, episode length 386, tracking 1.16 (`21328743_0`). Seed 1 is queued as
+  `21338295`.
 - **Pointed down, full-width stereo does not fail.** The corrected 16×16 arm
   lands at terrain level **0.877 / 0.560 / 0.886** (mean 0.774) against 0.021 as
   published — inside blind's 0.55–1.04. The "width effect" was the upward
@@ -129,10 +133,12 @@ Diagnostics that ran once, proved a point and were deleted are in
    `(0.707, 0, 0, −0.707)` is a −90° roll. The fix is `native_quat` on the intended
    `(w, x, y, z)` yaw, plus a spawn probe.
 4. **MARL**: first block done at n=3 — limb2's lead did not replicate. Tier 1's
-   grid is **paused**: its critic lacked the privileged observations PPO's critic
-   has, and MAPPO equalled IPPO. The critic A/B (`21330372`) comes first, then a
-   re-gate and the grid again. Tier 3's PPO row runs (`21328743_0`); its skrl rows
-   are held for the same reason.
+   grid is **paused**: no skrl setup has yet learned to walk to the command on
+   stairs. The privileged-critic fix did not close the gap (`21330392`); the noise
+   A/B (`21338294`) is next. If skrl cannot be made to match rsl-rl's PPO on the
+   one-agent control, the limb split moves into rsl-rl as a factorised actor
+   instead. Tier 3 PPO: seed 0 done at 4.49, seed 1 queued (`21338295`); its skrl
+   rows stay held.
 5. **Put B3's ice where the robots are**: patches at the terrain origins, or moved
    to `env_origins` at reset, on tiles flat enough that a flush patch stays flush;
    re-probe with `scripts/bench/ice_placement_probe.py`; then the B3 PPO arms and
@@ -258,7 +264,7 @@ rather than reshaped to fit.
 | 2 | `21234053` | **exit 0, clip written** |
 | 1 | `21233950`, `21233969` | 45-into-301: depth appended in the wrong place, before the controller's own assembly |
 
-### B5 maze — stereo re-run with the cameras pointing down · `running` — queued 2026-09-13
+### B5 maze — stereo re-run with the cameras pointing down · `done` — n=3, 2026-09-15
 **Every stereo number in the two B5 entries below was measured with the stereo
 pair looking 20° up, upside down.** The pose `(0.9848, 0, 0.1736, 0)` is 20° of
 down-pitch in Isaac Lab 2.3.2's `(w, x, y, z)`. B5 trains on the v60 stack, and
@@ -308,16 +314,29 @@ job left its lock behind for ten minutes).
 seed inside blind's 0.55–1.04. The "width effect" (0.021 at 16×16 against 1.124 at
 4×4) was the camera pointing at the sky, not the width drowning proprioception.
 
-**Pooled arms, pointed down, so far** (same statistic): 4×4 an eye **1.286 /
-1.340** at seeds 0 and 1 (published, upward camera: 1.027 / 1.139 / 1.207), and
-4×4 + lidar **1.079** at seed 2 (published 1.203 / 0.972 / 1.170). 4×4 seed 2 and
-4×4 + lidar seeds 0–1 are running; their curves sit near 0 at ~2,000
-iterations, which is where every finished B5 run also sat before climbing.
+**All three stereo arms, pointed down, n=3 — final** (mean of the last 50 of 6,000
+iterations, event files):
+
+| arm | seed 0 | seed 1 | seed 2 | mean | as published (upward camera) |
+|---|---:|---:|---:|---:|---:|
+| blind (control) | 0.545 | 0.634 | 1.037 | 0.738 | — |
+| lidar | 0.794 | 0.814 | 0.971 | 0.860 | — |
+| stereo 16×16 | 0.877 | 0.560 | 0.886 | 0.774 | 0.021 |
+| **stereo 4×4** | **1.286** | **1.340** | **1.237** | **1.288** | 1.124 |
+| stereo 4×4 + lidar | 1.063 | 1.065 | 1.079 | 1.069 | 1.115 |
+
+- **Pooled stereo beats blind cleanly**: every 4×4 seed (≥ 1.237) sits above
+  blind's best (1.037), +75% on the mean. Published, the ranges touched.
+- **Width still matters, far less than published**: 16×16 is below 4×4 in every
+  seed (≤ 0.886 against ≥ 1.237), but it trains like blind rather than failing.
+- **Adding lidar to pooled stereo costs**: 4×4 + lidar is below 4×4 alone in
+  every seed (≤ 1.079 against ≥ 1.237), −17% on the mean. Published, it "added
+  nothing".
 
 | # | id | outcome |
 |---|---|---|
 | 4 | `21329137` | **clip COMPLETED** (4:09, cn-gpu6, dgxh-1 excluded for Vulkan) — `mazefix-stereo-s0` through the camera-sensor recorder, 200 frames, with the corrected left eye and a raw-tuple eye dumped per frame (`train_play.py --clip-sensors stereo_l --clip-raw-stereo`); `docs/gifs/isaac/maze_stereo_fixed.gif`. The long pending jobs were niced for ten minutes so it could take the next slot, then restored |
-| 3 | `21317023`, `21317024`, `21317025` | seeds 0 / 1 / 2, `--array=2,5,6%1` (16×16, 4×4, 4×4 + lidar), 16 h limit, 2,048 envs as before — **16×16 COMPLETED in all three** (8:42, 5:41, 5:42); 4×4 seeds 0–1 COMPLETED (8:35, 9:08) and 4×4 + lidar seed 2 COMPLETED (9:12); 4×4 seed 2 and 4×4 + lidar seeds 0–1 running |
+| 3 | `21317023`, `21317024`, `21317025` | seeds 0 / 1 / 2, `--array=2,5,6%1` (16×16, 4×4, 4×4 + lidar), 16 h limit, 2,048 envs as before — **9 of 9 COMPLETED** (5:41–9:57); table above |
 | 2 | `21317022` | **STEREO-PITCH PASS** (0:54) — table above |
 
 ### B5 maze — stereo pooling sweep · `retracted` for every stereo arm — the pair looked up (entry above); blind and lidar stand
@@ -629,6 +648,12 @@ starts. v1 accepted those sweeps.
 
 | # | id | outcome |
 |---|---|---|
+| 48 | `21338293` | queued, afterany `21338292` — **C2 free base, jacket cloth**, 4 eps (`isaac_c2_jacket.json`) |
+| 47 | `21338292` | queued, afterany `21338291` — **C2 free base, sock cloth**, 4 eps (`isaac_c2_sock.json`) |
+| 46 | `21338291` | queued, afterany `21338290` — C2F jacket cloth (pinned), 4 eps, trace (`isaac_c2f_jacket.json`) |
+| 45 | `21338290` | queued, afterany `21338289` — C2F sock cloth (pinned), 4 eps, trace (`isaac_c2f_sock.json`) |
+| 44 | `21338289` | queued, afterany `21338288` — **C2 free base, shirt cloth**: balance v2, one-way coupling, scripted sweep, 4 eps, trace (`isaac_c2_shirt.json`) |
+| 43 | `21338288` | queued — C2 free base, arm held still, 2 eps, trace (`isaac_c2_hold.json`): does the balance controller stand in Newton, whose cloth scene steps at 60 Hz? (In MuJoCo at 60 Hz control: 6/6 standing, worst tilt 4.5° with the arm sweeping.) All six on `0374cb7`, where one-way coupling is the default |
 | 42 | `21330405` | **COMPLETED — the free-standing robot sorts the shirt on camera, in two sweeps**: the first leaves it at the table's edge, the second, re-planned from where it lay, drops it in the basket. 192 frames. Published: `docs/gifs/isaac/cloth_sort_free_base_shirt.gif` |
 | 41 | `21330404` | **COMPLETED — free-base jacket, balance v2: 8 of 8**, each with its first sweep, no falls |
 | 40 | `21330403` | **COMPLETED — free-base sock, balance v2: 8 of 8**, 1.25 sweeps, no falls, 0% refused |
@@ -1050,7 +1075,41 @@ Found while reading these:
 | 2 | `21302171` | seed 1 — **5 of 5 COMPLETED** (4:59–6:09); same limit cut |
 | 1 | `21302170` | **smoke 5/5 COMPLETED** (1:17–1:20; seed 99, 3 iterations) — each skrl row ran 72 of 72 timesteps, PPO logged 3 iterations at episode length 17.9 |
 
-### Tier 1 MARL grid — biped, left leg | right leg · `paused` — the skrl critic lacked PPO's privileged observations, 2026-09-14
+### Tier 1 MARL grid — biped, left leg | right leg · `paused` — skrl does not yet learn to walk on stairs; not the critic, 2026-09-15
+**Critic A/B, 1,500 iterations on stairs + depth, matched iterations, event files
+(2026-09-15).** Velocity-tracking reward at iterations 300 / 600 / 1,200 / 1,500:
+
+| arm | 300 | 600 | 1,200 | 1,500 | terrain level at 1,500 | episode length |
+|---|---:|---:|---:|---:|---:|---:|
+| rsl-rl PPO, seeds 0 / 1 / 2 | 0.46–0.48 | 0.74–0.89 | 1.34–1.36 | **1.39–1.41** | 0.97–1.12 | 457 |
+| skrl MAPPO, one agent, **privileged** critic (`21330392`) | 0.53 | 0.56 | 0.57 | **0.58** | 0.000 | 433 |
+| skrl IPPO, one agent, old policy-obs critic (`21330372_1`) | 0.47 | 0.52 | 0.54 | 0.56 | 0.000 | 399 |
+| skrl MAPPO, legs2, privileged critic (`21330372_2`) | 0.41 | 0.44 | 0.49 | 0.49 | 0.000 | 370 |
+
+**The critic was not the cause.** With PPO's critic, the one-agent skrl control
+tracks at 0.58, where PPO is at 1.40; the critic moves it by 0.02. It learns to
+survive and then stops improving, while PPO keeps climbing between iterations
+600 and 1,200. The curves that do differ are the exploration noise and the learning rate:
+
+| iteration | skrl std | rsl-rl std | skrl LR | rsl-rl LR |
+|---:|---:|---:|---:|---:|
+| ~32 | 0.89 | — | **1.0e-2** (its ceiling) | — |
+| ~150 | 0.41 | 0.63 (at 120) | 7.3e-4 | 1.3e-3 |
+| ~750 | 0.19 | 0.56 (at 600) | 2.6e-4 | 3.8e-4 |
+| 1,500 | **0.13** | **0.42** | 1.2e-4 | 2.6e-4 |
+
+skrl's `KLAdaptiveLR` adjusts once per update, against skrl's approximate KL.
+rsl-rl adjusts every mini-batch against the analytic Gaussian KL. skrl drove the
+rate to its 1e-2 ceiling in the first ~30 iterations, and the value loss spiked
+to 20. It also parameterises log-std, which Adam moves multiplicatively, where
+rsl-rl moves the std itself. The noise collapsed to a third of PPO's before the
+policy learned to walk. `21338294` splits the two suspects on the one-agent
+control: std as a direct parameter with the KL schedule, std direct with a
+fixed rate, and log-std with a fixed rate.
+
+The critic and MAPPO = IPPO findings below still stand as bugs fixed; they are
+just not what held learning back.
+
 **Stopped on the first stairs rows' curves, from the event files.** Seed 1's
 IPPO row finished all 144,000 timesteps; the three others were cut at 25–64%,
 already flat:
@@ -1113,7 +1172,7 @@ also checked inside `LimbMarlEnv` against the action term's own joint names.
 | 2 | `21328445`, `21328446` | **cancelled** — `DependencyNeverSatisfied` after the gate failed; their ice rows had been held first, pending `21328532` |
 | 1 | `21328444` | **FAIL, correctly** (9:50). (i)–(iii) pass on all 12 rows: 2 agents of 6, left and right hip first, observation 301 = state with depth, trainer matches. (iv) fails on 9: no terrain level in the event file, because Isaac Lab `.item()`s curriculum scalars and skrl logs only tensors. The three rough rows loaded the `loggable` fix mid-gate and passed (iv) |
 
-### Tier 3 — 22 DoF on stairs, depth, arm deviation off · `running` — PPO rows only; skrl rows held for the critic fix, 2026-09-14
+### Tier 3 — 22 DoF on stairs, depth, arm deviation off · `running` — PPO seed 0 done at 4.49, seed 1 queued; skrl rows held, 2026-09-15
 `Velocity-BHL-Arms-Stairs-Depth-v0` (`tasks/arms_terrain_env_cfg.py`): the arms
 robot on the biped stairs menu with the depth rung's camera and term, and
 `joint_deviation_shoulder` / `_elbow` cleared **in the task**. The first block
@@ -1132,6 +1191,7 @@ id absent rather than breaking every queued job that imports the registry.
 
 | # | id | outcome |
 |---|---|---|
+| 2 | `21328743_0`, `21338295` | **PPO seed 0 COMPLETED** (4:28): terrain level **4.493**, episode length 386, tracking 1.16 (last 50 iterations). Seed 1 resubmitted as `21338295`, since `21328744` waited on the held seed-0 skrl rows and was cancelled |
 | 1 | `21328742` → `21328743`, `21328744` | **G-T3 PASS, 3 of 3** (5:37): no shoulder or elbow deviation in any reward table, `joint_deviation_hip` present, observation 331 with depth (PPO's actor included), limb4's first joints the two shoulders and two hips, terrain level logged on the rsl-rl settings. Seed 0's PPO row running (`21328743_0`); both seeds' MAPPO and limb1 rows held (`21328743_1`–`_2`, `21328744`) until the critic A/B, since they share the grid's critic |
 
 ### Tier 1 / 2 / 3 MARL rows · `todo` — Tier 2 and Tier 1's PPO rows already exist; Tier 1's MARL rows and Tier 3 on stairs are queued (above)
@@ -1980,6 +2040,8 @@ came from.
 | `21329137` | B5 corrected-stereo clip with before/after eye panels |
 | `21330372` | MARL critic A/B — limb1 privileged, limb1 policy-obs, legs2 MAPPO privileged; stairs, 1,500 iterations |
 | `21330392` | critic A/B arm 0 again, limb1 + MAPPO privileged — `_0` of `21330372` died at step 0 |
+| `21338294` | MARL noise A/B — std parameterisation × LR schedule on the one-agent control, stairs, 1,500 iterations |
+| `21338295` | Tier 3 PPO seed 1 (resubmitted; `21328744` cancelled — its dependency on the held seed-0 skrl rows could never clear) |
 | `21300299`, `21300300`, `21300301` | cloth redesign: rigid smoke, Isaac C0 scripted (boot crash), C1 training smoke |
 | `21300348`, `21300493`, `21300494` | cloth redesign: C0 free base, C0 fixed base, C0 fixed-base clip |
 | `21300603`, `21300604`, `21300605` | cloth redesign with hand colliders: fixed-base C0, its clip, free-base C0 |
