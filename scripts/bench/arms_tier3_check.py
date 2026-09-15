@@ -58,15 +58,15 @@ def reward_table(text: str, problems: list[str]) -> None:
 
 def check_marl(text: str, repo: Path, part: str, problems: list[str]) -> None:
     m = re.search(r"\[marl-gate\] task=(\S+) partition=(\S+) n_dof=(\d+) agents=(\d+) "
-                  r"act=(\{.*?\}) obs=(\d+) state=(\d+) policy_terms=(\[.*?\]) joints=(\{.*\})", text)
+                  r"act=(\{.*?\}) obs=(\d+) state=(\d+) critic=(\w+) policy_terms=(\[.*?\]) joints=(\{.*\})", text)
     if not m:
         problems.append("no [marl-gate] env line")
         return
-    _, got, n_dof, agents, act, obs, state, terms, joints = m.groups()
+    _, got, n_dof, agents, act, obs, state, critic, terms, joints = m.groups()
     want = LIMB4 if part == "limb4" else {"whole": 22}
     if got != part or int(n_dof) != 22 or ast.literal_eval(act) != want:
         problems.append(f"partition {got} n_dof {n_dof} act {act}")
-    if int(obs) != OBS or int(state) != OBS or "depth" not in ast.literal_eval(terms):
+    if int(obs) != OBS or int(state) != OBS + 3 or critic != "privileged" or "depth" not in ast.literal_eval(terms):
         problems.append(f"obs {obs} state {state} terms {terms}")
     if part == "limb4":
         j = ast.literal_eval(joints)

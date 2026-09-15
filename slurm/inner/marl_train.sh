@@ -16,7 +16,7 @@ ARGS=(--task "$TASK" --num_envs "$NUM_ENVS" --seed "$SEED"
 [ "${BHL_ABLATE_ARM_DEV:-0}" = "1" ] && ARGS+=(--ablate-arm-deviation)
 # The first block (run names marl-*) trained on skrl's default PPO settings; keep
 # those reproducible. Everything else reads the rsl-rl control's settings.
-case "$RUN_NAME" in marl-*) ARGS+=(--hparams skrl-default) ;; *) ARGS+=(--hparams rsl) ;; esac
+case "$RUN_NAME" in marl-*) ARGS+=(--hparams skrl-default --critic policy) ;; *) ARGS+=(--hparams rsl --critic privileged) ;; esac
 
 "$PY" scripts/train_marl.py "${ARGS[@]}" 2>&1 | tee "$LOG"
 rc=${PIPESTATUS[0]}

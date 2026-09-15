@@ -10,8 +10,10 @@ to TensorBoard*, and passes only if, for every row:
   (ii)  the algorithm reached the trainer -- skrl built a MAPPO or IPPO object
         matching the row, not the default;
   (iii) every agent sees the full single-agent policy observation, depth term
-        included, at the same width on all four terrains, and MAPPO's critic
-        state is that same vector;
+        included, at the same width on all four terrains, and the critic state is
+        the env's privileged critic group -- the policy terms plus base linear
+        velocity, 3 wider -- as rsl-rl's PPO critic reads (21328607/8 plateaued
+        without it);
   (iv)  training progressed (48 of 48 timesteps) and the event file carries
         `Info / Curriculum/terrain_levels` -- the work order's primary metric,
         which no skrl run logged before `environment_info="log"` and the
@@ -60,12 +62,12 @@ def check(log: Path, repo: Path) -> tuple[bool, str, int | None]:
     problems = []
 
     m = re.search(r"\[marl-gate\] task=(\S+) partition=(\S+) n_dof=(\d+) agents=(\d+) "
-                  r"act=(\{.*?\}) obs=(\d+) state=(\d+) policy_terms=(\[.*?\]) joints=(\{.*\})", text)
+                  r"act=(\{.*?\}) obs=(\d+) state=(\d+) critic=(\w+) policy_terms=(\[.*?\]) joints=(\{.*\})", text)
     obs = None
     if not m:
         problems.append("no [marl-gate] env line (env never built)")
     else:
-        _, got_part, n_dof, agents, act, obs, state, terms, joints = m.groups()
+        _, got_part, n_dof, agents, act, obs, state, critic, terms, joints = m.groups()
         obs, state = int(obs), int(state)
         if got_part != part:
             problems.append(f"partition {got_part} != {part}")
@@ -75,8 +77,8 @@ def check(log: Path, repo: Path) -> tuple[bool, str, int | None]:
             problems.append(f"agents {agents} act {act} != {n_agents} {widths}")
         if "depth" not in ast.literal_eval(terms):
             problems.append(f"no depth term in policy obs {terms}")
-        if obs != state:
-            problems.append(f"obs {obs} != state {state}")
+        if critic != "privileged" or state != obs + 3:
+            problems.append(f"critic {critic} state {state}, want privileged {obs + 3}")
         j = ast.literal_eval(joints)
         if part == "legs2" and (j.get("leg_left", [""])[0] != "leg_left_hip_roll_joint"
                                 or j.get("leg_right", [""])[0] != "leg_right_hip_roll_joint"):

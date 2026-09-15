@@ -932,6 +932,16 @@ standing. Splitting along that seam helps; splitting further does not.
 > 74–80 steps; rsl-rl PPO on the same task survives ~225. The Tier 1 grid now
 > queued reads the rsl-rl settings from the task's own config.
 >
+> **And the MAPPO and IPPO rows were the same algorithm** (found 2026-09-14).
+> Every agent receives the full observation, and the wrapper handed MAPPO's
+> centralised critic that same observation as its "global state". So limb4 +
+> MAPPO against limb4 + IPPO (2.17 against 1.82) is two seeds' worth of one
+> method, and the work order's MAPPO-versus-IPPO question has not been asked
+> yet. Neither critic got the base linear velocity rsl-rl's critic reads. On the
+> Tier 1 stairs rows that capped velocity tracking at 0.53 against PPO's 1.52,
+> and they never left terrain level 0; that grid is paused while the critic fix
+> is A/B-tested.
+>
 > The original PPO control is not in the table: it routes through rsl-rl while
 > every MARL row routes through skrl, so it prices the RL library as well as the
 > factorisation. `limb1` replaced it — one agent owning every joint under the

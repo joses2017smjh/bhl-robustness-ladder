@@ -55,7 +55,8 @@ class LimbMarlEnv:
     `step` taking `{agent: action}`.
     """
 
-    def __init__(self, env, partition: str = "limb4", share_obs: bool = True):
+    def __init__(self, env, partition: str = "limb4", share_obs: bool = True,
+                 critic: str = "privileged"):
         self.env = env
         self.kind = partition
         # Size the partition to the asset in use: 22 DoF with welded hands, 24
@@ -69,8 +70,12 @@ class LimbMarlEnv:
         self._n_act = {a: len(i) for a, i in self.partition.items()}
         self.joint_names = self._action_joint_names()
         self._check_semantics()
+        if critic not in ("privileged", "policy"):
+            raise ValueError(f"critic must be 'privileged' or 'policy', got {critic!r}")
+        self.critic = critic
         obs, _ = self.env.reset()
         self._obs_dim = int(self._policy(obs).shape[-1])
+        self._state_dim = int(self._state_of(obs).shape[-1])
 
     # ------------------------------------------------------------ semantics
 
@@ -115,6 +120,23 @@ class LimbMarlEnv:
     def _policy(obs) -> torch.Tensor:
         return obs["policy"] if isinstance(obs, dict) else obs
 
+    def _state_of(self, obs) -> torch.Tensor:
+        """What a centralised critic reads.
+
+        `privileged` is the env's `critic` group -- the policy terms uncorrupted,
+        plus base linear velocity -- which is exactly what rsl-rl's PPO critic
+        reads. The first version handed MAPPO the noisy *policy* observation,
+        which is also what every IPPO critic already sees (agents share the full
+        observation), so MAPPO and IPPO were the same algorithm, and both critics
+        lacked the velocity a velocity-tracking value needs. On stairs every such
+        row plateaued at 0.53 tracking reward against PPO's 1.52 and never left
+        terrain level 0 (21328607/8). `policy` keeps that behaviour for replaying
+        the first block.
+        """
+        if self.critic == "privileged" and isinstance(obs, dict) and "critic" in obs:
+            return obs["critic"]
+        return self._policy(obs)
+
     @property
     def unwrapped(self):
         return self.env.unwrapped
@@ -153,13 +175,14 @@ class LimbMarlEnv:
 
     @property
     def num_states(self) -> int:
-        """State handed to a centralised critic.
+        """Width of the state handed to a centralised critic (see `_state_of`).
 
-        The full policy observation, which is the same information the
-        single-agent baseline's privileged critic already receives. Giving MAPPO
-        *more* than that would confound the algorithm with the information.
+        This used to claim the policy observation "is the same information the
+        single-agent baseline's privileged critic already receives". It is not:
+        rsl-rl's critic reads the `critic` group, which adds base linear velocity
+        and drops the noise. Matching that is what makes PPO a valid control.
         """
-        return self._obs_dim
+        return self._state_dim
 
     # ------------------------------------------------------------ interface
 
@@ -176,7 +199,7 @@ class LimbMarlEnv:
 
     def reset(self, **kw):
         obs, info = self.env.reset(**kw)
-        self._last = self._policy(obs)
+        self._last = self._state_of(obs)
         self.agents = list(self.possible_agents)
         return self._fan_out(obs), info
 
@@ -185,7 +208,7 @@ class LimbMarlEnv:
         obs, rew, term, trunc, info = self.env.step(joined)
         if isinstance(info, dict) and "log" in info:
             loggable(info["log"], self.device)
-        self._last = self._policy(obs)
+        self._last = self._state_of(obs)
         o = self._fan_out(obs)
         # One team reward and one shared done, copied per agent -- each as
         # (num_envs, 1), not (num_envs,).

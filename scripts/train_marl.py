@@ -32,6 +32,10 @@ parser.add_argument("--hparams", type=str, default="rsl", choices=("rsl", "skrl-
                          "rsl-rl runner config, so a skrl row differs from the PPO control "
                          "only in the factorisation. skrl-default: what the first block "
                          "(marl-* runs, 2026-08/09) trained with, kept to reproduce it.")
+parser.add_argument("--critic", type=str, default="privileged", choices=("privileged", "policy"),
+                    help="what MAPPO's centralised critic reads: the env's critic group, as "
+                         "rsl-rl's PPO critic does (privileged), or the policy observation "
+                         "every IPPO critic already has (policy; the first block)")
 parser.add_argument("--rollouts", type=int, default=None, help="override the hparam set")
 parser.add_argument("--learning-rate", type=float, default=None, help="override the hparam set")
 parser.add_argument("--write-interval", type=int, default=60,
@@ -163,7 +167,7 @@ def main() -> None:
                              "train with an unablated arm penalty")
 
     base = gym.make(args_cli.task, cfg=cfg, disable_env_checker=True)
-    env = LimbMarlEnv(base, partition=args_cli.partition)
+    env = LimbMarlEnv(base, partition=args_cli.partition, critic=args_cli.critic)
     device = env.device
     policy_terms = list(base.unwrapped.observation_manager.active_terms.get("policy", []))
     print(f"[marl] {args_cli.algo} on {args_cli.partition}: "
@@ -173,7 +177,7 @@ def main() -> None:
     print(f"[marl-gate] task={args_cli.task} partition={args_cli.partition} "
           f"n_dof={env.n_dof} agents={len(env.possible_agents)} "
           f"act={env.num_actions} obs={env.num_observations[env.possible_agents[0]]} "
-          f"state={env.num_states} policy_terms={policy_terms} "
+          f"state={env.num_states} critic={args_cli.critic} policy_terms={policy_terms} "
           f"joints={ {a: [env.joint_names[i] for i in idx][:1] for a, idx in env.partition.items()} }",
           flush=True)
 
