@@ -13,9 +13,10 @@
 > **A knee-1.0 stance with a leg controller designed in MuJoCo stands in Isaac**, and with
 > the layout raised to it **the free-standing robot sorts jacket proxies 8 of 8 and socks
 > 7 of 8, with no falls — but shirts only 1 of 8**, with 3 falls. The shirt is where the arm
-> reaches furthest forward, and the base tilts 7–8° under it. The first cloth rung (C2) is
-> void so far: Newton goes NaN when the hand pushes the cloth. End-to-end deformable RL
-> stays rejected.
+> reaches furthest forward, and the base tilts 7–8° under it. **The first cloth rung sorts
+> on the pinned base: one 8×8 Newton cloth, 4 of 4** — with one-way cloth-to-arm coupling,
+> because two-way coupling went NaN whenever the hand pushed the cloth. End-to-end
+> deformable RL stays rejected.
 
 This is an evidence-driven redesign. G-C1 answered that Newton cloth cannot
 carry the training workload. The research question moved with that measurement:
@@ -347,6 +348,13 @@ every height — the table, the fingertip table, the arm's root — rises with t
 | sock | **free** (`21329261`) | **7/8** | 0 | 1.1 | 29% |
 | shirt | **free** (`21329260`) | 1/8 | 3 | 2.0 | 39% |
 
+<p align="center">
+  <img src="gifs/isaac/cloth_sort_free_base_jacket.gif" width="440" alt="Isaac Sim: the free-standing humanoid in a knee-bent stance reaches to the table, sweeps the dark jacket proxy off its back edge, and the jacket lands in the grey jackets basket.">
+</p>
+
+`21329392`: the free-standing robot, legs balancing it, sorts the jacket proxy with one
+sweep. A rigid box, not cloth; the frames are brightened because the jacket is near-black.
+
 The shirt's basket is off the table's front edge, so its push has the arm reaching
 furthest forward. In its trace the base tilts 7–8° on every approach, and the fingertip
 lands 21 mm (mean) off its plan, against 1.4 mm on the pinned base. The MuJoCo model says
@@ -363,7 +371,11 @@ state went NaN mid-sweep (`21328765`, t = 2.83 s). A success in a blown-up simul
 a sort. The eval now reports `success_rate_finite`. Larger MuJoCo-Warp constraint buffers
 did not stop the NaN (`21328911`), and a still arm stays finite (`21328912`). Onset is always
 at the sample where the hand first moves the cloth, which points at the two-way
-cloth-to-arm coupling; a one-way run is queued (`21329213`).
+cloth-to-arm coupling. **With one-way coupling and nothing else changed, the cloth sorts 4 of
+4 with every step finite** (`21329265`). In the trace it moves only during the sweep and
+settles in the shirts basket. That is C2 on a pinned base, under a stated approximation: the
+rigid solver does not feel the cloth, so a 16 g cloth cannot push back on the arm. Under
+Newton the arm tracked at 38 mm mean, against PhysX's 1.4.
 
 **Quaternion order.** Isaac Lab 3.0 stores quaternions `(x, y, z, w)`; 2.x stored
 `(w, x, y, z)`, and every literal and hand-written unpack in this repo assumed the

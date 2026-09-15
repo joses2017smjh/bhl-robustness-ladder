@@ -107,10 +107,10 @@ Diagnostics that ran once, proved a point and were deleted are in
    (2/2 with the arm still, 3/4 through six sweeps). The layout is raised to that
    stance (`a4f438b`), and on it **the free-standing robot sorts jacket 8/8 and sock
    7/8, shirt 1/8.** Left: the shirt, via stiffer ankle gains and the arm's
-   centre-of-mass feedforward, then online arm correction from the base pose; C2 on
-   the fixed base, void so far because Newton goes NaN when the hand pushes the
-   cloth (one-way coupling test `21329265`); then the sequential five-garment scene
-   in Isaac, C1 training, and C3–C5.
+   centre-of-mass feedforward, then online arm correction from the base pose. **C2
+   on the fixed base sorts 4/4 with one-way cloth coupling** (two-way goes NaN); next
+   are C2 on the free base and sock/jacket cloth. Then the sequential five-garment
+   scene in Isaac, C1 training, and C3–C5.
 2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
    sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
    designs. *Before that, the terrain rung's stereo arms finish re-running with
@@ -585,6 +585,15 @@ because the body moves to counterbalance the arm and tilt changes the hand's hei
 centimetres against a 3 mm contact clearance. Placing the hand precisely on a free base
 means correcting the arm online from the measured base pose.
 
+**The first valid cloth sort: C2F with one-way coupling, 4 of 4 (row 37).** One 8×8 Newton
+cloth shirt, pinned base, scripted sweep. The only change against the void runs is
+`coupling_mode="one_way"`: the rigid solver no longer feels particle contacts, so the
+cloth cannot push back on the arm. For a 16 g cloth that force is small, but this is a
+physics approximation and is labelled as one wherever the result is cited. In the trace
+the cloth moves only during the sweep and settles in its basket. Under Newton the arm
+tracks at 38 mm mean, where PhysX gave 1.4 mm; the feedforward was calibrated on PhysX
+drives, and the sweep delivered the cloth anyway.
+
 **C2F diagnosis.** Larger MuJoCo-Warp buffers do not stop the NaN (row 26); a still arm
 stays finite (row 27). Onset is at the sample where the hand first moves the cloth, in
 every run. That points at the two-way cloth-to-rigid coupling. Row 31 changes only that,
@@ -606,8 +615,8 @@ starts. v1 accepted those sweeps.
 
 | # | id | outcome |
 |---|---|---|
-| 38 | `21329392` | queued, afterany `21329265` — clip, **free base, jacket**, stance layout (`results/clips/frames/cloth_c0_stance_jacket`), excludes dgxh-1 |
-| 37 | `21329265` | queued, afterany `21329264` — C2F with `BHL_NEWTON_COUPLING=one_way`, nothing else changed against rows 24/26 (the stance change leaves a pinned arm's geometry as it was), 4 eps, trace (`isaac_c2f_v3_oneway.json`) |
+| 38 | `21329392` | **COMPLETED — the free-standing robot sorts the jacket on camera**, 59 frames, cn-gpu7. Published: `docs/gifs/isaac/cloth_sort_free_base_jacket.gif` (brightened; the jacket proxy is near-black) |
+| 37 | `21329265` | **COMPLETED — C2F with one-way coupling: 4 of 4 sorted, all finite** (`success_rate_finite` 1.00). Trace: the cloth first moves at 2.83 s, inside the sweep, and lies in the shirts basket at z 0.008 by 3.5 s. Arm tracking under Newton was 38 mm mean |
 | 36 | `21329264` | CANCELLED before it started — shirt is the garment that mostly fails on the free base, so the clip became the jacket (row 38) |
 | 35 | `21329263` | **COMPLETED — fixed base, shirt, on the stance layout: 8 of 8**, each with its first sweep. Matches rows 20–22, as it should: the arm's geometry against the table is unchanged |
 | 34 | `21329262` | **COMPLETED — free base, jacket: 8 of 8**, no falls, 1.1 sweeps to success, 0% refused |
