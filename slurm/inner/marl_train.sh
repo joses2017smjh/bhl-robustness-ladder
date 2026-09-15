@@ -30,12 +30,18 @@ rc=${PIPESTATUS[0]}
 # within one requeue of throwing away eighteen GPU-hours of finished work. A
 # guard that reports a false negative is as expensive as one that reports a
 # false positive; it just fails in the other direction.
-if grep -qE "Learning iteration|iteration [0-9]+/|[0-9]+/[0-9]+ \[[0-9]" "$LOG"; then
-    echo "marl_train.sh: training produced progress output"
-elif ls -d "$REPO"/logs/skrl/marl/*"${RUN_NAME}"* >/dev/null 2>&1; then
-    echo "marl_train.sh: no progress line matched, but skrl wrote a run directory"
+# Judge the run by its last progress count, which must equal its total. The
+# first version passed on any tqdm line or on the run directory -- and skrl
+# prints "0/N [" and makes that directory before its first step, so a run that
+# died at step 0 (21330372_0, KeyError) was reported COMPLETED. The one before it
+# grepped only rsl-rl's wording and failed three finished six-hour runs. Both
+# directions cost a day; the count is the evidence.
+last=$(grep -aoE "[0-9]+/[0-9]+ \[" "$LOG" | tail -1 || true)
+n=${last%%/*}; t=${last#*/}; t=${t%% *}
+if [ -n "$last" ] && [ "$n" = "$t" ]; then
+    echo "marl_train.sh: training ran to ${last% [}"
 else
-    echo "marl_train.sh: FAILED -- no training progress and no run directory" >&2
+    echo "marl_train.sh: FAILED -- last progress '${last:-none}' is not the full run" >&2
     exit 1
 fi
 exit $rc

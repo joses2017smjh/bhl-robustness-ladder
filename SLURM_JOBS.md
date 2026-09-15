@@ -1062,6 +1062,16 @@ anything resumes: limb1 + privileged critic (should track like PPO), limb1 + the
 old critic, and legs2 MAPPO + privileged. The pending grid tasks are held, not
 cancelled.
 
+The limb1 arm died at step 0 and was reported COMPLETED (`21330372_0`, 0:52):
+skrl picks its single-agent loop when there is one agent, that loop never puts
+`shared_states` into infos, and MAPPO raised `KeyError`. The completion check
+passed it because skrl prints `0/36000 [` and creates its run directory before
+the first step, and the check accepted either. The wrapper now supplies
+`shared_states` / `shared_next_states` itself, and `marl_train.sh` (and the A/B
+script) pass a run only if its last progress count equals its total. The check
+still passes every finished row (`144000/144000`) and fails that arm.
+Resubmitted as `21330392`.
+
 The work order's Tier 1 rows (`slurm/89b_marl_terrain.sbatch`): MAPPO and IPPO on
 the 12-DoF biped split left leg | right leg (`legs2`), plus a limb1 single-agent
 control on every terrain, with ray-cast depth, 4,096 envs, 6,000 iterations,
@@ -1951,6 +1961,7 @@ came from.
 | `21328743`, `21328744` | Tier 3 on stairs — PPO, MAPPO limb4, limb1; seeds 0 and 1 |
 | `21329137` | B5 corrected-stereo clip with before/after eye panels |
 | `21330372` | MARL critic A/B — limb1 privileged, limb1 policy-obs, legs2 MAPPO privileged; stairs, 1,500 iterations |
+| `21330392` | critic A/B arm 0 again, limb1 + MAPPO privileged — `_0` of `21330372` died at step 0 |
 | `21300299`, `21300300`, `21300301` | cloth redesign: rigid smoke, Isaac C0 scripted (boot crash), C1 training smoke |
 | `21300348`, `21300493`, `21300494` | cloth redesign: C0 free base, C0 fixed base, C0 fixed-base clip |
 | `21300603`, `21300604`, `21300605` | cloth redesign with hand colliders: fixed-base C0, its clip, free-base C0 |

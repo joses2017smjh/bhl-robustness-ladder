@@ -205,10 +205,19 @@ class LimbMarlEnv:
 
     def step(self, actions: dict[str, torch.Tensor]):
         joined = reassemble_n(actions, self.partition, self.n_dof)
+        prev_state = self._last
         obs, rew, term, trunc, info = self.env.step(joined)
         if isinstance(info, dict) and "log" in info:
             loggable(info["log"], self.device)
         self._last = self._state_of(obs)
+        # skrl's multi-agent loop puts the centralised state into infos itself;
+        # its single-agent loop -- the one it picks when there is one agent --
+        # does not, and MAPPO then dies on KeyError 'shared_states' at step 0
+        # (21330372_0). limb1 + MAPPO is the control that has PPO's critic, so
+        # supply both here; the multi-agent loop overwrites them with the same.
+        if isinstance(info, dict):
+            info["shared_states"] = prev_state
+            info["shared_next_states"] = self._last
         o = self._fan_out(obs)
         # One team reward and one shared done, copied per agent -- each as
         # (num_envs, 1), not (num_envs,).
