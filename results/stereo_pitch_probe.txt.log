@@ -1,0 +1,235 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1789364651.953433 3248832 descriptor_database.cc:633] File already exists in database: grpc/health/v1/health.proto
+W0000 00:00:1789364651.957679 3248832 message.cc:301] Protobuf GeneratedMessageFactory: File is already registered: grpc/health/v1/health.proto
+Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaacsim/kit/data/Kit/IsaacLab/3.0/user.config.json'
+2026-09-14T05:44:08Z [Info] [carb] Logging to file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaacsim/kit/logs/Kit/IsaacLab/3.0/kit_20260913_224408.log
+2026-09-14T05:44:08Z [32ms] [Warning] [omni.ext.plugin] [ext: isaaclab_visualizers] Extensions config 'extension.toml' doesn't exist '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers' or '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers/config'
+2026-09-14T05:44:12Z [3,950ms] [Warning] [omni.perfmonitor.plugin]  PerfMonitorManager::onStart - error calling pthread_setaffinity_np
+2026-09-14T05:44:12Z [3,985ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2026-09-14T05:44:12Z [3,992ms] [Warning] [omni.rtx] CUDA_VISIBLE_DEVICES environment variable is set.
+2026-09-14T05:44:12Z [3,992ms] [Warning] [omni.rtx] Note CUDA device enumeration and Omniverse device enumeration are different.
+2026-09-14T05:44:12Z [3,992ms] [Warning] [omni.rtx] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 595.71.05     | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | Quadro RTX 8000                  | Yes: 0 |     | 78838   MB | 10de      | 0          |
+|     |                                  |        |     |            | 1e78      | deae60c2.. |
+|     |                                  |        |     |            | 48        |            |
+|=============================================================================================|
+| OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel: 5.14.0-611.55.1.el9_7.x86_64
+| Processor: Intel(R) Xeon(R) Gold 6248R CPU @ 3.00GHz
+| Cores: 48 | Logical Cores: 48
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 772476 | Free Memory: 718623
+| Total Page/Swap (MB): 0 | Free Page/Swap: 0
+|---------------------------------------------------------------------------------------------|
+2026-09-14T05:44:14Z [5,195ms] [Warning] [omni.rtx] ECC is enabled on physical device 0
+2026-09-14T05:44:18Z [9,425ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-09-14T05:44:18Z [9,425ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-09-14T05:44:18Z [9,689ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-09-14T05:44:18Z [9,689ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-09-14T05:44:18Z [9,691ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-09-14T05:44:18Z [9,691ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-09-14T05:44:19Z [10,718ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
+2026-09-14T05:44:19Z [10,718ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
+2026-09-14T05:44:20Z [11,320ms] [Warning] [omni.log] Source: omni.hydra was already registered.
+2026-09-14T05:44:24Z [15,868ms] [Warning] [pxr.Semantics] pxr.Semantics is deprecated - please use Semantics instead
+2026-09-14T05:44:26Z [17,911ms] [Warning] [omni.replicator.core.scripts.extension] No material configuration file, adding configuration to material settings directly.
+2026-09-14T05:44:30Z [21,469ms] [Warning] [omni.rtx] Trying to initialize NGX without vkGetInstanceProcAddr and vkGetDeviceProcAddr pointer-to-functions.
+2026-09-14T05:44:30Z [21,469ms] [Error] [omni.rtx] Could not get NGX parameters block because NGX isn't enabled.
+2026-09-14T05:44:30Z [21,469ms] [Error] [omni.rtx] Failed to create NGX context.
+[ISAACLAB] AppLauncher initialization complete
+[INFO]: Base environment:
+	Environment device    : cuda:0
+	Environment seed      : None
+	Physics step-size     : 0.005
+	Rendering step-size   : 0.02
+	Environment step-size : 0.04
+[INFO]: Registered backend 'physx' for factory Articulation.
+[INFO] Generating terrains based on curriculum took Last: 1.633725 s
+[INFO]: Registered backend 'physx' for factory FrameView.
+[INFO]: Registered backend 'physx' for factory ContactSensor.
+[INFO]: Registered backend 'physx' for factory RayCasterCamera.
+[INFO]: Physics scene prim path: /physicsScene
+[INFO]: Time taken for scene creation Last: 3.436299 s, Mean: 3.436299 s, Std: 0.000000 s, N: 1
+[INFO]: Scene manager:  <class InteractiveScene>
+	Number of environments: 8
+	Environment spacing   : 2.5
+	Source prim name      : /World/envs/env_0
+	Global prim paths     : ['/World/ground']
+	Replicate physics     : True
+[INFO]: Simulation parameters for joints in /World/envs/env_.*/robot:
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                        Simulation Joint Information (Prim path: /World/envs/env_.*/robot)                                                        |
++-------+-----------------------------+-----------+---------+----------+-----------------+------------------+------------------+-----------------+-----------------+---------------+
+| Index | Name                        | Stiffness | Damping | Armature | Static Friction | Dynamic Friction | Viscous Friction | Position Limits | Velocity Limits | Effort Limits |
++-------+-----------------------------+-----------+---------+----------+-----------------+------------------+------------------+-----------------+-----------------+---------------+
+|   0   | leg_left_hip_roll_joint     |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.175, 1.571] |      15.000     |     6.000     |
+|   1   | leg_right_hip_roll_joint    |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.571, 0.175] |      15.000     |     6.000     |
+|   2   | leg_left_hip_yaw_joint      |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.982, 0.589] |      15.000     |     6.000     |
+|   3   | leg_right_hip_yaw_joint     |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.589, 0.982] |      15.000     |     6.000     |
+|   4   | leg_left_hip_pitch_joint    |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.898, 0.982] |      15.000     |     6.000     |
+|   5   | leg_right_hip_pitch_joint   |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.898, 0.982] |      15.000     |     6.000     |
+|   6   | leg_left_knee_pitch_joint   |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.000, 2.443] |      15.000     |     6.000     |
+|   7   | leg_right_knee_pitch_joint  |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.000, 2.443] |      15.000     |     6.000     |
+|   8   | leg_left_ankle_pitch_joint  |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785] |      15.000     |     6.000     |
+|   9   | leg_right_ankle_pitch_joint |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785] |      15.000     |     6.000     |
+|   10  | leg_left_ankle_roll_joint   |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262] |      15.000     |     6.000     |
+|   11  | leg_right_ankle_roll_joint  |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262] |      15.000     |     6.000     |
++-------+-----------------------------+-----------+---------+----------+-----------------+------------------+------------------+-----------------+-----------------+---------------+
+[INFO]: Read mesh prim: /World/ground/terrain/mesh with 1312232 vertices and 7680024 faces.
+[INFO]: Time taken for simulation start Last: 13.023239 s, Mean: 13.023239 s, Std: 0.000000 s, N: 1
+[INFO] Command Manager:  <CommandManager> contains 1 active terms.
++------------------------------------------------+
+|              Active Command Terms              |
++-------+---------------+------------------------+
+| Index | Name          |          Type          |
++-------+---------------+------------------------+
+|   0   | base_velocity | UniformVelocityCommand |
++-------+---------------+------------------------+
+
+[INFO] Event Manager:  <EventManager> contains 2 active terms.
++--------------------------------------------+
+|   Active Event Terms in Mode: 'startup'    |
++-------+------------------------------------+
+| Index | Name                               |
++-------+------------------------------------+
+|   0   | physics_material                   |
+|   1   | add_base_mass                      |
+|   2   | add_all_joint_default_pos          |
+|   3   | scale_all_actuator_torque_constant |
++-------+------------------------------------+
++---------------------------------------+
+|  Active Event Terms in Mode: 'reset'  |
++--------+------------------------------+
+| Index  | Name                         |
++--------+------------------------------+
+|   0    | reset_base                   |
+|   1    | reset_robot_joints           |
+|   2    | base_external_force_torque   |
++--------+------------------------------+
+
+[INFO] Recorder Manager:  <RecorderManager> contains 0 active terms.
++---------------------+
+| Active Recorder Terms |
++-----------+---------+
+|   Index   | Name    |
++-----------+---------+
++-----------+---------+
+
+[INFO]: Resolved joint names for the action term JointPositionAction: ['leg_left_hip_roll_joint', 'leg_left_hip_yaw_joint', 'leg_left_hip_pitch_joint', 'leg_left_knee_pitch_joint', 'leg_left_ankle_pitch_joint', 'leg_left_ankle_roll_joint', 'leg_right_hip_roll_joint', 'leg_right_hip_yaw_joint', 'leg_right_hip_pitch_joint', 'leg_right_knee_pitch_joint', 'leg_right_ankle_pitch_joint', 'leg_right_ankle_roll_joint'] [[0, 2, 4, 6, 8, 10, 1, 3, 5, 7, 9, 11]]
+[INFO] Action Manager:  <ActionManager> contains 1 active terms.
++------------------------------------+
+|  Active Action Terms (shape: 12)   |
++--------+-------------+-------------+
+| Index  | Name        |   Dimension |
++--------+-------------+-------------+
+|   0    | joint_pos   |          12 |
++--------+-------------+-------------+
+
+[INFO] Observation Manager: <ObservationManager> contains 2 groups.
++---------------------------------------------------------+
+| Active Observation Terms in Group: 'policy' (shape: (77,)) |
++-----------+---------------------------------+-----------+
+|   Index   | Name                            |   Shape   |
++-----------+---------------------------------+-----------+
+|     0     | velocity_commands               |    (3,)   |
+|     1     | base_ang_vel                    |    (3,)   |
+|     2     | projected_gravity               |    (3,)   |
+|     3     | joint_pos                       |   (12,)   |
+|     4     | joint_vel                       |   (12,)   |
+|     5     | actions                         |   (12,)   |
+|     6     | stereo_l                        |   (16,)   |
+|     7     | stereo_r                        |   (16,)   |
++-----------+---------------------------------+-----------+
++---------------------------------------------------------+
+| Active Observation Terms in Group: 'critic' (shape: (80,)) |
++-----------+---------------------------------+-----------+
+|   Index   | Name                            |   Shape   |
++-----------+---------------------------------+-----------+
+|     0     | velocity_commands               |    (3,)   |
+|     1     | base_ang_vel                    |    (3,)   |
+|     2     | projected_gravity               |    (3,)   |
+|     3     | joint_pos                       |   (12,)   |
+|     4     | joint_vel                       |   (12,)   |
+|     5     | actions                         |   (12,)   |
+|     6     | stereo_l                        |   (16,)   |
+|     7     | stereo_r                        |   (16,)   |
+|     8     | base_lin_vel                    |    (3,)   |
++-----------+---------------------------------+-----------+
+
+[INFO] Termination Manager:  <TerminationManager> contains 2 active terms.
++-------------------------------------+
+|       Active Termination Terms      |
++-------+------------------+----------+
+| Index | Name             | Time Out |
++-------+------------------+----------+
+|   0   | time_out         |   True   |
+|   1   | base_orientation |  False   |
++-------+------------------+----------+
+
+[INFO] Reward Manager:  <RewardManager> contains 15 active terms.
++---------------------------------------------+
+|             Active Reward Terms             |
++-------+----------------------------+--------+
+| Index | Name                       | Weight |
++-------+----------------------------+--------+
+|   0   | track_lin_vel_xy_exp       |    2.0 |
+|   1   | track_ang_vel_z_exp        |    1.0 |
+|   2   | termination_penalty        |  -10.0 |
+|   3   | lin_vel_z_l2               |   -0.1 |
+|   4   | ang_vel_xy_l2              |  -0.05 |
+|   5   | flat_orientation_l2        |   -2.0 |
+|   6   | action_rate_l2             |  -0.01 |
+|   7   | dof_torques_l2             | -0.002 |
+|   8   | dof_acc_l2                 | -1e-06 |
+|   9   | dof_pos_limits             |   -1.0 |
+|   10  | feet_air_time              |    1.0 |
+|   11  | feet_slide                 |   -0.1 |
+|   12  | undesired_contacts         |   -1.0 |
+|   13  | joint_deviation_hip        |   -0.2 |
+|   14  | joint_deviation_ankle_roll |   -0.2 |
++-------+----------------------------+--------+
+
+[INFO] Curriculum Manager:  <CurriculumManager> contains 1 active terms.
++---------------------------+
+|  Active Curriculum Terms  |
++--------+------------------+
+| Index  | Name             |
++--------+------------------+
+|   0    | terrain_levels   |
++--------+------------------+
+
+[INFO]: Completed setting up the environment...
+quat order probed: xyzw   base projected-gravity z -0.998 (-1 upright)   configured corrected rot (0.0, 0.1736, 0.0, 0.9848)
+  stereo_l   pitch  -20.0 deg   up_z +0.94   hits 0.775   rows(top->bottom) 0.00 0.54 1.00 1.00 1.00
+  stereo_r   pitch  -20.0 deg   up_z +0.94   hits 0.776   rows(top->bottom) 0.00 0.54 1.00 1.00 1.00
+  stereo_raw pitch  +20.0 deg   up_z -0.94   hits 0.148   rows(top->bottom) 1.00 0.00 0.00 0.00 0.00
+STEREO-PITCH PASS  corrected pitch -20.0/-20.0 hits 0.775  raw pitch +20.0 hits 0.148
+[INFO]: SimulationContext cleared
+2026-09-14T05:44:30Z [21,469ms] [Warning] [carb.scenerenderer-rtx.plugin] Failed to create NGX context.
+2026-09-14T05:44:31Z [22,619ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-09-14T05:44:36Z [27,202ms] [Warning] [isaaclab.envs.manager_based_env] Seed not set for the environment. The environment creation may not be deterministic.
+2026-09-14T05:44:36Z [27,264ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-09-14T05:44:36Z [27,282ms] [Warning] [isaaclab.envs.manager_based_env] The render interval (4) is smaller than the decimation (8). Multiple render calls will happen for each environment step. If this is not intended, set the render interval to be equal to the decimation.
+2026-09-14T05:44:48Z [39,398ms] [Warning] [omni.usd] Encountered USD Warnings but USD Diagnostics are currently muted. To view USD Warnings, please set the '/persistent/app/usd/muteUsdDiagnostics' setting to false in Preferences page.
+2026-09-14T05:44:50Z [41,959ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-09-14T05:44:50Z [41,959ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-09-14T05:44:50Z [42,008ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-09-14T05:44:50Z [42,008ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-09-14T05:44:54Z [45,927ms] [Warning] [omni.physx.fabric.plugin] FabricManager::initializePointInstancer mismatched prototypes on point instancer: /Visuals/Command/velocity_goal.
+2026-09-14T05:44:54Z [45,927ms] [Warning] [omni.physx.fabric.plugin] FabricManager::initializePointInstancer mismatched prototypes on point instancer: /Visuals/Command/velocity_current.
+2026-09-14T05:44:54Z [45,945ms] [Warning] [omni.fabric.plugin] Unsupported type encountered during VtValue extraction
+2026-09-14T05:44:54Z [45,946ms] [Warning] [omni.fabric.plugin] Attempting to set an invalid data source to array attribute
+
+2026-09-14T05:44:54Z [45,946ms] [Warning] [omni.fabric.plugin] Warning: attribute material:binding not found for path /Visuals/Command/velocity_current/proto0/Looks
+
+2026-09-14T05:44:54Z [46,040ms] [Warning] [isaaclab.utils.math] The function 'quat_rotate_inverse' will be deprecated in favor of the faster method 'quat_apply_inverse'. Please use 'quat_apply_inverse' instead....
+2026-09-14T05:44:55Z [46,733ms] [Warning] [isaaclab.utils.math] The function 'quat_rotate_inverse' will be deprecated in favor of the faster method 'quat_apply_inverse'. Please use 'quat_apply_inverse' instead....
+2026-09-14T05:44:55Z [46,881ms] [Warning] [isaaclab.utils.math] The function 'quat_rotate_inverse' will be deprecated in favor of the faster method 'quat_apply_inverse'. Please use 'quat_apply_inverse' instead....
+2026-09-14T05:44:56Z [47,495ms] [Warning] [omni.kit.material.library.material_extensions] Could not initialize context menu integration: No module named 'omni.kit.context_menu'

@@ -22,6 +22,19 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 **Done since the last status**
 
+- **C2 cloth, 2026-09-15 (`21338288`–`293`).** Pinned-base Newton **sock sorts 4/4,
+  all finite** (`isaac_c2f_sock.json`). Pinned-base **jacket is 0/4 finite** —
+  4/4 nonfinite, garment moved in 1 episode (`isaac_c2f_jacket.json`). Free-base
+  Newton with the arm still: **0/2, 2/2 nonfinite**, garment travel ~0
+  (`isaac_c2_hold.json`) — the balance controller that stands in PhysX at
+  control rate does not stay finite in Newton's 60 Hz cloth scene. The free-base
+  sweeps crashed the job (`ValueError: NaN to integer` in `segment_on_contact`
+  after the garment pose went NaN). Guarded in `reach.py`; do not re-queue C2
+  free-base until Newton stays finite with the arm still.
+- **GitHub presence.** README now leads with problem/solution/result and four
+  visual case studies; repo description, homepage and topics set. Profile README
+  and portfolio replacement copy are in `docs/github-profile-README.md` and
+  `docs/PORTFOLIO.md`.
 - **Maze stereo, cameras pointed down, n=3 — final.** Terrain level: 4×4 an eye
   **1.288** (1.286 / 1.340 / 1.237), every seed above blind's best (0.738 mean,
   1.037 best). 16×16 **0.774** trains like blind rather than failing. 4×4 + lidar
@@ -119,9 +132,11 @@ Diagnostics that ran once, proved a point and were deleted are in
    stance (`a4f438b`), and on it, with balance v2 (`42ba537`), **the free-standing robot
    sorts 22 of 24 rigid proxies with no falls** (shirt 6/8, sock 8/8, jacket 8/8).
    **C2 on the fixed base sorts 4/4 with one-way cloth coupling** (two-way goes NaN).
-   Left: C2 on the free base, and sock and jacket cloth; online arm correction from
-   the base pose, for the last shirts; then the sequential five-garment scene in
-   Isaac, C1 training, and C3–C5.
+   Left: **jacket cloth on the pinned base still goes NaN** (0/4 finite,
+   `21338291`); sock cloth on that same rung is 4/4. C2 on the free base is
+   blocked until a still arm stays finite in Newton. Then online arm correction
+   from the base pose, for the last shirts; the sequential five-garment scene;
+   C1 training; C3–C5.
 2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
    sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
    designs. *Before that, the terrain rung's stereo arms finish re-running with
@@ -648,12 +663,12 @@ starts. v1 accepted those sweeps.
 
 | # | id | outcome |
 |---|---|---|
-| 48 | `21338293` | queued, afterany `21338292` — **C2 free base, jacket cloth**, 4 eps (`isaac_c2_jacket.json`) |
-| 47 | `21338292` | queued, afterany `21338291` — **C2 free base, sock cloth**, 4 eps (`isaac_c2_sock.json`) |
-| 46 | `21338291` | queued, afterany `21338290` — C2F jacket cloth (pinned), 4 eps, trace (`isaac_c2f_jacket.json`) |
-| 45 | `21338290` | queued, afterany `21338289` — C2F sock cloth (pinned), 4 eps, trace (`isaac_c2f_sock.json`) |
-| 44 | `21338289` | queued, afterany `21338288` — **C2 free base, shirt cloth**: balance v2, one-way coupling, scripted sweep, 4 eps, trace (`isaac_c2_shirt.json`) |
-| 43 | `21338288` | queued — C2 free base, arm held still, 2 eps, trace (`isaac_c2_hold.json`): does the balance controller stand in Newton, whose cloth scene steps at 60 Hz? (In MuJoCo at 60 Hz control: 6/6 standing, worst tilt 4.5° with the arm sweeping.) All six on `0374cb7`, where one-way coupling is the default |
+| 48 | `21338293` | **FAILED** — C2 free base, jacket cloth: same NaN crash in `segment_on_contact` (afterany of 47) |
+| 47 | `21338292` | **FAILED** — C2 free base, sock cloth: same NaN crash (afterany of 46) |
+| 46 | `21338291` | **COMPLETED — C2F jacket, pinned, 0/4 finite.** 4/4 nonfinite, garment moved in 1/4, travel 5.4 cm mean (`isaac_c2f_jacket.json`). One-way coupling is not enough for this garment |
+| 45 | `21338290` | **COMPLETED — C2F sock, pinned, 4/4, all finite**, first sweep (`isaac_c2f_sock.json`). The first cloth rung now has a second garment that sorts |
+| 44 | `21338289` | **FAILED** — C2 free-base shirt sweep crashed: garment pose NaN → `segment_on_contact` `ValueError`. Guarded; do not re-queue until row 43 is finite |
+| 43 | `21338288` | **COMPLETED — C2 free base, arm still: 0/2, 2/2 nonfinite**, garment travel ~0 (`isaac_c2_hold.json`). Newton at 60 Hz does not stay finite under the stance that stands in PhysX |
 | 42 | `21330405` | **COMPLETED — the free-standing robot sorts the shirt on camera, in two sweeps**: the first leaves it at the table's edge, the second, re-planned from where it lay, drops it in the basket. 192 frames. Published: `docs/gifs/isaac/cloth_sort_free_base_shirt.gif` |
 | 41 | `21330404` | **COMPLETED — free-base jacket, balance v2: 8 of 8**, each with its first sweep, no falls |
 | 40 | `21330403` | **COMPLETED — free-base sock, balance v2: 8 of 8**, 1.25 sweeps, no falls, 0% refused |

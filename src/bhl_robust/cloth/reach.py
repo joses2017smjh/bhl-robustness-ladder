@@ -291,8 +291,18 @@ def sweep_joints(xy_world, phase: str = "contact", table: ContactTable | None = 
 
 
 def segment_on_contact(a, b, table: ContactTable | None = None, step: float = 0.01) -> bool:
-    """True if every point from ``a`` to ``b`` (world xy) is a contact cell."""
+    """True if every point from ``a`` to ``b`` (world xy) is a contact cell.
+
+    Non-finite endpoints refuse the segment rather than raising. Newton cloth
+    can NaN the garment pose mid-episode (`21338289`); converting that distance
+    to an integer crashed the job instead of counting an invalid plan.
+    """
     t = table or load_contact()
     a, b = np.asarray(a, dtype=float)[:2], np.asarray(b, dtype=float)[:2]
-    n = max(2, int(np.ceil(np.linalg.norm(b - a) / step)) + 1)
+    if not (np.isfinite(a).all() and np.isfinite(b).all()):
+        return False
+    dist = float(np.linalg.norm(b - a))
+    if not np.isfinite(dist):
+        return False
+    n = max(2, int(np.ceil(dist / step)) + 1)
     return all(sweep_cell_ok(a + k * (b - a), "contact", t) for k in np.linspace(0.0, 1.0, n))

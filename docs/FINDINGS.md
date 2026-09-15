@@ -1155,9 +1155,11 @@ stance with leg gravity feedforward and IMU ankle feedback, found in a MuJoCo mo
 reproduces the fall, **stands in Isaac** (`21329076`–`077`). With the layout raised to it,
 and with the arm's centre-of-mass shift fed forward to the ankles, **the free-standing
 robot sorts 22 of 24 rigid proxies with no falls** (shirt 6/8, sock 8/8, jacket 8/8;
-`21330402`–`404`). One low-res Newton cloth sorts 4 of 4 on a pinned base, with one-way
-cloth-to-arm coupling (`21329265`). Scripted policy, rigid proxies on the free base, and
-one garment at a time: a design note still, but no longer a pinned robot.
+`21330402`–`404`). One low-res Newton shirt sorts 4 of 4 on a pinned base with one-way
+coupling (`21329265`); a Newton sock does too (`21338290`, 4/4 finite). A Newton jacket
+on that rung is 0/4 finite (`21338291`). Free-base Newton is not finite with the arm still
+(`21338288`). Scripted policy, rigid proxies on the free base, and one garment at a
+time: a design note still, but no longer a pinned robot.
 
 Full write-up: [docs/CLOTH_SORT.md](CLOTH_SORT.md). Ledger:
 [SLURM_JOBS.md](../SLURM_JOBS.md).

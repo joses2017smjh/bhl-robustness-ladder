@@ -1,7 +1,9 @@
 # Sorting garments into baskets
 
-> **Status, 2026-09-14: the free-standing robot sorts 22 of 24 rigid proxies with no falls,
-> and the first cloth rung sorts on a pinned base.** The first scene was never reachable — the garment sat
+> **Status, 2026-09-15: the free-standing robot sorts 22 of 24 rigid proxies with no falls.
+> Pinned-base Newton cloth: shirt 4/4 (`21329265`) and sock 4/4 (`21338290`), all finite;
+> jacket 0/4 finite (`21338291`). Free-base Newton is not finite with the arm still
+> (`21338288`).** The first scene was never reachable — the garment sat
 > 0.74 m away, the fingertips reach 0.28 m forward, and in Isaac the robot faced the other
 > way. The layout is rebuilt in the robot's own frame, inside a measured fingertip table.
 > In Isaac the shipped hands turned out to collide with nothing, and once they did, the
