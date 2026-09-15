@@ -1132,10 +1132,11 @@ the maze stereo cameras up (`3f7b679`). The planted pinch squat the layout was b
 around is not a stance this robot holds: each knee needs 5.5–6.0 N m of its 6. A knee-1.0
 stance with leg gravity feedforward and IMU ankle feedback, found in a MuJoCo model that
 reproduces the fall, **stands in Isaac** (`21329076`–`077`). With the layout raised to it,
-**the free-standing robot sorts jacket proxies 8 of 8 and socks 7 of 8 with no falls, and
-shirts 1 of 8** (`21329260`–`262`). The shirt needs the longest forward reach, and the base
-tilts and misplaces the hand under it. Scripted policy, rigid proxies, and one garment at a
-time: a design note still, but no longer a pinned robot.
+and with the arm's centre-of-mass shift fed forward to the ankles, **the free-standing
+robot sorts 22 of 24 rigid proxies with no falls** (shirt 6/8, sock 8/8, jacket 8/8;
+`21330402`–`404`). One low-res Newton cloth sorts 4 of 4 on a pinned base, with one-way
+cloth-to-arm coupling (`21329265`). Scripted policy, rigid proxies on the free base, and
+one garment at a time: a design note still, but no longer a pinned robot.
 
 Full write-up: [docs/CLOTH_SORT.md](CLOTH_SORT.md). Ledger:
 [SLURM_JOBS.md](../SLURM_JOBS.md).

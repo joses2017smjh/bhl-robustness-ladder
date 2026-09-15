@@ -1,6 +1,6 @@
 # Every clip, with what made it
 
-**23 clips from MuJoCo, 7 from Isaac Sim.** Renderer is in the folder name:
+**23 clips from MuJoCo, 8 from Isaac Sim.** Renderer is in the folder name:
 `docs/gifs/` is MuJoCo, `docs/gifs/isaac/` is Isaac Sim. Every clip is a real
 scored episode from the harness that produced the numbers, except `squat_pick`,
 which says on its face that it is scripted.
@@ -23,7 +23,8 @@ Tell me which names you want on the front page.
 | [`ice_pair`](#b3--ice) | MuJoCo | B3 — blind vs depth on flush friction patches | render works — **result retracted**: in training the ice was never under the robots |
 | [`isaac/maze_stereo_fixed`](#terrain-sensing-the-b5-maze-rung) | Isaac Sim | B5 — the corrected 16×16 stereo policy, and what its camera saw before and after the fix | **works** — terrain level 0.88, was 0.02 |
 | [`isaac/terrain_sensors`](#terrain-sensing-the-b5-maze-rung) | Isaac Sim | B5 — blind, lidar, stereo at two widths | render only — the result is the table, not the clip |
-| [`isaac/cloth_sort_free_base_jacket`](#cloth-sorting-free-base) | Isaac Sim | cloth-sort C0, scripted sweep, rigid jacket proxy, **free-standing robot** | **works** — jacket 8/8 free-base; shirts only 1/8 |
+| [`isaac/cloth_sort_free_base_shirt`](#cloth-sorting-free-base) | Isaac Sim | cloth-sort C0, scripted sweep, rigid shirt proxy, **free-standing robot**, two sweeps | **works** — free base 22/24 on balance v2 |
+| [`isaac/cloth_sort_free_base_jacket`](#cloth-sorting-free-base) | Isaac Sim | cloth-sort C0, scripted sweep, rigid jacket proxy, **free-standing robot** | **works** — jacket 8/8 free-base |
 | [`isaac/cloth_sort_fixed_base`](#cloth-sorting-fixed-base-diagnostic) | Isaac Sim | cloth-sort C0, scripted sweep, rigid shirt proxy, **root pinned** | **works** — 32/32 on this layout; not cloth, not a standing robot |
 | [`squat_pick`](#the-cooperative-lift) | MuJoCo | scripted reachability control | n/a — scripted |
 | [`carry_2`](#the-cooperative-lift) | MuJoCo | cooperative cube lift | **fails** |
@@ -187,7 +188,8 @@ one; `docs/ISAAC_RENDER.md` §10 has the recipe.
 
 | | |
 |---|---|
-| <img src="gifs/isaac/cloth_sort_free_base_jacket.gif" width="440"> | **`isaac/cloth_sort_free_base_jacket`** — `ClothSort-BHL-Rigid-Oracle-v0` with `--garment jacket`, job `21329392`. **The robot is free-standing**: its legs hold a knee-bent stance with gravity feedforward and IMU ankle feedback (`bhl_robust.cloth.balance`), and the table stands 5.9 cm higher to match. The hand sweeps the dark jacket proxy off the table's back edge into the grey jackets basket. On this layout the free base sorts jackets 8/8 and socks 7/8, but shirts only 1/8 (`21329260`–`262`). A rigid box, not cloth. Frames brightened because the jacket is near-black. **3.8 MB.** |
+| <img src="gifs/isaac/cloth_sort_free_base_shirt.gif" width="440"> | **`isaac/cloth_sort_free_base_shirt`** — job `21330405`, balance v2 (`42ba537`). The free-standing robot's first sweep leaves the shirt proxy at the table's edge. The second, planned from where the shirt lay, drops it into the red basket. On balance v2 the free base sorts shirt 6/8, sock 8/8 and jacket 8/8 with no falls. A rigid box, not cloth. Real time at 10 fps. **7.0 MB.** |
+| <img src="gifs/isaac/cloth_sort_free_base_jacket.gif" width="440"> | **`isaac/cloth_sort_free_base_jacket`** — `ClothSort-BHL-Rigid-Oracle-v0` with `--garment jacket`, job `21329392`. **The robot is free-standing**: its legs hold a knee-bent stance with gravity feedforward and IMU ankle feedback (`bhl_robust.cloth.balance`), and the table stands 5.9 cm higher to match. The hand sweeps the dark jacket proxy off the table's back edge into the grey jackets basket. On balance v1 this layout sorted jackets 8/8 and socks 7/8 but shirts 1/8 (`21329260`–`262`); balance v2 brought the shirt to 6/8. A rigid box, not cloth. Frames brightened because the jacket is near-black. **3.8 MB.** |
 
 ### Cloth sorting, fixed-base diagnostic
 

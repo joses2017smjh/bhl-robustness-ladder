@@ -73,6 +73,11 @@ Diagnostics that ran once, proved a point and were deleted are in
   ten cells that trained.
 - **Isaac renders fixed**: the viewport drew stale poses; a camera-sensor clip
   recorder shows the robot where it is (`docs/ISAAC_RENDER.md` §10).
+- **The free-standing robot sorts: 22 of 24 rigid proxies, no falls** (shirt 6/8,
+  sock 8/8, jacket 8/8; `21330402`–`404`). The squat the layout was built on could not
+  stand. A knee-1.0 stance with a leg controller designed in MuJoCo can, and the
+  layout rises with it. **The first cloth rung sorts too**: one Newton cloth, pinned
+  base, 4 of 4, under one-way cloth-to-arm coupling (`21329265`).
 - **Cloth sorts in Isaac for the first time — on a fixed base: 32 of 32 episodes**
   on the widened baskets (shirt 16, sock 8, jacket 8; `21317388`–`390`), each with
   its first sweep; 7 of 8 before the widening (`21317170`). Rigid proxies, scripted,
@@ -97,6 +102,8 @@ Diagnostics that ran once, proved a point and were deleted are in
   policies with the robot in shot.
 - `docs/gifs/isaac/cloth_sort_fixed_base.gif` — the scripted sweep pushing the shirt
   proxy into its basket, root pinned (`21317391`).
+- `docs/gifs/isaac/cloth_sort_free_base_jacket.gif`, `cloth_sort_free_base_shirt.gif` — the
+  free-standing robot sorting; the shirt takes two sweeps (`21329392`, `21330405`).
 
 **Left, in order**
 
@@ -105,12 +112,12 @@ Diagnostics that ran once, proved a point and were deleted are in
    *Fixed-base scripted C0 sorts 32/32 in Isaac for all three garment classes.*
    *The free base now stands in Isaac* with a knee-1.0 stance and a leg controller
    (2/2 with the arm still, 3/4 through six sweeps). The layout is raised to that
-   stance (`a4f438b`), and on it **the free-standing robot sorts jacket 8/8 and sock
-   7/8, shirt 1/8.** Left: the shirt, via stiffer ankle gains and the arm's
-   centre-of-mass feedforward, then online arm correction from the base pose. **C2
-   on the fixed base sorts 4/4 with one-way cloth coupling** (two-way goes NaN); next
-   are C2 on the free base and sock/jacket cloth. Then the sequential five-garment
-   scene in Isaac, C1 training, and C3–C5.
+   stance (`a4f438b`), and on it, with balance v2 (`42ba537`), **the free-standing robot
+   sorts 22 of 24 rigid proxies with no falls** (shirt 6/8, sock 8/8, jacket 8/8).
+   **C2 on the fixed base sorts 4/4 with one-way cloth coupling** (two-way goes NaN).
+   Left: C2 on the free base, and sock and jacket cloth; online arm correction from
+   the base pose, for the last shirts; then the sequential five-garment scene in
+   Isaac, C1 training, and C3–C5.
 2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
    sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
    designs. *Before that, the terrain rung's stereo arms finish re-running with
@@ -585,6 +592,13 @@ because the body moves to counterbalance the arm and tilt changes the hand's hei
 centimetres against a 3 mm contact clearance. Placing the hand precisely on a free base
 means correcting the arm online from the measured base pose.
 
+**Balance v2: the free-standing robot sorts 22 of 24, with no falls (rows 39–41).** The ankle
+pitch gain goes from 1.5 to 2.0, and each schedule feeds its arm's centre-of-mass shift
+forward to the ankles (`42ba537`). Shirt 6 of 8 (was 1 of 8 with 3 falls), sock 8 of 8, jacket
+8 of 8, no falls in 24 episodes. In the shirt trace the worst tilt is 3.4°, where it was 7–8°.
+The two shirts that did not sort are unexplained so far: episode 0 is the only one traced,
+and it sorted.
+
 **The first valid cloth sort: C2F with one-way coupling, 4 of 4 (row 37).** One 8×8 Newton
 cloth shirt, pinned base, scripted sweep. The only change against the void runs is
 `coupling_mode="one_way"`: the rigid solver no longer feels particle contacts, so the
@@ -615,6 +629,10 @@ starts. v1 accepted those sweeps.
 
 | # | id | outcome |
 |---|---|---|
+| 42 | `21330405` | **COMPLETED — the free-standing robot sorts the shirt on camera, in two sweeps**: the first leaves it at the table's edge, the second, re-planned from where it lay, drops it in the basket. 192 frames. Published: `docs/gifs/isaac/cloth_sort_free_base_shirt.gif` |
+| 41 | `21330404` | **COMPLETED — free-base jacket, balance v2: 8 of 8**, each with its first sweep, no falls |
+| 40 | `21330403` | **COMPLETED — free-base sock, balance v2: 8 of 8**, 1.25 sweeps, no falls, 0% refused |
+| 39 | `21330402` | **COMPLETED — free-base shirt on balance v2: 6 of 8, no falls** (row 32 was 1/8 with 3 falls), each with its first sweep, 22% of plans refused. Traced episode: worst tilt 3.4° (was 7–8°), arm tracking 5.3 mm, shirt into its basket |
 | 38 | `21329392` | **COMPLETED — the free-standing robot sorts the jacket on camera**, 59 frames, cn-gpu7. Published: `docs/gifs/isaac/cloth_sort_free_base_jacket.gif` (brightened; the jacket proxy is near-black) |
 | 37 | `21329265` | **COMPLETED — C2F with one-way coupling: 4 of 4 sorted, all finite** (`success_rate_finite` 1.00). Trace: the cloth first moves at 2.83 s, inside the sweep, and lies in the shirts basket at z 0.008 by 3.5 s. Arm tracking under Newton was 38 mm mean |
 | 36 | `21329264` | CANCELLED before it started — shirt is the garment that mostly fails on the free base, so the clip became the jacket (row 38) |

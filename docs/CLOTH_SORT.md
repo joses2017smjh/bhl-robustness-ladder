@@ -1,7 +1,7 @@
 # Sorting garments into baskets
 
-> **Status, 2026-09-14: all three garment classes sort in Isaac on a fixed base, 32 of 32;
-> on a free base the robot stands and sorts jackets and socks, not yet shirts.** The first scene was never reachable — the garment sat
+> **Status, 2026-09-14: the free-standing robot sorts 22 of 24 rigid proxies with no falls,
+> and the first cloth rung sorts on a pinned base.** The first scene was never reachable — the garment sat
 > 0.74 m away, the fingertips reach 0.28 m forward, and in Isaac the robot faced the other
 > way. The layout is rebuilt in the robot's own frame, inside a measured fingertip table.
 > In Isaac the shipped hands turned out to collide with nothing, and once they did, the
@@ -10,10 +10,9 @@
 > within 1.4–1.6 mm, and **with the root pinned the scripted sweep sorts shirt, sock and
 > jacket proxies 32 times in 32** (see [In Isaac](#in-isaac-why-the-hand-did-not-sort-2026-09-13)).
 > The pinch squat that layout was built on cannot stand on a free base: its knees saturate.
-> **A knee-1.0 stance with a leg controller designed in MuJoCo stands in Isaac**, and with
-> the layout raised to it **the free-standing robot sorts jacket proxies 8 of 8 and socks
-> 7 of 8, with no falls — but shirts only 1 of 8**, with 3 falls. The shirt is where the arm
-> reaches furthest forward, and the base tilts 7–8° under it. **The first cloth rung sorts
+> **A knee-1.0 stance with a leg controller designed in MuJoCo stands in Isaac.** With the
+> layout raised to it, and the arm's centre-of-mass shift fed forward to the ankles, **the
+> free-standing robot sorts shirt 6 of 8, sock 8 of 8 and jacket 8 of 8, with no falls.** **The first cloth rung sorts
 > on the pinned base: one 8×8 Newton cloth, 4 of 4** — with one-way cloth-to-arm coupling,
 > because two-way coupling went NaN whenever the hand pushed the cloth. End-to-end
 > deformable RL stays rejected.
@@ -346,7 +345,21 @@ every height — the table, the fingertip table, the arm's root — rises with t
 | shirt | pinned (`21329263`) | **8/8** | 0 | 1.0 | 0% |
 | jacket | **free** (`21329262`) | **8/8** | 0 | 1.1 | 0% |
 | sock | **free** (`21329261`) | **7/8** | 0 | 1.1 | 29% |
-| shirt | **free** (`21329260`) | 1/8 | 3 | 2.0 | 39% |
+| shirt | **free**, balance v1 (`21329260`) | 1/8 | 3 | 2.0 | 39% |
+| shirt | **free**, balance v2 (`21330402`) | **6/8** | 0 | 1.0 | 22% |
+| sock | **free**, balance v2 (`21330403`) | **8/8** | 0 | 1.25 | 0% |
+| jacket | **free**, balance v2 (`21330404`) | **8/8** | 0 | 1.0 | 0% |
+
+Balance v2 (`42ba537`) raises the ankle pitch gain from 1.5 to 2.0 and feeds each schedule's
+arm centre-of-mass shift forward to the ankles. The worst tilt in the shirt trace fell from
+7–8° to 3.4°. The v1 rows for sock and jacket (`21329261`–`262`) are above.
+
+<p align="center">
+  <img src="gifs/isaac/cloth_sort_free_base_shirt.gif" width="440" alt="Isaac Sim: the free-standing humanoid sweeps the red shirt proxy to the table's far edge, lifts its arm, re-plans, and a second sweep drops the shirt into the red shirts basket.">
+</p>
+
+`21330405`: on balance v2 the free-standing robot sorts the shirt in two sweeps. The first
+leaves it at the edge; the second is planned from where it lay.
 
 <p align="center">
   <img src="gifs/isaac/cloth_sort_free_base_jacket.gif" width="440" alt="Isaac Sim: the free-standing humanoid in a knee-bent stance reaches to the table, sweeps the dark jacket proxy off its back edge, and the jacket lands in the grey jackets basket.">
