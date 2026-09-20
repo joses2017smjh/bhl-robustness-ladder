@@ -1,0 +1,7 @@
+# CPU unit-test dependencies; Python 3.11.
+# Install torch==2.7.0 separately from the CPU wheel index (README).
+# Versions match the tested research environment; this is not an Isaac lockfile.
+numpy==1.26.0
+mujoco==3.3.5
+opencv-python-headless==4.11.0.86
+pytest==9.0.2

@@ -11,6 +11,12 @@ weights, shared Python environments, Isaac installations, full garment assets
 and raw frame caches are not vendored. Logical `artifact://` identifiers in results identify external checkpoints and
 assets, not public download URLs. See [publication details](PUBLIC_EVIDENCE.md).
 
+For CPU setup commands and dependency versions, see the [README](../README.md#quickstart-cpu-checks)
+and [requirements-test.txt](../requirements-test.txt). A fresh dependency
+installation remains unverified. A subsequent independent check of the final
+publication passed **146 tests in 17.84 seconds**; see the
+[verification note](PUBLICATION_CHECK_2026-09-20.md).
+
 ## Validation performed on September 20
 
 ```bash

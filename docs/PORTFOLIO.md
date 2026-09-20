@@ -54,6 +54,9 @@ Contact: **Hiring for ML, AI, or robotics?**
 
 ## Featured README changes
 
+[Reusable Markdown template](PROJECT_README_TEMPLATE.md) ·
+[Independent publication check](PUBLICATION_CHECK_2026-09-20.md).
+
 Lead with what the project does, a demo and one measured result. Then give
 contribution, architecture, important tradeoffs, stack, actual setup commands,
 and limits. Link the portfolio as a demo/case study, not as a hosted inference
