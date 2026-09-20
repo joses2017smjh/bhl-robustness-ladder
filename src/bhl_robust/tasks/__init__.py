@@ -353,6 +353,13 @@ for _id, _cfg in (
         kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG},
     )
 
+# Versioned repair: leave the legacy maze IDs/rewards replayable as recorded.
+from .maze_recovery_env_cfg import RECOVERY_CONFIGS  # noqa: E402
+for _id, _cfg in RECOVERY_CONFIGS.items():
+    gym.register(id=_id, entry_point="isaaclab.envs:ManagerBasedRLEnv",
+                 disable_env_checker=True,
+                 kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG})
+
 # ------------------------------------------------------------------ Tier 3
 # The 22-DoF robot on stairs with depth and the arm-deviation penalty ablated in
 # the task itself, so the rsl-rl PPO rows and the skrl MAPPO rows cannot differ

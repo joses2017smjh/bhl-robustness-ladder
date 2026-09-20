@@ -1,0 +1,692 @@
+{
+  "task": "team_airlock_v1",
+  "control": "oracle_pose_map_supervisor+frozen_isaac_locomotion+range_imu_brake",
+  "simulator": "MuJoCo 3.3.5",
+  "physical_object_transport": false,
+  "deploy": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/deploy.yaml",
+  "checkpoint": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/policy.onnx",
+  "crew": 2,
+  "episodes": [
+    {
+      "seed": 0,
+      "mode": "coordinated",
+      "crew": 2,
+      "success": true,
+      "failure": null,
+      "elapsed_s": 23.0,
+      "release_s": 3.7600000000000002,
+      "completion_s": 23.0,
+      "stations_visited": 2,
+      "members_crossed": 2,
+      "robot_contact_steps": 0,
+      "wall_contact_steps": 0,
+      "minimum_base_separation_m": 1.162459930481747,
+      "final_xy": [
+        [
+          3.549866411761674,
+          -0.8386718133629975
+        ],
+        [
+          3.5354758568964786,
+          0.8437937630557342
+        ]
+      ],
+      "sensors": {
+        "mode": "reactive",
+        "stats": {
+          "received_extero_packets": 462,
+          "dropped_extero_packets": 0,
+          "braked_robot_steps": 2,
+          "stale_stop_robot_steps": 0,
+          "range_limited_robot_steps": 0,
+          "imu_limited_robot_steps": 2,
+          "sampled_robot_steps": 1152
+        },
+        "dropout_probability": 0.0,
+        "metadata": {
+          "lidar": {
+            "rays": 108,
+            "sectors": 36,
+            "max_range_m": 12.0,
+            "body_mount_m": [
+              0.12,
+              0.0,
+              0.72
+            ],
+            "nominal_hz": 10.0
+          },
+          "stereo": {
+            "kind": "paired_idealized_ray_depth_not_rgb_matching",
+            "side": 8,
+            "baseline_m": 0.06,
+            "body_center_m": [
+              0.12,
+              0.0,
+              0.7
+            ],
+            "pitch_down_deg": 20,
+            "vfov_deg": 60.5,
+            "max_range_m": 6.0
+          },
+          "imu": {
+            "kind": "mujoco_site_quaternion_gyro_accelerometer",
+            "frame": "body_to_ENU_xyzw",
+            "gravity_unitless": true,
+            "gyro_units": "rad/s",
+            "specific_force_units": "m/s^2",
+            "hardware_calibrated": false
+          },
+          "localization": "oracle_simulator_pose_and_map",
+          "ssd": "not_configured_no_rgb_or_weights"
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "mode": "coordinated",
+      "crew": 2,
+      "success": true,
+      "failure": null,
+      "elapsed_s": 23.08,
+      "release_s": 3.8000000000000003,
+      "completion_s": 23.080000000000002,
+      "stations_visited": 2,
+      "members_crossed": 2,
+      "robot_contact_steps": 0,
+      "wall_contact_steps": 0,
+      "minimum_base_separation_m": 1.129183975296128,
+      "final_xy": [
+        [
+          3.535545081935135,
+          -0.8280153906715633
+        ],
+        [
+          3.5379328709761753,
+          0.8381630386342804
+        ]
+      ],
+      "sensors": {
+        "mode": "reactive",
+        "stats": {
+          "received_extero_packets": 462,
+          "dropped_extero_packets": 0,
+          "braked_robot_steps": 0,
+          "stale_stop_robot_steps": 0,
+          "range_limited_robot_steps": 0,
+          "imu_limited_robot_steps": 0,
+          "sampled_robot_steps": 1156
+        },
+        "dropout_probability": 0.0,
+        "metadata": {
+          "lidar": {
+            "rays": 108,
+            "sectors": 36,
+            "max_range_m": 12.0,
+            "body_mount_m": [
+              0.12,
+              0.0,
+              0.72
+            ],
+            "nominal_hz": 10.0
+          },
+          "stereo": {
+            "kind": "paired_idealized_ray_depth_not_rgb_matching",
+            "side": 8,
+            "baseline_m": 0.06,
+            "body_center_m": [
+              0.12,
+              0.0,
+              0.7
+            ],
+            "pitch_down_deg": 20,
+            "vfov_deg": 60.5,
+            "max_range_m": 6.0
+          },
+          "imu": {
+            "kind": "mujoco_site_quaternion_gyro_accelerometer",
+            "frame": "body_to_ENU_xyzw",
+            "gravity_unitless": true,
+            "gyro_units": "rad/s",
+            "specific_force_units": "m/s^2",
+            "hardware_calibrated": false
+          },
+          "localization": "oracle_simulator_pose_and_map",
+          "ssd": "not_configured_no_rgb_or_weights"
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "mode": "coordinated",
+      "crew": 2,
+      "success": true,
+      "failure": null,
+      "elapsed_s": 23.24,
+      "release_s": 3.84,
+      "completion_s": 23.240000000000002,
+      "stations_visited": 2,
+      "members_crossed": 2,
+      "robot_contact_steps": 0,
+      "wall_contact_steps": 0,
+      "minimum_base_separation_m": 1.1377076848685044,
+      "final_xy": [
+        [
+          3.5567568910047385,
+          -0.8572066602370516
+        ],
+        [
+          3.537328313127515,
+          0.8304959155482959
+        ]
+      ],
+      "sensors": {
+        "mode": "reactive",
+        "stats": {
+          "received_extero_packets": 466,
+          "dropped_extero_packets": 0,
+          "braked_robot_steps": 0,
+          "stale_stop_robot_steps": 0,
+          "range_limited_robot_steps": 0,
+          "imu_limited_robot_steps": 0,
+          "sampled_robot_steps": 1164
+        },
+        "dropout_probability": 0.0,
+        "metadata": {
+          "lidar": {
+            "rays": 108,
+            "sectors": 36,
+            "max_range_m": 12.0,
+            "body_mount_m": [
+              0.12,
+              0.0,
+              0.72
+            ],
+            "nominal_hz": 10.0
+          },
+          "stereo": {
+            "kind": "paired_idealized_ray_depth_not_rgb_matching",
+            "side": 8,
+            "baseline_m": 0.06,
+            "body_center_m": [
+              0.12,
+              0.0,
+              0.7
+            ],
+            "pitch_down_deg": 20,
+            "vfov_deg": 60.5,
+            "max_range_m": 6.0
+          },
+          "imu": {
+            "kind": "mujoco_site_quaternion_gyro_accelerometer",
+            "frame": "body_to_ENU_xyzw",
+            "gravity_unitless": true,
+            "gyro_units": "rad/s",
+            "specific_force_units": "m/s^2",
+            "hardware_calibrated": false
+          },
+          "localization": "oracle_simulator_pose_and_map",
+          "ssd": "not_configured_no_rgb_or_weights"
+        }
+      }
+    },
+    {
+      "seed": 0,
+      "mode": "no_wait",
+      "crew": 2,
+      "success": false,
+      "failure": "team_timeout",
+      "elapsed_s": 59.96,
+      "release_s": null,
+      "completion_s": null,
+      "stations_visited": 2,
+      "members_crossed": 0,
+      "robot_contact_steps": 0,
+      "wall_contact_steps": 0,
+      "minimum_base_separation_m": 0.7096579611600723,
+      "final_xy": [
+        [
+          1.2140219926008016,
+          -0.09220424690309367
+        ],
+        [
+          0.8175654689472519,
+          0.54189188534405
+        ]
+      ],
+      "sensors": {
+        "mode": "reactive",
+        "stats": {
+          "received_extero_packets": 1200,
+          "dropped_extero_packets": 0,
+          "braked_robot_steps": 2771,
+          "stale_stop_robot_steps": 0,
+          "range_limited_robot_steps": 2769,
+          "imu_limited_robot_steps": 2,
+          "sampled_robot_steps": 3000
+        },
+        "dropout_probability": 0.0,
+        "metadata": {
+          "lidar": {
+            "rays": 108,
+            "sectors": 36,
+            "max_range_m": 12.0,
+            "body_mount_m": [
+              0.12,
+              0.0,
+              0.72
+            ],
+            "nominal_hz": 10.0
+          },
+          "stereo": {
+            "kind": "paired_idealized_ray_depth_not_rgb_matching",
+            "side": 8,
+            "baseline_m": 0.06,
+            "body_center_m": [
+              0.12,
+              0.0,
+              0.7
+            ],
+            "pitch_down_deg": 20,
+            "vfov_deg": 60.5,
+            "max_range_m": 6.0
+          },
+          "imu": {
+            "kind": "mujoco_site_quaternion_gyro_accelerometer",
+            "frame": "body_to_ENU_xyzw",
+            "gravity_unitless": true,
+            "gyro_units": "rad/s",
+            "specific_force_units": "m/s^2",
+            "hardware_calibrated": false
+          },
+          "localization": "oracle_simulator_pose_and_map",
+          "ssd": "not_configured_no_rgb_or_weights"
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "mode": "no_wait",
+      "crew": 2,
+      "success": false,
+      "failure": "team_timeout",
+      "elapsed_s": 59.96,
+      "release_s": null,
+      "completion_s": null,
+      "stations_visited": 2,
+      "members_crossed": 0,
+      "robot_contact_steps": 0,
+      "wall_contact_steps": 0,
+      "minimum_base_separation_m": 0.6570060203188619,
+      "final_xy": [
+        [
+          1.1994293541225332,
+          -0.07167789703077818
+        ],
+        [
+          0.7960694722230368,
+          0.4895659885292277
+        ]
+      ],
+      "sensors": {
+        "mode": "reactive",
+        "stats": {
+          "received_extero_packets": 1200,
+          "dropped_extero_packets": 0,
+          "braked_robot_steps": 2761,
+          "stale_stop_robot_steps": 0,
+          "range_limited_robot_steps": 2761,
+          "imu_limited_robot_steps": 0,
+          "sampled_robot_steps": 3000
+        },
+        "dropout_probability": 0.0,
+        "metadata": {
+          "lidar": {
+            "rays": 108,
+            "sectors": 36,
+            "max_range_m": 12.0,
+            "body_mount_m": [
+              0.12,
+              0.0,
+              0.72
+            ],
+            "nominal_hz": 10.0
+          },
+          "stereo": {
+            "kind": "paired_idealized_ray_depth_not_rgb_matching",
+            "side": 8,
+            "baseline_m": 0.06,
+            "body_center_m": [
+              0.12,
+              0.0,
+              0.7
+            ],
+            "pitch_down_deg": 20,
+            "vfov_deg": 60.5,
+            "max_range_m": 6.0
+          },
+          "imu": {
+            "kind": "mujoco_site_quaternion_gyro_accelerometer",
+            "frame": "body_to_ENU_xyzw",
+            "gravity_unitless": true,
+            "gyro_units": "rad/s",
+            "specific_force_units": "m/s^2",
+            "hardware_calibrated": false
+          },
+          "localization": "oracle_simulator_pose_and_map",
+          "ssd": "not_configured_no_rgb_or_weights"
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "mode": "no_wait",
+      "crew": 2,
+      "success": false,
+      "failure": "team_timeout",
+      "elapsed_s": 59.96,
+      "release_s": null,
+      "completion_s": null,
+      "stations_visited": 2,
+      "members_crossed": 0,
+      "robot_contact_steps": 0,
+      "wall_contact_steps": 0,
+      "minimum_base_separation_m": 0.6470907765733627,
+      "final_xy": [
+        [
+          1.201246319041206,
+          -0.07363189057302075
+        ],
+        [
+          0.8134867148916967,
+          0.4847466544474095
+        ]
+      ],
+      "sensors": {
+        "mode": "reactive",
+        "stats": {
+          "received_extero_packets": 1200,
+          "dropped_extero_packets": 0,
+          "braked_robot_steps": 2761,
+          "stale_stop_robot_steps": 0,
+          "range_limited_robot_steps": 2761,
+          "imu_limited_robot_steps": 0,
+          "sampled_robot_steps": 3000
+        },
+        "dropout_probability": 0.0,
+        "metadata": {
+          "lidar": {
+            "rays": 108,
+            "sectors": 36,
+            "max_range_m": 12.0,
+            "body_mount_m": [
+              0.12,
+              0.0,
+              0.72
+            ],
+            "nominal_hz": 10.0
+          },
+          "stereo": {
+            "kind": "paired_idealized_ray_depth_not_rgb_matching",
+            "side": 8,
+            "baseline_m": 0.06,
+            "body_center_m": [
+              0.12,
+              0.0,
+              0.7
+            ],
+            "pitch_down_deg": 20,
+            "vfov_deg": 60.5,
+            "max_range_m": 6.0
+          },
+          "imu": {
+            "kind": "mujoco_site_quaternion_gyro_accelerometer",
+            "frame": "body_to_ENU_xyzw",
+            "gravity_unitless": true,
+            "gyro_units": "rad/s",
+            "specific_force_units": "m/s^2",
+            "hardware_calibrated": false
+          },
+          "localization": "oracle_simulator_pose_and_map",
+          "ssd": "not_configured_no_rgb_or_weights"
+        }
+      }
+    },
+    {
+      "seed": 0,
+      "mode": "withhold_last",
+      "crew": 2,
+      "success": false,
+      "failure": "team_timeout",
+      "elapsed_s": 59.96,
+      "release_s": null,
+      "completion_s": null,
+      "stations_visited": 1,
+      "members_crossed": 0,
+      "robot_contact_steps": 0,
+      "wall_contact_steps": 0,
+      "minimum_base_separation_m": 1.84859383400086,
+      "final_xy": [
+        [
+          0.6172180317567915,
+          -0.9051702944646545
+        ],
+        [
+          -0.013051710936586554,
+          0.9481120204236787
+        ]
+      ],
+      "sensors": {
+        "mode": "reactive",
+        "stats": {
+          "received_extero_packets": 1200,
+          "dropped_extero_packets": 0,
+          "braked_robot_steps": 2,
+          "stale_stop_robot_steps": 0,
+          "range_limited_robot_steps": 0,
+          "imu_limited_robot_steps": 2,
+          "sampled_robot_steps": 3000
+        },
+        "dropout_probability": 0.0,
+        "metadata": {
+          "lidar": {
+            "rays": 108,
+            "sectors": 36,
+            "max_range_m": 12.0,
+            "body_mount_m": [
+              0.12,
+              0.0,
+              0.72
+            ],
+            "nominal_hz": 10.0
+          },
+          "stereo": {
+            "kind": "paired_idealized_ray_depth_not_rgb_matching",
+            "side": 8,
+            "baseline_m": 0.06,
+            "body_center_m": [
+              0.12,
+              0.0,
+              0.7
+            ],
+            "pitch_down_deg": 20,
+            "vfov_deg": 60.5,
+            "max_range_m": 6.0
+          },
+          "imu": {
+            "kind": "mujoco_site_quaternion_gyro_accelerometer",
+            "frame": "body_to_ENU_xyzw",
+            "gravity_unitless": true,
+            "gyro_units": "rad/s",
+            "specific_force_units": "m/s^2",
+            "hardware_calibrated": false
+          },
+          "localization": "oracle_simulator_pose_and_map",
+          "ssd": "not_configured_no_rgb_or_weights"
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "mode": "withhold_last",
+      "crew": 2,
+      "success": false,
+      "failure": "team_timeout",
+      "elapsed_s": 59.96,
+      "release_s": null,
+      "completion_s": null,
+      "stations_visited": 1,
+      "members_crossed": 0,
+      "robot_contact_steps": 0,
+      "wall_contact_steps": 0,
+      "minimum_base_separation_m": 1.7744835328505293,
+      "final_xy": [
+        [
+          0.6303828764403708,
+          -0.9036716652504212
+        ],
+        [
+          -0.04139886848117456,
+          0.892383459836642
+        ]
+      ],
+      "sensors": {
+        "mode": "reactive",
+        "stats": {
+          "received_extero_packets": 1200,
+          "dropped_extero_packets": 0,
+          "braked_robot_steps": 0,
+          "stale_stop_robot_steps": 0,
+          "range_limited_robot_steps": 0,
+          "imu_limited_robot_steps": 0,
+          "sampled_robot_steps": 3000
+        },
+        "dropout_probability": 0.0,
+        "metadata": {
+          "lidar": {
+            "rays": 108,
+            "sectors": 36,
+            "max_range_m": 12.0,
+            "body_mount_m": [
+              0.12,
+              0.0,
+              0.72
+            ],
+            "nominal_hz": 10.0
+          },
+          "stereo": {
+            "kind": "paired_idealized_ray_depth_not_rgb_matching",
+            "side": 8,
+            "baseline_m": 0.06,
+            "body_center_m": [
+              0.12,
+              0.0,
+              0.7
+            ],
+            "pitch_down_deg": 20,
+            "vfov_deg": 60.5,
+            "max_range_m": 6.0
+          },
+          "imu": {
+            "kind": "mujoco_site_quaternion_gyro_accelerometer",
+            "frame": "body_to_ENU_xyzw",
+            "gravity_unitless": true,
+            "gyro_units": "rad/s",
+            "specific_force_units": "m/s^2",
+            "hardware_calibrated": false
+          },
+          "localization": "oracle_simulator_pose_and_map",
+          "ssd": "not_configured_no_rgb_or_weights"
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "mode": "withhold_last",
+      "crew": 2,
+      "success": false,
+      "failure": "team_timeout",
+      "elapsed_s": 59.96,
+      "release_s": null,
+      "completion_s": null,
+      "stations_visited": 1,
+      "members_crossed": 0,
+      "robot_contact_steps": 0,
+      "wall_contact_steps": 0,
+      "minimum_base_separation_m": 1.786019655753428,
+      "final_xy": [
+        [
+          0.6386399551160786,
+          -0.8910935940579315
+        ],
+        [
+          -0.04919186529618706,
+          0.9277678986611323
+        ]
+      ],
+      "sensors": {
+        "mode": "reactive",
+        "stats": {
+          "received_extero_packets": 1200,
+          "dropped_extero_packets": 0,
+          "braked_robot_steps": 0,
+          "stale_stop_robot_steps": 0,
+          "range_limited_robot_steps": 0,
+          "imu_limited_robot_steps": 0,
+          "sampled_robot_steps": 3000
+        },
+        "dropout_probability": 0.0,
+        "metadata": {
+          "lidar": {
+            "rays": 108,
+            "sectors": 36,
+            "max_range_m": 12.0,
+            "body_mount_m": [
+              0.12,
+              0.0,
+              0.72
+            ],
+            "nominal_hz": 10.0
+          },
+          "stereo": {
+            "kind": "paired_idealized_ray_depth_not_rgb_matching",
+            "side": 8,
+            "baseline_m": 0.06,
+            "body_center_m": [
+              0.12,
+              0.0,
+              0.7
+            ],
+            "pitch_down_deg": 20,
+            "vfov_deg": 60.5,
+            "max_range_m": 6.0
+          },
+          "imu": {
+            "kind": "mujoco_site_quaternion_gyro_accelerometer",
+            "frame": "body_to_ENU_xyzw",
+            "gravity_unitless": true,
+            "gyro_units": "rad/s",
+            "specific_force_units": "m/s^2",
+            "hardware_calibrated": false
+          },
+          "localization": "oracle_simulator_pose_and_map",
+          "ssd": "not_configured_no_rgb_or_weights"
+        }
+      }
+    }
+  ],
+  "sensor_mode": "reactive",
+  "summary": {
+    "success_rates": {
+      "coordinated": 1.0,
+      "no_wait": 0.0,
+      "withhold_last": 0.0
+    },
+    "gate_passed": true,
+    "controls_complete": true,
+    "seconds": 60.0,
+    "speed": 0.4,
+    "policy_dt": 0.04,
+    "physics_dt": 0.0005,
+    "contact_check": "every_physics_substep"
+  }
+}
