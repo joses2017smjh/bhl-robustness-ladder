@@ -1,0 +1,38 @@
+{
+  "task": "Velocity-BHL-MazeRecovery-Corridor-Stereo-v0",
+  "checkpoint": "artifact://bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-19_15-55-21_wknd-corridor-stereo-s1/model_1998.pt",
+  "seed": 101,
+  "steps": 600,
+  "num_envs": 32,
+  "completed_episodes": 307,
+  "successful_episodes": 299,
+  "success_rate": 0.9739413680781759,
+  "first_episodes_completed": 32,
+  "first_episode_success_rate": 0.9375,
+  "dead_end_episodes": 0,
+  "timeout_episodes": 1,
+  "mean_minimum_button_distance_m": 0.3306601047515869,
+  "mean_max_displacement_from_initial_spawn_m": 0.9994802474975586,
+  "sensors": {
+    "stereo_l": {
+      "shape": [
+        32,
+        16
+      ],
+      "min": 0.059454336762428284,
+      "max": 0.9534438848495483
+    },
+    "stereo_r": {
+      "shape": [
+        32,
+        16
+      ],
+      "min": 0.05994649976491928,
+      "max": 0.9871053695678711
+    }
+  },
+  "gate_kind": "policy_evaluation",
+  "navigation_source": "oracle_waypoint_teacher",
+  "camera_source": "raycast_depth_not_rgb_stereo",
+  "passed": true
+}

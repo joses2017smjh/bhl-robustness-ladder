@@ -1,54 +1,32 @@
-# Jose Sanchez
+# Jose Sanchez Gonzalez
 
-MS Artificial Intelligence, Oregon State (2026). I measure robot learning
-systems until the measurement is the result — including when that means
-retracting my own numbers.
+I build ML systems and robot perception, with reproducible evaluations.
+Seeking **machine learning / AI and robotics engineering roles**.
+M.S. Artificial Intelligence and B.S. Computer Science, Oregon State University.
 
-**Seeking:** robotics ML / simulation engineer, applied scientist (perception & control).
+[Portfolio](https://jose-sanchez-portfolio-com.vercel.app) · [Résumé](https://jose-sanchez-portfolio-com.vercel.app/resume.pdf) · [LinkedIn](https://linkedin.com/in/jose-j-sanchez-gonzalez-84a800257/) · [Email](mailto:josejsanchez20172@gmail.com)
 
-[Portfolio](https://jose-sanchez-portfolio-com.vercel.app) ·
-[Email](mailto:sanchej7@oregonstate.edu) ·
-Resume (PDF on the portfolio)
+[![A simulated pruning arm approaches a branch, performs a gated surrogate release, and returns home](https://raw.githubusercontent.com/joses2017smjh/isaac-sim-pruning-workflow/develop/docs/demo/isaac_two_trees_vision_sequence.gif)](https://jose-sanchez-portfolio-com.vercel.app/projects/isaac-pruning-workflow/)
 
-Python · PyTorch · Isaac Lab · MuJoCo · ONNX · computer vision · RL · Slurm/HPC
+*One controlled Isaac Sim episode. Classical RGB-D tracking, simulator depth and rigid-piece release; this is not a learned pruning policy or a wood-fracture model.*
 
 ## Featured work
 
-### [bhl-robustness-ladder](https://github.com/joses2017smjh/bhl-robustness-ladder)
+| Project | What I built | Evidence and limits |
+|---|---|---|
+| [SPUR metric depth](https://github.com/joses2017smjh/spur-depth-service) | Synthetic depth models, FastAPI inference and split ONNX export. | Encoder parity max difference 1.53e-5; V100 fp16 model p50 156 ms per six-view group. Field accuracy remains unverified. |
+| [Humanoid Robustness Ladder](https://github.com/joses2017smjh/bhl-robustness-ladder) | Isaac Lab curricula, ONNX/MuJoCo evaluation and seeded failure controls. | New known-route Isaac task: 379/384 first episodes. Separate frozen-gait MuJoCo inspection: 3/3. No hardware-transfer claim. |
+| [Vision-guided pruning](https://github.com/joses2017smjh/isaac-sim-pruning-workflow) | RGB-D control, dual-ToF release checks and an independent recording grader. | Success and stopped-closure recordings; one selected episode passes 17/17 checks. Known target, classical tracking, rigid-piece release. |
+| [MetaNaviT](https://github.com/joses2017smjh/MetaNavT) | Retrieval, data layer and APIs in a six-person team. | Recall@50 0.938 on 136 queries / 61 fixture files, with hash embeddings and overlap reranking. BM25 wins overall nDCG@10. |
 
-Train a 3D-printed humanoid in Isaac Lab, score it in MuJoCo. 156 policies,
-6,348 sim2sim episodes. Transfer inverts the training ranking (23% falls vs
-0%). Four of thirteen findings retract earlier claims in the same repo. The
-free-standing robot sorts 22/24 rigid garment proxies with no falls.
+## Technical focus
 
-### [isaac-sim-pruning-workflow](https://github.com/joses2017smjh/isaac-sim-pruning-workflow)
+Python, PyTorch, OpenCV, Isaac Sim / Isaac Lab, MuJoCo, ONNX Runtime,
+FastAPI and Slurm. I connect model outputs to measurable behavior, document
+failure cases, and keep demos linked to the code and evaluation that support them.
 
-UR5e pruning in Isaac Sim: two Blender trees, live RGB-D tracking, dual-ToF
-sensing, recorded surrogate-release successes and failures.
+The [portfolio](https://jose-sanchez-portfolio-com.vercel.app/#projects) provides
+short visual case studies; the repositories contain setup, architecture,
+results and current limitations.
 
-### [Vision-Based Metric Depth Estimation for Robotic Pruning](https://github.com/joses2017smjh/Vision-Based-Metric-Depth-Estimation-for-Robotic-Pruning)
-
-Metric depth for a pruning cut, served as an API — metres, not a pretty PNG.
-DINOv2 RGB+D refinement; Torch vs ONNX agreement at 1.5e-5. Numbers and
-latency are on the [portfolio](https://jose-sanchez-portfolio-com.vercel.app).
-
-### [IsaacSimFolding](https://github.com/joses2017smjh/IsaacSimFolding)
-
-Reproducing *Learning to Fold* in Isaac Sim on a cluster whose pinned renderer
-segfaults — flow-matching VLA, RECAP+AWR, Thompson-sampled inference.
-
-### [Agentic-Soccer-Match-Prediction-MCP](https://github.com/joses2017smjh/Agentic-Soccer-Match-Prediction-MCP)
-
-Calibrated forecasts over MCP, with a GRPO staking policy and human approval.
-World Cup 2026 holdout numbers are on the portfolio, not restated here.
-
-## How I work
-
-I would rather publish a retraction than a number I cannot replay. The
-humanoid repo's stereo cameras looked 20° up for an entire rung because Isaac
-Lab 3.0 reads `(x, y, z, w)` and the pose was written `(w, x, y, z)`. The
-fix is in the tree; so is the voided table.
-
-## Contact
-
-sanchej7@oregonstate.edu · Oregon State University, Corvallis
+[Folding research: policy success/failure and both wrist cameras](https://jose-sanchez-portfolio-com.vercel.app/projects/isaac-folding/) — the successful clip is from an earlier checkpoint; the latest adaptation has not shown a gain.

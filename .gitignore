@@ -71,3 +71,11 @@ results/clips/frames/
 # Render-probe frames (25 MB) and raw Isaac logs stay local; the JSON measurements are committed.
 results/render_probe/*.png
 results/render_probe/*.log
+
+# Weekend campaign: retain small verdicts/manifests, never vendor environments,
+# policy weights/optimizers, render caches or scheduler stdout.
+results/weekend-*/deps/
+results/weekend-*/fold-*/step_*/
+results/weekend-*/fold-*/.step_*.pending/
+results/weekend-*/*_frames/
+results/weekend-*/*.out

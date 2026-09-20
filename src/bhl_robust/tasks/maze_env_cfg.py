@@ -29,17 +29,22 @@ the sensor could physically have seen the thing it is credited with seeing.
 
 from __future__ import annotations
 
+import isaaclab.sim as sim_utils
 from isaaclab.managers import ObservationTermCfg as ObsTerm
+from isaaclab.managers import RewardTermCfg as RewTerm
 from isaaclab.managers import SceneEntityCfg
+from isaaclab.managers import TerminationTermCfg as DoneTerm
 from isaaclab.utils import configclass
 from isaaclab.utils.noise import GaussianNoiseCfg
 
 from bhl_robust.sensors_rig import (
     LIDAR_SECTORS, lidar_obs, make_lidar_cfg, make_stereo_cfg,
 )
-from bhl_robust.tasks import furniture
 from bhl_robust.tasks.depth_env_cfg import depth_obs
+from bhl_robust.tasks import maze_mdp
 from bhl_robust.tasks.terrain_env_cfg import BipedBumpyEnvCfg
+from bhl_robust.terrains.maze import MAZE_TERRAINS_CFG
+from bhl_robust.terrains.maze_layout import CRUISE_SPEED, FLOOR_RGB
 # The BHL biped's own ObservationsCfg, not Isaac Lab's upstream one. Upstream's
 # carries a `height_scan` term bound to a `height_scanner` sensor this robot's
 # config does not create, so inheriting from it registers a term whose sensor
@@ -48,20 +53,9 @@ from bhl_robust.tasks.terrain_env_cfg import BipedBumpyEnvCfg
 import berkeley_humanoid_lite.tasks.locomotion.velocity.mdp as mdp  # noqa: E402
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.biped.env_cfg import (
     ObservationsCfg,
+    RewardsCfg,
+    TerminationsCfg,
 )
-
-# A single corridor with two junctions, signed. Small enough to train and
-# large enough that a wrong turn costs the episode.
-#   (x, y, length, axis)
-MAZE_WALLS = [
-    (0.0, +furniture.CORRIDOR_W / 2, 6.0, "x"),
-    (0.0, -furniture.CORRIDOR_W / 2, 6.0, "x"),
-    (3.0, +1.8, 2.6, "y"),
-    (-3.0, -1.8, 2.6, "y"),
-]
-JUNCTIONS = [((1.5, 0.0, 0.45), "left"), ((-1.5, 0.0, 0.45), "right")]
-OBSTACLES = [(0.6, 0.15), (-0.4, -0.20), (2.2, 0.05)]
-BUTTON_AT = (3.0, 0.0, 0.55)
 
 
 @configclass
@@ -140,15 +134,48 @@ class BothObsCfg(StereoObsCfg):
     critic: CriticCfg = CriticCfg()
 
 
-def _build_maze(scene) -> None:
-    """Walls, signs, floor obstacles and the button, on any maze scene."""
-    for i, w in enumerate(furniture.corridor_walls(MAZE_WALLS)):
-        setattr(scene, f"maze_wall{i}", w)
-    for i, (pos, heading) in enumerate(JUNCTIONS):
-        setattr(scene, f"maze_arrow{i}", furniture.arrow_marker(f"maze_arrow{i}", pos, heading))
-    for i, (x, y) in enumerate(OBSTACLES):
-        setattr(scene, f"maze_obs{i}", furniture.small_obstacle(f"maze_obs{i}", (x, y, 0.0)))
-    scene.maze_button = furniture.button("maze_button", BUTTON_AT)
+@configclass
+class MazeCurriculumCfg:
+    """No terrain-level promotion: every tile is the same corridor."""
+
+
+@configclass
+class MazeRewardsCfg(RewardsCfg):
+    """Walking rewards plus the button route."""
+
+    progress_to_button = RewTerm(func=maze_mdp.progress_to_button, weight=2.0)
+    button_reached = RewTerm(func=maze_mdp.button_reached, weight=10.0)
+    dead_end = RewTerm(func=maze_mdp.in_dead_end, weight=-2.0)
+
+
+@configclass
+class MazeTerminationsCfg(TerminationsCfg):
+    """Fall / timeout plus the button and the dead-end."""
+
+    button_reached = DoneTerm(func=maze_mdp.button_reached)
+    dead_end = DoneTerm(func=maze_mdp.in_dead_end)
+
+
+@configclass
+class MazeCommandsCfg:
+    """Walk the signed corridor to the button, not a random SE(2) draw."""
+
+    base_velocity: maze_mdp.MazeWaypointCommandCfg = maze_mdp.MazeWaypointCommandCfg(
+        resampling_time_range=(1.0e9, 1.0e9),
+        debug_vis=False,
+        asset_name="robot",
+        heading_command=True,
+        heading_control_stiffness=0.5,
+        rel_standing_envs=0.0,
+        rel_heading_envs=1.0,
+        cruise_speed=CRUISE_SPEED,
+        ranges=maze_mdp.UniformVelocityCommandCfg.Ranges(
+            lin_vel_x=(CRUISE_SPEED, CRUISE_SPEED),
+            lin_vel_y=(0.0, 0.0),
+            ang_vel_z=(-1.0, 1.0),
+            heading=(0.0, 0.0),
+        ),
+    )
 
 
 @configclass
@@ -160,9 +187,37 @@ class MazeBlindEnvCfg(BipedBumpyEnvCfg):
     it a terrain verdict.
     """
 
+    commands: MazeCommandsCfg = MazeCommandsCfg()
+    curriculum: MazeCurriculumCfg = MazeCurriculumCfg()
+    rewards: MazeRewardsCfg = MazeRewardsCfg()
+    terminations: MazeTerminationsCfg = MazeTerminationsCfg()
+
     def __post_init__(self):
         super().__post_init__()
-        _build_maze(self.scene)
+        # The first maze cloned furniture at ``{ENV_REGEX_NS}``, but generated
+        # terrain resets the robots at terrain-tile origins instead.  The
+        # walls could therefore be metres away and the ray sensors (which cast
+        # only against /World/ground) could not see them.  Fuse every hazard
+        # into the generated ground mesh so collision, spawn and sensing share
+        # one origin.
+        self.scene.terrain.terrain_generator = MAZE_TERRAINS_CFG
+        # Parent bumpy cfg clears the Nucleus shingle so height-fields do not
+        # stretch a roof texture. A PreviewSurface is what RTX actually
+        # colours; without it the fused mesh records as R=G=B (mazenav clips
+        # historical run). Ray sensors still cast distance, not albedo.
+        self.scene.terrain.visual_material = sim_utils.PreviewSurfaceCfg(
+            diffuse_color=FLOOR_RGB,
+        )
+        # Parent locomotion spawn is ±0.5 m and ±π yaw, which puts robots
+        # through the 0.90 m corridor walls and facing the dead end.  Face +x
+        # at the tile origin, inside the walls.
+        self.events.reset_base.params["pose_range"] = {
+            "x": (-0.20, 0.20), "y": (-0.15, 0.15), "yaw": (-0.25, 0.25),
+        }
+        self.events.reset_base.params["velocity_range"] = {
+            "x": (0.0, 0.0), "y": (0.0, 0.0), "z": (0.0, 0.0),
+            "roll": (0.0, 0.0), "pitch": (0.0, 0.0), "yaw": (0.0, 0.0),
+        }
 
 
 @configclass
@@ -250,4 +305,3 @@ class MazeBothP16EnvCfg(MazeBothEnvCfg):
         for grp in (self.observations.policy, self.observations.critic):
             for term in ("stereo_l", "stereo_r"):
                 getattr(grp, term).params["pool"] = 16
-
