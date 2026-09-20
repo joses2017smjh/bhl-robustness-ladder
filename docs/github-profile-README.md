@@ -1,54 +1,45 @@
 # Jose Sanchez
 
-MS Artificial Intelligence, Oregon State (2026). I measure robot learning
-systems until the measurement is the result — including when that means
-retracting my own numbers.
+I build robot-learning simulations and perception systems, then test where
+they fail. My work connects Isaac Lab, MuJoCo, PyTorch and reproducible HPC
+experiments.
 
-**Seeking:** robotics ML / simulation engineer, applied scientist (perception & control).
+**Seeking robotics ML / simulation engineering roles.** Oregon State University.
 
 [Portfolio](https://jose-sanchez-portfolio-com.vercel.app) ·
-[Email](mailto:sanchej7@oregonstate.edu) ·
-Resume (PDF on the portfolio)
+[Robotics résumé](https://jose-sanchez-portfolio-com.vercel.app/resumes/resume_robotics.pdf) ·
+[Email](mailto:sanchej7@oregonstate.edu)
 
-Python · PyTorch · Isaac Lab · MuJoCo · ONNX · computer vision · RL · Slurm/HPC
+[![Humanoid completes an ordered inspection route; known waypoints, learned gait and sensor braking](https://raw.githubusercontent.com/joses2017smjh/bhl-robustness-ladder/main/docs/gifs/weekend-inspection.gif)](https://github.com/joses2017smjh/bhl-robustness-ladder#readme)
 
-## Featured work
+## Selected engineering work
 
-### [bhl-robustness-ladder](https://github.com/joses2017smjh/bhl-robustness-ladder)
+### [Humanoid simulation and evaluation](https://github.com/joses2017smjh/bhl-robustness-ladder)
 
-Train a 3D-printed humanoid in Isaac Lab, score it in MuJoCo. 156 policies,
-6,348 sim2sim episodes. Transfer inverts the training ranking (23% falls vs
-0%). Four of thirteen findings retract earlier claims in the same repo. The
-free-standing robot sorts 22/24 rigid garment proxies with no falls.
+Versioned PPO tasks, cross-engine gait evaluation, sensor checks and Slurm
+promotion gates. The repaired known-route Isaac task scores **379/384** final
+first episodes. Separate MuJoCo missions demonstrate two-/three-robot
+synchronization with explicit negative controls. Known waypoints are not
+autonomous visual navigation.
 
-### [isaac-sim-pruning-workflow](https://github.com/joses2017smjh/isaac-sim-pruning-workflow)
+### [Vision-guided robotic pruning](https://github.com/joses2017smjh/isaac-sim-pruning-workflow)
 
-UR5e pruning in Isaac Sim: two Blender trees, live RGB-D tracking, dual-ToF
-sensing, recorded surrogate-release successes and failures.
+UR5e simulation with wrist RGB-D tracking, dual ToF and an independent capture
+grader. A 20-second recording shows approach, gated rigid-spur release and
+return; a failed tracking sequence shows motion stopping without release.
+One known target, not learned tree recognition or wood fracture.
 
-### [Vision-Based Metric Depth Estimation for Robotic Pruning](https://github.com/joses2017smjh/Vision-Based-Metric-Depth-Estimation-for-Robotic-Pruning)
+### [SPUR metric-depth service](https://github.com/joses2017smjh/spur-depth-service)
 
-Metric depth for a pruning cut, served as an API — metres, not a pretty PNG.
-DINOv2 RGB+D refinement; Torch vs ONNX agreement at 1.5e-5. Numbers and
-latency are on the [portfolio](https://jose-sanchez-portfolio-com.vercel.app).
-
-### [IsaacSimFolding](https://github.com/joses2017smjh/IsaacSimFolding)
-
-Reproducing *Learning to Fold* in Isaac Sim on a cluster whose pinned renderer
-segfaults — flow-matching VLA, RECAP+AWR, Thompson-sampled inference.
-
-### [Agentic-Soccer-Match-Prediction-MCP](https://github.com/joses2017smjh/Agentic-Soccer-Match-Prediction-MCP)
-
-Calibrated forecasts over MCP, with a GRPO staking policy and human approval.
-World Cup 2026 holdout numbers are on the portfolio, not restated here.
+Synthetic orchard depth from PyTorch models through FastAPI and split ONNX
+inference. Includes named-GPU latency measurements, numerical parity checks,
+and the accuracy loss when predicted masks replace ground truth. Synthetic
+validation is not field accuracy.
 
 ## How I work
 
-I would rather publish a retraction than a number I cannot replay. The
-humanoid repo's stereo cameras looked 20° up for an entire rung because Isaac
-Lab 3.0 reads `(x, y, z, w)` and the pose was written `(w, x, y, z)`. The
-fix is in the tree; so is the voided table.
+I keep failures and retractions next to the successful demos. A completed
+training job is not a completed robot task; every headline should lead to a
+protocol, a result file and a stated limit.
 
-## Contact
-
-sanchej7@oregonstate.edu · Oregon State University, Corvallis
+Python · PyTorch · Isaac Lab/Sim · MuJoCo · ONNX Runtime · OpenCV · Slurm · Apptainer

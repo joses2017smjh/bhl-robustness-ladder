@@ -1,179 +1,157 @@
-# Portfolio and GitHub presence — copy to paste
+# Robotics portfolio audit and publication plan — September 20, 2026
 
-This file is the recruiter-facing pack for
-[jose-sanchez-portfolio-com.vercel.app](https://jose-sanchez-portfolio-com.vercel.app)
-and github.com/joses2017smjh. The research repo stays the technical proof.
-Numbers below are already published in this repository or on the live site;
-nothing here is invented.
+Target: robotics ML / simulation engineering. The Apptronik simulation-architect
+application provides a useful direction, not evidence of staff-level industry
+experience. Its IDE notes file is not present on this HPC checkout.
 
-**Target roles:** robotics ML / simulation engineer, applied scientist
-(perception and control).
-**Stack to lead with:** Python, PyTorch, Isaac Lab, MuJoCo, ONNX, RL, metric
-depth, Slurm.
+Website: https://jose-sanchez-portfolio-com.vercel.app
 
----
+GitHub: https://github.com/joses2017smjh
 
-## 1 · Prioritized audit
+## 1. Prioritized audit
 
-GitHub profile has **no profile README** (`joses2017smjh/joses2017smjh` 404).
-Pinned repos currently surface older work (`AgCV`, `HomeWorkoutApp`) above the
-humanoid and pruning stacks. `bhl-robustness-ladder` had an empty topics list
-and a description that stopped at push recovery.
+1. **Correct the evidence first.** Maze jobs are complete, not queued. Folding
+   adaptation did not outperform its valid short-pants baseline. Keep Isaac
+   PPO results separate from the older gait shown in MuJoCo. A missing asset
+   in a rendering job is an infrastructure failure, not a failed policy.
+2. **Make the hiring direction explicit.** Lead with robotics simulation,
+   perception and evaluation. Do not present the Apptronik job title as a
+   title already held. Keep language/retrieval projects below the robotics work.
+3. **Create a profile entry point.** GitHub API inspection found no profile
+   README repository and no pinned repositories. Feature three strong projects,
+   not five loosely related ones.
+4. **Make the first demo inexpensive and clear.** Replace the 14 MB BHL hero
+   with a captioned 0.63 MB actual simulator GIF; link successes, controls and
+   raw scores. The website should use MP4 with posters and reduced-motion support.
+5. **State reproducibility limits.** Cluster paths and external weights/assets
+   are not a portable install. CPU tests, simulation integration and policy
+   evaluation are different layers. The BHL root has no license file; remove
+   the unsupported MIT statement rather than inventing a license.
 
-The portfolio already has a clear visual language and measured project cards.
-Gaps:
+The public portfolio already uses Astro, responsive components, accessible
+navigation, local fonts and reduced-motion handling. Preserve its visual
+system; content and evidence alignment have higher value than a redesign.
 
-| issue | why it costs interviews |
-|---|---|
-| Hero says “computer vision, 3D perception, and LLM systems” | the strongest 2026 work is **robot learning + measurement**, not LLM systems |
-| BHL card still says **89 policies** | the repo now reports **156**; recruiters who click through see a mismatch |
-| BHL card omits cloth-sort and the retractions | those are the two most distinctive claims |
-| FIG. 02 is `multi_race` only | the lab-floor + depth GIF and the free-standing sort are stronger 15 s demos |
-| Coursework projects (PointNet, DoM) sit equal with shipped stacks | they should be one click below, not in the first fold |
-| No “I am looking for X” line | a recruiter has to infer the role |
+## 2. Recommended featured projects
 
-This repo's README was already technically credible. It did not say who wrote
-it, what role they want, or walk a recruiter through four case studies in
-under a minute.
+| Order | Project | Why it earns the slot | Evidence boundary |
+|---|---|---|---|
+| 1 | [BHL robustness ladder](https://github.com/joses2017smjh/bhl-robustness-ladder) | Simulation debugging, staged RL, multi-robot worlds, HPC provenance | Known-route evaluation, not SSD autonomy or hardware transfer |
+| 2 | [Isaac robotic pruning](https://github.com/joses2017smjh/isaac-sim-pruning-workflow) | Sensor-conditioned control, USD scene work, independent grading, success/failure media | One known target and rigid-piece release, not wood fracture |
+| 3 | [SPUR depth service](https://github.com/joses2017smjh/spur-depth-service) | Perception-to-service engineering, ONNX parity, GPU-specific latency | Synthetic validation, not field RMSE |
 
----
+Keep folding as a clearly marked research/debugging case, not a fourth
+successful flagship. Keep coursework and other ML projects available below
+the featured section. Do not rename repositories: existing deep links and
+résumé references are useful.
 
-## 2 · Pin these five (in this order)
+GitHub profile pinning is not exposed by the authenticated GraphQL mutation
+schema inspected here. After publication: profile → Customize your pins →
+select these three in order. A featured README is not the same as pinned repos.
 
-1. **bhl-robustness-ladder** — this repo
-2. **isaac-sim-pruning-workflow**
-3. **Vision-Based-Metric-Depth-Estimation-for-Robotic-Pruning** (or `spur-depth-service` if that is the served API)
-4. **IsaacSimFolding**
-5. **Agentic-Soccer-Match-Prediction-MCP**
+## 3. Revised GitHub profile README
 
-Unpin or leave unpinned: `AgCV`, `HomeWorkoutApp`, homework repos,
-`Joseswebsite`.
+Exact publishable content: [github-profile-README.md](github-profile-README.md).
+It states the role, links résumé/contact, embeds a real low-bandwidth demo and
+introduces the three verified projects. It avoids aggregate policy counts
+whose scope has shifted and unsupported folding-reproduction claims.
 
-Profile README: copy [github-profile-README.md](github-profile-README.md) into
-a new public repo named `joses2017smjh`.
+## 4. Reusable technical project README structure
 
----
+1. **Name + outcome:** one sentence describing what the system demonstrably does.
+2. **Demo:** one short captioned GIF or poster linked to MP4. Label simulator,
+   controller type, playback speed and any oracle inputs.
+3. **Problem / contribution / measured result:** distinguish upstream work from
+   your contribution; link exact result files with denominator and scope.
+4. **Quickstart:** real commands, prerequisites, external assets and a smoke
+   test. Mark cluster-specific instructions explicitly.
+5. **Architecture:** one small data-flow diagram only if it explains the system.
+6. **Engineering decisions:** why this solver/controller/data split; alternatives
+   and failure modes.
+7. **Validation:** unit tests, integration checks, task metrics, controls and
+   known failures. Separate these rather than reporting one blended score.
+8. **Deployment and limits:** supported runtimes, hardware, licensing and
+   reproducibility gaps; links to deeper protocol and job ledger.
 
-## 3 · Hero copy (replace the current opening)
+The BHL README now follows this structure without removing historical evidence.
 
-**Eyebrow:** MS Artificial Intelligence, Oregon State · 2026
+## 5. Revised portfolio structure and copy
 
-**H1:** I measure robot learning until the number survives a second simulator.
+**Hero:** Robot perception and learned control, tested in simulation.
 
-**Sub:** Isaac Lab in, MuJoCo out. Perception APIs that return metres. I am
-looking for a robotics ML / simulation role.
+**Role:** Seeking robotics ML and simulation engineering roles.
 
-**Primary CTA:** View the humanoid ladder → `#humanoid` / GitHub
-**Secondary:** Resume · Email
+**Supporting line:** Three projects, from sensor inputs to measured outcomes.
+Watch the robots, inspect the code, and see where the systems still fail.
 
-Drop “LLM systems” from the first sentence. Soccer and MetaNaviT stay on the
-page; they are not the lead.
+**Primary CTA:** Explore selected work.
 
----
+**Secondary CTAs:** Robotics résumé · Email.
 
-## 4 · Humanoid Robustness Ladder — project card
+Page order: hero → three featured visual case studies → further work →
+background/résumé → hardware build log → contact.
 
-**Replace the current body** (it still says 89 policies).
+Each case study leads with a demo and uses problem, solution, contribution,
+result, limits and technologies. Deep technical detail goes to the repository.
+BHL shows its known-route score and the separate multi-robot/inspection mission;
+pruning shows the graded release and the tracking-loss stop; SPUR shows metric
+depth, service/export evidence and synthetic-data limits.
 
-**Title:** Humanoid Robustness Ladder
+Contact: **Hiring for robotics simulation or perception?**
 
-**One line:** How much disturbance an 11.3 kg, 6 Nm humanoid can take before it
-stops learning — scored in a simulator it never trained in.
+I’m looking for a robotics ML or simulation engineering role where I can
+build, test and improve robot-learning systems with a team.
 
-**Problem.** Upstream ships flat-ground PPO with no curriculum and no scoring
-path. A policy that only works in PhysX has learned the solver.
+## 6. GIF/demo shot lists
 
-**Solution.** Train in Isaac Lab (4,096 envs). Export ONNX. Replay through
-upstream's own controller in headless MuJoCo. Gates refuse a verdict without a
-control.
+These are edit plans, not claims that every proposed composite has been filmed.
 
-**Contribution.** The measurement stack: sim2sim harness, 13 findings, four
-retractions left in public, including a stereo rung whose cameras pointed 20°
-up because Isaac Lab 3.0 reads quaternions `(x, y, z, w)`.
+| Featured project | 0–5 seconds: starting state | 5–15 seconds: flow | 15–22 seconds: differentiator | 22–30 seconds: result |
+|---|---|---|---|---|
+| BHL | Show two inspection stations, route and dead-end branch | Humanoid visits stations and exits | Show wrong-branch rejection or a matched policy fall from the existing gait controls | Freeze the linked score; label oracle waypoints and the older gait |
+| Pruning | Show the known spur and wrist RGB-D | Approach, gate release at 7.8 s, begin retreat | Contrast tracking-loss stop with no release | Show independent 17/17 grade and one-target/rigid-piece boundary |
+| SPUR | Show synthetic RGB and calibration context | Request metric depth and reconstruct the point cloud | Show Torch/ONNX parity and GT-vs-predicted-mask comparison | Show named-GPU latency with precision; label synthetic-only validation |
 
-**Result.** 156 policies, 6,348 scored episodes. Highest training reward falls
-23% in MuJoCo; the repo default falls 0%. At terrain `d = 1.0`, 22-DoF falls
-11.7% against the biped's 37.8%. The free-standing robot sorts 22 of 24 rigid
-garment proxies with no falls.
+Available new BHL GIFs: [inspection](gifs/weekend-inspection.gif),
+[wrong-branch control](gifs/weekend-inspection-failure.gif),
+[three robots](gifs/weekend-team3.gif). Their adjacent JSON sidecars record
+source hashes, episode scores and speed. The wrong-branch GIF is an intentional
+supervisor error, not a learned-policy failure. Existing
+[multi-policy push footage](gifs/multi_race.gif) shows actual learned gaits
+succeeding and failing under a shared disturbance.
 
-**Tech:** Python, Isaac Lab, MuJoCo, PPO, rsl-rl, ONNX, Warp, Slurm
+No new weekend folding-policy video completed. Historical single-garment
+success/failure examples exist in the folding checkout, but lack the new
+strict camera/physics audit; do not present them as the adaptation result.
+Replay-control movies are not learned-policy demonstrations.
 
-**Links:** [GitHub](https://github.com/joses2017smjh/bhl-robustness-ladder) ·
-[README](https://github.com/joses2017smjh/bhl-robustness-ladder#readme) ·
-[Findings](https://github.com/joses2017smjh/bhl-robustness-ladder/blob/main/docs/FINDINGS.md)
+## 7. Exact implementation changes
 
-**Hero visual:** `docs/gifs/multi_lab.gif` (lab floor + depth band). Secondary:
-`docs/gifs/isaac/cloth_sort_free_base_shirt.gif`.
+- BHL: result-first README, current maze/folding documentation, setup limits,
+  profile source and this audit, plus labelled GIFs with provenance.
+- Rendering: inspection evaluator accepts an explicit video route/sensor mode
+  and rejects mismatched selections, so failure captures are not silently skipped.
+- GitHub: publish the scoped BHL implementation/evidence and create the exact
+  username profile repository; update descriptive metadata without renaming repos.
+- Website: update hero/contact, three featured projects, current BHL/folding
+  copy, local MP4/posters and evidence links. Preserve résumé content.
+- Tests: BHL CPU suite 145 passed; website build and public-page checks recorded
+  in the final handoff. Do not claim visual browser checks unless they execute.
+- Do not cancel held user jobs, restart expensive folding arrays, commit
+  checkpoints/environments, or publish unrelated dirty files.
 
----
+## 8. Final recruiter-style quality check
 
-## 5 · GIF / demo shot lists (15–30 s)
+- Can a reviewer identify the sought role and strongest project in seconds?
+- Does each headline have a visible source, denominator and limit?
+- Are simulation, real hardware, scripted supervision and learned control distinct?
+- Are failures, oracle inputs and partial evaluations visible rather than hidden?
+- Do repository, profile, website and résumé links agree?
+- Does the site retain keyboard access, reduced-motion posters and mobile layout?
+- Are installation limits and missing weights/assets stated?
+- Are pins/manual actions and deployment verification reported honestly?
 
-### Humanoid ladder — recruiter loop
-
-1. **Problem (0–6 s):** `multi_race.gif` — four policies, one shove; the
-   un-randomized robot is already on the ground.
-2. **Impressive flow (6–16 s):** `multi_lab.gif` — orange 22-DoF robot clears
-   cable / threshold / ramp; depth waterfall along the bottom.
-3. **Differentiator (16–22 s):** freeze on the red border when the push-trained
-   policy falls; caption “same clock, not a composite.”
-4. **Result (22–30 s):** `cloth_sort_free_base_shirt.gif` — two sweeps, shirt
-   in the basket, robot still standing. Caption “22/24 rigid proxies, 0 falls.”
-
-### Pruning depth (from the live site's FIG. 01)
-
-1. Field camera on dormant wood (starting state).
-2. RGB-D overlay with a cut in metres.
-3. API response / Torch vs ONNX delta.
-4. Latency number on V100.
-
-Do not use `ice_pair.gif` as a win. The ice result is retracted.
-
-### Cooperative lift — only as a failure case
-
-`carry_cube_pov.gif`: 7.8 cm lift, then the 41 cm collapse. Caption it as a
-negative result or skip it on the homepage.
-
----
-
-## 6 · Exact GitHub repo metadata
-
-```
-Description:
-Train a 3D-printed humanoid in Isaac Lab, score it in MuJoCo. 156 policies,
-6,348 sim2sim episodes, 13 findings — four of them retractions.
-
-Homepage:
-https://jose-sanchez-portfolio-com.vercel.app
-
-Topics:
-reinforcement-learning, isaac-lab, mujoco, humanoid-robotics, sim-to-sim,
-robotics, pytorch, computer-vision, domain-randomization, locomotion
-```
-
----
-
-## 7 · Website structure (keep the current visual system)
-
-1. Hero (copy above) + one looping GIF (`multi_lab.gif`)
-2. Featured: Humanoid ladder, pruning depth, pruning workflow
-3. Also: IsaacSimFolding, Soccer MCP, MetaNaviT
-4. Coursework (PointNet, DoM) under “Also”
-5. Beyond / now / resume — unchanged
-6. Footer: GitHub, LinkedIn, email, resume
-
-Each featured card: problem · solution · contribution · result · tech ·
-GitHub. No skill-percentage charts. No “innovative / scalable.”
-
----
-
-## 8 · Recruiter-style quality check
-
-| check | this pack |
-|---|---|
-| Role is stated | robotics ML / simulation, applied scientist |
-| Strongest project in <5 s | `multi_lab.gif` + 23% vs 0% |
-| Claims match the repo | 156 policies, 22/24 sort, ice/stereo retractions named |
-| Failures shown | lift 7.8 cm, zero task success, four retractions |
-| Contact | email + portfolio + GitHub |
-| No invented metrics | all figures from FINDINGS.md or the live site |
+The credible pitch is **simulation and evaluation engineering with inspectable
+results**, not a claim of solved general humanoid autonomy. Staff-level scope
+still needs evidence of production ownership and technical leadership; project
+polish must not substitute for that experience.

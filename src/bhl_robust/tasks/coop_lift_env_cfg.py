@@ -39,6 +39,8 @@ from berkeley_humanoid_lite_assets.robots.berkeley_humanoid_lite import (
     HUMANOID_LITE_JOINTS,
 )
 
+from bhl_robust.quat_order import native_quat
+
 from . import coop_lift_mdp as coop
 
 
@@ -68,25 +70,25 @@ def apply_strategy_flags(cfg) -> None:
 
 
 _HANDS = ["arm_left_hand_link", "arm_right_hand_link"]
-# Root 4-tuples. Isaac Lab documents these as (w, x, y, z) yaws. Forced and
-# forwarded (21192744, 21192773) they are not:
+# Root 4-tuples, always written (w, x, y, z). Cameras already go through
+# ``native_quat``; robot ``init_state.rot`` did not, and on v60 a wxyz yaw is
+# read as xyzw. CubeToShelf probe ``21342562``:
 #
-#   (0.707, 0, 0, -0.707) "yaw -90"  -> hands at -0.177 / +0.177  (a roll)
-#   (0.707, -0.707, 0, 0) "roll -90" -> hands at -0.6077 / -0.6077, toward=+1
+#   as_configured (today's "roll" 4-tuple, raw)     BURIED  27/27  R22 = -1
+#   current_native (that roll through native_quat)  BURIED  15/27  R22 ~ 0
+#   legacy_yaw_native (documented yaw -90, native)  STANDING 1/27  R22 = +1
+#   stand_up_raw (0, 0, 1, 0)                       STANDING
+#   identity_native                                 STANDING
 #
-# The second is what actually stands robot_a up and faces it at the cube.
-# robot_b is the opposite 4-tuple. (0, 0, 0, 1) "yaw 180" inverts the robot
-# (Z=+0.608); (0, 1, 0, 0) is the upright 180. BHL_LEGACY_YAW=1 restores the
-# 4-tuples every FINDINGS number trained on.
+# So the v51 "roll that faces the cube" is not a standing pose on v60 even
+# after reordering. The documented yaw through ``native_quat`` is. Default
+# literals are those documented yaws; ``_robot`` converts them.
+# ``BHL_LEGACY_YAW=1`` writes the same wxyz tuples without converting — the
+# 4-tuples every FINDINGS Isaac number trained on, which bury the robot on v60.
 _S2 = 0.70710678
-if os.environ.get("BHL_LEGACY_YAW") == "1":
-    _YAW_M90 = (_S2, 0.0, 0.0, -_S2)
-    _YAW_P90 = (_S2, 0.0, 0.0, _S2)
-    _YAW_180 = (0.0, 0.0, 0.0, 1.0)
-else:
-    _YAW_M90 = (_S2, -_S2, 0.0, 0.0)
-    _YAW_P90 = (_S2, _S2, 0.0, 0.0)
-    _YAW_180 = (0.0, 1.0, 0.0, 0.0)
+_YAW_M90 = (_S2, 0.0, 0.0, -_S2)
+_YAW_P90 = (_S2, 0.0, 0.0, _S2)
+_YAW_180 = (0.0, 0.0, 0.0, 1.0)
 
 # Crouch + side-hold from the scripted GIF. Standing spawn left hands ~0.5 m
 # above a floor object, which saturates a tanh(·/0.15) kernel. Pelvis drop is
@@ -114,11 +116,12 @@ _PINCH_JOINT_POS = {
 }
 
 def _robot(prim: str, pos: tuple[float, float, float], rot: tuple[float, float, float, float]) -> ArticulationCfg:
+    q = rot if os.environ.get("BHL_LEGACY_YAW") == "1" else native_quat(rot)
     return HUMANOID_LITE_CFG.replace(
         prim_path=prim,
         init_state=ArticulationCfg.InitialStateCfg(
             pos=(pos[0], pos[1], _PINCH_ROOT_Z),
-            rot=rot,
+            rot=q,
             joint_pos=_PINCH_JOINT_POS,
             joint_vel={".*": 0.0},
         ),

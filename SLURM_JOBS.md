@@ -18,9 +18,97 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 ---
 
-## Project status — 2026-09-15
+## Weekend recovery campaign — 2026-09-19
+
+Requested scope: sensor-driven maze tasks, actual cloth folding, and a shared
+task for 2–3 humanoids. New submissions are isolated from the historical runs.
+Machine-readable scheduler receipts and source hashes are recorded at submission
+in `results/weekend-20260919/submissions.jsonl`.
+
+| Job | Experiment | Latest audited state | Budget / dependency / result |
+|---|---|---|---|
+| `21359422` | Corrected maze Approach/Blind physics and task probe | **PASS** | ~85 s on RTX; integration only, zero first-episode successes with zero actions |
+| `21359430` | Folding SmolVLA two-update/checkpoint smoke | failed before Python | Container clean environment omits USER; wrapper now derives workspace from forwarded REPO |
+| `21359431` | Official LeHome fold evaluator / particle-health smoke | failed before Python | Same USER forwarding issue; corrected before retry |
+| `21359432` | Shared-world 2-humanoid airlock, 5 seeds × 3 modes | **PASS** | Coordinated 5/5, no-wait 0/5, withheld teammate 0/5; completed in 8:59 |
+| `21359473` | Shared-world 3-humanoid airlock, 5 seeds × 3 modes | **PASS** | Coordinated 5/5, no-wait 0/5, withheld teammate 0/5 |
+| `21359475` | MuJoCo deformable towel fold physics gate | **PASS** | 4/4 released folds, 0/4 untouched controls, no warnings/NaNs; idealized pickers |
+| `21359477` | Folding SmolVLA two-update/checkpoint smoke, corrected wrapper | failed | Current CUDA 12.8 Torch wheel excludes V100 SM70; no training occurred |
+| `21359478` | Official fold evaluator smoke, corrected wrapper | **invalid** | Found swallowed Storm render errors on garment switches; physics alone cannot validate camera inputs. New unique per-garment USD layers and strict image checks added |
+| `21359481` | Folding training smoke on compatible compute hardware | **PASS** | H100: two updates and durable checkpoints completed; this is a plumbing test, not a fold-rate result |
+| `21359486` | Maze Approach: 4 sensor conditions × 3 seeds, 500 iterations | **12/12 COMPLETED; gates PASS** (Sept 20 audit) | 380/384 first-episode successes; initial seed-0 counts were blind 32, lidar 31, paired depth 31, both 30 /32 |
+| `21359499` | Maze Corridor: 12 matched cells, 1,500 additional iterations | **12/12 COMPLETED; gates PASS** (Sept 20 audit) | 375/384 first-episode successes; aftercorr `21359486`, exact passed-checkpoint resumes verified |
+| `21359510` | Maze Full: 12 matched cells, 4,000 additional iterations | **12/12 COMPLETED; gates PASS** (Sept 20 audit) | 379/384 first-episode successes; blind 93/96, lidar 96/96, paired depth 94/96, both 96/96; aftercorr `21359499` |
+| `21359521` | Strict official folding evaluator smoke | **COMPLETED/PASS** | 2:46; unique per-garment USD layers and strict fresh-image checks; smoke only |
+| `21359522` | SmolVLA garment-fold adaptation seed 0 | **COMPLETED** | H100: 1,500 updates; final held-out adaptation loss 0.06787; partial task evaluation in `21359574` below |
+| `21359527` | Isolated V100-compatible Torch/cu126 environment | **PASS** | CPU-only install; compiled SM70 verified, existing venvs untouched |
+| `21359529` | DGX2 CUDA kernels + two-update folding gate | **PASS** | Real V100 convolution/optimizer/attention/save-load and two SmolVLA updates succeed |
+| `21359530` | SmolVLA garment-fold adaptation seed 1 on DGX2 | **COMPLETED** | V100 with isolated cu126; 1,500 updates, final held-out adaptation loss 0.06099; partial task evaluation in `21359575` below |
+| `21359573` | Fresh folding baseline: four garment classes, 24 episodes/class | 1 completed, 1 failed, 2 timeouts | Completed short pants 8/24; short-top scorer index mismatch; switching stalls elsewhere |
+| `21359574` | Adapted folding seed 0: matched evaluation | 2 completed, 1 failed, 1 timeout | Completed long tops and long pants 0/24 each; other classes incomplete |
+| `21359575` | Adapted folding seed 1: matched evaluation | 2 completed, 2 timeouts | Completed short pants 3/24, long pants 0/24; other classes incomplete |
+| `21359576` | Sensor-reactive cooperative pair: 3 seeds × 3 modes | **PASS** | Coordinated 3/3; no-wait and withheld-role 0/3; real IMU/rays consumed by braking |
+| `21359631` | Final campaign results/accounting report | **COMPLETED**, 0:0 | CPU-only, afterany final maze/folding arrays; `results/weekend-20260919/SUMMARY.md` includes failed/incomplete evaluations, not an all-success verdict |
+| `21359677` | Two-turn inspection maze: 3 seeds × 2 routes × 2 sensor modes | **PASS** | CPU 3:59; ordered sensor-reactive 3/3, outage 0/3, wrong branch 0/3; no contacts/falls |
+
+**Maze evidence audit, 2026-09-20:** all 36 curriculum elements have Slurm
+exit code `0:0`, passing JSON plus both PASS sentinels, and existing checkpoint
+files. Their absence from the queue means normal completion. Full-stage
+seed 0/1/2 successes are blind **32/29/32**, lidar **32/32/32**, paired depth
+**32/32/30**, and both **32/32/32**, each count out of 32. Evaluation uses a
+known route, fixed geometry and no observation corruption; it does not prove
+sensor advantage or autonomous RGB/SSD navigation. The Isaac curriculum is
+the **12-DoF biped**, whereas inspection and team-airlock evidence uses the
+**22-DoF humanoid with a separate frozen August 18 gait**.
+[Dated results and source JSONs](docs/WEEKEND_RESULTS_2026-09-20.md).
+
+Interactive checks use the confirmed-idle GPUs within existing desktop
+allocation `21358937`: a strict camera smoke and
+`results/weekend-20260919/team3-airlock.mp4` (measured 30.68 s completion,
+zero contacts/falls). The video rollout is a showcase; the separate five-seed
+jobs above provide its controls.
+The same allocation rendered `inspection-maze.mp4`: two ordered inspections
+and two changes of travel direction in 17.36 s, zero contacts/falls; oracle
+waypoints with sensor braking. Job `21359677` supplies its multi-seed controls.
+
+The interactive strict camera smoke **passed all 12 garments**, including
+garment switches: finite moving particles and fresh images throughout
+(`fold-interactive-strict-smoke-s101.json`). Its 12-step horizon tests the
+measurement path, not folding success. The scheduled seed-0 gate also passed.
+
+**Media audit, September 20:** sibling gate `21360435` failed before stepping
+or rendering because its robot asset path resolved under `lehome-fold-repro/Assets`
+instead of `lehome-data/Assets`. Array `21360436_[1-15%1]` remains
+`DependencyNeverSatisfied`; report `21360437` waits for the array. No new
+folding media completed. These jobs were not canceled or resubmitted here.
+See [folding status](docs/CLOTH_FOLDING_WEEKEND.md).
+
+The idle GPU in current desktop allocation `21367413` rendered one 7.00 s
+MuJoCo wrong-branch control on September 20. It correctly failed with
+`dead_end_entered`; JSON and MP4 are `inspection-maze-failure-video.json`
+and `inspection-maze-failure.mp4`. This is a labelled supervisor-error control,
+not a new training experiment. Three captioned GIFs and provenance sidecars are
+under `docs/gifs/weekend-*`.
+
+**Folding historical correction:** direct inspection of sibling job
+`21214241` found 23,250 swallowed Storm rendering errors after garment
+switches. Its recorded 6/24 physical fold events cannot serve as a validated
+closed-loop visual-policy baseline. Fresh strict-camera evaluation is required.
+
+Old jobs, including held MARL arrays and the user's interactive allocations,
+have not been cancelled or released by this campaign.
+
+## Project status — 2026-09-18
 
 **Done since the last status**
+
+- **B5 maze navigation PPO finished 12/12 (`21353395`–`398`).** Train smoke 4/4, mean episode length 26.6–28.1. Then 6,000 iterations × four arms × n=3. Last-50 from the event files (`results/mazenav_last50.csv`): they walk to timeout (~0.94), **button_reached is 0.000 in every seed of every arm**, `progress_to_button` max 0.0005. Sensors do not separate. `Metrics/success_rate` ~0.99 is not button success — it tracks surviving without falling. Old `maze-*` rows stay terrain-perception.
+- **B3 ice is under the robots and retrained (`21342561`, `21344927`–`928`).** Placement median **0.8 m**, reachable fraction **1.000**. Last-50 terrain level: depth **2.92** (2.854 / 2.984) against blind **2.59** (2.576 / 2.605), n=2. Visible-ice matches blind seed-for-seed (proprioception-only; the paint is not observed). Clip: `docs/gifs/ice_pair_placed.gif` (`21352982`). Finding 11's *old* +10.6% stays retracted; this is a new measurement on the actual ice tiles.
+- **B5 maze navigation smoke passed (`21353199`, 0:57).** 4/4 arms construct, reset and step. Command is `MazeWaypointCommand` on every arm. Spawn `|y|_max` 0.12–0.14 m inside the 0.55 m corridor limit; mean button distance 2.97–3.05 m. Lidar wall checks 2/2: nearest 0.442 m / 0.454 m. Curriculum has 0 terms. Old `maze-*` PPO rows stay terrain-perception results.
+- **C2 free-base hold at dt=0.005 failed (`21353200`).** 2/2 nonfinite. Same as 60 Hz (`21338288`). Skip.
+- **C2F jacket new VBD sheet failed (`21353201`).** 4/4 nonfinite, `success_rate_finite` 0. Skip jacket; shirt/sock already sort.
+- **Isaac C5 pose-fix four-episode (`21353130`).** 2/4 sorted, moved 4/4, travel 0.19 m, fall 0, nonfinite 0.
+- **rsl-rl factorised actor gate (`21353129`).** PASS, 3 iterations, ep_len 18.94.
 
 - **C2 cloth, 2026-09-15 (`21338288`–`293`).** Pinned-base Newton **sock sorts 4/4,
   all finite** (`isaac_c2f_sock.json`). Pinned-base **jacket is 0/4 finite** —
@@ -112,6 +200,12 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 **Rendered**
 
+- `docs/gifs/isaac/mazenav_seed0.gif` — four seed-0 navigation policies walking
+  the fused-mesh corridor until timeout. Robot in shot, walls in shot, button
+  not reached (`21355466`, 200 frames × 4).
+- `docs/gifs/ice_pair_placed.gif` — B3 after the patches sit under the robots
+  (median 0.8 m). Green blind against red depth, both stay upright (`21352982`).
+  The *old* `ice_pair.gif` is the retracted 72 m placement.
 - `docs/gifs/isaac/maze_stereo_fixed.gif` — the corrected 16×16 stereo policy walking,
   with its left eye as B5 had it before the quaternion fix (20° up, a strip of
   ground) beside the corrected eye (`21329137`).
@@ -132,32 +226,38 @@ Diagnostics that ran once, proved a point and were deleted are in
    stance (`a4f438b`), and on it, with balance v2 (`42ba537`), **the free-standing robot
    sorts 22 of 24 rigid proxies with no falls** (shirt 6/8, sock 8/8, jacket 8/8).
    **C2 on the fixed base sorts 4/4 with one-way cloth coupling** (two-way goes NaN).
-   Left: **jacket cloth on the pinned base still goes NaN** (0/4 finite,
-   `21338291`); sock cloth on that same rung is 4/4. C2 on the free base is
-   blocked until a still arm stays finite in Newton. Then online arm correction
-   from the base pose, for the last shirts; the sequential five-garment scene;
-   C1 training; C3–C5.
-2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
-   sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
-   designs. *Before that, the terrain rung's stereo arms finish re-running with
-   the cameras pointed down (`21317023`–`21317025`; 16×16 done, 0.774 at n=3).*
+   Left: **jacket cloth on the pinned base still goes NaN** (0/4 finite at 60 Hz
+   `21338291`, and 4/4 nonfinite on the softer/thicker sheet `21353201`); sock
+   cloth on that same rung is 4/4. C2 on the free base is blocked: a still arm
+   is 2/2 nonfinite at 60 Hz (`21338288`) and at dt=0.005 (`21353200`). No new
+   physics idea, so those cells stay unqueued. Isaac C5 pose-fix four-episode
+   is **2/4 sorted** (`21353130`, moved 4/4, travel 0.19 m). Then online arm
+   correction from the base pose; C1 training; C3.
+2. **Maze navigation PPO is done; they walk to timeout.** Env smoke `21353199`
+   PASS. Train smoke `21353395` 4/4 then 12/12 `mazenav-*` at 6,000 iterations
+   (`21353396`–`398`). Button success 0 in 12/12; sensors do not separate.
+   Seed-0 camera-sensor clips are done (`21355466`, glob `mazenav-*-s0`, cn-gpu7,
+   `docs/gifs/isaac/mazenav_seed0.gif`). Pooling arms (P8/P16) wait on a navigation score, not a gait
+   score. Old `maze-*` rows stay terrain-perception.
 3. **Isaac spawn for the coop/TaskV2 tasks**: robots still spawn under the
    floor (`robot_a` bodies at z −0.806…−0.027 in `21299608`). *Likely cause found,
    not yet probed:* on v60 the spawn tuple `(0.707, −0.707, 0, 0)` is read
    `(x, y, z, w)`, an upside-down robot facing the cube (R₂₂ = −1); the legacy
    `(0.707, 0, 0, −0.707)` is a −90° roll. The fix is `native_quat` on the intended
-   `(w, x, y, z)` yaw, plus a spawn probe.
+   `(w, x, y, z)` yaw, plus a spawn probe. `v2stand-*` seed-0 (`21352980`) is
+   still running: CubeToShelf blind/depth done, rgb running; BallToNet blind
+   failed (`train.sh`: mean episode length 1.00); remaining cells pending on
+   `%` limit.
 4. **MARL**: first block done at n=3 — limb2's lead did not replicate. Tier 1's
    grid is **paused**: no skrl setup has yet learned to walk to the command on
    stairs. The privileged-critic fix did not close the gap (`21330392`); the noise
    A/B (`21338294`) is next. If skrl cannot be made to match rsl-rl's PPO on the
    one-agent control, the limb split moves into rsl-rl as a factorised actor
-   instead. Tier 3 PPO: seed 0 done at 4.49, seed 1 queued (`21338295`); its skrl
-   rows stay held.
-5. **Put B3's ice where the robots are**: patches at the terrain origins, or moved
-   to `env_origins` at reset, on tiles flat enough that a flush patch stays flush;
-   re-probe with `scripts/bench/ice_placement_probe.py`; then the B3 PPO arms and
-   Tier 1's ice rows. Until then B3 and finding 11 stay retracted.
+   instead. Tier 3 PPO: seed 0 done at 4.49; remaining skrl/tier3 rows stay held.
+5. **B3 ice placement is done.** Patches at the terrain origins (`21342561`,
+   median 0.8 m, reachable 1.000). PPO `ppo-ice-placed-*` (`21344928`) and
+   `docs/gifs/ice_pair_placed.gif` (`21352982`). Finding 11's original +10.6%
+   stays retracted. Tier 1 ice rows stay held with the rest of the skrl grid.
 
 ---
 
@@ -278,6 +378,77 @@ rather than reshaped to fit.
 | 3 | `21234171` | regression after tightening the guard — still exit 0, 13 MB |
 | 2 | `21234053` | **exit 0, clip written** |
 | 1 | `21233950`, `21233969` | 45-into-301: depth appended in the wrong place, before the controller's own assembly |
+
+### B5 maze — navigation PPO · `done` — 2026-09-18, they walk to timeout
+
+Env smoke `21353199` **PASS** 4/4 (`MazeWaypointCommand`, spawn in corridor,
+lidar wall 0.44 m). Walls live in `/World/ground`. This block trained that MDP.
+
+Run names are `mazenav-*`, not `maze-*`. Old maze PPO rows stay
+terrain-perception results. Four arms (blind / lidar / stereo / both), three
+seeds, 6,000 iterations, 2,048 envs. Terrain curriculum is off.
+
+**Last-50 of the event files** (`results/mazenav_last50.csv`; 6,000 logged
+iterations each). `Metrics/success_rate` ~0.99 is **not** button success: it
+tracks surviving without falling. Button termination is 0.000 in 12/12, including
+the max over the whole run. `progress_to_button` never exceeds 0.0005.
+
+| arm | eplen | track_lin_vel_xy_exp | time_out | button_reached | seeds |
+|---|---:|---:|---:|---:|---|
+| blind | 483.8 | 0.606 | 0.948 | **0.000** | 483.3 / 482.4 / 485.6 |
+| lidar | 482.3 | 0.596 | 0.940 | **0.000** | 483.2 / 481.4 / 482.4 |
+| stereo | 483.2 | 0.597 | 0.949 | **0.000** | 483.9 / 480.5 / 485.2 |
+| both | 485.4 | 0.580 | 0.954 | **0.000** | 486.0 / 483.0 / 487.3 |
+
+They learned a gait that lasts the 20 s episode. They did not close on the
+plate. Sensors do not separate. Pooling arms wait on a navigation score.
+
+Train smoke (3 iterations, 64 envs): episode length 27.26 / 26.56 / 27.39 / 28.10.
+
+Seed-0 camera-sensor clips: `slurm/97c_mazenav_video.sbatch` (glob `mazenav-*-s0`,
+`--exclude=dgxh-1`, `v60_boot_gate`). Assembled on the login node by
+`scripts/gif_mazenav.py` once each arm has ≥50 PNGs. Does not overwrite `maze_*`
+frame dirs.
+
+| # | id | outcome |
+|---|---|---|
+| 6 | `21355623` | running on cn-gpu7 — colour re-render (PreviewSurface floor + clip overlays) |
+| 5 | `21355466` | **clip COMPLETED** (4:51, cn-gpu7) — 200 frames × 4 arms (`mazenav-*-s0`); grayscale (fused mesh had no albedo). `docs/gifs/isaac/mazenav_seed0.gif` |
+| 4 | `21353398` | **12/12 COMPLETED** — `mazenav-*-s2`, 4:10–7:34, afterok of `21353395` |
+| 3 | `21353397` | **COMPLETED** — `mazenav-*-s1`, 4:21–5:59 |
+| 2 | `21353396` | **COMPLETED** — `mazenav-*-s0`, 5:15–7:18 |
+| 1 | `21353395` | **COMPLETED** — 3-iter train smoke, Blind/Lidar/Stereo/Both, eplen 26.6–28.1 |
+
+### B3 ice — patches placed, retrained · `done` — 2026-09-17
+
+The 72 m placement (`21328532`) is retracted. The follow-up probe
+(`21342561`) puts each patch at its terrain origin: robot → nearest own patch
+p10 0.5 m, **median 0.8 m**, p90 1.0 m; reachable fraction **1.000**.
+
+PPO `ppo-ice-placed-*` (`21344928`), 6,000 iterations, 4,096 envs, n=2. Last-50
+terrain level from the event files (`results/ice_placed_last50.csv`):
+
+| arm | s0 / s1 | mean |
+|---|---|---:|
+| **depth** | 2.854 / 2.984 | **2.92** |
+| blind | 2.576 / 2.605 | 2.59 |
+| visible ice | 2.576 / 2.605 | 2.59 |
+
+Depth is +13% on the mean against blind, with ice actually under the robots.
+Visible-ice last-50 matches blind seed-for-seed: `IceVisible-v0` is still
+proprioception-only; the paint does not enter the observation. n=2, so
+suggestive. Finding 11's original +10.6% (measured on bumpy ground) stays
+retracted — different tiles, different absolute levels.
+
+Clip `docs/gifs/ice_pair_placed.gif` (`21352982`): both stay upright, peak x
++4.66 m (blind) / +4.45 m (depth). Do not confuse with `ice_pair.gif`.
+
+| # | id | outcome |
+|---|---|---|
+| 4 | `21352982` | **clip COMPLETED** (0:21) — `docs/gifs/ice_pair_placed.gif`, 13 MB |
+| 3 | `21352981` | **export COMPLETED** (1:02) |
+| 2 | `21344928` | **6/6 COMPLETED** — placed PPO, 6:54–9:15 |
+| 1 | `21342561` | **ICE-PLACEMENT REACHABLE** (0:59) — median 0.8 m |
 
 ### B5 maze — stereo re-run with the cameras pointing down · `done` — n=3, 2026-09-15
 **Every stereo number in the two B5 entries below was measured with the stereo
@@ -663,6 +834,9 @@ starts. v1 accepted those sweeps.
 
 | # | id | outcome |
 |---|---|---|
+| 51 | `21353201` | **COMPLETED — C2F jacket, new VBD sheet: 4/4 nonfinite**, `success_rate_finite` 0 (`isaac_c2f_jacket_mat.json`). Headline `success_rate` 1.0 is not a sort |
+| 50 | `21353200` | **COMPLETED — C2 free-base hold at dt=0.005: 0/2, 2/2 nonfinite**, garment travel ~0 (`isaac_c2_hold_dt005.json`). Same as 60 Hz |
+| 49 | `21353130` | **COMPLETED — Isaac C5 pose-fix, four episodes: 2/4 sorted**, moved 4/4, travel 0.19 m, fall 0, nonfinite 0 (`isaac_c5_posefix_full.json`) |
 | 48 | `21338293` | **FAILED** — C2 free base, jacket cloth: same NaN crash in `segment_on_contact` (afterany of 47) |
 | 47 | `21338292` | **FAILED** — C2 free base, sock cloth: same NaN crash (afterany of 46) |
 | 46 | `21338291` | **COMPLETED — C2F jacket, pinned, 0/4 finite.** 4/4 nonfinite, garment moved in 1/4, travel 5.4 cm mean (`isaac_c2f_jacket.json`). One-way coupling is not enough for this garment |
@@ -2056,7 +2230,17 @@ came from.
 | `21330372` | MARL critic A/B — limb1 privileged, limb1 policy-obs, legs2 MAPPO privileged; stairs, 1,500 iterations |
 | `21330392` | critic A/B arm 0 again, limb1 + MAPPO privileged — `_0` of `21330372` died at step 0 |
 | `21338294` | MARL noise A/B — std parameterisation × LR schedule on the one-agent control, stairs, 1,500 iterations |
-| `21338295` | Tier 3 PPO seed 1 (resubmitted; `21328744` cancelled — its dependency on the held seed-0 skrl rows could never clear) |
+| `21353199` | B5 maze navigation env smoke — **PASS** 4/4 |
+| `21353200` | C2 free-base hold at dt=0.005 — **2/2 nonfinite** |
+| `21353201` | C2F jacket new VBD sheet — **4/4 nonfinite** |
+| `21353395` | B5 mazenav train smoke — **PASS** 4/4, eplen 26.6–28.1 |
+| `21353396`, `21353397`, `21353398` | B5 mazenav PPO n=3 — **12/12 COMPLETED**, button 0 |
+| `21355623` | B5 mazenav colour re-render — queued, PreviewSurface overlays |
+| `21342561` | B3 ice placement follow-up — **REACHABLE**, median 0.8 m |
+| `21344927` | B3 ice-placed train smoke |
+| `21344928` | B3 ice-placed PPO n=2 — **6/6 COMPLETED** |
+| `21352981`, `21352982` | B3 ice-placed export + clip — `docs/gifs/ice_pair_placed.gif` |
+| `21353130` | Isaac C5 pose-fix four-episode — **2/4 sorted** |
 | `21300299`, `21300300`, `21300301` | cloth redesign: rigid smoke, Isaac C0 scripted (boot crash), C1 training smoke |
 | `21300348`, `21300493`, `21300494` | cloth redesign: C0 free base, C0 fixed base, C0 fixed-base clip |
 | `21300603`, `21300604`, `21300605` | cloth redesign with hand colliders: fixed-base C0, its clip, free-base C0 |
