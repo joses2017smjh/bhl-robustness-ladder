@@ -60,11 +60,23 @@ class MissionRunner(MultiRunner):
                     if force[0] >= 1.:
                         self.button_contacts.add(self.plates[world])
                 if self.contact_trace is not None and (world in self.walls or world in self.plates):
+                    body1 = int(self.m.geom_bodyid[a])
+                    body2 = int(self.m.geom_bodyid[b])
+                    world_body = int(self.m.geom_bodyid[world])
+                    base_q = self.d.qpos[slot.qpos_adr+3:slot.qpos_adr+7]
+                    base_yaw = float(np.arctan2(
+                        2*(base_q[0]*base_q[3] + base_q[1]*base_q[2]),
+                        1 - 2*(base_q[2]**2 + base_q[3]**2)))
                     self.contact_trace.append({
                         "time_s": float(self.d.time),
                         "geom1": mujoco.mj_id2name(self.m, mujoco.mjtObj.mjOBJ_GEOM, a) or "",
                         "geom2": mujoco.mj_id2name(self.m, mujoco.mjtObj.mjOBJ_GEOM, b) or "",
                         "world_geom": mujoco.mj_id2name(self.m, mujoco.mjtObj.mjOBJ_GEOM, world) or "",
+                        "body1": mujoco.mj_id2name(self.m, mujoco.mjtObj.mjOBJ_BODY, body1) or "",
+                        "body2": mujoco.mj_id2name(self.m, mujoco.mjtObj.mjOBJ_BODY, body2) or "",
+                        "world_body": mujoco.mj_id2name(self.m, mujoco.mjtObj.mjOBJ_BODY, world_body) or "",
+                        "base_xy": self.d.xpos[slot.body_id, :2].astype(float).tolist(),
+                        "base_yaw": base_yaw,
                         "distance_m": float(contact.dist),
                         "normal_force_N": float(force[0]) if world in self.plates else 0.,
                         "tangent_force_N": float(np.linalg.norm(force[1:3])) if world in self.plates else 0.,

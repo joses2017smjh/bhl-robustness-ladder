@@ -1,5 +1,13 @@
 # Mission7: procedural sensor-driven humanoid missions
 
+**September 22 clearance diagnosis:** the exact unchanged ten-fall replay was
+reproduced on the original physics node with zero pose error in all 10 episodes.
+Every fall followed plate contact; minimum robot/plate clearance reached
+−39.4 mm and six falls occurred during traversal, four after exit. No first
+wall/door/goal-post contact preceded a retained fall. The exact 10/10 upright
+gate therefore remains **closed** pending a staged plate-crossing intervention;
+route and sensor evaluations remain locked.
+
 **September 21 completed Approach diagnosis:** the six PPO cells failed their
 stable-learning gates. Exact paired replays implicated raised pressure-plate
 contact in ten route falls. The authorized privileged follow-up reached

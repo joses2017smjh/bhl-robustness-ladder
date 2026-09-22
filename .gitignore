@@ -86,4 +86,7 @@ results/mission7-*/source-*/
 results/mission7-*/**/*cache*/
 results/mission7-dev/
 results/mission7-*/*.out
+# Ten-episode contact/clearance traces are large transient diagnostics; keep
+# the compact result summaries and leave full traces on the cluster.
+results/mission7-*/**/episodes.json
 results/mission7-*/**/source-*/

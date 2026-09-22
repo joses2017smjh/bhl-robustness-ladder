@@ -50,6 +50,36 @@ the later fall. A replay with plate sliding friction changed from `1.0` to
 `0.20` also produced 10/10 falls, so that parameter-only intervention is
 rejected.
 
+## Exact replay clearance diagnosis — September 22
+
+The unchanged command stream was instrumented before another intervention. The
+valid run is Slurm `21396492` on `cn-c22`, using the validated Mission7 Python
+environment. The two earlier launches are infrastructure records: `21396422`
+failed because the node default Python had no MuJoCo, and `21396448` was
+canceled after its cross-node replay failed the required pose-match check. Only
+`21396492` is interpreted scientifically.
+
+All ten retained falls reproduced exactly (`maximum_pose_difference = 0.0` for
+every episode), and all ten still fell. Every episode had a plate contact before
+the fall; no first undesired wall, door, or goal-post contact preceded a fall.
+The minimum robot/obstacle clearance ranged from −39.4 mm to −12.6 mm, and the
+minimum plate-edge clearance reached −208.8 mm. Six failures occurred during
+plate traversal and four immediately after plate exit. First contacts were
+ankle contacts with `plate_0_-1` in six layouts and `plate_0_1` in four. The
+first-contact base offsets were approximately 0.21–0.38 m laterally and
+−0.20–0.13 m longitudinally from the correct plate center. The corresponding
+commanded motion often included simultaneous lateral translation and yaw
+correction; realized motion differed substantially around the later fall, while
+the unchanged replay itself remained exactly matched.
+
+This rules out a first wall/goal-post collision as the common immediate cause
+of these ten falls and points to an unsafe plate entry/traversal state: an ankle
+reaches the low plate while the base is offset, then the route continues with
+lateral/yaw motion. It does not prove that the first contact alone causes every
+later fall. The full per-step trace is retained on the cluster; the tracked
+lightweight evidence is
+[`diagnostic_summary.json`](../results/mission7-approach-followup-20260922/replay-diagnose-cn-c22/diagnostic_summary.json).
+
 ## Candidate mitigation
 
 `PlateSafeRouteController` keeps the measured route controller and official
@@ -91,10 +121,12 @@ controller and clearance issue, not evidence that a sensor policy is ready.
 
 1. Keep the sensor-only and four-sensor studies closed. Neither prerequisite
    control gate passed, and no new sensor jobs are queued.
-2. If Mission 7 continues, investigate a controller-side clearance strategy
-   for the world −x goal-post approach and a contact-safe plate maneuver. Any
-   candidate must first reproduce the exact ten retained layouts at 10/10
-   upright with plates enabled and unchanged geometry.
+2. The next bounded experiment is one staged plate maneuver: approach a
+   pre-plate pose, settle and square the heading, then make a short straight
+   crossing with yaw correction frozen. It changes one causal control factor;
+   geometry, activation semantics, fall predicates, and the ten-layout replay
+   set remain unchanged. Any candidate must reach the exact ten-layout 10/10
+   upright gate before route evaluation is considered.
 3. Re-run the 16 Doors and 16 Transport route batches only after that exact
    replay gate passes. Release sensor comparisons only after the privileged
    Approach gate reaches at least 60/64, zero falls, and at least 14/16 in each

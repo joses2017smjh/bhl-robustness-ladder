@@ -25,10 +25,16 @@ def physical_sample(env, command, phase):
         for geom in (contact.geom1,contact.geom2):
             if int(geom) in r.walls:
                 contacts.append(mujoco.mj_id2name(env.model,mujoco.mjtObj.mjOBJ_GEOM,int(geom)))
+    yaw = yaw_of(env)
+    velocity = r.d.qvel[s.qvel_adr:s.qvel_adr+2].copy()
+    rotation = np.array([[np.cos(yaw), np.sin(yaw)],
+                         [-np.sin(yaw), np.cos(yaw)]])
+    command = np.asarray(command, dtype=float)
     return dict(time_s=float(r.d.time),xy=r.d.xpos[s.body_id,:2].tolist(),
-                velocity=r.d.qvel[s.qvel_adr:s.qvel_adr+2].tolist(),yaw=yaw_of(env),
+                velocity=velocity.tolist(),velocity_body=(rotation @ velocity).tolist(),
+                command_world=(rotation.T @ command[:2]).tolist(),command=command.tolist(),yaw=yaw,
                 yaw_rate=float(r.d.qvel[s.qvel_adr+5]),tilt=float(r.tilt(0)),
-                command=np.asarray(command).tolist(),phase=phase,contacts=sorted(set(contacts)))
+                phase=phase,contacts=sorted(set(contacts)))
 
 
 def classify_fall(trace):
