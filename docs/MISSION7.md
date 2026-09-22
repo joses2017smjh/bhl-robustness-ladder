@@ -13,7 +13,13 @@ smoke completed on `21398074`, unlocking the documented route evaluation:
 Doors **1/16** and Transport **0/16** on `21398514` using the existing
 PlateSafeRouteController. The replay gate passed, but the separate privileged
 Approach gate remains below threshold at 56/64 with world −x 8/16, so sensor
-comparisons remain closed.
+comparisons remain closed. Episode-level analysis showed that the route
+campaign never activated the guarded `PlateStage`: it used the separate
+`PlateSafeRouteController` switch/brake path, so the exact replay gate did not
+test route-to-stage handoff. The corrected bounded six-episode handoff probe
+completed under Slurm `21399211` after infrastructure-only failures `21399179`
+and `21399201`; it activated the guarded stage in 4/6 episodes, completed 2/6,
+and produced 1/6 full success. No new broad route or sensor campaign is open.
 
 **September 21 completed Approach diagnosis:** the six PPO cells failed their
 stable-learning gates. Exact paired replays implicated raised pressure-plate

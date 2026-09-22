@@ -1,0 +1,95 @@
+"""Submit the small, source-frozen Mission 7 route handoff probe."""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--campaign", type=Path, required=True)
+    parser.add_argument("--stage", choices=("doors", "transport", "both"), required=True)
+    parser.add_argument("--indices", required=True)
+    parser.add_argument("--node", default="cn-c22")
+    parser.add_argument("--submit", action="store_true")
+    args = parser.parse_args()
+    campaign = args.campaign.resolve()
+    if not campaign.is_relative_to(ROOT):
+        parser.error("campaign must remain inside this repository")
+    out = campaign / "route-handoff-probe-cn-c22"
+    snapshot = out / "source"
+    if out.exists():
+        parser.error(f"destination exists; preserve it and choose a new campaign: {out}")
+    if not args.submit:
+        print(json.dumps({"planned_output": str(out), "stage": args.stage,
+                          "indices": args.indices, "node": args.node}, indent=2))
+        return
+    snapshot.mkdir(parents=True)
+    files = list((ROOT / "src/bhl_robust/mission").glob("*.py"))
+    files += [ROOT / name for name in (
+        "src/bhl_robust/__init__.py", "src/bhl_robust/sensor_io.py",
+        "src/bhl_robust/eval/__init__.py", "src/bhl_robust/eval/multi_robot.py",
+        "src/bhl_robust/eval/mjcf_assets.py", "src/bhl_robust/eval/livery.py",
+        "src/bhl_robust/eval/team_sensors.py", "slurm/mission7_route_handoff_probe.sbatch",
+    )]
+    files += list((ROOT / "scripts").glob("mission7*.py"))
+    hashes = {}
+    for source in files:
+        relative = source.relative_to(ROOT)
+        target = snapshot / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
+        hashes[str(relative)] = hashlib.sha256(target.read_bytes()).hexdigest()
+    (snapshot / "sha256.json").write_text(json.dumps(hashes, indent=2) + "\n")
+    command = [
+        "sbatch", "--parsable", "--job-name=m7-handoff-probe", "--account=eecs",
+        "--partition=share", "--cpus-per-task=2", "--mem=12G", "--time=02:00:00",
+        f"--nodelist={args.node}", f"--chdir={ROOT}",
+        f"--output={out}/m7-handoff-probe-%j.out",
+        f"--error={out}/m7-handoff-probe-%j.out",
+        str(snapshot / "slurm/mission7_route_handoff_probe.sbatch"),
+        str(ROOT), str(snapshot), str(out), args.stage, args.indices,
+    ]
+    clean_env = {key: value for key, value in os.environ.items()
+                 if not key.startswith("SLURM_") and key not in ("TMPDIR", "CUDA_VISIBLE_DEVICES")}
+    receipt = subprocess.check_output(command, env=clean_env, text=True).strip()
+    job_id = receipt.split(";")[0]
+    if not job_id.isdigit():
+        raise RuntimeError(f"unrecognized sbatch receipt: {receipt}")
+    row = {
+        "job_id": job_id,
+        "status": "SUBMITTED",
+        "stage": args.stage,
+        "indices": args.indices,
+        "requested_node": args.node,
+        "destination": str(out),
+        "source_snapshot": str(snapshot),
+        "source_sha256": hashes,
+        "command": command,
+        "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "submitted_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+    }
+    (out / "submission.json").write_text(json.dumps(row, indent=2) + "\n")
+    with (ROOT / "SLURM_JOBS.md").open("a") as stream:
+        stream.write(
+            f"\nMission7 route handoff probe (2026-09-22): **SUBMITTED** `{job_id}` — "
+            f"{args.stage} layouts `{args.indices}`, node `{args.node}`, 2 CPUs / 12 GB / 0 GPUs / 2 h; "
+            f"guarded PlateStage added only at existing PlateSafeRouteController switch handoff; "
+            f"receipt/source hashes: `{out.relative_to(ROOT)}/submission.json`.\n"
+        )
+        stream.flush()
+        os.fsync(stream.fileno())
+    print(json.dumps(row, indent=2))
+
+
+if __name__ == "__main__":
+    main()

@@ -2464,3 +2464,19 @@ Mission7 staged plate intervention `21397732` **COMPLETED 0:0** on `cn-c22`; the
 Mission7 route smoke `21398074` **COMPLETED 0:0** on `cn-c22`; all four one-layout legacy/measured Doors/Transport smoke paths finished with finite terminal records. It unlocked the documented 16-layout route evaluation.
 
 Mission7 documented route evaluation `21398514` **COMPLETED 0:0** on `cn-c22`; Doors completed at 1/16 success (4 falls, 11 timeouts) and Transport at 0/16 success (6 falls, 10 timeouts). Compact verdict: `results/mission7-approach-followup-20260922/route-eval-cn-c22-v2/result.json`. No sensor jobs were submitted.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399179` — both layouts `1,4,8`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; guarded PlateStage added only at existing PlateSafeRouteController switch handoff; receipt/source hashes: `results/mission7-approach-followup-20260922/route-handoff-probe-cn-c22/submission.json`.
+
+Mission7 route handoff probe `21399179` **FAILED infrastructure** before episode execution on `cn-c22`; the bare node Python lacked numpy. No scientific episode was produced.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399201` — same six layouts and one-factor switch handoff, corrected interpreter path; receipt/source hashes: `results/mission7-approach-followup-20260922-v2/route-handoff-probe-cn-c22/submission.json`.
+
+Mission7 route handoff probe `21399201` **FAILED infrastructure** before episode execution; the selected interpreter lacked MuJoCo. No scientific episode was produced.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399211` — same six layouts and one-factor switch handoff, verified shared Humanoid Lite MuJoCo venv; receipt/source hashes: `results/mission7-approach-followup-20260922-v3/route-handoff-probe-cn-c22/submission.json`.
+
+Mission7 route handoff probe `21399211` **COMPLETED 0:0** on `cn-c22`; 4/6 guarded-stage activations, 2/6 completions, and 1/6 full success. Compact evidence: `results/mission7-approach-followup-20260922/route-handoff-probe-summary.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399201` — both layouts `1,4,8`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; guarded PlateStage added only at existing PlateSafeRouteController switch handoff; receipt/source hashes: `results/mission7-approach-followup-20260922-v2/route-handoff-probe-cn-c22/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399211` — both layouts `1,4,8`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; guarded PlateStage added only at existing PlateSafeRouteController switch handoff; receipt/source hashes: `results/mission7-approach-followup-20260922-v3/route-handoff-probe-cn-c22/submission.json`.
