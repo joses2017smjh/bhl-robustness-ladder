@@ -19,7 +19,14 @@ campaign never activated the guarded `PlateStage`: it used the separate
 test route-to-stage handoff. The corrected bounded six-episode handoff probe
 completed under Slurm `21399211` after infrastructure-only failures `21399179`
 and `21399201`; it activated the guarded stage in 4/6 episodes, completed 2/6,
-and produced 1/6 full success. No new broad route or sensor campaign is open.
+and produced 1/6 full success. The required two-episode early-handoff probe
+`21399449` then activated before target plate contact in both layout-1 cases;
+all three staged crossings completed, Transport/1 succeeded end-to-end, and
+Doors/1 timed out only after the first stage during route rejoin. This supports
+the handoff hypothesis for the original layout-1 failure, but does not resolve
+post-stage route continuation. No new broad route or sensor campaign is open.
+The compact early-handoff evidence is
+[`early-handoff-probe-summary.json`](../results/mission7-approach-followup-20260922/early-handoff-probe-summary.json).
 
 **September 21 completed Approach diagnosis:** the six PPO cells failed their
 stable-learning gates. Exact paired replays implicated raised pressure-plate

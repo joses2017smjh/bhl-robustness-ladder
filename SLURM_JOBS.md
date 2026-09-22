@@ -2480,3 +2480,7 @@ Mission7 route handoff probe `21399211` **COMPLETED 0:0** on `cn-c22`; 4/6 guard
 Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399201` — both layouts `1,4,8`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; guarded PlateStage added only at existing PlateSafeRouteController switch handoff; receipt/source hashes: `results/mission7-approach-followup-20260922-v2/route-handoff-probe-cn-c22/submission.json`.
 
 Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399211` — both layouts `1,4,8`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; guarded PlateStage added only at existing PlateSafeRouteController switch handoff; receipt/source hashes: `results/mission7-approach-followup-20260922-v3/route-handoff-probe-cn-c22/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399449` — both layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff; receipt/source hashes: `results/mission7-approach-followup-20260922-early/route-early-handoff-cn-c22/submission.json`.
+
+Mission7 route handoff probe `21399449` **COMPLETED 0:0** on `cn-c22`; exactly two episodes ran. Both first target handoffs preceded plate contact, all three observed staged crossings completed, Transport/layout 1 succeeded end-to-end, and Doors/layout 1 timed out after the first stage during route rejoin. Compact evidence: `results/mission7-approach-followup-20260922/early-handoff-probe-summary.json`.

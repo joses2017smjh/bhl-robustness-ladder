@@ -132,11 +132,63 @@ succeeded from a comparable entry, and world −x layout 8 failed inside the
 handoff. The exact replay gate was therefore too narrow in two ways: it did
 not exercise route activation timing, and its ten layouts did not include the
 world −x capture/transition geometry. The next smallest justified experiment
-is an early-handoff-only probe on layouts 1 (Doors and Transport), starting the
-same unchanged `PlateStage` from the pre-contact near-plate condition rather
-than waiting for `switch`; do not change stage timing, geometry, scoring, or
-the fall predicate, and do not release another 16+16 sweep until that probe is
-interpretable.
+was an early-handoff-only probe on layouts 1 (Doors and Transport), starting
+the same unchanged `PlateStage` from the pre-contact near-plate condition
+rather than waiting for `switch`.
+
+## Early route-to-stage handoff probe — September 22
+
+Slurm `21399449` ran exactly two episodes: Doors/layout 1 and
+Transport/layout 1. It changed only the handoff condition: the existing
+`PlateStage` activation predicate was polled continuously, rather than only
+while the route controller reported `switch`. Stage timing (0.40 s settle and
+1.20 s cross), geometry, activation semantics, terminal criteria, and the fall
+predicate were unchanged. The compact result is
+[`early-handoff-probe-summary.json`](../results/mission7-approach-followup-20260922/early-handoff-probe-summary.json);
+the raw source-frozen traces are retained under the early probe directory.
+
+| Episode | Handoff / first target contact | Stage result | Route result | Taxonomy |
+|---|---:|---|---|---|
+| Doors/1 | 19.800 / 21.537 s; **+1.737 s** | completed at 25.000 s | timeout at 180 s; first door open/crossed, second incomplete | after-stage route rejoin |
+| Transport/1, door 0 | 20.400 / 22.3195 s; **+1.9195 s** | completed at 25.800 s | continued | no stage failure |
+| Transport/1, door 1 | 57.600 / 59.035 s; **+1.435 s** | completed at 62.200 s | full success at 84.120 s | no divergence |
+
+The original layout-1 failures were falls at 22.28 s (Doors) and 22.88 s
+(Transport), before the guarded stage activated. With early handoff, neither
+episode fell. Doors/1 still timed out after the first guarded crossing, while
+Transport/1 completed both crossings, pickup, carry, release, and the full task.
+Thus the pre-contact failure mode disappeared in both paired cases; the
+intervention is supported as a route-to-stage handoff fix, but it is not a
+complete route solution.
+
+The entry states are close to the successful replay capture distribution. The
+first Doors/1 entry was distance 0.736 m, lateral offset −0.733 m, forward
+offset 0.069 m, heading error +0.024 rad, speed 0.586 m/s, and yaw rate
+0.063 rad/s, entering from route `advance` at waypoint 4. The first
+Transport/1 entry was distance 0.741 m, lateral offset −0.739 m, forward
+offset 0.045 m, heading error +0.039 rad, speed 0.963 m/s, and yaw rate
+0.213 rad/s, also from `advance` at waypoint 4. This does not support an
+insufficient stage capture region as the primary explanation for layout 1.
+The later Transport/1 door-1 entry was also inside the distance/lateral ranges
+but had a +1.512 rad heading error and still completed.
+
+The metrics are intentionally separated: handoff-before-contact passed for
+both first target stages; all three observed staged crossings completed;
+post-stage continuation passed in Transport/1 but failed to reach the second
+door in Doors/1; full-task success was 1/2. The Doors/1 failure is therefore a
+post-stage route rejoin/state-transition failure, not a PlateStage fall. World
+−x was not tested by this two-episode probe; the prior layout-8 probe remains
+the evidence that world −x can fail inside approach/settle/cross. Route-to-
+stage handoff is dominant for the original layout-1 failure, but not for every
+route failure: the existing 16+16 taxonomy still contains navigation,
+manipulation, incomplete interaction, and post-interaction failures.
+
+The next smallest justified intervention is a single-factor, deterministic
+Doors/layout-1 route-rejoin probe after a completed `PlateStage`. It must
+preserve the existing stage, action/activation semantics, and fall criteria,
+and instrument whether the post-stage controller state advances to door 1. No
+world-−x probe, threshold sweep, sensor experiment, or 16+16 route evaluation
+is justified before that rejoin mechanism is isolated.
 
 ## Contact dynamics hypothesis
 
@@ -235,8 +287,9 @@ controller and clearance issue, not evidence that a sensor policy is ready.
 2. Do not launch another broad route sweep or reopen the closed sensor studies
    from this result. The bounded staged replay gate passed, but the paired route
    evaluation remains low at 1/16 Doors and 0/16 Transport. The six-episode
-   handoff probe is the current targeted evidence; the next action is the
-   two-episode early-handoff probe described above, not a route sweep.
+   handoff probe and the two-episode early-handoff probe are the current
+   targeted evidence. The next action is a single-factor Doors/layout-1
+   post-stage route-rejoin probe, not a route sweep.
 
 The complete route aggregate is
 [`transport_summary.json`](../results/mission7-approach-followup-20260921/transport_array/transport_summary.json);
@@ -284,5 +337,6 @@ were canceled before consuming a scientific result.
 | 21399179 | six-episode route handoff probe | failed infrastructure; bare node Python lacked numpy |
 | 21399201 | corrected six-episode route handoff probe | failed infrastructure; selected interpreter lacked MuJoCo |
 | 21399211 | validated six-episode route handoff probe | complete; 4/6 guarded activations, 2/6 completions, 1/6 success |
+| 21399449 | two-episode early route-to-stage handoff probe, layouts 1 (Doors and Transport) | complete; both first handoffs preceded target contact, 3/3 staged crossings completed, Transport success, Doors post-stage timeout |
 
 No GPU resources were used by these diagnostics.
