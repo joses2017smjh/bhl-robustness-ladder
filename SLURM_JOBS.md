@@ -1,5 +1,12 @@
 # Slurm job ledger
 
+**Mission7 Approach diagnosis — closed September 21:** 18 retained tasks
+completed, including six PPO controls; one invalid replay (21384691) was
+cancelled and replaced by successful same-node replay 21384742. No jobs from
+this diagnostic campaign remain active. Allocation: **11.96 CPU-hours, zero
+GPUs**. No stable-learning or sensor-comparison gate passed.
+[Final results and all job IDs/dependencies](docs/MISSION7_APPROACH_DEBUG.md).
+
 What we are trying to achieve, which Slurm ID did it, and — when something ran
 more than once — one line on why the previous attempt did not count.
 
@@ -15,6 +22,55 @@ Status: `todo` · `running` · `done` · `blocked`
 
 Diagnostics that ran once, proved a point and were deleted are in
 [one-off probes](#one-off-probes) rather than getting a section each.
+
+---
+
+## Mission7 procedural sensor benchmark — 2026-09-20
+
+**User-approved queue cleanup, September 20:** cancelled old blocked media
+array `21360436_[1-15]` and its report `21360437`, held Tier 3 tasks
+`21328743_1`/`21328743_2`, held terrain tasks `21328607_[5-11]` and
+`21328608_[5-11]`, and running `21352980_8` (`v2stand-planktowall-rgb-s0`).
+The latter still reported one-step episodes, fallen 1.0 and success 0.0 near
+iteration 6,000/8,000. Slurm accounting confirms these cancellations. Existing
+logs/checkpoints and already completed array tasks were preserved. Desktop
+`21369598` and Mission7 learning job `21369796` were kept running. This cleanup
+supersedes older pending/held status notes below; it does not erase their history.
+
+New work remains in this repository on `main`; existing jobs and results are
+preserved. [Task, observation audit, matrix and limits](docs/MISSION7.md).
+Receipts: `results/mission7-20260920/submissions.jsonl`; immutable run source
+and SHA256 manifest: `results/mission7-20260920/source/`.
+
+| Job | Experiment | Latest audited state | Allocation / dependency / evidence |
+|---|---|---|---|
+| `21369795` | Phase A: all four arms ×3 objective types; PPO reset/update, contact and placement controls | **COMPLETED / infrastructure PASS** | `cn-b02`, `share`, 2 CPUs, 12 GB, **0 GPUs**; 49 s, exit `0:0`; JSON `passed:true` and `MISSION7_SMOKE_PASS`; `cluster-smoke/smoke.json` |
+| `21369796` | Phase B: Both, seed 0, Approach; 400×64 PPO decisions | **FAILED learning gate; training finished** | 54:38, exit `2:0`; final validation **0/16**; checkpoint preserved; no nonfinite PPO failure |
+| `21369990` | End-of-day diagnostic: 16 training layouts ×2 reset seeds ×slow/fast oracle and stationary control | **COMPLETED diagnostic** | 12:19, exit `0:0`; fast oracle **22/32**, slow **0/32**, stationary **0/32**; privileged feasibility only |
+| `21369991` | End-of-day diagnostic: final Both checkpoint ×16 validation layouts ×4 sensor conditions | **COMPLETED diagnostic** | 9:16, exit `0:0`; normal **0/16**, LiDAR missing **0/16**, depth missing **2/16**, both missing **0/16**; no sensor-benefit claim |
+
+At diagnostic submission, Phase B still had **0/16 validation successes at
+updates 100, 200 and 300**, and no successes in the first 356 training episodes
+(161 timeouts, 195 excessive-contact failures). Therefore no larger training
+sweep was released. The diagnostics retain the frozen Phase B task and leave
+held-out test layouts untouched. Local checks: two new unit tests passed;
+all diagnostic modes stepped finitely. On one training layout, fast privileged
+control completed the approach, while slow control and standing still timed
+out. That is a physical feasibility fixture, not learned-policy success.
+Receipts/source hashes: `results/mission7-diagnostics-20260920/`; eventual
+reports: `feasibility/report.json` and `checkpoint/report.json` in that folder.
+
+Local qualification before submission: **155 tests passed**, all **12**
+arm/stage finite PPO cells passed, four physical switch controls passed, and
+released-object placement succeeded while its outside-zone control failed.
+These are infrastructure/physics fixtures, not learned mission successes.
+`results/mission7-20260920/qualification.json` records tested source hashes.
+Logs are `results/mission7-20260920/m7-*.out`. Full multi-seed training and
+held-out evaluations remain planned behind measured learning gates.
+
+Startup audit: Phase B completed its initial **0/16** untrained-policy validation
+and reached update **10/400** (640 decisions, finite PPO losses). This is training
+progress, not a learning-success verdict. The later `gate.json` is authoritative.
 
 ---
 
@@ -2291,3 +2347,78 @@ sacct -j <id> --format=JobID%14,JobName%14,State%12,Elapsed -X
 
 A "why it was re-run" line should name the cause, not the symptom. "Failed" is
 not a reason; "the gif width fell into `"$@"` after `shift 5`" is.
+
+## Mission7 bounded overnight diagnostics — 2026-09-20
+
+Fourteen additional CPU tasks; original pilot and diagnostics preserved. No full campaign or held-out policy evaluations submitted.
+
+**Final audit, September 21:** all 14 scheduler tasks **COMPLETED**, exit `0:0`;
+none remain queued. Nine training studies finished all 200 updates, each with
+**0/8 final validation success / learning gate FAILED**. D1 and D2 completed
+their audits. S1–S3 completed only their prerequisite check and recorded
+**SKIPPED_NOT_LEARNABLE**; they did not train. Actual elapsed allocated CPU
+time: **16.22 CPU-hours**, zero GPUs (56 CPU-hour requested cap).
+Final evidence: `results/mission7-overnight-20260920/final-audit-20260921.json`
+and `scheduler-final-20260921.psv`; current task states are in `matrix.json`.
+
+| Array | Studies | Final state / outcome | Dependency |
+|---|---|---|---|
+| `21370064_[0-8%3]` | A1, A2, A3, A4, A5, B1, C2, C3, C4 | **COMPLETED; nine failed learning gates** | none |
+| `21370065_[12-13%2]` | D1, D2 | **COMPLETED diagnostics** | none |
+| `21370066_[9-11%3]` | S1, S2, S3 | **COMPLETED; SKIPPED_NOT_LEARNABLE** | afterok:21370064_8 |
+
+D2 final privileged full-route success: Doors **4/16**, Transport **4/16**;
+localized components: doors **13/16**, transport **7/8**. D1 confirms varying
+sensor features and sparse positive reward. C4's transient 2/8 validation at
+update 100 did not persist or pass the gate. Full findings and proposed next
+studies: [MISSION7_OVERNIGHT.md](docs/MISSION7_OVERNIGHT.md).
+No new jobs submitted during this closeout. The startup notes below are
+historical observations, superseded by this final audit.
+
+Each task: 2 CPUs, 12 GB, zero GPUs, 2 h cap; total maximum 56 CPU-hours. Sensor tasks also require C4 JSON learning evidence; otherwise they write `SKIPPED_NOT_LEARNABLE` without training. C4 is reused as the matched Both arm, and A1 doubles as the current-PPO sweep baseline. Receipts, config hashes, source hashes, commit and output paths: `results/mission7-overnight-20260920/matrix.json` and `results/mission7-overnight-20260920/submissions.jsonl`. Scheduler completion certifies diagnostic execution only, never learned success.
+
+Startup audit: **VALIDATED** (160 tests, 15 targeted rechecks, finite execution smokes). **RUNNING**: `21370064_0`, `_1`, `_2`, `21370065_12`, `_13`. A4/A5/B1/C2/C3/C4 remain **SUBMITTED / PENDING** under the training array throttle. S1–S3 remain **SUBMITTED / PENDING** behind `afterok:21370064_8` and the C4 JSON learning gate. Slurm confirms `cpu=2,mem=12G` and no GPU allocation. Complete task matrix, budgets, limitations and inspection commands: [MISSION7_OVERNIGHT.md](docs/MISSION7_OVERNIGHT.md).
+
+Early output audit (campaign still RUNNING): A1 wrote a finite PPO update; D1 static geometry audit **COMPLETED**, 352 unique topology hashes. D2 localized reports **COMPLETED**: door 0 **6/8**, door 1 **7/8**, transport **7/8** (acquisition 8/8). These are privileged component successes, not full-route or learned mission results. Full-route interaction rollouts continue. `results/mission7-overnight-20260920/startup-audit.json` preserves this observation.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21383807` array `0-2%3` — gait; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21383808` — c4; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384040` — gait_extra; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384041` — approach; dependency afterok:21383807; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384042` — rewards; dependency afterok:21383807; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384077` — fullroute; dependency afterok:21384040; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384200` — approach_recovery; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384285` array `0-3%4` — train; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384354` — fullroute_recovery; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384572` array `0-1%2` — train_exploration; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384641` — gait_endurance; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384691` — fall_replay; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384742` — fall_replay; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/replay-on-original-node/submissions.jsonl`.
+
+Mission7 control follow-up (2026-09-21): `21385772`, `21386044`, `21386064`, and `21386072` were canceled or failed before scientific execution because of invalid snapshot/input paths; their logs are preserved under `results/mission7-approach-followup-20260921/`.
+
+Mission7 control follow-up (2026-09-21): **SUBMITTED** `21386084` — initial detailed contact probe; completed but rejected by the explicit pose-match check after instrumentation altered some replay trajectories. **SUBMITTED** `21386215` — corrected pose-matched contact probe; pending.
+
+Mission7 control follow-up (2026-09-21): **SUBMITTED** `21386145` — balanced four-direction Approach with 0.50 m/s measured translation and matched standstill controls; 56/64 controller successes, 0 falls, 0/64 matched standstill, 12/64 easy standstill; final result preserved at `results/mission7-approach-followup-20260921/approach_controller_speed05/`.
+
+Mission7 control follow-up (2026-09-21): **SUBMITTED** `21386200` — exact ten replay contact-brake mitigation plus 16 Doors / 16 Transport route evaluation; failed after the replay phase on a controller initialization bug. All follow-up tasks request 2 CPUs, 12 GB, zero GPUs, and are pinned to `cn-c22` for paired physics.
+
+Mission7 control follow-up (2026-09-21): **SUBMITTED** `21386394` — corrected pre-contact replay and route evaluation; **SUBMITTED** `21386441` — bounded plate sliding-friction contact-parameter replay (geometry and activation unchanged).
+
+Mission7 control follow-up (2026-09-21): `21386488` completed the 16 Doors portion (1/16 success, 4 falls, 11 timeouts) before its sequential Transport phase was replaced by **SUBMITTED** array `21386803_[0-15%4]` for 16 parallel Transport episodes. The replacement preserves the completed Doors records and keeps the same controller, split, seed, and resource limits.
+
+Mission7 control follow-up (2026-09-21): `21386215` was canceled after one exact pose-matched episode to bound an oversized floor-contact trace; `21386409` was the filtered rerun and `21386539` is the corrected full-reset pose-matched contact probe. The final valid probe reproduced all ten unchanged falls with maximum pose error `0.0`; evidence is under `contact_probe-rerun5/`.
+
+Mission7 control follow-up finalization (2026-09-21): `21386145` completed with 56/64 Approach successes, zero falls, 8/16 in world −x, 16/16 in the other directions, and matched standstill 0/64. This fails the privileged Approach gate. `21386539` completed the corrected filtered contact probe: all ten unchanged replay trajectories matched exactly and all ten still fell. `21386540` completed the plate-friction intervention (sliding friction 1.0 → 0.20) with 10/10 falls, so the parameter-only intervention was rejected. `21386488` completed the contact-safe Doors route at 1/16 success (4 falls, 11 timeouts) and was canceled during partial Transport. Replacement array `21386803_[0-15%4]` completed all 16 Transport episodes: 1/16 success, 13 falls, and 2 timeouts. Aggregate: `results/mission7-approach-followup-20260921/transport_array/transport_summary.json`.
