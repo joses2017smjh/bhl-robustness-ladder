@@ -33,9 +33,12 @@ def physical_to_action(command, base_action):
 class RouteHandoffController:
     """PlateSafe routing with an explicitly scoped stage handoff condition."""
 
-    def __init__(self, env, handoff_mode="switch"):
+    def __init__(self, env, handoff_mode="switch", rejoin_diagnostic=False,
+                 rejoin_fix="none"):
         self.env = env
         self.handoff_mode = handoff_mode
+        self.rejoin_diagnostic = bool(rejoin_diagnostic)
+        self.rejoin_fix = rejoin_fix
         self.route = PlateSafeRouteController(env, contact_hold_s=1.0)
         self.stage = PlateStage(env)
         self.handoff_seen = False
@@ -48,6 +51,129 @@ class RouteHandoffController:
         self.stage_activation_times = []
         self.stage_entries = []
         self.plate_contact_events = []
+        self.route_action_events = []
+        self.decision_events = []
+        self.stage_exit_events = []
+        self.post_step_events = []
+        self.rejoin_fix_until = 0.
+        self.rejoin_fix_used = False
+        self.rejoin_fix_events = []
+        self.post_stage_exit_time = None
+        self.post_stage_exit_waypoint = None
+        self.post_stage_last_target_waypoint = None
+        self.post_stage_best_target_distance = None
+        self.post_stage_last_target_progress_time = None
+        if self.rejoin_diagnostic:
+            route_action = self.route.action
+
+            def traced_route_action():
+                before = self._route_snapshot()
+                action = route_action()
+                after = self._route_snapshot()
+                self.route_action_events.append({
+                    "time_s": float(self.env.runner.d.time),
+                    "before": before,
+                    "after": after,
+                    "route_action": np.asarray(action, dtype=float).tolist(),
+                })
+                return action
+
+            # Observe the existing route call without changing its arguments,
+            # return value, or state transitions.
+            self.route.action = traced_route_action
+
+    def _route_target(self):
+        """Read-only reconstruction of the target selected by route code."""
+        env, route, state = self.env, self.route, self.env.state
+        xy = env.runner.d.xpos[env.slot.body_id, :2].copy()
+        waypoint = int(route.waypoint)
+        target = None
+        target_kind = None
+        door_index = None
+        interaction_index = None
+        if env.stage == "transport" and not state.acquired:
+            limit = env.layout.object_index
+            if waypoint < limit:
+                target_kind, target = "waypoint", env.layout.xy(env.layout.route[waypoint])
+            else:
+                target_kind, target = "parcel", env.runner.d.xpos[env.parcel_body, :2].copy()
+                interaction_index = "acquire"
+        else:
+            if waypoint < len(env.layout.route) - 1:
+                target_kind, target = "waypoint", env.layout.xy(env.layout.route[waypoint])
+            for door, k in enumerate(env.layout.door_indices):
+                if waypoint >= k and not state.open[door]:
+                    door_index = int(door)
+                    interaction_index = "activate"
+                    center = env.layout.xy(env.layout.route[k])
+                    if np.linalg.norm(xy - center) < .5:
+                        target_kind = "plate"
+                        target = env.layout.plate(door, env.layout.correct_sides[door])
+                    else:
+                        target_kind, target = "door_center", center
+                    break
+            if (env.stage == "transport" and waypoint == len(env.layout.route) - 1
+                    and all(state.crossed)):
+                goal = env.layout.xy(env.layout.route[-1])
+                mount = env.runner.d.xmat[env.slot.body_id].reshape(3, 3) @ [.32, 0, .48]
+                target_kind, target = "release", goal - mount[:2]
+                interaction_index = "release"
+        if target is None:
+            target = env.layout.xy(env.layout.route[-1])
+            target_kind = "goal"
+        target = np.asarray(target, dtype=float)
+        delta = target - xy
+        yaw = yaw_of(env)
+        target_heading = float(np.arctan2(delta[1], delta[0])) if np.linalg.norm(delta) > 1e-9 else yaw
+        return {
+            "target_kind": target_kind,
+            "target_xy": target.tolist(),
+            "target_waypoint": waypoint,
+            "door_index": door_index,
+            "interaction_index": interaction_index,
+            "route_segment_index": waypoint,
+            "planner_goal": target_kind,
+            "expected_next_state": ("stage_" + self.stage.phase
+                                     if self.stage.phase != "recorded" else env.phase),
+            "target_distance_m": float(np.linalg.norm(delta)),
+            "target_heading_error_rad": float(wrap(target_heading - yaw)),
+            "target_behind": bool(np.dot(delta, np.array([np.cos(yaw), np.sin(yaw)])) < 0.),
+        }
+
+    def _route_snapshot(self):
+        """Read-only state needed to diagnose stage-to-route transition."""
+        env, route, state = self.env, self.route, self.env.state
+        slot = env.slot
+        velocity = env.runner.d.qvel[slot.qvel_adr:slot.qvel_adr + 2].astype(float)
+        return {
+            "time_s": float(env.runner.d.time),
+            "active_controller": ("PlateStage:" + self.stage.phase
+                                   if self.stage.phase != "recorded"
+                                   else "PlateSafeRouteController"),
+            "env_phase": env.phase,
+            "stage_phase": self.stage.phase,
+            "stage_door": None if self.stage.door is None else int(self.stage.door),
+            "stage_done": sorted(int(x) for x in self.stage.done),
+            "base_xy": env.runner.d.xpos[slot.body_id, :2].astype(float).tolist(),
+            "base_yaw_rad": float(yaw_of(env)),
+            "velocity_world_mps": velocity.tolist(),
+            "linear_speed_mps": float(np.linalg.norm(velocity)),
+            "angular_velocity_radps": float(env.runner.d.qvel[slot.qvel_adr + 5]),
+            "open": list(state.open),
+            "crossed": list(state.crossed),
+            "acquired": bool(state.acquired),
+            "carrying": bool(state.carrying),
+            "failure": state.failure,
+            "completed_s": state.completed_s,
+            "route_waypoint": int(route.waypoint),
+            "route_previous_open": list(route.previous_open),
+            "route_previous_carry": bool(route.previous_carry),
+            "route_brake_until_s": float(route.brake_until),
+            "route_contact_brake_until_s": float(route.contact_brake_until),
+            "route_plate_contacts_seen": sorted(set(route.plate_contacts_seen)),
+            "route_reset_reinitialize_hook_invoked": False,
+            **self._route_target(),
+        }
 
     def _entry_state(self, previous_route_phase, route_action):
         """Record the state at the instant the unchanged stage is acquired."""
@@ -88,6 +214,8 @@ class RouteHandoffController:
         }
 
     def action(self):
+        stage_phase_before_action = self.stage.phase
+        route_snapshot_before = self._route_snapshot() if self.rejoin_diagnostic else None
         base_action = self.route.action()
         recorded = np.tanh(base_action[:3]) * np.asarray([0.4, 0.35, 0.4])
         now = float(self.env.runner.d.time)
@@ -125,13 +253,96 @@ class RouteHandoffController:
                 if not self.phase_history or self.phase_history[-1].get("phase") != self.env.phase:
                     self.phase_history.append({"time_s": now, "phase": self.env.phase,
                                                "event": "transition"})
-                return physical_to_action(command, base_action)
-        return base_action
+                effective_action = physical_to_action(command, base_action)
+            else:
+                effective_action = base_action
+        else:
+            effective_action = base_action
+        if (self.rejoin_diagnostic and stage_phase_before_action != "recorded"
+                and self.stage.phase == "recorded"):
+            self.post_stage_exit_time = now
+            self.post_stage_exit_waypoint = int(self.route.waypoint)
+            self.post_stage_last_target_waypoint = None
+            self.post_stage_best_target_distance = None
+            self.post_stage_last_target_progress_time = None
+            self.stage_exit_events.append({
+                "time_s": now,
+                "active_controller_before": "PlateStage:" + stage_phase_before_action,
+                "active_controller_after": "PlateSafeRouteController",
+                "route_state_at_exit": self._route_snapshot(),
+                "stage_history": list(self.stage.history),
+            })
+        target = self._route_target()
+        if (self.post_stage_exit_time is not None
+                and target["target_kind"] == "waypoint"):
+            target_waypoint = int(target["target_waypoint"])
+            target_distance = float(target["target_distance_m"])
+            if target_waypoint != self.post_stage_last_target_waypoint:
+                self.post_stage_last_target_waypoint = target_waypoint
+                self.post_stage_best_target_distance = target_distance
+                self.post_stage_last_target_progress_time = now
+            elif (self.post_stage_best_target_distance is None
+                  or target_distance < self.post_stage_best_target_distance - .02):
+                self.post_stage_best_target_distance = target_distance
+                self.post_stage_last_target_progress_time = now
+        if (self.rejoin_fix == "forward_pulse" and self.rejoin_diagnostic
+                and self.post_stage_exit_time is not None and not self.rejoin_fix_used
+                and self.rejoin_fix_until <= now
+                and self.post_stage_last_target_progress_time is not None
+                and now - self.post_stage_last_target_progress_time >= .8
+                and self.route.waypoint > self.post_stage_exit_waypoint
+                and self.env.phase == "advance"
+                and target["target_kind"] == "waypoint"):
+            self.rejoin_fix_used = True
+            self.rejoin_fix_until = now + .4
+            self.rejoin_fix_events.append({
+                "time_s": now,
+                "event": "start_forward_restart_pulse",
+                "route_waypoint": int(self.route.waypoint),
+                "target": target,
+                "stalled_for_s": float(now - self.post_stage_last_target_progress_time),
+                "best_target_distance_m": self.post_stage_best_target_distance,
+            })
+        if self.rejoin_fix_until > now:
+            self.env.phase = "rejoin_recover"
+            effective_action = physical_to_action([.30, 0., 0.], base_action)
+        if self.rejoin_diagnostic:
+            route_snapshot_after = self._route_snapshot()
+            self.decision_events.append({
+                "time_s": now,
+                "active_controller_before": route_snapshot_before["active_controller"],
+                "active_controller_after": route_snapshot_after["active_controller"],
+                "stage_phase_before": stage_phase_before_action,
+                "stage_phase_after": self.stage.phase,
+                "route_state_before": route_snapshot_before,
+                "route_state_after": route_snapshot_after,
+                "effective_action": np.asarray(effective_action, dtype=float).tolist(),
+            })
+        return effective_action
 
     def observe_contacts(self, events):
         for event in events:
             if event["world_geom"].startswith("plate_"):
                 self.plate_contact_events.append(event)
+
+    def observe_step(self, action):
+        if not self.rejoin_diagnostic:
+            return
+        sample = self.env.diagnostic_trace[-1] if self.env.diagnostic_trace else None
+        self.post_step_events.append({
+            "time_s": float(self.env.runner.d.time),
+            "state": self._route_snapshot(),
+            "effective_action": np.asarray(action, dtype=float).tolist(),
+            "physical_sample": sample,
+        })
+        now = float(self.env.runner.d.time)
+        if self.rejoin_fix_until and now >= self.rejoin_fix_until:
+            self.rejoin_fix_events.append({
+                "time_s": now,
+                "event": "end_forward_restart_pulse",
+                "route_waypoint": int(self.route.waypoint),
+            })
+            self.rejoin_fix_until = 0.
 
 
 def run(args):
@@ -144,11 +355,15 @@ def run(args):
             env = DebugEnv(args.repo, args.out / f"{stage}-{index}-cache",
                            stage=stage, split="validation", seed=1000)
             env.reset(index)
-            controller = RouteHandoffController(env, handoff_mode=args.handoff)
+            controller = RouteHandoffController(
+                env, handoff_mode=args.handoff, rejoin_diagnostic=args.rejoin_diagnostic,
+                rejoin_fix=args.rejoin_fix)
             while True:
                 env.runner.contact_trace = []
-                _, _, done, _ = env.step(controller.action())
+                effective_action = controller.action()
+                _, _, done, _ = env.step(effective_action)
                 controller.observe_contacts(env.runner.contact_trace)
+                controller.observe_step(effective_action)
                 if done:
                     break
             row = env.metrics()
@@ -179,6 +394,27 @@ def run(args):
                  if item["phase"] == "recorded"),
                 None,
             )
+            rejoin_diagnostic = None
+            if args.rejoin_diagnostic and controller.stage_exit_events:
+                first_exit = controller.stage_exit_events[0]
+                window_start = float(first_exit["time_s"]) - 1.0
+                rejoin_diagnostic = {
+                    "window_start_s": window_start,
+                    "window_end_s": float(env.runner.d.time),
+                    "stage_exit_events": controller.stage_exit_events,
+                    "controller_transition_trace": [
+                        event for event in controller.decision_events
+                        if event["time_s"] >= window_start
+                    ],
+                    "route_action_trace": [
+                        event for event in controller.route_action_events
+                        if event["time_s"] >= window_start
+                    ],
+                    "post_stage_state_trace": [
+                        event for event in controller.post_step_events
+                        if event["time_s"] >= window_start
+                    ],
+                }
             row.update(
                 layout_index=index,
                 stage=stage,
@@ -214,6 +450,9 @@ def run(args):
                 fall_time_s=None if fall is None else fall["time_s"],
                 fall_phase=None if fall is None else fall["phase"],
                 failure_phase=failure_phase,
+                rejoin_fix=args.rejoin_fix,
+                rejoin_fix_events=controller.rejoin_fix_events,
+                rejoin_diagnostic=rejoin_diagnostic,
             )
             rows.append(row)
             (args.out / f"{stage}-{index}.json").write_text(json.dumps(row, indent=2) + "\n")
@@ -229,6 +468,8 @@ def run(args):
         "fall_predicate_unchanged": True,
         "plate_stage_internal_behavior_unchanged": True,
         "handoff_mode": args.handoff,
+        "rejoin_fix": args.rejoin_fix,
+        "rejoin_diagnostic": args.rejoin_diagnostic,
         "route_episode_count": len(rows),
         "guarded_stage_activations": sum(row["guarded_stage_activated"] for row in rows),
         "guarded_stage_completions": sum(row["guarded_stage_completed"] for row in rows),
@@ -251,6 +492,8 @@ if __name__ == "__main__":
     parser.add_argument("--stage", choices=("doors", "transport", "both"), required=True)
     parser.add_argument("--indices", required=True, help="comma-separated validation layout indices")
     parser.add_argument("--handoff", choices=("switch", "early"), default="switch")
+    parser.add_argument("--rejoin-diagnostic", action="store_true")
+    parser.add_argument("--rejoin-fix", choices=("none", "forward_pulse"), default="none")
     args = parser.parse_args()
     args.repo = args.repo.resolve()
     args.out = args.out.resolve()

@@ -22,6 +22,8 @@ def main():
     parser.add_argument("--node", default="cn-c22")
     parser.add_argument("--handoff", choices=("switch", "early"), default="switch")
     parser.add_argument("--output-name", default="route-handoff-probe-cn-c22")
+    parser.add_argument("--rejoin-diagnostic", action="store_true")
+    parser.add_argument("--rejoin-fix", choices=("none", "forward_pulse"), default="none")
     parser.add_argument("--submit", action="store_true")
     args = parser.parse_args()
     campaign = args.campaign.resolve()
@@ -60,6 +62,7 @@ def main():
         f"--error={out}/m7-handoff-probe-%j.out",
         str(snapshot / "slurm/mission7_route_handoff_probe.sbatch"),
         str(ROOT), str(snapshot), str(out), args.stage, args.indices, args.handoff,
+        "diagnostic" if args.rejoin_diagnostic else "standard", args.rejoin_fix,
     ]
     clean_env = {key: value for key, value in os.environ.items()
                  if not key.startswith("SLURM_") and key not in ("TMPDIR", "CUDA_VISIBLE_DEVICES")}
@@ -73,6 +76,8 @@ def main():
         "stage": args.stage,
         "indices": args.indices,
         "handoff": args.handoff,
+        "rejoin_diagnostic": args.rejoin_diagnostic,
+        "rejoin_fix": args.rejoin_fix,
         "requested_node": args.node,
         "destination": str(out),
         "source_snapshot": str(snapshot),
@@ -86,7 +91,8 @@ def main():
         stream.write(
             f"\nMission7 route handoff probe (2026-09-22): **SUBMITTED** `{job_id}` — "
             f"{args.stage} layouts `{args.indices}`, node `{args.node}`, 2 CPUs / 12 GB / 0 GPUs / 2 h; "
-            f"unchanged PlateStage with `{args.handoff}` route handoff; "
+            f"unchanged PlateStage with `{args.handoff}` route handoff"
+            f" and rejoin diagnostic `{args.rejoin_diagnostic}` with fix `{args.rejoin_fix}`; "
             f"receipt/source hashes: `{out.relative_to(ROOT)}/submission.json`.\n"
         )
         stream.flush()

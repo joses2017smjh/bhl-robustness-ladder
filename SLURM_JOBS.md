@@ -2484,3 +2484,15 @@ Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399211` — both lay
 Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399449` — both layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff; receipt/source hashes: `results/mission7-approach-followup-20260922-early/route-early-handoff-cn-c22/submission.json`.
 
 Mission7 route handoff probe `21399449` **COMPLETED 0:0** on `cn-c22`; exactly two episodes ran. Both first target handoffs preceded plate contact, all three observed staged crossings completed, Transport/layout 1 succeeded end-to-end, and Doors/layout 1 timed out after the first stage during route rejoin. Compact evidence: `results/mission7-approach-followup-20260922/early-handoff-probe-summary.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399494` — both layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True`; receipt/source hashes: `results/mission7-approach-followup-20260922-rejoin/route-rejoin-diagnostic-cn-c22/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399502` — doors layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True` with fix `forward_pulse`; receipt/source hashes: `results/mission7-approach-followup-20260922-rejoin-fix/route-rejoin-fix-cn-c22/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399503` — doors layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True` with fix `forward_pulse`; receipt/source hashes: `results/mission7-approach-followup-20260922/route-rejoin-fix-v2-cn-c22/submission.json`.
+
+Mission7 route rejoin diagnostic `21399494` **COMPLETED 0:0** on `cn-c22`; Doors/1 and Transport/1 both rejoined with valid route state. Doors/1 stalled physically at waypoint 8 after the first staged crossing; Transport/1 advanced through waypoint 8 and succeeded. Raw evidence: `results/mission7-approach-followup-20260922-rejoin/route-rejoin-diagnostic-cn-c22/`.
+
+Mission7 route rejoin attempt `21399502` **COMPLETED 0:0** on `cn-c22`; the requested pulse did not activate because the probe runner omitted the submitted fix argument. The diagnostic trace is retained, but this job is not interpreted as an intervention result. Raw evidence: `results/mission7-approach-followup-20260922-rejoin-fix/route-rejoin-fix-cn-c22/`.
+
+Mission7 corrected Doors/1 route rejoin intervention `21399503` **COMPLETED 0:0** on `cn-c22`; the single 0.30 m/s forward pulse activated at 45.8–46.2 s, but the robot remained at waypoint 8 and timed out at 180 s. Raw evidence: `results/mission7-approach-followup-20260922/route-rejoin-fix-v2-cn-c22/`.

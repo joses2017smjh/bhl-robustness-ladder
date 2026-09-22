@@ -22,10 +22,14 @@ and `21399201`; it activated the guarded stage in 4/6 episodes, completed 2/6,
 and produced 1/6 full success. The required two-episode early-handoff probe
 `21399449` then activated before target plate contact in both layout-1 cases;
 all three staged crossings completed, Transport/1 succeeded end-to-end, and
-Doors/1 timed out only after the first stage during route rejoin. This supports
-the handoff hypothesis for the original layout-1 failure, but does not resolve
-post-stage route continuation. No new broad route or sensor campaign is open.
-The compact early-handoff evidence is
+Doors/1 timed out only after the first stage during route rejoin. Read-only
+diagnostics in `21399494` showed a valid route-state transition followed by a
+physical waypoint-8 stall in Doors/1, while Transport/1 advanced through the
+same waypoint. The corrected single forward-pulse rerun `21399503` activated
+the pulse but still timed out at waypoint 8. This supports early handoff as the
+fix for the original layout-1 pre-contact falls, but identifies post-stage
+physical rejoin as the remaining Doors/1 failure. No new broad route or sensor
+campaign is open. The compact early-handoff evidence is
 [`early-handoff-probe-summary.json`](../results/mission7-approach-followup-20260922/early-handoff-probe-summary.json).
 
 **September 21 completed Approach diagnosis:** the six PPO cells failed their

@@ -5,7 +5,7 @@
 #SBATCH --mem=12G
 #SBATCH --time=02:00:00
 set -euo pipefail
-repo=${1:?repo}; snapshot=${2:?snapshot}; out=${3:?out}; stage=${4:?stage}; indices=${5:?indices}; handoff=${6:-switch}
+repo=${1:?repo}; snapshot=${2:?snapshot}; out=${3:?out}; stage=${4:?stage}; indices=${5:?indices}; handoff=${6:-switch}; diagnostic=${7:-standard}; rejoin_fix=${8:-none}
 cd "$repo"
 # cn-c22's bare python3 does not provide the validated MuJoCo/numpy stack.
 # Keep the environment override for portability, but default to the shared
@@ -18,5 +18,10 @@ root = pathlib.Path(sys.argv[1])
 for name, expected in json.loads((root / "sha256.json").read_text()).items():
     assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected, name
 PY
+extra=()
+if [[ "$diagnostic" == "diagnostic" ]]; then
+  extra+=(--rejoin-diagnostic)
+fi
 exec "$PY" "$snapshot/scripts/mission7_route_handoff_probe.py" \
-  --repo "$repo" --out "$out" --stage "$stage" --indices "$indices" --handoff "$handoff"
+  --repo "$repo" --out "$out" --stage "$stage" --indices "$indices" --handoff "$handoff" \
+  --rejoin-fix "$rejoin_fix" "${extra[@]}"
