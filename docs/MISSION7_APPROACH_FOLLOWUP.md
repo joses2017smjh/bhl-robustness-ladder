@@ -22,8 +22,39 @@ contacts before entering the goal region. The matched standstill control was
 started.
 
 The corrected contact probe, friction intervention, Approach matrix, and both
-16-episode route batches are complete. The results below are diagnostic
-evidence, not a passed qualification gate.
+16-episode route batches are complete. The earlier results below are
+diagnostic evidence; the final exact replay and route closeout are recorded in
+the September 22 section that follows.
+
+## Final staged replay and route closeout — September 22
+
+The unchanged replay diagnosis identified the common causal state: the robot's
+ankle entered a low plate while the base was laterally offset, with simultaneous
+lateral translation and yaw correction. A staged maneuver was then tested on
+the exact ten retained failures: approach to a pre-plate pose, settle for
+0.40 s, and cross for 1.20 s with yaw correction frozen. Geometry, activation
+schedule, fall predicate, and replay layouts were unchanged.
+
+The first staged replay reached 9/10 upright, with layout 13 still falling
+because it contacted the wrong-side plate before the correct-side-only staging
+could activate. A nearest-plate extension also reached 9/10 but introduced an
+earlier wrong-side intervention on layout 4. The guarded version retained
+correct-side staging and allowed wrong-side staging only when the correct plate
+was more than 1.0 m away. It reached **10/10 upright** on Slurm `21397732`;
+the exact replay gate is therefore **passed**. The compact verdict is
+[`plate-stage-cn-c22-guarded/result.json`](../results/mission7-approach-followup-20260922/plate-stage-cn-c22-guarded/result.json).
+
+The existing one-layout legacy/measured route smoke completed on `21398074`
+after an infrastructure-only snapshot correction. The documented 16-layout
+route evaluation then completed on `21398514`: Doors **1/16** (4 falls,
+11 timeouts) and Transport **0/16** (6 falls, 10 timeouts). These route results
+use the existing `PlateSafeRouteController`; its separate replay component was
+9/10 upright, so the guarded staged replay maneuver was not silently
+substituted for that route controller. The route evaluation is therefore
+unlocked and reported, but full-route reliability remains below a release-
+quality level. Compact route evidence is
+[`route-eval-cn-c22-v2/result.json`](../results/mission7-approach-followup-20260922/route-eval-cn-c22-v2/result.json),
+with detailed episode traces retained outside git.
 
 ## Contact dynamics hypothesis
 
@@ -84,14 +115,12 @@ lightweight evidence is
 
 `PlateSafeRouteController` keeps the measured route controller and official
 button semantics, then holds zero translation for 1.0 s after physical plate
-contact or gate activation. The exact ten retained failures are replayed first;
-the same controller is then evaluated on 16 Doors and 16 Transport episodes.
-The mitigation is accepted only if the ten replay traces remain upright and the
-broader route results are reported separately. The completed mitigation replay
-was 8/10 upright; its 16-episode Doors route was 1/16 success (4 falls,
-11 timeouts). It therefore does not pass the pressure-plate gate. The Transport
-array uses the same controller and produced 1/16 success, 13 falls, and 2
-timeouts; it cannot retroactively make the exact-replay gate pass.
+contact or gate activation. Its earlier diagnostic replay was 8/10 upright;
+the final unlocked route evaluation with the same controller reached 1/16 Doors
+success (4 falls, 11 timeouts) and 0/16 Transport success (6 falls,
+10 timeouts). The staged replay gate and route evaluation are separate pieces
+of evidence: the former establishes a deterministic 10/10 control replay, not
+full-route competence.
 
 ## Approach controller
 
@@ -111,26 +140,19 @@ controller and clearance issue, not evidence that a sensor policy is ready.
 
 | Gate | Status | Evidence |
 |---|---|---|
-| Pressure-plate exact replay, 10/10 upright | **FAIL for current mitigation (8/10)**; valid unchanged probe 10/10 reproduced; friction-only replay 0/10 upright |
-| Doors ≥16 and Transport ≥16 | Doors **1/16** (4 falls, 11 timeouts); Transport **1/16** (13 falls, 2 timeouts) |
+| Pressure-plate exact replay, 10/10 upright | **PASS: 10/10** with guarded staged crossing; unchanged baseline 10/10 falls; first staged candidate 9/10; nearest-plate candidate 9/10 |
+| Doors ≥16 and Transport ≥16 | **Completed after unlock:** Doors **1/16** (4 falls, 11 timeouts); Transport **0/16** (6 falls, 10 timeouts) |
 | Privileged Approach ≥60/64, zero falls, ≥14/16/direction | **FAIL: 56/64**, 0 falls; world −x **8/16**, other directions 16/16 |
 | Sensor-only Both readiness | **CLOSED** until both preceding gates pass |
 | Four-sensor comparison | **CLOSED** |
 
 ## Next steps
 
-1. Keep the sensor-only and four-sensor studies closed. Neither prerequisite
-   control gate passed, and no new sensor jobs are queued.
-2. The next bounded experiment is one staged plate maneuver: approach a
-   pre-plate pose, settle and square the heading, then make a short straight
-   crossing with yaw correction frozen. It changes one causal control factor;
-   geometry, activation semantics, fall predicates, and the ten-layout replay
-   set remain unchanged. Any candidate must reach the exact ten-layout 10/10
-   upright gate before route evaluation is considered.
-3. Re-run the 16 Doors and 16 Transport route batches only after that exact
-   replay gate passes. Release sensor comparisons only after the privileged
-   Approach gate reaches at least 60/64, zero falls, and at least 14/16 in each
-   direction.
+1. Keep the sensor-only and four-sensor studies closed. The privileged Approach
+   gate remains 56/64, with world −x 8/16, so its release condition is not met.
+2. Do not launch another broad route sweep or reopen the closed sensor studies
+   from this result. The bounded staged replay gate passed, but the paired route
+   evaluation remains low at 1/16 Doors and 0/16 Transport.
 
 The complete route aggregate is
 [`transport_summary.json`](../results/mission7-approach-followup-20260921/transport_array/transport_summary.json);
@@ -162,5 +184,18 @@ were canceled before consuming a scientific result.
 | 21386539 | corrected full-reset pose-matched contact probe | complete; 10/10 exact replay matches, 10/10 falls |
 | 21386488 | corrected PlateSafe replay and Doors route | complete; replay 8/10 upright, Doors 1/16; canceled during partial Transport |
 | 21386803 | parallel 16-episode Transport route array | complete; 1/16 success, 13 falls, 2 timeouts |
+| 21396422 | clearance diagnosis, default Python | failed infrastructure; MuJoCo unavailable |
+| 21396448 | clearance diagnosis, cross-node rerun | canceled; exact pose match failed on `cn-b01` |
+| 21396492 | exact unchanged clearance diagnosis | complete; 10/10 exact matches, 10/10 falls |
+| 21396660 | staged plate replay | failed infrastructure; incomplete snapshot |
+| 21396676 | staged plate replay resubmission | failed infrastructure; self-referential manifest |
+| 21396684 | staged plate replay resubmission | failed infrastructure; missing `mission7_diagnostic.py` |
+| 21396709 | staged plate replay, correct snapshot | complete; 9/10 upright |
+| 21397663 | nearest unopened plate intervention | complete; 9/10 upright, layout 4 fell |
+| 21397732 | guarded wrong-side staged intervention | complete; **10/10 upright exact replay gate passed** |
+| 21397985 | route smoke | failed infrastructure; snapshot omitted `mission7_debug.py` |
+| 21398074 | corrected route smoke | complete; four one-layout smoke paths finished |
+| 21398501 | 16/16 route evaluation | failed infrastructure; invalid campaign path |
+| 21398514 | corrected 16/16 route evaluation | complete; Doors 1/16, Transport 0/16 |
 
 No GPU resources were used by these diagnostics.

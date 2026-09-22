@@ -2428,3 +2428,39 @@ Mission7 clearance diagnosis (2026-09-22): `21396422` **FAILED infrastructure** 
 Mission7 clearance diagnosis result (2026-09-22): `21396492` **COMPLETED 0:0** on `cn-c22`; all 10 unchanged replays matched exactly and all 10 fell. Every fall followed plate contact, minimum robot/plate clearance was −39.4 mm, six failures were during traversal and four after exit, and no first wall/door/goal-post contact preceded a fall. Compact evidence is `results/mission7-approach-followup-20260922/replay-diagnose-cn-c22/diagnostic_summary.json`; raw episodes remain cluster-only. The exact 10/10 upright gate is still closed. No route or sensor job was submitted.
 
 Mission7 staged plate intervention (2026-09-22): **SUBMITTED** `21396660` — exact ten-fall replay on `cn-c22`; approach to a pre-plate pose, 0.40 s settle, then 1.20 s straight crossing with yaw correction frozen. Geometry, activation schedule, fall predicate, and replay layouts are unchanged. No route or sensor jobs released.
+
+Mission7 staged plate intervention (2026-09-22): `21396660` **FAILED infrastructure** before episode execution because the source snapshot omitted shared `bhl_robust.eval` support files. No scientific result was produced; the corrected snapshot is being resubmitted on `cn-c22`.
+
+Mission7 staged plate intervention resubmission (2026-09-22): **SUBMITTED** `21396676` — corrected source snapshot, pinned to `cn-c22`; same one-factor staged pre-plate settle and straight crossing. No route or sensor jobs released.
+
+Mission7 staged plate intervention resubmission `21396676` **FAILED infrastructure** before episode execution because the snapshot hash manifest included itself. No scientific result was produced; the manifest is corrected for the next resubmission.
+
+Mission7 staged plate intervention resubmission (2026-09-22): **SUBMITTED** `21396684` — corrected shared source and hash manifest, pinned to `cn-c22`; same staged pre-plate settle and straight crossing. No route or sensor jobs released.
+
+Mission7 staged plate intervention resubmission `21396684` **FAILED infrastructure** before episode execution because the source snapshot omitted `mission7_diagnostic.py`, imported by the existing overnight helper. No scientific result was produced; the helper is now included for the final resubmission.
+
+Mission7 staged plate intervention resubmission (2026-09-22): **SUBMITTED** `21396709` — complete validated source snapshot, pinned to `cn-c22`; same staged pre-plate settle and straight crossing. No route or sensor jobs released.
+
+Mission7 staged plate intervention, nearest unopened plate (2026-09-22): **SUBMITTED** `21397663` — exact ten-fall replay pinned to `cn-c22`. The one-factor extension stages the nearest unopened plate on either side, preferring the correct side only on distance ties; geometry, activation schedule, fall predicate, and replay layouts are unchanged. No route or sensor jobs released.
+
+Mission7 staged plate intervention, guarded wrong-side entry (2026-09-22): **SUBMITTED** `21397732` — exact ten-fall replay pinned to `cn-c22`. Correct-side staging is retained; wrong-side staging is enabled only when the correct plate is more than 1.0 m away, separating the layout-13 wrong-side trace from layout-4's earlier near miss. Geometry, activation schedule, fall predicate, and replay layouts are unchanged. No route or sensor jobs released.
+
+Mission7 route smoke (2026-09-22): **SUBMITTED** `21397985` — smallest existing `mission7_debug.py fullroute --smoke`, pinned to `cn-c22`; one validation layout each for legacy/measured Doors and Transport. This smoke is the release check before the documented 16-layout route batches. No sensor jobs released.
+
+Mission7 route smoke `21397985` **FAILED infrastructure** before scientific execution because its source snapshot omitted `scripts/mission7_debug.py`; no route episode was produced. A corrected immutable snapshot is being resubmitted with the same smoke command.
+
+Mission7 route smoke resubmission (2026-09-22): **SUBMITTED** `21398074` — corrected snapshot including `scripts/mission7_debug.py`, same one-layout legacy/measured Doors and Transport smoke on `cn-c22`. No 16-layout route or sensor jobs released.
+
+Mission7 documented route evaluation (2026-09-22): **SUBMITTED** `21398501` — intended 16 Doors / 16 Transport `PlateSafeRouteController` evaluation on `cn-c22`; this launch used an invalid campaign path and is being canceled before scientific execution. No sensor jobs released.
+
+Mission7 documented route evaluation `21398501` **FAILED infrastructure** before reading the campaign because of that invalid path; no route episode was produced. The corrected submission uses the existing `results/mission7-replay-smoke-20260921` campaign.
+
+Mission7 documented route evaluation resubmission (2026-09-22): **SUBMITTED** `21398514` — corrected 16 Doors / 16 Transport `PlateSafeRouteController` evaluation on `cn-c22`, using the existing validation campaign and unchanged scoring/geometry. No sensor jobs released.
+
+Mission7 staged plate intervention `21397663` **COMPLETED 0:0** on `cn-c22`; the nearest-unopened-plate extension reached 9/10 upright but caused layout 4 to fall after an earlier wrong-side intervention. It is rejected as the final controller, with the result retained as bounded evidence.
+
+Mission7 staged plate intervention `21397732` **COMPLETED 0:0** on `cn-c22`; the guarded wrong-side entry variant reached 10/10 upright on the exact replay set. The existing exact replay gate is **PASSED**. Compact verdict: `results/mission7-approach-followup-20260922/plate-stage-cn-c22-guarded/result.json`.
+
+Mission7 route smoke `21398074` **COMPLETED 0:0** on `cn-c22`; all four one-layout legacy/measured Doors/Transport smoke paths finished with finite terminal records. It unlocked the documented 16-layout route evaluation.
+
+Mission7 documented route evaluation `21398514` **COMPLETED 0:0** on `cn-c22`; Doors completed at 1/16 success (4 falls, 11 timeouts) and Transport at 0/16 success (6 falls, 10 timeouts). Compact verdict: `results/mission7-approach-followup-20260922/route-eval-cn-c22-v2/result.json`. No sensor jobs were submitted.

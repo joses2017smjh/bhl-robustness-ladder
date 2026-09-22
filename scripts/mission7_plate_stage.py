@@ -1,10 +1,12 @@
 """Staged plate-crossing intervention on the exact ten Mission7 replays.
 
 The unchanged replay and its recorded gate-opening times remain the baseline.
-This intervention changes only the command stream near each correct plate:
+This intervention changes only the command stream near each unopened plate:
 approach a pre-plate pose, settle with zero translation, then make a short
-straight crossing with yaw correction frozen.  Geometry, activation schedule,
-fall predicate, and deterministic reset stream are unchanged.
+straight crossing with yaw correction frozen. Correct-side staging is retained;
+wrong-side staging is allowed only when the correct plate is more than 1.0 m
+away. Geometry, activation schedule, fall predicate, and deterministic reset
+stream are unchanged.
 """
 from __future__ import annotations
 
@@ -43,9 +45,9 @@ def _world_command(env, vector, speed=0.30):
     return np.array([np.clip(body[0], -.4, .4), np.clip(body[1], -.35, .35), 0.])
 
 
-def _plate_state(env, door):
+def _plate_state(env, door, side):
     center, direction = env.layout.door(door)
-    plate = env.layout.plate(door, env.layout.correct_sides[door])
+    plate = env.layout.plate(door, side)
     direction = np.asarray(direction, dtype=float)
     return np.asarray(plate), direction
 
@@ -58,38 +60,59 @@ class PlateStage:
         self.approach_radius = float(approach_radius)
         self.settle_s = float(settle_s)
         self.cross_s = float(cross_s)
+        # A wrong-side plate is only an intervention target when the route is
+        # clearly not entering the intended plate.  The threshold separates
+        # the layout-13 wrong-side trace from layout-4's earlier near miss.
+        self.wrong_side_min_correct_distance = 1.0
         self.door = None
+        self.side = None
         self.phase = "recorded"
         self.phase_until = 0.
         self.done = set()
         self.history = []
 
-    def _start(self, door, now):
+    def _start(self, door, side, now):
         self.door = door
+        self.side = side
         self.phase = "approach"
         self.phase_until = float(now)
-        self.history.append({"time_s": float(now), "door": int(door), "phase": self.phase})
+        self.history.append({"time_s": float(now), "door": int(door),
+                             "side": int(side), "phase": self.phase})
 
     def command(self, recorded):
         env, runner, slot = self.env, self.env.runner, self.env.slot
         now = float(runner.d.time)
         xy = runner.d.xpos[slot.body_id, :2].copy()
         if self.phase == "recorded":
-            candidates = [door for door, opened in enumerate(env.state.open)
-                          if not opened and door not in self.done]
-            nearest = min(((float(np.linalg.norm(xy - _plate_state(env, door)[0])), door)
-                           for door in candidates), default=(float("inf"), None))
-            if nearest[1] is not None and nearest[0] <= self.approach_radius:
-                self._start(nearest[1], now)
+            candidates = []
+            for door, opened in enumerate(env.state.open):
+                if opened or door in self.done:
+                    continue
+                correct = env.layout.correct_sides[door]
+                correct_distance = float(np.linalg.norm(
+                    xy - _plate_state(env, door, correct)[0]))
+                candidates.append((door, correct))
+                wrong = -correct
+                if correct_distance > self.wrong_side_min_correct_distance:
+                    candidates.append((door, wrong))
+            nearest = min(
+                ((float(np.linalg.norm(xy - _plate_state(env, door, side)[0])),
+                  int(side != env.layout.correct_sides[door]), door, side)
+                 for door, side in candidates),
+                default=(float("inf"), 1, None, None),
+            )
+            if nearest[0] <= self.approach_radius:
+                self._start(nearest[2], nearest[3], now)
             else:
                 return np.asarray(recorded, dtype=float), "recorded"
-        plate, direction = _plate_state(env, self.door)
+        plate, direction = _plate_state(env, self.door, self.side)
         if self.phase == "approach":
             pre = plate - direction * .30
             if np.linalg.norm(xy - pre) <= .13:
                 self.phase = "settle"
                 self.phase_until = now + self.settle_s
-                self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase})
+                self.history.append({"time_s": now, "door": int(self.door),
+                                     "side": int(self.side), "phase": self.phase})
                 return np.zeros(3), self.phase
             return _world_command(env, pre - xy), self.phase
         if self.phase == "settle":
@@ -103,8 +126,10 @@ class PlateStage:
             if now < self.phase_until:
                 return _world_command(env, direction), self.phase
             self.done.add(self.door)
-            self.history.append({"time_s": now, "door": int(self.door), "phase": "recorded"})
+            self.history.append({"time_s": now, "door": int(self.door),
+                                 "side": int(self.side), "phase": "recorded"})
             self.door = None
+            self.side = None
             self.phase = "recorded"
             return np.asarray(recorded, dtype=float), "recorded"
         raise AssertionError(self.phase)
@@ -182,7 +207,7 @@ def run(args, out):
     report = {
         "complete": True,
         "status": "COMPLETED_INTERVENTION" if not args.smoke else "COMPLETED_SMOKE",
-        "intervention": "staged plate maneuver: pre-plate approach, 0.40 s settle, 1.20 s straight crossing with yaw correction frozen",
+        "intervention": "staged plate maneuver: pre-plate approach, 0.40 s settle, 1.20 s straight crossing with yaw correction frozen; wrong-side staging only when the correct plate is over 1.0 m away",
         "geometry_unchanged": True,
         "activation_schedule_unchanged": True,
         "fall_predicate_unchanged": True,

@@ -1,12 +1,19 @@
 # Mission7: procedural sensor-driven humanoid missions
 
-**September 22 clearance diagnosis:** the exact unchanged ten-fall replay was
+**September 22 Mission 7 closeout:** the exact unchanged ten-fall replay was
 reproduced on the original physics node with zero pose error in all 10 episodes.
 Every fall followed plate contact; minimum robot/plate clearance reached
 −39.4 mm and six falls occurred during traversal, four after exit. No first
-wall/door/goal-post contact preceded a retained fall. The exact 10/10 upright
-gate therefore remains **closed** pending a staged plate-crossing intervention;
-route and sensor evaluations remain locked.
+wall/door/goal-post contact preceded a retained fall. A staged pre-plate settle
+and straight crossing with yaw correction frozen, guarded so that wrong-side
+staging is used only when the correct plate is over 1.0 m away, reached the
+existing exact **10/10 upright replay gate** on Slurm `21397732` without changing
+geometry, activation semantics, or the fall predicate. The one-layout route
+smoke completed on `21398074`, unlocking the documented route evaluation:
+Doors **1/16** and Transport **0/16** on `21398514` using the existing
+PlateSafeRouteController. The replay gate passed, but the separate privileged
+Approach gate remains below threshold at 56/64 with world −x 8/16, so sensor
+comparisons remain closed.
 
 **September 21 completed Approach diagnosis:** the six PPO cells failed their
 stable-learning gates. Exact paired replays implicated raised pressure-plate
