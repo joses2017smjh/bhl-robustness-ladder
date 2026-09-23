@@ -26,14 +26,14 @@ replaced it). Route failures are never dropped from a denominator.
   fixed point; in-stage/post-exit failures = the raised plate (settle →
   fixed point on the plate edge; sideways crossing when unaligned; gait
   cannot turn in place; route walks back to the pre-door waypoint after
-  hand-back); world −x = 0.632 m robot vs 0.61 m post gap. Doors/1
+  hand-back); world −x = a 0.546–0.605 m walking envelope against a 0.61 m gap (marginal; the 0.632 m sphere-bound claim is withdrawn). Doors/1
   completes end-to-end with the composed crossing fix (77.7 s, rendered),
   but that composition fails the exact replay 7–9/10 and is not promoted.
 - **Open tasks and exact blockers:** (a) route gate ≥16/16 — blocked by the
   raised-plate crossing: needs a crossing that keeps the gait walking from a
   standstill without a lateral component *and* holds the ten-fall replay at
-  10/10; (b) privileged Approach ≥14/16 in world −x — geometrically bound
-  (robot wider than the post gap); (c) sensor-release and four-sensor
+  10/10; (b) privileged Approach ≥14/16 in world −x — clearance is 0.5–6 cm by gait
+  phase (AABB), so it is a fine-centring control problem, reopened; (c) sensor-release and four-sensor
   studies — closed until (a) and (b) pass.
 - **Budget:** 411 / 512 episodes; **101 unspent by decision**. Retained
   artifacts 7.7 GB of 10 GB after trimming raw traces of withdrawn arms and
@@ -64,7 +64,7 @@ replaced it). Route failures are never dropped from a denominator.
 | 7 | Freeze one recovery under the predeclared rule | DONE — candidate 1 frozen | unchanged guarded stage + early handoff + `prev_actions_reset` with a 3 s stall trigger; gate-compatible by construction; +1/−0 in development, +2/−0 on fresh layouts |
 | 8 | Confirmatory eval on validation 16–31 (predeclared) | DONE | paired: Doors 1/16 → 1/16, Transport 2/16 → 4/16; improved 2 (T24, T31), regressed 0, discordant 2, p = 0.5 → **underpowered, not null**; no new falls; `candidate1-confirmatory-summary.json` |
 | 9 | Exact replay regression for every PlateStage change | DONE | wait-open PASS 10/10; V2 FAIL 7/10 (`21401689`); V3/V4 8/10, ≤9/10 locally (not submitted); candidate 1 leaves PlateStage unchanged |
-| 10 | World −x / privileged Approach workstream | BLOCKED (geometric) | 6 arms / 96 episodes: 7–9/16 or 0/16; success set moves with crossing phase; robot 0.632 m > gap 0.61 m. Gate stays closed, unweakened. `approach-negx-summary.json` |
+| 10 | World −x / privileged Approach workstream | REOPENED | AABB width 0.546–0.605 m walking vs 0.61 m gap: marginal, not impossible (sphere-bound 0.632 m withdrawn). Six coarse arms 7–9/16 or 0/16 stand. Next: fine lateral centring on the gap midline while walking |
 | 11 | Sensor-only and four-sensor studies | BLOCKED | gates closed |
 | — | `forward_pulse` rejoin fix | SUPERSEDED | no-op by construction; `21399503` reinterpreted |
 | — | "Post-stage route rejoin" framing | SUPERSEDED | stall is free-space, route-state valid (`21400561`) |

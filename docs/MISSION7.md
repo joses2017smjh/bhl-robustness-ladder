@@ -41,9 +41,10 @@ the 32-episode Campaign A baseline (Doors 3/16, Transport 1/16): none exceeded
 3/16; the two that tied it (lateral 0.25 m with stage-owned activation)
 removed five of the five falls but failed the exact replay gate 8/10 by
 routing the approach across the raised plate; the gate-safe 0.35 m version is
-1/16. (3) *World −x Approach* is geometrically bound: both goal posts sit at
-`goal + (0.52, ±0.35)`, so only −x crosses the 0.61 m gap with a 0.632 m-wide
-robot; six command-side arms over 96 episodes all landed at 7–9/16 or 0/16
+1/16. (3) *World −x Approach* is marginal: both goal posts sit at
+`goal + (0.52, ±0.35)`, so only −x crosses the 0.61 m gap, and the robot's
+walking envelope is 0.546–0.605 m by geom AABB (the 0.632 m figure was a
+sphere bound); six command-side arms over 96 episodes all landed at 7–9/16 or 0/16
 with the succeeding layout set moving with crossing phase. All gates remain
 closed and unweakened; the confirmatory set (validation 16–31) and the test
 split were never read. Checklist and evidence:

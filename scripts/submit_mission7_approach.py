@@ -18,7 +18,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--campaign", type=Path, required=True)
     parser.add_argument("--output-name", required=True)
-    parser.add_argument("--controller", choices=("recovery", "guard", "pulse", "recovery030", "settle14", "settle16"),
+    parser.add_argument("--controller", choices=("recovery", "guard", "pulse", "recovery030", "settle14", "settle16", "center"),
                         default="recovery")
     parser.add_argument("--directions", default="", help="';'-separated subset; default all four")
     parser.add_argument("--controls", action="store_true")

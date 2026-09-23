@@ -9,7 +9,8 @@ from pathlib import Path
 
 import numpy as np
 
-from bhl_robust.mission.approach_debug import DebugEnv, GoalPostGuardController, PulseApproachController, RecoveryTranslationController
+from bhl_robust.mission.approach_debug import (DebugEnv, GoalPostGuardController, PulseApproachController,
+                                               RecoveryTranslationController, command_action, yaw_of)
 from bhl_robust.mission.layout import generate
 from mission7_overnight import write
 
@@ -99,7 +100,47 @@ CONTROLLERS = {
     "recovery030": lambda env: RecoveryTranslationController(env, speed=.30, stop_radius=.28),
     "settle14": lambda env: RecoveryTranslationController(env, speed=.50, stop_radius=.28, settle_s=1.4),
     "settle16": lambda env: RecoveryTranslationController(env, speed=.50, stop_radius=.28, settle_s=1.6),
+    # Fine lateral centring: the walking envelope (0.546-0.605 m by geom AABB)
+    # clears the 0.61 m post gap by 0.5-6 cm depending on gait phase, so the
+    # crossing needs the body on the gap midline to within ~2 cm and a heading
+    # aligned with the approach axis, held from before the post plane until past
+    # it.  Privileged pose only, geometry unchanged.
+    "center": lambda env: CenteredApproachController(env, speed=.50, stop_radius=.28),
 }
+
+
+class CenteredApproachController(RecoveryTranslationController):
+    """Recovery translation with a lateral P-term onto the approach-axis line
+    and a slower onset through the post plane (world -x only; other
+    directions never cross the gap and keep the parent behaviour)."""
+    def __init__(self, env, speed=.50, stop_radius=.28, settle_s=1.2, gain=1.5,
+                 gap_speed=.30, band_before=.45, band_after=.25):
+        super().__init__(env, speed=speed, stop_radius=stop_radius, settle_s=settle_s)
+        self.gain, self.gap_speed, self.band_before, self.band_after = gain, gap_speed, band_before, band_after
+        self.center_events = []
+
+    def action(self, target=None):
+        env, r, s = self.env, self.env.runner, self.env.slot
+        action = super().action(target)
+        goal = env.layout.xy(env.layout.route[-1]); prev = env.layout.xy(env.layout.route[-2])
+        axis = (goal - prev) / max(np.linalg.norm(goal - prev), 1e-9)
+        if axis[0] > -.9 or env.phase in ("settle", "brake"):
+            return action
+        xy = r.d.xpos[s.body_id, :2]
+        along = float((xy - goal) @ axis)            # negative before the goal along -x travel... measured toward the goal
+        post_x = goal[0] + .52
+        dist_to_post_plane = float(xy[0] - post_x)   # > 0 before the plane when travelling -x
+        lateral_err = float(xy[1] - goal[1])         # gap midline is y = goal_y
+        if -self.band_after <= dist_to_post_plane <= self.band_before:
+            yaw = yaw_of(env)
+            rot = np.array([[np.cos(yaw), np.sin(yaw)], [-np.sin(yaw), np.cos(yaw)]])
+            world = np.array([-self.gap_speed, -self.gain * lateral_err])
+            world[1] = float(np.clip(world[1], -.20, .20))
+            body = rot @ world
+            action = command_action([np.clip(body[0], -.4, .4), np.clip(body[1], -.35, .35), np.clip(-1.2 * yaw_of(env), -.35, .35)])
+            env.phase = "gap_center"
+            self.center_events.append({"time_s": float(r.d.time), "lateral_err_m": lateral_err, "dist_to_post_plane_m": dist_to_post_plane})
+        return action
 
 
 def controller_note(name, controller):
@@ -111,6 +152,8 @@ def controller_note(name, controller):
         return "pulse_approach_0.30mps_with_negative_x_post_detour_0.90m"
     if name == "recovery030":
         return "measured_translation_0.30mps_with_bounded_0.30mps_stall_pulse"
+    if name == "center":
+        return "recovery_translation_0.50mps_with_gap_midline_centring_0.30mps_through_posts"
     return f"measured_translation_0.50mps_settle_{controller.settle_s:.1f}s"
 
 

@@ -3,14 +3,19 @@
   "geometry": {
     "goal_posts": "goal + (0.52, +/-0.35), capsule r 0.045",
     "gap_between_posts_m": 0.61,
-    "robot_lateral_envelope_at_rest_m": 0.632,
+    "robot_lateral_envelope_at_rest_m": 0.606,
     "outside_post_margin_by_pitch_m": {
       "1.5": 0.315,
       "1.6": 0.365,
       "1.7": 0.415
     },
     "robot_half_width_m": 0.316,
-    "must_cross_post_plane": "spawn at goal+0.65 (x), dwell radius 0.36, posts at +0.52"
+    "must_cross_post_plane": "spawn at goal+0.65 (x), dwell radius 0.36, posts at +0.52",
+    "robot_lateral_envelope_walking_m": [
+      0.546,
+      0.605
+    ],
+    "measurement": "world-frame geom AABBs along y over a 6 s straight walk at 0.47 m/s; the earlier 0.632 m used geom_rbound sphere bounds and is withdrawn"
   },
   "arms": {
     "recovery": {
@@ -192,6 +197,6 @@
       20,
       41
     ],
-    "reading": "Every command-side arm lands at 7-9/16 or 0/16 and the successful layout set moves with settle time and onset speed: success is the arm-swing phase at the post crossing, not the layout. The >=14/16 per-direction criterion is geometrically bound for this robot in this gap. Nudging (guard) or detouring (pulse) inside a corridor narrower than the robot makes contact more likely. The gate stays closed on that basis; it is not weakened."
+    "reading": "Six coarse command-side arms land at 7-9/16 or 0/16 and the succeeding layout set moves with crossing phase. Clearance through the 0.61 m gap is 0.5-6 cm depending on gait phase (AABB envelope 0.546-0.605 m), so the gate is marginal rather than impossible; fine lateral centring on the gap midline is the untested lever."
   }
 }
