@@ -36,11 +36,14 @@ replaced it). Route failures are never dropped from a denominator.
   distributed identically across pitches — arm-swing phase, not width. The
   16-layout three-arm comparison (`21400730/731/732`) measures this rather
   than asserting it.
-- **Current limitation:** n = 1 on the recovery; no breadth yet.
+- **Campaign A (32):** Doors 3/16, Transport 1/16. Failures: in-stage wall
+  collision 15, post-exit fall 12, stall 5 (`frozen_targets`). Three separable
+  in-stage fixes defined and smoke-validated on single layouts (F1–F3).
+- **Current limitation:** factor arms and Campaign B not yet collected.
 - **World −x resolved as a geometric blocker** (six arms, 96 episodes; see task 10).
 - **Next objective:** collect Campaign A, classify every stall, then Campaign B
   baseline vs `prev_actions_reset` on the exposed episodes.
-- **Jobs:** completed `21400561`; pending none. Episodes used: 2 local + 3 smoke + 96 −x + 32 Campaign A = 133 / 512.
+- **Jobs:** completed `21400561`; pending none. Episodes used: 2 local + 3 −x smoke + 96 −x + 32 Campaign A + 5 local F smokes + 64 in-stage + 10 replay + 5 Campaign B = 217 / 512.
 
 ## Gates (unchanged unless evidence says otherwise)
 
@@ -59,12 +62,12 @@ replaced it). Route failures are never dropped from a denominator.
 | 1 | Commit + push guarded probe, sbatch preflight, ignore shapes, CLAUDE.md | DONE | `1a526c7` = origin |
 | 2 | Chain instrumentation: cmd→prev_actions→raw→targets→ctrl→joints→feet→base | DONE (pending review) | `--chain-trace`; local Doors/1 baseline classified `frozen_targets`; 99 s/episode, 31 MB trace |
 | 3 | `prev_actions_reset` intervention with delivery verification | DONE (pending review) | local Doors/1: APPLIED, delivered-zero verified, route success 82.7 s |
-| 4 | Campaign A: 16+16 early-handoff episodes, chain traced, mechanism per episode | ACTIVE | `21400752–755` running |
-| 5 | Campaign B: baseline vs `prev_actions_reset` on ≤24 exposed episodes, fingerprint-matched | BLOCKED | needs Campaign A exposure list |
-| 6 | Add command-only / combined arms if B leaves hypotheses undistinguished | BLOCKED | needs B |
+| 4 | Campaign A: 16+16 early-handoff episodes, chain traced, mechanism per episode | DONE | 32 episodes; during-stage 15 (wall), after-stage 12 (falls), stall exposures 5 (`frozen_targets` 4); `campaign-a-summary.json` |
+| 5 | Campaign B: baseline vs `prev_actions_reset` on the 5 exposed episodes, fingerprint-matched | ACTIVE | `21400806–807`; 24 was a ceiling, 5 exposed |
+| 6 | In-stage factors: F1 lateral 0.25 m, F2 stage-owned activation, F3 exit ramp 0.6 s — separately and combined | ACTIVE | `21400801–804` on 16 Doors; Campaign A is the baseline |
 | 7 | Freeze one recovery; predeclare eval set, metrics, n, stopping rule | BLOCKED | needs B |
 | 8 | Confirmatory eval on fresh validation layouts 16–31 (never used), paired baseline | BLOCKED | needs 7 |
-| 9 | Re-run 10/10 exact replay regression with the frozen candidate | BLOCKED | needs 7 |
+| 9 | Re-run 10/10 exact replay regression with F1 (F2/F3 act in the live route, outside the scripted replay) | ACTIVE | `21400805` |
 | 10 | World −x / privileged Approach workstream | BLOCKED (geometric) | 6 arms / 96 episodes: 7–9/16 or 0/16; success set moves with crossing phase; robot 0.632 m > gap 0.61 m. Gate stays closed, unweakened. `approach-negx-summary.json` |
 | 11 | Sensor-only and four-sensor studies | BLOCKED | gates closed |
 | — | `forward_pulse` rejoin fix | SUPERSEDED | no-op by construction; `21399503` reinterpreted |
@@ -89,4 +92,33 @@ are added here as they complete.
 | 21400745 | Approach −x, `recovery030` 0.30 m/s onset | DONE 7/16 |
 | 21400746 | Approach −x, `settle14` phase shift | DONE 8/16 |
 | 21400747 | Approach −x, `settle16` phase shift | DONE 9/16 — success set moves with phase |
-| 21400752–55 | Campaign A: 16 Doors + 16 Transport, chain traced | running |
+| 21400752–54, 21400780 | Campaign A: 16 Doors + 16 Transport, chain traced | DONE Doors 3/16, Transport 1/16; `21400755` OOM, fixed, 13–15 rerun |
+| 21400801–804 | In-stage arms F1, F1+F2, F1+F3, F1+F2+F3 on 16 Doors | running |
+| 21400805 | Replay gate 10/10 with F1 (`--stage-lateral=0.25`), cn-c22 | running |
+| 21400806–807 | Campaign B: `prev_actions_reset` on 5 exposed episodes | running |
+
+## Confirmatory protocol (predeclared 2026-09-23, before any in-stage or Campaign B result was read)
+
+- **Candidate selection** (development only): validation layouts 0–15. The
+  frozen candidate is the in-stage arm with the highest Doors route success on
+  `21400801–804`, combined with `prev_actions_reset` only if Campaign B shows
+  it APPLIED with ≥1 matched improvement and 0 matched regressions among the
+  exposed episodes. Ties break toward fewer factors.
+- **Regression gate:** the frozen candidate's PlateStage change must keep the
+  exact ten-fall replay at 10/10 upright (`21400805` for F1); F2/F3 act in the
+  live route controller and are outside the scripted replay by construction.
+- **Evaluation set:** validation layouts **16–31**, never used by any run so
+  far, both stages: 32 candidate episodes and 32 matched baseline episodes
+  (unchanged controller, same early handoff), 64 total, run under the hardware
+  constraint with the same source snapshot.
+- **Primary metric:** route success (paired by stage/layout). Secondary: falls,
+  in-stage collisions, post-exit falls, stall exposures. Denominator is every
+  episode; nothing is excluded.
+- **Precision:** with n = 32 per arm, a paired exact test on discordant pairs
+  is reported with a 95 % Clopper–Pearson interval on each arm's rate; only a
+  difference whose interval excludes zero is called an improvement. If the
+  discordant-pair count is under 6 the result is reported as underpowered, not
+  as null.
+- **Stopping rule:** one evaluation. No tuning against layouts 16–31 and no
+  second look; the test split (seeds 20000+) is untouched and reserved for its
+  documented final use.

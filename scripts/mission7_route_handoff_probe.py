@@ -13,6 +13,7 @@ indices are intentionally small and are supplied explicitly by the submitter.
 from __future__ import annotations
 
 import argparse
+import gc
 import hashlib
 import json
 from pathlib import Path
@@ -151,14 +152,31 @@ class RouteHandoffController:
     """PlateSafe routing with an explicitly scoped stage handoff condition."""
 
     def __init__(self, env, handoff_mode="switch", rejoin_diagnostic=False,
-                 rejoin_fix="none", chain_trace=False):
+                 rejoin_fix="none", chain_trace=False, stage_lateral_m=None,
+                 stage_activate=False, exit_ramp_s=0.):
         self.env = env
         self.handoff_mode = handoff_mode
         self.rejoin_diagnostic = bool(rejoin_diagnostic)
         self.rejoin_fix = rejoin_fix
         self.chain_trace = bool(chain_trace)
+        self.stage_lateral_m = stage_lateral_m
+        # F2: the stage asserts the activate flag while it holds the robot on
+        # the plate, and waits (bounded) for the door before crossing.  The
+        # route controller only raises activate in its own 'switch' phase, so a
+        # stage-placed press otherwise never registers (doors/15: 5,180 plate
+        # contacts, no activation, crossing into a closed door).
+        self.stage_activate = bool(stage_activate)
+        # F3: after the crossing, hold a forward-only 0.30 m/s command along
+        # the door direction for exit_ramp_s before the route resumes.  Ten of
+        # 29 Campaign A episodes fell 0.2-1.3 s after exit while the route
+        # commanded up to 0.35 m/s lateral, the gait's weakest axis.
+        self.exit_ramp_s = float(exit_ramp_s)
+        self.exit_ramp_until = 0.
+        self.exit_ramp_direction = None
+        self.exit_ramp_events = []
         self.route = PlateSafeRouteController(env, contact_hold_s=1.0)
-        self.stage = PlateStage(env)
+        self.stage = PlateStage(env, stage_lateral_m=stage_lateral_m,
+                                wait_open_s=2.0 if stage_activate else 0.)
         self.handoff_seen = False
         self.phase_history = []
         self.route_phase_history = []
@@ -490,6 +508,9 @@ class RouteHandoffController:
                     self.phase_history.append({"time_s": now, "phase": self.env.phase,
                                                "event": "transition"})
                 effective_action = physical_to_action(command, base_action)
+                if self.stage_activate:
+                    # Same value the route uses in its switch phase.
+                    effective_action[3] = 2.
             else:
                 effective_action = base_action
         else:
@@ -501,6 +522,13 @@ class RouteHandoffController:
         # is diagnostic-only.
         if (stage_phase_before_action != "recorded"
                 and self.stage.phase == "recorded"):
+            if self.exit_ramp_s > 0.:
+                _, direction = self.env.layout.door(
+                    int(self.stage.history[-1]["door"]))
+                self.exit_ramp_direction = np.asarray(direction, dtype=float)
+                self.exit_ramp_until = now + self.exit_ramp_s
+                self.exit_ramp_events.append({"time_s": now, "event": "exit_ramp_start",
+                                              "until_s": self.exit_ramp_until})
             self.post_stage_exit_time = now
             self.post_stage_exit_waypoint = int(self.route.waypoint)
             self.post_stage_last_target_waypoint = None
@@ -567,6 +595,12 @@ class RouteHandoffController:
                     "target_changed": bool(np.linalg.norm(before) > 1e-9),
                 })
             self.rejoin_fix_events.append(event)
+        if self.exit_ramp_until > now and self.exit_ramp_direction is not None:
+            yaw = yaw_of(self.env)
+            body = np.array([[np.cos(yaw), np.sin(yaw)],
+                             [-np.sin(yaw), np.cos(yaw)]]) @ (self.exit_ramp_direction * .30)
+            self.env.phase = "exit_ramp"
+            effective_action = physical_to_action([np.clip(body[0], 0., .4), 0., 0.], base_action)
         if self.rejoin_fix_until > now:
             without = action_to_physical(effective_action)
             imposed = np.asarray([REJOIN_PULSE_MPS, 0., 0.], dtype=float)
@@ -678,7 +712,9 @@ def run(args):
             env.reset(index)
             controller = RouteHandoffController(
                 env, handoff_mode=args.handoff, rejoin_diagnostic=args.rejoin_diagnostic,
-                rejoin_fix=args.rejoin_fix, chain_trace=args.chain_trace)
+                rejoin_fix=args.rejoin_fix, chain_trace=args.chain_trace,
+                stage_lateral_m=args.stage_lateral, stage_activate=args.stage_activate,
+                exit_ramp_s=args.exit_ramp)
             while True:
                 env.runner.contact_trace = []
                 effective_action = controller.action()
@@ -781,7 +817,12 @@ def run(args):
                 layout_index=index,
                 stage=stage,
                 handoff_mode=args.handoff,
-                controller=("PlateSafeRouteController plus unchanged guarded PlateStage "
+                stage_lateral_m=args.stage_lateral,
+                stage_activate=args.stage_activate,
+                exit_ramp_s=args.exit_ramp,
+                exit_ramp_events=controller.exit_ramp_events,
+                controller=("PlateSafeRouteController plus guarded PlateStage "
+                            f"(lateral {'plate centre' if args.stage_lateral is None else f'{args.stage_lateral:.2f} m'}) "
                             f"on {args.handoff} handoff"),
                 route_plate_contacts_seen=sorted(set(controller.route.plate_contacts_seen)),
                 guarded_stage_activated=controller.handoff_seen,
@@ -846,10 +887,18 @@ def run(args):
                     controller.rejoin_fix_forward_delta > COMMAND_EPSILON_MPS),
                 rejoin_diagnostic=rejoin_diagnostic,
             )
-            rows.append(row)
             record_name = f"{stage}-{index}.json"
             (args.out / record_name).write_text(json.dumps(row, indent=2) + "\n")
-            summaries.append(compact_episode(row, record_name))
+            summary = compact_episode(row, record_name)
+            summaries.append(summary)
+            # Keep only the compact summary in memory.  Job 21400755 (Transport
+            # 8-15, chain trace + rejoin diagnostic) ran out of its 12 GB after
+            # five episodes because every full row -- chain columns, per-step
+            # route snapshots, contact events -- stayed referenced here until
+            # the end.  Every aggregate below reads fields the summary keeps.
+            rows.append(summary)
+            del row, controller
+            gc.collect()
     requested = args.rejoin_fix != "none"
     fired = any(row["rejoin_fix_fired"] for row in rows)
     changed_forward = any(row["rejoin_fix_changed_forward_command"] for row in rows)
@@ -884,6 +933,9 @@ def run(args):
         "fall_predicate_unchanged": True,
         "plate_stage_internal_behavior_unchanged": True,
         "handoff_mode": args.handoff,
+        "stage_lateral_m": args.stage_lateral,
+        "stage_activate": args.stage_activate,
+        "exit_ramp_s": args.exit_ramp,
         "rejoin_fix": args.rejoin_fix,
         "intervention_requested": requested,
         "intervention_fired": fired,
@@ -942,6 +994,15 @@ if __name__ == "__main__":
                         default="none")
     parser.add_argument("--chain-trace", action="store_true",
                         help="record the command-to-motion chain at every 25 Hz gait update")
+    parser.add_argument("--stage-lateral", type=float, default=None,
+                        help="PlateStage body-centre lateral offset from the door centreline (m); "
+                             "default None = plate centre (0.42 m), the exact-replay behaviour")
+    parser.add_argument("--stage-activate", action="store_true",
+                        help="stage asserts the activate flag on the plate and waits up to 2 s "
+                             "for the door before crossing")
+    parser.add_argument("--exit-ramp", type=float, default=0.,
+                        help="seconds of forward-only 0.30 m/s along the door direction after "
+                             "the crossing before the route resumes (0 = off)")
     parser.add_argument("--allow-inactive-intervention", action="store_true",
                         help="record a requested-but-ineffective intervention as a "
                              "null result instead of failing the run")

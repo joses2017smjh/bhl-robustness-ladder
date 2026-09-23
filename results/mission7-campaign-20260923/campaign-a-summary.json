@@ -1,0 +1,2378 @@
+{
+  "episodes": 32,
+  "success": 4,
+  "falls": 13,
+  "timeouts": 6,
+  "by_stage": {
+    "doors": {
+      "n": 16,
+      "success": 3,
+      "falls": 5,
+      "timeouts": 3,
+      "failure_phases": {
+        "before PlateStage": 1,
+        "after PlateStage": 5,
+        "none": 3,
+        "during PlateStage": 7
+      },
+      "mechanisms": {
+        "None": 8,
+        "frozen_targets": 2,
+        "window_too_short": 2,
+        "progressing": 4
+      }
+    },
+    "transport": {
+      "n": 16,
+      "success": 1,
+      "falls": 8,
+      "timeouts": 3,
+      "failure_phases": {
+        "during PlateStage": 8,
+        "none": 1,
+        "after PlateStage": 7
+      },
+      "mechanisms": {
+        "progressing": 7,
+        "window_too_short": 3,
+        "frozen_targets": 2,
+        "None": 4
+      }
+    }
+  },
+  "by_world_direction": {
+    "+x": {
+      "n": 12,
+      "success": 1,
+      "falls": 8,
+      "timeouts": 3,
+      "failure_phases": {
+        "after PlateStage": 9,
+        "during PlateStage": 2,
+        "none": 1
+      },
+      "mechanisms": {
+        "frozen_targets": 3,
+        "window_too_short": 4,
+        "progressing": 4,
+        "None": 1
+      }
+    },
+    "+y": {
+      "n": 15,
+      "success": 2,
+      "falls": 3,
+      "timeouts": 2,
+      "failure_phases": {
+        "none": 2,
+        "during PlateStage": 11,
+        "after PlateStage": 2
+      },
+      "mechanisms": {
+        "progressing": 6,
+        "None": 8,
+        "frozen_targets": 1
+      }
+    },
+    "-x": {
+      "n": 2,
+      "success": 0,
+      "falls": 1,
+      "timeouts": 0,
+      "failure_phases": {
+        "during PlateStage": 2
+      },
+      "mechanisms": {
+        "None": 2
+      }
+    },
+    "-y": {
+      "n": 2,
+      "success": 1,
+      "falls": 1,
+      "timeouts": 0,
+      "failure_phases": {
+        "none": 1,
+        "after PlateStage": 1
+      },
+      "mechanisms": {
+        "progressing": 1,
+        "window_too_short": 1
+      }
+    },
+    "null": {
+      "n": 1,
+      "success": 0,
+      "falls": 0,
+      "timeouts": 1,
+      "failure_phases": {
+        "before PlateStage": 1
+      },
+      "mechanisms": {
+        "None": 1
+      }
+    }
+  },
+  "by_failure_phase": {
+    "before PlateStage": 1,
+    "after PlateStage": 12,
+    "none": 4,
+    "during PlateStage": 15
+  },
+  "mechanism_counts_stall_window": {
+    "frozen_targets": 4
+  },
+  "mechanism_counts_post_stage": {
+    "progressing": 13,
+    "window_too_short": 5,
+    "cycling_without_progress_in_place": 1,
+    "cycling_without_progress_slip": 1
+  },
+  "exposed_episodes": 5,
+  "exposure_list": [
+    {
+      "key": "doors/1",
+      "stage": "doors",
+      "layout_index": 1,
+      "world_direction": "+x",
+      "stall_branch_time_s": 45.80000000003666,
+      "stall_fingerprint": "16f6eb7283db5da6",
+      "outcome": "after PlateStage",
+      "mechanism": "frozen_targets"
+    },
+    {
+      "key": "doors/2",
+      "stage": "doors",
+      "layout_index": 2,
+      "world_direction": "+x",
+      "stall_branch_time_s": 49.40000000005385,
+      "stall_fingerprint": "daec3f174768518f",
+      "outcome": "after PlateStage",
+      "mechanism": "window_too_short"
+    },
+    {
+      "key": "doors/3",
+      "stage": "doors",
+      "layout_index": 3,
+      "world_direction": "-y",
+      "stall_branch_time_s": 36.39999999999178,
+      "stall_fingerprint": "a1cd4dfc2925b90d",
+      "outcome": "success",
+      "mechanism": "progressing"
+    },
+    {
+      "key": "doors/6",
+      "stage": "doors",
+      "layout_index": 6,
+      "world_direction": "+x",
+      "stall_branch_time_s": 37.79999999999846,
+      "stall_fingerprint": "e6f212f3bf4de81e",
+      "outcome": "after PlateStage",
+      "mechanism": "frozen_targets"
+    },
+    {
+      "key": "transport/0",
+      "stage": "transport",
+      "layout_index": 0,
+      "world_direction": "+y",
+      "stall_branch_time_s": 62.400000000115924,
+      "stall_fingerprint": "8805fea67b28cf57",
+      "outcome": "during PlateStage",
+      "mechanism": "progressing"
+    }
+  ],
+  "per_episode": [
+    {
+      "key": "doors/0",
+      "stage": "doors",
+      "layout_index": 0,
+      "world_direction": null,
+      "success": false,
+      "fall": false,
+      "timeout": true,
+      "failure_phase": "before PlateStage",
+      "elapsed_s": 179.9999999991995,
+      "stage_activated": false,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          179.95999999920045
+        ],
+        "ticks": 4474,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.9208761734465802,
+        "stance_slip_m": 1.47516139966159,
+        "base_progress_m": 3.193607385074126,
+        "base_speed_mean_mps": 0.055276128224048135,
+        "ctrl_saturation_frac": 0.09882350550656317,
+        "cmd_in_mean_mps": [
+          -0.009253464173317408,
+          0.32950804093486274,
+          -0.06908504722824559
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-00-07"
+    },
+    {
+      "key": "doors/1",
+      "stage": "doors",
+      "layout_index": 1,
+      "world_direction": "+x",
+      "success": false,
+      "fall": false,
+      "timeout": true,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 179.9999999991995,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "exposed",
+      "stall_branch_time_s": 45.80000000003666,
+      "stall_fingerprint": "16f6eb7283db5da6",
+      "mechanism": "frozen_targets",
+      "stall_window": {
+        "mechanism": "frozen_targets",
+        "window_s": [
+          159.99999999967244,
+          179.95999999920045
+        ],
+        "ticks": 500,
+        "target_range_ratio_vs_reference": 0.02349411915345076,
+        "tracking_err_ratio_vs_reference": 0.894287855234651,
+        "double_support_frac": 1.0,
+        "stance_slip_m": 0.02971126983721376,
+        "base_progress_m": 0.001100000000000101,
+        "base_speed_mean_mps": 0.011415713131839,
+        "ctrl_saturation_frac": 0.13636363636363635,
+        "cmd_in_mean_mps": [
+          0.30000001192092896,
+          0.012326999977231025,
+          0.02530800012871623
+        ]
+      },
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          26.039999999984662,
+          179.95999999920045
+        ],
+        "ticks": 3849,
+        "target_range_ratio_vs_reference": 1.3191497923869107,
+        "tracking_err_ratio_vs_reference": 0.9174032559443265,
+        "double_support_frac": 0.9256949857105742,
+        "stance_slip_m": 1.4532364469809926,
+        "base_progress_m": 3.841027906693728,
+        "base_speed_mean_mps": 0.05895708103037726,
+        "ctrl_saturation_frac": 0.14016627695505327,
+        "cmd_in_mean_mps": [
+          0.28756501525035577,
+          0.026316887387840347,
+          0.02584260851259875
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          19.280000000000417
+        ],
+        "ticks": 457,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.34573304157549234,
+        "stance_slip_m": 1.024719031747075,
+        "base_progress_m": 3.561518940002987,
+        "base_speed_mean_mps": 0.38660754523967483,
+        "ctrl_saturation_frac": 0.14670777799880644,
+        "cmd_in_mean_mps": [
+          0.10497177558333595,
+          0.2259682676139954,
+          -0.00816477026757392
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 24.999999999987086,
+        "stage_exit_waypoint": 4,
+        "steps_observed": 775,
+        "steps_with_world_contact": 19,
+        "fraction_steps_in_contact": 0.024516129032258065,
+        "distinct_world_geoms": [
+          "plate_0_-1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 19
+        },
+        "min_contact_distance_m": -0.006093168487094926,
+        "first_contact_time_s": 25.19999999998662
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-00-07"
+    },
+    {
+      "key": "doors/2",
+      "stage": "doors",
+      "layout_index": 2,
+      "world_direction": "+x",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 92.80000000026108,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "exposed",
+      "stall_branch_time_s": 49.40000000005385,
+      "stall_fingerprint": "daec3f174768518f",
+      "mechanism": "window_too_short",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "window_too_short",
+        "window_s": [
+          92.8000000002563,
+          92.80000000026108
+        ],
+        "ticks": 0,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": null,
+        "stance_slip_m": null,
+        "base_progress_m": null,
+        "base_speed_mean_mps": null,
+        "ctrl_saturation_frac": null,
+        "cmd_in_mean_mps": null
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          15.080000000006939
+        ],
+        "ticks": 352,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.2528409090909091,
+        "stance_slip_m": 0.6496137956285528,
+        "base_progress_m": 3.51030547531123,
+        "base_speed_mean_mps": 0.39750994832712894,
+        "ctrl_saturation_frac": 0.1337809917355372,
+        "cmd_in_mean_mps": [
+          0.03166477283759212,
+          0.316193176433444,
+          -0.02763806827847888
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 91.8000000002563,
+        "stage_exit_waypoint": 15,
+        "steps_observed": 353,
+        "steps_with_world_contact": 28,
+        "fraction_steps_in_contact": 0.07932011331444759,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_0_1",
+          "plate_1_-1",
+          "plate_1_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 10,
+          "plate_0_1": 5,
+          "plate_1_-1": 12,
+          "plate_1_1": 1
+        },
+        "min_contact_distance_m": -0.025101826960728813,
+        "first_contact_time_s": 22.399999999993145
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-00-07"
+    },
+    {
+      "key": "doors/3",
+      "stage": "doors",
+      "layout_index": 3,
+      "world_direction": "-y",
+      "success": true,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "none",
+      "elapsed_s": 101.96000000030482,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "exposed",
+      "stall_branch_time_s": 36.39999999999178,
+      "stall_fingerprint": "a1cd4dfc2925b90d",
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          83.4000000002162,
+          101.92000000030463
+        ],
+        "ticks": 464,
+        "target_range_ratio_vs_reference": 1.3645718459787317,
+        "tracking_err_ratio_vs_reference": 0.939920068192882,
+        "double_support_frac": 0.3728448275862069,
+        "stance_slip_m": 1.0733237397829085,
+        "base_progress_m": 3.817176239054205,
+        "base_speed_mean_mps": 0.4103102964250559,
+        "ctrl_saturation_frac": 0.15321316614420064,
+        "cmd_in_mean_mps": [
+          -0.1505463423927722,
+          0.1345086189243814,
+          -0.030507327487957182
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          27.67999999998084
+        ],
+        "ticks": 667,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.328335832083958,
+        "stance_slip_m": 1.576552735544563,
+        "base_progress_m": 5.555457923519897,
+        "base_speed_mean_mps": 0.4033972047891303,
+        "ctrl_saturation_frac": 0.14863023033937578,
+        "cmd_in_mean_mps": [
+          0.10482908864128591,
+          0.23068710269552697,
+          -0.010595352327132757
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 82.40000000021142,
+        "stage_exit_waypoint": 13,
+        "steps_observed": 343,
+        "steps_with_world_contact": 32,
+        "fraction_steps_in_contact": 0.09329446064139942,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_0_1",
+          "plate_1_-1",
+          "plate_1_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 9,
+          "plate_0_1": 4,
+          "plate_1_-1": 15,
+          "plate_1_1": 4
+        },
+        "min_contact_distance_m": -0.032556990389904984,
+        "first_contact_time_s": 33.59999999997841
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-00-07"
+    },
+    {
+      "key": "doors/4",
+      "stage": "doors",
+      "layout_index": 4,
+      "world_direction": "+y",
+      "success": true,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "none",
+      "elapsed_s": 137.12000000021348,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          61.80000000011306,
+          137.08000000021443
+        ],
+        "ticks": 1883,
+        "target_range_ratio_vs_reference": 1.6577268311637845,
+        "tracking_err_ratio_vs_reference": 1.018105652026647,
+        "double_support_frac": 0.6914498141263941,
+        "stance_slip_m": 2.1682889445308673,
+        "base_progress_m": 5.869049920557842,
+        "base_speed_mean_mps": 0.18675728348225096,
+        "ctrl_saturation_frac": 0.12154202674648772,
+        "cmd_in_mean_mps": [
+          0.21665348052390937,
+          -0.08171906658092541,
+          0.04556909191239829
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          16.88000000000601
+        ],
+        "ticks": 397,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.34760705289672544,
+        "stance_slip_m": 0.8967757024253792,
+        "base_progress_m": 3.112368893624276,
+        "base_speed_mean_mps": 0.391864242579953,
+        "ctrl_saturation_frac": 0.15227845202656287,
+        "cmd_in_mean_mps": [
+          0.12635541974475387,
+          0.208265739659631,
+          0.0010478588739546105
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 60.800000000108284,
+        "stage_exit_waypoint": 9,
+        "steps_observed": 582,
+        "steps_with_world_contact": 252,
+        "fraction_steps_in_contact": 0.4329896907216495,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_1_1",
+          "wall_m7_15"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 15,
+          "wall_m7_15": 2,
+          "plate_1_1": 237
+        },
+        "min_contact_distance_m": -0.03027804586683924,
+        "first_contact_time_s": 20.999999999996408
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-00-07"
+    },
+    {
+      "key": "doors/5",
+      "stage": "doors",
+      "layout_index": 5,
+      "world_direction": "+y",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 28.27999999997944,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          22.47999999999296
+        ],
+        "ticks": 537,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.5735567970204841,
+        "stance_slip_m": 1.5941557900753056,
+        "base_progress_m": 5.520714139493187,
+        "base_speed_mean_mps": 0.365494339963392,
+        "ctrl_saturation_frac": 0.18114101912984595,
+        "cmd_in_mean_mps": [
+          0.2726257091571943,
+          0.010364804478367948,
+          0.02743612670164479
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-00-07"
+    },
+    {
+      "key": "doors/6",
+      "stage": "doors",
+      "layout_index": 6,
+      "world_direction": "+x",
+      "success": false,
+      "fall": false,
+      "timeout": true,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 179.9999999991995,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "exposed",
+      "stall_branch_time_s": 37.79999999999846,
+      "stall_fingerprint": "e6f212f3bf4de81e",
+      "mechanism": "frozen_targets",
+      "stall_window": {
+        "mechanism": "frozen_targets",
+        "window_s": [
+          159.99999999967244,
+          179.95999999920045
+        ],
+        "ticks": 500,
+        "target_range_ratio_vs_reference": 0.014564274850747919,
+        "tracking_err_ratio_vs_reference": 0.9239915662867267,
+        "double_support_frac": 1.0,
+        "stance_slip_m": 0.014100000000016877,
+        "base_progress_m": 0.00022360679775045085,
+        "base_speed_mean_mps": 0.00598263028712786,
+        "ctrl_saturation_frac": 0.09090909090909091,
+        "cmd_in_mean_mps": [
+          0.03919700041413307,
+          0.3499999940395355,
+          -0.00848100014962256
+        ]
+      },
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          22.23999999999352,
+          179.95999999920045
+        ],
+        "ticks": 3944,
+        "target_range_ratio_vs_reference": 1.4300456268585564,
+        "tracking_err_ratio_vs_reference": 0.9309611492298017,
+        "double_support_frac": 0.9477687626774848,
+        "stance_slip_m": 1.0950244853418933,
+        "base_progress_m": 3.2223312120264733,
+        "base_speed_mean_mps": 0.04102778174840507,
+        "ctrl_saturation_frac": 0.09848100682279182,
+        "cmd_in_mean_mps": [
+          0.056179513435519884,
+          0.3244979660861826,
+          -0.008819726150751852
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          15.080000000006939
+        ],
+        "ticks": 352,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.2528409090909091,
+        "stance_slip_m": 0.6496137956285528,
+        "base_progress_m": 3.51030547531123,
+        "base_speed_mean_mps": 0.39750994832712894,
+        "ctrl_saturation_frac": 0.1337809917355372,
+        "cmd_in_mean_mps": [
+          0.03166477283759212,
+          0.316193176433444,
+          -0.02763806827847888
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 21.199999999995942,
+        "stage_exit_waypoint": 3,
+        "steps_observed": 794,
+        "steps_with_world_contact": 21,
+        "fraction_steps_in_contact": 0.02644836272040302,
+        "distinct_world_geoms": [
+          "plate_0_-1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 21
+        },
+        "min_contact_distance_m": -0.03080252535809551,
+        "first_contact_time_s": 21.399999999995476
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-00-07"
+    },
+    {
+      "key": "doors/7",
+      "stage": "doors",
+      "layout_index": 7,
+      "world_direction": "+y",
+      "success": true,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "none",
+      "elapsed_s": 99.48000000029297,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          57.00000000009014,
+          99.44000000029278
+        ],
+        "ticks": 1062,
+        "target_range_ratio_vs_reference": 1.372947715926386,
+        "tracking_err_ratio_vs_reference": 0.983789047101932,
+        "double_support_frac": 0.3662900188323917,
+        "stance_slip_m": 2.671300647985116,
+        "base_progress_m": 6.0094245523178005,
+        "base_speed_mean_mps": 0.3856088699799905,
+        "ctrl_saturation_frac": 0.15622324944358842,
+        "cmd_in_mean_mps": [
+          0.12791102116299607,
+          -0.07476742551797955,
+          0.01738079105842689
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          16.28000000000741
+        ],
+        "ticks": 382,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.35340314136125656,
+        "stance_slip_m": 0.9654454794493612,
+        "base_progress_m": 3.0252521382522817,
+        "base_speed_mean_mps": 0.4060903645329729,
+        "ctrl_saturation_frac": 0.15373631603998097,
+        "cmd_in_mean_mps": [
+          0.12104084158769726,
+          0.21422381851948916,
+          -0.006076177837069912
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 56.000000000085365,
+        "stage_exit_waypoint": 8,
+        "steps_observed": 397,
+        "steps_with_world_contact": 27,
+        "fraction_steps_in_contact": 0.06801007556675064,
+        "distinct_world_geoms": [
+          "plate_0_1",
+          "plate_1_-1",
+          "plate_1_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_1": 10,
+          "plate_1_1": 16,
+          "plate_1_-1": 1
+        },
+        "min_contact_distance_m": -0.030607635800961975,
+        "first_contact_time_s": 20.59999999999734
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-00-07"
+    },
+    {
+      "key": "doors/8",
+      "stage": "doors",
+      "layout_index": 8,
+      "world_direction": "-x",
+      "success": false,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 22.679999999992493,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          19.080000000000883
+        ],
+        "ticks": 452,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.47345132743362833,
+        "stance_slip_m": 1.2361597700872933,
+        "base_progress_m": 2.9060520194931128,
+        "base_speed_mean_mps": 0.38899827922618424,
+        "ctrl_saturation_frac": 0.1672365245374095,
+        "cmd_in_mean_mps": [
+          0.14812058048009608,
+          0.10313738787683774,
+          0.00767831867164108
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-08-15"
+    },
+    {
+      "key": "doors/9",
+      "stage": "doors",
+      "layout_index": 9,
+      "world_direction": "+x",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 30.51999999997422,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "window_too_short",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "window_too_short",
+        "window_s": [
+          30.199999999977297,
+          30.51999999997422
+        ],
+        "ticks": 7,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": null,
+        "stance_slip_m": null,
+        "base_progress_m": null,
+        "base_speed_mean_mps": null,
+        "ctrl_saturation_frac": null,
+        "cmd_in_mean_mps": null
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          23.47999999999063
+        ],
+        "ticks": 562,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.4804270462633452,
+        "stance_slip_m": 1.5885764325606488,
+        "base_progress_m": 4.755216820503561,
+        "base_speed_mean_mps": 0.38421717519800835,
+        "ctrl_saturation_frac": 0.17154642510514398,
+        "cmd_in_mean_mps": [
+          0.20142829935174117,
+          0.10545462484946276,
+          0.01289928831632669
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 29.199999999977297,
+        "stage_exit_waypoint": 5,
+        "steps_observed": 7,
+        "steps_with_world_contact": 7,
+        "fraction_steps_in_contact": 1.0,
+        "distinct_world_geoms": [
+          "plate_0_-1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 7
+        },
+        "min_contact_distance_m": -0.01154891450428032,
+        "first_contact_time_s": 29.39999999997683
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-08-15"
+    },
+    {
+      "key": "doors/10",
+      "stage": "doors",
+      "layout_index": 10,
+      "world_direction": "+x",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 36.83999999999388,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          32.59999999997363,
+          36.79999999999369
+        ],
+        "ticks": 106,
+        "target_range_ratio_vs_reference": 1.9050647237744927,
+        "tracking_err_ratio_vs_reference": 0.9277613991822231,
+        "double_support_frac": 0.0,
+        "stance_slip_m": 0.056721756291367886,
+        "base_progress_m": 0.365787752665395,
+        "base_speed_mean_mps": 0.3378922028825959,
+        "ctrl_saturation_frac": 0.14622641509433962,
+        "cmd_in_mean_mps": [
+          0.12098585097294934,
+          0.2775084857987064,
+          -0.08618867959616319
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          25.479999999985967
+        ],
+        "ticks": 612,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.3790849673202614,
+        "stance_slip_m": 1.4723955995022346,
+        "base_progress_m": 4.781707276695218,
+        "base_speed_mean_mps": 0.39306458188070703,
+        "ctrl_saturation_frac": 0.15753119429590018,
+        "cmd_in_mean_mps": [
+          0.141869449240819,
+          0.18378921283570307,
+          -0.00481944439287474
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 31.599999999971704,
+        "stage_exit_waypoint": 5,
+        "steps_observed": 27,
+        "steps_with_world_contact": 25,
+        "fraction_steps_in_contact": 0.9259259259259259,
+        "distinct_world_geoms": [
+          "plate_0_-1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 25
+        },
+        "min_contact_distance_m": -0.031136671727696113,
+        "first_contact_time_s": 31.799999999971238
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-08-15"
+    },
+    {
+      "key": "doors/11",
+      "stage": "doors",
+      "layout_index": 11,
+      "world_direction": "+y",
+      "success": false,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 22.95999999999184,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          19.280000000000417
+        ],
+        "ticks": 457,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.3479212253829322,
+        "stance_slip_m": 1.050695916426636,
+        "base_progress_m": 3.4415475080260043,
+        "base_speed_mean_mps": 0.3959904223532691,
+        "ctrl_saturation_frac": 0.15197931171672965,
+        "cmd_in_mean_mps": [
+          0.0915623658960298,
+          0.21926126574498297,
+          -0.01163522981686
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-08-15"
+    },
+    {
+      "key": "doors/12",
+      "stage": "doors",
+      "layout_index": 12,
+      "world_direction": "+y",
+      "success": false,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 16.28000000000741,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          13.080000000004494
+        ],
+        "ticks": 302,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.40066225165562913,
+        "stance_slip_m": 0.7044618407195506,
+        "base_progress_m": 2.0695786938408505,
+        "base_speed_mean_mps": 0.3878612283385879,
+        "ctrl_saturation_frac": 0.16104756170981335,
+        "cmd_in_mean_mps": [
+          0.12690232212451713,
+          0.15625960029822017,
+          0.005385761553982877
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-08-15"
+    },
+    {
+      "key": "doors/13",
+      "stage": "doors",
+      "layout_index": 13,
+      "world_direction": "+x",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 17.76000000000396,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          14.080000000005716
+        ],
+        "ticks": 327,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.382262996941896,
+        "stance_slip_m": 0.76351756655497,
+        "base_progress_m": 2.441388385734642,
+        "base_speed_mean_mps": 0.38660954515960333,
+        "ctrl_saturation_frac": 0.15540728384765082,
+        "cmd_in_mean_mps": [
+          0.12784006549558097,
+          0.19954586856135534,
+          -0.0036305810840350406
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-08-15"
+    },
+    {
+      "key": "doors/14",
+      "stage": "doors",
+      "layout_index": 14,
+      "world_direction": "+y",
+      "success": false,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 26.07999999998457,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          19.679999999999485
+        ],
+        "ticks": 467,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.5417558886509636,
+        "stance_slip_m": 1.4404401270229008,
+        "base_progress_m": 5.163954385933323,
+        "base_speed_mean_mps": 0.380713979972758,
+        "ctrl_saturation_frac": 0.18483550710531438,
+        "cmd_in_mean_mps": [
+          0.2685224946101677,
+          0.013050107189406275,
+          0.022678372687241363
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-08-15"
+    },
+    {
+      "key": "doors/15",
+      "stage": "doors",
+      "layout_index": 15,
+      "world_direction": "+y",
+      "success": false,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 18.320000000002654,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          14.68000000000645
+        ],
+        "ticks": 342,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.2953216374269006,
+        "stance_slip_m": 0.6806467817871276,
+        "base_progress_m": 3.14377575695214,
+        "base_speed_mean_mps": 0.39369452889090656,
+        "ctrl_saturation_frac": 0.13782562466772993,
+        "cmd_in_mean_mps": [
+          0.058361112374311304,
+          0.2838213402745232,
+          -0.025837134590307086
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-doors-08-15"
+    },
+    {
+      "key": "transport/0",
+      "stage": "transport",
+      "layout_index": 0,
+      "world_direction": "+y",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 72.84000000016577,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "exposed",
+      "stall_branch_time_s": 62.400000000115924,
+      "stall_fingerprint": "8805fea67b28cf57",
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          31.439999999972077,
+          72.80000000016558
+        ],
+        "ticks": 1035,
+        "target_range_ratio_vs_reference": 1.9558159110310018,
+        "tracking_err_ratio_vs_reference": 0.9896338600760028,
+        "double_support_frac": 0.3642512077294686,
+        "stance_slip_m": 2.7488476734459066,
+        "base_progress_m": 4.742893346892801,
+        "base_speed_mean_mps": 0.3935462207757739,
+        "ctrl_saturation_frac": 0.1606499780412824,
+        "cmd_in_mean_mps": [
+          0.11603111534706735,
+          -0.04332087409698319,
+          0.014776328471033712
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          26.479999999983637
+        ],
+        "ticks": 637,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.3359497645211931,
+        "stance_slip_m": 1.5014213099381657,
+        "base_progress_m": 3.957761014765798,
+        "base_speed_mean_mps": 0.4066301993931343,
+        "ctrl_saturation_frac": 0.15249036677608105,
+        "cmd_in_mean_mps": [
+          0.027856358395139374,
+          0.2029364176907429,
+          -0.00943076931890663
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 30.3999999999745,
+        "stage_exit_waypoint": 5,
+        "steps_observed": 213,
+        "steps_with_world_contact": 19,
+        "fraction_steps_in_contact": 0.0892018779342723,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_1_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 9,
+          "plate_1_1": 10
+        },
+        "min_contact_distance_m": -0.011881967430257804,
+        "first_contact_time_s": 30.79999999997357
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-00-07"
+    },
+    {
+      "key": "transport/1",
+      "stage": "transport",
+      "layout_index": 1,
+      "world_direction": "+x",
+      "success": true,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "none",
+      "elapsed_s": 84.12000000021963,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          63.20000000011974,
+          84.08000000021944
+        ],
+        "ticks": 523,
+        "target_range_ratio_vs_reference": 1.45672022908421,
+        "tracking_err_ratio_vs_reference": 0.9600107520880425,
+        "double_support_frac": 0.2829827915869981,
+        "stance_slip_m": 1.1384016872111369,
+        "base_progress_m": 4.734880996392623,
+        "base_speed_mean_mps": 0.3676744016596344,
+        "ctrl_saturation_frac": 0.14366417521293237,
+        "cmd_in_mean_mps": [
+          0.032306884351563966,
+          -0.23117304888213797,
+          -0.0031797321674451374
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          19.87999999999902
+        ],
+        "ticks": 472,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.4088983050847458,
+        "stance_slip_m": 1.0988959348762526,
+        "base_progress_m": 3.553451073252592,
+        "base_speed_mean_mps": 0.37192896633847977,
+        "ctrl_saturation_frac": 0.1445493066255778,
+        "cmd_in_mean_mps": [
+          0.10475169800979606,
+          0.21519597103992888,
+          -0.004368008556874406
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 62.20000000011497,
+        "stage_exit_waypoint": 10,
+        "steps_observed": 292,
+        "steps_with_world_contact": 70,
+        "fraction_steps_in_contact": 0.23972602739726026,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_1_-1",
+          "plate_1_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 29,
+          "plate_1_-1": 37,
+          "plate_1_1": 4
+        },
+        "min_contact_distance_m": -0.031542743558597694,
+        "first_contact_time_s": 25.999999999984755
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-00-07"
+    },
+    {
+      "key": "transport/2",
+      "stage": "transport",
+      "layout_index": 2,
+      "world_direction": "+x",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 25.31999999998634,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          22.439999999993052,
+          25.279999999986433
+        ],
+        "ticks": 72,
+        "target_range_ratio_vs_reference": 3.4614430135053937,
+        "tracking_err_ratio_vs_reference": 0.8847076535614877,
+        "double_support_frac": 0.1527777777777778,
+        "stance_slip_m": 0.22718283180352927,
+        "base_progress_m": 0.4763853587170788,
+        "base_speed_mean_mps": 0.5555308917017041,
+        "ctrl_saturation_frac": 0.2215909090909091,
+        "cmd_in_mean_mps": [
+          0.12204722480641471,
+          0.1720541643185748,
+          0.0032944445685845697
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          15.480000000007427
+        ],
+        "ticks": 362,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.27348066298342544,
+        "stance_slip_m": 0.6282986991705072,
+        "base_progress_m": 3.4902006933699385,
+        "base_speed_mean_mps": 0.3834298440066836,
+        "ctrl_saturation_frac": 0.131592164741336,
+        "cmd_in_mean_mps": [
+          0.03043784532575091,
+          0.30745855829992347,
+          -0.029133701916315813
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 21.399999999995476,
+        "stage_exit_waypoint": 3,
+        "steps_observed": 20,
+        "steps_with_world_contact": 19,
+        "fraction_steps_in_contact": 0.95,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_0_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 11,
+          "plate_0_1": 8
+        },
+        "min_contact_distance_m": -0.010087635856857737,
+        "first_contact_time_s": 21.59999999999501
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-00-07"
+    },
+    {
+      "key": "transport/3",
+      "stage": "transport",
+      "layout_index": 3,
+      "world_direction": "-y",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 87.3600000002351,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "window_too_short",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "window_too_short",
+        "window_s": [
+          88.20000000023434,
+          87.3600000002351
+        ],
+        "ticks": 0,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": null,
+        "stance_slip_m": null,
+        "base_progress_m": null,
+        "base_speed_mean_mps": null,
+        "ctrl_saturation_frac": null,
+        "cmd_in_mean_mps": null
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          28.479999999978975
+        ],
+        "ticks": 687,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.3289665211062591,
+        "stance_slip_m": 1.5661639833146241,
+        "base_progress_m": 5.577479162668382,
+        "base_speed_mean_mps": 0.39263236600950396,
+        "ctrl_saturation_frac": 0.14608971814211988,
+        "cmd_in_mean_mps": [
+          0.10196725197008973,
+          0.22868878812850432,
+          -0.011595196573499568
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 87.20000000023434,
+        "stage_exit_waypoint": 13,
+        "steps_observed": 265,
+        "steps_with_world_contact": 32,
+        "fraction_steps_in_contact": 0.12075471698113208,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_0_1",
+          "plate_1_-1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 17,
+          "plate_0_1": 5,
+          "plate_1_-1": 10
+        },
+        "min_contact_distance_m": -0.030998475755656858,
+        "first_contact_time_s": 34.59999999998318
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-00-07"
+    },
+    {
+      "key": "transport/4",
+      "stage": "transport",
+      "layout_index": 4,
+      "world_direction": "+y",
+      "success": false,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 60.480000000106756,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          21.83999999999445,
+          60.440000000106565
+        ],
+        "ticks": 966,
+        "target_range_ratio_vs_reference": 1.998154942346375,
+        "tracking_err_ratio_vs_reference": 0.9783351167920362,
+        "double_support_frac": 0.3198757763975155,
+        "stance_slip_m": 2.4289826714040474,
+        "base_progress_m": 2.5663646194568686,
+        "base_speed_mean_mps": 0.40479721945636554,
+        "ctrl_saturation_frac": 0.15480895915678525,
+        "cmd_in_mean_mps": [
+          0.09842805698919872,
+          0.04884678638283757,
+          0.0021361283385055644
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          17.080000000005544
+        ],
+        "ticks": 402,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.3681592039800995,
+        "stance_slip_m": 0.9340629919998746,
+        "base_progress_m": 3.1124645620472533,
+        "base_speed_mean_mps": 0.3865334207793033,
+        "ctrl_saturation_frac": 0.15038444142921756,
+        "cmd_in_mean_mps": [
+          0.1186609490339028,
+          0.20478233493707,
+          -0.0017875622688372451
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 20.799999999996874,
+        "stage_exit_waypoint": 3,
+        "steps_observed": 199,
+        "steps_with_world_contact": 20,
+        "fraction_steps_in_contact": 0.10050251256281408,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_1_1",
+          "wall_m7_22"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 8,
+          "plate_1_1": 9,
+          "wall_m7_22": 3
+        },
+        "min_contact_distance_m": -0.01830620315024753,
+        "first_contact_time_s": 21.199999999995942
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-00-07"
+    },
+    {
+      "key": "transport/5",
+      "stage": "transport",
+      "layout_index": 5,
+      "world_direction": "+y",
+      "success": false,
+      "fall": false,
+      "timeout": true,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 179.9999999991995,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          129.64000000039036,
+          179.95999999920045
+        ],
+        "ticks": 1259,
+        "target_range_ratio_vs_reference": 1.5650167640908208,
+        "tracking_err_ratio_vs_reference": 0.8498085154120205,
+        "double_support_frac": 0.17077045274027006,
+        "stance_slip_m": 1.8383946716520687,
+        "base_progress_m": 5.426590784276994,
+        "base_speed_mean_mps": 0.2696519521328824,
+        "ctrl_saturation_frac": 0.13026211278792693,
+        "cmd_in_mean_mps": [
+          0.08359611070432128,
+          0.20658014142609143,
+          -0.09967712463657176
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          22.679999999992493
+        ],
+        "ticks": 542,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.5682656826568265,
+        "stance_slip_m": 1.6326452518134726,
+        "base_progress_m": 5.566348347884814,
+        "base_speed_mean_mps": 0.36407627460435843,
+        "ctrl_saturation_frac": 0.18039248574303926,
+        "cmd_in_mean_mps": [
+          0.26457565626974916,
+          0.01095756457685115,
+          0.02537583030657834
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 128.60000000041495,
+        "stage_exit_waypoint": 4,
+        "steps_observed": 257,
+        "steps_with_world_contact": 116,
+        "fraction_steps_in_contact": 0.45136186770428016,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_0_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_1": 108,
+          "plate_0_-1": 8
+        },
+        "min_contact_distance_m": -0.007460976753188083,
+        "first_contact_time_s": 128.80000000041022
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-00-07"
+    },
+    {
+      "key": "transport/6",
+      "stage": "transport",
+      "layout_index": 6,
+      "world_direction": "+x",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 87.28000000023472,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          22.439999999993052,
+          87.24000000023453
+        ],
+        "ticks": 1621,
+        "target_range_ratio_vs_reference": 2.8764338652315935,
+        "tracking_err_ratio_vs_reference": 0.9706396954025853,
+        "double_support_frac": 0.35780382479950645,
+        "stance_slip_m": 4.475123617842946,
+        "base_progress_m": 5.541357437487678,
+        "base_speed_mean_mps": 0.40735828827663295,
+        "ctrl_saturation_frac": 0.16718075262183837,
+        "cmd_in_mean_mps": [
+          0.09473603009099064,
+          0.0029235009007706875,
+          -0.00156896979258471
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          15.480000000007427
+        ],
+        "ticks": 362,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.26795580110497236,
+        "stance_slip_m": 0.6614416319681622,
+        "base_progress_m": 3.5045003652446662,
+        "base_speed_mean_mps": 0.3915589354335247,
+        "ctrl_saturation_frac": 0.13058764439979909,
+        "cmd_in_mean_mps": [
+          0.03225773478374502,
+          0.3026243042386039,
+          -0.02432375714872341
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 21.399999999995476,
+        "stage_exit_waypoint": 3,
+        "steps_observed": 330,
+        "steps_with_world_contact": 50,
+        "fraction_steps_in_contact": 0.15151515151515152,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_1_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 43,
+          "plate_1_1": 7
+        },
+        "min_contact_distance_m": -0.030904238503635745,
+        "first_contact_time_s": 21.59999999999501
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-00-07"
+    },
+    {
+      "key": "transport/7",
+      "stage": "transport",
+      "layout_index": 7,
+      "world_direction": "+y",
+      "success": false,
+      "fall": false,
+      "timeout": true,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 179.9999999991995,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "frozen_targets",
+      "stall_window": {
+        "mechanism": "frozen_targets",
+        "window_s": [
+          159.99999999967244,
+          179.95999999920045
+        ],
+        "ticks": 500,
+        "target_range_ratio_vs_reference": 0.0,
+        "tracking_err_ratio_vs_reference": 0.9236330421729247,
+        "double_support_frac": 1.0,
+        "stance_slip_m": 0.0,
+        "base_progress_m": 0.0,
+        "base_speed_mean_mps": 0.0,
+        "ctrl_saturation_frac": 0.09090909090909091,
+        "cmd_in_mean_mps": [
+          -0.10859999805688858,
+          0.27970001101493835,
+          -0.2492000013589859
+        ]
+      },
+      "post_stage": {
+        "mechanism": "cycling_without_progress_in_place",
+        "window_s": [
+          20.83999999999678,
+          179.95999999920045
+        ],
+        "ticks": 3979,
+        "target_range_ratio_vs_reference": 0.5746507843000211,
+        "tracking_err_ratio_vs_reference": 0.9242223683026825,
+        "double_support_frac": 0.9972354863030912,
+        "stance_slip_m": 0.05574244389924066,
+        "base_progress_m": 0.040355420949359386,
+        "base_speed_mean_mps": 0.001973166928727958,
+        "ctrl_saturation_frac": 0.09111471589481139,
+        "cmd_in_mean_mps": [
+          -0.1081157309340454,
+          0.27792976403781655,
+          -0.2469009805127106
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          15.880000000007916
+        ],
+        "ticks": 372,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.3521505376344086,
+        "stance_slip_m": 0.9648627008644179,
+        "base_progress_m": 2.9905757606186807,
+        "base_speed_mean_mps": 0.4043327508900967,
+        "ctrl_saturation_frac": 0.1537145650048876,
+        "cmd_in_mean_mps": [
+          0.11722339070727548,
+          0.20958064171806057,
+          -0.008268548219974192
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 19.799999999999205,
+        "stage_exit_waypoint": 3,
+        "steps_observed": 801,
+        "steps_with_world_contact": 5,
+        "fraction_steps_in_contact": 0.006242197253433208,
+        "distinct_world_geoms": [
+          "plate_0_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_1": 5
+        },
+        "min_contact_distance_m": -0.0037570195100756656,
+        "first_contact_time_s": 20.399999999997807
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-00-07"
+    },
+    {
+      "key": "transport/8",
+      "stage": "transport",
+      "layout_index": 8,
+      "world_direction": "-x",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 22.879999999992027,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          19.280000000000417
+        ],
+        "ticks": 457,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.5010940919037199,
+        "stance_slip_m": 1.220522867686866,
+        "base_progress_m": 2.93694723309766,
+        "base_speed_mean_mps": 0.3760427524793064,
+        "ctrl_saturation_frac": 0.1621245275512234,
+        "cmd_in_mean_mps": [
+          0.15611597956351822,
+          0.09649824806926181,
+          0.01819277902366084
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-08-15"
+    },
+    {
+      "key": "transport/9",
+      "stage": "transport",
+      "layout_index": 9,
+      "world_direction": "+x",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 30.999999999973102,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "window_too_short",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "window_too_short",
+        "window_s": [
+          31.199999999974967,
+          30.999999999973102
+        ],
+        "ticks": 0,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": null,
+        "stance_slip_m": null,
+        "base_progress_m": null,
+        "base_speed_mean_mps": null,
+        "ctrl_saturation_frac": null,
+        "cmd_in_mean_mps": null
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          24.479999999988298
+        ],
+        "ticks": 587,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.4855195911413969,
+        "stance_slip_m": 1.5493022850134082,
+        "base_progress_m": 4.764187563478163,
+        "base_speed_mean_mps": 0.38176711112422546,
+        "ctrl_saturation_frac": 0.16656341954468018,
+        "cmd_in_mean_mps": [
+          0.1952695132937644,
+          0.10438841416042781,
+          0.014805451462364016
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 30.199999999974967,
+        "stage_exit_waypoint": 5,
+        "steps_observed": 4,
+        "steps_with_world_contact": 3,
+        "fraction_steps_in_contact": 0.75,
+        "distinct_world_geoms": [
+          "plate_0_-1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 3
+        },
+        "min_contact_distance_m": -0.0017956754182409504,
+        "first_contact_time_s": 30.3999999999745
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-08-15"
+    },
+    {
+      "key": "transport/10",
+      "stage": "transport",
+      "layout_index": 10,
+      "world_direction": "+x",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 70.68000000015546,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "window_too_short",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "window_too_short",
+        "window_s": [
+          71.20000000015317,
+          70.68000000015546
+        ],
+        "ticks": 0,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": null,
+        "stance_slip_m": null,
+        "base_progress_m": null,
+        "base_speed_mean_mps": null,
+        "ctrl_saturation_frac": null,
+        "cmd_in_mean_mps": null
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          25.879999999985035
+        ],
+        "ticks": 622,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.3954983922829582,
+        "stance_slip_m": 1.5180092740412339,
+        "base_progress_m": 4.742812914294638,
+        "base_speed_mean_mps": 0.39292671916357086,
+        "ctrl_saturation_frac": 0.15828705057000877,
+        "cmd_in_mean_mps": [
+          0.13716238409271794,
+          0.17728456314705565,
+          -0.004071382754703181
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 70.20000000015317,
+        "stage_exit_waypoint": 11,
+        "steps_observed": 195,
+        "steps_with_world_contact": 27,
+        "fraction_steps_in_contact": 0.13846153846153847,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_1_-1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 20,
+          "plate_1_-1": 7
+        },
+        "min_contact_distance_m": -0.03419753793706318,
+        "first_contact_time_s": 31.999999999970772
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-08-15"
+    },
+    {
+      "key": "transport/11",
+      "stage": "transport",
+      "layout_index": 11,
+      "world_direction": "+y",
+      "success": false,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 23.95999999998951,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          19.87999999999902
+        ],
+        "ticks": 472,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.3877118644067797,
+        "stance_slip_m": 1.0878577034398147,
+        "base_progress_m": 3.440357030890835,
+        "base_speed_mean_mps": 0.3864784628526489,
+        "ctrl_saturation_frac": 0.14907550077041604,
+        "cmd_in_mean_mps": [
+          0.09287606195450003,
+          0.20964131019693816,
+          -0.006985805081243043
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-08-15"
+    },
+    {
+      "key": "transport/12",
+      "stage": "transport",
+      "layout_index": 12,
+      "world_direction": "+y",
+      "success": false,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 16.840000000006103,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          13.680000000005228
+        ],
+        "ticks": 317,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.45110410094637227,
+        "stance_slip_m": 0.7670713383206433,
+        "base_progress_m": 2.045100537870938,
+        "base_speed_mean_mps": 0.37317685801297346,
+        "ctrl_saturation_frac": 0.15371379409234298,
+        "cmd_in_mean_mps": [
+          0.12672240173073973,
+          0.14380125959671164,
+          0.007843533000902916
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-08-15"
+    },
+    {
+      "key": "transport/13",
+      "stage": "transport",
+      "layout_index": 13,
+      "world_direction": "+x",
+      "success": false,
+      "fall": false,
+      "timeout": true,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 179.9999999991995,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "frozen_targets",
+      "stall_window": {
+        "mechanism": "frozen_targets",
+        "window_s": [
+          159.99999999967244,
+          179.95999999920045
+        ],
+        "ticks": 500,
+        "target_range_ratio_vs_reference": 9.558365290130463e-05,
+        "tracking_err_ratio_vs_reference": 0.9067220499199184,
+        "double_support_frac": 0.0,
+        "stance_slip_m": 0.00019999999999997797,
+        "base_progress_m": 0.0,
+        "base_speed_mean_mps": 0.0,
+        "ctrl_saturation_frac": 0.09090909090909091,
+        "cmd_in_mean_mps": [
+          0.12520000338554382,
+          0.3499999940395355,
+          0.10440000146627426
+        ]
+      },
+      "post_stage": {
+        "mechanism": "cycling_without_progress_slip",
+        "window_s": [
+          20.83999999999678,
+          179.95999999920045
+        ],
+        "ticks": 3979,
+        "target_range_ratio_vs_reference": 0.2001139357142584,
+        "tracking_err_ratio_vs_reference": 0.9053183058114443,
+        "double_support_frac": 0.0,
+        "stance_slip_m": 0.06257189882210776,
+        "base_progress_m": 0.02182567295640596,
+        "base_speed_mean_mps": 0.0005588471491671294,
+        "ctrl_saturation_frac": 0.09092051451940872,
+        "cmd_in_mean_mps": [
+          0.12546373522702578,
+          0.3499999940395355,
+          0.10315833148996145
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          14.480000000006205
+        ],
+        "ticks": 337,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.3857566765578635,
+        "stance_slip_m": 0.7091722353692995,
+        "base_progress_m": 2.4060309578224466,
+        "base_speed_mean_mps": 0.37614513360122753,
+        "ctrl_saturation_frac": 0.14917723226328566,
+        "cmd_in_mean_mps": [
+          0.1260709240894422,
+          0.19639465591983554,
+          -0.0034602374848508957
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 19.799999999999205,
+        "stage_exit_waypoint": 3,
+        "steps_observed": 801,
+        "steps_with_world_contact": 801,
+        "fraction_steps_in_contact": 1.0,
+        "distinct_world_geoms": [
+          "plate_0_-1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 801
+        },
+        "min_contact_distance_m": -0.005196183008062751,
+        "first_contact_time_s": 19.99999999999874
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-13-15"
+    },
+    {
+      "key": "transport/14",
+      "stage": "transport",
+      "layout_index": 14,
+      "world_direction": "+y",
+      "success": false,
+      "fall": true,
+      "timeout": false,
+      "failure_phase": "after PlateStage",
+      "elapsed_s": 57.88000000009434,
+      "stage_activated": true,
+      "stage_completed": true,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": "progressing",
+      "stall_window": null,
+      "post_stage": {
+        "mechanism": "progressing",
+        "window_s": [
+          30.239999999974874,
+          57.84000000009415
+        ],
+        "ticks": 691,
+        "target_range_ratio_vs_reference": 2.3112190603060854,
+        "tracking_err_ratio_vs_reference": 0.6663721380309967,
+        "double_support_frac": 0.020260492040520984,
+        "stance_slip_m": 0.39375623078000577,
+        "base_progress_m": 0.7268936992435686,
+        "base_speed_mean_mps": 0.07395856732038643,
+        "ctrl_saturation_frac": 0.10866991185370346,
+        "cmd_in_mean_mps": [
+          0.2829752645405433,
+          0.08445745295751975,
+          -0.323378286945267
+        ]
+      },
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          20.879999999996688
+        ],
+        "ticks": 497,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.5533199195171026,
+        "stance_slip_m": 1.3808737762162049,
+        "base_progress_m": 5.170511132373665,
+        "base_speed_mean_mps": 0.3668835400583486,
+        "ctrl_saturation_frac": 0.18392171209072616,
+        "cmd_in_mean_mps": [
+          0.2613682196413727,
+          0.012279275734370135,
+          0.026664185089710232
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": 29.199999999977297,
+        "stage_exit_waypoint": 4,
+        "steps_observed": 144,
+        "steps_with_world_contact": 143,
+        "fraction_steps_in_contact": 0.9930555555555556,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_0_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_1": 138,
+          "plate_0_-1": 6
+        },
+        "min_contact_distance_m": -0.016261714048111404,
+        "first_contact_time_s": 29.39999999997683
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-13-15"
+    },
+    {
+      "key": "transport/15",
+      "stage": "transport",
+      "layout_index": 15,
+      "world_direction": "+y",
+      "success": false,
+      "fall": false,
+      "timeout": false,
+      "failure_phase": "during PlateStage",
+      "elapsed_s": 21.279999999995756,
+      "stage_activated": true,
+      "stage_completed": false,
+      "exposure": "not_exposed",
+      "stall_branch_time_s": null,
+      "stall_fingerprint": null,
+      "mechanism": null,
+      "stall_window": null,
+      "post_stage": null,
+      "walking_reference": {
+        "mechanism": "progressing",
+        "window_s": [
+          1.039999999999941,
+          15.280000000007183
+        ],
+        "ticks": 357,
+        "target_range_ratio_vs_reference": null,
+        "tracking_err_ratio_vs_reference": null,
+        "double_support_frac": 0.2913165266106443,
+        "stance_slip_m": 0.6865480678129718,
+        "base_progress_m": 3.223297504109728,
+        "base_speed_mean_mps": 0.38724564815629825,
+        "ctrl_saturation_frac": 0.13292589763177998,
+        "cmd_in_mean_mps": [
+          0.05488935664963989,
+          0.2752761857985866,
+          -0.02381036439532263
+        ]
+      },
+      "post_stage_contacts": {
+        "stage_exit_time_s": null,
+        "stage_exit_waypoint": null,
+        "steps_observed": 0,
+        "steps_with_world_contact": 0,
+        "fraction_steps_in_contact": null,
+        "distinct_world_geoms": [],
+        "world_geom_step_counts": {},
+        "min_contact_distance_m": null,
+        "first_contact_time_s": null
+      },
+      "source_dir": "results/mission7-campaign-20260923/campaign-a-transport-13-15"
+    }
+  ]
+}

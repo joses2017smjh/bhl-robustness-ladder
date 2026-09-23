@@ -24,11 +24,40 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 
+HEAVY_EPISODE_KEYS = (
+    "plate_contact_events", "rejoin_diagnostic", "diagnostic_trace",
+    "decision_rewards", "route_phase_history", "trace",
+    "guarded_stage_history", "guarded_stage_phase_history",
+    "stage_entry_states", "world_contact_samples", "chain",
+)
+
+
 def load_dir(directory):
+    """Compact summaries for a probe output dir.
+
+    Falls back to the per-episode records when result.json is absent, which is
+    what a job that died mid-run (21400755, out of memory) leaves behind; the
+    episodes it did write are still valid and stay in the denominator.
+    """
     directory = Path(directory)
-    result = json.loads((directory / "result.json").read_text())
+    result_path = directory / "result.json"
     rows = []
-    for summary in result["episodes"]:
+    if result_path.exists():
+        result = json.loads(result_path.read_text())
+        summaries = result["episodes"]
+    else:
+        result = {"status": "PARTIAL_NO_RESULT_JSON", "episodes": []}
+        summaries = []
+        for record in sorted(directory.glob("*-[0-9]*.json")):
+            if record.name == "submission.json":
+                continue
+            row = json.loads(record.read_text())
+            summary = {k: v for k, v in row.items() if k not in HEAVY_EPISODE_KEYS}
+            summary["full_episode_record"] = record.name
+            summary["partial_dir"] = True
+            summaries.append(summary)
+        result["episodes"] = summaries
+    for summary in summaries:
         record = directory / summary.get("full_episode_record", f"{summary['stage']}-{summary['layout_index']}.json")
         rows.append({"summary": summary, "record_path": str(record), "dir": str(directory)})
     return result, rows

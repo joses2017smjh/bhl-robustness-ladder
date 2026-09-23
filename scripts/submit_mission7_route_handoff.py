@@ -39,6 +39,10 @@ def main():
                         default="none")
     parser.add_argument("--chain-trace", action="store_true",
                         help="record the 25 Hz command-to-motion chain (Campaign A)")
+    parser.add_argument("--stage-lateral", type=float, default=None,
+                        help="PlateStage body-centre lateral offset (m); default plate centre")
+    parser.add_argument("--stage-activate", action="store_true")
+    parser.add_argument("--exit-ramp", type=float, default=0.)
     parser.add_argument("--submit", action="store_true")
     args = parser.parse_args()
     campaign = args.campaign.resolve()
@@ -83,6 +87,12 @@ def main():
         probe_args.append("--rejoin-diagnostic")
     if args.chain_trace:
         probe_args.append("--chain-trace")
+    if args.stage_lateral is not None:
+        probe_args.append(f"--stage-lateral={args.stage_lateral}")
+    if args.stage_activate:
+        probe_args.append("--stage-activate")
+    if args.exit_ramp:
+        probe_args.append(f"--exit-ramp={args.exit_ramp}")
     if args.allow_inactive_intervention:
         probe_args.append("--allow-inactive-intervention")
     command = [
@@ -109,6 +119,9 @@ def main():
         "rejoin_diagnostic": args.rejoin_diagnostic,
         "rejoin_fix": args.rejoin_fix,
         "chain_trace": args.chain_trace,
+        "stage_lateral_m": args.stage_lateral,
+        "stage_activate": args.stage_activate,
+        "exit_ramp_s": args.exit_ramp,
         "allow_inactive_intervention": args.allow_inactive_intervention,
         "requested_node": args.node,
         "requested_constraint": None if args.node else args.constraint,

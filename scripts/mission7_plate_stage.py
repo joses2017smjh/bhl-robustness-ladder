@@ -55,11 +55,26 @@ def _plate_state(env, door, side):
 class PlateStage:
     """One bounded staged maneuver per unopened correct plate."""
 
-    def __init__(self, env, approach_radius=.78, settle_s=.40, cross_s=1.20):
+    def __init__(self, env, approach_radius=.78, settle_s=.40, cross_s=1.20,
+                 stage_lateral_m=None, wait_open_s=0.):
         self.env = env
         self.approach_radius = float(approach_radius)
         self.settle_s = float(settle_s)
         self.cross_s = float(cross_s)
+        # Where the body centres for the crossing, as a lateral offset from the
+        # door centreline toward the plate side.  None keeps the exact replay
+        # behaviour: the plate centre itself, 0.42 m off the centreline, which
+        # puts the body 0.29-0.39 m from the corridor wall against a 0.316 m
+        # half-body.  The plate is 0.24 m in radius and is pressed by a foot,
+        # not by the body centre, so a smaller offset keeps the body clear of
+        # the wall while the wall-side foot still lands on the plate.  Capture
+        # (approach_radius from the plate) and the fall predicate are unchanged.
+        self.stage_lateral_m = None if stage_lateral_m is None else float(stage_lateral_m)
+        # After the fixed settle, optionally keep standing on the plate for up
+        # to wait_open_s more until the door is open, instead of crossing into
+        # a closed door.  0 keeps the exact replay behaviour.
+        self.wait_open_s = float(wait_open_s)
+        self.wait_open_until = None
         # A wrong-side plate is only an intervention target when the route is
         # clearly not entering the intended plate.  The threshold separates
         # the layout-13 wrong-side trace from layout-4's earlier near miss.
@@ -106,6 +121,10 @@ class PlateStage:
             else:
                 return np.asarray(recorded, dtype=float), "recorded"
         plate, direction = _plate_state(env, self.door, self.side)
+        if self.stage_lateral_m is not None:
+            center, _ = env.layout.door(self.door)
+            lateral = np.array([-direction[1], direction[0]])
+            plate = np.asarray(center) + lateral * self.side * self.stage_lateral_m - direction * .12
         if self.phase == "approach":
             pre = plate - direction * .30
             if np.linalg.norm(xy - pre) <= .13:
@@ -118,6 +137,14 @@ class PlateStage:
         if self.phase == "settle":
             if now < self.phase_until:
                 return np.zeros(3), self.phase
+            if self.wait_open_s > 0. and not env.state.open[self.door]:
+                if self.wait_open_until is None:
+                    self.wait_open_until = now + self.wait_open_s
+                    self.history.append({"time_s": now, "door": int(self.door),
+                                         "side": int(self.side), "phase": "wait_open"})
+                if now < self.wait_open_until:
+                    return np.zeros(3), self.phase
+            self.wait_open_until = None
             self.phase = "cross"
             self.phase_until = now + self.cross_s
             self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase})
@@ -135,9 +162,9 @@ class PlateStage:
         raise AssertionError(self.phase)
 
 
-def _episode(env, index, source_episode, baseline):
+def _episode(env, index, source_episode, baseline, stage_lateral_m=None):
     runner = env.runner
-    stage = PlateStage(env)
+    stage = PlateStage(env, stage_lateral_m=stage_lateral_m)
     samples = []
     maximum_recorded_pose_difference = 0.
     for reference in source_episode["diagnostic_trace"]:
@@ -202,7 +229,8 @@ def run(args, out):
         for reset_index in range(next_reset, index + 1):
             env.reset(reset_index)
         next_reset = index + 1
-        rows.append(_episode(env, index, episode, baseline_rows[index]))
+        rows.append(_episode(env, index, episode, baseline_rows[index],
+                             stage_lateral_m=getattr(args, 'stage_lateral', None)))
         write(out / "episodes.json", {"complete": False, "episodes": rows})
     report = {
         "complete": True,
@@ -229,11 +257,21 @@ if __name__ == "__main__":
     parser.add_argument("--baseline", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--stage-lateral", type=float, default=None,
+                        help="PlateStage body-centre lateral offset (m); default None = plate "
+                             "centre, the exact 10/10 replay behaviour")
+    parser.add_argument("--preflight", action="store_true")
     args = parser.parse_args()
     args.repo = args.repo.resolve()
     args.campaign = args.campaign.resolve()
     args.baseline = args.baseline.resolve()
     args.out = args.out.resolve()
+    if args.preflight:
+        import sys
+        print(json.dumps({"status": "PREFLIGHT_OK", "python": sys.executable, "mujoco": mujoco.__version__,
+                          "stage_lateral_m": args.stage_lateral, "campaign": str(args.campaign),
+                          "baseline": str(args.baseline), "out": str(args.out)}, sort_keys=True), flush=True)
+        raise SystemExit(0)
     args.out.mkdir(parents=True, exist_ok=True)
     run(args, args.out)
     print("MISSION7_PLATE_STAGE_COMPLETE", flush=True)
