@@ -1,0 +1,38 @@
+{
+  "output": "results/mission7-campaign-20260923/media/doors1-crossing-fix-success.mp4",
+  "output_sha256": "8e7cffdadd05c76f84663ec05b2af4e6f8c1fcd8d197c73e03d8eec2a60b15b8",
+  "renderer": "MuJoCo EpisodeRecorder, tracking camera, 25 fps",
+  "ffmpeg_error": null,
+  "stage": "doors",
+  "layout_index": 1,
+  "split": "validation",
+  "configuration": {
+    "stage": "doors",
+    "index": 1,
+    "max_seconds": null,
+    "handoff": "early",
+    "rejoin_fix": "none",
+    "stall_min_s": 0.8,
+    "stage_activate": true,
+    "stage_wait_open": 0.0,
+    "pre_point": 0.45,
+    "cross_clear": 0.35,
+    "cross_kick": true,
+    "align_yaw": false,
+    "rejoin_advance": true,
+    "exit_ramp": 1.2,
+    "exit_ramp_center": true
+  },
+  "outcome_of_this_run": {
+    "success": true,
+    "failure": null,
+    "elapsed_s": 77.68000000018888,
+    "recording_stopped_early": false
+  },
+  "evidence": "results/mission7-campaign-20260923/local-stage-v2/doors-1-kick-center/result.json",
+  "evidence_sha256": "90ca59efdfea35c94d7cd0385b2eb321594c68d915b7b9a4644cf4f37911da6c",
+  "caption": "Doors/1 with the crossing fix (kick, cross-until-clear, centre-aimed ramp): success at 77.7 s -- single layout, replay gate not passed",
+  "scope": "A rendering of one development layout under one controller configuration; not a route-rate claim and not a replay-gate result.",
+  "git_commit": "58417a7d6b06d08e7f605baeaede3610490f24c7",
+  "re_encoded": "libopenh264 900 kb/s, 800 px wide, after rendering, to stay under the 5 MB artifact guard; frames unchanged"
+}

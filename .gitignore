@@ -115,6 +115,11 @@ results/mission7-approach-debug-20260921/**/*.json
 !results/mission7-*/**/submission.json
 !results/mission7-*/**/sha256.json
 results/mission7-*/**/source-*/
+# Per-job source snapshots nested under a campaign dir; reproducible from each
+# submission.json's commit and sha256 list.
+results/mission7-*/**/source/
+results/mission7-*/**/*.out
+results/mission7-*/**/*.log
 
 # Raw traces written into result.json before the probe was changed to keep
 # result.json compact (traces now stay in <stage>-<index>.json).  Finite and

@@ -36,7 +36,8 @@ replaced it). Route failures are never dropped from a denominator.
   (robot wider than the post gap); (c) sensor-release and four-sensor
   studies — closed until (a) and (b) pass.
 - **Budget:** 411 / 512 episodes; **101 unspent by decision**. Retained
-  artifacts ≈ 7.2 GB of 10 GB; disk ≥ 130 GB free.
+  artifacts 7.7 GB of 10 GB after trimming raw traces of withdrawn arms and
+  failed gates (compact results and receipts kept); disk ≥ 130 GB free.
 - **Validation:** 176 tests; every job preflighted and hash-frozen; replay
   gate unchanged for the frozen candidate.
 
