@@ -175,6 +175,12 @@ def campaign_b(args):
             "baseline_post_stage_progress_m": ((b.get("chain_post_stage_summary") or {}).get("base_progress_m")),
             "arm_post_stage_progress_m": ((a.get("chain_post_stage_summary") or {}).get("base_progress_m")),
             "arm_mechanism": a.get("mechanism"), "baseline_mechanism": b.get("mechanism"),
+            # The comparable column: the window that starts at the stall
+            # condition in each arm (present in records written after the
+            # 2026-09-23 review; older records need the offline recompute in
+            # campaign-b-stall-anchored.json).
+            "baseline_stall_anchored": compact_stats(b.get("chain_stall_anchored_summary")),
+            "arm_stall_anchored": compact_stats(a.get("chain_stall_anchored_summary")),
         })
     paired = [p for p in pairs if p.get("status") != "unpaired"]
     exposed = [p for p in paired if p["arm_exposure"] == "exposed"]

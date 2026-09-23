@@ -210,6 +210,7 @@ class RouteHandoffController:
         self.rejoin_fix_command_delta = 0.
         self.rejoin_fix_forward_delta = 0.
         self.post_stage_exit_time = None
+        self.post_stage_first_exit_time = None
         self.post_stage_exit_waypoint = None
         self.post_stage_last_target_waypoint = None
         self.post_stage_best_target_distance = None
@@ -241,6 +242,13 @@ class RouteHandoffController:
                                           "foot_r", "base", "phase")}
         model, slot = env.model, env.slot
         self.floor_geom = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "floor")
+        # Review finding: a foot standing on a pressure plate (a collidable box
+        # on the world body, z = .015) was recorded as airborne because only the
+        # geom named "floor" counted.  Stance is contact with ANY collidable
+        # world-body geom: floor, plates, door sills.
+        self.ground_geoms = {int(g) for g in range(model.ngeom)
+                             if int(model.geom_bodyid[g]) == 0 and int(model.geom_contype[g]) != 0}
+        self.ground_geoms.add(int(self.floor_geom))
         self.foot = {}
         for side in ("left", "right"):
             body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY,
@@ -309,7 +317,7 @@ class RouteHandoffController:
         for i in range(d.ncon):
             c = d.contact[i]
             g1, g2 = int(c.geom1), int(c.geom2)
-            if (g1 == self.floor_geom and g2 in geoms) or (g2 == self.floor_geom and g1 in geoms):
+            if (g1 in self.ground_geoms and g2 in geoms) or (g2 in self.ground_geoms and g1 in geoms):
                 contact = 1.
                 break
         xyz = d.xpos[body]
@@ -496,7 +504,8 @@ class RouteHandoffController:
             command, phase = self.stage.command(recorded)
             if stage_phase_before == "recorded" and self.stage.phase != "recorded":
                 self.handoff_seen = True
-                self.handoff_condition_first_true_time = now
+                if self.handoff_condition_first_true_time is None:
+                    self.handoff_condition_first_true_time = now
                 self.handoff_condition_reason = (
                     "continuous_existing_plate_stage_predicate"
                     if self.handoff_mode == "early" else "route_switch_phase")
@@ -537,6 +546,8 @@ class RouteHandoffController:
                 self.exit_ramp_events.append({"time_s": now, "event": "exit_ramp_start",
                                               "until_s": self.exit_ramp_until})
             self.post_stage_exit_time = now
+            if self.post_stage_first_exit_time is None:
+                self.post_stage_first_exit_time = now
             self.post_stage_exit_waypoint = int(self.route.waypoint)
             self.post_stage_last_target_waypoint = None
             self.post_stage_best_target_distance = None
@@ -762,6 +773,7 @@ def run(args):
             end_time = float(env.runner.d.time)
             chain_post_stage = None
             chain_stall_window = None
+            chain_stall_anchored = None
             chain_reference = None
             if args.chain_trace:
                 defaults = env.controller.default_joint_positions
@@ -781,6 +793,17 @@ def run(args):
                         controller.chain, max(controller.post_stage_exit_time + 1.0,
                                               end_time - STALL_WINDOW_S),
                         end_time, defaults, effort, reference=chain_reference)
+                # Review finding: the window that describes the stall itself, and
+                # the one a paired intervention arm must be compared on, starts at
+                # the stall condition -- not at the last stage exit, and not only
+                # when the episode timed out.  An exposed episode that later fell
+                # was being labelled from a window that included its earlier
+                # progress.
+                if controller.stall_first_time is not None:
+                    chain_stall_anchored = summarize_chain(
+                        controller.chain, controller.stall_first_time,
+                        min(end_time, controller.stall_first_time + STALL_WINDOW_S),
+                        defaults, effort, reference=chain_reference)
             exposure = ("exposed" if controller.stall_first_time is not None
                         else "not_exposed")
             fix_event = controller.rejoin_fix_events[0] if controller.rejoin_fix_events else None
@@ -863,6 +886,8 @@ def run(args):
                 fall_phase=None if fall is None else fall["phase"],
                 failure_phase=failure_phase,
                 post_stage_contact_summary={
+                    "anchor": "first stage exit; steps and contacts accumulate from there",
+                    "first_stage_exit_time_s": controller.post_stage_first_exit_time,
                     "stage_exit_time_s": controller.post_stage_exit_time,
                     "stage_exit_waypoint": controller.post_stage_exit_waypoint,
                     "steps_observed": controller.post_stage_steps,
@@ -884,7 +909,8 @@ def run(args):
                 chain_walking_reference_summary=chain_reference,
                 chain_post_stage_summary=chain_post_stage,
                 chain_stall_window_summary=chain_stall_window,
-                mechanism=((chain_stall_window or chain_post_stage or {}).get("mechanism")),
+                chain_stall_anchored_summary=chain_stall_anchored,
+                mechanism=((chain_stall_anchored or chain_stall_window or chain_post_stage or {}).get("mechanism")),
                 chain=controller.chain if args.chain_trace else None,
                 rejoin_fix=args.rejoin_fix,
                 rejoin_fix_events=controller.rejoin_fix_events,

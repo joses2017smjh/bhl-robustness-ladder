@@ -7,9 +7,11 @@ improvement. (1) *Post-stage stall* is a feedback fixed point of the frozen
 gait: with `history_length 0` the only persistent policy input is the
 22-element `prev_actions`; in every classifiable stall the joint-target range
 fell to ≈2 % of walking amplitude with both feet planted and the 0.30 m/s
-command verifiably delivered. A one-shot `prev_actions := 0` un-stuck it in
-5/5 fingerprint-matched exposures (Doors/1 → success) but regressed Doors/3
-downstream, so it was not promoted. (2) *In-stage failure* is geometric: the
+command verifiably delivered. Of five exposures, two were genuine stalls (Doors/1, Doors/6:
+0.02 m and 0.00 m in the 20 s after the stall condition) and a one-shot
+`prev_actions := 0` un-stuck both (3.5 m and 4.6 m; Doors/1 → success); the
+other three were 0.8 s pauses the baseline recovered from unaided, and the
+reset regressed Doors/3 downstream, so it was not promoted. (2) *In-stage failure* is geometric: the
 plate centre sits 0.42 m off the corridor centreline, leaving the body
 0.29–0.39 m from the wall against a 0.316 m half-body, and the stage waits
 where nothing presses the plate. Ten one-factor arms (160 episodes) against

@@ -12,8 +12,8 @@ replaced it). Route failures are never dropped from a denominator.
   `submission.json`.
 - **Achieved:** three mechanisms established with instrumented evidence —
   post-stage stall = gait feedback fixed point (`history_length 0`; the only
-  persistent input is the 22-element `prev_actions`; un-stuck 5/5 by
-  `prev_actions := 0`); in-stage failure = plate placement 0.29–0.39 m from
+  persistent input is the 22-element `prev_actions`; 2 of 5 exposures were
+  genuine stalls and `prev_actions := 0` un-stuck both, stall-anchored); in-stage failure = plate placement 0.29–0.39 m from
   the wall against a 0.316 m half-body, plus a wait that presses nothing;
   world −x = 0.632 m robot vs 0.61 m post gap. Infrastructure: preflighted,
   hash-frozen, pass-through submitters for route, Approach and replay gate;
@@ -52,7 +52,7 @@ replaced it). Route failures are never dropped from a denominator.
 | 2 | Chain instrumentation: cmd→prev_actions→raw→targets→ctrl→joints→feet→base | DONE (pending review) | `--chain-trace`; local Doors/1 baseline classified `frozen_targets`; 99 s/episode, 31 MB trace |
 | 3 | `prev_actions_reset` intervention with delivery verification | DONE (pending review) | local Doors/1: APPLIED, delivered-zero verified, route success 82.7 s |
 | 4 | Campaign A: 16+16 early-handoff episodes, chain traced, mechanism per episode | DONE | 32 episodes; during-stage 15 (wall), after-stage 12 (falls), stall exposures 5 (`frozen_targets` 4); `campaign-a-summary.json` |
-| 5 | Campaign B: baseline vs `prev_actions_reset` on the 5 exposed episodes, fingerprint-matched | DONE | 5/5 applied, fingerprints matched; Doors/1 → success, Doors/3 regressed downstream; un-sticks the fixed point 5/5 but not promoted alone |
+| 5 | Campaign B: baseline vs `prev_actions_reset` on the 5 exposed episodes, fingerprint-matched | DONE | 5/5 applied, fingerprints matched; 2/5 genuine stalls, both un-stuck (stall-anchored); 3/5 transient pauses; Doors/1 → success, Doors/3 regressed; not promoted. Review corrections applied |
 | 6 | In-stage factors (ten arms, 160 episodes) | DONE — negative | none exceeds 3/16; F1+F2(+F3)@0.25 ties with falls 5→1 but fails the gate; gate-safe 0.35 m is 1/16; `instage-summary.json` |
 | 7 | Freeze one recovery under the predeclared rule | DONE — no candidate | no arm meets selection + gate; reset had a regression |
 | 8 | Confirmatory eval on validation 16–31 | NOT LAUNCHED (by protocol) | no frozen candidate; layouts 16–31 and the test split remain unused |
