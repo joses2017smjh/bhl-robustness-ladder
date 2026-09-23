@@ -154,7 +154,8 @@ class RouteHandoffController:
     def __init__(self, env, handoff_mode="switch", rejoin_diagnostic=False,
                  rejoin_fix="none", chain_trace=False, stage_lateral_m=None,
                  stage_activate=False, exit_ramp_s=0., stage_press_hold=False,
-                 stage_wait_open_s=2.0):
+                 stage_wait_open_s=2.0, pre_point_m=.30, cross_clear_m=None, stall_min_s=.8,
+                 settle_s=.40, cross_kick=False):
         self.env = env
         self.handoff_mode = handoff_mode
         self.rejoin_diagnostic = bool(rejoin_diagnostic)
@@ -182,7 +183,13 @@ class RouteHandoffController:
         self.stage = PlateStage(env, stage_lateral_m=stage_lateral_m,
                                 wait_open_s=(float(stage_wait_open_s)
                                              if (stage_activate or stage_press_hold) else 0.),
-                                press_hold=stage_press_hold)
+                                press_hold=stage_press_hold, pre_point_m=pre_point_m,
+                                cross_clear_m=cross_clear_m, settle_s=settle_s, cross_kick=cross_kick)
+        # Exposure criterion: no progress toward the waypoint for stall_min_s.
+        # 0.8 s is what Campaigns A/B used; the two genuine stalls never moved
+        # again while the three pauses resumed within 0.36-0.64 s, so 3.0 s
+        # separates them with margin on both sides.
+        self.stall_min_s = float(stall_min_s)
         self.stage_press_hold = bool(stage_press_hold)
         self.handoff_seen = False
         self.phase_history = []
@@ -577,7 +584,7 @@ class RouteHandoffController:
         stall_now = (
             self.post_stage_exit_time is not None
             and self.post_stage_last_target_progress_time is not None
-            and now - self.post_stage_last_target_progress_time >= .8
+            and now - self.post_stage_last_target_progress_time >= self.stall_min_s
             and self.route.waypoint > self.post_stage_exit_waypoint
             and self.env.phase == "advance"
             and target["target_kind"] == "waypoint")
@@ -733,7 +740,9 @@ def run(args):
                 rejoin_fix=args.rejoin_fix, chain_trace=args.chain_trace,
                 stage_lateral_m=args.stage_lateral, stage_activate=args.stage_activate,
                 exit_ramp_s=args.exit_ramp, stage_press_hold=args.stage_press_hold,
-                stage_wait_open_s=args.stage_wait_open)
+                stage_wait_open_s=args.stage_wait_open, pre_point_m=args.pre_point,
+                cross_clear_m=args.cross_clear, stall_min_s=args.stall_min_s,
+                settle_s=args.settle_s, cross_kick=args.cross_kick)
             while True:
                 env.runner.contact_trace = []
                 effective_action = controller.action()
@@ -853,6 +862,7 @@ def run(args):
                 stage_press_hold=args.stage_press_hold,
                 exit_ramp_s=args.exit_ramp,
                 exit_ramp_events=controller.exit_ramp_events,
+                cross_kick_events=controller.stage.kick_events,
                 controller=("PlateSafeRouteController plus guarded PlateStage "
                             f"(lateral {'plate centre' if args.stage_lateral is None else f'{args.stage_lateral:.2f} m'}) "
                             f"on {args.handoff} handoff"),
@@ -972,6 +982,11 @@ def run(args):
         "stage_activate": args.stage_activate,
         "stage_wait_open_s": args.stage_wait_open,
         "stage_press_hold": args.stage_press_hold,
+        "pre_point_m": args.pre_point,
+        "cross_clear_m": args.cross_clear,
+        "settle_s": args.settle_s,
+        "cross_kick": args.cross_kick,
+        "stall_min_s": args.stall_min_s,
         "exit_ramp_s": args.exit_ramp,
         "rejoin_fix": args.rejoin_fix,
         "intervention_requested": requested,
@@ -1043,6 +1058,17 @@ if __name__ == "__main__":
     parser.add_argument("--stage-press-hold", action="store_true",
                         help="after the settle, creep onto the plate with activate asserted and hold "
                              "until the door opens (bounded), then cross")
+    parser.add_argument("--pre-point", type=float, default=.30,
+                        help="PlateStage settle point distance before the plate (m); replay value 0.30")
+    parser.add_argument("--cross-clear", type=float, default=None,
+                        help="PlateStage crosses until the body is this far past the plate centre (m); "
+                             "default = the replay's fixed 1.20 s")
+    parser.add_argument("--settle-s", type=float, default=.40,
+                        help="PlateStage settle standstill before the crossing (s); replay value 0.40, 0 = continuous")
+    parser.add_argument("--cross-kick", action="store_true",
+                        help="PlateStage zeroes prev_actions once at the start of the crossing")
+    parser.add_argument("--stall-min-s", type=float, default=.8,
+                        help="no-progress seconds before the stall condition counts (exposure); 0.8 = Campaigns A/B")
     parser.add_argument("--exit-ramp", type=float, default=0.,
                         help="seconds of forward-only 0.30 m/s along the door direction after "
                              "the crossing before the route resumes (0 = off)")

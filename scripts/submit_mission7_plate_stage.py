@@ -31,6 +31,10 @@ def main():
     parser.add_argument("--stage-lateral", type=float, default=None)
     parser.add_argument("--wait-open", type=float, default=0.)
     parser.add_argument("--press-hold", action="store_true")
+    parser.add_argument("--pre-point", type=float, default=None)
+    parser.add_argument("--cross-clear", type=float, default=None)
+    parser.add_argument("--settle-s", type=float, default=None)
+    parser.add_argument("--cross-kick", action="store_true")
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument("--node", default="cn-c22",
                         help="the replay gate is bitwise; it stays pinned to the original physics node")
@@ -55,6 +59,14 @@ def main():
         probe_args.append(f"--wait-open={args.wait_open}")
     if args.press_hold:
         probe_args.append("--press-hold")
+    if args.pre_point is not None:
+        probe_args.append(f"--pre-point={args.pre_point}")
+    if args.cross_clear is not None:
+        probe_args.append(f"--cross-clear={args.cross_clear}")
+    if args.settle_s is not None:
+        probe_args.append(f"--settle-s={args.settle_s}")
+    if args.cross_kick:
+        probe_args.append("--cross-kick")
     if args.smoke:
         probe_args.append("--smoke")
     if not args.submit:

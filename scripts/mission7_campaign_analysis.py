@@ -166,6 +166,11 @@ def campaign_b(args):
             "baseline_stall_time_s": b.get("stall_branch_time_s"), "arm_stall_time_s": a.get("stall_branch_time_s"),
             "fingerprint_baseline": bf, "fingerprint_arm": af, "fingerprint_at_fire": fire_fp,
             "fingerprints_match": (bf is not None and bf == af == (fire_fp or af)),
+            # An arm episode that was never exposed has no stall fingerprint to
+            # match; what matters is that its trajectory is the baseline's.
+            "unexposed_trajectory_unchanged": (a.get("intervention_exposure") != "exposed"
+                                               and abs(a["elapsed_s"] - b["elapsed_s"]) < 1e-6
+                                               and a["success"] == b["success"] and bool(a.get("fall")) == bool(b.get("fall"))),
             "delivery": a.get("intervention_delivery"),
             "baseline_outcome": "success" if b["success"] else b["failure_phase"],
             "arm_outcome": "success" if a["success"] else a["failure_phase"],
