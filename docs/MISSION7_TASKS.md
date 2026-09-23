@@ -31,7 +31,7 @@ replaced it). Route failures are never dropped from a denominator.
   continuous crossing — and a per-layout offset side chosen from the corridor
   geometry, since layouts 4 and 7 are lost by every lateral arm.
 - **Jobs:** 31 completed this campaign; none pending.
-- **Episodes used:** 374 / 512 (138 remain: ≤10 gate for V3, ≤48 dev on validation 0–15, 64 confirmatory reserved). Retained artifacts 6.8 GB of 10 GB; disk
+- **Episodes used:** 406 / 512 (106 remain: exposed-pair baseline reruns for candidate 1, ≤10 gate for V4, ≤32 dev, Transport dev if a crossing candidate passes). Retained artifacts 6.8 GB of 10 GB; disk
   ≥ 150 GB free throughout.
 
 ## Gates (unchanged unless evidence says otherwise)
@@ -55,7 +55,7 @@ replaced it). Route failures are never dropped from a denominator.
 | 5 | Campaign B: baseline vs `prev_actions_reset` on the 5 exposed episodes, fingerprint-matched | DONE | 5/5 applied, fingerprints matched; 2/5 genuine stalls, both un-stuck (stall-anchored); 3/5 transient pauses; Doors/1 → success, Doors/3 regressed; not promoted. Review corrections applied |
 | 6 | In-stage factors | REOPENED | the six lateral arms staged the robot 0.75 m past the plate (anchor bug, fixed) — withdrawn; no-lateral arms stand (F2/F3/F2F3/A1 all ≤ baseline). Root causes now traced: post-exit falls 8/8 and approach falls are raised-plate trips; crossing covers only 0.13 m |
 | 7 | Freeze one recovery under the predeclared rule | ACTIVE | Doors/1 succeeds with V2 + centre-aimed ramp + rejoin-advance (77.7 s); V2 fails the gate 7/10 (sideways crossing) → V3 = V2 + yaw alignment, local replay running |
-| 8 | Confirmatory eval on validation 16–31 | BLOCKED | needs a candidate passing selection + replay gate; 64 episodes reserved |
+| 8 | Confirmatory eval on validation 16–31 | ACTIVE | candidate 1 = unchanged stage + selective reset (3 s), gate-compatible by construction; 32 candidate episodes submitted, baseline reruns only for exposed pairs (predeclared) |
 | 9 | Exact replay regression for every PlateStage change | ACTIVE | offset gates withdrawn (misplaced target); wait-open PASS stands; new gates needed for pre-point 0.45 / cross-until-clear / corrected offset |
 | 10 | World −x / privileged Approach workstream | BLOCKED (geometric) | 6 arms / 96 episodes: 7–9/16 or 0/16; success set moves with crossing phase; robot 0.632 m > gap 0.61 m. Gate stays closed, unweakened. `approach-negx-summary.json` |
 | 11 | Sensor-only and four-sensor studies | BLOCKED | gates closed |

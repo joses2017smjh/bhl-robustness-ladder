@@ -135,6 +135,17 @@ class PlateStage:
         self.done = set()
         self.history = []
 
+    def _with_yaw(self, env, command, direction):
+        """Moving yaw correction toward the door direction (the frozen gait does
+        not turn in place: 1.5 s of a pure yaw command from standstill produced
+        no rotation in the V3 replays of layouts 7 and 14)."""
+        if not self.align_yaw:
+            return command
+        err = wrap(np.arctan2(direction[1], direction[0]) - _yaw(env))
+        out = np.asarray(command, dtype=float).copy()
+        out[2] = float(np.clip(1.2 * err, -.35, .35))
+        return out
+
     def _kick(self, now):
         if not self.cross_kick:
             return
@@ -199,20 +210,13 @@ class PlateStage:
                 self.history.append({"time_s": now, "door": int(self.door),
                                      "side": int(self.side), "phase": self.phase})
                 return np.zeros(3), self.phase
-            return _world_command(env, pre - xy), self.phase
+            return self._with_yaw(env, _world_command(env, pre - xy), direction), self.phase
         if self.phase == "settle":
-            if self.align_yaw:
-                if self.align_until is None:
-                    self.align_until = now + self.align_max_s
+            if self.align_yaw and (not self.align_events or self.align_events[-1]["door"] != int(self.door)):
                 err = wrap(np.arctan2(direction[1], direction[0]) - _yaw(env))
-                if abs(err) > self.align_tol_rad and now < self.align_until:
-                    return np.array([0., 0., float(np.clip(1.2 * err, -.35, .35))]), self.phase
-                if not self.align_events or self.align_events[-1]["door"] != int(self.door):
-                    self.align_events.append({"time_s": now, "door": int(self.door), "yaw_error_rad": float(err),
-                                              "aligned": bool(abs(err) <= self.align_tol_rad)})
-                if now < self.phase_until:
-                    return np.zeros(3), self.phase
-            elif now < self.phase_until:
+                self.align_events.append({"time_s": now, "door": int(self.door), "yaw_error_rad": float(err),
+                                          "aligned": bool(abs(err) <= self.align_tol_rad)})
+            if now < self.phase_until:
                 return np.zeros(3), self.phase
             if self.press_hold and not env.state.open[self.door]:
                 self.phase = "creep"
@@ -259,7 +263,7 @@ class PlateStage:
             else:
                 keep = now < self.phase_until
             if keep:
-                return _world_command(env, direction), self.phase
+                return self._with_yaw(env, _world_command(env, direction), direction), self.phase
             self.done.add(self.door)
             self.history.append({"time_s": now, "door": int(self.door),
                                  "side": int(self.side), "phase": "recorded"})
