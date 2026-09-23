@@ -196,11 +196,22 @@ def campaign_b(args):
         "matched_regressed": [p["key"] for p in matched if p["baseline_success"] and not p["arm_success"]],
         "matched_unchanged": [p["key"] for p in matched if p["arm_success"] == p["baseline_success"]],
         "matched_new_falls": [p["key"] for p in matched if p["arm_fall"] and not p["baseline_fall"]],
+        # Outcome flips over EVERY pair, whatever the delivery state: for a
+        # controller arm with no intervention (delivery NOT_REQUESTED) the
+        # matched_* lists above are empty by construction, and the in-stage
+        # arms were first read with those empty lists while pairs_detail showed
+        # Doors/8 turning into a success.  Success counts were always over all
+        # pairs; these make the per-layout flips visible too.
+        "all_improved": [p["key"] for p in paired if p["arm_success"] and not p["baseline_success"]],
+        "all_regressed": [p["key"] for p in paired if p["baseline_success"] and not p["arm_success"]],
+        "all_falls_removed": [p["key"] for p in paired if p["baseline_fall"] and not p["arm_fall"]],
+        "all_falls_added": [p["key"] for p in paired if p["arm_fall"] and not p["baseline_fall"]],
         "pairs_detail": pairs,
     }
     Path(args.out).write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps({k: summary[k] for k in ("pairs", "baseline_success", "arm_success", "exposed", "delivery_counts",
-                                              "matched_applied", "matched_improved", "matched_regressed", "fingerprint_mismatches")}, sort_keys=True))
+                                              "matched_applied", "matched_improved", "matched_regressed", "fingerprint_mismatches",
+                                              "all_improved", "all_regressed", "all_falls_removed", "all_falls_added")}, sort_keys=True))
 
 
 if __name__ == "__main__":

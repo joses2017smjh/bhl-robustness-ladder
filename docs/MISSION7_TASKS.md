@@ -7,43 +7,32 @@ replaced it). Route failures are never dropped from a denominator.
 
 ## Current status
 
-- **Last updated:** 2026-09-23, before Campaign A submission.
-- **Source checkpoint:** `1a526c7` pushed; chain-trace / `prev_actions_reset`
-  patch in the working tree, under adversarial review.
-- **Achieved:** Doors/1 stall mechanism identified on the instrumented local
-  rerun — final 20 s: joint-target range 2.3 % of the episode's own walking
-  amplitude, policy-output std 0.03 vs 1.04 walking, **both feet planted
-  100 % of the window**, feedback state (`prev_actions`, norm 79) nearly
-  static, 0.30 m/s forward command verifiably delivered to the policy input,
-  actuator saturation identical to walking. A **policy fixed point**, not
-  actuation or contact. A one-shot `prev_actions := 0` at the stall (45.80 s,
-  delivered-zero verified) turned the 180 s timeout into route **success at
-  82.7 s** (n = 1; `results/mission7-campaign-20260923/local-runs.json`).
-- **World −x (Approach) — geometry, not control:** the goal posts are at
-  `goal + (0.52, ±0.35)` for every layout, so only a −x approach passes
-  *through* the post gap (0.61 m clear). The robot's lateral collision
-  envelope at rest is **0.632 m** (elbow to elbow). All 8 failures are
-  `excessive_collision` (>5 contact ticks) at t = 2.0–2.1 s during the
-  first stride, 0.13 m past the spawn; the 8 successes are arm-swing phase.
-  A lateral nudge cannot fix a robot wider than the gap; the untested
-  `PulseApproachController` detours around the posts with geometry
-  unchanged and was the sound candidate — but on layout 1 (baseline success,
-  4.24 s reproduced) both `pulse` (11.84 s) and `guard` (3.24 s) failed with
-  `excessive_collision`. Corridor geometry for the 16 −x layouts: outside-post
-  margin 0.315 / 0.365 / 0.415 m at pitch 1.5 / 1.6 / 1.7 against a 0.316 m
-  half-robot, so the outside route is impossible or marginal, and the
-  between-post gap is 0.61 m everywhere. The 8 successes and 8 failures are
-  distributed identically across pitches — arm-swing phase, not width. The
-  16-layout three-arm comparison (`21400730/731/732`) measures this rather
-  than asserting it.
-- **Campaign A (32):** Doors 3/16, Transport 1/16. Failures: in-stage wall
-  collision 15, post-exit fall 12, stall 5 (`frozen_targets`). Three separable
-  in-stage fixes defined and smoke-validated on single layouts (F1–F3).
-- **Current limitation:** factor arms and Campaign B not yet collected.
-- **World −x resolved as a geometric blocker** (six arms, 96 episodes; see task 10).
-- **Next objective:** collect Campaign A, classify every stall, then Campaign B
-  baseline vs `prev_actions_reset` on the exposed episodes.
-- **Jobs:** completed `21400561`; pending none. Episodes used: 319 + 16 (F1F2F3@0.35) + 10 replay (combined) = 345 / 512.
+- **Last updated:** 2026-09-23, campaign closeout.
+- **Source checkpoint:** see `git log`; every job's source hashes are in its
+  `submission.json`.
+- **Achieved:** three mechanisms established with instrumented evidence —
+  post-stage stall = gait feedback fixed point (`history_length 0`; the only
+  persistent input is the 22-element `prev_actions`; un-stuck 5/5 by
+  `prev_actions := 0`); in-stage failure = plate placement 0.29–0.39 m from
+  the wall against a 0.316 m half-body, plus a wait that presses nothing;
+  world −x = 0.632 m robot vs 0.61 m post gap. Infrastructure: preflighted,
+  hash-frozen, pass-through submitters for route, Approach and replay gate;
+  25 Hz chain trace with mechanism labels; exposure-aware delivery states;
+  artifact size guard; 172 tests.
+- **Baseline vs final route results (development set):** Doors 3/16 → best
+  gate-passing arm 1/16 (falls 5 → 1); Transport 1/16, not re-run (no
+  candidate). **No validated improvement.**
+- **Current limitation:** every lateral arm loses layouts 4 and 7; the
+  plate-press / wall-clearance / plate-trip constraint band admits no tested
+  offset that raises route success; standstills feed the fixed point; the
+  reset regresses downstream or is never exposed once in-stage factors are on.
+- **Next objective (outside this campaign's evidence):** a stage that presses
+  without standing still — one deliberate footfall onto the plate inside a
+  continuous crossing — and a per-layout offset side chosen from the corridor
+  geometry, since layouts 4 and 7 are lost by every lateral arm.
+- **Jobs:** 31 completed this campaign; none pending.
+- **Episodes used:** 349 / 512. Retained artifacts ≈ 3.4 GB of 10 GB; disk
+  ≥ 150 GB free throughout.
 
 ## Gates (unchanged unless evidence says otherwise)
 
@@ -64,10 +53,10 @@ replaced it). Route failures are never dropped from a denominator.
 | 3 | `prev_actions_reset` intervention with delivery verification | DONE (pending review) | local Doors/1: APPLIED, delivered-zero verified, route success 82.7 s |
 | 4 | Campaign A: 16+16 early-handoff episodes, chain traced, mechanism per episode | DONE | 32 episodes; during-stage 15 (wall), after-stage 12 (falls), stall exposures 5 (`frozen_targets` 4); `campaign-a-summary.json` |
 | 5 | Campaign B: baseline vs `prev_actions_reset` on the 5 exposed episodes, fingerprint-matched | DONE | 5/5 applied, fingerprints matched; Doors/1 → success, Doors/3 regressed downstream; un-sticks the fixed point 5/5 but not promoted alone |
-| 6 | In-stage factors | ACTIVE | no arm beats 3/16 yet; F1 trips the replay, wait-open standstill harms, wall class needs an offset; A1/A2 (activate-only, ±0.35 m) are the last predeclared arms |
-| 7 | Freeze one recovery; predeclare eval set, metrics, n, stopping rule | BLOCKED | needs B |
-| 8 | Confirmatory eval on fresh validation layouts 16–31 (never used), paired baseline | BLOCKED | needs 7 |
-| 9 | Exact replay regression for every PlateStage change | ACTIVE | 0.25 m FAIL 8/10; wait-open PASS; 0.35 m PASS; combined `21400953` running |
+| 6 | In-stage factors (ten arms, 160 episodes) | DONE — negative | none exceeds 3/16; F1+F2(+F3)@0.25 ties with falls 5→1 but fails the gate; gate-safe 0.35 m is 1/16; `instage-summary.json` |
+| 7 | Freeze one recovery under the predeclared rule | DONE — no candidate | no arm meets selection + gate; reset had a regression |
+| 8 | Confirmatory eval on validation 16–31 | NOT LAUNCHED (by protocol) | no frozen candidate; layouts 16–31 and the test split remain unused |
+| 9 | Exact replay regression for every PlateStage change | DONE | 0.25 m FAIL 8/10; wait-open, 0.35 m, combined PASS 10/10 |
 | 10 | World −x / privileged Approach workstream | BLOCKED (geometric) | 6 arms / 96 episodes: 7–9/16 or 0/16; success set moves with crossing phase; robot 0.632 m > gap 0.61 m. Gate stays closed, unweakened. `approach-negx-summary.json` |
 | 11 | Sensor-only and four-sensor studies | BLOCKED | gates closed |
 | — | `forward_pulse` rejoin fix | SUPERSEDED | no-op by construction; `21399503` reinterpreted |
@@ -100,8 +89,9 @@ are added here as they complete.
 | 21400863 | Replay gate with `--wait-open=2.0` | DONE **10/10 PASS** |
 | 21400895–896 | A1 activate-only; A2 A1 + lateral 0.35 | DONE 2/16, 0/16 — A2 clears walls, crossings find the door closed |
 | 21400897 | Replay gate at lateral 0.35 | DONE **10/10 PASS** |
-| 21400952 | F1+F2+F3 at 0.35 m (last predeclared arm) | running |
-| 21400953 | Combined replay gate 0.35 m + wait-open 2.0 | running |
+| 21400952 | F1+F2+F3 at 0.35 m (last predeclared arm) | DONE 1/16, falls 5→1 |
+| 21400953 | Combined replay gate 0.35 m + wait-open 2.0 | DONE **10/10 PASS** |
+| 21400961 | Interaction: reset + F1F2F3@0.35 on 4 exposed Doors | DONE 0/4 — all fail in-stage first; reset NOT_EXPOSED 4/4 |
 
 ## Confirmatory protocol (predeclared 2026-09-23, before any in-stage or Campaign B result was read)
 

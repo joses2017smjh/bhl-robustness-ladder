@@ -265,6 +265,8 @@ controller and clearance issue, not evidence that a sensor policy is ready.
 | Doors ≥16 and Transport ≥16 | **Completed after unlock:** Doors **1/16** (4 falls, 11 timeouts); Transport **0/16** (6 falls, 10 timeouts) |
 | Privileged Approach ≥60/64, zero falls, ≥14/16/direction | **FAIL: 56/64**, 0 falls; world −x **8/16**, other directions 16/16 |
 | — world −x, 2026-09-23 six-arm probe (96 episodes, geometry/predicates unchanged) | **Geometrically bound:** every command-side arm 7–9/16 or 0/16; succeeding layouts move with crossing phase; robot lateral envelope 0.632 m vs 0.61 m post gap and ≤0.415 m outside margin. Gate unchanged, stays closed. `results/mission7-campaign-20260923/approach-negx-summary.json` |
+| — Doors/Transport, 2026-09-23 in-stage factor campaign (10 arms, 160 episodes) | **No improvement:** none exceeds Campaign A's Doors 3/16; the 0.25 m offset + stage activation ties it with falls 5→1 but fails the replay gate 8/10; gate-safe 0.35 m is 1/16. `results/mission7-campaign-20260923/instage-summary.json` |
+| — Post-stage stall, `prev_actions_reset` (5 matched exposures) | **Mechanism confirmed, not promoted:** un-sticks the fixed point 5/5, Doors/1 → success, Doors/3 regressed downstream; combined with the in-stage arm it is never exposed (4/4 fail in-stage first). `campaign-b-doors-summary.json` |
 | Sensor-only Both readiness | **CLOSED** until both preceding gates pass |
 | Four-sensor comparison | **CLOSED** |
 

@@ -1,5 +1,33 @@
 # Mission7: procedural sensor-driven humanoid missions
 
+**September 23 campaign closeout (349 CPU episodes, zero GPUs; branch
+`mission7-approach-followup`).** Three mechanisms were established with
+instrumented evidence and none yielded a validated end-to-end route
+improvement. (1) *Post-stage stall* is a feedback fixed point of the frozen
+gait: with `history_length 0` the only persistent policy input is the
+22-element `prev_actions`; in every classifiable stall the joint-target range
+fell to ≈2 % of walking amplitude with both feet planted and the 0.30 m/s
+command verifiably delivered. A one-shot `prev_actions := 0` un-stuck it in
+5/5 fingerprint-matched exposures (Doors/1 → success) but regressed Doors/3
+downstream, so it was not promoted. (2) *In-stage failure* is geometric: the
+plate centre sits 0.42 m off the corridor centreline, leaving the body
+0.29–0.39 m from the wall against a 0.316 m half-body, and the stage waits
+where nothing presses the plate. Ten one-factor arms (160 episodes) against
+the 32-episode Campaign A baseline (Doors 3/16, Transport 1/16): none exceeded
+3/16; the two that tied it (lateral 0.25 m with stage-owned activation)
+removed five of the five falls but failed the exact replay gate 8/10 by
+routing the approach across the raised plate; the gate-safe 0.35 m version is
+1/16. (3) *World −x Approach* is geometrically bound: both goal posts sit at
+`goal + (0.52, ±0.35)`, so only −x crosses the 0.61 m gap with a 0.632 m-wide
+robot; six command-side arms over 96 episodes all landed at 7–9/16 or 0/16
+with the succeeding layout set moving with crossing phase. All gates remain
+closed and unweakened; the confirmatory set (validation 16–31) and the test
+split were never read. Checklist and evidence:
+[`MISSION7_TASKS.md`](MISSION7_TASKS.md),
+[`campaign-a-summary.json`](../results/mission7-campaign-20260923/campaign-a-summary.json),
+[`instage-summary.json`](../results/mission7-campaign-20260923/instage-summary.json),
+[`approach-negx-summary.json`](../results/mission7-campaign-20260923/approach-negx-summary.json).
+
 **September 22 Mission 7 closeout:** the exact unchanged ten-fall replay was
 reproduced on the original physics node with zero pose error in all 10 episodes.
 Every fall followed plate contact; minimum robot/plate clearance reached
