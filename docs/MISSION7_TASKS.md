@@ -31,7 +31,7 @@ replaced it). Route failures are never dropped from a denominator.
   continuous crossing — and a per-layout offset side chosen from the corridor
   geometry, since layouts 4 and 7 are lost by every lateral arm.
 - **Jobs:** 31 completed this campaign; none pending.
-- **Episodes used:** 349 / 512. Retained artifacts ≈ 3.4 GB of 10 GB; disk
+- **Episodes used:** 349 / 512. Retained artifacts 6.8 GB of 10 GB (per-episode traces, git-ignored by shape); disk
   ≥ 150 GB free throughout.
 
 ## Gates (unchanged unless evidence says otherwise)
