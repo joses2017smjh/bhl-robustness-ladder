@@ -114,7 +114,7 @@ Columns: task · entry · classification · verified evidence (from the inventor
 | task | entry | class | verified evidence | next action | cost | status |
 |---|---|---|---|---|---|---|
 | M7-01 | Route gate (Doors ≥16, Transport ≥16) | unresolved failure | candidate 1: Doors 1/16 → 1/16, Transport 2/16 → 4/16 on fresh validation 16–31, +2/−0, underpowered | raised-plate crossing that holds the ten-fall replay at 10/10 | new budget line needed | BLOCKED: crossing composition fails replay 7–9/10 |
-| M7-02 | Privileged Approach gate | active improvement | 62/64, 0 falls, 16/16/16/14 (`21401966`) — **but `center_bias` was tuned on the same 16 test-split −x layouts** | held-out replication on 23 −x layouts no controller has seen (7 validation + 16 train), paired with the baseline | 46 CPU episodes | ACTIVE `21402017–018` |
+| M7-02 | Privileged Approach gate | completed reference | 62/64, 0 falls, 16/16/16/14 (`21401966`, test split, tuned there); **held-out −x 21/23 vs baseline 12/23**, +10/−1, p = 0.012 (`21402017–018`) | — | 46 CPU episodes spent | DONE |
 | M7-03 | Sensor-only and four-sensor studies | dependency-blocked | — | — | — | BLOCKED: route gate (M7-01) |
 
 ### Stale statements in untracked user drafts (left untouched, 2026-09-23)

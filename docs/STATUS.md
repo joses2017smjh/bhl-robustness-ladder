@@ -6,7 +6,7 @@ work; `main` untouched). Master backlog: [`REPO_TASKS.md`](REPO_TASKS.md).
 | Workstream | State | Latest measured result | Next executable action |
 |---|---|---|---|
 | Mission 7 route controller | active | candidate 1 (selective reset) validated: Doors 1/16 → 1/16, Transport 2/16 → 4/16 on fresh layouts, +2/−0, underpowered | crossing composition vs exact replay; −x fine centring |
-| Privileged Approach | **gate passed** | **62/64, 0 falls, 16/16/16/14** with fine centring (was 56/64, −x 8/16) | sensor studies still wait on the route gate |
+| Privileged Approach | **gate passed, held-out replicated** | 62/64, 0 falls (test split); held-out −x **21/23 vs 12/23**, p = 0.012 | sensor studies still wait on the route gate |
 | Inspection maze | extended, gate holds | **12/12 nominal, 0/12 complete outage, 12/12 at 35 % dropout, wrong-branch 12/12 rejected** on fresh seeds 3–14 | more layouts/approach orders need new script options (not yet exposed) |
 | Multi-robot airlock | extended, gates hold | crews 2 and 3 **10/10 on fresh seeds 5–14 with both controls 0/10**; crew 2 10/10 at 35 % dropout | crew 3 dropout arm running; delay/interruption stress needs script options |
 | Locomotion / terrain / sensors | reference | pairs valid; ice_pair retracted, ice_pair_placed n=2 | multi-seed comparisons per inventory |

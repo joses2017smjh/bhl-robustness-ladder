@@ -63,7 +63,7 @@ replaced it). Route failures are never dropped from a denominator.
 | 7 | Freeze one recovery under the predeclared rule | DONE — candidate 1 frozen | unchanged guarded stage + early handoff + `prev_actions_reset` with a 3 s stall trigger; gate-compatible by construction; +1/−0 in development, +2/−0 on fresh layouts |
 | 8 | Confirmatory eval on validation 16–31 (predeclared) | DONE | paired: Doors 1/16 → 1/16, Transport 2/16 → 4/16; improved 2 (T24, T31), regressed 0, discordant 2, p = 0.5 → **underpowered, not null**; no new falls; `candidate1-confirmatory-summary.json` |
 | 9 | Exact replay regression for every PlateStage change | DONE | wait-open PASS 10/10; V2 FAIL 7/10 (`21401689`); V3/V4 8/10, ≤9/10 locally (not submitted); candidate 1 leaves PlateStage unchanged |
-| 10 | World −x / privileged Approach workstream | **DONE — GATE PASSED** | `center_bias` full matrix **62/64, 0 falls, 16/16/16/14** (`21401966`); geometry and predicates unchanged; standstill controls not re-run (baseline 0/64 stands) |
+| 10 | World −x / privileged Approach workstream | **DONE — GATE PASSED, held-out replicated** | matrix **62/64, 0 falls, 16/16/16/14** (`21401966`, test split, where `center_bias` was also tuned); predeclared held-out −x replication **21/23 vs baseline 12/23** (+10/−1, p = 0.012; `21402017–018`) |
 | 11 | Sensor-only and four-sensor studies | BLOCKED | gates closed |
 | — | `forward_pulse` rejoin fix | SUPERSEDED | no-op by construction; `21399503` reinterpreted |
 | — | "Post-stage route rejoin" framing | SUPERSEDED | stall is free-space, route-state valid (`21400561`) |

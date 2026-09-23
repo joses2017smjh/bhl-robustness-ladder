@@ -5,7 +5,10 @@ re-measured with geom AABBs (0.546–0.605 m walking envelope against the 0.61 m
 post gap: marginal, not impossible), and a privileged-pose controller that
 holds the body on the gap midline with a +0.015 m pre-bias against the
 first-stride −y lurch scored **62/64, zero falls, 16/16/16/14** on the
-unchanged balanced matrix (`21401966`) — every documented criterion. The route
+unchanged balanced matrix (`21401966`) — every documented criterion. Because those 16 −x layouts are test-split and
+the pre-bias was sized on them, a predeclared held-out replication was run on
+23 −x layouts no controller had seen: **21/23 against the baseline's 12/23**
+(+10/−1, sign test p = 0.012). The route
 gate still fails, so sensor studies remain closed on it. Ledger and
 [`MISSION7_TASKS.md`](MISSION7_TASKS.md) carry provenance.
 
