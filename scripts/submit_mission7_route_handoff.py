@@ -49,6 +49,9 @@ def main():
     parser.add_argument("--stall-min-s", type=float, default=None)
     parser.add_argument("--settle-s", type=float, default=None)
     parser.add_argument("--cross-kick", action="store_true")
+    parser.add_argument("--rejoin-advance", action="store_true")
+    parser.add_argument("--exit-ramp-center", action="store_true")
+    parser.add_argument("--align-yaw", action="store_true")
     parser.add_argument("--exit-ramp", type=float, default=0.)
     parser.add_argument("--submit", action="store_true")
     args = parser.parse_args()
@@ -112,6 +115,12 @@ def main():
         probe_args.append(f"--settle-s={args.settle_s}")
     if args.cross_kick:
         probe_args.append("--cross-kick")
+    if args.rejoin_advance:
+        probe_args.append("--rejoin-advance")
+    if args.exit_ramp_center:
+        probe_args.append("--exit-ramp-center")
+    if args.align_yaw:
+        probe_args.append("--align-yaw")
     if args.exit_ramp:
         probe_args.append(f"--exit-ramp={args.exit_ramp}")
     if args.allow_inactive_intervention:
@@ -149,6 +158,9 @@ def main():
         "stall_min_s": args.stall_min_s,
         "settle_s": args.settle_s,
         "cross_kick": args.cross_kick,
+        "rejoin_advance": args.rejoin_advance,
+        "exit_ramp_center": args.exit_ramp_center,
+        "align_yaw": args.align_yaw,
         "exit_ramp_s": args.exit_ramp,
         "allow_inactive_intervention": args.allow_inactive_intervention,
         "requested_node": args.node,

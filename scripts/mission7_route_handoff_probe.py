@@ -155,7 +155,8 @@ class RouteHandoffController:
                  rejoin_fix="none", chain_trace=False, stage_lateral_m=None,
                  stage_activate=False, exit_ramp_s=0., stage_press_hold=False,
                  stage_wait_open_s=2.0, pre_point_m=.30, cross_clear_m=None, stall_min_s=.8,
-                 settle_s=.40, cross_kick=False):
+                 settle_s=.40, cross_kick=False, rejoin_advance=False, exit_ramp_center=False,
+                 align_yaw=False):
         self.env = env
         self.handoff_mode = handoff_mode
         self.rejoin_diagnostic = bool(rejoin_diagnostic)
@@ -184,12 +185,27 @@ class RouteHandoffController:
                                 wait_open_s=(float(stage_wait_open_s)
                                              if (stage_activate or stage_press_hold) else 0.),
                                 press_hold=stage_press_hold, pre_point_m=pre_point_m,
-                                cross_clear_m=cross_clear_m, settle_s=settle_s, cross_kick=cross_kick)
+                                cross_clear_m=cross_clear_m, settle_s=settle_s, cross_kick=cross_kick,
+                                align_yaw=align_yaw)
         # Exposure criterion: no progress toward the waypoint for stall_min_s.
         # 0.8 s is what Campaigns A/B used; the two genuine stalls never moved
         # again while the three pauses resumed within 0.36-0.64 s, so 3.0 s
         # separates them with margin on both sides.
         self.stall_min_s = float(stall_min_s)
+        # At hand-back the route's waypoint index still points at the cell
+        # before the door the stage just carried the robot through, so the
+        # route walks it backwards into the plate zone (both V2 smokes: along
+        # +0.69 -> +0.2 after exit).  Advance the index past the crossed door
+        # once the robot is beyond the plate; nothing else in the route changes.
+        self.rejoin_advance = bool(rejoin_advance)
+        self.rejoin_advance_events = []
+        # Exit ramp aimed at the door centre instead of straight ahead: the
+        # crossing leaves the body on the plate's lateral line, 0.4-0.5 m off
+        # the corridor centreline, and the door opening is at the centreline
+        # (rejoin-advance alone hit the jambs, wall_m7_15/22, 1.4 s after
+        # hand-back).  Re-centre while advancing; never walk backwards.
+        self.exit_ramp_center = bool(exit_ramp_center)
+        self.exit_ramp_target = None
         self.stage_press_hold = bool(stage_press_hold)
         self.handoff_seen = False
         self.phase_history = []
@@ -545,10 +561,22 @@ class RouteHandoffController:
         # is diagnostic-only.
         if (stage_phase_before_action != "recorded"
                 and self.stage.phase == "recorded"):
+            if self.rejoin_advance:
+                crossed = int(self.stage.history[-1]["door"])
+                k = int(self.env.layout.door_indices[crossed])
+                plate, direction = self.env.layout.plate(crossed, self.env.layout.correct_sides[crossed]), self.env.layout.door(crossed)[1]
+                along = float((self.env.runner.d.xpos[self.env.slot.body_id, :2] - np.asarray(plate)) @ np.asarray(direction, dtype=float))
+                before_wp = int(self.route.waypoint)
+                if self.env.state.open[crossed] and along >= .24 and self.route.waypoint <= k:
+                    self.route.waypoint = k + 1
+                self.rejoin_advance_events.append({"time_s": now, "door": crossed, "route_k": k,
+                                                   "along_plate_m": along, "open": bool(self.env.state.open[crossed]),
+                                                   "waypoint_before": before_wp, "waypoint_after": int(self.route.waypoint)})
             if self.exit_ramp_s > 0.:
-                _, direction = self.env.layout.door(
+                center, direction = self.env.layout.door(
                     int(self.stage.history[-1]["door"]))
                 self.exit_ramp_direction = np.asarray(direction, dtype=float)
+                self.exit_ramp_target = np.asarray(center, dtype=float) if self.exit_ramp_center else None
                 self.exit_ramp_until = now + self.exit_ramp_s
                 self.exit_ramp_events.append({"time_s": now, "event": "exit_ramp_start",
                                               "until_s": self.exit_ramp_until})
@@ -622,10 +650,21 @@ class RouteHandoffController:
             self.rejoin_fix_events.append(event)
         if self.exit_ramp_until > now and self.exit_ramp_direction is not None:
             yaw = yaw_of(self.env)
-            body = np.array([[np.cos(yaw), np.sin(yaw)],
-                             [-np.sin(yaw), np.cos(yaw)]]) @ (self.exit_ramp_direction * .30)
-            self.env.phase = "exit_ramp"
-            effective_action = physical_to_action([np.clip(body[0], 0., .4), 0., 0.], base_action)
+            rot = np.array([[np.cos(yaw), np.sin(yaw)], [-np.sin(yaw), np.cos(yaw)]])
+            if self.exit_ramp_target is not None:
+                xy = self.env.runner.d.xpos[self.env.slot.body_id, :2]
+                delta = self.exit_ramp_target - xy
+                # keep a forward component so the gait never reverses
+                forward = float(delta @ self.exit_ramp_direction)
+                lateral_vec = delta - forward * self.exit_ramp_direction
+                world = self.exit_ramp_direction * .30 + lateral_vec / max(np.linalg.norm(lateral_vec), 1e-9) * min(.25, np.linalg.norm(lateral_vec))
+                body = rot @ world
+                self.env.phase = "exit_ramp_center"
+                effective_action = physical_to_action([np.clip(body[0], 0., .4), np.clip(body[1], -.35, .35), 0.], base_action)
+            else:
+                body = rot @ (self.exit_ramp_direction * .30)
+                self.env.phase = "exit_ramp"
+                effective_action = physical_to_action([np.clip(body[0], 0., .4), 0., 0.], base_action)
         if self.rejoin_fix_until > now:
             without = action_to_physical(effective_action)
             imposed = np.asarray([REJOIN_PULSE_MPS, 0., 0.], dtype=float)
@@ -742,7 +781,9 @@ def run(args):
                 exit_ramp_s=args.exit_ramp, stage_press_hold=args.stage_press_hold,
                 stage_wait_open_s=args.stage_wait_open, pre_point_m=args.pre_point,
                 cross_clear_m=args.cross_clear, stall_min_s=args.stall_min_s,
-                settle_s=args.settle_s, cross_kick=args.cross_kick)
+                settle_s=args.settle_s, cross_kick=args.cross_kick,
+                rejoin_advance=args.rejoin_advance, exit_ramp_center=args.exit_ramp_center,
+                align_yaw=args.align_yaw)
             while True:
                 env.runner.contact_trace = []
                 effective_action = controller.action()
@@ -863,6 +904,8 @@ def run(args):
                 exit_ramp_s=args.exit_ramp,
                 exit_ramp_events=controller.exit_ramp_events,
                 cross_kick_events=controller.stage.kick_events,
+                align_events=controller.stage.align_events,
+                rejoin_advance_events=controller.rejoin_advance_events,
                 controller=("PlateSafeRouteController plus guarded PlateStage "
                             f"(lateral {'plate centre' if args.stage_lateral is None else f'{args.stage_lateral:.2f} m'}) "
                             f"on {args.handoff} handoff"),
@@ -986,6 +1029,9 @@ def run(args):
         "cross_clear_m": args.cross_clear,
         "settle_s": args.settle_s,
         "cross_kick": args.cross_kick,
+        "align_yaw": args.align_yaw,
+        "rejoin_advance": args.rejoin_advance,
+        "exit_ramp_center": args.exit_ramp_center,
         "stall_min_s": args.stall_min_s,
         "exit_ramp_s": args.exit_ramp,
         "rejoin_fix": args.rejoin_fix,
@@ -1067,6 +1113,12 @@ if __name__ == "__main__":
                         help="PlateStage settle standstill before the crossing (s); replay value 0.40, 0 = continuous")
     parser.add_argument("--cross-kick", action="store_true",
                         help="PlateStage zeroes prev_actions once at the start of the crossing")
+    parser.add_argument("--align-yaw", action="store_true",
+                        help="PlateStage turns in place toward the door direction during the settle")
+    parser.add_argument("--exit-ramp-center", action="store_true",
+                        help="aim the exit ramp at the door centre (re-centre while advancing)")
+    parser.add_argument("--rejoin-advance", action="store_true",
+                        help="at hand-back, advance the route's waypoint past the door just crossed")
     parser.add_argument("--stall-min-s", type=float, default=.8,
                         help="no-progress seconds before the stall condition counts (exposure); 0.8 = Campaigns A/B")
     parser.add_argument("--exit-ramp", type=float, default=0.,

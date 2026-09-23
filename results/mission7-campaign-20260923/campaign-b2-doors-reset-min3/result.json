@@ -1,0 +1,3206 @@
+{
+  "complete": true,
+  "status": "COMPLETED_TARGETED_HANDOFF_PROBE",
+  "controller": "PlateSafeRouteController plus unchanged guarded PlateStage on early handoff",
+  "selected_indices": [
+    1,
+    2,
+    3,
+    6
+  ],
+  "stages": [
+    "doors"
+  ],
+  "geometry_unchanged": true,
+  "activation_semantics_unchanged": true,
+  "fall_predicate_unchanged": true,
+  "plate_stage_internal_behavior_unchanged": true,
+  "handoff_mode": "early",
+  "stage_lateral_m": null,
+  "stage_activate": false,
+  "stage_wait_open_s": 2.0,
+  "stage_press_hold": false,
+  "pre_point_m": 0.3,
+  "cross_clear_m": null,
+  "stall_min_s": 3.0,
+  "exit_ramp_s": 0.0,
+  "rejoin_fix": "prev_actions_reset",
+  "intervention_requested": true,
+  "intervention_fired": true,
+  "intervention_changed_command": false,
+  "intervention_changed_forward_command": false,
+  "intervention_status": "APPLIED",
+  "intervention_deliveries": [
+    "APPLIED",
+    "NOT_EXPOSED"
+  ],
+  "episodes_exposed": 2,
+  "chain_trace": true,
+  "mechanism_counts": {
+    "progressing": 3,
+    "window_too_short": 1
+  },
+  "rejoin_diagnostic": false,
+  "route_episode_count": 4,
+  "guarded_stage_activations": 4,
+  "guarded_stage_completions": 4,
+  "episodes_are_summaries": true,
+  "episodes": [
+    {
+      "stage": "doors",
+      "open": [
+        true,
+        false
+      ],
+      "crossed": [
+        true,
+        false
+      ],
+      "activation_s": [
+        27.239999999981865,
+        null
+      ],
+      "wrong_buttons": 0,
+      "retries": 0,
+      "acquired": false,
+      "carrying": false,
+      "drops": 0,
+      "distance_m": 20.7788357978423,
+      "carried_m": 0.0,
+      "collisions": 0,
+      "dead_end_entries": 0,
+      "hold_s": 0.0,
+      "completed_s": null,
+      "failure": "fall",
+      "last_s": 64.88000000012777,
+      "success": false,
+      "layout": {
+        "split": "validation",
+        "seed": 10001,
+        "cell_m": 1.5,
+        "edges": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          [
+            [
+              0,
+              3
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          [
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ]
+          ],
+          [
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          [
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          [
+            [
+              1,
+              5
+            ],
+            [
+              2,
+              5
+            ]
+          ],
+          [
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          [
+            [
+              2,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          [
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          [
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          [
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ]
+          ],
+          [
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ]
+          ],
+          [
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ]
+          ],
+          [
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              1
+            ]
+          ],
+          [
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              3
+            ]
+          ],
+          [
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ]
+          ],
+          [
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          [
+            [
+              3,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          [
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ]
+          ],
+          [
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          [
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              3
+            ]
+          ],
+          [
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ]
+          ],
+          [
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          [
+            [
+              5,
+              1
+            ],
+            [
+              5,
+              2
+            ]
+          ],
+          [
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ]
+          ],
+          [
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ]
+          ],
+          [
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ]
+          ]
+        ],
+        "route": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            0
+          ]
+        ],
+        "door_indices": [
+          4,
+          10
+        ],
+        "correct_sides": [
+          -1,
+          -1
+        ],
+        "object_index": 1,
+        "geometry_sha256": "f53c9dd4b4f54d23e13d594e498fcbc9c877c9af1c3ec18995080bffae2bb44d",
+        "route_decisions": 7,
+        "route_turns": 7,
+        "centerline_m": 19.5,
+        "decision_ratio_to_one_decision_reference": 7,
+        "legacy_reference_route_m": 3.0
+      },
+      "arm": "both",
+      "seed": 1000,
+      "sensor_failure": "normal",
+      "elapsed_s": 64.88000000012777,
+      "fall": true,
+      "timeout": false,
+      "button_success": false,
+      "door_success": false,
+      "pickup_success": false,
+      "placement_success": false,
+      "wall_contact_intervals": 0,
+      "shortest_centerline_m": 19.5,
+      "path_efficiency": null,
+      "object_xyz": [
+        0.0,
+        0.0,
+        -5.0
+      ],
+      "placement_error_m": 7.5,
+      "transport_kind": "kinematic_attachment_no_grasp_or_payload_dynamics",
+      "reward_terms": {
+        "time": -0.6487999999999938,
+        "collision": 0.0,
+        "failure": -5.0,
+        "correct_button": 2.0,
+        "wrong_button": 0.0,
+        "door_crossing": 2.0,
+        "acquisition": 0.0,
+        "success": 0.0
+      },
+      "return_total": -1.6487999999999943,
+      "action_mean_abs": 0.18989039887998424,
+      "high_level_steps": 325,
+      "approach_spawn_m": 0.65,
+      "initial_goal_distance_m": 7.493694414337169,
+      "minimum_goal_distance_m": 4.741421176655652,
+      "final_goal_distance_m": 4.935780349997058,
+      "fraction_distance_closed": 0.3672785525408912,
+      "final_fraction_distance_closed": 0.34134219023479656,
+      "time_closest_s": 60.040000000104655,
+      "goal_region_entered": false,
+      "diagnostic_return_total": -1.6487999999999943,
+      "privileged_distance_progress": 0.0,
+      "action_hold_s": 0.2,
+      "fall_classification": {
+        "category": "other",
+        "time_s": 64.88000000012777,
+        "command": [
+          0.3,
+          -0.2368623533646425,
+          -0.06092142032046555
+        ],
+        "phase": "advance",
+        "contacts": [],
+        "classification": "temporal association, not established causality"
+      },
+      "layout_index": 1,
+      "handoff_mode": "early",
+      "stage_lateral_m": null,
+      "stage_activate": false,
+      "stage_press_hold": false,
+      "exit_ramp_s": 0.0,
+      "exit_ramp_events": [],
+      "controller": "PlateSafeRouteController plus guarded PlateStage (lateral plate centre) on early handoff",
+      "route_plate_contacts_seen": [
+        [
+          0,
+          true
+        ],
+        [
+          1,
+          true
+        ]
+      ],
+      "guarded_stage_activated": true,
+      "guarded_stage_completed": true,
+      "handoff_condition_first_true_time": 19.799999999999205,
+      "handoff_condition_reason": "continuous_existing_plate_stage_predicate",
+      "plate_stage_activation_time": 19.799999999999205,
+      "first_plate_contact_time": 21.536999999995157,
+      "first_target_plate_contact_time": 21.536999999995157,
+      "activation_before_first_plate_contact": true,
+      "activation_to_first_plate_contact_margin_s": 1.7369999999959518,
+      "activation_to_target_plate_contact_margin_s": 1.7369999999959518,
+      "stage_entry_state": {
+        "time_s": 19.799999999999205,
+        "door": 0,
+        "side": -1,
+        "plate_xy": [
+          1.38,
+          4.08
+        ],
+        "door_direction_world": [
+          1.0,
+          0.0
+        ],
+        "world_direction": "+x",
+        "base_xy": [
+          1.4493245767269238,
+          3.3472783603529566
+        ],
+        "base_yaw_rad": 0.023890849903561467,
+        "plate_distance_m": 0.735993816648903,
+        "lateral_offset_m": -0.7327216396470435,
+        "forward_distance_m": 0.06932457672692394,
+        "heading_error_rad": 0.023890849903561467,
+        "velocity_world_mps": [
+          0.2576740029846566,
+          0.5260716780155404
+        ],
+        "velocity_body_mps": [
+          0.2701675737629855,
+          0.5197660861495728
+        ],
+        "linear_speed_mps": 0.5857877620983757,
+        "angular_velocity_radps": 0.06294194185836102,
+        "previous_route_phase": "advance",
+        "route_waypoint": 4,
+        "route_action": [
+          0.06787616618285676,
+          7.254328619247669,
+          -0.07179565557365307,
+          0.0,
+          0.0
+        ]
+      },
+      "stage_activation_times": [
+        19.799999999999205,
+        59.600000000102554
+      ],
+      "stage_completion_time": 64.40000000012547,
+      "crossing_completion": true,
+      "fall_time_s": 64.88000000012777,
+      "fall_phase": "advance",
+      "failure_phase": "after PlateStage",
+      "post_stage_contact_summary": {
+        "anchor": "first stage exit; steps and contacts accumulate from there",
+        "first_stage_exit_time_s": 24.999999999987086,
+        "stage_exit_time_s": 64.40000000012547,
+        "stage_exit_waypoint": 10,
+        "steps_observed": 200,
+        "steps_with_world_contact": 37,
+        "fraction_steps_in_contact": 0.185,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_1_-1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 19,
+          "plate_1_-1": 18
+        },
+        "min_contact_distance_m": -0.021591060849826642,
+        "first_contact_time_s": 25.19999999998662
+      },
+      "stall_branch_time_s": 48.000000000047166,
+      "stall_event": {
+        "time_s": 48.000000000047166,
+        "route_waypoint": 8,
+        "target": {
+          "target_kind": "waypoint",
+          "target_xy": [
+            6.0,
+            6.0
+          ],
+          "target_waypoint": 8,
+          "door_index": null,
+          "interaction_index": null,
+          "route_segment_index": 8,
+          "planner_goal": "waypoint",
+          "expected_next_state": "advance",
+          "target_distance_m": 1.6574385371709637,
+          "target_heading_error_rad": 0.05553362368193242,
+          "target_behind": false
+        },
+        "stalled_for_s": 3.0000000000143245,
+        "best_target_distance_m": 1.6667047313358292,
+        "fingerprint": {
+          "sha256_16": "dd0044c4dc39fe6b",
+          "time_s": 48.000000000047166,
+          "base_xy": [
+            4.342651329329459,
+            5.982740558351608
+          ],
+          "prev_actions_norm": 80.50279998779297,
+          "route_waypoint": 8
+        }
+      },
+      "stall_fingerprint": {
+        "sha256_16": "dd0044c4dc39fe6b",
+        "time_s": 48.000000000047166,
+        "base_xy": [
+          4.342651329329459,
+          5.982740558351608
+        ],
+        "prev_actions_norm": 80.50279998779297,
+        "route_waypoint": 8
+      },
+      "intervention_exposure": "exposed",
+      "intervention_delivery": "APPLIED",
+      "prev_actions_reset_delivery": {
+        "time_s": 48.000000000047166,
+        "policy_input_prev_actions": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "policy_input_prev_actions_norm": 0.0,
+        "delivered_zero_input": true
+      },
+      "chain_walking_reference_summary": {
+        "window_s": [
+          1.039999999999941,
+          19.280000000000417
+        ],
+        "ticks": 457,
+        "target_range_mean_rad": 1.2424772727272726,
+        "target_std_mean_rad": 0.24592056154033726,
+        "raw_out_std_mean": 0.9836829660137475,
+        "prev_in_step_change_mean": 4.841054462284441,
+        "tracking_err_mean_rad": 1.306508313706824,
+        "tracking_err_max_rad": 18.11329999962598,
+        "ctrl_saturation_frac": 0.14670777799880644,
+        "ctrl_abs_mean_nm": 1.6821427292619855,
+        "foot_contact_any_frac": 1.0,
+        "double_support_frac": 0.34573304157549234,
+        "stance_slip_m": 1.024719031747075,
+        "base_path_m": 5.884977446208867,
+        "base_progress_m": 3.561518940002987,
+        "base_speed_mean_mps": 0.38660754523967483,
+        "cmd_in_mean_mps": [
+          0.10497177558333595,
+          0.2259682676139954,
+          -0.00816477026757392
+        ],
+        "tracking_err_ratio_vs_reference": null,
+        "slip_path_fraction": 0.17412454696953922,
+        "target_range_ratio_vs_reference": null,
+        "mechanism": "progressing"
+      },
+      "chain_post_stage_summary": {
+        "window_s": [
+          65.40000000012547,
+          64.88000000012777
+        ],
+        "ticks": 0,
+        "mechanism": "window_too_short"
+      },
+      "chain_stall_window_summary": null,
+      "chain_stall_anchored_summary": {
+        "window_s": [
+          48.000000000047166,
+          64.84000000012757
+        ],
+        "ticks": 422,
+        "target_range_mean_rad": 3.3593636363636366,
+        "target_std_mean_rad": 0.465066350310633,
+        "raw_out_std_mean": 1.8602628001784682,
+        "prev_in_step_change_mean": 5.339486959582628,
+        "tracking_err_mean_rad": 1.2621699960101596,
+        "tracking_err_max_rad": 18.006499999965726,
+        "ctrl_saturation_frac": 0.17675570874623006,
+        "ctrl_abs_mean_nm": 1.8993269065058167,
+        "foot_contact_any_frac": 0.995260663507109,
+        "double_support_frac": 0.4194312796208531,
+        "stance_slip_m": 1.3118994346628208,
+        "base_path_m": 5.986414284482944,
+        "base_progress_m": 2.7181130072165884,
+        "base_speed_mean_mps": 0.39564170404529253,
+        "cmd_in_mean_mps": [
+          0.1891943168830815,
+          -0.07926374751913375,
+          0.024255213408258643
+        ],
+        "tracking_err_ratio_vs_reference": 0.9660635012946317,
+        "slip_path_fraction": 0.21914611524019034,
+        "target_range_ratio_vs_reference": 2.703762644277379,
+        "mechanism": "progressing"
+      },
+      "mechanism": "progressing",
+      "rejoin_fix": "prev_actions_reset",
+      "rejoin_fix_events": [
+        {
+          "time_s": 48.000000000047166,
+          "route_waypoint": 8,
+          "target": {
+            "target_kind": "waypoint",
+            "target_xy": [
+              6.0,
+              6.0
+            ],
+            "target_waypoint": 8,
+            "door_index": null,
+            "interaction_index": null,
+            "route_segment_index": 8,
+            "planner_goal": "waypoint",
+            "expected_next_state": "advance",
+            "target_distance_m": 1.6574385371709637,
+            "target_heading_error_rad": 0.05553362368193242,
+            "target_behind": false
+          },
+          "stalled_for_s": 3.0000000000143245,
+          "best_target_distance_m": 1.6667047313358292,
+          "fingerprint": {
+            "sha256_16": "dd0044c4dc39fe6b",
+            "time_s": 48.000000000047166,
+            "base_xy": [
+              4.342651329329459,
+              5.982740558351608
+            ],
+            "prev_actions_norm": 80.50279998779297,
+            "route_waypoint": 8
+          },
+          "fingerprint_at_fire": {
+            "sha256_16": "dd0044c4dc39fe6b",
+            "time_s": 48.000000000047166,
+            "base_xy": [
+              4.342651329329459,
+              5.982740558351608
+            ],
+            "prev_actions_norm": 80.50279998779297,
+            "route_waypoint": 8
+          },
+          "event": "prev_actions_reset",
+          "prev_actions_before": [
+            -0.16380049288272858,
+            0.37435343861579895,
+            0.05330100655555725,
+            -34.80744171142578,
+            -0.000569542869925499,
+            -0.07849394530057907,
+            -0.4918358027935028,
+            -0.0125991590321064,
+            72.5125961303711,
+            0.06832883507013321,
+            0.06783869862556458,
+            0.2870705723762512,
+            1.0585651397705078,
+            0.1704743206501007,
+            3.0286450386047363,
+            0.15600185096263885,
+            0.015991389751434326,
+            -0.16836512088775635,
+            -0.3638283610343933,
+            0.11779706180095673,
+            0.16930237412452698,
+            -0.07673414796590805
+          ],
+          "prev_actions_before_norm": 80.50279998779297,
+          "prev_actions_after_norm": 0.0,
+          "target_changed": true
+        }
+      ],
+      "rejoin_fix_fired": true,
+      "rejoin_fix_command_samples": [],
+      "rejoin_fix_command_delta_mps": 0.0,
+      "rejoin_fix_forward_delta_mps": 0.0,
+      "rejoin_fix_changed_forward_command": false,
+      "full_episode_record": "doors-1.json",
+      "omitted_trace_keys": [
+        "plate_contact_events",
+        "rejoin_diagnostic",
+        "diagnostic_trace",
+        "decision_rewards",
+        "route_phase_history",
+        "trace",
+        "guarded_stage_history",
+        "guarded_stage_phase_history",
+        "stage_entry_states",
+        "chain"
+      ]
+    },
+    {
+      "stage": "doors",
+      "open": [
+        true,
+        true
+      ],
+      "crossed": [
+        true,
+        false
+      ],
+      "activation_s": [
+        24.43999999998839,
+        91.8400000002565
+      ],
+      "wrong_buttons": 2,
+      "retries": 0,
+      "acquired": false,
+      "carrying": false,
+      "drops": 0,
+      "distance_m": 33.10614671937123,
+      "carried_m": 0.0,
+      "collisions": 0,
+      "dead_end_entries": 0,
+      "hold_s": 0.0,
+      "completed_s": null,
+      "failure": "fall",
+      "last_s": 92.80000000026108,
+      "success": false,
+      "layout": {
+        "split": "validation",
+        "seed": 10002,
+        "cell_m": 1.6,
+        "edges": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          [
+            [
+              0,
+              3
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          [
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              5
+            ]
+          ],
+          [
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          [
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          [
+            [
+              1,
+              3
+            ],
+            [
+              1,
+              4
+            ]
+          ],
+          [
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              5
+            ]
+          ],
+          [
+            [
+              1,
+              5
+            ],
+            [
+              2,
+              5
+            ]
+          ],
+          [
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          [
+            [
+              2,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          [
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          [
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ]
+          ],
+          [
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ]
+          ],
+          [
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          [
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ]
+          ],
+          [
+            [
+              3,
+              2
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          [
+            [
+              3,
+              3
+            ],
+            [
+              4,
+              3
+            ]
+          ],
+          [
+            [
+              3,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          [
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          [
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ],
+          [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          [
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ]
+          ],
+          [
+            [
+              4,
+              2
+            ],
+            [
+              5,
+              2
+            ]
+          ],
+          [
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              3
+            ]
+          ],
+          [
+            [
+              4,
+              4
+            ],
+            [
+              5,
+              4
+            ]
+          ],
+          [
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ]
+          ],
+          [
+            [
+              5,
+              1
+            ],
+            [
+              5,
+              2
+            ]
+          ],
+          [
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ]
+          ],
+          [
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ]
+          ]
+        ],
+        "route": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "door_indices": [
+          3,
+          15
+        ],
+        "correct_sides": [
+          1,
+          -1
+        ],
+        "object_index": 2,
+        "geometry_sha256": "1b3d5dd7abe172fe933b92477d1e5987f130b5c4a7ea5883a5e6d92932d6a920",
+        "route_decisions": 7,
+        "route_turns": 11,
+        "centerline_m": 30.400000000000002,
+        "decision_ratio_to_one_decision_reference": 7,
+        "legacy_reference_route_m": 3.0
+      },
+      "arm": "both",
+      "seed": 1000,
+      "sensor_failure": "normal",
+      "elapsed_s": 92.80000000026108,
+      "fall": true,
+      "timeout": false,
+      "button_success": true,
+      "door_success": false,
+      "pickup_success": false,
+      "placement_success": false,
+      "wall_contact_intervals": 0,
+      "shortest_centerline_m": 30.400000000000002,
+      "path_efficiency": null,
+      "object_xyz": [
+        0.0,
+        0.0,
+        -5.0
+      ],
+      "placement_error_m": 1.6,
+      "transport_kind": "kinematic_attachment_no_grasp_or_payload_dynamics",
+      "reward_terms": {
+        "time": -0.9279999999999631,
+        "collision": 0.0,
+        "failure": -5.0,
+        "correct_button": 4.0,
+        "wrong_button": -2.0,
+        "door_crossing": 2.0,
+        "acquisition": 0.0,
+        "success": 0.0
+      },
+      "return_total": -1.9279999999999635,
+      "action_mean_abs": 0.183613992860016,
+      "high_level_steps": 464,
+      "approach_spawn_m": 0.65,
+      "initial_goal_distance_m": 1.593825389283028,
+      "minimum_goal_distance_m": 1.5279868124189822,
+      "final_goal_distance_m": 4.849391388912073,
+      "fraction_distance_closed": 0.04130852558049849,
+      "final_fraction_distance_closed": -2.0426114563864113,
+      "time_closest_s": 0.08000000000000006,
+      "goal_region_entered": false,
+      "diagnostic_return_total": -1.9279999999999635,
+      "privileged_distance_progress": 0.0,
+      "action_hold_s": 0.2,
+      "fall_classification": {
+        "category": "post-interaction recovery",
+        "time_s": 92.80000000026108,
+        "command": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "phase": "recover",
+        "contacts": [],
+        "classification": "temporal association, not established causality"
+      },
+      "layout_index": 2,
+      "handoff_mode": "early",
+      "stage_lateral_m": null,
+      "stage_activate": false,
+      "stage_press_hold": false,
+      "exit_ramp_s": 0.0,
+      "exit_ramp_events": [],
+      "controller": "PlateSafeRouteController plus guarded PlateStage (lateral plate centre) on early handoff",
+      "route_plate_contacts_seen": [
+        [
+          0,
+          false
+        ],
+        [
+          0,
+          true
+        ],
+        [
+          1,
+          true
+        ]
+      ],
+      "guarded_stage_activated": true,
+      "guarded_stage_completed": true,
+      "handoff_condition_first_true_time": 15.600000000007574,
+      "handoff_condition_reason": "continuous_existing_plate_stage_predicate",
+      "plate_stage_activation_time": 15.600000000007574,
+      "first_plate_contact_time": 17.439500000004706,
+      "first_target_plate_contact_time": 17.439500000004706,
+      "activation_before_first_plate_contact": true,
+      "activation_to_first_plate_contact_margin_s": 1.8394999999971322,
+      "activation_to_target_plate_contact_margin_s": 1.8394999999971322,
+      "stage_entry_state": {
+        "time_s": 15.600000000007574,
+        "door": 0,
+        "side": -1,
+        "plate_xy": [
+          -0.12,
+          4.380000000000001
+        ],
+        "door_direction_world": [
+          1.0,
+          0.0
+        ],
+        "world_direction": "+x",
+        "base_xy": [
+          -0.06278225113670304,
+          3.614128506771325
+        ],
+        "base_yaw_rad": 0.030452859072720637,
+        "plate_distance_m": 0.7680058690695697,
+        "lateral_offset_m": -0.7658714932286759,
+        "forward_distance_m": 0.05721774886329696,
+        "heading_error_rad": 0.03045285907272064,
+        "velocity_world_mps": [
+          -0.26625110321067735,
+          -0.29653695035723404
+        ],
+        "velocity_body_mps": [
+          -0.2751566574869787,
+          -0.28829260609433766
+        ],
+        "linear_speed_mps": 0.3985270541482365,
+        "angular_velocity_radps": -0.22124857283900176,
+        "previous_route_phase": "advance",
+        "route_waypoint": 3,
+        "route_action": [
+          0.08344200700424768,
+          7.254328619247669,
+          -0.0916140291315773,
+          0.0,
+          0.0
+        ]
+      },
+      "stage_activation_times": [
+        15.600000000007574,
+        88.40000000024007
+      ],
+      "stage_completion_time": 91.8000000002563,
+      "crossing_completion": true,
+      "fall_time_s": 92.80000000026108,
+      "fall_phase": "recover",
+      "failure_phase": "after PlateStage",
+      "post_stage_contact_summary": {
+        "anchor": "first stage exit; steps and contacts accumulate from there",
+        "first_stage_exit_time_s": 22.19999999999361,
+        "stage_exit_time_s": 91.8000000002563,
+        "stage_exit_waypoint": 15,
+        "steps_observed": 353,
+        "steps_with_world_contact": 28,
+        "fraction_steps_in_contact": 0.07932011331444759,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_0_1",
+          "plate_1_-1",
+          "plate_1_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 10,
+          "plate_0_1": 5,
+          "plate_1_-1": 12,
+          "plate_1_1": 1
+        },
+        "min_contact_distance_m": -0.025101826960728813,
+        "first_contact_time_s": 22.399999999993145
+      },
+      "stall_branch_time_s": null,
+      "stall_event": null,
+      "stall_fingerprint": null,
+      "intervention_exposure": "not_exposed",
+      "intervention_delivery": "NOT_EXPOSED",
+      "prev_actions_reset_delivery": null,
+      "chain_walking_reference_summary": {
+        "window_s": [
+          1.039999999999941,
+          15.080000000006939
+        ],
+        "ticks": 352,
+        "target_range_mean_rad": 1.0012045454545455,
+        "target_std_mean_rad": 0.2149268015676137,
+        "raw_out_std_mean": 0.8597075663912123,
+        "prev_in_step_change_mean": 5.065507082665875,
+        "tracking_err_mean_rad": 1.305415877109234,
+        "tracking_err_max_rad": 16.93659999996573,
+        "ctrl_saturation_frac": 0.1337809917355372,
+        "ctrl_abs_mean_nm": 1.5740030991735536,
+        "foot_contact_any_frac": 1.0,
+        "double_support_frac": 0.2528409090909091,
+        "stance_slip_m": 0.6496137956285528,
+        "base_path_m": 4.504377349912748,
+        "base_progress_m": 3.51030547531123,
+        "base_speed_mean_mps": 0.39750994832712894,
+        "cmd_in_mean_mps": [
+          0.03166477283759212,
+          0.316193176433444,
+          -0.02763806827847888
+        ],
+        "tracking_err_ratio_vs_reference": null,
+        "slip_path_fraction": 0.14421833367072057,
+        "target_range_ratio_vs_reference": null,
+        "mechanism": "progressing"
+      },
+      "chain_post_stage_summary": {
+        "window_s": [
+          92.8000000002563,
+          92.80000000026108
+        ],
+        "ticks": 0,
+        "mechanism": "window_too_short"
+      },
+      "chain_stall_window_summary": null,
+      "chain_stall_anchored_summary": null,
+      "mechanism": "window_too_short",
+      "rejoin_fix": "prev_actions_reset",
+      "rejoin_fix_events": [],
+      "rejoin_fix_fired": false,
+      "rejoin_fix_command_samples": [],
+      "rejoin_fix_command_delta_mps": 0.0,
+      "rejoin_fix_forward_delta_mps": 0.0,
+      "rejoin_fix_changed_forward_command": false,
+      "full_episode_record": "doors-2.json",
+      "omitted_trace_keys": [
+        "plate_contact_events",
+        "rejoin_diagnostic",
+        "diagnostic_trace",
+        "decision_rewards",
+        "route_phase_history",
+        "trace",
+        "guarded_stage_history",
+        "guarded_stage_phase_history",
+        "stage_entry_states",
+        "chain"
+      ]
+    },
+    {
+      "stage": "doors",
+      "open": [
+        true,
+        true
+      ],
+      "crossed": [
+        true,
+        true
+      ],
+      "activation_s": [
+        33.6399999999786,
+        80.60000000020283
+      ],
+      "wrong_buttons": 0,
+      "retries": 1,
+      "acquired": false,
+      "carrying": false,
+      "drops": 0,
+      "distance_m": 37.49678402691562,
+      "carried_m": 0.0,
+      "collisions": 0,
+      "dead_end_entries": 0,
+      "hold_s": 1.0000000000000002,
+      "completed_s": 101.96000000030482,
+      "failure": null,
+      "last_s": 101.96000000030482,
+      "success": true,
+      "layout": {
+        "split": "validation",
+        "seed": 10003,
+        "cell_m": 1.7,
+        "edges": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          [
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          [
+            [
+              0,
+              3
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          [
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              5
+            ]
+          ],
+          [
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          [
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          [
+            [
+              1,
+              3
+            ],
+            [
+              1,
+              4
+            ]
+          ],
+          [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          [
+            [
+              1,
+              5
+            ],
+            [
+              2,
+              5
+            ]
+          ],
+          [
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          [
+            [
+              2,
+              0
+            ],
+            [
+              3,
+              0
+            ]
+          ],
+          [
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          [
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              3
+            ],
+            [
+              3,
+              3
+            ]
+          ],
+          [
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              5
+            ]
+          ],
+          [
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ]
+          ],
+          [
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          [
+            [
+              3,
+              2
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          [
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ]
+          ],
+          [
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          [
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          [
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ],
+          [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          [
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ]
+          ],
+          [
+            [
+              4,
+              2
+            ],
+            [
+              5,
+              2
+            ]
+          ],
+          [
+            [
+              4,
+              4
+            ],
+            [
+              5,
+              4
+            ]
+          ],
+          [
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ]
+          ],
+          [
+            [
+              5,
+              0
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          [
+            [
+              5,
+              1
+            ],
+            [
+              5,
+              2
+            ]
+          ],
+          [
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ]
+          ],
+          [
+            [
+              5,
+              4
+            ],
+            [
+              5,
+              5
+            ]
+          ]
+        ],
+        "route": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        "door_indices": [
+          5,
+          13
+        ],
+        "correct_sides": [
+          -1,
+          -1
+        ],
+        "object_index": 2,
+        "geometry_sha256": "f3693e61d02f708bce38abc45d78c9ad802ef19adb4173231d9f0ba60b4e0c54",
+        "route_decisions": 7,
+        "route_turns": 6,
+        "centerline_m": 27.2,
+        "decision_ratio_to_one_decision_reference": 7,
+        "legacy_reference_route_m": 3.0
+      },
+      "arm": "both",
+      "seed": 1000,
+      "sensor_failure": "normal",
+      "elapsed_s": 101.96000000030482,
+      "fall": false,
+      "timeout": false,
+      "button_success": true,
+      "door_success": true,
+      "pickup_success": false,
+      "placement_success": false,
+      "wall_contact_intervals": 0,
+      "shortest_centerline_m": 27.2,
+      "path_efficiency": 0.7253955427344256,
+      "object_xyz": [
+        0.0,
+        0.0,
+        -5.0
+      ],
+      "placement_error_m": 2.4041630560342613,
+      "transport_kind": "kinematic_attachment_no_grasp_or_payload_dynamics",
+      "reward_terms": {
+        "time": -1.019599999999953,
+        "collision": 0.0,
+        "failure": 0.0,
+        "correct_button": 4.0,
+        "wrong_button": 0.0,
+        "door_crossing": 4.0,
+        "acquisition": 0.0,
+        "success": 10.0
+      },
+      "return_total": 16.980400000000046,
+      "action_mean_abs": 0.18025467054024724,
+      "high_level_steps": 510,
+      "approach_spawn_m": 0.65,
+      "initial_goal_distance_m": 2.4160512867495716,
+      "minimum_goal_distance_m": 0.10312464992888543,
+      "final_goal_distance_m": 0.11432402788967382,
+      "fraction_distance_closed": 0.9573168622311722,
+      "final_fraction_distance_closed": 0.9526814565085332,
+      "time_closest_s": 100.84000000029947,
+      "goal_region_entered": true,
+      "diagnostic_return_total": 16.980400000000046,
+      "privileged_distance_progress": 0.0,
+      "action_hold_s": 0.2,
+      "fall_classification": null,
+      "layout_index": 3,
+      "handoff_mode": "early",
+      "stage_lateral_m": null,
+      "stage_activate": false,
+      "stage_press_hold": false,
+      "exit_ramp_s": 0.0,
+      "exit_ramp_events": [],
+      "controller": "PlateSafeRouteController plus guarded PlateStage (lateral plate centre) on early handoff",
+      "route_plate_contacts_seen": [
+        [
+          0,
+          false
+        ],
+        [
+          0,
+          true
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          1,
+          true
+        ]
+      ],
+      "guarded_stage_activated": true,
+      "guarded_stage_completed": true,
+      "handoff_condition_first_true_time": 28.199999999979628,
+      "handoff_condition_reason": "continuous_existing_plate_stage_predicate",
+      "plate_stage_activation_time": 28.199999999979628,
+      "first_plate_contact_time": 29.440499999976737,
+      "first_target_plate_contact_time": 29.440499999976737,
+      "activation_before_first_plate_contact": true,
+      "activation_to_first_plate_contact_margin_s": 1.240499999997109,
+      "activation_to_target_plate_contact_margin_s": 1.240499999997109,
+      "stage_entry_state": {
+        "time_s": 28.199999999979628,
+        "door": 0,
+        "side": -1,
+        "plate_xy": [
+          2.98,
+          5.22
+        ],
+        "door_direction_world": [
+          0.0,
+          -1.0
+        ],
+        "world_direction": "-y",
+        "base_xy": [
+          2.255458626523192,
+          5.0853741327887585
+        ],
+        "base_yaw_rad": -0.024213985386411483,
+        "plate_distance_m": 0.7369425527149577,
+        "lateral_offset_m": -0.724541373476808,
+        "forward_distance_m": 0.13462586721124126,
+        "heading_error_rad": 1.5465823414084852,
+        "velocity_world_mps": [
+          0.43204554217821645,
+          0.104920129102789
+        ],
+        "velocity_body_mps": [
+          0.4293786043040995,
+          0.1153498945507903
+        ],
+        "linear_speed_mps": 0.4446027260454156,
+        "angular_velocity_radps": -0.3850380909923616,
+        "previous_route_phase": "advance",
+        "route_waypoint": 5,
+        "route_action": [
+          0.9729550745276564,
+          0.042292231762976404,
+          0.07277013589675135,
+          0.0,
+          0.0
+        ]
+      },
+      "stage_activation_times": [
+        28.199999999979628,
+        78.80000000019423
+      ],
+      "stage_completion_time": 82.40000000021142,
+      "crossing_completion": true,
+      "fall_time_s": null,
+      "fall_phase": null,
+      "failure_phase": "none",
+      "post_stage_contact_summary": {
+        "anchor": "first stage exit; steps and contacts accumulate from there",
+        "first_stage_exit_time_s": 33.39999999997745,
+        "stage_exit_time_s": 82.40000000021142,
+        "stage_exit_waypoint": 13,
+        "steps_observed": 343,
+        "steps_with_world_contact": 32,
+        "fraction_steps_in_contact": 0.09329446064139942,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_0_1",
+          "plate_1_-1",
+          "plate_1_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 9,
+          "plate_0_1": 4,
+          "plate_1_-1": 15,
+          "plate_1_1": 4
+        },
+        "min_contact_distance_m": -0.032556990389904984,
+        "first_contact_time_s": 33.59999999997841
+      },
+      "stall_branch_time_s": null,
+      "stall_event": null,
+      "stall_fingerprint": null,
+      "intervention_exposure": "not_exposed",
+      "intervention_delivery": "NOT_EXPOSED",
+      "prev_actions_reset_delivery": null,
+      "chain_walking_reference_summary": {
+        "window_s": [
+          1.039999999999941,
+          27.67999999998084
+        ],
+        "ticks": 667,
+        "target_range_mean_rad": 1.2818772727272725,
+        "target_std_mean_rad": 0.2402727908200646,
+        "raw_out_std_mean": 0.9610915092879263,
+        "prev_in_step_change_mean": 4.96061768175597,
+        "tracking_err_mean_rad": 1.3077408548373926,
+        "tracking_err_max_rad": 18.32529999962598,
+        "ctrl_saturation_frac": 0.14863023033937578,
+        "ctrl_abs_mean_nm": 1.6781891781382037,
+        "foot_contact_any_frac": 1.0,
+        "double_support_frac": 0.328335832083958,
+        "stance_slip_m": 1.576552735544563,
+        "base_path_m": 9.027719341666355,
+        "base_progress_m": 5.555457923519897,
+        "base_speed_mean_mps": 0.4033972047891303,
+        "cmd_in_mean_mps": [
+          0.10482908864128591,
+          0.23068710269552697,
+          -0.010595352327132757
+        ],
+        "tracking_err_ratio_vs_reference": null,
+        "slip_path_fraction": 0.17463466418015158,
+        "target_range_ratio_vs_reference": null,
+        "mechanism": "progressing"
+      },
+      "chain_post_stage_summary": {
+        "window_s": [
+          83.4000000002162,
+          101.92000000030463
+        ],
+        "ticks": 464,
+        "target_range_mean_rad": 1.7492136363636364,
+        "target_std_mean_rad": 0.3050601872118303,
+        "raw_out_std_mean": 1.2202391287287084,
+        "prev_in_step_change_mean": 5.004014517446132,
+        "tracking_err_mean_rad": 1.2291718734573798,
+        "tracking_err_max_rad": 16.7920000001356,
+        "ctrl_saturation_frac": 0.15321316614420064,
+        "ctrl_abs_mean_nm": 1.6619389694357367,
+        "foot_contact_any_frac": 1.0,
+        "double_support_frac": 0.3728448275862069,
+        "stance_slip_m": 1.0733237397829085,
+        "base_path_m": 6.95937967903509,
+        "base_progress_m": 3.817176239054205,
+        "base_speed_mean_mps": 0.4103102964250559,
+        "cmd_in_mean_mps": [
+          -0.1505463423927722,
+          0.1345086189243814,
+          -0.030507327487957182
+        ],
+        "tracking_err_ratio_vs_reference": 0.939920068192882,
+        "slip_path_fraction": 0.15422692672110738,
+        "target_range_ratio_vs_reference": 1.3645718459787317,
+        "mechanism": "progressing"
+      },
+      "chain_stall_window_summary": null,
+      "chain_stall_anchored_summary": null,
+      "mechanism": "progressing",
+      "rejoin_fix": "prev_actions_reset",
+      "rejoin_fix_events": [],
+      "rejoin_fix_fired": false,
+      "rejoin_fix_command_samples": [],
+      "rejoin_fix_command_delta_mps": 0.0,
+      "rejoin_fix_forward_delta_mps": 0.0,
+      "rejoin_fix_changed_forward_command": false,
+      "full_episode_record": "doors-3.json",
+      "omitted_trace_keys": [
+        "plate_contact_events",
+        "rejoin_diagnostic",
+        "diagnostic_trace",
+        "decision_rewards",
+        "route_phase_history",
+        "trace",
+        "guarded_stage_history",
+        "guarded_stage_phase_history",
+        "stage_entry_states",
+        "chain"
+      ]
+    },
+    {
+      "stage": "doors",
+      "open": [
+        true,
+        true
+      ],
+      "crossed": [
+        true,
+        true
+      ],
+      "activation_s": [
+        21.83999999999445,
+        90.72000000025115
+      ],
+      "wrong_buttons": 3,
+      "retries": 0,
+      "acquired": false,
+      "carrying": false,
+      "drops": 0,
+      "distance_m": 37.921985690126,
+      "carried_m": 0.0,
+      "collisions": 0,
+      "dead_end_entries": 0,
+      "hold_s": 1.0000000000000002,
+      "completed_s": 111.52000000035046,
+      "failure": null,
+      "last_s": 111.52000000035046,
+      "success": true,
+      "layout": {
+        "split": "validation",
+        "seed": 10006,
+        "cell_m": 1.6,
+        "edges": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ],
+          [
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ],
+          [
+            [
+              0,
+              3
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          [
+            [
+              0,
+              4
+            ],
+            [
+              0,
+              5
+            ]
+          ],
+          [
+            [
+              0,
+              4
+            ],
+            [
+              1,
+              4
+            ]
+          ],
+          [
+            [
+              0,
+              5
+            ],
+            [
+              1,
+              5
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          [
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          [
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          [
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          [
+            [
+              2,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ],
+          [
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ]
+          ],
+          [
+            [
+              2,
+              5
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          [
+            [
+              3,
+              0
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          [
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              2
+            ]
+          ],
+          [
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              1
+            ]
+          ],
+          [
+            [
+              3,
+              2
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          [
+            [
+              3,
+              3
+            ],
+            [
+              4,
+              3
+            ]
+          ],
+          [
+            [
+              3,
+              4
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          [
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          [
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              1
+            ]
+          ],
+          [
+            [
+              4,
+              0
+            ],
+            [
+              5,
+              0
+            ]
+          ],
+          [
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              1
+            ]
+          ],
+          [
+            [
+              4,
+              2
+            ],
+            [
+              5,
+              2
+            ]
+          ],
+          [
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              3
+            ]
+          ],
+          [
+            [
+              4,
+              4
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          [
+            [
+              4,
+              4
+            ],
+            [
+              5,
+              4
+            ]
+          ],
+          [
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ]
+          ],
+          [
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ]
+          ],
+          [
+            [
+              5,
+              3
+            ],
+            [
+              5,
+              4
+            ]
+          ]
+        ],
+        "route": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            4
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ]
+        ],
+        "door_indices": [
+          3,
+          14
+        ],
+        "correct_sides": [
+          -1,
+          -1
+        ],
+        "object_index": 1,
+        "geometry_sha256": "ced800098e4642b0b96e9e68f133d594c4f5e29623d42ae57a6a5315d091f54a",
+        "route_decisions": 7,
+        "route_turns": 9,
+        "centerline_m": 27.200000000000003,
+        "decision_ratio_to_one_decision_reference": 7,
+        "legacy_reference_route_m": 3.0
+      },
+      "arm": "both",
+      "seed": 1000,
+      "sensor_failure": "normal",
+      "elapsed_s": 111.52000000035046,
+      "fall": false,
+      "timeout": false,
+      "button_success": true,
+      "door_success": true,
+      "pickup_success": false,
+      "placement_success": false,
+      "wall_contact_intervals": 0,
+      "shortest_centerline_m": 27.200000000000003,
+      "path_efficiency": 0.7172620184570727,
+      "object_xyz": [
+        0.0,
+        0.0,
+        -5.0
+      ],
+      "placement_error_m": 8.0,
+      "transport_kind": "kinematic_attachment_no_grasp_or_payload_dynamics",
+      "reward_terms": {
+        "time": -1.1151999999999425,
+        "collision": 0.0,
+        "failure": 0.0,
+        "correct_button": 4.0,
+        "wrong_button": -3.0,
+        "door_crossing": 4.0,
+        "acquisition": 0.0,
+        "success": 10.0
+      },
+      "return_total": 13.884800000000057,
+      "action_mean_abs": 0.18516774614812387,
+      "high_level_steps": 558,
+      "approach_spawn_m": 0.65,
+      "initial_goal_distance_m": 7.993692201336045,
+      "minimum_goal_distance_m": 0.011786189449126213,
+      "final_goal_distance_m": 0.02648694327738627,
+      "fraction_distance_closed": 0.9985255637629935,
+      "final_fraction_distance_closed": 0.9966865194943384,
+      "time_closest_s": 110.16000000034397,
+      "goal_region_entered": true,
+      "diagnostic_return_total": 13.884800000000057,
+      "privileged_distance_progress": 0.0,
+      "action_hold_s": 0.2,
+      "fall_classification": null,
+      "layout_index": 6,
+      "handoff_mode": "early",
+      "stage_lateral_m": null,
+      "stage_activate": false,
+      "stage_press_hold": false,
+      "exit_ramp_s": 0.0,
+      "exit_ramp_events": [],
+      "controller": "PlateSafeRouteController plus guarded PlateStage (lateral plate centre) on early handoff",
+      "route_plate_contacts_seen": [
+        [
+          0,
+          true
+        ],
+        [
+          1,
+          false
+        ],
+        [
+          1,
+          true
+        ]
+      ],
+      "guarded_stage_activated": true,
+      "guarded_stage_completed": true,
+      "handoff_condition_first_true_time": 15.600000000007574,
+      "handoff_condition_reason": "continuous_existing_plate_stage_predicate",
+      "plate_stage_activation_time": 15.600000000007574,
+      "first_plate_contact_time": 17.47600000000462,
+      "first_target_plate_contact_time": 17.47600000000462,
+      "activation_before_first_plate_contact": true,
+      "activation_to_first_plate_contact_margin_s": 1.8759999999970471,
+      "activation_to_target_plate_contact_margin_s": 1.8759999999970471,
+      "stage_entry_state": {
+        "time_s": 15.600000000007574,
+        "door": 0,
+        "side": -1,
+        "plate_xy": [
+          -0.12,
+          4.380000000000001
+        ],
+        "door_direction_world": [
+          1.0,
+          0.0
+        ],
+        "world_direction": "+x",
+        "base_xy": [
+          -0.06278225113670304,
+          3.614128506771325
+        ],
+        "base_yaw_rad": 0.030452859072720637,
+        "plate_distance_m": 0.7680058690695697,
+        "lateral_offset_m": -0.7658714932286759,
+        "forward_distance_m": 0.05721774886329696,
+        "heading_error_rad": 0.03045285907272064,
+        "velocity_world_mps": [
+          -0.26625110321067735,
+          -0.29653695035723404
+        ],
+        "velocity_body_mps": [
+          -0.2751566574869787,
+          -0.28829260609433766
+        ],
+        "linear_speed_mps": 0.3985270541482365,
+        "angular_velocity_radps": -0.22124857283900176,
+        "previous_route_phase": "advance",
+        "route_waypoint": 3,
+        "route_action": [
+          0.08344200700424768,
+          7.254328619247669,
+          -0.0916140291315773,
+          0.0,
+          0.0
+        ]
+      },
+      "stage_activation_times": [
+        15.600000000007574,
+        83.8000000002181
+      ],
+      "stage_completion_time": 87.8000000002372,
+      "crossing_completion": true,
+      "fall_time_s": null,
+      "fall_phase": null,
+      "failure_phase": "none",
+      "post_stage_contact_summary": {
+        "anchor": "first stage exit; steps and contacts accumulate from there",
+        "first_stage_exit_time_s": 21.199999999995942,
+        "stage_exit_time_s": 87.8000000002372,
+        "stage_exit_waypoint": 14,
+        "steps_observed": 452,
+        "steps_with_world_contact": 57,
+        "fraction_steps_in_contact": 0.1261061946902655,
+        "distinct_world_geoms": [
+          "plate_0_-1",
+          "plate_1_-1",
+          "plate_1_1"
+        ],
+        "world_geom_step_counts": {
+          "plate_0_-1": 21,
+          "plate_1_1": 27,
+          "plate_1_-1": 9
+        },
+        "min_contact_distance_m": -0.03080252535809551,
+        "first_contact_time_s": 21.399999999995476
+      },
+      "stall_branch_time_s": 40.00000000000897,
+      "stall_event": {
+        "time_s": 40.00000000000897,
+        "route_waypoint": 6,
+        "target": {
+          "target_kind": "waypoint",
+          "target_xy": [
+            3.2,
+            6.4
+          ],
+          "target_waypoint": 6,
+          "door_index": null,
+          "interaction_index": null,
+          "route_segment_index": 6,
+          "planner_goal": "waypoint",
+          "expected_next_state": "advance",
+          "target_distance_m": 1.5886858254437897,
+          "target_heading_error_rad": 1.4692651306027664,
+          "target_behind": false
+        },
+        "stalled_for_s": 3.0000000000143245,
+        "best_target_distance_m": 1.5732075138724255,
+        "fingerprint": {
+          "sha256_16": "271c04996ca9cab0",
+          "time_s": 40.00000000000897,
+          "base_xy": [
+            3.05569442487315,
+            4.81788162486073
+          ],
+          "prev_actions_norm": 73.10305786132812,
+          "route_waypoint": 6
+        }
+      },
+      "stall_fingerprint": {
+        "sha256_16": "271c04996ca9cab0",
+        "time_s": 40.00000000000897,
+        "base_xy": [
+          3.05569442487315,
+          4.81788162486073
+        ],
+        "prev_actions_norm": 73.10305786132812,
+        "route_waypoint": 6
+      },
+      "intervention_exposure": "exposed",
+      "intervention_delivery": "APPLIED",
+      "prev_actions_reset_delivery": {
+        "time_s": 40.00000000000897,
+        "policy_input_prev_actions": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "policy_input_prev_actions_norm": 0.0,
+        "delivered_zero_input": true
+      },
+      "chain_walking_reference_summary": {
+        "window_s": [
+          1.039999999999941,
+          15.080000000006939
+        ],
+        "ticks": 352,
+        "target_range_mean_rad": 1.0012045454545455,
+        "target_std_mean_rad": 0.2149268015676137,
+        "raw_out_std_mean": 0.8597075663912123,
+        "prev_in_step_change_mean": 5.065507082665875,
+        "tracking_err_mean_rad": 1.305415877109234,
+        "tracking_err_max_rad": 16.93659999996573,
+        "ctrl_saturation_frac": 0.1337809917355372,
+        "ctrl_abs_mean_nm": 1.5740030991735536,
+        "foot_contact_any_frac": 1.0,
+        "double_support_frac": 0.2528409090909091,
+        "stance_slip_m": 0.6496137956285528,
+        "base_path_m": 4.504377349912748,
+        "base_progress_m": 3.51030547531123,
+        "base_speed_mean_mps": 0.39750994832712894,
+        "cmd_in_mean_mps": [
+          0.03166477283759212,
+          0.316193176433444,
+          -0.02763806827847888
+        ],
+        "tracking_err_ratio_vs_reference": null,
+        "slip_path_fraction": 0.14421833367072057,
+        "target_range_ratio_vs_reference": null,
+        "mechanism": "progressing"
+      },
+      "chain_post_stage_summary": {
+        "window_s": [
+          88.80000000024198,
+          111.48000000035027
+        ],
+        "ticks": 568,
+        "target_range_mean_rad": 2.3068,
+        "target_std_mean_rad": 0.35883450785156606,
+        "raw_out_std_mean": 1.4353396250126111,
+        "prev_in_step_change_mean": 4.889742467536641,
+        "tracking_err_mean_rad": 1.2773837105160852,
+        "tracking_err_max_rad": 19.053699999795853,
+        "ctrl_saturation_frac": 0.17085467349551856,
+        "ctrl_abs_mean_nm": 1.8667744878361074,
+        "foot_contact_any_frac": 0.9982394366197183,
+        "double_support_frac": 0.4612676056338028,
+        "stance_slip_m": 1.706272913367761,
+        "base_path_m": 7.664581389399669,
+        "base_progress_m": 4.176307989121492,
+        "base_speed_mean_mps": 0.38112843424736276,
+        "cmd_in_mean_mps": [
+          0.17675704817930368,
+          -0.09306690473954725,
+          0.014461443798647682
+        ],
+        "tracking_err_ratio_vs_reference": 0.9785262558203105,
+        "slip_path_fraction": 0.2226178869634791,
+        "target_range_ratio_vs_reference": 2.3040246975234373,
+        "mechanism": "progressing"
+      },
+      "chain_stall_window_summary": null,
+      "chain_stall_anchored_summary": {
+        "window_s": [
+          40.00000000000897,
+          59.96000000010427
+        ],
+        "ticks": 500,
+        "target_range_mean_rad": 2.3929590909090908,
+        "target_std_mean_rad": 0.3096746023422836,
+        "raw_out_std_mean": 1.2386976478882008,
+        "prev_in_step_change_mean": 4.842705666202815,
+        "tracking_err_mean_rad": 1.2968792407069245,
+        "tracking_err_max_rad": 17.754900000305472,
+        "ctrl_saturation_frac": 0.17427272727272727,
+        "ctrl_abs_mean_nm": 1.8728054545454547,
+        "foot_contact_any_frac": 1.0,
+        "double_support_frac": 0.438,
+        "stance_slip_m": 1.44018432127017,
+        "base_path_m": 7.1112438034996,
+        "base_progress_m": 4.58179740385801,
+        "base_speed_mean_mps": 0.4019020077056526,
+        "cmd_in_mean_mps": [
+          0.21972500829026104,
+          0.1052259984984994,
+          0.014584000136237592
+        ],
+        "tracking_err_ratio_vs_reference": 0.9934606001413027,
+        "slip_path_fraction": 0.2025221411423728,
+        "target_range_ratio_vs_reference": 2.390080130751594,
+        "mechanism": "progressing"
+      },
+      "mechanism": "progressing",
+      "rejoin_fix": "prev_actions_reset",
+      "rejoin_fix_events": [
+        {
+          "time_s": 40.00000000000897,
+          "route_waypoint": 6,
+          "target": {
+            "target_kind": "waypoint",
+            "target_xy": [
+              3.2,
+              6.4
+            ],
+            "target_waypoint": 6,
+            "door_index": null,
+            "interaction_index": null,
+            "route_segment_index": 6,
+            "planner_goal": "waypoint",
+            "expected_next_state": "advance",
+            "target_distance_m": 1.5886858254437897,
+            "target_heading_error_rad": 1.4692651306027664,
+            "target_behind": false
+          },
+          "stalled_for_s": 3.0000000000143245,
+          "best_target_distance_m": 1.5732075138724255,
+          "fingerprint": {
+            "sha256_16": "271c04996ca9cab0",
+            "time_s": 40.00000000000897,
+            "base_xy": [
+              3.05569442487315,
+              4.81788162486073
+            ],
+            "prev_actions_norm": 73.10305786132812,
+            "route_waypoint": 6
+          },
+          "fingerprint_at_fire": {
+            "sha256_16": "271c04996ca9cab0",
+            "time_s": 40.00000000000897,
+            "base_xy": [
+              3.05569442487315,
+              4.81788162486073
+            ],
+            "prev_actions_norm": 73.10305786132812,
+            "route_waypoint": 6
+          },
+          "event": "prev_actions_reset",
+          "prev_actions_before": [
+            0.001954697072505951,
+            0.41797226667404175,
+            0.041261617094278336,
+            -52.05177307128906,
+            0.05032578483223915,
+            -0.06382094323635101,
+            -0.47911858558654785,
+            -0.006524726748466492,
+            51.31147766113281,
+            -0.02620363049209118,
+            -0.13472482562065125,
+            0.17943185567855835,
+            0.13233506679534912,
+            -0.3946685492992401,
+            0.6898584961891174,
+            -0.12412256002426147,
+            0.15436546504497528,
+            0.24519461393356323,
+            0.18760502338409424,
+            -0.3497076630592346,
+            0.47018757462501526,
+            0.460125595331192
+          ],
+          "prev_actions_before_norm": 73.10305786132812,
+          "prev_actions_after_norm": 0.0,
+          "target_changed": true
+        }
+      ],
+      "rejoin_fix_fired": true,
+      "rejoin_fix_command_samples": [],
+      "rejoin_fix_command_delta_mps": 0.0,
+      "rejoin_fix_forward_delta_mps": 0.0,
+      "rejoin_fix_changed_forward_command": false,
+      "full_episode_record": "doors-6.json",
+      "omitted_trace_keys": [
+        "plate_contact_events",
+        "rejoin_diagnostic",
+        "diagnostic_trace",
+        "decision_rewards",
+        "route_phase_history",
+        "trace",
+        "guarded_stage_history",
+        "guarded_stage_phase_history",
+        "stage_entry_states",
+        "chain"
+      ]
+    }
+  ]
+}

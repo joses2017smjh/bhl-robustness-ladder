@@ -31,7 +31,7 @@ replaced it). Route failures are never dropped from a denominator.
   continuous crossing — and a per-layout offset side chosen from the corridor
   geometry, since layouts 4 and 7 are lost by every lateral arm.
 - **Jobs:** 31 completed this campaign; none pending.
-- **Episodes used:** 354 / 512 (163 remained at reopening; 5 spent; ≤20 gates, ≤48 dev, 64 confirmatory planned). Retained artifacts 6.8 GB of 10 GB; disk
+- **Episodes used:** 374 / 512 (138 remain: ≤10 gate for V3, ≤48 dev on validation 0–15, 64 confirmatory reserved). Retained artifacts 6.8 GB of 10 GB; disk
   ≥ 150 GB free throughout.
 
 ## Gates (unchanged unless evidence says otherwise)
@@ -54,7 +54,7 @@ replaced it). Route failures are never dropped from a denominator.
 | 4 | Campaign A: 16+16 early-handoff episodes, chain traced, mechanism per episode | DONE | 32 episodes; during-stage 15 (wall), after-stage 12 (falls), stall exposures 5 (`frozen_targets` 4); `campaign-a-summary.json` |
 | 5 | Campaign B: baseline vs `prev_actions_reset` on the 5 exposed episodes, fingerprint-matched | DONE | 5/5 applied, fingerprints matched; 2/5 genuine stalls, both un-stuck (stall-anchored); 3/5 transient pauses; Doors/1 → success, Doors/3 regressed; not promoted. Review corrections applied |
 | 6 | In-stage factors | REOPENED | the six lateral arms staged the robot 0.75 m past the plate (anchor bug, fixed) — withdrawn; no-lateral arms stand (F2/F3/F2F3/A1 all ≤ baseline). Root causes now traced: post-exit falls 8/8 and approach falls are raised-plate trips; crossing covers only 0.13 m |
-| 7 | Freeze one recovery under the predeclared rule | ACTIVE | Doors/3 regression explained (mid-walk reset lurch → plate trip); `--stall-min-s 3.0` declared and under matched verification (`21401685–686`) |
+| 7 | Freeze one recovery under the predeclared rule | ACTIVE | Doors/1 succeeds with V2 + centre-aimed ramp + rejoin-advance (77.7 s); V2 fails the gate 7/10 (sideways crossing) → V3 = V2 + yaw alignment, local replay running |
 | 8 | Confirmatory eval on validation 16–31 | BLOCKED | needs a candidate passing selection + replay gate; 64 episodes reserved |
 | 9 | Exact replay regression for every PlateStage change | ACTIVE | offset gates withdrawn (misplaced target); wait-open PASS stands; new gates needed for pre-point 0.45 / cross-until-clear / corrected offset |
 | 10 | World −x / privileged Approach workstream | BLOCKED (geometric) | 6 arms / 96 episodes: 7–9/16 or 0/16; success set moves with crossing phase; robot 0.632 m > gap 0.61 m. Gate stays closed, unweakened. `approach-negx-summary.json` |
@@ -92,7 +92,8 @@ are added here as they complete.
 | 21400952 | F1+F2+F3 at 0.35 m (last predeclared arm) | DONE 1/16, falls 5→1 |
 | 21400953 | Combined replay gate 0.35 m + wait-open 2.0 | DONE **10/10 PASS** |
 | 21400961 | Interaction: reset + F1F2F3@0.35 on 4 exposed Doors | DONE 0/4 — withdrawn with the misplaced-target arms |
-| 21401685–686 | Reset with `--stall-min-s 3.0`, unchanged stage, 5 exposures | running |
+| 21401685–686 | Reset with `--stall-min-s 3.0`, unchanged stage, 5 exposures | DONE — 3 NOT_EXPOSED tick-identical (Doors/3 preserved); Doors/6 → success; Doors/1 → door 2 then fall; 1/4 → 2/4 |
+| 21401689 | Replay gate V2 stage (pre 0.45, clear 0.35, kick) | DONE **7/10 FAIL** — crossing runs sideways when yaw is 90° off; `--align-yaw` declared, replay re-run locally first |
 
 ## Confirmatory protocol (predeclared 2026-09-23, before any in-stage or Campaign B result was read)
 

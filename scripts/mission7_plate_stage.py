@@ -45,6 +45,11 @@ def _world_command(env, vector, speed=0.30):
     return np.array([np.clip(body[0], -.4, .4), np.clip(body[1], -.35, .35), 0.])
 
 
+def _yaw(env):
+    q = env.runner.d.qpos[env.slot.qpos_adr + 3:env.slot.qpos_adr + 7]
+    return float(np.arctan2(2 * (q[0] * q[3] + q[1] * q[2]), 1 - 2 * (q[2] ** 2 + q[3] ** 2)))
+
+
 def _plate_state(env, door, side):
     center, direction = env.layout.door(door)
     plate = env.layout.plate(door, side)
@@ -58,7 +63,8 @@ class PlateStage:
     def __init__(self, env, approach_radius=.78, settle_s=.40, cross_s=1.20,
                  stage_lateral_m=None, wait_open_s=0., press_hold=False,
                  creep_mps=.15, creep_max_m=.45, pre_point_m=.30, cross_clear_m=None,
-                 cross_max_s=4.0, cross_kick=False):
+                 cross_max_s=4.0, cross_kick=False, align_yaw=False, align_tol_rad=.20,
+                 align_max_s=1.5):
         self.env = env
         self.approach_radius = float(approach_radius)
         self.settle_s = float(settle_s)
@@ -108,6 +114,16 @@ class PlateStage:
         # (2/2 genuine stalls).  Recorded in history; the replay gate must pass.
         self.cross_kick = bool(cross_kick)
         self.kick_events = []
+        # The crossing is a world-frame vector with no yaw correction, so a
+        # robot that reached the pre-point sideways crosses sideways: in the
+        # three V2 replay falls the body command was [0.01, 0.30, 0.0] for two
+        # seconds before the plate-edge trip.  Turn in place toward the door
+        # direction during the settle (bounded), so the crossing is forward.
+        self.align_yaw = bool(align_yaw)
+        self.align_tol_rad = float(align_tol_rad)
+        self.align_max_s = float(align_max_s)
+        self.align_until = None
+        self.align_events = []
         # A wrong-side plate is only an intervention target when the route is
         # clearly not entering the intended plate.  The threshold separates
         # the layout-13 wrong-side trace from layout-4's earlier near miss.
@@ -133,6 +149,7 @@ class PlateStage:
     def _start(self, door, side, now):
         self.door = door
         self.side = side
+        self.align_until = None
         self.phase = "approach"
         self.phase_until = float(now)
         self.history.append({"time_s": float(now), "door": int(door),
@@ -184,7 +201,18 @@ class PlateStage:
                 return np.zeros(3), self.phase
             return _world_command(env, pre - xy), self.phase
         if self.phase == "settle":
-            if now < self.phase_until:
+            if self.align_yaw:
+                if self.align_until is None:
+                    self.align_until = now + self.align_max_s
+                err = wrap(np.arctan2(direction[1], direction[0]) - _yaw(env))
+                if abs(err) > self.align_tol_rad and now < self.align_until:
+                    return np.array([0., 0., float(np.clip(1.2 * err, -.35, .35))]), self.phase
+                if not self.align_events or self.align_events[-1]["door"] != int(self.door):
+                    self.align_events.append({"time_s": now, "door": int(self.door), "yaw_error_rad": float(err),
+                                              "aligned": bool(abs(err) <= self.align_tol_rad)})
+                if now < self.phase_until:
+                    return np.zeros(3), self.phase
+            elif now < self.phase_until:
                 return np.zeros(3), self.phase
             if self.press_hold and not env.state.open[self.door]:
                 self.phase = "creep"
@@ -243,10 +271,11 @@ class PlateStage:
 
 
 def _episode(env, index, source_episode, baseline, stage_lateral_m=None, wait_open_s=0., press_hold=False,
-             pre_point_m=.30, cross_clear_m=None, settle_s=.40, cross_kick=False):
+             pre_point_m=.30, cross_clear_m=None, settle_s=.40, cross_kick=False, align_yaw=False):
     runner = env.runner
     stage = PlateStage(env, stage_lateral_m=stage_lateral_m, wait_open_s=wait_open_s, press_hold=press_hold,
-                       pre_point_m=pre_point_m, cross_clear_m=cross_clear_m, settle_s=settle_s, cross_kick=cross_kick)
+                       pre_point_m=pre_point_m, cross_clear_m=cross_clear_m, settle_s=settle_s, cross_kick=cross_kick,
+                       align_yaw=align_yaw)
     samples = []
     maximum_recorded_pose_difference = 0.
     for reference in source_episode["diagnostic_trace"]:
@@ -305,6 +334,10 @@ def run(args, out):
     selected = [(index, episode) for index, episode in enumerate(source["episodes"]) if episode.get("fall")]
     if args.smoke:
         selected = selected[:1]
+    only = getattr(args, "only", "")
+    if only:
+        keep = {int(x) for x in only.split(",") if x.strip()}
+        selected = [(i, e) for i, e in selected if i in keep]
     env = DebugEnv(args.repo, out / "cache", stage="doors", split="validation", seed=1000)
     rows, next_reset = [], 0
     for index, episode in selected:
@@ -318,7 +351,8 @@ def run(args, out):
                              pre_point_m=getattr(args, 'pre_point', .30),
                              cross_clear_m=getattr(args, 'cross_clear', None),
                              settle_s=getattr(args, 'settle_s', .40),
-                             cross_kick=getattr(args, 'cross_kick', False)))
+                             cross_kick=getattr(args, 'cross_kick', False),
+                             align_yaw=getattr(args, 'align_yaw', False)))
         write(out / "episodes.json", {"complete": False, "episodes": rows})
     report = {
         "complete": True,
@@ -358,6 +392,8 @@ if __name__ == "__main__":
                         help="cross until the body is this far past the plate centre (m); default fixed 1.20 s")
     parser.add_argument("--settle-s", type=float, default=.40, help="settle standstill before the crossing (s); replay 0.40")
     parser.add_argument("--cross-kick", action="store_true", help="zero prev_actions once at the start of the crossing")
+    parser.add_argument("--align-yaw", action="store_true", help="turn in place toward the door direction during the settle")
+    parser.add_argument("--only", default="", help="comma-separated layout indices to replay (local checks); default all ten")
     parser.add_argument("--preflight", action="store_true")
     args = parser.parse_args()
     args.repo = args.repo.resolve()
@@ -369,7 +405,7 @@ if __name__ == "__main__":
         print(json.dumps({"status": "PREFLIGHT_OK", "python": sys.executable, "mujoco": mujoco.__version__,
                           "stage_lateral_m": args.stage_lateral, "wait_open_s": args.wait_open,
                           "pre_point_m": args.pre_point, "cross_clear_m": args.cross_clear,
-                          "settle_s": args.settle_s, "cross_kick": args.cross_kick, "campaign": str(args.campaign),
+                          "settle_s": args.settle_s, "cross_kick": args.cross_kick, "align_yaw": args.align_yaw, "campaign": str(args.campaign),
                           "baseline": str(args.baseline), "out": str(args.out)}, sort_keys=True), flush=True)
         raise SystemExit(0)
     args.out.mkdir(parents=True, exist_ok=True)

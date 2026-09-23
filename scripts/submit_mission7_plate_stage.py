@@ -35,6 +35,7 @@ def main():
     parser.add_argument("--cross-clear", type=float, default=None)
     parser.add_argument("--settle-s", type=float, default=None)
     parser.add_argument("--cross-kick", action="store_true")
+    parser.add_argument("--align-yaw", action="store_true")
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument("--node", default="cn-c22",
                         help="the replay gate is bitwise; it stays pinned to the original physics node")
@@ -67,6 +68,8 @@ def main():
         probe_args.append(f"--settle-s={args.settle_s}")
     if args.cross_kick:
         probe_args.append("--cross-kick")
+    if args.align_yaw:
+        probe_args.append("--align-yaw")
     if args.smoke:
         probe_args.append("--smoke")
     if not args.submit:
