@@ -19,7 +19,19 @@ def main():
     parser.add_argument("--campaign", type=Path, required=True)
     parser.add_argument("--stage", choices=("doors", "transport", "both"), required=True)
     parser.add_argument("--indices", required=True)
-    parser.add_argument("--node", default="cn-c22")
+    # The `share` partition is heterogeneous: sandybridge through skylake, and
+    # both el8 and el9.  Different ISA (AVX vs AVX2 vs AVX-512) and different
+    # glibc change floating-point results, so a bare submission is not
+    # comparable to the completed cn-c22 jobs.  Constrain to cn-c22's hardware
+    # and OS class -- 8 nodes instead of 1 -- and keep --node for the exact
+    # bitwise replay gate, where the single original physics node is the point.
+    parser.add_argument("--node", default=None,
+                        help="pin to one node; only needed for exact bitwise replay")
+    parser.add_argument("--constraint", default="haswell&el8",
+                        help="node feature constraint used when --node is not given")
+    parser.add_argument("--allow-inactive-intervention", action="store_true",
+                        help="let the probe record a requested-but-ineffective "
+                             "intervention as a null result instead of failing")
     parser.add_argument("--handoff", choices=("switch", "early"), default="switch")
     parser.add_argument("--output-name", default="route-handoff-probe-cn-c22")
     parser.add_argument("--rejoin-diagnostic", action="store_true")
@@ -35,7 +47,9 @@ def main():
         parser.error(f"destination exists; preserve it and choose a new campaign: {out}")
     if not args.submit:
         print(json.dumps({"planned_output": str(out), "stage": args.stage,
-                          "indices": args.indices, "node": args.node}, indent=2))
+                          "indices": args.indices, "node": args.node,
+                          "constraint": None if args.node else args.constraint},
+                         indent=2))
         return
     snapshot.mkdir(parents=True)
     files = list((ROOT / "src/bhl_robust/mission").glob("*.py"))
@@ -54,15 +68,26 @@ def main():
         shutil.copyfile(source, target)
         hashes[str(relative)] = hashlib.sha256(target.read_bytes()).hexdigest()
     (snapshot / "sha256.json").write_text(json.dumps(hashes, indent=2) + "\n")
+    placement = ([f"--nodelist={args.node}"] if args.node
+                 else [f"--constraint={args.constraint}"])
+    # Everything after the three paths is forwarded to the probe verbatim, so a
+    # new probe flag needs no change here or in the sbatch.  The old eight
+    # positional slots had to agree across all three files, and when they
+    # stopped agreeing the job still ran and still exited 0.
+    probe_args = ["--stage", args.stage, "--indices", args.indices,
+                  "--handoff", args.handoff, "--rejoin-fix", args.rejoin_fix]
+    if args.rejoin_diagnostic:
+        probe_args.append("--rejoin-diagnostic")
+    if args.allow_inactive_intervention:
+        probe_args.append("--allow-inactive-intervention")
     command = [
         "sbatch", "--parsable", "--job-name=m7-handoff-probe", "--account=eecs",
         "--partition=share", "--cpus-per-task=2", "--mem=12G", "--time=02:00:00",
-        f"--nodelist={args.node}", f"--chdir={ROOT}",
+        *placement, f"--chdir={ROOT}",
         f"--output={out}/m7-handoff-probe-%j.out",
         f"--error={out}/m7-handoff-probe-%j.out",
         str(snapshot / "slurm/mission7_route_handoff_probe.sbatch"),
-        str(ROOT), str(snapshot), str(out), args.stage, args.indices, args.handoff,
-        "diagnostic" if args.rejoin_diagnostic else "standard", args.rejoin_fix,
+        str(ROOT), str(snapshot), str(out), *probe_args,
     ]
     clean_env = {key: value for key, value in os.environ.items()
                  if not key.startswith("SLURM_") and key not in ("TMPDIR", "CUDA_VISIBLE_DEVICES")}
@@ -78,7 +103,10 @@ def main():
         "handoff": args.handoff,
         "rejoin_diagnostic": args.rejoin_diagnostic,
         "rejoin_fix": args.rejoin_fix,
+        "allow_inactive_intervention": args.allow_inactive_intervention,
         "requested_node": args.node,
+        "requested_constraint": None if args.node else args.constraint,
+        "probe_args": probe_args,
         "destination": str(out),
         "source_snapshot": str(snapshot),
         "source_sha256": hashes,
@@ -90,7 +118,9 @@ def main():
     with (ROOT / "SLURM_JOBS.md").open("a") as stream:
         stream.write(
             f"\nMission7 route handoff probe (2026-09-22): **SUBMITTED** `{job_id}` — "
-            f"{args.stage} layouts `{args.indices}`, node `{args.node}`, 2 CPUs / 12 GB / 0 GPUs / 2 h; "
+            f"{args.stage} layouts `{args.indices}`, "
+            f"{'node `' + args.node + '`' if args.node else 'constraint `' + args.constraint + '`'}"
+            f", 2 CPUs / 12 GB / 0 GPUs / 2 h; "
             f"unchanged PlateStage with `{args.handoff}` route handoff"
             f" and rejoin diagnostic `{args.rejoin_diagnostic}` with fix `{args.rejoin_fix}`; "
             f"receipt/source hashes: `{out.relative_to(ROOT)}/submission.json`.\n"

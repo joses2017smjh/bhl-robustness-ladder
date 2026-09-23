@@ -2496,3 +2496,74 @@ Mission7 route rejoin diagnostic `21399494` **COMPLETED 0:0** on `cn-c22`; Doors
 Mission7 route rejoin attempt `21399502` **COMPLETED 0:0** on `cn-c22`; the requested pulse did not activate because the probe runner omitted the submitted fix argument. The diagnostic trace is retained, but this job is not interpreted as an intervention result. Raw evidence: `results/mission7-approach-followup-20260922-rejoin-fix/route-rejoin-fix-cn-c22/`.
 
 Mission7 corrected Doors/1 route rejoin intervention `21399503` **COMPLETED 0:0** on `cn-c22`; the single 0.30 m/s forward pulse activated at 45.8–46.2 s, but the robot remained at waypoint 8 and timed out at 180 s. Raw evidence: `results/mission7-approach-followup-20260922/route-rejoin-fix-v2-cn-c22/`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400561` — both layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True` with fix `none`; receipt/source hashes: `results/mission7-approach-followup-20260922/route-rejoin-contacts-cn-c22/submission.json`.
+
+**Correction (2026-09-22), Mission7 rejoin interventions `21399502` and `21399503`.**
+The recorded cause for `21399502` — "the probe runner omitted the submitted fix
+argument" — is wrong. Its immutable source snapshot is byte-identical to the
+current `slurm/mission7_route_handoff_probe.sbatch`, which does forward
+`--rejoin-fix "$rejoin_fix"`, and the submitted argv in its `submission.json`
+ends in `forward_pulse`. The argument was forwarded and accepted. The actual
+cause was in that snapshot's stall detector: `post_stage_last_progress_time` was
+refreshed in `observe_step` whenever the base moved more than 2 cm, so a
+humanoid stepping in place kept resetting the timer and the 0.8 s stall
+threshold was never crossed. The detector measured motion where it meant
+progress. The corrected build — the one `21399503` ran, whose snapshot runner
+is byte-identical to current HEAD — redefines progress as distance-to-waypoint
+decreasing by 2 cm, which is why its pulse fired at all.
+
+`21399503` is nevertheless further reinterpreted, for a separate reason. Its
+pulse did activate, but it was a no-op
+by construction: the "0.30 m/s forward restart pulse" imposed 0.300 m/s while
+the route controller was already commanding 0.300 m/s forward. Measured forward
+command delta is **0.000000 m/s**; the only change was zeroing a 0.020 m/s
+lateral and 0.049 rad/s yaw correction (full delta 0.056). `21399503` is
+therefore not evidence that forward drive fails to recover Doors/1 — no
+additional forward drive was ever applied.
+
+Both jobs exited `0:0` and wrote `"rejoin_fix": "forward_pulse"`. The probe now
+reports `intervention_status` and exits non-zero on
+`REQUESTED_BUT_NEVER_FIRED` or `FIRED_BUT_DID_NOT_CHANGE_FORWARD_COMMAND`;
+replaying `21399503` under the new build fails loudly with the latter.
+
+Mission7 Doors/1 vs Transport/1 post-stage rejoin contact probe (2026-09-22):
+**SUBMITTED** `21400561` — both layouts `1`, node `cn-c22`, 2 CPUs / 12 GB /
+0 GPUs / 2 h; unchanged PlateStage with `early` route handoff, rejoin
+diagnostic, and **no intervention** (`forward_pulse` is retired as a no-op by
+construction, above). Adds a compact post-stage world-contact summary: the
+environment already reported wall and door contacts every physics step and the
+probe discarded all but `plate_*`. Geometry, activation semantics and the fall
+predicate are unchanged. Purpose: discriminate physical blockage from
+locomotion-policy failure at the Doors/1 waypoint-8 stall, against Transport/1
+which advances through the same waypoint. A local reproduction of the Doors/1
+episode already shows **19 of 775 post-stage steps in any world contact, all of
+them the just-crossed `plate_0_-1`, with no wall or door contact during the
+134 s stall** — the robot is stationary in free space while commanded 0.30 m/s
+forward with no brake active and 0.05 rad heading error. Receipt/source hashes:
+`results/mission7-approach-followup-20260922/route-rejoin-contacts-cn-c22/submission.json`.
+
+Mission7 Doors/1 vs Transport/1 post-stage rejoin contact probe `21400561`
+**COMPLETED 0:0** on `cn-c22` in 2 m 53 s; preflight passed in ~4 s. Both
+guarded stages activated and completed (2/2). Transport/1 succeeded end-to-end
+at 84.120 s; Doors/1 timed out at 180.0 s without falling, as before. The new
+post-stage world-contact summary is decisive: across **775 post-stage steps
+Doors/1 was in contact with a world geom in only 19 (2.5 %), every one of them
+the just-crossed `plate_0_-1`, minimum distance −6.1 mm, last contact shortly
+after stage exit**. There is **no wall and no door contact during the 134 s
+stall**. Successful Transport/1, by contrast, spent 70 of 292 post-stage steps
+(24.0 %) in contact across three plate geoms.
+
+Interpretation: Doors/1 is **not physically blocked and not route-state
+corrupted**. It stands in free space with the route commanding a constant
+0.300 m/s forward, no brake active, 0.05 rad heading error and the waypoint-8
+target 1.64 m ahead, and does not move. Combined with the `21399503`
+reinterpretation above — no additional forward drive was ever applied — the
+remaining explanation is **locomotion-policy failure**: the frozen gait produces
+no forward gait from the post-stage entry state. "Post-stage route rejoin" is a
+misnomer for this failure; the route is correct.
+
+Compact verdict: `results/mission7-approach-followup-20260922/route-rejoin-contacts-cn-c22/result.json`
+(28 KB; the 24 MB and 48 MB per-episode traces stay on the cluster and are
+ignored by shape). No sensor jobs released. The privileged Approach gate and
+the sensor comparisons remain closed.

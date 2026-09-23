@@ -27,10 +27,27 @@ diagnostics in `21399494` showed a valid route-state transition followed by a
 physical waypoint-8 stall in Doors/1, while Transport/1 advanced through the
 same waypoint. The corrected single forward-pulse rerun `21399503` activated
 the pulse but still timed out at waypoint 8. This supports early handoff as the
-fix for the original layout-1 pre-contact falls, but identifies post-stage
-physical rejoin as the remaining Doors/1 failure. No new broad route or sensor
-campaign is open. The compact early-handoff evidence is
-[`early-handoff-probe-summary.json`](../results/mission7-approach-followup-20260922/early-handoff-probe-summary.json).
+fix for the original layout-1 pre-contact falls.
+
+**September 22 correction and closeout of the Doors/1 stall.** `21399503` is
+withdrawn as evidence about forward drive: its "0.30 m/s forward restart pulse"
+imposed 0.300 m/s while the route controller was already commanding 0.300 m/s
+forward, a measured forward-command delta of **0.000000 m/s**. No additional
+forward drive was ever applied. The contact probe `21400561` then settled the
+mechanism. Across **775 post-stage steps Doors/1 touched a world geom in 19
+(2.5 %), every one the just-crossed `plate_0_-1`, with no wall and no door
+contact during the 134 s stall**; successful Transport/1 spent 70 of 292
+post-stage steps (24.0 %) in contact across three plates and finished at
+84.120 s. Doors/1 is therefore **neither physically blocked nor route-state
+corrupted**: it stands in free space while the route commands a constant
+0.300 m/s forward with no brake active, 0.05 rad heading error and the
+waypoint-8 target 1.64 m ahead, and does not move. The remaining explanation is
+**locomotion-policy failure from the post-stage entry state**, not route
+rejoin. No new broad route or sensor campaign is open, and the privileged
+Approach gate and sensor comparisons remain closed. Compact evidence:
+[`early-handoff-probe-summary.json`](../results/mission7-approach-followup-20260922/early-handoff-probe-summary.json)
+and
+[`route-rejoin-contacts-cn-c22/result.json`](../results/mission7-approach-followup-20260922/route-rejoin-contacts-cn-c22/result.json).
 
 **September 21 completed Approach diagnosis:** the six PPO cells failed their
 stable-learning gates. Exact paired replays implicated raised pressure-plate

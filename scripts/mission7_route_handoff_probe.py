@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
 
 import numpy as np
 
@@ -23,10 +24,26 @@ from bhl_robust.mission.approach_debug import (DebugEnv, PlateSafeRouteControlle
 from mission7_plate_stage import PlateStage
 
 
+# Body-frame command scales (vx, vy, wz) shared by every conversion below.
+COMMAND_SCALES = np.asarray([0.4, 0.35, 0.4], dtype=float)
+
+# Forward speed the rejoin pulse imposes.  Note this is the same magnitude the
+# route controller already drives at, which is why the pulse must be checked
+# for effect and not merely for activation.
+REJOIN_PULSE_MPS = .30
+
+# Smallest commanded-velocity difference counted as a real change (m/s).
+COMMAND_EPSILON_MPS = 1e-3
+
+
+def action_to_physical(action):
+    return np.tanh(np.asarray(action, dtype=float)[:3]) * COMMAND_SCALES
+
+
 def physical_to_action(command, base_action):
-    scales = np.asarray([0.4, 0.35, 0.4], dtype=float)
     action = np.asarray(base_action, dtype=float).copy()
-    action[:3] = np.arctanh(np.clip(np.asarray(command, dtype=float) / scales, -0.999999, 0.999999))
+    action[:3] = np.arctanh(np.clip(np.asarray(command, dtype=float) / COMMAND_SCALES,
+                                    -0.999999, 0.999999))
     return action
 
 
@@ -58,11 +75,30 @@ class RouteHandoffController:
         self.rejoin_fix_until = 0.
         self.rejoin_fix_used = False
         self.rejoin_fix_events = []
+        # An intervention that fires is not an intervention that did anything.
+        # 21399503 fired a .30 m/s "forward restart pulse" while the route was
+        # already commanding .30 m/s forward, so the run looked clean and the
+        # forward drive never changed.  Record the command with and without the
+        # intervention so a no-op is visible instead of inferred.
+        self.rejoin_fix_command_samples = []
+        self.rejoin_fix_command_delta = 0.
+        self.rejoin_fix_forward_delta = 0.
         self.post_stage_exit_time = None
         self.post_stage_exit_waypoint = None
         self.post_stage_last_target_waypoint = None
         self.post_stage_best_target_distance = None
         self.post_stage_last_target_progress_time = None
+        # Doors/1 holds station at waypoint 8 for 134 s while the route commands
+        # .30 m/s forward with no brake active.  The env already reports wall and
+        # door contacts on every physics step and observe_contacts threw all of
+        # them away, keeping only plate_*.  Retaining a compact summary is what
+        # separates "physically blocked" from "locomotion produced no gait".
+        self._last_world_contacts = {}
+        self.post_stage_steps = 0
+        self.post_stage_contact_steps = 0
+        self.post_stage_geom_steps = {}
+        self.post_stage_min_distance_m = None
+        self.post_stage_first_contact_time_s = None
         if self.rejoin_diagnostic:
             route_action = self.route.action
 
@@ -217,7 +253,7 @@ class RouteHandoffController:
         stage_phase_before_action = self.stage.phase
         route_snapshot_before = self._route_snapshot() if self.rejoin_diagnostic else None
         base_action = self.route.action()
-        recorded = np.tanh(base_action[:3]) * np.asarray([0.4, 0.35, 0.4])
+        recorded = action_to_physical(base_action)
         now = float(self.env.runner.d.time)
         previous_route_phase = self.env.phase
         self.route_phase_history.append({
@@ -258,13 +294,20 @@ class RouteHandoffController:
                 effective_action = base_action
         else:
             effective_action = base_action
-        if (self.rejoin_diagnostic and stage_phase_before_action != "recorded"
+        # Stage exit is tracked unconditionally: it is one timestamp, and
+        # gating it on --rejoin-diagnostic meant the intervention could not run
+        # without also enabling the tracing that monkey-patches route.action and
+        # writes two full state snapshots per step.  Only the heavy record below
+        # is diagnostic-only.
+        if (stage_phase_before_action != "recorded"
                 and self.stage.phase == "recorded"):
             self.post_stage_exit_time = now
             self.post_stage_exit_waypoint = int(self.route.waypoint)
             self.post_stage_last_target_waypoint = None
             self.post_stage_best_target_distance = None
             self.post_stage_last_target_progress_time = None
+        if (self.rejoin_diagnostic and stage_phase_before_action != "recorded"
+                and self.stage.phase == "recorded"):
             self.stage_exit_events.append({
                 "time_s": now,
                 "active_controller_before": "PlateStage:" + stage_phase_before_action,
@@ -285,7 +328,7 @@ class RouteHandoffController:
                   or target_distance < self.post_stage_best_target_distance - .02):
                 self.post_stage_best_target_distance = target_distance
                 self.post_stage_last_target_progress_time = now
-        if (self.rejoin_fix == "forward_pulse" and self.rejoin_diagnostic
+        if (self.rejoin_fix == "forward_pulse"
                 and self.post_stage_exit_time is not None and not self.rejoin_fix_used
                 and self.rejoin_fix_until <= now
                 and self.post_stage_last_target_progress_time is not None
@@ -304,8 +347,22 @@ class RouteHandoffController:
                 "best_target_distance_m": self.post_stage_best_target_distance,
             })
         if self.rejoin_fix_until > now:
+            without = action_to_physical(effective_action)
+            imposed = np.asarray([REJOIN_PULSE_MPS, 0., 0.], dtype=float)
+            delta = imposed - without
+            self.rejoin_fix_command_delta = max(
+                self.rejoin_fix_command_delta, float(np.linalg.norm(delta)))
+            self.rejoin_fix_forward_delta = max(
+                self.rejoin_fix_forward_delta, float(abs(delta[0])))
+            self.rejoin_fix_command_samples.append({
+                "time_s": now,
+                "command_without_intervention_mps": without.tolist(),
+                "command_with_intervention_mps": imposed.tolist(),
+                "command_delta_mps": float(np.linalg.norm(delta)),
+                "forward_delta_mps": float(abs(delta[0])),
+            })
             self.env.phase = "rejoin_recover"
-            effective_action = physical_to_action([.30, 0., 0.], base_action)
+            effective_action = physical_to_action(imposed, base_action)
         if self.rejoin_diagnostic:
             route_snapshot_after = self._route_snapshot()
             self.decision_events.append({
@@ -321,11 +378,40 @@ class RouteHandoffController:
         return effective_action
 
     def observe_contacts(self, events):
+        world = {}
         for event in events:
             if event["world_geom"].startswith("plate_"):
                 self.plate_contact_events.append(event)
+            name = event["world_geom"]
+            distance = float(event["distance_m"])
+            if name not in world or distance < world[name]:
+                world[name] = distance
+        self._last_world_contacts = world
 
     def observe_step(self, action):
+        now = float(self.env.runner.d.time)
+        if self.post_stage_exit_time is not None:
+            self.post_stage_steps += 1
+            world = self._last_world_contacts
+            if world:
+                self.post_stage_contact_steps += 1
+                if self.post_stage_first_contact_time_s is None:
+                    self.post_stage_first_contact_time_s = now
+                for name, distance in world.items():
+                    self.post_stage_geom_steps[name] = (
+                        self.post_stage_geom_steps.get(name, 0) + 1)
+                    if (self.post_stage_min_distance_m is None
+                            or distance < self.post_stage_min_distance_m):
+                        self.post_stage_min_distance_m = distance
+        # Clearing the pulse window must not depend on the tracing below, or an
+        # intervention run without --rejoin-diagnostic would latch on forever.
+        if self.rejoin_fix_until and now >= self.rejoin_fix_until:
+            self.rejoin_fix_events.append({
+                "time_s": now,
+                "event": "end_forward_restart_pulse",
+                "route_waypoint": int(self.route.waypoint),
+            })
+            self.rejoin_fix_until = 0.
         if not self.rejoin_diagnostic:
             return
         sample = self.env.diagnostic_trace[-1] if self.env.diagnostic_trace else None
@@ -335,14 +421,27 @@ class RouteHandoffController:
             "effective_action": np.asarray(action, dtype=float).tolist(),
             "physical_sample": sample,
         })
-        now = float(self.env.runner.d.time)
-        if self.rejoin_fix_until and now >= self.rejoin_fix_until:
-            self.rejoin_fix_events.append({
-                "time_s": now,
-                "event": "end_forward_restart_pulse",
-                "route_waypoint": int(self.route.waypoint),
-            })
-            self.rejoin_fix_until = 0.
+
+
+# Per-step traces, measured on the 21399503 episode record: plate_contact_events
+# 8.1 MB, rejoin_diagnostic 5.1 MB, diagnostic_trace 1.9 MB out of 15.6 MB.
+# result.json used to embed every episode row whole, duplicating the per-episode
+# files beside it and reaching 84 MB.  The traces stay in <stage>-<index>.json;
+# result.json keeps the verdict, which is what the docs cite and what git keeps.
+HEAVY_EPISODE_KEYS = (
+    "plate_contact_events", "rejoin_diagnostic", "diagnostic_trace",
+    "decision_rewards", "route_phase_history", "trace",
+    "guarded_stage_history", "guarded_stage_phase_history",
+    "stage_entry_states", "world_contact_samples",
+)
+
+
+def compact_episode(row, record_name):
+    summary = {key: value for key, value in row.items()
+               if key not in HEAVY_EPISODE_KEYS}
+    summary["full_episode_record"] = record_name
+    summary["omitted_trace_keys"] = [key for key in HEAVY_EPISODE_KEYS if key in row]
+    return summary
 
 
 def run(args):
@@ -350,6 +449,7 @@ def run(args):
     stages = (args.stage,) if args.stage != "both" else ("doors", "transport")
     indices = [int(value) for value in args.indices.split(",") if value.strip()]
     rows = []
+    summaries = []
     for stage in stages:
         for index in indices:
             env = DebugEnv(args.repo, args.out / f"{stage}-{index}-cache",
@@ -450,15 +550,51 @@ def run(args):
                 fall_time_s=None if fall is None else fall["time_s"],
                 fall_phase=None if fall is None else fall["phase"],
                 failure_phase=failure_phase,
+                post_stage_contact_summary={
+                    "stage_exit_time_s": controller.post_stage_exit_time,
+                    "stage_exit_waypoint": controller.post_stage_exit_waypoint,
+                    "steps_observed": controller.post_stage_steps,
+                    "steps_with_world_contact": controller.post_stage_contact_steps,
+                    "fraction_steps_in_contact": (
+                        controller.post_stage_contact_steps / controller.post_stage_steps
+                        if controller.post_stage_steps else None),
+                    "distinct_world_geoms": sorted(controller.post_stage_geom_steps),
+                    "world_geom_step_counts": controller.post_stage_geom_steps,
+                    "min_contact_distance_m": controller.post_stage_min_distance_m,
+                    "first_contact_time_s": controller.post_stage_first_contact_time_s,
+                },
                 rejoin_fix=args.rejoin_fix,
                 rejoin_fix_events=controller.rejoin_fix_events,
+                rejoin_fix_fired=bool(controller.rejoin_fix_events),
+                rejoin_fix_command_samples=controller.rejoin_fix_command_samples,
+                rejoin_fix_command_delta_mps=controller.rejoin_fix_command_delta,
+                rejoin_fix_forward_delta_mps=controller.rejoin_fix_forward_delta,
+                rejoin_fix_changed_forward_command=bool(
+                    controller.rejoin_fix_forward_delta > COMMAND_EPSILON_MPS),
                 rejoin_diagnostic=rejoin_diagnostic,
             )
             rows.append(row)
-            (args.out / f"{stage}-{index}.json").write_text(json.dumps(row, indent=2) + "\n")
+            record_name = f"{stage}-{index}.json"
+            (args.out / record_name).write_text(json.dumps(row, indent=2) + "\n")
+            summaries.append(compact_episode(row, record_name))
+    requested = args.rejoin_fix != "none"
+    fired = any(row["rejoin_fix_fired"] for row in rows)
+    changed_forward = any(row["rejoin_fix_changed_forward_command"] for row in rows)
+    changed_any = any(row["rejoin_fix_command_delta_mps"] > COMMAND_EPSILON_MPS
+                      for row in rows)
+    if not requested:
+        intervention_status = "NOT_REQUESTED"
+    elif not fired:
+        intervention_status = "REQUESTED_BUT_NEVER_FIRED"
+    elif not changed_forward:
+        intervention_status = "FIRED_BUT_DID_NOT_CHANGE_FORWARD_COMMAND"
+    else:
+        intervention_status = "APPLIED"
+    ineffective = requested and intervention_status != "APPLIED"
     result = {
         "complete": True,
-        "status": "COMPLETED_TARGETED_HANDOFF_PROBE",
+        "status": ("COMPLETED_TARGETED_HANDOFF_PROBE" if not ineffective
+                   else "INEFFECTIVE_INTERVENTION"),
         "controller": ("PlateSafeRouteController plus unchanged guarded PlateStage "
                        f"on {args.handoff} handoff"),
         "selected_indices": indices,
@@ -469,11 +605,17 @@ def run(args):
         "plate_stage_internal_behavior_unchanged": True,
         "handoff_mode": args.handoff,
         "rejoin_fix": args.rejoin_fix,
+        "intervention_requested": requested,
+        "intervention_fired": fired,
+        "intervention_changed_command": changed_any,
+        "intervention_changed_forward_command": changed_forward,
+        "intervention_status": intervention_status,
         "rejoin_diagnostic": args.rejoin_diagnostic,
         "route_episode_count": len(rows),
         "guarded_stage_activations": sum(row["guarded_stage_activated"] for row in rows),
         "guarded_stage_completions": sum(row["guarded_stage_completed"] for row in rows),
-        "episodes": rows,
+        "episodes_are_summaries": True,
+        "episodes": summaries,
     }
     (args.out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps({
@@ -481,8 +623,26 @@ def run(args):
         "episodes": len(rows),
         "guarded_stage_activations": result["guarded_stage_activations"],
         "guarded_stage_completions": result["guarded_stage_completions"],
+        "intervention_status": intervention_status,
         "out": str(args.out),
     }, sort_keys=True), flush=True)
+    # A requested intervention that never fired, or that reproduced the command
+    # the route was already issuing, is not a result about the intervention.
+    # Job 21399502 exited 0 with "rejoin_fix": "forward_pulse" and no pulse, and
+    # 21399503 exited 0 with a pulse whose forward speed equalled the route's
+    # own.  Both read as clean completions.  Fail loudly instead; the evidence
+    # above is already written, so nothing is lost by exiting non-zero.
+    if ineffective:
+        message = (f"requested intervention {args.rejoin_fix!r} was ineffective: "
+                   f"{intervention_status}")
+        if args.allow_inactive_intervention:
+            print(f"warning: {message} (allowed by --allow-inactive-intervention)",
+                  file=sys.stderr, flush=True)
+        else:
+            raise SystemExit(f"error: {message}\n"
+                             f"  evidence retained at {args.out}\n"
+                             f"  pass --allow-inactive-intervention to record this "
+                             f"as an intentional null result")
 
 
 if __name__ == "__main__":
@@ -494,9 +654,36 @@ if __name__ == "__main__":
     parser.add_argument("--handoff", choices=("switch", "early"), default="switch")
     parser.add_argument("--rejoin-diagnostic", action="store_true")
     parser.add_argument("--rejoin-fix", choices=("none", "forward_pulse"), default="none")
+    parser.add_argument("--allow-inactive-intervention", action="store_true",
+                        help="record a requested-but-ineffective intervention as a "
+                             "null result instead of failing the run")
+    parser.add_argument("--preflight", action="store_true",
+                        help="validate interpreter, imports and arguments, then exit "
+                             "without running any episode")
     args = parser.parse_args()
     args.repo = args.repo.resolve()
     args.out = args.out.resolve()
     if not args.out.is_relative_to(args.repo):
         parser.error("output must remain inside repository")
+    if args.preflight:
+        # Reaching this line already proves the three things that killed
+        # 21396684, 21397985, 21399179, 21399201 and 21398501: this interpreter
+        # has numpy and mujoco, the source snapshot is import-closed (the
+        # module-level imports above resolved), argparse accepted every
+        # forwarded argument, and the output path validated.  Seconds here, in
+        # place of hours of queue wait followed by an immediate crash.
+        import mujoco
+        print(json.dumps({
+            "status": "PREFLIGHT_OK",
+            "python": sys.executable,
+            "numpy": np.__version__,
+            "mujoco": mujoco.__version__,
+            "stage": args.stage,
+            "indices": args.indices,
+            "handoff": args.handoff,
+            "rejoin_fix": args.rejoin_fix,
+            "rejoin_diagnostic": args.rejoin_diagnostic,
+            "out": str(args.out),
+        }, sort_keys=True), flush=True)
+        raise SystemExit(0)
     run(args)

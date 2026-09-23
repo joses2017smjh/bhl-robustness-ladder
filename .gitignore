@@ -86,7 +86,49 @@ results/mission7-*/source-*/
 results/mission7-*/**/*cache*/
 results/mission7-dev/
 results/mission7-*/*.out
-# Ten-episode contact/clearance traces are large transient diagnostics; keep
-# the compact result summaries and leave full traces on the cluster.
-results/mission7-*/**/episodes.json
+# Raw per-step traces from Mission 7 probes.  Ignored by the SHAPE the probes
+# emit, not one filename at a time: the old list named only episodes.json, and
+# when the route probes started writing routes.json, doors-<n>.json and whole
+# episode rows into result.json it silently stopped covering them, leaving
+# 1.4 GB stageable by a single `git add -A`.  Compact verdicts and receipts are
+# re-included below and stay in the repo.
+results/mission7-*/**/*episodes*.json
+results/mission7-*/**/*episodes*.jsonl
+results/mission7-*/**/*routes*.json
+results/mission7-*/**/*doors*.json
+results/mission7-*/**/*transport*.json
+results/mission7-*/**/*-trace.json
+results/mission7-*/**/*_trace.json
+results/mission7-*/**/*standstill*.json
+results/mission7-*/**/*validation-*.json
+results/mission7-*/**/pulse.json
+results/mission7-*/**/replay/
+
+# The 2026-09-21 Approach diagnosis is a closed investigation whose raw
+# per-episode JSON stays on the cluster; nothing in it was ever tracked.
+# Compact artifacts are re-included by the negations above and below.
+results/mission7-approach-debug-20260921/**/*.json
+!results/mission7-approach-debug-20260921/**/*summary*.json
+!results/mission7-approach-debug-20260921/**/qualification.json
+!results/mission7-*/**/*summary*.json
+!results/mission7-*/**/*_summary.json
+!results/mission7-*/**/submission.json
+!results/mission7-*/**/sha256.json
 results/mission7-*/**/source-*/
+
+# Raw traces written into result.json before the probe was changed to keep
+# result.json compact (traces now stay in <stage>-<index>.json).  Finite and
+# enumerated on purpose; tests/test_result_artifacts.py fails the suite if a
+# new oversized artifact appears instead of being compacted.
+results/mission7-approach-debug-20260921/approach_recovery/result.json
+results/mission7-approach-debug-20260921/c4/update-100/result.json
+results/mission7-approach-debug-20260921/c4/update-125/result.json
+results/mission7-approach-debug-20260921/c4/update-75/result.json
+results/mission7-approach-debug-20260921/gait-0/result.json
+results/mission7-approach-debug-20260921/gait-1/result.json
+results/mission7-approach-debug-20260921/gait-2/result.json
+results/mission7-approach-debug-20260921/gait_endurance/result.json
+results/mission7-approach-followup-20260922-early/route-early-handoff-cn-c22/result.json
+results/mission7-approach-followup-20260922-rejoin-fix/route-rejoin-fix-cn-c22/result.json
+results/mission7-approach-followup-20260922-rejoin/route-rejoin-diagnostic-cn-c22/result.json
+results/mission7-approach-followup-20260922/route-rejoin-fix-v2-cn-c22/result.json
