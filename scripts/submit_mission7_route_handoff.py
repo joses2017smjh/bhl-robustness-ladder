@@ -43,6 +43,7 @@ def main():
                         help="PlateStage body-centre lateral offset (m); default plate centre")
     parser.add_argument("--stage-activate", action="store_true")
     parser.add_argument("--stage-press-hold", action="store_true")
+    parser.add_argument("--stage-wait-open", type=float, default=None)
     parser.add_argument("--exit-ramp", type=float, default=0.)
     parser.add_argument("--submit", action="store_true")
     args = parser.parse_args()
@@ -94,6 +95,8 @@ def main():
         probe_args.append("--stage-activate")
     if args.stage_press_hold:
         probe_args.append("--stage-press-hold")
+    if args.stage_wait_open is not None:
+        probe_args.append(f"--stage-wait-open={args.stage_wait_open}")
     if args.exit_ramp:
         probe_args.append(f"--exit-ramp={args.exit_ramp}")
     if args.allow_inactive_intervention:
@@ -125,6 +128,7 @@ def main():
         "stage_lateral_m": args.stage_lateral,
         "stage_activate": args.stage_activate,
         "stage_press_hold": args.stage_press_hold,
+        "stage_wait_open_s": args.stage_wait_open,
         "exit_ramp_s": args.exit_ramp,
         "allow_inactive_intervention": args.allow_inactive_intervention,
         "requested_node": args.node,

@@ -153,7 +153,8 @@ class RouteHandoffController:
 
     def __init__(self, env, handoff_mode="switch", rejoin_diagnostic=False,
                  rejoin_fix="none", chain_trace=False, stage_lateral_m=None,
-                 stage_activate=False, exit_ramp_s=0., stage_press_hold=False):
+                 stage_activate=False, exit_ramp_s=0., stage_press_hold=False,
+                 stage_wait_open_s=2.0):
         self.env = env
         self.handoff_mode = handoff_mode
         self.rejoin_diagnostic = bool(rejoin_diagnostic)
@@ -175,8 +176,12 @@ class RouteHandoffController:
         self.exit_ramp_direction = None
         self.exit_ramp_events = []
         self.route = PlateSafeRouteController(env, contact_hold_s=1.0)
+        # wait-open is a standstill, and standstills are what drive this gait
+        # into its feedback fixed point (F2 with a 2 s wait: 3/16 -> 1/16,
+        # falls 5 -> 8).  Activate-only is wait 0.
         self.stage = PlateStage(env, stage_lateral_m=stage_lateral_m,
-                                wait_open_s=2.0 if (stage_activate or stage_press_hold) else 0.,
+                                wait_open_s=(float(stage_wait_open_s)
+                                             if (stage_activate or stage_press_hold) else 0.),
                                 press_hold=stage_press_hold)
         self.stage_press_hold = bool(stage_press_hold)
         self.handoff_seen = False
@@ -716,7 +721,8 @@ def run(args):
                 env, handoff_mode=args.handoff, rejoin_diagnostic=args.rejoin_diagnostic,
                 rejoin_fix=args.rejoin_fix, chain_trace=args.chain_trace,
                 stage_lateral_m=args.stage_lateral, stage_activate=args.stage_activate,
-                exit_ramp_s=args.exit_ramp, stage_press_hold=args.stage_press_hold)
+                exit_ramp_s=args.exit_ramp, stage_press_hold=args.stage_press_hold,
+                stage_wait_open_s=args.stage_wait_open)
             while True:
                 env.runner.contact_trace = []
                 effective_action = controller.action()
@@ -938,6 +944,7 @@ def run(args):
         "handoff_mode": args.handoff,
         "stage_lateral_m": args.stage_lateral,
         "stage_activate": args.stage_activate,
+        "stage_wait_open_s": args.stage_wait_open,
         "stage_press_hold": args.stage_press_hold,
         "exit_ramp_s": args.exit_ramp,
         "rejoin_fix": args.rejoin_fix,
@@ -1004,6 +1011,9 @@ if __name__ == "__main__":
     parser.add_argument("--stage-activate", action="store_true",
                         help="stage asserts the activate flag on the plate and waits up to 2 s "
                              "for the door before crossing")
+    parser.add_argument("--stage-wait-open", type=float, default=2.0,
+                        help="bounded wait for the door after the settle when --stage-activate "
+                             "or --stage-press-hold is set (s); 0 = activate-only, no standstill")
     parser.add_argument("--stage-press-hold", action="store_true",
                         help="after the settle, creep onto the plate with activate asserted and hold "
                              "until the door opens (bounded), then cross")
