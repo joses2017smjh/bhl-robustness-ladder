@@ -43,7 +43,7 @@ replaced it). Route failures are never dropped from a denominator.
 - **World −x resolved as a geometric blocker** (six arms, 96 episodes; see task 10).
 - **Next objective:** collect Campaign A, classify every stall, then Campaign B
   baseline vs `prev_actions_reset` on the exposed episodes.
-- **Jobs:** completed `21400561`; pending none. Episodes used: 2 local + 3 −x smoke + 96 −x + 32 Campaign A + 5 local F smokes + 64 in-stage + 10 replay + 5 Campaign B = 217 / 512.
+- **Jobs:** completed `21400561`; pending none. Episodes used: 217 + 48 no-lateral arms + 10 replay (wait-open) = 275 / 512.
 
 ## Gates (unchanged unless evidence says otherwise)
 
@@ -63,11 +63,11 @@ replaced it). Route failures are never dropped from a denominator.
 | 2 | Chain instrumentation: cmd→prev_actions→raw→targets→ctrl→joints→feet→base | DONE (pending review) | `--chain-trace`; local Doors/1 baseline classified `frozen_targets`; 99 s/episode, 31 MB trace |
 | 3 | `prev_actions_reset` intervention with delivery verification | DONE (pending review) | local Doors/1: APPLIED, delivered-zero verified, route success 82.7 s |
 | 4 | Campaign A: 16+16 early-handoff episodes, chain traced, mechanism per episode | DONE | 32 episodes; during-stage 15 (wall), after-stage 12 (falls), stall exposures 5 (`frozen_targets` 4); `campaign-a-summary.json` |
-| 5 | Campaign B: baseline vs `prev_actions_reset` on the 5 exposed episodes, fingerprint-matched | ACTIVE | `21400806–807`; 24 was a ceiling, 5 exposed |
-| 6 | In-stage factors: F1 lateral 0.25 m, F2 stage-owned activation, F3 exit ramp 0.6 s — separately and combined | ACTIVE | `21400801–804` on 16 Doors; Campaign A is the baseline |
+| 5 | Campaign B: baseline vs `prev_actions_reset` on the 5 exposed episodes, fingerprint-matched | DONE | 5/5 applied, fingerprints matched; Doors/1 → success, Doors/3 regressed downstream; un-sticks the fixed point 5/5 but not promoted alone |
+| 6 | In-stage factors F1/F2/F3 | ACTIVE | F1 rejected (0/16 live, 8/10 replay); F2 load-bearing (falls 5→1); closed-door class remains (wait at pre-point presses nothing); no-lateral arms and press-and-hold next |
 | 7 | Freeze one recovery; predeclare eval set, metrics, n, stopping rule | BLOCKED | needs B |
 | 8 | Confirmatory eval on fresh validation layouts 16–31 (never used), paired baseline | BLOCKED | needs 7 |
-| 9 | Re-run 10/10 exact replay regression with F1 (F2/F3 act in the live route, outside the scripted replay) | ACTIVE | `21400805` |
+| 9 | Exact replay regression for every PlateStage change | ACTIVE | F1: FAIL 8/10; F2 wait-open: `21400863` running |
 | 10 | World −x / privileged Approach workstream | BLOCKED (geometric) | 6 arms / 96 episodes: 7–9/16 or 0/16; success set moves with crossing phase; robot 0.632 m > gap 0.61 m. Gate stays closed, unweakened. `approach-negx-summary.json` |
 | 11 | Sensor-only and four-sensor studies | BLOCKED | gates closed |
 | — | `forward_pulse` rejoin fix | SUPERSEDED | no-op by construction; `21399503` reinterpreted |
@@ -93,9 +93,11 @@ are added here as they complete.
 | 21400746 | Approach −x, `settle14` phase shift | DONE 8/16 |
 | 21400747 | Approach −x, `settle16` phase shift | DONE 9/16 — success set moves with phase |
 | 21400752–54, 21400780 | Campaign A: 16 Doors + 16 Transport, chain traced | DONE Doors 3/16, Transport 1/16; `21400755` OOM, fixed, 13–15 rerun |
-| 21400801–804 | In-stage arms F1, F1+F2, F1+F3, F1+F2+F3 on 16 Doors | running |
-| 21400805 | Replay gate 10/10 with F1 (`--stage-lateral=0.25`), cn-c22 | running |
-| 21400806–807 | Campaign B: `prev_actions_reset` on 5 exposed episodes | running |
+| 21400801–804 | In-stage arms F1, F1+F2, F1+F3, F1+F2+F3 on 16 Doors | DONE 0, 3, 0, 3 /16; falls 5→1 with F2 |
+| 21400805 | Replay gate with F1 0.25 m | DONE **8/10 FAIL** — approach trips on the plate; F1 rejected |
+| 21400806–807 | Campaign B: `prev_actions_reset` on 5 exposed | DONE 5/5 APPLIED; +1 −1; not promoted alone |
+| 21400825–827 | In-stage arms F2, F3, F2+F3 (plate-centre lateral) | running |
+| 21400863 | Replay gate with `--wait-open=2.0` (F2's PlateStage part) | running |
 
 ## Confirmatory protocol (predeclared 2026-09-23, before any in-stage or Campaign B result was read)
 

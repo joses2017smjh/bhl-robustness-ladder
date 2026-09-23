@@ -1,0 +1,168 @@
+{
+  "pairs": 4,
+  "unpaired": [
+    "doors/0",
+    "doors/4",
+    "doors/5",
+    "doors/7"
+  ],
+  "route_denominator": 4,
+  "baseline_success": 1,
+  "arm_success": 1,
+  "baseline_falls": 1,
+  "arm_falls": 1,
+  "not_exposed": [],
+  "exposed": 4,
+  "delivery_counts": {
+    "APPLIED": 4
+  },
+  "fingerprint_mismatches": [],
+  "matched_applied": 4,
+  "matched_improved": [
+    "doors/1"
+  ],
+  "matched_regressed": [
+    "doors/3"
+  ],
+  "matched_unchanged": [
+    "doors/2",
+    "doors/6"
+  ],
+  "matched_new_falls": [
+    "doors/3"
+  ],
+  "pairs_detail": [
+    {
+      "key": "doors/0",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    },
+    {
+      "key": "doors/1",
+      "stage": "doors",
+      "layout_index": 1,
+      "world_direction": "+x",
+      "baseline_exposure": "exposed",
+      "arm_exposure": "exposed",
+      "baseline_stall_time_s": 45.80000000003666,
+      "arm_stall_time_s": 45.80000000003666,
+      "fingerprint_baseline": "16f6eb7283db5da6",
+      "fingerprint_arm": "16f6eb7283db5da6",
+      "fingerprint_at_fire": "16f6eb7283db5da6",
+      "fingerprints_match": true,
+      "delivery": "APPLIED",
+      "baseline_outcome": "after PlateStage",
+      "arm_outcome": "success",
+      "baseline_success": false,
+      "arm_success": true,
+      "baseline_fall": false,
+      "arm_fall": false,
+      "baseline_elapsed_s": 179.9999999991995,
+      "arm_elapsed_s": 82.76000000021314,
+      "baseline_post_stage_progress_m": 3.841027906693728,
+      "arm_post_stage_progress_m": 4.719275886192711,
+      "arm_mechanism": "progressing",
+      "baseline_mechanism": "frozen_targets"
+    },
+    {
+      "key": "doors/2",
+      "stage": "doors",
+      "layout_index": 2,
+      "world_direction": "+x",
+      "baseline_exposure": "exposed",
+      "arm_exposure": "exposed",
+      "baseline_stall_time_s": 49.40000000005385,
+      "arm_stall_time_s": 49.40000000005385,
+      "fingerprint_baseline": "daec3f174768518f",
+      "fingerprint_arm": "daec3f174768518f",
+      "fingerprint_at_fire": "daec3f174768518f",
+      "fingerprints_match": true,
+      "delivery": "APPLIED",
+      "baseline_outcome": "after PlateStage",
+      "arm_outcome": "after PlateStage",
+      "baseline_success": false,
+      "arm_success": false,
+      "baseline_fall": true,
+      "arm_fall": false,
+      "baseline_elapsed_s": 92.80000000026108,
+      "arm_elapsed_s": 112.52000000035524,
+      "baseline_post_stage_progress_m": null,
+      "arm_post_stage_progress_m": 4.508117683690168,
+      "arm_mechanism": "progressing",
+      "baseline_mechanism": "window_too_short"
+    },
+    {
+      "key": "doors/3",
+      "stage": "doors",
+      "layout_index": 3,
+      "world_direction": "-y",
+      "baseline_exposure": "exposed",
+      "arm_exposure": "exposed",
+      "baseline_stall_time_s": 36.39999999999178,
+      "arm_stall_time_s": 36.39999999999178,
+      "fingerprint_baseline": "a1cd4dfc2925b90d",
+      "fingerprint_arm": "a1cd4dfc2925b90d",
+      "fingerprint_at_fire": "a1cd4dfc2925b90d",
+      "fingerprints_match": true,
+      "delivery": "APPLIED",
+      "baseline_outcome": "success",
+      "arm_outcome": "during PlateStage",
+      "baseline_success": true,
+      "arm_success": false,
+      "baseline_fall": false,
+      "arm_fall": true,
+      "baseline_elapsed_s": 101.96000000030482,
+      "arm_elapsed_s": 82.64000000021257,
+      "baseline_post_stage_progress_m": 3.817176239054205,
+      "arm_post_stage_progress_m": 5.514859574821466,
+      "arm_mechanism": "progressing",
+      "baseline_mechanism": "progressing"
+    },
+    {
+      "key": "doors/4",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    },
+    {
+      "key": "doors/5",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    },
+    {
+      "key": "doors/6",
+      "stage": "doors",
+      "layout_index": 6,
+      "world_direction": "+x",
+      "baseline_exposure": "exposed",
+      "arm_exposure": "exposed",
+      "baseline_stall_time_s": 37.79999999999846,
+      "arm_stall_time_s": 37.79999999999846,
+      "fingerprint_baseline": "e6f212f3bf4de81e",
+      "fingerprint_arm": "e6f212f3bf4de81e",
+      "fingerprint_at_fire": "e6f212f3bf4de81e",
+      "fingerprints_match": true,
+      "delivery": "APPLIED",
+      "baseline_outcome": "after PlateStage",
+      "arm_outcome": "during PlateStage",
+      "baseline_success": false,
+      "arm_success": false,
+      "baseline_fall": false,
+      "arm_fall": false,
+      "baseline_elapsed_s": 179.9999999991995,
+      "arm_elapsed_s": 84.7200000002225,
+      "baseline_post_stage_progress_m": 3.2223312120264733,
+      "arm_post_stage_progress_m": 5.254875398142186,
+      "arm_mechanism": "progressing",
+      "baseline_mechanism": "frozen_targets"
+    },
+    {
+      "key": "doors/7",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    }
+  ]
+}

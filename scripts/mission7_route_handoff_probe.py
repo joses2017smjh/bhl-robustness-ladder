@@ -153,7 +153,7 @@ class RouteHandoffController:
 
     def __init__(self, env, handoff_mode="switch", rejoin_diagnostic=False,
                  rejoin_fix="none", chain_trace=False, stage_lateral_m=None,
-                 stage_activate=False, exit_ramp_s=0.):
+                 stage_activate=False, exit_ramp_s=0., stage_press_hold=False):
         self.env = env
         self.handoff_mode = handoff_mode
         self.rejoin_diagnostic = bool(rejoin_diagnostic)
@@ -176,7 +176,9 @@ class RouteHandoffController:
         self.exit_ramp_events = []
         self.route = PlateSafeRouteController(env, contact_hold_s=1.0)
         self.stage = PlateStage(env, stage_lateral_m=stage_lateral_m,
-                                wait_open_s=2.0 if stage_activate else 0.)
+                                wait_open_s=2.0 if (stage_activate or stage_press_hold) else 0.,
+                                press_hold=stage_press_hold)
+        self.stage_press_hold = bool(stage_press_hold)
         self.handoff_seen = False
         self.phase_history = []
         self.route_phase_history = []
@@ -508,7 +510,7 @@ class RouteHandoffController:
                     self.phase_history.append({"time_s": now, "phase": self.env.phase,
                                                "event": "transition"})
                 effective_action = physical_to_action(command, base_action)
-                if self.stage_activate:
+                if self.stage_activate or self.stage_press_hold:
                     # Same value the route uses in its switch phase.
                     effective_action[3] = 2.
             else:
@@ -714,7 +716,7 @@ def run(args):
                 env, handoff_mode=args.handoff, rejoin_diagnostic=args.rejoin_diagnostic,
                 rejoin_fix=args.rejoin_fix, chain_trace=args.chain_trace,
                 stage_lateral_m=args.stage_lateral, stage_activate=args.stage_activate,
-                exit_ramp_s=args.exit_ramp)
+                exit_ramp_s=args.exit_ramp, stage_press_hold=args.stage_press_hold)
             while True:
                 env.runner.contact_trace = []
                 effective_action = controller.action()
@@ -819,6 +821,7 @@ def run(args):
                 handoff_mode=args.handoff,
                 stage_lateral_m=args.stage_lateral,
                 stage_activate=args.stage_activate,
+                stage_press_hold=args.stage_press_hold,
                 exit_ramp_s=args.exit_ramp,
                 exit_ramp_events=controller.exit_ramp_events,
                 controller=("PlateSafeRouteController plus guarded PlateStage "
@@ -935,6 +938,7 @@ def run(args):
         "handoff_mode": args.handoff,
         "stage_lateral_m": args.stage_lateral,
         "stage_activate": args.stage_activate,
+        "stage_press_hold": args.stage_press_hold,
         "exit_ramp_s": args.exit_ramp,
         "rejoin_fix": args.rejoin_fix,
         "intervention_requested": requested,
@@ -1000,6 +1004,9 @@ if __name__ == "__main__":
     parser.add_argument("--stage-activate", action="store_true",
                         help="stage asserts the activate flag on the plate and waits up to 2 s "
                              "for the door before crossing")
+    parser.add_argument("--stage-press-hold", action="store_true",
+                        help="after the settle, creep onto the plate with activate asserted and hold "
+                             "until the door opens (bounded), then cross")
     parser.add_argument("--exit-ramp", type=float, default=0.,
                         help="seconds of forward-only 0.30 m/s along the door direction after "
                              "the crossing before the route resumes (0 = off)")

@@ -56,7 +56,8 @@ class PlateStage:
     """One bounded staged maneuver per unopened correct plate."""
 
     def __init__(self, env, approach_radius=.78, settle_s=.40, cross_s=1.20,
-                 stage_lateral_m=None, wait_open_s=0.):
+                 stage_lateral_m=None, wait_open_s=0., press_hold=False,
+                 creep_mps=.15, creep_max_m=.45):
         self.env = env
         self.approach_radius = float(approach_radius)
         self.settle_s = float(settle_s)
@@ -75,6 +76,16 @@ class PlateStage:
         # a closed door.  0 keeps the exact replay behaviour.
         self.wait_open_s = float(wait_open_s)
         self.wait_open_until = None
+        # Press-and-hold: after the settle, creep along the door direction at
+        # creep_mps until the plate registers a press (door open) or creep_max_m
+        # has been covered, hold still with activate asserted for up to
+        # wait_open_s, then cross.  The default stage waits at the pre-point
+        # 0.30 m before the plate, where nothing presses it: 8 of 9 F1+F2+F3
+        # in-stage terminations were crossings into a still-closed door.
+        self.press_hold = bool(press_hold)
+        self.creep_mps = float(creep_mps)
+        self.creep_max_m = float(creep_max_m)
+        self.creep_origin = None
         # A wrong-side plate is only an intervention target when the route is
         # clearly not entering the intended plate.  The threshold separates
         # the layout-13 wrong-side trace from layout-4's earlier near miss.
@@ -137,7 +148,12 @@ class PlateStage:
         if self.phase == "settle":
             if now < self.phase_until:
                 return np.zeros(3), self.phase
-            if self.wait_open_s > 0. and not env.state.open[self.door]:
+            if self.press_hold and not env.state.open[self.door]:
+                self.phase = "creep"
+                self.creep_origin = xy.copy()
+                self.history.append({"time_s": now, "door": int(self.door),
+                                     "side": int(self.side), "phase": self.phase})
+            elif self.wait_open_s > 0. and not env.state.open[self.door]:
                 if self.wait_open_until is None:
                     self.wait_open_until = now + self.wait_open_s
                     self.history.append({"time_s": now, "door": int(self.door),
@@ -148,6 +164,23 @@ class PlateStage:
             self.phase = "cross"
             self.phase_until = now + self.cross_s
             self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase})
+        if self.phase == "creep":
+            travelled = float(np.linalg.norm(xy - self.creep_origin))
+            if env.state.open[self.door] or travelled >= self.creep_max_m:
+                self.phase = "hold"
+                self.phase_until = now + self.wait_open_s
+                self.history.append({"time_s": now, "door": int(self.door),
+                                     "side": int(self.side), "phase": self.phase,
+                                     "creep_m": travelled, "open": bool(env.state.open[self.door])})
+                return np.zeros(3), self.phase
+            return _world_command(env, direction, speed=self.creep_mps), self.phase
+        if self.phase == "hold":
+            if not env.state.open[self.door] and now < self.phase_until:
+                return np.zeros(3), self.phase
+            self.phase = "cross"
+            self.phase_until = now + self.cross_s
+            self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase,
+                                 "open": bool(env.state.open[self.door])})
         if self.phase == "cross":
             # The short crossing deliberately carries no yaw correction.
             if now < self.phase_until:
@@ -162,9 +195,9 @@ class PlateStage:
         raise AssertionError(self.phase)
 
 
-def _episode(env, index, source_episode, baseline, stage_lateral_m=None):
+def _episode(env, index, source_episode, baseline, stage_lateral_m=None, wait_open_s=0., press_hold=False):
     runner = env.runner
-    stage = PlateStage(env, stage_lateral_m=stage_lateral_m)
+    stage = PlateStage(env, stage_lateral_m=stage_lateral_m, wait_open_s=wait_open_s, press_hold=press_hold)
     samples = []
     maximum_recorded_pose_difference = 0.
     for reference in source_episode["diagnostic_trace"]:
@@ -230,7 +263,9 @@ def run(args, out):
             env.reset(reset_index)
         next_reset = index + 1
         rows.append(_episode(env, index, episode, baseline_rows[index],
-                             stage_lateral_m=getattr(args, 'stage_lateral', None)))
+                             stage_lateral_m=getattr(args, 'stage_lateral', None),
+                             wait_open_s=getattr(args, 'wait_open', 0.),
+                             press_hold=getattr(args, 'press_hold', False)))
         write(out / "episodes.json", {"complete": False, "episodes": rows})
     report = {
         "complete": True,
@@ -260,6 +295,10 @@ if __name__ == "__main__":
     parser.add_argument("--stage-lateral", type=float, default=None,
                         help="PlateStage body-centre lateral offset (m); default None = plate "
                              "centre, the exact 10/10 replay behaviour")
+    parser.add_argument("--wait-open", type=float, default=0.,
+                        help="PlateStage bounded wait on the plate for the door before crossing (s); 0 = replay behaviour")
+    parser.add_argument("--press-hold", action="store_true",
+                        help="creep onto the plate after the settle and hold until the door opens")
     parser.add_argument("--preflight", action="store_true")
     args = parser.parse_args()
     args.repo = args.repo.resolve()
@@ -269,7 +308,7 @@ if __name__ == "__main__":
     if args.preflight:
         import sys
         print(json.dumps({"status": "PREFLIGHT_OK", "python": sys.executable, "mujoco": mujoco.__version__,
-                          "stage_lateral_m": args.stage_lateral, "campaign": str(args.campaign),
+                          "stage_lateral_m": args.stage_lateral, "wait_open_s": args.wait_open, "campaign": str(args.campaign),
                           "baseline": str(args.baseline), "out": str(args.out)}, sort_keys=True), flush=True)
         raise SystemExit(0)
     args.out.mkdir(parents=True, exist_ok=True)

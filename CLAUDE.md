@@ -104,9 +104,30 @@ the defect in §5.1 below was identified.
   - `v60` — Isaac Sim 6.0 + Lab 3.0.0b2, py3.12. RTX works, but the API moved
     and task overlays are unported — v60 numbers are not comparable to v51.
 
+### Campaign tooling added 2026-09-23
+
+- `docs/MISSION7_TASKS.md` — persistent checklist: gates, tasks with status
+  vocabulary (DONE / ACTIVE / BLOCKED / SUPERSEDED), envelope usage, job table,
+  and the **predeclared confirmatory protocol**. Read it before the ledger.
+- `scripts/mission7_route_handoff_probe.py` flags: `--chain-trace` (25 Hz
+  command-to-motion chain and mechanism labels), `--rejoin-fix
+  prev_actions_reset`, `--stage-lateral`, `--stage-activate`, `--exit-ramp`,
+  `--preflight`, `--allow-inactive-intervention`. Every run records the stall
+  branch time and fingerprint; `intervention_delivery` is per episode.
+- `scripts/submit_mission7_approach.py` + `--controller/--directions` in
+  `mission7_approach_followup.py` — one-factor privileged Approach arms.
+- `scripts/submit_mission7_plate_stage.py` — the 10/10 exact replay gate,
+  pinned to `cn-c22` by protocol; re-run it for any PlateStage change.
+- `scripts/mission7_campaign_analysis.py campaign-a|campaign-b` — compact
+  aggregates, exposure lists, fingerprint-matched pairing; tolerates partial
+  output dirs from jobs that died mid-run.
+- All three sbatch files forward probe flags verbatim after their positional
+  paths and run `--preflight` on the exact science argv first.
+
 ### Where the truth lives
 
 Read in this order when returning to the project:
+0. `docs/MISSION7_TASKS.md` — current status, gates, job table, protocol
 1. `docs/MISSION7.md` — opens with a dated status paragraph
 2. `docs/MISSION7_APPROACH_FOLLOWUP.md` — detailed current log
 3. `SLURM_JOBS.md` (tail) — job ledger

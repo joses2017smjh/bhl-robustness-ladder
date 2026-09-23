@@ -29,6 +29,8 @@ def main():
     parser.add_argument("--campaign", type=Path, default=Path(DEFAULT_CAMPAIGN))
     parser.add_argument("--baseline", type=Path, default=Path(DEFAULT_BASELINE))
     parser.add_argument("--stage-lateral", type=float, default=None)
+    parser.add_argument("--wait-open", type=float, default=0.)
+    parser.add_argument("--press-hold", action="store_true")
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument("--node", default="cn-c22",
                         help="the replay gate is bitwise; it stays pinned to the original physics node")
@@ -49,6 +51,10 @@ def main():
     probe_args = []
     if args.stage_lateral is not None:
         probe_args.append(f"--stage-lateral={args.stage_lateral}")
+    if args.wait_open:
+        probe_args.append(f"--wait-open={args.wait_open}")
+    if args.press_hold:
+        probe_args.append("--press-hold")
     if args.smoke:
         probe_args.append("--smoke")
     if not args.submit:
@@ -86,7 +92,7 @@ def main():
     job_id = receipt.split(";")[0]
     if not job_id.isdigit():
         raise RuntimeError(f"unrecognized sbatch receipt: {receipt}")
-    row = {"job_id": job_id, "status": "SUBMITTED", "stage_lateral_m": args.stage_lateral, "smoke": args.smoke,
+    row = {"job_id": job_id, "status": "SUBMITTED", "stage_lateral_m": args.stage_lateral, "wait_open_s": args.wait_open, "smoke": args.smoke,
            "requested_node": args.node, "campaign": str(campaign), "baseline": str(baseline),
            "destination": str(out), "source_snapshot": str(snapshot), "source_sha256": hashes,
            "probe_args": probe_args, "command": command,
@@ -96,7 +102,7 @@ def main():
     with (ROOT / "SLURM_JOBS.md").open("a") as stream:
         stream.write(
             f"\nMission7 exact replay gate (2026-09-23): **SUBMITTED** `{job_id}` — ten-fall staged replay pinned to "
-            f"`{args.node}`, PlateStage lateral `{'plate centre' if args.stage_lateral is None else f'{args.stage_lateral} m'}`; "
+            f"`{args.node}`, PlateStage lateral `{'plate centre' if args.stage_lateral is None else f'{args.stage_lateral} m'}`, wait-open `{args.wait_open} s`; "
             f"geometry, activation schedule and fall predicate unchanged; receipt/source hashes: "
             f"`{out.relative_to(ROOT)}/submission.json`.\n")
         stream.flush(); os.fsync(stream.fileno())
