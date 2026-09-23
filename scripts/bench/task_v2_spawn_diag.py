@@ -81,6 +81,10 @@ parser.add_argument("--seed", type=int, default=0)
 parser.add_argument("--tilt_stand", type=float, default=0.5,
                     help="native tilt (rad) at or above which a robot is not standing")
 parser.add_argument("--out_dir", default=os.environ.get("SPAWN_DIAG_OUT") or DEFAULT_OUT)
+parser.add_argument("--init_z_offset", type=float, default=0.0,
+                    help="metres added to both robots' configured init_state z before the env is built "
+                         "(spawn-height sweep; 0 = as configured)")
+parser.add_argument("--tag", default="", help="suffix for the output file names, e.g. z-0.095")
 
 # --help must not boot Isaac Sim: answer it before importing isaaclab.
 if any(a in ("-h", "--help") for a in sys.argv[1:]):
@@ -372,6 +376,7 @@ def run_condition(env, probe: Probe, cond: str, steps: int, seed: int) -> dict:
                   "step_dt": u.step_dt, "physics_dt": u.physics_dt,
                   "decimation": u.cfg.decimation,
                   "max_episode_length": int(u.max_episode_length)},
+        "init_z_offset": args_cli.init_z_offset,
         "configured_init_rot": {r: list(getattr(u.cfg.scene, r).init_state.rot)
                                 for r in probe.robots},
         "configured_init_pos": {r: list(getattr(u.cfg.scene, r).init_state.pos)
@@ -400,6 +405,12 @@ def main() -> None:
     cfg = gym.spec(args_cli.task).kwargs["env_cfg_entry_point"]()
     cfg.scene.num_envs = args_cli.num_envs
     cfg.seed = args_cli.seed
+    if args_cli.init_z_offset:
+        for r in ("robot_a", "robot_b"):
+            rc_ = getattr(cfg.scene, r)
+            x, y, z = rc_.init_state.pos
+            rc_.init_state.pos = (x, y, z + args_cli.init_z_offset)
+            print(f"  {r}: init_state z {z:+.4f} -> {z + args_cli.init_z_offset:+.4f}", flush=True)
     env = gym.make(args_cli.task, cfg=cfg, disable_env_checker=True)
     env.reset(seed=args_cli.seed)
     probe = Probe(env)
@@ -416,7 +427,8 @@ def main() -> None:
     rc = 0
     for cond in args_cli.conditions:
         res = run_condition(env, probe, cond, args_cli.steps, args_cli.seed)
-        path = os.path.join(args_cli.out_dir, f"{args_cli.task}__{cond}.json")
+        suffix = f"__{args_cli.tag}" if args_cli.tag else ""
+        path = os.path.join(args_cli.out_dir, f"{args_cli.task}__{cond}{suffix}.json")
         with open(path, "w") as f:
             json.dump(res, f, indent=1)
         ff = {t: v["step"] for t, v in res["first_fire"].items()}

@@ -135,6 +135,48 @@ Doors/1 end to end but fail the exact replay gate and must not be described as
 a route-rate improvement. `scripts/render_mission7.py` + `slurm/mission7_render.sbatch`
 render a probe configuration on a GPU node with hashed sidecars.
 
+### Repo-wide campaign tooling and findings (2026-09-23, later the same day)
+
+- **Backlog and status.** `docs/REPO_TASKS.md` (every gallery/experiment entry
+  mapped to code, checkpoints, evaluator and evidence, with discrepancies) and
+  `docs/STATUS.md` (one row per workstream). Corrections to captions that
+  contradicted their evidence are listed at the top of `docs/GALLERY.md`.
+- **Sensor fusion.** `docs/SENSOR_FUSION.md` (layered architecture and the
+  SF-01..05 plan) and `docs/SENSOR_FUSION_SURVEY.md` (references with
+  verification flags). `bhl_robust.fusion.attitude` has Mahony/Madgwick
+  filters, accelerometer alignment and a stress IMU noise/delay model;
+  `scripts/bench/inspection_maze.py --imu-source estimated` puts the filter in
+  the MuJoCo loop. **Finding (SF-03, job 21402531):** the frozen 22-DoF gait
+  tolerates an estimated attitude with gravity RMSE up to ~0.05, but falls in
+  every arm with >= 40 ms of IMU delay. Latency, not accuracy, is the hardware
+  requirement. The filter runs at the 25 Hz policy rate; the 5-40 ms boundary
+  is unmeasured.
+- **Quaternion storage order.** Isaac Lab 3.x (`v60`) stores `root_quat_w` as
+  xyzw, 2.x as wxyz. `quat_order.unpack_wxyz` is the only correct way to read
+  it by index. Before the fix, `_tilt_from_quat` read xyzw as wxyz and the
+  +/-90 degree yaw spawn of the TaskV2 cube-to-shelf arms registered as a
+  1.6 rad tilt at reset, so every episode ended on step 1. Those training
+  results are invalid, not negative (spawn diagnostic 21402547, pre-fix outputs
+  under `results/repo-gpu-20260923/spawn_diag/pre-fix/`).
+- **Launchers under `slurm/repo20260923/`.** `cpu_eval.sbatch` (matched push
+  protocol, lab traverse, coop cross-engine scoring, SF-03 sweep; MuJoCo on
+  `share`), `gpu_render_eval.sbatch` (same body on a GPU node with EGL, for
+  depth policies), and four Isaac-side diagnostics prepared under adversarial
+  review: `gpu_spawn_diag`, `gpu_ice_exposure`, `gpu_maze_noise`
+  (`maze_recovery_probe.py --keep-corruption`) and `gpu_depth_bench`. Each
+  computes PASS/FAIL from its outputs, not from exit codes.
+- **Measured today.** Held-out world -x Approach replication 21/23 vs 12/23;
+  lab traverse over 5 seeds 5/20 (22 DoF) vs 2/20 (12 DoF); matched push
+  protocol push-adaptive 0.100 vs no-push control 0.211 (p = 0.056), two push
+  families worse than the control; occluded coop checkpoints lift nothing in
+  MuJoCo; placed-ice rung confirmed exposed (63/64 episodes touch ice).
+
+- **Raw Mission 7 traces are gzipped.** Files over 100 MB under
+  `results/mission7-campaign-20260923/` are stored as `*.json.gz` (done
+  2026-09-23 to keep the share above 100 GB free). Compact summaries next to
+  them are plain JSON and committed; re-analysis of per-step chains must
+  `gzip.open` the raw file.
+
 ### Where the truth lives
 
 Read in this order when returning to the project:
