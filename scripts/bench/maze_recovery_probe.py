@@ -44,27 +44,41 @@ from bhl_robust import maze_recovery as recovery
 
 
 
-def _imu_slices(u):
-    """Column slices of the IMU terms inside obs['policy'] (base_ang_vel, projected_gravity)."""
+def _term_slices(u):
+    """Column slices of every term inside obs['policy']."""
     om = u.observation_manager
     names = om.active_terms["policy"]; dims = om.group_obs_term_dim["policy"]
     out, col = {}, 0
     for n, d in zip(names, dims):
         w = int(torch.tensor(d).prod()) if not isinstance(d, int) else d
-        if n in ("base_ang_vel", "projected_gravity"):
-            out[n] = slice(col, col + w)
+        out[n] = slice(col, col + w)
         col += w
     return out
+
+
+def _imu_slices(u):
+    """Column slices of the IMU terms inside obs['policy'] (base_ang_vel, projected_gravity)."""
+    return {k: v for k, v in _term_slices(u).items() if k in ("base_ang_vel", "projected_gravity")}
 
 
 class _ImuDelay:
     """Policy-side FIFO delay of the IMU columns only (SF-01): the policy acts on
     IMU values from `steps` control periods ago, everything else is current."""
 
-    def __init__(self, slices, steps):
+    def __init__(self, slices, steps, zero_slices=()):
         self.slices, self.steps, self.queue = slices, int(steps), []
+        self.zero_slices = list(zero_slices)
 
     def __call__(self, obs):
+        if self.zero_slices:
+            pol = obs["policy"] if isinstance(obs, dict) or hasattr(obs, "keys") else obs
+            pol = pol.clone()
+            for s in self.zero_slices:
+                pol[:, s] = 0.0
+            if isinstance(obs, dict) or hasattr(obs, "keys"):
+                obs = obs.clone() if hasattr(obs, "clone") else dict(obs); obs["policy"] = pol
+            else:
+                obs = pol
         if self.steps <= 0 or not self.slices:
             return obs
         pol = obs["policy"] if isinstance(obs, dict) or hasattr(obs, "keys") else obs
@@ -130,6 +144,12 @@ def _rollout(env, u, policy, obs, start, delay, steps):
             action = policy(delay(obs)) if policy else torch.zeros((u.num_envs, u.action_manager.total_action_dim), device=u.device)
             if policy:
                 obs, _, done, _ = env.step(action)
+                mod = getattr(policy, "__self__", None)          # rsl_rl bound act_inference -> the policy module
+                if mod is not None and hasattr(mod, "reset"):
+                    try:
+                        mod.reset(done)                             # recurrent policies: clear hidden state of done envs
+                    except TypeError:
+                        mod.reset()
             else:
                 obs, _, terminated, truncated, _ = env.step(action)
                 done = terminated | truncated
@@ -205,7 +225,7 @@ def run():
         obs = env.get_observations()
         obs = obs[0] if isinstance(obs, tuple) else obs
     settings = json.loads(args.settings) if args.settings else [{"name": "as_configured"}]
-    slices = _imu_slices(u)
+    slices = _imu_slices(u); all_slices = _term_slices(u)
     print(f"policy terms {list(u.observation_manager.active_terms['policy'])} imu slices {{k: (v.start, v.stop) for k, v in slices.items()}}", flush=True)
     per_setting = []
     for si, setting in enumerate(settings):
@@ -228,7 +248,9 @@ def run():
                 env.unwrapped.reset(seed=args.seed)
                 obs = env.get_observations(); obs = obs[0] if isinstance(obs, tuple) else obs
             start = recovery.local_xy(u).clone()
-            delay = _ImuDelay(slices, applied["imu_delay_steps"])
+            zero = [all_slices[n] for n in (setting.get("zero_terms") or []) if n in all_slices]
+            applied["zero_terms"] = [n for n in (setting.get("zero_terms") or []) if n in all_slices]
+            delay = _ImuDelay(slices, applied["imu_delay_steps"], zero)
             r = _rollout(env, u, policy, obs, start, delay, args.steps)
         except Exception:                                        # noqa: BLE001
             import traceback

@@ -11,6 +11,7 @@ from isaaclab.utils.noise import GaussianNoiseCfg
 from bhl_robust import maze_recovery as recovery
 from bhl_robust.tasks import maze_env_cfg as legacy
 from bhl_robust.tasks.maze_mdp import MazeWaypointCommand, MazeWaypointCommandCfg
+from bhl_robust.tasks import maze_robust as _robust
 
 
 class RecoveryWaypointCommand(MazeWaypointCommand):
@@ -98,7 +99,8 @@ def _make_config(base, stage, arm):
 RECOVERY_CONFIGS = {}
 for _stage in STAGE_SPAWNS:
     for _arm, _base in (("Blind", legacy.MazeBlindEnvCfg), ("Lidar", legacy.MazeLidarEnvCfg),
-                        ("Stereo", legacy.MazeStereoEnvCfg), ("Both", legacy.MazeBothEnvCfg)):
+                        ("Stereo", legacy.MazeStereoEnvCfg), ("Both", legacy.MazeBothEnvCfg),
+                        ("BothRobust", _robust.MazeBothRobustEnvCfg)):   # SF-04, docs/SENSOR_FUSION.md
         _cfg = _make_config(_base, _stage, _arm)
         globals()[_cfg.__name__] = _cfg
         RECOVERY_CONFIGS[f"Velocity-BHL-MazeRecovery-{_stage}-{_arm}-v0"] = _cfg
