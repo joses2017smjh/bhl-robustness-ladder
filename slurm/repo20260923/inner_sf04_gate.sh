@@ -10,7 +10,7 @@ cd "$REPO"; export PYTHONPATH="$REPO/src:${PYTHONPATH:-}"
 task="Velocity-BHL-MazeRecovery-${stage}-${arm}-v0"
 outdir="$REPO/results/weekend-20260919"
 RUN_NAME="wknd-${stage,,}-${arm,,}-s${seed}"
-checkpoint=$("$PY" "$REPO/scripts/bench/maze_checkpoint.py" resolve --log-root "$UPSTREAM/logs/rsl_rl/biped" --run-name "$RUN_NAME")
+checkpoint=$("$PY" "$REPO/scripts/bench/maze_checkpoint.py" resolve --log-root "$UPSTREAM/logs/rsl_rl/biped" --run-name "$RUN_NAME" --newer-than 0)
 echo "gate: $task <- $checkpoint"
 output="$outdir/maze-eval-${stage}-${arm}-s${seed}.json"
 log=$(mktemp "${TMPDIR:-/tmp}/bhl-maze-eval-XXXXXX.log")
