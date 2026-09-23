@@ -1,0 +1,105 @@
+{
+  "pairs": 1,
+  "unpaired": [
+    "transport/1",
+    "transport/2",
+    "transport/3",
+    "transport/4",
+    "transport/5",
+    "transport/6",
+    "transport/7"
+  ],
+  "route_denominator": 1,
+  "baseline_success": 0,
+  "arm_success": 0,
+  "baseline_falls": 1,
+  "arm_falls": 1,
+  "not_exposed": [
+    "transport/0"
+  ],
+  "exposed": 0,
+  "delivery_counts": {},
+  "fingerprint_mismatches": [],
+  "matched_applied": 0,
+  "matched_improved": [],
+  "matched_regressed": [],
+  "matched_unchanged": [],
+  "matched_new_falls": [],
+  "all_improved": [],
+  "all_regressed": [],
+  "all_falls_removed": [],
+  "all_falls_added": [],
+  "pairs_detail": [
+    {
+      "key": "transport/0",
+      "stage": "transport",
+      "layout_index": 0,
+      "world_direction": "+y",
+      "baseline_exposure": "exposed",
+      "arm_exposure": "not_exposed",
+      "baseline_stall_time_s": 62.400000000115924,
+      "arm_stall_time_s": null,
+      "fingerprint_baseline": "8805fea67b28cf57",
+      "fingerprint_arm": null,
+      "fingerprint_at_fire": null,
+      "fingerprints_match": false,
+      "delivery": "NOT_EXPOSED",
+      "baseline_outcome": "during PlateStage",
+      "arm_outcome": "during PlateStage",
+      "baseline_success": false,
+      "arm_success": false,
+      "baseline_fall": true,
+      "arm_fall": true,
+      "baseline_elapsed_s": 72.84000000016577,
+      "arm_elapsed_s": 72.84000000016577,
+      "baseline_post_stage_progress_m": 4.742893346892801,
+      "arm_post_stage_progress_m": 4.742893346892801,
+      "arm_mechanism": "progressing",
+      "baseline_mechanism": "progressing",
+      "baseline_stall_anchored": null,
+      "arm_stall_anchored": null
+    },
+    {
+      "key": "transport/1",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    },
+    {
+      "key": "transport/2",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    },
+    {
+      "key": "transport/3",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    },
+    {
+      "key": "transport/4",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    },
+    {
+      "key": "transport/5",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    },
+    {
+      "key": "transport/6",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    },
+    {
+      "key": "transport/7",
+      "status": "unpaired",
+      "in_baseline": true,
+      "in_arm": false
+    }
+  ]
+}

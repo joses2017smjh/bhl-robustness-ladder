@@ -7,8 +7,8 @@ in [the job ledger](../SLURM_JOBS.md) and [maze history](MAZE_RIG.md).
 
 ## Isaac corridor recovery: completed
 
-Slurm accounting reports **36/36 completed, exit code `0:0`** across the
-Approach, Corridor and Full stages. All 36 JSON gates passed,
+Slurm accounting reports **36/36 completed, exit code `0:0`** across Approach
+`21359486`, Corridor `21359499`, and Full `21359510`. All 36 JSON gates passed,
 all logs contain `MAZE_PROBE_PASS` and `MAZE_STAGE_PASS`, and all referenced
 checkpoints exist. The arrays are absent from the live queue because they
 finished. The last element ended `2026-09-20T01:34:07` in Slurm's reported

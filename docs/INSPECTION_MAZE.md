@@ -13,7 +13,7 @@ within 60 s and stayed upright without contact. Evidence is in
 [`results/inspection_maze_probe.json`](../results/inspection_maze_probe.json).
 This is feasibility evidence on one seed, not a measured generalization rate.
 
-The subsequent CPU Slurm evaluation **passed all three nominal
+The subsequent CPU Slurm evaluation **21359677 passed all three nominal
 seeds** (17.24, 17.44, 17.28 s), with no contacts or falls. Complete-outage and
 wrong-branch controls each completed 0/3 missions; the latter entered the
 dead end after station A. Evidence:
@@ -73,7 +73,7 @@ The USB AHRS is not assumed calibrated by this simulation.
 ```bash
 export PYTHONPATH="$PWD/src:${PYTHONPATH:-}"
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
-python scripts/bench/inspection_maze.py \
+/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python scripts/bench/inspection_maze.py \
   --deploy external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/deploy.yaml \
   --upstream external/Berkeley-Humanoid-Lite \
   --cache-dir /tmp/bhl-inspection-maze-eval \

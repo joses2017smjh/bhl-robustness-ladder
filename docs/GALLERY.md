@@ -17,25 +17,51 @@ Adjacent GIF JSON sidecars contain source hashes, scores and playback speed.
 These use the older full-body gait, not the new Isaac maze checkpoints.
 The [dated results](WEEKEND_RESULTS_2026-09-20.md) link their multi-seed controls.
 Existing `multi_race` and `dr_pair` below show learned-policy successes and
-falls. New folding-policy media is dependency-blocked; do not relabel old
+falls. New folding-policy media from the September 20 array was **cancelled**, not
+blocked (`21360436`/`21360437`, CANCELLED 2026-09-20); one repaired episode
+rendered (`21367715`, fold failed). Folding now runs in the linked repository's
+own campaigns — see [`CLOTH_FOLDING_WEEKEND.md`](CLOTH_FOLDING_WEEKEND.md). Do not relabel old
 replay controls as current adaptation successes.
+
+## September 23: Mission 7 — one layout, the stall and the crossing fix
+
+| Actual recording | Result and scope |
+|---|---|
+| Approach −x centring [GIF](gifs/mission7-approach-negx-centering.gif) · [baseline MP4](../results/mission7-campaign-20260923/media/approach-negx14-baseline.mp4) · [centred MP4](../results/mission7-campaign-20260923/media/approach-negx14-centered.mp4) | Left: the evaluated 0.50 m/s privileged recovery controller strikes `goal_post_-1` on its first stride and is rejected at 2.12 s. Right: gap-midline centring with a +0.015 m pre-bias passes the same layout at 4.40 s. Both reproduce the evaluated episodes (reset order replayed). **Gate passed on the full matrix: 62/64, 0 falls, 16/16/16/14** (`21401966`), geometry, spawn and predicates unchanged; privileged pose, scripted centring, frozen gait. [Sidecar](gifs/mission7-approach-negx-centering.json). |
+| Doors/1 stall vs crossing fix [GIF](gifs/mission7-doors1-stall-vs-crossing-fix.gif) · [baseline MP4](../results/mission7-campaign-20260923/media/doors1-baseline-stall.mp4) · [fix MP4](../results/mission7-campaign-20260923/media/doors1-crossing-fix-success.mp4) | Left: the unchanged guarded plate stage hands back on the plate edge and the frozen gait settles into its standing fixed point (recording stopped at 70 s of a 180 s timeout). Right: the same layout with the stage-owned crossing — `prev_actions` kick, cross-until-clear, centre-aimed exit ramp, waypoint advance — completes at 77.7 s. Deterministic reruns of one development layout; GIF at 1.94×. **Not a promoted candidate:** the crossing fails the exact ten-fall replay regression (7/10 to 9/10 across variants) and was never evaluated on the route rate. The [sidecar](gifs/mission7-doors1-stall-vs-crossing-fix.json) carries source hashes, outcomes and configurations. |
+
+The learned-policy Mission 7 results remain 0/16 validation success; the route
+controller evidence lives in [`MISSION7_TASKS.md`](MISSION7_TASKS.md).
+
+
+> **Corrections, 2026-09-23.** A repository-wide audit checked every entry
+> below against its own evidence files. Corrected here: `arms_push_pair`
+> (caption and GIF labels inverted the n=60 result), `arms_dr_pair` (quoted a
+> terrain-sweep number on a flat clip), `ice_pair` / `ice_pair_placed` (the
+> MuJoCo renders are flat ground; the harness has no ice world),
+> `multi_lab` (course description), `carry_ladder_pov` (12 seeds, not 18) and
+> `isaac/maze_stereo_fixed` (seed-0 vs 3-seed-mean comparison; the corrected
+> stereo arm is a null result against blind). Full mapping:
+> [`REPO_TASKS.md`](REPO_TASKS.md).
 
 ## Index
 
 | clip | renderer | task / rung | verdict |
 |---|---|---|---|
+| mission7/approach_negx_centering | MuJoCo | Mission 7 privileged Approach, world −x, test layout 14 | works — gate passed 62/64, 0 falls (privileged pose, scripted centring, frozen gait) |
+| mission7/doors1_stall_vs_crossing_fix | MuJoCo | Mission 7 Doors, validation layout 1 | render works — the crossing fix reaches the goal on this layout; not promoted (replay regression 7–9/10) |
 | [`dr_pair`](#locomotion) | MuJoCo | domain randomization | **works** |
-| [`push_pair`](#locomotion) | MuJoCo | push curriculum | **works** |
+| [`push_pair`](#locomotion) | MuJoCo | push curriculum | **works** — matched-protocol check 2026-09-23: push-adaptive 0.100 vs no-push control 0.211 (n=60/90, p = 0.056), supported in direction only |
 | [`terrain_pair`](#locomotion) | MuJoCo | terrain curriculum | **works** |
-| [`arms_dr_pair`](#locomotion) | MuJoCo | 22-DoF vs 12-DoF, randomization | **works** |
-| [`arms_push_pair`](#locomotion) | MuJoCo | 22-DoF vs 12-DoF, shove | **works** |
+| [`arms_dr_pair`](#locomotion) | MuJoCo | 22-DoF, randomization s=1.0 vs s=0 | **works** — walk vs walk by design (0/60 falls each on flat; two training seeds) |
+| [`arms_push_pair`](#locomotion) | MuJoCo | 22-DoF push-trained vs DR-only, shove | render works — **no push benefit**: push-trained falls 0.15 vs DR-only 0.10 (n=60); caption corrected 2026-09-23 |
 | [`arms_terrain_pair`](#locomotion) | MuJoCo | 22-DoF vs 12-DoF, terrain | **works** |
 | [`multi_race`](#four-policies-at-once) | MuJoCo | 4 policies, one shove | **works** |
-| [`multi_lab`](#four-policies-at-once) | MuJoCo | 4 policies, obstacle course + depth | **works** |
+| [`multi_lab`](#four-policies-at-once) | MuJoCo | 4 policies, obstacle course + depth | render works — **course cleared 5/20 (22 DoF) and 2/20 (12 DoF) over 5 seeds**, not reliably |
 | [`depth_pair`](#depth) | MuJoCo | ray-cast depth | **works** |
-| [`ice_pair`](#b3--ice) | MuJoCo | B3 — blind vs depth on flush friction patches | render works — **result retracted**: in training the ice was never under the robots |
-| [`ice_pair_placed`](#b3--ice) | MuJoCo | B3 — same pair after patches sit at terrain origins (median 0.8 m) | **works as a render of the placed policies**; n=2, depth terrain level 2.92 vs blind 2.59 |
-| [`isaac/maze_stereo_fixed`](#terrain-sensing-the-b5-maze-rung) | Isaac Sim | B5 — the corrected 16×16 stereo policy, and what its camera saw before and after the fix | **works** — terrain level 0.88, was 0.02 |
+| [`ice_pair`](#b3--ice) | MuJoCo | B3 — blind vs depth policies, rendered on **flat MuJoCo ground** (the harness has no ice world) | render works — **result retracted**: in training the ice was never under the robots ([probe verdict](../results/ice_placement_probe_21328532.txt)) |
+| [`ice_pair_placed`](#b3--ice) | MuJoCo | B3 — policies retrained with patches at terrain origins (median 0.8 m), rendered on **flat MuJoCo ground** | **works as a render of the placed policies**; n=2, depth terrain level 2.92 vs blind 2.59 |
+| [`isaac/maze_stereo_fixed`](#terrain-sensing-the-b5-maze-rung) | Isaac Sim | B5 — the corrected 16×16 stereo policy, and what its camera saw before and after the fix | render works — seed-0 terrain level 0.877 vs pre-fix seed 0 0.001; corrected 3-seed mean 0.774 sits inside blind's 0.545–1.037, so it shows the camera fix, **not a stereo advantage** |
 | [`isaac/mazenav_seed0`](#terrain-sensing-the-b5-maze-rung) | Isaac Sim | B5 navigation — seed-0 blind/lidar/stereo/both in the fused-mesh corridor | **walks, does not reach the button** — button 0/12 |
 | [`isaac/terrain_sensors`](#terrain-sensing-the-b5-maze-rung) | Isaac Sim | B5 — blind, lidar, stereo at two widths | render only — the result is the table, not the clip |
 | [`isaac/cloth_sort_free_base_shirt`](#cloth-sorting-free-base) | Isaac Sim | cloth-sort C0, scripted sweep, rigid shirt proxy, **free-standing robot**, two sweeps | **works** — free base 22/24 on balance v2 |
@@ -48,7 +74,7 @@ replay controls as current adaptation successes.
 | [`carry_cube_pov`](#robot-pov) | MuJoCo | cube lift, POV | **fails** — best is 7.8 cm |
 | [`carry_ball_native_pov`](#robot-pov) | MuJoCo | ball lift, POV | **fails** — 0/6 seeds |
 | [`carry_ball_transfer_pov`](#robot-pov) | MuJoCo | ball, transfer condition | **fails** |
-| [`carry_ladder_pov`](#robot-pov) | MuJoCo | plank lift, POV | **fails** — 0.0 cm, 18 seeds |
+| [`carry_ladder_pov`](#robot-pov) | MuJoCo | plank lift, POV | **fails** — 0.0 cm, 12 seeds |
 | [`carry_vision_swap_2`](#vision-made-it-worse) | MuJoCo | depth replacing object pose | **fails** |
 | [`carry_vision_swap_3`](#vision-made-it-worse) | MuJoCo | same, three pairs | **fails** |
 | [`carry_vision_swap_4`](#vision-made-it-worse) | MuJoCo | same, four pairs — unused | **fails** |
@@ -73,8 +99,8 @@ Two policies, one command, one world. Left is the intervention, right the contro
 | <img src="gifs/dr_pair.gif" width="420"> | **`dr_pair`** — identical strafe. Left `s=1.0`, right `s=0`. Neither policy ever saw MuJoCo in training. |
 | <img src="gifs/push_pair.gif" width="420"> | **`push_pair`** — identical 0.5 m/s shoves. Left has a push curriculum. **0/6 falls against 3/6.** |
 | <img src="gifs/terrain_pair.gif" width="420"> | **`terrain_pair`** — rough ground at `d = 0.80`. Left terrain-trained, right flat-trained. **0/6 against 3/6.** |
-| <img src="gifs/arms_dr_pair.gif" width="420"> | **`arms_dr_pair`** — the same three comparisons on the 22-DoF body. At `d = 1.0` the humanoid falls 11.7% where the biped falls 37.8%. |
-| <img src="gifs/arms_push_pair.gif" width="420"> | **`arms_push_pair`** — 12 DoF against 22. Arms move angular momentum away from the legs: 0.2 m/s of shove rejection, free. |
+| <img src="gifs/arms_dr_pair.gif" width="420"> | **`arms_dr_pair`** — the same three comparisons on the 22-DoF body. A walk-vs-walk strafe by design: on flat ground the 22-DoF body falls 0/60 at both s=1.0 and s=0, where the 12-DoF biped at s=0 falls 21/90. (The 11.7 % vs 37.8 % comparison belongs to the terrain sweep, `arms_terrain_pair`, and mixes n=60 with n=90.) Two training seeds. |
+| <img src="gifs/arms_push_pair.gif" width="420"> | **`arms_push_pair`** — **caption corrected 2026-09-23.** 22-DoF push-trained (left) against 22-DoF DR-only (right) under the same 0.5 m/s shove. This clip is the one command of six in the filming run where the ordering favours push training; over n=60 the push-trained policy falls **more** (0.15) than the DR-only control (0.10), and in the filming run itself 2/6 against 1/6. No push benefit is shown on the 22-DoF body. The earlier caption ('0.2 m/s of shove rejection, free') transplanted a biped training-side finding and inverted this result. [Sidecar](gifs/arms_push_pair.json). |
 | <img src="gifs/arms_terrain_pair.gif" width="420"> | **`arms_terrain_pair`** — arms on rough ground. |
 
 ## Four policies at once
@@ -82,7 +108,7 @@ Two policies, one command, one world. Left is the intervention, right the contro
 | | |
 |---|---|
 | <img src="gifs/multi_race.gif" width="420"> | **`multi_race`** — identical 0.45 m/s shoves. Same solver, same clock, not a composite. The un-randomized robot is the one on the ground. |
-| <img src="gifs/multi_lab.gif" width="420"> | **`multi_lab`** — current README hero. Four colour-coded policies crossing plank, beam and ramp, with the orange robot's egocentric depth along the bottom. **14 MB.** |
+| <img src="gifs/multi_lab.gif" width="420"> | **`multi_lab`** — current README hero. Four colour-coded policies on a carpet, cable, threshold and ramp course (the clip is one rollout per policy; a 5-seed rerun, [`lab_traverse_5seed.json`](../results/lab-traverse-20260923/lab_traverse_5seed.json), finishes the course 1/5, 0/5, 2/5, 2/5 for randomized, no-randomization, push-trained and terrain-trained on 22 DoF and 0/5, 0/5, 0/5, 2/5 on 12 DoF: the course is cleared sometimes, not reliably, and the no-randomization 22-DoF policy stalls past the carpet every time), with the orange robot's egocentric depth along the bottom. **14 MB.** |
 
 ## Depth
 
@@ -97,7 +123,7 @@ Two policies, one command, one world. Left is the intervention, right the contro
 > (`scripts/bench/ice_placement_probe.py`, FINDINGS *Ice*). `ice_pair` is those
 > policies, trained on bumpy ground, dropped onto ice in MuJoCo.
 >
-> **Placed, 2026-09-17.** The placement probe put the patches at the terrain origins
+> **Placed, 2026-09-17.** Probe `21342561` put the patches at the terrain origins
 > (median 0.8 m, reachable 1.000). `ice_pair_placed` is the retrained pair.
 
 The old +10.6% (depth 1.519 against blind 1.374) was measured on bumpy tiles.
@@ -113,8 +139,8 @@ produced the numbers.
 
 | | |
 |---|---|
-| <img src="gifs/ice_pair.gif" width="640"> | **`ice_pair`** — green blind, red depth, identical command. Along the bottom is the depth robot's own egocentric view and a scrolling waterfall of the centre column. **14 MB.** Retracted as evidence about ice: the patches were 72 m away in training. |
-| <img src="gifs/ice_pair_placed.gif" width="640"> | **`ice_pair_placed`** — the same pair after the placement repair put the patches at the terrain origins (median 0.8 m, reachable 1.000). Both stay upright; peak x +4.66 m (blind) / +4.45 m (depth). Last-50 terrain level: depth 2.92 against blind 2.59 (n=2). **13 MB.** |
+| <img src="gifs/ice_pair.gif" width="640"> | **`ice_pair`** — green blind, red depth, identical command. Along the bottom is the depth robot's own egocentric view and a scrolling waterfall of the centre column. **14 MB.** Retracted as evidence about ice: the patches were 72 m away in training ([probe verdict](../results/ice_placement_probe_21328532.txt)). **The MuJoCo harness has no ice world, so this clip is plain flat ground** — it shows two policies walking, not ice handling. |
+| <img src="gifs/ice_pair_placed.gif" width="640"> | **`ice_pair_placed`** — the same pair after `21342561` put the patches at the terrain origins (median 0.8 m, reachable 1.000). Both stay upright; peak x +4.66 m (blind) / +4.45 m (depth). Job `21352982`. Last-50 terrain level: depth 2.92 against blind 2.59 (n=2, 'visible' bitwise-identical to blind). **Rendered on flat MuJoCo ground (no ice in the harness)** — the clip shows two upright policies, not ice handling; whether the training rung exercised the patches is the open exposure probe. **13 MB.** |
 
 ## The cooperative lift
 
@@ -134,7 +160,7 @@ Colour, raw 64×64 depth, and the 8×8 the network actually receives.
 | <img src="gifs/carry_cube_pov.gif" width="420"> | **`carry_cube_pov`** — the best rollout in the project. 7.8 cm of lift, hands in the pinch gate 98% of the time, 12 s without a fall. Also a controlled collapse: the pair drops 41 cm before contact. |
 | <img src="gifs/carry_ball_native_pov.gif" width="420"> | **`carry_ball_native_pov`** — the 21 cm arm cross-checked in the other engine. Falls at 0.72 s having never touched the ball. |
 | <img src="gifs/carry_ball_transfer_pov.gif" width="420"> | **`carry_ball_transfer_pov`** — the same arm, transfer condition. |
-| <img src="gifs/carry_ladder_pov.gif" width="420"> | **`carry_ladder_pov`** — the plank. 18 seeds at 0.0 cm, closest approach 39 cm. Contact points are further apart than shoulders that cannot adduct past 36 cm can span. |
+| <img src="gifs/carry_ladder_pov.gif" width="420"> | **`carry_ladder_pov`** — the plank. 12 seeds at 0.0 cm, closest approach 39 cm. Contact points are further apart than shoulders that cannot adduct past 36 cm can span. |
 
 ## Vision made it worse
 
@@ -189,29 +215,29 @@ stays alive for 427 steps against 8 while doing it.
 
 | | |
 |---|---|
-| <img src="gifs/isaac/maze_stereo_fixed.gif" width="560"> | **`isaac/maze_stereo_fixed`** — the stereo policy fed 16×16 an eye, retrained with its cameras pointed down (`mazefix-stereo-s0`, terrain level 0.88; the same arm scored 0.02 with the old pose). Right, the left eye's 64×64 depth each frame, bright near and black at the 6 m limit. **Top: the pose every B5 run on Isaac Lab 3.0 had before `3f7b679`** — the quaternion read in the wrong order, 20° up and upside down, with ground only in a strip along the top. **Bottom: the corrected pose** this policy trained on. Both eyes ride the same robot in the same run. Cropped and lightly blurred, because the bumpy terrain is per-pixel noise GIF cannot compress. **9.5 MB.** |
+| <img src="gifs/isaac/maze_stereo_fixed.gif" width="560"> | **`isaac/maze_stereo_fixed`** — the stereo policy fed 16×16 an eye, retrained with its cameras pointed down (`mazefix-stereo-s0`, seed-0 terrain level 0.877 against 0.001 for pre-fix seed 0; 3-seed means 0.774 and 0.021). The corrected arm's mean sits inside blind's seed range 0.545–1.037, so this clip shows the camera fix, not a stereo advantage. Right, the left eye's 64×64 depth each frame, bright near and black at the 6 m limit. **Top: the pose every B5 run on Isaac Lab 3.0 had before `3f7b679`** — the quaternion read in the wrong order, 20° up and upside down, with ground only in a strip along the top. **Bottom: the corrected pose** this policy trained on. Both eyes ride the same robot in the same run (`21329137`). Cropped and lightly blurred, because the bumpy terrain is per-pixel noise GIF cannot compress. **9.5 MB.** |
 | <img src="gifs/isaac/terrain_sensors.gif" width="560"> | **`isaac/terrain_sensors`** — the four seed-0 policies, each followed by its own camera: blind, lidar, stereo fed at 16×16 an eye, and stereo pooled to 4×4. Labels are each clip's own terrain level (3-seed means are in FINDINGS). **Watch it for what the policies look like, not for the result**: over twelve seconds all four walk, because the difference is how far the terrain curriculum promoted them, which one clip on one patch cannot show. There are no walls in shot because there never were any near the robots — see FINDINGS. **Both stereo policies here trained with their cameras looking 20° up, upside down** — `isaac/maze_stereo_fixed` above shows the difference (Isaac Lab 3.0 reads the pose quaternion in a different order; FINDINGS, *Terrain sensing*), so those two panels show what the policies did, not what stereo sees. Denoised and cropped from 640×360 path-traced frames. **10 MB.** |
-| <img src="gifs/isaac/mazenav_seed0.gif" width="560"> | **`isaac/mazenav_seed0`** — the four seed-0 *navigation* policies (`mazenav-{blind,lidar,stereo,both}-s0`) after the walls were fused into `/World/ground`. Robot in shot, walls in shot. They walk the corridor until timeout; they do not reach the plate. 200 frames an arm, cropped and blurred. **14 MB.** |
+| <img src="gifs/isaac/mazenav_seed0.gif" width="560"> | **`isaac/mazenav_seed0`** — the four seed-0 *navigation* policies (`mazenav-{blind,lidar,stereo,both}-s0`) after the walls were fused into `/World/ground`. Robot in shot, walls in shot. They walk the corridor until timeout; they do not reach the plate. Job `21355466`, 200 frames an arm, cropped and blurred. **14 MB.** |
 
-**How the render got fixed.** The first attempt filmed corridors
+**How the render got fixed.** The first attempt (`21247917`) filmed corridors
 and no robot. The viewport, which `RecordVideo` records, draws an articulation
 at its stale USD pose when fabric is on — here the env's grid origin, tens of
 metres from the terrain patch the robot walks on. A camera *sensor* draws the
-body where physics has it, so `train_play` now records through
+body where physics has it (`21299608`), so `train_play` now records through
 one; `docs/ISAAC_RENDER.md` §10 has the recipe.
 
 ### Cloth sorting, free base
 
 | | |
 |---|---|
-| <img src="gifs/isaac/cloth_sort_free_base_shirt.gif" width="440"> | **`isaac/cloth_sort_free_base_shirt`** — balance v2 (`42ba537`). The free-standing robot's first sweep leaves the shirt proxy at the table's edge. The second, planned from where the shirt lay, drops it into the red basket. On balance v2 the free base sorts shirt 6/8, sock 8/8 and jacket 8/8 with no falls. A rigid box, not cloth. Real time at 10 fps. **7.0 MB.** |
-| <img src="gifs/isaac/cloth_sort_free_base_jacket.gif" width="440"> | **`isaac/cloth_sort_free_base_jacket`** — `ClothSort-BHL-Rigid-Oracle-v0` with `--garment jacket`. **The robot is free-standing**: its legs hold a knee-bent stance with gravity feedforward and IMU ankle feedback (`bhl_robust.cloth.balance`), and the table stands 5.9 cm higher to match. The hand sweeps the dark jacket proxy off the table's back edge into the grey jackets basket. On balance v1 this layout sorted jackets 8/8 and socks 7/8 but shirts 1/8; balance v2 brought the shirt to 6/8. A rigid box, not cloth. Frames brightened because the jacket is near-black. **3.8 MB.** |
+| <img src="gifs/isaac/cloth_sort_free_base_shirt.gif" width="440"> | **`isaac/cloth_sort_free_base_shirt`** — job `21330405`, balance v2 (`42ba537`). The free-standing robot's first sweep leaves the shirt proxy at the table's edge. The second, planned from where the shirt lay, drops it into the red basket. On balance v2 the free base sorts shirt 6/8, sock 8/8 and jacket 8/8 with no falls. A rigid box, not cloth. Real time at 10 fps. **7.0 MB.** |
+| <img src="gifs/isaac/cloth_sort_free_base_jacket.gif" width="440"> | **`isaac/cloth_sort_free_base_jacket`** — `ClothSort-BHL-Rigid-Oracle-v0` with `--garment jacket`, job `21329392`. **The robot is free-standing**: its legs hold a knee-bent stance with gravity feedforward and IMU ankle feedback (`bhl_robust.cloth.balance`), and the table stands 5.9 cm higher to match. The hand sweeps the dark jacket proxy off the table's back edge into the grey jackets basket. On balance v1 this layout sorted jackets 8/8 and socks 7/8 but shirts 1/8 (`21329260`–`262`); balance v2 brought the shirt to 6/8. A rigid box, not cloth. Frames brightened because the jacket is near-black. **3.8 MB.** |
 
 ### Cloth sorting, fixed-base diagnostic
 
 | | |
 |---|---|
-| <img src="gifs/isaac/cloth_sort_fixed_base.gif" width="440"> | **`isaac/cloth_sort_fixed_base`** — `ClothSort-BHL-RigidFixedBase-Oracle-v0`. The scripted sweep: the right hand descends at an anchor beside the table, glides around the red shirt proxy, and sweeps it off the front edge into the red shirts basket. **The robot's root is pinned and the shirt is a rigid 10 × 8 cm box.** With the root free this robot falls backward within a second even with its arm still, so this clip shows the manipulation half alone. On this layout shirt, sock and jacket sort 32 of 32. The episode ends when the shirt's centre enters the basket, so the clip stops as it drops. Camera sensor, 640×360 path-traced, cropped and denoised. **3.9 MB.** |
+| <img src="gifs/isaac/cloth_sort_fixed_base.gif" width="440"> | **`isaac/cloth_sort_fixed_base`** — `ClothSort-BHL-RigidFixedBase-Oracle-v0`, job `21317391`. The scripted sweep: the right hand descends at an anchor beside the table, glides around the red shirt proxy, and sweeps it off the front edge into the red shirts basket. **The robot's root is pinned and the shirt is a rigid 10 × 8 cm box.** With the root free this robot falls backward within a second even with its arm still (`21317172`), so this clip shows the manipulation half alone. On this layout shirt, sock and jacket sort 32 of 32 (`21317388`–`390`). The episode ends when the shirt's centre enters the basket, so the clip stops as it drops. Camera sensor, 640×360 path-traced, cropped and denoised. **3.9 MB.** |
 
 ### On the corrected *rotation* — and a spawn that is still wrong
 

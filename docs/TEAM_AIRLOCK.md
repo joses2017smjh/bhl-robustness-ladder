@@ -60,7 +60,7 @@ grasp model, and sustained shared-payload support in both simulators.
 ```bash
 export PYTHONPATH="$PWD/src:${PYTHONPATH:-}"
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
-python scripts/bench/team_airlock.py \
+/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python scripts/bench/team_airlock.py \
   --deploy external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/deploy.yaml \
   --upstream external/Berkeley-Humanoid-Lite \
   --cache-dir /tmp/bhl-team-airlock-pair \

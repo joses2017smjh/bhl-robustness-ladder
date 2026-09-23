@@ -4,7 +4,7 @@ Updated 2026-09-20T17:12:10.973927+00:00
 
 Only completed, physically scored evaluations support task-success claims. Training losses and smoke tests do not.
 
-The historical folding evaluation has invalid visual inputs after garment switches; its old 6/24 is not the baseline.
+Historical folding job 21214241 has invalid visual inputs after garment switches; its old 6/24 is not the baseline.
 
 | Evidence | Measured result | Scope |
 | --- | --- | --- |
@@ -69,6 +69,32 @@ The historical folding evaluation has invalid visual inputs after garment switch
 - fold-adapt-s0: checkpoint step 1500; completed=True
 - fold-adapt-s1: checkpoint step 1500; completed=True
 
-Scheduler records are retained locally. See [publication details](../../docs/PUBLIC_EVIDENCE.md).
+## Scheduler
+
+| Submission | Name | Current accounting |
+| --- | --- | --- |
+| 21359422 | wk-maze-smoke | 1 COMPLETED |
+| 21359430 | wk-fold-ft-smoke | 1 FAILED |
+| 21359431 | wk-fold-eval-smoke | 1 FAILED |
+| 21359432 | wk-team2 | 1 COMPLETED |
+| 21359473 | wk-team3 | 1 COMPLETED |
+| 21359475 | wk-cloth-mujoco | 1 COMPLETED |
+| 21359477 | wk-fold-ft-smoke | 1 FAILED |
+| 21359478 | wk-fold-eval-smoke | 1 COMPLETED |
+| 21359481 | wk-fold-ft-smoke | 1 COMPLETED |
+| 21359486 | wk-maze-approach | 12 COMPLETED |
+| 21359499 | wk-maze-corridor | 12 COMPLETED |
+| 21359510 | wk-maze-full | 12 COMPLETED |
+| 21359521 | wk-fold-eval-strict | 1 COMPLETED |
+| 21359522 | wk-fold-adapt-s0 | 1 COMPLETED |
+| 21359527 | wk-v100-runtime | 1 COMPLETED |
+| 21359529 | wk-v100-fold-gate | 1 COMPLETED |
+| 21359530 | wk-fold-adapt-s1 | 1 COMPLETED |
+| 21359573 | wk-fold-baseline | 1 COMPLETED, 1 FAILED, 2 TIMEOUT |
+| 21359574 | wk-fold-eval-s0 | 2 COMPLETED, 1 FAILED, 1 TIMEOUT |
+| 21359575 | wk-fold-eval-s1 | 2 COMPLETED, 2 TIMEOUT |
+| 21359576 | wk-team-sensors | 1 COMPLETED |
+| 21359631 | wk-final-report | 1 COMPLETED |
+| 21359677 | bhl-inspect-maze | 1 COMPLETED |
 
 [Campaign scope and research](../../docs/WEEKEND_CAMPAIGN.md)

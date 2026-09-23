@@ -1,0 +1,69 @@
+{
+  "output": "docs/gifs/mission7-approach-negx-centering.gif",
+  "output_sha256": "0beef1e7f4dedffa65fd076f02c564cdda8abc0c96d0d07c951076d8f2bbb8c3",
+  "source_clip": [
+    "results/mission7-campaign-20260923/media/approach-negx14-baseline.mp4",
+    "results/mission7-campaign-20260923/media/approach-negx14-centered.mp4"
+  ],
+  "source_sha256": [
+    "036ce1a86b8ae3b3a6ecb00e53756b20ff8687e71dc09dcd8c6e3de53c35d5ed",
+    "879cf4e8b1e9be48da42f494fd81d7b7e2e2f7a092acd7641f3132fe63165db1"
+  ],
+  "evidence": [
+    "results/mission7-campaign-20260923/approach-negx-recovery/result.json",
+    "results/mission7-campaign-20260923/approach-matrix-center-bias/result.json"
+  ],
+  "evidence_sha256": [
+    "0090359daae635566ad09bcfaf6e352820e93bcf07fc757cd8a772c09f80350d",
+    "4457da78c6e18301834ba86db10a0a858a726cd0d1d939e65e256037c2d579d1"
+  ],
+  "left": {
+    "label": "baseline: post collision",
+    "controller": "measured_translation_0.50mps_with_bounded_0.30mps_stall_pulse",
+    "outcome": {
+      "success": false,
+      "failure": "excessive_collision",
+      "collisions": 6,
+      "elapsed_s": 2.1199999999998753
+    },
+    "reset_sequence": [
+      1,
+      5,
+      6,
+      7,
+      14
+    ]
+  },
+  "right": {
+    "label": "centred: through the gap",
+    "controller": "gap_midline_centring_with_plus_y_prebias_0.015m",
+    "outcome": {
+      "success": true,
+      "failure": null,
+      "collisions": 0,
+      "elapsed_s": 4.400000000000281
+    },
+    "reset_sequence": [
+      1,
+      5,
+      6,
+      7,
+      14
+    ]
+  },
+  "expected_success": {
+    "left": false,
+    "right": true
+  },
+  "completion_s": {
+    "left": null,
+    "right": 4.400000000000281
+  },
+  "playback_speed": 1.0,
+  "gif_budget_s": 12.0,
+  "reproduces_evaluated_episode": true,
+  "caption": "Mission 7 privileged Approach, world -x, test layout 14 (0.65 m spawn, both goal posts unchanged): the evaluated 0.50 m/s recovery controller strikes goal_post_-1 on its first stride and is rejected by the >5-contact-tick predicate at 2.12 s (left); with gap-midline centring pre-biased +0.015 m the same layout passes at 4.40 s (right). Full-matrix gate result: 62/64, 0 falls, 16/16/16/14 (job 21401966).",
+  "labels": "privileged pose (oracle), frozen learned gait, free-standing, native MuJoCo; scripted centring, not learned",
+  "scope": "One evaluated layout, reproduced by replaying the evaluator's reset order; the gate claim rests on the 64-episode matrix in the evidence file, not on this clip.",
+  "git_commit": "a501e5df09adfd8567b5f6e18be2ad387e528bde"
+}

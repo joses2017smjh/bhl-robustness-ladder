@@ -9,7 +9,7 @@ from __future__ import annotations
 #: Must match ``BUMPY_TERRAINS_CFG.size[0]``. A patch that leaves this square
 #: sits on a neighbouring tile, and GPU collision filtering lets a robot touch
 #: only its own env's prims -- the same fault that put the original patches a
-#: median 72 m away (``historical run``).
+#: median 72 m away (``21328532``).
 TILE_SIZE = 8.0
 
 #: Patch top face sits at exactly z = 0, flush with the ground plane.

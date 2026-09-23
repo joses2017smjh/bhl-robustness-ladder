@@ -8,38 +8,24 @@ package. An example command is not a clean-machine installation test.
 The repository includes task overlays, reward repairs, sensor adapters, CPU
 tests, Slurm entrypoints, per-evaluation JSON and selected recordings. Policy
 weights, shared Python environments, Isaac installations, full garment assets
-and raw frame caches are not vendored. Logical `artifact://` identifiers in results identify external checkpoints and
-assets, not public download URLs. See [publication details](PUBLIC_EVIDENCE.md).
-
-For CPU setup commands and dependency versions, see the [README](../README.md#quickstart-cpu-checks)
-and [requirements-test.txt](../requirements-test.txt). A fresh dependency
-installation remains unverified. A subsequent independent check of the final
-publication passed **146 tests in 17.84 seconds**; see the
-[verification note](PUBLICATION_CHECK_2026-09-20.md).
+and raw frame caches are not vendored. Absolute checkpoint paths in results
+identify local artifacts, not public download URLs.
 
 ## Validation performed on September 20
 
 ```bash
-PYTHONPATH=src python -m pytest -q tests
-python scripts/summarize_weekend.py
+PYTHONPATH=src /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python -m pytest -q tests
+python scripts/summarize_weekend.py --slurm
 python scripts/build_portfolio_media.py
 ```
 
 Initialize nested upstream assets with `git submodule update --init --recursive`
 before running the full suite: two tests read the pinned upstream URDF and
-actuator configuration directly. Without those files, the other 144 tests pass
+actuator configuration directly. Without those files, the other 143 tests pass
 but those two fail with missing-file errors.
 
-The curated publication passed **146 tests in 18.33 seconds** using the existing
-Python 3.11 environment. This includes the new receipt-free reporting regression.
-The two upstream fixtures were read-only links to files verified byte-for-byte
-against nested assets commit `fc90fedd008b1e56a22e3c5221548d6b24f49707`, pinned
-by BHL commit `984741a3623c93b0583ccfdc479f1f8b1c4d900e`. The original 145-test
-audit preceded that additional regression. No simulation jobs were run for this
-publication check.
-
-Public artifact reporting requires no scheduler access. Scheduler refresh
-requires local submission receipts and Slurm access. Media conversion requires ffmpeg with drawtext and fontconfig;
+The existing Python 3.11 environment passed 145 tests. Reporting requires
+Slurm access. Media conversion requires ffmpeg with drawtext and fontconfig;
 it refuses to overwrite its three GIFs and SHA-256 sidecars. Inspect the
 committed artifacts without rebuilding. The wrong-route video is an
 intentional negative control, not a failed training job or renderer crash.

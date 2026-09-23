@@ -204,7 +204,7 @@ class MazeBlindEnvCfg(BipedBumpyEnvCfg):
         # Parent bumpy cfg clears the Nucleus shingle so height-fields do not
         # stretch a roof texture. A PreviewSurface is what RTX actually
         # colours; without it the fused mesh records as R=G=B (mazenav clips
-        # historical run). Ray sensors still cast distance, not albedo.
+        # 21355466). Ray sensors still cast distance, not albedo.
         self.scene.terrain.visual_material = sim_utils.PreviewSurfaceCfg(
             diffuse_color=FLOOR_RGB,
         )

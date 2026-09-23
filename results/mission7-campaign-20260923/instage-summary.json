@@ -1,0 +1,248 @@
+{
+  "note": "In-stage factor campaign on validation Doors layouts 0-15 (development set); Campaign A (21400752-754, 21400780) is the matched baseline: 3/16 success, 5 falls. Geometry, spawn, activation requirement (>=1 N plate contact with the activate flag) and the fall / excessive-collision predicates unchanged in every arm.",
+  "factors": {
+    "F1": "--stage-lateral (body centre off the plate centre; 0.25 or 0.35 m)",
+    "F2": "--stage-activate (stage asserts activate; wait-open 2.0 s unless noted)",
+    "F3": "--exit-ramp=0.6 (forward-only 0.30 m/s after the crossing)",
+    "A1/A2": "activate-only, wait-open 0"
+  },
+  "arms": {
+    "F1": {
+      "job": 21400801,
+      "success": "3->0",
+      "falls": "5->2",
+      "improved": [],
+      "regressed": [
+        "doors/3",
+        "doors/4",
+        "doors/7"
+      ],
+      "falls_removed": [
+        "doors/10",
+        "doors/13",
+        "doors/2",
+        "doors/5",
+        "doors/9"
+      ],
+      "falls_added": [
+        "doors/12",
+        "doors/7"
+      ]
+    },
+    "F1F2": {
+      "job": 21400802,
+      "success": "3->3",
+      "falls": "5->1",
+      "improved": [
+        "doors/8",
+        "doors/9"
+      ],
+      "regressed": [
+        "doors/4",
+        "doors/7"
+      ],
+      "falls_removed": [
+        "doors/10",
+        "doors/13",
+        "doors/2",
+        "doors/5",
+        "doors/9"
+      ],
+      "falls_added": [
+        "doors/7"
+      ]
+    },
+    "F1F3": {
+      "job": 21400803,
+      "success": "3->0",
+      "falls": "5->1",
+      "improved": [],
+      "regressed": [
+        "doors/3",
+        "doors/4",
+        "doors/7"
+      ],
+      "falls_removed": [
+        "doors/10",
+        "doors/13",
+        "doors/2",
+        "doors/5",
+        "doors/9"
+      ],
+      "falls_added": [
+        "doors/7"
+      ]
+    },
+    "F1F2F3": {
+      "job": 21400804,
+      "success": "3->3",
+      "falls": "5->1",
+      "improved": [
+        "doors/1",
+        "doors/9"
+      ],
+      "regressed": [
+        "doors/4",
+        "doors/7"
+      ],
+      "falls_removed": [
+        "doors/10",
+        "doors/13",
+        "doors/2",
+        "doors/5",
+        "doors/9"
+      ],
+      "falls_added": [
+        "doors/7"
+      ]
+    },
+    "F2": {
+      "job": 21400825,
+      "success": "3->1",
+      "falls": "5->8",
+      "improved": [],
+      "regressed": [
+        "doors/3",
+        "doors/7"
+      ],
+      "falls_removed": [],
+      "falls_added": [
+        "doors/3",
+        "doors/6",
+        "doors/7"
+      ]
+    },
+    "F3": {
+      "job": 21400826,
+      "success": "3->1",
+      "falls": "5->9",
+      "improved": [
+        "doors/10"
+      ],
+      "regressed": [
+        "doors/3",
+        "doors/4",
+        "doors/7"
+      ],
+      "falls_removed": [
+        "doors/10"
+      ],
+      "falls_added": [
+        "doors/1",
+        "doors/3",
+        "doors/4",
+        "doors/6",
+        "doors/7"
+      ]
+    },
+    "F2F3": {
+      "job": 21400827,
+      "success": "3->1",
+      "falls": "5->6",
+      "improved": [
+        "doors/10"
+      ],
+      "regressed": [
+        "doors/3",
+        "doors/4",
+        "doors/7"
+      ],
+      "falls_removed": [
+        "doors/10",
+        "doors/2"
+      ],
+      "falls_added": [
+        "doors/3",
+        "doors/6",
+        "doors/7"
+      ]
+    },
+    "A1-activate-only": {
+      "job": 21400895,
+      "success": "3->2",
+      "falls": "5->6",
+      "improved": [],
+      "regressed": [
+        "doors/3"
+      ],
+      "falls_removed": [
+        "doors/2"
+      ],
+      "falls_added": [
+        "doors/3",
+        "doors/6"
+      ]
+    },
+    "A2-activate-only-l035": {
+      "job": 21400896,
+      "success": "3->0",
+      "falls": "5->2",
+      "improved": [],
+      "regressed": [
+        "doors/3",
+        "doors/4",
+        "doors/7"
+      ],
+      "falls_removed": [
+        "doors/10",
+        "doors/13",
+        "doors/2",
+        "doors/5",
+        "doors/9"
+      ],
+      "falls_added": [
+        "doors/6",
+        "doors/7"
+      ]
+    },
+    "F1F2F3-l035": {
+      "job": 21400952,
+      "success": "3->1",
+      "falls": "5->1",
+      "improved": [
+        "doors/8"
+      ],
+      "regressed": [
+        "doors/3",
+        "doors/4",
+        "doors/7"
+      ],
+      "falls_removed": [
+        "doors/10",
+        "doors/13",
+        "doors/2",
+        "doors/5",
+        "doors/9"
+      ],
+      "falls_added": [
+        "doors/7"
+      ]
+    }
+  },
+  "replay_gates": {
+    "plate centre (baseline)": {
+      "job": 21397732,
+      "upright": 10
+    },
+    "lateral 0.25": {
+      "job": 21400805,
+      "upright": 8
+    },
+    "wait-open 2.0": {
+      "job": 21400863,
+      "upright": 10
+    },
+    "lateral 0.35": {
+      "job": 21400897,
+      "upright": 10
+    },
+    "lateral 0.35 + wait-open 2.0": {
+      "job": 21400953,
+      "upright": 10
+    }
+  },
+  "selection": {
+    "rule": "predeclared: highest Doors success among arms, ties to fewer factors, replay gate 10/10 required; prev_actions_reset joins only with >=1 matched improvement and 0 regressions",
+    "outcome": "no arm exceeds the 3/16 baseline; the two arms that tie it (F1+F2, F1+F2+F3 at 0.25 m, falls 5->1) fail the replay gate 8/10; the gate-safe 0.35 m version is 1/16; prev_actions_reset had one matched regression. No candidate frozen; confirmatory evaluation not launched."
+  }
+}

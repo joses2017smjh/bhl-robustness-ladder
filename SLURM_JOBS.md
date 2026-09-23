@@ -1,5 +1,12 @@
 # Slurm job ledger
 
+**Mission7 Approach diagnosis — closed September 21:** 18 retained tasks
+completed, including six PPO controls; one invalid replay (21384691) was
+cancelled and replaced by successful same-node replay 21384742. No jobs from
+this diagnostic campaign remain active. Allocation: **11.96 CPU-hours, zero
+GPUs**. No stable-learning or sensor-comparison gate passed.
+[Final results and all job IDs/dependencies](docs/MISSION7_APPROACH_DEBUG.md).
+
 What we are trying to achieve, which Slurm ID did it, and — when something ran
 more than once — one line on why the previous attempt did not count.
 
@@ -18,9 +25,146 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 ---
 
-## Project status — 2026-09-15
+## Mission7 procedural sensor benchmark — 2026-09-20
+
+**User-approved queue cleanup, September 20:** cancelled old blocked media
+array `21360436_[1-15]` and its report `21360437`, held Tier 3 tasks
+`21328743_1`/`21328743_2`, held terrain tasks `21328607_[5-11]` and
+`21328608_[5-11]`, and running `21352980_8` (`v2stand-planktowall-rgb-s0`).
+The latter still reported one-step episodes, fallen 1.0 and success 0.0 near
+iteration 6,000/8,000. Slurm accounting confirms these cancellations. Existing
+logs/checkpoints and already completed array tasks were preserved. Desktop
+`21369598` and Mission7 learning job `21369796` were kept running. This cleanup
+supersedes older pending/held status notes below; it does not erase their history.
+
+New work remains in this repository on `main`; existing jobs and results are
+preserved. [Task, observation audit, matrix and limits](docs/MISSION7.md).
+Receipts: `results/mission7-20260920/submissions.jsonl`; immutable run source
+and SHA256 manifest: `results/mission7-20260920/source/`.
+
+| Job | Experiment | Latest audited state | Allocation / dependency / evidence |
+|---|---|---|---|
+| `21369795` | Phase A: all four arms ×3 objective types; PPO reset/update, contact and placement controls | **COMPLETED / infrastructure PASS** | `cn-b02`, `share`, 2 CPUs, 12 GB, **0 GPUs**; 49 s, exit `0:0`; JSON `passed:true` and `MISSION7_SMOKE_PASS`; `cluster-smoke/smoke.json` |
+| `21369796` | Phase B: Both, seed 0, Approach; 400×64 PPO decisions | **FAILED learning gate; training finished** | 54:38, exit `2:0`; final validation **0/16**; checkpoint preserved; no nonfinite PPO failure |
+| `21369990` | End-of-day diagnostic: 16 training layouts ×2 reset seeds ×slow/fast oracle and stationary control | **COMPLETED diagnostic** | 12:19, exit `0:0`; fast oracle **22/32**, slow **0/32**, stationary **0/32**; privileged feasibility only |
+| `21369991` | End-of-day diagnostic: final Both checkpoint ×16 validation layouts ×4 sensor conditions | **COMPLETED diagnostic** | 9:16, exit `0:0`; normal **0/16**, LiDAR missing **0/16**, depth missing **2/16**, both missing **0/16**; no sensor-benefit claim |
+
+At diagnostic submission, Phase B still had **0/16 validation successes at
+updates 100, 200 and 300**, and no successes in the first 356 training episodes
+(161 timeouts, 195 excessive-contact failures). Therefore no larger training
+sweep was released. The diagnostics retain the frozen Phase B task and leave
+held-out test layouts untouched. Local checks: two new unit tests passed;
+all diagnostic modes stepped finitely. On one training layout, fast privileged
+control completed the approach, while slow control and standing still timed
+out. That is a physical feasibility fixture, not learned-policy success.
+Receipts/source hashes: `results/mission7-diagnostics-20260920/`; eventual
+reports: `feasibility/report.json` and `checkpoint/report.json` in that folder.
+
+Local qualification before submission: **155 tests passed**, all **12**
+arm/stage finite PPO cells passed, four physical switch controls passed, and
+released-object placement succeeded while its outside-zone control failed.
+These are infrastructure/physics fixtures, not learned mission successes.
+`results/mission7-20260920/qualification.json` records tested source hashes.
+Logs are `results/mission7-20260920/m7-*.out`. Full multi-seed training and
+held-out evaluations remain planned behind measured learning gates.
+
+Startup audit: Phase B completed its initial **0/16** untrained-policy validation
+and reached update **10/400** (640 decisions, finite PPO losses). This is training
+progress, not a learning-success verdict. The later `gate.json` is authoritative.
+
+---
+
+## Weekend recovery campaign — 2026-09-19
+
+Requested scope: sensor-driven maze tasks, actual cloth folding, and a shared
+task for 2–3 humanoids. New submissions are isolated from the historical runs.
+Machine-readable scheduler receipts and source hashes are recorded at submission
+in `results/weekend-20260919/submissions.jsonl`.
+
+| Job | Experiment | Latest audited state | Budget / dependency / result |
+|---|---|---|---|
+| `21359422` | Corrected maze Approach/Blind physics and task probe | **PASS** | ~85 s on RTX; integration only, zero first-episode successes with zero actions |
+| `21359430` | Folding SmolVLA two-update/checkpoint smoke | failed before Python | Container clean environment omits USER; wrapper now derives workspace from forwarded REPO |
+| `21359431` | Official LeHome fold evaluator / particle-health smoke | failed before Python | Same USER forwarding issue; corrected before retry |
+| `21359432` | Shared-world 2-humanoid airlock, 5 seeds × 3 modes | **PASS** | Coordinated 5/5, no-wait 0/5, withheld teammate 0/5; completed in 8:59 |
+| `21359473` | Shared-world 3-humanoid airlock, 5 seeds × 3 modes | **PASS** | Coordinated 5/5, no-wait 0/5, withheld teammate 0/5 |
+| `21359475` | MuJoCo deformable towel fold physics gate | **PASS** | 4/4 released folds, 0/4 untouched controls, no warnings/NaNs; idealized pickers |
+| `21359477` | Folding SmolVLA two-update/checkpoint smoke, corrected wrapper | failed | Current CUDA 12.8 Torch wheel excludes V100 SM70; no training occurred |
+| `21359478` | Official fold evaluator smoke, corrected wrapper | **invalid** | Found swallowed Storm render errors on garment switches; physics alone cannot validate camera inputs. New unique per-garment USD layers and strict image checks added |
+| `21359481` | Folding training smoke on compatible compute hardware | **PASS** | H100: two updates and durable checkpoints completed; this is a plumbing test, not a fold-rate result |
+| `21359486` | Maze Approach: 4 sensor conditions × 3 seeds, 500 iterations | **12/12 COMPLETED; gates PASS** (Sept 20 audit) | 380/384 first-episode successes; initial seed-0 counts were blind 32, lidar 31, paired depth 31, both 30 /32 |
+| `21359499` | Maze Corridor: 12 matched cells, 1,500 additional iterations | **12/12 COMPLETED; gates PASS** (Sept 20 audit) | 375/384 first-episode successes; aftercorr `21359486`, exact passed-checkpoint resumes verified |
+| `21359510` | Maze Full: 12 matched cells, 4,000 additional iterations | **12/12 COMPLETED; gates PASS** (Sept 20 audit) | 379/384 first-episode successes; blind 93/96, lidar 96/96, paired depth 94/96, both 96/96; aftercorr `21359499` |
+| `21359521` | Strict official folding evaluator smoke | **COMPLETED/PASS** | 2:46; unique per-garment USD layers and strict fresh-image checks; smoke only |
+| `21359522` | SmolVLA garment-fold adaptation seed 0 | **COMPLETED** | H100: 1,500 updates; final held-out adaptation loss 0.06787; partial task evaluation in `21359574` below |
+| `21359527` | Isolated V100-compatible Torch/cu126 environment | **PASS** | CPU-only install; compiled SM70 verified, existing venvs untouched |
+| `21359529` | DGX2 CUDA kernels + two-update folding gate | **PASS** | Real V100 convolution/optimizer/attention/save-load and two SmolVLA updates succeed |
+| `21359530` | SmolVLA garment-fold adaptation seed 1 on DGX2 | **COMPLETED** | V100 with isolated cu126; 1,500 updates, final held-out adaptation loss 0.06099; partial task evaluation in `21359575` below |
+| `21359573` | Fresh folding baseline: four garment classes, 24 episodes/class | 1 completed, 1 failed, 2 timeouts | Completed short pants 8/24; short-top scorer index mismatch; switching stalls elsewhere |
+| `21359574` | Adapted folding seed 0: matched evaluation | 2 completed, 1 failed, 1 timeout | Completed long tops and long pants 0/24 each; other classes incomplete |
+| `21359575` | Adapted folding seed 1: matched evaluation | 2 completed, 2 timeouts | Completed short pants 3/24, long pants 0/24; other classes incomplete |
+| `21359576` | Sensor-reactive cooperative pair: 3 seeds × 3 modes | **PASS** | Coordinated 3/3; no-wait and withheld-role 0/3; real IMU/rays consumed by braking |
+| `21359631` | Final campaign results/accounting report | **COMPLETED**, 0:0 | CPU-only, afterany final maze/folding arrays; `results/weekend-20260919/SUMMARY.md` includes failed/incomplete evaluations, not an all-success verdict |
+| `21359677` | Two-turn inspection maze: 3 seeds × 2 routes × 2 sensor modes | **PASS** | CPU 3:59; ordered sensor-reactive 3/3, outage 0/3, wrong branch 0/3; no contacts/falls |
+
+**Maze evidence audit, 2026-09-20:** all 36 curriculum elements have Slurm
+exit code `0:0`, passing JSON plus both PASS sentinels, and existing checkpoint
+files. Their absence from the queue means normal completion. Full-stage
+seed 0/1/2 successes are blind **32/29/32**, lidar **32/32/32**, paired depth
+**32/32/30**, and both **32/32/32**, each count out of 32. Evaluation uses a
+known route, fixed geometry and no observation corruption; it does not prove
+sensor advantage or autonomous RGB/SSD navigation. The Isaac curriculum is
+the **12-DoF biped**, whereas inspection and team-airlock evidence uses the
+**22-DoF humanoid with a separate frozen August 18 gait**.
+[Dated results and source JSONs](docs/WEEKEND_RESULTS_2026-09-20.md).
+
+Interactive checks use the confirmed-idle GPUs within existing desktop
+allocation `21358937`: a strict camera smoke and
+`results/weekend-20260919/team3-airlock.mp4` (measured 30.68 s completion,
+zero contacts/falls). The video rollout is a showcase; the separate five-seed
+jobs above provide its controls.
+The same allocation rendered `inspection-maze.mp4`: two ordered inspections
+and two changes of travel direction in 17.36 s, zero contacts/falls; oracle
+waypoints with sensor braking. Job `21359677` supplies its multi-seed controls.
+
+The interactive strict camera smoke **passed all 12 garments**, including
+garment switches: finite moving particles and fresh images throughout
+(`fold-interactive-strict-smoke-s101.json`). Its 12-step horizon tests the
+measurement path, not folding success. The scheduled seed-0 gate also passed.
+
+**Media audit, September 20:** sibling gate `21360435` failed before stepping
+or rendering because its robot asset path resolved under `lehome-fold-repro/Assets`
+instead of `lehome-data/Assets`. Array `21360436_[1-15%1]` remains
+`DependencyNeverSatisfied`; report `21360437` waits for the array. No new
+folding media completed. These jobs were not canceled or resubmitted here.
+See [folding status](docs/CLOTH_FOLDING_WEEKEND.md).
+
+The idle GPU in current desktop allocation `21367413` rendered one 7.00 s
+MuJoCo wrong-branch control on September 20. It correctly failed with
+`dead_end_entered`; JSON and MP4 are `inspection-maze-failure-video.json`
+and `inspection-maze-failure.mp4`. This is a labelled supervisor-error control,
+not a new training experiment. Three captioned GIFs and provenance sidecars are
+under `docs/gifs/weekend-*`.
+
+**Folding historical correction:** direct inspection of sibling job
+`21214241` found 23,250 swallowed Storm rendering errors after garment
+switches. Its recorded 6/24 physical fold events cannot serve as a validated
+closed-loop visual-policy baseline. Fresh strict-camera evaluation is required.
+
+Old jobs, including held MARL arrays and the user's interactive allocations,
+have not been cancelled or released by this campaign.
+
+## Project status — 2026-09-18
 
 **Done since the last status**
+
+- **B5 maze navigation PPO finished 12/12 (`21353395`–`398`).** Train smoke 4/4, mean episode length 26.6–28.1. Then 6,000 iterations × four arms × n=3. Last-50 from the event files (`results/mazenav_last50.csv`): they walk to timeout (~0.94), **button_reached is 0.000 in every seed of every arm**, `progress_to_button` max 0.0005. Sensors do not separate. `Metrics/success_rate` ~0.99 is not button success — it tracks surviving without falling. Old `maze-*` rows stay terrain-perception.
+- **B3 ice is under the robots and retrained (`21342561`, `21344927`–`928`).** Placement median **0.8 m**, reachable fraction **1.000**. Last-50 terrain level: depth **2.92** (2.854 / 2.984) against blind **2.59** (2.576 / 2.605), n=2. Visible-ice matches blind seed-for-seed (proprioception-only; the paint is not observed). Clip: `docs/gifs/ice_pair_placed.gif` (`21352982`). Finding 11's *old* +10.6% stays retracted; this is a new measurement on the actual ice tiles.
+- **B5 maze navigation smoke passed (`21353199`, 0:57).** 4/4 arms construct, reset and step. Command is `MazeWaypointCommand` on every arm. Spawn `|y|_max` 0.12–0.14 m inside the 0.55 m corridor limit; mean button distance 2.97–3.05 m. Lidar wall checks 2/2: nearest 0.442 m / 0.454 m. Curriculum has 0 terms. Old `maze-*` PPO rows stay terrain-perception results.
+- **C2 free-base hold at dt=0.005 failed (`21353200`).** 2/2 nonfinite. Same as 60 Hz (`21338288`). Skip.
+- **C2F jacket new VBD sheet failed (`21353201`).** 4/4 nonfinite, `success_rate_finite` 0. Skip jacket; shirt/sock already sort.
+- **Isaac C5 pose-fix four-episode (`21353130`).** 2/4 sorted, moved 4/4, travel 0.19 m, fall 0, nonfinite 0.
+- **rsl-rl factorised actor gate (`21353129`).** PASS, 3 iterations, ep_len 18.94.
 
 - **C2 cloth, 2026-09-15 (`21338288`–`293`).** Pinned-base Newton **sock sorts 4/4,
   all finite** (`isaac_c2f_sock.json`). Pinned-base **jacket is 0/4 finite** —
@@ -112,6 +256,12 @@ Diagnostics that ran once, proved a point and were deleted are in
 
 **Rendered**
 
+- `docs/gifs/isaac/mazenav_seed0.gif` — four seed-0 navigation policies walking
+  the fused-mesh corridor until timeout. Robot in shot, walls in shot, button
+  not reached (`21355466`, 200 frames × 4).
+- `docs/gifs/ice_pair_placed.gif` — B3 after the patches sit under the robots
+  (median 0.8 m). Green blind against red depth, both stay upright (`21352982`).
+  The *old* `ice_pair.gif` is the retracted 72 m placement.
 - `docs/gifs/isaac/maze_stereo_fixed.gif` — the corrected 16×16 stereo policy walking,
   with its left eye as B5 had it before the quaternion fix (20° up, a strip of
   ground) beside the corrected eye (`21329137`).
@@ -132,32 +282,38 @@ Diagnostics that ran once, proved a point and were deleted are in
    stance (`a4f438b`), and on it, with balance v2 (`42ba537`), **the free-standing robot
    sorts 22 of 24 rigid proxies with no falls** (shirt 6/8, sock 8/8, jacket 8/8).
    **C2 on the fixed base sorts 4/4 with one-way cloth coupling** (two-way goes NaN).
-   Left: **jacket cloth on the pinned base still goes NaN** (0/4 finite,
-   `21338291`); sock cloth on that same rung is 4/4. C2 on the free base is
-   blocked until a still arm stays finite in Newton. Then online arm correction
-   from the base pose, for the last shirts; the sequential five-garment scene;
-   C1 training; C3–C5.
-2. **Make the maze a maze**: walls into the terrain mesh at the terrain origins,
-   sensors pointed at them, and the navigation objective `docs/MAZE_RIG.md`
-   designs. *Before that, the terrain rung's stereo arms finish re-running with
-   the cameras pointed down (`21317023`–`21317025`; 16×16 done, 0.774 at n=3).*
+   Left: **jacket cloth on the pinned base still goes NaN** (0/4 finite at 60 Hz
+   `21338291`, and 4/4 nonfinite on the softer/thicker sheet `21353201`); sock
+   cloth on that same rung is 4/4. C2 on the free base is blocked: a still arm
+   is 2/2 nonfinite at 60 Hz (`21338288`) and at dt=0.005 (`21353200`). No new
+   physics idea, so those cells stay unqueued. Isaac C5 pose-fix four-episode
+   is **2/4 sorted** (`21353130`, moved 4/4, travel 0.19 m). Then online arm
+   correction from the base pose; C1 training; C3.
+2. **Maze navigation PPO is done; they walk to timeout.** Env smoke `21353199`
+   PASS. Train smoke `21353395` 4/4 then 12/12 `mazenav-*` at 6,000 iterations
+   (`21353396`–`398`). Button success 0 in 12/12; sensors do not separate.
+   Seed-0 camera-sensor clips are done (`21355466`, glob `mazenav-*-s0`, cn-gpu7,
+   `docs/gifs/isaac/mazenav_seed0.gif`). Pooling arms (P8/P16) wait on a navigation score, not a gait
+   score. Old `maze-*` rows stay terrain-perception.
 3. **Isaac spawn for the coop/TaskV2 tasks**: robots still spawn under the
    floor (`robot_a` bodies at z −0.806…−0.027 in `21299608`). *Likely cause found,
    not yet probed:* on v60 the spawn tuple `(0.707, −0.707, 0, 0)` is read
    `(x, y, z, w)`, an upside-down robot facing the cube (R₂₂ = −1); the legacy
    `(0.707, 0, 0, −0.707)` is a −90° roll. The fix is `native_quat` on the intended
-   `(w, x, y, z)` yaw, plus a spawn probe.
+   `(w, x, y, z)` yaw, plus a spawn probe. `v2stand-*` seed-0 (`21352980`) is
+   still running: CubeToShelf blind/depth done, rgb running; BallToNet blind
+   failed (`train.sh`: mean episode length 1.00); remaining cells pending on
+   `%` limit.
 4. **MARL**: first block done at n=3 — limb2's lead did not replicate. Tier 1's
    grid is **paused**: no skrl setup has yet learned to walk to the command on
    stairs. The privileged-critic fix did not close the gap (`21330392`); the noise
    A/B (`21338294`) is next. If skrl cannot be made to match rsl-rl's PPO on the
    one-agent control, the limb split moves into rsl-rl as a factorised actor
-   instead. Tier 3 PPO: seed 0 done at 4.49, seed 1 queued (`21338295`); its skrl
-   rows stay held.
-5. **Put B3's ice where the robots are**: patches at the terrain origins, or moved
-   to `env_origins` at reset, on tiles flat enough that a flush patch stays flush;
-   re-probe with `scripts/bench/ice_placement_probe.py`; then the B3 PPO arms and
-   Tier 1's ice rows. Until then B3 and finding 11 stay retracted.
+   instead. Tier 3 PPO: seed 0 done at 4.49; remaining skrl/tier3 rows stay held.
+5. **B3 ice placement is done.** Patches at the terrain origins (`21342561`,
+   median 0.8 m, reachable 1.000). PPO `ppo-ice-placed-*` (`21344928`) and
+   `docs/gifs/ice_pair_placed.gif` (`21352982`). Finding 11's original +10.6%
+   stays retracted. Tier 1 ice rows stay held with the rest of the skrl grid.
 
 ---
 
@@ -278,6 +434,77 @@ rather than reshaped to fit.
 | 3 | `21234171` | regression after tightening the guard — still exit 0, 13 MB |
 | 2 | `21234053` | **exit 0, clip written** |
 | 1 | `21233950`, `21233969` | 45-into-301: depth appended in the wrong place, before the controller's own assembly |
+
+### B5 maze — navigation PPO · `done` — 2026-09-18, they walk to timeout
+
+Env smoke `21353199` **PASS** 4/4 (`MazeWaypointCommand`, spawn in corridor,
+lidar wall 0.44 m). Walls live in `/World/ground`. This block trained that MDP.
+
+Run names are `mazenav-*`, not `maze-*`. Old maze PPO rows stay
+terrain-perception results. Four arms (blind / lidar / stereo / both), three
+seeds, 6,000 iterations, 2,048 envs. Terrain curriculum is off.
+
+**Last-50 of the event files** (`results/mazenav_last50.csv`; 6,000 logged
+iterations each). `Metrics/success_rate` ~0.99 is **not** button success: it
+tracks surviving without falling. Button termination is 0.000 in 12/12, including
+the max over the whole run. `progress_to_button` never exceeds 0.0005.
+
+| arm | eplen | track_lin_vel_xy_exp | time_out | button_reached | seeds |
+|---|---:|---:|---:|---:|---|
+| blind | 483.8 | 0.606 | 0.948 | **0.000** | 483.3 / 482.4 / 485.6 |
+| lidar | 482.3 | 0.596 | 0.940 | **0.000** | 483.2 / 481.4 / 482.4 |
+| stereo | 483.2 | 0.597 | 0.949 | **0.000** | 483.9 / 480.5 / 485.2 |
+| both | 485.4 | 0.580 | 0.954 | **0.000** | 486.0 / 483.0 / 487.3 |
+
+They learned a gait that lasts the 20 s episode. They did not close on the
+plate. Sensors do not separate. Pooling arms wait on a navigation score.
+
+Train smoke (3 iterations, 64 envs): episode length 27.26 / 26.56 / 27.39 / 28.10.
+
+Seed-0 camera-sensor clips: `slurm/97c_mazenav_video.sbatch` (glob `mazenav-*-s0`,
+`--exclude=dgxh-1`, `v60_boot_gate`). Assembled on the login node by
+`scripts/gif_mazenav.py` once each arm has ≥50 PNGs. Does not overwrite `maze_*`
+frame dirs.
+
+| # | id | outcome |
+|---|---|---|
+| 6 | `21355623` | running on cn-gpu7 — colour re-render (PreviewSurface floor + clip overlays) |
+| 5 | `21355466` | **clip COMPLETED** (4:51, cn-gpu7) — 200 frames × 4 arms (`mazenav-*-s0`); grayscale (fused mesh had no albedo). `docs/gifs/isaac/mazenav_seed0.gif` |
+| 4 | `21353398` | **12/12 COMPLETED** — `mazenav-*-s2`, 4:10–7:34, afterok of `21353395` |
+| 3 | `21353397` | **COMPLETED** — `mazenav-*-s1`, 4:21–5:59 |
+| 2 | `21353396` | **COMPLETED** — `mazenav-*-s0`, 5:15–7:18 |
+| 1 | `21353395` | **COMPLETED** — 3-iter train smoke, Blind/Lidar/Stereo/Both, eplen 26.6–28.1 |
+
+### B3 ice — patches placed, retrained · `done` — 2026-09-17
+
+The 72 m placement (`21328532`) is retracted. The follow-up probe
+(`21342561`) puts each patch at its terrain origin: robot → nearest own patch
+p10 0.5 m, **median 0.8 m**, p90 1.0 m; reachable fraction **1.000**.
+
+PPO `ppo-ice-placed-*` (`21344928`), 6,000 iterations, 4,096 envs, n=2. Last-50
+terrain level from the event files (`results/ice_placed_last50.csv`):
+
+| arm | s0 / s1 | mean |
+|---|---|---:|
+| **depth** | 2.854 / 2.984 | **2.92** |
+| blind | 2.576 / 2.605 | 2.59 |
+| visible ice | 2.576 / 2.605 | 2.59 |
+
+Depth is +13% on the mean against blind, with ice actually under the robots.
+Visible-ice last-50 matches blind seed-for-seed: `IceVisible-v0` is still
+proprioception-only; the paint does not enter the observation. n=2, so
+suggestive. Finding 11's original +10.6% (measured on bumpy ground) stays
+retracted — different tiles, different absolute levels.
+
+Clip `docs/gifs/ice_pair_placed.gif` (`21352982`): both stay upright, peak x
++4.66 m (blind) / +4.45 m (depth). Do not confuse with `ice_pair.gif`.
+
+| # | id | outcome |
+|---|---|---|
+| 4 | `21352982` | **clip COMPLETED** (0:21) — `docs/gifs/ice_pair_placed.gif`, 13 MB |
+| 3 | `21352981` | **export COMPLETED** (1:02) |
+| 2 | `21344928` | **6/6 COMPLETED** — placed PPO, 6:54–9:15 |
+| 1 | `21342561` | **ICE-PLACEMENT REACHABLE** (0:59) — median 0.8 m |
 
 ### B5 maze — stereo re-run with the cameras pointing down · `done` — n=3, 2026-09-15
 **Every stereo number in the two B5 entries below was measured with the stereo
@@ -663,6 +890,9 @@ starts. v1 accepted those sweeps.
 
 | # | id | outcome |
 |---|---|---|
+| 51 | `21353201` | **COMPLETED — C2F jacket, new VBD sheet: 4/4 nonfinite**, `success_rate_finite` 0 (`isaac_c2f_jacket_mat.json`). Headline `success_rate` 1.0 is not a sort |
+| 50 | `21353200` | **COMPLETED — C2 free-base hold at dt=0.005: 0/2, 2/2 nonfinite**, garment travel ~0 (`isaac_c2_hold_dt005.json`). Same as 60 Hz |
+| 49 | `21353130` | **COMPLETED — Isaac C5 pose-fix, four episodes: 2/4 sorted**, moved 4/4, travel 0.19 m, fall 0, nonfinite 0 (`isaac_c5_posefix_full.json`) |
 | 48 | `21338293` | **FAILED** — C2 free base, jacket cloth: same NaN crash in `segment_on_contact` (afterany of 47) |
 | 47 | `21338292` | **FAILED** — C2 free base, sock cloth: same NaN crash (afterany of 46) |
 | 46 | `21338291` | **COMPLETED — C2F jacket, pinned, 0/4 finite.** 4/4 nonfinite, garment moved in 1/4, travel 5.4 cm mean (`isaac_c2f_jacket.json`). One-way coupling is not enough for this garment |
@@ -2056,7 +2286,17 @@ came from.
 | `21330372` | MARL critic A/B — limb1 privileged, limb1 policy-obs, legs2 MAPPO privileged; stairs, 1,500 iterations |
 | `21330392` | critic A/B arm 0 again, limb1 + MAPPO privileged — `_0` of `21330372` died at step 0 |
 | `21338294` | MARL noise A/B — std parameterisation × LR schedule on the one-agent control, stairs, 1,500 iterations |
-| `21338295` | Tier 3 PPO seed 1 (resubmitted; `21328744` cancelled — its dependency on the held seed-0 skrl rows could never clear) |
+| `21353199` | B5 maze navigation env smoke — **PASS** 4/4 |
+| `21353200` | C2 free-base hold at dt=0.005 — **2/2 nonfinite** |
+| `21353201` | C2F jacket new VBD sheet — **4/4 nonfinite** |
+| `21353395` | B5 mazenav train smoke — **PASS** 4/4, eplen 26.6–28.1 |
+| `21353396`, `21353397`, `21353398` | B5 mazenav PPO n=3 — **12/12 COMPLETED**, button 0 |
+| `21355623` | B5 mazenav colour re-render — queued, PreviewSurface overlays |
+| `21342561` | B3 ice placement follow-up — **REACHABLE**, median 0.8 m |
+| `21344927` | B3 ice-placed train smoke |
+| `21344928` | B3 ice-placed PPO n=2 — **6/6 COMPLETED** |
+| `21352981`, `21352982` | B3 ice-placed export + clip — `docs/gifs/ice_pair_placed.gif` |
+| `21353130` | Isaac C5 pose-fix four-episode — **2/4 sorted** |
 | `21300299`, `21300300`, `21300301` | cloth redesign: rigid smoke, Isaac C0 scripted (boot crash), C1 training smoke |
 | `21300348`, `21300493`, `21300494` | cloth redesign: C0 free base, C0 fixed base, C0 fixed-base clip |
 | `21300603`, `21300604`, `21300605` | cloth redesign with hand colliders: fixed-base C0, its clip, free-base C0 |
@@ -2107,3 +2347,469 @@ sacct -j <id> --format=JobID%14,JobName%14,State%12,Elapsed -X
 
 A "why it was re-run" line should name the cause, not the symptom. "Failed" is
 not a reason; "the gif width fell into `"$@"` after `shift 5`" is.
+
+## Mission7 bounded overnight diagnostics — 2026-09-20
+
+Fourteen additional CPU tasks; original pilot and diagnostics preserved. No full campaign or held-out policy evaluations submitted.
+
+**Final audit, September 21:** all 14 scheduler tasks **COMPLETED**, exit `0:0`;
+none remain queued. Nine training studies finished all 200 updates, each with
+**0/8 final validation success / learning gate FAILED**. D1 and D2 completed
+their audits. S1–S3 completed only their prerequisite check and recorded
+**SKIPPED_NOT_LEARNABLE**; they did not train. Actual elapsed allocated CPU
+time: **16.22 CPU-hours**, zero GPUs (56 CPU-hour requested cap).
+Final evidence: `results/mission7-overnight-20260920/final-audit-20260921.json`
+and `scheduler-final-20260921.psv`; current task states are in `matrix.json`.
+
+| Array | Studies | Final state / outcome | Dependency |
+|---|---|---|---|
+| `21370064_[0-8%3]` | A1, A2, A3, A4, A5, B1, C2, C3, C4 | **COMPLETED; nine failed learning gates** | none |
+| `21370065_[12-13%2]` | D1, D2 | **COMPLETED diagnostics** | none |
+| `21370066_[9-11%3]` | S1, S2, S3 | **COMPLETED; SKIPPED_NOT_LEARNABLE** | afterok:21370064_8 |
+
+D2 final privileged full-route success: Doors **4/16**, Transport **4/16**;
+localized components: doors **13/16**, transport **7/8**. D1 confirms varying
+sensor features and sparse positive reward. C4's transient 2/8 validation at
+update 100 did not persist or pass the gate. Full findings and proposed next
+studies: [MISSION7_OVERNIGHT.md](docs/MISSION7_OVERNIGHT.md).
+No new jobs submitted during this closeout. The startup notes below are
+historical observations, superseded by this final audit.
+
+Each task: 2 CPUs, 12 GB, zero GPUs, 2 h cap; total maximum 56 CPU-hours. Sensor tasks also require C4 JSON learning evidence; otherwise they write `SKIPPED_NOT_LEARNABLE` without training. C4 is reused as the matched Both arm, and A1 doubles as the current-PPO sweep baseline. Receipts, config hashes, source hashes, commit and output paths: `results/mission7-overnight-20260920/matrix.json` and `results/mission7-overnight-20260920/submissions.jsonl`. Scheduler completion certifies diagnostic execution only, never learned success.
+
+Startup audit: **VALIDATED** (160 tests, 15 targeted rechecks, finite execution smokes). **RUNNING**: `21370064_0`, `_1`, `_2`, `21370065_12`, `_13`. A4/A5/B1/C2/C3/C4 remain **SUBMITTED / PENDING** under the training array throttle. S1–S3 remain **SUBMITTED / PENDING** behind `afterok:21370064_8` and the C4 JSON learning gate. Slurm confirms `cpu=2,mem=12G` and no GPU allocation. Complete task matrix, budgets, limitations and inspection commands: [MISSION7_OVERNIGHT.md](docs/MISSION7_OVERNIGHT.md).
+
+Early output audit (campaign still RUNNING): A1 wrote a finite PPO update; D1 static geometry audit **COMPLETED**, 352 unique topology hashes. D2 localized reports **COMPLETED**: door 0 **6/8**, door 1 **7/8**, transport **7/8** (acquisition 8/8). These are privileged component successes, not full-route or learned mission results. Full-route interaction rollouts continue. `results/mission7-overnight-20260920/startup-audit.json` preserves this observation.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21383807` array `0-2%3` — gait; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21383808` — c4; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384040` — gait_extra; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384041` — approach; dependency afterok:21383807; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384042` — rewards; dependency afterok:21383807; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384077` — fullroute; dependency afterok:21384040; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384200` — approach_recovery; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384285` array `0-3%4` — train; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384354` — fullroute_recovery; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384572` array `0-1%2` — train_exploration; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384641` — gait_endurance; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384691` — fall_replay; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/submissions.jsonl`.
+
+Mission7 Approach diagnosis (2026-09-21): **SUBMITTED** `21384742` — fall_replay; dependency none; 2 CPUs /12 GB /0 GPUs /2 h per task. Receipts/source hashes: `results/mission7-approach-debug-20260921/replay-on-original-node/submissions.jsonl`.
+
+Mission7 control follow-up (2026-09-21): `21385772`, `21386044`, `21386064`, and `21386072` were canceled or failed before scientific execution because of invalid snapshot/input paths; their logs are preserved under `results/mission7-approach-followup-20260921/`.
+
+Mission7 control follow-up (2026-09-21): **SUBMITTED** `21386084` — initial detailed contact probe; completed but rejected by the explicit pose-match check after instrumentation altered some replay trajectories. **SUBMITTED** `21386215` — corrected pose-matched contact probe; pending.
+
+Mission7 control follow-up (2026-09-21): **SUBMITTED** `21386145` — balanced four-direction Approach with 0.50 m/s measured translation and matched standstill controls; 56/64 controller successes, 0 falls, 0/64 matched standstill, 12/64 easy standstill; final result preserved at `results/mission7-approach-followup-20260921/approach_controller_speed05/`.
+
+Mission7 control follow-up (2026-09-21): **SUBMITTED** `21386200` — exact ten replay contact-brake mitigation plus 16 Doors / 16 Transport route evaluation; failed after the replay phase on a controller initialization bug. All follow-up tasks request 2 CPUs, 12 GB, zero GPUs, and are pinned to `cn-c22` for paired physics.
+
+Mission7 control follow-up (2026-09-21): **SUBMITTED** `21386394` — corrected pre-contact replay and route evaluation; **SUBMITTED** `21386441` — bounded plate sliding-friction contact-parameter replay (geometry and activation unchanged).
+
+Mission7 control follow-up (2026-09-21): `21386488` completed the 16 Doors portion (1/16 success, 4 falls, 11 timeouts) before its sequential Transport phase was replaced by **SUBMITTED** array `21386803_[0-15%4]` for 16 parallel Transport episodes. The replacement preserves the completed Doors records and keeps the same controller, split, seed, and resource limits.
+
+Mission7 control follow-up (2026-09-21): `21386215` was canceled after one exact pose-matched episode to bound an oversized floor-contact trace; `21386409` was the filtered rerun and `21386539` is the corrected full-reset pose-matched contact probe. The final valid probe reproduced all ten unchanged falls with maximum pose error `0.0`; evidence is under `contact_probe-rerun5/`.
+
+Mission7 control follow-up finalization (2026-09-21): `21386145` completed with 56/64 Approach successes, zero falls, 8/16 in world −x, 16/16 in the other directions, and matched standstill 0/64. This fails the privileged Approach gate. `21386539` completed the corrected filtered contact probe: all ten unchanged replay trajectories matched exactly and all ten still fell. `21386540` completed the plate-friction intervention (sliding friction 1.0 → 0.20) with 10/10 falls, so the parameter-only intervention was rejected. `21386488` completed the contact-safe Doors route at 1/16 success (4 falls, 11 timeouts) and was canceled during partial Transport. Replacement array `21386803_[0-15%4]` completed all 16 Transport episodes: 1/16 success, 13 falls, and 2 timeouts. Aggregate: `results/mission7-approach-followup-20260921/transport_array/transport_summary.json`.
+
+Mission7 clearance diagnosis (2026-09-22): `21396422` **FAILED infrastructure** before replay because the node's default `python3` lacked MuJoCo (`ModuleNotFoundError`); no scientific output was written. `21396448` was then **CANCELED** after its `cn-b01` run failed the required unchanged-replay pose match, so its partial output is invalid and will not be interpreted. The same snapshot was resubmitted as **`21396492`**, pinned to the original replay node `cn-c22` with the validated CPU environment explicitly selected. It runs the exact ten-fall replay with read-only robot/obstacle and plate-edge clearance, contact-body, entry-pose, commanded/realized-motion, and fall-stage instrumentation. No route or sensor jobs are released pending this diagnosis.
+
+Mission7 clearance diagnosis result (2026-09-22): `21396492` **COMPLETED 0:0** on `cn-c22`; all 10 unchanged replays matched exactly and all 10 fell. Every fall followed plate contact, minimum robot/plate clearance was −39.4 mm, six failures were during traversal and four after exit, and no first wall/door/goal-post contact preceded a fall. Compact evidence is `results/mission7-approach-followup-20260922/replay-diagnose-cn-c22/diagnostic_summary.json`; raw episodes remain cluster-only. The exact 10/10 upright gate is still closed. No route or sensor job was submitted.
+
+Mission7 staged plate intervention (2026-09-22): **SUBMITTED** `21396660` — exact ten-fall replay on `cn-c22`; approach to a pre-plate pose, 0.40 s settle, then 1.20 s straight crossing with yaw correction frozen. Geometry, activation schedule, fall predicate, and replay layouts are unchanged. No route or sensor jobs released.
+
+Mission7 staged plate intervention (2026-09-22): `21396660` **FAILED infrastructure** before episode execution because the source snapshot omitted shared `bhl_robust.eval` support files. No scientific result was produced; the corrected snapshot is being resubmitted on `cn-c22`.
+
+Mission7 staged plate intervention resubmission (2026-09-22): **SUBMITTED** `21396676` — corrected source snapshot, pinned to `cn-c22`; same one-factor staged pre-plate settle and straight crossing. No route or sensor jobs released.
+
+Mission7 staged plate intervention resubmission `21396676` **FAILED infrastructure** before episode execution because the snapshot hash manifest included itself. No scientific result was produced; the manifest is corrected for the next resubmission.
+
+Mission7 staged plate intervention resubmission (2026-09-22): **SUBMITTED** `21396684` — corrected shared source and hash manifest, pinned to `cn-c22`; same staged pre-plate settle and straight crossing. No route or sensor jobs released.
+
+Mission7 staged plate intervention resubmission `21396684` **FAILED infrastructure** before episode execution because the source snapshot omitted `mission7_diagnostic.py`, imported by the existing overnight helper. No scientific result was produced; the helper is now included for the final resubmission.
+
+Mission7 staged plate intervention resubmission (2026-09-22): **SUBMITTED** `21396709` — complete validated source snapshot, pinned to `cn-c22`; same staged pre-plate settle and straight crossing. No route or sensor jobs released.
+
+Mission7 staged plate intervention, nearest unopened plate (2026-09-22): **SUBMITTED** `21397663` — exact ten-fall replay pinned to `cn-c22`. The one-factor extension stages the nearest unopened plate on either side, preferring the correct side only on distance ties; geometry, activation schedule, fall predicate, and replay layouts are unchanged. No route or sensor jobs released.
+
+Mission7 staged plate intervention, guarded wrong-side entry (2026-09-22): **SUBMITTED** `21397732` — exact ten-fall replay pinned to `cn-c22`. Correct-side staging is retained; wrong-side staging is enabled only when the correct plate is more than 1.0 m away, separating the layout-13 wrong-side trace from layout-4's earlier near miss. Geometry, activation schedule, fall predicate, and replay layouts are unchanged. No route or sensor jobs released.
+
+Mission7 route smoke (2026-09-22): **SUBMITTED** `21397985` — smallest existing `mission7_debug.py fullroute --smoke`, pinned to `cn-c22`; one validation layout each for legacy/measured Doors and Transport. This smoke is the release check before the documented 16-layout route batches. No sensor jobs released.
+
+Mission7 route smoke `21397985` **FAILED infrastructure** before scientific execution because its source snapshot omitted `scripts/mission7_debug.py`; no route episode was produced. A corrected immutable snapshot is being resubmitted with the same smoke command.
+
+Mission7 route smoke resubmission (2026-09-22): **SUBMITTED** `21398074` — corrected snapshot including `scripts/mission7_debug.py`, same one-layout legacy/measured Doors and Transport smoke on `cn-c22`. No 16-layout route or sensor jobs released.
+
+Mission7 documented route evaluation (2026-09-22): **SUBMITTED** `21398501` — intended 16 Doors / 16 Transport `PlateSafeRouteController` evaluation on `cn-c22`; this launch used an invalid campaign path and is being canceled before scientific execution. No sensor jobs released.
+
+Mission7 documented route evaluation `21398501` **FAILED infrastructure** before reading the campaign because of that invalid path; no route episode was produced. The corrected submission uses the existing `results/mission7-replay-smoke-20260921` campaign.
+
+Mission7 documented route evaluation resubmission (2026-09-22): **SUBMITTED** `21398514` — corrected 16 Doors / 16 Transport `PlateSafeRouteController` evaluation on `cn-c22`, using the existing validation campaign and unchanged scoring/geometry. No sensor jobs released.
+
+Mission7 staged plate intervention `21397663` **COMPLETED 0:0** on `cn-c22`; the nearest-unopened-plate extension reached 9/10 upright but caused layout 4 to fall after an earlier wrong-side intervention. It is rejected as the final controller, with the result retained as bounded evidence.
+
+Mission7 staged plate intervention `21397732` **COMPLETED 0:0** on `cn-c22`; the guarded wrong-side entry variant reached 10/10 upright on the exact replay set. The existing exact replay gate is **PASSED**. Compact verdict: `results/mission7-approach-followup-20260922/plate-stage-cn-c22-guarded/result.json`.
+
+Mission7 route smoke `21398074` **COMPLETED 0:0** on `cn-c22`; all four one-layout legacy/measured Doors/Transport smoke paths finished with finite terminal records. It unlocked the documented 16-layout route evaluation.
+
+Mission7 documented route evaluation `21398514` **COMPLETED 0:0** on `cn-c22`; Doors completed at 1/16 success (4 falls, 11 timeouts) and Transport at 0/16 success (6 falls, 10 timeouts). Compact verdict: `results/mission7-approach-followup-20260922/route-eval-cn-c22-v2/result.json`. No sensor jobs were submitted.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399179` — both layouts `1,4,8`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; guarded PlateStage added only at existing PlateSafeRouteController switch handoff; receipt/source hashes: `results/mission7-approach-followup-20260922/route-handoff-probe-cn-c22/submission.json`.
+
+Mission7 route handoff probe `21399179` **FAILED infrastructure** before episode execution on `cn-c22`; the bare node Python lacked numpy. No scientific episode was produced.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399201` — same six layouts and one-factor switch handoff, corrected interpreter path; receipt/source hashes: `results/mission7-approach-followup-20260922-v2/route-handoff-probe-cn-c22/submission.json`.
+
+Mission7 route handoff probe `21399201` **FAILED infrastructure** before episode execution; the selected interpreter lacked MuJoCo. No scientific episode was produced.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399211` — same six layouts and one-factor switch handoff, verified shared Humanoid Lite MuJoCo venv; receipt/source hashes: `results/mission7-approach-followup-20260922-v3/route-handoff-probe-cn-c22/submission.json`.
+
+Mission7 route handoff probe `21399211` **COMPLETED 0:0** on `cn-c22`; 4/6 guarded-stage activations, 2/6 completions, and 1/6 full success. Compact evidence: `results/mission7-approach-followup-20260922/route-handoff-probe-summary.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399201` — both layouts `1,4,8`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; guarded PlateStage added only at existing PlateSafeRouteController switch handoff; receipt/source hashes: `results/mission7-approach-followup-20260922-v2/route-handoff-probe-cn-c22/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399211` — both layouts `1,4,8`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; guarded PlateStage added only at existing PlateSafeRouteController switch handoff; receipt/source hashes: `results/mission7-approach-followup-20260922-v3/route-handoff-probe-cn-c22/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399449` — both layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff; receipt/source hashes: `results/mission7-approach-followup-20260922-early/route-early-handoff-cn-c22/submission.json`.
+
+Mission7 route handoff probe `21399449` **COMPLETED 0:0** on `cn-c22`; exactly two episodes ran. Both first target handoffs preceded plate contact, all three observed staged crossings completed, Transport/layout 1 succeeded end-to-end, and Doors/layout 1 timed out after the first stage during route rejoin. Compact evidence: `results/mission7-approach-followup-20260922/early-handoff-probe-summary.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399494` — both layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True`; receipt/source hashes: `results/mission7-approach-followup-20260922-rejoin/route-rejoin-diagnostic-cn-c22/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399502` — doors layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True` with fix `forward_pulse`; receipt/source hashes: `results/mission7-approach-followup-20260922-rejoin-fix/route-rejoin-fix-cn-c22/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21399503` — doors layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True` with fix `forward_pulse`; receipt/source hashes: `results/mission7-approach-followup-20260922/route-rejoin-fix-v2-cn-c22/submission.json`.
+
+Mission7 route rejoin diagnostic `21399494` **COMPLETED 0:0** on `cn-c22`; Doors/1 and Transport/1 both rejoined with valid route state. Doors/1 stalled physically at waypoint 8 after the first staged crossing; Transport/1 advanced through waypoint 8 and succeeded. Raw evidence: `results/mission7-approach-followup-20260922-rejoin/route-rejoin-diagnostic-cn-c22/`.
+
+Mission7 route rejoin attempt `21399502` **COMPLETED 0:0** on `cn-c22`; the requested pulse did not activate because the probe runner omitted the submitted fix argument. The diagnostic trace is retained, but this job is not interpreted as an intervention result. Raw evidence: `results/mission7-approach-followup-20260922-rejoin-fix/route-rejoin-fix-cn-c22/`.
+
+Mission7 corrected Doors/1 route rejoin intervention `21399503` **COMPLETED 0:0** on `cn-c22`; the single 0.30 m/s forward pulse activated at 45.8–46.2 s, but the robot remained at waypoint 8 and timed out at 180 s. Raw evidence: `results/mission7-approach-followup-20260922/route-rejoin-fix-v2-cn-c22/`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400561` — both layouts `1`, node `cn-c22`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True` with fix `none`; receipt/source hashes: `results/mission7-approach-followup-20260922/route-rejoin-contacts-cn-c22/submission.json`.
+
+**Correction (2026-09-22), Mission7 rejoin interventions `21399502` and `21399503`.**
+The recorded cause for `21399502` — "the probe runner omitted the submitted fix
+argument" — is wrong. Its immutable source snapshot is byte-identical to the
+current `slurm/mission7_route_handoff_probe.sbatch`, which does forward
+`--rejoin-fix "$rejoin_fix"`, and the submitted argv in its `submission.json`
+ends in `forward_pulse`. The argument was forwarded and accepted. The actual
+cause was in that snapshot's stall detector: `post_stage_last_progress_time` was
+refreshed in `observe_step` whenever the base moved more than 2 cm, so a
+humanoid stepping in place kept resetting the timer and the 0.8 s stall
+threshold was never crossed. The detector measured motion where it meant
+progress. The corrected build — the one `21399503` ran, whose snapshot runner
+is byte-identical to current HEAD — redefines progress as distance-to-waypoint
+decreasing by 2 cm, which is why its pulse fired at all.
+
+`21399503` is nevertheless further reinterpreted, for a separate reason. Its
+pulse did activate, but it was a no-op
+by construction: the "0.30 m/s forward restart pulse" imposed 0.300 m/s while
+the route controller was already commanding 0.300 m/s forward. Measured forward
+command delta is **0.000000 m/s**; the only change was zeroing a 0.020 m/s
+lateral and 0.049 rad/s yaw correction (full delta 0.056). `21399503` is
+therefore not evidence that forward drive fails to recover Doors/1 — no
+additional forward drive was ever applied.
+
+Both jobs exited `0:0` and wrote `"rejoin_fix": "forward_pulse"`. The probe now
+reports `intervention_status` and exits non-zero on
+`REQUESTED_BUT_NEVER_FIRED` or `FIRED_BUT_DID_NOT_CHANGE_FORWARD_COMMAND`;
+replaying `21399503` under the new build fails loudly with the latter.
+
+Mission7 Doors/1 vs Transport/1 post-stage rejoin contact probe (2026-09-22):
+**SUBMITTED** `21400561` — both layouts `1`, node `cn-c22`, 2 CPUs / 12 GB /
+0 GPUs / 2 h; unchanged PlateStage with `early` route handoff, rejoin
+diagnostic, and **no intervention** (`forward_pulse` is retired as a no-op by
+construction, above). Adds a compact post-stage world-contact summary: the
+environment already reported wall and door contacts every physics step and the
+probe discarded all but `plate_*`. Geometry, activation semantics and the fall
+predicate are unchanged. Purpose: discriminate physical blockage from
+locomotion-policy failure at the Doors/1 waypoint-8 stall, against Transport/1
+which advances through the same waypoint. A local reproduction of the Doors/1
+episode already shows **19 of 775 post-stage steps in any world contact, all of
+them the just-crossed `plate_0_-1`, with no wall or door contact during the
+134 s stall** — the robot is stationary in free space while commanded 0.30 m/s
+forward with no brake active and 0.05 rad heading error. Receipt/source hashes:
+`results/mission7-approach-followup-20260922/route-rejoin-contacts-cn-c22/submission.json`.
+
+Mission7 Doors/1 vs Transport/1 post-stage rejoin contact probe `21400561`
+**COMPLETED 0:0** on `cn-c22` in 2 m 53 s; preflight passed in ~4 s. Both
+guarded stages activated and completed (2/2). Transport/1 succeeded end-to-end
+at 84.120 s; Doors/1 timed out at 180.0 s without falling, as before. The new
+post-stage world-contact summary is decisive: across **775 post-stage steps
+Doors/1 was in contact with a world geom in only 19 (2.5 %), every one of them
+the just-crossed `plate_0_-1`, minimum distance −6.1 mm, last contact shortly
+after stage exit**. There is **no wall and no door contact during the 134 s
+stall**. Successful Transport/1, by contrast, spent 70 of 292 post-stage steps
+(24.0 %) in contact across three plate geoms.
+
+Interpretation: Doors/1 is **not physically blocked and not route-state
+corrupted**. It stands in free space with the route commanding a constant
+0.300 m/s forward, no brake active, 0.05 rad heading error and the waypoint-8
+target 1.64 m ahead, and does not move. Combined with the `21399503`
+reinterpretation above — no additional forward drive was ever applied — the
+remaining explanation is **locomotion-policy failure**: the frozen gait produces
+no forward gait from the post-stage entry state. "Post-stage route rejoin" is a
+misnomer for this failure; the route is correct.
+
+Compact verdict: `results/mission7-approach-followup-20260922/route-rejoin-contacts-cn-c22/result.json`
+(28 KB; the 24 MB and 48 MB per-episode traces stay on the cluster and are
+ignored by shape). No sensor jobs released. The privileged Approach gate and
+the sensor comparisons remain closed.
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21400730` — controller `recovery`, directions `-1,+0`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 01:00:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-negx-recovery/submission.json`.
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21400731` — controller `guard`, directions `-1,+0`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 01:00:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-negx-guard/submission.json`.
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21400732` — controller `pulse`, directions `-1,+0`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 01:00:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-negx-pulse/submission.json`.
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21400745` — controller `recovery030`, directions `-1,+0`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 01:00:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-negx-recovery030/submission.json`.
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21400746` — controller `settle14`, directions `-1,+0`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 01:00:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-negx-settle14/submission.json`.
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21400747` — controller `settle16`, directions `-1,+0`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 01:00:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-negx-settle16/submission.json`.
+
+Mission7 privileged Approach −x arms `21400730` (`recovery`), `21400731` (`guard`), `21400732` (`pulse`) **COMPLETED 0:0** on `cn-c22`/`cn-c23` under `--constraint=haswell&el8`, 16 world −x layouts each (balanced test-split selection unchanged), geometry, 0.65 m spawn and the >5-contact-tick predicate unchanged. `recovery` (the evaluated 0.50 m/s controller) reproduced `21386145` exactly: **8/16, 0 falls, 8 excessive_collision**, mean 3.2 s. `guard` (lateral centering before the post line, previously untested): **0/16** — 7 excessive_collision, 9 timeouts; regressed all eight baseline successes (1, 5, 6, 7, 20, 25, 37, 41), improved none. `pulse` (0.30 m/s pulses with a 0.90 m detour around the posts, previously untested): **0/16** — 11 excessive_collision, 5 timeouts; same eight regressions, no improvement. Both are rejected. Geometry measured this session: posts at `goal + (0.52, ±0.35)` give a 0.61 m gap; the robot's lateral collision envelope at rest is 0.632 m (elbow to elbow); the outside-post corridor margin is 0.315 / 0.365 / 0.415 m at pitch 1.5 / 1.6 / 1.7 against a 0.316 m half-robot. A −x approach must cross the post plane (spawn at +0.65, dwell radius 0.36), so neither route clears; the 8/16 is arm-swing phase at the crossing. Compact results: `results/mission7-campaign-20260923/approach-negx-{recovery,guard,pulse}/result.json`.
+
+Mission7 privileged Approach −x phase/onset arms (2026-09-23): **SUBMITTED** `21400745` (`recovery030`, 0.30 m/s onset), `21400746` (`settle14`, settle 1.4 s), `21400747` (`settle16`, settle 1.6 s) — same 16 −x layouts, same geometry and predicates; one command-side factor each. The settle arms test the phase reading directly: if success flips on the same layouts with settle time, the crossing phase is the cause.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400752` — doors layouts `0,1,2,3,4,5,6,7`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/campaign-a-doors-00-07/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400753` — doors layouts `8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/campaign-a-doors-08-15/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400754` — transport layouts `0,1,2,3,4,5,6,7`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/campaign-a-transport-00-07/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400755` — transport layouts `8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/campaign-a-transport-08-15/submission.json`.
+
+Mission7 privileged Approach −x phase/onset arms `21400745` (`recovery030`), `21400746` (`settle14`), `21400747` (`settle16`) **COMPLETED 0:0** under `--constraint=haswell&el8`, 16 world −x layouts each, geometry and predicates unchanged. `recovery030` **7/16** (0 falls; gained 17, 33; lost 6, 25, 37). `settle14` **8/16** (gained 14; lost 25). `settle16` **9/16** (gained 14, 33; lost 6). With `recovery` 8/16 and the rejected `guard`/`pulse` 0/16, six arms and 96 episodes place every command-side factor at 7–9/16 or 0/16, and the set of succeeding layouts moves with settle time and onset speed. Success at the post crossing is arm-swing phase, not layout: the ≥14/16 per-direction Approach criterion is **geometrically bound** for a 0.632 m robot in a 0.61 m gap with ≤0.415 m outside margin. The privileged Approach gate therefore stays **closed** on geometric grounds, unchanged; no candidate is promoted. Compact summary: `results/mission7-campaign-20260923/approach-negx-summary.json`.
+
+Mission7 Campaign A (2026-09-23): **SUBMITTED** `21400752` (Doors 0–7), `21400753` (Doors 8–15), `21400754` (Transport 0–7), `21400755` (Transport 8–15) — early handoff, no intervention, `--chain-trace --rejoin-diagnostic`, `--constraint=haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h each; 32 instrumented development episodes on validation layouts 0–15 with the 25 Hz command-to-motion chain, foot-floor contact and per-episode mechanism classification (thresholds declared in the probe before submission). Receipts: `results/mission7-campaign-20260923/campaign-a-*/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400780` — transport layouts `13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `True`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/campaign-a-transport-13-15/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400801` — doors layouts `0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/instage-doors-F1/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400802` — doors layouts `0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/instage-doors-F1F2/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400803` — doors layouts `0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/instage-doors-F1F3/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400804` — doors layouts `0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/instage-doors-F1F2F3/submission.json`.
+
+Mission7 exact replay gate (2026-09-23): **SUBMITTED** `21400805` — ten-fall staged replay pinned to `cn-c22`, PlateStage lateral `0.25 m`; geometry, activation schedule and fall predicate unchanged; receipt/source hashes: `results/mission7-campaign-20260923/replay-gate-lateral025/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400806` — doors layouts `1,2,3,6`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `prev_actions_reset`; receipt/source hashes: `results/mission7-campaign-20260923/campaign-b-doors-reset/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400807` — transport layouts `0`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `prev_actions_reset`; receipt/source hashes: `results/mission7-campaign-20260923/campaign-b-transport-reset/submission.json`.
+
+Mission7 Campaign A `21400752` (Doors 0–7), `21400753` (Doors 8–15), `21400754` (Transport 0–7) **COMPLETED 0:0**; `21400755` (Transport 8–15) **OUT_OF_MEMORY** at 12 GB after writing five valid episode records (8–12): the runner held every full episode row — chain columns, per-step route snapshots, contact events — in memory until the end. Fixed (only the compact summary is retained after each record is written; records unchanged) and the three missing layouts resubmitted as `21400780` (Transport 13–15) **COMPLETED 0:0**. Campaign A is complete: **32 episodes, Doors 3/16, Transport 1/16, 13 falls, 6 timeouts.** Failure phases: during PlateStage **15** (seven `excessive_collision` with a maze wall — the plate centre sits 0.42 m off the corridor centreline, leaving the body 0.29–0.39 m from the wall against a 0.316 m half-body; concentrated in world +y), after PlateStage **12** (falls 0.2–1.3 s after the crossing while the route commands up to 0.35 m/s lateral), before PlateStage 1 (Doors/0 never reached the plate). Post-stage stall exposures **5** (Doors 1, 2, 3, 6; Transport 0); stall-window mechanism `frozen_targets` in every classifiable case (4). Compact summary: `results/mission7-campaign-20260923/campaign-a-summary.json`.
+
+Local single-layout smokes (login node, not Slurm) of three separable in-stage factors, geometry and predicates unchanged: F1 `--stage-lateral=0.25` (body centres 0.25 m off the centreline instead of on the plate centre; wall-side foot at 0.355 m still lands on the 0.24 m-radius plate) removed the Doors/12 wall collision (stage completed, 0 collisions) but the episode fell 2.0 s after exit; on Doors/15 the collision moved from the wall to the closed door — the plate was touched 5,180 times and never activated, because `PlateSafeRouteController` only raises `activate` in its own `switch` phase. F2 `--stage-activate` (stage asserts `activate` on the plate and waits up to 2 s for the door before crossing) activated Doors/12's door at 15.3 s during the stage. F3 `--exit-ramp=0.6` (forward-only 0.30 m/s along the door direction after the crossing) removed the Doors/12 post-exit fall; with F1+F2+F3 Doors/12 reached the second door at 66 s before colliding there.
+
+Mission7 in-stage factor campaign (2026-09-23): **SUBMITTED** `21400801` (F1), `21400802` (F1+F2), `21400803` (F1+F3), `21400804` (F1+F2+F3) — 16 Doors validation layouts each, early handoff, chain trace, `--constraint=haswell&el8`; Campaign A is the matched baseline. **SUBMITTED** `21400805` — exact ten-fall replay gate with `--stage-lateral=0.25`, pinned `cn-c22` (bitwise protocol). **SUBMITTED** Campaign B `21400806` (Doors 1, 2, 3, 6) and `21400807` (Transport 0) — `prev_actions_reset` on the five exposed episodes, chain trace, baseline fingerprints from Campaign A; delivery verified per episode.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400825` — doors layouts `0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/instage-doors-F2/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400826` — doors layouts `0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/instage-doors-F3/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400827` — doors layouts `0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/instage-doors-F2F3/submission.json`.
+
+Mission7 exact replay gate (2026-09-23): **SUBMITTED** `21400863` — ten-fall staged replay pinned to `cn-c22`, PlateStage lateral `plate centre`, wait-open `2.0 s`; geometry, activation schedule and fall predicate unchanged; receipt/source hashes: `results/mission7-campaign-20260923/replay-gate-waitopen2/submission.json`.
+
+Mission7 Campaign B `21400806` (Doors 1, 2, 3, 6) and `21400807` (Transport 0) **COMPLETED 0:0** under `--constraint=haswell&el8`. All five exposed episodes: stall time and fingerprint identical to Campaign A, `prev_actions_reset` **APPLIED** (target changed, zero input delivered to the next policy update). Doors/1 timeout → **success 82.8 s**; Doors/2 post-exit fall → no fall (timeout); Doors/6 reached the second door (progress 3.2 → 5.3 m) and failed inside that stage; Doors/3 **regressed** success → fall inside the second stage; Transport/0 unchanged (fall inside the second stage, 72.8 → 72.3 s). Route success 1/5 → 1/5. The reset un-sticks the feedback fixed point in 5/5 (post-stage progress 3.2–3.8 → 4.5–5.5 m) but hands control back into the in-stage failure downstream; under the predeclared rule (≥1 matched improvement, 0 regressions) it is **not** promoted alone. Compact: `results/mission7-campaign-20260923/campaign-b-doors-summary.json`.
+
+Mission7 exact replay gate `21400805` (`--stage-lateral=0.25`) **COMPLETED 0:0** on `cn-c22`: **8/10 upright — gate FAILED** (baseline 10/10). Layouts 5 and 7 fell in the stage's `approach` phase with a knee on the raised plate: the offset pre-point routes the approach across the plate edge, reintroducing the original trip mechanism. F1 at 0.25 m is rejected as-is.
+
+Mission7 in-stage arms `21400801` (F1), `21400802` (F1+F2), `21400803` (F1+F3), `21400804` (F1+F2+F3) **COMPLETED 0:0**, 16 Doors validation layouts each, Campaign A (3/16, 5 falls) as the matched baseline. F1 **0/16** (in-stage failures 7 → 13: with the body off the plate centre the route's `activate` never fires and every crossing hits the closed door). F1+F3 **0/16**. F1+F2 **3/16, falls 5 → 1**; F1+F2+F3 **3/16, falls 5 → 1** — identical to F1+F2, so F3 adds nothing on Doors. Of F1+F2+F3's nine in-stage terminations, eight are `excessive_collision` with the still-closed `door_0` after the 2 s `wait_open` expired unactivated: the stage settles 0.30 m *before* the plate, so nothing presses it while it waits. Stage-owned activation works (Doors/12 activated at 15.3 s) only when a foot happens to land on the plate mid-crossing.
+
+Mission7 in-stage no-lateral arms (2026-09-23): **SUBMITTED** `21400825` (F2), `21400826` (F3), `21400827` (F2+F3) — 16 Doors, plate-centre lateral (replay-safe approach geometry). **SUBMITTED** `21400863` — exact replay gate with `--wait-open=2.0` at the plate centre, pinned `cn-c22`, the regression run for F2's PlateStage part.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400895` — doors layouts `0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/instage-doors-A1-activate-only/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400896` — doors layouts `0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/instage-doors-A2-activate-only-l035/submission.json`.
+
+Mission7 exact replay gate (2026-09-23): **SUBMITTED** `21400897` — ten-fall staged replay pinned to `cn-c22`, PlateStage lateral `0.35 m`, wait-open `0.0 s`; geometry, activation schedule and fall predicate unchanged; receipt/source hashes: `results/mission7-campaign-20260923/replay-gate-lateral035/submission.json`.
+
+Mission7 exact replay gate `21400863` (`--wait-open=2.0`, plate centre) **COMPLETED 0:0** on `cn-c22`: **10/10 upright — gate PASSED**; F2's PlateStage part is replay-safe.
+
+Mission7 in-stage no-lateral arms `21400825` (F2), `21400826` (F3), `21400827` (F2+F3) **COMPLETED 0:0**, 16 Doors, Campaign A baseline 3/16 with 5 falls. F2 **1/16, 8 falls**; F3 **1/16, 9 falls**; F2+F3 **1/16, 6 falls** — all worse. At the plate centre the five wall-class layouts (8, 11, 12, 14, 15) still terminate on maze walls in `approach`/`settle`, unchanged from Campaign A; the 2 s `wait_open` is a standstill and standstills are what drive this gait into its feedback fixed point, so the crossing that follows restarts badly (layouts 3, 4, 7 lost). Local press-and-hold smokes on Doors/11 and Doors/14 terminated at exactly the baseline wall-collision times (23.0 s, 26.1 s), before the hold could act; press-and-hold is deprioritized as another standstill.
+
+Selection-pool additions declared before results (2026-09-23): **SUBMITTED** `21400895` (A1: `--stage-activate --stage-wait-open 0`, activate-only at the plate centre, replay-identical PlateStage) and `21400896` (A2: A1 with `--stage-lateral=0.35`, the largest offset that keeps both feet on the 0.24 m plate while moving the body 0.36–0.46 m from the wall), 16 Doors each; **SUBMITTED** `21400897` — exact replay gate at `--stage-lateral=0.35`, pinned `cn-c22`. The predeclared selection rule (highest Doors success, ties to fewer factors, replay gate 10/10 required) now ranges over `21400801–804`, `21400825–827`, `21400895–896`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400952` — doors layouts `0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/instage-doors-F1F2F3-l035/submission.json`.
+
+Mission7 exact replay gate (2026-09-23): **SUBMITTED** `21400953` — ten-fall staged replay pinned to `cn-c22`, PlateStage lateral `0.35 m`, wait-open `2.0 s`; geometry, activation schedule and fall predicate unchanged; receipt/source hashes: `results/mission7-campaign-20260923/replay-gate-lateral035-waitopen2/submission.json`.
+
+Mission7 exact replay gate `21400897` (`--stage-lateral=0.35`) **COMPLETED 0:0** on `cn-c22`: **10/10 upright — gate PASSED**; a 0.35 m body offset keeps the approach off the raised plate. In-stage arms `21400895` (A1, activate-only at the plate centre) **2/16, 6 falls** and `21400896` (A2, activate-only at 0.35 m) **0/16, 2 falls** **COMPLETED 0:0**. A2 clears the wall class — Doors/11 and 12 reach the second door for the first time — but ten layouts then cross into a still-closed `door_0` with no press registered during the 1.2 s crossing; activation without an offset (A1) loses Doors/3 in the second stage. Across nine arms the only sizeable signal remains F1+F2(+F3) at 0.25 m: success held at 3/16 with falls 5 → 1, on a geometry the gate rejects.
+
+Declared before results (2026-09-23): **SUBMITTED** `21400952` — F1+F2+F3 at the replay-safe 0.35 m (`--stage-lateral=0.35 --stage-activate --exit-ramp=0.6`, wait-open 2.0), 16 Doors; and `21400953` — the combined exact replay gate (0.35 m + wait-open 2.0), pinned `cn-c22`. This is the last in-stage arm in the predeclared selection pool; if it does not reach ≥3/16 with the gate at 10/10, no in-stage candidate is frozen and the confirmatory evaluation is not launched.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21400961` — doors layouts `1,2,3,6`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `prev_actions_reset`; receipt/source hashes: `results/mission7-campaign-20260923/interaction-doors-reset-F1F2F3-l035/submission.json`.
+
+Mission7 last predeclared in-stage arm `21400952` (F1+F2+F3 at 0.35 m) **COMPLETED 0:0**: **1/16, falls 5 → 1** — Doors/8 (a wall-class layout) succeeds for the first time; baseline successes 3, 4 and 7 are lost. Combined exact replay gate `21400953` (0.35 m + wait-open 2.0) **COMPLETED 0:0** on `cn-c22`: **10/10 — PASSED**. Full in-stage table (ten arms, 160 episodes, Campaign A baseline 3/16 with 5 falls): F1 0/16; F1+F2 3/16 (falls 1; +8, +9; −4, −7); F1+F3 0/16; F1+F2+F3 3/16 (falls 1; +1, +9; −4, −7); F2 1/16 (8 falls); F3 1/16 (9); F2+F3 1/16 (6); activate-only 2/16; activate-only at 0.35 m 0/16; F1+F2+F3 at 0.35 m 1/16 (falls 1; +8; −3, −4, −7). Every lateral arm loses layouts 4 and 7. Gates: 0.25 m **8/10 FAIL**; wait-open, 0.35 m and their combination **10/10**.
+
+**Selection decision under the predeclared protocol:** no arm exceeds the baseline; the two that tie it are on a geometry the gate rejects; the gate-safe version is 1/16; `prev_actions_reset` had one matched regression. **No candidate is frozen and the confirmatory evaluation on validation 16–31 is not launched.** The reserved test split is untouched. Compact: `results/mission7-campaign-20260923/instage-summary.json`.
+
+Declared before its result: **SUBMITTED** `21400961` — interaction test, `prev_actions_reset` combined with F1+F2+F3 at 0.35 m on the four exposed Doors episodes (1, 2, 3, 6); the plan's "combine 2 and 3" check, 4 episodes.
+
+Mission7 interaction test `21400961` (`prev_actions_reset` + F1+F2+F3 at 0.35 m, Doors 1, 2, 3, 6) **COMPLETED 0:0**: all four episodes terminated inside the stage at 22–35 s, before any post-stage stall opportunity, so the reset was **NOT_EXPOSED in 4/4** (never fired; a route failure of the in-stage arm, distinct from a requested intervention silently doing nothing). Route success 1/4 → 0/4 against Campaign A and against the reset-alone arm; Doors/2's fall removed. The combination is rejected. Campaign closeout: 30 jobs, 349 CPU episodes, zero GPUs; no candidate frozen; confirmatory set and test split unread; all gates unchanged and closed.
+
+**Correction (2026-09-23), Campaign B interpretation.** The adversarial review of the probe patch (35 agents; 5 confirmed of 16 candidate findings) established that the "post-stage progress 3.2–3.8 → 4.5–5.5 m" figures and the "un-sticks the fixed point 5/5" statement compared `chain_post_stage_summary` windows anchored at the *last* stage exit, which cover different route segments in the two arms. Recomputed offline from the retained 25 Hz chain columns of the same runs on the window that starts at the stall condition itself (`stall_branch_time` → +20 s; `results/mission7-campaign-20260923/campaign-b-stall-anchored.json`): only **two of the five exposures were genuine stalls** — Doors/1 (0.019 m in 20 s, cycling in place, target range 47 % of walking and decaying to 2 % by the final window) and Doors/6 (0.003 m, 17 %); `prev_actions_reset` un-stuck **both** (3.46 m and 4.63 m in the same window). Doors/2, Doors/3 and Transport/0 were 0.8 s pauses the unchanged baseline walked out of on its own (4.64, 4.45, 2.56 m), and the reset changed nothing measurable there (4.75, 4.44, 2.61 m). The stall detector's 0.8 s no-progress criterion therefore over-counts exposures; a fixed point should be required to persist for several seconds before an episode counts as exposed. The promotion decision is unchanged (Doors/3's regression stands). Other confirmed findings, all fixed in the probe: foot contact ignored feet standing on plate geoms (foot-contact and slip statistics undercounted in windows that include a plate; no label changed); no stall-anchored classification window existed (added; `mechanism` now prefers it for exposed episodes); `handoff_condition_first_true_time` was overwritten on a second activation; the post-stage contact summary now names its first-exit anchor. Rejected findings (11) are recorded in the workflow journal.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21401685` — doors layouts `1,2,3,6`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `prev_actions_reset`; receipt/source hashes: `results/mission7-campaign-20260923/campaign-b2-doors-reset-min3/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21401686` — transport layouts `0`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `True`, fix `prev_actions_reset`; receipt/source hashes: `results/mission7-campaign-20260923/campaign-b2-transport-reset-min3/submission.json`.
+
+**Correction (2026-09-23), in-stage lateral arms withdrawn — misplaced staging target.** Validating plate-relative geometry from the retained chain columns shows that every `--stage-lateral` arm staged the robot about **0.75 m past the plate**, in front of the door, not laterally offset from it: `layout.plate()` anchors the plate on `xy(route[k])`, the cell before the door, while the offset target was built on `layout.door()`'s centre half a cell further along. In the offset arms the settle and crossing ran at +0.43 to +0.79 m along the door direction with zero plate contact; presses registered only when the robot happened to walk over the plate on its way to the wrong point; the "wall class cleared" because the robot stood somewhere else; and the 0.25 m replay falls came from approaching that far point across the plate. Withdrawn as evidence about a lateral offset: `21400801` (F1), `21400802` (F1+F2), `21400803` (F1+F3), `21400804` (F1+F2+F3), `21400896` (A2), `21400952` (F1+F2+F3 at 0.35) and the replay gates `21400805`, `21400897`, `21400953` (96 + 30 episodes). They stand as evidence about a target placed before the door. The anchor is fixed and verified to reproduce the plate position exactly at 0.42 m. Arms without the offset (`21400825–827`, `21400895`) and the wait-open gate `21400863` are unaffected.
+
+**Established from the same traces (2026-09-23).** (1) *Post-exit falls are plate-edge trips, 8/8:* at hand-back the base is 0.13–0.39 m from the plate centre — on the plate — the route immediately commands up to 0.35 m/s lateral, and every fall carries 230–860 N of plate contact in its last 1.5 s. Cause: from the 0.40 s standstill the gait covers only ~0.13 m in the replay's 1.20 s crossing, so the crossing ends with the feet on the plate edge. (2) *Approach-phase falls are plate trips from the side:* Doors/13, Doors/5 and Transport/0's second door were captured 0.46–0.78 m lateral to the plate, two of them at a ~90° heading, and the straight-line approach with no yaw correction walked onto the raised plate (2,600–4,700 contacts, 340–590 N). (3) *Doors/3's Campaign B regression* is not stall-related: the reset fired at 36.4 s during a 0.64 s pause while walking at 0.34 m/s, zeroing `prev_actions` mid-stride produced a 0.7–1.0 m/s lurch that re-converged within a second, and the 0.2 s timing shift it left put a different footfall on the raised plate in the second crossing (1,155 contacts, 338 N) at 82.6 s. (4) *Exposure durations:* the two genuine stalls (Doors/1, Doors/6) never moved again; the three pauses resumed within 0.36–0.64 s; a 3.0 s no-progress criterion separates them with margin.
+
+Declared before results (2026-09-23): **SUBMITTED** `21401685` (Doors 1, 2, 3, 6) and `21401686` (Transport 0) — `prev_actions_reset` with `--stall-min-s 3.0`, unchanged stage; expected Doors/1 and Doors/6 exposed and recovered, the other three NOT_EXPOSED with outcomes identical to Campaign A. Budget: 163 episodes remained; 5 spent here; plan ≤ 20 replay-gate episodes, ≤ 48 development episodes on validation 0–15, and 64 reserved for a predeclared confirmatory run (32 candidate + 32 baseline on validation 16–31) only if a candidate qualifies.
+
+Mission7 exact replay gate (2026-09-23): **SUBMITTED** `21401689` — ten-fall staged replay pinned to `cn-c22`, PlateStage lateral `plate centre`, wait-open `0.0 s`; geometry, activation schedule and fall predicate unchanged; receipt/source hashes: `results/mission7-campaign-20260923/replay-gate-v2-clear035-kick/submission.json`.
+
+Mission7 selective-trigger verification `21401685` (Doors 1, 2, 3, 6) and `21401686` (Transport 0) **COMPLETED 0:0** — `prev_actions_reset` with `--stall-min-s 3.0`, unchanged stage, Campaign A as the matched baseline. Doors/2, Doors/3 and Transport/0: **NOT_EXPOSED, trajectories tick-identical to baseline** (92.8 s, 102.0 s, 72.8 s); Doors/3's success is preserved, so the Campaign B regression is removed by the trigger alone. Doors/6: exposed at 40.0 s, APPLIED, timeout → **success 111.5 s**. Doors/1: exposed at 48.0 s, APPLIED, progressed 2.7 m and opened the second door, then fell after the second crossing at 64.9 s (timeout → fall; a downstream plate trip). Doors 1/4 → 2/4 on success, falls 1 → 2. The selective trigger is validated as regression-free on success; it exposes only the two genuine stalls.
+
+Local single-layout smokes of the corrected stage on Doors/1 (login node, no budget). *Pre-point 0.45 + cross-until-clear 0.35 + activate-only*: approach lands at the intended point, the press registers mid-crossing (door open 23.7 s), but the gait advances 0.2 m after the 0.40 s settle and then **stands on the plate edge for the remaining 3 s at the full 0.30 m/s command** — the standing fixed point, and the reason the replay's crossing covers only 0.13 m. *No settle (V1)*: continuous motion into the plate, trip at 24.2 s — rejected, consistent with the original ten falls. *Cross-kick (V2: settle, then `prev_actions := 0` at cross start)*: the crossing advances steadily −0.43 → +0.36 m in 3.0 s, door open at 23.8 s, hand-back **past the plate with no plate contact**; the route then brakes on the next plate contact and reverses onto the plate, and Doors/1 opens both doors for the first time before a post-exit fall at the second door (73.5 s). *Corrected lateral 0.25 on Doors/12*: press registers (15.1 s) but the straight-line approach from 0.83 m to the side overshoots to the plate's own line and hits the wall at the baseline time (16.3 s); the wall class is an approach-dynamics problem the offset alone does not solve.
+
+Declared before results (2026-09-23): **SUBMITTED** `21401689` — exact replay gate for the V2 stage (`--pre-point=0.45 --cross-clear=0.35 --cross-kick`, settle 0.40), pinned `cn-c22`. Local smokes of the two hand-back complements (V2 + 0.6 s exit ramp; V2 with clearance 0.60 m) run in parallel; the better-behaved complement and the gate result decide the 16-Doors development arms. Budget after this gate: 148 episodes.
+
+Local Doors/1 smokes of the V2 stage with hand-back complements (2026-09-23, no budget). **V2 + 0.6 s exit ramp: route SUCCESS at 84.0 s** — both doors opened (23.8 s, 57.8 s), both crossings clean, no fall, no stall exposure; the first full-route success produced by an in-stage change. V2 with clearance 0.60 m and no ramp: fell in the second crossing at 62.9 s — rejected. In every V2 smoke the route walks the robot backwards along the door direction after hand-back (+0.69 → +0.2 m from the plate): the per-step route history shows `route.waypoint` still at the cell **before** the door (index 4 of a door between 4 and 5) for three seconds after the stage carried the robot past it, before advancing to 5. Declared: `--rejoin-advance`, which at hand-back sets the waypoint to the cell after the crossed door once the door is open and the body is ≥0.24 m past the plate; nothing else in the route changes. Smokes of V2 + rejoin-advance with and without the ramp are running. Rendering note: the login node has neither EGL nor OSMesa; the existing GIF launchers (`97_maze_video.sbatch`) use the GPU partitions with `--gres=gpu:1`, which a Mission 7 clip will need too.
+
+Local Doors/1 smokes, V2 + `--rejoin-advance` with and without the straight exit ramp (2026-09-23): the backward walk is gone (along the door direction +0.35 → +0.80 m monotonically) but both end in `excessive_collision` 1.2–1.6 s after hand-back on the door jambs (`wall_m7_15`, `wall_m7_22`): heading straight for the next cell from the plate's lateral line, the robot reaches the door opening 0.46 m off the corridor centreline. The baseline's backward walk to the pre-door waypoint was re-centring, at the cost of re-entering the plate zone. Declared: `--exit-ramp-center` (the ramp aims at the door centre, re-centring while always advancing) combined with rejoin-advance; smoke running.
+
+Mission7 exact replay gate `21401689` (V2: `--pre-point=0.45 --cross-clear=0.35 --cross-kick`) **COMPLETED 0:0** on `cn-c22`: **7/10 upright — gate FAILED** (layouts 4, 5, 7 fell). Forensics from the gate's own samples: in all three the body-frame command during `cross` was **[0.01, 0.30, 0.0] — a sideways walk** for ~2 s before a plate-edge trip (tilt rising with 60–240 N plate contact). The crossing is a world-frame vector issued without yaw correction, so a robot that reached the pre-point about 90° off the door direction crosses laterally, on the gait's weakest axis; the replay's fixed 1.20 s crossing barely moved (0.13 m) and never reached the edge, which is why the plate-centre gates passed, while cross-until-clear keeps the sideways walk going until it falls. Declared: `--align-yaw` — turn in place toward the door direction during the settle (tolerance 0.20 rad, bounded 1.5 s) before the kick and a now-forward crossing. Local Doors/1 smoke of V2 + rejoin-advance + centre-aimed exit ramp (1.2 s): **route SUCCESS at 77.7 s**, both doors, zero contacts, re-centred from −0.61 m to −0.11 m while advancing. The ten-episode replay of V3 (V2 + align-yaw) is being run locally first, at no budget, before any further gate; budget remaining 138.
+
+Local ten-episode replay of V3 (V2 + in-place yaw alignment during the settle), 2026-09-23, no budget: **8/10** — layouts 4 and 5 now upright, 7 still falls, 14 newly falls, and 9/12/13 never reach the pre-point before the recorded episode ends (upright). Forensics: in 7 and 14 the pre-point is reached 75–90° off the door direction and **the frozen gait does not turn in place** — 1.5 s of a pure yaw command from standstill produced no rotation (yaw error 1.25 → 1.33 rad) — so the crossing was sideways again. Declared V4: the yaw term is applied while moving, during the approach and the crossing, with no in-place turn; the local replay and a Doors/1 smoke are running. Doors/1 with V3 + centre-aimed ramp + rejoin-advance: route success at 81.0 s.
+
+**Predeclared confirmatory evaluation, candidate 1 (2026-09-23, before any result on validation 16–31 was read).** Candidate frozen by snapshot hash: the unchanged guarded PlateStage (plate centre, 0.40 s settle, 1.20 s crossing — the configuration that holds the 10/10 exact replay), early handoff, and `prev_actions_reset` with `--stall-min-s 3.0`. Development evidence: on the five Campaign A exposures the 3 s trigger leaves every pause tick-identical to baseline (3/3) and fires only on the two genuine stalls, recovering Doors/6 to success and carrying Doors/1 to the second door; no success regression. Evaluation set: validation layouts **16–31**, never used, both stages, 32 candidate episodes without chain trace (`21401728` Doors, `21401729` Transport, `--constraint=haswell&el8`). Because a non-exposed candidate episode is tick-identical to baseline by construction (verified), the candidate run is the matched baseline wherever the reset does not fire; matched baseline reruns are submitted only for exposed episodes. Primary metric: route success on exposed pairs plus the unchanged non-exposed pairs (full denominator 32 per stage); secondary: falls, exposure count. Precision as predeclared: with the expected 1–3 exposures the result will be reported as underpowered, not as null. One evaluation, no second look; the test split stays untouched.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21401728` — doors layouts `16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `False`, fix `prev_actions_reset`; receipt/source hashes: `results/mission7-campaign-20260923/candidate1-doors-16-31/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21401729` — transport layouts `16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `False`, fix `prev_actions_reset`; receipt/source hashes: `results/mission7-campaign-20260923/candidate1-transport-16-31/submission.json`.
+Mission7 media render (2026-09-23): **SUBMITTED** `21401734` — GPU partition, EGL; renders Doors/1 baseline (stopped at 70 s, stall shown) and Doors/1 with the crossing fix (V2 + centre ramp + rejoin-advance, local success 77.7 s) to MP4 with hashed sidecars, then a paired GIF. Two rendered episodes count against the budget; the clip is a rendering of a single development layout, not a route-rate or gate claim.
+
+Local ten-episode replay of V4 (moving yaw term in approach and crossing), 2026-09-23, no budget: layout 7 falls again (9/10 at best); and on Doors/1 the yaw term changed the crossing timing so the kick-restarted gait stalled on the plate a second time, the 4 s crossing budget expired with the robot still on the plate, and the route's backward walk tripped it at 30.2 s (fall 31.0 s; V3 had succeeded at 81.0 s). **Crossing workstream closed for this budget as a validated mechanism without a gate-passing composition:** (1) after the settle the frozen gait restarts for ~0.2 m at the 0.30 m/s command and settles into its standing fixed point on the plate edge — the reason the replay's crossing covers 0.13 m and every post-exit fall is a plate trip; (2) a stage-owned `prev_actions` kick restarts it, once; (3) a robot that reaches the pre-point sideways crosses sideways, and the gait cannot turn in place; (4) after hand-back the route's waypoint index still points at the pre-door cell, so it walks backwards into the plate zone; a centre-aimed exit ramp with the index advanced fixes the hand-back. Composed, these produce full-route success on Doors/1 (77.7 s and 81.0 s) but the exact ten-fall replay is 7/10 (V2, `21401689`), 8/10 (V3, local) and ≤9/10 (V4, local). No further gate is spent on it; the remaining budget goes to candidate 1's predeclared confirmatory.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21401788` — doors layouts `28`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `False`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/baseline-doors-exposed-16-31/submission.json`.
+
+Mission7 route handoff probe (2026-09-22): **SUBMITTED** `21401789` — transport layouts `24,31`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 2 h; unchanged PlateStage with `early` route handoff and rejoin diagnostic `False`, chain trace `False`, fix `none`; receipt/source hashes: `results/mission7-campaign-20260923/baseline-transport-exposed-16-31/submission.json`.
+
+Mission7 candidate 1 confirmatory `21401728` (Doors 16–31) and `21401729` (Transport 16–31) **COMPLETED 0:0** under `--constraint=haswell&el8`, 32 episodes on the never-used validation layouts. Doors **1/16** (layout 26), 9 falls; Transport **4/16** (19, 24, 28, 31), 4 falls. Exposures **3**: Doors/28 (reset applied at 31.6 s → timeout, no fall), Transport/24 (applied at 40.6 s → **success 100.1 s**), Transport/31 (applied at 73.4 s → **success 123.7 s**). Every other episode is, by the verified construction, the baseline trajectory. Whether the two exposed Transport successes are the reset's doing is decided by the predeclared matched baseline reruns of exactly those three layouts with the unchanged controller: **SUBMITTED** `21401788` (Doors 28) and `21401789` (Transport 24, 31). Media render `21401734` **COMPLETED 0:0** on a GPU node (EGL): `media/doors1-baseline-stall.mp4` (stopped at 70 s) and `media/doors1-crossing-fix-success.mp4` (77.68 s, success reproduced), hashed sidecars, and `docs/gifs/mission7-doors1-stall-vs-crossing-fix.gif` at 1.94× with its own sidecar; gallery section and index row added. Budget: 101 episodes remain after the three reruns.
+
+Mission7 candidate 1 matched baseline reruns `21401788` (Doors 28) and `21401789` (Transport 24, 31) **COMPLETED 0:0**. **Paired confirmatory result on validation 16–31 (32 pairs per arm, full denominator):** Doors baseline **1/16 → candidate 1/16** (the one exposed pair, Doors/28, times out in both arms, no fall); Transport baseline **2/16 → candidate 4/16** — both exposed Transport layouts stalled to a 180 s timeout under the unchanged controller and **succeed with the reset applied** (24 at 100.1 s, 31 at 123.7 s). Improved 2, regressed 0, discordant pairs 2, two-sided sign test p = 0.5; falls 9 → 9 and 4 → 4. Per the predeclaration this is reported as **underpowered, not null**: the effect is confined to genuine stalls (3 of 32 fresh episodes), and on every one of the five genuine stalls seen across development and confirmation the selective reset converted a stall into forward progress, with route success in four (Doors/6, Doors/1 → later fall at door 2, Transport/24, Transport/31) and no regression anywhere. Candidate 1 stays frozen as defined; the reserved test split is untouched. Compact: `results/mission7-campaign-20260923/candidate1-confirmatory-summary.json`. Budget: 101 episodes unspent.
+
+Artifact trim (2026-09-23): the campaign directory reached 11 GB against the 10 GB retained-artifact allowance. Raw per-episode chain traces of the withdrawn misplaced-target arms (`21400801–804`, `21400896`, `21400952`, `21400961`) and the raw `episodes.json` of the withdrawn/failed replay gates (`21400805`, `21400897`, `21400953`, `21401689`) and the two local replays were deleted; every compact `result.json` and `submission.json` (with source hashes) is kept and committed, so no verdict or receipt was lost. Nested per-job `source/` snapshots and job logs are now ignored by shape.
+
+**Correction (2026-09-23), world −x clearance.** The statement that the privileged Approach −x gate is "geometrically bound" rested on a sphere-bound (`geom_rbound`) width of 0.632 m. Measured with world-frame geom AABBs over a 6 s straight walk at 0.47 m/s (local MuJoCo, no budget): lateral width **0.606 m at rest, 0.546–0.605 m while walking (mean 0.584)**, extreme geoms `arm_{left,right}_elbow_roll`; the width is under the 0.61 m post gap at **every** walking tick and under 0.58 m on 32 % of them. The gap is therefore **marginal (0.5–6 cm of clearance depending on gait phase), not impossible**, and the 8/16 result remains phase luck at the crossing under a controller with no fine lateral centring. The six-arm negative (`21400730–747`) stands as evidence about those controllers; "geometrically bound" is withdrawn as the reason the gate is closed. Reopened as a control problem: fine lateral centring on the gap midline from privileged pose while walking straight, with a slow onset through the gap.
+
+Inspection and airlock extension (2026-09-23): **SUBMITTED** `21401943` (inspection, ordered route, 12 fresh seeds 3–14, reactive + complete-outage dropout, gate), `21401944` (same seeds, intermittent dropout 0.35), `21401945` (wrong-branch control, same seeds), `21401946` (airlock crew 2, seeds 5–14, coordinated / no_wait / withhold_last, gate), `21401947` (crew 3, same), `21401948` (crew 2 coordinated with sensor dropout 0.35). Frozen 22-DoF gait `2026-08-18_20-57-50_arms-dr1.0-s0`, MuJoCo CPU, 60 s episodes, 0.4 m/s, `--constraint=haswell&el8`, 4 CPUs / 12 GB / 4 h each via `slurm/weekend_cpu.sbatch`. These extend the September 19 3/3 and 5/5 results to new seeds and stress conditions with the same evaluators and negative controls; they are evaluations of the existing scripted-supervision controllers, not learned coordination.
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21401950` — controller `center`, directions `-1,+0`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 01:00:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-negx-center/submission.json`.
+
+Inspection extension `21401944` (intermittent sensor dropout 0.35, ordered route, 12 fresh seeds 3–14) **COMPLETED 0:0**: **12/12** ordered inspections completed under 35 % packet loss with the reactive controller (the file's `gate_passed=False` only reflects that its single arm cannot satisfy the two-arm gate rule; the nominal and complete-outage arms run in `21401943`). Wrong-branch control `21401945` (12 fresh seeds) **COMPLETED 0:0**: **0/12 success, 12/12 `dead_end_entered`** — the supervisor-error control fails deterministically on every seed, as designed. Mission7 privileged Approach −x fine-centring arm (2026-09-23): **SUBMITTED** `21401950` — `center` controller (recovery translation with a lateral P-term onto the gap midline and a 0.30 m/s onset from 0.45 m before to 0.25 m past the post plane, privileged pose only), 16 −x layouts, geometry and predicates unchanged; local smokes engaged the term within ±3 cm. Mission 7 budget after this arm: 85 episodes.
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21401964` — controller `center_bias`, directions `-1,+0`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 01:00:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-negx-center-bias/submission.json`.
+
+Mission7 privileged Approach −x fine-centring arm `21401950` **COMPLETED 0:0** under `--constraint=haswell&el8`: **11/16, 0 falls** on the 16 test-split −x layouts (recovery baseline 8/16) — gained 14, 33, 36, lost none. All five failures are `excessive_collision` on **`goal_post_-1`** at 1.84–2.00 s, the first stride: a systematic −y lurch (minimum pre-contact drift −0.015 to −0.036 m, median −0.025) that the lateral P-term cannot cancel within its 0.2 s reaction; successes showed ±2–4 cm excursions that cleared. Declared and **SUBMITTED** `21401964`: `center_bias`, the same controller with the midline target pre-biased +0.015 m toward +y (0.6 × the median drift), 16 −x layouts. Airlock crew 2 with sensor dropout 0.35 `21401948` **COMPLETED 0:0**: **10/10** coordinated completions on seeds 5–14. Mission 7 budget after the bias arm: 69 episodes.
+
+Inspection extension `21401943` (ordered route, 12 fresh seeds 3–14, reactive vs complete-outage dropout, gate) **COMPLETED 0:0**: **reactive 12/12** (completion 17.1–17.8 s, both stations, zero wall-contact steps), **complete outage 0/12** (all `mission_timeout`), **gate passed**. With `21401944` (12/12 at 35 % dropout) and `21401945` (wrong-branch 12/12 rejected), the September 19 three-seed inspection result now holds on 15 seeds with both negative controls intact. Same frozen gait, scripted supervision, oracle waypoints; no learned navigation or recognition is claimed.
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21401966` — controller `center_bias`, directions `all`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 02:00:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-matrix-center-bias/submission.json`.
+
+Mission7 privileged Approach −x `center_bias` arm `21401964` **COMPLETED 0:0**: **14/16, 0 falls** on the 16 test-split −x layouts — versus the recovery baseline +14, +15, +17, +21, +31, +36, +51 / −25; versus the unbiased centring arm +15, +17, +21, +31, +51 / −25, −33. Failures: layout 25 `timeout` (never closer than 0.58 m; the +y pre-bias displaced the approach on a layout the unbiased arm passed) and layout 33 `excessive_collision` at 2.2 s. This meets the per-direction ≥14/16 criterion for world −x; the documented gate also requires ≥60/64 and zero falls over the balanced four-direction matrix. Declared and **SUBMITTED** `21401966`: the full 64-episode matrix with `center_bias` (the controller alters behaviour only when the final route segment points to world −x, so the other three directions are expected to reproduce the baseline's 48/48; the gate is measured, not assumed). Matched standstill controls are not re-run (budget); the baseline's 0/64 standstill result on the same layouts is geometry-only and remains the negative control. Mission 7 budget after the matrix: 5 episodes.
+
+**Mission7 privileged Approach gate — PASSED.** `21401966` (`center_bias`, full balanced four-direction matrix, 64 episodes, test-split selection unchanged from `21386145`, geometry / 0.65 m spawn / dwell / fall and >5-contact-tick predicates unchanged, privileged pose only) **COMPLETED 0:0** under `--constraint=haswell&el8`: **62/64 successes, 0 falls; +y 16/16, −y 16/16, +x 16/16, −x 14/16.** All five documented criteria hold (`minimum_episodes`, `successes_at_least_60`, `zero_falls`, `per_direction_at_least_14`, `full_matrix`). Failures: −x layout 25 `timeout` (never within 0.58 m) and −x layout 33 `excessive_collision` at 2.2 s. The controller is the evaluated 0.50 m/s recovery translation plus, on world −x only, a lateral P-term (gain 1.5, ±0.20 m/s) onto the gap midline pre-biased +0.015 m toward +y and a 0.30 m/s onset from 0.45 m before to 0.25 m past the post plane. Provenance: task Mission 7 Approach (0.65 m), frozen gait `2026-08-18_20-57-50_arms-dr1.0-s0`, MuJoCo 3.3.5, seed 2300, evaluator `scripts/mission7_approach_followup.py --controller center_bias`, source hashes in `approach-matrix-center-bias/submission.json`. Matched standstill controls were not re-run (budget); the same layouts' 0/64 standstill result under `21386145` remains the geometry-only negative control. Sensor-release gates stay closed on the still-failing route gate (Doors 1/16, Transport 4/16 with candidate 1). Mission 7 budget: 5 episodes remain.
+Mission7 Approach media render (2026-09-23): **SUBMITTED** `21401970` — GPU/EGL; world −x layout 14 under the recovery baseline (collision) and under `center_bias` (success), MP4s with hashed sidecars and a paired GIF at ≤12 s budget; two rendered episodes (Mission 7 budget: 3 remain).
+
+Airlock extension `21401946` (crew 2, seeds 5–14, coordinated / no_wait / withhold_last, gate) **COMPLETED 0:0**: **coordinated 10/10** (completion 23.0–23.7 s, zero robot- and wall-contact steps), **no_wait 0/10** (all `robot_collision`), **withhold_last 0/10** (all `team_timeout`), **gate passed** — the September 19 five-seed result holds on ten fresh seeds with both negative controls intact. Crew 3 (`21401947`) is 10/10 coordinated and 0/10 no_wait with the withhold_last arm still running. Scripted synchronization with a frozen gait; no learned coordination is claimed.
+
+Approach media render `21401970` **COMPLETED 0:0** but is **withdrawn, not published**: both layout-14 clips succeeded (0 collisions) because a fresh environment draws the first spawn-noise sample, whereas the evaluator advances its generator through the preceding layouts of the balanced selection; the rendered baseline therefore did not reproduce the evaluated collision. The unfaithful MP4s/GIF were deleted. `scripts/render_mission7_approach.py` now takes `--replay-order` (reset through the selection in the evaluator's order up to the target) and records the reset sequence in its sidecar, and the sbatch asserts that the baseline run fails and the centred run succeeds before any GIF is built. **SUBMITTED** `21401987` (re-render of layout 14, both arms, replayed order). Mission 7 budget: 1 episode remains after this render.
+
+Airlock extension `21401947` (crew 3, seeds 5–14, coordinated / no_wait / withhold_last, gate) **COMPLETED 0:0**: **coordinated 10/10** (completion 30.6–31.0 s, zero robot- and wall-contact steps), **no_wait 0/10** (`robot_collision`), **withhold_last 0/10** (`team_timeout`), **gate passed**. Both crews now hold on ten fresh seeds with both negative controls; crew 2 additionally holds 10/10 under 35 % sensor dropout. Shared-world scripted synchronization with a frozen gait; no learned coordination or object recognition is claimed.
+Airlock stress (2026-09-23): **SUBMITTED** `21402000` — crew 3, coordinated, sensor dropout 0.35, seeds 5–14 (the one airlock stress condition not yet run).
+
+**Qualification (2026-09-23), privileged Approach gate.** All 16 world −x layouts in the balanced matrix are **test-split** layouts, and the `center` controller and its +0.015 m `center_bias` were designed and sized on exactly those layouts (the bias from the median pre-contact drift of the five `center` failures). The −x 14/16 in `21401966` is therefore a **development result on the reserved test split**, which the Mission 7 protocol reserves for final reporting and forbids for selection. The 62/64 stands as measured and is not withdrawn, but it is not a held-out result. Predeclared before any result: a held-out replication on the 23 world −x layouts that no controller in this programme has touched — the 7 validation −x layouts outside the balanced selection (2, 5, 13, 18, 22, 23, 27) and the first 16 train-split −x layouts (1, 7, 10, 11, 17, 19, 21, 22, 24, 26, 27, 31, 35, 40, 42, 43); both `recovery` (baseline) and `center_bias`, same spawn, predicates and seed stream. Reported as a paired rate; the per-direction criterion (≥14/16 ≈ 87.5 %) is the reference. Budget: a new, separately accounted line of 46 CPU episodes under the repo-wide plan (Mission 7's own line has 1 left and is not used).
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21402017` — controller `recovery`, directions `all`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 01:30:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-negx-heldout-recovery/submission.json`.
+
+Mission7 privileged Approach arm (2026-09-23): **SUBMITTED** `21402018` — controller `center_bias`, directions `all`, constraint `haswell&el8`, 2 CPUs / 12 GB / 0 GPUs / 01:30:00; geometry, spawn and predicates unchanged; receipt/source hashes: `results/mission7-campaign-20260923/approach-negx-heldout-center_bias/submission.json`.
+Airlock stress `21402000` (crew 3, coordinated, sensor dropout 0.35, seeds 5–14) **COMPLETED 0:0**: **10/10**. Both crews now hold 10/10 under 35 % dropout.
+
+Mission7 Approach held-out replication `21402017` (`recovery`) and `21402018` (`center_bias`) **COMPLETED 0:0** under `--constraint=haswell&el8` — the predeclared paired rescore on 23 world −x layouts no controller had touched (validation 2, 5, 13, 18, 22, 23, 27; train 1, 7, 10, 11, 17, 19, 21, 22, 24, 26, 27, 31, 35, 40, 42, 43). **`center_bias` 21/23 (0.913, Wilson 95 % CI 0.73–0.98) against the baseline's 12/23**; validation 7/7 vs 4/7, train 14/16 vs 8/16; improved 10, regressed 1 (train 26), two-sided sign test p = 0.012; zero falls in either arm. The test-split tuning qualification is resolved in the controller's favour: the −x centring effect replicates on held-out geometry at a rate above the 14/16 per-direction reference. The 62/64 gate figure itself remains the test-split measurement it was. Compact: `approach-negx-heldout-summary.json`.
+
+Repo-wide CPU evaluations (2026-09-23), existing exported checkpoints, MuJoCo 3.3.5, `--constraint=haswell&el8`, 4 CPUs / 16 GB / ≤3 h, `slurm/repo20260923/cpu_eval.sbatch` with an import preflight: **SUBMITTED** `21402035` + `21402036` — matched push protocol for every exported biped DR and push policy (0.5 m/s shoves every 3 s, 12 s episodes, 5 seeds × the harness command set; 21 policies incl. the dr-default no-push control, which the bulk tables never scored under pushes); predeclared: the `push_pair` caption stands only if push-trained fall rates are below dr-default's with no training-seed overlap. `21402037` / `21402038` — lab traverse (carpet/cable/threshold/ramp) for the four 22-DoF and four 12-DoF policies over seeds 0–4, replacing a single-rollout Slurm log. `21402039` — cross-engine scoring of the six occluded coop-lift checkpoints (blind s0 ×2 dirs, s1, s2; depth s0 ×2 dirs), 8 seeds × crews 2 and 3, so the occlusion claims have a results file.
+
+Correction: `21402039` (coop occluded scoring) **FAILED** at 1:19 on a CPU share node — `mujoco.FatalError: an OpenGL platform library has not been loaded` from `coop_sim2sim.py`'s depth renderer (the two depth checkpoints need rendering; blind ones do not). No results written. **Resubmitted as `21402060`** on gpu/dgxh/ampere with `MUJOCO_GL=egl`, ≤1 h, `slurm/repo20260923/gpu_render_eval.sbatch` (same body, GPU header). Counts against the GPU evaluation allowance.
+
+Lab traverse 5-seed rerun `21402037` (22 DoF) / `21402038` (12 DoF) **COMPLETED 0:0** (3:17 / 2:26). Finishes over seeds 0–4: 22 DoF randomized 1/5, no-randomization 0/5 (stalls past the carpet every seed), push-trained 2/5, terrain-trained 2/5; 12 DoF 0/5, 0/5, 0/5, terrain-trained 2/5. Falls cluster on the cable (12 DoF) and the ramp/landing (22 DoF). This replaces the single-rollout Slurm-log evidence behind REPORT §8 and the `multi_lab` caption: the 22-DoF model clears the course more often, neither clears it reliably. Summary: `results/lab-traverse-20260923/lab_traverse_5seed.json`.
+
+Sensor fusion SF-03 (attitude filter in the loop, `docs/SENSOR_FUSION.md`) **SUBMITTED** `21402118` — CPU share, `haswell&el8`, `cpu_eval.sbatch sf03`. Inspection maze, ordered route, reactive sensors, seeds 0–2, 22-DoF `arms-dr1.0-s0` gait. Predeclared levels: L0 truth control; L1 gyro std 0.02 rad/s / accel std 0.3 m/s² / bias 0.02 rad/s / no delay (Mahony and Madgwick); L2 0.05 / 1.0 / 0.05 / 1-step delay (both filters); L3 0.10 / 2.0 / 0.10 / 2-step delay (Mahony). 18 episodes. Predeclared reading: success within one seed of the truth control at gravity RMSE ≤ 0.05 counts as tolerated; report the first level at which it fails. Filter runs at the 25 Hz policy rate (conservative). Local smoke before submission: L1 Mahony seed 0 success at 16.6 s, gravity RMSE 0.035, max 0.079, alignment 17 steps.
+
+Correction: SF-03 `21402118` **COMPLETED 0:0** (3:09) but its L2/L3 rows are **invalid**: the stationary-alignment gate required five consecutive single samples within 5 % of g, which accelerometer noise of 1–2 m/s² never satisfies, so the filter never aligned (`pre_alignment_steps` = whole episode) and those episodes ran on the oracle observation. Only L0 (3/3) and L1 (Mahony 3/3, RMSE 0.037; Madgwick 3/3, RMSE 0.030; alignment 14–17 steps) are valid. Outputs moved to `results/sensor-fusion-20260923/run1-invalid-gate/`. Gate rewritten to average a 0.4 s window (no free-fall sample, mean |a| within 10 % of g, mean gyro < 0.3 rad/s) and the episode row now carries `aligned`. Local smoke with the new gate: L2 aligned at 12 steps and the gait **fell** (gravity RMSE 0.150, max 0.376); L3 aligned at 13 steps and fell (RMSE 0.125). **Resubmitted as `21402531`** with three factor-isolation arms (accel-noise-only, gyro-noise-only, delay-only from L1) and a low-gain Mahony (kp 0.3) at L2: 30 episodes, so SF-03 spends 48 CPU episodes in total against the predeclared 30 (the 18-episode first run is charged even though half of it was invalid).
+
+Repo-wide GPU diagnostics (2026-09-23), prepared by an adversarially reviewed workflow (static checks only; reviews ok with non-blocking notes): **SUBMITTED** `21402547` cube-to-shelf spawn diagnostic (v60, `gpu_spawn_diag.sbatch`, 4 envs × 200 steps × {zero, PD-hold, N(0,1)} actions on `TaskV2-BHL-CubeToShelf-Blind-v0` and the Grip variant; records the first termination term to fire; tests the prediction that `_tilt_from_quat` reads the v60 xyzw root quaternion as wxyz so 'fallen' fires at step 1 for the ±90° yaw spawn; ≈0.5 GPU-h). `21402548` ice foot-on-patch exposure probe (v51, `gpu_ice_exposure.sbatch`, placed blind/depth s0 `model_5999.pt`, 64 envs, one episode with the policy acting, filtered foot–patch contact sensor with a geometric fallback; verdict EXPOSED if ≥ 0.5 of episodes touch a patch and mean on-ice fraction ≥ 0.10; ≈0.4 GPU-h). `21402549` maze recovery corruption-ON re-evaluation (v60, `gpu_maze_noise.sbatch`, `--dependency=afterany:21402547` to hold GPU concurrency at two; 12 Full-stage checkpoints, 32 envs × 600 steps, same seeds as the published noise-off 379/384; `maze_recovery_probe.py` gains `--keep-corruption` defaulting to the old behaviour; ≈0.6 GPU-h). Depth bench re-run is held for a manual review of its launcher (its review agent failed on a session limit).
+
+Depth validation/throughput bench re-run **SUBMITTED** `21402550` after a manual review of `slurm/repo20260923/gpu_depth_bench.sbatch` (v51; `--partition=gpu --constraint=rtx8000` because commit b34b99a dates the measuring GPUs as Turing; provenance and worktree patch captured; per-step deadline guard; `depth_bench_summary.py` compares finite fraction 1.000, mean relative error 0.029 and the 21,844 / 21,490 env-steps/s rows at 10 % tolerance and prints PASS / MISMATCH / NOT_MEASURED per claim). `--dependency=afterany:21402548` holds GPU concurrency at two. ≈0.5 GPU-h. Running GPU set: `21402547` spawn, `21402548` ice, then `21402549` maze and `21402550` depth.
+
+SF-03 v2 `21402531` **COMPLETED 0:0** (4:00), 30 episodes, all estimated arms aligned in 11–16 policy steps. Ordered-route success and gravity RMSE (mean over seeds 0–2): L0 truth 3/3; **L1 Mahony 3/3 (0.041), L1 Madgwick 3/3 (0.034)**; accelerometer noise alone at 1.0 m/s² 3/3 (0.046); gyro noise 0.05 rad/s + bias 0.05 rad/s alone 3/3 (0.046); **one policy step (40 ms) of IMU delay alone 0/3 (falls at 3.4 / 7.1 / 4.0 s, RMSE 0.086)**; L2 (noise + 1-step delay) Mahony 0/3, Madgwick 0/3, Mahony kp 0.3 0/3; L3 (2-step delay) 0/3 (falls within 1.7 s). Reading against the predeclared criterion: the frozen 22-DoF gait tolerates an *estimated* attitude at L1 and at each noise factor alone (RMSE ≤ 0.05), and the failure factor is **latency, not noise** — every arm with ≥ 40 ms of IMU delay falls, whichever filter or gain. Limitation: the filter runs at the 25 Hz policy rate and delay is quantised to policy steps, so the boundary between ~5 ms (a 200 Hz AHRS) and 40 ms is unmeasured. Summary: `results/sensor-fusion-20260923/sf03_summary.json`.
+
+Matched push protocol `21402035` / `21402036` **COMPLETED 0:0** (10:17 / 11:46), 21 policies × 30 episodes (0.5 m/s shoves every 3 s, 12 s, seeds 0–4 × the harness command set). Pooled fall rates: dr-off 90/90; **dr-default (no push training) 19/90 = 0.211**; push-adaptive 6/60 = 0.100; push-fixed 12/90 = 0.133; push-c0.6 8/60 = 0.133; push-curriculum 13/90 = 0.144; push-c0.4 25/90 = 0.278; push-c0.2 20/60 = 0.333. Predeclared reading: the `push_pair` caption (push-adaptive upright where DR-only fell) is **supported in direction** — push-adaptive halves the control's fall rate (one-sided Fisher p = 0.056, both push-adaptive seeds at or below every dr-default seed) — but not at conventional significance, and two push families (c0.2, c0.4) fall *more* than the control. Summary: `results/push-matched-20260923/push_matched_summary.json`.
+
+Coop occluded cross-engine scoring `21402060` **COMPLETED 0:0** (1:43, GPU/EGL). Six checkpoints × crews 2 and 3 × 8 seeds × 200 steps: **no occluded checkpoint lifts in MuJoCo** — held lift ≤ 0.005 m everywhere; blind s0 (both directories) falls 8/8 at crew 2; blind s1 and s2 stand (0 falls) but never lift (peak lift 0.000, in-pinch 0.95); both depth s0 checkpoints fall 8/8 and never reach the pinch (in-pinch 0.00). COOP-15/16 now have a results file (`results/coop-occluded-20260923/coop_occluded_summary.json`): the occlusion prose numbers are replaced by a measured zero-transfer result.
+
+Cube-to-shelf spawn diagnostic `21402547` **COMPLETED**, verdict for every task × condition (CubeToShelf-Blind and CubeToShelfGrip-Blind × zero / PD-hold / N(0,1) actions): **`TERMINATES: fallen @ step 1`**. Diagnosis from the JSONs: at reset the native tilt (acos R22 from the stack's own `matrix_from_quat`) is 0.000 rad for every env, while `coop_lift_mdp._tilt_from_quat` reads 1.49–1.68 rad because it unpacks the v60 `root_quat_w` (stored xyzw, e.g. `[0, 0, −0.745, 0.667]`) as wxyz; the ±90° yaw spawn therefore looks like a fall and the `fallen` term fires on step 1 regardless of the action. This is the mechanism behind the 1–5-step TaskV2 training episodes (COOP-18 and the other v2 arms), so those training results are invalid rather than "the robot cannot stand". Outputs kept under `results/repo-gpu-20260923/spawn_diag/pre-fix/`. **Fix:** `quat_order.unpack_wxyz` (stack-aware, cached) now used by `_tilt_from_quat` and by the plank-axis check in `task_v2_mdp.py`; unit test `tests/test_quat_order_unpack.py` reproduces the misread as a 1.571 rad tilt and checks both layouts. v51 behaviour (wxyz) is unchanged. **Resubmitted the diagnostic as `21402574`** (`--dependency=afterany:21402549`, GPU concurrency held at two); expected verdict STANDS or a different, genuine first term.
+
+Ice exposure probe `21402548` **COMPLETED**: **EXPOSED** for both placed checkpoints — blind s0: 63/64 episodes touch a patch (0.984), mean on-ice step fraction 0.373; depth s0: 0.984 / 0.334; method = filtered foot–patch contact sensors (filter_count 6 per foot), geometric cross-check agreement 0.93, 64 envs × 500 policy steps, params_match true. The placed rung does exercise the ice, so the ice no-ice control is no longer gated behind this probe; it stays unfunded in this campaign (two arms × seeds of training exceed the single justified training run).
+
+Disk envelope (2026-09-23, evening): free space on `/nfs/hpc/share` fell to **96 GB** (the share is at 94 % from all users), under the campaign's ≥ 100 GB floor. The largest items this campaign retains are gitignored raw per-step traces under `results/mission7-campaign-20260923/` (7.8 GB; e.g. `campaign-a-transport-13-15/transport-13.json` 1.25 GB, `replay-gate-waitopen2/episodes.json` 0.9 GB), each with its compact summary committed. Rather than delete them, every trace file over 100 MB there is being **gzip-compressed in place** (`*.json.gz`; reversible with `gunzip`, or read with `gzip.open` in Python). Analysis scripts that re-read raw traces must open the `.gz` form; the committed summaries are unaffected.
+
+Maze recovery corruption-ON re-evaluation `21402549` **COMPLETED**, `MAZE-NOISE RESULT: PASS` (12/12 evaluations, `observation_corruption: true` recorded in every JSON). First-episode success with the training observation noise enabled: Blind 32/32, 32/32, 31/32; Lidar 32, 31, 32; Stereo 31, 32, 32; Both 32, 31, 32 — **pooled 380/384 (0.990) against the published noise-off 379/384 (0.987)**. The "scored with observation noise disabled" caveat on the weekend Full-stage result is closed: the checkpoints are not relying on noise-free observations. Same limits as before (fixed route, oracle waypoints, privileged success predicate). Summary: `results/repo-gpu-20260923/maze-noise/summary.json`.
+
+Depth bench `21402550`: the `validate_res64_n16` step hung after environment creation and hit its 601 s timeout (rc 124, no output after the Isaac warnings), so the finite-fraction and relative-error claims will read NOT_MEASURED; the throughput steps ran (physics 2048 and depth64 2048 in 41–42 s each). Final claim table pending the job's summary.
+
+Depth bench `21402550` **FAILED 21:07** by its own rule (`DEPTH-BENCH FAIL | incomplete: validate.rough_departure`): the `depth_validate` step timed out at 601 s on its rough-terrain departure check, so the measurement is incomplete; everything else ran on a Quadro RTX 8000 (Turing, the class the docs' numbers came from). Claims, at 10 % tolerance: **finite fraction 1.000 = documented (PASS)**; **mean relative error 0.0504 vs documented 0.029 (MISMATCH, +74 %; the validator's own verdict FAIL at its 0.03 tolerance)**; row-flipped error 1.039 vs 1.02 (PASS) and best orientation as-returned (PASS); throughput physics 4096 **24,298** vs 21,844 and depth48 4096 **23,968** vs 21,490 env-steps/s (+11 %, MISMATCH by being faster), physics 2048 18,281 vs 13,971 (+31 %), depth64 2048 16,414 vs 13,956; depth cost at 4096 **1.36 % vs documented 1.6 %** (MISMATCH on the strict relative check, qualitatively the same "depth is cheap" result). **Caveat:** the bench recorded `depth-code-dirty yes` — the worktree carries the user's uncommitted edits to `src/bhl_robust/tasks/*.py` and terrains, captured in `results/repo-gpu-20260923/depth-bench/worktree.patch`, so the relative-error mismatch cannot be attributed to the committed code. Summary: `results/repo-gpu-20260923/depth-bench/depth_bench_summary.json`.
+
+Post-fix spawn diagnostic `21402574` **COMPLETED**: with the quaternion read fixed, `tilt_term` now equals `tilt_native` (0.000 at reset) and `fallen` fires at **step 11–14 (0.44 s)** instead of step 1, identically for zero, PD-hold and random actions. The time series shows the second defect: the configured init z is the MuJoCo pinch-pose root height (−0.0272, `_PINCH_ROOT_Z`), which on this Isaac asset leaves the **ankles 0.145 m above the floor (sole offset 0.05 m, so the feet hang 9.5 cm in the air)**; foot force is zero for four steps (free fall, base z −0.027 → −0.145), the feet land with 115 N each at step 4, and the crouched pinch pose then topples (tilt 0.05 → 1.2 rad by step 13). The user's `spawn_quat_probe` judged "standing" from the reset pose alone, before the drop. **Spawn-height sweep submitted:** `21402603` was cancelled (f-string syntax error in the new `--init_z_offset` option; never ran on Isaac), **resubmitted as `21402604`** (`gpu_spawn_zsweep.sbatch`: CubeToShelf-Blind, PD-hold, offsets 0 / −0.05 / −0.095 / −0.12 m, one Kit boot each; ≈0.4 GPU-h).
+
+Spawn-height sweep `21402604` **COMPLETED** (`SPAWN-DIAG RESULT: PASS`, four Kit boots, CubeToShelf-Blind, PD-hold at the configured pinch joint pose, 4 envs × 200 steps): init z offset **0 → fallen at step 11; −0.05 → step 12; −0.095 (feet on the floor at reset) → step 16; −0.12 → step 16**; max native tilt 1.84 rad in every case. Lowering the spawn removes the 9.5 cm drop but the crouched pinch pose still topples within 0.64 s under the PD hold, so the remaining blocker for every TaskV2 cube-to-shelf arm is the **posture/actuation design of the pinch pose on this stack** (COM vs support polygon, or PD gains/torque limits at those joint targets), not the spawn height or the fall check. The campaign's one justified training run is therefore **not spent** on TaskV2: training on an initial pose that falls in 0.6 s under a hold would reproduce the invalid result with a different failure step. Outputs: `results/repo-gpu-20260923/spawn_zsweep/`.
+
+Disk envelope, second step: `results/weekend-20260919/` is 84 GB, almost all folding checkpoints (`fold-adapt-s0` and `fold-adapt-s1` 34 GB each, one 1.14 GB `model.safetensors` per 100 steps; `fold-smoke-h100-s0` and `fold-smoke-v100-cu126-s0` 5.5 GB each). The six **smoke-test** checkpoints (`fold-smoke-*/step_00000{0,1,2}/model.safetensors`, 6.7 GB, steps 0–2 of two boot smokes, gitignored, referenced by no document in this repo or the folding repo) were **deleted**; free space 98G → 98G. The two adaptation trees are the user's archival runs and were left in place: pruning their intermediate steps (keeping the last checkpoint of each) would free ≈ 60 GB and is proposed, not done.
+
+Trace compression finished: 13 raw Mission 7 trace files over 100 MB gzipped in place; `results/mission7-campaign-20260923/` 7.8 GB → 3.0 GB; free space on the share 96 GB → **105 GB** (with the smoke-checkpoint deletion). No file was removed from the campaign directory; every `.json.gz` unzips to the original.
+
+Sensor-fusion execution (2026-09-23, evening; authorized: "execute it, validate it and complete it"). **SUBMITTED** `21402699` posture comparison for cube-to-shelf (`gpu_spawn_pose.sbatch`, v60: pinch pose with feet on the floor vs the upstream standing pose at z 0 and −0.03, PD-hold, with the actuator stiffness/damping/effort limits and per-step applied vs computed torque recorded; decides whether the crouch is torque-limited on this stack). **SUBMITTED** `21402710` SF-01/SF-02 Isaac side (`gpu_maze_sf01.sbatch`, v60): the four Full-stage s0 checkpoints, 14 settings each in one boot — noise-on baseline, gyro std 0.10 / 0.20, gravity std 0.05 / 0.10, IMU-only observation delay 1 / 2 / 4 policy steps, teacher position bias 0.05 / 0.10 / 0.20 m, position noise 0.05 m, heading error 3° / 10° — 32 envs × 600 steps per setting, first-episode success. The probe gained `--settings`; the waypoint commands read the teacher position through `_estimated_xy()` (evaluation-only error hook, zero in training), while reward and termination keep the true pose. Predeclared reading: report the largest noise, delay and localization error at which pooled first-episode success stays ≥ 0.8.
+
+SF-03b **SUBMITTED** `21402725` (CPU share, `cpu_eval.sbatch sf03b`): the attitude filter now runs at **200 Hz from a physics-substep hook** (`ContactRunner.substep_hook`, `--imu-rate-hz`), with the IMU delivery delay in milliseconds (`--imu-delay-ms`, quantised to 5 ms samples). Sweep 0 / 5 / 10 / 20 / 30 / 40 / 60 ms at L1 noise, Mahony, seeds 0–2, ordered route: 21 episodes. Local smoke: 200 Hz with 20 ms delay completed the mission at 16.1 s, gravity RMSE 0.034. Predeclared reading: the largest delay with 3/3 success is the latency budget the IMU path must meet; SF-03 (policy-rate filter) found 40 ms fatal.
+
+SF-02 (MuJoCo side) **SUBMITTED** `21402726` (CPU share, `cpu_eval.sbatch sf02`): localization error applied only to the pose the route controller consumes (`--pose-bias-m`, `--pose-noise-m`, `--pose-yaw-deg`, `--pose-drift-mps`), the mission judge keeps the true pose. Levels: bias 0.05 / 0.10 / 0.15 / 0.20 m (random direction per seed), noise 0.05 / 0.10 m, heading 3° / 10° / 20°, drift 0.01 / 0.03 m/s; seeds 0–2, ordered route, truth attitude: 33 episodes. Local smoke: bias 0.10 m + heading 5° completed at 18.7 s. Predeclared reading: the smallest level that halves success is the Layer-3 localization requirement.
+
+Correction: SF-01 `21402710` **FAILED** (4:50): every arm ran the noise-on baseline (32/32 first-episode success, 207 episodes) and then exited silently at the second setting — an exception raised while mutating the observation-noise cfg propagated to the top-level `finally: app.close()`, and Kit's close terminated the process before Python printed the traceback, so the outer job saw exit 0 and no JSON. Hardened: term-cfg lookup falls back to the manager's private cfg list, each setting is wrapped so a failure is recorded as an `error` entry and the loop continues, and the top-level handler prints the traceback before Kit closes. **Resubmitted as `21402730`.**
+
+Posture comparison `21402699` **COMPLETED** (three Kit boots, PD-hold, 4 envs): **pinch pose with feet on the floor → fallen at step 16**; **upstream standing pose at z 0 → fallen at step 22** (z −0.03 → step 24). The torque record settles the mechanism: the asset's leg and ankle actuators are `ImplicitActuatorCfg(effort_limit=6, stiffness=20, damping=2)` (upstream `berkeley_humanoid_lite.py`), and at reset the PD hold of the **crouched pinch pose demands 28–30 Nm** on its most loaded joint while the applied torque is pinned at the **6 Nm limit** (ratio 1.0 on every env from step 0); the crouch is infeasible for these actuators by a factor of five, so no spawn height can make it stand. The standing pose starts within limits (0.2–0.7 Nm at step 2) but a pure joint-position hold is not a balance controller: the tilt grows from step 4 and the hold saturates at 6 Nm by step 18. Conclusion for the cube-to-shelf training request: **the task as configured cannot produce valid episodes** — its spawn posture exceeds the robot's torque budget, and the object/shelf geometry (`GRASP_Z`) is laid out for that crouch. The training run stays **withheld**; a valid task needs a spawn posture inside the 6 Nm budget with the object re-placed for it (or a crouch-capable actuator model), which is a task-design change for the author, not a launch parameter. Outputs: `results/repo-gpu-20260923/spawn_pose/`.
+SF-01 `21402730` **FAILED** the same way (silent exit after the first setting, exit 0): the traceback goes to Kit's log because Kit redirects Python's stderr, and its close exits 0. Probe now prints tracebacks to stdout and writes `<output>.error.txt`; also prints the policy term list and IMU slices at start. **Resubmitted as `21402843`.**
+
+SF-03b `21402725` **COMPLETED 0:0** (3:45), 21 episodes, Mahony at 200 Hz from the physics substep hook, L1 noise, seeds 0–2: delay **0 / 5 / 10 / 20 / 30 ms → 3/3 each** (gravity RMSE 0.029–0.040, completion 16.2–16.4 s); **40 ms → 1/3** (falls at 4.7 and 20.2 s, RMSE 0.063); **60 ms → 0/3** (falls within 3.7 s, RMSE 0.106). The IMU latency budget for the frozen gait is therefore **about 30 ms end-to-end**, with the failure edge between 30 and 40 ms; SF-03's policy-rate result (40 ms fatal) is consistent. Summary: `results/sensor-fusion-20260923/sf03b_summary.json`.
+
+SF-02 (MuJoCo) `21402726` **COMPLETED 0:0** (9:21), 33 episodes, truth attitude, localization error applied only to the route controller's pose: position bias **0.05 / 0.10 / 0.15 m → 3/3** (completion 17.4 → 18.9 s, zero wall contacts), **0.20 m → 1/3** (mission timeouts: the 0.23 m station radius becomes unreachable); white noise 0.05 / 0.10 m → 3/3; heading error 3° / 10° / 20° → 3/3 (20° costs 3.3 s); **drift 0.01 m/s → 0/3 and 0.03 m/s → 0/3** (timeouts, path stalls). Reading: the Layer-3 requirement is *bounded* map-relative error below ≈0.15 m and a few degrees of heading — odometry alone, which drifts, fails even at 1 cm/s, so localization must be anchored to the map (scan matching / AMCL), exactly as `docs/SENSOR_FUSION.md` recommends. Summary: `results/sensor-fusion-20260923/sf02_summary.json`.
+
+SF-04 **SUBMITTED** as the campaign's one justified training run (the cube-to-shelf run is withheld on the torque evidence): the `BothRobust` maze-recovery arm, seed 0, through the weekend pipeline (smoke → train → promotion gate at each stage) with `BHL_POLICY=recurrent` (train.py overlay, LSTM 256). `21402922` Approach 500 it (3 h) → `21402923` Corridor 1500 it (`afterok`, 6 h) → `21402924` Full 4000 it (`afterok`, 12 h); `--partition=gpu,ampere,dgxh`, the weekend's constraint set, 1024 envs. The arm (`src/bhl_robust/tasks/maze_robust.py`, registered as `Velocity-BHL-MazeRecovery-{Stage}-BothRobust-v0`) keeps the `Both` observation layout and adds, per episode via a reset event: LiDAR or stereo zeroed with p = 0.2 each, per-episode gyro/gravity bias std 0.02, IMU delay 0 or 1 policy step (20 ms at 50 Hz, inside the ≈30 ms budget from SF-03b); the critic stays clean (asymmetric). Predeclared evaluation after Full: the probe with settings {baseline, lidar off, stereo off, both off, IMU delay 1 and 2 steps, gyro std 0.10} on BothRobust Full s0 and on the published Both Full s0 as the control; gate: BothRobust ≥ Both on baseline, and ≥ the corresponding single-modality arm (Lidar / Stereo s0) when the other modality is zeroed. Expected cost ≈ 5 GPU-h.
+SF-01 `21402843` **FAILED** with the cause now captured: `RuntimeError: Inplace update to inference tensor outside InferenceMode` at the second setting's reset — the rollout runs under `torch.inference_mode()`, which makes the command term's waypoint index an inference tensor, and the reset outside that mode cannot update it in place. The per-setting reset now runs inside inference mode. **Resubmitted as `21402926`.**
+Correction: SF-04 chain `21402922`/`21402923`/`21402924` **FAILED at launch** — `weekend_maze.sh` rejects arms outside `Blind|Lidar|Stereo|Both` (`Invalid arm: BothRobust`, 0 GPU-min used); dependents cancelled. Arm list extended to include `BothRobust`. **Resubmitted: `21402927` Approach → `21402928` Corridor → `21402929` Full.**
+
+SF-04 Approach `21402927` **FAILED at the gate, training itself succeeded** (30:36; 500 recurrent iterations, mean reward 12.5, checkpoint `2026-09-23_15-15-48_wknd-approach-bothrobust-s0/model_499.pt`, `agent.yaml` records `RNNModel`/lstm): the promotion probe built the task's default MLP runner and failed with `Error(s) in loading state_dict for MLPModel`. Dependents `21402928`/`21402929` cancelled. The probe now applies the same `BHL_POLICY=recurrent` overlay as `train.py`. **Resubmitted as a gate-only rerun `21403137` on the existing Approach checkpoint (`inner_sf04_gate.sh`, no retraining) → `21403138` Corridor → `21403139` Full (`afterok`).**
+Correction: chain v3 (`21403137–139`) cancelled before running — the gate script omitted the resolver's required `--newer-than` (now `0`). **Chain v4: `21403140` gate(Approach) → `21403141` Corridor → `21403142` Full.**
+
+SF-01 / SF-02 (Isaac) `21402926` **COMPLETED the science, FAILED its own checker** (35:29): all four Full s0 checkpoints ran all 14 settings; the sbatch's final `MAZE-SF01 RESULT: FAIL` is only the inherited checker expecting the 12-checkpoint published pool (379/384) from a 4-checkpoint run (recomputed 128/384) — a checker mismatch, not missing data. Pooled first-episode success over Blind/Both/Lidar/Stereo s0 (32 envs each, seed 100, corruption on): baseline **125/128 = 0.977**; gyro std 0.10 → 0.984, 0.20 → 0.953; gravity std 0.05 → 0.977, 0.10 → 0.859; **IMU delay 1 policy step (20 ms) → 40/128 = 0.312; 2 steps → 0.023; 4 steps → 0.000**; teacher position bias 0.05 m → 0.852, 0.10 m → 0.859, 0.20 m → 0.688; position noise 0.05 m → 0.844; heading error 3° → 0.852, 10° → 0.859. Reading against the predeclared ≥ 0.8 rule: the trained maze policies tolerate the noise levels tested (gravity 0.10 at the margin) but **no IMU delay at all** — a single 20 ms step on the IMU columns alone is fatal, stricter than the 22-DoF gait's ≈30 ms budget (SF-03b). For the teacher, any error level tested costs ≈12 points at once (0.977 → 0.85, flat from 5 cm to 10 cm and 3° to 10°) and 20 cm of bias falls below the rule; the flat step suggests an interaction with the stop/dwell predicate rather than a smooth degradation, and is the one result here I would not over-read without a per-env look. Summary: `results/repo-gpu-20260923/maze-sf01/summary.json`. This is exactly the failure SF-04 trains against (IMU delay 0–1 step in training).
+
+SF-04 Approach gate rerun `21403140` **PASSED**: recurrent BothRobust Approach checkpoint (`model_499.pt`) first-episode success **31/32 = 0.969** under its own per-episode dropout/bias/delay randomization (`MAZE_STAGE_PASS`). Corridor `21403141` training; Full `21403142` queued. **SUBMITTED** the predeclared evaluation `21403172` (`afterok:21403142`, `inner_sf04_eval.sh`): BothRobust Full s0 (recurrent) and the published Both / Lidar / Stereo Full s0 (MLP), each with settings {baseline, lidar off, stereo off, both off, IMU delay 1 / 2 steps, gyro 0.10, gravity 0.10}; for the BothRobust arm the probe forces its training-time randomization off so every condition is explicit. Pass rule as predeclared: BothRobust ≥ Both on baseline, ≥ Lidar with stereo zeroed, ≥ Stereo with lidar zeroed. Whatever the outcome, it is reported.

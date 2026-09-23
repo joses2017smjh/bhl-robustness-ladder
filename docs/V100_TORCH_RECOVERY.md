@@ -1,6 +1,6 @@
 # DGX2 V100 training compatibility, 2026-09-19
 
-The V100 training gate reached the real LeRobot fine-tuning path on
+Job `21359477` reached the real LeRobot fine-tuning path on
 `Tesla V100-SXM3-32GB` and failed on a CUDA cast with `no kernel image is
 available for execution on the device`. The existing training environment's
 `torch==2.7.0+cu128` reports the compiled architectures `sm_75 sm_80 sm_86

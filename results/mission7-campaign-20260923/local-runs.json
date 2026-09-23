@@ -1,0 +1,5 @@
+{
+  "note": "Local (login-node, not Slurm) instrumented reruns of validation Doors/1 with the patched probe, early handoff, no rejoin diagnostic. Source: working tree after 1a526c7 with the chain-trace/prev_actions_reset patch (committed with Campaign A). Same stall time (45.80 s) and stall fingerprint (16f6eb7283db5da6) in both, matching cn-c22 job 21399503's pulse time.",
+  "local-doors1-baseline-chain": {"outcome": "timeout 180 s", "final_20s_mechanism": "frozen_targets", "target_range_ratio_vs_walking": 0.023, "double_support_frac": 1.0, "cmd_in_mps": [0.3, 0.012, 0.025], "prev_actions_norm_at_stall": 79.22},
+  "local-doors1-prev-actions-reset": {"outcome": "SUCCESS 82.7 s", "intervention": "prev_actions_reset at 45.80 s", "prev_actions_before_norm": 79.22, "delivered_zero_input": true, "post_stage_progress_m_last_exit_window": 4.72, "stall_anchored_progress_m": 3.456, "note": "stall-anchored window is the comparable column; see campaign-b-stall-anchored.json"}
+}

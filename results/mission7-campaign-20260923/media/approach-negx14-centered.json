@@ -1,0 +1,31 @@
+{
+  "output": "results/mission7-campaign-20260923/media/approach-negx14-centered.mp4",
+  "output_sha256": "879cf4e8b1e9be48da42f494fd81d7b7e2e2f7a092acd7641f3132fe63165db1",
+  "renderer": "MuJoCo EpisodeRecorder, tracking camera, 25 fps",
+  "ffmpeg_error": null,
+  "task": "Mission 7 privileged Approach, 0.65 m spawn, balanced-matrix layout",
+  "split": "test",
+  "layout_index": 14,
+  "controller_arm": "center_bias",
+  "controller": "gap_midline_centring_with_plus_y_prebias_0.015m",
+  "reset_sequence": [
+    1,
+    5,
+    6,
+    7,
+    14
+  ],
+  "reproduces_evaluated_episode": true,
+  "outcome_of_this_run": {
+    "success": true,
+    "failure": null,
+    "collisions": 0,
+    "elapsed_s": 4.400000000000281
+  },
+  "evidence": "results/mission7-campaign-20260923/approach-matrix-center-bias/result.json",
+  "evidence_sha256": "4457da78c6e18301834ba86db10a0a858a726cd0d1d939e65e256037c2d579d1",
+  "caption": "Approach, world -x, layout 14: gap-midline centring with +0.015 m pre-bias -- through the posts to the goal (gate 62/64)",
+  "labels": "privileged pose (oracle), frozen learned gait, free-standing, native MuJoCo",
+  "scope": "One layout under one controller arm; the gate result is the 64-episode matrix in the evidence file, not this clip.",
+  "git_commit": "a501e5df09adfd8567b5f6e18be2ad387e528bde"
+}

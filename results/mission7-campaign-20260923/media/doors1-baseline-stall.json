@@ -1,0 +1,38 @@
+{
+  "output": "results/mission7-campaign-20260923/media/doors1-baseline-stall.mp4",
+  "output_sha256": "f9b8f8f8f73afbdaee5df5e31f3d89a81e49eb2d0d45de3a9a2044a8c7ca769e",
+  "renderer": "MuJoCo EpisodeRecorder, tracking camera, 25 fps",
+  "ffmpeg_error": null,
+  "stage": "doors",
+  "layout_index": 1,
+  "split": "validation",
+  "configuration": {
+    "stage": "doors",
+    "index": 1,
+    "max_seconds": 70.0,
+    "handoff": "early",
+    "rejoin_fix": "none",
+    "stall_min_s": 0.8,
+    "stage_activate": false,
+    "stage_wait_open": 2.0,
+    "pre_point": 0.3,
+    "cross_clear": null,
+    "cross_kick": false,
+    "align_yaw": false,
+    "rejoin_advance": false,
+    "exit_ramp": 0.0,
+    "exit_ramp_center": false
+  },
+  "outcome_of_this_run": {
+    "success": false,
+    "failure": null,
+    "elapsed_s": 70.00000000015221,
+    "recording_stopped_early": true
+  },
+  "evidence": "results/mission7-campaign-20260923/campaign-a-doors-00-07/result.json",
+  "evidence_sha256": "91600a2bd8bd567a2e3878ed5adb1faeba0d877fccbc52b01200351b22a68db7",
+  "caption": "Doors/1 baseline: guarded stage, then a 134 s stall (timeout at 180 s)",
+  "scope": "A rendering of one development layout under one controller configuration; not a route-rate claim and not a replay-gate result.",
+  "git_commit": "58417a7d6b06d08e7f605baeaede3610490f24c7",
+  "re_encoded": "libopenh264 900 kb/s, 800 px wide, after rendering, to stay under the 5 MB artifact guard; frames unchanged"
+}

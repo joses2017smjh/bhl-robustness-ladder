@@ -72,7 +72,7 @@ def apply_strategy_flags(cfg) -> None:
 _HANDS = ["arm_left_hand_link", "arm_right_hand_link"]
 # Root 4-tuples, always written (w, x, y, z). Cameras already go through
 # ``native_quat``; robot ``init_state.rot`` did not, and on v60 a wxyz yaw is
-# read as xyzw. CubeToShelf probe ``historical run``:
+# read as xyzw. CubeToShelf probe ``21342562``:
 #
 #   as_configured (today's "roll" 4-tuple, raw)     BURIED  27/27  R22 = -1
 #   current_native (that roll through native_quat)  BURIED  15/27  R22 ~ 0
@@ -419,9 +419,9 @@ class EventsCfg:
     # 0-3. It still does not train: a 400-iteration probe went 9.1 -> 5.0 -> 5.0
     # mean episode length with a fall rate of 1.000, against 428 steps for the
     # gripper arms without it. That probe planted the legs of a robot lying
-    # on its side: the configured "yaw" 4-tuple was a roll (historical run). The
-    # FACE+SYM replacement is now the default (historical run, reset-verified
-    # historical run). Planting an upright robot is a different experiment and
+    # on its side: the configured "yaw" 4-tuple was a roll (21192744). The
+    # FACE+SYM replacement is now the default (21192773, reset-verified
+    # 21192782). Planting an upright robot is a different experiment and
     # still opt-in.
     #
     # Off by default so the published numbers reproduce: every result in

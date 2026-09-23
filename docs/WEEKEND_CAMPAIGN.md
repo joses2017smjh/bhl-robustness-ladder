@@ -2,9 +2,9 @@
 
 This campaign repairs the prior experiments, uses measured progress gates,
 and adds a real shared-world task for two and three Berkeley Humanoid Lites.
-Raw scheduler receipts and host metadata are retained locally. The public
-[evidence summary](../results/weekend-20260919/SUMMARY.md) retains task outcomes;
-[publication details](PUBLIC_EVIDENCE.md) describe location redactions.
+Scheduler receipts and source hashes are in
+`results/weekend-20260919/submissions.jsonl`; live job identities and failures
+are maintained in [SLURM_JOBS.md](../SLURM_JOBS.md).
 
 | Track | Running implementation | Promotion / evidence | Capability boundary |
 | --- | --- | --- | --- |
@@ -53,13 +53,13 @@ without manipulation. The folding work instead uses the existing nearby
 `lehome-fold-repro` assets and pretrained SmolVLA, without editing that sibling.
 Frame-level train/validation leakage and failed-replay action supervision are
 removed from the new adaptation. A deeper audit found **23,250 swallowed
-camera errors** in a historical folding job; its recorded 6/24 fold
+camera errors** in historical folding job `21214241`; its recorded 6/24 fold
 events are not a validated closed-loop visual-policy baseline. New evaluation
 uses separate per-garment USD layers and fails on rendering errors or missing
 fresh frames. [Folding details](CLOTH_FOLDING_WEEKEND.md).
 
-Both 1,500-update folding adaptations completed: one on H100 and one
-on V100. The strict camera gate passed; all 12 class-evaluation
+Both 1,500-update folding adaptations completed: job `21359522` on H100 and
+`21359530` on V100. The strict camera gate passed; all 12 class-evaluation
 tasks have now ended: **5 completed, 2 failed, 5 timed out**. Completed short-pants
 evaluations score baseline **8/24** and adaptation seed 1 **3/24**, both 0/4
 Unseen. New adaptation has not demonstrated an improvement. Short-top scorer
@@ -168,7 +168,7 @@ perform short verification and rendering without requesting another GPU.
 
 The report artifact
 [`SUMMARY.md`](../results/weekend-20260919/SUMMARY.md) has been generated; the
-September 20 audit read its 15:23 UTC snapshot. The reporting job was configured
+September 20 audit read its 15:23 UTC snapshot. Job `21359631` was configured
 to refresh it after the final training and folding-evaluation arrays finish,
 including failures. Artifact availability alone does not establish that every
 evaluation succeeded or that the report job itself has exited. Refresh at any time

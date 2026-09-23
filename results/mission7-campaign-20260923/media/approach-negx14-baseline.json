@@ -1,0 +1,31 @@
+{
+  "output": "results/mission7-campaign-20260923/media/approach-negx14-baseline.mp4",
+  "output_sha256": "036ce1a86b8ae3b3a6ecb00e53756b20ff8687e71dc09dcd8c6e3de53c35d5ed",
+  "renderer": "MuJoCo EpisodeRecorder, tracking camera, 25 fps",
+  "ffmpeg_error": null,
+  "task": "Mission 7 privileged Approach, 0.65 m spawn, balanced-matrix layout",
+  "split": "test",
+  "layout_index": 14,
+  "controller_arm": "recovery",
+  "controller": "measured_translation_0.50mps_with_bounded_0.30mps_stall_pulse",
+  "reset_sequence": [
+    1,
+    5,
+    6,
+    7,
+    14
+  ],
+  "reproduces_evaluated_episode": true,
+  "outcome_of_this_run": {
+    "success": false,
+    "failure": "excessive_collision",
+    "collisions": 6,
+    "elapsed_s": 2.1199999999998753
+  },
+  "evidence": "results/mission7-campaign-20260923/approach-negx-recovery/result.json",
+  "evidence_sha256": "0090359daae635566ad09bcfaf6e352820e93bcf07fc757cd8a772c09f80350d",
+  "caption": "Approach, world -x, layout 14: 0.50 m/s recovery translation -- hits goal_post_-1 on the first stride",
+  "labels": "privileged pose (oracle), frozen learned gait, free-standing, native MuJoCo",
+  "scope": "One layout under one controller arm; the gate result is the 64-episode matrix in the evidence file, not this clip.",
+  "git_commit": "a501e5df09adfd8567b5f6e18be2ad387e528bde"
+}

@@ -10,7 +10,7 @@ nor an idealized cloth picker is evidence of humanoid folding.
 The weekend jobs did not disappear: Slurm accounting shows that both adaptation
 training jobs completed, and all 12 class-evaluation array tasks terminated:
 **5 completed, 2 failed, and 5 reached their six-hour time limit**. The strict
-camera smoke also completed; its 12-step episodes only verify the
+camera smoke `21359521` also completed; its 12-step episodes only verify the
 pipeline. It is not a folding benchmark.
 
 The table below reports saved, completed episodes, not missing episodes counted
@@ -20,20 +20,20 @@ a 600-step cap, real GPU PhysX cloth and the strict Storm-camera entrypoint.
 Files are under `results/weekend-20260919/` with names
 `fold-{baseline,adapt0,adapt1}-{class}-s100.json`.
 
-| Policy | Class | Final state | Scorer successes / saved episodes |
-| --- | --- | --- | --- |
-| Historical raster-adapted baseline | `pant_short` | Completed | **8/24** |
-| Historical raster-adapted baseline | `top_short` | Failed; incomplete | 0/6 |
-| Historical raster-adapted baseline | `top_long` | Timed out; incomplete | 0/4 |
-| Historical raster-adapted baseline | `pant_long` | Timed out; incomplete | 0/2 |
-| New adaptation seed 0 | `pant_short` | Timed out; incomplete | 0/14 |
-| New adaptation seed 0 | `top_short` | Failed; incomplete | 0/6 |
-| New adaptation seed 0 | `top_long` | Completed | 0/24 |
-| New adaptation seed 0 | `pant_long` | Completed | 0/24 |
-| New adaptation seed 1 | `pant_short` | Completed | **3/24** |
-| New adaptation seed 1 | `top_short` | Timed out; incomplete | 0/2 |
-| New adaptation seed 1 | `top_long` | Timed out; incomplete | 0/2 |
-| New adaptation seed 1 | `pant_long` | Completed | 0/24 |
+| Policy | Class | Slurm task | Final state | Scorer successes / saved episodes |
+| --- | --- | --- | --- | --- |
+| Historical raster-adapted baseline | `pant_short` | `21359573_0` | Completed | **8/24** |
+| Historical raster-adapted baseline | `top_short` | `21359573_1` | Failed; incomplete | 0/6 |
+| Historical raster-adapted baseline | `top_long` | `21359573_2` | Timed out; incomplete | 0/4 |
+| Historical raster-adapted baseline | `pant_long` | `21359573_3` | Timed out; incomplete | 0/2 |
+| New adaptation seed 0 | `pant_short` | `21359574_0` | Timed out; incomplete | 0/14 |
+| New adaptation seed 0 | `top_short` | `21359574_1` | Failed; incomplete | 0/6 |
+| New adaptation seed 0 | `top_long` | `21359574_2` | Completed | 0/24 |
+| New adaptation seed 0 | `pant_long` | `21359574_3` | Completed | 0/24 |
+| New adaptation seed 1 | `pant_short` | `21359575_0` | Completed | **3/24** |
+| New adaptation seed 1 | `top_short` | `21359575_1` | Timed out; incomplete | 0/2 |
+| New adaptation seed 1 | `top_long` | `21359575_2` | Timed out; incomplete | 0/2 |
+| New adaptation seed 1 | `pant_long` | `21359575_3` | Completed | 0/24 |
 
 Short-pants baseline success was 8/20 Seen and 0/4 Unseen (33.3% overall).
 Adaptation seed 1 achieved 3/20 Seen and 0/4 Unseen (12.5% overall).
@@ -71,10 +71,10 @@ This localizes the stall to the switch/configuration/physics-cleanup path;
 the precise blocking operation is not yet established. Merely extending the
 wall-time limit is not a demonstrated fix.
 
-### Original media campaign and historical examples
+### Media available, and the blocked new-media campaign
 
 The sibling campaign `lehome-fold-repro/campaigns/20260919-media` requested
-16 new single-garment policy videos. Its gate failed after 36 seconds,
+16 new single-garment policy videos. Its gate `21360435` failed after 36 seconds,
 before any physics step or rendered observation. The robot USD resolved to the
 nonexistent `lehome-fold-repro/Assets/robots/lerobot/so101_follower_good.usd`.
 The actual 23,251,377-byte asset exists under `lehome-data/Assets/robots/lerobot/`.
@@ -83,12 +83,26 @@ the rollout's `--assets` argument is used later by the observer and does not
 override that robot configuration. The saved state is `infrastructure_error`,
 not a failed fold.
 
-Consequently the remaining media array is blocked by the failed gate, and
-the report waits for that array. That original campaign produced
-**zero completed episodes and zero GIFs**,
-not 16 policy failures. A later isolated repair produced one valid failure
-rollout; see the dated update below. No jobs were canceled or resubmitted
-during that original audit. The weekend class evaluators saved per-garment camera PNGs,
+Consequently `21360436_[1-15%1]` is pending with
+`DependencyNeverSatisfied` on `afterok:21360435`, and `21360437` waits for that
+array. There are **zero completed new-media episodes and zero new campaign
+GIFs**, not 16 policy failures. No jobs were canceled or resubmitted during this
+September 20 audit.
+
+> **Update, 2026-09-23 (scheduler state re-checked with `sacct`).** The array
+> `21360436_[1-15%1]` and the report `21360437` are **CANCELLED by 19646** at
+> 2026-09-20 16:58:44, never having started; they are not pending and cannot be
+> revived. The repair gate `21367715` completed at 10:35:15 and rendered one
+> seed-0 short-top episode (checker ever and terminal both false: rendering
+> passed, the fold failed). The later folding work lives in the linked
+> repository: the horizon pilot (`campaigns/20260921-horizon-pilot`) **ran** and
+> was negative (H50 4/8, H10 0/8, H5 0/8 settled); closed-loop AWR training v2
+> (`campaigns/20260922-closed-loop-training-v2`) **closed negative** — no
+> candidate improved development H10 over the matched baseline (best 1/8 vs
+> 2/8), so the **untouched baseline checkpoint is retained** and the adaptation
+> seeds 0 and 1 above are archival; recovery-supervision v3
+> (`campaigns/20260923-recovery-supervision-v3`) is running under its own
+> driver. BHL does not submit folding jobs while that driver is live. The weekend class evaluators saved per-garment camera PNGs,
 not full rollout videos; their measured successes cannot be illustrated with
 new success GIFs unless they are replayed in a separately identified run.
 
@@ -114,20 +128,9 @@ short tops episodes 2/1, long tops 251/250, short pants 501/502, and long pants
 portfolio caption; the existence of a replay success does not establish
 learned-policy competence on that garment class.
 
-### Later isolated media repair, 20 September 2026
-
-A separate asset-root repair completed one adapted-seed-0
-`Top_Short_Seen_0` development rollout: 600/600 actions, 601 validated render
-calls, 9,774 cloth particles, and maximum particle movement 0.215 m. Both
-ever-triggered success and terminal success were false: the process completed,
-but the policy did not produce a successful fold. Four camera GIFs were saved,
-including individual views and a triptych, with 101 frames each. This is one
-pinned-pose development failure, not a benchmark rate or evidence that the
-blocked original array resumed.
-
 ## What failed, and what already works
 
-The latest sibling ledger reports **6/24 folds** in a historical run, but a fresh
+The latest sibling ledger reports **6/24 folds** in job `21214241`, but a fresh
 audit of its full log found **23,250 swallowed rendering failures** after
 garment switches, all from the same USD layer-identifier collision described
 below. Its geometric checker recorded those folds with real physics, but the
@@ -196,8 +199,8 @@ Run under the existing training interpreter inside `bhl.sif`:
 
 ```bash
 python scripts/cloth/finetune_fold.py \
-  --policy-path ../lehome-data/outputs/train/bc_smolvla_seed0/checkpoints/030000/pretrained_model \
-  --captures '../lehome-data/storm_capture100/*.npz' \
+  --policy-path /nfs/hpc/share/sanchej7/Humanoid_Lite/lehome-data/outputs/train/bc_smolvla_seed0/checkpoints/030000/pretrained_model \
+  --captures '/nfs/hpc/share/sanchej7/Humanoid_Lite/lehome-data/storm_capture100/*.npz' \
   --out RESULTS/cloth/adapt_s0 --cache NODE_SCRATCH/fold-cache \
   --steps 1500 --save-every 100 --batch-size 4 --unfreeze vision+action --seed 0 \
   --validation-mode stratified-success --class-balanced
@@ -208,14 +211,14 @@ Replace `RESULTS` and `NODE_SCRATCH` with concrete campaign and scratch paths.
 `--smoke --steps 2 --save-every 1 --val-per-episode 1 --batch-size 2` and uses
 a different output directory. A smoke checkpoint cannot resume full-data
 training because its split hash differs. Float32 is used. The first DGX2 GPU
-smoke established that the installed cu128 PyTorch wheel excludes
+smoke (`21359477`) established that the installed cu128 PyTorch wheel excludes
 V100/SM70 kernels: changing dtype cannot repair that. H100/H200 or supported
 RTX GPUs are required with the existing training environment. A one-element
 CUDA kernel now checks this before capture preparation or model loading.
 
 The subsequent [isolated cu126 recovery](V100_TORCH_RECOVERY.md) passed real
 V100 kernels and SmolVLA updates without modifying shared environments. Both
-production seeds completed 1,500 updates (one on H100, one on V100).
+production seeds completed 1,500 updates (H100 `21359522`, V100 `21359530`).
 The September 20 matched-evaluation results above supersede the original
 queued status; training completion and lower validation loss alone did not
 establish an improved learned fold-success rate.
@@ -228,9 +231,9 @@ results separately, and avoids copying helper modules into shared source.
 
 ```bash
 python scripts/cloth/eval_fold.py \
-  --lehome-repo ../lehome-fold-repro \
-  --assets ../lehome-data/Assets \
-  --dataset-root ../lehome-data/Datasets/example/four_types_merged \
+  --lehome-repo /nfs/hpc/share/sanchej7/Humanoid_Lite/lehome-fold-repro \
+  --assets /nfs/hpc/share/sanchej7/Humanoid_Lite/lehome-data/Assets \
+  --dataset-root /nfs/hpc/share/sanchej7/Humanoid_Lite/lehome-data/Datasets/example/four_types_merged \
   --policy-path RESULTS/cloth/adapt_s0/best.json \
   --out RESULTS/cloth/adapted_pant_short_s0.json \
   --garment-type pant_short --episodes 2 --max-steps 600 --seed 0
@@ -244,13 +247,14 @@ requires a graphics-capable allocation (A40/RTX8000 in the known working path).
 Its depth channel is synthetic; this policy uses the three RGB cameras and
 joint state, not that depth.
 
-The first new evaluator smoke exposed another real bug in the
+The first new evaluator smoke (`21359478`) exposed another real bug in the
 sibling observer: after a garment switch, old camera/attribute handles retained
 the USD layer, and recreating `obs_stage.usda` failed. Its shim caught those
 exceptions and kept returning stale images. That run's metrics are void. The
 new entrypoint now gives each garment a distinct layer path, clears old USD
 handles, checks all three RGB outputs and propagates rendering errors.
-The same error was then confirmed in the full historical evaluation log, overturning the ledger's interpretation of its 25% headline. Consequently,
+The same error was then confirmed in the full historical `lh-n1-21214241.out`
+log, overturning the ledger's interpretation of its 25% headline. Consequently,
 new reports must require both geometric physics validity and fresh camera
 observations; numeric success predicates alone did not catch this failure.
 
@@ -266,7 +270,7 @@ friction. It is a controller/physics diagnostic; it contains no humanoid or
 gripper model. MuJoCo's native CPU solver does not benefit from reserving a GPU.
 
 ```bash
-python \
+/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python \
   scripts/cloth/fold_mujoco.py --episodes 4 --resolution 7 \
   --out RESULTS/cloth/mujoco_towel_gate.json
 ```
@@ -278,11 +282,11 @@ still became nonfinite, including the 200 Hz hold probe. Repeating those jobs
 without a distinct solver hypothesis is not useful. They are not repaired by
 the SO-101 folding adaptation.
 
-New measured diagnostic result: the MuJoCo diagnostic completed four randomized
+New measured diagnostic result: Slurm job `21359475` completed four randomized
 MuJoCo folds and four matched untouched controls. All 4 folds passed after
 release; all 4 controls failed. Mirror-point RMSE was 0.58–0.69 mm, with finite
 states and zero solver warnings throughout. This validates the explicitly
-idealized picker physics gate only. The H100 SmolVLA smoke wrote
+idealized picker physics gate only. The H100 SmolVLA smoke `21359481` wrote
 both requested update checkpoints; two updates do not establish learned
 folding performance.
 
@@ -311,10 +315,3 @@ folding performance.
 
 Research was checked on 19 September 2026. These are relevant recent sources,
 not a claim that every 2026 folding publication was exhaustively reviewed.
-
-## Inspect the recordings and next experiments
-
-[Five labelled policy GIFs](FOLDING_MEDIA.md) include historical success/failure
-and the new failure from both wrist cameras. [Research-based next experiments](FOLDING_NEXT_EXPERIMENTS.md)
-propose controlled execution-horizon and grasp-supervision comparisons; they are
-not submitted jobs or demonstrated improvements.

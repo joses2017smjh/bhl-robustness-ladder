@@ -8,7 +8,7 @@ arm=${3:?arm}
 seed=${4:?seed}
 shift 4
 case "$stage" in Approach|Corridor|Full) ;; *) echo "Invalid stage: $stage" >&2; exit 2;; esac
-case "$arm" in Blind|Lidar|Stereo|Both) ;; *) echo "Invalid arm: $arm" >&2; exit 2;; esac
+case "$arm" in Blind|Lidar|Stereo|Both|BothRobust) ;; *) echo "Invalid arm: $arm" >&2; exit 2;; esac
 task="Velocity-BHL-MazeRecovery-${stage}-${arm}-v0"
 outdir="$REPO/results/weekend-20260919"
 mkdir -p "$outdir"

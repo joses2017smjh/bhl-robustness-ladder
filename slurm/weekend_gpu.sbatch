@@ -1,5 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=wknd-gate
+#SBATCH --account=eecs
+#SBATCH --partition=gpu,ampere
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:1
@@ -7,13 +9,11 @@
 
 # Submit from this repository with an explicit --chdir and log path.
 # Usage: sbatch ... weekend_gpu.sbatch v60 slurm/inner/weekend_maze.sh ...
-# Supply cluster account/partition through sbatch flags.
 set -euo pipefail
 stack=${1:?stack}; inner=${2:?inner script}; shift 2
 export BHL_STACK=$stack
 if [ "$stack" = train ]; then export BHL_STACK=v51; fi
-repo=${REPO:-${SLURM_SUBMIT_DIR:-$PWD}}
-source "$repo/slurm/_env.sh"
+source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
 setup_node_cache
 export PYTHONPATH="$REPO/src:${PYTHONPATH:-}" OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK:-8}
 BHL_FORWARD_VARS="$BHL_FORWARD_VARS SLURM_ARRAY_TASK_ID"

@@ -1,0 +1,165 @@
+{
+  "note": "Stall-anchored window [stall_branch_time, min(end, stall+20 s)] recomputed offline from the retained 25 Hz chain columns of the original runs (no reruns; identical source records). This is the column the paired comparison needs; the earlier reported 'post-stage progress' used the last-stage-exit window, which covers different route segments in the two arms.",
+  "pairs": {
+    "doors/1": {
+      "baseline": {
+        "stall_branch_time_s": 45.80000000003666,
+        "outcome": "after PlateStage",
+        "fall": false,
+        "window_s": [
+          45.80000000003666,
+          65.76000000013197
+        ],
+        "mechanism": "cycling_without_progress_in_place",
+        "base_progress_m": 0.019436563482262293,
+        "base_speed_mean_mps": 0.014443381093773144,
+        "target_range_ratio_vs_reference": 0.47145914503649244,
+        "double_support_frac": 1.0,
+        "plate_contact_events_in_window": 0
+      },
+      "reset": {
+        "stall_branch_time_s": 45.80000000003666,
+        "outcome": "success",
+        "fall": false,
+        "window_s": [
+          45.80000000003666,
+          65.76000000013197
+        ],
+        "mechanism": "progressing",
+        "base_progress_m": 3.456016002567118,
+        "base_speed_mean_mps": 0.38944142143102134,
+        "target_range_ratio_vs_reference": 2.4194699006749714,
+        "double_support_frac": 0.38,
+        "plate_contact_events_in_window": 9125
+      }
+    },
+    "doors/2": {
+      "baseline": {
+        "stall_branch_time_s": 49.40000000005385,
+        "outcome": "after PlateStage",
+        "fall": true,
+        "window_s": [
+          49.40000000005385,
+          69.36000000014916
+        ],
+        "mechanism": "progressing",
+        "base_progress_m": 4.639235412220424,
+        "base_speed_mean_mps": 0.3943452612717093,
+        "target_range_ratio_vs_reference": 1.247660772251606,
+        "double_support_frac": 0.448,
+        "plate_contact_events_in_window": 0
+      },
+      "reset": {
+        "stall_branch_time_s": 49.40000000005385,
+        "outcome": "after PlateStage",
+        "fall": false,
+        "window_s": [
+          49.40000000005385,
+          69.36000000014916
+        ],
+        "mechanism": "progressing",
+        "base_progress_m": 4.749959873514722,
+        "base_speed_mean_mps": 0.4000978047289407,
+        "target_range_ratio_vs_reference": 2.3274464849158965,
+        "double_support_frac": 0.448,
+        "plate_contact_events_in_window": 0
+      }
+    },
+    "doors/3": {
+      "baseline": {
+        "stall_branch_time_s": 36.39999999999178,
+        "outcome": "success",
+        "fall": false,
+        "window_s": [
+          36.39999999999178,
+          56.36000000008708
+        ],
+        "mechanism": "progressing",
+        "base_progress_m": 4.451233034789349,
+        "base_speed_mean_mps": 0.3872622336677442,
+        "target_range_ratio_vs_reference": 1.0964707300727274,
+        "double_support_frac": 0.44,
+        "plate_contact_events_in_window": 0
+      },
+      "reset": {
+        "stall_branch_time_s": 36.39999999999178,
+        "outcome": "during PlateStage",
+        "fall": true,
+        "window_s": [
+          36.39999999999178,
+          56.36000000008708
+        ],
+        "mechanism": "progressing",
+        "base_progress_m": 4.435191831251496,
+        "base_speed_mean_mps": 0.386484560237449,
+        "target_range_ratio_vs_reference": 1.8284015275891539,
+        "double_support_frac": 0.466,
+        "plate_contact_events_in_window": 0
+      }
+    },
+    "doors/6": {
+      "baseline": {
+        "stall_branch_time_s": 37.79999999999846,
+        "outcome": "after PlateStage",
+        "fall": false,
+        "window_s": [
+          37.79999999999846,
+          57.76000000009377
+        ],
+        "mechanism": "cycling_without_progress_in_place",
+        "base_progress_m": 0.0030594117081557694,
+        "base_speed_mean_mps": 0.004838940603795889,
+        "target_range_ratio_vs_reference": 0.16811567884139567,
+        "double_support_frac": 1.0,
+        "plate_contact_events_in_window": 0
+      },
+      "reset": {
+        "stall_branch_time_s": 37.79999999999846,
+        "outcome": "during PlateStage",
+        "fall": false,
+        "window_s": [
+          37.79999999999846,
+          57.76000000009377
+        ],
+        "mechanism": "progressing",
+        "base_progress_m": 4.625911448568812,
+        "base_speed_mean_mps": 0.4063252401815868,
+        "target_range_ratio_vs_reference": 2.309536240437654,
+        "double_support_frac": 0.47,
+        "plate_contact_events_in_window": 0
+      }
+    },
+    "transport/0": {
+      "baseline": {
+        "stall_branch_time_s": 62.400000000115924,
+        "outcome": "during PlateStage",
+        "fall": true,
+        "window_s": [
+          62.400000000115924,
+          72.80000000016558
+        ],
+        "mechanism": "progressing",
+        "base_progress_m": 2.5643050091594017,
+        "base_speed_mean_mps": 0.41536462882868214,
+        "target_range_ratio_vs_reference": 1.7941030377118858,
+        "double_support_frac": 0.24521072796934865,
+        "plate_contact_events_in_window": 4836
+      },
+      "reset": {
+        "stall_branch_time_s": 62.400000000115924,
+        "outcome": "during PlateStage",
+        "fall": true,
+        "window_s": [
+          62.400000000115924,
+          72.2800000001631
+        ],
+        "mechanism": "progressing",
+        "base_progress_m": 2.609595194661425,
+        "base_speed_mean_mps": 0.43267380201575184,
+        "target_range_ratio_vs_reference": 2.093754740383157,
+        "double_support_frac": 0.25,
+        "plate_contact_events_in_window": 1953
+      }
+    }
+  }
+}

@@ -78,7 +78,7 @@ as a result. Both are worse than saying so.
 ## Status
 
 `Velocity-BHL-Maze-{Blind,Lidar,Stereo,Both}-v0` are registered. Geometry
-smoke **PASS** 4/4: `MazeWaypointCommand` on every arm, spawn
+smoke `21353199` **PASS** 4/4: `MazeWaypointCommand` on every arm, spawn
 `|y|_max` 0.12–0.14 m inside the corridor, lidar wall 0.442 / 0.454 m.
 Hazards are fused into each generated `/World/ground` tile. Old B5 PPO rows
 are terrain-perception results and are not relabelled.
@@ -92,7 +92,7 @@ upward camera over bumpy ground returns too. `native_quat` fixes the pose, and
 and the fraction of pixels that hit terrain (14.8% as trained, 77.5% fixed).
 
 **Navigation training, 2026-09-17–18.** Run names `mazenav-*` (not `maze-*`).
-Train smoke (3 iterations, eplen 26.6–28.1) then the four PPO configurations
+Train smoke `21353395` (3 iterations, eplen 26.6–28.1) then PPO `21353396`–`398`
 (6,000 iterations, four sensor arms, n=3). Terrain curriculum is off; the score
 is button/dead-end, not `terrain_levels`.
 
@@ -110,7 +110,7 @@ is button/dead-end, not `terrain_levels`.
 `progress_to_button` never exceeds 0.0005. Sensors do not separate.
 `Metrics/success_rate` ~0.99 is surviving without falling, not a bump on the
 plate. Seed-0 camera-sensor clips: `docs/gifs/isaac/mazenav_seed0.gif`
-(200 frames × 4, robot and walls in shot). Pooling arms wait on a
+(`21355466`, 200 frames × 4, robot and walls in shot). Pooling arms wait on a
 navigation score.
 
 ## Recovery campaign, 2026-09-19
@@ -204,8 +204,8 @@ JSON. An integration smoke or a merely existing checkpoint cannot promote it.
 
 ## Recovery results verified — 2026-09-20
 
-All 36 stage jobs completed with exit code `0:0`: Approach,
-Corridor, and Full, each with four arms and three seeds.
+All 36 stage jobs completed with exit code `0:0`: Approach `21359486`,
+Corridor `21359499`, and Full `21359510`, each with four arms and three seeds.
 Every stage passed its checkpoint evaluation and emitted both required PASS
 sentinels; all checkpoint files exist. No training or promotion gate failed.
 The arrays have finished and are no longer in the live queue.
