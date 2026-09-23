@@ -264,6 +264,7 @@ controller and clearance issue, not evidence that a sensor policy is ready.
 | Pressure-plate exact replay, 10/10 upright | **PASS: 10/10** with guarded staged crossing; unchanged baseline 10/10 falls; first staged candidate 9/10; nearest-plate candidate 9/10 |
 | Doors ≥16 and Transport ≥16 | **Completed after unlock:** Doors **1/16** (4 falls, 11 timeouts); Transport **0/16** (6 falls, 10 timeouts) |
 | Privileged Approach ≥60/64, zero falls, ≥14/16/direction | **FAIL: 56/64**, 0 falls; world −x **8/16**, other directions 16/16 |
+| — world −x, 2026-09-23 six-arm probe (96 episodes, geometry/predicates unchanged) | **Geometrically bound:** every command-side arm 7–9/16 or 0/16; succeeding layouts move with crossing phase; robot lateral envelope 0.632 m vs 0.61 m post gap and ≤0.415 m outside margin. Gate unchanged, stays closed. `results/mission7-campaign-20260923/approach-negx-summary.json` |
 | Sensor-only Both readiness | **CLOSED** until both preceding gates pass |
 | Four-sensor comparison | **CLOSED** |
 

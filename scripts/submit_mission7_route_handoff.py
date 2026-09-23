@@ -35,7 +35,10 @@ def main():
     parser.add_argument("--handoff", choices=("switch", "early"), default="switch")
     parser.add_argument("--output-name", default="route-handoff-probe-cn-c22")
     parser.add_argument("--rejoin-diagnostic", action="store_true")
-    parser.add_argument("--rejoin-fix", choices=("none", "forward_pulse"), default="none")
+    parser.add_argument("--rejoin-fix", choices=("none", "forward_pulse", "prev_actions_reset"),
+                        default="none")
+    parser.add_argument("--chain-trace", action="store_true",
+                        help="record the 25 Hz command-to-motion chain (Campaign A)")
     parser.add_argument("--submit", action="store_true")
     args = parser.parse_args()
     campaign = args.campaign.resolve()
@@ -78,6 +81,8 @@ def main():
                   "--handoff", args.handoff, "--rejoin-fix", args.rejoin_fix]
     if args.rejoin_diagnostic:
         probe_args.append("--rejoin-diagnostic")
+    if args.chain_trace:
+        probe_args.append("--chain-trace")
     if args.allow_inactive_intervention:
         probe_args.append("--allow-inactive-intervention")
     command = [
@@ -103,6 +108,7 @@ def main():
         "handoff": args.handoff,
         "rejoin_diagnostic": args.rejoin_diagnostic,
         "rejoin_fix": args.rejoin_fix,
+        "chain_trace": args.chain_trace,
         "allow_inactive_intervention": args.allow_inactive_intervention,
         "requested_node": args.node,
         "requested_constraint": None if args.node else args.constraint,
@@ -122,7 +128,8 @@ def main():
             f"{'node `' + args.node + '`' if args.node else 'constraint `' + args.constraint + '`'}"
             f", 2 CPUs / 12 GB / 0 GPUs / 2 h; "
             f"unchanged PlateStage with `{args.handoff}` route handoff"
-            f" and rejoin diagnostic `{args.rejoin_diagnostic}` with fix `{args.rejoin_fix}`; "
+            f" and rejoin diagnostic `{args.rejoin_diagnostic}`, chain trace `{args.chain_trace}`, "
+            f"fix `{args.rejoin_fix}`; "
             f"receipt/source hashes: `{out.relative_to(ROOT)}/submission.json`.\n"
         )
         stream.flush()

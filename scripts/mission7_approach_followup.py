@@ -2,13 +2,14 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from collections import Counter, defaultdict
 import json
 from pathlib import Path
 
 import numpy as np
 
-from bhl_robust.mission.approach_debug import DebugEnv, RecoveryTranslationController
+from bhl_robust.mission.approach_debug import DebugEnv, GoalPostGuardController, PulseApproachController, RecoveryTranslationController
 from bhl_robust.mission.layout import generate
 from mission7_overnight import write
 
@@ -82,8 +83,45 @@ def run_controller(env, controller):
             return env.metrics()
 
 
+# One-factor controller arms for the world -x workstream.  All three keep the
+# benchmark geometry, the goal criterion, the fall and excessive-collision
+# predicates and the 0.65 m spawn unchanged; only the privileged command
+# policy differs.  'recovery' is the evaluated 56/64 controller.
+CONTROLLERS = {
+    "recovery": lambda env: RecoveryTranslationController(env, speed=.50, stop_radius=.28),
+    "guard": lambda env: GoalPostGuardController(env, speed=.50, stop_radius=.28),
+    "pulse": lambda env: PulseApproachController(env),
+    # Command-side one-factor levers that leave geometry and predicates alone:
+    # a slower onset (the measured 0.30 m/s gait threshold) to shrink the
+    # first-stride lateral lurch, and a shifted settle time to move the
+    # arm-swing phase at which the post plane is crossed.  If success flips
+    # with settle time on the same layouts, the phase-luck reading is confirmed.
+    "recovery030": lambda env: RecoveryTranslationController(env, speed=.30, stop_radius=.28),
+    "settle14": lambda env: RecoveryTranslationController(env, speed=.50, stop_radius=.28, settle_s=1.4),
+    "settle16": lambda env: RecoveryTranslationController(env, speed=.50, stop_radius=.28, settle_s=1.6),
+}
+
+
+def controller_note(name, controller):
+    if name == "recovery":
+        return "measured_translation_0.50mps_with_bounded_0.30mps_stall_pulse"
+    if name == "guard":
+        return "goal_post_guard_lateral_centering_0.50mps"
+    if name == "pulse":
+        return "pulse_approach_0.30mps_with_negative_x_post_detour_0.90m"
+    if name == "recovery030":
+        return "measured_translation_0.30mps_with_bounded_0.30mps_stall_pulse"
+    return f"measured_translation_0.50mps_settle_{controller.settle_s:.1f}s"
+
+
 def evaluate(a, out):
     selection = balanced_layouts()
+    if a.directions:
+        wanted = set(a.directions.split(";"))
+        unknown = wanted - set(selection)
+        if unknown:
+            raise SystemExit(f"unknown direction(s) {sorted(unknown)}; have {sorted(selection)}")
+        selection = {k: v for k, v in selection.items() if k in wanted}
     rows = []
     envs = {split: DebugEnv(a.repo, out / ("pulse-" + split + "-cache"), stage="approach",
                             split=split, seed=2300, approach_distance=.65)
@@ -93,11 +131,13 @@ def evaluate(a, out):
             index, split = entry["index"], entry["split"]
             env = envs[split]
             env.reset(index)
-            controller = RecoveryTranslationController(env, speed=.50, stop_radius=.28)
+            controller = CONTROLLERS[a.controller](env)
             row = run_controller(env, controller)
             row.update(layout_index=index, layout_split=split, direction=direction,
-                       controller="measured_translation_0.50mps_with_bounded_0.30mps_stall_pulse",
-                       recovery_pulse_used=controller.kicked)
+                       controller=controller_note(a.controller, controller),
+                       controller_arm=a.controller,
+                       recovery_pulse_used=bool(getattr(controller, "kicked", False)),
+                       controller_phase_history=getattr(controller, "phase_history", None))
             row["failure_stage"] = failure_stage(row)
             rows.append(row)
             write(out / "pulse.json", {"complete": False, "selection": selection, "episodes": rows})
@@ -108,7 +148,8 @@ def evaluate(a, out):
     # second .40 m easy-start fixture documents when initial proximity alone
     # can satisfy the official dwell requirement.
     controls = {}
-    for distance, label in ((.65, "matched_standstill"), (.40, "easy_standstill")):
+    control_specs = ((.65, "matched_standstill"), (.40, "easy_standstill")) if a.controls else ()
+    for distance, label in control_specs:
         stand_rows = []
         stand_envs = {split: DebugEnv(a.repo, out / (label + "-" + split + "-cache"), stage="approach",
                                       split=split, seed=2300, approach_distance=distance)
@@ -136,13 +177,16 @@ def evaluate(a, out):
         "complete": True,
         "status": "COMPLETED_DIAGNOSTIC",
         "selection": selection,
-        "controller": {
+        "controller_arm": a.controller,
+        "directions": sorted(selection),
+        "controller": ({
             "speed_m_s": .50, "stall_pulse_m_s": .30, "stall_pulse_s": .40,
             "stop_radius_m": .28, "heading_gain": 1.2,
-        },
+        } if a.controller == "recovery" else {"arm": a.controller}),
         "pulse": summarize(rows),
         "controls": {k: v["summary"] for k, v in controls.items()},
         "gate": {
+            "full_matrix": len(selection) == 4,
             "minimum_episodes": len(rows) >= 64,
             "successes_at_least_60": sum(r["success"] for r in rows) >= 60,
             "zero_falls": sum(r["fall"] for r in rows) == 0,
@@ -159,8 +203,23 @@ if __name__ == "__main__":
     parser.add_argument("--campaign", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--controller", choices=sorted(CONTROLLERS), default="recovery",
+                        help="privileged command policy arm; geometry and predicates unchanged")
+    parser.add_argument("--directions", default="",
+                        help="';'-separated subset of '+0,+1;+0,-1;+1,+0;-1,+0'; default all four")
+    parser.add_argument("--controls", action="store_true",
+                        help="also run the matched and easy standstill controls")
+    parser.add_argument("--preflight", action="store_true",
+                        help="validate interpreter, imports and arguments, then exit")
     args = parser.parse_args()
     args.repo = args.repo.resolve(); args.campaign = args.campaign.resolve(); args.out = args.out.resolve()
+    if args.preflight:
+        import mujoco
+        print(json.dumps({"status": "PREFLIGHT_OK", "python": sys.executable,
+                          "mujoco": mujoco.__version__, "numpy": np.__version__,
+                          "controller": args.controller, "directions": args.directions or "all",
+                          "controls": args.controls, "out": str(args.out)}, sort_keys=True), flush=True)
+        raise SystemExit(0)
     args.out.mkdir(parents=True, exist_ok=True)
     evaluate(args, args.out)
     print("MISSION7_APPROACH_FOLLOWUP_COMPLETE", flush=True)

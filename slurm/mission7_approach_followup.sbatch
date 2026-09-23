@@ -5,14 +5,18 @@
 #SBATCH --mem=12G
 #SBATCH --time=04:00:00
 set -euo pipefail
-repo=${1:?repo}; snapshot=${2:?snapshot}; campaign=${3:?campaign}; out=${4:?out}
+# Three positional paths; everything after them is forwarded to the evaluator
+# verbatim (see slurm/mission7_route_handoff_probe.sbatch for why).
+repo=${1:?repo}; snapshot=${2:?snapshot}; campaign=${3:?campaign}; out=${4:?out}; shift 4
 cd "$repo"
-PY="${PYTHON:-python3}"
+PY="${PYTHON:-/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python}"
 export PYTHONPATH="$snapshot/src:$snapshot/scripts" OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONUNBUFFERED=1
-"$PY" - "$snapshot" <<'PY'
+script="$snapshot/scripts/mission7_approach_followup.py"
+"$PY" - "$snapshot" <<'PYEOF'
 import hashlib, json, pathlib, sys
 root = pathlib.Path(sys.argv[1])
 for name, expected in json.loads((root / 'sha256.json').read_text()).items():
     assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected, name
-PY
-exec "$PY" "$snapshot/scripts/mission7_approach_followup.py" --repo "$repo" --campaign "$campaign" --out "$out"
+PYEOF
+"$PY" "$script" --repo "$repo" --campaign "$campaign" --out "$out" "$@" --preflight
+exec "$PY" "$script" --repo "$repo" --campaign "$campaign" --out "$out" "$@"

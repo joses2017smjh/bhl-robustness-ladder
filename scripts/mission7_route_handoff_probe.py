@@ -13,9 +13,12 @@ indices are intentionally small and are supplied explicitly by the submitter.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import sys
+
+import mujoco
 
 import numpy as np
 
@@ -35,6 +38,103 @@ REJOIN_PULSE_MPS = .30
 # Smallest commanded-velocity difference counted as a real change (m/s).
 COMMAND_EPSILON_MPS = 1e-3
 
+# Gait-policy observation layout (deploy.yaml: num_observations 75, history 0):
+# command(3) ang_vel(3) gravity(3) joint_pos(22) joint_vel(22) prev_actions(22).
+OBS_CMD = slice(0, 3)
+OBS_JPOS = slice(9, 31)
+OBS_JVEL = slice(31, 53)
+OBS_PREV = slice(53, 75)
+
+# Mechanism classification thresholds, declared before Campaign A.  Raw
+# statistics are always reported beside the label so an episode can be
+# reclassified without rerunning it.
+#
+# Progress is tested first.  On the first instrumented Doors/1 recovery the
+# post-stage window walked 4.7 m at 0.36 m/s with a mean |target - joint| of
+# 1.26 rad: with kp 10 and a 4 N.m effort limit this gait drives joints through
+# the PD as a force command, and targets are never reached.  An absolute
+# tracking threshold therefore labels normal walking as poor tracking.  Poor
+# tracking is instead judged against the same episode's own walking reference
+# window, taken while it approached the plate.
+FROZEN_TARGET_RANGE_RAD = .02     # absolute fallback when no walking reference exists
+FROZEN_TARGET_RATIO = .05         # stall target range / walking-reference range below this: frozen
+POOR_TRACKING_RATIO = 2.0         # stall tracking error / walking-reference error above this
+STALL_PROGRESS_M = .30            # base displacement over the window below this: no progress
+SLIP_PATH_FRACTION = .50          # stance-foot slip / base path above this: feet slipping
+STALL_WINDOW_S = 20.              # final window analysed for a post-stage timeout
+
+
+def summarize_chain(chain, t0, t1, defaults, effort, reference=None):
+    """Statistics of the command-to-motion chain over ticks with t0 <= t <= t1.
+
+    ``reference`` is the same episode's walking-reference summary; tracking is
+    judged as a ratio against it rather than against an absolute threshold.
+    """
+    t = np.asarray(chain["t"], dtype=float)
+    keep = (t >= t0) & (t <= t1)
+    if keep.sum() < 25:
+        return {"window_s": [t0, t1], "ticks": int(keep.sum()), "mechanism": "window_too_short"}
+    idx = np.flatnonzero(keep)
+    tgt = np.asarray(chain["tgt_out"], dtype=float)[idx]
+    jpos_rel = np.asarray(chain["jpos_in"], dtype=float)[idx]
+    jpos_abs = jpos_rel + np.asarray(defaults, dtype=float)
+    raw = np.asarray(chain["raw_out"], dtype=float)[idx]
+    prev = np.asarray(chain["prev_in"], dtype=float)[idx]
+    ctrl = np.asarray(chain["ctrl_pre"], dtype=float)[idx]
+    base = np.asarray(chain["base"], dtype=float)[idx]
+    fl = np.asarray(chain["foot_l"], dtype=float)[idx]
+    fr = np.asarray(chain["foot_r"], dtype=float)[idx]
+    # target at tick k is tracked by the joint state observed at tick k+1
+    track = np.abs(tgt[:-1] - jpos_abs[1:])
+    slip = 0.
+    for foot in (fl, fr):
+        both = (foot[1:, 0] > .5) & (foot[:-1, 0] > .5)
+        slip += float(np.linalg.norm(foot[1:, 1:3] - foot[:-1, 1:3], axis=1)[both].sum())
+    path = float(np.linalg.norm(np.diff(base[:, :2], axis=0), axis=1).sum())
+    progress = float(np.linalg.norm(base[-1, :2] - base[0, :2]))
+    stats = {
+        "window_s": [float(t[idx[0]]), float(t[idx[-1]])],
+        "ticks": int(len(idx)),
+        "target_range_mean_rad": float((tgt.max(0) - tgt.min(0)).mean()),
+        "target_std_mean_rad": float(tgt.std(0).mean()),
+        "raw_out_std_mean": float(raw.std(0).mean()),
+        "prev_in_step_change_mean": float(np.linalg.norm(np.diff(prev, axis=0), axis=1).mean()),
+        "tracking_err_mean_rad": float(track.mean()),
+        "tracking_err_max_rad": float(track.max()),
+        "ctrl_saturation_frac": float((np.abs(ctrl) >= .99 * np.asarray(effort, dtype=float)).mean()),
+        "ctrl_abs_mean_nm": float(np.abs(ctrl).mean()),
+        "foot_contact_any_frac": float(((fl[:, 0] > .5) | (fr[:, 0] > .5)).mean()),
+        "double_support_frac": float(((fl[:, 0] > .5) & (fr[:, 0] > .5)).mean()),
+        "stance_slip_m": slip,
+        "base_path_m": path,
+        "base_progress_m": progress,
+        "base_speed_mean_mps": float(np.linalg.norm(base[:, 2:4], axis=1).mean()),
+        "cmd_in_mean_mps": np.asarray(chain["cmd_in"], dtype=float)[idx].mean(0).tolist(),
+    }
+    ref_err = (reference or {}).get("tracking_err_mean_rad")
+    stats["tracking_err_ratio_vs_reference"] = (
+        None if not ref_err else float(stats["tracking_err_mean_rad"] / ref_err))
+    stats["slip_path_fraction"] = float(slip / path) if path > 1e-6 else None
+    ref_range = (reference or {}).get("target_range_mean_rad")
+    stats["target_range_ratio_vs_reference"] = (
+        None if not ref_range else float(stats["target_range_mean_rad"] / ref_range))
+    frozen = (stats["target_range_ratio_vs_reference"] < FROZEN_TARGET_RATIO
+              if stats["target_range_ratio_vs_reference"] is not None
+              else stats["target_range_mean_rad"] < FROZEN_TARGET_RANGE_RAD)
+    if progress >= STALL_PROGRESS_M:
+        mechanism = "progressing"
+    elif frozen:
+        mechanism = "frozen_targets"
+    elif (stats["tracking_err_ratio_vs_reference"] is not None
+          and stats["tracking_err_ratio_vs_reference"] > POOR_TRACKING_RATIO):
+        mechanism = "poor_joint_tracking"
+    elif stats["slip_path_fraction"] is not None and stats["slip_path_fraction"] > SLIP_PATH_FRACTION:
+        mechanism = "cycling_without_progress_slip"
+    else:
+        mechanism = "cycling_without_progress_in_place"
+    stats["mechanism"] = mechanism
+    return stats
+
 
 def action_to_physical(action):
     return np.tanh(np.asarray(action, dtype=float)[:3]) * COMMAND_SCALES
@@ -51,11 +151,12 @@ class RouteHandoffController:
     """PlateSafe routing with an explicitly scoped stage handoff condition."""
 
     def __init__(self, env, handoff_mode="switch", rejoin_diagnostic=False,
-                 rejoin_fix="none"):
+                 rejoin_fix="none", chain_trace=False):
         self.env = env
         self.handoff_mode = handoff_mode
         self.rejoin_diagnostic = bool(rejoin_diagnostic)
         self.rejoin_fix = rejoin_fix
+        self.chain_trace = bool(chain_trace)
         self.route = PlateSafeRouteController(env, contact_hold_s=1.0)
         self.stage = PlateStage(env)
         self.handoff_seen = False
@@ -99,6 +200,64 @@ class RouteHandoffController:
         self.post_stage_geom_steps = {}
         self.post_stage_min_distance_m = None
         self.post_stage_first_contact_time_s = None
+        # The stall condition is tracked for every run, intervention or not: it
+        # is the branch point Campaign B reruns to, and its fingerprint is what
+        # a paired comparison must match before the arms are compared.
+        self.stall_first_time = None
+        self.stall_fingerprint = None
+        self.stall_event = None
+        # prev_actions reset delivery: the next gait update's observation must
+        # carry zeros in its prev_actions slice, and only that update can show it.
+        self._verify_prev_input = False
+        self.prev_reset_delivery = None
+        # Command-to-motion chain, one row per 25 Hz gait update.
+        self.chain = {key: [] for key in ("t", "cmd_in", "prev_in", "jpos_in", "jvel_in",
+                                          "raw_out", "tgt_out", "ctrl_pre", "foot_l",
+                                          "foot_r", "base", "phase")}
+        model, slot = env.model, env.slot
+        self.floor_geom = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "floor")
+        self.foot = {}
+        for side in ("left", "right"):
+            body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY,
+                                     f"{slot.prefix}leg_{side}_ankle_roll")
+            geoms = {int(g) for g in np.flatnonzero(model.geom_bodyid == body)}
+            self.foot[side] = (int(body), geoms)
+        controller_update = env.controller.update
+
+        def traced_update(robot_observations):
+            pre = self._chain_pre() if self.chain_trace else None
+            targets = controller_update(robot_observations)
+            controller = self.env.controller
+            if self._verify_prev_input:
+                delivered = controller.policy_observations[0, OBS_PREV].copy()
+                self.prev_reset_delivery = {
+                    "time_s": float(self.env.runner.d.time),
+                    "policy_input_prev_actions": delivered.tolist(),
+                    "policy_input_prev_actions_norm": float(np.linalg.norm(delivered)),
+                    "delivered_zero_input": bool(np.abs(delivered).max() < 1e-9),
+                }
+                self._verify_prev_input = False
+            if pre is not None:
+                obs = controller.policy_observations[0]
+                self.chain["t"].append(pre["t"])
+                self.chain["cmd_in"].append(np.round(obs[OBS_CMD], 4).tolist())
+                self.chain["prev_in"].append(np.round(obs[OBS_PREV], 4).tolist())
+                self.chain["jpos_in"].append(np.round(obs[OBS_JPOS], 4).tolist())
+                self.chain["jvel_in"].append(np.round(obs[OBS_JVEL], 4).tolist())
+                self.chain["raw_out"].append(np.round(controller.policy_actions[0], 4).tolist())
+                self.chain["tgt_out"].append(np.round(np.asarray(targets, dtype=float), 4).tolist())
+                self.chain["ctrl_pre"].append(pre["ctrl"])
+                self.chain["foot_l"].append(pre["foot_l"])
+                self.chain["foot_r"].append(pre["foot_r"])
+                self.chain["base"].append(pre["base"])
+                self.chain["phase"].append(self.env.phase)
+            return targets
+
+        # Wrap the gait controller rather than the environment: every one of the
+        # five 25 Hz updates inside an env.step is seen, with the exact 75-vector
+        # the ONNX policy consumed.  The controller is rebuilt on env.reset, so
+        # this is installed after reset, per episode.
+        env.controller.update = traced_update
         if self.rejoin_diagnostic:
             route_action = self.route.action
 
@@ -117,6 +276,47 @@ class RouteHandoffController:
             # Observe the existing route call without changing its arguments,
             # return value, or state transitions.
             self.route.action = traced_route_action
+
+    def _foot_state(self, side):
+        d, m = self.env.runner.d, self.env.model
+        body, geoms = self.foot[side]
+        contact = 0.
+        for i in range(d.ncon):
+            c = d.contact[i]
+            g1, g2 = int(c.geom1), int(c.geom2)
+            if (g1 == self.floor_geom and g2 in geoms) or (g2 == self.floor_geom and g1 in geoms):
+                contact = 1.
+                break
+        xyz = d.xpos[body]
+        return [contact, round(float(xyz[0]), 4), round(float(xyz[1]), 4), round(float(xyz[2]), 4)]
+
+    def _chain_pre(self):
+        """Physical state at the instant a gait update is called (= end of the
+        previous 80-substep window): applied torque, feet, base."""
+        d, s = self.env.runner.d, self.env.slot
+        base = d.xpos[s.body_id, :2]
+        vel = d.qvel[s.qvel_adr:s.qvel_adr + 2]
+        return {
+            "t": float(d.time),
+            "ctrl": np.round(d.ctrl[s.ctrl], 3).tolist(),
+            "foot_l": self._foot_state("left"),
+            "foot_r": self._foot_state("right"),
+            "base": [round(float(base[0]), 4), round(float(base[1]), 4),
+                     round(float(vel[0]), 4), round(float(vel[1]), 4),
+                     round(float(yaw_of(self.env)), 4)],
+        }
+
+    def _fingerprint(self):
+        d = self.env.runner.d
+        blob = np.concatenate([[d.time], d.qpos, d.qvel,
+                               self.env.controller.prev_actions]).astype(np.float64)
+        return {
+            "sha256_16": hashlib.sha256(blob.tobytes()).hexdigest()[:16],
+            "time_s": float(d.time),
+            "base_xy": d.xpos[self.env.slot.body_id, :2].astype(float).tolist(),
+            "prev_actions_norm": float(np.linalg.norm(self.env.controller.prev_actions)),
+            "route_waypoint": int(self.route.waypoint),
+        }
 
     def _route_target(self):
         """Read-only reconstruction of the target selected by route code."""
@@ -328,24 +528,45 @@ class RouteHandoffController:
                   or target_distance < self.post_stage_best_target_distance - .02):
                 self.post_stage_best_target_distance = target_distance
                 self.post_stage_last_target_progress_time = now
-        if (self.rejoin_fix == "forward_pulse"
-                and self.post_stage_exit_time is not None and not self.rejoin_fix_used
-                and self.rejoin_fix_until <= now
-                and self.post_stage_last_target_progress_time is not None
-                and now - self.post_stage_last_target_progress_time >= .8
-                and self.route.waypoint > self.post_stage_exit_waypoint
-                and self.env.phase == "advance"
-                and target["target_kind"] == "waypoint"):
-            self.rejoin_fix_used = True
-            self.rejoin_fix_until = now + .4
-            self.rejoin_fix_events.append({
+        stall_now = (
+            self.post_stage_exit_time is not None
+            and self.post_stage_last_target_progress_time is not None
+            and now - self.post_stage_last_target_progress_time >= .8
+            and self.route.waypoint > self.post_stage_exit_waypoint
+            and self.env.phase == "advance"
+            and target["target_kind"] == "waypoint")
+        if stall_now and self.stall_first_time is None:
+            self.stall_first_time = now
+            self.stall_fingerprint = self._fingerprint()
+            self.stall_event = {
                 "time_s": now,
-                "event": "start_forward_restart_pulse",
                 "route_waypoint": int(self.route.waypoint),
                 "target": target,
                 "stalled_for_s": float(now - self.post_stage_last_target_progress_time),
                 "best_target_distance_m": self.post_stage_best_target_distance,
-            })
+                "fingerprint": self.stall_fingerprint,
+            }
+        if (self.rejoin_fix != "none" and stall_now and not self.rejoin_fix_used
+                and self.rejoin_fix_until <= now):
+            self.rejoin_fix_used = True
+            event = {**self.stall_event, "time_s": now,
+                     "fingerprint_at_fire": self._fingerprint()}
+            if self.rejoin_fix == "forward_pulse":
+                self.rejoin_fix_until = now + .4
+                event["event"] = "start_forward_restart_pulse"
+            elif self.rejoin_fix == "prev_actions_reset":
+                controller = self.env.controller
+                before = controller.prev_actions.copy()
+                controller.prev_actions[:] = 0.
+                self._verify_prev_input = True
+                event.update({
+                    "event": "prev_actions_reset",
+                    "prev_actions_before": before.tolist(),
+                    "prev_actions_before_norm": float(np.linalg.norm(before)),
+                    "prev_actions_after_norm": float(np.linalg.norm(controller.prev_actions)),
+                    "target_changed": bool(np.linalg.norm(before) > 1e-9),
+                })
+            self.rejoin_fix_events.append(event)
         if self.rejoin_fix_until > now:
             without = action_to_physical(effective_action)
             imposed = np.asarray([REJOIN_PULSE_MPS, 0., 0.], dtype=float)
@@ -432,7 +653,7 @@ HEAVY_EPISODE_KEYS = (
     "plate_contact_events", "rejoin_diagnostic", "diagnostic_trace",
     "decision_rewards", "route_phase_history", "trace",
     "guarded_stage_history", "guarded_stage_phase_history",
-    "stage_entry_states", "world_contact_samples",
+    "stage_entry_states", "world_contact_samples", "chain",
 )
 
 
@@ -457,7 +678,7 @@ def run(args):
             env.reset(index)
             controller = RouteHandoffController(
                 env, handoff_mode=args.handoff, rejoin_diagnostic=args.rejoin_diagnostic,
-                rejoin_fix=args.rejoin_fix)
+                rejoin_fix=args.rejoin_fix, chain_trace=args.chain_trace)
             while True:
                 env.runner.contact_trace = []
                 effective_action = controller.action()
@@ -494,6 +715,47 @@ def run(args):
                  if item["phase"] == "recorded"),
                 None,
             )
+            end_time = float(env.runner.d.time)
+            chain_post_stage = None
+            chain_stall_window = None
+            chain_reference = None
+            if args.chain_trace:
+                defaults = env.controller.default_joint_positions
+                effort = env.runner.eff
+                # Walking reference: from settle-out until just before the stage
+                # took over (or the whole episode if it never did).
+                ref_end = ((activation_time - .5) if activation_time is not None
+                           else end_time)
+                chain_reference = summarize_chain(controller.chain, 1.0, ref_end,
+                                                  defaults, effort)
+            if args.chain_trace and controller.post_stage_exit_time is not None:
+                chain_post_stage = summarize_chain(
+                    controller.chain, controller.post_stage_exit_time + 1.0, end_time,
+                    defaults, effort, reference=chain_reference)
+                if failure_phase == "after PlateStage" and row.get("timeout"):
+                    chain_stall_window = summarize_chain(
+                        controller.chain, max(controller.post_stage_exit_time + 1.0,
+                                              end_time - STALL_WINDOW_S),
+                        end_time, defaults, effort, reference=chain_reference)
+            exposure = ("exposed" if controller.stall_first_time is not None
+                        else "not_exposed")
+            fix_event = controller.rejoin_fix_events[0] if controller.rejoin_fix_events else None
+            if args.rejoin_fix == "none":
+                delivery = "NOT_REQUESTED"
+            elif exposure == "not_exposed":
+                delivery = "NOT_EXPOSED"
+            elif fix_event is None:
+                delivery = "EXPOSED_BUT_NOT_EXECUTED"
+            elif args.rejoin_fix == "forward_pulse":
+                delivery = ("APPLIED" if controller.rejoin_fix_forward_delta > COMMAND_EPSILON_MPS
+                            else "EXECUTED_BUT_TARGET_UNCHANGED")
+            elif args.rejoin_fix == "prev_actions_reset":
+                if not fix_event.get("target_changed"):
+                    delivery = "EXECUTED_BUT_TARGET_UNCHANGED"
+                elif not (controller.prev_reset_delivery or {}).get("delivered_zero_input"):
+                    delivery = "EXECUTED_BUT_NOT_DELIVERED_TO_POLICY"
+                else:
+                    delivery = "APPLIED"
             rejoin_diagnostic = None
             if args.rejoin_diagnostic and controller.stage_exit_events:
                 first_exit = controller.stage_exit_events[0]
@@ -563,6 +825,17 @@ def run(args):
                     "min_contact_distance_m": controller.post_stage_min_distance_m,
                     "first_contact_time_s": controller.post_stage_first_contact_time_s,
                 },
+                stall_branch_time_s=controller.stall_first_time,
+                stall_event=controller.stall_event,
+                stall_fingerprint=controller.stall_fingerprint,
+                intervention_exposure=exposure,
+                intervention_delivery=delivery,
+                prev_actions_reset_delivery=controller.prev_reset_delivery,
+                chain_walking_reference_summary=chain_reference,
+                chain_post_stage_summary=chain_post_stage,
+                chain_stall_window_summary=chain_stall_window,
+                mechanism=((chain_stall_window or chain_post_stage or {}).get("mechanism")),
+                chain=controller.chain if args.chain_trace else None,
                 rejoin_fix=args.rejoin_fix,
                 rejoin_fix_events=controller.rejoin_fix_events,
                 rejoin_fix_fired=bool(controller.rejoin_fix_events),
@@ -582,15 +855,22 @@ def run(args):
     changed_forward = any(row["rejoin_fix_changed_forward_command"] for row in rows)
     changed_any = any(row["rejoin_fix_command_delta_mps"] > COMMAND_EPSILON_MPS
                       for row in rows)
+    exposed = [row for row in rows if row["intervention_exposure"] == "exposed"]
+    deliveries = sorted({row["intervention_delivery"] for row in rows})
+    # Never reaching the stall is a route outcome, not a runner defect: those
+    # episodes stay in the route denominator and are marked not exposed.  The
+    # run fails only when an EXPOSED episode did not receive its intervention.
     if not requested:
         intervention_status = "NOT_REQUESTED"
-    elif not fired:
-        intervention_status = "REQUESTED_BUT_NEVER_FIRED"
-    elif not changed_forward:
-        intervention_status = "FIRED_BUT_DID_NOT_CHANGE_FORWARD_COMMAND"
-    else:
+    elif not exposed:
+        intervention_status = "REQUESTED_BUT_NO_EPISODE_EXPOSED"
+    elif all(row["intervention_delivery"] == "APPLIED" for row in exposed):
         intervention_status = "APPLIED"
-    ineffective = requested and intervention_status != "APPLIED"
+    else:
+        bad = sorted({row["intervention_delivery"] for row in exposed
+                      if row["intervention_delivery"] != "APPLIED"})
+        intervention_status = "EXPOSED_EPISODES_NOT_APPLIED:" + ",".join(bad)
+    ineffective = requested and bool(exposed) and intervention_status != "APPLIED"
     result = {
         "complete": True,
         "status": ("COMPLETED_TARGETED_HANDOFF_PROBE" if not ineffective
@@ -610,6 +890,11 @@ def run(args):
         "intervention_changed_command": changed_any,
         "intervention_changed_forward_command": changed_forward,
         "intervention_status": intervention_status,
+        "intervention_deliveries": deliveries,
+        "episodes_exposed": len(exposed),
+        "chain_trace": args.chain_trace,
+        "mechanism_counts": {m: sum(1 for row in rows if row["mechanism"] == m)
+                             for m in sorted({row["mechanism"] for row in rows}, key=str)},
         "rejoin_diagnostic": args.rejoin_diagnostic,
         "route_episode_count": len(rows),
         "guarded_stage_activations": sum(row["guarded_stage_activated"] for row in rows),
@@ -653,7 +938,10 @@ if __name__ == "__main__":
     parser.add_argument("--indices", required=True, help="comma-separated validation layout indices")
     parser.add_argument("--handoff", choices=("switch", "early"), default="switch")
     parser.add_argument("--rejoin-diagnostic", action="store_true")
-    parser.add_argument("--rejoin-fix", choices=("none", "forward_pulse"), default="none")
+    parser.add_argument("--rejoin-fix", choices=("none", "forward_pulse", "prev_actions_reset"),
+                        default="none")
+    parser.add_argument("--chain-trace", action="store_true",
+                        help="record the command-to-motion chain at every 25 Hz gait update")
     parser.add_argument("--allow-inactive-intervention", action="store_true",
                         help="record a requested-but-ineffective intervention as a "
                              "null result instead of failing the run")
