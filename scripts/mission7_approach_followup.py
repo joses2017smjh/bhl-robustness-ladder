@@ -164,8 +164,24 @@ def controller_note(name, controller):
     return f"measured_translation_0.50mps_settle_{controller.settle_s:.1f}s"
 
 
+def explicit_layouts(spec):
+    """'validation:2,5;train:1,7' -> {direction_key: [{split, index}, ...]}."""
+    found = defaultdict(list)
+    for part in spec.split(";"):
+        if not part.strip():
+            continue
+        split, indices = part.split(":")
+        for index in indices.split(","):
+            layout = generate(split.strip(), int(index))
+            found["%+d,%+d" % direction_for(layout)].append({"split": split.strip(), "index": int(index)})
+    return dict(sorted(found.items()))
+
+
 def evaluate(a, out):
-    selection = balanced_layouts()
+    # --layout-list evaluates an explicit, predeclared set instead of the
+    # balanced test-split matrix (used for held-out replication of a controller
+    # that was tuned on the matrix's own layouts).
+    selection = explicit_layouts(a.layout_list) if a.layout_list else balanced_layouts()
     if a.directions:
         wanted = set(a.directions.split(";"))
         unknown = wanted - set(selection)
@@ -175,7 +191,7 @@ def evaluate(a, out):
     rows = []
     envs = {split: DebugEnv(a.repo, out / ("pulse-" + split + "-cache"), stage="approach",
                             split=split, seed=2300, approach_distance=.65)
-            for split in ("test", "validation")}
+            for split in sorted({e["split"] for v in selection.values() for e in v} | {"test", "validation"})}
     for direction, indices in selection.items():
         for entry in indices[:1] if a.smoke else indices:
             index, split = entry["index"], entry["split"]
@@ -235,8 +251,9 @@ def evaluate(a, out):
         } if a.controller == "recovery" else {"arm": a.controller}),
         "pulse": summarize(rows),
         "controls": {k: v["summary"] for k, v in controls.items()},
+        "layout_list": a.layout_list or None,
         "gate": {
-            "full_matrix": len(selection) == 4,
+            "full_matrix": len(selection) == 4 and not a.layout_list,
             "minimum_episodes": len(rows) >= 64,
             "successes_at_least_60": sum(r["success"] for r in rows) >= 60,
             "zero_falls": sum(r["fall"] for r in rows) == 0,
@@ -257,6 +274,8 @@ if __name__ == "__main__":
                         help="privileged command policy arm; geometry and predicates unchanged")
     parser.add_argument("--directions", default="",
                         help="';'-separated subset of '+0,+1;+0,-1;+1,+0;-1,+0'; default all four")
+    parser.add_argument("--layout-list", default="",
+                        help="explicit 'split:i,j;split:k' layout set instead of the balanced test-split matrix")
     parser.add_argument("--controls", action="store_true",
                         help="also run the matched and easy standstill controls")
     parser.add_argument("--preflight", action="store_true",

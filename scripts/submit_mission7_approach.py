@@ -22,6 +22,7 @@ def main():
                         default="recovery")
     parser.add_argument("--directions", default="", help="';'-separated subset; default all four")
     parser.add_argument("--controls", action="store_true")
+    parser.add_argument("--layout-list", default="")
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument("--node", default=None)
     parser.add_argument("--constraint", default="haswell&el8")
@@ -40,6 +41,8 @@ def main():
         probe_args.append(f"--directions={args.directions}")
     if args.controls:
         probe_args.append("--controls")
+    if args.layout_list:
+        probe_args.append(f"--layout-list={args.layout_list}")
     if args.smoke:
         probe_args.append("--smoke")
     placement = [f"--nodelist={args.node}"] if args.node else [f"--constraint={args.constraint}"]
