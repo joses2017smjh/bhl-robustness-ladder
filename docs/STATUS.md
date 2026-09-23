@@ -7,8 +7,8 @@ work; `main` untouched). Master backlog: [`REPO_TASKS.md`](REPO_TASKS.md).
 |---|---|---|---|
 | Mission 7 route controller | active | candidate 1 (selective reset) validated: Doors 1/16 → 1/16, Transport 2/16 → 4/16 on fresh layouts, +2/−0, underpowered | crossing composition vs exact replay; −x fine centring |
 | Privileged Approach | **gate passed** | **62/64, 0 falls, 16/16/16/14** with fine centring (was 56/64, −x 8/16) | sensor studies still wait on the route gate |
-| Inspection maze | extending | 3/3 nominal; **12/12 under 35 % dropout; wrong-branch 12/12 rejected** (fresh seeds 3–14) | nominal + outage arms (`21401943`) |
-| Multi-robot airlock | extended | crew 2 **gate passed on 10 fresh seeds** (10/10; controls 0/10, 0/10); 10/10 under 35 % dropout; crew 3 10/10 with controls running | crew 3 completion (`21401947`) |
+| Inspection maze | extended, gate holds | **12/12 nominal, 0/12 complete outage, 12/12 at 35 % dropout, wrong-branch 12/12 rejected** on fresh seeds 3–14 | more layouts/approach orders need new script options (not yet exposed) |
+| Multi-robot airlock | extended, gates hold | crews 2 and 3 **10/10 on fresh seeds 5–14 with both controls 0/10**; crew 2 10/10 at 35 % dropout | crew 3 dropout arm running; delay/interruption stress needs script options |
 | Locomotion / terrain / sensors | reference | pairs valid; ice_pair retracted, ice_pair_placed n=2 | multi-seed comparisons per inventory |
 | Navigation PPO / B5 | reference + failure | 379/384 oracle-route; maze button 0/12 | provenance reconciled, then multi-seed/route eval |
 | Cooperative lift / carry / cube-to-shelf | unresolved failures | best lift 7.8 cm; 0/6, 0/18; underground-spawn artifacts retracted | feasibility diagnostics before any training |
