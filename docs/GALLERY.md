@@ -57,7 +57,7 @@ controller evidence lives in [`MISSION7_TASKS.md`](MISSION7_TASKS.md).
 | [`arms_push_pair`](#locomotion) | MuJoCo | 22-DoF push-trained vs DR-only, shove | render works — **no push benefit**: push-trained falls 0.15 vs DR-only 0.10 (n=60); caption corrected 2026-09-23 |
 | [`arms_terrain_pair`](#locomotion) | MuJoCo | 22-DoF vs 12-DoF, terrain | **works** |
 | [`multi_race`](#four-policies-at-once) | MuJoCo | 4 policies, one shove | **works** |
-| [`multi_lab`](#four-policies-at-once) | MuJoCo | 4 policies, obstacle course + depth | **works** |
+| [`multi_lab`](#four-policies-at-once) | MuJoCo | 4 policies, obstacle course + depth | render works — **course cleared 5/20 (22 DoF) and 2/20 (12 DoF) over 5 seeds**, not reliably |
 | [`depth_pair`](#depth) | MuJoCo | ray-cast depth | **works** |
 | [`ice_pair`](#b3--ice) | MuJoCo | B3 — blind vs depth policies, rendered on **flat MuJoCo ground** (the harness has no ice world) | render works — **result retracted**: in training the ice was never under the robots ([probe verdict](../results/ice_placement_probe_21328532.txt)) |
 | [`ice_pair_placed`](#b3--ice) | MuJoCo | B3 — policies retrained with patches at terrain origins (median 0.8 m), rendered on **flat MuJoCo ground** | **works as a render of the placed policies**; n=2, depth terrain level 2.92 vs blind 2.59 |
@@ -108,7 +108,7 @@ Two policies, one command, one world. Left is the intervention, right the contro
 | | |
 |---|---|
 | <img src="gifs/multi_race.gif" width="420"> | **`multi_race`** — identical 0.45 m/s shoves. Same solver, same clock, not a composite. The un-randomized robot is the one on the ground. |
-| <img src="gifs/multi_lab.gif" width="420"> | **`multi_lab`** — current README hero. Four colour-coded policies on a carpet, cable, threshold and ramp course (one rollout per policy; the traversal table is a Slurm log, `21004154`, not a results file), with the orange robot's egocentric depth along the bottom. **14 MB.** |
+| <img src="gifs/multi_lab.gif" width="420"> | **`multi_lab`** — current README hero. Four colour-coded policies on a carpet, cable, threshold and ramp course (the clip is one rollout per policy; a 5-seed rerun, [`lab_traverse_5seed.json`](../results/lab-traverse-20260923/lab_traverse_5seed.json), finishes the course 1/5, 0/5, 2/5, 2/5 for randomized, no-randomization, push-trained and terrain-trained on 22 DoF and 0/5, 0/5, 0/5, 2/5 on 12 DoF: the course is cleared sometimes, not reliably, and the no-randomization 22-DoF policy stalls past the carpet every time), with the orange robot's egocentric depth along the bottom. **14 MB.** |
 
 ## Depth
 
