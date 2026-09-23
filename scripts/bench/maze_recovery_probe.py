@@ -8,6 +8,7 @@ and prints MAZE_PROBE_PASS, so an Isaac shutdown exit-code bug cannot pass it.
 from __future__ import annotations
 
 import argparse
+import os
 import math
 import json
 from pathlib import Path
@@ -213,6 +214,16 @@ def run():
         from isaaclab_rl.rsl_rl import RslRlVecEnvWrapper
         from rsl_rl.runners import OnPolicyRunner
         agent = spec.kwargs["rsl_rl_cfg_entry_point"]()
+        if os.environ.get("BHL_POLICY", "").strip() == "recurrent":
+            # Same overlay as scripts/train.py: a checkpoint trained with
+            # BHL_POLICY=recurrent (LSTM 256) cannot load into the MLP runner.
+            from isaaclab_rl.rsl_rl import RslRlPpoActorCriticRecurrentCfg
+            old_pol = agent.policy
+            agent.policy = RslRlPpoActorCriticRecurrentCfg(
+                init_noise_std=old_pol.init_noise_std, actor_hidden_dims=old_pol.actor_hidden_dims,
+                critic_hidden_dims=old_pol.critic_hidden_dims, activation=old_pol.activation,
+                rnn_type="lstm", rnn_hidden_dim=256, rnn_num_layers=1)
+            print("[overlay] probe policy: ActorCriticRecurrent (lstm, 256)", flush=True)
         try:
             from isaaclab_rl.rsl_rl import handle_deprecated_rsl_rl_cfg
             agent = handle_deprecated_rsl_rl_cfg(agent, version("rsl-rl-lib"))
