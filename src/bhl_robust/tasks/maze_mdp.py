@@ -104,13 +104,27 @@ class MazeWaypointCommand(UniformVelocityCommand):
         self._wp_idx[ids] = 0
         self._apply_waypoint(ids)
 
+    def _estimated_xy(self) -> torch.Tensor:
+        """The position the *teacher* believes: true xy plus an evaluation-only
+        localization error (SF-02, set by maze_recovery_probe --settings). The
+        reward and termination terms keep reading the true position, so this
+        corrupts the guidance, never the judge. Zero unless the probe sets it."""
+        xy = robot_xy_local(self._env)
+        bias = getattr(self, "_sf02_bias", None)
+        if bias is not None:
+            xy = xy + bias
+        noise = float(getattr(self, "_sf02_noise_m", 0.0) or 0.0)
+        if noise > 0.0:
+            xy = xy + noise * torch.randn(xy.shape, generator=getattr(self, "_sf02_gen", None), device=xy.device)
+        return xy
+
     def _update_command(self):
         self._advance_waypoints()
         self._apply_waypoint(torch.arange(self.num_envs, device=self.device))
         super()._update_command()
 
     def _advance_waypoints(self) -> None:
-        xy = robot_xy_local(self._env)
+        xy = self._estimated_xy()
         idx = self._wp_idx.clamp(max=self._path.shape[0] - 1)
         dist = (self._path[idx] - xy).norm(dim=-1)
         last = self._wp_idx >= (self._path.shape[0] - 1)
@@ -120,7 +134,7 @@ class MazeWaypointCommand(UniformVelocityCommand):
     def _apply_waypoint(self, env_ids: torch.Tensor) -> None:
         if env_ids.numel() == 0:
             return
-        xy = robot_xy_local(self._env)[env_ids]
+        xy = self._estimated_xy()[env_ids]
         idx = self._wp_idx[env_ids].clamp(max=self._path.shape[0] - 1)
         delta = self._path[idx] - xy
         self.heading_target[env_ids] = torch.atan2(delta[:, 1], delta[:, 0])

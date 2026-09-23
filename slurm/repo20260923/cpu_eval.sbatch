@@ -52,6 +52,22 @@ case "$mode" in
       "$PY" scripts/bench/inspection_maze.py "${common[@]}" --output "$O/sf03-$1-$2.json" --imu-source estimated --imu-filter "$2" \
         --imu-gyro-std "$3" --imu-accel-std "$4" --imu-gyro-bias "$5" --imu-delay-steps "$6" --imu-kp "$7"
     done ;;
+  sf03b)  # attitude filter at 200 Hz from the physics substep hook; IMU delay in ms (SF-03b latency boundary), L1 noise, seeds 0-2
+    D=$(ls -d "$U"/logs/rsl_rl/humanoid/*_arms-dr1.0-s0 | head -1); O=results/sensor-fusion-20260923
+    common=(--deploy "$D/exported/deploy.yaml" --upstream "$U" --cache-dir "$CACHE" --seeds 3 --seconds 60 --sensor-modes reactive --routes ordered
+            --imu-source estimated --imu-filter mahony --imu-rate-hz 200 --imu-gyro-std 0.02 --imu-accel-std 0.3 --imu-gyro-bias 0.02)
+    for ms in 0 5 10 20 30 40 60; do
+      "$PY" scripts/bench/inspection_maze.py "${common[@]}" --imu-delay-ms "$ms" --output "$O/sf03b-delay${ms}ms.json"
+    done ;;
+  sf02)   # localization error fed to the route controller (SF-02, MuJoCo side), truth attitude, seeds 0-2
+    D=$(ls -d "$U"/logs/rsl_rl/humanoid/*_arms-dr1.0-s0 | head -1); O=results/sensor-fusion-20260923
+    common=(--deploy "$D/exported/deploy.yaml" --upstream "$U" --cache-dir "$CACHE" --seeds 3 --seconds 60 --sensor-modes reactive --routes ordered)
+    for spec in "bias0.05 --pose-bias-m 0.05" "bias0.10 --pose-bias-m 0.10" "bias0.15 --pose-bias-m 0.15" "bias0.20 --pose-bias-m 0.20" \
+                "noise0.05 --pose-noise-m 0.05" "noise0.10 --pose-noise-m 0.10" "yaw3 --pose-yaw-deg 3" "yaw10 --pose-yaw-deg 10" "yaw20 --pose-yaw-deg 20" \
+                "drift0.01 --pose-drift-mps 0.01" "drift0.03 --pose-drift-mps 0.03"; do
+      set -- $spec; tag=$1; shift
+      "$PY" scripts/bench/inspection_maze.py "${common[@]}" "$@" --output "$O/sf02-$tag.json"
+    done ;;
   *) echo "unknown mode $mode"; exit 2 ;;
 esac
 echo REPO_CPU_EVAL_COMPLETE

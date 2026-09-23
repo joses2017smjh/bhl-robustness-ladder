@@ -19,7 +19,7 @@ class RecoveryWaypointCommand(MazeWaypointCommand):
     def _resample_command(self, env_ids):
         super()._resample_command(env_ids)
         ids = torch.as_tensor(env_ids, device=self.device, dtype=torch.long).reshape(-1)
-        xy = recovery.local_xy(self._env)[ids]
+        xy = self._estimated_xy()[ids]
         # Near-goal curriculum starts after waypoint 0: never turn around to it.
         self._wp_idx[ids] = (xy[:, 0] >= 1.15).long()
         self._apply_waypoint(ids)
@@ -28,11 +28,14 @@ class RecoveryWaypointCommand(MazeWaypointCommand):
         super()._apply_waypoint(env_ids)
         if env_ids.numel() == 0:
             return
-        xy = recovery.local_xy(self._env)[env_ids]
+        xy = self._estimated_xy()[env_ids]
         idx = self._wp_idx[env_ids].clamp(max=self._path.shape[0] - 1)
         delta = self._path[idx] - xy
         distance = delta.norm(dim=-1)
         heading = recovery.tensor(self._env.scene["robot"].data.heading_w)[env_ids]
+        # Evaluation-only heading-estimate error (SF-02, maze_recovery_probe --settings);
+        # zero unless the probe sets it, so training is unaffected.
+        heading = heading + getattr(self, "_sf02_yaw", 0.0)
         error = torch.atan2(torch.sin(self.heading_target[env_ids] - heading),
                             torch.cos(self.heading_target[env_ids] - heading))
         final = idx == self._path.shape[0] - 1
@@ -40,7 +43,8 @@ class RecoveryWaypointCommand(MazeWaypointCommand):
         self.vel_command_b[env_ids, 0] = torch.where(final, speed,
             self.cfg.cruise_speed * torch.clamp(torch.cos(error), min=0.0))
         self.is_standing_env[env_ids] = final & (distance <= 0.26)
-        self.metrics["button_distance"][env_ids] = (xy - xy.new_tensor((3.0, 0.0))).norm(dim=-1)
+        true_xy = recovery.local_xy(self._env)[env_ids]
+        self.metrics["button_distance"][env_ids] = (true_xy - true_xy.new_tensor((3.0, 0.0))).norm(dim=-1)
 
     def __init__(self, cfg, env):
         super().__init__(cfg, env)

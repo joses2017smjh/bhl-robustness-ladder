@@ -51,6 +51,9 @@ class ContactRunner(MultiRunner):
                 tau = self.kp * (targets_per_robot[i] - jp) - self.kd * jv
                 self.d.ctrl[slot.ctrl] = np.clip(tau, -self.eff, self.eff)
             mujoco.mj_step(self.m, self.d)
+            hook = getattr(self, "substep_hook", None)   # e.g. an IMU/attitude filter at sensor rate
+            if hook is not None:
+                hook(self.d)
             if self.d.ncon:
                 g1, g2 = self.d.contact.geom1, self.d.contact.geom2
                 a, b = self.owners[g1], self.owners[g2]

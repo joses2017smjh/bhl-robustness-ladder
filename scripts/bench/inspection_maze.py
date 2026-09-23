@@ -48,6 +48,13 @@ class EstimatedAttitude:
         self.errors = []
         self.pre_alignment_steps = 0
         self._still = []
+        # Sensor-rate mode (SF-03b): the filter runs every `every` physics substeps
+        # from a substep hook, with the delivery delay quantised in IMU samples;
+        # apply() then only substitutes the latest estimate into the observation.
+        self.sensor_rate_hz = float(getattr(args, "imu_rate_hz", 0.0) or 0.0)
+        self.every = None
+        self._substep = 0
+        self._latest = None
 
     ALIGN_STEPS = 10         # stationary averaging window in policy steps (0.4 s at 25 Hz)
 
@@ -59,7 +66,25 @@ class EstimatedAttitude:
             return FILTERS["mahony"](kp=self.args.imu_kp, ki=self.args.imu_ki, q0=q0)
         return FILTERS["madgwick"](beta=self.args.imu_beta, q0=q0)
 
-    def apply(self, obs, data, dt):
+    def bind_sensor_rate(self, runner, physics_dt):
+        """Run the filter from the runner's substep hook at `sensor_rate_hz`."""
+        if self.sensor_rate_hz <= 0:
+            return
+        self.every = max(1, int(round(1.0 / (self.sensor_rate_hz * physics_dt))))
+        self.ALIGN_STEPS = max(5, int(round(0.4 * self.sensor_rate_hz)))   # keep a 0.4 s window
+        self.sensor_dt = self.every * physics_dt
+        delay_ms = float(getattr(self.args, "imu_delay_ms", 0.0) or 0.0)
+        self.noise.delay_steps = int(round(delay_ms / 1000.0 / self.sensor_dt))
+        runner.substep_hook = self._substep_update
+
+    def _substep_update(self, data):
+        self._substep += 1
+        if self._substep % self.every:
+            return
+        self._latest = self._update(data, self.sensor_dt)
+
+    def _update(self, data, dt):
+        """One filter update from the current MuJoCo sensors; returns (q_est, g_corrected) or None before alignment."""
         s = self.slot
         q_true = data.sensordata[s.quat_adr:s.quat_adr + 4].copy()
         gyro = data.sensordata[s.gyro_adr:s.gyro_adr + 3]
@@ -80,23 +105,34 @@ class EstimatedAttitude:
             if len(self._still) > self.ALIGN_STEPS:
                 self._still.pop(0)
             if len(self._still) < self.ALIGN_STEPS:
-                return obs
+                return None
             accs = np.array([x[0] for x in self._still]); gyrs = np.array([x[1] for x in self._still])
             if (np.linalg.norm(accs, axis=1).min() <= 0.5*GRAVITY_M_S2
                     or abs(np.linalg.norm(accs.mean(0)) - GRAVITY_M_S2) > 0.10*GRAVITY_M_S2
                     or np.linalg.norm(gyrs.mean(0)) >= 0.3):
-                return obs
+                return None
             self.filter = self._make_filter(q_true, accs.mean(0))
         q_est = self.filter.update(g, a, dt)
+        self.errors.append(float(np.linalg.norm(body_gravity(q_est) - body_gravity(q_true))))
+        return q_est, g - self.filter.bias
+
+    def apply(self, obs, data, dt):
+        """Substitute the estimate into the policy observation (policy-rate mode
+        updates the filter here; sensor-rate mode uses the latest hook result)."""
+        est = self._latest if self.every else self._update(data, dt)
+        if est is None:
+            return obs
+        q_est, g_corr = est
         obs = obs.copy()
         obs[0:4] = q_est
-        obs[4:7] = g - self.filter.bias
-        self.errors.append(float(np.linalg.norm(body_gravity(q_est) - body_gravity(q_true))))
+        obs[4:7] = g_corr
         return obs
 
     def summary(self):
         e = np.asarray(self.errors)
         return {"source": "estimated", "filter": self.args.imu_filter,
+                "filter_rate_hz": self.sensor_rate_hz if self.every else 25.0,
+                "imu_delay_ms": float(getattr(self.args, "imu_delay_ms", 0.0) or 0.0) if self.every else None,
                 "aligned": self.filter is not None,
                 "pre_alignment_steps": self.pre_alignment_steps,
                 "gravity_rmse": float(np.sqrt(np.mean(e**2))) if e.size else None,
@@ -128,6 +164,13 @@ def episode(args, model, slots, cfg, policy, seed, sensor_mode, route):
     prior_xy = runner.d.xpos[slot.body_id, :2].copy()
     dt = float(cfg.policy_dt)
     imu = EstimatedAttitude(args, model, slot, seed) if args.imu_source == "estimated" else None
+    if imu is not None:
+        imu.bind_sensor_rate(runner, float(cfg.physics_dt))
+    # SF-02: localization error applied ONLY to the pose the route controller uses;
+    # the mission judge (mission.update) keeps the true pose.
+    loc_rng = np.random.default_rng(10_000 + seed)
+    loc_bias = args.pose_bias_m * (lambda v: v / np.linalg.norm(v))(loc_rng.normal(size=2)) if args.pose_bias_m else np.zeros(2)
+    loc_yaw = np.deg2rad(args.pose_yaw_deg)
     renderer = video = None
     if (args.video and sensor_mode == args.video_sensor_mode
             and seed == args.seed_start and route == args.video_route):
@@ -152,7 +195,8 @@ def episode(args, model, slots, cfg, policy, seed, sensor_mode, route):
             q = runner.d.qpos[slot.qpos_adr+3:slot.qpos_adr+7]
             yaw = np.arctan2(2*(q[0]*q[3]+q[1]*q[2]), 1-2*(q[2]**2+q[3]**2))
             target = mission.target() if now >= 1 else np.zeros(2)
-            raw = velocity_command(xy, yaw, target, args.speed)
+            xy_est = xy + loc_bias + args.pose_drift_mps * now * np.array([1.0, 0.0]) + (loc_rng.normal(size=2) * args.pose_noise_m if args.pose_noise_m else 0.0)
+            raw = velocity_command(xy_est, yaw + loc_yaw, target, args.speed)
             command = sensors.filter_commands(runner.d, [raw], now)[0]
             obs = runner.observe(0, command)
             if imu is not None:
@@ -191,7 +235,10 @@ def episode(args, model, slots, cfg, policy, seed, sensor_mode, route):
             "waypoints_completed": mission.stage, "wall_contact_steps": wall_contact_steps,
             "path_length_m": path_m, "final_xy": runner.d.xpos[slot.body_id, :2].tolist(),
             "sensor_stats": sensors.stats, "dropout_probability": sensors.dropout,
-            "imu": imu.summary() if imu is not None else {"source": "truth"}, "trace": trace}
+            "imu": imu.summary() if imu is not None else {"source": "truth"},
+            "localization_error": {"pose_bias_m": args.pose_bias_m, "pose_noise_m": args.pose_noise_m,
+                                   "pose_yaw_deg": args.pose_yaw_deg, "pose_drift_mps": args.pose_drift_mps},
+            "trace": trace}
 
 
 def main():
@@ -230,6 +277,13 @@ def main():
     imu.add_argument("--imu-gyro-bias", type=float, default=0.0, help="rad/s constant bias magnitude, random direction per seed")
     imu.add_argument("--imu-gyro-bias-walk", type=float, default=0.0, help="rad/s/sqrt(s)")
     imu.add_argument("--imu-delay-steps", type=int, default=0, help="policy steps of IMU delivery delay")
+    imu.add_argument("--imu-rate-hz", type=float, default=0.0, help="run the filter at this sensor rate from the physics substep hook (0 = policy rate)")
+    imu.add_argument("--imu-delay-ms", type=float, default=0.0, help="IMU delivery delay in ms (sensor-rate mode only)")
+    loc = parser.add_argument_group("localization error fed to the route controller (SF-02)")
+    loc.add_argument("--pose-bias-m", type=float, default=0.0, help="constant position offset magnitude, random direction per seed")
+    loc.add_argument("--pose-noise-m", type=float, default=0.0, help="white position noise std per policy step")
+    loc.add_argument("--pose-yaw-deg", type=float, default=0.0, help="constant heading-estimate error")
+    loc.add_argument("--pose-drift-mps", type=float, default=0.0, help="position drift rate along +x")
     args = parser.parse_args()
     if args.video and (args.video_route not in args.routes or args.video_sensor_mode not in args.sensor_modes):
         parser.error("Requested video route/sensor mode must be included in this evaluation")

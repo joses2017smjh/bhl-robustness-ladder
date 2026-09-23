@@ -85,6 +85,11 @@ parser.add_argument("--init_z_offset", type=float, default=0.0,
                     help="metres added to both robots' configured init_state z before the env is built "
                          "(spawn-height sweep; 0 = as configured)")
 parser.add_argument("--tag", default="", help="suffix for the output file names, e.g. z-0.095")
+parser.add_argument("--init_joint_pose", choices=("configured", "standing"), default="configured",
+                    help="'standing' replaces both robots' init joint_pos with the upstream HUMANOID_LITE_CFG "
+                         "standing pose (the pose every locomotion task spawns in)")
+parser.add_argument("--init_z", type=float, default=None,
+                    help="absolute init_state z for both robots (overrides --init_z_offset)")
 
 # --help must not boot Isaac Sim: answer it before importing isaaclab.
 if any(a in ("-h", "--help") for a in sys.argv[1:]):
@@ -164,6 +169,24 @@ class Probe:
                 fidx = _idx(snames, ("ankle_roll", "foot", "ankle"))
                 m.update(sensor=sname, foot_sensor_idx=fidx,
                          foot_sensor_names=[snames[i] for i in fidx])
+            # Actuator gains and limits actually applied on this stack (best effort
+            # across Lab versions): a crouch that cannot be held shows up here as
+            # applied torque pinned at the effort limit.
+            names_j = list(art.joint_names)
+            def _vec(*attrs):
+                for a in attrs:
+                    v = getattr(art.data, a, None)
+                    if v is not None:
+                        try:
+                            return [round(float(x), 4) for x in _t(v)[0].tolist()]
+                        except Exception:                      # noqa: BLE001
+                            pass
+                return None
+            m["joint_names"] = names_j
+            m["stiffness"] = _vec("joint_stiffness")
+            m["damping"] = _vec("joint_damping")
+            m["effort_limit"] = _vec("joint_effort_limits", "joint_effort_limits_sim", "joint_effort_limit")
+            m["actuator_types"] = {k: type(v).__name__ for k, v in getattr(art, "actuators", {}).items()}
             self.meta[r] = m
 
     def snapshot(self) -> dict:
@@ -192,6 +215,17 @@ class Probe:
                 "joint_err": jerr,
                 "foot_force": None,
             }
+            app = getattr(art.data, "applied_torque", None)
+            comp = getattr(art.data, "computed_torque", None)
+            if app is not None:
+                a = _t(app).abs(); row["max_applied_torque"] = a.max(dim=1).values
+                row["argmax_applied_joint"] = a.argmax(dim=1)
+                lim = m.get("effort_limit")
+                if lim:
+                    limt = torch.tensor(lim, device=a.device, dtype=a.dtype).clamp(min=1e-6)
+                    row["max_torque_ratio"] = (a / limt).max(dim=1).values
+            if comp is not None:
+                row["max_computed_torque"] = _t(comp).abs().max(dim=1).values
             if m["sensor"] and m["foot_sensor_idx"]:
                 f = _t(u.scene[m["sensor"]].data.net_forces_w)
                 if f is not None:
@@ -405,7 +439,19 @@ def main() -> None:
     cfg = gym.spec(args_cli.task).kwargs["env_cfg_entry_point"]()
     cfg.scene.num_envs = args_cli.num_envs
     cfg.seed = args_cli.seed
-    if args_cli.init_z_offset:
+    if args_cli.init_joint_pose == "standing":
+        from berkeley_humanoid_lite_assets.robots.berkeley_humanoid_lite import HUMANOID_LITE_CFG
+        for r in ("robot_a", "robot_b"):
+            rc_ = getattr(cfg.scene, r)
+            rc_.init_state.joint_pos = dict(HUMANOID_LITE_CFG.init_state.joint_pos)
+            print(f"  {r}: init joint_pos <- upstream standing pose", flush=True)
+    if args_cli.init_z is not None:
+        for r in ("robot_a", "robot_b"):
+            rc_ = getattr(cfg.scene, r)
+            x, y, z = rc_.init_state.pos
+            rc_.init_state.pos = (x, y, args_cli.init_z)
+            print(f"  {r}: init_state z {z:+.4f} -> {args_cli.init_z:+.4f} (absolute)", flush=True)
+    elif args_cli.init_z_offset:
         for r in ("robot_a", "robot_b"):
             rc_ = getattr(cfg.scene, r)
             x, y, z = rc_.init_state.pos
