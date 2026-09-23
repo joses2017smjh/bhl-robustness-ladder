@@ -74,9 +74,10 @@ robot is tall. This layer's outputs are exactly the sim's `projected_gravity`
 and `base_ang_vel`, so the locomotion policy needs no retraining if the filter
 error is inside what the policy tolerates. SF-03 measured that tolerance: the
 frozen gait walks on an estimated attitude with gravity RMSE up to ≈0.05 but
-**falls whenever the IMU sample it acts on is ≥ 40 ms old**. The requirement is
+**falls once the IMU sample it acts on is more than about 30 ms old** (SF-03b: 3/3 up
+to 30 ms at a 200 Hz filter, 1/3 at 40 ms, 0/3 at 60 ms). The requirement is
 therefore on latency, not accuracy: the attitude must reach the policy within
-one control period. The IM10A's factory 10 Hz output (100 ms period) cannot
+≈30 ms end-to-end, sensor to observation. The IM10A's factory 10 Hz output (100 ms period) cannot
 meet that; it must be configured to ≥ 100 Hz over a fast enough serial link,
 or the gait retrained with delay randomization (Isaac Lab `DelayBuffer`).
 Filter choice (Mahony vs Madgwick, gain 0.3 vs 1.0) made no difference to
@@ -154,8 +155,8 @@ simulator's clean sensors.
 | ID | Question | Method | Compute | Gate / predeclared reading |
 |---|---|---|---|---|
 | SF-01 | How much IMU noise and delay do the trained Full-stage maze checkpoints tolerate? | `maze_recovery_probe.py` on the 12 Full checkpoints with gyro std {0.05, 0.10, 0.20}, gravity std {0.02, 0.05, 0.10}, observation delay {0, 1, 2} policy steps; first-episode success, corruption **on** | ≤1.5 GPU-h (v60) | Report the largest setting at which pooled success stays ≥ 0.8. No claim of hardware readiness; this is a requirement, not a result |
-| SF-02 | How accurate must maze localization be? | Inject pose error into the oracle route teacher: position bias/noise {0.02, 0.05, 0.10, 0.20 m}, yaw {1°, 3°, 5°, 10°}, drift; MuJoCo inspection harness (CPU) first, Isaac second | ≤40 CPU episodes, ≤1 GPU-h | The error level that halves success is the Layer 3 requirement |
-| SF-03 | Does the frozen 22-DoF gait tolerate an estimated attitude? | **DONE** (`21402531`, `results/sensor-fusion-20260923/sf03_summary.json`): Mahony/Madgwick at the 25 Hz policy rate on corrupted MuJoCo gyro + accelerometer, 0.4 s stationary alignment, inspection maze, seeds 0–2 | 48 CPU episodes spent | **Noise is tolerated, latency is not.** L1 (gyro 0.02 rad/s, accel 0.3 m/s², bias 0.02) 3/3 with both filters, gravity RMSE 0.034–0.041; accel noise 1.0 m/s² alone 3/3; gyro noise + bias 0.05 alone 3/3; **one policy step (40 ms) of IMU delay alone 0/3**, and every arm with ≥ 40 ms delay falls whatever the filter or gain. Boundary between ~5 ms and 40 ms unmeasured (SF-03b) |
+| SF-02 | How accurate must maze localization be? | **MuJoCo DONE** (`21402726`, `sf02_summary.json`): error applied only to the route controller's pose, seeds 0–3 | 33 CPU episodes spent; Isaac side in `21402843` | Bias 0.05/0.10/0.15 m 3/3; **0.20 m 1/3**; noise 0.10 m 3/3; heading 3°/10°/20° 3/3; **drift 0.01 m/s 0/3**. Requirement: bounded map-relative error < 0.15 m and no drift — an odometry-only Layer 3 fails |
+| SF-03 | Does the frozen 22-DoF gait tolerate an estimated attitude? | **DONE** (`21402531`, `results/sensor-fusion-20260923/sf03_summary.json`): Mahony/Madgwick at the 25 Hz policy rate on corrupted MuJoCo gyro + accelerometer, 0.4 s stationary alignment, inspection maze, seeds 0–2 | 48 CPU episodes spent | **Noise is tolerated, latency is not.** L1 (gyro 0.02 rad/s, accel 0.3 m/s², bias 0.02) 3/3 with both filters, gravity RMSE 0.034–0.041; accel noise 1.0 m/s² alone 3/3; gyro noise + bias 0.05 alone 3/3; **one policy step (40 ms) of IMU delay alone 0/3**, and every arm with ≥ 40 ms delay falls whatever the filter or gain. **SF-03b (`21402725`, filter at 200 Hz): 0–30 ms 3/3, 40 ms 1/3, 60 ms 0/3 — the latency budget is ≈30 ms end-to-end** |
 | SF-04 | Does a recurrent, modality-dropout `both` policy degrade gracefully? | One training run (v60), LSTM student per `scan-student`, dropout p=0.2 per modality, delays from SF-01; evaluate lidar-off / stereo-off / both-off | ≤24 GPU-h | Both-on ≥ current `both`; each single-modality condition ≥ the corresponding single-modality arm. Otherwise negative, reported as such |
 | SF-05 | What is the hardware actually? | Recordings per `IMU_INPUT.md` checklist; Allan variance; stereo calibration JSON; LiDAR–IMU extrinsics; a taped maze route with AprilTag or tape ground truth for evo ATE/RPE | none (bench) | Produces the noise/latency numbers SF-01/SF-04 must randomize over |
 

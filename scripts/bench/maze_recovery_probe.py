@@ -206,24 +206,38 @@ def run():
         obs = obs[0] if isinstance(obs, tuple) else obs
     settings = json.loads(args.settings) if args.settings else [{"name": "as_configured"}]
     slices = _imu_slices(u)
+    print(f"policy terms {list(u.observation_manager.active_terms['policy'])} imu slices {{k: (v.start, v.stop) for k, v in slices.items()}}", flush=True)
     per_setting = []
     for si, setting in enumerate(settings):
         setting = dict(setting); setting.setdefault("seed", args.seed)
         try:
             applied = _apply_setting(u, setting)
+            print(f"SETTING {setting.get('name')} applied {applied}", flush=True)
         except Exception:                                        # noqa: BLE001
             import traceback
-            traceback.print_exc(); sys.stdout.flush(); sys.stderr.flush()
-            per_setting.append({"name": setting.get("name", f"setting{si}"), "error": traceback.format_exc()[-800:]})
+            tb = traceback.format_exc()
+            print("SETTING-ERROR\n" + tb, flush=True)             # stdout: Kit swallows stderr
+            Path(args.output).with_suffix(".error.txt").write_text(tb)
+            per_setting.append({"name": setting.get("name", f"setting{si}"), "error": tb[-800:]})
             print(json.dumps(per_setting[-1]), flush=True)
             continue
-        obs, _ = (env.reset() if policy is None else (env.get_observations(), None))
-        if policy is not None:
-            env.unwrapped.reset(seed=args.seed)
-            obs = env.get_observations(); obs = obs[0] if isinstance(obs, tuple) else obs
-        start = recovery.local_xy(u).clone()
-        delay = _ImuDelay(slices, applied["imu_delay_steps"])
-        r = _rollout(env, u, policy, obs, start, delay, args.steps)
+        try:
+            if policy is None:
+                obs, _ = env.reset()
+            else:
+                env.unwrapped.reset(seed=args.seed)
+                obs = env.get_observations(); obs = obs[0] if isinstance(obs, tuple) else obs
+            start = recovery.local_xy(u).clone()
+            delay = _ImuDelay(slices, applied["imu_delay_steps"])
+            r = _rollout(env, u, policy, obs, start, delay, args.steps)
+        except Exception:                                        # noqa: BLE001
+            import traceback
+            tb = traceback.format_exc()
+            print("ROLLOUT-ERROR\n" + tb, flush=True)
+            Path(args.output).with_suffix(".error.txt").write_text(tb)
+            per_setting.append({"name": setting.get("name", f"setting{si}"), "error": tb[-800:]})
+            print(json.dumps(per_setting[-1]), flush=True)
+            continue
         per_setting.append({"name": setting.get("name", f"setting{si}"), **applied,
                             "first_episodes_completed": int(r["first_finished"].sum()),
                             "first_episode_success_rate": float(r["first_success"].float().mean()),
@@ -271,7 +285,7 @@ try:
     run()
 except BaseException:                                       # noqa: BLE001
     import traceback
-    traceback.print_exc(); sys.stdout.flush(); sys.stderr.flush()   # Kit's close can exit before Python prints it
+    print("PROBE-ERROR\n" + traceback.format_exc(), flush=True)   # stdout: Kit swallows stderr and its close exits 0
     raise
 finally:
     app.app.close()
