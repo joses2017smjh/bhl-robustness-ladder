@@ -21,6 +21,7 @@ from isaaclab.assets import RigidObject
 from isaaclab.managers import SceneEntityCfg
 
 from bhl_robust.tasks.coop_lift_mdp import _t
+from bhl_robust.quat_order import unpack_wxyz
 
 if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedRLEnv
@@ -145,9 +146,9 @@ def plank_leaned(
     """
     obj: RigidObject = env.scene["object"]
     p = _obj_local(env, "object")
-    q = _t(obj.data.root_quat_w)
-    # Long axis of the plank (its local x) in world coordinates.
-    w, x, y, z = q[:, 0], q[:, 1], q[:, 2], q[:, 3]
+    # Long axis of the plank (its local x) in world coordinates; quaternion
+    # unpacked in the running stack's layout (xyzw on Isaac Lab 3.x).
+    w, x, y, z = unpack_wxyz(_t(obj.data.root_quat_w))
     ax = torch.stack([1 - 2 * (y * y + z * z), 2 * (x * y + w * z),
                       2 * (x * z - w * y)], dim=-1)
     tilt = torch.asin(ax[:, 2].abs().clamp(max=1.0)) * 180.0 / torch.pi

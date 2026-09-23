@@ -35,6 +35,8 @@ from isaaclab.assets import Articulation, RigidObject
 from isaaclab.managers import SceneEntityCfg
 from isaaclab.utils.math import subtract_frame_transforms
 
+from bhl_robust.quat_order import unpack_wxyz
+
 if TYPE_CHECKING:
     from isaaclab.envs import ManagerBasedRLEnv
 
@@ -365,8 +367,10 @@ def _tilt_from_quat(robot) -> torch.Tensor:
     uses -- arccos(R[2, 2]) -- so the trainer and the sim2sim judge now agree by
     construction rather than by coincidence.
     """
-    q = _t(robot.data.root_quat_w)
-    w, x, y, z = q[:, 0], q[:, 1], q[:, 2], q[:, 3]
+    # Unpacked in the running stack's layout: Isaac Lab 3.x stores root_quat_w
+    # as xyzw, 2.x as wxyz. Reading xyzw as wxyz made the +/-90 degree yaw spawn
+    # look like a 1.6 rad tilt at reset (spawn diagnostic, 2026-09-23).
+    w, x, y, z = unpack_wxyz(_t(robot.data.root_quat_w))
     up_z = 1.0 - 2.0 * (x * x + y * y)      # R[2, 2]
     return torch.acos(up_z.clamp(-1.0, 1.0))
 

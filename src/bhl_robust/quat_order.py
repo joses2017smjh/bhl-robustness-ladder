@@ -56,3 +56,28 @@ def reorder(wxyz, order: str) -> tuple[float, float, float, float]:
 def native_quat(wxyz) -> tuple[float, float, float, float]:
     """A `(w, x, y, z)` literal in the order this Isaac Lab will read it."""
     return reorder(wxyz, quat_order())
+
+
+_CACHED_ORDER: str | None = None
+
+
+def unpack_wxyz(q, order: str | None = None):
+    """Columns `(w, x, y, z)` of an `(N, 4)` quaternion tensor stored in `order`.
+
+    `order` defaults to the running Isaac Lab's layout (cached after the first
+    call). Every place that derives an angle from `root_quat_w` by index must
+    go through this: reading an `xyzw` tensor as `wxyz` turns a +/-90 degree
+    yaw spawn into a 1.57 rad "tilt" and terminates the episode on its first
+    step, which is exactly what the 2026-09-23 spawn diagnostic found for the
+    TaskV2 cube-to-shelf arms on the v60 stack.
+    """
+    global _CACHED_ORDER
+    if order is None:
+        if _CACHED_ORDER is None:
+            _CACHED_ORDER = quat_order()
+        order = _CACHED_ORDER
+    if order not in (WXYZ, XYZW):
+        raise ValueError(f"unknown quaternion order {order!r}")
+    if order == XYZW:
+        return q[..., 3], q[..., 0], q[..., 1], q[..., 2]
+    return q[..., 0], q[..., 1], q[..., 2], q[..., 3]
