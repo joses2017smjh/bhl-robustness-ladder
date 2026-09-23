@@ -22,3 +22,5 @@ Envelope for this campaign: ≤8 concurrent jobs; CPU on `share` with
 for one justified training/adaptation; ≥100 GB free; compact retained evidence
 (raw traces trimmed, verdicts and receipts kept). Mission 7's remaining 101
 CPU episodes are its own budget line.
+
+> **Disk, 2026-09-23 evening.** Free space on `/nfs/hpc/share` dipped to 96 GB (the share is 94 % used, 1.4 TB of it under this user's quota). Restored to 104 GB by gzip-compressing raw Mission 7 traces over 100 MB in place and deleting six unreferenced folding smoke-test checkpoints (6.7 GB). Largest remaining reclaim candidates, not touched: `results/weekend-20260919/fold-adapt-s{0,1}` (34 GB each, one 1.14 GB checkpoint per 100 steps; keeping only the last would free ≈ 60 GB) and `Humanoid_Lite/logs` (4.4 GB, 1,367 files).
