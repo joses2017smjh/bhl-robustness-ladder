@@ -32,8 +32,7 @@ replaced it). Route failures are never dropped from a denominator.
 - **Open tasks and exact blockers:** (a) route gate ≥16/16 — blocked by the
   raised-plate crossing: needs a crossing that keeps the gait walking from a
   standstill without a lateral component *and* holds the ten-fall replay at
-  10/10; (b) privileged Approach ≥14/16 in world −x — clearance is 0.5–6 cm by gait
-  phase (AABB), so it is a fine-centring control problem, reopened; (c) sensor-release and four-sensor
+  10/10; (b) privileged Approach — **passed** 62/64 with fine centring (`21401966`); (c) sensor-release and four-sensor
   studies — closed until (a) and (b) pass.
 - **Budget:** 411 / 512 episodes; **101 unspent by decision**. Retained
   artifacts 7.7 GB of 10 GB after trimming raw traces of withdrawn arms and
@@ -47,8 +46,8 @@ replaced it). Route failures are never dropped from a denominator.
 |---|---|---|
 | Pressure-plate exact replay, 10/10 upright | **PASS** | `21397732` |
 | Doors ≥16 and Transport ≥16 (documented route protocol) | **FAIL** 1/16, 0/16 | `21398514` |
-| Privileged Approach ≥60/64, zero falls, ≥14/16 per direction | **FAIL** 56/64, world −x 8/16 | `21386145` |
-| Sensor-only Both readiness | **CLOSED** until both above pass | — |
+| Privileged Approach ≥60/64, zero falls, ≥14/16 per direction | **PASS** 62/64, 0 falls, −x 14/16 (`center_bias`) | `21401966` |
+| Sensor-only Both readiness | **CLOSED** — route gate still fails | — |
 | Four-sensor comparison | **CLOSED** | — |
 
 ## Campaign
@@ -64,7 +63,7 @@ replaced it). Route failures are never dropped from a denominator.
 | 7 | Freeze one recovery under the predeclared rule | DONE — candidate 1 frozen | unchanged guarded stage + early handoff + `prev_actions_reset` with a 3 s stall trigger; gate-compatible by construction; +1/−0 in development, +2/−0 on fresh layouts |
 | 8 | Confirmatory eval on validation 16–31 (predeclared) | DONE | paired: Doors 1/16 → 1/16, Transport 2/16 → 4/16; improved 2 (T24, T31), regressed 0, discordant 2, p = 0.5 → **underpowered, not null**; no new falls; `candidate1-confirmatory-summary.json` |
 | 9 | Exact replay regression for every PlateStage change | DONE | wait-open PASS 10/10; V2 FAIL 7/10 (`21401689`); V3/V4 8/10, ≤9/10 locally (not submitted); candidate 1 leaves PlateStage unchanged |
-| 10 | World −x / privileged Approach workstream | ACTIVE — improving | fine centring **11/16, 0 falls** (baseline 8/16; +14, +33, +36; none lost); all failures strike `goal_post_-1` on the first stride; `center_bias` (+0.015 m) running (`21401964`). Gate needs ≥14/16 in −x plus an unchanged 48/48 elsewhere |
+| 10 | World −x / privileged Approach workstream | **DONE — GATE PASSED** | `center_bias` full matrix **62/64, 0 falls, 16/16/16/14** (`21401966`); geometry and predicates unchanged; standstill controls not re-run (baseline 0/64 stands) |
 | 11 | Sensor-only and four-sensor studies | BLOCKED | gates closed |
 | — | `forward_pulse` rejoin fix | SUPERSEDED | no-op by construction; `21399503` reinterpreted |
 | — | "Post-stage route rejoin" framing | SUPERSEDED | stall is free-space, route-state valid (`21400561`) |

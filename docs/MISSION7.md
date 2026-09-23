@@ -1,5 +1,14 @@
 # Mission7: procedural sensor-driven humanoid missions
 
+**September 23, privileged Approach gate passed.** The world −x clearance was
+re-measured with geom AABBs (0.546–0.605 m walking envelope against the 0.61 m
+post gap: marginal, not impossible), and a privileged-pose controller that
+holds the body on the gap midline with a +0.015 m pre-bias against the
+first-stride −y lurch scored **62/64, zero falls, 16/16/16/14** on the
+unchanged balanced matrix (`21401966`) — every documented criterion. The route
+gate still fails, so sensor studies remain closed on it. Ledger and
+[`MISSION7_TASKS.md`](MISSION7_TASKS.md) carry provenance.
+
 **September 23, second closeout — a validated, gate-compatible improvement
 (411 of 512 CPU episodes; branch `mission7-approach-followup`).** Candidate 1
 is the unchanged guarded plate stage with early handoff and a one-shot
