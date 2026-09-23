@@ -242,12 +242,16 @@ def run():
             print(json.dumps(per_setting[-1]), flush=True)
             continue
         try:
-            if policy is None:
-                obs, _ = env.reset()
-            else:
-                env.unwrapped.reset(seed=args.seed)
-                obs = env.get_observations(); obs = obs[0] if isinstance(obs, tuple) else obs
-            start = recovery.local_xy(u).clone()
+            # The rollout steps under torch.inference_mode(), which turns the
+            # command term's waypoint index into an inference tensor; the reset
+            # must run in the same mode or its in-place update is rejected.
+            with torch.inference_mode():
+                if policy is None:
+                    obs, _ = env.reset()
+                else:
+                    env.unwrapped.reset(seed=args.seed)
+                    obs = env.get_observations(); obs = obs[0] if isinstance(obs, tuple) else obs
+                start = recovery.local_xy(u).clone()
             zero = [all_slices[n] for n in (setting.get("zero_terms") or []) if n in all_slices]
             applied["zero_terms"] = [n for n in (setting.get("zero_terms") or []) if n in all_slices]
             delay = _ImuDelay(slices, applied["imu_delay_steps"], zero)
