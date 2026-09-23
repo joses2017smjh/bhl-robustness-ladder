@@ -51,7 +51,7 @@ controller evidence lives in [`MISSION7_TASKS.md`](MISSION7_TASKS.md).
 | mission7/approach_negx_centering | MuJoCo | Mission 7 privileged Approach, world −x, test layout 14 | works — gate passed 62/64, 0 falls (privileged pose, scripted centring, frozen gait) |
 | mission7/doors1_stall_vs_crossing_fix | MuJoCo | Mission 7 Doors, validation layout 1 | render works — the crossing fix reaches the goal on this layout; not promoted (replay regression 7–9/10) |
 | [`dr_pair`](#locomotion) | MuJoCo | domain randomization | **works** |
-| [`push_pair`](#locomotion) | MuJoCo | push curriculum | **works** |
+| [`push_pair`](#locomotion) | MuJoCo | push curriculum | **works** — matched-protocol check 2026-09-23: push-adaptive 0.100 vs no-push control 0.211 (n=60/90, p = 0.056), supported in direction only |
 | [`terrain_pair`](#locomotion) | MuJoCo | terrain curriculum | **works** |
 | [`arms_dr_pair`](#locomotion) | MuJoCo | 22-DoF, randomization s=1.0 vs s=0 | **works** — walk vs walk by design (0/60 falls each on flat; two training seeds) |
 | [`arms_push_pair`](#locomotion) | MuJoCo | 22-DoF push-trained vs DR-only, shove | render works — **no push benefit**: push-trained falls 0.15 vs DR-only 0.10 (n=60); caption corrected 2026-09-23 |

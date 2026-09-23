@@ -19,7 +19,93 @@ from bhl_robust.eval.inspection_maze import InspectionMaze, OPEN_CELLS, CELL_M, 
 from bhl_robust.eval.multi_robot import _WORLDS, build_multi
 from bhl_robust.eval.team_airlock import velocity_command
 from bhl_robust.eval.team_sensors import TeamSensors
+from bhl_robust.fusion.attitude import (FILTERS, GRAVITY_M_S2, ImuNoise, attitude_from_accel,
+                                        body_gravity)
 from team_airlock import ContactRunner, CpuPolicy
+
+
+class EstimatedAttitude:
+    """Attitude filter in the loop (SF-03, docs/SENSOR_FUSION.md).
+
+    Replaces the oracle quaternion and gyro in the policy observation with a
+    Mahony/Madgwick estimate driven by the *corrupted* MuJoCo gyro and
+    accelerometer. The filter runs at the policy rate, which is slower than a
+    real AHRS; that makes this a conservative test of the frozen gait's
+    tolerance, not a model of any particular IMU.
+    """
+
+    def __init__(self, args, model, slot, seed):
+        sid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, slot.prefix + "imu_acc")
+        if sid < 0:
+            raise ValueError(f"missing accelerometer sensor for {slot.prefix}")
+        self.acc_adr = int(model.sensor_adr[sid])
+        self.slot = slot
+        self.args = args
+        self.noise = ImuNoise(gyro_std=args.imu_gyro_std, accel_std=args.imu_accel_std,
+                              gyro_bias=args.imu_gyro_bias, gyro_bias_walk=args.imu_gyro_bias_walk,
+                              delay_steps=args.imu_delay_steps, seed=seed)
+        self.filter = None
+        self.errors = []
+        self.pre_alignment_steps = 0
+        self._still = []
+
+    ALIGN_STEPS = 10         # stationary averaging window in policy steps (0.4 s at 25 Hz)
+
+    def _make_filter(self, q_true, accel):
+        yaw = float(np.arctan2(2*(q_true[0]*q_true[3] + q_true[1]*q_true[2]),
+                               1 - 2*(q_true[2]**2 + q_true[3]**2)))
+        q0 = q_true.copy() if self.args.imu_init == "truth" else attitude_from_accel(accel, yaw=yaw)
+        if self.args.imu_filter == "mahony":
+            return FILTERS["mahony"](kp=self.args.imu_kp, ki=self.args.imu_ki, q0=q0)
+        return FILTERS["madgwick"](beta=self.args.imu_beta, q0=q0)
+
+    def apply(self, obs, data, dt):
+        s = self.slot
+        q_true = data.sensordata[s.quat_adr:s.quat_adr + 4].copy()
+        gyro = data.sensordata[s.gyro_adr:s.gyro_adr + 3]
+        accel = data.sensordata[self.acc_adr:self.acc_adr + 3]
+        g, a = self.noise(gyro, accel, dt)
+        if self.filter is None:
+            # Stationary alignment gate. The robot spawns in free fall (specific
+            # force ~0, direction = noise) and then lands (|a| passes through g
+            # while pointing tens of degrees off). A deployment aligns while
+            # standing still by AVERAGING a short window, so noise on single
+            # samples does not block alignment: over the last ALIGN_STEPS
+            # samples we require no free-fall sample (|a| > 0.5 g each), the
+            # mean specific force within 10 % of g, and the mean gyro below
+            # 0.3 rad/s. The oracle observation is passed through until then
+            # (the mission target is zero for the first second anyway).
+            self.pre_alignment_steps += 1
+            self._still.append((a.copy(), g.copy()))
+            if len(self._still) > self.ALIGN_STEPS:
+                self._still.pop(0)
+            if len(self._still) < self.ALIGN_STEPS:
+                return obs
+            accs = np.array([x[0] for x in self._still]); gyrs = np.array([x[1] for x in self._still])
+            if (np.linalg.norm(accs, axis=1).min() <= 0.5*GRAVITY_M_S2
+                    or abs(np.linalg.norm(accs.mean(0)) - GRAVITY_M_S2) > 0.10*GRAVITY_M_S2
+                    or np.linalg.norm(gyrs.mean(0)) >= 0.3):
+                return obs
+            self.filter = self._make_filter(q_true, accs.mean(0))
+        q_est = self.filter.update(g, a, dt)
+        obs = obs.copy()
+        obs[0:4] = q_est
+        obs[4:7] = g - self.filter.bias
+        self.errors.append(float(np.linalg.norm(body_gravity(q_est) - body_gravity(q_true))))
+        return obs
+
+    def summary(self):
+        e = np.asarray(self.errors)
+        return {"source": "estimated", "filter": self.args.imu_filter,
+                "aligned": self.filter is not None,
+                "pre_alignment_steps": self.pre_alignment_steps,
+                "gravity_rmse": float(np.sqrt(np.mean(e**2))) if e.size else None,
+                "gravity_max": float(e.max()) if e.size else None,
+                "gyro_bias_true_rad_s": self.noise.bias.tolist(),
+                "gyro_bias_estimated_rad_s": self.filter.bias.tolist() if self.filter is not None else None,
+                "settings": {k: getattr(self.args, k) for k in (
+                    "imu_gyro_std", "imu_accel_std", "imu_gyro_bias", "imu_gyro_bias_walk",
+                    "imu_delay_steps", "imu_init", "imu_kp", "imu_ki", "imu_beta")}}
 
 
 def episode(args, model, slots, cfg, policy, seed, sensor_mode, route):
@@ -41,6 +127,7 @@ def episode(args, model, slots, cfg, policy, seed, sensor_mode, route):
     trace, wall_contact_steps, path_m = [], 0, 0.0
     prior_xy = runner.d.xpos[slot.body_id, :2].copy()
     dt = float(cfg.policy_dt)
+    imu = EstimatedAttitude(args, model, slot, seed) if args.imu_source == "estimated" else None
     renderer = video = None
     if (args.video and sensor_mode == args.video_sensor_mode
             and seed == args.seed_start and route == args.video_route):
@@ -67,7 +154,10 @@ def episode(args, model, slots, cfg, policy, seed, sensor_mode, route):
             target = mission.target() if now >= 1 else np.zeros(2)
             raw = velocity_command(xy, yaw, target, args.speed)
             command = sensors.filter_commands(runner.d, [raw], now)[0]
-            target_q = controller.update(runner.observe(0, command))
+            obs = runner.observe(0, command)
+            if imu is not None:
+                obs = imu.apply(obs, runner.d, dt)
+            target_q = controller.update(obs)
             if not np.isfinite(target_q).all():
                 mission.failure = "nonfinite_action"
                 break
@@ -100,7 +190,8 @@ def episode(args, model, slots, cfg, policy, seed, sensor_mode, route):
             "stations_completed": len(mission.station_times), "station_times": mission.station_times,
             "waypoints_completed": mission.stage, "wall_contact_steps": wall_contact_steps,
             "path_length_m": path_m, "final_xy": runner.d.xpos[slot.body_id, :2].tolist(),
-            "sensor_stats": sensors.stats, "dropout_probability": sensors.dropout, "trace": trace}
+            "sensor_stats": sensors.stats, "dropout_probability": sensors.dropout,
+            "imu": imu.summary() if imu is not None else {"source": "truth"}, "trace": trace}
 
 
 def main():
@@ -124,6 +215,21 @@ def main():
     parser.add_argument("--video-sensor-mode", choices=("record", "reactive", "reactive_dropout"),
                         default="reactive")
     parser.add_argument("--gate", action="store_true")
+    imu = parser.add_argument_group("attitude filter in the loop (SF-03, docs/SENSOR_FUSION.md)")
+    imu.add_argument("--imu-source", choices=("truth", "estimated"), default="truth",
+                     help="'estimated' replaces the oracle quaternion/gyro the policy sees with a "
+                          "filter estimate driven by corrupted MuJoCo gyro+accelerometer samples")
+    imu.add_argument("--imu-filter", choices=tuple(FILTERS), default="mahony")
+    imu.add_argument("--imu-init", choices=("accel", "truth"), default="accel",
+                     help="initial alignment: tilt from the first accelerometer sample (yaw from truth), or truth")
+    imu.add_argument("--imu-kp", type=float, default=1.0)
+    imu.add_argument("--imu-ki", type=float, default=0.1)
+    imu.add_argument("--imu-beta", type=float, default=0.1)
+    imu.add_argument("--imu-gyro-std", type=float, default=0.0, help="rad/s white noise (stress setting, not a calibration)")
+    imu.add_argument("--imu-accel-std", type=float, default=0.0, help="m/s^2 white noise")
+    imu.add_argument("--imu-gyro-bias", type=float, default=0.0, help="rad/s constant bias magnitude, random direction per seed")
+    imu.add_argument("--imu-gyro-bias-walk", type=float, default=0.0, help="rad/s/sqrt(s)")
+    imu.add_argument("--imu-delay-steps", type=int, default=0, help="policy steps of IMU delivery delay")
     args = parser.parse_args()
     if args.video and (args.video_route not in args.routes or args.video_sensor_mode not in args.sensor_modes):
         parser.error("Requested video route/sensor mode must be included in this evaluation")
@@ -164,7 +270,15 @@ def main():
     complete = bool(nominal and outage)
     gate = bool(complete and rates["reactive"] >= .8 and rates["reactive_dropout"] < rates["reactive"])
     payload["summary"] = {"gate_passed": gate, "controls_complete": complete, "success_rates": rates,
-                          "seconds": args.seconds, "speed": args.speed, "contact_check": "every_physics_substep"}
+                          "seconds": args.seconds, "speed": args.speed, "contact_check": "every_physics_substep",
+                          "imu_source": args.imu_source}
+    if args.imu_source == "estimated":
+        rmse = [r["imu"]["gravity_rmse"] for r in rows if r["imu"].get("gravity_rmse") is not None]
+        payload["summary"]["imu_aligned_episodes"] = int(sum(bool(r["imu"].get("aligned")) for r in rows))
+        payload["summary"]["imu_gravity_rmse_mean"] = float(np.mean(rmse)) if rmse else None
+        payload["summary"]["imu_gravity_max"] = float(max(r["imu"]["gravity_max"] for r in rows if r["imu"].get("gravity_max") is not None)) if rmse else None
+        payload["attitude_filter"] = {"filter": args.imu_filter, "rate": "policy step (conservative; a real AHRS runs faster)",
+                                      "init": args.imu_init, "noise_is_calibration": False}
     args.output.write_text(json.dumps(payload, indent=2, allow_nan=False)+"\n")
     verdict = "PASS" if gate else "FAIL" if complete else "INCOMPLETE_CONTROLS"
     print(f"INSPECTION_MAZE_GATE={verdict} output={args.output}", flush=True)

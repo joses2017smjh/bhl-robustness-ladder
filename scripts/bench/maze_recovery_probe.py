@@ -25,6 +25,9 @@ parser.add_argument("--steps", type=int, default=600)
 parser.add_argument("--seed", type=int, default=100)
 parser.add_argument("--minimum-success", type=float, default=0.0)
 parser.add_argument("--output", required=True)
+parser.add_argument("--keep-corruption", action="store_true",
+                    help="Keep the task's policy observation noise (training default) instead of "
+                         "forcing enable_corruption=False. Off by default = published behaviour.")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 app = AppLauncher(args)
@@ -40,7 +43,9 @@ def run():
     cfg = spec.kwargs["env_cfg_entry_point"]()
     cfg.scene.num_envs = args.num_envs
     cfg.seed = args.seed
-    cfg.observations.policy.enable_corruption = False
+    if not args.keep_corruption:
+        cfg.observations.policy.enable_corruption = False
+    observation_corruption = bool(cfg.observations.policy.enable_corruption)
     env = gym.make(args.task, cfg=cfg)
     u = env.unwrapped
     obs, _ = env.reset()
@@ -121,7 +126,8 @@ def run():
         "mean_minimum_button_distance_m": float(minimum_dist.mean()),
         "mean_max_displacement_from_initial_spawn_m": float(max_displacement.mean()),
         "sensors": sensors, "gate_kind": "policy_evaluation" if policy else "integration_smoke",
-        "navigation_source": "oracle_waypoint_teacher", "camera_source": "raycast_depth_not_rgb_stereo"}
+        "navigation_source": "oracle_waypoint_teacher", "camera_source": "raycast_depth_not_rgb_stereo",
+        "observation_corruption": observation_corruption}
     if policy and (not bool(first_finished.all()) or result["first_episode_success_rate"] < args.minimum_success):
         result["passed"] = False
     else:

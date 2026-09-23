@@ -1,0 +1,154 @@
+{
+  "protocol": "run_eval, 0.5 m/s shoves every 3 s, 12 s episodes, seeds 0-4 x harness command set, terrain 0, matched across all exported biped DR/push policies; seed = policy training seed",
+  "pooled": {
+    "dr-default": {
+      "falls": 19,
+      "n": 90,
+      "rate": 0.2111
+    },
+    "dr-default-s0": {
+      "falls": 10,
+      "n": 30,
+      "rate": 0.3333
+    },
+    "dr-default-s1": {
+      "falls": 4,
+      "n": 30,
+      "rate": 0.1333
+    },
+    "dr-default-s2": {
+      "falls": 5,
+      "n": 30,
+      "rate": 0.1667
+    },
+    "dr-off": {
+      "falls": 90,
+      "n": 90,
+      "rate": 1.0
+    },
+    "dr-off-s0": {
+      "falls": 30,
+      "n": 30,
+      "rate": 1.0
+    },
+    "dr-off-s1": {
+      "falls": 30,
+      "n": 30,
+      "rate": 1.0
+    },
+    "dr-off-s2": {
+      "falls": 30,
+      "n": 30,
+      "rate": 1.0
+    },
+    "push-adaptive": {
+      "falls": 6,
+      "n": 60,
+      "rate": 0.1
+    },
+    "push-adaptive-s0": {
+      "falls": 4,
+      "n": 30,
+      "rate": 0.1333
+    },
+    "push-adaptive-s1": {
+      "falls": 2,
+      "n": 30,
+      "rate": 0.0667
+    },
+    "push-c0.2": {
+      "falls": 20,
+      "n": 60,
+      "rate": 0.3333
+    },
+    "push-c0.2-s0": {
+      "falls": 9,
+      "n": 30,
+      "rate": 0.3
+    },
+    "push-c0.2-s1": {
+      "falls": 11,
+      "n": 30,
+      "rate": 0.3667
+    },
+    "push-c0.4": {
+      "falls": 25,
+      "n": 90,
+      "rate": 0.2778
+    },
+    "push-c0.4-s0": {
+      "falls": 8,
+      "n": 30,
+      "rate": 0.2667
+    },
+    "push-c0.4-s1": {
+      "falls": 9,
+      "n": 30,
+      "rate": 0.3
+    },
+    "push-c0.4-s2": {
+      "falls": 8,
+      "n": 30,
+      "rate": 0.2667
+    },
+    "push-c0.6": {
+      "falls": 8,
+      "n": 60,
+      "rate": 0.1333
+    },
+    "push-c0.6-s0": {
+      "falls": 4,
+      "n": 30,
+      "rate": 0.1333
+    },
+    "push-c0.6-s1": {
+      "falls": 4,
+      "n": 30,
+      "rate": 0.1333
+    },
+    "push-curriculum": {
+      "falls": 13,
+      "n": 90,
+      "rate": 0.1444
+    },
+    "push-curriculum-s0": {
+      "falls": 1,
+      "n": 30,
+      "rate": 0.0333
+    },
+    "push-curriculum-s1": {
+      "falls": 7,
+      "n": 30,
+      "rate": 0.2333
+    },
+    "push-curriculum-s2": {
+      "falls": 5,
+      "n": 30,
+      "rate": 0.1667
+    },
+    "push-fixed": {
+      "falls": 12,
+      "n": 90,
+      "rate": 0.1333
+    },
+    "push-fixed-s0": {
+      "falls": 6,
+      "n": 30,
+      "rate": 0.2
+    },
+    "push-fixed-s1": {
+      "falls": 4,
+      "n": 30,
+      "rate": 0.1333
+    },
+    "push-fixed-s2": {
+      "falls": 2,
+      "n": 30,
+      "rate": 0.0667
+    }
+  },
+  "jobs": [
+    21402035,
+    21402036
+  ]
+}

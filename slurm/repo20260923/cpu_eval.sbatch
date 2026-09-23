@@ -40,6 +40,18 @@ case "$mode" in
     dirs=(); for r in "$@"; do dirs+=("$U/logs/rsl_rl/coop_lift/$r"); done
     "$PY" scripts/bench/coop_sim2sim.py --run-dir "${dirs[@]}" --upstream "$U" --cache-dir "$CACHE" --seeds 8 --crews 2 3 \
       --csv results/coop-occluded-20260923/coop_occluded_sim2sim.csv ;;
+  sf03)   # attitude filter in the loop (docs/SENSOR_FUSION.md SF-03): predeclared levels, seeds 0-2, ordered route, reactive sensors
+    D=$(ls -d "$U"/logs/rsl_rl/humanoid/*_arms-dr1.0-s0 | head -1)
+    O=results/sensor-fusion-20260923
+    common=(--deploy "$D/exported/deploy.yaml" --upstream "$U" --cache-dir "$CACHE" --seeds 3 --seconds 60 --sensor-modes reactive --routes ordered)
+    "$PY" scripts/bench/inspection_maze.py "${common[@]}" --output "$O/sf03-L0-truth.json" --imu-source truth
+    # tag filter gyro_std accel_std gyro_bias delay_steps kp   (L1/L2/L3 predeclared; F* isolate one factor at a time from L1; G lowers the Mahony gain at L2)
+    for spec in "L1 mahony 0.02 0.3 0.02 0 1.0" "L1 madgwick 0.02 0.3 0.02 0 1.0" "L2 mahony 0.05 1.0 0.05 1 1.0" "L2 madgwick 0.05 1.0 0.05 1 1.0" "L3 mahony 0.10 2.0 0.10 2 1.0" \
+                "Faccel mahony 0.02 1.0 0.02 0 1.0" "Fgyro mahony 0.05 0.3 0.05 0 1.0" "Fdelay mahony 0.02 0.3 0.02 1 1.0" "Gkp0.3-L2 mahony 0.05 1.0 0.05 1 0.3"; do
+      set -- $spec
+      "$PY" scripts/bench/inspection_maze.py "${common[@]}" --output "$O/sf03-$1-$2.json" --imu-source estimated --imu-filter "$2" \
+        --imu-gyro-std "$3" --imu-accel-std "$4" --imu-gyro-bias "$5" --imu-delay-steps "$6" --imu-kp "$7"
+    done ;;
   *) echo "unknown mode $mode"; exit 2 ;;
 esac
 echo REPO_CPU_EVAL_COMPLETE
