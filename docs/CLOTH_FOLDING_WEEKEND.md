@@ -87,7 +87,22 @@ Consequently `21360436_[1-15%1]` is pending with
 `DependencyNeverSatisfied` on `afterok:21360435`, and `21360437` waits for that
 array. There are **zero completed new-media episodes and zero new campaign
 GIFs**, not 16 policy failures. No jobs were canceled or resubmitted during this
-September 20 audit. The weekend class evaluators saved per-garment camera PNGs,
+September 20 audit.
+
+> **Update, 2026-09-23 (scheduler state re-checked with `sacct`).** The array
+> `21360436_[1-15%1]` and the report `21360437` are **CANCELLED by 19646** at
+> 2026-09-20 16:58:44, never having started; they are not pending and cannot be
+> revived. The repair gate `21367715` completed at 10:35:15 and rendered one
+> seed-0 short-top episode (checker ever and terminal both false: rendering
+> passed, the fold failed). The later folding work lives in the linked
+> repository: the horizon pilot (`campaigns/20260921-horizon-pilot`) **ran** and
+> was negative (H50 4/8, H10 0/8, H5 0/8 settled); closed-loop AWR training v2
+> (`campaigns/20260922-closed-loop-training-v2`) **closed negative** — no
+> candidate improved development H10 over the matched baseline (best 1/8 vs
+> 2/8), so the **untouched baseline checkpoint is retained** and the adaptation
+> seeds 0 and 1 above are archival; recovery-supervision v3
+> (`campaigns/20260923-recovery-supervision-v3`) is running under its own
+> driver. BHL does not submit folding jobs while that driver is live. The weekend class evaluators saved per-garment camera PNGs,
 not full rollout videos; their measured successes cannot be illustrated with
 new success GIFs unless they are replayed in a separately identified run.
 

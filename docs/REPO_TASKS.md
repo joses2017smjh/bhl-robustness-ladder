@@ -117,6 +117,15 @@ Columns: task · entry · classification · verified evidence (from the inventor
 | M7-02 | Privileged Approach gate | active improvement | 62/64, 0 falls, 16/16/16/14 (`21401966`) — **but `center_bias` was tuned on the same 16 test-split −x layouts** | held-out replication on 23 −x layouts no controller has seen (7 validation + 16 train), paired with the baseline | 46 CPU episodes | ACTIVE `21402017–018` |
 | M7-03 | Sensor-only and four-sensor studies | dependency-blocked | — | — | — | BLOCKED: route gate (M7-01) |
 
+### Stale statements in untracked user drafts (left untouched, 2026-09-23)
+
+`docs/FOLDING_NEXT_EXPERIMENTS.md` still calls the horizon pilot a proposed
+experiment (it ran: H50 4/8, H10 0/8, H5 0/8), and
+`docs/PUBLICATION_HANDOFF_2026-09-20.md` describes the media array as
+dependent/pending (it is CANCELLED). Both files are the user's uncommitted
+drafts and are preserved as-is; the tracked `CLOTH_FOLDING_WEEKEND.md` and
+`GALLERY.md` carry the corrections.
+
 ### Not funded (recorded decisions, 2026-09-23)
 
 - Ice no-ice control (~32 GPU-h): gated behind the exposure probe (LOC ice_pair_placed).

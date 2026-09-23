@@ -141,7 +141,10 @@ def main(argv: list[str] | None = None) -> int:
         (A / "push" / "arms-push-s0__vx+0.3_vy+0.0_wz+0.5__OK.mp4",
          A / "push" / "arms-dr1.0-s0__vx+0.3_vy+0.0_wz+0.5__FELL.mp4",
          OUT / "arms_push_pair.gif",
-         "22-DoF  push-trained  -  RECOVERS", "22-DoF  no push training  -  FALLS",
+         # Corrected 2026-09-23: this is the one command of six where the
+         # ordering favours push training; over n=60 the push-trained policy
+         # falls MORE (0.15) than the DR-only control (0.10).
+         "push-trained: 0.15 falls (n=60)", "DR only: 0.10 falls (n=60)",
          ARMS_S, True),
         (A / "terrain" / "arms-terrain-s0__vx+0.0_vy+0.2_wz+0.0_d0.80__OK.mp4",
          A / "terrain" / "arms-dr1.0-s0__vx+0.0_vy+0.2_wz+0.0_d0.80__FELL.mp4",
