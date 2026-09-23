@@ -236,6 +236,14 @@ def run():
         obs = env.get_observations()
         obs = obs[0] if isinstance(obs, tuple) else obs
     settings = json.loads(args.settings) if args.settings else [{"name": "as_configured"}]
+    # SF-04 arms randomize dropout/bias/delay per episode; for an explicit
+    # evaluation matrix the conditions must be set, not sampled.
+    if args.settings and getattr(u, "_sf04_state", None) is not None:
+        st = u._sf04_state
+        st.force_lidar_on, st.force_stereo_on, st.force_delay = True, True, 0
+        st.gyro_bias_std = st.gravity_bias_std = 0.0
+        st.resample(torch.arange(u.num_envs, device=u.device))
+        print("[sf04] evaluation: dropout/bias/delay randomization forced off; conditions come from --settings", flush=True)
     slices = _imu_slices(u); all_slices = _term_slices(u)
     print(f"policy terms {list(u.observation_manager.active_terms['policy'])} imu slices {{k: (v.start, v.stop) for k, v in slices.items()}}", flush=True)
     per_setting = []
