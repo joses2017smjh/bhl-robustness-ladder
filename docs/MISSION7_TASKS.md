@@ -64,7 +64,7 @@ replaced it). Route failures are never dropped from a denominator.
 | 7 | Freeze one recovery under the predeclared rule | DONE — candidate 1 frozen | unchanged guarded stage + early handoff + `prev_actions_reset` with a 3 s stall trigger; gate-compatible by construction; +1/−0 in development, +2/−0 on fresh layouts |
 | 8 | Confirmatory eval on validation 16–31 (predeclared) | DONE | paired: Doors 1/16 → 1/16, Transport 2/16 → 4/16; improved 2 (T24, T31), regressed 0, discordant 2, p = 0.5 → **underpowered, not null**; no new falls; `candidate1-confirmatory-summary.json` |
 | 9 | Exact replay regression for every PlateStage change | DONE | wait-open PASS 10/10; V2 FAIL 7/10 (`21401689`); V3/V4 8/10, ≤9/10 locally (not submitted); candidate 1 leaves PlateStage unchanged |
-| 10 | World −x / privileged Approach workstream | REOPENED | AABB width 0.546–0.605 m walking vs 0.61 m gap: marginal, not impossible (sphere-bound 0.632 m withdrawn). Six coarse arms 7–9/16 or 0/16 stand. Next: fine lateral centring on the gap midline while walking |
+| 10 | World −x / privileged Approach workstream | ACTIVE — improving | fine centring **11/16, 0 falls** (baseline 8/16; +14, +33, +36; none lost); all failures strike `goal_post_-1` on the first stride; `center_bias` (+0.015 m) running (`21401964`). Gate needs ≥14/16 in −x plus an unchanged 48/48 elsewhere |
 | 11 | Sensor-only and four-sensor studies | BLOCKED | gates closed |
 | — | `forward_pulse` rejoin fix | SUPERSEDED | no-op by construction; `21399503` reinterpreted |
 | — | "Post-stage route rejoin" framing | SUPERSEDED | stall is free-space, route-state valid (`21400561`) |

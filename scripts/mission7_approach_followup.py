@@ -106,6 +106,10 @@ CONTROLLERS = {
     # aligned with the approach axis, held from before the post plane until past
     # it.  Privileged pose only, geometry unchanged.
     "center": lambda env: CenteredApproachController(env, speed=.50, stop_radius=.28),
+    # All five centre-arm failures struck goal_post_-1 on the first stride: a
+    # systematic -y lurch the P-term cannot catch in 0.2 s.  Pre-bias the
+    # midline target toward +y by 0.015 m (0.6 x the median pre-contact drift).
+    "center_bias": lambda env: CenteredApproachController(env, speed=.50, stop_radius=.28, bias=0.015),
 }
 
 
@@ -114,9 +118,10 @@ class CenteredApproachController(RecoveryTranslationController):
     and a slower onset through the post plane (world -x only; other
     directions never cross the gap and keep the parent behaviour)."""
     def __init__(self, env, speed=.50, stop_radius=.28, settle_s=1.2, gain=1.5,
-                 gap_speed=.30, band_before=.45, band_after=.25):
+                 gap_speed=.30, band_before=.45, band_after=.25, bias=0.):
         super().__init__(env, speed=speed, stop_radius=stop_radius, settle_s=settle_s)
         self.gain, self.gap_speed, self.band_before, self.band_after = gain, gap_speed, band_before, band_after
+        self.bias = float(bias)
         self.center_events = []
 
     def action(self, target=None):
@@ -130,7 +135,7 @@ class CenteredApproachController(RecoveryTranslationController):
         along = float((xy - goal) @ axis)            # negative before the goal along -x travel... measured toward the goal
         post_x = goal[0] + .52
         dist_to_post_plane = float(xy[0] - post_x)   # > 0 before the plane when travelling -x
-        lateral_err = float(xy[1] - goal[1])         # gap midline is y = goal_y
+        lateral_err = float(xy[1] - (goal[1] + self.bias))   # gap midline is y = goal_y (+ pre-bias)
         if -self.band_after <= dist_to_post_plane <= self.band_before:
             yaw = yaw_of(env)
             rot = np.array([[np.cos(yaw), np.sin(yaw)], [-np.sin(yaw), np.cos(yaw)]])
@@ -154,6 +159,8 @@ def controller_note(name, controller):
         return "measured_translation_0.30mps_with_bounded_0.30mps_stall_pulse"
     if name == "center":
         return "recovery_translation_0.50mps_with_gap_midline_centring_0.30mps_through_posts"
+    if name == "center_bias":
+        return f"gap_midline_centring_with_plus_y_prebias_{controller.bias:.3f}m"
     return f"measured_translation_0.50mps_settle_{controller.settle_s:.1f}s"
 
 

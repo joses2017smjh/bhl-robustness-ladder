@@ -6,9 +6,9 @@ work; `main` untouched). Master backlog: [`REPO_TASKS.md`](REPO_TASKS.md).
 | Workstream | State | Latest measured result | Next executable action |
 |---|---|---|---|
 | Mission 7 route controller | active | candidate 1 (selective reset) validated: Doors 1/16 → 1/16, Transport 2/16 → 4/16 on fresh layouts, +2/−0, underpowered | crossing composition vs exact replay; −x fine centring |
-| Privileged Approach −x | reopened | 8/16 (coarse arms 7–9/16 or 0/16); walking envelope 0.546–0.605 m vs 0.61 m gap — marginal, not bound | `center` arm on the 16 −x layouts |
-| Inspection maze | extending | 3/3 nominal, controls 0/3 (3 seeds) | 12 fresh seeds + dropout 0.35 + wrong-branch (`21401943–945`) |
-| Multi-robot airlock | extending | 5/5 crew 2 and 3, controls 0/5 (5 seeds) | 10 fresh seeds, crews 2/3, dropout 0.35 (`21401946–948`) |
+| Privileged Approach −x | improving | fine centring **11/16, 0 falls** (was 8/16, +3/−0); first-stride −y lurch remains | `center_bias` (+0.015 m) running; full 64 matrix if −x ≥14/16 |
+| Inspection maze | extending | 3/3 nominal; **12/12 under 35 % dropout; wrong-branch 12/12 rejected** (fresh seeds 3–14) | nominal + outage arms (`21401943`) |
+| Multi-robot airlock | extending | 5/5 crews 2/3; **crew 2 10/10 under 35 % dropout** (seeds 5–14) | crews 2/3 nominal + controls (`21401946–947`) |
 | Locomotion / terrain / sensors | reference | pairs valid; ice_pair retracted, ice_pair_placed n=2 | multi-seed comparisons per inventory |
 | Navigation PPO / B5 | reference + failure | 379/384 oracle-route; maze button 0/12 | provenance reconciled, then multi-seed/route eval |
 | Cooperative lift / carry / cube-to-shelf | unresolved failures | best lift 7.8 cm; 0/6, 0/18; underground-spawn artifacts retracted | feasibility diagnostics before any training |
