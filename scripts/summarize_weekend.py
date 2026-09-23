@@ -15,7 +15,11 @@ def main():
     parser.add_argument("--slurm", action="store_true")
     a = parser.parse_args()
     directory = a.directory.resolve()
-    receipts = [json.loads(line) for line in (directory/"submissions.jsonl").read_text().splitlines() if line]
+    receipts_path = directory / "submissions.jsonl"
+    receipts = ([json.loads(line) for line in receipts_path.read_text().splitlines() if line]
+                if receipts_path.exists() else [])
+    if a.slurm and not receipts:
+        parser.error("--slurm requires local submissions.jsonl receipts; omit --slurm for public artifact reporting")
     states = {}
     if a.slurm:
         ids = ",".join(r["job_id"] for r in receipts)
@@ -68,11 +72,13 @@ def main():
             training.append(dict(run=folder.name, checkpoint_step=current["step"],
                                  complete=(folder/"completed.json").exists()))
     report = dict(updated_utc=dt.datetime.now(dt.timezone.utc).isoformat(), evidence=rows,
-                  training=training, slurm=states, submitted_jobs=len(receipts))
+                  training=training)
+    if a.slurm:
+        report.update(slurm=states, submitted_jobs=len(receipts))
     (directory/"summary.json").write_text(json.dumps(report, indent=2)+"\n")
     lines = ["# Weekend campaign results", "", f"Updated {report['updated_utc']}", "",
         "Only completed, physically scored evaluations support task-success claims. Training losses and smoke tests do not.", "",
-        "Historical folding job 21214241 has invalid visual inputs after garment switches; its old 6/24 is not the baseline.", "",
+        "The historical folding evaluation has invalid visual inputs after garment switches; its old 6/24 is not the baseline.", "",
         "| Evidence | Measured result | Scope |", "| --- | --- | --- |"]
     lines += [f"| [{r['file']}]({r['file']}) | {r['verdict']} | {r['scope']} |" for r in rows]
     lines += ["", "## Training checkpoints", ""]
