@@ -1,5 +1,27 @@
 # Mission7: procedural sensor-driven humanoid missions
 
+**September 23, second closeout — a validated, gate-compatible improvement
+(411 of 512 CPU episodes; branch `mission7-approach-followup`).** Candidate 1
+is the unchanged guarded plate stage with early handoff and a one-shot
+`prev_actions := 0` that fires only after 3 s without progress — pauses stay
+tick-identical, and the ten-fall replay gate is untouched by construction. On
+every genuine stall observed (five across development and confirmation) it
+restored forward progress, with route success in four and no regression. The
+predeclared confirmatory on never-used validation layouts 16–31 (32 paired
+episodes per arm, full denominator) gave Doors 1/16 → 1/16 and **Transport
+2/16 → 4/16**, improved 2 / regressed 0, falls unchanged — reported as
+**underpowered (two discordant pairs, p = 0.5), not null**, exactly as
+predeclared. An earlier lateral-offset series was withdrawn after a
+staging-anchor bug was found in the traces; the raised-plate crossing was then
+traced end to end (settle → standing fixed point on the plate edge; sideways
+crossing when unaligned; the gait cannot turn in place; the route walks back
+to the pre-door waypoint after hand-back) and a composed fix completes Doors/1
+in 77.7 s ([rendered](GALLERY.md)), but that composition fails the exact
+replay 7–9/10 and is not promoted. Route and Approach gates stay closed on
+their documented criteria; the test split is untouched. Checklist:
+[`MISSION7_TASKS.md`](MISSION7_TASKS.md); evidence:
+[`candidate1-confirmatory-summary.json`](../results/mission7-campaign-20260923/candidate1-confirmatory-summary.json).
+
 **September 23 campaign closeout (349 CPU episodes, zero GPUs; branch
 `mission7-approach-followup`).** Three mechanisms were established with
 instrumented evidence and none yielded a validated end-to-end route

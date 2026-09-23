@@ -124,6 +124,17 @@ the defect in §5.1 below was identified.
 - All three sbatch files forward probe flags verbatim after their positional
   paths and run `--preflight` on the exact science argv first.
 
+### Campaign outcome (2026-09-23)
+
+The one promoted configuration is **candidate 1**: unchanged guarded stage,
+`--handoff early --rejoin-fix prev_actions_reset --stall-min-s 3.0`. Its
+paired confirmatory is in `results/mission7-campaign-20260923/candidate1-confirmatory-summary.json`.
+The crossing-fix flags (`--pre-point --cross-clear --cross-kick --align-yaw
+--rejoin-advance --exit-ramp-center`) are diagnostic tooling: they complete
+Doors/1 end to end but fail the exact replay gate and must not be described as
+a route-rate improvement. `scripts/render_mission7.py` + `slurm/mission7_render.sbatch`
+render a probe configuration on a GPU node with hashed sidecars.
+
 ### Where the truth lives
 
 Read in this order when returning to the project:

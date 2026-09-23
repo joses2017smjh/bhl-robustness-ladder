@@ -7,32 +7,38 @@ replaced it). Route failures are never dropped from a denominator.
 
 ## Current status
 
-- **Last updated:** 2026-09-23, campaign closeout.
+- **Last updated:** 2026-09-23, second campaign closeout.
 - **Source checkpoint:** see `git log`; every job's source hashes are in its
   `submission.json`.
-- **Achieved:** three mechanisms established with instrumented evidence —
-  post-stage stall = gait feedback fixed point (`history_length 0`; the only
-  persistent input is the 22-element `prev_actions`; 2 of 5 exposures were
-  genuine stalls and `prev_actions := 0` un-stuck both, stall-anchored); in-stage failure = plate placement 0.29–0.39 m from
-  the wall against a 0.316 m half-body, plus a wait that presses nothing;
-  world −x = 0.632 m robot vs 0.61 m post gap. Infrastructure: preflighted,
-  hash-frozen, pass-through submitters for route, Approach and replay gate;
-  25 Hz chain trace with mechanism labels; exposure-aware delivery states;
-  artifact size guard; 172 tests.
-- **Baseline vs final route results (development set):** Doors 3/16 → best
-  gate-passing arm 1/16 (falls 5 → 1); Transport 1/16, not re-run (no
-  candidate). **No validated improvement.**
-- **Current limitation:** every lateral arm loses layouts 4 and 7; the
-  plate-press / wall-clearance / plate-trip constraint band admits no tested
-  offset that raises route success; standstills feed the fixed point; the
-  reset regresses downstream or is never exposed once in-stage factors are on.
-- **Next objective (outside this campaign's evidence):** a stage that presses
-  without standing still — one deliberate footfall onto the plate inside a
-  continuous crossing — and a per-layout offset side chosen from the corridor
-  geometry, since layouts 4 and 7 are lost by every lateral arm.
-- **Jobs:** 31 completed this campaign; none pending.
-- **Episodes used:** 406 / 512 (106 remain: exposed-pair baseline reruns for candidate 1, ≤10 gate for V4, ≤32 dev, Transport dev if a crossing candidate passes). Retained artifacts 6.8 GB of 10 GB; disk
-  ≥ 150 GB free throughout.
+- **Achieved milestone:** a **validated, gate-compatible improvement** —
+  candidate 1 (unchanged guarded stage, early handoff, `prev_actions_reset`
+  with a 3 s stall trigger). It fires only on genuine stalls (pauses stay
+  tick-identical), and on every genuine stall seen (5 across development
+  and confirmation) it restored forward progress, with route success in 4
+  and no regression anywhere. Predeclared confirmatory on never-used
+  validation 16–31: Doors 1/16 → 1/16, **Transport 2/16 → 4/16**, improved
+  2 / regressed 0, falls unchanged — **underpowered (2 discordant pairs,
+  p = 0.5), not null**, exactly as predeclared.
+- **Baseline vs candidate:** development (validation 0–15): Doors 3/16 →
+  4/16, Transport 1/16 → 1/16; confirmation (16–31): Doors 1/16 → 1/16,
+  Transport 2/16 → 4/16.
+- **Mechanisms established (traces, not conjecture):** stall = gait feedback
+  fixed point; in-stage/post-exit failures = the raised plate (settle →
+  fixed point on the plate edge; sideways crossing when unaligned; gait
+  cannot turn in place; route walks back to the pre-door waypoint after
+  hand-back); world −x = 0.632 m robot vs 0.61 m post gap. Doors/1
+  completes end-to-end with the composed crossing fix (77.7 s, rendered),
+  but that composition fails the exact replay 7–9/10 and is not promoted.
+- **Open tasks and exact blockers:** (a) route gate ≥16/16 — blocked by the
+  raised-plate crossing: needs a crossing that keeps the gait walking from a
+  standstill without a lateral component *and* holds the ten-fall replay at
+  10/10; (b) privileged Approach ≥14/16 in world −x — geometrically bound
+  (robot wider than the post gap); (c) sensor-release and four-sensor
+  studies — closed until (a) and (b) pass.
+- **Budget:** 411 / 512 episodes; **101 unspent by decision**. Retained
+  artifacts ≈ 7.2 GB of 10 GB; disk ≥ 130 GB free.
+- **Validation:** 176 tests; every job preflighted and hash-frozen; replay
+  gate unchanged for the frozen candidate.
 
 ## Gates (unchanged unless evidence says otherwise)
 
@@ -53,10 +59,10 @@ replaced it). Route failures are never dropped from a denominator.
 | 3 | `prev_actions_reset` intervention with delivery verification | DONE (pending review) | local Doors/1: APPLIED, delivered-zero verified, route success 82.7 s |
 | 4 | Campaign A: 16+16 early-handoff episodes, chain traced, mechanism per episode | DONE | 32 episodes; during-stage 15 (wall), after-stage 12 (falls), stall exposures 5 (`frozen_targets` 4); `campaign-a-summary.json` |
 | 5 | Campaign B: baseline vs `prev_actions_reset` on the 5 exposed episodes, fingerprint-matched | DONE | 5/5 applied, fingerprints matched; 2/5 genuine stalls, both un-stuck (stall-anchored); 3/5 transient pauses; Doors/1 → success, Doors/3 regressed; not promoted. Review corrections applied |
-| 6 | In-stage factors | REOPENED | the six lateral arms staged the robot 0.75 m past the plate (anchor bug, fixed) — withdrawn; no-lateral arms stand (F2/F3/F2F3/A1 all ≤ baseline). Root causes now traced: post-exit falls 8/8 and approach falls are raised-plate trips; crossing covers only 0.13 m |
-| 7 | Freeze one recovery under the predeclared rule | ACTIVE | Doors/1 succeeds with V2 + centre-aimed ramp + rejoin-advance (77.7 s); V2 fails the gate 7/10 (sideways crossing) → V3 = V2 + yaw alignment, local replay running |
-| 8 | Confirmatory eval on validation 16–31 | ACTIVE | candidate 1 = unchanged stage + selective reset (3 s), gate-compatible by construction; 32 candidate episodes submitted, baseline reruns only for exposed pairs (predeclared) |
-| 9 | Exact replay regression for every PlateStage change | ACTIVE | offset gates withdrawn (misplaced target); wait-open PASS stands; new gates needed for pre-point 0.45 / cross-until-clear / corrected offset |
+| 6 | In-stage crossing workstream | CLOSED for this budget — mechanism validated, no gate-passing composition | standstill → fixed point on the plate edge (kick restarts once); sideways crossing when unaligned, gait cannot turn in place; route walks back to the pre-door waypoint after hand-back. Doors/1 full-route success with V2 + centre ramp + rejoin (77.7 s); replay 7/10 (V2), 8/10 (V3), ≤9/10 (V4). Exact unmet prerequisite: a crossing that keeps the gait walking from a standstill without a lateral component, verified 10/10 on the replay set |
+| 7 | Freeze one recovery under the predeclared rule | DONE — candidate 1 frozen | unchanged guarded stage + early handoff + `prev_actions_reset` with a 3 s stall trigger; gate-compatible by construction; +1/−0 in development, +2/−0 on fresh layouts |
+| 8 | Confirmatory eval on validation 16–31 (predeclared) | DONE | paired: Doors 1/16 → 1/16, Transport 2/16 → 4/16; improved 2 (T24, T31), regressed 0, discordant 2, p = 0.5 → **underpowered, not null**; no new falls; `candidate1-confirmatory-summary.json` |
+| 9 | Exact replay regression for every PlateStage change | DONE | wait-open PASS 10/10; V2 FAIL 7/10 (`21401689`); V3/V4 8/10, ≤9/10 locally (not submitted); candidate 1 leaves PlateStage unchanged |
 | 10 | World −x / privileged Approach workstream | BLOCKED (geometric) | 6 arms / 96 episodes: 7–9/16 or 0/16; success set moves with crossing phase; robot 0.632 m > gap 0.61 m. Gate stays closed, unweakened. `approach-negx-summary.json` |
 | 11 | Sensor-only and four-sensor studies | BLOCKED | gates closed |
 | — | `forward_pulse` rejoin fix | SUPERSEDED | no-op by construction; `21399503` reinterpreted |
@@ -93,7 +99,10 @@ are added here as they complete.
 | 21400953 | Combined replay gate 0.35 m + wait-open 2.0 | DONE **10/10 PASS** |
 | 21400961 | Interaction: reset + F1F2F3@0.35 on 4 exposed Doors | DONE 0/4 — withdrawn with the misplaced-target arms |
 | 21401685–686 | Reset with `--stall-min-s 3.0`, unchanged stage, 5 exposures | DONE — 3 NOT_EXPOSED tick-identical (Doors/3 preserved); Doors/6 → success; Doors/1 → door 2 then fall; 1/4 → 2/4 |
-| 21401689 | Replay gate V2 stage (pre 0.45, clear 0.35, kick) | DONE **7/10 FAIL** — crossing runs sideways when yaw is 90° off; `--align-yaw` declared, replay re-run locally first |
+| 21401689 | Replay gate V2 stage (pre 0.45, clear 0.35, kick) | DONE **7/10 FAIL** — sideways crossing when yaw is 90° off |
+| 21401728–729 | Candidate 1 confirmatory, validation 16–31 (32) | DONE Doors 1/16, Transport 4/16, 3 exposures |
+| 21401788–789 | Matched baseline reruns for the 3 exposed pairs | DONE — T24/T31 stall to timeout without the reset |
+| 21401734 | Media render (GPU): Doors/1 stall vs crossing fix | DONE — MP4s + hashed sidecars + GIF, gallery updated |
 
 ## Confirmatory protocol (predeclared 2026-09-23, before any in-stage or Campaign B result was read)
 

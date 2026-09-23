@@ -20,10 +20,20 @@ Existing `multi_race` and `dr_pair` below show learned-policy successes and
 falls. New folding-policy media is dependency-blocked; do not relabel old
 replay controls as current adaptation successes.
 
+## September 23: Mission 7 — one layout, the stall and the crossing fix
+
+| Actual recording | Result and scope |
+|---|---|
+| Doors/1 stall vs crossing fix [GIF](gifs/mission7-doors1-stall-vs-crossing-fix.gif) · [baseline MP4](../results/mission7-campaign-20260923/media/doors1-baseline-stall.mp4) · [fix MP4](../results/mission7-campaign-20260923/media/doors1-crossing-fix-success.mp4) | Left: the unchanged guarded plate stage hands back on the plate edge and the frozen gait settles into its standing fixed point (recording stopped at 70 s of a 180 s timeout). Right: the same layout with the stage-owned crossing — `prev_actions` kick, cross-until-clear, centre-aimed exit ramp, waypoint advance — completes at 77.7 s. Deterministic reruns of one development layout; GIF at 1.94×. **Not a promoted candidate:** the crossing fails the exact ten-fall replay regression (7/10 to 9/10 across variants) and was never evaluated on the route rate. The [sidecar](gifs/mission7-doors1-stall-vs-crossing-fix.json) carries source hashes, outcomes and configurations. |
+
+The learned-policy Mission 7 results remain 0/16 validation success; the route
+controller evidence lives in [`MISSION7_TASKS.md`](MISSION7_TASKS.md).
+
 ## Index
 
 | clip | renderer | task / rung | verdict |
 |---|---|---|---|
+| mission7/doors1_stall_vs_crossing_fix | MuJoCo | Mission 7 Doors, validation layout 1 | render works — the crossing fix reaches the goal on this layout; not promoted (replay regression 7–9/10) |
 | [`dr_pair`](#locomotion) | MuJoCo | domain randomization | **works** |
 | [`push_pair`](#locomotion) | MuJoCo | push curriculum | **works** |
 | [`terrain_pair`](#locomotion) | MuJoCo | terrain curriculum | **works** |
