@@ -231,7 +231,7 @@ def main() -> int:
         import subprocess
         png = Path(sink["png_dir"])
         for enc, extra in (("libx264", ["-preset", "veryfast", "-crf", "20"]), ("mpeg4", ["-q:v", "3"])):
-            r = subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(round(result["video_fps"])),
+            r = subprocess.run([panels.ffmpeg_exe(), "-y", "-loglevel", "error", "-framerate", str(round(result["video_fps"])),
                                 "-i", str(png / "frame_%04d.png"), "-c:v", enc, *extra, "-pix_fmt", "yuv420p", str(out_mp4)])
             if r.returncode == 0 and out_mp4.is_file():
                 result["mp4"] = str(out_mp4); result["mp4_assembled_with"] = enc; break

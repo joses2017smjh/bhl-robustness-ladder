@@ -41,6 +41,25 @@ GRID = (60, 66, 78)
 MAX_GIF_BYTES = 5 * 1024 * 1024        # tests/test_result_artifacts.py's committable limit
 
 
+_FFMPEG: str | None = None
+
+
+def ffmpeg_exe() -> str:
+    """The system ffmpeg when it starts, else imageio-ffmpeg's bundled binary.
+
+    dgxh-2's ffmpeg dies loading libvmaf (job 21408633), while the bundled one
+    that imageio writes the mp4s with runs everywhere the venv does."""
+    global _FFMPEG
+    if _FFMPEG is None:
+        try:
+            subprocess.run(["ffmpeg", "-version"], check=True, capture_output=True, timeout=30)
+            _FFMPEG = "ffmpeg"
+        except Exception:                                            # noqa: BLE001
+            import imageio_ffmpeg
+            _FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
+    return _FFMPEG
+
+
 def load_font(size: int):
     for cand in FONT_CANDIDATES:
         if os.path.isfile(cand):
@@ -237,10 +256,10 @@ def write_gif(src_mp4: Path, out_gif: Path, *, fps: int = 8, speed: float = 1.0,
         rate = "" if speed == 1.0 else f"setpts=PTS/{speed:g},"
         vf = f"{rate}fps={f},scale={wpx}:-2:flags=lanczos,{text}split[a][b];[a]palettegen=max_colors={colors}:stats_mode=diff[p];" \
              f"[b][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle"
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(src_mp4), "-filter_complex", vf,
+        subprocess.run([ffmpeg_exe(), "-y", "-loglevel", "error", "-i", str(src_mp4), "-filter_complex", vf,
                         "-loop", "0", str(out_gif)], check=True)
         size = out_gif.stat().st_size
-        last = {"gif": str(out_gif), "bytes": size, "mb": round(size / 1e6, 2), "fps": f, "width": wpx,
+        last = {"gif": str(out_gif), "bytes": size, "mb": round(size / 1e6, 2), "fps": f, "width": wpx, "ffmpeg": ffmpeg_exe(),
                 "max_colors": colors, "speed": speed, "badge": badge, "within_budget": size <= max_bytes}
         if size <= max_bytes:
             break
