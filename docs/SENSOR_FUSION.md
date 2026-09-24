@@ -147,12 +147,14 @@ injection in both harnesses (`inspection_maze.py --pose-*`,
 
 ## 5. What to adopt first
 
-0. **Measured 2026-09-24:** the two cheapest policy-side remedies both work on the
+0. **Measured 2026-09-24:** the cheapest policy-side remedies all work on the
    maze — a 2,000-iteration fine-tune with a randomized 0–1 step IMU delay restores
    the memoryless policy to 32/32 and 30/32 under one and two steps of delay, and
    distilling it into a recurrent student on degraded observations keeps ≥ 27/32
-   under every tested outage and delay. Randomize latency in training; distil
-   for outages. (Fixed known route; see the SF-04 caveat.)
+   under every tested outage and delay; and a 2,000-iteration MLP fine-tune with
+   all three degradations randomized per episode scores 29–32/32 on every row.
+   Randomize latency, bias and outages when fine-tuning the working policy; do
+   not train a recurrent policy from scratch. (Fixed known route; see the SF-04 caveat.)
 
 1. ~~Layer 1 attitude filter in the MuJoCo loop (SF-03)~~ **done**: the gait
    tolerates the estimate; it does not tolerate ≥ 40 ms of IMU latency. The
@@ -176,7 +178,7 @@ injection in both harnesses (`inspection_maze.py --pose-*`,
 | SF-01 | How much IMU noise and delay do the trained Full-stage maze checkpoints tolerate? | **DONE** (clean rerun `21404944`, fixed probe; `results/repo-gpu-20260923/maze-sf01/summary.json`) | 1.2 GPU-h | Pooled over four Full s0 checkpoints: baseline 0.969; gyro 0.10/0.20 → 0.977; gravity 0.05 → 0.984, 0.10 → 0.891; **IMU delay 20 ms → 0.477, 40 ms → 0.023, 80 ms → 0.000**. Noise tolerated; one control period of IMU latency halves success, two end it (single-arm delay-1 numbers carry ±5-env run-to-run spread) |
 | SF-02 | How accurate must maze localization be? | **DONE both sides** (MuJoCo `21402726`; Isaac `21404944`) | done | MuJoCo route controller: bias ≤ 0.15 m 3/3, 0.20 m 1/3, noise 0.10 m 3/3, heading ≤ 20° 3/3, **drift 0.01 m/s 0/3**. Isaac teacher: bias 0.05 m → 0.961, 0.10 m → 0.930, **0.20 m → 0.773**, heading 3°/10° → 0.969. Requirement: bounded, map-anchored error ≤ 0.10–0.15 m and a few degrees; no drift |
 | SF-03 | Does the frozen 22-DoF gait tolerate an estimated attitude? | **DONE** (`21402531`, `results/sensor-fusion-20260923/sf03_summary.json`): Mahony/Madgwick at the 25 Hz policy rate on corrupted MuJoCo gyro + accelerometer, 0.4 s stationary alignment, inspection maze, seeds 0–2 | 48 CPU episodes spent | **Noise is tolerated, latency is not.** L1 (gyro 0.02 rad/s, accel 0.3 m/s², bias 0.02) 3/3 with both filters, gravity RMSE 0.034–0.041; accel noise 1.0 m/s² alone 3/3; gyro noise + bias 0.05 alone 3/3; **one policy step (40 ms) of IMU delay alone 0/3**, and every arm with ≥ 40 ms delay falls whatever the filter or gain. **SF-03b (`21402725`, filter at 200 Hz): 0–30 ms 3/3, 40 ms 1/3, 60 ms 0/3 — the latency budget is ≈30 ms end-to-end** |
-| SF-04 | Does a recurrent, modality-dropout `both` policy degrade gracefully? | From scratch: **NEGATIVE**. **Distillation: PASS** (`21404181`). **Delay-only fine-tune: large effect** (`21404967`). All-ingredients, dropout-only, bias-only fine-tunes running (`21404945–947`) | ≈10 GPU-h so far | **Student (LSTM, distilled from the Both MLP, degraded observations): baseline 30/32, delay 1 step 30/32, delay 2 steps 27/32, LiDAR off 31/32, stereo off 30/32, both off 30/32** vs teacher 30 / 27 / 0 / 18 / 0 / 0. Delay-only MLP fine-tune: delay 1 → 32/32, delay 2 → 30/32. Caveat: Blind already solves this fixed route (32/32), so sensor-off failures of the teacher are distribution shift, not lost information; the student tolerates the shift, it does not perceive blind |
+| SF-04 | Does a recurrent, modality-dropout `both` policy degrade gracefully? | From scratch: **NEGATIVE**. From the `Both` checkpoint: **delay-only fine-tune, distillation and all-ingredients fine-tune all succeed** (`21404967`, `21404181`, `21404945`); dropout-only and bias-only arms queued | ≈12 GPU-h | **All-ingredients MLP fine-tune: baseline 32/32, delay 1 → 32/32, delay 2 → 29/32, LiDAR off 32/32, stereo off 32/32, both off 30/32** vs control 30 / 27 / 0 / 18 / 0 / 0 (passes the amended rule; the printed NEGATIVE is the delay-1 ceiling). Distilled recurrent student: 30 / 30 / 27 / 31 / 30 / 30. Conclusion: randomize latency, bias and outages *when fine-tuning the working policy*; the recurrent-from-scratch recipe is what failed. Caveat: fixed route, Blind already 32/32 |
 | SF-05 | What is the hardware actually? | Recordings per `IMU_INPUT.md` checklist; Allan variance; stereo calibration JSON; LiDAR–IMU extrinsics; a taped maze route with AprilTag or tape ground truth for evo ATE/RPE | none (bench) | Produces the noise/latency numbers SF-01/SF-04 must randomize over |
 
 None of these is funded by this document; each is a backlog row (SF-01…SF-05
