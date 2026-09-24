@@ -231,7 +231,21 @@ measured **34.05** (job `21408622`, `maze_record.py --render-quality clean`),
 so the noise is not those terms alone. The profiles that replace the missing
 temporal pass — `taa` (TAA instead of DLSS) and `pathtrace` (16 spp through the
 OptiX denoiser, which does not need NGX) — are measured against the same bar
-(≤ 12) by `21408633` / `21408634`; the ledger carries the outcome. Until a
-profile meets the bar, the fallback stays what section 8 describes: nlmeans
-before composition, and the sidecar says so.
+(≤ 12) by `21408633` / `21408634`; the ledger carries the outcome. Outcome: **`pathtrace` meets the bar — spatial grain 0.32, temporal 0.00**
+(`21408634`); `taa` measured 34.16 and `rtl` 34.17 — the request for
+`RaytracedLighting` is not honoured on this stack (the readback still says
+`RealTimePathTracing`), so the classic real-time mode is not available as a
+fix here. The working recipe, applied both through `RenderCfg.carb_settings`
+and directly into carb right after `AppLauncher`:
+
+```
+/rtx/rendermode = PathTracing
+/rtx/pathtracing/spp = 16, /rtx/pathtracing/totalSpp = 16, /rtx/pathtracing/clampSpp = 16
+/rtx/pathtracing/optixDenoiser/enabled = true, /rtx/pathtracing/optixDenoiser/blendFactor = 0
+```
+
+Cost on a DGX H100 node: a 161-step episode with a 1280×720 overhead camera
+plus the two ray-cast eyes rendered and composed in about seven minutes of
+job time. Section 8's nlmeans pass is no longer needed for new clips; it stays
+documented for the ones already published.
 

@@ -1,0 +1,80 @@
+{
+  "output": "docs/gifs/isaac/maze_both_panels.gif",
+  "output_sha256": "4804893a647e434abb989e1f6fe5c7db58ed7f87e7124b2259110320ff3ea223",
+  "output_mb": 0.91,
+  "gif": {
+    "gif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/docs/gifs/isaac/maze_both_panels.gif",
+    "bytes": 912086,
+    "mb": 0.91,
+    "fps": 8,
+    "width": 860,
+    "ffmpeg": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
+    "max_colors": 128,
+    "speed": 1.0,
+    "badge": null,
+    "within_budget": true
+  },
+  "source_clip": "results/repo-gpu-20260923/maze-panels/both-s0-panels-pathtrace.panels.mp4",
+  "source_sha256": "8705ec6a499e1e719cad54945ae6e486905b5aec6282acd35b44f79f25f1deeb",
+  "evidence": "results/repo-gpu-20260923/maze-panels/both-s0-panels-pathtrace.json",
+  "evidence_sha256": "3657af01c72b1bf27c4d43f99696826e6973fdebf7cc873d92124a0f92d71bac",
+  "episode": {
+    "task": "Velocity-BHL-MazeRecovery-Full-Both-v0",
+    "checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-19_16-25-50_wknd-full-both-s0/model_5997.pt",
+    "checkpoint_sha256": "82889d05589f053cba0ecb7351287187fcc215aa75b33eabdc1e19f027b5a5d4",
+    "seed": 100,
+    "outcome": "success",
+    "terminations_fired": [
+      "button_reached"
+    ],
+    "steps": 161,
+    "sim_seconds": 6.44,
+    "observation_corruption": true,
+    "stack": "v60",
+    "git_commit": "89e0c204a86a7ba4a368887a5112d9ef40bd9412"
+  },
+  "render": {
+    "quality": "pathtrace",
+    "settings": {
+      "rtx.rendermode": "PathTracing",
+      "rtx.pathtracing.spp": 16,
+      "rtx.pathtracing.totalSpp": 16,
+      "rtx.pathtracing.clampSpp": 16,
+      "rtx.pathtracing.optixDenoiser.enabled": true,
+      "rtx.pathtracing.optixDenoiser.blendFactor": 0.0
+    },
+    "effective": {
+      "/rtx/rendermode": "PathTracing",
+      "/rtx/post/aa/op": 3,
+      "/rtx/post/dlss/execMode": 0,
+      "/rtx/directLighting/sampledLighting/enabled": true,
+      "/rtx/directLighting/sampledLighting/samplesPerPixel": 1,
+      "/rtx/ambientOcclusion/enabled": false,
+      "/rtx/indirectDiffuse/enabled": false,
+      "/rtx/pathtracing/spp": 16,
+      "/rtx/pathtracing/totalSpp": 16,
+      "/rtx/pathtracing/optixDenoiser/enabled": true,
+      "/rtx-transient/dldenoiser/enabled": null
+    },
+    "grain_spatial": 0.3170739710330963,
+    "grain_temporal_mad": 0.0,
+    "grain_baseline": {
+      "stock_clip_spatial": 36.1,
+      "stock_clip_temporal_mad": 47.3,
+      "mujoco_spatial": 0.4
+    },
+    "denoised": false,
+    "top_eye_offset_m": [
+      1.5,
+      -0.25,
+      3.9
+    ],
+    "top_frames": 161,
+    "sensor_rows": 161,
+    "sensor_read_errors": 0
+  },
+  "panels": "top: fixed overhead RTX camera over env 0; stereo: RayCasterCamera ray depth 64x64 per eye + the pooled 4x4 the policy reads; lidar: 36 sector minima of 500 rays as the policy reads them, raw hits behind",
+  "scope": "Isaac Sim 6.0 / Lab 3.0.0b2 | learned PPO policy consuming lidar + stereo + IMU | oracle waypoint heading | training observation noise on | 1x",
+  "playback_speed": 1.0,
+  "profile_selection": "Three RTX profiles were run on the same episode with the same predeclared bar (spatial grain <= 12): taa 34.16 (job 21408633), rtl 34.17 (21408636; the RaytracedLighting request was not honoured, mode stayed RealTimePathTracing), pathtrace 0.32 (21408634) -- this clip. Stock renders measure 36.1."
+}
