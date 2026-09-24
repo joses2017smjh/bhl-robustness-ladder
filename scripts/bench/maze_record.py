@@ -233,6 +233,10 @@ def build_parser() -> argparse.ArgumentParser:
     pan.add_argument("--floor-checker", action="store_true",
                      help="visual-only 0.5 m checker tiles on the corridor floor (the fused ground mesh has no albedo); "
                           "collision off and not in any ray-caster's mesh list, so the MDP is untouched")
+    pan.add_argument("--target-luma", type=float, default=122.0,
+                     help="auto-exposure trim after --light-scale: scale /World/light and /World/skyLight until the overhead "
+                          "frame's mean luminance is within 10 of this (0-255; a tan floor at correct exposure is ~120-130); "
+                          "0 disables")
     pan.add_argument("--warmup-frames", type=int, default=6,
                      help="render-only frames after each reset before recording; the last two give the grain metrics")
     return p
@@ -721,6 +725,46 @@ def run(args, searches) -> int:
                     top_cam.update(dt=0.0, force_recompute=True)
                     pan["warmup"].append(read_top())
                     pan["warmup"] = pan["warmup"][-2:]
+                # Auto-exposure trim: the configured light scale is a guess, and a miss costs a
+                # queue cycle. Scale the two upstream light prims by target/measured (clamped)
+                # until the mean luminance sits near the target, then re-measure the grain.
+                pan["exposure"] = {"target_luma": args.target_luma, "steps": []}
+                if args.target_luma > 0:
+                    try:
+                        import omni.usd
+                        stage_ = omni.usd.get_context().get_stage()
+                        prims_ = [stage_.GetPrimAtPath(pp) for pp in ("/World/light", "/World/skyLight")]
+                        prims_ = [pr for pr in prims_ if pr and pr.IsValid()]
+
+                        def _iattr(pr):
+                            for nm in ("inputs:intensity", "intensity"):
+                                at = pr.GetAttribute(nm)
+                                if at and at.IsValid():
+                                    return at
+                            return None
+                        attrs_ = [a_ for a_ in (_iattr(pr) for pr in prims_) if a_ is not None]
+                        if not attrs_:
+                            raise RuntimeError("no light intensity attributes found")
+                        for _it in range(4):
+                            fr = pan["warmup"][-1].astype(np.float32)
+                            luma = float((0.299 * fr[..., 0] + 0.587 * fr[..., 1] + 0.114 * fr[..., 2]).mean())
+                            factor = float(np.clip(args.target_luma / max(luma, 1.0), 0.5, 2.0))
+                            pan["exposure"]["steps"].append({"mean_luma": round(luma, 1), "factor": round(factor, 3),
+                                                             "intensities": [float(a_.Get()) for a_ in attrs_]})
+                            if abs(luma - args.target_luma) <= 10.0:
+                                break
+                            for a_ in attrs_:
+                                a_.Set(float(a_.Get()) * factor)
+                            for _ in range(2):
+                                u.sim.render()
+                                top_cam.update(dt=0.0, force_recompute=True)
+                                pan["warmup"].append(read_top())
+                                pan["warmup"] = pan["warmup"][-2:]
+                        pan["exposure"]["final_intensities"] = [float(a_.Get()) for a_ in attrs_]
+                        print(f"[panels] exposure trim: {json.dumps(pan['exposure'])}", flush=True)
+                    except Exception as exc:                         # noqa: BLE001
+                        pan["exposure"]["error"] = repr(exc)
+                        print(f"[panels] exposure trim skipped ({exc!r}); configured light scale stands", flush=True)
                 a, b = pan["warmup"]
                 pan["grain_spatial"] = grain(b)
                 pan["grain_temporal_mad"] = float(np.mean(np.abs(a.astype(np.float32) - b.astype(np.float32))))
@@ -840,7 +884,7 @@ def run(args, searches) -> int:
                                     root_xy=np.stack(pan["root_xy"][:m]) if m else np.zeros((0, 2), np.float32),
                                     root_yaw=np.asarray(pan["root_yaw"][:m], np.float32), step_dt=step_dt)
                 panels_rec = {"npz": str(npz), "top_png_dir": pan["top_png_dir"], "top_frames": pan["top_frames"],
-                              "sensor_rows": m, "grain_spatial": pan.get("grain_spatial"),
+                              "sensor_rows": m, "grain_spatial": pan.get("grain_spatial"), "exposure": pan.get("exposure"),
                               "grain_temporal_mad": pan.get("grain_temporal_mad"),
                               "grain_baseline": {"stock_clip_spatial": 36.1, "stock_clip_temporal_mad": 47.3, "mujoco_spatial": 0.4},
                               "needs_denoise": (pan.get("grain_spatial") is None) or (pan["grain_spatial"] > 12.0),

@@ -76,5 +76,6 @@
   "panels": "top: fixed overhead RTX camera over env 0; stereo: RayCasterCamera ray depth 64x64 per eye + the pooled 4x4 the policy reads; lidar: 36 sector minima of 500 rays as the policy reads them, raw hits behind",
   "scope": "Isaac Sim 6.0 / Lab 3.0.0b2 | learned PPO policy consuming lidar + stereo + IMU | oracle waypoint heading | training observation noise on | 1x",
   "playback_speed": 1.0,
-  "profile_selection": "Three RTX profiles were run on the same episode with the same predeclared bar (spatial grain <= 12): taa 34.16 (job 21408633), rtl 34.17 (21408636; the RaytracedLighting request was not honoured, mode stayed RealTimePathTracing), pathtrace 0.32 (21408634) -- this clip. Stock renders measure 36.1."
+  "profile_selection": "Three RTX profiles were run on the same episode with the same predeclared bar (spatial grain <= 12): taa 34.16 (job 21408633), rtl 34.17 (21408636; the RaytracedLighting request was not honoured, mode stayed RealTimePathTracing), pathtrace 0.32 (21408634) -- this clip. Stock renders measure 36.1.",
+  "state": "FIRST PASS: noise-free (spatial grain 0.32) but over-exposed under path tracing -- the overlay colours (tan floor, blue walls) wash to white; a second pass with the scene lights scaled and a checker floor is queued as 21408711 and replaces this file if it passes the same bar."
 }
