@@ -114,7 +114,23 @@ def _apply_setting(u, setting):
         except Exception:                                        # noqa: BLE001
             names = list(om.active_terms["policy"])
             return om._group_obs_term_cfgs["policy"][names.index(term)]
+    # Restore the TRAINING noise std for every IMU term first, then apply this
+    # setting's override. Without the restore, a std set by an earlier setting
+    # leaked into every later one (the 2026-09-23 SF-01 run measured its delay
+    # and localization settings under gyro 0.20 / gravity 0.10).
+    if not hasattr(u, "_probe_training_noise_std"):
+        u._probe_training_noise_std = {}
+        for term in ("base_ang_vel", "projected_gravity"):
+            try:
+                tc = term_cfg(term)
+                u._probe_training_noise_std[term] = float(tc.noise.std) if getattr(tc, "noise", None) is not None else None
+            except Exception:                                    # noqa: BLE001
+                u._probe_training_noise_std[term] = None
+        print(f"[probe] training noise std {u._probe_training_noise_std}", flush=True)
     for term, key in (("base_ang_vel", "gyro_std"), ("projected_gravity", "gravity_std")):
+        base_std = u._probe_training_noise_std.get(term)
+        if base_std is not None:
+            term_cfg(term).noise.std = base_std
         if setting.get(key) is not None:
             tc = term_cfg(term)
             if getattr(tc, "noise", None) is None:
