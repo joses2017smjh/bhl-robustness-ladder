@@ -202,3 +202,29 @@ ffmpeg -framerate 25 -i /path/to/frames/frame_%04d.png ...     # then section 8
 articulation root every step (eye and look-at are world-frame offsets from the
 root), and writes PNGs — no `--video`, no `RecordVideo`. Gate on the frame
 count, per section 0. `slurm/inner/maze_video.sh` is the worked example.
+
+## 12. Why every Isaac clip is speckled, measured (2026-09-24)
+
+The speckle is not the scene and not the GIF quantisation. On a frame of the
+stock maze clip the spatial grain (mean |f − 3×3 box blur of f|, 0–255) is
+**36.1**, against **0.4** for a MuJoCo frame; consecutive frames of a static
+camera differ by 47 on the same scale.
+
+Cause, from the experience files this stack runs: `isaaclab.python.headless.rendering.kit`
+sets `rtx.directLighting.sampledLighting.enabled = true` with
+`samplesPerPixel = 1` and leaves the clean-up to DLSS
+(`rtx.post.dlss.execMode = 0`; `balanced.kit` would add the DL denoiser). Both
+of those are NGX features, and NGX fails to initialise on these nodes
+(`Failed to create NGX context`, section 7). The raw 1-spp samples are what
+reaches the render product.
+
+What did not fix it: turning the stochastic terms off (sampled direct
+lighting, AO, indirect diffuse, reflections) via `RenderCfg.carb_settings`
+measured **34.05** (job `21408622`, `maze_record.py --render-quality clean`),
+so the noise is not those terms alone. The profiles that replace the missing
+temporal pass — `taa` (TAA instead of DLSS) and `pathtrace` (16 spp through the
+OptiX denoiser, which does not need NGX) — are measured against the same bar
+(≤ 12) by `21408633` / `21408634`; the ledger carries the outcome. Until a
+profile meets the bar, the fallback stays what section 8 describes: nlmeans
+before composition, and the sidecar says so.
+

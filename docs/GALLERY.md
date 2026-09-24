@@ -5,6 +5,14 @@ Renderer is in the folder name:
 scored episode from the harness that produced the numbers, except `squat_pick`,
 which says on its face that it is scripted.
 
+## September 24: three-panel maze clips (top view + the robot's own sensors)
+
+| Actual recording | Result and scope |
+|---|---|
+| [Inspection maze, three panels](gifs/inspection-maze-panels.gif) · [MP4 (1×, not in git)](../results/repo-gpu-20260923/maze-panels/inspection-maze-panels.mp4) · [sidecar](gifs/inspection-maze-panels.json) | The README's episode (seed 0, ordered route, reactive sensor brake) **re-run through the same harness** with a per-step recorder: completed at **17.36 s, the recording's time to the hundredth**, 2 stations, 0 wall contacts. Main view: overhead render of the textured world (materials and lights only; geometry and contact arrays checked identical to the plain world). Right column: a robot-eye render (for the viewer, not an input), the stereo rig's 8×8 **paired ray depth** (no RGB matching) and the **36-sector lidar** exactly as the speed brake received them at 10 Hz; "brake ×0.57" shows the brake acting near the exit wall. Gait: learned PPO, frozen; route: oracle waypoints. GIF plays at 2× (badged); 1.19 MB |
+
+Why the September 20 GIF below looks flat: it was rendered from the plain world (one point light, untextured grey walls on a navy floor, no skybox) from 8.6 m away at 720 px, then quantised to 64 colours. The clip above is the same run with a checker floor, brick-textured walls, shadows and a closer overhead camera; none of that touches the physics.
+
 ## September 20: mission demos and a rejected route
 
 | Actual recording | Result and scope |
