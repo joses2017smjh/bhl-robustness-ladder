@@ -1,0 +1,685 @@
+"""Record one maze-recovery episode per seed, with the termination that ended it.
+
+v60 (Isaac Sim 6.0 / Lab 3.0.0b2). Built on the rollout of
+scripts/bench/maze_recovery_probe.py: the task's env with the training
+observation noise kept ON (the probe's --keep-corruption semantics), the
+checkpoint through OnPolicyRunner, num_envs 1, run until the FIRST termination
+(or --max-steps), and every termination term that fired is written down.
+
+Two pictures are taken of every step, because on this stack they disagree
+(docs/ISAAC_RENDER.md section 10, jobs 21247917 / 21299608):
+
+* ``viewport``  -- gym.wrappers.RecordVideo around the env built with
+  render_mode="rgb_array", the way scripts/train.py records --video. On v60
+  that is the Kit perspective camera through isaaclab's VideoRecorder. With
+  fabric on it draws the robot at its stale USD pose (the spawn), so the
+  published finding is that this clip shows the maze and no walking robot.
+  It is recorded anyway, as ``<name>.viewport.mp4``: it re-measures the
+  finding on this exact task and checkpoint, and if it does show the robot
+  the JSON says so (frame count and file) and it can be promoted by hand.
+* ``camera_sensor`` -- a CameraCfg sensor that follows the robot's root, the
+  recorder train_play.py uses for every published Isaac clip. This is the
+  clip used for the GIF: ``<name>.mp4`` (real time, 1/step_dt fps) written
+  with imageio; PNG frames also go to --frames-root so the launcher can
+  assemble them with ffmpeg if the writer fails.
+
+Searches. ``--search name:want:seed:max_seeds[:imu_delay_steps]`` (repeatable,
+colon-separated because Apptainer --env and sbatch --export split on commas)
+runs episodes at seed, seed+1, ... until an episode with the wanted outcome
+(``success``, ``failure`` or ``any``) is found or max_seeds is spent. Every
+episode is kept as ``<label>-s<seed>[-d<delay>].{json,mp4,viewport.mp4}``;
+the first matching episode is copied to ``<name>.{json,mp4,viewport.mp4}``.
+A later search first looks through episodes already recorded by an earlier
+one, so a failure met while looking for the success is reused, not re-rolled.
+``failure`` means a termination other than button_reached. Reaching
+--max-steps with no termination is ``step_cap`` and satisfies neither.
+
+The optional imu_delay_steps field delays the policy's IMU columns
+(base_ang_vel, projected_gravity) by that many control steps, the
+maze_recovery_probe SF-01 setting, for a same-policy same-seed controlled
+failure (docs/SENSOR_FUSION.md: 2 steps = 40 ms -> 0.02 success).
+
+Kit swallows stderr and its close exits 0, so tracebacks go to stdout and to
+``<out-dir>/<label>.error.txt``; the launcher scores the JSON files, never the
+exit code. ``--selftest`` exercises the Isaac-free helpers and exits.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import shutil
+import socket
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[2]
+
+SUCCESS_TERM = "button_reached"
+WANTS = ("success", "failure", "any")
+
+# Camera framings, metres. World-frame offsets; the sensor follows the root
+# (a fixed wide shot makes the 0.5 m robot ~50 px), the viewport frames env 0's
+# corridor from the -y side and above: spawn x in -0.2..0.2, button at (3, 0),
+# walls at y = +-0.45 (maze_layout: CORRIDOR_W 0.90, WALL_H 0.60).
+#
+# The sensor is a rear-follow shot INSIDE the corridor, not a side view: any
+# eye beyond the y = +-0.45 walls has its line of sight to the feet cross the
+# 0.60 m wall (for a side eye 2 m out and 1.5 m up the crossing is at z ~0.4 m,
+# so the lower ~0.25 m of the robot is hidden, more as it drifts toward that
+# wall). Behind the robot at its own y, 2 m back and 1.5 m up, nothing stands
+# between the lens and the body; at focal 18 mm (36 deg vertical FOV) the feet
+# are ~14 deg below the frame centre and the button plate, seen from the spawn,
+# ~14 deg above it, with both walls at ~+-13 deg converging toward the plate.
+SENSOR_EYE = (-2.0, 0.0, 1.5)
+SENSOR_LOOKAT = (0.5, 0.0, 0.1)
+VIEWPORT_EYE = (1.4, -3.5, 2.5)
+VIEWPORT_LOOKAT = (1.4, 0.0, 0.2)
+
+
+# ----------------------------------------------------------------------------
+# Isaac-free helpers (covered by --selftest)
+# ----------------------------------------------------------------------------
+def parse_vec(raw: str | None, default):
+    """'x:y:z' (commas accepted) -> tuple of 3 floats."""
+    if not raw:
+        return tuple(default)
+    parts = [float(v) for v in raw.replace(",", ":").split(":")]
+    if len(parts) != 3:
+        raise ValueError(f"expected three numbers separated by ':', got {raw!r}")
+    return tuple(parts)
+
+
+def parse_search(spec: str) -> dict:
+    """'name:want:seed:max_seeds[:imu_delay_steps]' -> dict."""
+    parts = spec.split(":")
+    if len(parts) not in (4, 5):
+        raise ValueError(f"--search wants name:want:seed:max_seeds[:imu_delay_steps], got {spec!r}")
+    name, want, seed, max_seeds = parts[:4]
+    delay = int(parts[4]) if len(parts) == 5 else 0
+    if want not in WANTS:
+        raise ValueError(f"want must be one of {WANTS}, got {want!r}")
+    if not name or "/" in name:
+        raise ValueError(f"bad search name {name!r}")
+    seed, max_seeds = int(seed), int(max_seeds)
+    if max_seeds < 1 or delay < 0:
+        raise ValueError(f"max_seeds >= 1 and imu_delay_steps >= 0 required in {spec!r}")
+    return {"name": name, "want": want, "seed": seed, "max_seeds": max_seeds, "imu_delay_steps": delay}
+
+
+def classify(success: bool, done: bool, fired: list[str], timed_out: bool) -> str:
+    """One word for the launcher: success | <term> | time_out | step_cap."""
+    if done and success:
+        return "success"
+    if done:
+        others = [t for t in fired if t not in (SUCCESS_TERM, "time_out")]
+        if others:
+            return "+".join(others)
+        return "time_out" if (timed_out or "time_out" in fired) else "unknown_termination"
+    return "step_cap"
+
+
+def is_failure(outcome: str) -> bool:
+    return outcome not in ("success", "step_cap")
+
+
+def matches(want: str, outcome: str) -> bool:
+    if want == "success":
+        return outcome == "success"
+    if want == "failure":
+        return is_failure(outcome)
+    return outcome != "step_cap"
+
+
+def sha256(path) -> str | None:
+    p = Path(path)
+    if not p.is_file():
+        return None
+    h = hashlib.sha256()
+    with p.open("rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def git_head(repo: Path) -> str | None:
+    try:
+        return subprocess.run(["git", "-C", str(repo), "rev-parse", "HEAD"], capture_output=True,
+                              text=True, timeout=20, check=True).stdout.strip()
+    except Exception:                                            # noqa: BLE001
+        return None
+
+
+def episode_stem(label: str, seed: int, delay: int) -> str:
+    return f"{label}-s{seed}" + (f"-d{delay}" if delay else "")
+
+
+def selftest() -> int:
+    s = parse_search("both-s0-success:success:100:4")
+    assert s == {"name": "both-s0-success", "want": "success", "seed": 100, "max_seeds": 4, "imu_delay_steps": 0}, s
+    assert parse_search("x:failure:100:2:2")["imu_delay_steps"] == 2
+    for bad in ("a:b", "a:nope:1:1", "a:success:1:0", "a/b:success:1:1"):
+        try:
+            parse_search(bad)
+        except ValueError:
+            pass
+        else:
+            raise AssertionError(f"accepted {bad!r}")
+    assert classify(True, True, ["button_reached"], False) == "success"
+    assert classify(False, True, ["base_orientation"], False) == "base_orientation"
+    assert classify(False, True, ["time_out"], True) == "time_out"
+    assert classify(False, True, ["dead_end", "time_out"], True) == "dead_end"
+    assert classify(False, False, [], False) == "step_cap"
+    assert is_failure("base_orientation") and is_failure("time_out") and is_failure("dead_end")
+    assert not is_failure("success") and not is_failure("step_cap")
+    assert matches("failure", "dead_end") and not matches("failure", "step_cap")
+    assert matches("success", "success") and not matches("success", "dead_end")
+    assert matches("any", "success") and matches("any", "time_out") and not matches("any", "step_cap")
+    assert parse_vec("1:2:3", (0, 0, 0)) == (1.0, 2.0, 3.0) and parse_vec(None, SENSOR_EYE) == SENSOR_EYE
+    assert episode_stem("both-s0", 100, 0) == "both-s0-s100" and episode_stem("both-s0", 100, 2) == "both-s0-s100-d2"
+    print("maze_record selftest OK")
+    return 0
+
+
+# ----------------------------------------------------------------------------
+# Isaac side
+# ----------------------------------------------------------------------------
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--task", default="Velocity-BHL-MazeRecovery-Full-Both-v0")
+    p.add_argument("--checkpoint", required=False)
+    p.add_argument("--label", default=None, help="episode file prefix (default: derived from the task)")
+    p.add_argument("--search", action="append", default=[],
+                   help="name:want:seed:max_seeds[:imu_delay_steps]; repeatable (default both-s0-success:success:100:1)")
+    p.add_argument("--out-dir", default=str(REPO / "results/repo-gpu-20260923/maze-record"))
+    p.add_argument("--frames-root", default=os.path.join(os.environ.get("TMPDIR", "/tmp"), "maze-record-frames"),
+                   help="PNG frames of the camera-sensor clip go here (node-local by default)")
+    p.add_argument("--max-steps", type=int, default=600)
+    p.add_argument("--width", type=int, default=640)
+    p.add_argument("--height", type=int, default=360)
+    p.add_argument("--sensor-eye", default=None, help="x:y:z offset from the robot root (default %s)" % (SENSOR_EYE,))
+    p.add_argument("--sensor-lookat", default=None, help="x:y:z offset from the robot root (default %s)" % (SENSOR_LOOKAT,))
+    p.add_argument("--viewport-eye", default=None, help="x:y:z offset from env 0's origin (default %s)" % (VIEWPORT_EYE,))
+    p.add_argument("--viewport-lookat", default=None, help="x:y:z offset from env 0's origin (default %s)" % (VIEWPORT_LOOKAT,))
+    p.add_argument("--no-viewport", action="store_true", help="skip the RecordVideo viewport clip")
+    p.add_argument("--viewport-episodes", type=int, default=1,
+                   help="record the viewport clip for the first N episodes only (0 = all); it is a diagnostic of the "
+                        "stale-pose finding and costs a Kit app update per frame")
+    p.add_argument("--no-overlays", action="store_true", help="do not spawn the coloured maze clip overlays")
+    p.add_argument("--drop-corruption", action="store_true",
+                   help="force enable_corruption=False (the published noise-off scoring); default keeps the training noise")
+    p.add_argument("--selftest", action="store_true", help="run the Isaac-free helper checks and exit")
+    return p
+
+
+class ImuDelay:
+    """Policy-side FIFO delay of the IMU columns (maze_recovery_probe SF-01)."""
+
+    def __init__(self, slices: dict, steps: int):
+        self.slices, self.steps, self.queue = slices, int(steps), []
+
+    def __call__(self, obs):
+        import torch
+        if self.steps <= 0 or not self.slices:
+            return obs
+        pol = obs["policy"]
+        cur = torch.cat([pol[:, s] for s in self.slices.values()], dim=1).clone()
+        self.queue.append(cur)
+        old = self.queue.pop(0) if len(self.queue) > self.steps else self.queue[0]
+        pol = pol.clone()
+        c = 0
+        for s in self.slices.values():
+            w = s.stop - s.start
+            pol[:, s] = old[:, c:c + w]
+            c += w
+        obs = obs.clone() if hasattr(obs, "clone") else dict(obs)
+        obs["policy"] = pol
+        return obs
+
+
+def imu_slices(u) -> dict:
+    import torch
+    om = u.observation_manager
+    names, dims = om.active_terms["policy"], om.group_obs_term_dim["policy"]
+    out, col = {}, 0
+    for n, d in zip(names, dims):
+        w = int(torch.tensor(d).prod()) if not isinstance(d, int) else d
+        if n in ("base_ang_vel", "projected_gravity"):
+            out[n] = slice(col, col + w)
+        col += w
+    return out
+
+
+class FrameSink:
+    """Streams camera-sensor frames to an mp4 (imageio) and to PNGs."""
+
+    def __init__(self, mp4: Path, png_dir: Path, fps: float):
+        self.mp4, self.png_dir, self.fps = mp4, png_dir, fps
+        self.n, self.writer, self.writer_error = 0, None, None
+        if png_dir.exists():
+            shutil.rmtree(png_dir)
+        png_dir.mkdir(parents=True, exist_ok=True)
+        mp4.parent.mkdir(parents=True, exist_ok=True)
+        self.codecs = ["libx264", "mpeg4"]      # imageio's bundled ffmpeg has libx264; the cluster's own does not
+        self.codec = None
+        self._open()
+
+    def _open(self):
+        while self.codecs:
+            codec = self.codecs.pop(0)
+            try:
+                import imageio.v2 as imageio
+                self.writer = imageio.get_writer(str(self.mp4), fps=round(self.fps), codec=codec, quality=8,
+                                                 pixelformat="yuv420p", macro_block_size=1)
+                self.codec = codec
+                return
+            except Exception as exc:                             # noqa: BLE001
+                self.writer_error = repr(exc)
+        self.writer = None
+        print(f"[sensor] imageio writer unavailable ({self.writer_error}); PNG frames only", flush=True)
+
+    def add(self, rgb):
+        from PIL import Image
+        img = Image.fromarray(rgb)
+        img.save(self.png_dir / f"frame_{self.n:04d}.png")
+        if self.writer is not None:
+            try:
+                self.writer.append_data(rgb)
+            except Exception as exc:                             # noqa: BLE001
+                self.writer_error = repr(exc)
+                self.writer = None
+                if self.n == 0 and self.codecs:                  # encoder rejected on the first frame: try the next codec
+                    self._open()
+                    if self.writer is not None:
+                        try:
+                            self.writer.append_data(rgb)
+                        except Exception as exc2:                # noqa: BLE001
+                            self.writer_error = repr(exc2)
+                            self.writer = None
+        self.n += 1
+
+    def close(self) -> dict:
+        if self.writer is not None:
+            try:
+                self.writer.close()
+            except Exception as exc:                             # noqa: BLE001
+                self.writer_error = repr(exc)
+        ok = self.mp4.is_file() and self.mp4.stat().st_size > 0
+        return {"frames": self.n, "mp4": str(self.mp4) if ok else None, "codec": self.codec if ok else None,
+                "png_dir": str(self.png_dir), "writer_error": self.writer_error}
+
+
+def main() -> int:
+    args, _unknown = build_parser().parse_known_args()
+    if args.selftest:
+        return selftest()
+
+    from isaaclab.app import AppLauncher
+    parser = build_parser()
+    AppLauncher.add_app_launcher_args(parser)
+    args = parser.parse_args()
+    if not args.checkpoint:
+        parser.error("--checkpoint is required")
+    searches = [parse_search(s) for s in (args.search or ["both-s0-success:success:100:1"])]
+    args.enable_cameras = True          # the CameraCfg sensor needs the RTX renderer even without the viewport clip
+    app = AppLauncher(args)
+    try:
+        rc = run(args, searches)
+    except BaseException:                                       # noqa: BLE001
+        import traceback
+        tb = traceback.format_exc()
+        print("RECORD-ERROR\n" + tb, flush=True)                  # stdout: Kit swallows stderr
+        try:
+            Path(args.out_dir).mkdir(parents=True, exist_ok=True)
+            (Path(args.out_dir) / f"{args.label or 'maze-record'}.error.txt").write_text(tb)
+        except Exception:                                        # noqa: BLE001
+            pass
+        raise
+    finally:
+        app.app.close()
+    return rc
+
+
+def run(args, searches) -> int:
+    import gymnasium as gym
+    import numpy as np
+    import torch
+    import isaaclab.sim as sim_utils
+    from isaaclab.sensors import CameraCfg
+    import bhl_robust.tasks  # noqa: F401
+    from bhl_robust import maze_recovery as recovery
+
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    label = args.label or args.task.replace("Velocity-BHL-MazeRecovery-", "").replace("-v0", "").lower()
+    sensor_eye = parse_vec(args.sensor_eye, SENSOR_EYE)
+    sensor_lookat = parse_vec(args.sensor_lookat, SENSOR_LOOKAT)
+    viewport_eye = parse_vec(args.viewport_eye, VIEWPORT_EYE)
+    viewport_lookat = parse_vec(args.viewport_lookat, VIEWPORT_LOOKAT)
+    ckpt_sha = sha256(args.checkpoint)
+    if ckpt_sha is None:
+        raise FileNotFoundError(f"checkpoint missing: {args.checkpoint}")
+
+    spec = gym.spec(args.task)
+    cfg = spec.kwargs["env_cfg_entry_point"]()
+    cfg.scene.num_envs = 1
+    cfg.seed = searches[0]["seed"]
+    if args.drop_corruption:
+        cfg.observations.policy.enable_corruption = False
+    observation_corruption = bool(cfg.observations.policy.enable_corruption)
+    # Viewer: frame env 0 (honoured by the interactive viewport controller; the
+    # v60 VideoRecorder copies eye/lookat as raw world coordinates, fixed below
+    # once env 0's origin is known).
+    cfg.viewer.origin_type = "env"
+    cfg.viewer.env_index = 0
+    cfg.viewer.eye = tuple(viewport_eye)
+    cfg.viewer.lookat = tuple(viewport_lookat)
+    cfg.viewer.resolution = (args.width, args.height)
+    vr = getattr(cfg, "video_recorder", None)
+    if vr is not None:
+        # RecordVideo buffers every frame in RAM for moviepy: 600 x 1280x720 is ~1.6 GB.
+        vr.window_width, vr.window_height = args.width, args.height
+    # The camera-sensor recorder train_play.py uses for every published Isaac
+    # clip (docs/ISAAC_RENDER.md section 10): mounted per env, aimed at the
+    # robot's root every step, world-frame offsets so the view does not spin.
+    cfg.scene.clip_cam = CameraCfg(
+        prim_path="{ENV_REGEX_NS}/clip_cam", height=args.height, width=args.width, data_types=["rgb"],
+        spawn=sim_utils.PinholeCameraCfg(focal_length=18.0),
+        offset=CameraCfg.OffsetCfg(pos=(0.0, 0.0, 2.0), rot=(1.0, 0.0, 0.0, 0.0), convention="world"),
+    )
+
+    render_mode = None if args.no_viewport else "rgb_array"
+    env = gym.make(args.task, cfg=cfg, render_mode=render_mode)
+    u = env.unwrapped
+    overlays = 0
+    if not args.no_overlays:
+        try:
+            from bhl_robust.terrains.maze_viz import spawn_maze_clip_color
+            overlays = spawn_maze_clip_color(u)
+            print(f"[clip] spawned {overlays} maze clip-colour overlays", flush=True)
+        except Exception as exc:                                 # noqa: BLE001
+            print(f"[clip] overlays skipped ({exc!r})", flush=True)
+
+    # Viewport clip: gym.wrappers.RecordVideo, as scripts/train.py wraps for
+    # --video. Driven by hand (start/stop per episode) instead of a step
+    # trigger so several episodes can be recorded in one Kit boot.
+    rv = None
+    viewport_error = None
+    viewport_dir = out_dir / f".{label}-viewport-tmp"
+
+    class TolerantRecordVideo(gym.wrappers.RecordVideo):
+        """A viewport render error must not take the camera-sensor clip down with it."""
+        capture_error = None
+
+        def _capture_frame(self):
+            try:
+                super()._capture_frame()
+            except Exception as exc:                             # noqa: BLE001
+                self.capture_error = repr(exc)
+                self.recording, self.recorded_frames = False, []
+                print(f"[viewport] capture disabled after error: {exc!r}", flush=True)
+
+    if render_mode == "rgb_array":
+        try:
+            rv = TolerantRecordVideo(env, video_folder=str(viewport_dir), step_trigger=lambda step: False,
+                                     video_length=args.max_steps + 5, name_prefix=label, disable_logger=True)
+            env = rv
+        except Exception as exc:                                 # noqa: BLE001
+            viewport_error = repr(exc)
+            print(f"[viewport] RecordVideo unavailable ({exc!r}); camera-sensor clip only", flush=True)
+    env.reset()
+
+    # Policy: the task's rsl_rl cfg through OnPolicyRunner (maze_recovery_probe).
+    from importlib.metadata import version
+    from isaaclab_rl.rsl_rl import RslRlVecEnvWrapper
+    from rsl_rl.runners import OnPolicyRunner
+    agent = spec.kwargs["rsl_rl_cfg_entry_point"]()
+    if os.environ.get("BHL_POLICY", "").strip() == "recurrent":
+        from isaaclab_rl.rsl_rl import RslRlPpoActorCriticRecurrentCfg
+        old_pol = agent.policy
+        agent.policy = RslRlPpoActorCriticRecurrentCfg(
+            init_noise_std=old_pol.init_noise_std, actor_hidden_dims=old_pol.actor_hidden_dims,
+            critic_hidden_dims=old_pol.critic_hidden_dims, activation=old_pol.activation,
+            rnn_type="lstm", rnn_hidden_dim=256, rnn_num_layers=1)
+        print("[overlay] policy: ActorCriticRecurrent (lstm, 256)", flush=True)
+    try:
+        from isaaclab_rl.rsl_rl import handle_deprecated_rsl_rl_cfg
+        agent = handle_deprecated_rsl_rl_cfg(agent, version("rsl-rl-lib"))
+    except ImportError:
+        pass
+    env = RslRlVecEnvWrapper(env)
+    runner = OnPolicyRunner(env, agent.to_dict(), log_dir=None, device=u.device)
+    runner.load(args.checkpoint)
+    policy = runner.get_inference_policy(device=u.device)
+    slices = imu_slices(u)
+
+    clip_cam = u.scene["clip_cam"]
+    robot = u.scene["robot"]
+    dev = u.device
+
+    def as_torch(x):
+        # v60 wraps some buffers (recovery.tensor's `.torch`); train_play reads the rest with torch.as_tensor(x[:]).
+        return x.torch if hasattr(x, "torch") else torch.as_tensor(x[:])
+    eye_off = torch.tensor(sensor_eye, device=dev, dtype=torch.float32)
+    look_off = torch.tensor(sensor_lookat, device=dev, dtype=torch.float32)
+    origin0 = recovery.tensor(u.scene.env_origins)[0].detach().float().cpu().tolist()
+    vp_eye = [o + d for o, d in zip(origin0, viewport_eye)]
+    vp_lookat = [o + d for o, d in zip(origin0, viewport_lookat)]
+    viewport_camera = "default"
+    if rv is not None:
+        # Kit's perspective camera is aimed lazily, on the first frame, from the
+        # capture cfg's world-frame eye/lookat; point it at env 0's corridor.
+        try:
+            cap = u.video_recorder._capture
+            cap.cfg.eye, cap.cfg.lookat = tuple(vp_eye), tuple(vp_lookat)
+            viewport_camera = "env0_corridor"
+        except Exception as exc:                                 # noqa: BLE001
+            viewport_camera = f"default ({exc!r})"
+        try:
+            u.sim.set_camera_view(tuple(vp_eye), tuple(vp_lookat))
+        except Exception as exc:                                 # noqa: BLE001
+            print(f"[viewport] sim.set_camera_view skipped ({exc!r})", flush=True)
+    step_dt, physics_dt = float(u.step_dt), float(u.physics_dt)
+    fps = 1.0 / step_dt
+    base = {"task": args.task, "checkpoint": args.checkpoint, "checkpoint_sha256": ckpt_sha, "num_envs": 1,
+            "max_steps": args.max_steps, "sim_dt": physics_dt, "step_dt": step_dt,
+            "decimation": int(getattr(u.cfg, "decimation", round(step_dt / physics_dt))),
+            "observation_corruption": observation_corruption, "stack": os.environ.get("BHL_STACK"),
+            "hostname": socket.gethostname(), "git_commit": git_head(REPO), "clip_overlays": overlays,
+            "capture_path_used_for_gif": "camera_sensor",
+            "capture_note": ("viewport = gym RecordVideo on the Kit perspective camera (draws the stale USD pose "
+                             "under fabric on this stack, docs/ISAAC_RENDER.md s10); camera_sensor = CameraCfg "
+                             "following the robot root, the recorder behind every published Isaac clip"),
+            "sensor_eye_offset_m": list(sensor_eye), "sensor_lookat_offset_m": list(sensor_lookat),
+            "viewport_eye_world_m": vp_eye, "viewport_lookat_world_m": vp_lookat, "viewport_camera": viewport_camera,
+            "viewport_error": viewport_error, "env0_origin_m": origin0, "frame_size": [args.width, args.height],
+            "video_fps": fps, "playback_speed": 1.0}
+    print(json.dumps({k: v for k, v in base.items() if k != "capture_note"}), flush=True)
+
+    episodes: list[dict] = []
+
+    def sim_time():
+        for obj, attr in ((u.sim, "current_time"), (getattr(u.sim, "physics_manager", None), "current_time")):
+            v = getattr(obj, attr, None) if obj is not None else None
+            if v is not None:
+                try:
+                    return float(v)
+                except Exception:                                # noqa: BLE001
+                    pass
+        return None
+
+    def record_episode(seed: int, delay_steps: int) -> dict:
+        stem = episode_stem(label, seed, delay_steps)
+        print(f"=== episode {stem} | seed {seed} | imu delay {delay_steps} steps | {time.strftime('%H:%M:%S')} ===", flush=True)
+        sink = FrameSink(out_dir / f"{stem}.mp4", Path(args.frames_root) / stem, fps)
+        vp_name = f"{stem}.viewport"
+        use_viewport = rv is not None and (args.viewport_episodes <= 0 or len(episodes) < args.viewport_episodes)
+        if use_viewport:
+            try:
+                rv.start_recording(vp_name)
+            except Exception as exc:                             # noqa: BLE001
+                print(f"[viewport] start_recording failed ({exc!r})", flush=True)
+        t_sim0 = sim_time()
+        t_wall0 = time.time()
+        # The rollout steps under torch.inference_mode(), which turns the command
+        # term's waypoint index into an inference tensor; the reset must run in
+        # the same mode or its in-place update is rejected (job 21402843).
+        with torch.inference_mode():
+            u.reset(seed=seed)
+            obs = env.get_observations()
+            obs = obs[0] if isinstance(obs, tuple) else obs
+        mod = getattr(policy, "__self__", None)
+        if mod is not None and hasattr(mod, "reset"):
+            try:
+                mod.reset()                                      # recurrent policies: clear the hidden state
+            except Exception:                                    # noqa: BLE001
+                pass
+        delay = ImuDelay(slices, delay_steps)
+        start = recovery.local_xy(u)[0].clone()
+        goal = start.new_tensor((3.0, 0.0))
+        min_dist = float((start - goal).norm())
+        max_disp = 0.0
+        steps = done = 0
+        success = False
+        fired: list[str] = []
+        timed_out = False
+        final_dist = min_dist
+        for _ in range(args.max_steps):
+            with torch.inference_mode():
+                # Aim the sensor at the root BEFORE stepping (train_play), from the
+                # pre-step pose; world-frame offsets keep the view from spinning.
+                root = as_torch(robot.data.root_pos_w)[:, :3].to(dev).float()
+                try:
+                    clip_cam.set_world_poses_from_view(root + eye_off, root + look_off)
+                except Exception as exc:                         # noqa: BLE001
+                    if steps == 0:
+                        print(f"[sensor] set_world_poses_from_view failed ({exc!r})", flush=True)
+                action = policy(delay(obs))
+                obs, _, dones, _ = env.step(action)
+            steps += 1
+            try:
+                rgb = as_torch(clip_cam.data.output["rgb"])[0, ..., :3]
+                sink.add(np.ascontiguousarray(rgb.detach().cpu().numpy().astype(np.uint8)))
+            except Exception as exc:                             # noqa: BLE001
+                if sink.n == 0 and steps == 1:
+                    print(f"[sensor] frame read failed ({exc!r})", flush=True)
+            # Pre-reset terminal state: the recovery cache is from the terminal
+            # transition, unlike root_pos_w which is already reset (probe).
+            state = getattr(u, "_maze_recovery_state", None)
+            d = bool(recovery.tensor(dones)[0])
+            if state is not None:
+                dist = float(state["dist"][0])
+                won = bool(state["success"][0])
+            else:
+                dist = float((recovery.local_xy(u)[0] - goal).norm())
+                won = bool(recovery.tensor(u.termination_manager.get_term(SUCCESS_TERM))[0])
+            min_dist = min(min_dist, dist)
+            final_dist = dist
+            if not d:
+                max_disp = max(max_disp, float((recovery.local_xy(u)[0] - start).norm()))
+            if d:
+                done = 1
+                tm = u.termination_manager
+                for name in tm.active_terms:
+                    try:
+                        if bool(recovery.tensor(tm.get_term(name))[0]):
+                            fired.append(name)
+                    except Exception:                            # noqa: BLE001
+                        pass
+                timed_out = bool(recovery.tensor(tm.time_outs)[0])
+                if timed_out and "time_out" not in fired:
+                    fired.append("time_out")
+                success = won or SUCCESS_TERM in fired
+                break
+        sensor = sink.close()
+        t_sim1 = sim_time()
+        wall_s = time.time() - t_wall0
+        viewport = {"recorded": use_viewport, "frames": 0, "mp4": None,
+                    "error": getattr(rv, "capture_error", None) if rv is not None else viewport_error}
+        if use_viewport:
+            viewport["frames"] = len(rv.recorded_frames)
+            try:
+                if rv.recording:
+                    rv.stop_recording()
+                src = viewport_dir / f"{vp_name}.mp4"
+                if src.is_file():
+                    dst = out_dir / f"{stem}.viewport.mp4"
+                    shutil.move(str(src), str(dst))
+                    viewport["mp4"] = str(dst)
+            except Exception as exc:                             # noqa: BLE001
+                viewport["error"] = repr(exc)
+                print(f"[viewport] stop_recording failed ({exc!r})", flush=True)
+        outcome = classify(success, bool(done), fired, timed_out)
+        rec = dict(base, seed=seed, imu_delay_steps=delay_steps, outcome=outcome, success=success,
+                   terminated=bool(done), terminations_fired=fired, steps=steps, sim_seconds=steps * step_dt,
+                   wall_seconds=round(wall_s, 2),
+                   # step_dt means the viewport's per-frame Kit update did not step physics; larger means it did.
+                   sim_time_per_step=(None if t_sim0 is None or t_sim1 is None or steps == 0 else (t_sim1 - t_sim0) / steps),
+                   final_button_distance_m=final_dist, min_button_distance_m=min_dist,
+                   max_displacement_from_spawn_m=max_disp, camera_sensor=sensor, viewport=viewport,
+                   mp4=sensor["mp4"], viewport_mp4=viewport["mp4"], episode=stem)
+        (out_dir / f"{stem}.json").write_text(json.dumps(rec, indent=2) + "\n")
+        print(json.dumps({k: rec[k] for k in ("episode", "seed", "imu_delay_steps", "outcome", "terminations_fired",
+                                              "steps", "sim_seconds", "final_button_distance_m", "min_button_distance_m")}
+                         | {"sensor_frames": sensor["frames"], "viewport_frames": viewport["frames"]}), flush=True)
+        episodes.append(rec)
+        return rec
+
+    def publish(search: dict, rec: dict) -> None:
+        name = search["name"]
+        out = dict(rec, search=search, selected_from_episode=rec["episode"])
+        for key, suffix in (("mp4", ".mp4"), ("viewport_mp4", ".viewport.mp4")):
+            src = rec.get(key)
+            dst = out_dir / f"{name}{suffix}"
+            if src and Path(src).is_file():
+                shutil.copy2(src, dst)
+                out[key] = str(dst)
+            else:
+                out[key] = None
+        (out_dir / f"{name}.json").write_text(json.dumps(out, indent=2) + "\n")
+        print(f"SEARCH {name}: {rec['outcome']} from {rec['episode']} -> {name}.json", flush=True)
+
+    results = {}
+    for search in searches:
+        found = None
+        for rec in episodes:
+            if rec["imu_delay_steps"] == search["imu_delay_steps"] and matches(search["want"], rec["outcome"]):
+                found = rec
+                break
+        tried = []
+        if found is None:
+            for k in range(search["max_seeds"]):
+                seed = search["seed"] + k
+                prior = next((r for r in episodes if r["seed"] == seed and r["imu_delay_steps"] == search["imu_delay_steps"]), None)
+                rec = prior or record_episode(seed, search["imu_delay_steps"])
+                tried.append({"seed": seed, "outcome": rec["outcome"]})
+                if matches(search["want"], rec["outcome"]):
+                    found = rec
+                    break
+        if found is not None:
+            publish(search, found)
+            results[search["name"]] = {"outcome": found["outcome"], "episode": found["episode"]}
+        else:
+            (out_dir / f"{search['name']}.json").write_text(json.dumps(
+                {"search": search, "outcome": None, "found": False, "tried": tried, **base}, indent=2) + "\n")
+            results[search["name"]] = {"outcome": None, "tried": tried}
+            print(f"SEARCH {search['name']}: no {search['want']} in {len(tried)} seed(s)", flush=True)
+    summary = {"label": label, "searches": results, "episodes": [
+        {k: r[k] for k in ("episode", "seed", "imu_delay_steps", "outcome", "steps", "terminations_fired")}
+        | {"sensor_frames": r["camera_sensor"]["frames"], "viewport_frames": r["viewport"]["frames"]} for r in episodes]}
+    (out_dir / f"{label}.episodes.json").write_text(json.dumps(summary, indent=2) + "\n")
+    print("MAZE-RECORD SUMMARY " + json.dumps(summary), flush=True)
+    try:
+        shutil.rmtree(viewport_dir, ignore_errors=True)
+    except Exception:                                            # noqa: BLE001
+        pass
+    env.close()
+    print("MAZE_RECORD_DONE", flush=True)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

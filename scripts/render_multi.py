@@ -20,6 +20,7 @@ misreadable:
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 from pathlib import Path
 
@@ -242,7 +243,8 @@ def main():
     p.add_argument("--labels", nargs="+", required=True)
     p.add_argument("--upstream", type=Path, required=True)
     p.add_argument("--cache-dir", type=Path, required=True)
-    p.add_argument("--out", type=Path, required=True)
+    p.add_argument("--out", type=Path, default=None,
+                   help="output MP4 (required unless --no-video)")
     p.add_argument("--seconds", type=float, default=12.0)
     p.add_argument("--vx", type=float, default=0.3)
     p.add_argument("--push", type=float, default=0.0)
@@ -259,7 +261,16 @@ def main():
     p.add_argument("--gif-seconds", type=float, default=None)
     p.add_argument("--gif-fps", type=int, default=10)
     p.add_argument("--gif-width", type=int, default=880)
+    p.add_argument("--no-video", action="store_true",
+                   help="simulate only: no renderer, MP4 or GIF (needs no GPU/EGL); "
+                        "the per-robot outcome lines and --json are still produced")
+    p.add_argument("--json", type=Path, default=None,
+                   help="write the per-robot outcome (fall time, peak x, push times, "
+                        "flags) to this JSON file")
     args = p.parse_args()
+
+    if args.out is None and not args.no_video:
+        p.error("--out is required unless --no-video is given")
 
     n = len(args.deploy)
     if len(args.labels) != n:
@@ -321,17 +332,22 @@ def main():
     if depth_slot is not None:
         cap += f"   depth: {args.labels[depth_slot]}"
 
-    rec = LegendRecorder(
-        model, args.out, fps=1.0 / cfgs[0].policy_dt,
-        width=1280, height=640, caption=cap, track_body="",
-        labels=args.labels, hero=hero, depth_cam=depth_cam,
-        depth_res=args.depth_res,
-    )
-    rec.camera.distance = 5.4 if args.world == "lab" else 4.8
-    rec.camera.elevation = -16.0
-    rec.camera.azimuth = 128.0
-    rec._track_id = -1
-    rec.camera.lookat[:] = [0.8, 0.0, 0.32]
+    # With --no-video nothing GL-backed is ever constructed, so the same
+    # rollout runs on a CPU node without EGL; every physics and policy call
+    # below is identical either way.
+    rec = None
+    if not args.no_video:
+        rec = LegendRecorder(
+            model, args.out, fps=1.0 / cfgs[0].policy_dt,
+            width=1280, height=640, caption=cap, track_body="",
+            labels=args.labels, hero=hero, depth_cam=depth_cam,
+            depth_res=args.depth_res,
+        )
+        rec.camera.distance = 5.4 if args.world == "lab" else 4.8
+        rec.camera.elevation = -16.0
+        rec.camera.azimuth = 128.0
+        rec._track_id = -1
+        rec.camera.lookat[:] = [0.8, 0.0, 0.32]
 
     command = (args.vx, 0.0, 0.0)
     steps = int(args.seconds / cfgs[0].policy_dt)
@@ -344,12 +360,14 @@ def main():
     push_flash = 0
     any_fell = False
     fell_at = [None] * n
+    push_times = []
     peak = np.array([float(run.d.qpos[s.qpos_adr]) for s in run.slots])
 
     for t in range(steps):
         if push_every and t > settle and t % push_every == 0:
             run.push_all(args.push, rng)
             push_flash = 8
+            push_times.append(round(t * cfgs[0].policy_dt, 3))
 
         targets = []
         for i in range(n):
@@ -367,21 +385,55 @@ def main():
         # Track the pack so the shot stays on the robots as they walk away. Only
         # robots still upright vote: once one is face down it stops advancing,
         # and averaging it in drags the camera off the ones still walking.
-        alive = [float(run.d.qpos[s.qpos_adr])
-                 for i, s in enumerate(run.slots) if fell_at[i] is None]
-        xs = alive if alive else [float(run.d.qpos[s.qpos_adr]) for s in run.slots]
-        rec.camera.lookat[0] = float(np.mean(xs)) + 0.5
-        rec.camera.lookat[1] = 0.0
+        if rec is not None:
+            alive = [float(run.d.qpos[s.qpos_adr])
+                     for i, s in enumerate(run.slots) if fell_at[i] is None]
+            xs = alive if alive else [float(run.d.qpos[s.qpos_adr]) for s in run.slots]
+            rec.camera.lookat[0] = float(np.mean(xs)) + 0.5
+            rec.camera.lookat[1] = 0.0
 
-        mark = "push" if push_flash > 0 else ("fall" if any_fell else None)
-        rec.capture(run.d, mark)
+            mark = "push" if push_flash > 0 else ("fall" if any_fell else None)
+            rec.capture(run.d, mark)
         push_flash = max(0, push_flash - 1)
 
-    err = rec.close()
-    print(f"video -> {args.out}  ({rec.n_frames} frames)" if not err else f"ffmpeg: {err}")
+    if rec is not None:
+        err = rec.close()
+        print(f"video -> {args.out}  ({rec.n_frames} frames)" if not err else f"ffmpeg: {err}")
+    else:
+        print(f"no video (--no-video): {steps} policy steps simulated, seed {args.seed}")
     for i, s in enumerate(slots):
         status = "FELL @ %.1fs" % fell_at[i] if fell_at[i] is not None else "upright"
         print(f"  {s.label:22s} {status:16s} peak x={peak[i]:+.2f} m")
+
+    if args.json is not None:
+        record = {
+            "seed": args.seed,
+            "flags": {
+                "seconds": args.seconds, "vx": args.vx, "push": args.push,
+                "push_every": args.push_every, "world": args.world,
+                "variant": args.variant, "policy_dt": float(cfgs[0].policy_dt),
+                "tilt_limit_rad": TILT_LIMIT,
+            },
+            "push_times_s": push_times,
+            "video": None if rec is None else str(args.out),
+            "robots": [
+                {
+                    "label": s.label,
+                    "deploy": str(args.deploy[i]),
+                    "run_dir": Path(args.deploy[i]).resolve().parent.parent.name,
+                    "fell": fell_at[i] is not None,
+                    "fell_at_s": None if fell_at[i] is None else round(float(fell_at[i]), 3),
+                    "peak_x_m": round(float(peak[i]), 4),
+                }
+                for i, s in enumerate(slots)
+            ],
+        }
+        args.json.parent.mkdir(parents=True, exist_ok=True)
+        args.json.write_text(json.dumps(record, indent=2) + "\n")
+        print(f"json  -> {args.json}")
+
+    if rec is None:
+        return
 
     burn_caption(args.out, args.labels)
     gif = args.gif or args.out.with_suffix(".gif")
