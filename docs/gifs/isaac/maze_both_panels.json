@@ -1,11 +1,11 @@
 {
   "output": "docs/gifs/isaac/maze_both_panels.gif",
-  "output_sha256": "6125b00c66a083f8be0a1c368dbbdb635508a9ef873a0494f862077366d66644",
-  "output_mb": 0.92,
+  "output_sha256": "91ede9c9f8f3a9bbd5359983a105b1b97eb04186e2f18876a44c2a7dec81649a",
+  "output_mb": 1.02,
   "gif": {
     "gif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/docs/gifs/isaac/maze_both_panels.gif",
-    "bytes": 921824,
-    "mb": 0.92,
+    "bytes": 1017677,
+    "mb": 1.02,
     "fps": 8,
     "width": 860,
     "ffmpeg": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
@@ -15,9 +15,9 @@
     "within_budget": true
   },
   "source_clip": "results/repo-gpu-20260923/maze-panels/both-s0-panels-pathtrace.panels.mp4",
-  "source_sha256": "e387937559c20f7809c9efe7f6afc43b2ebd8f0c618a2e66d07708a8562f865b",
+  "source_sha256": "44ffcbc9dbc75b81144886cec5ae0b06a35777100b8fd34cdddcf00c88b5ac24",
   "evidence": "results/repo-gpu-20260923/maze-panels/both-s0-panels-pathtrace.json",
-  "evidence_sha256": "b432c41bdeae2fcb1830f30a23c814cf0c47e0fd5fc95555a24715f02a680755",
+  "evidence_sha256": "3db944f65a6389fe1c3983b110ddbff487bfa3ab997e11b51e8570963124a1d9",
   "episode": {
     "task": "Velocity-BHL-MazeRecovery-Full-Both-v0",
     "checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-19_16-25-50_wknd-full-both-s0/model_5997.pt",
@@ -31,7 +31,7 @@
     "sim_seconds": 6.44,
     "observation_corruption": true,
     "stack": "v60",
-    "git_commit": "8211c61e78ab0f9098e6b20d8b089aa1773fb0ec"
+    "git_commit": "8639efd2a2b50a8477a0ecc9844fda9e4f59171f"
   },
   "render": {
     "quality": "pathtrace",
@@ -69,7 +69,7 @@
     },
     "floor_checker_tiles": 140,
     "crop_frac": 0.75,
-    "grain_spatial": 0.5221089720726013,
+    "grain_spatial": 0.49200448393821716,
     "grain_temporal_mad": 0.0,
     "grain_baseline": {
       "stock_clip_spatial": 36.1,
@@ -84,11 +84,52 @@
     ],
     "top_frames": 161,
     "sensor_rows": 161,
-    "sensor_read_errors": 0
+    "sensor_read_errors": 0,
+    "exposure_trim": {
+      "target_luma": 122.0,
+      "steps": [
+        {
+          "mean_luma": 174.2,
+          "factor": 0.7,
+          "intensities": [
+            900.0,
+            300.0
+          ]
+        },
+        {
+          "mean_luma": 151.0,
+          "factor": 0.808,
+          "intensities": [
+            630.2791137695312,
+            210.09304809570312
+          ]
+        },
+        {
+          "mean_luma": 136.0,
+          "factor": 0.897,
+          "intensities": [
+            509.123779296875,
+            169.7079315185547
+          ]
+        },
+        {
+          "mean_luma": 128.4,
+          "factor": 0.95,
+          "intensities": [
+            456.7786560058594,
+            152.25955200195312
+          ]
+        }
+      ],
+      "final_intensities": [
+        456.7786560058594,
+        152.25955200195312
+      ]
+    }
   },
   "panels": "top: fixed overhead RTX camera over env 0; stereo: RayCasterCamera ray depth 64x64 per eye + the pooled 4x4 the policy reads; lidar: 36 sector minima of 500 rays as the policy reads them, raw hits behind",
   "scope": "Isaac Sim 6.0 / Lab 3.0.0b2 | learned PPO policy consuming lidar + stereo + IMU | oracle waypoint heading | training observation noise on | 1x",
   "playback_speed": 1.0,
   "profile_selection": "Three RTX profiles on the same episode, same predeclared bar (spatial grain <= 12): taa 34.16 (21408633), rtl 34.17 (21408636; RaytracedLighting not honoured), pathtrace 0.32 (21408634). Stock renders measure 36.1.",
-  "state": "SECOND PASS (21408711): scene lights x0.3, 140 visual-only checker tiles, overhead cropped to 75 %; grain 0.52. Horizontal surfaces are still bright (floor tan reads pale); a third pass with an auto-exposure trim of the two scene lights and a 3 m lidar window is queued as 21408718 and replaces this file if it passes the same bar."
+  "state": "THIRD PASS (21408718), final: scene lights x0.3 then an auto-exposure trim of /World/light and /World/skyLight to a mean luminance of 122 +- 10 on the overhead frame (reached 128 in four steps; final intensities recorded under render.exposure_trim), 140 visual-only checker tiles, overhead cropped to 75 %, lidar panel on a 3 m window; grain 0.49. Passes 1 (over-exposed) and 2 (bright) were superseded, ledger 2026-09-24."
 }

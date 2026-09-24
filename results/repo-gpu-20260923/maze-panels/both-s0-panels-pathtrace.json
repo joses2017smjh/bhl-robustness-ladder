@@ -10,7 +10,7 @@
   "observation_corruption": true,
   "stack": "v60",
   "hostname": "dgxh-2.hpc.engr.oregonstate.edu",
-  "git_commit": "8211c61e78ab0f9098e6b20d8b089aa1773fb0ec",
+  "git_commit": "8639efd2a2b50a8477a0ecc9844fda9e4f59171f",
   "clip_overlays": 10,
   "capture_path_used_for_gif": "camera_sensor",
   "capture_note": "viewport = gym RecordVideo on the Kit perspective camera (draws the stale USD pose under fabric on this stack, docs/ISAAC_RENDER.md s10); camera_sensor = CameraCfg following the robot root, the recorder behind every published Isaac clip",
@@ -102,7 +102,7 @@
   ],
   "steps": 161,
   "sim_seconds": 6.44,
-  "wall_seconds": 146.84,
+  "wall_seconds": 146.87,
   "sim_time_per_step": null,
   "final_button_distance_m": 0.33972814679145813,
   "min_button_distance_m": 0.3322230875492096,
@@ -111,7 +111,7 @@
     "frames": 161,
     "mp4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/maze-panels/both-s0-panels-pathtrace-s100.mp4",
     "codec": "libx264",
-    "png_dir": "/scratch/sanchej7/tmp/maze-panels-frames-21408711/both-s0-panels-pathtrace-s100",
+    "png_dir": "/scratch/sanchej7/tmp/maze-panels-frames-21408718/both-s0-panels-pathtrace-s100",
     "writer_error": null
   },
   "viewport": {
@@ -125,10 +125,51 @@
   "episode": "both-s0-panels-pathtrace-s100",
   "panels": {
     "npz": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/maze-panels/both-s0-panels-pathtrace-s100.panels.npz",
-    "top_png_dir": "/scratch/sanchej7/tmp/maze-panels-frames-21408711/both-s0-panels-pathtrace-s100-top",
+    "top_png_dir": "/scratch/sanchej7/tmp/maze-panels-frames-21408718/both-s0-panels-pathtrace-s100-top",
     "top_frames": 161,
     "sensor_rows": 161,
-    "grain_spatial": 0.5221089720726013,
+    "grain_spatial": 0.49200448393821716,
+    "exposure": {
+      "target_luma": 122.0,
+      "steps": [
+        {
+          "mean_luma": 174.2,
+          "factor": 0.7,
+          "intensities": [
+            900.0,
+            300.0
+          ]
+        },
+        {
+          "mean_luma": 151.0,
+          "factor": 0.808,
+          "intensities": [
+            630.2791137695312,
+            210.09304809570312
+          ]
+        },
+        {
+          "mean_luma": 136.0,
+          "factor": 0.897,
+          "intensities": [
+            509.123779296875,
+            169.7079315185547
+          ]
+        },
+        {
+          "mean_luma": 128.4,
+          "factor": 0.95,
+          "intensities": [
+            456.7786560058594,
+            152.25955200195312
+          ]
+        }
+      ],
+      "final_intensities": [
+        456.7786560058594,
+        152.25955200195312
+      ]
+    },
     "grain_temporal_mad": 0.0,
     "grain_baseline": {
       "stock_clip_spatial": 36.1,
