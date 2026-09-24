@@ -1,0 +1,49 @@
+{
+  "output": "results/mission7-campaign-20260923/media/overhead/approach-negx14-centered.mp4",
+  "output_sha256": "d7102498809920166379f2577f4742bf3505833aa31ca187cf48e33f8c24a34e",
+  "renderer": "MuJoCo EpisodeRecorder, overhead camera, 25 fps",
+  "camera": "overhead",
+  "robot_visibility": {
+    "camera": "overhead",
+    "probes": 5,
+    "probe_every_frames": 25,
+    "robot_pixel_fraction_min": 0.004722222222222222,
+    "robot_pixel_fraction_mean": 0.004798611111111111,
+    "share_of_probes_with_robot_visible": 1.0,
+    "visible_threshold_fraction": 0.001
+  },
+  "ffmpeg_error": null,
+  "task": "Mission 7 privileged Approach, 0.65 m spawn, balanced-matrix layout",
+  "split": "test",
+  "layout_index": 14,
+  "controller_arm": "center_bias",
+  "controller": "gap_midline_centring_with_plus_y_prebias_0.015m",
+  "reset_sequence": [
+    1,
+    5,
+    6,
+    7,
+    14
+  ],
+  "reproduces_evaluated_episode": true,
+  "outcome_of_this_run": {
+    "success": true,
+    "failure": null,
+    "collisions": 0,
+    "elapsed_s": 4.400000000000281
+  },
+  "evidence": "results/mission7-campaign-20260923/approach-matrix-center-bias/result.json",
+  "evidence_sha256": "4457da78c6e18301834ba86db10a0a858a726cd0d1d939e65e256037c2d579d1",
+  "caption": "Approach, world -x, layout 14: gap-midline centring with +0.015 m pre-bias -- through the posts to the goal (gate 62/64)",
+  "labels": "privileged pose (oracle), frozen learned gait, free-standing, native MuJoCo",
+  "scope": "One layout under one controller arm; the gate result is the 64-episode matrix in the evidence file, not this clip.",
+  "git_commit": "c1c92e6d3166a441fc220bdedff18a4dd861b97a",
+  "ffmpeg_visibility": {
+    "median_central_std": 23.6,
+    "median_central_diff": 1.302,
+    "old_tracking_reference": {
+      "central_std": "3.5-9",
+      "central_diff": "0-0.3"
+    }
+  }
+}

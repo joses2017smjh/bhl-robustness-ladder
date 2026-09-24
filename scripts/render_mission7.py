@@ -17,7 +17,7 @@ from pathlib import Path
 
 import numpy as np
 
-from bhl_robust.eval.video import EpisodeRecorder
+from bhl_robust.eval.video import CAMERA_PRESETS, EpisodeRecorder
 from bhl_robust.mission.approach_debug import DebugEnv
 from mission7_route_handoff_probe import RouteHandoffController
 
@@ -34,6 +34,10 @@ def main():
     p.add_argument("--index", type=int, required=True)
     p.add_argument("--caption", default="")
     p.add_argument("--max-seconds", type=float, default=None, help="stop recording early (render only)")
+    p.add_argument("--camera", choices=sorted(CAMERA_PRESETS), default="tracking",
+                   help="EpisodeRecorder preset; overhead clears the 1.1 m maze walls, tracking is the historical default")
+    p.add_argument("--visibility-every", type=int, default=25,
+                   help="segmentation probe of robot pixel coverage every N frames (0 disables)")
     p.add_argument("--evidence", type=Path, default=None, help="result record this run reproduces")
     p.add_argument("--handoff", choices=("switch", "early"), default="early")
     p.add_argument("--rejoin-fix", choices=("none", "forward_pulse", "prev_actions_reset"), default="none")
@@ -59,7 +63,8 @@ def main():
         stage_activate=a.stage_activate, stage_wait_open_s=a.stage_wait_open, pre_point_m=a.pre_point,
         cross_clear_m=a.cross_clear, cross_kick=a.cross_kick, align_yaw=a.align_yaw,
         rejoin_advance=a.rejoin_advance, exit_ramp_s=a.exit_ramp, exit_ramp_center=a.exit_ramp_center)
-    recorder = EpisodeRecorder(env.model, a.out, fps=25.0, caption=a.caption, track_body=f"{env.slot.prefix}base")
+    recorder = EpisodeRecorder(env.model, a.out, fps=25.0, caption=a.caption, track_body=f"{env.slot.prefix}base",
+                               camera=a.camera, visibility_every=a.visibility_every)
     runner_step = env.runner.step
 
     def recorded_step(targets):
@@ -81,9 +86,10 @@ def main():
     row = env.metrics()
     sidecar = {
         "output": str(a.out.relative_to(a.repo)), "output_sha256": sha256(a.out) if a.out.exists() else None,
-        "renderer": "MuJoCo EpisodeRecorder, tracking camera, 25 fps", "ffmpeg_error": err,
+        "renderer": f"MuJoCo EpisodeRecorder, {a.camera} camera, 25 fps", "camera": a.camera,
+        "robot_visibility": recorder.visibility_summary(), "ffmpeg_error": err,
         "stage": a.stage, "layout_index": a.index, "split": "validation",
-        "configuration": {k: v for k, v in vars(a).items() if k not in ("repo", "out", "evidence", "caption")},
+        "configuration": {k: v for k, v in vars(a).items() if k not in ("repo", "out", "evidence", "caption", "camera", "visibility_every")},
         "outcome_of_this_run": {"success": bool(row["success"]), "failure": row["failure"], "elapsed_s": row["elapsed_s"],
                                 "recording_stopped_early": a.max_seconds is not None and row["elapsed_s"] >= a.max_seconds and row["failure"] is None and not row["success"]},
         "evidence": str(a.evidence) if a.evidence else None,

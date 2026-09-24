@@ -42,7 +42,24 @@ Logged per step (step 0 = after reset, before any action), per robot, per env:
   ankle_z      z of each *ankle_roll* body;  shoulder_z  z of each *shoulder_pitch*
   foot_force   |net contact force| on each foot body from contact_a / contact_b
   joint_err    max |joint_pos - default_joint_pos|
-and per env: every termination term's value, object z above the origin.
+  hand_z       z of each hand/wrist end body (first of 'wrist', 'hand',
+               'gripper', 'elbow' that matches a body name; names printed)
+  hand_xy_off_w  xy of each hand body minus the robot's root xy, world frame
+  gripper_z    z of bodies containing 'gripper' or 'finger' (Grip variants
+               only: add_gripper.py adds arm_*_finger_link; the fingertips sit
+               below the hand link)
+and per env: every termination term's value, object z above the origin and
+`object_pos` (xyz above the origin; env origins sit at z = 0 on the plane, so
+these are world heights).
+
+`--init_joint_pose standing_pinch_arms` (hand-height measurement for the task
+author): legs from the upstream HUMANOID_LITE_CFG standing pose, arms at the
+`_PINCH_JOINT_POS` values from coop_lift_env_cfg, every other configured joint
+(e.g. the Grip variants' gripper joints) as configured. The JSON then carries
+`hand_height`: hand z at step 0 (reset) and step 1 (first policy step, before
+the topple) next to `configured_object_spawn_z` (GRASP_Z) and
+`delta = hand_z(step 1) - object_spawn_z` -- positive means raise the object.
+Grep line per condition:  HAND-HEIGHT <task> <condition> step1_hand_z=.. object_z=.. delta=..
 
 Output: one JSON per condition, `<out_dir>/<task>__<condition>.json`, with
 `first_fire` (first step each term fires, overall and per env), the time
@@ -85,11 +102,30 @@ parser.add_argument("--init_z_offset", type=float, default=0.0,
                     help="metres added to both robots' configured init_state z before the env is built "
                          "(spawn-height sweep; 0 = as configured)")
 parser.add_argument("--tag", default="", help="suffix for the output file names, e.g. z-0.095")
-parser.add_argument("--init_joint_pose", choices=("configured", "standing"), default="configured",
+parser.add_argument("--init_joint_pose", choices=("configured", "standing", "standing_pinch_arms"),
+                    default="configured",
                     help="'standing' replaces both robots' init joint_pos with the upstream HUMANOID_LITE_CFG "
-                         "standing pose (the pose every locomotion task spawns in)")
+                         "standing pose (the pose every locomotion task spawns in); "
+                         "'standing_pinch_arms' keeps the upstream standing legs but puts the arm joints at "
+                         "the coop_lift_env_cfg._PINCH_JOINT_POS values (other configured joints unchanged)")
 parser.add_argument("--init_z", type=float, default=None,
                     help="absolute init_state z for both robots (overrides --init_z_offset)")
+
+
+def merge_standing_pinch_arms(configured: dict, standing: dict, pinch: dict) -> dict:
+    """Legs (and everything else) from the upstream standing pose, arms from the pinch pose.
+
+    Starts from the task's configured joint_pos so joints that only the task adds
+    (the Grip variants' `arm_*_gripper_joint`) keep their configured value, then
+    overlays every upstream standing value, then the pinch values of the arm
+    joints only (`arm_*` keys that are not gripper joints).
+    """
+    out = dict(configured)
+    out.update(standing)
+    out.update({k: v for k, v in pinch.items()
+                if k.startswith("arm_") and "gripper" not in k})
+    return out
+
 
 # --help must not boot Isaac Sim: answer it before importing isaaclab.
 if any(a in ("-h", "--help") for a in sys.argv[1:]):
@@ -113,6 +149,7 @@ from bhl_robust.quat_order import quat_order  # noqa: E402
 from bhl_robust.tasks.coop_lift_mdp import _t, _tilt_from_quat  # noqa: E402
 
 ROBOTS = ("robot_a", "robot_b")
+RUN_META: dict = {}   # filled by main(): resolved init pose, configured object spawn z
 
 
 def _r(x, nd: int = 5):
@@ -160,6 +197,12 @@ class Probe:
                 "body_names": names,
                 "ankle_idx": _idx(names, ("ankle_roll", "ankle", "foot")),
                 "shoulder_idx": _idx(names, ("shoulder_pitch", "shoulder")),
+                # Hand/wrist end bodies, first matching key wins (priority order).
+                "hand_idx": _idx(names, ("wrist", "hand", "gripper", "elbow")),
+                # Finger/gripper jaw bodies: scripts/add_gripper.py names them
+                # arm_*_finger_link (the joint is arm_*_gripper_joint), so match both.
+                "gripper_idx": [i for i, nm in enumerate(names)
+                                if any(k in nm.lower() for k in ("gripper", "finger"))],
                 "sensor": None, "foot_sensor_idx": [], "foot_sensor_names": [],
             }
             sname = "contact_" + r.split("_")[-1]
@@ -183,6 +226,10 @@ class Probe:
                             pass
                 return None
             m["joint_names"] = names_j
+            m["hand_names"] = [names[i] for i in m["hand_idx"]]
+            m["hand_key"] = next((k for k in ("wrist", "hand", "gripper", "elbow")
+                                  if any(k in nm.lower() for nm in names)), None)
+            m["gripper_names"] = [names[i] for i in m["gripper_idx"]]
             m["stiffness"] = _vec("joint_stiffness")
             m["damping"] = _vec("joint_damping")
             m["effort_limit"] = _vec("joint_effort_limits", "joint_effort_limits_sim", "joint_effort_limit")
@@ -203,7 +250,8 @@ class Probe:
             pg = _t(art.data.projected_gravity_b)
             tilt_pg = torch.acos((-pg[:, 2]).clamp(-1.0, 1.0))
             root = _t(art.data.root_pos_w)
-            bz = _t(art.data.body_pos_w)[..., 2] - org[:, 2:3]
+            bp = _t(art.data.body_pos_w)
+            bz = bp[..., 2] - org[:, 2:3]
             jerr = (_t(art.data.joint_pos) - _t(art.data.default_joint_pos)).abs().max(dim=1).values
             row = {
                 "tilt_native": tilt_native, "tilt_term": tilt_term, "tilt_pg": tilt_pg,
@@ -214,6 +262,9 @@ class Probe:
                 "shoulder_z": bz[:, m["shoulder_idx"]] if m["shoulder_idx"] else None,
                 "joint_err": jerr,
                 "foot_force": None,
+                "hand_z": bz[:, m["hand_idx"]] if m["hand_idx"] else None,
+                "hand_xy_off_w": (bp[:, m["hand_idx"], :2] - root[:, None, :2]) if m["hand_idx"] else None,
+                "gripper_z": bz[:, m["gripper_idx"]] if m["gripper_idx"] else None,
             }
             app = getattr(art.data, "applied_torque", None)
             comp = getattr(art.data, "computed_torque", None)
@@ -232,8 +283,13 @@ class Probe:
                     row["foot_force"] = f[:, m["foot_sensor_idx"], :].norm(dim=-1)
             out[r] = {k: _r(v) for k, v in row.items()}
         if self.has_object:
-            oz = _t(u.scene["object"].data.root_pos_w)[:, 2] - org[:, 2]
-            out["object_z"] = _r(oz)
+            op = _t(u.scene["object"].data.root_pos_w)
+            out["object_z"] = _r(op[:, 2] - org[:, 2])
+            out["object_pos"] = _r(op - org)
+            # xy of the object relative to each robot's root, world frame: where
+            # the payload sits with respect to the body whose hands must reach it.
+            out["object_xy_off_from_base_w"] = {
+                r: _r(op[:, :2] - _t(u.scene[r].data.root_pos_w)[:, :2]) for r in self.robots}
         return out
 
 
@@ -403,8 +459,47 @@ def run_condition(env, probe: Probe, cond: str, steps: int, seed: int) -> dict:
                 f"AT FIRST FIRE a robot's native tilt is {tn_max:.3f} > 0.78: it has "
                 f"physically tipped over by step {s}.")
 
+    # ---------------------------------------------------- hand height (author)
+    hand_height = {"note": "hand_z is the z of the matched hand body's frame above the env origin "
+                           "(= world z on the flat plane); delta = mean hand z at step 1 minus the "
+                           "configured object spawn z; positive means raise the object by that much",
+                   "object_spawn_z": RUN_META.get("configured_object_spawn_z")}
+    for label, sidx in (("step0", 0), ("step1", 1)):
+        if sidx >= len(series):
+            hand_height[label] = None
+            continue
+        per_robot, flat = {}, []
+        for r in probe.robots:
+            hz = series[sidx][r].get("hand_z")
+            if not hz:
+                per_robot[r] = None
+                continue
+            vals = [v for env in hz for v in env if v is not None]
+            flat.extend(vals)
+            n_hands = len(hz[0]) if hz else 0
+            per_hand = [_r(sum(env[j] for env in hz if env[j] is not None) /
+                           max(1, sum(1 for env in hz if env[j] is not None)))
+                        for j in range(n_hands)]
+            per_robot[r] = {"hand_names": probe.meta[r]["hand_names"],
+                            "mean_per_hand_over_envs": per_hand}
+        hand_height[label] = {
+            "per_robot": per_robot,
+            "mean": _r(sum(flat) / len(flat)) if flat else None,
+            "min": _r(min(flat)) if flat else None,
+            "max": _r(max(flat)) if flat else None,
+        }
+    oz = hand_height["object_spawn_z"]
+    m1 = (hand_height.get("step1") or {}).get("mean")
+    hand_height["delta_raise_object_by"] = _r(m1 - oz) if (m1 is not None and oz is not None) else None
+
     return {
         "task": args_cli.task, "condition": cond, "num_envs": n, "steps": steps,
+        "init_joint_pose": args_cli.init_joint_pose,
+        "init_joint_pos_resolved": RUN_META.get("init_joint_pos_resolved"),
+        "configured_object_spawn_z": RUN_META.get("configured_object_spawn_z"),
+        "hand_bodies": {r: {"key": probe.meta[r]["hand_key"], "names": probe.meta[r]["hand_names"],
+                            "gripper_names": probe.meta[r]["gripper_names"]} for r in probe.robots},
+        "hand_height": hand_height,
         "seed": seed, "error": err, "wall_s": round(wall, 2),
         "stack": {"quat_order": quat_order(), "bhl_stack": os.environ.get("BHL_STACK"),
                   "step_dt": u.step_dt, "physics_dt": u.physics_dt,
@@ -425,10 +520,12 @@ def run_condition(env, probe: Probe, cond: str, steps: int, seed: int) -> dict:
         "verdict": verdict,
         "diagnosis": diagnosis,
         "bodies": {r: {k: probe.meta[r][k] for k in
-                       ("ankle_idx", "shoulder_idx", "sensor", "foot_sensor_names")}
+                       ("ankle_idx", "shoulder_idx", "hand_idx", "gripper_idx", "sensor", "foot_sensor_names")}
                    | {"ankle_names": [probe.meta[r]["body_names"][i] for i in probe.meta[r]["ankle_idx"]],
                       "shoulder_names": [probe.meta[r]["body_names"][i] for i in probe.meta[r]["shoulder_idx"]],
-                      "n_bodies": len(probe.meta[r]["body_names"])}
+                      "hand_names": probe.meta[r]["hand_names"],
+                      "n_bodies": len(probe.meta[r]["body_names"]),
+                      "body_names": probe.meta[r]["body_names"]}
                    for r in probe.robots},
         "timeseries": series,
     }
@@ -445,6 +542,23 @@ def main() -> None:
             rc_ = getattr(cfg.scene, r)
             rc_.init_state.joint_pos = dict(HUMANOID_LITE_CFG.init_state.joint_pos)
             print(f"  {r}: init joint_pos <- upstream standing pose", flush=True)
+    elif args_cli.init_joint_pose == "standing_pinch_arms":
+        from berkeley_humanoid_lite_assets.robots.berkeley_humanoid_lite import HUMANOID_LITE_CFG
+        from bhl_robust.tasks.coop_lift_env_cfg import _PINCH_JOINT_POS
+        for r in ("robot_a", "robot_b"):
+            rc_ = getattr(cfg.scene, r)
+            jp = merge_standing_pinch_arms(dict(rc_.init_state.joint_pos),
+                                          dict(HUMANOID_LITE_CFG.init_state.joint_pos),
+                                          dict(_PINCH_JOINT_POS))
+            rc_.init_state.joint_pos = jp
+            arms = {k: v for k, v in jp.items() if k.startswith("arm_")}
+            print(f"  {r}: init joint_pos <- upstream standing legs + pinch arms {arms}", flush=True)
+    RUN_META["init_joint_pos_resolved"] = {r: dict(getattr(cfg.scene, r).init_state.joint_pos)
+                                           for r in ("robot_a", "robot_b")}
+    obj_cfg = getattr(cfg.scene, "object", None)
+    RUN_META["configured_object_spawn_z"] = (
+        float(obj_cfg.init_state.pos[2]) if obj_cfg is not None else None)
+    print(f"  configured object spawn z (GRASP_Z) {RUN_META['configured_object_spawn_z']}", flush=True)
     if args_cli.init_z is not None:
         for r in ("robot_a", "robot_b"):
             rc_ = getattr(cfg.scene, r)
@@ -469,6 +583,8 @@ def main() -> None:
         print(f"  {r}: ankle bodies {[m['body_names'][i] for i in m['ankle_idx']]}  "
               f"shoulder bodies {[m['body_names'][i] for i in m['shoulder_idx']]}  "
               f"foot sensor bodies {m['foot_sensor_names']}", flush=True)
+        print(f"  {r}: hand bodies (key '{m['hand_key']}') {m['hand_names']}  "
+              f"gripper bodies {m['gripper_names']}  all bodies {m['body_names']}", flush=True)
 
     rc = 0
     for cond in args_cli.conditions:
@@ -483,6 +599,12 @@ def main() -> None:
               f"max_tilt_native {res['max_tilt_native']}", flush=True)
         for line in res["diagnosis"]:
             print(f"    {line}", flush=True)
+        hh = res["hand_height"]
+        s1 = (hh.get("step1") or {}).get("mean")
+        s0 = (hh.get("step0") or {}).get("mean")
+        print(f"HAND-HEIGHT {args_cli.task} {cond} step1_hand_z={s1} step0_hand_z={s0} "
+              f"object_z={hh.get('object_spawn_z')} delta={hh.get('delta_raise_object_by')}  "
+              f"hands={res['hand_bodies']}", flush=True)
         print(f"wrote {path}", flush=True)
         if res["error"]:
             rc = 1

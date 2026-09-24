@@ -12,10 +12,18 @@ falls) is extended by freezing its last frame, so the fall stays on screen
 instead of the pair collapsing to the length of the failure. A red outline is
 drawn from the fall onward — the same marker the evaluator burns into the MP4,
 thickened after downscale so it still reads at GIF size.
+
+Colour convention: the FAILING / negative panel carries the red label and the
+red outline, the succeeding panel the green label. `outline_right` marks the
+right panel as the failure (the locomotion pairs below), `outline_left` the left
+one (the Mission 7 pairs, whose baseline is on the left). Until 2026-09-23 the
+Mission 7 launchers passed `outline_right=True` with the success on the right,
+which coloured the success red; `pair_sidecar` now records which panel is red.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import subprocess
@@ -23,6 +31,27 @@ import sys
 from pathlib import Path
 
 FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+GREEN, RED = "0x1f7a4d", "0x9c2222"
+
+
+def font_file() -> str:
+    """The DejaVu path the clips were made with, else whatever fontconfig has.
+
+    Compute nodes carry the DejaVu path; the login node does not, and drawtext
+    aborts on a missing fontfile.
+    """
+    if Path(FONT).is_file():
+        return FONT
+    try:
+        alt = subprocess.run(["fc-match", "-f", "%{file}", "sans:bold"],
+                             capture_output=True, text=True, timeout=30).stdout.strip()
+    except Exception:                                            # noqa: BLE001
+        alt = ""
+    return alt if alt and Path(alt).is_file() else FONT
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 W = 430           # per-panel width; 2*W + divider stays under GitHub's column
 FPS = 10
 MAX_S = 9.0       # biped pairs; keeps each GIF a few MB rather than tens
@@ -45,13 +74,32 @@ def pair_gif(
     right_label: str,
     max_s: float = MAX_S,
     outline_right: bool = False,
+    outline_left: bool = False,
+    speed: float = 1.0,
+    fps: int = FPS,
+    outline_from_s: float | None = None,
+    max_colors: int = 128,
 ):
+    """Composite two clips side by side into one looping GIF.
+
+    outline_right / outline_left: which panel is the failure. That panel gets
+    the red label and a red outline from `outline_from_s` (source-clip seconds;
+    default 0.4 s before its end, where the evaluator holds the fall) onward.
+    speed > 1 plays both sources faster (setpts), so `max_s` is GIF seconds.
+    """
+    if outline_right and outline_left:
+        raise ValueError("only one panel can be the failure")
     d_left, d_right = duration(left), duration(right)
     # Pad to the budget so a fall freezes on screen instead of the GIF
     # ending when the episode does.
     d = max_s
     # Evaluator holds 15 extra frames (~0.3 s) on the fall; outline from there.
-    fall_t = max(0.05, d_right - 0.40) if outline_right else None
+    fall_t = None
+    if outline_right or outline_left:
+        d_fail = d_right if outline_right else d_left
+        src_t = max(0.05, d_fail - 0.40) if outline_from_s is None else max(0.0, outline_from_s)
+        fall_t = src_t / speed                    # drawbox runs after setpts
+    font = font_file()
 
     def panel(idx: int, label: str, colour: str, outline_t: float | None) -> str:
         safe = label.replace(":", r"\:").replace("'", "")
@@ -61,20 +109,21 @@ def pair_gif(
                 f"drawbox=x=0:y=0:w=iw:h=ih:c=0xdc2828:t=8:"
                 f"enable='gte(t,{outline_t:.2f})',"
             )
+        rate = "" if speed == 1.0 else f"setpts=PTS/{speed:g},"
         return (
-            f"[{idx}:v]scale={W}:-2,{box}"
+            f"[{idx}:v]scale={W}:-2,{rate}{box}"
             f"tpad=stop_mode=clone:stop_duration={max_s},"
             f"trim=duration={d:.2f},setpts=PTS-STARTPTS,"
-            f"drawtext=fontfile={FONT}:text='{safe}':x=(w-tw)/2:y=h-38:"
+            f"drawtext=fontfile={font}:text='{safe}':x=(w-tw)/2:y=h-38:"
             f"fontsize=19:fontcolor=white:box=1:boxcolor={colour}@0.85:boxborderw=9"
             f"[p{idx}]"
         )
 
     filt = (
-        panel(0, left_label, "0x1f7a4d", None) + ";" +
-        panel(1, right_label, "0x9c2222" if outline_right else "0x1f7a4d", fall_t) + ";" +
-        "[p0][p1]hstack=inputs=2,fps=" + str(FPS) + ",split[s0][s1];"
-        "[s0]palettegen=max_colors=128[pal];"
+        panel(0, left_label, RED if outline_left else GREEN, fall_t if outline_left else None) + ";" +
+        panel(1, right_label, RED if outline_right else GREEN, fall_t if outline_right else None) + ";" +
+        "[p0][p1]hstack=inputs=2,fps=" + str(fps) + ",split[s0][s1];"
+        f"[s0]palettegen=max_colors={max_colors}[pal];"
         "[s1][pal]paletteuse=dither=bayer:bayer_scale=3"
     )
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -82,9 +131,110 @@ def pair_gif(
         ["ffmpeg", "-y", "-loglevel", "error", "-i", str(left), "-i", str(right),
          "-filter_complex", filt, "-loop", "0", str(out)], check=True)
     mb = out.stat().st_size / 1e6
-    print(f"  {out.name}  {mb:.1f} MB  ({d:.1f}s, sources {d_left:.1f}/{d_right:.1f}"
-          f"{'' if fall_t is None else f', outline @ {fall_t:.1f}s'})")
+    print(f"  {out.name}  {mb:.1f} MB  ({d:.1f}s @ {speed:g}x, sources {d_left:.1f}/{d_right:.1f}"
+          f"{'' if fall_t is None else f', outline @ {fall_t:.1f}s gif time'})")
     return mb
+
+
+def pair_sidecar(
+    gif: Path,
+    left_mp4: Path,
+    right_mp4: Path,
+    repo: Path,
+    *,
+    left_label: str,
+    right_label: str,
+    red_panel: str,
+    playback_speed: float,
+    gif_budget_s: float,
+    camera: str,
+    carry_from: Path | None = None,
+    extra: dict | None = None,
+) -> dict:
+    """Write docs/gifs/<name>.json for a pair GIF (the shape the Mission 7 sidecars use).
+
+    Reads each MP4's own sidecar (written by the render scripts) for outcome,
+    configuration/controller and evidence hashes. `carry_from` is a previous
+    sidecar whose caption / labels / scope / evidence strings are carried over
+    verbatim (they hold the scientific caveats) and whose GIF hash is recorded
+    as superseded.
+    """
+    repo = Path(repo).resolve()
+
+    def rel(path: Path) -> str:
+        path = Path(path).resolve()
+        return str(path.relative_to(repo)) if path.is_relative_to(repo) else str(path)
+
+    sides = {}
+    for key, mp4, label in (("left", left_mp4, left_label), ("right", right_mp4, right_label)):
+        meta = json.loads(Path(mp4).with_suffix(".json").read_text())
+        side = {"label": label, "outcome": meta["outcome_of_this_run"], "camera": meta.get("camera"),
+                "robot_visibility": meta.get("robot_visibility")}
+        for k in ("controller", "reset_sequence", "configuration", "re_encoded"):
+            if k in meta:
+                side[k] = meta[k]
+        sides[key] = (meta, side)
+    (lm, left), (rm, right) = sides["left"], sides["right"]
+    prev = json.loads(carry_from.read_text()) if carry_from and Path(carry_from).is_file() else {}
+    record = {
+        "output": rel(gif), "output_sha256": sha256(gif),
+        "source_clip": [rel(m) for m in (left_mp4, right_mp4)],
+        "source_sha256": [sha256(left_mp4), sha256(right_mp4)],
+        "evidence": [lm.get("evidence"), rm.get("evidence")],
+        "evidence_sha256": [lm.get("evidence_sha256"), rm.get("evidence_sha256")],
+        "left": left, "right": right,
+        "expected_success": {"left": red_panel != "left", "right": red_panel != "right"},
+        "completion_s": {k: (v["outcome"]["elapsed_s"] if v["outcome"]["success"] else None) for k, v in (("left", left), ("right", right))},
+        "red_outline_panel": red_panel, "green_panel": "right" if red_panel == "left" else "left",
+        "playback_speed": playback_speed, "gif_budget_s": gif_budget_s, "camera": camera,
+    }
+    if lm.get("reproduces_evaluated_episode") is not None:
+        record["reproduces_evaluated_episode"] = bool(lm.get("reproduces_evaluated_episode") and rm.get("reproduces_evaluated_episode"))
+    for k in ("caption", "labels", "scope"):
+        if k in prev:
+            record[k] = prev[k]
+    if prev:
+        legacy = "red_outline_panel" not in prev        # pre-2026-09-23 sidecar: tracking camera, outline_right=True
+        record["supersedes"] = {"output_sha256": prev.get("output_sha256"), "source_sha256": prev.get("source_sha256"),
+                               "camera": prev.get("camera", "tracking"),
+                               "red_outline_panel": prev.get("red_outline_panel", "right" if legacy else None),
+                               "note": ("previous GIF: tracking camera behind the maze walls, success panel outlined red" if legacy
+                                        else f"previous GIF: {prev.get('camera')} camera, red outline on the {prev.get('red_outline_panel')} panel")}
+    if extra:
+        record.update(extra)
+    record["git_commit"] = subprocess.check_output(["git", "-C", str(repo), "rev-parse", "HEAD"], text=True).strip()
+    Path(gif).with_suffix(".json").write_text(json.dumps(record, indent=2) + "\n")
+    return record
+
+
+def ffmpeg_visibility(mp4: Path, *, sample_fps: int = 5, crop: float = 0.4, size=(160, 90)) -> dict:
+    """Per-second luminance statistics of a clip, decoded through ffmpeg.
+
+    The robot sits at the tracked lookat (frame centre), so the central crop
+    is the robot region: `central_std` is its spatial contrast and
+    `central_diff` the mean absolute frame-to-frame change. Wall-only frames
+    from the old tracking camera scored central_std 3.5-9 and central_diff
+    0-0.3; this is a printed cross-check for the submitter, while the exact
+    verdict comes from the recorder's segmentation probe in the MP4 sidecar.
+    """
+    import numpy as np
+    w, h = size
+    raw = subprocess.run(
+        ["ffmpeg", "-v", "error", "-i", str(mp4), "-vf", f"fps={sample_fps},scale={w}:{h}",
+         "-f", "rawvideo", "-pix_fmt", "gray", "-"], capture_output=True, check=True).stdout
+    frames = np.frombuffer(raw, np.uint8).reshape(-1, h, w).astype(np.float32)
+    lo, hi = (1 - crop) / 2, (1 + crop) / 2
+    centre = frames[:, int(h * lo):int(h * hi), int(w * lo):int(w * hi)]
+    rows = []
+    for s in range(0, len(frames), sample_fps):
+        blk, cb = frames[s:s + sample_fps], centre[s:s + sample_fps]
+        rows.append({"t_s": s // sample_fps, "mean_luminance": round(float(blk.mean()), 2),
+                     "central_std": round(float(cb.std(axis=(1, 2)).mean()), 2),
+                     "central_diff": round(float(np.abs(np.diff(cb, axis=0)).mean()) if len(cb) > 1 else 0.0, 3)})
+    return {"clip": str(mp4), "per_second": rows,
+            "median_central_std": float(np.median([r["central_std"] for r in rows])),
+            "median_central_diff": float(np.median([r["central_diff"] for r in rows])),
+            "old_tracking_reference": {"central_std": "3.5-9", "central_diff": "0-0.3"}}
 
 
 def existing_clip(path: Path, *, allow_swap: bool = True) -> Path | None:

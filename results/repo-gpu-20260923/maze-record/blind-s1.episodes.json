@@ -1,0 +1,23 @@
+{
+  "label": "blind-s1",
+  "searches": {
+    "blind-s1-failure": {
+      "outcome": "base_orientation",
+      "episode": "blind-s1-s101"
+    }
+  },
+  "episodes": [
+    {
+      "episode": "blind-s1-s101",
+      "seed": 101,
+      "imu_delay_steps": 0,
+      "outcome": "base_orientation",
+      "steps": 69,
+      "terminations_fired": [
+        "base_orientation"
+      ],
+      "sensor_frames": 69,
+      "viewport_frames": 69
+    }
+  ]
+}

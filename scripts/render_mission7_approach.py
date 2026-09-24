@@ -13,7 +13,7 @@ import json
 import subprocess
 from pathlib import Path
 
-from bhl_robust.eval.video import EpisodeRecorder
+from bhl_robust.eval.video import CAMERA_PRESETS, EpisodeRecorder
 from bhl_robust.mission.approach_debug import DebugEnv
 from mission7_approach_followup import CONTROLLERS, balanced_layouts, controller_note, run_controller
 
@@ -30,6 +30,10 @@ def main():
     p.add_argument("--split", choices=("test", "validation"), default="test")
     p.add_argument("--index", type=int, required=True)
     p.add_argument("--caption", default="")
+    p.add_argument("--camera", choices=sorted(CAMERA_PRESETS), default="tracking",
+                   help="EpisodeRecorder preset; overhead clears the 1.1 m maze walls, tracking is the historical default")
+    p.add_argument("--visibility-every", type=int, default=25,
+                   help="segmentation probe of robot pixel coverage every N frames (0 disables)")
     p.add_argument("--evidence", type=Path, default=None)
     p.add_argument("--replay-order", default=None,
                    help="direction key such as '-1,+0': reset through the balanced-matrix selection in the "
@@ -54,7 +58,8 @@ def main():
     else:
         env.reset(a.index)
     controller = CONTROLLERS[a.controller](env)
-    recorder = EpisodeRecorder(env.model, a.out, fps=25.0, caption=a.caption, track_body=f"{env.slot.prefix}base")
+    recorder = EpisodeRecorder(env.model, a.out, fps=25.0, caption=a.caption, track_body=f"{env.slot.prefix}base",
+                               camera=a.camera, visibility_every=a.visibility_every)
     runner_step = env.runner.step
 
     def recorded_step(targets):
@@ -66,7 +71,8 @@ def main():
     err = recorder.close()
     sidecar = {
         "output": str(a.out.relative_to(a.repo)), "output_sha256": sha256(a.out) if a.out.exists() else None,
-        "renderer": "MuJoCo EpisodeRecorder, tracking camera, 25 fps", "ffmpeg_error": err,
+        "renderer": f"MuJoCo EpisodeRecorder, {a.camera} camera, 25 fps", "camera": a.camera,
+        "robot_visibility": recorder.visibility_summary(), "ffmpeg_error": err,
         "task": "Mission 7 privileged Approach, 0.65 m spawn, balanced-matrix layout", "split": a.split, "layout_index": a.index,
         "controller_arm": a.controller, "controller": controller_note(a.controller, controller),
         "reset_sequence": replayed or [a.index],
