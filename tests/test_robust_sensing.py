@@ -34,3 +34,18 @@ def test_eval_overrides_and_validation():
         RobustSensingState(4, "cpu", p_lidar_off=1.5)
     with pytest.raises(ValueError):
         RobustSensingState(4, "cpu", max_delay_steps=-1)
+
+
+def test_all_zero_parameters_are_identity():
+    s = RobustSensingState(64, "cpu", p_lidar_off=0.0, p_stereo_off=0.0, gyro_bias_std=0.0,
+                           gravity_bias_std=0.0, max_delay_steps=0)
+    s.resample(torch.arange(64))
+    assert s.lidar_on.all() and s.stereo_on.all() and (s.delay == 0).all()
+    x = torch.randn(64, 36); y = torch.randn(64, 32)
+    assert torch.equal(s.lidar(x), x) and torch.equal(s.stereo(y), y)
+    a1, a2 = torch.randn(64, 3), torch.randn(64, 3)
+    s.angular_velocity(a1)
+    assert torch.equal(s.angular_velocity(a2), a2)
+    g1, g2 = torch.randn(64, 3), torch.randn(64, 3)
+    s.gravity(g1)
+    assert torch.equal(s.gravity(g2), g2)

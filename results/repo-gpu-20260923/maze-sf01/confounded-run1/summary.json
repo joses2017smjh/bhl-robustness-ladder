@@ -1,6 +1,6 @@
 {
-  "protocol": "maze_recovery_probe.py --settings with per-setting restore of the training noise std (fixed 2026-09-24); Full-stage s0 checkpoints (Blind, Lidar, Stereo, Both), 32 envs x 600 steps, seed 100, corruption on; IMU delay on the IMU columns only; position/heading error only on the route teacher",
-  "job": 21404944,
+  "protocol": "maze_recovery_probe.py --settings, Full-stage s0 checkpoints (Blind, Lidar, Stereo, Both), 32 envs x 600 steps, seed 100, corruption on; IMU delay applies to the IMU columns only; position/heading error applies only to the route teacher",
+  "job": 21402926,
   "arms": {
     "Blind": {
       "baseline_noise_on": {
@@ -14,12 +14,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 1.0,
-        "episodes_completed": 207,
-        "successes": 206,
+        "episodes_completed": 210,
+        "successes": 207,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.0026757593732327223,
-        "max_displacement_m": 3.1847903728485107
+        "min_goal_distance_m": 0.006073400378227234,
+        "max_displacement_m": 3.264594793319702
       },
       "gyro0.10": {
         "name": "gyro0.10",
@@ -32,12 +32,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 1.0,
-        "episodes_completed": 206,
-        "successes": 204,
+        "episodes_completed": 207,
+        "successes": 205,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.004912571981549263,
-        "max_displacement_m": 3.2179291248321533
+        "min_goal_distance_m": 0.005416510161012411,
+        "max_displacement_m": 3.382673740386963
       },
       "gyro0.20": {
         "name": "gyro0.20",
@@ -49,13 +49,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 1.0,
-        "episodes_completed": 202,
-        "successes": 200,
+        "first_episode_success_rate": 0.96875,
+        "episodes_completed": 206,
+        "successes": 198,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.011883066967129707,
-        "max_displacement_m": 3.2821381092071533
+        "min_goal_distance_m": 0.0029471321031451225,
+        "max_displacement_m": 3.210367202758789
       },
       "grav0.05": {
         "name": "grav0.05",
@@ -68,12 +68,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 1.0,
-        "episodes_completed": 202,
-        "successes": 194,
+        "episodes_completed": 199,
+        "successes": 188,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.006577327847480774,
-        "max_displacement_m": 3.2919909954071045
+        "min_goal_distance_m": 0.009241477586328983,
+        "max_displacement_m": 3.270322799682617
       },
       "grav0.10": {
         "name": "grav0.10",
@@ -86,12 +86,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.84375,
-        "episodes_completed": 178,
-        "successes": 142,
+        "episodes_completed": 183,
+        "successes": 145,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.005370265804231167,
-        "max_displacement_m": 3.2870514392852783
+        "min_goal_distance_m": 0.005100191570818424,
+        "max_displacement_m": 3.393972873687744
       },
       "delay1": {
         "name": "delay1",
@@ -103,13 +103,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.53125,
-        "episodes_completed": 178,
-        "successes": 87,
-        "dead_ends": 0,
+        "first_episode_success_rate": 0.3125,
+        "episodes_completed": 214,
+        "successes": 44,
+        "dead_ends": 3,
         "timeouts": 0,
-        "min_goal_distance_m": 0.008837108500301838,
-        "max_displacement_m": 3.5869412422180176
+        "min_goal_distance_m": 0.007436731364578009,
+        "max_displacement_m": 3.281517267227173
       },
       "delay2": {
         "name": "delay2",
@@ -122,12 +122,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.0,
-        "episodes_completed": 398,
+        "episodes_completed": 461,
         "successes": 0,
-        "dead_ends": 2,
-        "timeouts": 2,
-        "min_goal_distance_m": 0.09525897353887558,
-        "max_displacement_m": 3.2227025032043457
+        "dead_ends": 1,
+        "timeouts": 0,
+        "min_goal_distance_m": 0.05919220671057701,
+        "max_displacement_m": 3.2286734580993652
       },
       "delay4": {
         "name": "delay4",
@@ -140,12 +140,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.0,
-        "episodes_completed": 666,
+        "episodes_completed": 765,
         "successes": 0,
-        "dead_ends": 4,
-        "timeouts": 3,
-        "min_goal_distance_m": 1.4868806600570679,
-        "max_displacement_m": 1.6010217666625977
+        "dead_ends": 3,
+        "timeouts": 0,
+        "min_goal_distance_m": 1.3377190828323364,
+        "max_displacement_m": 1.703980565071106
       },
       "pos0.05": {
         "name": "pos0.05",
@@ -157,13 +157,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.96875,
-        "episodes_completed": 210,
-        "successes": 203,
-        "dead_ends": 0,
+        "first_episode_success_rate": 0.84375,
+        "episodes_completed": 188,
+        "successes": 131,
+        "dead_ends": 2,
         "timeouts": 0,
-        "min_goal_distance_m": 0.0020776656456291676,
-        "max_displacement_m": 3.2503063678741455
+        "min_goal_distance_m": 0.004638347774744034,
+        "max_displacement_m": 3.3523154258728027
       },
       "pos0.10": {
         "name": "pos0.10",
@@ -175,13 +175,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.90625,
-        "episodes_completed": 200,
-        "successes": 191,
+        "first_episode_success_rate": 0.84375,
+        "episodes_completed": 180,
+        "successes": 146,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.001068605575710535,
-        "max_displacement_m": 3.506239652633667
+        "min_goal_distance_m": 0.0032104819547384977,
+        "max_displacement_m": 3.3395566940307617
       },
       "pos0.20": {
         "name": "pos0.20",
@@ -193,13 +193,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.78125,
-        "episodes_completed": 163,
-        "successes": 133,
-        "dead_ends": 0,
+        "first_episode_success_rate": 0.59375,
+        "episodes_completed": 152,
+        "successes": 86,
+        "dead_ends": 1,
         "timeouts": 1,
-        "min_goal_distance_m": 0.012612528167665005,
-        "max_displacement_m": 3.290144205093384
+        "min_goal_distance_m": 0.01148550771176815,
+        "max_displacement_m": 3.3005685806274414
       },
       "posnoise0.05": {
         "name": "posnoise0.05",
@@ -211,13 +211,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.96875,
-        "episodes_completed": 209,
-        "successes": 204,
-        "dead_ends": 0,
+        "first_episode_success_rate": 0.84375,
+        "episodes_completed": 184,
+        "successes": 144,
+        "dead_ends": 2,
         "timeouts": 0,
-        "min_goal_distance_m": 0.0044586616568267345,
-        "max_displacement_m": 3.273043155670166
+        "min_goal_distance_m": 0.007982680574059486,
+        "max_displacement_m": 3.493783950805664
       },
       "yaw3": {
         "name": "yaw3",
@@ -229,13 +229,13 @@
         "pose_yaw_deg": 3.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 1.0,
-        "episodes_completed": 209,
-        "successes": 207,
+        "first_episode_success_rate": 0.78125,
+        "episodes_completed": 178,
+        "successes": 140,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.01846245676279068,
-        "max_displacement_m": 3.166471004486084
+        "min_goal_distance_m": 0.017085794359445572,
+        "max_displacement_m": 3.2808754444122314
       },
       "yaw10": {
         "name": "yaw10",
@@ -247,13 +247,13 @@
         "pose_yaw_deg": 10.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 1.0,
-        "episodes_completed": 210,
-        "successes": 209,
+        "first_episode_success_rate": 0.84375,
+        "episodes_completed": 187,
+        "successes": 139,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.008134265430271626,
-        "max_displacement_m": 3.1627838611602783
+        "min_goal_distance_m": 0.006739042699337006,
+        "max_displacement_m": 3.272003173828125
       }
     },
     "Both": {
@@ -272,8 +272,8 @@
         "successes": 121,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.2907447814941406,
-        "max_displacement_m": 2.8799521923065186
+        "min_goal_distance_m": 0.3042956292629242,
+        "max_displacement_m": 2.898791551589966
       },
       "gyro0.10": {
         "name": "gyro0.10",
@@ -285,13 +285,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 1.0,
-        "episodes_completed": 125,
-        "successes": 125,
+        "first_episode_success_rate": 0.96875,
+        "episodes_completed": 124,
+        "successes": 123,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.2777334749698639,
-        "max_displacement_m": 2.8765711784362793
+        "min_goal_distance_m": 0.30064964294433594,
+        "max_displacement_m": 2.8802530765533447
       },
       "gyro0.20": {
         "name": "gyro0.20",
@@ -303,13 +303,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.96875,
-        "episodes_completed": 127,
-        "successes": 124,
+        "first_episode_success_rate": 0.9375,
+        "episodes_completed": 123,
+        "successes": 121,
         "dead_ends": 0,
-        "timeouts": 0,
-        "min_goal_distance_m": 0.29787951707839966,
-        "max_displacement_m": 2.8825485706329346
+        "timeouts": 1,
+        "min_goal_distance_m": 0.2882072329521179,
+        "max_displacement_m": 2.9005188941955566
       },
       "grav0.05": {
         "name": "grav0.05",
@@ -326,8 +326,8 @@
         "successes": 119,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.3002711236476898,
-        "max_displacement_m": 2.86777663230896
+        "min_goal_distance_m": 0.29053276777267456,
+        "max_displacement_m": 2.8708269596099854
       },
       "grav0.10": {
         "name": "grav0.10",
@@ -339,13 +339,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.875,
-        "episodes_completed": 114,
-        "successes": 94,
+        "first_episode_success_rate": 0.9375,
+        "episodes_completed": 113,
+        "successes": 105,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.05099507421255112,
-        "max_displacement_m": 3.0189859867095947
+        "min_goal_distance_m": 0.2371399849653244,
+        "max_displacement_m": 2.8770694732666016
       },
       "delay1": {
         "name": "delay1",
@@ -357,13 +357,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.53125,
-        "episodes_completed": 120,
-        "successes": 72,
+        "first_episode_success_rate": 0.46875,
+        "episodes_completed": 135,
+        "successes": 41,
         "dead_ends": 0,
         "timeouts": 1,
-        "min_goal_distance_m": 0.03369961678981781,
-        "max_displacement_m": 3.1235873699188232
+        "min_goal_distance_m": 0.07231052964925766,
+        "max_displacement_m": 3.1207735538482666
       },
       "delay2": {
         "name": "delay2",
@@ -375,13 +375,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.03125,
-        "episodes_completed": 256,
-        "successes": 3,
-        "dead_ends": 2,
-        "timeouts": 2,
-        "min_goal_distance_m": 0.11670655757188797,
-        "max_displacement_m": 3.144087553024292
+        "first_episode_success_rate": 0.0,
+        "episodes_completed": 314,
+        "successes": 1,
+        "dead_ends": 3,
+        "timeouts": 3,
+        "min_goal_distance_m": 0.17589955031871796,
+        "max_displacement_m": 2.866185426712036
       },
       "delay4": {
         "name": "delay4",
@@ -394,12 +394,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.0,
-        "episodes_completed": 518,
+        "episodes_completed": 510,
         "successes": 0,
         "dead_ends": 1,
-        "timeouts": 4,
-        "min_goal_distance_m": 1.8934588432312012,
-        "max_displacement_m": 1.1626651287078857
+        "timeouts": 6,
+        "min_goal_distance_m": 1.5315709114074707,
+        "max_displacement_m": 1.419635534286499
       },
       "pos0.05": {
         "name": "pos0.05",
@@ -411,13 +411,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.9375,
-        "episodes_completed": 122,
-        "successes": 118,
+        "first_episode_success_rate": 0.875,
+        "episodes_completed": 108,
+        "successes": 90,
         "dead_ends": 0,
         "timeouts": 1,
-        "min_goal_distance_m": 0.09480790048837662,
-        "max_displacement_m": 2.877686023712158
+        "min_goal_distance_m": 0.0675543025135994,
+        "max_displacement_m": 2.9213128089904785
       },
       "pos0.10": {
         "name": "pos0.10",
@@ -429,13 +429,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.9375,
-        "episodes_completed": 107,
-        "successes": 104,
+        "first_episode_success_rate": 0.84375,
+        "episodes_completed": 105,
+        "successes": 91,
         "dead_ends": 0,
         "timeouts": 2,
-        "min_goal_distance_m": 0.27272558212280273,
-        "max_displacement_m": 2.904385805130005
+        "min_goal_distance_m": 0.08636718988418579,
+        "max_displacement_m": 3.0288732051849365
       },
       "pos0.20": {
         "name": "pos0.20",
@@ -447,13 +447,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.84375,
-        "episodes_completed": 93,
-        "successes": 87,
+        "first_episode_success_rate": 0.8125,
+        "episodes_completed": 98,
+        "successes": 79,
         "dead_ends": 0,
         "timeouts": 4,
-        "min_goal_distance_m": 0.13744832575321198,
-        "max_displacement_m": 2.9472055435180664
+        "min_goal_distance_m": 0.14657233655452728,
+        "max_displacement_m": 3.017181873321533
       },
       "posnoise0.05": {
         "name": "posnoise0.05",
@@ -465,13 +465,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.96875,
-        "episodes_completed": 123,
-        "successes": 122,
+        "first_episode_success_rate": 0.78125,
+        "episodes_completed": 109,
+        "successes": 99,
         "dead_ends": 0,
-        "timeouts": 0,
-        "min_goal_distance_m": 0.29868122935295105,
-        "max_displacement_m": 2.881314754486084
+        "timeouts": 1,
+        "min_goal_distance_m": 0.2807036340236664,
+        "max_displacement_m": 2.8850438594818115
       },
       "yaw3": {
         "name": "yaw3",
@@ -483,13 +483,13 @@
         "pose_yaw_deg": 3.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.96875,
-        "episodes_completed": 122,
-        "successes": 121,
+        "first_episode_success_rate": 0.875,
+        "episodes_completed": 117,
+        "successes": 103,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.2736254930496216,
-        "max_displacement_m": 2.9097561836242676
+        "min_goal_distance_m": 0.10177623480558395,
+        "max_displacement_m": 2.9852945804595947
       },
       "yaw10": {
         "name": "yaw10",
@@ -502,12 +502,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.9375,
-        "episodes_completed": 125,
-        "successes": 123,
+        "episodes_completed": 106,
+        "successes": 98,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.30276206135749817,
-        "max_displacement_m": 2.8866124153137207
+        "min_goal_distance_m": 0.14019262790679932,
+        "max_displacement_m": 3.0084497928619385
       }
     },
     "Lidar": {
@@ -522,12 +522,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.96875,
-        "episodes_completed": 106,
-        "successes": 105,
+        "episodes_completed": 108,
+        "successes": 107,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.2824431359767914,
-        "max_displacement_m": 2.8819637298583984
+        "min_goal_distance_m": 0.2733672857284546,
+        "max_displacement_m": 2.9022767543792725
       },
       "gyro0.10": {
         "name": "gyro0.10",
@@ -539,13 +539,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.9375,
-        "episodes_completed": 110,
-        "successes": 106,
+        "first_episode_success_rate": 0.96875,
+        "episodes_completed": 109,
+        "successes": 108,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.28101855516433716,
-        "max_displacement_m": 2.879055976867676
+        "min_goal_distance_m": 0.27417632937431335,
+        "max_displacement_m": 2.882171869277954
       },
       "gyro0.20": {
         "name": "gyro0.20",
@@ -558,12 +558,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.9375,
-        "episodes_completed": 106,
-        "successes": 104,
+        "episodes_completed": 108,
+        "successes": 105,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.2622043788433075,
-        "max_displacement_m": 2.909977674484253
+        "min_goal_distance_m": 0.2515586018562317,
+        "max_displacement_m": 2.900980234146118
       },
       "grav0.05": {
         "name": "grav0.05",
@@ -576,12 +576,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.96875,
-        "episodes_completed": 104,
-        "successes": 103,
+        "episodes_completed": 103,
+        "successes": 102,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.25832003355026245,
-        "max_displacement_m": 2.910444498062134
+        "min_goal_distance_m": 0.2500726878643036,
+        "max_displacement_m": 2.8981070518493652
       },
       "grav0.10": {
         "name": "grav0.10",
@@ -593,13 +593,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.90625,
-        "episodes_completed": 105,
-        "successes": 80,
+        "first_episode_success_rate": 0.75,
+        "episodes_completed": 104,
+        "successes": 65,
         "dead_ends": 0,
-        "timeouts": 0,
-        "min_goal_distance_m": 0.051492106169462204,
-        "max_displacement_m": 3.0249674320220947
+        "timeouts": 1,
+        "min_goal_distance_m": 0.021956825628876686,
+        "max_displacement_m": 3.073071241378784
       },
       "delay1": {
         "name": "delay1",
@@ -611,13 +611,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.25,
-        "episodes_completed": 121,
-        "successes": 23,
-        "dead_ends": 1,
-        "timeouts": 6,
-        "min_goal_distance_m": 0.025722211226820946,
-        "max_displacement_m": 3.0120232105255127
+        "first_episode_success_rate": 0.03125,
+        "episodes_completed": 167,
+        "successes": 4,
+        "dead_ends": 0,
+        "timeouts": 4,
+        "min_goal_distance_m": 0.014332485385239124,
+        "max_displacement_m": 3.0763378143310547
       },
       "delay2": {
         "name": "delay2",
@@ -630,12 +630,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.0,
-        "episodes_completed": 296,
+        "episodes_completed": 330,
         "successes": 0,
-        "dead_ends": 4,
-        "timeouts": 6,
-        "min_goal_distance_m": 1.6823861598968506,
-        "max_displacement_m": 1.4319952726364136
+        "dead_ends": 3,
+        "timeouts": 3,
+        "min_goal_distance_m": 1.5289660692214966,
+        "max_displacement_m": 1.4419291019439697
       },
       "delay4": {
         "name": "delay4",
@@ -648,12 +648,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.0,
-        "episodes_completed": 627,
+        "episodes_completed": 717,
         "successes": 0,
-        "dead_ends": 3,
-        "timeouts": 2,
-        "min_goal_distance_m": 1.9001260995864868,
-        "max_displacement_m": 1.16233229637146
+        "dead_ends": 7,
+        "timeouts": 0,
+        "min_goal_distance_m": 1.8996695280075073,
+        "max_displacement_m": 1.0800007581710815
       },
       "pos0.05": {
         "name": "pos0.05",
@@ -665,13 +665,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.96875,
-        "episodes_completed": 107,
-        "successes": 104,
+        "first_episode_success_rate": 0.78125,
+        "episodes_completed": 97,
+        "successes": 69,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.2581096887588501,
-        "max_displacement_m": 2.882251024246216
+        "min_goal_distance_m": 0.11815299093723297,
+        "max_displacement_m": 3.255230188369751
       },
       "pos0.10": {
         "name": "pos0.10",
@@ -683,13 +683,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.9375,
-        "episodes_completed": 106,
-        "successes": 103,
+        "first_episode_success_rate": 0.8125,
+        "episodes_completed": 89,
+        "successes": 64,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.21826502680778503,
-        "max_displacement_m": 2.9343984127044678
+        "min_goal_distance_m": 0.08817672729492188,
+        "max_displacement_m": 3.0352299213409424
       },
       "pos0.20": {
         "name": "pos0.20",
@@ -701,13 +701,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.75,
-        "episodes_completed": 84,
-        "successes": 71,
-        "dead_ends": 0,
-        "timeouts": 3,
-        "min_goal_distance_m": 0.1029524877667427,
-        "max_displacement_m": 3.0689949989318848
+        "first_episode_success_rate": 0.5625,
+        "episodes_completed": 91,
+        "successes": 53,
+        "dead_ends": 1,
+        "timeouts": 2,
+        "min_goal_distance_m": 0.04827193170785904,
+        "max_displacement_m": 3.213923931121826
       },
       "posnoise0.05": {
         "name": "posnoise0.05",
@@ -719,13 +719,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.9375,
-        "episodes_completed": 111,
-        "successes": 108,
+        "first_episode_success_rate": 0.75,
+        "episodes_completed": 103,
+        "successes": 69,
         "dead_ends": 0,
-        "timeouts": 0,
-        "min_goal_distance_m": 0.23683610558509827,
-        "max_displacement_m": 2.895522117614746
+        "timeouts": 1,
+        "min_goal_distance_m": 0.0828922688961029,
+        "max_displacement_m": 3.419034242630005
       },
       "yaw3": {
         "name": "yaw3",
@@ -737,13 +737,13 @@
         "pose_yaw_deg": 3.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.9375,
-        "episodes_completed": 107,
-        "successes": 105,
+        "first_episode_success_rate": 0.78125,
+        "episodes_completed": 93,
+        "successes": 69,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.2724287211894989,
-        "max_displacement_m": 2.8760666847229004
+        "min_goal_distance_m": 0.03709735348820686,
+        "max_displacement_m": 3.02224063873291
       },
       "yaw10": {
         "name": "yaw10",
@@ -755,13 +755,13 @@
         "pose_yaw_deg": 10.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.9375,
-        "episodes_completed": 107,
-        "successes": 104,
+        "first_episode_success_rate": 0.75,
+        "episodes_completed": 94,
+        "successes": 71,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.2715548574924469,
-        "max_displacement_m": 2.8853397369384766
+        "min_goal_distance_m": 0.15330106019973755,
+        "max_displacement_m": 2.958885669708252
       }
     },
     "Stereo": {
@@ -775,13 +775,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.96875,
-        "episodes_completed": 215,
-        "successes": 212,
+        "first_episode_success_rate": 1.0,
+        "episodes_completed": 209,
+        "successes": 208,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.03809161111712456,
-        "max_displacement_m": 3.160339832305908
+        "min_goal_distance_m": 0.030685201287269592,
+        "max_displacement_m": 3.3634209632873535
       },
       "gyro0.10": {
         "name": "gyro0.10",
@@ -793,13 +793,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.96875,
-        "episodes_completed": 212,
-        "successes": 209,
+        "first_episode_success_rate": 1.0,
+        "episodes_completed": 214,
+        "successes": 212,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.020159592851996422,
-        "max_displacement_m": 3.4602599143981934
+        "min_goal_distance_m": 0.07746603339910507,
+        "max_displacement_m": 3.323021173477173
       },
       "gyro0.20": {
         "name": "gyro0.20",
@@ -811,13 +811,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 1.0,
-        "episodes_completed": 207,
-        "successes": 204,
+        "first_episode_success_rate": 0.96875,
+        "episodes_completed": 209,
+        "successes": 205,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.021882861852645874,
-        "max_displacement_m": 3.2924749851226807
+        "min_goal_distance_m": 0.029782140627503395,
+        "max_displacement_m": 3.1682944297790527
       },
       "grav0.05": {
         "name": "grav0.05",
@@ -829,13 +829,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 1.0,
-        "episodes_completed": 203,
-        "successes": 201,
+        "first_episode_success_rate": 0.96875,
+        "episodes_completed": 205,
+        "successes": 202,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.03845802694559097,
-        "max_displacement_m": 3.4124433994293213
+        "min_goal_distance_m": 0.02872353605926037,
+        "max_displacement_m": 3.293050527572632
       },
       "grav0.10": {
         "name": "grav0.10",
@@ -847,13 +847,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.9375,
-        "episodes_completed": 187,
-        "successes": 171,
+        "first_episode_success_rate": 0.90625,
+        "episodes_completed": 194,
+        "successes": 175,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.04821097478270531,
-        "max_displacement_m": 3.1215007305145264
+        "min_goal_distance_m": 0.07921238988637924,
+        "max_displacement_m": 3.385981798171997
       },
       "delay1": {
         "name": "delay1",
@@ -865,13 +865,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.59375,
-        "episodes_completed": 177,
-        "successes": 108,
-        "dead_ends": 1,
+        "first_episode_success_rate": 0.4375,
+        "episodes_completed": 179,
+        "successes": 68,
+        "dead_ends": 4,
         "timeouts": 0,
-        "min_goal_distance_m": 0.029971009120345116,
-        "max_displacement_m": 3.302574396133423
+        "min_goal_distance_m": 0.039491426199674606,
+        "max_displacement_m": 3.499899387359619
       },
       "delay2": {
         "name": "delay2",
@@ -883,13 +883,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.0625,
-        "episodes_completed": 351,
-        "successes": 4,
-        "dead_ends": 4,
-        "timeouts": 5,
-        "min_goal_distance_m": 0.09606065601110458,
-        "max_displacement_m": 3.058107852935791
+        "first_episode_success_rate": 0.09375,
+        "episodes_completed": 378,
+        "successes": 9,
+        "dead_ends": 3,
+        "timeouts": 0,
+        "min_goal_distance_m": 0.08444401621818542,
+        "max_displacement_m": 3.1622519493103027
       },
       "delay4": {
         "name": "delay4",
@@ -902,12 +902,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.0,
-        "episodes_completed": 683,
+        "episodes_completed": 699,
         "successes": 0,
-        "dead_ends": 5,
-        "timeouts": 2,
-        "min_goal_distance_m": 1.3629481792449951,
-        "max_displacement_m": 1.7008520364761353
+        "dead_ends": 2,
+        "timeouts": 1,
+        "min_goal_distance_m": 1.0698472261428833,
+        "max_displacement_m": 1.8285088539123535
       },
       "pos0.05": {
         "name": "pos0.05",
@@ -919,13 +919,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.96875,
-        "episodes_completed": 213,
-        "successes": 208,
+        "first_episode_success_rate": 0.90625,
+        "episodes_completed": 190,
+        "successes": 175,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.009076125919818878,
-        "max_displacement_m": 3.159557342529297
+        "min_goal_distance_m": 0.03880872577428818,
+        "max_displacement_m": 3.276021718978882
       },
       "pos0.10": {
         "name": "pos0.10",
@@ -938,12 +938,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.9375,
-        "episodes_completed": 194,
-        "successes": 183,
-        "dead_ends": 0,
-        "timeouts": 3,
-        "min_goal_distance_m": 0.03542106971144676,
-        "max_displacement_m": 3.3293192386627197
+        "episodes_completed": 179,
+        "successes": 162,
+        "dead_ends": 1,
+        "timeouts": 1,
+        "min_goal_distance_m": 0.024249404668807983,
+        "max_displacement_m": 3.3178155422210693
       },
       "pos0.20": {
         "name": "pos0.20",
@@ -955,13 +955,13 @@
         "pose_yaw_deg": 0.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 0.71875,
-        "episodes_completed": 169,
-        "successes": 140,
+        "first_episode_success_rate": 0.78125,
+        "episodes_completed": 165,
+        "successes": 123,
         "dead_ends": 1,
-        "timeouts": 6,
-        "min_goal_distance_m": 0.05742054060101509,
-        "max_displacement_m": 3.248810052871704
+        "timeouts": 1,
+        "min_goal_distance_m": 0.045001983642578125,
+        "max_displacement_m": 3.2299752235412598
       },
       "posnoise0.05": {
         "name": "posnoise0.05",
@@ -974,12 +974,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 1.0,
-        "episodes_completed": 213,
-        "successes": 212,
+        "episodes_completed": 189,
+        "successes": 175,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.02224610559642315,
-        "max_displacement_m": 3.1323299407958984
+        "min_goal_distance_m": 0.01703920029103756,
+        "max_displacement_m": 3.1730260848999023
       },
       "yaw3": {
         "name": "yaw3",
@@ -992,12 +992,12 @@
         "zero_terms": [],
         "first_episodes_completed": 32,
         "first_episode_success_rate": 0.96875,
-        "episodes_completed": 214,
-        "successes": 212,
-        "dead_ends": 0,
+        "episodes_completed": 192,
+        "successes": 176,
+        "dead_ends": 1,
         "timeouts": 0,
-        "min_goal_distance_m": 0.014300353825092316,
-        "max_displacement_m": 3.0900020599365234
+        "min_goal_distance_m": 0.004770051222294569,
+        "max_displacement_m": 3.137028694152832
       },
       "yaw10": {
         "name": "yaw10",
@@ -1009,39 +1009,39 @@
         "pose_yaw_deg": 10.0,
         "zero_terms": [],
         "first_episodes_completed": 32,
-        "first_episode_success_rate": 1.0,
-        "episodes_completed": 210,
-        "successes": 207,
+        "first_episode_success_rate": 0.90625,
+        "episodes_completed": 192,
+        "successes": 182,
         "dead_ends": 0,
         "timeouts": 0,
-        "min_goal_distance_m": 0.02602687105536461,
-        "max_displacement_m": 3.25708270072937
+        "min_goal_distance_m": 0.03400573506951332,
+        "max_displacement_m": 3.206333875656128
       }
     }
   },
   "pooled": {
     "baseline_noise_on": [
-      124,
+      125,
       128
     ],
     "gyro0.10": [
-      125,
-      128
-    ],
-    "gyro0.20": [
-      125,
-      128
-    ],
-    "grav0.05": [
       126,
       128
     ],
+    "gyro0.20": [
+      122,
+      128
+    ],
+    "grav0.05": [
+      125,
+      128
+    ],
     "grav0.10": [
-      114,
+      110,
       128
     ],
     "delay1": [
-      61,
+      40,
       128
     ],
     "delay2": [
@@ -1053,27 +1053,27 @@
       128
     ],
     "pos0.05": [
-      123,
+      109,
       128
     ],
     "pos0.10": [
-      119,
+      110,
       128
     ],
     "pos0.20": [
-      99,
+      88,
       128
     ],
     "posnoise0.05": [
-      124,
+      108,
       128
     ],
     "yaw3": [
-      124,
+      109,
       128
     ],
     "yaw10": [
-      124,
+      110,
       128
     ]
   }

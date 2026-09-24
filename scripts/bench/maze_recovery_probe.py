@@ -34,6 +34,11 @@ parser.add_argument("--settings", default=None,
 parser.add_argument("--keep-corruption", action="store_true",
                     help="Keep the task's policy observation noise (training default) instead of "
                          "forcing enable_corruption=False. Off by default = published behaviour.")
+parser.add_argument("--runner", choices=("onpolicy", "distillation"), default="onpolicy",
+                    help="How --checkpoint is loaded. 'onpolicy' (default, unchanged behaviour): the task's "
+                         "rsl_rl_cfg_entry_point through OnPolicyRunner. 'distillation': the task's "
+                         "rsl_rl_distillation_cfg_entry_point through DistillationRunner, evaluating the STUDENT "
+                         "on its own observation group (SF-04 distillation, src/bhl_robust/tasks/maze_distill.py).")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 app = AppLauncher(args)
@@ -109,7 +114,23 @@ def _apply_setting(u, setting):
         except Exception:                                        # noqa: BLE001
             names = list(om.active_terms["policy"])
             return om._group_obs_term_cfgs["policy"][names.index(term)]
+    # Restore the TRAINING noise std for every IMU term first, then apply this
+    # setting's override. Without the restore, a std set by an earlier setting
+    # leaked into every later one (the 2026-09-23 SF-01 run measured its delay
+    # and localization settings under gyro 0.20 / gravity 0.10).
+    if not hasattr(u, "_probe_training_noise_std"):
+        u._probe_training_noise_std = {}
+        for term in ("base_ang_vel", "projected_gravity"):
+            try:
+                tc = term_cfg(term)
+                u._probe_training_noise_std[term] = float(tc.noise.std) if getattr(tc, "noise", None) is not None else None
+            except Exception:                                    # noqa: BLE001
+                u._probe_training_noise_std[term] = None
+        print(f"[probe] training noise std {u._probe_training_noise_std}", flush=True)
     for term, key in (("base_ang_vel", "gyro_std"), ("projected_gravity", "gravity_std")):
+        base_std = u._probe_training_noise_std.get(term)
+        if base_std is not None:
+            term_cfg(term).noise.std = base_std
         if setting.get(key) is not None:
             tc = term_cfg(term)
             if getattr(tc, "noise", None) is None:
@@ -177,6 +198,37 @@ def _rollout(env, u, policy, obs, start, delay, steps):
                 minimum_dist=minimum_dist, max_displacement=max_displacement)
 
 
+def _load_distillation_student(env, u, spec, checkpoint):
+    """--runner distillation: build the task's DistillationRunner and return the STUDENT.
+
+    The runner is built from `rsl_rl_distillation_cfg_entry_point` (through
+    `handle_deprecated_rsl_rl_cfg`, a no-op on an already-migrated cfg), the
+    distillation checkpoint is loaded (student + teacher + optimizer) and
+    `runner.get_inference_policy` -- the student -- is evaluated. The student
+    reads only its own observation group (the degraded `policy` group for
+    the SF-04 distillation task); the teacher group is computed but unused.
+    Returns the bound `forward` so `_rollout`'s existing `__self__` hook
+    resets the recurrent hidden state of envs that finished an episode, as
+    the training loop does. Returns (wrapped env, policy callable, obs)."""
+    from importlib.metadata import version
+    from isaaclab_rl.rsl_rl import RslRlVecEnvWrapper, handle_deprecated_rsl_rl_cfg
+    from rsl_rl.runners import DistillationRunner
+    entry = spec.kwargs.get("rsl_rl_distillation_cfg_entry_point")
+    if entry is None:
+        raise RuntimeError(f"{args.task} has no rsl_rl_distillation_cfg_entry_point; --runner distillation needs one")
+    agent = entry() if callable(entry) else entry
+    agent = handle_deprecated_rsl_rl_cfg(agent, version("rsl-rl-lib"))
+    env = RslRlVecEnvWrapper(env)
+    runner = DistillationRunner(env, agent.to_dict(), log_dir=None, device=u.device)
+    runner.load(checkpoint)
+    student = runner.get_inference_policy(device=u.device)
+    print(f"[distill] probe policy: STUDENT {type(student).__name__} (recurrent={getattr(student, 'is_recurrent', None)}) "
+          f"on observation groups {getattr(student, 'obs_groups', None)}; teacher loaded but unused", flush=True)
+    obs = env.get_observations()
+    obs = obs[0] if isinstance(obs, tuple) else obs
+    return env, student.forward, obs
+
+
 def run():
     spec = gym.spec(args.task)
     cfg = spec.kwargs["env_cfg_entry_point"]()
@@ -209,7 +261,9 @@ def run():
             raise RuntimeError(f"{name}: non-finite or constant observation")
         sensors[name] = {"shape": list(values.shape), "min": float(values.min()), "max": float(values.max())}
     policy = None
-    if args.checkpoint:
+    if args.checkpoint and args.runner == "distillation":
+        env, policy, obs = _load_distillation_student(env, u, spec, args.checkpoint)
+    elif args.checkpoint:
         from importlib.metadata import version
         from isaaclab_rl.rsl_rl import RslRlVecEnvWrapper
         from rsl_rl.runners import OnPolicyRunner
@@ -270,6 +324,9 @@ def run():
                 else:
                     env.unwrapped.reset(seed=args.seed)
                     obs = env.get_observations(); obs = obs[0] if isinstance(obs, tuple) else obs
+                    mod = getattr(policy, "__self__", None)          # --runner distillation: bound student.forward
+                    if mod is not None and hasattr(mod, "reset"):
+                        mod.reset()                                 # fresh recurrent state per setting, as at every done
                 start = recovery.local_xy(u).clone()
             zero = [all_slices[n] for n in (setting.get("zero_terms") or []) if n in all_slices]
             applied["zero_terms"] = [n for n in (setting.get("zero_terms") or []) if n in all_slices]
