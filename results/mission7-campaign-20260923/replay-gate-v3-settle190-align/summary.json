@@ -1,0 +1,151 @@
+{
+  "tag": "v3-settle190-align",
+  "verdict": "FAIL",
+  "exact_replay_gate_passed": false,
+  "upright": 7,
+  "falls": 3,
+  "episodes": 10,
+  "complete": true,
+  "status": "COMPLETED_INTERVENTION",
+  "job_id": "21405543",
+  "requested_node": "cn-c22",
+  "probe_args": [
+    "--pre-point=0.45",
+    "--cross-clear=0.35",
+    "--settle-s=1.9",
+    "--cross-kick",
+    "--align-yaw"
+  ],
+  "git_commit": "348eeb2f976e6a54464662a0a96e94eeae5a61bf",
+  "source_sha256_plate_stage": "fdde7a559bc92d047cc10f6c66775eb24e444db7b211404378bd0e65d3555576",
+  "layouts": [
+    {
+      "layout_index": 0,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.2169438248974192,
+      "phases": [
+        "approach",
+        "settle",
+        "cross",
+        "cross_kick",
+        "recorded"
+      ]
+    },
+    {
+      "layout_index": 1,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.12331560170039282,
+      "phases": [
+        "approach",
+        "settle",
+        "cross",
+        "cross_kick",
+        "recorded"
+      ]
+    },
+    {
+      "layout_index": 4,
+      "fall": true,
+      "first_fall_s": 25.119999999986806,
+      "maximum_tilt": 1.7857208830697657,
+      "phases": [
+        "approach",
+        "settle",
+        "cross",
+        "cross_kick",
+        "recorded"
+      ]
+    },
+    {
+      "layout_index": 5,
+      "fall": true,
+      "first_fall_s": 26.43999999998373,
+      "maximum_tilt": 1.7517150251217297,
+      "phases": [
+        "approach",
+        "settle",
+        "cross",
+        "cross_kick",
+        "recorded"
+      ]
+    },
+    {
+      "layout_index": 7,
+      "fall": true,
+      "first_fall_s": 19.83999999999911,
+      "maximum_tilt": 1.7099379633759988,
+      "phases": [
+        "approach",
+        "settle",
+        "cross",
+        "cross_kick",
+        "recorded"
+      ]
+    },
+    {
+      "layout_index": 9,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.13228236928475545,
+      "phases": [
+        "approach"
+      ]
+    },
+    {
+      "layout_index": 12,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.18059786415832488,
+      "phases": [
+        "approach"
+      ]
+    },
+    {
+      "layout_index": 13,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.15877105740522354,
+      "phases": [
+        "approach"
+      ]
+    },
+    {
+      "layout_index": 14,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.15600641963837975,
+      "phases": [
+        "approach",
+        "settle",
+        "cross",
+        "cross_kick",
+        "recorded"
+      ]
+    },
+    {
+      "layout_index": 15,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.16698770882550223,
+      "phases": [
+        "approach",
+        "settle",
+        "cross",
+        "cross_kick",
+        "recorded"
+      ]
+    }
+  ],
+  "fallen_layouts": [
+    4,
+    5,
+    7
+  ],
+  "crossings_started": 7,
+  "crossings_completed": 7,
+  "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-v3-settle190-align",
+  "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+  "summarized_utc": "2026-09-24T06:31:50.719175+00:00"
+}

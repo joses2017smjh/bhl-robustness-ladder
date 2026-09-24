@@ -1,0 +1,512 @@
+{
+  "complete": true,
+  "status": "COMPLETED_INTERVENTION",
+  "intervention": "staged plate maneuver: pre-plate approach, 0.40 s settle, 1.20 s straight crossing with yaw correction frozen; wrong-side staging only when the correct plate is over 1.0 m away",
+  "geometry_unchanged": true,
+  "activation_schedule_unchanged": true,
+  "fall_predicate_unchanged": true,
+  "baseline_result": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-approach-followup-20260922/replay-diagnose-cn-c22/result.json",
+  "episodes": 10,
+  "falls": 1,
+  "upright": 9,
+  "exact_replay_gate_passed": false,
+  "episode_comparison": [
+    {
+      "layout_index": 0,
+      "layout_seed": 10000,
+      "original_elapsed_s": 55.04000000008078,
+      "replay_elapsed_s": 55.04000000008078,
+      "fall": true,
+      "first_fall_s": 26.599999999983357,
+      "maximum_tilt": 1.9530402229292156,
+      "maximum_recorded_pose_difference": 5.138783866808612,
+      "plate_contacts": 110201,
+      "peak_plate_normal_force_N": 965.5562065894193,
+      "peak_plate_tangent_force_N": 197.77848705314466,
+      "minimum_plate_distance_m": -0.018075707391887692,
+      "stage_history": [
+        {
+          "time_s": 22.7199999999924,
+          "door": 0,
+          "side": -1,
+          "phase": "approach"
+        },
+        {
+          "time_s": 23.83999999998979,
+          "door": 0,
+          "side": -1,
+          "phase": "settle"
+        },
+        {
+          "time_s": 24.67999999998783,
+          "door": 0,
+          "phase": "cross"
+        },
+        {
+          "time_s": 24.67999999998783,
+          "door": 0,
+          "phase": "cross_kick",
+          "prev_actions_before_norm": 75.29826354980469
+        },
+        {
+          "time_s": 28.719999999978416,
+          "door": 0,
+          "side": -1,
+          "phase": "recorded"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 55.04000000008078,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.03612869372423548,
+          "robot_plate_surface_clearance_m": -0.03612869372423548,
+          "robot_plate_edge_clearance_m": -0.06919171048669573,
+          "correct_plate_edge_clearance_m": -0.06919171048669573
+        },
+        "failure_stage_relative_to_plate": "during_plate_traversal"
+      }
+    },
+    {
+      "layout_index": 1,
+      "layout_seed": 10001,
+      "original_elapsed_s": 43.68000000002654,
+      "replay_elapsed_s": 43.68000000002654,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.141955308898978,
+      "maximum_recorded_pose_difference": 4.853041725527785,
+      "plate_contacts": 7293,
+      "peak_plate_normal_force_N": 396.49964777474514,
+      "peak_plate_tangent_force_N": 175.45482600260038,
+      "minimum_plate_distance_m": -0.031601060058649065,
+      "stage_history": [
+        {
+          "time_s": 16.560000000006756,
+          "door": 0,
+          "side": -1,
+          "phase": "approach"
+        },
+        {
+          "time_s": 19.639999999999578,
+          "door": 0,
+          "side": -1,
+          "phase": "settle"
+        },
+        {
+          "time_s": 20.47999999999762,
+          "door": 0,
+          "phase": "cross"
+        },
+        {
+          "time_s": 20.47999999999762,
+          "door": 0,
+          "phase": "cross_kick",
+          "prev_actions_before_norm": 77.57756042480469
+        },
+        {
+          "time_s": 24.07999999998923,
+          "door": 0,
+          "side": -1,
+          "phase": "recorded"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 43.68000000002654,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.033943651058905795,
+          "robot_plate_surface_clearance_m": -0.033943651058905795,
+          "robot_plate_edge_clearance_m": -0.20878266706296827,
+          "correct_plate_edge_clearance_m": -0.20878266706296827
+        },
+        "failure_stage_relative_to_plate": "after_plate_exit"
+      }
+    },
+    {
+      "layout_index": 4,
+      "layout_seed": 10004,
+      "original_elapsed_s": 45.08000000003322,
+      "replay_elapsed_s": 45.08000000003322,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.13690934784449785,
+      "maximum_recorded_pose_difference": 4.545309510892985,
+      "plate_contacts": 23646,
+      "peak_plate_normal_force_N": 188.40523146736876,
+      "peak_plate_tangent_force_N": 65.88037224725385,
+      "minimum_plate_distance_m": -0.0030555627292580935,
+      "stage_history": [
+        {
+          "time_s": 14.400000000006107,
+          "door": 0,
+          "side": -1,
+          "phase": "approach"
+        },
+        {
+          "time_s": 15.520000000007476,
+          "door": 0,
+          "side": -1,
+          "phase": "settle"
+        },
+        {
+          "time_s": 16.360000000007222,
+          "door": 0,
+          "phase": "cross"
+        },
+        {
+          "time_s": 16.360000000007222,
+          "door": 0,
+          "phase": "cross_kick",
+          "prev_actions_before_norm": 78.78675079345703
+        },
+        {
+          "time_s": 20.399999999997807,
+          "door": 0,
+          "side": -1,
+          "phase": "recorded"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 45.08000000003322,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.024936062053454926,
+          "robot_plate_surface_clearance_m": -0.024936062053454926,
+          "robot_plate_edge_clearance_m": -0.05263732885998096,
+          "correct_plate_edge_clearance_m": -0.05263732885998096
+        },
+        "failure_stage_relative_to_plate": "after_plate_exit"
+      }
+    },
+    {
+      "layout_index": 5,
+      "layout_seed": 10005,
+      "original_elapsed_s": 42.60000000002138,
+      "replay_elapsed_s": 42.60000000002138,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.21730950692801362,
+      "maximum_recorded_pose_difference": 4.019716171977315,
+      "plate_contacts": 36319,
+      "peak_plate_normal_force_N": 267.15326393212365,
+      "peak_plate_tangent_force_N": 138.10654398061385,
+      "minimum_plate_distance_m": -0.009518936243203872,
+      "stage_history": [
+        {
+          "time_s": 15.200000000007085,
+          "door": 0,
+          "side": 1,
+          "phase": "approach"
+        },
+        {
+          "time_s": 18.48000000000228,
+          "door": 0,
+          "side": 1,
+          "phase": "settle"
+        },
+        {
+          "time_s": 19.320000000000324,
+          "door": 0,
+          "phase": "cross"
+        },
+        {
+          "time_s": 19.320000000000324,
+          "door": 0,
+          "phase": "cross_kick",
+          "prev_actions_before_norm": 77.80184936523438
+        },
+        {
+          "time_s": 23.359999999990908,
+          "door": 0,
+          "side": 1,
+          "phase": "recorded"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 42.60000000002138,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.02591885093687655,
+          "robot_plate_surface_clearance_m": -0.02591885093687655,
+          "robot_plate_edge_clearance_m": -0.11038397543106665,
+          "correct_plate_edge_clearance_m": -0.10944159374692031
+        },
+        "failure_stage_relative_to_plate": "during_plate_traversal"
+      }
+    },
+    {
+      "layout_index": 7,
+      "layout_seed": 10007,
+      "original_elapsed_s": 44.48000000003036,
+      "replay_elapsed_s": 44.48000000003036,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.16831511825771847,
+      "maximum_recorded_pose_difference": 3.6706441162028662,
+      "plate_contacts": 73904,
+      "peak_plate_normal_force_N": 405.01201828613154,
+      "peak_plate_tangent_force_N": 268.3119276327991,
+      "minimum_plate_distance_m": -0.03510930329723476,
+      "stage_history": [
+        {
+          "time_s": 14.240000000005912,
+          "door": 0,
+          "side": 1,
+          "phase": "approach"
+        },
+        {
+          "time_s": 15.240000000007134,
+          "door": 0,
+          "side": 1,
+          "phase": "settle"
+        },
+        {
+          "time_s": 16.040000000007968,
+          "door": 0,
+          "phase": "cross"
+        },
+        {
+          "time_s": 16.040000000007968,
+          "door": 0,
+          "phase": "cross_kick",
+          "prev_actions_before_norm": 76.74869537353516
+        },
+        {
+          "time_s": 20.079999999998552,
+          "door": 0,
+          "side": 1,
+          "phase": "recorded"
+        },
+        {
+          "time_s": 32.87999999997497,
+          "door": 1,
+          "side": -1,
+          "phase": "approach"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 44.48000000003036,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.022340493570389697,
+          "robot_plate_surface_clearance_m": -0.022340493570389697,
+          "robot_plate_edge_clearance_m": -0.05392003809750687,
+          "correct_plate_edge_clearance_m": -0.05392003809750687
+        },
+        "failure_stage_relative_to_plate": "after_plate_exit"
+      }
+    },
+    {
+      "layout_index": 9,
+      "layout_seed": 10009,
+      "original_elapsed_s": 20.879999999996688,
+      "replay_elapsed_s": 20.879999999996688,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.13228236928475545,
+      "maximum_recorded_pose_difference": 0.7785727941451026,
+      "plate_contacts": 0,
+      "peak_plate_normal_force_N": 0.0,
+      "peak_plate_tangent_force_N": 0.0,
+      "minimum_plate_distance_m": null,
+      "stage_history": [
+        {
+          "time_s": 18.280000000002747,
+          "door": 0,
+          "side": -1,
+          "phase": "approach"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 20.879999999996688,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.021085343697040803,
+          "robot_plate_surface_clearance_m": -0.021085343697040803,
+          "robot_plate_edge_clearance_m": -0.07536995093502702,
+          "correct_plate_edge_clearance_m": -0.07536995093502702
+        },
+        "failure_stage_relative_to_plate": "during_plate_traversal"
+      }
+    },
+    {
+      "layout_index": 12,
+      "layout_seed": 10012,
+      "original_elapsed_s": 13.60000000000513,
+      "replay_elapsed_s": 13.60000000000513,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.18059786415832488,
+      "maximum_recorded_pose_difference": 0.7637443326177259,
+      "plate_contacts": 109,
+      "peak_plate_normal_force_N": 129.98928840131117,
+      "peak_plate_tangent_force_N": 95.04612251414028,
+      "minimum_plate_distance_m": -0.0038558700502868484,
+      "stage_history": [
+        {
+          "time_s": 11.44000000000249,
+          "door": 0,
+          "side": -1,
+          "phase": "approach"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 13.60000000000513,
+        "fall_phase": "switch",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.039379554570321114,
+          "robot_plate_surface_clearance_m": -0.039379554570321114,
+          "robot_plate_edge_clearance_m": -0.18648106403149034,
+          "correct_plate_edge_clearance_m": -0.18648106403149034
+        },
+        "failure_stage_relative_to_plate": "during_plate_traversal"
+      }
+    },
+    {
+      "layout_index": 13,
+      "layout_seed": 10013,
+      "original_elapsed_s": 15.240000000007134,
+      "replay_elapsed_s": 15.240000000007134,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.20020767153973212,
+      "maximum_recorded_pose_difference": 0.9151041856651183,
+      "plate_contacts": 627,
+      "peak_plate_normal_force_N": 134.6697511535363,
+      "peak_plate_tangent_force_N": 120.50457130473669,
+      "minimum_plate_distance_m": -0.002667285203687557,
+      "stage_history": [
+        {
+          "time_s": 12.200000000003419,
+          "door": 0,
+          "side": -1,
+          "phase": "approach"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 15.240000000007134,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.01258451470748306,
+          "robot_plate_surface_clearance_m": -0.01258451470748306,
+          "robot_plate_edge_clearance_m": -0.0755181065732573,
+          "correct_plate_edge_clearance_m": 0.7684953920735176
+        },
+        "failure_stage_relative_to_plate": "during_plate_traversal"
+      }
+    },
+    {
+      "layout_index": 14,
+      "layout_seed": 10014,
+      "original_elapsed_s": 37.15999999999541,
+      "replay_elapsed_s": 37.15999999999541,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.1961492527741641,
+      "maximum_recorded_pose_difference": 3.6549160668144878,
+      "plate_contacts": 8588,
+      "peak_plate_normal_force_N": 251.579567700517,
+      "peak_plate_tangent_force_N": 179.03798982685177,
+      "minimum_plate_distance_m": -0.007310332167960432,
+      "stage_history": [
+        {
+          "time_s": 14.720000000006499,
+          "door": 0,
+          "side": 1,
+          "phase": "approach"
+        },
+        {
+          "time_s": 19.12000000000079,
+          "door": 0,
+          "side": 1,
+          "phase": "settle"
+        },
+        {
+          "time_s": 19.959999999998832,
+          "door": 0,
+          "phase": "cross"
+        },
+        {
+          "time_s": 19.959999999998832,
+          "door": 0,
+          "phase": "cross_kick",
+          "prev_actions_before_norm": 78.00477600097656
+        },
+        {
+          "time_s": 23.999999999989416,
+          "door": 0,
+          "side": 1,
+          "phase": "recorded"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 37.15999999999541,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.031410429568132156,
+          "robot_plate_surface_clearance_m": -0.031410429568132156,
+          "robot_plate_edge_clearance_m": -0.16003268584312225,
+          "correct_plate_edge_clearance_m": -0.16003268584312225
+        },
+        "failure_stage_relative_to_plate": "during_plate_traversal"
+      }
+    },
+    {
+      "layout_index": 15,
+      "layout_seed": 10015,
+      "original_elapsed_s": 40.680000000012214,
+      "replay_elapsed_s": 40.680000000012214,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.17947298151480015,
+      "maximum_recorded_pose_difference": 3.926267709277615,
+      "plate_contacts": 95332,
+      "peak_plate_normal_force_N": 425.77239113441254,
+      "peak_plate_tangent_force_N": 190.72478652080707,
+      "minimum_plate_distance_m": -0.031761065501716444,
+      "stage_history": [
+        {
+          "time_s": 13.480000000004983,
+          "door": 0,
+          "side": 1,
+          "phase": "approach"
+        },
+        {
+          "time_s": 17.64000000000424,
+          "door": 0,
+          "side": 1,
+          "phase": "settle"
+        },
+        {
+          "time_s": 18.48000000000228,
+          "door": 0,
+          "phase": "cross"
+        },
+        {
+          "time_s": 18.48000000000228,
+          "door": 0,
+          "phase": "cross_kick",
+          "prev_actions_before_norm": 77.7592544555664
+        },
+        {
+          "time_s": 22.519999999992866,
+          "door": 0,
+          "side": 1,
+          "phase": "recorded"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 40.680000000012214,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.030035148526338727,
+          "robot_plate_surface_clearance_m": -0.030035148526338727,
+          "robot_plate_edge_clearance_m": -0.1735288908698046,
+          "correct_plate_edge_clearance_m": -0.1735288908698046
+        },
+        "failure_stage_relative_to_plate": "after_plate_exit"
+      }
+    }
+  ]
+}
