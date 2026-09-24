@@ -1,0 +1,172 @@
+{
+  "label": "both-s0",
+  "searches": {
+    "both-s0-success": {
+      "outcome": "success",
+      "episode": "both-s0-s100"
+    },
+    "both-s0-failure": {
+      "outcome": null,
+      "tried": [
+        {
+          "seed": 101,
+          "outcome": "success"
+        },
+        {
+          "seed": 102,
+          "outcome": "success"
+        },
+        {
+          "seed": 103,
+          "outcome": "success"
+        },
+        {
+          "seed": 104,
+          "outcome": "success"
+        },
+        {
+          "seed": 105,
+          "outcome": "success"
+        },
+        {
+          "seed": 106,
+          "outcome": "success"
+        },
+        {
+          "seed": 107,
+          "outcome": "success"
+        },
+        {
+          "seed": 108,
+          "outcome": "success"
+        }
+      ]
+    },
+    "both-s0-delay40ms": {
+      "outcome": "base_orientation",
+      "episode": "both-s0-s100-d2"
+    }
+  },
+  "episodes": [
+    {
+      "episode": "both-s0-s100",
+      "seed": 100,
+      "imu_delay_steps": 0,
+      "outcome": "success",
+      "steps": 159,
+      "terminations_fired": [
+        "button_reached"
+      ],
+      "sensor_frames": 159,
+      "viewport_frames": 159
+    },
+    {
+      "episode": "both-s0-s101",
+      "seed": 101,
+      "imu_delay_steps": 0,
+      "outcome": "success",
+      "steps": 161,
+      "terminations_fired": [
+        "button_reached"
+      ],
+      "sensor_frames": 161,
+      "viewport_frames": 0
+    },
+    {
+      "episode": "both-s0-s102",
+      "seed": 102,
+      "imu_delay_steps": 0,
+      "outcome": "success",
+      "steps": 140,
+      "terminations_fired": [
+        "button_reached"
+      ],
+      "sensor_frames": 140,
+      "viewport_frames": 0
+    },
+    {
+      "episode": "both-s0-s103",
+      "seed": 103,
+      "imu_delay_steps": 0,
+      "outcome": "success",
+      "steps": 159,
+      "terminations_fired": [
+        "button_reached"
+      ],
+      "sensor_frames": 159,
+      "viewport_frames": 0
+    },
+    {
+      "episode": "both-s0-s104",
+      "seed": 104,
+      "imu_delay_steps": 0,
+      "outcome": "success",
+      "steps": 131,
+      "terminations_fired": [
+        "button_reached"
+      ],
+      "sensor_frames": 131,
+      "viewport_frames": 0
+    },
+    {
+      "episode": "both-s0-s105",
+      "seed": 105,
+      "imu_delay_steps": 0,
+      "outcome": "success",
+      "steps": 141,
+      "terminations_fired": [
+        "button_reached"
+      ],
+      "sensor_frames": 141,
+      "viewport_frames": 0
+    },
+    {
+      "episode": "both-s0-s106",
+      "seed": 106,
+      "imu_delay_steps": 0,
+      "outcome": "success",
+      "steps": 150,
+      "terminations_fired": [
+        "button_reached"
+      ],
+      "sensor_frames": 150,
+      "viewport_frames": 0
+    },
+    {
+      "episode": "both-s0-s107",
+      "seed": 107,
+      "imu_delay_steps": 0,
+      "outcome": "success",
+      "steps": 152,
+      "terminations_fired": [
+        "button_reached"
+      ],
+      "sensor_frames": 152,
+      "viewport_frames": 0
+    },
+    {
+      "episode": "both-s0-s108",
+      "seed": 108,
+      "imu_delay_steps": 0,
+      "outcome": "success",
+      "steps": 156,
+      "terminations_fired": [
+        "button_reached"
+      ],
+      "sensor_frames": 156,
+      "viewport_frames": 0
+    },
+    {
+      "episode": "both-s0-s100-d2",
+      "seed": 100,
+      "imu_delay_steps": 2,
+      "outcome": "base_orientation",
+      "steps": 70,
+      "terminations_fired": [
+        "base_orientation"
+      ],
+      "sensor_frames": 70,
+      "viewport_frames": 0
+    }
+  ]
+}

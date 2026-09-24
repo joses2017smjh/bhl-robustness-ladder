@@ -1,0 +1,89 @@
+{
+  "task": "Velocity-BHL-MazeRecovery-Full-Both-v0",
+  "checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-19_16-25-50_wknd-full-both-s0/model_5997.pt",
+  "checkpoint_sha256": "82889d05589f053cba0ecb7351287187fcc215aa75b33eabdc1e19f027b5a5d4",
+  "num_envs": 1,
+  "max_steps": 600,
+  "sim_dt": 0.005,
+  "step_dt": 0.04,
+  "decimation": 8,
+  "observation_corruption": true,
+  "stack": "v60",
+  "hostname": "cn-gpu6.hpc.engr.oregonstate.edu",
+  "git_commit": "c1c92e6d3166a441fc220bdedff18a4dd861b97a",
+  "clip_overlays": 10,
+  "capture_path_used_for_gif": "camera_sensor",
+  "capture_note": "viewport = gym RecordVideo on the Kit perspective camera (draws the stale USD pose under fabric on this stack, docs/ISAAC_RENDER.md s10); camera_sensor = CameraCfg following the robot root, the recorder behind every published Isaac clip",
+  "sensor_eye_offset_m": [
+    -2.0,
+    0.0,
+    1.5
+  ],
+  "sensor_lookat_offset_m": [
+    0.5,
+    0.0,
+    0.1
+  ],
+  "viewport_eye_world_m": [
+    -34.6,
+    -79.5,
+    2.5
+  ],
+  "viewport_lookat_world_m": [
+    -34.6,
+    -76.0,
+    0.2
+  ],
+  "viewport_camera": "env0_corridor",
+  "viewport_error": null,
+  "env0_origin_m": [
+    -36.0,
+    -76.0,
+    0.0
+  ],
+  "frame_size": [
+    640,
+    360
+  ],
+  "video_fps": 25.0,
+  "playback_speed": 1.0,
+  "seed": 100,
+  "imu_delay_steps": 2,
+  "outcome": "base_orientation",
+  "success": false,
+  "terminated": true,
+  "terminations_fired": [
+    "base_orientation"
+  ],
+  "steps": 70,
+  "sim_seconds": 2.8000000000000003,
+  "wall_seconds": 14.16,
+  "sim_time_per_step": null,
+  "final_button_distance_m": 1.7202380895614624,
+  "min_button_distance_m": 1.7202380895614624,
+  "max_displacement_from_spawn_m": 1.4175374507904053,
+  "camera_sensor": {
+    "frames": 70,
+    "mp4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/maze-record/both-s0-s100-d2.mp4",
+    "codec": "libx264",
+    "png_dir": "/scratch/sanchej7/tmp/maze-record-frames/both-s0-s100-d2",
+    "writer_error": null
+  },
+  "viewport": {
+    "recorded": false,
+    "frames": 0,
+    "mp4": null,
+    "error": null
+  },
+  "mp4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/maze-record/both-s0-delay40ms.mp4",
+  "viewport_mp4": null,
+  "episode": "both-s0-s100-d2",
+  "search": {
+    "name": "both-s0-delay40ms",
+    "want": "failure",
+    "seed": 100,
+    "max_seeds": 2,
+    "imu_delay_steps": 2
+  },
+  "selected_from_episode": "both-s0-s100-d2"
+}
