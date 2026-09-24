@@ -212,8 +212,19 @@ def base_height_mean(env: "ManagerBasedRLEnv", env_ids: Sequence[int]) -> float:
     iterations, before that was noticed. Curriculum terms log their return value
     directly and touch no gradient, which is the behaviour that was wanted.
     """
-    a = _t(env.scene["robot_a"].data.root_pos_w)[:, 2]
-    b = _t(env.scene["robot_b"].data.root_pos_w)[:, 2]
+    # Pair scenes name the robots robot_a/robot_b; crew scenes robot_0..robot_N
+    # (the 2026-09-24 crew gate failed here with KeyError 'robot_a'). Average
+    # whichever robots the scene holds.
+    names = [k for k in ("robot_a", "robot_b") if k in env.scene.keys()]
+    if not names:
+        names = sorted(k for k in env.scene.keys() if k.startswith("robot_"))
+    if not names:
+        return 0.0
+    heights = [_t(env.scene[k].data.root_pos_w)[:, 2] for k in names]
+    a = heights[0]
+    b = heights[1] if len(heights) > 1 else heights[0]
+    if len(heights) > 2:
+        b = sum(heights[1:]) / len(heights[1:])
     # A scalar, because the curriculum manager logs one number per term rather
     # than a per-env vector -- the same shape `stage_lift` and `lift_height`
     # return.
