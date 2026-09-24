@@ -53,10 +53,10 @@ controller evidence lives in [`MISSION7_TASKS.md`](MISSION7_TASKS.md).
 | mission7/approach_negx_centering | MuJoCo | Mission 7 privileged Approach, world −x, test layout 14 | works — gate passed 62/64, 0 falls (privileged pose, scripted centring, frozen gait) |
 | mission7/doors1_stall_vs_crossing_fix | MuJoCo | Mission 7 Doors, validation layout 1 | render works — the crossing fix reaches the goal on this layout; not promoted (replay regression 7–9/10) |
 | [`dr_pair`](#locomotion) | MuJoCo | domain randomization | **works** |
-| [`push_pair`](#locomotion) | MuJoCo | push curriculum | **works** — matched-protocol check 2026-09-23: push-adaptive 0.100 vs no-push control 0.211 (n=60/90, p = 0.056), supported in direction only |
+| [`push_pair`](#locomotion) | MuJoCo | push curriculum | **works** — matched-protocol check with three seeds (2026-09-24): push-adaptive 0.122 vs no-push control 0.211 (n = 90 / 90, p = 0.08), supported in direction only |
 | [`terrain_pair`](#locomotion) | MuJoCo | terrain curriculum | **works** |
 | [`arms_dr_pair`](#locomotion) | MuJoCo | 22-DoF, randomization s=1.0 vs s=0 | **works** — walk vs walk by design (0/60 falls each on flat; two training seeds) |
-| [`arms_push_pair`](#locomotion) | MuJoCo | 22-DoF push-trained vs DR-only, shove | render works — **no push benefit**: push-trained falls 0.15 vs DR-only 0.10 (n=60); caption corrected 2026-09-23 |
+| [`arms_push_pair`](#locomotion) | MuJoCo | 22-DoF push-trained vs DR-only, shove | render works — **no detectable effect of push training** at four seeds: arms-push 0.167 (n = 120) vs DR-only 0.117 (n = 60), p = 0.87 / 0.26 either way; caption corrected 2026-09-23, seeds added 2026-09-24 |
 | [`arms_terrain_pair`](#locomotion) | MuJoCo | 22-DoF vs 12-DoF, terrain | **works** |
 | [`multi_race`](#four-policies-at-once) | MuJoCo | 4 policies, one shove | **works** |
 | [`multi_lab`](#four-policies-at-once) | MuJoCo | 4 policies, obstacle course + depth | render works — **course cleared 5/20 (22 DoF) and 2/20 (12 DoF) over 5 seeds**, not reliably |

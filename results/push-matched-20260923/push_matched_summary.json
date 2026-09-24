@@ -150,5 +150,93 @@
   "jobs": [
     21402035,
     21402036
-  ]
+  ],
+  "rescore_2026_09_24": {
+    "job": 21405529,
+    "families": {
+      "dr-default": {
+        "falls": 19,
+        "n": 90,
+        "rate": 0.2111,
+        "seeds": {
+          "s0": [
+            10,
+            30
+          ],
+          "s1": [
+            4,
+            30
+          ],
+          "s2": [
+            5,
+            30
+          ]
+        }
+      },
+      "push-adaptive": {
+        "falls": 11,
+        "n": 90,
+        "rate": 0.1222,
+        "seeds": {
+          "s0": [
+            4,
+            30
+          ],
+          "s1": [
+            2,
+            30
+          ],
+          "s2": [
+            5,
+            30
+          ]
+        }
+      },
+      "arms-dr1.0": {
+        "falls": 7,
+        "n": 60,
+        "rate": 0.1167,
+        "seeds": {
+          "s0": [
+            3,
+            30
+          ],
+          "s1": [
+            4,
+            30
+          ]
+        }
+      },
+      "arms-push": {
+        "falls": 20,
+        "n": 120,
+        "rate": 0.1667,
+        "seeds": {
+          "s0": [
+            7,
+            30
+          ],
+          "s1": [
+            2,
+            30
+          ],
+          "s2": [
+            7,
+            30
+          ],
+          "s3": [
+            4,
+            30
+          ]
+        }
+      }
+    },
+    "fisher_one_sided": {
+      "push_adaptive_lt_dr_default": 0.08038187495905069,
+      "arms_push_lt_arms_dr": 0.866902648945034,
+      "arms_push_gt_arms_dr": 0.25683514527611906
+    },
+    "predeclared": "push_pair caption supported iff pooled push-adaptive (3 seeds) < dr-default at p < 0.05",
+    "verdict": "NOT SUPPORTED at p < 0.05; direction favourable"
+  }
 }
