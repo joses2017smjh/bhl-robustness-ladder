@@ -124,21 +124,21 @@ def world_xml(textured: bool = False):
       <compiler angle="radian"/><option timestep=".0005"/>
       <visual>
         <global offwidth="1280" offheight="720"/>
-        <headlight diffuse="0.50 0.50 0.50" ambient="0.28 0.28 0.30" specular="0.1 0.1 0.1"/>
+        <headlight diffuse="0.40 0.40 0.40" ambient="0.30 0.30 0.32" specular="0 0 0"/>
         <quality shadowsize="4096"/>
         <rgba haze="0.16 0.18 0.22 1"/>
       </visual>
       <asset>
         <texture type="skybox" builtin="gradient" rgb1="0.50 0.56 0.64" rgb2="0.10 0.12 0.16" width="512" height="3072"/>
-        <texture type="2d" name="tile" builtin="checker" mark="edge" rgb1="0.74 0.73 0.70" rgb2="0.60 0.60 0.58"
+        <texture type="2d" name="tile" builtin="checker" mark="edge" rgb1="0.66 0.65 0.62" rgb2="0.53 0.53 0.51"
                  markrgb="0.40 0.40 0.40" width="300" height="300"/>
-        <material name="tile" texture="tile" texuniform="true" texrepeat="6 6" reflectance="0.12"/>
+        <material name="tile" texture="tile" texuniform="true" texrepeat="6 6" reflectance="0.0" specular="0.05" shininess="0.05"/>
         <texture type="2d" name="brick" builtin="checker" mark="edge" rgb1="0.52 0.57 0.64" rgb2="0.46 0.51 0.58"
                  markrgb="0.36 0.40 0.46" width="128" height="128"/>
-        <material name="wall" texture="brick" texuniform="true" texrepeat="3 3" reflectance="0.04" specular="0.2"/>
+        <material name="wall" texture="brick" texuniform="true" texrepeat="3 3" reflectance="0.0" specular="0.1" shininess="0.1"/>
       </asset>
       <worldbody>
-      <light pos="2 0 6" dir="0 0 -1" castshadow="true" diffuse="0.75 0.75 0.75"/>
+      <light pos="2 0 6" dir="0 0 -1" castshadow="true" diffuse="0.55 0.55 0.55" specular="0.05 0.05 0.05"/>
       <light pos="-2 3 5" dir="0.45 -0.55 -0.7" directional="true" castshadow="false" diffuse="0.30 0.30 0.32"/>
       <geom name="floor" type="plane" size="9 9 .05" material="tile"/>
     ''' + "\n".join(geoms) + "</worldbody></mujoco>"

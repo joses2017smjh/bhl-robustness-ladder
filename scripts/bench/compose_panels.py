@@ -49,7 +49,7 @@ def compose(episode: dict, top_dir: Path, out_mp4: Path, png_dir: Path, quality_
         sectors = npz["lidar_sector_policy_m"][k]    # (36,)
         hits = npz["lidar_hits_body_xy"][k]          # (R, 2)
         # the two panels add up to the 720 px overhead view
-        dp = panels.depth_pair_panel(raw, STEREO_RANGE, (320, 300), "stereo pair: ray depth 64x64 (no RGB)",
+        dp = panels.depth_pair_panel(raw, STEREO_RANGE, (320, 300), "stereo: ray depth 64x64, L / R (no RGB)",
                                      pooled=pooled, subtitle="policy input = the pooled pair (+ training noise)")
         lp = panels.lidar_panel(sectors, LIDAR_RANGE, (320, max(200, top.shape[0] - 300)),
                                 "lidar: 36 sector minima of 500 rays", window_m=6.0, rays_xy=hits,

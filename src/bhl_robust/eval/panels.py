@@ -51,7 +51,7 @@ def load_font(size: int):
     return ImageFont.load_default()
 
 
-def _title(draw: ImageDraw.ImageDraw, w: int, text: str, size: int = 14, colour=TEXT) -> int:
+def _title(draw: ImageDraw.ImageDraw, w: int, text: str, size: int = 13, colour=TEXT) -> int:
     font = load_font(size)
     draw.rectangle((0, 0, w, size + 8), fill=(40, 44, 52))
     draw.text((6, 4), text, font=font, fill=colour)
@@ -87,7 +87,7 @@ def depth_pair_panel(pair, max_range: float, size: tuple[int, int], title: str,
         return img
     n = pair.shape[0]
     gap = 6
-    avail_h = h - top - 8 - (0 if pooled is None else 36)
+    avail_h = h - top - 8 - (0 if pooled is None else 36) - (16 if subtitle else 0)
     tile_w = (w - gap * (n + 1)) // n
     tile_h = max(8, min(avail_h, tile_w))
     for i in range(n):
@@ -108,7 +108,7 @@ def depth_pair_panel(pair, max_range: float, size: tuple[int, int], title: str,
                   font=load_font(11), fill=DIM)
         y += ph + 6
     if subtitle:
-        draw.text((8, min(y, h - 16)), subtitle, font=load_font(11), fill=DIM)
+        draw.text((8, min(y + 2, h - 15)), subtitle, font=load_font(11), fill=DIM)
     return img
 
 
@@ -215,23 +215,33 @@ def compose_frame(main_rgb, panels: list[Image.Image], header: str, footer: str,
 
 
 def write_gif(src_mp4: Path, out_gif: Path, *, fps: int = 8, speed: float = 1.0, width: int = 860,
-              max_colors: int = 128, max_bytes: int = MAX_GIF_BYTES) -> dict:
+              max_colors: int = 128, max_bytes: int = MAX_GIF_BYTES, badge: str | None = None) -> dict:
     """ffmpeg palette GIF from an mp4; shrinks (colours, fps, width) until it
-    fits the committable budget. Returns what it ended up using."""
+    fits the committable budget. `badge` (default: the playback speed when it
+    is not 1x) is drawn bottom-right so a sped-up GIF says so on its face.
+    Returns what it ended up using."""
     out_gif = Path(out_gif)
     out_gif.parent.mkdir(parents=True, exist_ok=True)
+    if badge is None and speed != 1.0:
+        badge = f"GIF {speed:g}x"
+    font = next((c for c in FONT_CANDIDATES if os.path.isfile(c)), None)
+    text = ""
+    if badge and font:
+        safe = badge.replace(":", r"\:").replace("'", "")
+        text = (f"drawtext=fontfile={font}:text='{safe}':x=w-tw-10:y=h-th-8:fontsize=16:fontcolor=white:"
+                f"box=1:boxcolor=0x1e2128@0.85:boxborderw=6,")
     attempts = [(max_colors, fps, width), (96, fps, width), (96, max(5, fps - 2), width),
                 (64, max(5, fps - 2), width), (64, 5, int(width * 0.85)), (48, 5, int(width * 0.75))]
     last = None
     for colors, f, wpx in attempts:
         rate = "" if speed == 1.0 else f"setpts=PTS/{speed:g},"
-        vf = f"{rate}fps={f},scale={wpx}:-2:flags=lanczos,split[a][b];[a]palettegen=max_colors={colors}:stats_mode=diff[p];" \
+        vf = f"{rate}fps={f},scale={wpx}:-2:flags=lanczos,{text}split[a][b];[a]palettegen=max_colors={colors}:stats_mode=diff[p];" \
              f"[b][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle"
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(src_mp4), "-filter_complex", vf,
                         "-loop", "0", str(out_gif)], check=True)
         size = out_gif.stat().st_size
         last = {"gif": str(out_gif), "bytes": size, "mb": round(size / 1e6, 2), "fps": f, "width": wpx,
-                "max_colors": colors, "speed": speed, "within_budget": size <= max_bytes}
+                "max_colors": colors, "speed": speed, "badge": badge, "within_budget": size <= max_bytes}
         if size <= max_bytes:
             break
     return last

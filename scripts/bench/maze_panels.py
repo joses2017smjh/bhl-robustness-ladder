@@ -117,10 +117,10 @@ class PanelRecorder:
         # the three panels add up to the main view's height (170 + 170 + rest)
         eye_panel = panels.image_panel(eye_rgb, (self.side_w, 170), "robot-eye view (render, not an input)")
         depth_panel = panels.depth_pair_panel(depth, DEPTH_RANGE, (self.side_w, 170),
-                                              "stereo rig: paired ray depth 8x8 (no RGB)",
+                                              "stereo rig: ray depth 8x8, L / R (no RGB)",
                                               stale=stale, subtitle="10 Hz packets; feeds the speed brake only")
         lidar_panel = panels.lidar_panel(lidar, LIDAR_RANGE, (self.side_w, max(160, self.h - 340)),
-                                         "lidar: 36 sector minima (108 rays)", window_m=6.0, stale=stale, brake=brake,
+                                         "lidar: 36 sector minima of 108 rays", window_m=6.0, stale=stale, brake=brake,
                                          subtitle="forward is up; feeds the speed brake only")
         done = mission.completed_at is not None
         status = "COMPLETED" if done else mission.active_label.replace("_", " ")
