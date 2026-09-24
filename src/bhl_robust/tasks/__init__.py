@@ -287,6 +287,8 @@ gym.register(
 # control for them.
 for _task, _variants in (
     ("CubeToShelf", task_v2_env_cfg.CUBE_VARIANTS),
+    # Standing-height cube: a different, easier task (see its docstring).
+    ("CubeToShelfStand", task_v2_env_cfg.CUBE_STAND_VARIANTS),
     ("BallToNet", task_v2_env_cfg.BALL_VARIANTS),
     ("PlankToWall", task_v2_env_cfg.PLANK_VARIANTS),
     # The solo control decides whether the paired ball number is a cooperation
@@ -434,4 +436,21 @@ for _id, _cfg in (
         entry_point="isaaclab.envs:ManagerBasedRLEnv",
         disable_env_checker=True,
         kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _CLOTH_PPO},
+    )
+
+# ------------------------------------------------- B3 control: ice, no ice
+# The placed-ice cfgs with every ice_* patch at the ground's own friction.
+# Everything else -- patch placement, reset, terrain, curriculum, cameras --
+# is inherited unchanged, so a depth advantage that survives here is not
+# about friction (LOC-11, docs/REPO_TASKS.md).
+from bhl_robust.tasks import ice_control_env_cfg as _ice_control  # noqa: E402
+for _id, _cfg in (
+    ("Velocity-BHL-Biped-IceControl-v0", _ice_control.BipedIceControlEnvCfg),
+    ("Velocity-BHL-Biped-IceControl-Depth-v0", _ice_control.BipedIceControlDepthEnvCfg),
+):
+    gym.register(
+        id=_id,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG},
     )

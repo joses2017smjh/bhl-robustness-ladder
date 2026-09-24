@@ -31,7 +31,8 @@ from isaaclab.utils import configclass
 from bhl_robust.quat_order import native_quat
 from bhl_robust.reach_band import GRASP_Z
 from bhl_robust.tasks import furniture, task_v2_mdp as v2
-from bhl_robust.tasks.coop_lift_env_cfg import CoopLiftEnvCfg, _COLLISION, _RIGID, _object, _robot
+from bhl_robust.tasks.coop_lift_env_cfg import (CoopLiftEnvCfg, _COLLISION, _PINCH_JOINT_POS, _RIGID,
+                                               _object, _robot)
 from bhl_robust.tasks.rgb_env_cfg import CAM_POS, CAM_ROT, CAM_RANGE
 
 CAM_RES = 32
@@ -254,6 +255,57 @@ class CubeToShelfCfg(_TaskV2Base):
         self._add_cameras()
 
 
+#: Cube centre for the standing variant. Measured, not derived: with the
+#: upstream standing legs and the pinch arms the hand frames sit at z = 0.599
+#: (`results/repo-gpu-20260923/spawn_hands/...standing_pinch_arms.json`, step 1
+#: mean; `delta_raise_object_by` 0.299 against GRASP_Z). 0.55 puts the hands
+#: 5 cm above the cube's centre, inside its upper half, keeps the cube's top at
+#: 0.69 under the shelf slot's 0.72 ceiling (SHELF_DECK + SHELF_SLOT), and the
+#: cube seated on the deck ends at 0.52 -- 3 cm below the carry height, so the
+#: arms lower it in rather than the knees.
+STAND_CUBE_Z = 0.55
+
+
+def standing_pinch_arms(joint_pos: dict) -> dict:
+    """Upstream standing legs, pinch-pose arms (the spawn_diag recipe)."""
+    from berkeley_humanoid_lite_assets.robots.berkeley_humanoid_lite import HUMANOID_LITE_CFG
+    out = dict(joint_pos)
+    out.update(HUMANOID_LITE_CFG.init_state.joint_pos)
+    out.update({k: v for k, v in _PINCH_JOINT_POS.items()
+                if k.startswith("arm_") and "gripper" not in k})
+    return out
+
+
+@configclass
+class CubeToShelfStandCfg(CubeToShelfCfg):
+    """CubeToShelf with the cube raised to standing hand height. A DIFFERENT,
+    EASIER task than `CubeToShelfCfg`, not a fix to it.
+
+    reach_band.py put GRASP_Z at 0.30 so that standing is instrumentally
+    necessary. The spawn diagnostics (2026-09-24, `spawn_pose`/`spawn_hands`)
+    showed the crouch that reaches 0.30 asks 28-30 Nm of the knee against the
+    asset's 6 Nm effort limit, the crews stand up out of it, and standing the
+    hands are at 0.60 m with the cube 30 cm below them -- which is the shape of
+    every zero-lift crew run. This variant keeps the shelf, the rewards and the
+    success test, and moves the cube to `STAND_CUBE_Z` on a taller plinth with
+    the robots spawned standing (root z 0.0, as the walking asset spawns) with
+    the pinch arms. Results are reported as CubeToShelfStand and never compared
+    against CubeToShelf as if they were the same task.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        for name in ("robot_a", "robot_b"):
+            rc = getattr(self.scene, name)
+            x, y, _ = rc.init_state.pos
+            rc.init_state = rc.init_state.replace(
+                pos=(x, y, 0.0), joint_pos=standing_pinch_arms(rc.init_state.joint_pos))
+        self.object_spawn_z = STAND_CUBE_Z
+        self.scene.object = _object(self.scene.object.spawn, z=STAND_CUBE_Z)
+        h = STAND_CUBE_Z - 0.14
+        self.scene.plinth = furniture._box("plinth", (0.26, 0.26, h), (0.0, 0.0, h / 2.0))
+
+
 @configclass
 class BallToNetCfg(_TaskV2Base):
     """r = 0.18 m ball carried to a release zone and thrown into a net."""
@@ -370,6 +422,7 @@ def _variants(base, name):
 
 
 CUBE_VARIANTS = _variants(CubeToShelfCfg, "CubeToShelf")
+CUBE_STAND_VARIANTS = _variants(CubeToShelfStandCfg, "CubeToShelfStand")
 BALL_VARIANTS = _variants(BallToNetCfg, "BallToNet")
 PLANK_VARIANTS = _variants(PlankToWallCfg, "PlankToWall")
 

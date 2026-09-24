@@ -47,7 +47,7 @@ def _clear_sim() -> None:
 
 
 TASKS = [f"TaskV2-BHL-{t}-{v}-v0"
-         for t in ("CubeToShelf", "BallToNet", "PlankToWall")
+         for t in ("CubeToShelf", "BallToNet", "PlankToWall", "CubeToShelfStand")
          for v in ("Blind", "Depth", "Rgb")]
 
 
