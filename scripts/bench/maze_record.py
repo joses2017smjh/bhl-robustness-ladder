@@ -59,6 +59,9 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 
 SUCCESS_TERM = "button_reached"
+# The policy's lidar / stereo terms are scaled by these ranges (sensors_rig.py); panels undo it.
+LIDAR_RANGE_M = 12.0
+STEREO_RANGE_M = 6.0
 WANTS = ("success", "failure", "any")
 
 # Camera framings, metres. World-frame offsets; the sensor follows the root
@@ -212,6 +215,17 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--drop-corruption", action="store_true",
                    help="force enable_corruption=False (the published noise-off scoring); default keeps the training noise")
     p.add_argument("--selftest", action="store_true", help="run the Isaac-free helper checks and exit")
+    pan = p.add_argument_group("three-panel recording (top view + the policy's stereo and lidar inputs)")
+    pan.add_argument("--panels", action="store_true",
+                     help="add a fixed overhead camera and dump per-step lidar/stereo arrays for compose_panels.py")
+    pan.add_argument("--top-eye", default="1.5:-0.25:3.9", help="x:y:z offset of the overhead eye from env 0's origin")
+    pan.add_argument("--top-lookat", default="1.5:0.0:0.0", help="x:y:z offset of its target from env 0's origin")
+    pan.add_argument("--top-width", type=int, default=1280)
+    pan.add_argument("--top-height", type=int, default=720)
+    pan.add_argument("--render-quality", choices=("stock", "clean"), default="stock",
+                     help="clean = sampled direct lighting / AO / GI / reflections off via RenderCfg.carb_settings")
+    pan.add_argument("--warmup-frames", type=int, default=6,
+                     help="render-only frames after each reset before recording; the last two give the grain metrics")
     return p
 
 
@@ -391,6 +405,33 @@ def run(args, searches) -> int:
         offset=CameraCfg.OffsetCfg(pos=(0.0, 0.0, 2.0), rot=(1.0, 0.0, 0.0, 0.0), convention="world"),
     )
 
+    top_eye = parse_vec(args.top_eye, (1.5, -0.25, 3.9))
+    top_lookat = parse_vec(args.top_lookat, (1.5, 0.0, 0.0))
+    render_settings = {}
+    if args.panels:
+        cfg.scene.top_cam = CameraCfg(
+            prim_path="{ENV_REGEX_NS}/top_cam", height=args.top_height, width=args.top_width, data_types=["rgb"],
+            spawn=sim_utils.PinholeCameraCfg(focal_length=18.0),
+            offset=CameraCfg.OffsetCfg(pos=(0.0, 0.0, 4.0), rot=(1.0, 0.0, 0.0, 0.0), convention="world"),
+        )
+        if args.render_quality == "clean":
+            # performance.kit leaves sampled direct lighting on and the DL denoiser off (the
+            # NGX path that fails on these nodes): that pairing is the speckle in every clip
+            # so far (spatial grain 36 on 0-255, MuJoCo's 0.4). Off with the stochastic terms.
+            # Keys use dots, which RenderCfg turns into carb paths; no underscores.
+            render_settings = {
+                "rtx.directLighting.sampledLighting.enabled": False,
+                "rtx.directLighting.sampledLighting.autoEnable": False,
+                "rtx.ambientOcclusion.enabled": False,
+                "rtx.indirectDiffuse.enabled": False,
+                "rtx.reflections.enabled": False,
+                "rtx.raytracing.subpixel.mode": 0,
+            }
+            try:
+                cfg.sim.render.carb_settings = dict(render_settings)
+            except Exception as exc:                                 # noqa: BLE001
+                print(f"[panels] RenderCfg.carb_settings unavailable ({exc!r}); stock renderer", flush=True)
+                render_settings = {"error": repr(exc)}
     render_mode = None if args.no_viewport else "rgb_array"
     env = gym.make(args.task, cfg=cfg, render_mode=render_mode)
     u = env.unwrapped
@@ -496,8 +537,34 @@ def run(args, searches) -> int:
             "sensor_eye_offset_m": list(sensor_eye), "sensor_lookat_offset_m": list(sensor_lookat),
             "viewport_eye_world_m": vp_eye, "viewport_lookat_world_m": vp_lookat, "viewport_camera": viewport_camera,
             "viewport_error": viewport_error, "env0_origin_m": origin0, "frame_size": [args.width, args.height],
-            "video_fps": fps, "playback_speed": 1.0}
+            "video_fps": fps, "playback_speed": 1.0,
+            "panels_enabled": bool(args.panels), "render_quality": args.render_quality if args.panels else None,
+            "render_settings": render_settings, "top_eye_offset_m": list(top_eye), "top_lookat_offset_m": list(top_lookat)}
     print(json.dumps({k: v for k, v in base.items() if k != "capture_note"}), flush=True)
+    top_cam = u.scene["top_cam"] if args.panels else None
+    from bhl_robust.quat_order import unpack_wxyz
+
+    def term_slices() -> dict:
+        om = u.observation_manager
+        names, dims = om.active_terms["policy"], om.group_obs_term_dim["policy"]
+        out, col = {}, 0
+        for n_, d_ in zip(names, dims):
+            w_ = int(torch.tensor(d_).prod()) if not isinstance(d_, int) else d_
+            out[n_] = (slice(col, col + w_), tuple(d_) if not isinstance(d_, int) else (d_,))
+            col += w_
+        return out
+
+    pol_slices = term_slices() if args.panels else {}
+
+    def grain(a: np.ndarray) -> float:
+        a = a.astype(np.float32)
+        pd = np.pad(a, ((1, 1), (1, 1), (0, 0)), mode="edge")
+        b = sum(pd[i:i + a.shape[0], j:j + a.shape[1]] for i in range(3) for j in range(3)) / 9.0
+        return float(np.mean(np.abs(a - b)))
+
+    def read_top() -> np.ndarray:
+        rgb = as_torch(top_cam.data.output["rgb"])[0, ..., :3]
+        return np.ascontiguousarray(rgb.detach().cpu().numpy().astype(np.uint8))
 
     episodes: list[dict] = []
 
@@ -538,6 +605,32 @@ def run(args, searches) -> int:
             except Exception:                                    # noqa: BLE001
                 pass
         delay = ImuDelay(slices, delay_steps)
+        pan = None
+        if args.panels:
+            top_png = Path(args.frames_root) / f"{stem}-top"
+            if top_png.exists():
+                shutil.rmtree(top_png)
+            top_png.mkdir(parents=True, exist_ok=True)
+            pan = {"top_png_dir": str(top_png), "stereo_raw": [], "stereo_policy": [], "lidar_sector": [],
+                   "lidar_hits": [], "root_xy": [], "root_yaw": [], "top_frames": 0, "warmup": [], "errors": []}
+            try:
+                o0 = recovery.tensor(u.scene.env_origins)[0].detach().float()
+                eye = (o0 + o0.new_tensor(top_eye)).unsqueeze(0)
+                tgt = (o0 + o0.new_tensor(top_lookat)).unsqueeze(0)
+                top_cam.set_world_poses_from_view(eye, tgt)
+                for _ in range(max(2, args.warmup_frames)):
+                    u.sim.render()
+                    top_cam.update(dt=0.0, force_recompute=True)
+                    pan["warmup"].append(read_top())
+                    pan["warmup"] = pan["warmup"][-2:]
+                a, b = pan["warmup"]
+                pan["grain_spatial"] = grain(b)
+                pan["grain_temporal_mad"] = float(np.mean(np.abs(a.astype(np.float32) - b.astype(np.float32))))
+                print(f"[panels] {stem}: render quality {args.render_quality}: spatial grain {pan['grain_spatial']:.2f} "
+                      f"(stock clip 36.1, MuJoCo 0.4), temporal MAD {pan['grain_temporal_mad']:.2f} (stock 47.3)", flush=True)
+            except Exception as exc:                                 # noqa: BLE001
+                pan["errors"].append(f"warmup: {exc!r}")
+                print(f"[panels] warm-up failed ({exc!r})", flush=True)
         start = recovery.local_xy(u)[0].clone()
         goal = start.new_tensor((3.0, 0.0))
         min_dist = float((start - goal).norm())
@@ -557,9 +650,48 @@ def run(args, searches) -> int:
                 except Exception as exc:                         # noqa: BLE001
                     if steps == 0:
                         print(f"[sensor] set_world_poses_from_view failed ({exc!r})", flush=True)
+                if pan is not None:
+                    try:
+                        pol = obs["policy"] if isinstance(obs, dict) or hasattr(obs, "keys") else obs
+                        pol = pol.torch if hasattr(pol, "torch") else pol
+                        sl, sr = pol_slices["stereo_l"], pol_slices["stereo_r"]
+                        pooled = torch.stack([pol[0, sl[0]].reshape(sl[1]), pol[0, sr[0]].reshape(sr[1])]).float()
+                        pan["stereo_policy"].append((pooled * STEREO_RANGE_M).cpu().numpy().astype(np.float32))
+                        lsl = pol_slices["lidar"]
+                        pan["lidar_sector"].append((pol[0, lsl[0]].float() * LIDAR_RANGE_M).cpu().numpy().astype(np.float32))
+                        raw = []
+                        for eye_name in ("stereo_l", "stereo_r"):
+                            dimg = as_torch(u.scene[eye_name].data.output["distance_to_image_plane"])[0]
+                            raw.append(dimg.reshape(dimg.shape[0], dimg.shape[1]).float().cpu().numpy())
+                        pan["stereo_raw"].append(np.stack(raw).astype(np.float32))
+                        lid = u.scene["lidar"]
+                        hits = as_torch(lid.data.ray_hits_w)[0, :, :2].float()
+                        lpos = as_torch(lid.data.pos_w)[0, :2].float()
+                        qw = unpack_wxyz(as_torch(robot.data.root_quat_w)[0:1].float())[0]
+                        yaw = float(torch.atan2(2 * (qw[0] * qw[3] + qw[1] * qw[2]), 1 - 2 * (qw[2] ** 2 + qw[3] ** 2)))
+                        rel = hits - lpos
+                        rel = torch.nan_to_num(rel, nan=LIDAR_RANGE_M, posinf=LIDAR_RANGE_M, neginf=-LIDAR_RANGE_M)
+                        c, s_ = float(np.cos(-yaw)), float(np.sin(-yaw))
+                        body = torch.stack([c * rel[:, 0] - s_ * rel[:, 1], s_ * rel[:, 0] + c * rel[:, 1]], dim=1)
+                        pan["lidar_hits"].append(body.cpu().numpy().astype(np.float32))
+                        rxy = as_torch(robot.data.root_pos_w)[0, :2].float().cpu().numpy()
+                        pan["root_xy"].append(rxy.astype(np.float32))
+                        pan["root_yaw"].append(np.float32(yaw))
+                    except Exception as exc:                         # noqa: BLE001
+                        if not pan["errors"]:
+                            print(f"[panels] sensor read failed ({exc!r})", flush=True)
+                        pan["errors"].append(f"step {steps}: {exc!r}")
                 action = policy(delay(obs))
                 obs, _, dones, _ = env.step(action)
             steps += 1
+            if pan is not None:
+                try:
+                    from PIL import Image
+                    Image.fromarray(read_top()).save(Path(pan["top_png_dir"]) / f"frame_{pan['top_frames']:04d}.png")
+                    pan["top_frames"] += 1
+                except Exception as exc:                             # noqa: BLE001
+                    if pan["top_frames"] == 0 and steps == 1:
+                        print(f"[panels] top frame read failed ({exc!r})", flush=True)
             try:
                 rgb = as_torch(clip_cam.data.output["rgb"])[0, ..., :3]
                 sink.add(np.ascontiguousarray(rgb.detach().cpu().numpy().astype(np.uint8)))
@@ -595,6 +727,26 @@ def run(args, searches) -> int:
                 success = won or SUCCESS_TERM in fired
                 break
         sensor = sink.close()
+        panels_rec = None
+        if pan is not None:
+            npz = out_dir / f"{stem}.panels.npz"
+            try:
+                m = min(len(pan["stereo_raw"]), len(pan["stereo_policy"]), len(pan["lidar_sector"]), len(pan["lidar_hits"]))
+                np.savez_compressed(npz, stereo_raw_m=np.stack(pan["stereo_raw"][:m]) if m else np.zeros((0, 2, 1, 1), np.float32),
+                                    stereo_policy_m=np.stack(pan["stereo_policy"][:m]) if m else np.zeros((0, 2, 1, 1), np.float32),
+                                    lidar_sector_policy_m=np.stack(pan["lidar_sector"][:m]) if m else np.zeros((0, 36), np.float32),
+                                    lidar_hits_body_xy=np.stack(pan["lidar_hits"][:m]) if m else np.zeros((0, 1, 2), np.float32),
+                                    root_xy=np.stack(pan["root_xy"][:m]) if m else np.zeros((0, 2), np.float32),
+                                    root_yaw=np.asarray(pan["root_yaw"][:m], np.float32), step_dt=step_dt)
+                panels_rec = {"npz": str(npz), "top_png_dir": pan["top_png_dir"], "top_frames": pan["top_frames"],
+                              "sensor_rows": m, "grain_spatial": pan.get("grain_spatial"),
+                              "grain_temporal_mad": pan.get("grain_temporal_mad"),
+                              "grain_baseline": {"stock_clip_spatial": 36.1, "stock_clip_temporal_mad": 47.3, "mujoco_spatial": 0.4},
+                              "needs_denoise": (pan.get("grain_spatial") is None) or (pan["grain_spatial"] > 12.0),
+                              "errors": pan["errors"][:5], "n_errors": len(pan["errors"])}
+            except Exception as exc:                                 # noqa: BLE001
+                panels_rec = {"error": repr(exc), "top_png_dir": pan["top_png_dir"], "top_frames": pan["top_frames"]}
+            print(f"[panels] {stem}: {json.dumps({k: v for k, v in panels_rec.items() if k != 'errors'})}", flush=True)
         t_sim1 = sim_time()
         wall_s = time.time() - t_wall0
         viewport = {"recorded": use_viewport, "frames": 0, "mp4": None,
@@ -620,7 +772,7 @@ def run(args, searches) -> int:
                    sim_time_per_step=(None if t_sim0 is None or t_sim1 is None or steps == 0 else (t_sim1 - t_sim0) / steps),
                    final_button_distance_m=final_dist, min_button_distance_m=min_dist,
                    max_displacement_from_spawn_m=max_disp, camera_sensor=sensor, viewport=viewport,
-                   mp4=sensor["mp4"], viewport_mp4=viewport["mp4"], episode=stem)
+                   mp4=sensor["mp4"], viewport_mp4=viewport["mp4"], episode=stem, panels=panels_rec)
         (out_dir / f"{stem}.json").write_text(json.dumps(rec, indent=2) + "\n")
         print(json.dumps({k: rec[k] for k in ("episode", "seed", "imu_delay_steps", "outcome", "terminations_fired",
                                               "steps", "sim_seconds", "final_button_distance_m", "min_button_distance_m")}

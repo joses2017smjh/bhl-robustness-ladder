@@ -144,3 +144,9 @@ results/mission7-*/*.json.gz
 
 # raw Isaac maze recordings (2026-09-24): 20-25 MB per seed; only the GIF pair and sidecars are committed
 results/repo-gpu-20260923/maze-record/*.mp4
+
+# three-panel maze recordings: keep the clips, arrays and frames out of git
+results/repo-gpu-20260923/maze-panels/*.mp4
+results/repo-gpu-20260923/maze-panels/*.npz
+results/repo-gpu-20260923/maze-panels/.*-frames/
+results/repo-gpu-20260923/maze-panels/*.log
