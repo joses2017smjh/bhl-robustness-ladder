@@ -42,7 +42,7 @@ unset BHL_POLICY BHL_RND BHL_SYMMETRY
 
 check_arm() { case "$1" in BothDelay|BothDrop|BothBias|BothRobust) ;; *) echo "Invalid arm: $1 (BothDelay|BothDrop|BothBias|BothRobust)" >&2; exit 2;; esac; }
 # min(1800, arg), floored at 60: `timeout 0` would mean no timeout at all.
-probe_timeout() { local t=${1:-1800}; case "$t" in ''|*[!0-9]*) t=1800;; esac; [ "$t" -gt 1800 ] && t=1800; [ "$t" -lt 60 ] && t=60; echo "$t"; }
+probe_timeout() { local t=${1:-3600}; case "$t" in ''|*[!0-9]*) t=3600;; esac; [ "$t" -gt 3600 ] && t=3600; [ "$t" -lt 60 ] && t=60; echo "$t"; }   # 1800 s killed the BothDelay eval (21404180)
 
 # probe <task> <checkpoint> <output.json> <log> <timeout_s>: one boot, seven settings.
 # set +e around it: with --minimum-success 0 the probe still raises after

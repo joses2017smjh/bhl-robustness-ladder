@@ -100,7 +100,8 @@ else
     boot
     TRAIN_TMO=$(( WALL_S - SECONDS - EVAL_RESERVE_S )); [ "$TRAIN_TMO" -lt 60 ] && TRAIN_TMO=60   # 'timeout 0' = no limit
     echo "=== train $ARM $ITERS it (timeout ${TRAIN_TMO}s) | t=${SECONDS}s | $(date) ==="
-    bhl_exec "$INNER" train "$ARM" "$ITERS" "$TRAIN_TMO"; train_rc=$?
+    if [ "${EVAL_ONLY:-0}" = 1 ]; then echo "=== EVAL_ONLY=1: skipping training; evaluating the newest existing checkpoint of $ARM ==="; train_rc=0; JOB_START=0; else
+    bhl_exec "$INNER" train "$ARM" "$ITERS" "$TRAIN_TMO"; train_rc=$?; fi
     echo "=== train exit $train_rc | t=${SECONDS}s ==="; release
     # 3. Evaluate the newest checkpoint written by this job's run.
     if [ $(( WALL_S - SECONDS )) -lt 420 ]; then
