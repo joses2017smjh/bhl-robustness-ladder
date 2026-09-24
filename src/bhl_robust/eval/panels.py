@@ -148,8 +148,8 @@ def lidar_panel(sector_m, max_range: float, size: tuple[int, int], title: str, w
         # body +x forward -> up; body +y (left) -> screen left
         return cx - yb * scale, cy - xb * scale
 
-    for r in (1.0, 2.0, 4.0, 6.0):
-        if r <= window_m:
+    for r in (0.5, 1.0, 2.0, 4.0, 6.0):
+        if r <= window_m and (r >= 1.0 or window_m <= 3.0):
             rr = r * scale
             draw.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), outline=GRID)
             draw.text((cx + rr - 18, cy - 12), f"{r:g}m", font=load_font(10), fill=DIM)

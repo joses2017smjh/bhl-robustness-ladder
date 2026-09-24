@@ -55,14 +55,16 @@ def compose(episode: dict, top_dir: Path, out_mp4: Path, png_dir: Path, quality_
             side = int(round(pooled.shape[1] ** 0.5))
             pooled = pooled.reshape(2, side, side) if side * side == pooled.shape[1] else pooled[:, None, :]
         sectors = npz["lidar_sector_policy_m"][k]    # (36,)
-        hits = npz["lidar_hits_body_xy"][k]          # (R, 2)
+        hits = npz["lidar_hits_body_xy"][k]          # (R, 2); a miss was recorded as the range sentinel
+        hits = hits[np.hypot(hits[:, 0], hits[:, 1]) < LIDAR_RANGE - 0.1]
         # the two panels add up to the 720 px overhead view
         dh = min(300, top.shape[0] // 2)
         dp = panels.depth_pair_panel(raw, STEREO_RANGE, (320, dh), "stereo: ray depth 64x64, L / R (no RGB)",
                                      pooled=pooled, subtitle="policy input = the pooled pair (+ training noise)")
+        # 3 m window: the corridor walls sit 0.45 m out and would be a few pixels at 6 m
         lp = panels.lidar_panel(sectors, LIDAR_RANGE, (320, max(200, top.shape[0] - dh)),
-                                "lidar: 36 sector minima of 500 rays", window_m=6.0, rays_xy=hits,
-                                subtitle="forward is up; policy input, raw hits behind")
+                                "lidar: 36 sector minima of 500 rays", window_m=3.0, rays_xy=hits,
+                                subtitle="forward is up; 3 m window of the 12 m range; raw hits behind")
         t = k * step_dt
         status = ("REACHED THE BUTTON" if (k == n - 1 and outcome == "success")
                   else (outcome.upper().replace("_", " ") if k == n - 1 else "walking"))
