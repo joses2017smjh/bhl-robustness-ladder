@@ -655,7 +655,9 @@ def run(args, searches) -> int:
                         pol = obs["policy"] if isinstance(obs, dict) or hasattr(obs, "keys") else obs
                         pol = pol.torch if hasattr(pol, "torch") else pol
                         sl, sr = pol_slices["stereo_l"], pol_slices["stereo_r"]
-                        pooled = torch.stack([pol[0, sl[0]].reshape(sl[1]), pol[0, sr[0]].reshape(sr[1])]).float()
+                        pooled = torch.stack([pol[0, sl[0]].reshape(-1), pol[0, sr[0]].reshape(-1)]).float()
+                        side_ = int(round(pooled.shape[1] ** 0.5))          # the pooled eye is square (64/pool)
+                        pooled = pooled.reshape(2, side_, side_) if side_ * side_ == pooled.shape[1] else pooled.unsqueeze(1)
                         pan["stereo_policy"].append((pooled * STEREO_RANGE_M).cpu().numpy().astype(np.float32))
                         lsl = pol_slices["lidar"]
                         pan["lidar_sector"].append((pol[0, lsl[0]].float() * LIDAR_RANGE_M).cpu().numpy().astype(np.float32))

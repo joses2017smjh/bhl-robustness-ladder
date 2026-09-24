@@ -43,6 +43,9 @@ def compose(episode: dict, top_dir: Path, out_mp4: Path, png_dir: Path, quality_
         top = np.asarray(Image.open(frames[k]).convert("RGB"))
         raw = npz["stereo_raw_m"][k]                 # (2, H, W)
         pooled = npz["stereo_policy_m"][k]           # (2, h, w)
+        if pooled.ndim == 2:                         # flat terms: make them square images
+            side = int(round(pooled.shape[1] ** 0.5))
+            pooled = pooled.reshape(2, side, side) if side * side == pooled.shape[1] else pooled[:, None, :]
         sectors = npz["lidar_sector_policy_m"][k]    # (36,)
         hits = npz["lidar_hits_body_xy"][k]          # (R, 2)
         # the two panels add up to the 720 px overhead view
