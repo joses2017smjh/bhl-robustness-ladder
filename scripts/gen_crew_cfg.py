@@ -138,8 +138,8 @@ def emit(n, vision):
           f'    reaching_fine = RewTerm(func=coop.crew_reach, weight=2.0, params={{"std": 0.12, "robot_cfgs": {hands}}})',
           f'    opposing_clamp = RewTerm(func=coop.crew_force_closure, weight=2.0, params={{"robot_cfgs": {hands}}})',
           f'    crew_spread = RewTerm(func=coop.crew_spread, weight=-2.0, params={{"robot_cfgs": {hands}}})',
-          '    lift_progress = RewTerm(func=coop.object_lift_progress, weight=2.0, params={"height": 0.04})',
-          '    lifting_object = RewTerm(func=coop.object_is_lifted, weight=15.0, params={"height": 0.04})',
+          '    lift_progress = RewTerm(func=coop.object_lift_progress, weight=2.0)',   # no params: matches the pair task (2026-09-24 crew-gate fix)
+          '    lifting_object = RewTerm(func=coop.object_is_lifted, weight=15.0, params={"minimal_height": 0.04})',   # object_is_lifted(minimal_height=...)
           '    object_tilt = RewTerm(func=coop.object_tilt_l2, weight=-2.0)',
           '    object_xy = RewTerm(func=coop.object_xy_drift_l2, weight=-1.0)',
           '    object_vel = RewTerm(func=coop.object_lin_vel_l2, weight=-0.05)',
