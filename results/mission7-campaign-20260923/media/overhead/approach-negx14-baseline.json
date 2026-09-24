@@ -1,0 +1,49 @@
+{
+  "output": "results/mission7-campaign-20260923/media/overhead/approach-negx14-baseline.mp4",
+  "output_sha256": "eacbd4c6e560565ad6e36fabee76de1a855d8a61fbf3ba18abc42d238169be1c",
+  "renderer": "MuJoCo EpisodeRecorder, overhead camera, 25 fps",
+  "camera": "overhead",
+  "robot_visibility": {
+    "camera": "overhead",
+    "probes": 3,
+    "probe_every_frames": 25,
+    "robot_pixel_fraction_min": 0.004722222222222222,
+    "robot_pixel_fraction_mean": 0.004851466049382716,
+    "share_of_probes_with_robot_visible": 1.0,
+    "visible_threshold_fraction": 0.001
+  },
+  "ffmpeg_error": null,
+  "task": "Mission 7 privileged Approach, 0.65 m spawn, balanced-matrix layout",
+  "split": "test",
+  "layout_index": 14,
+  "controller_arm": "recovery",
+  "controller": "measured_translation_0.50mps_with_bounded_0.30mps_stall_pulse",
+  "reset_sequence": [
+    1,
+    5,
+    6,
+    7,
+    14
+  ],
+  "reproduces_evaluated_episode": true,
+  "outcome_of_this_run": {
+    "success": false,
+    "failure": "excessive_collision",
+    "collisions": 6,
+    "elapsed_s": 2.1199999999998753
+  },
+  "evidence": "results/mission7-campaign-20260923/approach-negx-recovery/result.json",
+  "evidence_sha256": "0090359daae635566ad09bcfaf6e352820e93bcf07fc757cd8a772c09f80350d",
+  "caption": "Approach, world -x, layout 14: 0.50 m/s recovery translation -- hits goal_post_-1 on the first stride",
+  "labels": "privileged pose (oracle), frozen learned gait, free-standing, native MuJoCo",
+  "scope": "One layout under one controller arm; the gate result is the 64-episode matrix in the evidence file, not this clip.",
+  "git_commit": "c1c92e6d3166a441fc220bdedff18a4dd861b97a",
+  "ffmpeg_visibility": {
+    "median_central_std": 19.6,
+    "median_central_diff": 1.586,
+    "old_tracking_reference": {
+      "central_std": "3.5-9",
+      "central_diff": "0-0.3"
+    }
+  }
+}
