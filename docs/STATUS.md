@@ -17,7 +17,7 @@ work; `main` untouched). Master backlog: [`REPO_TASKS.md`](REPO_TASKS.md).
 | Dual-arm folding (linked repo) | **external driver active** | v2 closed negative (baseline retained); v3 recovery-supervision running under its own driver | do not modify while `lh-v3-*` runs; consume its REPORT/STATUS |
 
 Envelope for this campaign: ≤8 concurrent jobs; CPU on `share` with
-`--constraint=haswell&el8` for deterministic controls; GPU ≤2 concurrent on
+`--constraint=haswell&el8` for deterministic controls; GPU concurrency ≤8 jobs of ours, GPU hours uncapped from 2026-09-24 (user) on
 `gpu`/`ampere`, ≤24 GPU-h for evaluation and rendering plus ≤24 GPU-h reserved
 for one justified training/adaptation; ≥100 GB free; compact retained evidence
 (raw traces trimmed, verdicts and receipts kept). Mission 7's remaining 101
