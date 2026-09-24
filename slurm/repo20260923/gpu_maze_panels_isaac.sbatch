@@ -31,7 +31,9 @@ export MAZE_REC_OUT=${MAZE_REC_OUT:-$REPO/results/repo-gpu-20260923/maze-panels}
 export MAZE_REC_TIMEOUT=${MAZE_REC_TIMEOUT:-2400}
 export MAZE_REC_QUALITY=${MAZE_REC_QUALITY:-clean}
 export MAZE_REC_FRAMES=${TMPDIR:-/tmp}/maze-panels-frames-$SLURM_JOB_ID
-export BHL_FORWARD_VARS="$BHL_FORWARD_VARS MAZE_REC_OUT MAZE_REC_TIMEOUT MAZE_REC_QUALITY MAZE_REC_FRAMES MAZE_REC_TASK MAZE_REC_CKPT MAZE_REC_LABEL MAZE_REC_SEARCHES"
+export MAZE_REC_LIGHT_SCALE=${MAZE_REC_LIGHT_SCALE:-0.3}
+export MAZE_PANELS_CROP=${MAZE_PANELS_CROP:-0.75}
+export BHL_FORWARD_VARS="$BHL_FORWARD_VARS MAZE_REC_OUT MAZE_REC_TIMEOUT MAZE_REC_QUALITY MAZE_REC_FRAMES MAZE_REC_TASK MAZE_REC_CKPT MAZE_REC_LABEL MAZE_REC_SEARCHES MAZE_REC_LIGHT_SCALE"
 LABEL=both-s0-panels-$MAZE_REC_QUALITY
 GIF=${MAZE_PANELS_GIF:-$REPO/docs/gifs/isaac/maze_both_panels-$MAZE_REC_QUALITY.gif}
 PUB=$REPO/results/weekend-20260919/maze-eval-Full-Both-s0.json
@@ -56,7 +58,7 @@ args=(); for s in $MAZE_REC_SEARCHES; do args+=(--search "$s"); done
 timeout "$MAZE_REC_TIMEOUT" "$PY" "$REPO/scripts/bench/maze_record.py" --headless --enable_cameras \
     --task "$MAZE_REC_TASK" --checkpoint "$MAZE_REC_CKPT" --label "$MAZE_REC_LABEL" --out-dir "$MAZE_REC_OUT" \
     --frames-root "$MAZE_REC_FRAMES" --max-steps 600 --no-viewport --panels --render-quality "$MAZE_REC_QUALITY" \
-    --top-width 1280 --top-height 720 "${args[@]}" > "$log" 2>&1
+    --top-width 1280 --top-height 720 --light-scale "${MAZE_REC_LIGHT_SCALE:-0.3}" --floor-checker "${args[@]}" > "$log" 2>&1
 rc=$?
 grep -E '^(SEARCH |\{"episode"|\[panels\]|\[sensor\]|\[clip\]|RECORD-ERROR)' "$log" | cut -c1-400 || true
 echo "=== inner exit $rc ==="
@@ -95,7 +97,7 @@ if pan.get("needs_denoise"):
     if r.returncode == 0 and any(dn.glob("frame_*.png")):
         top, denoised, note = dn, True, note + ", nlmeans denoise applied"
 mp4 = out / f"{label}.panels.mp4"
-res = compose_panels.compose(rec, top, mp4, out / f".{label}-frames", note)
+res = compose_panels.compose(rec, top, mp4, out / f".{label}-frames", note, float(os.environ.get("MAZE_PANELS_CROP", "1.0")))
 if not res.get("mp4"):
     png = Path(res["png_dir"])
     for enc, extra in (("libx264", ["-preset", "veryfast", "-crf", "20"]), ("mpeg4", ["-q:v", "3"])):
@@ -112,7 +114,7 @@ side = {"output": os.path.relpath(gif, Path.cwd()), "output_sha256": sha(gif), "
         "evidence": os.path.relpath(rec_p, Path.cwd()), "evidence_sha256": sha(rec_p),
         "episode": {k: rec.get(k) for k in ("task", "checkpoint", "checkpoint_sha256", "seed", "outcome", "terminations_fired",
                                             "steps", "sim_seconds", "observation_corruption", "stack", "git_commit")},
-        "render": {"quality": quality, "settings": rec.get("render_settings"), "effective": rec.get("rtx_effective"), "grain_spatial": pan.get("grain_spatial"),
+        "render": {"quality": quality, "settings": rec.get("render_settings"), "effective": rec.get("rtx_effective"), "light_scale": rec.get("light_scale"), "lights_scaled": rec.get("lights_scaled"), "floor_checker_tiles": rec.get("floor_checker_tiles"), "crop_frac": float(os.environ.get("MAZE_PANELS_CROP", "1.0")), "grain_spatial": pan.get("grain_spatial"),
                    "grain_temporal_mad": pan.get("grain_temporal_mad"), "grain_baseline": pan.get("grain_baseline"),
                    "denoised": denoised, "top_eye_offset_m": rec.get("top_eye_offset_m"), "top_frames": pan.get("top_frames"),
                    "sensor_rows": pan.get("sensor_rows"), "sensor_read_errors": pan.get("n_errors")},

@@ -25,7 +25,10 @@ LIDAR_RANGE = 12.0
 STEREO_RANGE = 6.0
 
 
-def compose(episode: dict, top_dir: Path, out_mp4: Path, png_dir: Path, quality_note: str = "") -> dict:
+def compose(episode: dict, top_dir: Path, out_mp4: Path, png_dir: Path, quality_note: str = "",
+            crop_frac: float = 1.0) -> dict:
+    """`crop_frac` keeps that central fraction of the overhead frame's height
+    (the corridor is 0.9 m tall in a 2.6 m tall view)."""
     from PIL import Image
     npz = np.load(episode["panels"]["npz"])
     frames = sorted(top_dir.glob("frame_*.png"))
@@ -41,6 +44,11 @@ def compose(episode: dict, top_dir: Path, out_mp4: Path, png_dir: Path, quality_
     last = None
     for k in range(n):
         top = np.asarray(Image.open(frames[k]).convert("RGB"))
+        if 0.0 < crop_frac < 1.0:
+            hh = top.shape[0]
+            keep = int(hh * crop_frac) // 2 * 2
+            y0 = (hh - keep) // 2
+            top = top[y0:y0 + keep]
         raw = npz["stereo_raw_m"][k]                 # (2, H, W)
         pooled = npz["stereo_policy_m"][k]           # (2, h, w)
         if pooled.ndim == 2:                         # flat terms: make them square images
@@ -49,9 +57,10 @@ def compose(episode: dict, top_dir: Path, out_mp4: Path, png_dir: Path, quality_
         sectors = npz["lidar_sector_policy_m"][k]    # (36,)
         hits = npz["lidar_hits_body_xy"][k]          # (R, 2)
         # the two panels add up to the 720 px overhead view
-        dp = panels.depth_pair_panel(raw, STEREO_RANGE, (320, 300), "stereo: ray depth 64x64, L / R (no RGB)",
+        dh = min(300, top.shape[0] // 2)
+        dp = panels.depth_pair_panel(raw, STEREO_RANGE, (320, dh), "stereo: ray depth 64x64, L / R (no RGB)",
                                      pooled=pooled, subtitle="policy input = the pooled pair (+ training noise)")
-        lp = panels.lidar_panel(sectors, LIDAR_RANGE, (320, max(200, top.shape[0] - 300)),
+        lp = panels.lidar_panel(sectors, LIDAR_RANGE, (320, max(200, top.shape[0] - dh)),
                                 "lidar: 36 sector minima of 500 rays", window_m=6.0, rays_xy=hits,
                                 subtitle="forward is up; policy input, raw hits behind")
         t = k * step_dt
@@ -77,11 +86,12 @@ def main() -> int:
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--png-dir", type=Path, default=None)
     ap.add_argument("--quality-note", default="")
+    ap.add_argument("--crop-frac", type=float, default=1.0)
     args = ap.parse_args()
     ep = json.loads(args.episode.read_text())
     top_dir = args.top_dir or Path(ep["panels"]["top_png_dir"])
     png_dir = args.png_dir or (args.out.parent / f".{args.out.stem}-frames")
-    res = compose(ep, top_dir, args.out, png_dir, args.quality_note)
+    res = compose(ep, top_dir, args.out, png_dir, args.quality_note, args.crop_frac)
     print(json.dumps(res))
     return 0 if res.get("mp4") or res.get("frames") else 1
 

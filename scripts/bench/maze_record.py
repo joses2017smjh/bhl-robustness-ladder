@@ -227,6 +227,12 @@ def build_parser() -> argparse.ArgumentParser:
                           "missing here (grain 36); clean/taa = stochastic terms off (+ TAA): measured 34, not enough; "
                           "rtl = the classic RaytracedLighting mode (no per-pixel path sampling); "
                           "pathtrace = offline PathTracing at 16 spp through the OptiX denoiser (no NGX needed)")
+    pan.add_argument("--light-scale", type=float, default=1.0,
+                     help="multiply every scene light's intensity (path tracing over-exposes the stock lights: the "
+                          "tan floor and blue walls came out white in 21408634)")
+    pan.add_argument("--floor-checker", action="store_true",
+                     help="visual-only 0.5 m checker tiles on the corridor floor (the fused ground mesh has no albedo); "
+                          "collision off and not in any ray-caster's mesh list, so the MDP is untouched")
     pan.add_argument("--warmup-frames", type=int, default=6,
                      help="render-only frames after each reset before recording; the last two give the grain metrics")
     return p
@@ -478,10 +484,42 @@ def run(args, searches) -> int:
             except Exception as exc:                                 # noqa: BLE001
                 print(f"[panels] RenderCfg override unavailable ({exc!r})", flush=True)
                 render_settings = {**render_settings, "rendercfg_error": repr(exc)}
+    lights_scaled = {}
+    if args.panels and args.light_scale != 1.0:
+        for name_, val_ in list(vars(cfg.scene).items()):
+            sp = getattr(val_, "spawn", None)
+            if sp is not None and hasattr(sp, "intensity") and "Light" in type(sp).__name__:
+                before = float(sp.intensity)
+                sp.intensity = before * args.light_scale
+                lights_scaled[name_] = [before, float(sp.intensity)]
+        print(f"[panels] scene lights scaled x{args.light_scale:g}: {json.dumps(lights_scaled)}", flush=True)
     render_mode = None if args.no_viewport else "rgb_array"
     env = gym.make(args.task, cfg=cfg, render_mode=render_mode)
     u = env.unwrapped
     overlays = 0
+    checker_tiles = 0
+    if args.panels and args.floor_checker:
+        try:
+            from bhl_robust.terrains.maze_layout import FLOOR_RGB
+            origins_ = recovery.tensor(u.scene.env_origins)
+            o = origins_[0].detach().cpu().tolist()
+            dark = tuple(c * 0.82 for c in FLOOR_RGB)
+            tile, half_x, half_y = 0.5, 3.5, 2.5
+            nx, ny = int(2 * half_x / tile), int(2 * half_y / tile)
+            for ix in range(nx):
+                for iy in range(ny):
+                    cx_ = -half_x + (ix + 0.5) * tile
+                    cy_ = -half_y + (iy + 0.5) * tile
+                    tcfg = sim_utils.CuboidCfg(
+                        size=(tile, tile, 0.004),
+                        visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=FLOOR_RGB if (ix + iy) % 2 == 0 else dark),
+                        collision_props=sim_utils.CollisionPropertiesCfg(collision_enabled=False),
+                    )
+                    tcfg.func(f"/World/maze_panels_floor/t{ix}_{iy}", tcfg, translation=(o[0] + cx_, o[1] + cy_, o[2] + 0.002))
+                    checker_tiles += 1
+            print(f"[panels] spawned {checker_tiles} visual-only floor tiles", flush=True)
+        except Exception as exc:                                     # noqa: BLE001
+            print(f"[panels] floor checker skipped ({exc!r})", flush=True)
     if not args.no_overlays:
         try:
             from bhl_robust.terrains.maze_viz import spawn_maze_clip_color
@@ -585,6 +623,8 @@ def run(args, searches) -> int:
             "viewport_error": viewport_error, "env0_origin_m": origin0, "frame_size": [args.width, args.height],
             "video_fps": fps, "playback_speed": 1.0,
             "panels_enabled": bool(args.panels), "render_quality": args.render_quality if args.panels else None,
+            "light_scale": args.light_scale if args.panels else None, "lights_scaled": lights_scaled,
+            "floor_checker_tiles": checker_tiles,
             "render_settings": render_settings, "top_eye_offset_m": list(top_eye), "top_lookat_offset_m": list(top_lookat)}
     print(json.dumps({k: v for k, v in base.items() if k != "capture_note"}), flush=True)
     top_cam = u.scene["top_cam"] if args.panels else None
