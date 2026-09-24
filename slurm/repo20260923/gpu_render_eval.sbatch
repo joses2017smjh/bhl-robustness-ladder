@@ -42,6 +42,14 @@ case "$mode" in
     dirs=(); for r in "$@"; do dirs+=("$U/logs/rsl_rl/coop_lift/$r"); done
     "$PY" scripts/bench/coop_sim2sim.py --run-dir "${dirs[@]}" --upstream "$U" --cache-dir "$CACHE" --seeds 8 --crews 2 3 \
       --csv results/coop-occluded-20260923/coop_occluded_sim2sim.csv ;;
+  crewscore)   # crew lift runs (coop-crew{3,4}-{blind,vision}-s0) scored cross-engine at their own crew size
+    for tag in crew3-blind crew4-blind crew3-vision crew4-vision; do
+      d=$(ls -d "$U"/logs/rsl_rl/coop_lift/*_coop-${tag}-s0 2>/dev/null | tail -1); [ -n "$d" ] || { echo "no run dir for $tag"; continue; }
+      n=3; case "$tag" in crew4*) n=4;; esac
+      "$PY" scripts/bench/coop_sim2sim.py --run-dir "$d" --upstream "$U" --cache-dir "$CACHE" --seeds 8 --crews "$n" \
+        --csv "results/repo-gpu-20260923/crew-score/${tag}.csv" || echo "SCORE FAILED for $tag"
+    done
+    ls results/repo-gpu-20260923/crew-score/*.csv 2>/dev/null && echo "CREW-SCORE COMPLETE" ;;
   *) echo "unknown mode $mode"; exit 2 ;;
 esac
 echo REPO_CPU_EVAL_COMPLETE
