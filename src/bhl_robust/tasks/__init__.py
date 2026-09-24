@@ -360,6 +360,34 @@ for _id, _cfg in RECOVERY_CONFIGS.items():
                  disable_env_checker=True,
                  kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG})
 
+# ------------------------------------------------ SF-04 teacher-student distillation
+# The Full-stage BothRobust env publishing a clean `teacher` group beside the
+# degraded `policy` group, so the working Both Full s0 MLP can be distilled into
+# a recurrent student (src/bhl_robust/tasks/maze_distill.py). Three entry
+# points: the env, the ordinary PPO cfg (unused, keeps the id uniform) and the
+# distillation cfg that scripts/train_distill.py and the probe's
+# --runner distillation read.
+#
+# Guarded like Tier 3: the module needs isaaclab_rl's rsl-rl >= 4 model cfgs
+# (RslRlRNNModelCfg, handle_deprecated_rsl_rl_cfg), which the v51 stack does
+# not ship, and every v51 job imports this registry.
+try:
+    from bhl_robust.tasks import maze_distill  # noqa: E402
+
+    gym.register(
+        id="Velocity-BHL-MazeRecovery-Full-BothRobustDistill-v0",
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={
+            "env_cfg_entry_point": maze_distill.MazeBothRobustDistillEnvCfg,
+            "rsl_rl_cfg_entry_point": _PPO_CFG,
+            "rsl_rl_distillation_cfg_entry_point": maze_distill.MazeStudentDistillCfg,
+        },
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] SF-04 distillation id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+
 # ------------------------------------------------------------------ Tier 3
 # The 22-DoF robot on stairs with depth and the arm-deviation penalty ablated in
 # the task itself, so the rsl-rl PPO rows and the skrl MAPPO rows cannot differ

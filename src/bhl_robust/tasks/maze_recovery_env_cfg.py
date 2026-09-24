@@ -100,7 +100,11 @@ RECOVERY_CONFIGS = {}
 for _stage in STAGE_SPAWNS:
     for _arm, _base in (("Blind", legacy.MazeBlindEnvCfg), ("Lidar", legacy.MazeLidarEnvCfg),
                         ("Stereo", legacy.MazeStereoEnvCfg), ("Both", legacy.MazeBothEnvCfg),
-                        ("BothRobust", _robust.MazeBothRobustEnvCfg)):   # SF-04, docs/SENSOR_FUSION.md
+                        # SF-04, docs/SENSOR_FUSION.md: all three ingredients, then one at a time.
+                        ("BothRobust", _robust.MazeBothRobustEnvCfg),
+                        ("BothDelay", _robust.MazeBothDelayEnvCfg),
+                        ("BothDrop", _robust.MazeBothDropEnvCfg),
+                        ("BothBias", _robust.MazeBothBiasEnvCfg)):
         _cfg = _make_config(_base, _stage, _arm)
         globals()[_cfg.__name__] = _cfg
         RECOVERY_CONFIGS[f"Velocity-BHL-MazeRecovery-{_stage}-{_arm}-v0"] = _cfg

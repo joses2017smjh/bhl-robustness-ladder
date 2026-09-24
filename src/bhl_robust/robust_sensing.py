@@ -1,14 +1,60 @@
-"""Per-episode sensor-realism state for the SF-04 `BothRobust` maze arm.
+"""Per-episode sensor-realism state for the SF-04 maze arms.
 
 Pure torch, no Isaac import, so the logic is unit-testable. One instance lives
 on the environment; the reset event resamples the rows of the envs that reset.
 All ranges are experiment settings (docs/SENSOR_FUSION.md SF-04), not a
 calibration of any IMU or LiDAR.
+
+`SF04_ARM_PARAMS` is the single source of truth for the four arms' parameter
+sets. `bhl_robust.tasks.maze_robust` builds its env-cfg fields from it and
+`tests/test_maze_robust_params.py` checks that each arm perturbs only its own
+ingredient, all without an Isaac import.
 """
 
 from __future__ import annotations
 
 import torch
+
+SF04_PARAM_NAMES = ("p_lidar_off", "p_stereo_off", "gyro_bias_std", "gravity_bias_std", "max_delay_steps")
+
+# Floats must be float literals and max_delay_steps an int: Isaac Lab's
+# `update_class_from_dict` (the Hydra round-trip in train.py) type-checks each
+# scalar against the cfg default with isinstance.
+SF04_ARM_PARAMS: dict[str, dict[str, float | int]] = {
+    # All three ingredients (the original SF-04 recipe).
+    "BothRobust": dict(p_lidar_off=0.2, p_stereo_off=0.2, gyro_bias_std=0.02, gravity_bias_std=0.02,
+                       max_delay_steps=1),
+    # IMU delay 0-1 policy step only.
+    "BothDelay": dict(p_lidar_off=0.0, p_stereo_off=0.0, gyro_bias_std=0.0, gravity_bias_std=0.0,
+                      max_delay_steps=1),
+    # Whole-modality LiDAR / stereo dropout only.
+    "BothDrop": dict(p_lidar_off=0.2, p_stereo_off=0.2, gyro_bias_std=0.0, gravity_bias_std=0.0,
+                     max_delay_steps=0),
+    # Per-episode gyro / gravity bias only.
+    "BothBias": dict(p_lidar_off=0.0, p_stereo_off=0.0, gyro_bias_std=0.02, gravity_bias_std=0.02,
+                     max_delay_steps=0),
+}
+
+
+def sf04_params(source=None) -> dict[str, float | int]:
+    """Return the five state kwargs from a cfg object, a mapping or None (BothRobust defaults).
+
+    Missing entries fall back to the BothRobust values, so a cfg that predates
+    the parametrization behaves exactly as before.
+    """
+    base = dict(SF04_ARM_PARAMS["BothRobust"])
+    if source is None:
+        return base
+    for name in SF04_PARAM_NAMES:
+        if isinstance(source, dict):
+            if name in source:
+                base[name] = source[name]
+        elif hasattr(source, name):
+            base[name] = getattr(source, name)
+    for name in SF04_PARAM_NAMES[:-1]:
+        base[name] = float(base[name])
+    base["max_delay_steps"] = int(base["max_delay_steps"])
+    return base
 
 
 class RobustSensingState:
