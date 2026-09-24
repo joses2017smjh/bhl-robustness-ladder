@@ -32,7 +32,8 @@ export MAZE_REC_TIMEOUT=${MAZE_REC_TIMEOUT:-2400}
 export MAZE_REC_QUALITY=${MAZE_REC_QUALITY:-clean}
 export MAZE_REC_FRAMES=${TMPDIR:-/tmp}/maze-panels-frames-$SLURM_JOB_ID
 export BHL_FORWARD_VARS="$BHL_FORWARD_VARS MAZE_REC_OUT MAZE_REC_TIMEOUT MAZE_REC_QUALITY MAZE_REC_FRAMES MAZE_REC_TASK MAZE_REC_CKPT MAZE_REC_LABEL MAZE_REC_SEARCHES"
-GIF=$REPO/docs/gifs/isaac/maze_both_panels.gif
+LABEL=both-s0-panels-$MAZE_REC_QUALITY
+GIF=${MAZE_PANELS_GIF:-$REPO/docs/gifs/isaac/maze_both_panels-$MAZE_REC_QUALITY.gif}
 PUB=$REPO/results/weekend-20260919/maze-eval-Full-Both-s0.json
 mkdir -p "$MAZE_REC_OUT" "$MAZE_REC_FRAMES" "$(dirname "$GIF")"
 source "$REPO/slurm/inner/v60_boot_gate.sh"
@@ -43,7 +44,7 @@ cd "$REPO" && echo "repo HEAD $(git rev-parse --short HEAD)"
 CK=$("$PYH" -c 'import json,sys; print(json.load(open(sys.argv[1]))["checkpoint"])' "$PUB")
 [ -f "$CK" ] || { echo "MAZE-PANELS RESULT: FAIL (checkpoint missing: $CK)"; exit 1; }
 echo "checkpoint $CK"
-rm -f "$MAZE_REC_OUT"/both-s0-panels*.json "$MAZE_REC_OUT"/both-s0-panels*.mp4 "$MAZE_REC_OUT"/both-s0-panels*.npz "$MAZE_REC_OUT"/*.error.txt
+rm -f "$MAZE_REC_OUT"/"$LABEL"*.json "$MAZE_REC_OUT"/"$LABEL"*.mp4 "$MAZE_REC_OUT"/"$LABEL"*.npz "$MAZE_REC_OUT"/"$LABEL"*.error.txt
 
 INNER=$MAZE_REC_OUT/.inner-$SLURM_JOB_ID.sh
 cat >"$INNER" <<'INNER_EOF'
@@ -62,21 +63,21 @@ echo "=== inner exit $rc ==="
 INNER_EOF
 chmod +x "$INNER"
 v60_boot_gate; gate_pid=${!:-}
-MAZE_REC_LABEL=both-s0-panels MAZE_REC_TASK=Velocity-BHL-MazeRecovery-Full-Both-v0 MAZE_REC_CKPT="$CK" \
-    MAZE_REC_SEARCHES="both-s0-panels:success:100:3" bhl_exec "$INNER"
+MAZE_REC_LABEL="$LABEL" MAZE_REC_TASK=Velocity-BHL-MazeRecovery-Full-Both-v0 MAZE_REC_CKPT="$CK" \
+    MAZE_REC_SEARCHES="$LABEL:success:100:3" bhl_exec "$INNER"
 kill "$gate_pid" 2>/dev/null || true; _v60_release "${V60_BOOT_LOCK:-/nfs/hpc/share/$USER/Humanoid_Lite/.v60-boot.lock}"
 rm -f "$INNER"
 
 # --- compose + GIF outside the container ---
 cd "$REPO"
-"$PYH" - "$MAZE_REC_OUT" "$GIF" "$MAZE_REC_QUALITY" <<'PY'
+"$PYH" - "$MAZE_REC_OUT" "$GIF" "$MAZE_REC_QUALITY" "$LABEL" <<'PY'
 import json, os, subprocess, sys, hashlib
 from pathlib import Path
 sys.path.insert(0, "src"); sys.path.insert(0, "scripts/bench")
 from bhl_robust.eval import panels
 import compose_panels
-out, gif, quality = Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3]
-rec_p = out / "both-s0-panels.json"
+out, gif, quality, label = Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3], sys.argv[4]
+rec_p = out / f"{label}.json"
 if not rec_p.is_file():
     print("MAZE-PANELS RESULT: FAIL (no search result json)"); sys.exit(1)
 rec = json.load(open(rec_p))
@@ -93,8 +94,8 @@ if pan.get("needs_denoise"):
                         "-vf", "nlmeans=s=6:p=5:r=11", "-start_number", "0", str(dn / "frame_%04d.png")])
     if r.returncode == 0 and any(dn.glob("frame_*.png")):
         top, denoised, note = dn, True, note + ", nlmeans denoise applied"
-mp4 = out / "both-s0-panels.panels.mp4"
-res = compose_panels.compose(rec, top, mp4, out / ".both-s0-panels-frames", note)
+mp4 = out / f"{label}.panels.mp4"
+res = compose_panels.compose(rec, top, mp4, out / f".{label}-frames", note)
 if not res.get("mp4"):
     png = Path(res["png_dir"])
     for enc, extra in (("libx264", ["-preset", "veryfast", "-crf", "20"]), ("mpeg4", ["-q:v", "3"])):
@@ -111,7 +112,7 @@ side = {"output": os.path.relpath(gif, Path.cwd()), "output_sha256": sha(gif), "
         "evidence": os.path.relpath(rec_p, Path.cwd()), "evidence_sha256": sha(rec_p),
         "episode": {k: rec.get(k) for k in ("task", "checkpoint", "checkpoint_sha256", "seed", "outcome", "terminations_fired",
                                             "steps", "sim_seconds", "observation_corruption", "stack", "git_commit")},
-        "render": {"quality": quality, "settings": rec.get("render_settings"), "grain_spatial": pan.get("grain_spatial"),
+        "render": {"quality": quality, "settings": rec.get("render_settings"), "effective": rec.get("rtx_effective"), "grain_spatial": pan.get("grain_spatial"),
                    "grain_temporal_mad": pan.get("grain_temporal_mad"), "grain_baseline": pan.get("grain_baseline"),
                    "denoised": denoised, "top_eye_offset_m": rec.get("top_eye_offset_m"), "top_frames": pan.get("top_frames"),
                    "sensor_rows": pan.get("sensor_rows"), "sensor_read_errors": pan.get("n_errors")},

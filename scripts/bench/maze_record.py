@@ -222,8 +222,10 @@ def build_parser() -> argparse.ArgumentParser:
     pan.add_argument("--top-lookat", default="1.5:0.0:0.0", help="x:y:z offset of its target from env 0's origin")
     pan.add_argument("--top-width", type=int, default=1280)
     pan.add_argument("--top-height", type=int, default=720)
-    pan.add_argument("--render-quality", choices=("stock", "clean"), default="stock",
-                     help="clean = sampled direct lighting / AO / GI / reflections off via RenderCfg.carb_settings")
+    pan.add_argument("--render-quality", choices=("stock", "clean", "taa", "pathtrace"), default="stock",
+                     help="clean = sampled direct lighting / AO / GI / reflections off (measured: grain 34 vs stock 36, "
+                          "not enough); taa = clean + TAA instead of the DLSS pass NGX cannot provide here; "
+                          "pathtrace = path tracing at 16 spp with the OptiX denoiser")
     pan.add_argument("--warmup-frames", type=int, default=6,
                      help="render-only frames after each reset before recording; the last two give the grain metrics")
     return p
@@ -414,12 +416,16 @@ def run(args, searches) -> int:
             spawn=sim_utils.PinholeCameraCfg(focal_length=18.0),
             offset=CameraCfg.OffsetCfg(pos=(0.0, 0.0, 4.0), rot=(1.0, 0.0, 0.0, 0.0), convention="world"),
         )
-        if args.render_quality == "clean":
-            # performance.kit leaves sampled direct lighting on and the DL denoiser off (the
-            # NGX path that fails on these nodes): that pairing is the speckle in every clip
-            # so far (spatial grain 36 on 0-255, MuJoCo's 0.4). Off with the stochastic terms.
-            # Keys use dots, which RenderCfg turns into carb paths; no underscores.
-            render_settings = {
+        if args.render_quality != "stock":
+            # The headless rendering kit runs sampled direct lighting at 1 spp and leaves
+            # the clean-up to DLSS (rtx.post.dlss.execMode = 0), which needs NGX -- and NGX
+            # fails to initialise on these nodes. The raw 1-spp samples are the speckle in
+            # every clip so far (spatial grain 36 on 0-255 against MuJoCo's 0.4). Turning
+            # the stochastic terms off alone measured 34 (job 21408622), so the profiles
+            # below replace the missing temporal pass: TAA, or path tracing through the
+            # OptiX denoiser, which does not depend on NGX. Keys use dots (RenderCfg turns
+            # them into carb paths); never underscores.
+            stochastic_off = {
                 "rtx.directLighting.sampledLighting.enabled": False,
                 "rtx.directLighting.sampledLighting.autoEnable": False,
                 "rtx.ambientOcclusion.enabled": False,
@@ -427,10 +433,28 @@ def run(args, searches) -> int:
                 "rtx.reflections.enabled": False,
                 "rtx.raytracing.subpixel.mode": 0,
             }
+            aa = None
+            if args.render_quality == "clean":
+                render_settings = dict(stochastic_off)
+            elif args.render_quality == "taa":
+                render_settings = dict(stochastic_off)
+                aa = "TAA"
+            else:
+                render_settings = {
+                    "rtx.rendermode": "PathTracing",
+                    "rtx.pathtracing.spp": 16,
+                    "rtx.pathtracing.totalSpp": 16,
+                    "rtx.pathtracing.clampSpp": 16,
+                    "rtx.pathtracing.optixDenoiser.enabled": True,
+                    "rtx.pathtracing.optixDenoiser.blendFactor": 0.0,
+                }
             try:
                 cfg.sim.render.carb_settings = dict(render_settings)
+                if aa is not None:
+                    cfg.sim.render.antialiasing_mode = aa
+                    render_settings["antialiasing_mode"] = aa
             except Exception as exc:                                 # noqa: BLE001
-                print(f"[panels] RenderCfg.carb_settings unavailable ({exc!r}); stock renderer", flush=True)
+                print(f"[panels] RenderCfg override unavailable ({exc!r}); stock renderer", flush=True)
                 render_settings = {"error": repr(exc)}
     render_mode = None if args.no_viewport else "rgb_array"
     env = gym.make(args.task, cfg=cfg, render_mode=render_mode)
@@ -542,6 +566,18 @@ def run(args, searches) -> int:
             "render_settings": render_settings, "top_eye_offset_m": list(top_eye), "top_lookat_offset_m": list(top_lookat)}
     print(json.dumps({k: v for k, v in base.items() if k != "capture_note"}), flush=True)
     top_cam = u.scene["top_cam"] if args.panels else None
+    if args.panels:
+        try:
+            import carb
+            st_ = carb.settings.get_settings()
+            base["rtx_effective"] = {k: st_.get(k) for k in (
+                "/rtx/rendermode", "/rtx/post/aa/op", "/rtx/post/dlss/execMode", "/rtx/directLighting/sampledLighting/enabled",
+                "/rtx/directLighting/sampledLighting/samplesPerPixel", "/rtx/ambientOcclusion/enabled", "/rtx/indirectDiffuse/enabled",
+                "/rtx/pathtracing/spp", "/rtx/pathtracing/totalSpp", "/rtx/pathtracing/optixDenoiser/enabled",
+                "/rtx-transient/dldenoiser/enabled")}
+            print(f"[panels] effective rtx settings: {json.dumps(base['rtx_effective'])}", flush=True)
+        except Exception as exc:                                     # noqa: BLE001
+            print(f"[panels] could not read carb settings ({exc!r})", flush=True)
     from bhl_robust.quat_order import unpack_wxyz
 
     def term_slices() -> dict:
@@ -669,8 +705,9 @@ def run(args, searches) -> int:
                         lid = u.scene["lidar"]
                         hits = as_torch(lid.data.ray_hits_w)[0, :, :2].float()
                         lpos = as_torch(lid.data.pos_w)[0, :2].float()
-                        qw = unpack_wxyz(as_torch(robot.data.root_quat_w)[0:1].float())[0]
-                        yaw = float(torch.atan2(2 * (qw[0] * qw[3] + qw[1] * qw[2]), 1 - 2 * (qw[2] ** 2 + qw[3] ** 2)))
+                        qw_, qx_, qy_, qz_ = unpack_wxyz(as_torch(robot.data.root_quat_w)[0:1].float())
+                        yaw = float(torch.atan2(2 * (qw_[0] * qz_[0] + qx_[0] * qy_[0]),
+                                                1 - 2 * (qy_[0] ** 2 + qz_[0] ** 2)))
                         rel = hits - lpos
                         rel = torch.nan_to_num(rel, nan=LIDAR_RANGE_M, posinf=LIDAR_RANGE_M, neginf=-LIDAR_RANGE_M)
                         c, s_ = float(np.cos(-yaw)), float(np.sin(-yaw))
