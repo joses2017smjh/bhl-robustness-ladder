@@ -218,6 +218,13 @@ of those are NGX features, and NGX fails to initialise on these nodes
 (`Failed to create NGX context`, section 7). The raw 1-spp samples are what
 reaches the render product.
 
+The readback from inside a recording job (`21408633`) names the mode: this
+stack's default is **`/rtx/rendermode = RealTimePathTracing`** — a stochastic
+real-time path tracer at 1 spp whose clean-up is DLSS Ray Reconstruction, an
+NGX feature. Without NGX the raw samples are the image. That is why toggling
+the sampled-lighting terms (still reported `true` afterwards; the kit preset
+wins over `RenderCfg.carb_settings`) and adding TAA changed nothing.
+
 What did not fix it: turning the stochastic terms off (sampled direct
 lighting, AO, indirect diffuse, reflections) via `RenderCfg.carb_settings`
 measured **34.05** (job `21408622`, `maze_record.py --render-quality clean`),

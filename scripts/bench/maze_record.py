@@ -222,10 +222,11 @@ def build_parser() -> argparse.ArgumentParser:
     pan.add_argument("--top-lookat", default="1.5:0.0:0.0", help="x:y:z offset of its target from env 0's origin")
     pan.add_argument("--top-width", type=int, default=1280)
     pan.add_argument("--top-height", type=int, default=720)
-    pan.add_argument("--render-quality", choices=("stock", "clean", "taa", "pathtrace"), default="stock",
-                     help="clean = sampled direct lighting / AO / GI / reflections off (measured: grain 34 vs stock 36, "
-                          "not enough); taa = clean + TAA instead of the DLSS pass NGX cannot provide here; "
-                          "pathtrace = path tracing at 16 spp with the OptiX denoiser")
+    pan.add_argument("--render-quality", choices=("stock", "clean", "taa", "rtl", "pathtrace"), default="stock",
+                     help="stock = the kit's RealTimePathTracing at 1 spp, which relies on the NGX denoiser that is "
+                          "missing here (grain 36); clean/taa = stochastic terms off (+ TAA): measured 34, not enough; "
+                          "rtl = the classic RaytracedLighting mode (no per-pixel path sampling); "
+                          "pathtrace = offline PathTracing at 16 spp through the OptiX denoiser (no NGX needed)")
     pan.add_argument("--warmup-frames", type=int, default=6,
                      help="render-only frames after each reset before recording; the last two give the grain metrics")
     return p
@@ -328,6 +329,46 @@ class FrameSink:
                 "png_dir": str(self.png_dir), "writer_error": self.writer_error}
 
 
+def render_profile(quality: str) -> tuple[dict, str | None]:
+    """carb settings (dotted keys, no underscores) and the antialiasing mode for a --render-quality."""
+    stochastic_off = {
+        "rtx.directLighting.sampledLighting.enabled": False,
+        "rtx.directLighting.sampledLighting.autoEnable": False,
+        "rtx.ambientOcclusion.enabled": False,
+        "rtx.indirectDiffuse.enabled": False,
+        "rtx.reflections.enabled": False,
+        "rtx.raytracing.subpixel.mode": 0,
+    }
+    if quality == "clean":
+        return dict(stochastic_off), None
+    if quality == "taa":
+        return dict(stochastic_off), "TAA"
+    if quality == "rtl":
+        return {"rtx.rendermode": "RaytracedLighting", **stochastic_off}, "TAA"
+    if quality == "pathtrace":
+        return {"rtx.rendermode": "PathTracing", "rtx.pathtracing.spp": 16, "rtx.pathtracing.totalSpp": 16,
+                "rtx.pathtracing.clampSpp": 16, "rtx.pathtracing.optixDenoiser.enabled": True,
+                "rtx.pathtracing.optixDenoiser.blendFactor": 0.0}, None
+    return {}, None
+
+
+def apply_carb_now(settings: dict, aa: str | None) -> dict:
+    """Set the profile straight into carb, right after the app is up and before
+    the stage/render products exist -- RenderCfg.carb_settings is applied too,
+    but job 21408633 showed the kit's rendering preset winning over it."""
+    import carb
+    st = carb.settings.get_settings()
+    applied = {}
+    for k, v in settings.items():
+        path = "/" + k.replace(".", "/")
+        st.set(path, v)
+        applied[path] = st.get(path)
+    if aa is not None:
+        st.set("/rtx/post/aa/op", {"Off": 0, "TAA": 1, "FXAA": 2, "DLSS": 3, "DLAA": 4}[aa])
+        applied["/rtx/post/aa/op"] = st.get("/rtx/post/aa/op")
+    return applied
+
+
 def main() -> int:
     args, _unknown = build_parser().parse_known_args()
     if args.selftest:
@@ -342,6 +383,12 @@ def main() -> int:
     searches = [parse_search(s) for s in (args.search or ["both-s0-success:success:100:1"])]
     args.enable_cameras = True          # the CameraCfg sensor needs the RTX renderer even without the viewport clip
     app = AppLauncher(args)
+    if args.panels and args.render_quality != "stock":
+        try:
+            prof, aa = render_profile(args.render_quality)
+            print(f"[panels] carb settings applied at app start: {json.dumps(apply_carb_now(prof, aa))}", flush=True)
+        except Exception as exc:                                    # noqa: BLE001
+            print(f"[panels] direct carb application failed ({exc!r}); RenderCfg path only", flush=True)
     try:
         rc = run(args, searches)
     except BaseException:                                       # noqa: BLE001
@@ -417,45 +464,20 @@ def run(args, searches) -> int:
             offset=CameraCfg.OffsetCfg(pos=(0.0, 0.0, 4.0), rot=(1.0, 0.0, 0.0, 0.0), convention="world"),
         )
         if args.render_quality != "stock":
-            # The headless rendering kit runs sampled direct lighting at 1 spp and leaves
-            # the clean-up to DLSS (rtx.post.dlss.execMode = 0), which needs NGX -- and NGX
-            # fails to initialise on these nodes. The raw 1-spp samples are the speckle in
-            # every clip so far (spatial grain 36 on 0-255 against MuJoCo's 0.4). Turning
-            # the stochastic terms off alone measured 34 (job 21408622), so the profiles
-            # below replace the missing temporal pass: TAA, or path tracing through the
-            # OptiX denoiser, which does not depend on NGX. Keys use dots (RenderCfg turns
-            # them into carb paths); never underscores.
-            stochastic_off = {
-                "rtx.directLighting.sampledLighting.enabled": False,
-                "rtx.directLighting.sampledLighting.autoEnable": False,
-                "rtx.ambientOcclusion.enabled": False,
-                "rtx.indirectDiffuse.enabled": False,
-                "rtx.reflections.enabled": False,
-                "rtx.raytracing.subpixel.mode": 0,
-            }
-            aa = None
-            if args.render_quality == "clean":
-                render_settings = dict(stochastic_off)
-            elif args.render_quality == "taa":
-                render_settings = dict(stochastic_off)
-                aa = "TAA"
-            else:
-                render_settings = {
-                    "rtx.rendermode": "PathTracing",
-                    "rtx.pathtracing.spp": 16,
-                    "rtx.pathtracing.totalSpp": 16,
-                    "rtx.pathtracing.clampSpp": 16,
-                    "rtx.pathtracing.optixDenoiser.enabled": True,
-                    "rtx.pathtracing.optixDenoiser.blendFactor": 0.0,
-                }
+            # The kit's default mode on this stack is RealTimePathTracing at 1 spp, which
+            # hands its clean-up to the NGX denoiser -- and NGX fails to initialise on
+            # these nodes (job 21408633's readback). Every Isaac clip's speckle is that raw
+            # 1-spp image. `render_profile` holds the alternatives; they are applied both
+            # here (RenderCfg) and straight into carb at app start (`apply_carb_now`).
+            render_settings, aa = render_profile(args.render_quality)
             try:
                 cfg.sim.render.carb_settings = dict(render_settings)
                 if aa is not None:
                     cfg.sim.render.antialiasing_mode = aa
                     render_settings["antialiasing_mode"] = aa
             except Exception as exc:                                 # noqa: BLE001
-                print(f"[panels] RenderCfg override unavailable ({exc!r}); stock renderer", flush=True)
-                render_settings = {"error": repr(exc)}
+                print(f"[panels] RenderCfg override unavailable ({exc!r})", flush=True)
+                render_settings = {**render_settings, "rendercfg_error": repr(exc)}
     render_mode = None if args.no_viewport else "rgb_array"
     env = gym.make(args.task, cfg=cfg, render_mode=render_mode)
     u = env.unwrapped
