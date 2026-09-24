@@ -118,8 +118,12 @@ fi
 import json, os, sys
 out, arm = sys.argv[1], sys.argv[2]
 names = ["baseline", "delay1", "delay2", "lidar_off", "stereo_off", "both_off", "gyro0.10"]
-trained_for = {"BothDelay": ["delay1"], "BothDrop": ["lidar_off", "stereo_off"],
-               "BothBias": ["gyro0.10"], "BothRobust": ["delay1", "lidar_off", "stereo_off"]}[arm]
+trained_for = {"BothDelay": ["delay2"], "BothDrop": ["lidar_off", "stereo_off"],
+               "BothBias": ["gyro0.10"], "BothRobust": ["delay2", "lidar_off", "stereo_off"]}
+# 2026-09-24: the delay criterion moved from delay1 to delay2. The clean control scores 27/32 on delay1, so "+8" was
+# unsatisfiable at the ceiling of 32 (BothDelay 21404967 printed NEGATIVE with delay2 0/32 -> 30/32). delay2 is
+# 0/32 for the control, so "+8" there is a real bar. Jobs submitted before this edit carry the old rule and are
+# rescored from their JSONs; both verdicts are reported.[arm]
 problems = []
 
 def load(label, path):
