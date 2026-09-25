@@ -67,3 +67,19 @@ python scripts/bench/maze_explore.py --upstream external/Berkeley-Humanoid-Lite 
 # three-panel clip of one seed (needs EGL: MUJOCO_GL=egl on a GPU node)
 python scripts/bench/maze_explore.py ... --seeds 1 --seed-start K --render --gif docs/gifs/random-maze-explore.gif
 ```
+
+## A learned policy on the same interface (NavGym)
+
+`bhl_robust/navgym/env.py` is a Gymnasium environment whose action is exactly
+the gait's command (vx, wz; no vy) and whose observation is what the physics
+runner can reproduce: the 36 lidar sectors, a 3×24×24 egocentric crop of a
+0.2 m log-odds map built from the same 108 rays, and goal distance/bearing.
+The proxy dynamics are a unicycle with the gait's measured yaw-rate gain, a
+first-order lag, walking drift and command latency, randomized per episode.
+`scripts/bench/navgym_train.py` trains it with Stable-Baselines3 PPO on CPU
+under a maze-size curriculum, evaluates on mazes with seeds ≥ 10 000 (never
+trained on) and exports the deterministic actor to ONNX;
+`scripts/bench/maze_explore.py --policy actor.onnx` then drives the physics
+robot with it. Jobs `21412154` / `21412155`; the predeclared transfer test is in
+`SLURM_JOBS.md`. Results land here when they exist.
+
