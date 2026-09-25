@@ -1,0 +1,189 @@
+diff --git a/src/bhl_robust/tasks/depth_env_cfg.py b/src/bhl_robust/tasks/depth_env_cfg.py
+index b67929b..20a67a6 100644
+--- a/src/bhl_robust/tasks/depth_env_cfg.py
++++ b/src/bhl_robust/tasks/depth_env_cfg.py
+@@ -163,6 +163,5 @@ class BipedIceDepthEnvCfg(BipedDepthEnvCfg):
+ 
+     def __post_init__(self):
+         super().__post_init__()
+-        from bhl_robust.terrains.ice import ice_patches
+-        for name, patch in ice_patches().items():
+-            setattr(self.scene, name, patch)
++        from bhl_robust.terrains.ice import install_ice
++        install_ice(self)
+diff --git a/src/bhl_robust/tasks/terrain_env_cfg.py b/src/bhl_robust/tasks/terrain_env_cfg.py
+index af8f6e4..7b78b2f 100644
+--- a/src/bhl_robust/tasks/terrain_env_cfg.py
++++ b/src/bhl_robust/tasks/terrain_env_cfg.py
+@@ -134,9 +134,8 @@ class BipedIceEnvCfg(BipedBumpyEnvCfg):
+ 
+     def __post_init__(self):
+         super().__post_init__()
+-        from bhl_robust.terrains.ice import ice_patches
+-        for name, patch in ice_patches().items():
+-            setattr(self.scene, name, patch)
++        from bhl_robust.terrains.ice import install_ice
++        install_ice(self)
+ 
+ 
+ @configclass
+@@ -150,6 +149,5 @@ class BipedIceVisibleEnvCfg(BipedIceEnvCfg):
+ 
+     def __post_init__(self):
+         super().__post_init__()
+-        from bhl_robust.terrains.ice import ice_patches
+-        for name, patch in ice_patches(visible=True).items():
+-            setattr(self.scene, name, patch)
++        from bhl_robust.terrains.ice import install_ice
++        install_ice(self, visible=True)
+diff --git a/src/bhl_robust/terrains/bumpy.py b/src/bhl_robust/terrains/bumpy.py
+index fcc9401..1ba89c6 100644
+--- a/src/bhl_robust/terrains/bumpy.py
++++ b/src/bhl_robust/terrains/bumpy.py
+@@ -84,3 +84,15 @@ FLATFILL_TERRAINS_CFG = BUMPY_TERRAINS_CFG.replace(
+         ),
+     }
+ )
++
++# B3: every tile is flat, so a flush friction patch stays flush as the
++# curriculum promotes. Same grid shape as BUMPY (size, rows, cols, border),
++# otherwise the robots would land on a different origin layout than the
++# placement probe measures.
++ICE_TERRAINS_CFG = BUMPY_TERRAINS_CFG.replace(
++    sub_terrains={
++        "flat": terrain_gen.HfPyramidSlopedTerrainCfg(
++            proportion=1.0, slope_range=(0.0, 0.0), platform_width=2.0, border_width=0.25,
++        ),
++    }
++)
+diff --git a/src/bhl_robust/terrains/ice.py b/src/bhl_robust/terrains/ice.py
+index df056c5..9cb605b 100644
+--- a/src/bhl_robust/terrains/ice.py
++++ b/src/bhl_robust/terrains/ice.py
+@@ -16,16 +16,33 @@ So the patches must be exactly coplanar with the ground. A patch raised even a
+ millimetre is a step, a step is geometry, and the experiment quietly becomes the
+ one it was designed to exclude. `PATCH_INSET` is what enforces that, and G-B3
+ ray-casts the boundary to check it rather than trusting the number.
++
++They also have to be *where the robots are*. Spawned as ``AssetBaseCfg`` under
++``{ENV_REGEX_NS}`` they sat at the clone-grid origin; with a terrain generator
++Isaac Lab resets each robot onto a terrain origin a median 72 m away
++(``21328532``). They are kinematic rigid bodies now, and ``reset_ice_patches``
++writes ``default_root_state + env_origins`` at every reset -- the same move
++``reset_root_state_uniform`` does for the robot.
+ """
+ 
+ from __future__ import annotations
+ 
++from typing import TYPE_CHECKING
++
+ import isaaclab.sim as sim_utils
+-from isaaclab.assets import AssetBaseCfg
++from isaaclab.assets import RigidObjectCfg
++from isaaclab.managers import EventTermCfg as EventTerm
+ 
+-#: Patch top face sits at exactly z = 0, flush with the ground plane.
+-PATCH_THICKNESS = 0.02
+-PATCH_INSET = PATCH_THICKNESS / 2.0
++from bhl_robust.terrains.ice_layout import (
++    N_PATCHES,
++    PATCH_INSET,
++    PATCH_SIZE,
++    PATCH_THICKNESS,
++    ice_local_offsets,
++)
++
++if TYPE_CHECKING:
++    from isaaclab.envs import ManagerBasedEnv
+ 
+ #: Friction of the patches, against the default ground. The uniform-slippery
+ #: rung used static 0.25 / dynamic 0.18; matching it keeps the two comparable,
+@@ -40,16 +57,29 @@ ICE_DYNAMIC = 0.18
+ ICE_RGBA = (0.55, 0.57, 0.60, 1.0)
+ VISIBLE_ICE_RGBA = (0.35, 0.72, 0.95, 1.0)
+ 
++# Re-export so existing ``from bhl_robust.terrains.ice import PATCH_INSET``
++# still works (ice_gate, tests).
++__all__ = [
++    "ICE_DYNAMIC",
++    "ICE_STATIC",
++    "PATCH_INSET",
++    "PATCH_THICKNESS",
++    "ice_patches",
++    "install_ice",
++    "reset_ice_patches",
++]
++
+ 
+-def _patch(name: str, size: float, pos: tuple[float, float], rgba) -> AssetBaseCfg:
+-    return AssetBaseCfg(
++def _patch(name: str, size: float, pos: tuple[float, float], rgba) -> RigidObjectCfg:
++    return RigidObjectCfg(
+         prim_path=f"{{ENV_REGEX_NS}}/{name}",
+-        init_state=AssetBaseCfg.InitialStateCfg(pos=(pos[0], pos[1], -PATCH_INSET)),
++        init_state=RigidObjectCfg.InitialStateCfg(pos=(pos[0], pos[1], -PATCH_INSET)),
+         spawn=sim_utils.CuboidCfg(
+             size=(size, size, PATCH_THICKNESS),
+             rigid_props=sim_utils.RigidBodyPropertiesCfg(
+                 disable_gravity=True, kinematic_enabled=True),
+             collision_props=sim_utils.CollisionPropertiesCfg(),
++            mass_props=sim_utils.MassPropertiesCfg(mass=1.0),
+             visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=rgba[:3]),
+             physics_material=sim_utils.RigidBodyMaterialCfg(
+                 static_friction=ICE_STATIC,
+@@ -61,17 +91,47 @@ def _patch(name: str, size: float, pos: tuple[float, float], rgba) -> AssetBaseC
+     )
+ 
+ 
+-def ice_patches(n: int = 6, size: float = 1.2, spacing: float = 2.0,
+-                visible: bool = False) -> dict[str, AssetBaseCfg]:
++def ice_patches(n: int = N_PATCHES, size: float = PATCH_SIZE,
++                visible: bool = False) -> dict[str, RigidObjectCfg]:
+     """A checker of low-friction squares the robot has to cross.
+ 
+-    Laid along +x on alternating y, so a straight-line velocity command cannot
+-    avoid them by drifting sideways -- an unavoidable hazard is the only kind
+-    that measures anything.
++    Packed inside one terrain tile (see ``ice_layout.ice_local_offsets``).
+     """
+     rgba = VISIBLE_ICE_RGBA if visible else ICE_RGBA
+     out = {}
+-    for i in range(n):
+-        y = (size * 0.6) * (1 if i % 2 else -1)
+-        out[f"ice_{i}"] = _patch(f"ice_{i}", size, ((i + 1) * spacing, y), rgba)
++    for i, pos in enumerate(ice_local_offsets(n=n, size=size)):
++        out[f"ice_{i}"] = _patch(f"ice_{i}", size, pos, rgba)
+     return out
++
++
++def reset_ice_patches(env: "ManagerBasedEnv", env_ids):
++    """Move each env's ice onto that env's terrain origin.
++
++    ``default_root_state`` is the configured local offset. Adding
++    ``scene.env_origins`` is what ``reset_root_state_uniform`` does for the
++    robot; without it the patches stay at the clone-grid origin.
++    """
++    origins = env.scene.env_origins[env_ids]
++    for name in sorted(k for k in env.scene.keys() if str(k).startswith("ice_")):
++        asset = env.scene[name]
++        root = asset.data.default_root_state[env_ids].clone()
++        pose = root[:, :7].clone()
++        pose[:, :3] = root[:, :3] + origins
++        asset.write_root_pose_to_sim(pose, env_ids=env_ids)
++        asset.write_root_velocity_to_sim(root[:, 7:13], env_ids=env_ids)
++
++
++def install_ice(cfg, *, visible: bool = False) -> None:
++    """Flat tiles, then kinematic patches that follow ``env_origins`` at reset.
++
++    Called from every ice env's ``__post_init__``. The generator is the bumpy
++    menu with every sub-terrain replaced by a zero-slope tile, so the patch
++    stays flush as the curriculum promotes, and the robots still land on
++    terrain origins rather than the clone grid.
++    """
++    from bhl_robust.terrains.bumpy import ICE_TERRAINS_CFG
++
++    cfg.scene.terrain.terrain_generator = ICE_TERRAINS_CFG
++    for name, patch in ice_patches(visible=visible).items():
++        setattr(cfg.scene, name, patch)
++    cfg.events.reset_ice = EventTerm(func=reset_ice_patches, mode="reset")
