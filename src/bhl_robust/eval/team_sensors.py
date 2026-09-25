@@ -78,12 +78,18 @@ def brake_command(command, *, lidar_m, depth_m, imu, fresh):
 class TeamSensors:
     """Sample each robot's own sensors without changing the physical model."""
 
-    def __init__(self, model, slots, owners, *, mode, seed, dropout_probability=.35):
+    def __init__(self, model, slots, owners, *, mode, seed, dropout_probability=.35,
+                 lidar_mount=None, stereo_center=None):
+        """`lidar_mount` / `stereo_center` are body-frame offsets from the base;
+        the defaults are the full humanoid's deck mounts. The biped's base sits
+        lower, so its callers pass the Isaac rig's offsets (+0.34 / +0.30)."""
         if mode not in MODES or mode == "off":
             raise ValueError("sensor sampler requires a non-off sensor mode")
         if not 0 <= dropout_probability <= 1:
             raise ValueError("dropout probability must be in [0,1]")
         self.model, self.slots, self.mode = model, slots, mode
+        self.lidar_mount = LIDAR_MOUNT if lidar_mount is None else np.asarray(lidar_mount, dtype=float)
+        self.stereo_center = STEREO_CENTER if stereo_center is None else np.asarray(stereo_center, dtype=float)
         self.rng = np.random.default_rng(seed + 170009)
         self.dropout = dropout_probability if mode == "reactive_dropout" else 0.0
         self.timing = SensorTiming(max_age_s=.15)
@@ -124,18 +130,20 @@ class TeamSensors:
         try:
             # geom_group affects ray/render filtering only, never contact masks.
             self.model.geom_group[geoms] = 5
-            raw = self._rays(data, position + rotation @ LIDAR_MOUNT,
+            raw = self._rays(data, position + rotation @ self.lidar_mount,
                              self.lidar_dirs @ rotation.T, LIDAR_RANGE)
             depths = []
             for side in (+1, -1):
-                mount = STEREO_CENTER + np.array([0, side * STEREO_BASELINE / 2, 0])
+                mount = self.stereo_center + np.array([0, side * STEREO_BASELINE / 2, 0])
                 ray_range = self._rays(data, position + rotation @ mount,
                                        self.depth_dirs @ rotation.T, DEPTH_RANGE)
                 depths.append((ray_range * self.depth_cos).reshape(DEPTH_SIDE, DEPTH_SIDE))
         finally:
             self.model.geom_group[geoms] = previous
+        # `lidar_raw_m` is the un-pooled scan (one range per ray, in `self.angles`
+        # order); the brake never reads it, a mapper does.
         return {"stamp_s": now, "lidar_m": raw.reshape(LIDAR_SECTORS, -1).min(axis=1),
-                "paired_depth_m": np.array(depths)}
+                "lidar_raw_m": raw.copy(), "paired_depth_m": np.array(depths)}
 
     def filter_commands(self, data, commands, now):
         outputs = []
