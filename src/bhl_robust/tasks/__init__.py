@@ -95,6 +95,21 @@ gym.register(
     },
 )
 
+# Turning-gait arms (2026-09-24): the shipped humanoid gait ignores yaw-rate
+# commands in MuJoCo; each arm changes one suspect in the reward set (see
+# arms_env_cfg.py). Same DR (s = 1.0) as arms-dr1.0 through the launcher.
+for _id, _cfg in (
+    ("Velocity-BHL-Arms-TurnHip-v0", arms_env_cfg.HumanoidTurnHipCfg),
+    ("Velocity-BHL-Arms-TurnTrack-v0", arms_env_cfg.HumanoidTurnTrackCfg),
+    ("Velocity-BHL-Arms-TurnBoth-v0", arms_env_cfg.HumanoidTurnBothCfg),
+):
+    gym.register(
+        id=_id,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+
 gym.register(
     id="Velocity-BHL-Biped-ConvexCollision-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",

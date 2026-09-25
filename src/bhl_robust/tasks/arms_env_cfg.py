@@ -90,3 +90,66 @@ class HumanoidBumpyEnvCfg(BerkeleyHumanoidLiteEnvCfg):
         self.scene.terrain.terrain_generator = BUMPY_TERRAINS_CFG
         self.scene.terrain.max_init_terrain_level = 0
         self.scene.terrain.visual_material = None
+
+
+# --- Turning gait (2026-09-24) -------------------------------------------
+#
+# Measured in MuJoCo (scripts/bench/turn_test.py): the shipped 22-DoF gait
+# `arms-dr1.0-s0` turns 0.2 deg in 6 s on a 0.6 rad/s yaw-rate command, while
+# the 12-DoF biped `dr-default-s0` turns 239 deg through the same replay path.
+# The two Isaac configs differ in exactly these places: the humanoid penalises
+# hip-yaw/hip-roll and ankle-roll deviation at -1.0 (the biped: -0.2), tracks
+# yaw rate through a kernel twice as wide (std 0.5 vs 0.25), and neither config
+# rewards stepping under a pure-turn command (the air-time gate reads the
+# linear command only). One arm per suspect, and one with everything.
+import torch
+from isaaclab.managers import SceneEntityCfg
+from isaaclab.sensors import ContactSensor
+
+
+def feet_air_time_positive_biped_turn(env, command_name: str, threshold: float, sensor_cfg: SceneEntityCfg) -> torch.Tensor:
+    """Upstream `feet_air_time_positive_biped`, gated on the FULL command norm so
+    a pure-turn command (vx = vy = 0, wz != 0) still pays for stepping."""
+    contact_sensor: ContactSensor = env.scene.sensors[sensor_cfg.name]
+    air_time = contact_sensor.data.current_air_time[:, sensor_cfg.body_ids]
+    contact_time = contact_sensor.data.current_contact_time[:, sensor_cfg.body_ids]
+    in_contact = contact_time > 0.0
+    in_mode_time = torch.where(in_contact, contact_time, air_time)
+    single_stance = torch.sum(in_contact.int(), dim=1) == 1
+    reward = torch.min(torch.where(single_stance.unsqueeze(-1), in_mode_time, 0.0), dim=1)[0]
+    reward = torch.clamp(reward, max=threshold)
+    reward *= torch.norm(env.command_manager.get_command(command_name)[:, :3], dim=1) > 0.1
+    return reward
+
+
+@configclass
+class HumanoidTurnHipCfg(BerkeleyHumanoidLiteEnvCfg):
+    """Arm A: the biped's leg-deviation weights (-0.2), nothing else changed."""
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.rewards.joint_deviation_hip.weight = -0.2
+        self.rewards.joint_deviation_ankle_roll.weight = -0.2
+
+
+@configclass
+class HumanoidTurnTrackCfg(BerkeleyHumanoidLiteEnvCfg):
+    """Arm B: the biped's yaw-rate kernel (std 0.25) at twice the weight."""
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.rewards.track_ang_vel_z_exp.weight = 2.0
+        self.rewards.track_ang_vel_z_exp.params["std"] = 0.25
+
+
+@configclass
+class HumanoidTurnBothCfg(BerkeleyHumanoidLiteEnvCfg):
+    """Arm C: A + B, plus stepping rewarded under pure-turn commands."""
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.rewards.joint_deviation_hip.weight = -0.2
+        self.rewards.joint_deviation_ankle_roll.weight = -0.2
+        self.rewards.track_ang_vel_z_exp.weight = 2.0
+        self.rewards.track_ang_vel_z_exp.params["std"] = 0.25
+        self.rewards.feet_air_time.func = feet_air_time_positive_biped_turn
