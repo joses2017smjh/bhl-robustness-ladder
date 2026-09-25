@@ -161,8 +161,9 @@ class ExploreRecorder:
         mp = self.map_panel(grid, blocked, xy, yaw, plan, size=(self.side_w, max(160, self.h - 340)))
         header = (f"random maze seed {self.maze.seed} ({self.maze.n}x{self.maze.m}, unknown to the planner) | t = {now:5.1f} s"
                   f" | {state} | mapped {100 * known:3.0f} % | replans {replans} | 1x")
-        footer = ("gait: learned PPO (biped dr-default), frozen | map: lidar log-odds | pose: oracle | plan: A* on the map,"
-                  " unknown = free | turn in place, then walk forward; never sideways")
+        footer = ("gait: learned PPO (biped dr-default), frozen | map: lidar log-odds | pose: oracle | "
+                  + ("commands: LEARNED NavGym policy (PPO, trained in the gym, deployed here) | no sideways command" if self.args.policy is not None
+                     else "plan: A* on the map, unknown = free | turn in place, then walk forward; never sideways"))
         frame = panels.compose_frame(top_rgb, [dp, lp, mp], header, footer, side_w=self.side_w)
         self.last_frame = frame
         self.sink.add(np.ascontiguousarray(frame))
@@ -216,6 +217,15 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
     grid = rm.OccupancyGrid(maze.bounds(), res=args.map_res, margin=0.6)
     planner = rm.Planner(grid, inflate_m=args.inflate)
     ctrl = rm.TurnWalkController(cruise=args.cruise, turn_rate=args.turn_rate)
+    learned = None
+    if args.policy is not None:
+        import onnxruntime as ort
+        from bhl_robust.navgym.env import EgoMap, LIDAR_RANGE as NAV_RANGE, V_MAX, W_MAX, goal_features, sector_minima
+        so = ort.SessionOptions()
+        so.intra_op_num_threads = 1
+        so.inter_op_num_threads = 1
+        learned = {"sess": ort.InferenceSession(str(args.policy), so), "emap": EgoMap(maze.bounds()), "prev": np.zeros(2, np.float32),
+                   "scale": (V_MAX, W_MAX), "feat": (goal_features, sector_minima), "range": NAV_RANGE}
     goal = maze.centre(maze.goal)
     dt = float(cfg.policy_dt)
     rec = recorder_factory(model, slot, maze, dt) if recorder_factory else None
@@ -239,13 +249,26 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         if pkt is not None and pkt["stamp_s"] != last_stamp:
             last_stamp = pkt["stamp_s"]
             grid.update(xy[0], xy[1], yaw, sensors.angles, np.asarray(pkt["lidar_raw_m"]), LIDAR_RANGE)
+            if learned is not None:
+                learned["emap"].update(xy[0], xy[1], yaw, sensors.angles, np.asarray(pkt["lidar_raw_m"]))
         # plan on a timer, or when there is no plan yet
         if plan is None or now - last_plan_t >= args.replan_s:
             new_plan = planner.plan(xy, goal)
             last_plan_t = now
             if new_plan:
                 plan, wp_index = new_plan, 1 if len(new_plan) > 1 else 0
-        if plan:
+        if learned is not None:
+            # the gym's observation, from the packet's raw rays (sectors) and the ego map
+            goal_features_, sector_minima_ = learned["feat"]
+            lid = sector_minima_(np.asarray(pkt["lidar_raw_m"]) if pkt is not None else np.full(108, learned["range"]))
+            feeds = {"lidar": lid.astype(np.float32)[None], "map": learned["emap"].crop(xy[0], xy[1], yaw)[None].astype(np.float32),
+                     "goal": goal_features_(xy[0], xy[1], yaw, goal, learned["prev"])[None]}
+            act = np.clip(learned["sess"].run(None, feeds)[0][0], -1.0, 1.0).astype(np.float32)
+            learned["prev"] = act
+            v_max, w_max = learned["scale"]
+            raw = np.array([(act[0] + 1.0) * 0.5 * v_max, 0.0, act[1] * w_max])
+            state, err = "policy", 0.0
+        elif plan:
             while wp_index < len(plan) - 1 and math.hypot(plan[wp_index][0] - xy[0], plan[wp_index][1] - xy[1]) < ctrl.waypoint_radius:
                 wp_index += 1
             wp = plan[wp_index]
@@ -294,7 +317,9 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         "mapped_fraction_end": round(grid.known_fraction(), 3), "sensor_mode": args.sensor_mode, "sensor_stats": sensors.stats,
         "initial_heading_rad": round(yaw0, 3), "controller": {"cruise": args.cruise, "turn_rate": args.turn_rate, "inflate_m": args.inflate,
                                                               "replan_s": args.replan_s, "map_res": args.map_res},
-        "control": "frozen_learned_biped_gait+lidar_occupancy_map+astar_unknown_free+turn_then_walk; pose and goal are oracle",
+        "control": ("frozen_learned_biped_gait+lidar_occupancy_map+LEARNED_navgym_policy(onnx); pose and goal are oracle" if learned is not None
+                    else "frozen_learned_biped_gait+lidar_occupancy_map+astar_unknown_free+turn_then_walk; pose and goal are oracle"),
+        "policy": str(args.policy) if args.policy is not None else None,
         "wall_seconds": round(time.time() - t_wall0, 1), "trace": trace,
     }
     if rec is not None:
@@ -343,6 +368,9 @@ def main() -> int:
     ap.add_argument("--gif-fps", type=int, default=8)
     ap.add_argument("--gif-width", type=int, default=860)
     ap.add_argument("--tag", default="", help="suffix for per-seed files")
+    ap.add_argument("--policy", type=Path, default=None,
+                    help="NavGym actor (.onnx from navgym_train.py): replaces the A* planner + turn-then-walk with the learned "
+                         "policy; same lidar sectors, the same 0.2 m egocentric map built from the same raw rays, oracle pose + goal")
     args = ap.parse_args()
 
     gait = args.gait or (Path(args.upstream) / GAIT_DEFAULT)

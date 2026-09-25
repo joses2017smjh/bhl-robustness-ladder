@@ -153,3 +153,8 @@ results/repo-gpu-20260923/maze-panels/*.log
 
 # randomized-maze mission: clips and arrays stay out of git (JSON evidence is kept)
 results/maze-explore-20260924/**/*.mp4
+
+# NavGym trainings: keep summaries, eval histories and the exported actor; not checkpoints or TensorBoard
+results/navgym-20260924/**/ckpt/
+results/navgym-20260924/**/tb/
+results/navgym-20260924/**/*.zip
