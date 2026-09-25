@@ -42,8 +42,21 @@ trained on it.
 
 ## Results
 
-Filled from `results/maze-explore-20260924/*/summary.json` when the table job
-lands (see `SLURM_JOBS.md`).
+Job `21412035` (CPU MuJoCo, 9:52 for all 24 episodes), one maze per seed, seeds 0–11, initial heading +x:
+
+| configuration | seeds | reached goal | clean (no wall contact) | falls | completion, median (range) | route cells, median (range) | path walked, median | turns, median (range) | median-time seed |
+|---|---|---|---|---|---|---|---|---|---|
+| base-5x5 | 12 | **12/12** | **12/12** | 0 | 37.2 s (28.9–70.2) | 9 (9–19) | 12.4 m | 5 (1–22) | seed 5 |
+| hard-6x6 | 12 | **12/12** | **12/12** | 0 | 73.1 s (56.8–116.4) | 17 (11–31) | 22.6 m | 15 (9–38) | seed 1 |
+
+Every episode reached its goal with no fall and no wall contact at any physics substep. The mapped fraction of the
+grid at the goal was 0.43–0.78: the planner never needed the whole maze, only what the 12 m lidar had returned along
+the way. "Turns" counts walk→turn transitions, i.e. every time the next waypoint needed a turn in place.
+
+Predeclared rule applied: the harder configuration scored ≥ 10/12 clean, so the clip is its median-time seed
+(seed 1: 73.1 s, 24.8 m walked for a 21-cell route, 23 turns, 172 replans), rendered by job `21412068` →
+`docs/gifs/random-maze-explore.gif`. Evidence: `results/maze-explore-20260924/{base-5x5,hard-6x6}/seed*.json`
+(per-step traces) and `summary.json`.
 
 ## Reproduce
 
