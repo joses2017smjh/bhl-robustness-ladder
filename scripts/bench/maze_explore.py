@@ -74,7 +74,8 @@ class ExploreRecorder:
         self.w, self.h = args.width, args.height
         self.side_w = 320
         self.fps = 1.0 / policy_dt
-        self.sink = FrameSink(out_mp4, png_dir, self.fps)
+        # the clip holds every `stride`-th policy step, so its frame rate is the policy rate over the stride: real time
+        self.sink = FrameSink(out_mp4, png_dir, self.fps / max(1, args.stride))
         self.frames = 0
         self.last_frame = None
         self.crumbs: list[tuple[float, float, float]] = []      # (x, y, t)

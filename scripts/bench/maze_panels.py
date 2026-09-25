@@ -73,7 +73,7 @@ class PanelRecorder:
         self.ew, self.eh = int(self.ew), int(self.eh)
         self.side_w = 320
         self.fps = 1.0 / policy_dt
-        self.sink = FrameSink(out_mp4, png_dir, self.fps)
+        self.sink = FrameSink(out_mp4, png_dir, self.fps / max(1, args.stride))   # real time at any stride
         self.frames = 0
         self.last_frame = None
         if self.render:
