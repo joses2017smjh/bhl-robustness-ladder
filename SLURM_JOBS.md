@@ -2939,3 +2939,5 @@ Randomized-maze table `21412035` **COMPLETED — 24/24 clean** (9:52, cn-c22, CP
 Maze render `21412068` **FAILED at argument parsing** (0:18): the launcher passed `--tag "-render"` and argparse read the leading dash as an option; tag changed to `_render`, resubmitted as `21412077` (same configuration and seed).
 
 Maze render `21412077` **COMPLETED** (4:12, cn-gpu6): seed 1 reproduced bit-for-bit (73.12 s, 24.8 m, 23 turns) and wrote `docs/gifs/random-maze-explore.gif` (0.67 MB) — but the recorder wrote every second policy step at the full policy rate, so the clip ran at 2× before the 5× GIF speed-up (10× effective while badged 5×). Recorder fixed (frame rate = policy rate / stride, both maze recorders); re-rendered as `21412102` so the badge is true.
+
+Maze render `21412102` **COMPLETED** (4:26, cn-gpu7): seed 1 reproduced again bit-for-bit (73.12 s), clip at real time this time; `docs/gifs/random-maze-explore.gif` 1.04 MB, 124 frames at 8 fps = the 74.6 s episode at the badged 5×. Gallery row added; evidence `results/maze-explore-20260924/hard-6x6/seed1_render.json`.
