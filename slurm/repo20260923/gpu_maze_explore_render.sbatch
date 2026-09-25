@@ -29,8 +29,8 @@ GIF=$REPO/docs/gifs/random-maze-explore.gif
 "$PY" -c "import mujoco; r = mujoco.Renderer(mujoco.MjModel.from_xml_string('<mujoco><worldbody><geom size=\"1\"/></worldbody></mujoco>'), 64, 64); r.render(); r.close(); print('EGL render preflight OK', mujoco.__version__)"
 echo "=== node: $(hostname) | HEAD $(git rev-parse --short HEAD) | cfg $CFG seed $SEED | $(date) ==="
 "$PY" scripts/bench/maze_explore.py --upstream "$U" --cache-dir "$CACHE" --seeds 1 --seed-start "$SEED" --n "$N" --m "$M" --extra-openings "$EXTRA" \
-    --time-limit "$TL" --out-dir "$OUT" --tag "-render" --render --frames-root "$CACHE/frames" --stride 2 \
+    --time-limit "$TL" --out-dir "$OUT" --tag "_render" --render --frames-root "$CACHE/frames" --stride 2 \
     --gif "$GIF" --gif-speed "${MAZE_GIF_SPEED:-4.0}" --gif-fps 8 --gif-width 860 2>&1 | grep -v "^\["
 rm -rf "$CACHE"
-ls -la "$GIF" "${GIF%.gif}.json" "$OUT"/seed${SEED}-render.* 2>/dev/null
+ls -la "$GIF" "${GIF%.gif}.json" "$OUT"/seed${SEED}_render.* 2>/dev/null
 echo "=== done: $(date) ==="
