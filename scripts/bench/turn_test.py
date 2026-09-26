@@ -9,6 +9,19 @@ and whether it fell. The three predeclared checks for a turning gait:
   arc     (0.2, 0, 0.8)              ->  reported, not gated
 
 Exit status 0 = PASS on turn and walk, 1 = FAIL, 2 = could not run.
+
+--protocol v1 (default) is the above, unchanged. --protocol v2 (2026-09-26)
+tests turning from a SETTLED stand, because the v1 turn command arrives 1 s
+after reset while some gaits are still stepping off the reset transient:
+
+  turn    for reset seed in 0, 1, 2: 3.0 s standing, then (0, 0, +0.6) and
+          (0, 0, -0.6) for 6 s each  ->  all six reach >= 150 deg IN THE
+          COMMANDED DIRECTION with no fall
+  walk    (0.35, 0, 0), 1.0 s warm-up, reset seed --seed (as v1)
+          ->  |yaw drift| <= 15 deg, no fall
+
+v2 PASS iff all six turn runs and the walk run pass; the JSON records every run.
+(--warm is not used by v2; its warm-ups are fixed as above.)
 """
 from __future__ import annotations
 
@@ -66,6 +79,54 @@ def run_command(deploy: Path, upstream: Path, cache: Path, variant: str, cmd, se
             "displacement_m": round(float(np.linalg.norm(xy1 - xy0)), 3), "seconds": seconds}
 
 
+V2_TURN_SEEDS = (0, 1, 2)
+V2_TURN_WZ = 0.6
+V2_TURN_WARM_S = 3.0
+V2_WALK_CMD = (0.35, 0.0, 0.0)
+V2_WALK_WARM_S = 1.0
+
+
+def v2_judge(turns: list[dict], walk: dict, turn_min_deg: float, drift_max_deg: float) -> dict:
+    """Pure v2 rule: every turn run turns >= turn_min_deg in the sign of its commanded wz without
+    falling, and the walk run drifts <= drift_max_deg without falling."""
+    for r in turns:
+        r["ok"] = bool(r["fell_at_s"] is None and r["yaw_deg"] * math.copysign(1.0, r["cmd"][2]) >= turn_min_deg)
+    walk["ok"] = bool(walk["fell_at_s"] is None and abs(walk["yaw_deg"]) <= drift_max_deg)
+    turn_ok = bool(turns) and all(r["ok"] for r in turns)
+    return {"turn_ok": turn_ok, "walk_ok": walk["ok"], "n_turn_ok": sum(r["ok"] for r in turns),
+            "n_turn": len(turns), "verdict": "PASS" if (turn_ok and walk["ok"]) else "FAIL"}
+
+
+def main_v2(args) -> int:
+    try:
+        turns = []
+        for seed in V2_TURN_SEEDS:
+            for sign in (1.0, -1.0):
+                r = run_command(args.deploy, args.upstream, args.cache_dir, args.variant, (0.0, 0.0, sign * V2_TURN_WZ),
+                                args.seconds, V2_TURN_WARM_S, seed)
+                turns.append({"name": f"turn{'+' if sign > 0 else '-'}_s{seed}", "seed": seed, "warm_s": V2_TURN_WARM_S, **r})
+                print(f"  {turns[-1]['name']}: yaw {r['yaw_deg']} deg, fell {r['fell_at_s']}", flush=True)
+        walk = {"name": f"walk_s{args.seed}", "seed": args.seed, "warm_s": V2_WALK_WARM_S,
+                **run_command(args.deploy, args.upstream, args.cache_dir, args.variant, V2_WALK_CMD,
+                              args.seconds, V2_WALK_WARM_S, args.seed)}
+        print(f"  {walk['name']}: drift {walk['yaw_deg']} deg, fell {walk['fell_at_s']}", flush=True)
+    except Exception as exc:                                        # noqa: BLE001
+        print(f"TURN-TEST RESULT: ERROR {exc!r}")
+        return 2
+    judged = v2_judge(turns, walk, args.turn_min_deg, args.drift_max_deg)
+    out = {"deploy": str(args.deploy), "variant": args.variant, "protocol": "v2", "turns": turns, "walk": walk, **judged,
+           "rule": {"turn_min_deg": args.turn_min_deg, "drift_max_deg": args.drift_max_deg, "seconds": args.seconds,
+                    "turn_seeds": list(V2_TURN_SEEDS), "turn_wz": V2_TURN_WZ, "turn_warm_s": V2_TURN_WARM_S,
+                    "walk_cmd": list(V2_WALK_CMD), "walk_warm_s": V2_WALK_WARM_S, "walk_seed": args.seed}}
+    if args.out:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(out, indent=2) + "\n")
+    print(f"TURN-TEST v2 RESULT: {judged['verdict']} (turns ok {judged['n_turn_ok']}/{judged['n_turn']}: "
+          f"{[r['yaw_deg'] for r in turns]} deg; walk drift {walk['yaw_deg']} deg; "
+          f"falls {[r['fell_at_s'] for r in turns + [walk]]})")
+    return 0 if judged["verdict"] == "PASS" else 1
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--deploy", type=Path, required=True)
@@ -78,7 +139,11 @@ def main() -> int:
     ap.add_argument("--turn-min-deg", type=float, default=150.0)
     ap.add_argument("--drift-max-deg", type=float, default=15.0)
     ap.add_argument("--out", type=Path, default=None)
+    ap.add_argument("--protocol", choices=("v1", "v2"), default="v1",
+                    help="v1 = the original three-command test (default); v2 = settled-stand turns, see above")
     args = ap.parse_args()
+    if args.protocol == "v2":
+        return main_v2(args)
     try:
         res = {name: run_command(args.deploy, args.upstream, args.cache_dir, args.variant, cmd, args.seconds, args.warm, args.seed)
                for name, cmd in (("turn", (0.0, 0.0, 0.6)), ("walk", (0.35, 0.0, 0.0)), ("arc", (0.2, 0.0, 0.8)))}

@@ -102,6 +102,9 @@ for _id, _cfg in (
     ("Velocity-BHL-Arms-TurnHip-v0", arms_env_cfg.HumanoidTurnHipCfg),
     ("Velocity-BHL-Arms-TurnTrack-v0", arms_env_cfg.HumanoidTurnTrackCfg),
     ("Velocity-BHL-Arms-TurnBoth-v0", arms_env_cfg.HumanoidTurnBothCfg),
+    # 2026-09-26: TurnBoth rewards + a command mix that trains sustained pure
+    # turns (turn_command.TurnMixVelocityCommand); judged by turn_test --protocol v2.
+    ("Velocity-BHL-Arms-TurnCmd-v0", arms_env_cfg.HumanoidTurnCmdCfg),
 ):
     gym.register(
         id=_id,
@@ -304,6 +307,9 @@ for _task, _variants in (
     ("CubeToShelf", task_v2_env_cfg.CUBE_VARIANTS),
     # Standing-height cube: a different, easier task (see its docstring).
     ("CubeToShelfStand", task_v2_env_cfg.CUBE_STAND_VARIANTS),
+    # Standing-height cube, v2: upright-gated shaping, priced fall, placement
+    # worth more than hovering. A different, easier task than CubeToShelf.
+    ("CubeToShelfStand2", task_v2_env_cfg.CUBE_STAND2_VARIANTS),
     ("BallToNet", task_v2_env_cfg.BALL_VARIANTS),
     ("PlankToWall", task_v2_env_cfg.PLANK_VARIANTS),
     # The solo control decides whether the paired ball number is a cooperation

@@ -523,3 +523,85 @@ def _gripper_variant(base, name):
 CUBE_GRIPPER_VARIANTS = _gripper_variant(CubeToShelfCfg, "CubeToShelf")
 BALL_GRIPPER_VARIANTS = _gripper_variant(BallToNetCfg, "BallToNet")
 PLANK_GRIPPER_VARIANTS = _gripper_variant(PlankToWallCfg, "PlankToWall")
+
+
+# ------------------------------------------------------ standing cube, v2
+# CubeToShelfStand2: a DIFFERENT, EASIER task than CubeToShelf (cube at standing
+# hand height). Never compared with CubeToShelf numbers.
+#
+# v1 (`CubeToShelfStandCfg`, job 21408514) learned to stand -- 334-378-step
+# episodes, 45% time-outs by iteration 300 -- and then traded standing for the
+# lift bonus: fall rate 0.49 -> 0.93 between iterations 325 and 1000 with no
+# loss of return, because one lifted step paid 0.60 and a fall cost 0.40 once.
+# Full diagnosis and every number behind the choices below: `stand_mdp.py`.
+#
+# One lever -- task income is conditional on staying up -- applied as two
+# coupled changes: every shaping term is multiplied by both robots' upright
+# gate, and the fall-only penalty is repriced from 0.4 to 20 units. Geometry,
+# spawn, observations, actions, success test and `placed` are v1's.
+
+from isaaclab.managers import CurriculumTermCfg as CurrTerm  # noqa: E402
+
+from bhl_robust.tasks import stand_mdp as stand  # noqa: E402
+
+_HAND_BODIES = ["arm_left_hand_link", "arm_right_hand_link"]
+
+
+@configclass
+class CubeToShelfStand2Cfg(CubeToShelfStandCfg):
+    """CubeToShelfStand with upright-gated task rewards and a priced fall.
+
+    A DIFFERENT, EASIER task than `CubeToShelfCfg`; reported as
+    CubeToShelfStand2 and never read as a CubeToShelf number.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        hands_a = SceneEntityCfg("robot_a", body_names=_HAND_BODIES)
+        hands_b = SceneEntityCfg("robot_b", body_names=_HAND_BODIES)
+        gate = {"gate_free": stand.GATE_FREE, "gate_std": stand.GATE_STD}
+        r = self.rewards
+        # Reassigning existing names keeps their order in the manager, so the
+        # reach terms still run first and fill the pinch cache the clamp and
+        # lift terms read.
+        r.reaching_coarse = RewTerm(
+            func=stand.gated_constellation_reach,
+            params={"std": 0.40, "robot_a_cfg": hands_a, "robot_b_cfg": hands_b, **gate},
+            weight=r.reaching_coarse.weight)
+        r.reaching_fine = RewTerm(
+            func=stand.gated_constellation_reach,
+            params={"std": 0.12, "robot_a_cfg": hands_a, "robot_b_cfg": hands_b, **gate},
+            weight=r.reaching_fine.weight)
+        r.opposing_clamp = RewTerm(
+            func=stand.gated_opposing_clamp,
+            params={"robot_a_cfg": hands_a, "robot_b_cfg": hands_b, **gate},
+            weight=r.opposing_clamp.weight)
+        r.lift_progress = RewTerm(
+            func=stand.gated_lift_progress, params=dict(gate),
+            weight=r.lift_progress.weight)
+        r.lifting_object = RewTerm(
+            func=stand.gated_object_is_lifted,
+            params={"minimal_height": r.lifting_object.params["minimal_height"], **gate},
+            weight=r.lifting_object.weight)
+        r.carry = RewTerm(
+            func=stand.gated_carry_progress,
+            params={"target_x": SHELF_X, **gate},
+            weight=r.carry.weight)
+        # `placed` stays ungated: success terminates whatever the posture. Its weight
+        # is raised so that placing is worth more than hovering (stand.PLACED_WEIGHT).
+        r.placed.weight = stand.PLACED_WEIGHT
+        # Fall-only price; `is_terminated` also fired on success.
+        r.termination_penalty = None
+        r.fall_penalty = RewTerm(
+            func=stand.fall_penalty, params={"term_name": "fallen"},
+            weight=stand.FALL_PENALTY_WEIGHT)
+        # Diagnostics only (logged as Curriculum/*, no gradient): how much task
+        # pay the gate keeps, and which robot is down when an episode ends.
+        self.curriculum.upright_gate = CurrTerm(func=stand.upright_gate_mean, params=dict(gate))
+        self.curriculum.fell_a = CurrTerm(
+            func=stand.fell_share, params={"robot_name": "robot_a", "limit_angle": stand.FALL_LIMIT})
+        self.curriculum.fell_b = CurrTerm(
+            func=stand.fell_share, params={"robot_name": "robot_b", "limit_angle": stand.FALL_LIMIT})
+
+
+CUBE_STAND2_VARIANTS = _variants(CubeToShelfStand2Cfg, "CubeToShelfStand2")

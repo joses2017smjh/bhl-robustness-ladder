@@ -220,12 +220,15 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
     learned = None
     if args.policy is not None:
         import onnxruntime as ort
-        from bhl_robust.navgym.env import EgoMap, LIDAR_RANGE as NAV_RANGE, V_MAX, W_MAX, goal_features, sector_minima
+        from bhl_robust.navgym.env import EgoMap, LIDAR_RANGE as NAV_RANGE, V_MAX, W_MAX, build_obs
         so = ort.SessionOptions()
         so.intra_op_num_threads = 1
         so.inter_op_num_threads = 1
-        learned = {"sess": ort.InferenceSession(str(args.policy), so), "emap": EgoMap(maze.bounds()), "prev": np.zeros(2, np.float32),
-                   "scale": (V_MAX, W_MAX), "feat": (goal_features, sector_minima), "range": NAV_RANGE}
+        sess = ort.InferenceSession(str(args.policy), so)
+        # the actor's own input names decide the observation: v1 (lidar, map, goal), v2 (lidar, near, map, goal)
+        keys = tuple(i.name for i in sess.get_inputs())
+        learned = {"sess": sess, "keys": keys, "emap": EgoMap(maze.bounds()), "prev": np.zeros(2, np.float32),
+                   "scale": (V_MAX, W_MAX), "build": build_obs, "range": NAV_RANGE}
     goal = maze.centre(maze.goal)
     dt = float(cfg.policy_dt)
     rec = recorder_factory(model, slot, maze, dt) if recorder_factory else None
@@ -258,11 +261,10 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
             if new_plan:
                 plan, wp_index = new_plan, 1 if len(new_plan) > 1 else 0
         if learned is not None:
-            # the gym's observation, from the packet's raw rays (sectors) and the ego map
-            goal_features_, sector_minima_ = learned["feat"]
-            lid = sector_minima_(np.asarray(pkt["lidar_raw_m"]) if pkt is not None else np.full(108, learned["range"]))
-            feeds = {"lidar": lid.astype(np.float32)[None], "map": learned["emap"].crop(xy[0], xy[1], yaw)[None].astype(np.float32),
-                     "goal": goal_features_(xy[0], xy[1], yaw, goal, learned["prev"])[None]}
+            # the gym's observation, built by the gym's own builder from the packet's raw rays and the ego map
+            raw_m = np.asarray(pkt["lidar_raw_m"]) if pkt is not None else np.full(108, learned["range"])
+            obs_ = learned["build"](learned["keys"], raw_m, learned["emap"], xy[0], xy[1], yaw, goal, learned["prev"])
+            feeds = {k: np.asarray(v, dtype=np.float32)[None] for k, v in obs_.items()}
             act = np.clip(learned["sess"].run(None, feeds)[0][0], -1.0, 1.0).astype(np.float32)
             learned["prev"] = act
             v_max, w_max = learned["scale"]
