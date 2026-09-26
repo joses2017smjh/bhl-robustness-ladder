@@ -68,6 +68,18 @@ python scripts/bench/maze_explore.py --upstream external/Berkeley-Humanoid-Lite 
 python scripts/bench/maze_explore.py ... --seeds 1 --seed-start K --render --gif docs/gifs/random-maze-explore.gif
 ```
 
+## Robustness (job `21434853`, same 12 maze seeds per configuration)
+
+| Perturbation | 5×5 reached / clean | 6×6 reached / clean | Falls | Verdict (predeclared) |
+|---|---|---|---|---|
+| none (published table) | 12 / 12 | 12 / 12 | 0 | reference |
+| 35 % of lidar/depth packets dropped | 12 / 12 | 12 / 11 | 0 | **PASS** (≥ 10/12 reached, 0 falls) |
+| 70 % dropped | 12 / 12 | 9 / 7, 3 time-outs | 0 | reported, not gated |
+| random initial heading | 12 / 12 | 12 / 12 | 0 | **PASS** |
+| speed brake off | 12 / 12 | 12 / **8** | 0 | **brake is load-bearing** on 6×6 (clean ≤ 9/12) |
+
+Dropout slows the robot rather than stopping it (median 47 s vs 37 s on 5×5, 85 s vs 73 s on 6×6 at 35 %): the brake stops translation while packets are stale, and the map keeps what earlier scans saw. With the brake off the planner still reaches every goal, but four of twelve 6×6 runs brush a wall, so the "clean" part of 24/24 belongs to the reactive layer, not to the map.
+
 ## A learned policy on the same interface (NavGym)
 
 `bhl_robust/navgym/env.py` is a Gymnasium environment whose action is exactly
