@@ -144,7 +144,10 @@ class EstimatedAttitude:
                     "imu_delay_steps", "imu_init", "imu_kp", "imu_ki", "imu_beta")}}
 
 
-def episode(args, model, slots, cfg, policy, seed, sensor_mode, route):
+def episode(args, model, slots, cfg, policy, seed, sensor_mode, route, frame_hook=None):
+    """One mission. `frame_hook(step=, now=, runner=, sensors=, mission=, xy=, yaw=,
+    command=, raw=)` is called after every policy step for recorders; it only
+    reads state, and the run is the same with or without it."""
     controller = RlController(cfg)
     controller.policy = policy
     runner = ContactRunner(model, slots, [cfg], [controller])
@@ -218,6 +221,9 @@ def episode(args, model, slots, cfg, policy, seed, sensor_mode, route):
             if renderer is not None:
                 renderer.update_scene(runner.d, camera=camera)
                 video.append_data(renderer.render())
+            if frame_hook is not None:
+                frame_hook(step=step, now=now, runner=runner, sensors=sensors, mission=mission,
+                           xy=after, yaw=yaw, command=command, raw=raw)
             if runner.tilt(0) >= .78:
                 mission.failure = "fall"
                 break
@@ -241,7 +247,7 @@ def episode(args, model, slots, cfg, policy, seed, sensor_mode, route):
             "trace": trace}
 
 
-def main():
+def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--deploy", type=Path, required=True)
     parser.add_argument("--upstream", type=Path, required=True)
@@ -284,6 +290,11 @@ def main():
     loc.add_argument("--pose-noise-m", type=float, default=0.0, help="white position noise std per policy step")
     loc.add_argument("--pose-yaw-deg", type=float, default=0.0, help="constant heading-estimate error")
     loc.add_argument("--pose-drift-mps", type=float, default=0.0, help="position drift rate along +x")
+    return parser
+
+
+def main():
+    parser = build_parser()
     args = parser.parse_args()
     if args.video and (args.video_route not in args.routes or args.video_sensor_mode not in args.sensor_modes):
         parser.error("Requested video route/sensor mode must be included in this evaluation")

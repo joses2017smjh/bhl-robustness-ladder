@@ -1,0 +1,47 @@
+{
+  "deploy": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-09-24_19-00-56_arms-turn-turnhip-s1/exported/deploy.yaml",
+  "variant": "humanoid",
+  "results": {
+    "turn": {
+      "cmd": [
+        0.0,
+        0.0,
+        0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": 2.0,
+      "displacement_m": 0.036,
+      "seconds": 6.0
+    },
+    "walk": {
+      "cmd": [
+        0.35,
+        0.0,
+        0.0
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -21.1,
+      "displacement_m": 1.883,
+      "seconds": 6.0
+    },
+    "arc": {
+      "cmd": [
+        0.2,
+        0.0,
+        0.8
+      ],
+      "fell_at_s": null,
+      "yaw_deg": 68.2,
+      "displacement_m": 0.1,
+      "seconds": 6.0
+    }
+  },
+  "turn_ok": false,
+  "walk_ok": false,
+  "verdict": "FAIL",
+  "rule": {
+    "turn_min_deg": 150.0,
+    "drift_max_deg": 15.0,
+    "seconds": 6.0
+  }
+}

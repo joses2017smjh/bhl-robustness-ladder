@@ -202,3 +202,50 @@ ffmpeg -framerate 25 -i /path/to/frames/frame_%04d.png ...     # then section 8
 articulation root every step (eye and look-at are world-frame offsets from the
 root), and writes PNGs — no `--video`, no `RecordVideo`. Gate on the frame
 count, per section 0. `slurm/inner/maze_video.sh` is the worked example.
+
+## 12. Why every Isaac clip is speckled, measured (2026-09-24)
+
+The speckle is not the scene and not the GIF quantisation. On a frame of the
+stock maze clip the spatial grain (mean |f − 3×3 box blur of f|, 0–255) is
+**36.1**, against **0.4** for a MuJoCo frame; consecutive frames of a static
+camera differ by 47 on the same scale.
+
+Cause, from the experience files this stack runs: `isaaclab.python.headless.rendering.kit`
+sets `rtx.directLighting.sampledLighting.enabled = true` with
+`samplesPerPixel = 1` and leaves the clean-up to DLSS
+(`rtx.post.dlss.execMode = 0`; `balanced.kit` would add the DL denoiser). Both
+of those are NGX features, and NGX fails to initialise on these nodes
+(`Failed to create NGX context`, section 7). The raw 1-spp samples are what
+reaches the render product.
+
+The readback from inside a recording job (`21408633`) names the mode: this
+stack's default is **`/rtx/rendermode = RealTimePathTracing`** — a stochastic
+real-time path tracer at 1 spp whose clean-up is DLSS Ray Reconstruction, an
+NGX feature. Without NGX the raw samples are the image. That is why toggling
+the sampled-lighting terms (still reported `true` afterwards; the kit preset
+wins over `RenderCfg.carb_settings`) and adding TAA changed nothing.
+
+What did not fix it: turning the stochastic terms off (sampled direct
+lighting, AO, indirect diffuse, reflections) via `RenderCfg.carb_settings`
+measured **34.05** (job `21408622`, `maze_record.py --render-quality clean`),
+so the noise is not those terms alone. The profiles that replace the missing
+temporal pass — `taa` (TAA instead of DLSS) and `pathtrace` (16 spp through the
+OptiX denoiser, which does not need NGX) — are measured against the same bar
+(≤ 12) by `21408633` / `21408634`; the ledger carries the outcome. Outcome: **`pathtrace` meets the bar — spatial grain 0.32, temporal 0.00**
+(`21408634`); `taa` measured 34.16 and `rtl` 34.17 — the request for
+`RaytracedLighting` is not honoured on this stack (the readback still says
+`RealTimePathTracing`), so the classic real-time mode is not available as a
+fix here. The working recipe, applied both through `RenderCfg.carb_settings`
+and directly into carb right after `AppLauncher`:
+
+```
+/rtx/rendermode = PathTracing
+/rtx/pathtracing/spp = 16, /rtx/pathtracing/totalSpp = 16, /rtx/pathtracing/clampSpp = 16
+/rtx/pathtracing/optixDenoiser/enabled = true, /rtx/pathtracing/optixDenoiser/blendFactor = 0
+```
+
+Cost on a DGX H100 node: a 161-step episode with a 1280×720 overhead camera
+plus the two ray-cast eyes rendered and composed in about seven minutes of
+job time. Section 8's nlmeans pass is no longer needed for new clips; it stays
+documented for the ones already published.
+

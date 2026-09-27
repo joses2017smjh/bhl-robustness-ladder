@@ -29,7 +29,10 @@ parser.add_argument("--minimum-success", type=float, default=0.0)
 parser.add_argument("--output", required=True)
 parser.add_argument("--settings", default=None,
                     help="JSON list of sensor-fusion settings to evaluate in ONE boot (docs/SENSOR_FUSION.md SF-01/SF-02). "
-                         "Each item: {name, gyro_std, gravity_std, imu_delay_steps, pose_bias_m, pose_noise_m, pose_yaw_deg}. "
+                         "Each item: {name, gyro_std, gravity_std, imu_delay_steps, pose_bias_m, pose_noise_m, pose_yaw_deg, "
+                         "gyro_bias, gravity_bias}. gyro_bias / gravity_bias (SF-04): magnitude of a constant per-env bias "
+                         "vector (rad/s; unit-vector components) added to the base_ang_vel / projected_gravity columns, "
+                         "random direction from the setting's seed. "
                          "Implies --keep-corruption for items with noise; each item is a full rollout after env.reset.")
 parser.add_argument("--keep-corruption", action="store_true",
                     help="Keep the task's policy observation noise (training default) instead of "
@@ -67,15 +70,79 @@ def _imu_slices(u):
     return {k: v for k, v in _term_slices(u).items() if k in ("base_ang_vel", "projected_gravity")}
 
 
+# --- SF-04 IMU bias setting (keys gyro_bias / gravity_bias) -------------------
+# Pure torch/math helpers: tests/test_probe_bias.py extracts them with `ast`
+# (this module boots Kit at import) and checks them on the login node.
+IMU_BIAS_KEYS = ("gyro_bias", "gravity_bias")
+IMU_BIAS_SEED_OFFSET = 11
+IMU_BIAS_MODEL = ("policy-side constant vector added to the raw base_ang_vel (rad/s) and projected_gravity "
+                  "(unit-vector components) observation columns (no scale/history on these terms), before the "
+                  "IMU delay and zero_terms; |vector| = the given magnitude exactly, direction uniform on the "
+                  "sphere from a CPU torch.Generator(seed + 11), gyro and gravity drawn independently; constant "
+                  "per env for the setting's whole rollout (each setting starts at env.reset, so constant over "
+                  "the scored first episode); same seed -> same directions at every magnitude and for every policy")
+
+
+def _parse_imu_bias(setting):
+    """(gyro_bias, gravity_bias) magnitudes of one --settings item; missing/None -> 0.0.
+    Rejects negative, non-finite or non-numeric values."""
+    out = []
+    for key in IMU_BIAS_KEYS:
+        raw = setting.get(key)
+        if raw is None:
+            out.append(0.0); continue
+        if isinstance(raw, bool) or not isinstance(raw, (int, float)):
+            raise ValueError(f"{key} must be a number, got {raw!r}")
+        val = float(raw)
+        if not math.isfinite(val) or val < 0.0:
+            raise ValueError(f"{key} must be a finite non-negative magnitude, got {raw!r}")
+        out.append(val)
+    return out[0], out[1]
+
+
+def _imu_bias_vectors(num_envs, gyro_mag, grav_mag, seed):
+    """Constant bias vectors, one per env: (gyro (n, 3), gravity (n, 3)) float32 CPU tensors.
+    Each row has norm exactly `*_mag` (zeros for magnitude 0); directions are
+    uniform on the sphere. Both draws always happen, gyro first, so the
+    directions depend only on (num_envs, seed), never on the magnitudes."""
+    gen = torch.Generator(device="cpu").manual_seed(int(seed) + IMU_BIAS_SEED_OFFSET)
+    vecs = []
+    for mag in (float(gyro_mag), float(grav_mag)):
+        g = torch.randn(int(num_envs), 3, generator=gen, dtype=torch.float32)
+        g = g / g.norm(dim=1, keepdim=True).clamp_min(1.0e-12)
+        vecs.append(g * mag)
+    return vecs[0], vecs[1]
+
+
 class _ImuDelay:
     """Policy-side FIFO delay of the IMU columns only (SF-01): the policy acts on
-    IMU values from `steps` control periods ago, everything else is current."""
+    IMU values from `steps` control periods ago, everything else is current.
+    Optional `bias` {term name: (num_envs, width) tensor} is added to that
+    term's columns first (SF-04 bias setting); None/empty = unchanged behaviour."""
 
-    def __init__(self, slices, steps, zero_slices=()):
+    def __init__(self, slices, steps, zero_slices=(), bias=None):
         self.slices, self.steps, self.queue = slices, int(steps), []
         self.zero_slices = list(zero_slices)
+        self.bias = []
+        for term, vec in (bias or {}).items():
+            if term not in self.slices:
+                raise RuntimeError(f"IMU bias requested on {term!r}, which is not an IMU term of obs['policy'] "
+                                   f"(have {list(self.slices)})")
+            s = self.slices[term]
+            if vec.shape[-1] != s.stop - s.start:
+                raise RuntimeError(f"IMU bias for {term!r} has width {vec.shape[-1]}, columns are {s.stop - s.start}")
+            self.bias.append((s, vec))
 
     def __call__(self, obs):
+        if self.bias:
+            pol = obs["policy"] if isinstance(obs, dict) or hasattr(obs, "keys") else obs
+            pol = pol.clone()
+            for s, vec in self.bias:
+                pol[:, s] = pol[:, s] + vec.to(device=pol.device, dtype=pol.dtype)
+            if isinstance(obs, dict) or hasattr(obs, "keys"):
+                obs = obs.clone() if hasattr(obs, "clone") else dict(obs); obs["policy"] = pol
+            else:
+                obs = pol
         if self.zero_slices:
             pol = obs["policy"] if isinstance(obs, dict) or hasattr(obs, "keys") else obs
             pol = pol.clone()
@@ -150,9 +217,16 @@ def _apply_setting(u, setting):
     # Yaw error: rotate the command the teacher produces (heading error) via the
     # command term's heading_target offset.
     cmd._sf02_yaw = math.radians(yaw_deg)
-    return {"gyro_std": setting.get("gyro_std"), "gravity_std": setting.get("gravity_std"),
-            "imu_delay_steps": int(setting.get("imu_delay_steps") or 0), "pose_bias_m": bias_m,
-            "pose_noise_m": noise_m, "pose_yaw_deg": yaw_deg}
+    applied = {"gyro_std": setting.get("gyro_std"), "gravity_std": setting.get("gravity_std"),
+               "imu_delay_steps": int(setting.get("imu_delay_steps") or 0), "pose_bias_m": bias_m,
+               "pose_noise_m": noise_m, "pose_yaw_deg": yaw_deg}
+    # SF-04 IMU bias: recorded only when the setting names a bias key, so every
+    # other setting's JSON row is exactly what it was before this key existed.
+    if any(k in setting for k in IMU_BIAS_KEYS):
+        gyro_b, grav_b = _parse_imu_bias(setting)
+        applied.update({"gyro_bias": gyro_b, "gravity_bias": grav_b,
+                        "imu_bias_seed": int(setting.get("seed", 0)), "imu_bias_model": IMU_BIAS_MODEL})
+    return applied
 
 
 def _rollout(env, u, policy, obs, start, delay, steps):
@@ -330,7 +404,14 @@ def run():
                 start = recovery.local_xy(u).clone()
             zero = [all_slices[n] for n in (setting.get("zero_terms") or []) if n in all_slices]
             applied["zero_terms"] = [n for n in (setting.get("zero_terms") or []) if n in all_slices]
-            delay = _ImuDelay(slices, applied["imu_delay_steps"], zero)
+            bias = None
+            if "gyro_bias" in applied:
+                gyro_v, grav_v = _imu_bias_vectors(u.num_envs, applied["gyro_bias"], applied["gravity_bias"],
+                                                   applied["imu_bias_seed"])
+                bias = {"base_ang_vel": gyro_v.to(u.device), "projected_gravity": grav_v.to(u.device)}
+                applied["gyro_bias_norm_mean"] = float(gyro_v.norm(dim=1).mean())
+                applied["gravity_bias_norm_mean"] = float(grav_v.norm(dim=1).mean())
+            delay = _ImuDelay(slices, applied["imu_delay_steps"], zero, bias=bias)
             r = _rollout(env, u, policy, obs, start, delay, args.steps)
         except Exception:                                        # noqa: BLE001
             import traceback

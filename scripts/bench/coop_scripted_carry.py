@@ -1,0 +1,580 @@
+"""Scripted-arm cooperative cube carry in MuJoCo: score seeds, or render one.
+
+    learned gait (frozen) + scripted arms + oracle cube pose
+
+Two modes.
+
+* score (default): run the predeclared seeds (0-9) for a crew of 2 (one pair)
+  or 4 (two pairs, two cubes, one world), write one JSON with every episode,
+  the per-pair summary under `scripted_carry.SUCCESS_RULE`, and print
+  `SCRIPTED_CARRY_VERDICT crew=N verdict=PASS|NEGATIVE|INCOMPLETE`, computed
+  from the JSON. The JSON is rewritten after every episode, so a wall-time
+  kill keeps what finished.
+* render (`--render-from SCORE.json`): read a score JSON; if it did not PASS,
+  print `SCRIPTED_CARRY_RENDER=SKIPPED (NEGATIVE)` and write nothing. If it
+  passed, re-simulate the median-by-completion-time successful seed with an
+  offscreen renderer (needs OpenGL: MUJOCO_GL=egl on a GPU node), write the
+  mp4, a GIF within the 5 MiB budget (`panels.write_gif`) and a JSON sidecar
+  with source hashes, labels, metrics and playback speed. `--no-render` runs
+  the same pipeline with blank frames for a login-node check.
+
+Protocols (`--protocol`, default carry):
+
+* carry: the original experiment above (`scripted_carry.SUCCESS_RULE`,
+  30 s, lift then carry), unchanged.
+* lift_hold: the separate cooperative LIFT-AND-HOLD experiment
+  (`scripted_carry.LIFT_HOLD_RULE`, 20 s): same harness, layout, hand pads,
+  kp-30 grasping arm and label, the carry phase removed (zero velocity command
+  all episode). Score mode refuses an existing --out and prints
+  `COOP-LIFT-HOLD crew N: PASS|NEGATIVE|INCOMPLETE ...` computed from the
+  written JSON. Render mode renders the median-by-hold-duration successful
+  seed of a PASS, refuses to overwrite any output, and labels frame, banner,
+  sidecar and caption "cooperative lift and hold — carry not achieved"
+  (`scripted_carry.LIFT_HOLD_NOTE`) with the full label.
+
+Clip speed: the frame header states simulated time only (no speed claim). The
+mp4 is encoded at round(fps) (12 fps for 12.5 sim frames/s at stride 2, i.e.
+0.96x, `playback_speed_mp4`); the GIF badge states the true GIF speed
+(gif speed x mp4 speed, e.g. "GIF 1.92x"), also in the sidecar
+(`sim_seconds_per_gif_second`). A GIF over the 5 MiB budget is deleted, never
+left in docs/gifs, and gets no sidecar.
+
+Everything the script decides is in `scripted_carry.CarryParams` and
+`KEYFRAMES_LEFT`; both are copied into every output.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+import numpy as np
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+REPO = HERE.parents[1]
+
+from bhl_robust.eval import panels                                    # noqa: E402
+from bhl_robust.eval import scripted_carry as sc                      # noqa: E402
+
+TASK = "coop_scripted_carry_v1"
+TASK_LIFT_HOLD = "coop_lift_hold_v1"
+
+
+def sha256(path) -> str | None:
+    path = Path(path)
+    if not path.is_file():
+        return None
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def git_head() -> str | None:
+    try:
+        return subprocess.run(["git", "-C", str(REPO), "rev-parse", "--short", "HEAD"],
+                              capture_output=True, text=True, timeout=20).stdout.strip() or None
+    except Exception:                                                  # noqa: BLE001
+        return None
+
+
+def parse_seeds(raw: str) -> list[int]:
+    out = []
+    for part in raw.split(","):
+        if "-" in part:
+            a, b = part.split("-")
+            out += list(range(int(a), int(b) + 1))
+        elif part:
+            out.append(int(part))
+    return out
+
+
+def load(args):
+    from omegaconf import OmegaConf
+    from team_airlock import CpuPolicy
+
+    cfg = OmegaConf.load(args.deploy)
+    if cfg.num_actions != 22 or cfg.num_joints != 22 or cfg.num_observations != 75:
+        raise SystemExit("requires the full 22-DoF, 75-observation humanoid locomotion policy")
+    policy = CpuPolicy(cfg.policy_checkpoint_path)
+    p = sc.CarryParams()
+    model, slots, pairs = sc.build_carry(args.upstream, args.cache_dir, args.crew // 2, p)
+    return cfg, policy, p, model, slots, pairs
+
+
+def provenance(args, cfg, p) -> dict:
+    import mujoco
+    return {
+        "task": TASK, "label": sc.LABEL, "label_detail": sc.LABEL_DETAIL,
+        "learned": "22-DoF locomotion gait (legs + each robot's outer arm), frozen",
+        "scripted": "each robot's grasping arm: joint keyframes reach/squeeze/lift/hold",
+        "oracle": "cube pose (carry gate + stop) and robot base poses (pair sync) from the simulator",
+        "modelling_choices": [
+            "hand pads: one box collision geom per hand = hand-mesh AABB (upstream hands are visual-only)",
+            f"grasping-arm PD kp {p.grasp_kp} (deploy.yaml 10); kd and the 4 Nm arm effort cap unchanged",
+            "grasping arm spawned in the script's rest pose",
+            "the cube may rotate in the hands; the rule scores its centre height",
+        ],
+        "rule": sc.SUCCESS_RULE, "params": sc.params_dict(p), "keyframes_left": sc.KEYFRAMES_LEFT,
+        "crew": args.crew, "pairs": args.crew // 2,
+        "simulator": f"MuJoCo {mujoco.__version__}", "physics_dt": float(cfg.physics_dt),
+        "policy_dt": float(cfg.policy_dt),
+        "deploy": str(Path(args.deploy).resolve()), "checkpoint": str(cfg.policy_checkpoint_path),
+        "checkpoint_sha256": sha256(cfg.policy_checkpoint_path),
+        "module_sha256": sha256(REPO / "src/bhl_robust/eval/scripted_carry.py"),
+        "script_sha256": sha256(Path(__file__)), "git_head": git_head(),
+    }
+
+
+def provenance_for(args, cfg, p) -> dict:
+    """`provenance` for the chosen protocol (carry: exactly `provenance`)."""
+    out = provenance(args, cfg, p)
+    if getattr(args, "protocol", "carry") == "lift_hold":
+        out.update({
+            "task": TASK_LIFT_HOLD, "protocol": "lift_hold", "note": sc.LIFT_HOLD_NOTE,
+            "label_detail": sc.LIFT_HOLD_LABEL_DETAIL,
+            "scripted": "each robot's grasping arm: joint keyframes reach/squeeze/lift, then held",
+            "oracle": "cube pose from the simulator, used only to score (no carry gate, no sync); "
+                      "every velocity command is zero",
+            "rule": sc.LIFT_HOLD_RULE,
+        })
+    return out
+
+
+def verdict_of(summary: dict) -> str:
+    if not summary["complete"]:
+        return "INCOMPLETE"
+    return "PASS" if summary["pass"] else "NEGATIVE"
+
+
+# ------------------------------------------------------------------ score
+
+def score(args) -> int:
+    if getattr(args, "protocol", "carry") == "lift_hold":
+        return score_lift_hold(args)
+    cfg, policy, p, model, slots, pairs = load(args)
+    rule = dict(sc.SUCCESS_RULE)
+    seeds = parse_seeds(args.seeds)
+    if args.seconds is not None:
+        # a shortened episode is a pipeline check, never a scored run
+        rule["episode_s"] = float(args.seconds)
+    payload = provenance(args, cfg, p)
+    payload["scored_run"] = args.seconds is None and seeds == list(sc.SUCCESS_RULE["seeds"])
+    payload["episodes"] = []
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    for seed in seeds:
+        t0 = time.time()
+        ep = sc.run_episode(model, slots, pairs, cfg, policy, seed, p, rule=rule)
+        ep["wall_s"] = round(time.time() - t0, 1)
+        payload["episodes"].append(ep)
+        for r in ep["pairs"]:
+            print(json.dumps({"crew": args.crew, "seed": seed, "pair": r["pair"],
+                              "success": r["success"], "first_failed_check": r["first_failed_check"],
+                              "lift_peak_m": r["lift_peak_m"], "lift_hold_s": r["lift_hold_s"],
+                              "carry_m": r["carry_m"], "max_tilt_rad": r["max_tilt_rad"],
+                              "floor": r["cube_floor_contact"], "completion_s": r["completion_s"],
+                              "wall_s": ep["wall_s"]}), flush=True)
+        payload["summary"] = sc.summarize(payload["episodes"], args.crew // 2, rule)
+        payload["summary"]["median_seed"] = sc.median_seed(payload["episodes"])
+        payload["summary"]["verdict"] = verdict_of(payload["summary"])
+        if not payload["scored_run"]:
+            payload["summary"]["verdict"] = "PIPELINE_CHECK"
+            payload["summary"]["pass"] = False
+        args.out.write_text(json.dumps(payload, indent=1, allow_nan=False) + "\n")
+    s = payload["summary"]
+    counts = " ".join(f"pair{pp['pair']}={pp['successes']}/{pp['episodes']}" for pp in s["per_pair"])
+    print(f"SCRIPTED_CARRY_VERDICT crew={args.crew} verdict={s['verdict']} {counts} "
+          f"median_seed={s['median_seed']} json={args.out}", flush=True)
+    return 0
+
+
+def score_lift_hold(args) -> int:
+    """Score mode of the lift-and-hold protocol. Never overwrites --out."""
+    if args.out.exists():
+        raise SystemExit(f"COOP-LIFT-HOLD: REFUSED ({args.out} exists; score JSONs are never overwritten)")
+    rule = dict(sc.LIFT_HOLD_RULE)
+    seeds = parse_seeds(args.seeds)
+    if args.seconds is not None:
+        # a shortened episode is a pipeline check, never a scored run
+        rule["episode_s"] = float(args.seconds)
+    cfg, policy, p, model, slots, pairs = load(args)
+    payload = provenance_for(args, cfg, p)
+    payload["scored_run"] = args.seconds is None and seeds == list(sc.LIFT_HOLD_RULE["seeds"])
+    payload["episodes"] = []
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    for seed in seeds:
+        t0 = time.time()
+        ep = sc.run_episode(model, slots, pairs, cfg, policy, seed, p, rule=rule, protocol="lift_hold")
+        ep["wall_s"] = round(time.time() - t0, 1)
+        payload["episodes"].append(ep)
+        for r in ep["pairs"]:
+            print(json.dumps({"protocol": "lift_hold", "crew": args.crew, "seed": seed, "pair": r["pair"],
+                              "success": r["success"], "first_failed_check": r["first_failed_check"],
+                              "lift_peak_m": r["lift_peak_m"], "lift_hold_s": r["lift_hold_s"],
+                              "hold_start_s": r["hold_start_s"], "hold_end_s": r["hold_end_s"],
+                              "max_tilt_rad": r["max_tilt_rad"], "floor": r["cube_floor_contact"],
+                              "final_lift_m": r["final_lift_m"], "horiz_max_m": r["horiz_max_m"],
+                              "wall_s": ep["wall_s"]}), flush=True)
+        payload["summary"] = sc.summarize_lift_hold(payload["episodes"], args.crew // 2, rule)
+        payload["summary"]["median_seed"] = sc.median_seed_by_hold(payload["episodes"])
+        payload["summary"]["verdict"] = verdict_of(payload["summary"])
+        if not payload["scored_run"]:
+            payload["summary"]["verdict"] = "PIPELINE_CHECK"
+            payload["summary"]["pass"] = False
+        args.out.write_text(json.dumps(payload, indent=1, allow_nan=False) + "\n")
+    # the verdict line is computed from the JSON as written
+    print(sc.lift_hold_verdict_line(json.loads(args.out.read_text()), args.crew) + f" | json={args.out}",
+          flush=True)
+    return 0
+
+
+# ------------------------------------------------------------------ render
+
+class Recorder:
+    """Frame hook: overhead-oblique view that follows the cube(s), plus a
+    text panel with the live numbers and the labels."""
+
+    def __init__(self, args, model, pairs, policy_dt: float, out_mp4: Path, png_dir: Path):
+        from maze_record import FrameSink
+        import mujoco
+
+        self.args, self.model, self.pairs = args, model, pairs
+        self.lift_hold = getattr(args, "protocol", "carry") == "lift_hold"
+        self.run_steps = np.zeros(len(pairs), dtype=int)    # current >= 5 cm run, per pair
+        self.policy_dt = policy_dt
+        self.render = not args.no_render
+        self.w, self.h = args.width, args.height
+        self.side_w = 330
+        self.fps = 1.0 / policy_dt
+        self.sink = FrameSink(out_mp4, png_dir, self.fps / max(1, args.stride))
+        self.frames = 0
+        self.look = None
+        if self.render:
+            self.r = mujoco.Renderer(model, height=self.h, width=self.w)
+            self.cam = mujoco.MjvCamera()
+            self.cam.distance = args.distance
+            self.cam.azimuth, self.cam.elevation = args.azimuth, args.elevation
+        self.last = None
+
+    def __call__(self, *, step, t, runner, script, pairs, lift, horiz, carry_on, carry_done, commands):
+        up = np.asarray(lift) >= sc.LIFT_HOLD_RULE["lift_hold_m"]
+        self.run_steps = np.where(up, self.run_steps + 1, 0)
+        if self.args.stride > 1 and step % self.args.stride:
+            return
+        centre = np.mean([runner.d.xpos[pr.cube_body] for pr in pairs], axis=0)
+        target = np.array([centre[0], centre[1] - 0.15, 0.35])
+        self.look = target if self.look is None else 0.9 * self.look + 0.1 * target
+        if self.render:
+            self.cam.lookat[:] = self.look
+            self.r.update_scene(runner.d, camera=self.cam)
+            main = self.r.render()
+        else:
+            main = np.full((self.h, self.w, 3), 40, dtype=np.uint8)
+        panel = self._panel(t, script.phase(t), runner, pairs, lift, horiz, carry_on, carry_done)
+        # no playback-speed claim in the frame: the same frame is played by the
+        # mp4 (0.96x at stride 2) and the GIF (badge states its true speed)
+        header = (f"MuJoCo | {self.args.crew} BHL humanoids, {len(pairs)} cube(s) 0.28 m / 0.5 kg | "
+                  f"seed {self.args.seed_used} | sim t = {t:5.2f} s | {script.phase(t)}")
+        footer = sc.LABEL + " | hand pads added | scripted arm kp 30"
+        if self.lift_hold:
+            footer = sc.LIFT_HOLD_NOTE + " | " + footer
+        frame = panels.compose_frame(main, [panel], header, footer, side_w=self.side_w)
+        self.last = frame
+        self.sink.add(np.ascontiguousarray(frame))
+        self.frames += 1
+
+    def _panel(self, t, phase, runner, pairs, lift, horiz, carry_on, carry_done):
+        from PIL import Image, ImageDraw
+        img = Image.new("RGB", (self.side_w, self.h), panels.PANEL_BG)
+        d = ImageDraw.Draw(img)
+        top = panels._title(d, self.side_w, "live numbers (simulator)")
+        f, fs = panels.load_font(14), panels.load_font(12)
+        y = top + 8
+        if self.lift_hold:
+            return self._panel_lift_hold(d, img, y, f, fs, phase, runner, pairs, lift)
+        for k, pr in enumerate(pairs):
+            F = runner.cube_forces(pr)
+            state = "carrying" if carry_on[k] else ("stopped" if carry_done[k] else phase)
+            lines = [f"pair {k}: {state}",
+                     f"  cube lift   {100 * lift[k]:6.1f} cm",
+                     f"  carried     {horiz[k]:6.2f} m",
+                     f"  squeeze b/a {F['b']:4.1f} / {F['a']:4.1f} N",
+                     f"  robot tilt  {max(runner.tilt(pr.robot_a), runner.tilt(pr.robot_b)):5.2f} rad"]
+            for ln in lines:
+                d.text((10, y), ln, font=f, fill=panels.TEXT)
+                y += 20
+            y += 8
+        rule = sc.SUCCESS_RULE
+        for ln in ["rule (predeclared):", f"  lift >= {100 * rule['lift_peak_m']:.0f} cm,",
+                   f"  >= {100 * rule['lift_hold_m']:.0f} cm for {rule['lift_hold_s']:.0f} s,",
+                   f"  carried >= {rule['carry_m']:.1f} m, no fall,", "  no floor contact, 30 s",
+                   "", "learned: gait (legs + outer arm)", "scripted: grasping arm",
+                   "oracle: cube + robot poses", "contact: MuJoCo, no welds"]:
+            d.text((10, y), ln, font=fs, fill=panels.DIM)
+            y += 17
+        return img
+
+    def _panel_lift_hold(self, d, img, y, f, fs, phase, runner, pairs, lift):
+        warn = (255, 196, 90)
+        for ln in ("cooperative lift and hold \u2014", "carry not achieved"):
+            d.text((10, y), ln, font=f, fill=warn)
+            y += 20
+        y += 6
+        for k, pr in enumerate(pairs):
+            F = runner.cube_forces(pr)
+            lines = [f"pair {k}: {phase}",
+                     f"  cube lift   {100 * lift[k]:6.1f} cm",
+                     f"  held >= 5cm {self.run_steps[k] * self.policy_dt:6.1f} s",
+                     f"  squeeze b/a {F['b']:4.1f} / {F['a']:4.1f} N",
+                     f"  robot tilt  {max(runner.tilt(pr.robot_a), runner.tilt(pr.robot_b)):5.2f} rad"]
+            for ln in lines:
+                d.text((10, y), ln, font=f, fill=panels.TEXT)
+                y += 20
+            y += 8
+        rule = sc.LIFT_HOLD_RULE
+        for ln in ["rule (predeclared):", f"  lift >= {100 * rule['lift_peak_m']:.0f} cm,",
+                   f"  >= {100 * rule['lift_hold_m']:.0f} cm for {rule['lift_hold_s']:.0f} s continuously,",
+                   f"  no fall, no floor contact, {rule['episode_s']:.0f} s",
+                   "  no carry: zero velocity command",
+                   "", "learned: gait (legs + outer arm)", "scripted: grasping arm",
+                   "oracle: cube pose (scoring only)", "contact: MuJoCo, no welds"]:
+            d.text((10, y), ln, font=fs, fill=panels.DIM)
+            y += 17
+        return img
+
+    def hold(self, seconds: float, banner: str, sub: str | None = None):
+        if self.last is None:
+            return
+        from PIL import Image, ImageDraw
+        img = Image.fromarray(self.last.copy())
+        d = ImageDraw.Draw(img)
+        font = panels.load_font(28)
+        tw = d.textlength(banner, font=font)
+        x, y = (img.size[0] - self.side_w - tw) / 2, 56
+        d.rectangle((x - 14, y - 8, x + tw + 14, y + 38), fill=(20, 110, 60))
+        d.text((x, y), banner, font=font, fill=(255, 255, 255))
+        if sub:
+            f2 = panels.load_font(20)
+            sw = d.textlength(sub, font=f2)
+            x2, y2 = (img.size[0] - self.side_w - sw) / 2, y + 52
+            d.rectangle((x2 - 12, y2 - 6, x2 + sw + 12, y2 + 28), fill=(120, 70, 10))
+            d.text((x2, y2), sub, font=f2, fill=(255, 255, 255))
+        arr = np.asarray(img)
+        for _ in range(int(seconds * self.fps / max(1, self.args.stride))):
+            self.sink.add(np.ascontiguousarray(arr))
+
+    def close(self):
+        if self.render:
+            self.r.close()
+        return self.sink.close()
+
+
+def render(args) -> int:
+    lift_hold = getattr(args, "protocol", "carry") == "lift_hold"
+    tag = "COOP_LIFT_HOLD_RENDER" if lift_hold else "SCRIPTED_CARRY_RENDER"
+    scored = json.loads(Path(args.render_from).read_text())
+    s = scored.get("summary", {})
+    if scored.get("protocol", "carry") != getattr(args, "protocol", "carry"):
+        raise SystemExit(f"--protocol {args.protocol} but {args.render_from} is protocol "
+                         f"{scored.get('protocol', 'carry')}")
+    if args.pipeline_check_seed is not None:
+        # login-node check of the render path only: blank frames, no GIF, any verdict
+        if not args.no_render:
+            raise SystemExit("--pipeline-check-seed requires --no-render")
+        s = dict(s, median_seed=args.pipeline_check_seed, verdict="PIPELINE_CHECK")
+        scored = dict(scored, scored_run=True)
+    elif not (scored.get("scored_run") and s.get("verdict") == "PASS" and s.get("median_seed") is not None):
+        print(f"{tag}=SKIPPED verdict={s.get('verdict')} crew={scored.get('crew')} "
+              f"(no success clip is rendered for a run that did not pass)", flush=True)
+        return 0
+    if int(scored["crew"]) != args.crew:
+        raise SystemExit(f"--crew {args.crew} but {args.render_from} is crew {scored['crew']}")
+    stem = f"coop_lift_scripted_{args.crew}" if lift_hold else f"carry_scripted_{args.crew}"
+    mp4 = args.out_dir / f"{stem}.mp4"
+    if lift_hold:
+        if scored.get("rule") != sc.LIFT_HOLD_RULE and args.pipeline_check_seed is None:
+            raise SystemExit("score JSON rule differs from scripted_carry.LIFT_HOLD_RULE")
+        taken = [f for f in (args.gif, Path(args.gif).with_suffix(".json") if args.gif else None,
+                             mp4, args.out_dir / f"{stem}.json") if f is not None and Path(f).exists()]
+        if taken:
+            raise SystemExit(f"COOP-LIFT-HOLD-RENDER: REFUSED ({', '.join(map(str, taken))} exists; "
+                             f"outputs are never overwritten)")
+    seed = int(s["median_seed"])
+    args.seed_used = seed
+    want = next((e for e in scored["episodes"] if e["seed"] == seed), scored["episodes"][0])
+    cfg, policy, p, model, slots, pairs = load(args)
+    if sc.params_dict(p) != scored["params"] or sc.KEYFRAMES_LEFT != scored["keyframes_left"]:
+        raise SystemExit("scripted_carry parameters changed since the scored run; re-score first")
+    args.out_dir.mkdir(parents=True, exist_ok=True)
+    rec = Recorder(args, model, pairs, float(cfg.policy_dt), mp4, Path(args.frames_root) / stem)
+    t0 = time.time()
+    if lift_hold:
+        ep = sc.run_episode(model, slots, pairs, cfg, policy, seed, p, frame_hook=rec,
+                            rule=sc.LIFT_HOLD_RULE, protocol="lift_hold")
+    else:
+        ep = sc.run_episode(model, slots, pairs, cfg, policy, seed, p, frame_hook=rec)
+    ok = all(r["success"] for r in ep["pairs"])
+    if lift_hold:
+        hold_s = min(r["lift_hold_s"] for r in ep["pairs"])
+        peak = min(r["lift_peak_m"] for r in ep["pairs"])
+        rec.hold(1.5, f"LIFTED {100 * peak:.0f} cm, HELD {hold_s:.1f} s  (seed {seed})" if ok
+                 else f"NOT REPRODUCED (seed {seed})", sub=sc.LIFT_HOLD_NOTE)
+    else:
+        done_t = max((r["completion_s"] or 0.0) for r in ep["pairs"])
+        rec.hold(1.5, f"CARRIED  {min(r['carry_m'] for r in ep['pairs']):.2f} m  (seed {seed})" if ok
+                 else f"NOT REPRODUCED (seed {seed})")
+    sink = rec.close()
+    if sink["mp4"] is None and sink["frames"] > 0:
+        png = Path(sink["png_dir"])
+        for enc, extra in (("libx264", ["-preset", "veryfast", "-crf", "20"]), ("mpeg4", ["-q:v", "3"])):
+            r = subprocess.run([panels.ffmpeg_exe(), "-y", "-loglevel", "error", "-framerate",
+                                str(round(rec.fps / max(1, args.stride))), "-i", str(png / "frame_%04d.png"),
+                                "-c:v", enc, *extra, "-pix_fmt", "yuv420p", str(mp4)])
+            if r.returncode == 0 and mp4.is_file():
+                sink["mp4"] = str(mp4)
+                break
+    if lift_hold:
+        matches = [{"pair": a["pair"], "success": a["success"] == b["success"],
+                    "lift_hold_s": a["lift_hold_s"], "scored_lift_hold_s": b["lift_hold_s"]}
+                   for a, b in zip(ep["pairs"], want["pairs"])]
+    else:
+        matches = [{"pair": a["pair"], "success": a["success"] == b["success"],
+                    "completion_s": a["completion_s"], "scored_completion_s": b["completion_s"]}
+                   for a, b in zip(ep["pairs"], want["pairs"])]
+    speed_mp4 = round(round(rec.fps / max(1, args.stride)) / (rec.fps / max(1, args.stride)), 4)
+    sim_per_gif = round(args.gif_speed * speed_mp4, 4)
+    result = {
+        "name": stem, "seed": seed, "crew": args.crew, "reproduced_success": ok,
+        "matches_scored_episode": matches, "episode": {k: v for k, v in ep.items() if k != "trace"},
+        "frames": sink["frames"], "mp4": sink["mp4"], "mp4_sha256": sha256(mp4) if sink["mp4"] else None,
+        "no_render": args.no_render, "video_fps": rec.fps / max(1, args.stride),
+        # FrameSink encodes at round(fps): at stride 2 that is 12 fps for 12.5 frames per sim second
+        "encoded_fps": round(rec.fps / max(1, args.stride)),
+        "playback_speed_mp4": speed_mp4,
+        # the frame header states sim time only; clip speeds are these fields and the GIF badge
+        "frame_header_speed": None,
+        "camera": {"type": "free, follows mean cube xy", "distance": args.distance,
+                   "azimuth": args.azimuth, "elevation": args.elevation, "size": [args.width, args.height]},
+        "scored_json": os.path.relpath(Path(args.render_from).resolve(), REPO),
+        "scored_json_sha256": sha256(args.render_from),
+        "label": sc.LABEL, "label_detail": sc.LIFT_HOLD_LABEL_DETAIL if lift_hold else sc.LABEL_DETAIL,
+        "wall_seconds": round(time.time() - t0, 1),
+    }
+    if lift_hold:
+        result.update({"protocol": "lift_hold", "note": sc.LIFT_HOLD_NOTE})
+    if args.gif and result["mp4"] and ok and not args.no_render:
+        g = panels.write_gif(mp4, args.gif, fps=args.gif_fps, speed=args.gif_speed, width=args.gif_width,
+                             badge=f"GIF {sim_per_gif:.2f}x")
+        side = Path(args.gif).with_suffix(".json")
+        gate = sc.enforce_gif_budget(g, args.gif, side if lift_hold else None)
+        result["gif"] = g
+        if not gate["kept"]:
+            # over the 5 MiB budget: deleted, never left in docs/gifs, and no sidecar
+            result["gif_deleted_over_budget"] = gate["deleted"]
+        else:
+            common = {
+                "output": os.path.relpath(Path(args.gif).resolve(), REPO), "output_sha256": sha256(args.gif),
+                "output_mb": g["mb"], "within_budget": g["within_budget"],
+                "source_clip": os.path.relpath(mp4.resolve(), REPO), "source_sha256": result["mp4_sha256"],
+                "evidence": result["scored_json"], "evidence_sha256": result["scored_json_sha256"],
+            }
+            speeds = {
+                "playback_speed": sim_per_gif, "gif_speed_setting": args.gif_speed,
+                "playback_speed_mp4": speed_mp4, "sim_seconds_per_gif_second": sim_per_gif,
+                "frame_header_speed": None, "badge": g.get("badge"),
+                "gif": g,
+                "checkpoint": scored["checkpoint"], "checkpoint_sha256": scored["checkpoint_sha256"],
+                "module_sha256": scored["module_sha256"],
+            }
+            if lift_hold:
+                sidecar = {
+                    **common, "protocol": "lift_hold", "note": sc.LIFT_HOLD_NOTE,
+                    "caption": (f"{sc.LIFT_HOLD_NOTE}: {args.crew} BHL humanoids lift a 0.28 m / 0.5 kg cube "
+                                f"together and hold it (seed {seed}: lifted {100 * peak:.1f} cm, held >= 5 cm "
+                                f"for {hold_s:.1f} s; median hold duration of the successful seeds). "
+                                f"{sc.LABEL}. Hand pads added; grasping arm scripted at kp 30; the robots "
+                                f"never walk (zero velocity command)."),
+                    "label": sc.LABEL, "label_detail": sc.LIFT_HOLD_LABEL_DETAIL,
+                    "modelling_choices": scored["modelling_choices"],
+                    "success_rule": scored["rule"], "summary": s,
+                    "episode": [{k: r[k] for k in ("pair", "success", "lift_peak_m", "lift_hold_s",
+                                                   "hold_start_s", "hold_end_s", "max_tilt_rad",
+                                                   "cube_floor_contact")} for r in ep["pairs"]],
+                    **speeds,
+                }
+            else:
+                sidecar = {
+                    **common,
+                    "caption": (f"{args.crew} BHL humanoids lift a 0.28 m / 0.5 kg cube together and carry it "
+                                f"(seed {seed}, median completion of the successful seeds). "
+                                f"{sc.LABEL}. Hand pads added; grasping arm scripted at kp 30."),
+                    "label": sc.LABEL, "label_detail": sc.LABEL_DETAIL,
+                    "modelling_choices": scored["modelling_choices"],
+                    "success_rule": scored["rule"], "summary": s,
+                    "episode": [{k: r[k] for k in ("pair", "success", "lift_peak_m", "lift_hold_s", "carry_m",
+                                                   "max_tilt_rad", "completion_s")} for r in ep["pairs"]],
+                    **speeds,
+                }
+            side.write_text(json.dumps(sidecar, indent=2, ensure_ascii=False) + "\n")
+    elif args.gif:
+        result["gif"] = None
+        result["gif_skipped"] = ("--no-render" if args.no_render else
+                                 "re-simulated episode did not succeed" if not ok else "no mp4")
+    (args.out_dir / f"{stem}.json").write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
+    gif_path = result["gif"]["gif"] if (result.get("gif") and not result.get("gif_deleted_over_budget")) else None
+    if lift_hold:
+        print(f"{tag} crew={args.crew} seed={seed} reproduced={ok} hold_s={hold_s:.2f} "
+              f"frames={sink['frames']} gif={gif_path} | {sc.LIFT_HOLD_NOTE}", flush=True)
+    else:
+        print(f"{tag} crew={args.crew} seed={seed} reproduced={ok} "
+              f"completion_s={done_t:.2f} frames={sink['frames']} gif={gif_path}", flush=True)
+    return 0
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--deploy", type=Path, required=True)
+    ap.add_argument("--upstream", type=Path, required=True)
+    ap.add_argument("--cache-dir", type=Path, required=True)
+    ap.add_argument("--crew", type=int, choices=(2, 4), default=2)
+    ap.add_argument("--protocol", choices=sc.PROTOCOLS, default="carry",
+                    help="carry (default, SUCCESS_RULE) or lift_hold (LIFT_HOLD_RULE, no carry phase)")
+    ap.add_argument("--seeds", default="0-9", help="e.g. 0-9 or 100,101")
+    ap.add_argument("--seconds", type=float, default=None,
+                    help="shorten episodes (pipeline check only; the verdict becomes PIPELINE_CHECK)")
+    ap.add_argument("--out", type=Path, help="score mode: JSON output")
+    ap.add_argument("--render-from", type=Path, help="render mode: a score JSON")
+    ap.add_argument("--out-dir", type=Path, help="render mode: mp4 + result JSON directory")
+    ap.add_argument("--gif", type=Path)
+    ap.add_argument("--frames-root", default=os.path.join(os.environ.get("TMPDIR", "/tmp"), "scripted-carry-frames"))
+    ap.add_argument("--width", type=int, default=960)
+    ap.add_argument("--height", type=int, default=540)
+    ap.add_argument("--distance", type=float, default=3.4)
+    ap.add_argument("--azimuth", type=float, default=135.0)
+    ap.add_argument("--elevation", type=float, default=-38.0)
+    ap.add_argument("--stride", type=int, default=1)
+    ap.add_argument("--no-render", action="store_true")
+    ap.add_argument("--pipeline-check-seed", type=int, default=None,
+                    help="with --no-render: exercise the render path on this seed regardless of verdict")
+    ap.add_argument("--gif-speed", type=float, default=2.0)
+    ap.add_argument("--gif-fps", type=int, default=8)
+    ap.add_argument("--gif-width", type=int, default=860)
+    args = ap.parse_args()
+    if args.render_from:
+        if not args.out_dir:
+            ap.error("--render-from needs --out-dir")
+        return render(args)
+    if not args.out:
+        ap.error("score mode needs --out")
+    return score(args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

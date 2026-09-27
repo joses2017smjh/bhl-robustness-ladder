@@ -31,7 +31,8 @@ from isaaclab.utils import configclass
 from bhl_robust.quat_order import native_quat
 from bhl_robust.reach_band import GRASP_Z
 from bhl_robust.tasks import furniture, task_v2_mdp as v2
-from bhl_robust.tasks.coop_lift_env_cfg import CoopLiftEnvCfg, _COLLISION, _RIGID, _object, _robot
+from bhl_robust.tasks.coop_lift_env_cfg import (CoopLiftEnvCfg, _COLLISION, _PINCH_JOINT_POS, _RIGID,
+                                               _object, _robot)
 from bhl_robust.tasks.rgb_env_cfg import CAM_POS, CAM_ROT, CAM_RANGE
 
 CAM_RES = 32
@@ -254,6 +255,57 @@ class CubeToShelfCfg(_TaskV2Base):
         self._add_cameras()
 
 
+#: Cube centre for the standing variant. Measured, not derived: with the
+#: upstream standing legs and the pinch arms the hand frames sit at z = 0.599
+#: (`results/repo-gpu-20260923/spawn_hands/...standing_pinch_arms.json`, step 1
+#: mean; `delta_raise_object_by` 0.299 against GRASP_Z). 0.55 puts the hands
+#: 5 cm above the cube's centre, inside its upper half, keeps the cube's top at
+#: 0.69 under the shelf slot's 0.72 ceiling (SHELF_DECK + SHELF_SLOT), and the
+#: cube seated on the deck ends at 0.52 -- 3 cm below the carry height, so the
+#: arms lower it in rather than the knees.
+STAND_CUBE_Z = 0.55
+
+
+def standing_pinch_arms(joint_pos: dict) -> dict:
+    """Upstream standing legs, pinch-pose arms (the spawn_diag recipe)."""
+    from berkeley_humanoid_lite_assets.robots.berkeley_humanoid_lite import HUMANOID_LITE_CFG
+    out = dict(joint_pos)
+    out.update(HUMANOID_LITE_CFG.init_state.joint_pos)
+    out.update({k: v for k, v in _PINCH_JOINT_POS.items()
+                if k.startswith("arm_") and "gripper" not in k})
+    return out
+
+
+@configclass
+class CubeToShelfStandCfg(CubeToShelfCfg):
+    """CubeToShelf with the cube raised to standing hand height. A DIFFERENT,
+    EASIER task than `CubeToShelfCfg`, not a fix to it.
+
+    reach_band.py put GRASP_Z at 0.30 so that standing is instrumentally
+    necessary. The spawn diagnostics (2026-09-24, `spawn_pose`/`spawn_hands`)
+    showed the crouch that reaches 0.30 asks 28-30 Nm of the knee against the
+    asset's 6 Nm effort limit, the crews stand up out of it, and standing the
+    hands are at 0.60 m with the cube 30 cm below them -- which is the shape of
+    every zero-lift crew run. This variant keeps the shelf, the rewards and the
+    success test, and moves the cube to `STAND_CUBE_Z` on a taller plinth with
+    the robots spawned standing (root z 0.0, as the walking asset spawns) with
+    the pinch arms. Results are reported as CubeToShelfStand and never compared
+    against CubeToShelf as if they were the same task.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        for name in ("robot_a", "robot_b"):
+            rc = getattr(self.scene, name)
+            x, y, _ = rc.init_state.pos
+            rc.init_state = rc.init_state.replace(
+                pos=(x, y, 0.0), joint_pos=standing_pinch_arms(rc.init_state.joint_pos))
+        self.object_spawn_z = STAND_CUBE_Z
+        self.scene.object = _object(self.scene.object.spawn, z=STAND_CUBE_Z)
+        h = STAND_CUBE_Z - 0.14
+        self.scene.plinth = furniture._box("plinth", (0.26, 0.26, h), (0.0, 0.0, h / 2.0))
+
+
 @configclass
 class BallToNetCfg(_TaskV2Base):
     """r = 0.18 m ball carried to a release zone and thrown into a net."""
@@ -370,6 +422,7 @@ def _variants(base, name):
 
 
 CUBE_VARIANTS = _variants(CubeToShelfCfg, "CubeToShelf")
+CUBE_STAND_VARIANTS = _variants(CubeToShelfStandCfg, "CubeToShelfStand")
 BALL_VARIANTS = _variants(BallToNetCfg, "BallToNet")
 PLANK_VARIANTS = _variants(PlankToWallCfg, "PlankToWall")
 
@@ -470,3 +523,85 @@ def _gripper_variant(base, name):
 CUBE_GRIPPER_VARIANTS = _gripper_variant(CubeToShelfCfg, "CubeToShelf")
 BALL_GRIPPER_VARIANTS = _gripper_variant(BallToNetCfg, "BallToNet")
 PLANK_GRIPPER_VARIANTS = _gripper_variant(PlankToWallCfg, "PlankToWall")
+
+
+# ------------------------------------------------------ standing cube, v2
+# CubeToShelfStand2: a DIFFERENT, EASIER task than CubeToShelf (cube at standing
+# hand height). Never compared with CubeToShelf numbers.
+#
+# v1 (`CubeToShelfStandCfg`, job 21408514) learned to stand -- 334-378-step
+# episodes, 45% time-outs by iteration 300 -- and then traded standing for the
+# lift bonus: fall rate 0.49 -> 0.93 between iterations 325 and 1000 with no
+# loss of return, because one lifted step paid 0.60 and a fall cost 0.40 once.
+# Full diagnosis and every number behind the choices below: `stand_mdp.py`.
+#
+# One lever -- task income is conditional on staying up -- applied as two
+# coupled changes: every shaping term is multiplied by both robots' upright
+# gate, and the fall-only penalty is repriced from 0.4 to 20 units. Geometry,
+# spawn, observations, actions, success test and `placed` are v1's.
+
+from isaaclab.managers import CurriculumTermCfg as CurrTerm  # noqa: E402
+
+from bhl_robust.tasks import stand_mdp as stand  # noqa: E402
+
+_HAND_BODIES = ["arm_left_hand_link", "arm_right_hand_link"]
+
+
+@configclass
+class CubeToShelfStand2Cfg(CubeToShelfStandCfg):
+    """CubeToShelfStand with upright-gated task rewards and a priced fall.
+
+    A DIFFERENT, EASIER task than `CubeToShelfCfg`; reported as
+    CubeToShelfStand2 and never read as a CubeToShelf number.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        hands_a = SceneEntityCfg("robot_a", body_names=_HAND_BODIES)
+        hands_b = SceneEntityCfg("robot_b", body_names=_HAND_BODIES)
+        gate = {"gate_free": stand.GATE_FREE, "gate_std": stand.GATE_STD}
+        r = self.rewards
+        # Reassigning existing names keeps their order in the manager, so the
+        # reach terms still run first and fill the pinch cache the clamp and
+        # lift terms read.
+        r.reaching_coarse = RewTerm(
+            func=stand.gated_constellation_reach,
+            params={"std": 0.40, "robot_a_cfg": hands_a, "robot_b_cfg": hands_b, **gate},
+            weight=r.reaching_coarse.weight)
+        r.reaching_fine = RewTerm(
+            func=stand.gated_constellation_reach,
+            params={"std": 0.12, "robot_a_cfg": hands_a, "robot_b_cfg": hands_b, **gate},
+            weight=r.reaching_fine.weight)
+        r.opposing_clamp = RewTerm(
+            func=stand.gated_opposing_clamp,
+            params={"robot_a_cfg": hands_a, "robot_b_cfg": hands_b, **gate},
+            weight=r.opposing_clamp.weight)
+        r.lift_progress = RewTerm(
+            func=stand.gated_lift_progress, params=dict(gate),
+            weight=r.lift_progress.weight)
+        r.lifting_object = RewTerm(
+            func=stand.gated_object_is_lifted,
+            params={"minimal_height": r.lifting_object.params["minimal_height"], **gate},
+            weight=r.lifting_object.weight)
+        r.carry = RewTerm(
+            func=stand.gated_carry_progress,
+            params={"target_x": SHELF_X, **gate},
+            weight=r.carry.weight)
+        # `placed` stays ungated: success terminates whatever the posture. Its weight
+        # is raised so that placing is worth more than hovering (stand.PLACED_WEIGHT).
+        r.placed.weight = stand.PLACED_WEIGHT
+        # Fall-only price; `is_terminated` also fired on success.
+        r.termination_penalty = None
+        r.fall_penalty = RewTerm(
+            func=stand.fall_penalty, params={"term_name": "fallen"},
+            weight=stand.FALL_PENALTY_WEIGHT)
+        # Diagnostics only (logged as Curriculum/*, no gradient): how much task
+        # pay the gate keeps, and which robot is down when an episode ends.
+        self.curriculum.upright_gate = CurrTerm(func=stand.upright_gate_mean, params=dict(gate))
+        self.curriculum.fell_a = CurrTerm(
+            func=stand.fell_share, params={"robot_name": "robot_a", "limit_angle": stand.FALL_LIMIT})
+        self.curriculum.fell_b = CurrTerm(
+            func=stand.fell_share, params={"robot_name": "robot_b", "limit_angle": stand.FALL_LIMIT})
+
+
+CUBE_STAND2_VARIANTS = _variants(CubeToShelfStand2Cfg, "CubeToShelfStand2")

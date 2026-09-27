@@ -95,6 +95,24 @@ gym.register(
     },
 )
 
+# Turning-gait arms (2026-09-24): the shipped humanoid gait ignores yaw-rate
+# commands in MuJoCo; each arm changes one suspect in the reward set (see
+# arms_env_cfg.py). Same DR (s = 1.0) as arms-dr1.0 through the launcher.
+for _id, _cfg in (
+    ("Velocity-BHL-Arms-TurnHip-v0", arms_env_cfg.HumanoidTurnHipCfg),
+    ("Velocity-BHL-Arms-TurnTrack-v0", arms_env_cfg.HumanoidTurnTrackCfg),
+    ("Velocity-BHL-Arms-TurnBoth-v0", arms_env_cfg.HumanoidTurnBothCfg),
+    # 2026-09-26: TurnBoth rewards + a command mix that trains sustained pure
+    # turns (turn_command.TurnMixVelocityCommand); judged by turn_test --protocol v2.
+    ("Velocity-BHL-Arms-TurnCmd-v0", arms_env_cfg.HumanoidTurnCmdCfg),
+):
+    gym.register(
+        id=_id,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+
 gym.register(
     id="Velocity-BHL-Biped-ConvexCollision-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
@@ -287,6 +305,11 @@ gym.register(
 # control for them.
 for _task, _variants in (
     ("CubeToShelf", task_v2_env_cfg.CUBE_VARIANTS),
+    # Standing-height cube: a different, easier task (see its docstring).
+    ("CubeToShelfStand", task_v2_env_cfg.CUBE_STAND_VARIANTS),
+    # Standing-height cube, v2: upright-gated shaping, priced fall, placement
+    # worth more than hovering. A different, easier task than CubeToShelf.
+    ("CubeToShelfStand2", task_v2_env_cfg.CUBE_STAND2_VARIANTS),
     ("BallToNet", task_v2_env_cfg.BALL_VARIANTS),
     ("PlankToWall", task_v2_env_cfg.PLANK_VARIANTS),
     # The solo control decides whether the paired ball number is a cooperation
@@ -434,4 +457,21 @@ for _id, _cfg in (
         entry_point="isaaclab.envs:ManagerBasedRLEnv",
         disable_env_checker=True,
         kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _CLOTH_PPO},
+    )
+
+# ------------------------------------------------- B3 control: ice, no ice
+# The placed-ice cfgs with every ice_* patch at the ground's own friction.
+# Everything else -- patch placement, reset, terrain, curriculum, cameras --
+# is inherited unchanged, so a depth advantage that survives here is not
+# about friction (LOC-11, docs/REPO_TASKS.md).
+from bhl_robust.tasks import ice_control_env_cfg as _ice_control  # noqa: E402
+for _id, _cfg in (
+    ("Velocity-BHL-Biped-IceControl-v0", _ice_control.BipedIceControlEnvCfg),
+    ("Velocity-BHL-Biped-IceControl-Depth-v0", _ice_control.BipedIceControlDepthEnvCfg),
+):
+    gym.register(
+        id=_id,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG},
     )

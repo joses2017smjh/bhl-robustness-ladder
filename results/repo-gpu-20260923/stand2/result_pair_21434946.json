@@ -1,0 +1,37 @@
+{
+ "verdict": "NEGATIVE (stands on 1/2 seeds)",
+ "seeds": [
+  {
+   "placed": false,
+   "stands": true,
+   "killed": false,
+   "success": 0.0,
+   "time_out": 0.6357232874631882,
+   "nonfall": 0.6357232874631882,
+   "last_iter": 7999,
+   "window": 200,
+   "ep_len": 387.09965057373046,
+   "fallen": 0.3648931989073753,
+   "mode": "seed",
+   "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-09-26_16-35-02_v2-cubetoshelfstand2-blind-s0",
+   "latest_iter_logged": 7999
+  },
+  {
+   "placed": false,
+   "stands": false,
+   "killed": false,
+   "success": 0.0,
+   "time_out": 0.41934144094586373,
+   "nonfall": 0.41934144094586373,
+   "last_iter": 4468,
+   "window": 200,
+   "ep_len": 314.7263500976562,
+   "fallen": 0.5811847135424614,
+   "mode": "seed",
+   "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-09-26_16-35-02_v2-cubetoshelfstand2-blind-s1",
+   "latest_iter_logged": 4468
+  }
+ ],
+ "task": "CubeToShelfStand2 (blind)",
+ "note": "different, easier task than CubeToShelf; never compared with it"
+}

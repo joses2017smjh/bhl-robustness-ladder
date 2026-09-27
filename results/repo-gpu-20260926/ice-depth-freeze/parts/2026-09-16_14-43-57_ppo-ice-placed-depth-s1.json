@@ -1,0 +1,5129 @@
+{
+ "schema": "ice_depth_freeze/part/v1",
+ "labels": {
+  "learned": "actor MLP from model_5999.pt (deterministic mean action)",
+  "scripted": "velocity commands (harness set); arm B frozen t=0 image; arm C analytic image",
+  "oracle": "arm C and the analytic nominal use the simulator's ground-truth camera pose to ray-cast the z=0 floor plane (privileged state)",
+  "sim": "MuJoCo flat biped scene, uniform friction (no ice patches); pushes off"
+ },
+ "run": "2026-09-16_14-43-57_ppo-ice-placed-depth-s1",
+ "ring": "placed",
+ "kind": "depth",
+ "train_seed": 1,
+ "checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-16_14-43-57_ppo-ice-placed-depth-s1/model_5999.pt",
+ "obs_width": 301,
+ "predeclared": {
+  "decided": "2026-09-26",
+  "gate": "A fall rate > 0.5 -> INCONCLUSIVE (sim2sim gap if matched blind fall rate <= 0.2, else harness)",
+  "i": "fall(B)-fall(A) >= 0.3 or disp(B) <= 0.5*disp(A)",
+  "ii": "|fall(B)-fall(A)| <= 0.1 and |disp(B)-disp(A)| <= 0.2*disp(A)",
+  "iii": "otherwise",
+  "C_secondary": "C within 0.1 fall and 20% disp of A",
+  "Bsettle_secondary": "(i)/(ii)/(iii) rules applied to Bsettle in place of B; reported, never replaces the primary B outcome",
+  "pooled": "episodes of gate-passing checkpoints only; none -> INCONCLUSIVE",
+  "onnx_parity_tol": 0.001,
+  "render_check_tol": 0.02,
+  "matched_blind": "same ring (placed/control), same training seed"
+ },
+ "started": "2026-09-26 16:42:11",
+ "onnx_parity_max_abs": null,
+ "onnx_note": "no exported/policy.onnx; model_5999.pt loaded directly",
+ "protocol": {
+  "episode_s": 12.0,
+  "settle_s": 1.0,
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "commands": [
+   [
+    0.3,
+    0.0,
+    0.0
+   ],
+   [
+    0.5,
+    0.0,
+    0.0
+   ],
+   [
+    -0.2,
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    0.2,
+    0.0
+   ],
+   [
+    0.0,
+    0.0,
+    0.5
+   ],
+   [
+    0.3,
+    0.0,
+    0.5
+   ]
+  ],
+  "push_speed": 0.0,
+  "init_joint_noise": 0.02,
+  "init_vel_noise": 0.05,
+  "tilt_limit_rad": 0.78,
+  "max_sink_m": 0.25,
+  "nominal_source": "rendered",
+  "paired": "every arm of a (command, seed) starts from the identical state"
+ },
+ "nominal": {
+  "cam_pos": [
+   0.12,
+   0.0,
+   0.3
+  ],
+  "cam_fovy_deg": 60.5,
+  "mujoco_no_hit_depth_m": 200.0,
+  "analytic_image_multirunner": [
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.5078,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.29678,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.21043,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.16316,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.13327,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.11265,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.09757,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.08605,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.07697,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06962,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.06356,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846,
+   0.05846
+  ],
+  "multirunner_vs_isaac_convention_max_abs": 0.03928518295288086,
+  "multirunner_vs_isaac_cells_differing": 16
+ },
+ "arms": {
+  "A": {
+   "summary": {
+    "n": 60,
+    "fall_rate": 0.0,
+    "mean_disp_m": 2.137854646927859,
+    "mean_lin_vel_err": 0.2545159304973819,
+    "mean_yaw_rate_err": 0.11976778243409693,
+    "mean_survival_s": 12.0,
+    "by_command": {
+     "+0.0,+0.0,+0.5": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 0.0236080773799969,
+      "mean_lin_vel_err": 0.1494324572344695
+     },
+     "+0.0,+0.2,+0.0": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 1.409004480608493,
+      "mean_lin_vel_err": 0.2616573721197754
+     },
+     "+0.3,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 3.37307356424479,
+      "mean_lin_vel_err": 0.3040430086481315
+     },
+     "+0.3,+0.0,+0.5": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 0.17978816509646708,
+      "mean_lin_vel_err": 0.2864089857518639
+     },
+     "+0.5,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 5.515643616979655,
+      "mean_lin_vel_err": 0.30951896907783916
+     },
+     "-0.2,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 2.3260099772577543,
+      "mean_lin_vel_err": 0.2160347901522118
+     }
+    },
+    "render_check": {
+     "t0_max_abs": 0.03225484490394592,
+     "t0_within_tol": false,
+     "mean_frac_steps_gt_tol": 1.0,
+     "tol": 0.02
+    },
+    "wall_s": 87.9
+   },
+   "episodes": [
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30651289896070255,
+     "yaw_rate_err": 0.08751200215374423,
+     "distance_m": 3.3716850014572017,
+     "mean_cam_height_m": 0.250472771488619,
+     "settle_cam_height_m": 0.25358945527646315,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15712803602218628,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3030680289393672,
+     "yaw_rate_err": 0.08466456698683923,
+     "distance_m": 3.3716196618444467,
+     "mean_cam_height_m": 0.25033175365082916,
+     "settle_cam_height_m": 0.253723956374992,
+     "t0_render_vs_analytic_max": 0.032001376152038574,
+     "step_render_vs_analytic_max": 0.1579974889755249,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30295625930874975,
+     "yaw_rate_err": 0.08546564424874027,
+     "distance_m": 3.3707614209636807,
+     "mean_cam_height_m": 0.2503345828638299,
+     "settle_cam_height_m": 0.2536856169062653,
+     "t0_render_vs_analytic_max": 0.032001376152038574,
+     "step_render_vs_analytic_max": 0.1552562713623047,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3040664647917607,
+     "yaw_rate_err": 0.0848055717481044,
+     "distance_m": 3.352488993334286,
+     "mean_cam_height_m": 0.25044131001919673,
+     "settle_cam_height_m": 0.25364724071000766,
+     "t0_render_vs_analytic_max": 0.032001346349716187,
+     "step_render_vs_analytic_max": 0.15950411558151245,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3028667738555154,
+     "yaw_rate_err": 0.08651625842230364,
+     "distance_m": 3.3821625787173613,
+     "mean_cam_height_m": 0.2503362798392039,
+     "settle_cam_height_m": 0.25390631122977914,
+     "t0_render_vs_analytic_max": 0.032001376152038574,
+     "step_render_vs_analytic_max": 0.15469640493392944,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3050628485980255,
+     "yaw_rate_err": 0.08494648799371494,
+     "distance_m": 3.3836204897909146,
+     "mean_cam_height_m": 0.2504334718687902,
+     "settle_cam_height_m": 0.25365591584784564,
+     "t0_render_vs_analytic_max": 0.032001376152038574,
+     "step_render_vs_analytic_max": 0.1561037302017212,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3032179031684956,
+     "yaw_rate_err": 0.08475260893981713,
+     "distance_m": 3.361598897675197,
+     "mean_cam_height_m": 0.25035782192751815,
+     "settle_cam_height_m": 0.2534823784476075,
+     "t0_render_vs_analytic_max": 0.032001346349716187,
+     "step_render_vs_analytic_max": 0.15369081497192383,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3032276049550034,
+     "yaw_rate_err": 0.08351130527081667,
+     "distance_m": 3.3757108188265352,
+     "mean_cam_height_m": 0.25033532293000793,
+     "settle_cam_height_m": 0.2537211553691902,
+     "t0_render_vs_analytic_max": 0.032001346349716187,
+     "step_render_vs_analytic_max": 0.15712982416152954,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3028848057712153,
+     "yaw_rate_err": 0.08420607872775472,
+     "distance_m": 3.3812409592938435,
+     "mean_cam_height_m": 0.25034521321061015,
+     "settle_cam_height_m": 0.25364656215043513,
+     "t0_render_vs_analytic_max": 0.032001376152038574,
+     "step_render_vs_analytic_max": 0.15725964307785034,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3065664981324797,
+     "yaw_rate_err": 0.08184798999536434,
+     "distance_m": 3.3798468205444356,
+     "mean_cam_height_m": 0.2504905563489254,
+     "settle_cam_height_m": 0.2532722773050578,
+     "t0_render_vs_analytic_max": 0.032001346349716187,
+     "step_render_vs_analytic_max": 0.15508049726486206,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.31006834637200353,
+     "yaw_rate_err": 0.14233767798912936,
+     "distance_m": 5.4898140398450614,
+     "mean_cam_height_m": 0.2442587022143783,
+     "settle_cam_height_m": 0.24903671966011098,
+     "t0_render_vs_analytic_max": 0.032001346349716187,
+     "step_render_vs_analytic_max": 0.16134417057037354,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3085954777698026,
+     "yaw_rate_err": 0.14205861889140117,
+     "distance_m": 5.503673811709959,
+     "mean_cam_height_m": 0.24424519845835893,
+     "settle_cam_height_m": 0.2490001980867158,
+     "t0_render_vs_analytic_max": 0.03225484490394592,
+     "step_render_vs_analytic_max": 0.16036313772201538,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.31045720014336337,
+     "yaw_rate_err": 0.1548518274638001,
+     "distance_m": 5.539920765449,
+     "mean_cam_height_m": 0.24428960290745058,
+     "settle_cam_height_m": 0.2493388674602835,
+     "t0_render_vs_analytic_max": 0.03225484490394592,
+     "step_render_vs_analytic_max": 0.16154688596725464,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3087957699731698,
+     "yaw_rate_err": 0.1445082384873901,
+     "distance_m": 5.5135415888392965,
+     "mean_cam_height_m": 0.2442459706308028,
+     "settle_cam_height_m": 0.24872119499349998,
+     "t0_render_vs_analytic_max": 0.03225484490394592,
+     "step_render_vs_analytic_max": 0.16457253694534302,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.308347472789322,
+     "yaw_rate_err": 0.14406429787015457,
+     "distance_m": 5.514356742596924,
+     "mean_cam_height_m": 0.24425466146554464,
+     "settle_cam_height_m": 0.24757500064399626,
+     "t0_render_vs_analytic_max": 0.03225484490394592,
+     "step_render_vs_analytic_max": 0.16429656744003296,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3104997760402368,
+     "yaw_rate_err": 0.14789055035657278,
+     "distance_m": 5.511686380521107,
+     "mean_cam_height_m": 0.24429947111642053,
+     "settle_cam_height_m": 0.24851404207680972,
+     "t0_render_vs_analytic_max": 0.03225484490394592,
+     "step_render_vs_analytic_max": 0.162395179271698,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30966239207008905,
+     "yaw_rate_err": 0.1516325214461251,
+     "distance_m": 5.512365132527831,
+     "mean_cam_height_m": 0.24427965453378378,
+     "settle_cam_height_m": 0.24893946147953805,
+     "t0_render_vs_analytic_max": 0.03225484490394592,
+     "step_render_vs_analytic_max": 0.16123968362808228,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3104672060992143,
+     "yaw_rate_err": 0.1435299905775564,
+     "distance_m": 5.519310764966934,
+     "mean_cam_height_m": 0.24424883979950354,
+     "settle_cam_height_m": 0.248942701208435,
+     "t0_render_vs_analytic_max": 0.03225484490394592,
+     "step_render_vs_analytic_max": 0.1640058159828186,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3087051520453895,
+     "yaw_rate_err": 0.14311730658821722,
+     "distance_m": 5.5164119627319,
+     "mean_cam_height_m": 0.24424335903153002,
+     "settle_cam_height_m": 0.24864342026393146,
+     "t0_render_vs_analytic_max": 0.03225484490394592,
+     "step_render_vs_analytic_max": 0.16136598587036133,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3095908974758005,
+     "yaw_rate_err": 0.14834176205728716,
+     "distance_m": 5.535354980608539,
+     "mean_cam_height_m": 0.24420507912109438,
+     "settle_cam_height_m": 0.2492832676788012,
+     "t0_render_vs_analytic_max": 0.03225484490394592,
+     "step_render_vs_analytic_max": 0.16362136602401733,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21739418187261886,
+     "yaw_rate_err": 0.09135057189796253,
+     "distance_m": 2.3330153890692538,
+     "mean_cam_height_m": 0.1947325541694756,
+     "settle_cam_height_m": 0.22416148257441532,
+     "t0_render_vs_analytic_max": 0.03225484490394592,
+     "step_render_vs_analytic_max": 0.20054751634597778,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.214767852652168,
+     "yaw_rate_err": 0.09099295370627043,
+     "distance_m": 2.327953657823194,
+     "mean_cam_height_m": 0.1946166991672542,
+     "settle_cam_height_m": 0.22617468994119505,
+     "t0_render_vs_analytic_max": 0.03221437335014343,
+     "step_render_vs_analytic_max": 0.20189207792282104,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21580908671623825,
+     "yaw_rate_err": 0.09114663570773754,
+     "distance_m": 2.3253039698114355,
+     "mean_cam_height_m": 0.19460051326295333,
+     "settle_cam_height_m": 0.22703839356905192,
+     "t0_render_vs_analytic_max": 0.03221437335014343,
+     "step_render_vs_analytic_max": 0.20394980907440186,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21619086169856966,
+     "yaw_rate_err": 0.09292441322003564,
+     "distance_m": 2.3223155938924585,
+     "mean_cam_height_m": 0.19476206596888734,
+     "settle_cam_height_m": 0.22533478351948028,
+     "t0_render_vs_analytic_max": 0.03221437335014343,
+     "step_render_vs_analytic_max": 0.20036077499389648,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2149181458938627,
+     "yaw_rate_err": 0.09220276308723314,
+     "distance_m": 2.3183726648921823,
+     "mean_cam_height_m": 0.19468649511737265,
+     "settle_cam_height_m": 0.2263092147284413,
+     "t0_render_vs_analytic_max": 0.03221437335014343,
+     "step_render_vs_analytic_max": 0.20177209377288818,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2179579642976329,
+     "yaw_rate_err": 0.09120959361896032,
+     "distance_m": 2.3390873064098505,
+     "mean_cam_height_m": 0.19478794268592667,
+     "settle_cam_height_m": 0.22473002213097598,
+     "t0_render_vs_analytic_max": 0.03221437335014343,
+     "step_render_vs_analytic_max": 0.20034337043762207,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21563935895154937,
+     "yaw_rate_err": 0.09254840606519513,
+     "distance_m": 2.3322144110952214,
+     "mean_cam_height_m": 0.19442418529696667,
+     "settle_cam_height_m": 0.226347266386067,
+     "t0_render_vs_analytic_max": 0.03221437335014343,
+     "step_render_vs_analytic_max": 0.20048069953918457,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21575950728860072,
+     "yaw_rate_err": 0.09225556511792014,
+     "distance_m": 2.3172863831151003,
+     "mean_cam_height_m": 0.1945677135064772,
+     "settle_cam_height_m": 0.22692333429929445,
+     "t0_render_vs_analytic_max": 0.03221437335014343,
+     "step_render_vs_analytic_max": 0.2026350498199463,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21695435553999037,
+     "yaw_rate_err": 0.09236833065862521,
+     "distance_m": 2.3211267021705675,
+     "mean_cam_height_m": 0.19475362555401762,
+     "settle_cam_height_m": 0.22580889575388569,
+     "t0_render_vs_analytic_max": 0.03221437335014343,
+     "step_render_vs_analytic_max": 0.20174330472946167,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21495658661088715,
+     "yaw_rate_err": 0.0899871412905269,
+     "distance_m": 2.3234236942982807,
+     "mean_cam_height_m": 0.19448433278521646,
+     "settle_cam_height_m": 0.22622838694740158,
+     "t0_render_vs_analytic_max": 0.03221437335014343,
+     "step_render_vs_analytic_max": 0.20232611894607544,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.251559021840134,
+     "yaw_rate_err": 0.1441995125326267,
+     "distance_m": 1.442367118489508,
+     "mean_cam_height_m": 0.2510931204135705,
+     "settle_cam_height_m": 0.25132712539561874,
+     "t0_render_vs_analytic_max": 0.03221437335014343,
+     "step_render_vs_analytic_max": 0.15190333127975464,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.26187690447702994,
+     "yaw_rate_err": 0.12272589200894189,
+     "distance_m": 1.4390517956097284,
+     "mean_cam_height_m": 0.2510753708157241,
+     "settle_cam_height_m": 0.2520111104413608,
+     "t0_render_vs_analytic_max": 0.032111525535583496,
+     "step_render_vs_analytic_max": 0.15230399370193481,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2630460517164362,
+     "yaw_rate_err": 0.12455878683250621,
+     "distance_m": 1.3635097754838426,
+     "mean_cam_height_m": 0.25112466777764514,
+     "settle_cam_height_m": 0.25178695623752556,
+     "t0_render_vs_analytic_max": 0.032111525535583496,
+     "step_render_vs_analytic_max": 0.15601301193237305,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.26553617972606564,
+     "yaw_rate_err": 0.12280159876717764,
+     "distance_m": 1.4090031538375958,
+     "mean_cam_height_m": 0.25107715592584773,
+     "settle_cam_height_m": 0.25220938429713957,
+     "t0_render_vs_analytic_max": 0.032111525535583496,
+     "step_render_vs_analytic_max": 0.15222179889678955,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2606395343893554,
+     "yaw_rate_err": 0.12214577052846093,
+     "distance_m": 1.4055267710581103,
+     "mean_cam_height_m": 0.2510675439783334,
+     "settle_cam_height_m": 0.25230572153361,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15112143754959106,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.26189499469894634,
+     "yaw_rate_err": 0.1291099090123158,
+     "distance_m": 1.4629026423050993,
+     "mean_cam_height_m": 0.2510296411890205,
+     "settle_cam_height_m": 0.2521774306483977,
+     "t0_render_vs_analytic_max": 0.032111525535583496,
+     "step_render_vs_analytic_max": 0.15231621265411377,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2639452512905272,
+     "yaw_rate_err": 0.12594316963144891,
+     "distance_m": 1.4252297029448442,
+     "mean_cam_height_m": 0.2511355596457691,
+     "settle_cam_height_m": 0.25090632179743527,
+     "t0_render_vs_analytic_max": 0.032111525535583496,
+     "step_render_vs_analytic_max": 0.15230876207351685,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.26375165464425004,
+     "yaw_rate_err": 0.12773704371271127,
+     "distance_m": 1.355525175572319,
+     "mean_cam_height_m": 0.2510711250346771,
+     "settle_cam_height_m": 0.2518403955369671,
+     "t0_render_vs_analytic_max": 0.032111525535583496,
+     "step_render_vs_analytic_max": 0.15622657537460327,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2635276309668675,
+     "yaw_rate_err": 0.1146445155689527,
+     "distance_m": 1.3771843658714777,
+     "mean_cam_height_m": 0.251164755391187,
+     "settle_cam_height_m": 0.25129749675333657,
+     "t0_render_vs_analytic_max": 0.032111525535583496,
+     "step_render_vs_analytic_max": 0.15581071376800537,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2607964974481417,
+     "yaw_rate_err": 0.1237172476474206,
+     "distance_m": 1.4097443049124037,
+     "mean_cam_height_m": 0.25105856592192893,
+     "settle_cam_height_m": 0.2512888031477472,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15424078702926636,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.1521540270128311,
+     "yaw_rate_err": 0.08522931148648055,
+     "distance_m": 0.026599778236425713,
+     "mean_cam_height_m": 0.24103173846166606,
+     "settle_cam_height_m": 0.24558772408463392,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15515130758285522,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.1329334384087205,
+     "yaw_rate_err": 0.23133564710065171,
+     "distance_m": 0.05696137160795396,
+     "mean_cam_height_m": 0.24098608476121594,
+     "settle_cam_height_m": 0.24444570250166173,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.1555512547492981,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.15385858336249075,
+     "yaw_rate_err": 0.08517414802975584,
+     "distance_m": 0.002654484275836059,
+     "mean_cam_height_m": 0.24102614550154994,
+     "settle_cam_height_m": 0.24554520684951722,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15156149864196777,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.12744486223573856,
+     "yaw_rate_err": 0.24359808466860344,
+     "distance_m": 0.05910481355326496,
+     "mean_cam_height_m": 0.24098703576764685,
+     "settle_cam_height_m": 0.2442934417549285,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15543627738952637,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.15442228928226323,
+     "yaw_rate_err": 0.08625841212966125,
+     "distance_m": 0.01139248358112356,
+     "mean_cam_height_m": 0.2410238712194195,
+     "settle_cam_height_m": 0.24638759593730028,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.1506921648979187,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.15447811839031889,
+     "yaw_rate_err": 0.08694324313072907,
+     "distance_m": 0.013900653758276229,
+     "mean_cam_height_m": 0.24101401789353996,
+     "settle_cam_height_m": 0.24566488005730427,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15298140048980713,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.155854629798784,
+     "yaw_rate_err": 0.08647436429216164,
+     "distance_m": 0.023985666153077345,
+     "mean_cam_height_m": 0.241026140281299,
+     "settle_cam_height_m": 0.2448526153657724,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15352046489715576,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.15363201439833368,
+     "yaw_rate_err": 0.08530899871338148,
+     "distance_m": 0.006539664711170575,
+     "mean_cam_height_m": 0.24105636475560294,
+     "settle_cam_height_m": 0.24551190982183857,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15757131576538086,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.1538451538106868,
+     "yaw_rate_err": 0.08617780198612111,
+     "distance_m": 0.015492052318568919,
+     "mean_cam_height_m": 0.24104130757432013,
+     "settle_cam_height_m": 0.24581530120160902,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15357226133346558,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.15570145564452756,
+     "yaw_rate_err": 0.08504809554457461,
+     "distance_m": 0.019449805604271665,
+     "mean_cam_height_m": 0.24101710931592915,
+     "settle_cam_height_m": 0.245133212758491,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15129882097244263,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2853758089533677,
+     "yaw_rate_err": 0.1553385461647147,
+     "distance_m": 0.15218567151366497,
+     "mean_cam_height_m": 0.2507564752296536,
+     "settle_cam_height_m": 0.2532867784156379,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15785592794418335,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2865504613887736,
+     "yaw_rate_err": 0.15586362034718768,
+     "distance_m": 0.15456611223603617,
+     "mean_cam_height_m": 0.2507347577946572,
+     "settle_cam_height_m": 0.25319923570580743,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15726840496063232,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.28613321910456113,
+     "yaw_rate_err": 0.15550671128731758,
+     "distance_m": 0.1654149597181342,
+     "mean_cam_height_m": 0.25073170951507956,
+     "settle_cam_height_m": 0.2532176632170185,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15789508819580078,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2861047854629913,
+     "yaw_rate_err": 0.15375854181005985,
+     "distance_m": 0.16476104032300626,
+     "mean_cam_height_m": 0.2507279840023394,
+     "settle_cam_height_m": 0.25316955272927166,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.1572977900505066,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2853708258825596,
+     "yaw_rate_err": 0.1538030945298745,
+     "distance_m": 0.17802999825025187,
+     "mean_cam_height_m": 0.2507310485443146,
+     "settle_cam_height_m": 0.2535275591831251,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15747976303100586,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.28583342567578424,
+     "yaw_rate_err": 0.15448273390578532,
+     "distance_m": 0.16834165053947298,
+     "mean_cam_height_m": 0.2507200653973032,
+     "settle_cam_height_m": 0.2533659331164034,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15901589393615723,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.28555027577235437,
+     "yaw_rate_err": 0.15456886687900998,
+     "distance_m": 0.1682869014631379,
+     "mean_cam_height_m": 0.2507361064253437,
+     "settle_cam_height_m": 0.25308764447447213,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15767771005630493,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.28806109795345686,
+     "yaw_rate_err": 0.1523107986998453,
+     "distance_m": 0.21086161908877754,
+     "mean_cam_height_m": 0.2507377429426232,
+     "settle_cam_height_m": 0.25316559094901964,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.15867096185684204,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2858758235896021,
+     "yaw_rate_err": 0.15278844955948737,
+     "distance_m": 0.18234460188250012,
+     "mean_cam_height_m": 0.2507326921162226,
+     "settle_cam_height_m": 0.2532440580595578,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.16186225414276123,
+     "frac_steps_render_diff_gt_tol": 1.0
+    },
+    {
+     "arm": "A",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2892341337351883,
+     "yaw_rate_err": 0.1509663489525498,
+     "distance_m": 0.25308909594968904,
+     "mean_cam_height_m": 0.2507148288609208,
+     "settle_cam_height_m": 0.2532253705700625,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": 0.1579412817955017,
+     "frac_steps_render_diff_gt_tol": 1.0
+    }
+   ]
+  },
+  "B": {
+   "summary": {
+    "n": 60,
+    "fall_rate": 0.9833333333333333,
+    "mean_disp_m": 0.11196939852075372,
+    "mean_lin_vel_err": 0.2658494320291213,
+    "mean_yaw_rate_err": 0.258011818250544,
+    "mean_survival_s": 1.860666666666667,
+    "by_command": {
+     "+0.0,+0.0,+0.5": {
+      "n": 10,
+      "fall_rate": 1.0,
+      "mean_disp_m": 0.17611892983809815,
+      "mean_lin_vel_err": 0.23993421084589475
+     },
+     "+0.0,+0.2,+0.0": {
+      "n": 10,
+      "fall_rate": 1.0,
+      "mean_disp_m": 0.15453471267395716,
+      "mean_lin_vel_err": 0.19806138544565574
+     },
+     "+0.3,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 1.0,
+      "mean_disp_m": 0.055039565268195,
+      "mean_lin_vel_err": 0.2943160038780642
+     },
+     "+0.3,+0.0,+0.5": {
+      "n": 10,
+      "fall_rate": 0.9,
+      "mean_disp_m": 0.04970278367419673,
+      "mean_lin_vel_err": 0.30473207073653563
+     },
+     "+0.5,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 1.0,
+      "mean_disp_m": 0.08129930061240632,
+      "mean_lin_vel_err": 0.466145871440235
+     },
+     "-0.2,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 1.0,
+      "mean_disp_m": 0.15512109905766885,
+      "mean_lin_vel_err": 0.21208491347501077
+     }
+    },
+    "rendered_nominal_vs_analytic_max_abs": 0.032171159982681274,
+    "wall_s": 11.2
+   },
+   "episodes": [
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 1.72,
+     "lin_vel_err": 0.29020196907049,
+     "yaw_rate_err": 0.16878804001704667,
+     "distance_m": 0.06314448461246874,
+     "mean_cam_height_m": 0.18362849692487582,
+     "settle_cam_height_m": 0.23161971060058606,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 1.68,
+     "lin_vel_err": 0.28743727368736044,
+     "yaw_rate_err": 0.1580190546427313,
+     "distance_m": 0.07171109876790432,
+     "mean_cam_height_m": 0.1837002321174812,
+     "settle_cam_height_m": 0.2280846867245789,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 1.76,
+     "lin_vel_err": 0.29509830181072,
+     "yaw_rate_err": 0.1466404298140389,
+     "distance_m": 0.03921504902331568,
+     "mean_cam_height_m": 0.18123169472451628,
+     "settle_cam_height_m": 0.22832016802403174,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 1.6,
+     "lin_vel_err": 0.2868659965433068,
+     "yaw_rate_err": 0.14900993756168404,
+     "distance_m": 0.0803164422171821,
+     "mean_cam_height_m": 0.1846096817911626,
+     "settle_cam_height_m": 0.22756951479017729,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 1.6400000000000001,
+     "lin_vel_err": 0.30937575019325503,
+     "yaw_rate_err": 0.12111942399540027,
+     "distance_m": 0.09506882452142655,
+     "mean_cam_height_m": 0.18440943860965728,
+     "settle_cam_height_m": 0.22874342749916693,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 1.76,
+     "lin_vel_err": 0.2891642616875204,
+     "yaw_rate_err": 0.1660143088331337,
+     "distance_m": 0.06120066585025397,
+     "mean_cam_height_m": 0.18388824892694436,
+     "settle_cam_height_m": 0.23047712846757215,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": true,
+     "survival_s": 1.84,
+     "lin_vel_err": 0.2969704648358631,
+     "yaw_rate_err": 0.14520546991888408,
+     "distance_m": 0.028608848929862516,
+     "mean_cam_height_m": 0.18188192884721563,
+     "settle_cam_height_m": 0.22977422439833614,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 1.72,
+     "lin_vel_err": 0.29177515082403654,
+     "yaw_rate_err": 0.1536453385273929,
+     "distance_m": 0.039201316439627,
+     "mean_cam_height_m": 0.18139131426569285,
+     "settle_cam_height_m": 0.2277228546012955,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": true,
+     "survival_s": 1.96,
+     "lin_vel_err": 0.30745141192500464,
+     "yaw_rate_err": 0.10991599387575962,
+     "distance_m": 0.03767003512066648,
+     "mean_cam_height_m": 0.1830143386791285,
+     "settle_cam_height_m": 0.23077343943948103,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 1.72,
+     "lin_vel_err": 0.28881945820308497,
+     "yaw_rate_err": 0.1696182994963646,
+     "distance_m": 0.03425888719924261,
+     "mean_cam_height_m": 0.1819571166771911,
+     "settle_cam_height_m": 0.23011757083476547,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 0.92,
+     "lin_vel_err": null,
+     "yaw_rate_err": null,
+     "distance_m": 0.09002462448462684,
+     "mean_cam_height_m": null,
+     "settle_cam_height_m": 0.21993010774783528,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 0.92,
+     "lin_vel_err": null,
+     "yaw_rate_err": null,
+     "distance_m": 0.09329582781288481,
+     "mean_cam_height_m": null,
+     "settle_cam_height_m": 0.21632170773805756,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 0.92,
+     "lin_vel_err": null,
+     "yaw_rate_err": null,
+     "distance_m": 0.09031332001422823,
+     "mean_cam_height_m": null,
+     "settle_cam_height_m": 0.2176075203126027,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 0.96,
+     "lin_vel_err": null,
+     "yaw_rate_err": null,
+     "distance_m": 0.10095083795410696,
+     "mean_cam_height_m": null,
+     "settle_cam_height_m": 0.2146809267142243,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 1.04,
+     "lin_vel_err": 0.43360881454453587,
+     "yaw_rate_err": 0.26326562223248395,
+     "distance_m": 0.07538202294625299,
+     "mean_cam_height_m": 0.14181047936975238,
+     "settle_cam_height_m": 0.2097750131885561,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 1.12,
+     "lin_vel_err": 0.4500342016815673,
+     "yaw_rate_err": 0.1058129488105622,
+     "distance_m": 0.0705667436401333,
+     "mean_cam_height_m": 0.14297512271654936,
+     "settle_cam_height_m": 0.21545218800541088,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": true,
+     "survival_s": 0.88,
+     "lin_vel_err": null,
+     "yaw_rate_err": null,
+     "distance_m": 0.0913948594732398,
+     "mean_cam_height_m": null,
+     "settle_cam_height_m": 0.221753422785084,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 0.88,
+     "lin_vel_err": null,
+     "yaw_rate_err": null,
+     "distance_m": 0.07823795079199017,
+     "mean_cam_height_m": null,
+     "settle_cam_height_m": 0.2192623815276522,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": true,
+     "survival_s": 1.28,
+     "lin_vel_err": 0.4490176576414516,
+     "yaw_rate_err": 0.4301052837521088,
+     "distance_m": 0.03202302538969139,
+     "mean_cam_height_m": 0.14419558860633988,
+     "settle_cam_height_m": 0.21710413140951984,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 1.08,
+     "lin_vel_err": 0.5319228118933853,
+     "yaw_rate_err": 0.4976339906859272,
+     "distance_m": 0.0908037936169087,
+     "mean_cam_height_m": 0.14472900195676858,
+     "settle_cam_height_m": 0.21739435105648497,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.212646876829373,
+     "yaw_rate_err": 0.11353596133824649,
+     "distance_m": 0.16627630510082397,
+     "mean_cam_height_m": 0.19228085508920784,
+     "settle_cam_height_m": 0.2314695488539346,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 1.6400000000000001,
+     "lin_vel_err": 0.2383612732488887,
+     "yaw_rate_err": 0.1927843959896008,
+     "distance_m": 0.1546677606623997,
+     "mean_cam_height_m": 0.1895902764758129,
+     "settle_cam_height_m": 0.22891696303621817,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 1.68,
+     "lin_vel_err": 0.2224289913826215,
+     "yaw_rate_err": 0.14300078398564012,
+     "distance_m": 0.14871530502156236,
+     "mean_cam_height_m": 0.19005718701157762,
+     "settle_cam_height_m": 0.22963013391948273,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 1.6,
+     "lin_vel_err": 0.23292514510452478,
+     "yaw_rate_err": 0.202404845304493,
+     "distance_m": 0.16514716956031797,
+     "mean_cam_height_m": 0.19058911268149545,
+     "settle_cam_height_m": 0.22752953619073565,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.17900058373604938,
+     "yaw_rate_err": 0.07174206100511546,
+     "distance_m": 0.16276357400732858,
+     "mean_cam_height_m": 0.18842296355830315,
+     "settle_cam_height_m": 0.22892953672161703,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 1.84,
+     "lin_vel_err": 0.18786906540757783,
+     "yaw_rate_err": 0.10110539127623988,
+     "distance_m": 0.16101799723208166,
+     "mean_cam_height_m": 0.186258819757877,
+     "settle_cam_height_m": 0.2286047304995056,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": true,
+     "survival_s": 2.16,
+     "lin_vel_err": 0.1885668919884881,
+     "yaw_rate_err": 0.09670119631674949,
+     "distance_m": 0.17726150595814158,
+     "mean_cam_height_m": 0.19400472425153883,
+     "settle_cam_height_m": 0.2307725595276496,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 1.72,
+     "lin_vel_err": 0.224556547400666,
+     "yaw_rate_err": 0.1499211511548933,
+     "distance_m": 0.14483125653497705,
+     "mean_cam_height_m": 0.19055173365141123,
+     "settle_cam_height_m": 0.2300633671932472,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.2152107342709296,
+     "yaw_rate_err": 0.12248379292593845,
+     "distance_m": 0.13543810088167052,
+     "mean_cam_height_m": 0.18738034289642486,
+     "settle_cam_height_m": 0.22938762419356118,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 1.72,
+     "lin_vel_err": 0.21928302538098915,
+     "yaw_rate_err": 0.10344263214175825,
+     "distance_m": 0.13509201561738535,
+     "mean_cam_height_m": 0.18741526640059095,
+     "settle_cam_height_m": 0.22918302449474848,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 2.6,
+     "lin_vel_err": 0.2007679021675326,
+     "yaw_rate_err": 0.0506334738163992,
+     "distance_m": 0.16148447440442312,
+     "mean_cam_height_m": 0.19663180192712,
+     "settle_cam_height_m": 0.23499008446026173,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 2.32,
+     "lin_vel_err": 0.20244665626511724,
+     "yaw_rate_err": 0.06620327482287248,
+     "distance_m": 0.1682369183756526,
+     "mean_cam_height_m": 0.19681654437766538,
+     "settle_cam_height_m": 0.232502828744617,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 2.48,
+     "lin_vel_err": 0.20012499001748477,
+     "yaw_rate_err": 0.06036212841783388,
+     "distance_m": 0.1520128794668745,
+     "mean_cam_height_m": 0.19638858432293518,
+     "settle_cam_height_m": 0.2331692047383331,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 2.32,
+     "lin_vel_err": 0.19793582826107226,
+     "yaw_rate_err": 0.07631634274525602,
+     "distance_m": 0.17065232431443006,
+     "mean_cam_height_m": 0.1965073101742579,
+     "settle_cam_height_m": 0.2314902127265003,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 2.52,
+     "lin_vel_err": 0.20268504397994747,
+     "yaw_rate_err": 0.05014733152506891,
+     "distance_m": 0.1537344333982066,
+     "mean_cam_height_m": 0.19710563871837486,
+     "settle_cam_height_m": 0.23291727430397732,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 2.64,
+     "lin_vel_err": 0.19777917649419502,
+     "yaw_rate_err": 0.048176929430814794,
+     "distance_m": 0.15688915414299098,
+     "mean_cam_height_m": 0.1964920038916287,
+     "settle_cam_height_m": 0.23307602821408854,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 6,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.18570541732134702,
+     "yaw_rate_err": 0.17025504678330658,
+     "distance_m": 0.15671912664373644,
+     "mean_cam_height_m": 0.1960917408007545,
+     "settle_cam_height_m": 0.23160298533225046,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 2.52,
+     "lin_vel_err": 0.20289434451789295,
+     "yaw_rate_err": 0.055462098740701106,
+     "distance_m": 0.14923963749015162,
+     "mean_cam_height_m": 0.1970680218760811,
+     "settle_cam_height_m": 0.2335920015643132,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 8,
+     "fell": true,
+     "survival_s": 2.68,
+     "lin_vel_err": 0.19231502555722035,
+     "yaw_rate_err": 0.06009494564861199,
+     "distance_m": 0.13404354657191836,
+     "mean_cam_height_m": 0.1954190535949406,
+     "settle_cam_height_m": 0.2331002765155034,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 2.48,
+     "lin_vel_err": 0.19795946987474777,
+     "yaw_rate_err": 0.05784910045998531,
+     "distance_m": 0.1423346319311874,
+     "mean_cam_height_m": 0.19570379217445666,
+     "settle_cam_height_m": 0.2324373709344182,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 1.2,
+     "lin_vel_err": 0.26402321608231505,
+     "yaw_rate_err": 0.5478713208246813,
+     "distance_m": 0.17772994482959156,
+     "mean_cam_height_m": 0.18734849925734115,
+     "settle_cam_height_m": 0.22792661326888392,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 1.24,
+     "lin_vel_err": 0.2011964779401639,
+     "yaw_rate_err": 0.3777574131647838,
+     "distance_m": 0.1841240057697813,
+     "mean_cam_height_m": 0.18931535322043935,
+     "settle_cam_height_m": 0.2256883804375885,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 1.28,
+     "lin_vel_err": 0.20894522420404876,
+     "yaw_rate_err": 0.38520598415717205,
+     "distance_m": 0.18134743206276496,
+     "mean_cam_height_m": 0.18690870483623326,
+     "settle_cam_height_m": 0.22592622556388092,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 1.2,
+     "lin_vel_err": 0.3409518817297668,
+     "yaw_rate_err": 0.42279680527078656,
+     "distance_m": 0.1684453845035381,
+     "mean_cam_height_m": 0.19424080727427467,
+     "settle_cam_height_m": 0.2247376688308888,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 1.16,
+     "lin_vel_err": 0.21633864593984736,
+     "yaw_rate_err": 0.700686209241426,
+     "distance_m": 0.17470585604756797,
+     "mean_cam_height_m": 0.17495425040317492,
+     "settle_cam_height_m": 0.22506737030855428,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 1.16,
+     "lin_vel_err": 0.17840590929013644,
+     "yaw_rate_err": 0.6070081865017982,
+     "distance_m": 0.19763034755826242,
+     "mean_cam_height_m": 0.1799084985908985,
+     "settle_cam_height_m": 0.2250245397778756,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 6,
+     "fell": true,
+     "survival_s": 1.24,
+     "lin_vel_err": 0.23043217828390727,
+     "yaw_rate_err": 0.2935290692254597,
+     "distance_m": 0.17241199542739907,
+     "mean_cam_height_m": 0.18909924807383285,
+     "settle_cam_height_m": 0.22575837941033858,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 1.28,
+     "lin_vel_err": 0.22625532989020486,
+     "yaw_rate_err": 0.37037258586510197,
+     "distance_m": 0.16394800420776512,
+     "mean_cam_height_m": 0.1863090325826737,
+     "settle_cam_height_m": 0.2261350122496336,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 8,
+     "fell": true,
+     "survival_s": 1.24,
+     "lin_vel_err": 0.20193559261043614,
+     "yaw_rate_err": 0.3930903618248589,
+     "distance_m": 0.14258011832338338,
+     "mean_cam_height_m": 0.1740895089275916,
+     "settle_cam_height_m": 0.2245358283314556,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 1.16,
+     "lin_vel_err": 0.3308576524881207,
+     "yaw_rate_err": 0.45711836196962086,
+     "distance_m": 0.1982662096509279,
+     "mean_cam_height_m": 0.18322038026966686,
+     "settle_cam_height_m": 0.2243984130521435,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 2.0,
+     "lin_vel_err": 0.29256045958592697,
+     "yaw_rate_err": 0.4261510339380403,
+     "distance_m": 0.03904073258259939,
+     "mean_cam_height_m": 0.17998356461263665,
+     "settle_cam_height_m": 0.23010377641101507,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 1.84,
+     "lin_vel_err": 0.31158839638821645,
+     "yaw_rate_err": 0.545200253925666,
+     "distance_m": 0.049978013815202504,
+     "mean_cam_height_m": 0.17462479038015755,
+     "settle_cam_height_m": 0.22609463615562425,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 2.2,
+     "lin_vel_err": 0.3371424424771651,
+     "yaw_rate_err": 0.4913958973575999,
+     "distance_m": 0.07965710842230031,
+     "mean_cam_height_m": 0.17550863967735,
+     "settle_cam_height_m": 0.22600485660943992,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.29835884100387217,
+     "yaw_rate_err": 0.4742114332357074,
+     "distance_m": 0.044595652841019726,
+     "mean_cam_height_m": 0.17548301909371108,
+     "settle_cam_height_m": 0.22513819902012003,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.27160015616902755,
+     "yaw_rate_err": 0.35682575778326425,
+     "distance_m": 0.022810373636173217,
+     "mean_cam_height_m": 0.17666282484019732,
+     "settle_cam_height_m": 0.22595964429241872,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.2772102038432428,
+     "yaw_rate_err": 0.38964481363625186,
+     "distance_m": 0.0335015605559115,
+     "mean_cam_height_m": 0.17570407086056705,
+     "settle_cam_height_m": 0.22726859800254695,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 6,
+     "fell": true,
+     "survival_s": 2.0,
+     "lin_vel_err": 0.35877410152041267,
+     "yaw_rate_err": 0.5297530674799432,
+     "distance_m": 0.08091830934205964,
+     "mean_cam_height_m": 0.1761836710649514,
+     "settle_cam_height_m": 0.22711041773045043,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 2.12,
+     "lin_vel_err": 0.34791054039161434,
+     "yaw_rate_err": 0.47775925418535914,
+     "distance_m": 0.08143921887081534,
+     "mean_cam_height_m": 0.17508675577575272,
+     "settle_cam_height_m": 0.22553179822230923,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30016866803643066,
+     "yaw_rate_err": 0.4985356873098586,
+     "distance_m": 0.04644498731351079,
+     "mean_cam_height_m": 0.1967600178467827,
+     "settle_cam_height_m": 0.22637288321732643,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "B",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 1.68,
+     "lin_vel_err": 0.2520068979494473,
+     "yaw_rate_err": 0.41030766263894886,
+     "distance_m": 0.018641879362374922,
+     "mean_cam_height_m": 0.17526626896715194,
+     "settle_cam_height_m": 0.22756485803150536,
+     "t0_render_vs_analytic_max": 0.032171159982681274,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    }
+   ]
+  },
+  "Bsettle": {
+   "summary": {
+    "n": 60,
+    "fall_rate": 0.8666666666666667,
+    "mean_disp_m": 0.4275200796150423,
+    "mean_lin_vel_err": 0.3602380740879899,
+    "mean_yaw_rate_err": 0.32031147544782657,
+    "mean_survival_s": 3.6566666666666663,
+    "by_command": {
+     "+0.0,+0.0,+0.5": {
+      "n": 10,
+      "fall_rate": 0.4,
+      "mean_disp_m": 0.08939722820798049,
+      "mean_lin_vel_err": 0.20896032291425373
+     },
+     "+0.0,+0.2,+0.0": {
+      "n": 10,
+      "fall_rate": 0.8,
+      "mean_disp_m": 0.6068031086320143,
+      "mean_lin_vel_err": 0.3000927490366837
+     },
+     "+0.3,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 1.0,
+      "mean_disp_m": 0.3533383641398112,
+      "mean_lin_vel_err": 0.41571034385747707
+     },
+     "+0.3,+0.0,+0.5": {
+      "n": 10,
+      "fall_rate": 1.0,
+      "mean_disp_m": 0.35831346880486675,
+      "mean_lin_vel_err": 0.43993560051527386
+     },
+     "+0.5,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 1.0,
+      "mean_disp_m": 0.6539554704223771,
+      "mean_lin_vel_err": 0.49545614229766616
+     },
+     "-0.2,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 1.0,
+      "mean_disp_m": 0.5033128374832041,
+      "mean_lin_vel_err": 0.3012732859065849
+     }
+    },
+    "wall_s": 22.2
+   },
+   "episodes": [
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.4190453365086954,
+     "yaw_rate_err": 0.3931533578982972,
+     "distance_m": 0.33277703680312737,
+     "mean_cam_height_m": 0.23741500063634083,
+     "settle_cam_height_m": 0.25358945527646315,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.4073801625864473,
+     "yaw_rate_err": 0.4017579896579381,
+     "distance_m": 0.36599438641415905,
+     "mean_cam_height_m": 0.23872413963309908,
+     "settle_cam_height_m": 0.25372452088935604,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.4180066029924426,
+     "yaw_rate_err": 0.4266364330691671,
+     "distance_m": 0.3538564981424627,
+     "mean_cam_height_m": 0.23966505703204594,
+     "settle_cam_height_m": 0.25368500229393165,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.4162104850555682,
+     "yaw_rate_err": 0.3130425114885403,
+     "distance_m": 0.3014954275660977,
+     "mean_cam_height_m": 0.22827485948681422,
+     "settle_cam_height_m": 0.25365074506503615,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.41815834778088906,
+     "yaw_rate_err": 0.41158095721532123,
+     "distance_m": 0.3783100573449459,
+     "mean_cam_height_m": 0.24212692257358784,
+     "settle_cam_height_m": 0.25390609270219733,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.4178195701578735,
+     "yaw_rate_err": 0.4085084480671389,
+     "distance_m": 0.373361714619359,
+     "mean_cam_height_m": 0.23894585319576397,
+     "settle_cam_height_m": 0.2536565374407864,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.4163189513800264,
+     "yaw_rate_err": 0.4254885289719626,
+     "distance_m": 0.3421461658680974,
+     "mean_cam_height_m": 0.23765960485142773,
+     "settle_cam_height_m": 0.25348291449488386,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.408749506880151,
+     "yaw_rate_err": 0.403781552927268,
+     "distance_m": 0.3687623655336248,
+     "mean_cam_height_m": 0.23876270464469798,
+     "settle_cam_height_m": 0.2537219028839401,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.4214122882556616,
+     "yaw_rate_err": 0.4323965170084239,
+     "distance_m": 0.3467694181580412,
+     "mean_cam_height_m": 0.23895470494528323,
+     "settle_cam_height_m": 0.2536468498641999,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.41400218697701596,
+     "yaw_rate_err": 0.4466774506609783,
+     "distance_m": 0.36991057094819657,
+     "mean_cam_height_m": 0.23937789802853338,
+     "settle_cam_height_m": 0.25327829281235115,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.49335268837932883,
+     "yaw_rate_err": 0.16971978179240169,
+     "distance_m": 0.6277124827307096,
+     "mean_cam_height_m": 0.21336001055624668,
+     "settle_cam_height_m": 0.24905083708185302,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 1.96,
+     "lin_vel_err": 0.5092661800935684,
+     "yaw_rate_err": 0.2537112930153559,
+     "distance_m": 0.6823913042118023,
+     "mean_cam_height_m": 0.19785687138866978,
+     "settle_cam_height_m": 0.24898757804932958,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.5055078944937987,
+     "yaw_rate_err": 0.19274665526447593,
+     "distance_m": 0.6402914409016676,
+     "mean_cam_height_m": 0.20612886824787252,
+     "settle_cam_height_m": 0.24933032864544977,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 1.96,
+     "lin_vel_err": 0.4849592726236505,
+     "yaw_rate_err": 0.16544204623205314,
+     "distance_m": 0.6569830078828639,
+     "mean_cam_height_m": 0.21122361826617808,
+     "settle_cam_height_m": 0.2487286213116822,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.5143483610513844,
+     "yaw_rate_err": 0.41344490462092837,
+     "distance_m": 0.6598378073005434,
+     "mean_cam_height_m": 0.19300831115332134,
+     "settle_cam_height_m": 0.24754620412737932,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.4568499118390117,
+     "yaw_rate_err": 0.15420910090730033,
+     "distance_m": 0.6336442157750659,
+     "mean_cam_height_m": 0.21369685378511213,
+     "settle_cam_height_m": 0.2485127613727991,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.4849642444290408,
+     "yaw_rate_err": 0.32135147584465606,
+     "distance_m": 0.6595509169591449,
+     "mean_cam_height_m": 0.1989794387228769,
+     "settle_cam_height_m": 0.2489407220327313,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.5162723987645548,
+     "yaw_rate_err": 0.2823981970920972,
+     "distance_m": 0.664834223425455,
+     "mean_cam_height_m": 0.20292154125153544,
+     "settle_cam_height_m": 0.24893783542647166,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": true,
+     "survival_s": 1.8800000000000001,
+     "lin_vel_err": 0.4958579153459088,
+     "yaw_rate_err": 0.32837096586052145,
+     "distance_m": 0.6683926323679876,
+     "mean_cam_height_m": 0.20132778280699465,
+     "settle_cam_height_m": 0.24866407903134924,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 1.92,
+     "lin_vel_err": 0.4931825559564147,
+     "yaw_rate_err": 0.1622443189652526,
+     "distance_m": 0.6459166726685296,
+     "mean_cam_height_m": 0.21389083706071077,
+     "settle_cam_height_m": 0.24928449410624573,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 2.2,
+     "lin_vel_err": 0.33855264804226964,
+     "yaw_rate_err": 0.23523098126215666,
+     "distance_m": 0.4310487213031949,
+     "mean_cam_height_m": 0.20665351378986394,
+     "settle_cam_height_m": 0.22415742247239812,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 2.52,
+     "lin_vel_err": 0.3193498274347036,
+     "yaw_rate_err": 0.529326587154482,
+     "distance_m": 0.4504199277050349,
+     "mean_cam_height_m": 0.1762771612053609,
+     "settle_cam_height_m": 0.22617462556877022,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 2.24,
+     "lin_vel_err": 0.2728871826693983,
+     "yaw_rate_err": 0.42245478715079443,
+     "distance_m": 0.3066724165682295,
+     "mean_cam_height_m": 0.17969208583398547,
+     "settle_cam_height_m": 0.2270383125575831,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 4.72,
+     "lin_vel_err": 0.2679873925329805,
+     "yaw_rate_err": 0.20979524432150923,
+     "distance_m": 0.8313802868657773,
+     "mean_cam_height_m": 0.18841100316948609,
+     "settle_cam_height_m": 0.22533948545127358,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 2.48,
+     "lin_vel_err": 0.31952553257305255,
+     "yaw_rate_err": 0.4275364411509627,
+     "distance_m": 0.3674245432291871,
+     "mean_cam_height_m": 0.1766919955332745,
+     "settle_cam_height_m": 0.22630635633881982,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 7.08,
+     "lin_vel_err": 0.2853591205623931,
+     "yaw_rate_err": 0.22242436963031934,
+     "distance_m": 1.2058389343805016,
+     "mean_cam_height_m": 0.18804556680898815,
+     "settle_cam_height_m": 0.22472742882427832,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": true,
+     "survival_s": 1.6,
+     "lin_vel_err": 0.39624276383700746,
+     "yaw_rate_err": 0.3335796101710104,
+     "distance_m": 0.42282936800352156,
+     "mean_cam_height_m": 0.19557114819289295,
+     "settle_cam_height_m": 0.22634674266323537,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 2.2,
+     "lin_vel_err": 0.271156416189762,
+     "yaw_rate_err": 0.41288612030664024,
+     "distance_m": 0.310813678474399,
+     "mean_cam_height_m": 0.18040663921134495,
+     "settle_cam_height_m": 0.22691921330687365,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": true,
+     "survival_s": 2.48,
+     "lin_vel_err": 0.2510241405131021,
+     "yaw_rate_err": 0.3722700851875478,
+     "distance_m": 0.35313853474730855,
+     "mean_cam_height_m": 0.17978616569050113,
+     "settle_cam_height_m": 0.22578598259770685,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 1.96,
+     "lin_vel_err": 0.29064783471117983,
+     "yaw_rate_err": 0.43193616979957516,
+     "distance_m": 0.3535619635548862,
+     "mean_cam_height_m": 0.18516302175841304,
+     "settle_cam_height_m": 0.22625418992130644,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 3.3200000000000003,
+     "lin_vel_err": 0.27627211771046506,
+     "yaw_rate_err": 0.18102971672606552,
+     "distance_m": 0.3893250299996754,
+     "mean_cam_height_m": 0.2544999544336717,
+     "settle_cam_height_m": 0.2513112215163387,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.22561120545531538,
+     "yaw_rate_err": 0.16853133673279622,
+     "distance_m": 1.6104740566845488,
+     "mean_cam_height_m": 0.25717056762975815,
+     "settle_cam_height_m": 0.25207967329717457,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 2.68,
+     "lin_vel_err": 0.29967794792837377,
+     "yaw_rate_err": 0.2617471720724699,
+     "distance_m": 0.2999312962474639,
+     "mean_cam_height_m": 0.250671624036066,
+     "settle_cam_height_m": 0.2517915484330274,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 2.96,
+     "lin_vel_err": 0.2857227377244185,
+     "yaw_rate_err": 0.19900341448203404,
+     "distance_m": 0.388091302499643,
+     "mean_cam_height_m": 0.23801070270133562,
+     "settle_cam_height_m": 0.2522340858942914,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 3.12,
+     "lin_vel_err": 0.2822123020535403,
+     "yaw_rate_err": 0.20066516740455057,
+     "distance_m": 0.3542908580094911,
+     "mean_cam_height_m": 0.25396474607216024,
+     "settle_cam_height_m": 0.25230572153361,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 3.52,
+     "lin_vel_err": 0.3430732258097086,
+     "yaw_rate_err": 0.37932846016279925,
+     "distance_m": 0.49144718261431025,
+     "mean_cam_height_m": 0.2538416286212533,
+     "settle_cam_height_m": 0.2521774304776946,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21229456297841184,
+     "yaw_rate_err": 0.16765037075117115,
+     "distance_m": 1.551229033901296,
+     "mean_cam_height_m": 0.2586090747875276,
+     "settle_cam_height_m": 0.2509061367396572,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 2.64,
+     "lin_vel_err": 0.30532290981488514,
+     "yaw_rate_err": 0.23814078311301584,
+     "distance_m": 0.26871195940893244,
+     "mean_cam_height_m": 0.25919197133504424,
+     "settle_cam_height_m": 0.2518471628572657,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 8,
+     "fell": true,
+     "survival_s": 2.68,
+     "lin_vel_err": 0.29948745029118634,
+     "yaw_rate_err": 0.2465754304212843,
+     "distance_m": 0.33589555207500943,
+     "mean_cam_height_m": 0.2585597307844757,
+     "settle_cam_height_m": 0.25129536985904705,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 2.6,
+     "lin_vel_err": 0.47125303060053286,
+     "yaw_rate_err": 0.39568231458886416,
+     "distance_m": 0.37863481487977224,
+     "mean_cam_height_m": 0.2622185536241065,
+     "settle_cam_height_m": 0.2512888031477472,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.16739756007379336,
+     "yaw_rate_err": 0.17396947976991112,
+     "distance_m": 0.04839628685605307,
+     "mean_cam_height_m": 0.25353379498956674,
+     "settle_cam_height_m": 0.24558772408463392,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 2.72,
+     "lin_vel_err": 0.28775438258083824,
+     "yaw_rate_err": 0.2869169099214799,
+     "distance_m": 0.09120790152596221,
+     "mean_cam_height_m": 0.26791227972279247,
+     "settle_cam_height_m": 0.24444570250166173,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.16712318049623334,
+     "yaw_rate_err": 0.16307826923359947,
+     "distance_m": 0.07509442569780739,
+     "mean_cam_height_m": 0.25194728988664716,
+     "settle_cam_height_m": 0.24554520684951722,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 2.68,
+     "lin_vel_err": 0.2832530903915158,
+     "yaw_rate_err": 0.29153966927728836,
+     "distance_m": 0.0726503113668525,
+     "mean_cam_height_m": 0.2721222593732537,
+     "settle_cam_height_m": 0.2442934417549285,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 3.56,
+     "lin_vel_err": 0.2701536783886137,
+     "yaw_rate_err": 0.23855857263677868,
+     "distance_m": 0.20886982982297522,
+     "mean_cam_height_m": 0.2070240036775956,
+     "settle_cam_height_m": 0.24638759593730028,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 2.7600000000000002,
+     "lin_vel_err": 0.3281166481003345,
+     "yaw_rate_err": 0.2061232065565145,
+     "distance_m": 0.12890910276008075,
+     "mean_cam_height_m": 0.2662407189780743,
+     "settle_cam_height_m": 0.24566488005730427,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.14342113184951127,
+     "yaw_rate_err": 0.11541783726095639,
+     "distance_m": 0.028086264650370524,
+     "mean_cam_height_m": 0.2454461740571439,
+     "settle_cam_height_m": 0.2448526153657724,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.14721411383899655,
+     "yaw_rate_err": 0.13399787374721206,
+     "distance_m": 0.10350311452704355,
+     "mean_cam_height_m": 0.24672171118455252,
+     "settle_cam_height_m": 0.24551190982183857,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.14839596879254593,
+     "yaw_rate_err": 0.1103942469498217,
+     "distance_m": 0.06537769863767723,
+     "mean_cam_height_m": 0.24282125435404467,
+     "settle_cam_height_m": 0.24581530120160902,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.14677347463015442,
+     "yaw_rate_err": 0.09856837482016238,
+     "distance_m": 0.07187734623498256,
+     "mean_cam_height_m": 0.23783629543100449,
+     "settle_cam_height_m": 0.245133212758491,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 0,
+     "fell": true,
+     "survival_s": 2.12,
+     "lin_vel_err": 0.42722189299443486,
+     "yaw_rate_err": 0.47019301078959963,
+     "distance_m": 0.33443335372671196,
+     "mean_cam_height_m": 0.23040365089559958,
+     "settle_cam_height_m": 0.2532867784156379,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 1,
+     "fell": true,
+     "survival_s": 2.04,
+     "lin_vel_err": 0.43520615173424876,
+     "yaw_rate_err": 0.501676621769229,
+     "distance_m": 0.3741213975407549,
+     "mean_cam_height_m": 0.24260593582901874,
+     "settle_cam_height_m": 0.25319923570580743,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 2,
+     "fell": true,
+     "survival_s": 2.08,
+     "lin_vel_err": 0.4549201886932277,
+     "yaw_rate_err": 0.5341633740312198,
+     "distance_m": 0.353503151482542,
+     "mean_cam_height_m": 0.23999401326170505,
+     "settle_cam_height_m": 0.2532176632170185,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 3,
+     "fell": true,
+     "survival_s": 2.08,
+     "lin_vel_err": 0.45865089835014766,
+     "yaw_rate_err": 0.5216274073810753,
+     "distance_m": 0.35122384658438344,
+     "mean_cam_height_m": 0.2400619065851957,
+     "settle_cam_height_m": 0.25316955272927166,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 4,
+     "fell": true,
+     "survival_s": 2.04,
+     "lin_vel_err": 0.41249272860374364,
+     "yaw_rate_err": 0.4992479975580665,
+     "distance_m": 0.39694874529098695,
+     "mean_cam_height_m": 0.2384971612695669,
+     "settle_cam_height_m": 0.2535275591831251,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 5,
+     "fell": true,
+     "survival_s": 2.08,
+     "lin_vel_err": 0.45555761636438413,
+     "yaw_rate_err": 0.5290118403791331,
+     "distance_m": 0.3523062110266337,
+     "mean_cam_height_m": 0.2396398249807272,
+     "settle_cam_height_m": 0.2533659331164034,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 6,
+     "fell": true,
+     "survival_s": 2.0,
+     "lin_vel_err": 0.4416039302135381,
+     "yaw_rate_err": 0.41496124076862656,
+     "distance_m": 0.335363881651015,
+     "mean_cam_height_m": 0.23209445471363194,
+     "settle_cam_height_m": 0.25308764447447213,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 7,
+     "fell": true,
+     "survival_s": 2.0,
+     "lin_vel_err": 0.4322442050306295,
+     "yaw_rate_err": 0.3499438848001978,
+     "distance_m": 0.3141620822876029,
+     "mean_cam_height_m": 0.22874656133450344,
+     "settle_cam_height_m": 0.25316559094901964,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 8,
+     "fell": true,
+     "survival_s": 2.04,
+     "lin_vel_err": 0.4400674630126611,
+     "yaw_rate_err": 0.5181008427071314,
+     "distance_m": 0.3868691015187506,
+     "mean_cam_height_m": 0.24209888018762366,
+     "settle_cam_height_m": 0.2532440580595578,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "Bsettle",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 9,
+     "fell": true,
+     "survival_s": 2.04,
+     "lin_vel_err": 0.44139093015572367,
+     "yaw_rate_err": 0.5187408173614666,
+     "distance_m": 0.38420291693928604,
+     "mean_cam_height_m": 0.24105848853127995,
+     "settle_cam_height_m": 0.2532253705700625,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    }
+   ]
+  },
+  "C": {
+   "summary": {
+    "n": 60,
+    "fall_rate": 0.0,
+    "mean_disp_m": 2.1354697775052744,
+    "mean_lin_vel_err": 0.2546119477546346,
+    "mean_yaw_rate_err": 0.12114980569599121,
+    "mean_survival_s": 12.0,
+    "by_command": {
+     "+0.0,+0.0,+0.5": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 0.022288143556404565,
+      "mean_lin_vel_err": 0.142334617516936
+     },
+     "+0.0,+0.2,+0.0": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 1.406649584329241,
+      "mean_lin_vel_err": 0.2631212065055586
+     },
+     "+0.3,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 3.3692824127806715,
+      "mean_lin_vel_err": 0.3079794741729375
+     },
+     "+0.3,+0.0,+0.5": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 0.18065144089659568,
+      "mean_lin_vel_err": 0.2883981213936715
+     },
+     "+0.5,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 5.545157139966496,
+      "mean_lin_vel_err": 0.30889720251323577
+     },
+     "-0.2,+0.0,+0.0": {
+      "n": 10,
+      "fall_rate": 0.0,
+      "mean_disp_m": 2.288789943502243,
+      "mean_lin_vel_err": 0.2169410644254682
+     }
+    },
+    "wall_s": 73.7
+   },
+   "episodes": [
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30675751985930994,
+     "yaw_rate_err": 0.07922322583591784,
+     "distance_m": 3.3459260130476687,
+     "mean_cam_height_m": 0.24936129173106233,
+     "settle_cam_height_m": 0.2527579602525068,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3068210611422691,
+     "yaw_rate_err": 0.07805052936731921,
+     "distance_m": 3.3574716467726846,
+     "mean_cam_height_m": 0.24935188833597988,
+     "settle_cam_height_m": 0.2529429591447758,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3096441040935949,
+     "yaw_rate_err": 0.08493629905582907,
+     "distance_m": 3.36863065823846,
+     "mean_cam_height_m": 0.24950347461322223,
+     "settle_cam_height_m": 0.25286567199381665,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3065958667798564,
+     "yaw_rate_err": 0.07851057706946386,
+     "distance_m": 3.366168913003042,
+     "mean_cam_height_m": 0.24935109041077763,
+     "settle_cam_height_m": 0.2528781259947054,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3086969929364044,
+     "yaw_rate_err": 0.0876809838423772,
+     "distance_m": 3.403246539332172,
+     "mean_cam_height_m": 0.2494673481110571,
+     "settle_cam_height_m": 0.25266987247069034,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30692369083990517,
+     "yaw_rate_err": 0.07645368152404738,
+     "distance_m": 3.3610184750327736,
+     "mean_cam_height_m": 0.24934876592146887,
+     "settle_cam_height_m": 0.2527104559237728,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3129408515124925,
+     "yaw_rate_err": 0.07901646969819255,
+     "distance_m": 3.3649524140237608,
+     "mean_cam_height_m": 0.24958748720214274,
+     "settle_cam_height_m": 0.25255996591036434,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30694149772703955,
+     "yaw_rate_err": 0.07795018605960949,
+     "distance_m": 3.360233365503096,
+     "mean_cam_height_m": 0.2493619287844522,
+     "settle_cam_height_m": 0.2528951530579173,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.307862768698198,
+     "yaw_rate_err": 0.0786057481294364,
+     "distance_m": 3.3732007466372838,
+     "mean_cam_height_m": 0.24940168834574664,
+     "settle_cam_height_m": 0.25289788290957843,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3066103881403047,
+     "yaw_rate_err": 0.08134208018013189,
+     "distance_m": 3.3919753562157746,
+     "mean_cam_height_m": 0.24935592210666185,
+     "settle_cam_height_m": 0.25237850806971823,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3097348838195942,
+     "yaw_rate_err": 0.1524316932411042,
+     "distance_m": 5.51741892248234,
+     "mean_cam_height_m": 0.24307811071300725,
+     "settle_cam_height_m": 0.24821313221613978,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30843373781854944,
+     "yaw_rate_err": 0.1510393485749768,
+     "distance_m": 5.529663198805616,
+     "mean_cam_height_m": 0.24307043945234133,
+     "settle_cam_height_m": 0.2472756536187378,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3085546858743488,
+     "yaw_rate_err": 0.15249273215126627,
+     "distance_m": 5.56771119357215,
+     "mean_cam_height_m": 0.24303037357512283,
+     "settle_cam_height_m": 0.24804131388439812,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30858005275970823,
+     "yaw_rate_err": 0.14545866251210374,
+     "distance_m": 5.531784772397141,
+     "mean_cam_height_m": 0.2430372325511851,
+     "settle_cam_height_m": 0.24820492144619183,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.31021116255494463,
+     "yaw_rate_err": 0.1443211645334776,
+     "distance_m": 5.556342317671752,
+     "mean_cam_height_m": 0.24300267981174448,
+     "settle_cam_height_m": 0.247316087599565,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3092875102224804,
+     "yaw_rate_err": 0.14725460641502203,
+     "distance_m": 5.528188289410224,
+     "mean_cam_height_m": 0.24307172920329342,
+     "settle_cam_height_m": 0.24789094975501552,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.3085543586765674,
+     "yaw_rate_err": 0.14942492496049473,
+     "distance_m": 5.530277791285921,
+     "mean_cam_height_m": 0.24301432767090547,
+     "settle_cam_height_m": 0.24821818930147757,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30858294316203594,
+     "yaw_rate_err": 0.1515738495332043,
+     "distance_m": 5.5733279161219595,
+     "mean_cam_height_m": 0.2429537717620633,
+     "settle_cam_height_m": 0.24845069854429638,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.30804886331961173,
+     "yaw_rate_err": 0.1497078771209772,
+     "distance_m": 5.554162437603613,
+     "mean_cam_height_m": 0.24300264025208818,
+     "settle_cam_height_m": 0.24771989837481034,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.5,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.308983826924517,
+     "yaw_rate_err": 0.14970163213088034,
+     "distance_m": 5.562694560314233,
+     "mean_cam_height_m": 0.2429858676190089,
+     "settle_cam_height_m": 0.24846540940154693,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21685011714005714,
+     "yaw_rate_err": 0.08865613417560018,
+     "distance_m": 2.3110504018700606,
+     "mean_cam_height_m": 0.19406563959269382,
+     "settle_cam_height_m": 0.22323963511452127,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21729428661876232,
+     "yaw_rate_err": 0.08725267890369895,
+     "distance_m": 2.289326657832859,
+     "mean_cam_height_m": 0.19423306745993532,
+     "settle_cam_height_m": 0.2271313943269349,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21854665487365918,
+     "yaw_rate_err": 0.08839555367864273,
+     "distance_m": 2.2663627275620013,
+     "mean_cam_height_m": 0.19431589495865081,
+     "settle_cam_height_m": 0.22599028711903635,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2163907302758928,
+     "yaw_rate_err": 0.08805857666599483,
+     "distance_m": 2.3013562807350096,
+     "mean_cam_height_m": 0.19414642486602796,
+     "settle_cam_height_m": 0.2253095143639036,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2162628374773665,
+     "yaw_rate_err": 0.08804167953257129,
+     "distance_m": 2.2870472999438323,
+     "mean_cam_height_m": 0.1941059117668205,
+     "settle_cam_height_m": 0.2258236493373728,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21761094842571843,
+     "yaw_rate_err": 0.08742391283174927,
+     "distance_m": 2.3069891436923493,
+     "mean_cam_height_m": 0.19425989994130036,
+     "settle_cam_height_m": 0.2245041415671437,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21697884603797574,
+     "yaw_rate_err": 0.08804167632940355,
+     "distance_m": 2.292638824322154,
+     "mean_cam_height_m": 0.19398124638374906,
+     "settle_cam_height_m": 0.22623897766004808,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21635949369016172,
+     "yaw_rate_err": 0.08756402176765365,
+     "distance_m": 2.2692934908031805,
+     "mean_cam_height_m": 0.19419712018861013,
+     "settle_cam_height_m": 0.2259826072771313,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21871140403927194,
+     "yaw_rate_err": 0.08892962012147707,
+     "distance_m": 2.2849877728048544,
+     "mean_cam_height_m": 0.19440250642003332,
+     "settle_cam_height_m": 0.22539626773210888,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      -0.2,
+      0.0,
+      0.0
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.21440532567581644,
+     "yaw_rate_err": 0.08552362608614972,
+     "distance_m": 2.278846835456128,
+     "mean_cam_height_m": 0.19404193454797775,
+     "settle_cam_height_m": 0.22507819931841266,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.27306930112666167,
+     "yaw_rate_err": 0.11811814188662265,
+     "distance_m": 1.4059502315856733,
+     "mean_cam_height_m": 0.2504479696560512,
+     "settle_cam_height_m": 0.25073748584281225,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2607337440097485,
+     "yaw_rate_err": 0.12659619393041877,
+     "distance_m": 1.4309013127264874,
+     "mean_cam_height_m": 0.25036674183810936,
+     "settle_cam_height_m": 0.25059493560727353,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2680596412726505,
+     "yaw_rate_err": 0.12423549578266008,
+     "distance_m": 1.3954224565080295,
+     "mean_cam_height_m": 0.2504813772453664,
+     "settle_cam_height_m": 0.2510923057211861,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2612509362851322,
+     "yaw_rate_err": 0.1261238306369283,
+     "distance_m": 1.3811673830880173,
+     "mean_cam_height_m": 0.2504396256270203,
+     "settle_cam_height_m": 0.25124829371751184,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.25713398362777135,
+     "yaw_rate_err": 0.12813425695687494,
+     "distance_m": 1.3995150044731404,
+     "mean_cam_height_m": 0.25032023059362796,
+     "settle_cam_height_m": 0.2515966557353054,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.26240871804132276,
+     "yaw_rate_err": 0.13036522918289056,
+     "distance_m": 1.3654362002670997,
+     "mean_cam_height_m": 0.25042823928890967,
+     "settle_cam_height_m": 0.2513475427707606,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2620462947539809,
+     "yaw_rate_err": 0.12146405503299217,
+     "distance_m": 1.4131183434894146,
+     "mean_cam_height_m": 0.25044660907889343,
+     "settle_cam_height_m": 0.25031537788515384,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2690098517345355,
+     "yaw_rate_err": 0.12796281022942504,
+     "distance_m": 1.4111807595233627,
+     "mean_cam_height_m": 0.2504590662807649,
+     "settle_cam_height_m": 0.2512880949604548,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2582994145217818,
+     "yaw_rate_err": 0.12735552695102756,
+     "distance_m": 1.4211589979771122,
+     "mean_cam_height_m": 0.25044048099730554,
+     "settle_cam_height_m": 0.25068856820606183,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.2,
+      0.0
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2592001796820006,
+     "yaw_rate_err": 0.12857379863653276,
+     "distance_m": 1.4426451536540716,
+     "mean_cam_height_m": 0.25032684320767035,
+     "settle_cam_height_m": 0.2507737978390707,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.14800517210240205,
+     "yaw_rate_err": 0.08763121449489773,
+     "distance_m": 0.03020106366681946,
+     "mean_cam_height_m": 0.24052569324199524,
+     "settle_cam_height_m": 0.2449199975192326,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.11962380446448027,
+     "yaw_rate_err": 0.2875930707944478,
+     "distance_m": 0.058301597323386,
+     "mean_cam_height_m": 0.240347809699386,
+     "settle_cam_height_m": 0.2436981166836439,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.1484799012208473,
+     "yaw_rate_err": 0.08809861872192935,
+     "distance_m": 0.0021208177471381748,
+     "mean_cam_height_m": 0.2405252828027176,
+     "settle_cam_height_m": 0.244933017892948,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.10909749360256904,
+     "yaw_rate_err": 0.3212748042015077,
+     "distance_m": 0.04252947918634325,
+     "mean_cam_height_m": 0.2403549507554542,
+     "settle_cam_height_m": 0.24348437598266767,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.14868071128516036,
+     "yaw_rate_err": 0.08819734643770186,
+     "distance_m": 0.019380978866428672,
+     "mean_cam_height_m": 0.2405146152277743,
+     "settle_cam_height_m": 0.24551948223631478,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.14870014165506276,
+     "yaw_rate_err": 0.08929876311383414,
+     "distance_m": 0.006525048209124842,
+     "mean_cam_height_m": 0.2405133741762229,
+     "settle_cam_height_m": 0.2450055581809107,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.14797734168539314,
+     "yaw_rate_err": 0.08983185566007239,
+     "distance_m": 0.021248866439393138,
+     "mean_cam_height_m": 0.24052717181247313,
+     "settle_cam_height_m": 0.24427171510462142,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.14886428974894608,
+     "yaw_rate_err": 0.08870060771947473,
+     "distance_m": 0.006582956266764745,
+     "mean_cam_height_m": 0.24051722611497756,
+     "settle_cam_height_m": 0.2452027196454398,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.15415019221515655,
+     "yaw_rate_err": 0.08831189210851342,
+     "distance_m": 0.0124252531246743,
+     "mean_cam_height_m": 0.24042937332694897,
+     "settle_cam_height_m": 0.24508227401735566,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.0,
+      0.0,
+      0.5
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.14976712718934257,
+     "yaw_rate_err": 0.08803827726618876,
+     "distance_m": 0.02356537473397309,
+     "mean_cam_height_m": 0.24048236353903463,
+     "settle_cam_height_m": 0.24475306109996606,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 0,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2889587532399205,
+     "yaw_rate_err": 0.1475659086139053,
+     "distance_m": 0.17250748232303598,
+     "mean_cam_height_m": 0.2497357021539641,
+     "settle_cam_height_m": 0.25248253773985074,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 1,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.28877898008014075,
+     "yaw_rate_err": 0.1539584306233798,
+     "distance_m": 0.1759835010326348,
+     "mean_cam_height_m": 0.2497091377163625,
+     "settle_cam_height_m": 0.2524762379233152,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 2,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2898041213137798,
+     "yaw_rate_err": 0.15453734095673166,
+     "distance_m": 0.17782516206016505,
+     "mean_cam_height_m": 0.2497162980032902,
+     "settle_cam_height_m": 0.252250811420215,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 3,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.29109694789244467,
+     "yaw_rate_err": 0.15285706538543836,
+     "distance_m": 0.2156713429363273,
+     "mean_cam_height_m": 0.24969512596946733,
+     "settle_cam_height_m": 0.25219475738805597,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 4,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2871599353721964,
+     "yaw_rate_err": 0.15191136027790356,
+     "distance_m": 0.1768944791541774,
+     "mean_cam_height_m": 0.24973965126917744,
+     "settle_cam_height_m": 0.25261495474445395,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 5,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.28852282506771015,
+     "yaw_rate_err": 0.15325627557327373,
+     "distance_m": 0.16707857743296142,
+     "mean_cam_height_m": 0.24972950317675766,
+     "settle_cam_height_m": 0.2525716155396355,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 6,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.2885471275267892,
+     "yaw_rate_err": 0.15319151741324089,
+     "distance_m": 0.17813288182766587,
+     "mean_cam_height_m": 0.24972384309273696,
+     "settle_cam_height_m": 0.2521009210284051,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 7,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.28611558348091776,
+     "yaw_rate_err": 0.14839740248048616,
+     "distance_m": 0.16566980814969234,
+     "mean_cam_height_m": 0.24973262659340956,
+     "settle_cam_height_m": 0.2523954019269868,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 8,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.28764915368773286,
+     "yaw_rate_err": 0.15127914717311153,
+     "distance_m": 0.2056976441684277,
+     "mean_cam_height_m": 0.24967793222374854,
+     "settle_cam_height_m": 0.2522381408582382,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    },
+    {
+     "arm": "C",
+     "command": [
+      0.3,
+      0.0,
+      0.5
+     ],
+     "seed": 9,
+     "fell": false,
+     "survival_s": 12.0,
+     "lin_vel_err": 0.28734778627508295,
+     "yaw_rate_err": 0.15306435148828734,
+     "distance_m": 0.17105352988086878,
+     "mean_cam_height_m": 0.24973814341120767,
+     "settle_cam_height_m": 0.2523975450491827,
+     "t0_render_vs_analytic_max": null,
+     "step_render_vs_analytic_max": null,
+     "frac_steps_render_diff_gt_tol": null
+    }
+   ]
+  }
+ },
+ "finished": "2026-09-26 16:45:30"
+}
