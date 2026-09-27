@@ -60,6 +60,18 @@ seeds 0-9):
   stepping at -0.4 m/s (cube carried 0.24-0.28 m before it slips) and at
   -0.6/-0.8 m/s both robots fall (tilt 1.8 rad). A lower lift pose did not
   lift (1.8 cm); script + policy arm swing ("residual") did not lift (0.4 cm).
+
+Protocols. `run_episode(protocol=...)`:
+
+* "carry" (default, the original experiment, `SUCCESS_RULE`): lift, then the
+  oracle-gated backward carry described above;
+* "lift_hold" (`LIFT_HOLD_RULE`, a separate experiment predeclared in
+  SLURM_JOBS.md before any scored carry seed existed): the same harness,
+  layout, hand pads, kp-30 grasping arm, arm script and label, with the carry
+  phase removed -- every robot's velocity command is zero for the whole
+  episode, so after the lift the pair stands and holds the cube until the end
+  of a 20 s episode. The oracle cube pose is used only to score. Outputs of
+  this protocol say `LIFT_HOLD_NOTE` ("carry not achieved").
 """
 
 from __future__ import annotations
@@ -108,6 +120,32 @@ SUCCESS_RULE = {
     "seeds": list(range(10)),   # reset-jitter seeds
     "pass_min": 8,              # PASS iff >= 8/10 seeds succeed (per pair for crew 4)
 }
+
+PROTOCOLS = ("carry", "lift_hold")
+
+#: Cooperative LIFT-AND-HOLD rule, a separate experiment predeclared in
+#: SLURM_JOBS.md ("cooperative LIFT-AND-HOLD, a separate experiment") before
+#: any scored seed of the carry run existed. No carry clause: the pair never
+#: receives a velocity command.
+LIFT_HOLD_RULE = {
+    "protocol": "lift_hold",
+    "episode_s": 20.0,
+    "lift_peak_m": 0.10,        # cube rises >= 10 cm above its plinth rest height
+    "lift_hold_m": 0.05,        # ...and stays >= 5 cm up
+    "lift_hold_s": 5.0,         # ...for >= 5 s continuously
+    "tilt_rad": TILT_LIMIT,     # no robot of the pair tilts past this at any policy step
+    "floor_contact": False,     # the cube never touches the floor (every physics step)
+    "seeds": list(range(10)),   # reset-jitter seeds
+    "pass_min": 8,              # PASS iff >= 8/10 seeds succeed (per pair for crew 4)
+}
+
+#: Said by every lift-and-hold output (frame, banner, sidecar, verdict line).
+LIFT_HOLD_NOTE = "cooperative lift and hold — carry not achieved"
+LIFT_HOLD_LABEL_DETAIL = (
+    "legs + outer arm: frozen learned PPO gait, unmodified observation, zero velocity "
+    "command all episode | grasping arm (one per robot): scripted joint targets, PD kp 30 "
+    "(deploy 10), 4 Nm cap | cube pose: simulator oracle (scoring only; no carry) | contact: "
+    "MuJoCo, added box pads = hand-mesh AABB, no welds")
 
 #: Joint-space keyframes for the LEFT grasping arm (robot a); the right arm
 #: (robot b) is the exact mirror, q_right = -q_left (checked in the tests).
@@ -399,11 +437,14 @@ def _smooth(u: float) -> float:
 
 class ArmScript:
     """Open-loop grasping-arm schedule: rest -> reach -> squeeze -> lift, then held.
-    Returns the five LEFT-arm targets; the right grasping arm uses -q."""
+    Returns the five LEFT-arm targets; the right grasping arm uses -q.
+    `hold_forever` (lift-and-hold protocol) only relabels the phase after
+    `t_carry` as "hold"; the joint targets are the same."""
 
     PHASES = ("settle", "reach", "squeeze", "lift")
 
-    def __init__(self, p: CarryParams, keyframes: dict = KEYFRAMES_LEFT):
+    def __init__(self, p: CarryParams, keyframes: dict = KEYFRAMES_LEFT, hold_forever: bool = False):
+        self.hold_forever = bool(hold_forever)
         k = {n: np.asarray(v, dtype=float) for n, v in keyframes.items()}
         t0 = p.t_settle
         t1 = t0 + p.t_reach
@@ -419,7 +460,7 @@ class ArmScript:
         for (_, b, _, _), n in zip(self.segs, self.PHASES):
             if t < b:
                 return n
-        return "hold" if t < self.t_carry else "carry"
+        return "hold" if (self.hold_forever or t < self.t_carry) else "carry"
 
     def __call__(self, t: float) -> np.ndarray:
         for a, b, q0, q1 in self.segs:
@@ -559,9 +600,21 @@ def body_frame_command(yaw: float, v_world) -> np.ndarray:
 
 
 def run_episode(model, slots, pairs, cfg, policy, seed: int, p: CarryParams,
-                frame_hook=None, rule: dict = SUCCESS_RULE,
-                keyframes: dict = KEYFRAMES_LEFT) -> dict:
-    """One seeded episode for every pair in the model."""
+                frame_hook=None, rule: dict | None = None,
+                keyframes: dict = KEYFRAMES_LEFT, protocol: str = "carry") -> dict:
+    """One seeded episode for every pair in the model.
+
+    protocol "carry" (default): `SUCCESS_RULE`, lift then oracle-gated carry.
+    protocol "lift_hold": `LIFT_HOLD_RULE`, no velocity command ever (the
+    pair stands and holds after the lift), scored by `score_lift_hold`.
+    `rule` defaults to the protocol's own rule."""
+    if protocol not in PROTOCOLS:
+        raise ValueError(f"unknown protocol {protocol!r}")
+    lift_hold = protocol == "lift_hold"
+    if rule is None:
+        rule = LIFT_HOLD_RULE if lift_hold else SUCCESS_RULE
+    if lift_hold != (rule.get("protocol") == "lift_hold"):
+        raise ValueError(f"rule does not belong to protocol {protocol!r}")
     from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController
 
     controllers = [RlController(cfg) for _ in slots]
@@ -578,7 +631,7 @@ def run_episode(model, slots, pairs, cfg, policy, seed: int, p: CarryParams,
             raise RuntimeError(f"{s.prefix} actuator order differs from deploy.yaml joints")
     runner.reset(np.random.default_rng(seed))
     dt = float(cfg.policy_dt)
-    script = ArmScript(p, keyframes)
+    script = ArmScript(p, keyframes, hold_forever=lift_hold)
     n_steps = int(round(rule["episode_s"] / dt))
 
     rest_z = rest_xy = None
@@ -604,7 +657,7 @@ def run_episode(model, slots, pairs, cfg, policy, seed: int, p: CarryParams,
             horiz[:, step] = np.linalg.norm(cube[:, :2] - rest_xy, axis=1)
 
         commands = [np.zeros(3) for _ in slots]
-        if rest_z is not None and t >= script.t_carry:
+        if not lift_hold and rest_z is not None and t >= script.t_carry:
             for k, pr in enumerate(pairs):
                 if not carry_on[k] and not carry_done[k] and lift[k, step] >= p.carry_gate_lift_m:
                     carry_on[k], carry_started[k] = True, round(t, 3)
@@ -646,16 +699,23 @@ def run_episode(model, slots, pairs, cfg, policy, seed: int, p: CarryParams,
     rows = []
     for k, pr in enumerate(pairs):
         mt = float(tilt_series[[pr.robot_a, pr.robot_b], :n_done].max()) if n_done else 0.0
-        row = score_pair(lift[k, :n_done], horiz[k, :n_done], dt, max_tilt=mt,
-                         floor=bool(runner.cube_floor[k]), failed=failed, rule=rule)
+        if lift_hold:
+            row = score_lift_hold(lift[k, :n_done], horiz[k, :n_done], dt, max_tilt=mt,
+                                  floor=bool(runner.cube_floor[k]), failed=failed, rule=rule)
+        else:
+            row = score_pair(lift[k, :n_done], horiz[k, :n_done], dt, max_tilt=mt,
+                             floor=bool(runner.cube_floor[k]), failed=failed, rule=rule)
         row.update({"pair": k, "seed": seed, "carry_started_s": carry_started[k],
                     "carry_stopped_s": carry_stopped[k],
                     "lift_series_m": lift[k, :n_done:5].round(4).tolist(),
                     "horiz_series_m": horiz[k, :n_done:5].round(4).tolist(),
                     "series_dt_s": round(5 * dt, 3)})
         rows.append(row)
-    return {"seed": seed, "pairs": rows, "failed": failed, "steps": n_done,
-            "elapsed_s": round(n_done * dt, 3), "trace": trace}
+    out = {"seed": seed, "pairs": rows, "failed": failed, "steps": n_done,
+           "elapsed_s": round(n_done * dt, 3), "trace": trace}
+    if lift_hold:
+        out["protocol"] = "lift_hold"
+    return out
 
 
 def score_pair(lift, horiz, dt: float, *, max_tilt: float, floor: bool,
@@ -730,3 +790,127 @@ def median_seed(episodes: list[dict]) -> int | None:
 
 def params_dict(p: CarryParams) -> dict:
     return asdict(p)
+
+
+# ------------------------------------------------------------------ lift and hold
+
+def _longest_run(mask) -> tuple[int, int]:
+    """(length, start index) of the longest run of True; the first one on ties."""
+    best = run = 0
+    start = best_start = 0
+    for i, u in enumerate(mask):
+        if u:
+            if run == 0:
+                start = i
+            run += 1
+            if run > best:
+                best, best_start = run, start
+        else:
+            run = 0
+    return best, best_start
+
+
+def score_lift_hold(lift, horiz, dt: float, *, max_tilt: float, floor: bool,
+                    failed: str | None, rule: dict = LIFT_HOLD_RULE) -> dict:
+    """`LIFT_HOLD_RULE` applied to one pair's per-step series. Same clauses
+    and the same longest-contiguous-run hold as `score_pair`, without the
+    carry clause; `horiz` is reported (cube drift) but never scored."""
+    lift = np.asarray(lift, dtype=float)
+    horiz = np.asarray(horiz, dtype=float)
+    up = lift >= rule["lift_hold_m"]
+    best, start = _longest_run(up)
+    hold_s = best * dt
+    peak = float(lift.max()) if lift.size else 0.0
+    checks = {
+        "lift_peak": peak >= rule["lift_peak_m"],
+        "lift_hold": hold_s >= rule["lift_hold_s"] - 1e-9,
+        "no_fall": max_tilt <= rule["tilt_rad"],
+        "no_floor_contact": not floor,
+        "finite": failed is None,
+        "full_episode": lift.size * dt >= rule["episode_s"] - 1e-6,
+    }
+    success = all(checks.values())
+    return {"success": bool(success),
+            "first_failed_check": None if success else next(k for k, v in checks.items() if not v),
+            "checks": checks, "lift_peak_m": round(peak, 4), "lift_hold_s": round(hold_s, 3),
+            "hold_start_s": round(start * dt, 3) if best else None,
+            "hold_end_s": round((start + best) * dt, 3) if best else None,
+            "max_tilt_rad": round(max_tilt, 4), "cube_floor_contact": bool(floor),
+            "horiz_max_m": round(float(horiz.max()), 4) if horiz.size else 0.0,
+            "final_lift_m": round(float(lift[-1]), 4) if lift.size else None}
+
+
+def summarize_lift_hold(episodes: list[dict], n_pairs: int, rule: dict = LIFT_HOLD_RULE) -> dict:
+    """Per-pair success counts and the PASS verdict under `LIFT_HOLD_RULE`.
+    Complete only when every predeclared seed has been run."""
+    seeds_run = sorted({e["seed"] for e in episodes})
+    complete = all(s in seeds_run for s in rule["seeds"])
+    per_pair = []
+    for k in range(n_pairs):
+        rows = [e["pairs"][k] for e in episodes if e["seed"] in rule["seeds"]]
+        wins = [r for r in rows if r["success"]]
+        failed = sorted({r["first_failed_check"] for r in rows} - {None})
+        per_pair.append({
+            "pair": k, "episodes": len(rows), "successes": len(wins),
+            "pass": bool(complete and len(wins) >= rule["pass_min"]),
+            "first_failed_check_counts": {c: sum(1 for r in rows if r["first_failed_check"] == c)
+                                          for c in failed},
+            "lift_peak_m_median": float(np.median([r["lift_peak_m"] for r in rows])) if rows else None,
+            "lift_hold_s_median": float(np.median([r["lift_hold_s"] for r in rows])) if rows else None,
+            "lift_hold_s_max": float(max(r["lift_hold_s"] for r in rows)) if rows else None,
+            "falls": sum(1 for r in rows if r["max_tilt_rad"] > rule["tilt_rad"]),
+            "floor_contacts": sum(1 for r in rows if r["cube_floor_contact"]),
+        })
+    return {"per_pair": per_pair, "complete": bool(complete), "seeds_run": seeds_run,
+            "pass": bool(complete and all(pp["pass"] for pp in per_pair))}
+
+
+def median_seed_by_hold(episodes: list[dict]) -> int | None:
+    """Seed of the median-by-hold-duration successful episode (every pair
+    successful; an episode's hold is its weakest pair's longest hold). Sorted
+    ascending with the lower median on an even count, so the choice is never
+    the longer-holding (better-looking) one; ties break on the lower seed."""
+    done = sorted((min(r["lift_hold_s"] for r in e["pairs"]), e["seed"])
+                  for e in episodes if all(r["success"] for r in e["pairs"]))
+    if not done:
+        return None
+    return done[(len(done) - 1) // 2][1]
+
+
+def lift_hold_verdict_line(payload: dict, crew=None) -> str:
+    """`COOP-LIFT-HOLD crew N: PASS|NEGATIVE|INCOMPLETE|INVALID ...`, computed
+    from a lift-and-hold score JSON (its episodes, re-summarised here)."""
+    crew = payload.get("crew", crew) if crew is None else crew
+    label = payload.get("label", LABEL)
+    if payload.get("protocol") != "lift_hold" or payload.get("rule") != LIFT_HOLD_RULE:
+        return (f"COOP-LIFT-HOLD crew {crew}: INVALID (not a lift_hold score JSON under the "
+                f"predeclared LIFT_HOLD_RULE) | {LIFT_HOLD_NOTE} | {label}")
+    n_pairs = int(payload.get("pairs", int(crew) // 2))
+    s = summarize_lift_hold(payload.get("episodes", []), n_pairs, LIFT_HOLD_RULE)
+    median = median_seed_by_hold([e for e in payload.get("episodes", [])
+                                  if e["seed"] in LIFT_HOLD_RULE["seeds"]])
+    if not (payload.get("scored_run") and s["complete"]):
+        verdict = "INCOMPLETE"
+    else:
+        verdict = "PASS" if s["pass"] else "NEGATIVE"
+    pp = " ".join(
+        f"pair{p['pair']}={p['successes']}/{p['episodes']} (first failed: {p['first_failed_check_counts']}, "
+        f"median lift {p['lift_peak_m_median']:.3f} m, median hold {p['lift_hold_s_median']:.2f} s, "
+        f"max hold {p['lift_hold_s_max']:.2f} s, falls {p['falls']}, floor contacts {p['floor_contacts']})"
+        for p in s["per_pair"] if p["episodes"])
+    return (f"COOP-LIFT-HOLD crew {crew}: {verdict} | {pp or 'no scored episodes'} | "
+            f"median_seed_by_hold={median} | {LIFT_HOLD_NOTE} | {label}")
+
+
+def enforce_gif_budget(gif: dict | None, gif_path, sidecar_path=None) -> dict:
+    """Render gate: a GIF over the committable budget is never left behind.
+    Deletes `gif_path` (and `sidecar_path`) unless `gif["within_budget"]`."""
+    gif_path = Path(gif_path)
+    if gif is not None and gif.get("within_budget"):
+        return {"kept": True, "deleted": []}
+    deleted = []
+    for f in (gif_path, Path(sidecar_path) if sidecar_path else None):
+        if f is not None and f.exists():
+            f.unlink()
+            deleted.append(str(f))
+    return {"kept": False, "deleted": deleted}
