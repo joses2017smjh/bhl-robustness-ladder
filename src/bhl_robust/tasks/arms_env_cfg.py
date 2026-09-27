@@ -158,7 +158,8 @@ class HumanoidTurnBothCfg(BerkeleyHumanoidLiteEnvCfg):
 # --- Turning gait, arm TurnCmd (2026-09-26) ----------------------------------
 #
 # Settled-stand check (turn command after a 3.0 s warm-up, both directions, reset
-# seeds 0-2): only TurnBoth-s0 turns from standstill; the others sit in a
+# seeds 0-2): only TurnBoth-s0 turns both ways (2026-09-27: TurnTrack-s0 turns
+# in the -wz direction only); the other 10 of 12 sit in a
 # standing fixed point and never lift a foot under a sustained (0, 0, wz)
 # command, which upstream's heading-derived generator almost never produces
 # (~0.2-1.4 % of steps). TurnCmd = TurnBoth's reward changes + a command mix
@@ -195,9 +196,12 @@ class HumanoidTurnCmdCfg(HumanoidTurnBothCfg):
 
 # --- Turning gait, arm TurnRest (2026-09-27) ---------------------------------
 #
-# Diagnosis (scripts/bench/turn_diagnose.py): the non-turners never lift a foot
-# under a pure turn from rest although their actions respond to wz; TurnBoth-s0
-# turns only while it is still stepping in place. TurnRest = TurnBoth's reward
+# Diagnosis (scripts/bench/turn_diagnose.py mujoco, all 12 turning-arm
+# checkpoints): 10 of 12 never lift a foot under a pure turn although their
+# actions respond to wz; TurnTrack-s0 steps and turns in one direction only
+# (once from a true standstill); TurnBoth-s0 is the only one that turns both
+# ways, while it is still stepping in place. Pooled, a step was started from
+# rest in 1 of 50 at-rest runs. See turn_command.py. TurnRest = TurnBoth's reward
 # set, unchanged, with a command mix that adds rest-then-turn envs (zero command
 # for 1.5-4 s, then a sustained pure turn; turn_command.TurnRestMixVelocityCommand).
 # It is trained as a FINE-TUNE of arms-turn-turnboth-s0 (model_5999.pt) by

@@ -23,18 +23,26 @@
 # Obs/actions unchanged (75 / 22), same export and deploy path.
 #
 # WHY (diagnosis, 2026-09-27, scripts/bench/turn_diagnose.py mujoco, reset seeds
-# 0-2, 3 s zero-command settle then +/-0.6 rad/s for 6 s): the 11 non-turning
-# checkpoints make ZERO lift-offs under a pure turn although their actions do
-# respond to the command (||a(cmd) - a(0)|| 1.3-2.2 vs the turner's 2.0): a
-# 15-20 deg double-stance twist, never a step. TurnBoth-s0 turns while it is
-# still stepping in place after the settle (up to 9 lift-offs in the last 2 s)
-# and failed the one run in which it had come to rest. The missing behaviour is
-# step initiation from rest under a pure turn; REST_TURN asks for exactly that,
-# and fine-tuning starts from the only checkpoint that already has a stepping
-# turn. Isaac training curves (turn_diagnose.py tb): every turning arm, and the
-# shipped arms-dr1.0, still ends ~27-35 % of episodes in a fall at iteration
-# 6000, so continued training is part of the treatment. KNOWN CONFOUND: this arm
-# changes the command mix AND trains 3000 more iterations; there is no
+# 0-2, 3 s zero-command settle then +/-0.6 rad/s for 6 s, all 12 turning-arm
+# checkpoints; diagnose/mujoco_{existing,hip_track}_s012.json): 10 of the 12
+# make ZERO lift-offs under a pure turn although their actions do respond to the
+# command (||a(cmd) - a(0)|| 1.1-2.4, against ||a|| ~ 47-109 raw; TurnBoth-s0's
+# 2.0): an 8-20 deg double-stance twist, never a step. TurnTrack-s0 steps and
+# turns in the -wz direction only (2/6 runs >= 150 deg, one of them from a true
+# standstill). TurnBoth-s0, the only checkpoint that turns both ways (5/6), is
+# still stepping in place after the settle (1-9 lift-offs per foot in the last
+# 2 s); its one failure is a run in which it had nearly stopped, though the
+# opposite direction from the same settle state stepped and turned 212 deg, so
+# near-rest alone does not explain it. Pooled over the 72 runs, a step was
+# started from rest in 1 of 50 at-rest runs. The missing behaviour is step
+# initiation from rest under a pure turn; REST_TURN asks for
+# exactly that, and fine-tuning starts from the only checkpoint that already
+# has a stepping turn in both directions (with TurnBoth's reward set, which the
+# arm keeps unchanged). Isaac training curves (turn_diagnose.py tb): every
+# turning arm, and the shipped arms-dr1.0, still ends ~27-35 % of episodes in a
+# fall at iteration 6000, so continued training is part of the treatment.
+# KNOWN CONFOUND: this arm changes the command mix AND trains 3000 more
+# iterations; there is no
 # continued-training-only control, so a PASS cannot be attributed to REST_TURN.
 # It is also three fine-tunes of ONE parent, not three independent recipes.
 #
@@ -107,7 +115,8 @@ FT_ITERS=${FT_ITERS:-3000}
 PREFIX=arms-turn-turnrest-ft
 
 # v2_test <deploy.yaml> <label>: turn_test v2 into a fresh temp JSON, one verdict
-# line read from THAT JSON, then moved to $OUT_DIR/<label>.json (as v3).
+# line read from THAT JSON, then moved to $OUT_DIR/<label>.json, or to
+# <label>.$JOBTAG.json if that already exists (never overwrite).
 v2_test() {
     local cfg=$1 label=$2 tmp
     tmp="$OUT_DIR/.$label.$JOBTAG.json"
@@ -127,7 +136,11 @@ try:
 except Exception as exc:  # noqa: BLE001
     print(f"TURN-V2 {label}: FAIL (no readable v2 JSON: {exc!r})")
 EOF
-    if [ -f "$tmp" ]; then mv -f "$tmp" "$OUT_DIR/$label.json"; fi
+    if [ -f "$tmp" ]; then                       # never overwrite an earlier v2 JSON (as diag());
+        local dst="$OUT_DIR/$label.json"          # arm_summary reads the first one (v2 is deterministic)
+        [ -e "$dst" ] && dst="$OUT_DIR/$label.$JOBTAG.json"
+        mv "$tmp" "$dst"
+    fi
 }
 
 # diag <deploy.yaml> <label>: non-gating MuJoCo diagnosis (reset seeds 0-2, +/-0.6).

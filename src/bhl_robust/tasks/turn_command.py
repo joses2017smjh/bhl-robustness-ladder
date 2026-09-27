@@ -1,9 +1,10 @@
 """A velocity command that actually asks for sustained turns (arm TurnCmd).
 
 Why this exists (2026-09-26, MuJoCo, scripts/bench/turn_test.py): from a
-settled stand, the 22-DoF turning arms trained on upstream's command generator
-sit in a standing fixed point under a sustained pure yaw-rate command and never
-lift a foot. Upstream's `UniformVelocityCommandCfg` with `heading_command=True`
+settled stand, most of the 22-DoF turning arms trained on upstream's command
+generator sit in a standing fixed point under a sustained pure yaw-rate command
+and never lift a foot (10 of 12 checkpoints; see the 2026-09-27 note below for
+the two that step). Upstream's `UniformVelocityCommandCfg` with `heading_command=True`
 and `rel_heading_envs=1.0` overwrites wz with `clip(0.5 * heading_error)` in
 EVERY env on every step, and zeroes all three components in the 2 % standing
 envs, so a sustained (0, 0, wz) command almost never occurs in training.
@@ -157,15 +158,31 @@ class TurnMixVelocityCommandCfg(UniformVelocityCommandCfg):
 # --- Rest-then-turn mix (arm TurnRest, 2026-09-27) ----------------------------
 #
 # MuJoCo diagnosis (scripts/bench/turn_diagnose.py mujoco, reset seeds 0-2,
-# 3 s zero-command settle then (0, 0, +/-0.6) for 6 s): 11 of the 12 turning-arm
-# checkpoints make ZERO lift-offs under a pure turn while their actions do respond
-# to wz (||a(cmd) - a(0)|| 1.3-2.2, the same size as the turner's 2.0): they
-# answer with a 15-20 deg double-stance twist, never a step. The one turner,
-# TurnBoth-s0, is still stepping in place at the end of the settle on the runs
-# that turn (up to 9 lift-offs in the last 2 s); its one failure is the run in
-# which it had come to rest. What is missing is step INITIATION from rest under a
-# pure-turn command, and the TurnCmd mix never asks for it explicitly: its pure
-# turns start at a resample, when the robot is usually already moving.
+# 3 s zero-command settle then (0, 0, +/-0.6) for 6 s; all 12 turning-arm
+# checkpoints, results/repo-gpu-20260923/turn-20260927/diagnose/
+# mujoco_{existing,hip_track}_s012.json):
+#   * 10 of 12 (TurnHip s0-s2, TurnTrack s1-s2, TurnBoth s1-s2, TurnCmd s0-s2)
+#     make ZERO lift-offs in all 6 runs, although their actions do respond to wz
+#     (||a(cmd) - a(0)|| 1.1-2.4, against ||a|| ~ 47-109 raw; TurnBoth-s0's
+#     2.0): an 8-20 deg double-stance twist, never a step.
+#   * TurnTrack-s0 steps and turns in the -wz direction only (-231, -259 deg;
+#     2/6 runs >= 150 deg); one of those runs starts from a true standstill
+#     (0 lift-offs in the last 2 s of the settle). It never steps under +wz,
+#     even from reset seed 1, where it is still stepping (7 / 4 lift-offs) at
+#     the end of the settle and steps under -wz.
+#   * TurnBoth-s0 is the only checkpoint that turns both ways (5/6). It is still
+#     stepping in place at the end of the settle (1-9 lift-offs per foot in the
+#     last 2 s). Its one failure (-0.6, reset seed 1) is on a reset where it had
+#     nearly stopped (1 lift-off per foot), but the +0.6 run from the same settle
+#     state stepped and turned 212 deg, so near-rest alone does not account for
+#     it: direction matters too.
+# Pooled over the 72 runs ("at rest" = 0 lift-offs on both feet in the last 2 s
+# of the settle): the robot was at rest at the end of the settle in 50
+# and took a step under the turn in 1 of them; it was still stepping in 22 and
+# stepped under the turn in 6. Step INITIATION from rest under a pure-turn
+# command is therefore rare (1/50), and the TurnCmd mix never asks for it
+# explicitly: its pure turns start at a resample, when the robot is usually
+# already moving.
 #
 # REST_TURN (rel_rest_turn_envs): zero command for rest_s ~ U(rest_time_range),
 # then (0, 0, +/-|wz|), |wz| ~ U(pure_turn_ang_vel_abs), for the rest of the
