@@ -105,6 +105,10 @@ for _id, _cfg in (
     # 2026-09-26: TurnBoth rewards + a command mix that trains sustained pure
     # turns (turn_command.TurnMixVelocityCommand); judged by turn_test --protocol v2.
     ("Velocity-BHL-Arms-TurnCmd-v0", arms_env_cfg.HumanoidTurnCmdCfg),
+    # 2026-09-27: TurnBoth rewards + pure-turn / rest-then-turn / direct / upstream command mix
+    # (turn_command.TurnRestMixVelocityCommand); trained as a FINE-TUNE of arms-turn-turnboth-s0
+    # by slurm/repo20260923/gpu_turngait_v4.sbatch; judged by turn_test --protocol v2.
+    ("Velocity-BHL-Arms-TurnRest-v0", arms_env_cfg.HumanoidTurnRestCfg),
 ):
     gym.register(
         id=_id,

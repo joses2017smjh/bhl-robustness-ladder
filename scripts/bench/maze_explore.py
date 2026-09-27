@@ -296,8 +296,11 @@ class ExploreRecorder:
         out = Image.new("RGB", (w, h), panels.PANEL_BG)
         d = ImageDraw.Draw(out)
         d.rectangle((0, 0, w, title_h), fill=(40, 44, 52))
-        d.text((6, 4), "lidar-built map (" + ("ESTIMATED pose" if _pose_error_on(self.args) else "oracle pose") + ") + plan",
-               font=panels.load_font(13), fill=panels.TEXT)
+        if self.args.policy is None:
+            title = "lidar-built map (" + ("ESTIMATED pose" if _pose_error_on(self.args) else "oracle pose") + ") + plan"
+        else:
+            title = "lidar map (" + ("EST. pose" if _pose_error_on(self.args) else "oracle pose") + "); no planner"
+        d.text((6, 4), title, font=panels.load_font(13), fill=panels.TEXT)
         ox, oy = 4, title_h + 3
         out.paste(pil, (ox, oy))
 
@@ -339,12 +342,17 @@ class ExploreRecorder:
         lp = panels.lidar_panel(lidar, LIDAR_RANGE, (self.side_w, 170), "lidar: 36 sector minima of 108 rays",
                                 window_m=4.0, stale=stale, brake=brake, subtitle="forward is up; raw rays build the map")
         mp = self.map_panel(grid, blocked, xy, yaw, plan, size=(self.side_w, max(160, self.h - 340)))
-        header = (f"random maze seed {self.maze.seed} ({self.maze.n}x{self.maze.m}, unknown to the planner) | t = {now:5.1f} s"
-                  f" | {state} | mapped {100 * known:3.0f} % | replans {replans} | 1x")
+        if self.args.policy is None:
+            header = (f"random maze seed {self.maze.seed} ({self.maze.n}x{self.maze.m}, unknown to the planner) | t = {now:5.1f} s"
+                      f" | {state} | mapped {100 * known:3.0f} % | replans {replans} | 1x")
+        else:
+            header = (f"random maze seed {self.maze.seed} ({self.maze.n}x{self.maze.m}, walls seen only through the lidar) | t = {now:5.1f} s"
+                      f" | LEARNED NavGym policy | mapped {100 * known:3.0f} % | 1x")
         footer = ("gait: learned PPO (biped dr-default), frozen | map: lidar log-odds | "
                   + ("pose: oracle + injected error | " if _pose_error_on(self.args) else "pose: oracle | ")
                   + ("attitude: filter in the loop | " if getattr(self.args, "imu_source", "truth") == "estimated" else "")
-                  + ("commands: LEARNED NavGym policy (PPO, trained in the gym, deployed here) | no sideways command" if self.args.policy is not None
+                  + ("commands: LEARNED NavGym policy (PPO in the gym, deployed on the physics robot) | goal: oracle | no sideways"
+                     if self.args.policy is not None
                      else "plan: A* on the map, unknown = free | turn in place, then walk forward; never sideways"))
         frame = panels.compose_frame(top_rgb, [dp, lp, mp], header, footer, side_w=self.side_w)
         self.last_frame = frame
@@ -447,8 +455,8 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
             grid.update(xy_e[0], xy_e[1], yaw_e, sensors.angles, np.asarray(pkt["lidar_raw_m"]), LIDAR_RANGE)
             if learned is not None:
                 learned["emap"].update(xy_e[0], xy_e[1], yaw_e, sensors.angles, np.asarray(pkt["lidar_raw_m"]))
-        # plan on a timer, or when there is no plan yet
-        if plan is None or now - last_plan_t >= args.replan_s:
+        # plan on a timer, or when there is no plan yet (never with --policy: the learned actor does not use a plan)
+        if learned is None and (plan is None or now - last_plan_t >= args.replan_s):
             new_plan = planner.plan(xy_e, goal)
             last_plan_t = now
             if new_plan:
@@ -529,7 +537,8 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         "mapped_fraction_end": round(grid.known_fraction(), 3), "sensor_mode": args.sensor_mode, "sensor_stats": sensors.stats,
         "initial_heading_rad": round(yaw0, 3), "controller": {"cruise": args.cruise, "turn_rate": args.turn_rate, "inflate_m": args.inflate,
                                                               "replan_s": args.replan_s, "map_res": args.map_res},
-        "control": ("frozen_learned_biped_gait+lidar_occupancy_map+LEARNED_navgym_policy(onnx); " if learned is not None
+        "control": ("frozen_learned_biped_gait+lidar_egomap+LEARNED_navgym_policy(onnx, PPO in the gym; lidar at 10 Hz packets here, "
+                    "every 0.04 s step in the gym; team_sensors speed brake still filters its commands); " if learned is not None
                     else "frozen_learned_biped_gait+lidar_occupancy_map+astar_unknown_free+turn_then_walk; ")
                    + ("pose and goal are oracle" if oracle_pose else "goal is oracle; pose = oracle + injected error (pose_error)")
                    + ("" if imu is None else "; gait attitude = filter in the loop (imu)"),
@@ -687,7 +696,16 @@ def main() -> int:
                 "playback_speed": args.gif_speed, "gait": r["gait"],
                 "scope": ("MuJoCo 3.3.5 | frozen learned biped gait (dr-default-s0) | lidar log-odds map | A* on the map with unknown = free | "
                           "turn in place then walk forward (no sideways) | oracle pose and goal coordinate; the maze itself is unknown to the planner | "
-                          "one seed = one maze; the multi-seed table is the evidence, this clip the illustration")}
+                          "one seed = one maze; the multi-seed table is the evidence, this clip the illustration") if args.policy is None else
+                         ("MuJoCo 3.3.5 | frozen learned biped gait (dr-default-s0) | (vx, wz) commands from the LEARNED NavGym policy "
+                          f"({os.path.relpath(args.policy, REPO)}; PPO trained in the 2-D NavGym proxy, deployed here unchanged, deterministic mean) | "
+                          "its observation: 36 lidar sector minima + a 0.2 m egocentric log-odds map built from the robot's own 108 lidar rays | "
+                          "oracle pose and goal coordinate; the maze walls are seen only through the lidar | no planner, no scripted controller; "
+                          "the team_sensors speed brake still filters the commands | one seed = one maze; the multi-seed transfer table is the evidence, "
+                          "this clip the illustration")}
+        if args.policy is not None:
+            side["policy"] = {"onnx": os.path.relpath(args.policy, REPO), "onnx_sha256": sha256(Path(args.policy)),
+                              "label": "LEARNED (PPO in NavGym, deployed on the physics robot); oracle pose + goal"}
         args.gif.with_suffix(".json").write_text(json.dumps(side, indent=2) + "\n")
         print(f"GIF {side['output']} {g['mb']} MB")
     return 0

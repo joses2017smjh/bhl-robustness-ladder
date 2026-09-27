@@ -18,6 +18,33 @@ NavGym v2 (2026-09-26) is selected explicitly:
   --ppo v1          the v1 settings (gamma 0.995, LR 3e-4 constant, ent 0.003,
                     no KL target, log_std_init 0, no floor) -- the ablation arm.
 
+NavGym v3 (2026-09-27) = the v2 env + --ppo v3:
+
+  --ppo v3          v2 PPO plus ONE change: a std CEILING of 1.0 (log_std clamped
+                    to [log 0.2, log 1.0] after every update, the floor's own hook).
+                    Why (scripts/bench/navgym_diagnose.py on the v2 Arm A runs):
+                    with ent_coef 0.01 and actions clipped to [-1, 1], the
+                    pre-clamp std grew monotonically to 7-10 (vx) / 4.5 (wz); the
+                    Gaussian means followed (median |mean| 25 / 6-12), so the
+                    deterministic actor is bang-bang: median 91-96 % of wz means
+                    outside [-1, 1], wz sign flips 15-20 per second. 11 of the 15
+                    5x5 time-outs of the final actors are a dither in place
+                    (< 3 cm/s over the last 20 s, never near a wall), the other 4
+                    move but wander (net 0.04-0.07 m/s; the limit needs ~0.10);
+                    the forward command is at
+                    zero in a median 72 % of time-out steps vs 3-6 % on successes,
+                    and 0/15 reach the goal with twice the time. The v2
+                    checkpoints at std <= 1.15 (2 M, 4 M steps, both seeds) had wz
+                    saturation 0.10-0.23, 1.4-2.7 flips/s and periodic 5x5
+                    time-outs 0.00-0.125 (but more collisions).
+  --final-eval-fresh-base 20000
+                    also evaluate the final and the best actor on the FRESH held-out
+                    set (maze seed 20 000 + k, dynamics reset(seed=20 000 + k)),
+                    written as "final_eval_fresh_48"; the periodic evaluation and the
+                    best-checkpoint selection stay on seeds 10 000..10 023.
+  verdict-v3 ROOT   (`navgym_train.py verdict-v3 <root> --seeds 2 3 4`) applies the
+                    predeclared v3 rule to <root>/armV3-s<seed>/summary.json.
+
 Every run: VecMonitor (rollout/ep_rew_mean, ep_len_mean), held-out success /
 collision / time-out rates to TensorBoard and eval_history.json, the best
 checkpoint by held-out 6x6 success (tie-break 5x5) kept in best/, and at the
@@ -46,12 +73,13 @@ from stable_baselines3.common.callbacks import BaseCallback, CheckpointCallback 
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor  # noqa: E402
 from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv, VecMonitor  # noqa: E402
 
-from bhl_robust.navgym.env import MazeNavEnv, MAP_CROP, heldout_env  # noqa: E402
+from bhl_robust.navgym.env import FRESH_BASE, HELDOUT_BASE, MazeNavEnv, MAP_CROP, heldout_env  # noqa: E402
 
 CURRICULUM = [((3, 3),), ((3, 3), (4, 4)), ((4, 4), (5, 5)), ((5, 5), (6, 6))]
 EVAL_SIZES = ((4, 4), (5, 5), (6, 6))
 V2_PERIODIC_EVAL_SIZES = ((5, 5), (6, 6))      # v2 episodes are up to 3x longer; 4x4 only in the final eval
 STD_FLOOR = 0.2
+STD_CEILING_V3 = 1.0
 
 PPO_SETTINGS = {
     # v1: exactly the settings of results/navgym-20260924
@@ -60,6 +88,9 @@ PPO_SETTINGS = {
     # v2: the post-mortem fixes for the std collapse / KL blow-up / saturated means
     "v2": {"n_steps": 256, "batch_size": 1024, "n_epochs": 4, "lr": 3e-4, "lr_final": 3e-5, "gamma": 0.998, "gae_lambda": 0.95,
            "clip": 0.2, "ent_coef": 0.01, "target_kl": 0.02, "log_std_init": -0.5, "std_floor": STD_FLOOR},
+    # v3: v2 + a std ceiling (the diagnosis of 2026-09-27: std growth -> saturated bang-bang means -> dither time-outs)
+    "v3": {"n_steps": 256, "batch_size": 1024, "n_epochs": 4, "lr": 3e-4, "lr_final": 3e-5, "gamma": 0.998, "gae_lambda": 0.95,
+           "clip": 0.2, "ent_coef": 0.01, "target_kl": 0.02, "log_std_init": -0.5, "std_floor": STD_FLOOR, "std_ceiling": STD_CEILING_V3},
 }
 
 
@@ -95,11 +126,13 @@ def make_env(rank: int, seed: int, sizes, randomize: bool = True, version: int =
     return _init
 
 
-def evaluate(model, sizes, seeds, deterministic: bool = True, version: int = 1, gamma: float = 0.998) -> dict:
+def evaluate(model, sizes, seeds, deterministic: bool = True, version: int = 1, gamma: float = 0.998, maze_base: int = HELDOUT_BASE) -> dict:
     """Held-out mazes: one episode per seed per size (maze seed 10 000 + seed, dynamics from
     reset(seed=seed)); success = goal reached. v2 episodes run to the v2 route-scaled limit."""
     out = {}
     for sz in sizes:
+        if version == 1 and maze_base != HELDOUT_BASE:
+            raise ValueError("the v1 serial evaluation only knows the original held-out set")
         env = MazeNavEnv(sizes=(sz,), randomize_dynamics=True, seed_base=10_000, seed_span=1) if version == 1 else None
         succ, steps, coll, tout = 0, [], 0, 0
         for k, sd in enumerate(seeds):
@@ -107,7 +140,7 @@ def evaluate(model, sizes, seeds, deterministic: bool = True, version: int = 1, 
                 env.seed_base = 10_000 + sd
                 obs, info = env.reset(seed=sd)
             else:
-                env, obs, info = heldout_env(sz, sd, version=version, gamma=gamma)
+                env, obs, info = heldout_env(sz, sd, version=version, gamma=gamma, maze_base=maze_base)
             done = False
             while not done:
                 a, _ = model.predict(obs, deterministic=deterministic)
@@ -133,7 +166,8 @@ class HeldoutPool:
         self.venv = SubprocVecEnv(fns, start_method="forkserver")
         self.n = n_workers
 
-    def evaluate(self, model, sizes, seeds) -> dict:
+    def evaluate(self, model, sizes, seeds, maze_base: int = HELDOUT_BASE) -> dict:
+        """`maze_base` 10 000 (default) is the published held-out set; FRESH_BASE (20 000) the v3 scored set."""
         jobs = [(tuple(sz), int(sd)) for sz in sizes for sd in seeds]
         res = {}
         nxt = 0
@@ -142,7 +176,10 @@ class HeldoutPool:
 
         def assign(i):
             nonlocal nxt
-            o = self.venv.env_method("heldout_reset", jobs[nxt][0], jobs[nxt][1], indices=[i])[0]
+            if maze_base == HELDOUT_BASE:
+                o = self.venv.env_method("heldout_reset", jobs[nxt][0], jobs[nxt][1], indices=[i])[0]
+            else:
+                o = self.venv.env_method("heldout_reset", jobs[nxt][0], jobs[nxt][1], maze_base, indices=[i])[0]
             cur[i] = jobs[nxt]
             nxt += 1
             return o
@@ -184,24 +221,34 @@ def _best_key(ev: dict) -> tuple:
 class StdFloor(BaseCallback):
     """Clamp the Gaussian policy's log_std to >= log(floor) after every PPO update (the
     rollout-start hook runs right after train()). Records the pre-clamp std -- the value
-    SB3 logged as train/std for that update -- so the run's std is judged unclamped."""
+    SB3 logged as train/std for that update -- so the run's std is judged unclamped.
+    `ceiling` (v3 only; None = v2 exactly) also clamps log_std <= log(ceiling) in the same hook."""
 
-    def __init__(self, floor: float):
+    def __init__(self, floor: float, ceiling: float | None = None):
         super().__init__()
         self.log_floor = float(np.log(floor))
+        self.log_ceiling = None if ceiling is None else float(np.log(ceiling))
         self.last_std_pre_clamp = None
+        self.last_std_pre_clamp_per_dim = None
         self.clamps = 0
+        self.ceiling_clamps = 0
 
     def _clamp(self) -> None:
         ls = self.model.policy.log_std
         with torch.no_grad():
             self.last_std_pre_clamp = float(torch.exp(ls).mean())
+            self.last_std_pre_clamp_per_dim = [float(x) for x in torch.exp(ls)]
             low = ls < self.log_floor
             if bool(low.any()):
                 self.clamps += 1
                 ls.clamp_(min=self.log_floor)
+            if self.log_ceiling is not None and bool((ls > self.log_ceiling).any()):
+                self.ceiling_clamps += 1
+                ls.clamp_(max=self.log_ceiling)
         self.logger.record("train/std_pre_floor", self.last_std_pre_clamp)
         self.logger.record("train/std_floor_clamps", self.clamps)
+        if self.log_ceiling is not None:
+            self.logger.record("train/std_ceiling_clamps", self.ceiling_clamps)
 
     def _on_rollout_start(self) -> None:
         if self.model.num_timesteps > 0:
@@ -335,7 +382,12 @@ def main() -> int:
     ap.add_argument("--n-final-eval", type=int, default=48)
     ap.add_argument("--eval-workers", type=int, default=None,
                     help="v2 only: parallel held-out evaluation workers (default = --n-envs; 0 = serial). v1 is always serial.")
+    ap.add_argument("--final-eval-fresh-base", type=int, default=None,
+                    help="also evaluate the final and best actors on the fresh held-out set maze seed BASE + k (v3: 20000); "
+                         "default None = only the original set (10 000 + k), as every earlier run")
     args = ap.parse_args()
+    if args.final_eval_fresh_base is not None and args.final_eval_fresh_base < 10_000 + 1_000:
+        ap.error("--final-eval-fresh-base must be clear of the training seeds (< 10 000) and the original held-out set (10 000 + k)")
     args.out.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(max(1, min(4, args.n_envs)))
     P = dict(PPO_SETTINGS[args.ppo])
@@ -371,22 +423,24 @@ def main() -> int:
     n_eval_workers = 0 if version == 1 else (args.n_envs if args.eval_workers is None else args.eval_workers)
     pool = HeldoutPool(n_eval_workers, version, env_gamma) if n_eval_workers > 0 and not args.dummy_vec else None
 
-    def heldout(m, n_seeds):
+    def heldout(m, n_seeds, maze_base=HELDOUT_BASE):
         if pool is not None:
-            return pool.evaluate(m, EVAL_SIZES, list(range(n_seeds)))
-        return evaluate(m, EVAL_SIZES, list(range(n_seeds)), version=version, gamma=env_gamma)
+            return pool.evaluate(m, EVAL_SIZES, list(range(n_seeds)), maze_base=maze_base)
+        return evaluate(m, EVAL_SIZES, list(range(n_seeds)), version=version, gamma=env_gamma, maze_base=maze_base)
 
     cur = CurriculumAndEval(args.out, args.eval_every, n_eval=args.n_eval, version=version, gamma=env_gamma, eval_sizes=eval_sizes, pool=pool)
     cb = [cur, CheckpointCallback(save_freq=max(1, args.checkpoint_every // args.n_envs), save_path=str(args.out / "ckpt"), name_prefix="ppo")]
     floor = None
     if P["std_floor"] is not None:
-        floor = StdFloor(P["std_floor"])
+        floor = StdFloor(P["std_floor"], P.get("std_ceiling"))
         cb.append(floor)
     t0 = time.time()
     model.learn(total_timesteps=args.total_steps, callback=cb, progress_bar=False)
     model.save(str(args.out / "ppo_final.zip"))
     std_final = float(torch.exp(model.policy.log_std).mean())
     final = heldout(model, args.n_final_eval)
+    fresh = args.final_eval_fresh_base
+    final_fresh = heldout(model, args.n_final_eval, maze_base=fresh) if fresh is not None else None
     onnx_info = export_onnx(model, args.out / "actor.onnx")
     best_info = None
     if (args.out / "best" / "ppo_best.zip").is_file():
@@ -394,11 +448,25 @@ def main() -> int:
         best_info = {**cur.best, "note": "selected on held-out seeds 0-23 (a subset of the 48): its 48-maze numbers are selection-biased",
                      "final_eval_heldout_48": heldout(best_model, args.n_final_eval),
                      "onnx": export_onnx(best_model, args.out / "actor_best.onnx")}
+        if fresh is not None:
+            best_info["final_eval_fresh_48"] = heldout(best_model, args.n_final_eval, maze_base=fresh)
     summary = {"total_steps": args.total_steps, "wall_hours": round((time.time() - t0) / 3600, 2), "final_eval_heldout_48": final,
                "curriculum_stage": cb[0].stage, "onnx": onnx_info, "env_version": version, "ppo": args.ppo,
                "train_std_last_update": (floor.last_std_pre_clamp if floor is not None else std_final), "policy_std_final": std_final,
                "std_floor_clamps": floor.clamps if floor is not None else None, "best": best_info,
                "eval_mode": "parallel_pool" if pool is not None else "serial"}
+    if fresh is not None or P.get("std_ceiling") is not None:
+        # v3 additions (absent from v1/v2 summaries, which stay as published)
+        summary["num_timesteps"] = int(model.num_timesteps)
+        summary["reached_last_step"] = bool(model.num_timesteps >= args.total_steps)
+        summary["std_pre_clamp_per_dim_last_update"] = floor.last_std_pre_clamp_per_dim if floor is not None else None
+        summary["std_ceiling"] = P.get("std_ceiling")
+        summary["std_ceiling_clamps"] = floor.ceiling_clamps if floor is not None else None
+        summary["policy_std_final_per_dim"] = [float(x) for x in torch.exp(model.policy.log_std.detach())]
+    if fresh is not None:
+        summary["final_eval_fresh_48"] = final_fresh
+        summary["fresh_set"] = {"maze_seeds": f"{fresh} + k, k = 0..{args.n_final_eval - 1}", "dynamics": f"reset(seed={fresh} + k)",
+                                "note": "never used for training, periodic evaluation, best-checkpoint selection or diagnosis"}
     if pool is not None:
         pool.close()
     (args.out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
@@ -406,5 +474,91 @@ def main() -> int:
     return 0
 
 
+# ---------------------------------------------------------------- v3 verdict
+V3_RULE = {"5x5_success_min": 0.80, "6x6_success_min": 0.70, "6x6_collision_max": 0.15, "n": 48, "total_steps": 30_000_000,
+           "seeds": (2, 3, 4), "min_seeds_passing": 2, "set": "final_eval_fresh_48", "fresh_base": 20_000}
+
+
+def judge_v3(summary: dict | None, rule: dict = V3_RULE) -> dict:
+    """Per-seed checks of the predeclared v3 rule on one summary.json (None = no summary: the run did not finish)."""
+    if summary is None:
+        return {"meets": False, "checks": {"summary_exists": False}, "numbers": None}
+    ev = summary.get(rule["set"]) or {}
+    a, b = ev.get("5x5"), ev.get("6x6")
+    fs = summary.get("fresh_set") or {}
+    checks = {"summary_exists": True,
+              "config_v3": summary.get("ppo") == "v3" and summary.get("env_version") == 2 and summary.get("std_ceiling") == STD_CEILING_V3,
+              "reached_last_step": bool(summary.get("reached_last_step")) and int(summary.get("num_timesteps", 0)) >= rule["total_steps"]
+              and int(summary.get("total_steps", 0)) == rule["total_steps"],
+              "fresh_set_is_20000": str(fs.get("maze_seeds", "")).startswith(f"{rule['fresh_base']} + k"),
+              "n48": bool(a and b and a["n"] == rule["n"] and b["n"] == rule["n"]),
+              "5x5_success": bool(a and a["success"] >= rule["5x5_success_min"]),
+              "6x6_success": bool(b and b["success"] >= rule["6x6_success_min"]),
+              "6x6_collision": bool(b and b["collision"] <= rule["6x6_collision_max"])}
+    nums = None
+    if a and b:
+        ho = summary.get("final_eval_heldout_48") or {}
+        nums = {"fresh": {k: ev[k] for k in ("4x4", "5x5", "6x6") if k in ev},
+                "heldout_10000_for_comparability": {k: ho[k] for k in ("4x4", "5x5", "6x6") if k in ho},
+                "num_timesteps": summary.get("num_timesteps"), "std_pre_clamp_last": summary.get("std_pre_clamp_per_dim_last_update"),
+                "std_ceiling_clamps": summary.get("std_ceiling_clamps"), "std_floor_clamps": summary.get("std_floor_clamps")}
+        best = summary.get("best") or {}
+        if best:
+            nums["best_checkpoint_not_gated"] = {"timesteps": best.get("timesteps"), "fresh": best.get("final_eval_fresh_48"),
+                                                 "heldout_10000_selection_biased": best.get("final_eval_heldout_48")}
+    return {"meets": all(checks.values()), "checks": checks, "numbers": nums}
+
+
+def verdict_v3(root: Path, seeds=V3_RULE["seeds"], rule: dict = V3_RULE, final: bool = False) -> dict:
+    """The arm verdict. A seed without summary.json is PENDING while the array runs; with
+    `final` (all tasks have ended) it is a run that did not reach its last step, i.e. a miss."""
+    per = {}
+    for sd in seeds:
+        p = root / f"armV3-s{sd}" / "summary.json"
+        per[str(sd)] = judge_v3(json.loads(p.read_text()) if p.is_file() else None, rule)
+    n_pass = sum(v["meets"] for v in per.values())
+    missing = 0 if final else sum(not v["checks"].get("summary_exists") for v in per.values())
+    if n_pass >= rule["min_seeds_passing"]:
+        verdict = "PASS"
+    elif n_pass + missing >= rule["min_seeds_passing"]:
+        verdict = "PENDING"
+    else:
+        verdict = "NEGATIVE"
+    return {"rule": {**rule, "seeds": list(rule["seeds"]),
+                     "text": ("PASS iff >= 2 of 3 fresh seeds (2, 3, 4) meet every clause on the FRESH held-out set (maze seeds "
+                              "20000-20047, final actor, deterministic): 5x5 success >= 0.80, 6x6 success >= 0.70, 6x6 collision "
+                              "<= 0.15, n = 48 per size, and the run reached its last step (num_timesteps >= 30 000 000). "
+                              "Seeds 10000-10047 are reported for comparability, not gated.")},
+            "final": bool(final), "seeds_passing": n_pass, "verdict": verdict, "per_seed": per}
+
+
+def verdict_main(argv) -> int:
+    ap = argparse.ArgumentParser(prog="navgym_train.py verdict-v3")
+    ap.add_argument("root", type=Path)
+    ap.add_argument("--seeds", type=int, nargs="+", default=list(V3_RULE["seeds"]))
+    ap.add_argument("--out", type=Path, default=None, help="default: <root>/verdict_v3.json")
+    ap.add_argument("--final", action="store_true", help="every array task has ended: a missing summary counts as a miss")
+    a = ap.parse_args(argv)
+    v = verdict_v3(a.root, tuple(a.seeds), final=a.final)
+    out = a.out or a.root / "verdict_v3.json"
+    out.write_text(json.dumps(v, indent=2) + "\n")
+    rd = json.loads(out.read_text())            # the printed verdict is recomputed from the file just written
+    parts = []
+    for sd, r in rd["per_seed"].items():
+        n = r["numbers"]
+        if n is None:
+            parts.append(f"s{sd}: no summary")
+        else:
+            f5, f6 = n["fresh"]["5x5"], n["fresh"]["6x6"]
+            h = n["heldout_10000_for_comparability"]
+            cmp_ = (f" [10000-set 5x5 {h['5x5']['success']:.3f} 6x6 {h['6x6']['success']:.3f}]" if "5x5" in h and "6x6" in h else "")
+            parts.append(f"s{sd}: {'MEETS' if r['meets'] else 'misses'} fresh 5x5 {f5['success']:.3f} 6x6 {f6['success']:.3f} "
+                         f"(coll {f6['collision']:.3f}; last step {r['checks']['reached_last_step']}){cmp_}")
+    print(f"NAVGYM-V3 VERDICT: {rd['verdict']} ({rd['seeds_passing']}/{len(rd['per_seed'])} seeds meet the bar) | " + " | ".join(parts), flush=True)
+    return 0
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "verdict-v3":
+        sys.exit(verdict_main(sys.argv[2:]))
     sys.exit(main())

@@ -191,3 +191,43 @@ class HumanoidTurnCmdCfg(HumanoidTurnBothCfg):
             direct_lin_vel_y=(-0.25, 0.25),
             direct_ang_vel_z=(-1.0, 1.0),
         )
+
+
+# --- Turning gait, arm TurnRest (2026-09-27) ---------------------------------
+#
+# Diagnosis (scripts/bench/turn_diagnose.py): the non-turners never lift a foot
+# under a pure turn from rest although their actions respond to wz; TurnBoth-s0
+# turns only while it is still stepping in place. TurnRest = TurnBoth's reward
+# set, unchanged, with a command mix that adds rest-then-turn envs (zero command
+# for 1.5-4 s, then a sustained pure turn; turn_command.TurnRestMixVelocityCommand).
+# It is trained as a FINE-TUNE of arms-turn-turnboth-s0 (model_5999.pt) by
+# slurm/repo20260923/gpu_turngait_v4.sbatch, so the reward set, and hence the
+# value function it resumes, match the parent's. Obs 75 / actions 22 unchanged.
+from bhl_robust.tasks.turn_command import TurnRestMixVelocityCommandCfg
+
+
+@configclass
+class HumanoidTurnRestCfg(HumanoidTurnBothCfg):
+    """Arm E: TurnBoth rewards + pure-turn / rest-then-turn / direct / upstream command mix."""
+
+    def __post_init__(self):
+        super().__post_init__()
+        old = self.commands.base_velocity
+        self.commands.base_velocity = TurnRestMixVelocityCommandCfg(
+            resampling_time_range=old.resampling_time_range,
+            debug_vis=old.debug_vis,
+            asset_name=old.asset_name,
+            heading_command=old.heading_command,
+            heading_control_stiffness=old.heading_control_stiffness,
+            rel_standing_envs=old.rel_standing_envs,
+            rel_heading_envs=old.rel_heading_envs,
+            ranges=old.ranges,
+            rel_pure_turn_envs=0.15,
+            rel_rest_turn_envs=0.25,
+            rel_direct_envs=0.20,
+            rest_time_range=(1.5, 4.0),
+            pure_turn_ang_vel_abs=(0.3, 1.0),
+            direct_lin_vel_x=(-0.5, 0.5),
+            direct_lin_vel_y=(-0.25, 0.25),
+            direct_ang_vel_z=(-1.0, 1.0),
+        )

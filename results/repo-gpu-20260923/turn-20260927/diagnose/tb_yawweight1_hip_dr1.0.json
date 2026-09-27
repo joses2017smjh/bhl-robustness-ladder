@@ -1,0 +1,176 @@
+{
+  "instrument": "TensorBoard scalars of Isaac training runs (learned policies, stochastic rollouts)",
+  "note": "yaw_err_per_step_rad_s and yaw_kernel_mean are APPROXIMATE: ratios of episode means (metric mean / mean episode length), not per-episode means of the ratio",
+  "window": 50,
+  "at": [
+    1000,
+    3000,
+    5949
+  ],
+  "runs": {
+    "2026-09-24_18-58-11_arms-turn-turnhip-s0": {
+      "1000": {
+        "error_vel_yaw": 0.2833,
+        "error_vel_xy": 0.1277,
+        "track_ang_vel_z_exp": 0.0627,
+        "feet_air_time": 0.0028,
+        "track_lin_vel_xy_exp": 0.2339,
+        "mean_episode_length": 90.7782,
+        "base_orientation": 0.9536,
+        "time_out": 0.0465,
+        "mean_noise_std": 1.6105,
+        "yaw_err_per_step_rad_s": 0.7801,
+        "yaw_kernel_mean": 0.3455
+      },
+      "3000": {
+        "error_vel_yaw": 0.7977,
+        "error_vel_xy": 0.2916,
+        "track_ang_vel_z_exp": 0.2214,
+        "feet_air_time": 0.0394,
+        "track_lin_vel_xy_exp": 0.8797,
+        "mean_episode_length": 285.6924,
+        "base_orientation": 0.6363,
+        "time_out": 0.3641,
+        "mean_noise_std": 1.807,
+        "yaw_err_per_step_rad_s": 0.6981,
+        "yaw_kernel_mean": 0.3875
+      },
+      "5949": {
+        "error_vel_yaw": 0.9734,
+        "error_vel_xy": 0.3701,
+        "track_ang_vel_z_exp": 0.3451,
+        "feet_air_time": 0.0721,
+        "track_lin_vel_xy_exp": 1.2673,
+        "mean_episode_length": 400.5215,
+        "base_orientation": 0.3351,
+        "time_out": 0.6653,
+        "mean_noise_std": 1.7318,
+        "yaw_err_per_step_rad_s": 0.6076,
+        "yaw_kernel_mean": 0.4309
+      }
+    },
+    "2026-09-24_19-00-56_arms-turn-turnhip-s1": {
+      "1000": {
+        "error_vel_yaw": 0.2885,
+        "error_vel_xy": 0.1255,
+        "track_ang_vel_z_exp": 0.0627,
+        "feet_air_time": 0.003,
+        "track_lin_vel_xy_exp": 0.2401,
+        "mean_episode_length": 93.6448,
+        "base_orientation": 0.955,
+        "time_out": 0.0451,
+        "mean_noise_std": 1.6304,
+        "yaw_err_per_step_rad_s": 0.7701,
+        "yaw_kernel_mean": 0.3348
+      },
+      "3000": {
+        "error_vel_yaw": 0.8331,
+        "error_vel_xy": 0.3034,
+        "track_ang_vel_z_exp": 0.2324,
+        "feet_air_time": 0.0434,
+        "track_lin_vel_xy_exp": 0.9235,
+        "mean_episode_length": 302.6918,
+        "base_orientation": 0.6015,
+        "time_out": 0.3986,
+        "mean_noise_std": 1.7884,
+        "yaw_err_per_step_rad_s": 0.6881,
+        "yaw_kernel_mean": 0.3839
+      },
+      "5949": {
+        "error_vel_yaw": 0.9791,
+        "error_vel_xy": 0.3702,
+        "track_ang_vel_z_exp": 0.3405,
+        "feet_air_time": 0.071,
+        "track_lin_vel_xy_exp": 1.26,
+        "mean_episode_length": 396.4989,
+        "base_orientation": 0.34,
+        "time_out": 0.6603,
+        "mean_noise_std": 1.7329,
+        "yaw_err_per_step_rad_s": 0.6174,
+        "yaw_kernel_mean": 0.4293
+      }
+    },
+    "2026-09-25_14-57-19_arms-turn-turnhip-s2": {
+      "1000": {
+        "error_vel_yaw": 0.2995,
+        "error_vel_xy": 0.1327,
+        "track_ang_vel_z_exp": 0.0677,
+        "feet_air_time": 0.0033,
+        "track_lin_vel_xy_exp": 0.2541,
+        "mean_episode_length": 97.3096,
+        "base_orientation": 0.9486,
+        "time_out": 0.0515,
+        "mean_noise_std": 1.6148,
+        "yaw_err_per_step_rad_s": 0.7693,
+        "yaw_kernel_mean": 0.3479
+      },
+      "3000": {
+        "error_vel_yaw": 0.8243,
+        "error_vel_xy": 0.3022,
+        "track_ang_vel_z_exp": 0.235,
+        "feet_air_time": 0.043,
+        "track_lin_vel_xy_exp": 0.926,
+        "mean_episode_length": 299.897,
+        "base_orientation": 0.6046,
+        "time_out": 0.3957,
+        "mean_noise_std": 1.7898,
+        "yaw_err_per_step_rad_s": 0.6872,
+        "yaw_kernel_mean": 0.3919
+      },
+      "5949": {
+        "error_vel_yaw": 0.9721,
+        "error_vel_xy": 0.374,
+        "track_ang_vel_z_exp": 0.3489,
+        "feet_air_time": 0.0716,
+        "track_lin_vel_xy_exp": 1.2707,
+        "mean_episode_length": 403.2342,
+        "base_orientation": 0.3272,
+        "time_out": 0.673,
+        "mean_noise_std": 1.7183,
+        "yaw_err_per_step_rad_s": 0.6027,
+        "yaw_kernel_mean": 0.4326
+      }
+    },
+    "2026-08-18_20-57-50_arms-dr1.0-s0": {
+      "1000": {
+        "error_vel_yaw": 0.1839,
+        "error_vel_xy": 0.0949,
+        "track_ang_vel_z_exp": 0.049,
+        "feet_air_time": 0.0013,
+        "track_lin_vel_xy_exp": 0.1631,
+        "mean_episode_length": 62.9007,
+        "base_orientation": 0.9679,
+        "time_out": 0.0321,
+        "mean_noise_std": 1.3794,
+        "yaw_err_per_step_rad_s": 0.731,
+        "yaw_kernel_mean": 0.3895
+      },
+      "3000": {
+        "error_vel_yaw": 0.5471,
+        "error_vel_xy": 0.2287,
+        "track_ang_vel_z_exp": 0.1964,
+        "feet_air_time": 0.0266,
+        "track_lin_vel_xy_exp": 0.6973,
+        "mean_episode_length": 227.3003,
+        "base_orientation": 0.7491,
+        "time_out": 0.2509,
+        "mean_noise_std": 1.5773,
+        "yaw_err_per_step_rad_s": 0.6018,
+        "yaw_kernel_mean": 0.432
+      },
+      "5949": {
+        "error_vel_yaw": 0.7527,
+        "error_vel_xy": 0.3536,
+        "track_ang_vel_z_exp": 0.4028,
+        "feet_air_time": 0.0639,
+        "track_lin_vel_xy_exp": 1.2476,
+        "mean_episode_length": 390.9755,
+        "base_orientation": 0.3472,
+        "time_out": 0.653,
+        "mean_noise_std": 1.5139,
+        "yaw_err_per_step_rad_s": 0.4813,
+        "yaw_kernel_mean": 0.5152
+      }
+    }
+  }
+}

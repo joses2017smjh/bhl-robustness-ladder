@@ -96,6 +96,10 @@ V2_TIME_SLACK = 400        # steps (16 s) for the initial turn, lag and waiting
 V2_MAX_STEPS_CAP = 4500    # 180 s, the physics 6x6 time limit
 FINE_RES = 0.05            # m, resolution of the continuous geodesic field
 
+# ---- held-out evaluation sets (training draws maze seeds < 10 000)
+HELDOUT_BASE = 10_000      # the held-out set every run so far is evaluated on (maze seeds 10 000 + k)
+FRESH_BASE = 20_000        # NavGym v3's scored set (maze seeds 20 000 + k), never used before 2026-09-27
+
 
 @dataclass
 class Dynamics:
@@ -571,21 +575,36 @@ class MazeNavEnv(gym.Env):
         info["t"] = self.t
         return self._obs(), float(reward), terminated, truncated, info
 
-    def heldout_reset(self, size, seed: int) -> dict:
+    def heldout_reset(self, size, seed: int, maze_base: int = HELDOUT_BASE, dyn_base: int | None = None) -> dict:
         """Make this env held-out episode `seed` on a `size` maze -- the same episode as
-        `heldout_env(size, seed, version, gamma)` -- and reset it; returns the observation.
-        (For a pool of evaluation workers; the env keeps its version, gamma and max_steps.)"""
+        `heldout_env(size, seed, version, gamma, maze_base=..., dyn_base=...)` -- and reset it;
+        returns the observation. (For a pool of evaluation workers; the env keeps its version,
+        gamma and max_steps.)"""
+        mb, db = heldout_bases(maze_base, dyn_base)
         self.set_sizes((tuple(size),))
         self.randomize_dynamics = True
-        self.seed_base, self.seed_span = 10_000 + int(seed), 1
-        obs, _ = self.reset(seed=int(seed))
+        self.seed_base, self.seed_span = mb + int(seed), 1
+        obs, _ = self.reset(seed=db + int(seed))
         return obs
 
 
-def heldout_env(size, seed: int, version: int = 1, gamma: float = V2_GAMMA, max_steps: int | None = None) -> tuple:
-    """The trainer's held-out evaluation episode `seed` (maze seed 10 000 + seed, randomized
-    dynamics drawn from reset(seed=seed)) on a `size` maze: returns (env, obs, info)."""
-    env = MazeNavEnv(sizes=(tuple(size),), randomize_dynamics=True, seed_base=10_000 + int(seed), seed_span=1,
+def heldout_bases(maze_base: int = HELDOUT_BASE, dyn_base: int | None = None) -> tuple:
+    """(maze seed base, dynamics reset-seed base) of a held-out set. The original set (maze_base
+    10 000) draws its dynamics from reset(seed=k) -- dyn_base 0 -- as every published evaluation
+    did; any other set defaults to dyn_base = maze_base (reset(seed=maze_base + k))."""
+    mb = int(maze_base)
+    db = (0 if mb == HELDOUT_BASE else mb) if dyn_base is None else int(dyn_base)
+    return mb, db
+
+
+def heldout_env(size, seed: int, version: int = 1, gamma: float = V2_GAMMA, max_steps: int | None = None,
+                maze_base: int = HELDOUT_BASE, dyn_base: int | None = None) -> tuple:
+    """The trainer's held-out evaluation episode `seed` on a `size` maze: returns (env, obs, info).
+    Default: maze seed 10 000 + seed, randomized dynamics drawn from reset(seed=seed) -- the
+    published held-out set. `maze_base=FRESH_BASE` gives the v3 scored set: maze seed 20 000 + seed,
+    dynamics from reset(seed=20 000 + seed) (`heldout_bases`)."""
+    mb, db = heldout_bases(maze_base, dyn_base)
+    env = MazeNavEnv(sizes=(tuple(size),), randomize_dynamics=True, seed_base=mb + int(seed), seed_span=1,
                      version=version, gamma=gamma, max_steps=max_steps)
-    obs, info = env.reset(seed=int(seed))
+    obs, info = env.reset(seed=db + int(seed))
     return env, obs, info
