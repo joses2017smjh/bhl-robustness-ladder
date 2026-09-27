@@ -80,6 +80,19 @@ python scripts/bench/maze_explore.py ... --seeds 1 --seed-start K --render --gif
 
 Dropout slows the robot rather than stopping it (median 47 s vs 37 s on 5×5, 85 s vs 73 s on 6×6 at 35 %): the brake stops translation while packets are stale, and the map keeps what earlier scans saw. With the brake off the planner still reaches every goal, but four of twelve 6×6 runs brush a wall, so the "clean" part of 24/24 belongs to the reactive layer, not to the map.
 
+## Sensor-fusion stress (job `21435083`, hard 6×6, seeds 0–11)
+
+Errors feed the map, the planner and the controller; the judge always uses the true pose.
+
+| Stress | Levels (reached with no fall / 12) | Predeclared verdict |
+|---|---|---|
+| constant heading error | 0°: 12, 1°: 11, 3°: 10, 10°: 9 | **tolerance 3°** |
+| IMU delivery delay (Mahony 200 Hz) | 0 ms: 11, 20: 11, 30: 11, 40: 1 (11 falls), 60: 0 (12 falls) | **budget 30 ms** |
+| constant position bias | 0.05 m: 3, 0.15 m: 2, 0.30 m: 3 | FAIL — mostly *arrived, not judged* (9, 7, 8) |
+| position noise 0.10 m | 8 | FAIL |
+
+On a map the robot builds itself, a heading error is much more dangerous than on a known map (3° here against 20° in SF-02) because every scan is painted rotated. A constant position bias barely hurts exploration: the map and the robot stay consistent, so the robot finds the goal on its own map and stops exactly where its biased estimate says the goal is. The failure is goal localisation (the goal has to live in the map frame, or the bias has to be estimated), not navigation. The IMU budget of the biped gait, 30 ms, matches the 22-DoF gait's.
+
 ## A learned policy on the same interface (NavGym)
 
 `bhl_robust/navgym/env.py` is a Gymnasium environment whose action is exactly
