@@ -35,3 +35,22 @@ def test_depth_colours_are_monotone_in_range():
     d = np.array([[0.0, 3.0, 6.0]])
     rgb = panels.depth_colours(d, 6.0).astype(int)
     assert rgb[0, 0].sum() > rgb[0, 1].sum() > rgb[0, 2].sum()
+
+
+def test_write_gif_badge_needs_no_drawtext(tmp_path, monkeypatch):
+    """The bundled imageio-ffmpeg build has no drawtext filter (job 21442351): the badge is a PIL overlay."""
+    import subprocess
+
+    import pytest
+    from PIL import Image
+    imageio_ffmpeg = pytest.importorskip("imageio_ffmpeg")
+    exe = imageio_ffmpeg.get_ffmpeg_exe()
+    mp4 = tmp_path / "white.mp4"
+    subprocess.run([exe, "-y", "-loglevel", "error", "-f", "lavfi", "-i", "color=c=white:s=320x160:r=10", "-t", "1",
+                    "-pix_fmt", "yuv420p", str(mp4)], check=True)
+    monkeypatch.setattr(panels, "_FFMPEG", exe)
+    g = panels.write_gif(mp4, tmp_path / "out.gif", fps=5, speed=2.0, width=320)
+    assert g["badge"] == "GIF 2x" and g["within_budget"]
+    im = Image.open(tmp_path / "out.gif").convert("RGB")
+    a = np.asarray(im).astype(int)
+    assert a[-10, -10].sum() < 300 and a[10, 10].sum() > 700     # dark badge bottom-right, white elsewhere

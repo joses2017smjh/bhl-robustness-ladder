@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import os
 import subprocess
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -123,8 +124,8 @@ def depth_pair_panel(pair, max_range: float, size: tuple[int, int], title: str,
         for i in range(pooled.shape[0]):
             tile = Image.fromarray(depth_colours(pooled[i], max_range)).resize((pw, ph), Image.NEAREST)
             img.paste(tile, (gap + i * (tile_w + gap), y + 2))
-        draw.text((gap + n * (tile_w + gap) - 2 - 90, y + 6), f"policy sees {pooled.shape[1]}x{pooled.shape[2]}",
-                  font=load_font(11), fill=DIM)
+        label, font = f"policy sees {pooled.shape[1]}x{pooled.shape[2]}", load_font(11)
+        draw.text((w - gap - 2 - int(draw.textlength(label, font=font)), y + 6), label, font=font, fill=DIM)
         y += ph + 6
     if subtitle:
         draw.text((8, min(y + 2, h - 15)), subtitle, font=load_font(11), fill=DIM)
@@ -243,24 +244,31 @@ def write_gif(src_mp4: Path, out_gif: Path, *, fps: int = 8, speed: float = 1.0,
     out_gif.parent.mkdir(parents=True, exist_ok=True)
     if badge is None and speed != 1.0:
         badge = f"GIF {speed:g}x"
-    font = next((c for c in FONT_CANDIDATES if os.path.isfile(c)), None)
-    text = ""
-    if badge and font:
-        safe = badge.replace(":", r"\:").replace("'", "")
-        text = (f"drawtext=fontfile={font}:text='{safe}':x=w-tw-10:y=h-th-8:fontsize=16:fontcolor=white:"
-                f"box=1:boxcolor=0x1e2128@0.85:boxborderw=6,")
+    # The badge is a PIL-drawn PNG overlaid by ffmpeg: the bundled imageio-ffmpeg build has no
+    # drawtext filter (job 21442351), while overlay is in every build.
+    tmp = tempfile.TemporaryDirectory()
+    badge_in, badge_f, tail = [], "", "[v]"
+    if badge:
+        font = load_font(16)
+        tw, th = (lambda b: (b[2] - b[0], b[3] - b[1]))(ImageDraw.Draw(Image.new("RGB", (1, 1))).textbbox((0, 0), badge, font=font))
+        img = Image.new("RGBA", (tw + 12, th + 12), (0x1E, 0x21, 0x28, 217))
+        ImageDraw.Draw(img).text((6, 6), badge, font=font, fill=(255, 255, 255, 255), anchor="lt")
+        img.save(Path(tmp.name) / "badge.png")
+        badge_in, tail = ["-i", str(Path(tmp.name) / "badge.png")], "[vb]"
+        badge_f = "[v][1:v]overlay=W-w-4:H-h-2[vb];"
     attempts = [(max_colors, fps, width), (96, fps, width), (96, max(5, fps - 2), width),
                 (64, max(5, fps - 2), width), (64, 5, int(width * 0.85)), (48, 5, int(width * 0.75))]
     last = None
     for colors, f, wpx in attempts:
         rate = "" if speed == 1.0 else f"setpts=PTS/{speed:g},"
-        vf = f"{rate}fps={f},scale={wpx}:-2:flags=lanczos,{text}split[a][b];[a]palettegen=max_colors={colors}:stats_mode=diff[p];" \
-             f"[b][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle"
-        subprocess.run([ffmpeg_exe(), "-y", "-loglevel", "error", "-i", str(src_mp4), "-filter_complex", vf,
+        vf = f"[0:v]{rate}fps={f},scale={wpx}:-2:flags=lanczos[v];{badge_f}{tail}split[a][b];" \
+             f"[a]palettegen=max_colors={colors}:stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle"
+        subprocess.run([ffmpeg_exe(), "-y", "-loglevel", "error", "-i", str(src_mp4), *badge_in, "-filter_complex", vf,
                         "-loop", "0", str(out_gif)], check=True)
         size = out_gif.stat().st_size
         last = {"gif": str(out_gif), "bytes": size, "mb": round(size / 1e6, 2), "fps": f, "width": wpx, "ffmpeg": ffmpeg_exe(),
                 "max_colors": colors, "speed": speed, "badge": badge, "within_budget": size <= max_bytes}
         if size <= max_bytes:
             break
+    tmp.cleanup()
     return last

@@ -88,7 +88,7 @@ if rec.get("outcome") != "success":
 pan = rec.get("panels") or {}
 if not pan.get("npz") or not pan.get("top_frames"):
     print(f"MAZE-PANELS RESULT: FAIL (panels data missing: {pan})"); sys.exit(1)
-top = Path(pan["top_png_dir"]); note = f"quality={quality}, grain {pan.get('grain_spatial')}"
+top = Path(pan["top_png_dir"]); g_ = pan.get("grain_spatial"); note = f"quality={quality}" + (f", grain {g_:.2f}" if isinstance(g_, (int, float)) else "")
 denoised = False
 if pan.get("needs_denoise"):
     dn = top.parent / (top.name + "-dn"); dn.mkdir(exist_ok=True)
