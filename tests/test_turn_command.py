@@ -235,6 +235,147 @@ class TurnCommandTests(unittest.TestCase):
             self.make(8, cfg=self.cfg(rel_pure_turn_envs=0.8, rel_direct_envs=0.4))
 
 
+@unittest.skipUnless((ISAACLAB / "envs/mdp/commands/velocity_command.py").exists(), "installed isaaclab source not found")
+class TurnRestCommandTests(unittest.TestCase):
+    """Arm TurnRest (2026-09-27): rest-then-turn envs on top of the TurnCmd mix."""
+
+    DT = 0.04
+
+    @classmethod
+    def setUpClass(cls):
+        cls.vc, cls.BaseCfg, cls.tc = _install()
+
+    def cfg(self, **kw):
+        ranges = self.BaseCfg.Ranges(lin_vel_x=(-1.0, 1.0), lin_vel_y=(-0.5, 0.5), ang_vel_z=(-1.5, 1.5),
+                                     heading=(-math.pi, math.pi))
+        args = dict(resampling_time_range=(10.0, 10.0), debug_vis=False, asset_name="robot", heading_command=True,
+                    heading_control_stiffness=0.5, rel_standing_envs=0.02, rel_heading_envs=1.0, ranges=ranges)
+        args.update(kw)
+        return self.tc.TurnRestMixVelocityCommandCfg(**args)
+
+    def make(self, n, seed=0, cfg=None):
+        torch.manual_seed(seed)
+        self.heading = torch.empty(n).uniform_(-math.pi, math.pi)
+        robot = SimpleNamespace(data=SimpleNamespace(heading_w=self.heading))
+        env = SimpleNamespace(num_envs=n, device="cpu", scene={"robot": robot}, step_dt=self.DT)
+        cmd = self.tc.TurnRestMixVelocityCommand(cfg or self.cfg(), env)
+        cmd._resample_command(torch.arange(n))
+        return cmd
+
+    def test_draw_modes_rest_boundaries(self):
+        tc = self.tc
+        u = torch.tensor([0.0, 0.149, 0.15, 0.399, 0.40, 0.599, 0.60, 0.999])
+        self.assertEqual(tc.draw_modes_rest(u, 0.15, 0.25, 0.20).tolist(),
+                         [tc.PURE_TURN, tc.PURE_TURN, tc.REST_TURN, tc.REST_TURN, tc.DIRECT, tc.DIRECT,
+                          tc.UPSTREAM, tc.UPSTREAM])
+        self.assertTrue((tc.draw_modes_rest(u, 0.0, 0.0, 0.0) == tc.UPSTREAM).all())
+
+    def test_rest_turn_update_pure_function(self):
+        tc = self.tc
+        vel = torch.tensor([[0.5, 0.1, 0.3]] * 5)
+        modes = torch.tensor([tc.REST_TURN, tc.REST_TURN, tc.REST_TURN, tc.PURE_TURN, tc.UPSTREAM])
+        left = torch.tensor([1.0, 0.0, -0.3, 0.0, 0.0])
+        wz = torch.tensor([0.7, -0.6, 0.9, 0.0, 0.0])
+        standing = torch.tensor([False, False, True, False, False])
+        out = tc.rest_turn_update(vel, modes, left, wz, standing)
+        torch.testing.assert_close(out, torch.tensor([[0.0, 0.0, 0.0], [0.0, 0.0, -0.6], [0.0, 0.0, 0.0],
+                                                      [0.5, 0.1, 0.3], [0.5, 0.1, 0.3]]))
+        self.assertTrue((vel == 0.5).all(dim=0)[0])                     # input untouched
+
+    def test_check_rest_mix(self):
+        tc = self.tc
+        tc.check_rest_mix(0.15, 0.25, 0.20, (1.5, 4.0))
+        for bad in ((0.5, 0.4, 0.2, (1.5, 4.0)), (0.1, -0.1, 0.2, (1.5, 4.0)), (0.1, 0.2, 0.2, (4.0, 1.5)),
+                    (0.1, 0.2, 0.2, (-1.0, 1.0))):
+            with self.assertRaises(ValueError):
+                tc.check_rest_mix(*bad)
+        with self.assertRaises(ValueError):
+            self.make(8, cfg=self.cfg(rel_pure_turn_envs=0.5, rel_rest_turn_envs=0.4, rel_direct_envs=0.2))
+
+    def test_cfg_defaults_and_class(self):
+        c = self.cfg()
+        self.assertIs(c.class_type, self.tc.TurnRestMixVelocityCommand)
+        self.assertEqual((c.rel_pure_turn_envs, c.rel_rest_turn_envs, c.rel_direct_envs), (0.15, 0.25, 0.20))
+        self.assertEqual(tuple(c.rest_time_range), (1.5, 4.0))
+        # the TurnCmd cfg's defaults are untouched by the subclass
+        base = self.tc.TurnMixVelocityCommandCfg(resampling_time_range=(10.0, 10.0), asset_name="robot", ranges=c.ranges)
+        self.assertEqual((base.rel_pure_turn_envs, base.rel_direct_envs), (0.25, 0.25))
+        self.assertIs(base.class_type, self.tc.TurnMixVelocityCommand)
+
+    def test_fractions_rest_then_sustained_turn(self):
+        tc, n = self.tc, 40000
+        cmd = self.make(n, seed=5)
+        mode, stand = cmd.turn_mode.clone(), cmd.is_standing_env.clone()
+        for m, target in ((tc.PURE_TURN, 0.15), (tc.REST_TURN, 0.25), (tc.DIRECT, 0.20), (tc.UPSTREAM, 0.40)):
+            self.assertAlmostEqual(float((mode == m).float().mean()), target, delta=0.015)
+        self.assertTrue((cmd.is_heading_env == (mode == tc.UPSTREAM)).all())
+        rest = (mode == tc.REST_TURN) & ~stand
+        rest_s = cmd.rest_left[rest].clone()
+        self.assertTrue(((rest_s >= 1.5) & (rest_s <= 4.0)).all())
+        wz = cmd.rest_wz[rest].clone()
+        self.assertTrue(((wz.abs() >= 0.3) & (wz.abs() <= 1.0)).all())
+        self.assertAlmostEqual(float((wz > 0).float().mean()), 0.5, delta=0.03)
+        pure = (mode == tc.PURE_TURN) & ~stand
+        pure_wz = None
+        # step through 6 s: each REST row is zero until its rest time has elapsed, then (0, 0, wz), held
+        for k in range(1, 151):
+            self.heading += 0.03
+            cmd._update_command()
+            v = cmd.vel_command_b
+            if pure_wz is None:
+                pure_wz = v[pure, 2].clone()
+            t = k * self.DT
+            resting = rest_s > t + 1e-6
+            vr = v[rest]
+            self.assertTrue((vr[resting] == 0).all())
+            self.assertTrue((vr[~resting & (rest_s < t - 1e-6), :2] == 0).all())
+            torch.testing.assert_close(vr[~resting & (rest_s < t - 1e-6), 2], wz[~resting & (rest_s < t - 1e-6)])
+            self.assertTrue((v[stand] == 0).all())
+            self.assertTrue((v[pure, 2] == pure_wz).all() and (v[pure, :2] == 0).all())
+        self.assertTrue(((cmd.vel_command_b[rest, 2] == wz)).all())      # all past rest by 6 s
+        self.assertAlmostEqual(float(cmd.metrics["rest_turn_env"].mean()), float((mode == tc.REST_TURN).float().mean()))
+
+    def test_partial_resample_and_dimension(self):
+        tc, n = self.tc, 1000
+        cmd = self.make(n, seed=6)
+        for _ in range(10):
+            cmd._update_command()
+        v0, l0, m0 = cmd.vel_command_b.clone(), cmd.rest_left.clone(), cmd.turn_mode.clone()
+        ids = torch.arange(0, n, 5)
+        cmd._resample_command(ids)
+        other = torch.ones(n, dtype=torch.bool)
+        other[ids] = False
+        self.assertTrue((cmd.vel_command_b[other] == v0[other]).all() and (cmd.rest_left[other] == l0[other]).all())
+        self.assertTrue((cmd.turn_mode[other] == m0[other]).all())
+        self.assertTrue((cmd.vel_command_b[ids][cmd.turn_mode[ids] == tc.REST_TURN] == 0).all())
+        self.assertEqual(tuple(cmd.command.shape), (n, 3))
+        cmd._resample_command(torch.tensor([], dtype=torch.long))
+
+
+class TurnDiagnoseHelperTests(unittest.TestCase):
+    """scripts/bench/turn_diagnose.py pure helpers."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.td = _load("turn_diagnose_under_test", REPO / "scripts/bench/turn_diagnose.py")
+
+    def test_count_liftoffs(self):
+        c = self.td.count_liftoffs
+        dt = 0.005
+        self.assertEqual(c([True] * 10, dt), (0, 0.0))
+        n, air = c([True] * 3 + [False] * 10 + [True] * 3 + [False] * 2 + [True], dt)   # 50 ms bout counts, 10 ms chatter not
+        self.assertEqual(n, 1)
+        self.assertAlmostEqual(air, 0.05)
+        self.assertEqual(c([False] * 10 + [True] * 3, dt)[0], 0)          # airborne before first contact is not a lift-off
+        self.assertEqual(c([True] + [False] * 4, dt)[0], 1)               # open bout at the end, 20 ms, counts
+
+    def test_tb_normalisers(self):
+        # error_vel_yaw sum 0.877 over a 419.8-step episode, max command 250 steps -> 0.522 rad/s per step
+        self.assertAlmostEqual(self.td.per_step(0.877, 419.8, 250.0), 0.5223, places=3)
+        # Episode_Reward 0.455 /s over 20 s, 419.8 steps of 0.04 s, weight 2.0 -> mean kernel 0.271
+        self.assertAlmostEqual(self.td.kernel_mean(0.455, 20.0, 419.8, 0.04, 2.0), 0.2709, places=3)
+
+
 class TurnTestV2RuleTests(unittest.TestCase):
     """scripts/bench/turn_test.py v2_judge: the predeclared v2 rule, sign-aware."""
 
@@ -269,6 +410,53 @@ class TurnTestV2RuleTests(unittest.TestCase):
         j = self.tt.v2_judge([], dict(walk), 150.0, 15.0)
         self.assertEqual(j["verdict"], "FAIL")
 
+
+class TurnTestV2xRuleTests(unittest.TestCase):
+    """scripts/bench/turn_test.py v2x_judge: the single-checkpoint qualification count rule (2026-09-27)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tt = _load("turn_test_v2x_under_test", REPO / "scripts/bench/turn_test.py")
+
+    @staticmethod
+    def turns(yaws, falls=None):
+        falls = falls or [None] * len(yaws)
+        return [{"cmd": [0.0, 0.0, 0.6 if i % 2 == 0 else -0.6], "yaw_deg": y, "fell_at_s": f}
+                for i, (y, f) in enumerate(zip(yaws, falls))]
+
+    @staticmethod
+    def walks(drifts, falls=None):
+        falls = falls or [None] * len(drifts)
+        return [{"yaw_deg": d, "fell_at_s": f} for d, f in zip(drifts, falls)]
+
+    def judge(self, turns, walks):
+        return self.tt.v2x_judge(turns, walks, 150.0, 15.0, 9, 2)
+
+    def test_defaults_are_fresh_seeds(self):
+        self.assertEqual(self.tt.V2X_TURN_SEEDS, (10, 11, 12, 13, 14))
+        self.assertEqual(self.tt.V2X_WALK_SEEDS, (10, 11, 12))
+        self.assertFalse(set(self.tt.V2X_TURN_SEEDS) & set(self.tt.V2_TURN_SEEDS))
+
+    def test_nine_of_ten_passes_eight_fails(self):
+        good = [200.0, -200.0] * 5
+        j = self.judge(self.turns(good[:9] + [-11.4]), self.walks([1.0, -20.0, 3.0]))
+        self.assertEqual((j["verdict"], j["n_turn_ok"], j["n_walk_ok"]), ("PASS", 9, 2))
+        j = self.judge(self.turns(good[:8] + [100.0, -11.4]), self.walks([1.0, 2.0, 3.0]))
+        self.assertEqual((j["verdict"], j["n_turn_ok"]), ("FAIL", 8))
+
+    def test_wrong_direction_and_falls_do_not_count(self):
+        j = self.judge(self.turns([200.0, 200.0] * 5), self.walks([0.0] * 3))       # -0.6 runs turn the wrong way
+        self.assertEqual((j["verdict"], j["n_turn_ok"]), ("FAIL", 5))
+        j = self.judge(self.turns([200.0, -200.0] * 5, [None] * 8 + [3.0, 2.0]), self.walks([0.0] * 3))
+        self.assertEqual((j["verdict"], j["n_turn_ok"], j["n_fell"]), ("FAIL", 8, 2))
+
+    def test_walk_clause(self):
+        t = self.turns([200.0, -200.0] * 5)
+        self.assertEqual(self.judge(t, self.walks([16.0, -15.1, 2.0]))["verdict"], "FAIL")
+        self.assertEqual(self.judge(t, self.walks([1.0, 2.0, 3.0], [None, 4.0, 5.0]))["verdict"], "FAIL")
+        self.assertEqual(self.judge(t, self.walks([15.0, -15.0, 40.0]))["verdict"], "PASS")
+        self.assertEqual(self.judge(t, [])["verdict"], "FAIL")
+        self.assertEqual(self.judge([], self.walks([0.0] * 3))["verdict"], "FAIL")
 
 if __name__ == "__main__":
     unittest.main()

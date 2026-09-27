@@ -257,3 +257,118 @@ def test_v2_progress_form_pays_nothing_for_stalling():
     env.queue = [np.zeros(2) for _ in env.queue]
     _, r, term, trunc, _ = env.step(np.array([-1.0, 0.0], np.float32))
     assert not term and r == pytest.approx(V2_STEP_COST, abs=1e-9)
+
+
+# ------------------------------------------------------------------ NavGym v3 (2026-09-27)
+import json
+import sys
+
+from bhl_robust.navgym.env import FRESH_BASE, HELDOUT_BASE, heldout_bases
+
+sys.path.insert(0, str(REPO / "scripts" / "bench"))
+
+
+def test_heldout_default_set_is_unchanged_and_fresh_set_is_separate():
+    """Default heldout_env is the published set (maze 10 000 + k, dynamics reset(seed=k)); the v3
+    fresh set is maze 20 000 + k with dynamics reset(seed=20 000 + k); a pool worker replays both."""
+    assert heldout_bases() == (10_000, 0) and heldout_bases(FRESH_BASE) == (20_000, 20_000) and HELDOUT_BASE == 10_000
+    for sd in (0, 5):
+        env, o, info = heldout_env((5, 5), sd, version=2, gamma=1.0)
+        old = MazeNavEnv(sizes=((5, 5),), randomize_dynamics=True, seed_base=10_000 + sd, seed_span=1, version=2, gamma=1.0)
+        o_old, info_old = old.reset(seed=sd)
+        assert info["maze_seed"] == 10_000 + sd and env.dyn == old.dyn and info == info_old
+        for k in OBS_KEYS_V2:
+            assert np.array_equal(o[k], o_old[k])
+        fr, of, fi = heldout_env((5, 5), sd, version=2, gamma=1.0, maze_base=FRESH_BASE)
+        assert fi["maze_seed"] == 20_000 + sd
+        from bhl_robust.navgym.env import sample_dynamics
+        rng = np.random.default_rng(20_000 + sd)
+        rng.integers(1)                                   # the size draw of reset()
+        rng.integers(1)                                   # the maze-seed draw (span 1)
+        assert fr.dyn == sample_dynamics(rng) and fr.dyn != env.dyn
+        worker = MazeNavEnv(sizes=((3, 3),), version=2, gamma=1.0)
+        worker.reset(seed=99)
+        ow = worker.heldout_reset((5, 5), sd, FRESH_BASE)
+        assert worker.episode_seed == 20_000 + sd and worker.dyn == fr.dyn and worker.max_steps == fr.max_steps
+        for k in OBS_KEYS_V2:
+            assert np.array_equal(ow[k], of[k])
+
+
+def _tiny_ppo(ppo_key):
+    pytest.importorskip("stable_baselines3")
+    from stable_baselines3 import PPO
+    from stable_baselines3.common.logger import configure
+    from stable_baselines3.common.vec_env import DummyVecEnv
+    import navgym_train as nt
+    venv = DummyVecEnv([lambda: MazeNavEnv(sizes=((3, 3),), version=2, gamma=1.0)])
+    P = nt.PPO_SETTINGS[ppo_key]
+    model = PPO("MultiInputPolicy", venv, n_steps=8, batch_size=8, device="cpu",
+                policy_kwargs={"features_extractor_class": nt.NavExtractor, "log_std_init": P["log_std_init"]})
+    model.set_logger(configure(None, [""]))
+    return nt, model, P
+
+
+def test_v3_is_v2_plus_a_std_ceiling_only():
+    import navgym_train as nt
+    v2, v3 = nt.PPO_SETTINGS["v2"], nt.PPO_SETTINGS["v3"]
+    assert "std_ceiling" not in v2 and "std_ceiling" not in nt.PPO_SETTINGS["v1"]
+    assert {k: v for k, v in v3.items() if k != "std_ceiling"} == v2 and v3["std_ceiling"] == 1.0
+
+
+def test_std_clamp_ceiling_binds_in_v3_and_not_in_v2():
+    import torch
+    for key, expect in (("v2", [math.exp(2.0)]), ("v3", [1.0])):
+        nt, model, P = _tiny_ppo(key)
+        cb = nt.StdFloor(P["std_floor"], P.get("std_ceiling"))
+        cb.init_callback(model)
+        with torch.no_grad():
+            model.policy.log_std.copy_(torch.tensor([2.0, -3.0]))
+        cb._clamp()
+        std = torch.exp(model.policy.log_std.detach()).tolist()
+        # the floor lifts -3 to log 0.2 in both; only v3 caps +2 at log 1.0
+        assert std[1] == pytest.approx(0.2, rel=1e-6)
+        assert std[0] == pytest.approx(expect[0], rel=1e-6)
+        assert cb.last_std_pre_clamp_per_dim == pytest.approx([math.exp(2.0), math.exp(-3.0)], rel=1e-6)
+        assert cb.ceiling_clamps == (1 if key == "v3" else 0) and cb.clamps == 1
+
+
+def _summ(s5, s6, c6, steps=30_000_000, n=48):
+    ev = {"4x4": {"success": 1.0, "collision": 0.0, "time_out": 0.0, "n": n},
+          "5x5": {"success": s5, "collision": 0.0, "time_out": 1 - s5, "n": n},
+          "6x6": {"success": s6, "collision": c6, "time_out": 0.0, "n": n}}
+    return {"ppo": "v3", "env_version": 2, "std_ceiling": 1.0, "total_steps": 30_000_000, "num_timesteps": steps,
+            "reached_last_step": steps >= 30_000_000, "final_eval_fresh_48": ev, "final_eval_heldout_48": ev,
+            "fresh_set": {"maze_seeds": "20000 + k, k = 0..47"}}
+
+
+def test_v3_verdict_rule(tmp_path):
+    import navgym_train as nt
+    def write(sd, s):
+        d = tmp_path / f"armV3-s{sd}"
+        d.mkdir(exist_ok=True)
+        (d / "summary.json").write_text(json.dumps(s))
+    assert nt.judge_v3(_summ(0.80, 0.70, 0.15))["meets"]                 # every bound inclusive
+    assert not nt.judge_v3(_summ(0.79, 0.90, 0.0))["meets"]
+    assert not nt.judge_v3(_summ(0.90, 0.69, 0.0))["meets"]
+    assert not nt.judge_v3(_summ(0.90, 0.90, 0.16))["meets"]
+    assert not nt.judge_v3(_summ(0.90, 0.90, 0.0, steps=29_999_000))["meets"]   # did not reach the last step
+    assert not nt.judge_v3(_summ(0.90, 0.90, 0.0, n=24))["meets"]
+    assert not nt.judge_v3({**_summ(0.90, 0.90, 0.0), "ppo": "v2"})["meets"]
+    write(2, _summ(0.85, 0.75, 0.05))
+    assert nt.verdict_v3(tmp_path)["verdict"] == "PENDING"
+    assert nt.verdict_v3(tmp_path, final=True)["verdict"] == "NEGATIVE"      # missing runs count as misses at the end
+    write(3, _summ(0.70, 0.75, 0.05))
+    assert nt.verdict_v3(tmp_path)["verdict"] == "PENDING"
+    write(4, _summ(0.81, 0.71, 0.10))
+    v = nt.verdict_v3(tmp_path, final=True)
+    assert v["verdict"] == "PASS" and v["seeds_passing"] == 2
+    write(4, _summ(0.81, 0.71, 0.20))
+    assert nt.verdict_v3(tmp_path, final=True)["verdict"] == "NEGATIVE"
+
+
+def test_diagnose_timeout_classes_follow_the_declared_order():
+    import navgym_diagnose as nd
+    assert nd.classify_timeout(0.1, 0.0, 1.0) == "stalled"                 # stalled wins over wall
+    assert nd.classify_timeout(1.0, 0.1, 0.6) == "stuck_at_wall"
+    assert nd.classify_timeout(1.0, 0.1, 0.1) == "looping"
+    assert nd.classify_timeout(1.0, 0.6, 0.9) == "slow_but_progressing"

@@ -34,10 +34,60 @@ Lab · MuJoCo · ONNX · Slurm/HPC.
   full-body gait. <a href="docs/GALLERY.md">Success and failure gallery</a>.</sub>
 </p>
 
+## Highlights
+
+<p align="center">
+  <img src="docs/gifs/random-maze-explore.gif" width="760" alt="Top view of a randomized 6x6 maze. A biped turns in place and walks forward along an orange breadcrumb path to a green goal. Side panels show its ray depth, lidar sectors and the occupancy map it builds from its own lidar, with the A* plan. Badge: GOAL REACHED 73.1 s, GIF at 5x."><br>
+  <sub>A new maze every seed, so the route cannot be memorized. Learned gait; scripted A* on a map built from the robot's own lidar; oracle pose and goal.
+  <b>24/24</b> goals (12 at 5×5, 12 at 6×6), no falls, no wall contact. <a href="docs/RANDOM_MAZE.md">Tables and stress tests</a></sub>
+</p>
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/gifs/navgym-learned-maze.gif" width="420" alt="Top view of a randomized 6x6 maze. The biped walks to the green goal under forward-speed and turn commands from a learned navigation policy; side panels show ray depth, lidar sectors and the lidar map, with no planner. Badge: GOAL REACHED 51.3 s, GIF at 4x."><br>
+      <sub><b>Exploratory.</b> The planner is replaced by a PPO navigation policy trained in a 2-D gym and deployed unchanged on the physics biped (no planner in the loop; oracle pose and goal).
+      <b>10/12</b> never-seen 6×6 mazes, 0 falls (A*: 12/12); the policy missed its predeclared gym bar by one clause, and this clip's maze is inside its training-seed range.</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/gifs/isaac/maze_both_panels.gif" width="420" alt="Isaac Sim top view of a biped walking a corridor to a button; side panels show its stereo ray depth, the pooled 4x4 it reads, and 36 lidar sectors."><br>
+      <sub>Isaac Sim: a learned PPO policy that reads its own 36 lidar sectors and pooled ray depth (no RGB) reaches the button; oracle waypoint heading.
+      This checkpoint <b>32/32</b>, all 12 checkpoints <b>380/384</b> with training observation noise on. Blind policies score 95/96, so this is not a sensor-benefit claim.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/gifs/inspection-maze-panels.gif" width="420" alt="The hero inspection episode from above, with robot-eye view, 8x8 stereo ray depth and 36-sector lidar panels. Badge: COMPLETED 17.36 s."><br>
+      <sub>The inspection episode above, with the lidar and ray depth that drive its speed brake. Learned gait, oracle waypoints. <b>3/3</b>; both failure controls <b>0/3</b>.</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/gifs/weekend-team3.gif" width="420" alt="Three humanoids in one MuJoCo world wait at a red airlock door, cross, and meet on green rendezvous discs. Caption: COMPLETED, learned gait plus oracle team supervisor, 1.1x."><br>
+      <sub>Three robots in one world: inspect, wait, cross the airlock, rendezvous. Learned gait, oracle team supervisor. <b>5/5</b>; both controls <b>0/5</b>.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/gifs/dr_pair.gif" width="420" alt="Two bipeds given the same strafe command in MuJoCo. Left, randomized, walks. Right, un-randomized, falls."><br>
+      <sub>Isaac-trained PPO, scored in MuJoCo. The highest-training-reward policy (right, no randomization) falls in <b>21/90</b> episodes; the default randomization <b>0/90</b>.</sub>
+    </td>
+    <td width="50%" align="center">
+      <sub><a href="docs/GALLERY.md">Every clip, successes and failures</a> ·
+      <a href="docs/STATUS.md">status of every workstream, negatives included</a> ·
+      <a href="SLURM_JOBS.md">job ledger with predeclared rules</a></sub>
+    </td>
+  </tr>
+</table>
+
+<sub>Learned = PPO policy, frozen at evaluation. Scripted = hand-written planner or supervisor.
+Oracle = simulator ground truth (pose, goal, waypoints) given to the controller.</sub>
+
 ## Latest measured results
 
 | Experiment | Evidence | Boundary |
 |---|---|---|
+| Randomized-maze mission (Sept 24–27) | **24/24** unseen mazes, 0 falls, 0 wall contacts; 6×6 at 35 % packet dropout: **12/12** reached, 11 clean | Learned gait, scripted A* on the robot's own lidar map, oracle pose and goal; MuJoCo only |
+| Learned navigation on the physics biped (Sept 27) | **10/12** never-seen 6×6 mazes, 0 falls (A* 12/12) | Exploratory: the gym policy missed its predeclared held-out bar by one clause; oracle pose and goal |
+| Turning gait, cooperative lift, standing cube-to-shelf (Sept 27) | Turning: 1 of 12 seeds qualifies; scripted lift-and-hold **0/10**; standing policy stands but never places | Negatives, recorded with their mechanisms in [status](docs/STATUS.md) |
 | Repaired goal-reaching PPO | **379/384** final-stage first episodes; 4 sensor conditions × 3 seeds × 32 envs; all 36 curriculum jobs completed | 12-DoF biped, fixed corridor, oracle waypoints, observation noise disabled; not a sensor-benefit claim |
 | Two-turn inspection mission | **3/3** nominal; **0/3** wrong-branch and **0/3** complete-outage controls | 22-DoF MuJoCo humanoid; known map/pose and frozen gait |
 | Two-/three-robot airlock | **5/5** each; both negative controls **0/5** each | One physical world, explicit synchronization; no carrying or newly trained MARL |
