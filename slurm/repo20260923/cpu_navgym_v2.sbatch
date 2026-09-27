@@ -2,7 +2,7 @@
 #SBATCH --job-name=navgym-v2
 #SBATCH --account=eecs
 #SBATCH --partition=share
-#SBATCH --constraint=haswell&el8
+#SBATCH --constraint=el9
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=32G
 #SBATCH --time=26:00:00
