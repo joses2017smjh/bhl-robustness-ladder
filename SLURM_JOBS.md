@@ -3026,3 +3026,13 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
 - **TurnBoth-s0 qualification** `21442352` — **QUALIFIED** under its predeclared rule: turn 10/10 (need 9; yaw +291/−245/+296/−239/+227/−194/+281/−245/+232/−195°), walk 3/3 (drift −5.4/0.0/−3.4°), push 7/60 = 0.117 (need ≤ 0.15; the shipped arms-dr1.0 reference is 7/60 = 0.117). Scored seeds disjoint from everything seen on this checkpoint. **Label:** LEARNED policy, MuJoCo replay; a single checkpoint (1 of 12 turning-arm seeds) that marches in place at zero command and turns while stepping — not a reliable recipe. Output `results/repo-gpu-20260923/turn-20260927/qualify/arms-turn-turnboth-s0__qualify.json`.
 - **Isaac replay probe** `21442353` — COMPLETE (Isaac exited after all 6 runs; `isaac-probe/isaac_probe.json`). Pure yaw 0.6 rad/s after a 3 s settle, 32 envs, per direction medians: TurnCmd s0/s1/s2 0/32, 0/32, 0/32 (12–15°); TurnBoth-s1 2/32; shipped arms-dr1.0-s0 0/32 (4°) — all **< 8/32 = not learned** (the failure is in the policy, not a sim2sim gap). TurnBoth-s0 11/32 = **mixed**: median +154.7° in the + direction, 11.5° in the − direction, 0 median lift-offs — in Isaac it turns one way only, where MuJoCo turns it both ways (above). Neither reading supports a sim2sim-gap explanation for the other 11 checkpoints.
 - **TurnRest smoke** `21442357` — PASS (loaded `arms-turn-turnboth-s0/model_5999.pt`, reached its last iteration); array `21442358` running.
+- **NavGym physics transfer** `21442350` — COMPLETED 00:45:38 (`results/navgym-transfer-20260927/transfer_table.json`). **EXPLORATORY** (the v2 arm did not pass its gym gate; oracle pose and goal; the learned actor commands forward speed and yaw rate only — the biped gait's interface has no sideways channel). Physics biped in MuJoCo, 6×6 mazes, n = 12 each:
+
+  | driver | hard-6×6 seeds 0–11 (training range) | fresh 6×6 seeds 30000–30011 (never seen) |
+  |---|---|---|
+  | A* on the lidar map + turn-then-walk (SCRIPTED) | 12/12, median 73.1 s | 12/12, median 58.9 s |
+  | armA-s1 best (LEARNED) | 11/12, 0 falls, median 51.3 s | 10/12, 0 falls, 2 time-outs, median 52.0 s |
+  | armA-s1 final (LEARNED) | 10/12, median 72.8 s | 10/12, median 55.0 s |
+  | armA-s0 best (LEARNED) | 7/12, median 69.5 s | 4/12 (6 stuck), median 59.2 s |
+
+  Reading: the best learned actor transfers from the kinematic gym to the physics biped with 0 falls and 0 wall contacts and is faster than A* where it succeeds, but reaches fewer goals (10/12 vs 12/12 on fresh mazes); seed-to-seed spread is large (s0 4/12). Render gate (≥ 8/12 on set 1) met by armA-s1 best (11/12) → render `21442351` running (seed 8).
