@@ -336,6 +336,20 @@ for _task, _variants in (
             },
         )
 
+# Side-deck standing cube (CubeToShelfStand3): a different, easier task than
+# CubeToShelf and CubeToShelfStand2, with its OWN runner (log std, entropy 0.001).
+# Separate loop: the tuple loop above hardcodes _V2_RUNNER.
+for _vis, _cls in task_v2_env_cfg.CUBE_STAND3_VARIANTS.items():
+    gym.register(
+        id=f"TaskV2-BHL-CubeToShelfStand3-{_vis.capitalize()}-v0",
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={
+            "env_cfg_entry_point": _cls,
+            "rsl_rl_cfg_entry_point": task_v2_env_cfg._STAND3_RUNNER,
+        },
+    )
+
 # ------------------------------------------------------------------ B3: ice
 # Patchy friction on flat ground. The blind/depth pair is the negative control
 # for the depth claim; the visible arm separates "depth helps without seeing"

@@ -324,5 +324,429 @@ class LauncherHeaderTest(unittest.TestCase):
             self.assertIn(s, head, s)
 
 
+
+# ============================================================ Stand3 (side deck)
+TRAIN3_SBATCH = REPO / "slurm/repo20260923/gpu_v2_stand3_train.sbatch"
+COOP_LIFT_CFG = REPO / "src/bhl_robust/tasks/coop_lift_env_cfg.py"
+SMOKE3_INNER = REPO / "slurm/repo20260923/inner_v2_stand3_smoke.sh"
+
+
+def _cfg_terms(class_name):
+    """(kind, func name, param keys) for every stand.* term a cfg class sets."""
+    tree = ast.parse(TASK_V2_CFG.read_text())
+    cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == class_name)
+    gate_keys = {"gate_free", "gate_std"}
+    out = []
+    for call in ast.walk(cls):
+        if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+                and call.func.id in ("RewTerm", "CurrTerm", "DoneTerm")):
+            continue
+        kw = {k.arg: k.value for k in call.keywords}
+        func = kw["func"]
+        if not (isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name)
+                and func.value.id == "stand"):
+            continue
+        p = kw.get("params")
+        keys = set()
+        if isinstance(p, ast.Dict):
+            for k in p.keys:
+                if k is None:
+                    keys |= gate_keys
+                else:
+                    keys.add(k.value)
+        elif isinstance(p, ast.Call) and getattr(p.func, "id", "") == "dict":
+            keys |= gate_keys
+        out.append((call.func.id, func.attr, keys))
+    return out
+
+
+class Stand3GeometryTests(unittest.TestCase):
+    def test_deck_clear_of_spawned_cube(self):
+        # far face of a spawned cube at the jitter limit, plus clearance
+        self.assertGreaterEqual(sm.DECK_EDGE - (sm.CUBE_HALF + sm.OBJ_X_JITTER), 0.02 - 1e-9)
+
+    def test_lip_stops_a_slide_and_the_curriculum_clears_it(self):
+        # the lip stops a flat slide; it does not stop a push-and-tip, which the
+        # docstrings say and the tilt diagnostics record
+        self.assertGreater(sm.DECK_TOP, sm.PLINTH_TOP)
+        self.assertGreater(sm.PLINTH_TOP + 0.04, sm.DECK_TOP)      # first lift stage clears it
+        self.assertGreater(sm.PLINTH_TOP + sm.STAND3_LIFT_MAX, sm.DECK_TOP)
+        self.assertLess(sm.STAND3_LIFT_MAX, 0.19)                  # Stand2 climbed to +0.19
+
+    def test_shift_is_stated_honestly(self):
+        # the required shift exceeds the measured feet-planted envelope; the
+        # docstrings and the launcher say so rather than "within reach"
+        self.assertAlmostEqual(sm.REQUIRED_SHIFT, 0.19, places=6)
+        self.assertGreater(sm.REQUIRED_SHIFT, sm.MEASURED_SHIFT_ARMS_TWIST)
+        self.assertLess(sm.REQUIRED_SHIFT, 1.2 / 6.0 + 1e-9)       # 6x shorter than Stand2
+        head = TRAIN3_SBATCH.read_text().split("set -euo")[0]
+        self.assertIn("NOT", head)
+        self.assertIn("mechanism not asserted", head)
+        self.assertNotIn("lift required", TASK_V2_CFG.read_text())
+
+    def test_income_weights_match_the_configs(self):
+        # Every positive non-terminal term Stand3 runs: the base coop-lift
+        # RewardsCfg's positive weights (read from source) plus deck_progress.
+        tree = ast.parse(COOP_LIFT_CFG.read_text())
+        cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "RewardsCfg")
+        pos = {}
+        for st in cls.body:
+            if isinstance(st, ast.Assign) and isinstance(st.value, ast.Call):
+                w = {k.arg: k.value for k in st.value.keywords}.get("weight")
+                v = ast.literal_eval(w)
+                if v > 0:
+                    pos[st.targets[0].id] = v
+        base = {k: v for k, v in sm.STAND3_INCOME_WEIGHTS.items() if k != "deck_progress"}
+        self.assertEqual(pos, base)
+        # the only runtime weight writer on these terms (stage_lift_on_pinch)
+        # restores exactly the base weights, never more
+        mdp = ast.parse((COOP_LIFT_CFG.parent / "coop_lift_mdp.py").read_text())
+        fn = next(n for n in mdp.body if isinstance(n, ast.FunctionDef) and n.name == "stage_lift_on_pinch")
+        defaults = dict(zip([a.arg for a in fn.args.args][-len(fn.args.defaults):],
+                            [ast.literal_eval(d) for d in fn.args.defaults]))
+        self.assertEqual((defaults["progress_weight"], defaults["bonus_weight"]),
+                         (base["lift_progress"], base["lifting_object"]))
+        # no ancestor in task_v2_env_cfg raises a weight by assignment; the one
+        # `.weight =` is Stand2's placed, which Stand3 replaces
+        import re
+        self.assertEqual(re.findall(r"\.weight = .*", TASK_V2_CFG.read_text()),
+                         [".weight = stand.PLACED_WEIGHT"])
+        self.assertEqual(sm.STAND3_INCOME_WEIGHTS["deck_progress"], sm.DECK_PROGRESS_WEIGHT)
+        # Stand3 adds no other positive term than deck_progress and placed, and
+        # keeps Stand2's lift terms (it does not reassign them)
+        src = TASK_V2_CFG.read_text()
+        s3 = src[src.index("class CubeToShelfStand3Cfg"):src.index("CUBE_STAND3_VARIANTS = ")]
+        self.assertNotIn("r.lift_progress =", s3)
+        self.assertNotIn("r.lifting_object =", s3)
+        self.assertNotIn("deck_edge", s3)
+        self.assertIn("weight=stand.STAND3_PLACED_WEIGHT", s3)
+        self.assertNotIn("weight=stand.PLACED_WEIGHT", s3)
+        runner = src[src.index("class TaskV2Stand3PPORunnerCfg"):src.index("_STAND3_RUNNER = TaskV2Stand3PPORunnerCfg")]
+        self.assertIn(f"gamma={sm.STAND3_GAMMA}", runner)
+
+    def test_placing_beats_every_hover(self):
+        # 2026-09-27 review: `success` terminates, so the bonus must beat the
+        # discounted continuation of the RICHEST non-terminal state, not just
+        # the over-deck hover. With the lift terms ungated, that is lifted +
+        # pinched over a deck centre: 24.5 weight = 0.98/step <= 98 discounted.
+        per_step = sum(sm.STAND3_INCOME_WEIGHTS.values()) * sm.STEP_DT
+        self.assertAlmostEqual(sum(sm.STAND3_INCOME_WEIGHTS.values()), 24.5)
+        self.assertAlmostEqual(sm.STAND3_HOVER_BOUND, per_step / (1 - sm.STAND3_GAMMA))
+        self.assertAlmostEqual(sm.STAND3_HOVER_BOUND, 98.0)
+        bonus = sm.STAND3_PLACED_WEIGHT * sm.STEP_DT
+        self.assertAlmostEqual(bonus, 200.0)
+        self.assertGreaterEqual(bonus, 2.0 * sm.STAND3_HOVER_BOUND)
+        # the plinth hover Stand2 s0 learned (deck_progress at x = 0) is below
+        # the bound, so it is covered too
+        k0 = float(sm.deck_progress_kernel(torch.tensor([[0.0, 0.0, 0.62]]))[0])
+        plinth = (per_step - sm.DECK_PROGRESS_WEIGHT * sm.STEP_DT * (1 - k0)) / (1 - sm.STAND3_GAMMA)
+        self.assertLess(plinth, sm.STAND3_HOVER_BOUND)
+        self.assertGreater(bonus, 2.0 * plinth)
+        # lowering + 12-step hold forfeits lifting_object (seated centre is below
+        # every lift threshold) and at most all of lift_progress: small vs the bonus
+        self.assertLess(sm.DECK_SEATED_Z, sm.STAND3_CUBE_Z + 0.04)
+        forfeit = (15.0 + 2.0) * sm.STEP_DT * 25
+        self.assertLess(forfeit + sm.STAND3_HOVER_BOUND, bonus)
+        # and the bonus is itself discounted over those ~25 steps (review round 2):
+        # 200 x 0.99^25 = 156 still clears the 98 bound by > 50
+        self.assertGreater(bonus * sm.STAND3_GAMMA ** 25 - sm.STAND3_HOVER_BOUND, 50.0)
+        # Stand2's weight is untouched
+        self.assertEqual(sm.PLACED_WEIGHT, 2500.0)
+
+
+class Stand3KillRuleTests(unittest.TestCase):
+    """2026-09-27 review: success ends the episode, so a seed that places quickly has
+    short episodes; Stand2's length clause would kill it and record it as not placed."""
+
+    def test_placing_seed_is_not_killed_for_short_episodes(self):
+        v = sm.kill_verdict3(70.0, 0.0, 0.9)
+        self.assertEqual(v["verdict"], "CONTINUE")
+        self.assertTrue(v["length_clause_skipped"])
+        self.assertEqual(sm.kill_verdict(70.0, 0.0, 0.9)["verdict"], "KILL")   # Stand2's rule would
+
+    def test_falling_seed_is_still_killed(self):
+        self.assertEqual(sm.kill_verdict3(70.0, 0.05, 0.0)["verdict"], "KILL")
+        v = sm.kill_verdict3(70.0, 0.50, 0.05)             # success under the bar: length clause applies
+        self.assertEqual(v["verdict"], "KILL")
+        self.assertFalse(v["length_clause_skipped"])
+        self.assertEqual(sm.kill_verdict3(326.1, 0.02, 0.05)["verdict"], "KILL")   # nonfall clause kept
+        self.assertEqual(sm.kill_verdict3(math.nan, math.nan, math.nan)["verdict"], "KILL")
+
+    def test_matches_stand2_below_the_success_bar(self):
+        for args in ((177.5, 0.053, 0.0), (326.1, 0.447, 0.0), (60.0, 0.30, 0.0), (150.0, 0.2, 0.09)):
+            self.assertEqual(sm.kill_verdict3(*args)["verdict"], sm.kill_verdict(*args)["verdict"])
+
+    def test_launcher_uses_the_stand3_kill_rule(self):
+        text = (REPO / "slurm/repo20260923/gpu_v2_stand3_train.sbatch").read_text()
+        self.assertIn("sm.evaluate_kill3(sc)", text)
+        self.assertNotIn("sm.evaluate_kill(sc)", text)
+        self.assertIn("kill_verdict3", text)
+
+
+class Stand3KernelTests(unittest.TestCase):
+    def p(self, x, y=0.0, z=None):
+        return torch.tensor([[x, y, sm.DECK_SEATED_Z if z is None else z]])
+
+    def seated(self, x, y=0.0, z=None, v=0.0):
+        return bool(sm.seated_mask(self.p(x, y, z), torch.tensor([v]))[0])
+
+    def test_seated_mask(self):
+        self.assertTrue(self.seated(sm.DECK_CENTER))
+        self.assertTrue(self.seated(-sm.DECK_CENTER))              # either deck
+        self.assertFalse(self.seated(0.0, z=sm.STAND3_CUBE_Z))     # spawn
+        self.assertFalse(self.seated(sm.DECK_CENTER, z=sm.DECK_SEATED_Z + 0.05))   # hovering
+        # release is not checked: still, 1.5 cm above the deck counts (SEATED_NOTE)
+        self.assertTrue(self.seated(sm.DECK_CENTER, z=sm.DECK_SEATED_Z + 0.015))
+        self.assertIn("hands may still be on it", sm.SEATED_NOTE)
+        self.assertFalse(self.seated(sm.DECK_CENTER, v=0.2))       # moving
+        self.assertFalse(self.seated(sm.DECK_CENTER, y=0.15))      # off the side
+        self.assertFalse(self.seated(sm.DECK_CENTER, z=0.14))      # on the floor
+        self.assertFalse(self.seated(sm.DECK_EDGE))                # COM on the edge
+        self.assertFalse(self.seated(0.50))                        # past the far margin
+
+    def test_over_deck(self):
+        self.assertFalse(hasattr(sm, "off_deck"))                  # lift terms not position-gated
+        p = torch.tensor([[0.3, 0.0, 0.6], [-0.3, 0.0, 0.14], [0.0, 0.0, 0.55]])
+        self.assertEqual(sm.over_deck_mask(p).tolist(), [True, False, False])
+
+    def test_deck_progress(self):
+        xs = torch.linspace(0.0, sm.DECK_CENTER, 50)
+        p = torch.stack([xs, torch.zeros(50), torch.full((50,), 0.55)], 1)
+        k = sm.deck_progress_kernel(p)
+        self.assertTrue(bool((k[1:] > k[:-1]).all()))              # rises toward the deck
+        self.assertAlmostEqual(float(k[-1]), 1.0, places=5)
+        self.assertTrue(torch.allclose(k, sm.deck_progress_kernel(p * torch.tensor([-1.0, 1, 1]))))
+        self.assertEqual(float(sm.deck_progress_kernel(torch.tensor([[0.3, 0.0, 0.14]]))[0]), 0.0)
+        # steeper at the plinth than Stand2's carry (0.68 per metre at x = 0)
+        slope = sm.DECK_PROGRESS_WEIGHT * (1 - math.tanh(sm.DECK_CENTER / sm.DECK_PROGRESS_STD) ** 2) \
+            / sm.DECK_PROGRESS_STD
+        self.assertGreater(slope, 3.0 * 0.68)
+
+    def test_clipped_action_rate(self):
+        a, b = torch.randn(8, 44), torch.randn(8, 44)
+        self.assertTrue(torch.allclose(sm.clipped_action_rate(a, b),
+                                       torch.sum((a - b) ** 2, dim=-1)))
+        huge = torch.full((2, 44), 1e30)
+        r = sm.clipped_action_rate(huge, -huge)
+        self.assertTrue(bool(torch.isfinite(r).all()))
+        self.assertAlmostEqual(float(r[0]), 44 * (2 * sm.ACTION_CLIP) ** 2, places=1)
+
+    def test_body_z_tilt(self):
+        s2 = math.sqrt(0.5)
+        w, x, y, z = (torch.tensor(v) for v in ([1.0, s2, s2, math.cos(0.2)],
+                                                 [0.0, s2, 0.0, math.sin(0.2)],
+                                                 [0.0, 0.0, 0.0, 0.0],
+                                                 [0.0, 0.0, s2, 0.0]))
+        t = sm.body_z_tilt_deg(w, x, y, z)
+        # upright; tipped 90 deg about x (a cube tipped onto a side face);
+        # yawed 90 deg (still upright); tilted 22.9 deg about x
+        self.assertTrue(torch.allclose(t, torch.tensor([0.0, 90.0, 0.0, 22.918]), atol=1e-3))
+        self.assertTrue(bool(t[1] > sm.TILT_TIPPED_DEG) and bool(t[3] < sm.TILT_TIPPED_DEG))
+
+    def test_clip_bounds(self):
+        self.assertGreaterEqual(0.25 * sm.ACTION_CLIP, 2.5)        # past every joint range
+        self.assertGreater(sm.TARGET_CLIP, sm.MAX_JOINT_LIMIT)
+        self.assertGreater(sm.OBS_CLIP, 2.0 * 10)                  # far above obs noise
+        self.assertEqual((sm.STAND3_ENTROPY_COEF, sm.STAND3_STD_TYPE), (0.001, "log"))
+
+
+class _FakeV2Stand3(_FakeV2):
+    def __init__(self, p, speed):
+        self.p, self.speed = p, speed
+
+    def _obj_local(self, env, name="object"):
+        return self.p
+
+    def _held(self, env, key, now, steps):
+        buf = getattr(env, key, torch.zeros_like(now, dtype=torch.long))
+        buf = torch.where(now, buf + 1, torch.zeros_like(buf))
+        setattr(env, key, buf)
+        return buf >= steps
+
+
+class _FakeCoopStand3(_FakeCoop):
+    def __init__(self, tilt_a, tilt_b, vel):
+        super().__init__(tilt_a, tilt_b)
+        self.vel = vel
+
+    def _t(self, v):
+        return v
+
+
+class Stand3WrapperTests(unittest.TestCase):
+    def setUp(self):
+        self.mod = _load()
+        p = torch.tensor([[0.0, 0.0, 0.62], [sm.DECK_CENTER, 0.0, sm.DECK_SEATED_Z]])
+        vel = torch.zeros(2, 3)
+        self.coop = _FakeCoopStand3(torch.tensor([0.0, 0.0]), torch.tensor([0.0, 0.0]), vel)
+        self.v2 = _FakeV2Stand3(p, vel.norm(dim=-1))
+        self.mod._coop = lambda: self.coop
+        self.mod._v2 = lambda: self.v2
+        obj = types.SimpleNamespace(data=types.SimpleNamespace(root_lin_vel_w=vel))
+        self.env = types.SimpleNamespace(scene={"robot_a": "robot_a", "robot_b": "robot_b",
+                                                "object": obj})
+
+    def test_lift_terms_not_gated_by_position(self):
+        # Stand3 inherits Stand2's gated_* lift terms: same pay over a deck as
+        # over the plinth (2026-09-27 review), so crossing the deck edge costs nothing
+        m, e = self.mod, self.env
+        self.assertFalse(hasattr(m, "deck_gated_object_is_lifted"))
+        self.assertFalse(hasattr(m, "deck_gated_lift_progress"))
+        self.assertEqual(m.gated_object_is_lifted(e, minimal_height=0.04).tolist(), [1.0, 1.0])
+
+    def test_success_holds_once_per_call(self):
+        m, e = self.mod, self.env
+        outs = [m.cube_on_side_deck(e, hold_steps=3).tolist() for _ in range(3)]
+        self.assertEqual(outs, [[False, False], [False, False], [False, True]])
+
+    def test_success_bonus_reads_the_termination(self):
+        env = types.SimpleNamespace(termination_manager=_TermMgr({
+            "success": torch.tensor([False, True])}))
+        self.assertEqual(self.mod.success_bonus(env).tolist(), [0.0, 1.0])
+
+    def test_diagnostics(self):
+        self.assertAlmostEqual(self.mod.over_deck_share(self.env, None), 0.5)
+        self.assertAlmostEqual(self.mod.cube_abs_x_mean(self.env, None), sm.DECK_CENTER / 2, places=6)
+
+    def test_action_rate_wrapper(self):
+        am = types.SimpleNamespace(action=torch.full((1, 44), 1e20), prev_action=torch.zeros(1, 44))
+        r = self.mod.action_rate_clipped_l2(types.SimpleNamespace(action_manager=am))
+        self.assertAlmostEqual(float(r[0]), 44 * sm.ACTION_CLIP ** 2, places=1)
+
+
+MJCF = Path("/nfs/hpc/share/sanchej7/Humanoid_Lite/mjcf_cache/mjcf_humanoid/berkeley_humanoid_lite.xml")
+
+
+@unittest.skipUnless(MJCF.is_file(), "MJCF cache not available")
+class TargetClipTest(unittest.TestCase):
+    def test_target_clip_never_binds_inside_the_joint_limits(self):
+        import re
+        joints = re.findall(r'<joint [^>]*type="hinge"[^>]*>', MJCF.read_text())
+        self.assertEqual(len(joints), 22)
+        lims = [abs(float(v)) for j in joints
+                for a, b in re.findall(r'range="([-0-9.e]+) ([-0-9.e]+)"', j) for v in (a, b)]
+        self.assertAlmostEqual(max(lims), sm.MAX_JOINT_LIMIT, places=2)
+        self.assertLess(max(lims), sm.TARGET_CLIP)
+
+
+class Stand3CfgContractTests(unittest.TestCase):
+    def test_every_stand3_term_matches_its_signature(self):
+        terms = _cfg_terms("CubeToShelfStand3Cfg")
+        names = {f for _, f, _ in terms}
+        self.assertEqual(names, {"gated_deck_progress", "cube_on_side_deck", "success_bonus",
+                                 "action_rate_clipped_l2", "over_deck_share", "cube_abs_x_mean",
+                                 "cube_tilted_share", "tipped_over_deck_share"})
+        for kind, fname, keys in terms:
+            sig = inspect.signature(getattr(sm, fname)).parameters
+            args = list(sig)
+            with_def = [a for a in args if sig[a].default is not inspect.Parameter.empty]
+            without = [a for a in args if sig[a].default is inspect.Parameter.empty]
+            min_argc = 2 if kind == "CurrTerm" else 1
+            ordered = without + with_def
+            self.assertEqual(set(ordered[min_argc:]), keys | set(with_def), (fname, keys))
+            self.assertTrue(keys <= set(args), (fname, keys))
+        # the lift terms Stand3 inherits are Stand2's
+        s2 = {f for _, f, _ in _cfg_terms("CubeToShelfStand2Cfg")}
+        self.assertTrue({"gated_lift_progress", "gated_object_is_lifted"} <= s2)
+
+    def test_stand3_is_additive(self):
+        src = TASK_V2_CFG.read_text()
+        self.assertIn("class CubeToShelfStand3Cfg(CubeToShelfStand2Cfg):", src)
+        self.assertIn('CUBE_STAND3_VARIANTS = _variants(CubeToShelfStand3Cfg, "CubeToShelfStand3")', src)
+        self.assertIn("class TaskV2Stand3PPORunnerCfg(TaskV2PPORunnerCfg):", src)
+        self.assertIn("_STAND3_RUNNER = _V2_RUNNER", src)          # v51 fallback
+        head = src[:src.index("# ------------------------------------------------- side-deck cube, Stand3")]
+        self.assertNotIn("Stand3", head)                           # appended only
+        self.assertEqual(src.count("_V2_RUNNER = "), 1)            # never reassigned
+        base = src[src.index("class TaskV2PPORunnerCfg"):src.index("_V2_RUNNER = TaskV2PPORunnerCfg")]
+        self.assertIn("entropy_coef=0.005", base)
+        # Stand2's constants, which its published result was trained on
+        self.assertEqual((sm.FALL_PENALTY_WEIGHT, sm.PLACED_WEIGHT, sm.GATE_FREE, sm.GATE_STD),
+                         (-500.0, 2500.0, 0.10, 0.25))
+
+    def test_runner_uses_the_declared_constants(self):
+        src = TASK_V2_CFG.read_text()
+        cls = src[src.index("class TaskV2Stand3PPORunnerCfg"):src.index("_STAND3_RUNNER = TaskV2Stand3PPORunnerCfg")]
+        self.assertIn("entropy_coef=stand.STAND3_ENTROPY_COEF", cls)
+        self.assertIn("std_type=stand.STAND3_STD_TYPE", cls)
+        self.assertNotIn("clip_actions", cls.split('"""', 2)[2])   # dead in scripts/train.py
+
+
+def _sc(last, success=0.0, time_out=0.6, over=0.2, value=10.0, nan_at=None):
+    it = range(0, last + 1)
+    val = [(i, (math.nan if i == nan_at else value)) for i in it]
+    return {sm.TAG_LEN: [(i, 400.0) for i in it], sm.TAG_TIMEOUT: [(i, time_out) for i in it],
+            sm.TAG_SUCCESS: [(i, success) for i in it], sm.TAG_FALLEN: [(i, 1 - time_out) for i in it],
+            sm.TAG_OVER_DECK: [(i, over) for i in it], sm.TAG_ABS_X: [(i, 0.1) for i in it],
+            sm.TAG_VALUE: val}
+
+
+class Stand3RuleTests(unittest.TestCase):
+    def test_complete_positive(self):
+        r = sm.evaluate_seed3(_sc(7999, success=0.2))
+        self.assertTrue(r["complete"] and r["placed"] and r["stands"] and r["shifts"] and r["stable"])
+        self.assertTrue(sm.pair_result3([r, sm.evaluate_seed3(_sc(4468))]).startswith(sm.POSITIVE_LABEL3))
+
+    def test_short_run_is_incomplete_never_a_result(self):
+        r = sm.evaluate_seed3(_sc(4468, success=0.5))              # Stand2 s1's last iteration
+        self.assertFalse(r["complete"] or r["placed"] or r["decided"])
+        neg = sm.evaluate_seed3(_sc(7999))
+        self.assertTrue(sm.pair_result3([neg, r]).startswith("INCOMPLETE"))
+        self.assertTrue(sm.pair_result3([neg, neg]).startswith("NEGATIVE"))
+
+    def test_nan_in_window_is_incomplete(self):
+        r = sm.evaluate_seed3(_sc(7999, success=0.5, nan_at=7990))
+        self.assertFalse(r["complete"] or r["placed"])
+        self.assertFalse(r["stable"])
+
+    def test_transient_spike_is_reported_not_voiding(self):
+        sc = _sc(7999, success=0.0)
+        sc[sm.TAG_VALUE][4357] = (4357, math.inf)
+        sc[sm.TAG_VALUE][4207] = (4207, 2.8e6)
+        r = sm.evaluate_seed3(sc)
+        self.assertTrue(r["complete"])
+        self.assertEqual(r["unstable_iters"], 2)
+        self.assertFalse(r["stable"])
+
+    def test_killed_is_decided_not_placed(self):
+        k = sm.evaluate_seed3(_sc(1016, success=0.5), killed=True)
+        self.assertTrue(k["decided"] and not k["placed"])
+        self.assertTrue(sm.pair_result3([k, sm.evaluate_seed3(_sc(7999))]).startswith("NEGATIVE"))
+
+    def test_budget_is_8000(self):
+        self.assertEqual(sm.STAND3_MAX_ITER, 8000)
+        self.assertFalse(sm.evaluate_seed3(_sc(7998))["complete"])
+
+
+@unittest.skipUnless(TRAIN3_SBATCH.is_file(), "launcher not written")
+class Stand3LauncherTests(unittest.TestCase):
+    def test_header_states_the_rules(self):
+        head = TRAIN3_SBATCH.read_text().split("set -euo pipefail")[0]
+        for s in ("model_1000", "< 100 steps", "(time_out + success) < 0.10", "iteration 7999",
+                  "finite", "INCOMPLETE", ">= 0.10 on at least one", ">= 0.50",
+                  "Curriculum/over_deck >= 0.10", "Loss/value > 1000", "DIFFERENT, EASIER task",
+                  "never compared", "fresh runs", "0.119", "0.19", "200 units",
+                  "98-unit", "NOT gated", "hands may", "Loss/value", "1e-5"):
+            self.assertIn(s, head, s)
+
+    def test_runner_check_matches_the_constants(self):
+        body = TRAIN3_SBATCH.read_text()
+        self.assertIn(f"entropy_coef: {sm.STAND3_ENTROPY_COEF}".replace(".", r"\."), body)
+        self.assertIn(f"std_type: {sm.STAND3_STD_TYPE}$", body)
+        self.assertIn("TaskV2-BHL-CubeToShelfStand3-Blind-v0", body)
+        self.assertIn("stand3_2026-09-27", body)
+        w = f"{sm.STAND3_PLACED_WEIGHT}".replace(".", r"\.")
+        self.assertIn(f"weight: {w}$", body)                       # placed weight checked at start
+        self.assertIn(r"stand_mdp:success_bonus$", body)
+        self.assertIn("evaluate_seed3", body)
+        self.assertIn("pair_result3", body)
+
+    def test_smoke_checks_terms(self):
+        body = SMOKE3_INNER.read_text()
+        for t in ("deck_progress", "action_rate_clipped", "over_deck", "cube_tilted",
+                  "tipped_over_deck", "carry", "object_xy", "termination_penalty", "194 322 578"):
+            self.assertIn(t, body)
+
+
 if __name__ == "__main__":
     unittest.main()
