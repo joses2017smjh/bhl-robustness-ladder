@@ -31,6 +31,17 @@ Protocols (`--protocol`, default carry):
   seed of a PASS, refuses to overwrite any output, and labels frame, banner,
   sidecar and caption "cooperative lift and hold — carry not achieved"
   (`scripted_carry.LIFT_HOLD_NOTE`) with the full label.
+* lift_place: the separate cooperative LIFT, HOLD and PLACE experiment
+  (`scripted_carry.LIFT_PLACE_RULE`, 20 s, `scripted_carry.PlaceParams`):
+  same harness, layout, hand pads, kp-30 grasping arm, cube and label; after
+  the lift the pair holds briefly, lowers the cube back onto its plinth,
+  opens the hands and stands. Scored seeds are 10-19 ONLY: the protocol
+  refuses any seed 0-9 (scored for the other protocols). Score mode refuses
+  an existing --out and prints `COOP-LIFT-PLACE crew N: ...` from the written
+  JSON. Render mode renders the median-by-hold successful seed of a PASS,
+  refuses to overwrite, and labels everything with
+  `scripted_carry.LIFT_PLACE_NOTE` ("cooperative lift, hold and place —
+  scripted arms, frozen learned gait; carry not achieved").
 
 Clip speed: the frame header states simulated time only (no speed claim). The
 mp4 is encoded at round(fps) (12 fps for 12.5 sim frames/s at stride 2, i.e.
@@ -64,6 +75,7 @@ from bhl_robust.eval import scripted_carry as sc                      # noqa: E4
 
 TASK = "coop_scripted_carry_v1"
 TASK_LIFT_HOLD = "coop_lift_hold_v1"
+TASK_LIFT_PLACE = "coop_lift_place_v1"
 
 
 def sha256(path) -> str | None:
@@ -136,6 +148,26 @@ def provenance(args, cfg, p) -> dict:
 def provenance_for(args, cfg, p) -> dict:
     """`provenance` for the chosen protocol (carry: exactly `provenance`)."""
     out = provenance(args, cfg, p)
+    if getattr(args, "protocol", "carry") == "lift_place":
+        q = sc.PlaceParams()
+        out.update({
+            "task": TASK_LIFT_PLACE, "protocol": "lift_place", "note": sc.LIFT_PLACE_NOTE,
+            "label_detail": sc.LIFT_PLACE_LABEL_DETAIL,
+            "scripted": "each robot's grasping arm: joint keyframes reach/squeeze/lift, hold, lower "
+                        "(PlaceParams.lower_to, reached from the lift keyframe), open, rest",
+            "oracle": ("cube pose from the simulator, used only to score; robot base poses drive "
+                       "station keeping" if q.station_keep else
+                       "cube pose from the simulator, used only to score; every velocity command is zero"),
+            "modelling_choices": out["modelling_choices"] + [
+                f"lowering starts at {sc.PlaceScript(p, q).t_lower_start:.2f} s so the cube is on the plinth "
+                "before the earliest grip slip seen under lift_hold on exploration seeds 100-119",
+                f"lowering target (LEFT arm) {list(sc.PlaceScript(p, q).lower_target)} "
+                + sc.describe_lower_target(sc.PlaceScript(p, q).lower_target),
+                "station keeping " + ("ON (oracle base poses)" if q.station_keep else "OFF"),
+            ],
+            "rule": sc.LIFT_PLACE_RULE, "place_params": sc.place_params_dict(q),
+        })
+        return out
     if getattr(args, "protocol", "carry") == "lift_hold":
         out.update({
             "task": TASK_LIFT_HOLD, "protocol": "lift_hold", "note": sc.LIFT_HOLD_NOTE,
@@ -159,6 +191,8 @@ def verdict_of(summary: dict) -> str:
 def score(args) -> int:
     if getattr(args, "protocol", "carry") == "lift_hold":
         return score_lift_hold(args)
+    if getattr(args, "protocol", "carry") == "lift_place":
+        return score_lift_place(args)
     cfg, policy, p, model, slots, pairs = load(args)
     rule = dict(sc.SUCCESS_RULE)
     seeds = parse_seeds(args.seeds)
@@ -235,6 +269,58 @@ def score_lift_hold(args) -> int:
     return 0
 
 
+def score_lift_place(args) -> int:
+    """Score mode of the lift-hold-place protocol. Never overwrites --out and
+    never runs a seed 0-9 (those are scored for the carry / lift_hold rules)."""
+    if args.out.exists():
+        raise SystemExit(f"COOP-LIFT-PLACE: REFUSED ({args.out} exists; score JSONs are never overwritten)")
+    seeds = parse_seeds(args.seeds)
+    if any(0 <= s < 10 for s in seeds):
+        raise SystemExit("COOP-LIFT-PLACE: REFUSED (seeds 0-9 are scored for the carry / lift_hold "
+                         "protocols; lift_place is scored on seeds 10-19 only)")
+    reserved = list(sc.LIFT_PLACE_RULE["seeds"])
+    if any(s in reserved for s in seeds) and not (seeds == reserved and args.seconds is None):
+        raise SystemExit("COOP-LIFT-PLACE: REFUSED (seeds 10-19 are reserved for the scored run: "
+                         "all of 10-19, full-length episodes, or none of them)")
+    rule = dict(sc.LIFT_PLACE_RULE)
+    if args.seconds is not None:
+        # a shortened episode is a pipeline check, never a scored run
+        rule["episode_s"] = float(args.seconds)
+    cfg, policy, p, model, slots, pairs = load(args)
+    q = sc.PlaceParams()
+    payload = provenance_for(args, cfg, p)
+    payload["scored_run"] = args.seconds is None and seeds == list(sc.LIFT_PLACE_RULE["seeds"])
+    payload["episodes"] = []
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    for seed in seeds:
+        t0 = time.time()
+        ep = sc.run_place_episode(model, slots, pairs, cfg, policy, seed, p, q=q, rule=rule)
+        ep["wall_s"] = round(time.time() - t0, 1)
+        payload["episodes"].append(ep)
+        for r in ep["pairs"]:
+            print(json.dumps({"protocol": "lift_place", "crew": args.crew, "seed": seed, "pair": r["pair"],
+                              "success": r["success"], "first_failed_check": r["first_failed_check"],
+                              "lift_peak_m": r["lift_peak_m"], "lift_hold_s": r["lift_hold_s"],
+                              "hold_end_s": r["hold_end_s"], "max_tilt_rad": r["max_tilt_rad"],
+                              "floor": r["cube_floor_contact"], "final_dz_m": r["final_dz_m"],
+                              "final_speed_mps": r["final_speed_mps"],
+                              "final_offset_xy_m": r["final_offset_xy_m"],
+                              "final_robot_contact": r["final_robot_contact"],
+                              "station_disp_max_m": r["station_disp_max_m"],
+                              "wall_s": ep["wall_s"]}), flush=True)
+        payload["summary"] = sc.summarize_lift_place(payload["episodes"], args.crew // 2, rule)
+        payload["summary"]["median_seed"] = sc.median_seed_by_hold(payload["episodes"])
+        payload["summary"]["verdict"] = verdict_of(payload["summary"])
+        if not payload["scored_run"]:
+            payload["summary"]["verdict"] = "PIPELINE_CHECK"
+            payload["summary"]["pass"] = False
+        args.out.write_text(json.dumps(payload, indent=1, allow_nan=False) + "\n")
+    # the verdict line is computed from the JSON as written
+    print(sc.lift_place_verdict_line(json.loads(args.out.read_text()), args.crew) + f" | json={args.out}",
+          flush=True)
+    return 0
+
+
 # ------------------------------------------------------------------ render
 
 class Recorder:
@@ -247,6 +333,7 @@ class Recorder:
 
         self.args, self.model, self.pairs = args, model, pairs
         self.lift_hold = getattr(args, "protocol", "carry") == "lift_hold"
+        self.lift_place = getattr(args, "protocol", "carry") == "lift_place"
         self.run_steps = np.zeros(len(pairs), dtype=int)    # current >= 5 cm run, per pair
         self.policy_dt = policy_dt
         self.render = not args.no_render
@@ -263,7 +350,8 @@ class Recorder:
             self.cam.azimuth, self.cam.elevation = args.azimuth, args.elevation
         self.last = None
 
-    def __call__(self, *, step, t, runner, script, pairs, lift, horiz, carry_on, carry_done, commands):
+    def __call__(self, *, step, t, runner, script, pairs, lift, horiz, carry_on, carry_done, commands,
+                 **extra):
         up = np.asarray(lift) >= sc.LIFT_HOLD_RULE["lift_hold_m"]
         self.run_steps = np.where(up, self.run_steps + 1, 0)
         if self.args.stride > 1 and step % self.args.stride:
@@ -285,6 +373,10 @@ class Recorder:
         footer = sc.LABEL + " | hand pads added | scripted arm kp 30"
         if self.lift_hold:
             footer = sc.LIFT_HOLD_NOTE + " | " + footer
+        if self.lift_place:
+            # shorter than NOTE + LABEL so it fits the 960+330 px frame (the note already says
+            # "scripted arms, frozen learned gait"; the remaining label part is the oracle cube pose)
+            footer = sc.LIFT_PLACE_NOTE + " | oracle cube pose | hand pads added, arm kp 30"
         frame = panels.compose_frame(main, [panel], header, footer, side_w=self.side_w)
         self.last = frame
         self.sink.add(np.ascontiguousarray(frame))
@@ -299,6 +391,8 @@ class Recorder:
         y = top + 8
         if self.lift_hold:
             return self._panel_lift_hold(d, img, y, f, fs, phase, runner, pairs, lift)
+        if self.lift_place:
+            return self._panel_lift_place(d, img, y, f, fs, phase, runner, pairs, lift)
         for k, pr in enumerate(pairs):
             F = runner.cube_forces(pr)
             state = "carrying" if carry_on[k] else ("stopped" if carry_done[k] else phase)
@@ -349,6 +443,37 @@ class Recorder:
             y += 17
         return img
 
+    def _panel_lift_place(self, d, img, y, f, fs, phase, runner, pairs, lift):
+        warn = (255, 196, 90)
+        for ln in ("cooperative lift, hold and place", "\u2014 carry not achieved"):
+            d.text((10, y), ln, font=f, fill=warn)
+            y += 20
+        y += 6
+        for k, pr in enumerate(pairs):
+            F = runner.cube_forces(pr)
+            c = runner.d.xpos[pr.cube_body]
+            off = c[:2] - self.model.geom_pos[pr.plinth_geom][:2]
+            lines = [f"pair {k}: {phase}",
+                     f"  cube lift   {100 * lift[k]:6.1f} cm",
+                     f"  held >= 5cm {self.run_steps[k] * self.policy_dt:6.1f} s",
+                     f"  off plinth  {100 * off[0]:+5.1f},{100 * off[1]:+5.1f} cm",
+                     f"  squeeze b/a {F['b']:4.1f} / {F['a']:4.1f} N",
+                     f"  robot tilt  {max(runner.tilt(pr.robot_a), runner.tilt(pr.robot_b)):5.2f} rad"]
+            for ln in lines:
+                d.text((10, y), ln, font=f, fill=panels.TEXT)
+                y += 20
+            y += 8
+        rule = sc.LIFT_PLACE_RULE
+        for ln in ["rule (predeclared):", f"  lift >= {100 * rule['lift_peak_m']:.0f} cm, >= "
+                   f"{100 * rule['lift_hold_m']:.0f} cm for {rule['lift_hold_s']:.0f} s,",
+                   f"  ends on the plinth (+/-{100 * rule['final_height_tol_m']:.0f} cm, centre on top),",
+                   f"  at rest, released, no fall, no floor, {rule['episode_s']:.0f} s",
+                   "", "learned: gait (legs + outer arm)", "scripted: grasping arm",
+                   "oracle: cube pose (scoring only)", "contact: MuJoCo, no welds"]:
+            d.text((10, y), ln, font=fs, fill=panels.DIM)
+            y += 17
+        return img
+
     def hold(self, seconds: float, banner: str, sub: str | None = None):
         if self.last is None:
             return
@@ -377,6 +502,8 @@ class Recorder:
 
 
 def render(args) -> int:
+    if getattr(args, "protocol", "carry") == "lift_place":
+        return render_lift_place(args)
     lift_hold = getattr(args, "protocol", "carry") == "lift_hold"
     tag = "COOP_LIFT_HOLD_RENDER" if lift_hold else "SCRIPTED_CARRY_RENDER"
     scored = json.loads(Path(args.render_from).read_text())
@@ -538,6 +665,143 @@ def render(args) -> int:
     return 0
 
 
+def render_lift_place(args) -> int:
+    """Render mode of the lift-hold-place protocol: only on a scored PASS, the
+    median-by-hold successful seed, nothing ever overwritten."""
+    tag = "COOP_LIFT_PLACE_RENDER"
+    scored = json.loads(Path(args.render_from).read_text())
+    s = scored.get("summary", {})
+    if scored.get("protocol") != "lift_place":
+        raise SystemExit(f"--protocol lift_place but {args.render_from} is protocol "
+                         f"{scored.get('protocol', 'carry')}")
+    if args.pipeline_check_seed is not None:
+        # login-node check of the render path only: blank frames, no GIF, any verdict
+        if not args.no_render:
+            raise SystemExit("--pipeline-check-seed requires --no-render")
+        if 0 <= args.pipeline_check_seed < 20:
+            raise SystemExit("--pipeline-check-seed must not be a scored seed (0-19)")
+        s = dict(s, median_seed=args.pipeline_check_seed, verdict="PIPELINE_CHECK")
+    else:
+        line = sc.lift_place_verdict_line(scored, scored.get("crew"))
+        # the seed is recomputed from the episodes, never taken from the stored summary
+        median = sc.median_seed_by_hold([e for e in scored.get("episodes", [])
+                                         if e["seed"] in sc.LIFT_PLACE_RULE["seeds"]])
+        s = dict(s, median_seed=median)
+        if not (line.split(" | ")[0].endswith(": PASS") and median is not None):
+            print(f"{tag}=SKIPPED verdict={line.split(' | ')[0].split(': ')[-1]} crew={scored.get('crew')} "
+                  f"(no success clip is rendered for a run that did not pass)", flush=True)
+            return 0
+        if scored.get("rule") != sc.LIFT_PLACE_RULE:
+            raise SystemExit("score JSON rule differs from scripted_carry.LIFT_PLACE_RULE")
+    if int(scored["crew"]) != args.crew:
+        raise SystemExit(f"--crew {args.crew} but {args.render_from} is crew {scored['crew']}")
+    stem = f"coop_lift_place_scripted_{args.crew}"
+    mp4 = args.out_dir / f"{stem}.mp4"
+    taken = [f for f in (args.gif, Path(args.gif).with_suffix(".json") if args.gif else None,
+                         mp4, args.out_dir / f"{stem}.json") if f is not None and Path(f).exists()]
+    if taken:
+        raise SystemExit(f"COOP-LIFT-PLACE-RENDER: REFUSED ({', '.join(map(str, taken))} exists; "
+                         f"outputs are never overwritten)")
+    seed = int(s["median_seed"])
+    args.seed_used = seed
+    want = next((e for e in scored["episodes"] if e["seed"] == seed), None)
+    cfg, policy, p, model, slots, pairs = load(args)
+    q = sc.PlaceParams()
+    if (sc.params_dict(p) != scored["params"] or sc.KEYFRAMES_LEFT != scored["keyframes_left"]
+            or json.loads(json.dumps(sc.place_params_dict(q))) != scored["place_params"]):
+        raise SystemExit("scripted_carry parameters changed since the scored run; re-score first")
+    args.out_dir.mkdir(parents=True, exist_ok=True)
+    rec = Recorder(args, model, pairs, float(cfg.policy_dt), mp4, Path(args.frames_root) / stem)
+    t0 = time.time()
+    rule = sc.LIFT_PLACE_RULE
+    if args.seconds is not None:
+        if args.pipeline_check_seed is None:
+            raise SystemExit("--seconds is only for --pipeline-check-seed")
+        rule = dict(rule, episode_s=float(args.seconds))
+    ep = sc.run_place_episode(model, slots, pairs, cfg, policy, seed, p, q=q, frame_hook=rec, rule=rule)
+    ok = all(r["success"] for r in ep["pairs"])
+    hold_s = min(r["lift_hold_s"] for r in ep["pairs"])
+    peak = min(r["lift_peak_m"] for r in ep["pairs"])
+    rec.hold(1.5, f"LIFTED {100 * peak:.0f} cm, HELD {hold_s:.1f} s, PLACED  (seed {seed})" if ok
+             else f"NOT REPRODUCED (seed {seed})", sub="cooperative lift, hold and place \u2014 carry not achieved")
+    sink = rec.close()
+    if sink["mp4"] is None and sink["frames"] > 0:
+        png = Path(sink["png_dir"])
+        for enc, extra in (("libx264", ["-preset", "veryfast", "-crf", "20"]), ("mpeg4", ["-q:v", "3"])):
+            r = subprocess.run([panels.ffmpeg_exe(), "-y", "-loglevel", "error", "-framerate",
+                                str(round(rec.fps / max(1, args.stride))), "-i", str(png / "frame_%04d.png"),
+                                "-c:v", enc, *extra, "-pix_fmt", "yuv420p", str(mp4)])
+            if r.returncode == 0 and mp4.is_file():
+                sink["mp4"] = str(mp4)
+                break
+    matches = [{"pair": a["pair"], "success": a["success"] == b["success"],
+                "lift_hold_s": a["lift_hold_s"], "scored_lift_hold_s": b["lift_hold_s"],
+                "final_offset_xy_m": a["final_offset_xy_m"], "scored_final_offset_xy_m": b["final_offset_xy_m"]}
+               for a, b in zip(ep["pairs"], want["pairs"])] if want else None
+    speed_mp4 = round(round(rec.fps / max(1, args.stride)) / (rec.fps / max(1, args.stride)), 4)
+    sim_per_gif = round(args.gif_speed * speed_mp4, 4)
+    result = {
+        "name": stem, "protocol": "lift_place", "note": sc.LIFT_PLACE_NOTE, "seed": seed, "crew": args.crew,
+        "reproduced_success": ok, "matches_scored_episode": matches,
+        "episode": {k: v for k, v in ep.items() if k != "trace"},
+        "frames": sink["frames"], "mp4": sink["mp4"], "mp4_sha256": sha256(mp4) if sink["mp4"] else None,
+        "no_render": args.no_render, "video_fps": rec.fps / max(1, args.stride),
+        "encoded_fps": round(rec.fps / max(1, args.stride)), "playback_speed_mp4": speed_mp4,
+        "frame_header_speed": None,
+        "camera": {"type": "free, follows mean cube xy", "distance": args.distance,
+                   "azimuth": args.azimuth, "elevation": args.elevation, "size": [args.width, args.height]},
+        "scored_json": os.path.relpath(Path(args.render_from).resolve(), REPO),
+        "scored_json_sha256": sha256(args.render_from),
+        "label": sc.LABEL, "label_detail": sc.LIFT_PLACE_LABEL_DETAIL,
+        "wall_seconds": round(time.time() - t0, 1),
+    }
+    if args.gif and result["mp4"] and ok and not args.no_render:
+        g = panels.write_gif(mp4, args.gif, fps=args.gif_fps, speed=args.gif_speed, width=args.gif_width,
+                             badge=f"GIF {sim_per_gif:.2f}x")
+        side = Path(args.gif).with_suffix(".json")
+        gate = sc.enforce_gif_budget(g, args.gif, side)
+        result["gif"] = g
+        if not gate["kept"]:
+            result["gif_deleted_over_budget"] = gate["deleted"]
+        else:
+            sidecar = {
+                "output": os.path.relpath(Path(args.gif).resolve(), REPO), "output_sha256": sha256(args.gif),
+                "output_mb": g["mb"], "within_budget": g["within_budget"],
+                "source_clip": os.path.relpath(mp4.resolve(), REPO), "source_sha256": result["mp4_sha256"],
+                "evidence": result["scored_json"], "evidence_sha256": result["scored_json_sha256"],
+                "protocol": "lift_place", "note": sc.LIFT_PLACE_NOTE,
+                "caption": (f"{sc.LIFT_PLACE_NOTE}: {args.crew} BHL humanoids lift a 0.28 m / 0.5 kg cube "
+                            f"together, hold it and set it back on its plinth (seed {seed}: lifted "
+                            f"{100 * peak:.1f} cm, held >= 5 cm for {hold_s:.1f} s, placed and released; "
+                            f"median hold of the successful seeds). {sc.LABEL}. Hand pads added; grasping "
+                            f"arm scripted at kp 30; the robots never walk. Plays at {sim_per_gif:.2f}x."),
+                "label": sc.LABEL, "label_detail": sc.LIFT_PLACE_LABEL_DETAIL,
+                "learned": scored.get("learned"), "scripted": scored.get("scripted"),
+                "oracle": scored.get("oracle"),
+                "modelling_choices": scored["modelling_choices"], "place_params": scored["place_params"],
+                "success_rule": scored["rule"], "summary": s,
+                "episode": [{k: r[k] for k in ("pair", "success", "lift_peak_m", "lift_hold_s", "hold_start_s",
+                                               "hold_end_s", "max_tilt_rad", "cube_floor_contact", "final_dz_m",
+                                               "final_speed_mps", "final_offset_xy_m", "final_robot_contact")}
+                            for r in ep["pairs"]],
+                "playback_speed": sim_per_gif, "gif_speed_setting": args.gif_speed,
+                "playback_speed_mp4": speed_mp4, "sim_seconds_per_gif_second": sim_per_gif,
+                "frame_header_speed": None, "badge": g.get("badge"), "gif": g,
+                "checkpoint": scored["checkpoint"], "checkpoint_sha256": scored["checkpoint_sha256"],
+                "module_sha256": scored["module_sha256"],
+            }
+            side.write_text(json.dumps(sidecar, indent=2, ensure_ascii=False) + "\n")
+    elif args.gif:
+        result["gif"] = None
+        result["gif_skipped"] = ("--no-render" if args.no_render else
+                                 "re-simulated episode did not succeed" if not ok else "no mp4")
+    (args.out_dir / f"{stem}.json").write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
+    gif_path = result["gif"]["gif"] if (result.get("gif") and not result.get("gif_deleted_over_budget")) else None
+    print(f"{tag} crew={args.crew} seed={seed} reproduced={ok} hold_s={hold_s:.2f} "
+          f"frames={sink['frames']} gif={gif_path} | {sc.LIFT_PLACE_NOTE}", flush=True)
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--deploy", type=Path, required=True)
@@ -545,7 +809,8 @@ def main() -> int:
     ap.add_argument("--cache-dir", type=Path, required=True)
     ap.add_argument("--crew", type=int, choices=(2, 4), default=2)
     ap.add_argument("--protocol", choices=sc.PROTOCOLS, default="carry",
-                    help="carry (default, SUCCESS_RULE) or lift_hold (LIFT_HOLD_RULE, no carry phase)")
+                    help="carry (default, SUCCESS_RULE), lift_hold (LIFT_HOLD_RULE, no carry phase) or "
+                         "lift_place (LIFT_PLACE_RULE, seeds 10-19 only)")
     ap.add_argument("--seeds", default="0-9", help="e.g. 0-9 or 100,101")
     ap.add_argument("--seconds", type=float, default=None,
                     help="shorten episodes (pipeline check only; the verdict becomes PIPELINE_CHECK)")
