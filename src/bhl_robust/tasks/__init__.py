@@ -109,6 +109,9 @@ for _id, _cfg in (
     # (turn_command.TurnRestMixVelocityCommand); trained as a FINE-TUNE of arms-turn-turnboth-s0
     # by slurm/repo20260923/gpu_turngait_v4.sbatch; judged by turn_test --protocol v2.
     ("Velocity-BHL-Arms-TurnRest-v0", arms_env_cfg.HumanoidTurnRestCfg),
+    # 2026-09-27: TurnRest + interval push with the adaptive push curriculum (TurnRest
+    # failed its push regression); fine-tuned by gpu_turngait_v5.sbatch.
+    ("Velocity-BHL-Arms-TurnRestPush-v0", arms_env_cfg.HumanoidTurnRestPushCfg),
 ):
     gym.register(
         id=_id,

@@ -460,3 +460,38 @@ class TurnTestV2xRuleTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TurnGaitV5WiringTests(unittest.TestCase):
+    """2026-09-27 follow-up to TurnRest's failed push regression: the TurnRestPush arm and
+    the continued-TurnBoth control (source-level; the configs need Isaac to import)."""
+
+    def test_turnrestpush_is_turnrest_plus_the_adaptive_push(self):
+        import ast
+        tree = ast.parse((REPO / "src/bhl_robust/tasks/arms_env_cfg.py").read_text())
+        cls = {n.name: n for n in tree.body if isinstance(n, ast.ClassDef)}
+        c = cls["HumanoidTurnRestPushCfg"]
+        self.assertEqual([b.id for b in c.bases], ["HumanoidTurnRestCfg"])
+        ann = {s.target.id: s.annotation.id for s in c.body if isinstance(s, ast.AnnAssign)}
+        self.assertEqual(ann, {"events": "ArmsPushEventsCfg", "curriculum": "ArmsPushCurriculumCfg"})
+        # the same two members as the push-adaptive task, nothing else changed
+        ref = {s.target.id: s.annotation.id for s in cls["HumanoidPushAdaptiveCfg"].body if isinstance(s, ast.AnnAssign)}
+        self.assertEqual(ann, ref)
+        self.assertFalse(any(isinstance(s, ast.FunctionDef) for s in c.body))
+
+    def test_registered(self):
+        text = (REPO / "src/bhl_robust/tasks/__init__.py").read_text()
+        self.assertIn('("Velocity-BHL-Arms-TurnRestPush-v0", arms_env_cfg.HumanoidTurnRestPushCfg)', text)
+
+    def test_v5_launcher_arms_and_rules(self):
+        text = (REPO / "slurm/repo20260923/gpu_turngait_v5.sbatch").read_text()
+        self.assertIn("#SBATCH --array=0-5%4", text)
+        self.assertIn("cont) PREFIX=arms-turn-turnboth-cont;   ARM_TASK=Velocity-BHL-Arms-TurnBoth-v0;", text)
+        self.assertIn("push) PREFIX=arms-turn-turnrestpush-ft; ARM_TASK=Velocity-BHL-Arms-TurnRestPush-v0;", text)
+        self.assertIn("SEED=$((IDX % 3))", text)
+        self.assertIn('TURNQ_RUN="$RUN_NAME" bash "$REPO/slurm/repo20260923/cpu_turn_qualify.sbatch"', text)
+        self.assertIn("PUSH arm PASSES iff >= 2 of its 3 seeds both PASS turn_test v2 AND are QUALIFIED", text)
+        self.assertIn('k = sum(v[0] == "PASS" and v[1] == "QUALIFIED" for v in rows.values())', text)
+        self.assertIn("hi, lo = sum(r > 0.30 for r in rates), sum(r <= 0.15 for r in rates)", text)
+        self.assertNotIn("Isaac probe (GPU)", text)
+        self.assertEqual(text.count('arm_guard "$TLOG"'), 2)     # smoke and full-run guards
