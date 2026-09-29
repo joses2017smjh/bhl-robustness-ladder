@@ -63,6 +63,15 @@ fixes the five faults found in the v1 post-mortem (2026-09-25):
               ``build_obs`` is the single builder used by the gym and by the
               physics runner (maze_explore.py --policy), which picks the keys
               from the ONNX actor's input names so v1 actors still run.
+
+Stall price (NavGym v4, 2026-09-28; opt-in, version 2 only). ``MazeNavEnv(version=2,
+idle_cost=V4_IDLE_COST)`` (``navgym_train.py --idle-cost 0.008``) subtracts ``idle_cost``
+on every step whose commanded forward action is ~0 (a[0] <= V4_IDLE_A0_MAX = -0.9, i.e.
+v_cmd <= 5 % of V_MAX) while the straight-line goal distance at the start of the step is
+> V4_IDLE_FAR_M = 0.5 m; the step's info then carries ``idle_charged``. With the -0.002
+step cost an endless idle stall is worth (-0.002 - 0.008) / (1 - 0.998) = -5.0 at the
+learner's gamma (SB3 bootstraps truncations), the crash penalty, instead of -1.0. The
+default idle_cost 0.0 leaves every existing path unchanged.
 """
 from __future__ import annotations
 
@@ -95,6 +104,11 @@ V2_TIME_FACTOR = 3.0       # x the full-speed time along the route (budget in th
 V2_TIME_SLACK = 400        # steps (16 s) for the initial turn, lag and waiting
 V2_MAX_STEPS_CAP = 4500    # 180 s, the physics 6x6 time limit
 FINE_RES = 0.05            # m, resolution of the continuous geodesic field
+
+# ---- v4 stall price (opt-in via MazeNavEnv(idle_cost=...); the default 0.0 never reads these)
+V4_IDLE_A0_MAX = -0.9      # commanded forward action at or below this is "forward command ~0" (v_cmd <= 0.05 * V_MAX)
+V4_IDLE_FAR_M = 0.5        # m, straight-line goal distance (start of the step) beyond which idling is charged
+V4_IDLE_COST = 0.008       # the v4 value: (V2_STEP_COST - 0.008) / (1 - 0.998) = -5.0 = V2_COLLISION
 
 # ---- held-out evaluation sets (training draws maze seeds < 10 000)
 HELDOUT_BASE = 10_000      # the held-out set every run so far is evaluated on (maze seeds 10 000 + k)
@@ -423,14 +437,18 @@ class MazeNavEnv(gym.Env):
 
     def __init__(self, sizes=((3, 3), (4, 4), (5, 5), (6, 6)), extra_openings: int = 1, max_steps: int | None = None,
                  seed_base: int = 0, seed_span: int = 10_000, randomize_dynamics: bool = True, size_weights=None,
-                 version: int = 1, gamma: float = V2_GAMMA):
+                 version: int = 1, gamma: float = V2_GAMMA, idle_cost: float = 0.0):
         """`version` 1 (default) is the v1 environment, unchanged; 2 is NavGym v2 (module
         docstring). `max_steps` None means the version's default -- v1: a flat 1500; v2: the
         route-scaled limit of `route_time_limit`, set at every reset -- and an int is a flat
-        limit in either version. `gamma` is the shaping discount (v2 only; pass the learner's)."""
+        limit in either version. `gamma` is the shaping discount (v2 only; pass the learner's).
+        `idle_cost` (v2 only, >= 0; default 0.0 = off) is the v4 stall price (module docstring)."""
         super().__init__()
         if version not in (1, 2):
             raise ValueError(f"MazeNavEnv version must be 1 or 2, got {version!r}")
+        if idle_cost < 0 or (idle_cost and version != 2):
+            raise ValueError(f"idle_cost must be >= 0 and needs version 2, got {idle_cost!r} with version {version!r}")
+        self.idle_cost = float(idle_cost)
         self.version = int(version)
         self.sizes = tuple(tuple(s) for s in sizes)
         self.size_weights = None if size_weights is None else np.asarray(size_weights, dtype=float) / np.sum(size_weights)
@@ -508,6 +526,9 @@ class MazeNavEnv(gym.Env):
 
     def step(self, action):
         a = np.clip(np.asarray(action, dtype=np.float32), -1.0, 1.0)
+        # v4 stall price (off by default): forward command ~0 while > V4_IDLE_FAR_M from the goal, judged at the step start
+        idle = bool(self.idle_cost) and float(a[0]) <= V4_IDLE_A0_MAX and \
+            math.hypot(self.goal_xy[0] - self.x, self.goal_xy[1] - self.y) > V4_IDLE_FAR_M
         self.prev_action = a.copy()
         v_cmd = (a[0] + 1.0) * 0.5 * V_MAX
         w_cmd = a[1] * W_MAX
@@ -523,7 +544,7 @@ class MazeNavEnv(gym.Env):
         nx, ny = self.x + v * DT * math.cos(self.yaw), self.y + v * DT * math.sin(self.yaw)
         self.t += 1
         if self.version == 2:
-            return self._finish_v2(nx, ny)
+            return self._finish_v2(nx, ny, idle)
         terminated, truncated = False, False
         reward = -0.01
         if point_in_wall(self.boxes, nx, ny, ROBOT_RADIUS):
@@ -547,8 +568,9 @@ class MazeNavEnv(gym.Env):
         info["maze_seed"] = self.episode_seed
         return self._obs(), float(reward), terminated, truncated, info
 
-    def _finish_v2(self, nx: float, ny: float):
-        """v2 transition: round footprint, continuous potential-based shaping, -5 crash."""
+    def _finish_v2(self, nx: float, ny: float, idle: bool = False):
+        """v2 transition: round footprint, continuous potential-based shaping, -5 crash
+        (and, only when idle_cost > 0, the v4 idle cost on an idle step of any outcome)."""
         terminated, truncated = False, False
         reward = V2_STEP_COST
         if circle_in_wall(self.boxes, nx, ny, ROBOT_RADIUS):
@@ -570,6 +592,10 @@ class MazeNavEnv(gym.Env):
             elif self.t >= self.max_steps:
                 truncated = True
                 info = {"outcome": "time_out"}
+        if self.idle_cost:
+            if idle:
+                reward -= self.idle_cost
+            info["idle_charged"] = bool(idle)
         self._scan()
         info["maze_seed"] = self.episode_seed
         info["t"] = self.t

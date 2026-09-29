@@ -372,3 +372,253 @@ def test_diagnose_timeout_classes_follow_the_declared_order():
     assert nd.classify_timeout(1.0, 0.1, 0.6) == "stuck_at_wall"
     assert nd.classify_timeout(1.0, 0.1, 0.1) == "looping"
     assert nd.classify_timeout(1.0, 0.6, 0.9) == "slow_but_progressing"
+
+
+# ------------------------------------------------------------------ 2026-09-28: v2 golden, v2ctl reading, v4 stall price
+def _descend(env):
+    """Oracle controller (tests only): steer down the continuous geodesic; reaches the goal on small mazes."""
+    h = 0.05
+    gx = env.geo(env.x + h, env.y) - env.geo(env.x - h, env.y)
+    gy = env.geo(env.x, env.y + h) - env.geo(env.x, env.y - h)
+    e = (math.atan2(-gy, -gx) - env.yaw + math.pi) % (2 * math.pi) - math.pi
+    return np.array([1.0 if abs(e) < 0.35 else -1.0, max(-1.0, min(1.0, 2.0 * e))], np.float32)
+
+
+# Recorded on 2026-09-28 from the v2 env at git HEAD 7c6ef05 (env.py sha256 c48ccd4e...), BEFORE the v4 stall-price
+# edit: goal, crash, and stalled time-out episodes. MazeNavEnv(version=2) with no new keyword must reproduce them exactly.
+V2_GOLDEN = [
+    ("mz", dict(sizes=((3, 3),), version=2, gamma=1.0, randomize_dynamics=False), 0, "descend",
+     dict(maze_seed=8506, t=421, outcome="goal", max_steps=1447, route_m=4.883171858868458, reward_sum=8.750247270277152,
+          reward_last=5.011244706566285, x=2.797079898858059, y=2.5103371072756846, yaw=1.583930207436544, lidar_sum=1694.4702041689306,
+          near_sum=9219.44812014699, map_sum=242496.0, goal_sum=744.3931784438901)),
+    ("mz", dict(sizes=((4, 4),), version=2, gamma=1.0), 2, "descend",
+     dict(maze_seed=8375, t=1020, outcome="goal", max_steps=3305, route_m=13.554978667474233, reward_sum=16.20856621338885,
+          reward_last=5.008400665176615, x=4.197786272625983, y=3.908026584829612, yaw=1.572619374723427, lidar_sum=4128.594295883551,
+          near_sum=22033.803452447057, map_sum=587520.0, goal_sum=1857.3569260610911)),
+    ("mz", dict(sizes=((4, 4),), version=2, gamma=0.998), 5, "descend",
+     dict(maze_seed=6707, t=514, outcome="goal", max_steps=1695, route_m=6.042969833513124, reward_sum=13.373006761652952,
+          reward_last=5.011633654947392, x=4.052444860243608, y=3.9389648744830144, yaw=1.060831704313288, lidar_sum=2440.555840173736,
+          near_sum=12511.52498409152, map_sum=296064.0, goal_sum=1020.2129253945313)),
+    ("ho", dict(size=(5, 5), seed=3, gamma=0.998), None, "random",
+     dict(maze_seed=10003, t=93, outcome="collision", max_steps=2647, route_m=10.483171857868472, reward_sum=-3.6834883439687562,
+          reward_last=-5.002, x=-0.43801968080787884, y=-0.362683028686183, yaw=-2.409068470712409, lidar_sum=344.87228877842426,
+          near_sum=1695.4588338062167, map_sum=53568.0, goal_sum=-20.911093686707318)),
+    ("ho", dict(size=(6, 6), seed=4, gamma=1.0, max_steps=200), None, "stall",
+     dict(maze_seed=10004, t=200, outcome="time_out", max_steps=200, route_m=12.849625289736696, reward_sum=-0.39068139687052095,
+          reward_last=-0.0018572896830335566, x=0.013796420748577634, y=-0.04546934815832517, yaw=0.23882599197938026,
+          lidar_sum=639.7048387341201, near_sum=3501.563729286194, map_sum=115200.0, goal_sum=270.9591631293297)),
+]
+
+
+def _run_golden(kind, kw, sd, pol, **extra):
+    if kind == "mz":
+        env = MazeNavEnv(**kw, **extra)
+        obs, _ = env.reset(seed=sd)
+    else:
+        env, obs, _ = heldout_env(kw["size"], kw["seed"], version=2, gamma=kw["gamma"], max_steps=kw.get("max_steps"))
+        for k, v in extra.items():
+            setattr(env, k, v)
+    rng = np.random.default_rng(77)
+    rs, sums = [], {k: 0.0 for k in obs}
+    while True:
+        if pol == "descend":
+            a = _descend(env)
+        elif pol == "random":
+            a = np.array([rng.uniform(-1, 1), rng.uniform(-1, 1)], np.float32)
+        else:
+            a = np.array([-1.0, 1.0 if env.t % 2 else -1.0], np.float32)
+        obs, r, te, tr, st = env.step(a)
+        rs.append(r)
+        for k in obs:
+            sums[k] += float(np.asarray(obs[k], np.float64).sum())
+        if te or tr:
+            break
+    got = dict(maze_seed=int(st["maze_seed"]), t=int(env.t), outcome=st["outcome"], max_steps=int(env.max_steps), route_m=float(env.route_m),
+               reward_sum=float(np.sum(rs)), reward_last=float(rs[-1]), x=float(env.x), y=float(env.y), yaw=float(env.yaw),
+               **{f"{k}_sum": v for k, v in sums.items()})
+    return env, got, rs
+
+
+@pytest.mark.parametrize("kind,kw,sd,pol,gold", V2_GOLDEN)
+def test_v2_is_reproduced_exactly(kind, kw, sd, pol, gold):
+    _, got, _ = _run_golden(kind, kw, sd, pol)
+    for k, v in gold.items():
+        if isinstance(v, float):
+            assert got[k] == pytest.approx(v, rel=1e-12, abs=1e-12), k
+        else:
+            assert got[k] == v, k
+
+
+def _v2ctl_summ(s5, c6, ppo="v2", ceiling=None, steps=30_000_000, base=40_000, s6=0.8):
+    ev = {"4x4": {"success": 1.0, "collision": 0.0, "time_out": 0.0, "n": 48},
+          "5x5": {"success": s5, "collision": 0.0, "time_out": 1 - s5, "n": 48},
+          "6x6": {"success": s6, "collision": c6, "time_out": 0.0, "n": 48}}
+    return {"ppo": ppo, "env_version": 2, "std_ceiling": ceiling, "total_steps": 30_000_000, "num_timesteps": steps,
+            "reached_last_step": steps >= 30_000_000, "final_eval_heldout_48": ev, "final_eval_fresh_48": ev,
+            "fresh_set": {"maze_seeds": f"{base} + k, k = 0..47"}}
+
+
+def test_v2ctl_determinism_check_cuts_at_the_first_clamp():
+    import navgym_train as nt
+    twin = [(4096 * i, float(i)) for i in range(1, 11)]
+    clamps = [(4096 * i, 0.0 if i < 6 else float(i - 5)) for i in range(1, 11)]       # first logged clamp at 6 * 4096
+    same_before = [(s, v) if s < 6 * 4096 else (s, v + 3.0) for s, v in twin]            # differs only from the clamp on
+    r = nt.determinism_check(same_before, twin, clamps)
+    assert r["result"] == "single-factor comparison" and r["points_compared"] == 5 and r["first_ceiling_clamp_step"] == 6 * 4096
+    off = [(s, v + (1e-3 if s == 3 * 4096 else 0.0)) for s, v in twin]
+    r = nt.determinism_check(off, twin, clamps)
+    assert r["result"] == "seed-matched replicate" and r["first_divergence_step"] == 3 * 4096
+    missing = [p for p in twin if p[0] != 2 * 4096]
+    assert nt.determinism_check(missing, twin, clamps)["first_divergence_step"] == 2 * 4096
+    assert nt.determinism_check(None, twin, clamps)["result"] == "no result"
+
+
+def test_v2ctl_reading_rule(tmp_path):
+    import navgym_train as nt
+    own, v3 = tmp_path / "v2ctl", tmp_path / "v3"
+
+    def write(root, d, s):
+        (root / d).mkdir(parents=True, exist_ok=True)
+        (root / d / "summary.json").write_text(json.dumps(s))
+    # v3 twins: 6x6 collision 0.25 / 0.25 / 0.25 on the 10000-set
+    for sd in (2, 3, 4):
+        write(v3, f"armV3-s{sd}", _v2ctl_summ(0.5, 12 / 48, ppo="v3", ceiling=1.0, base=20_000))
+    R = lambda: nt.reading_v2ctl(own, v3, None, tb=False)   # noqa: E731
+    assert R()["b"]["reading"].startswith("no result") and R()["c"]["reading"].startswith("no result")
+    write(own, "armV2C-s2", _v2ctl_summ(14 / 48, 7 / 48))       # 0.292 < 0.30; collision lower by 5/48 = 0.104
+    write(own, "armV2C-s3", _v2ctl_summ(0.9, 7 / 48))
+    r = R()
+    assert r["b"]["reading"] == "the collapse is not caused by the ceiling"
+    assert r["c"]["reading"] == "the ceiling raised collisions" and r["c"]["n_lower_by_0.10"] == 2
+    write(own, "armV2C-s2", _v2ctl_summ(29 / 48, 8 / 48))       # 0.604 >= 0.60; lower by 4/48 = 0.083 (neither)
+    write(own, "armV2C-s3", _v2ctl_summ(0.9, 10 / 48))          # within 2/48
+    write(own, "armV2C-s4", _v2ctl_summ(0.9, 14 / 48))          # within 2/48 (higher)
+    r = R()
+    assert r["b"]["reading"] == "the ceiling caused or deepened it"
+    assert r["c"]["reading"] == "the ceiling did not raise collisions" and r["c"]["n_within_0.05"] == 2
+    write(own, "armV2C-s2", _v2ctl_summ(0.5, 9 / 48))           # 0.30 <= 0.5 < 0.60; lower by 3/48 (neither)
+    write(own, "armV2C-s4", _v2ctl_summ(0.9, 6 / 48))           # lower by 6/48
+    r = R()
+    assert r["b"]["reading"] == "inconclusive" and r["c"]["reading"] == "inconclusive"
+    # a v3-configured or unfinished run is not a valid v2ctl seed
+    write(own, "armV2C-s2", _v2ctl_summ(0.1, 0.0, ppo="v3", ceiling=1.0))
+    write(own, "armV2C-s3", _v2ctl_summ(0.9, 0.0, steps=29_000_000))
+    r = R()
+    assert r["b"]["reading"].startswith("no result") and not r["per_seed"]["3"]["valid"]
+    write(own, "armV2C-s4", _v2ctl_summ(0.9, 0.0, base=20_000))                 # evaluated on the spent 20000-set
+    assert not R()["per_seed"]["4"]["valid"]
+
+
+from bhl_robust.navgym.env import V2_COLLISION, V2_GOAL, V4_IDLE_A0_MAX, V4_IDLE_COST, V4_IDLE_FAR_M
+
+
+def test_v4_flags_default_off_and_v2_golden_with_explicit_zero():
+    """New keywords default off: MazeNavEnv / make_env / the trainer's PPO settings are unchanged, and passing
+    idle_cost=0.0 explicitly reproduces the pre-edit v2 golden bit for bit."""
+    import navgym_train as nt
+    assert MazeNavEnv().idle_cost == 0.0 and MazeNavEnv(version=2).idle_cost == 0.0
+    assert set(nt.PPO_SETTINGS) == {"v1", "v2", "v3"}
+    env = nt.make_env(0, 0, ((3, 3),), version=2, gamma=1.0)()
+    assert env.idle_cost == 0.0
+    ap = nt.build_parser()
+    a = ap.parse_args(["--out", "x"])
+    assert a.idle_cost is None and a.env_version == 1 and a.ppo == "v1" and a.final_eval_fresh_base is None
+    for kind, kw, sd, pol, gold in V2_GOLDEN:
+        if kind != "mz":
+            continue
+        _, got, _ = _run_golden(kind, kw, sd, pol, idle_cost=0.0)
+        for k, v in gold.items():
+            assert got[k] == (pytest.approx(v, rel=1e-12, abs=1e-12) if isinstance(v, float) else v), k
+    with pytest.raises(ValueError):
+        MazeNavEnv(version=1, idle_cost=0.008)                       # v1 is never priced
+    with pytest.raises(ValueError):
+        MazeNavEnv(version=2, idle_cost=-0.008)
+
+
+def test_v4_stall_cost_arithmetic():
+    gamma = 0.998
+    # an endless idle stall costs what a crash costs, at the learner's gamma (truncations are bootstrapped)
+    assert (V2_STEP_COST - V4_IDLE_COST) / (1 - gamma) == pytest.approx(V2_COLLISION, abs=1e-9)
+    assert V2_STEP_COST / (1 - gamma) == pytest.approx(-1.0, abs=1e-9)          # v2: the cheap stall being priced
+    t = np.arange(20_000)
+    assert float(np.sum((V2_STEP_COST - V4_IDLE_COST) * gamma ** t)) == pytest.approx(-5.0, abs=1e-6)
+    # V4_IDLE_A0_MAX is "forward command ~0": v_cmd = (a + 1) / 2 * V_MAX <= 5 % of V_MAX
+    assert (V4_IDLE_A0_MAX + 1.0) * 0.5 * V_MAX == pytest.approx(0.05 * V_MAX)
+
+    def fresh(cost):
+        env, _, _ = heldout_env((3, 3), 2, version=2, gamma=1.0)
+        env.idle_cost = cost
+        env.dyn.v_noise = env.dyn.w_noise = 0.0
+        env.dyn.drift = 0.0
+        env.v = env.w = 0.0
+        env.queue = [np.zeros(2) for _ in env.queue]
+        return env
+    # a stall step far from the goal: step cost + idle cost, charged and flagged
+    env = fresh(V4_IDLE_COST)
+    assert math.hypot(env.goal_xy[0] - env.x, env.goal_xy[1] - env.y) > V4_IDLE_FAR_M
+    _, r, te, tr, info = env.step(np.array([-1.0, 0.7], np.float32))
+    assert not (te or tr) and r == pytest.approx(V2_STEP_COST - V4_IDLE_COST, abs=1e-12) and info["idle_charged"] is True
+    # below the -0.9 threshold is idle, above it is not (float32(-0.9) itself rounds to just above -0.9 in double
+    # precision, so the boundary value is deliberately not tested; the pilot compared exactly as the env does)
+    for a0, charged in ((-1.0, True), (-0.95, True), (-0.85, False), (1.0, False)):
+        e1, e0 = fresh(V4_IDLE_COST), fresh(0.0)
+        _, r1, *_, i1 = e1.step(np.array([a0, 0.0], np.float32))
+        _, r0, *_, i0 = e0.step(np.array([a0, 0.0], np.float32))
+        assert i1["idle_charged"] is charged and "idle_charged" not in i0
+        assert r1 == pytest.approx(r0 - (V4_IDLE_COST if charged else 0.0), abs=1e-12)
+    # within V4_IDLE_FAR_M of the goal a stall is not charged
+    env = fresh(V4_IDLE_COST)
+    env.x, env.y = env.goal_xy[0] + 0.38, env.goal_xy[1]
+    env.potential = env.geo(env.x, env.y)
+    _, r, te, tr, info = env.step(np.array([-1.0, 0.0], np.float32))
+    assert info["idle_charged"] is False and r == pytest.approx(V2_STEP_COST, abs=1e-12)
+
+
+def test_v4_idle_cost_changes_only_idle_steps_of_a_goal_episode():
+    """The oracle reaches the goal: with the idle cost every reward equals the unpriced one minus exactly
+    V4_IDLE_COST on the steps it charges, the trajectory is identical, and the goal step is never charged."""
+    kind, kw, sd, pol, _ = V2_GOLDEN[1]
+    e0, g0, r0 = _run_golden(kind, kw, sd, pol)
+    e1, g1, r1 = _run_golden(kind, kw, sd, pol, idle_cost=V4_IDLE_COST)
+    assert g0["outcome"] == g1["outcome"] == "goal" and g0["t"] == g1["t"] and (g0["x"], g0["y"]) == (g1["x"], g1["y"])
+    d = np.asarray(r1) - np.asarray(r0)
+    charged = np.isclose(d, -V4_IDLE_COST, atol=1e-12)
+    assert np.all(charged | (d == 0.0)) and charged.sum() > 0 and not charged[-1]
+    assert r0[-1] > V2_GOAL - 0.1
+
+
+def test_v4_verdict_rule(tmp_path):
+    import navgym_train as nt
+
+    def summ(s5, s6, c6, steps=30_000_000, n=48, price="frozen", ppo="v2", base=40_000):
+        ev = {"4x4": {"success": 1.0, "collision": 0.0, "time_out": 0.0, "n": n},
+              "5x5": {"success": s5, "collision": 0.0, "time_out": 1 - s5, "n": n},
+              "6x6": {"success": s6, "collision": c6, "time_out": 0.0, "n": n}}
+        sp = dict(nt.V4_STALL_PRICE) if price == "frozen" else price
+        return {"ppo": ppo, "env_version": 2, "std_ceiling": None, "total_steps": 30_000_000, "num_timesteps": steps,
+                "reached_last_step": steps >= 30_000_000, "final_eval_fresh_48": ev, "final_eval_heldout_48": ev,
+                "fresh_set": {"maze_seeds": f"{base} + k, k = 0..47"}, "stall_price": sp}
+
+    def write(sd, s):
+        d = tmp_path / f"armV4-s{sd}"
+        d.mkdir(exist_ok=True)
+        (d / "summary.json").write_text(json.dumps(s))
+    assert nt.judge_v4(summ(0.80, 0.70, 0.15))["meets"]                             # every bound inclusive
+    assert not nt.judge_v4(summ(0.79, 0.90, 0.0))["meets"]
+    assert not nt.judge_v4(summ(0.90, 0.69, 0.0))["meets"]
+    assert not nt.judge_v4(summ(0.90, 0.90, 0.16))["meets"]
+    assert not nt.judge_v4(summ(0.90, 0.90, 0.0, steps=29_999_000))["meets"]
+    assert not nt.judge_v4(summ(0.90, 0.90, 0.0, n=24))["meets"]
+    assert not nt.judge_v4(summ(0.90, 0.90, 0.0, price=None))["meets"]               # a plain v2 run is not v4
+    assert not nt.judge_v4(summ(0.90, 0.90, 0.0, price={**nt.V4_STALL_PRICE, "idle_cost": 0.004}))["meets"]
+    assert not nt.judge_v4(summ(0.90, 0.90, 0.0, ppo="v3"))["meets"]
+    assert not nt.judge_v4(summ(0.90, 0.90, 0.0, base=20_000))["meets"]             # the spent set
+    write(5, summ(0.85, 0.75, 0.05))
+    assert nt.verdict_v4(tmp_path)["verdict"] == "PENDING"
+    assert nt.verdict_v4(tmp_path, final=True)["verdict"] == "NEGATIVE"
+    write(6, summ(0.70, 0.75, 0.05))
+    write(7, summ(0.81, 0.71, 0.10))
+    v = nt.verdict_v4(tmp_path, final=True)
+    assert v["verdict"] == "PASS" and v["seeds_passing"] == 2
+    write(7, summ(0.81, 0.71, 0.20))
+    assert nt.verdict_v4(tmp_path, final=True)["verdict"] == "NEGATIVE"
