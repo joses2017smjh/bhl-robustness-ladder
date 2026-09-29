@@ -1,7 +1,7 @@
 # Repository status — one page
 
 **Updated:** 2026-09-28. **Branch:** `mission7-approach-followup` (all campaign
-work; merged to `main` through PR #9). Master backlog: [`REPO_TASKS.md`](REPO_TASKS.md).
+work; merged to `main` through PR #9). Master backlog: [`REPO_TASKS.md`](REPO_TASKS.md). Pending work and stretch goals: [`ROADMAP.md`](ROADMAP.md).
 
 | Workstream | State | Latest measured result | Next executable action |
 |---|---|---|---|
