@@ -659,3 +659,14 @@ def test_fake_rollout_buffer_too_short_is_incomplete(sm):
     assert not roll["all_done"] and roll["t_end"] == 100
     s = sr.summarize(tr, 2, 3)["summary"]
     assert not s["complete"] and sr.funding_reading(s)["code"] == "INCOMPLETE"
+
+
+def test_terrain_num_envs_mirror_is_allowlisted():
+    """Job 21463687 stopped on scene.terrain.num_envs (1024 vs 32), a copy of scene.num_envs."""
+    import importlib.util
+    from pathlib import Path
+    spec = importlib.util.spec_from_file_location(
+        "stand3_replay_allow", Path(__file__).resolve().parents[1] / "scripts/bench/stand3_replay.py")
+    m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    assert "scene.terrain.num_envs" in m.CONFIG_ALLOWLIST and "scene.num_envs" in m.CONFIG_ALLOWLIST
+    assert not any(p.startswith(("rewards", "observations", "actions", "terminations", "events")) for p in m.CONFIG_ALLOWLIST)

@@ -196,7 +196,9 @@ REASON_LOW, REASON_X_BAND, REASON_Y_BAND = 1, 2, 4
 REASON_NAMES = {REASON_LOW: "LOW", REASON_X_BAND: "X_BAND", REASON_Y_BAND: "Y_BAND"}
 
 # Config check.
-CONFIG_ALLOWLIST = ("seed", "scene.num_envs", "sim.device", "sim.log_dir")
+# scene.terrain.num_envs is the terrain importer's copy of scene.num_envs (added 2026-09-29 after
+# job 21463687 stopped on it as its only gated diff: 1024 trained vs 32 live).
+CONFIG_ALLOWLIST = ("seed", "scene.num_envs", "scene.terrain.num_envs", "sim.device", "sim.log_dir")
 CONFIG_REPORT_ONLY_TOP = ("rewards", "curriculum", "viewer", "video_recorder", "recorders",
                           "ui_window_class_type", "teleop_devices", "isaac_teleop", "xr",
                           "export_io_descriptors", "log_dir", "wait_for_textures",
