@@ -748,5 +748,82 @@ class Stand3LauncherTests(unittest.TestCase):
             self.assertIn(t, body)
 
 
+# ---- 2026-09-28 payload-quaternion fix (appended). The body-z tilt diagnostic's
+# definition is unchanged; with the spawn fixed (coop_lift_env_cfg._object through
+# native_quat) it reads 0 at spawn and 90 on a side face, as designed. Stand3's
+# recorded cube_tilted / tipped_over_deck (1.0 from iteration 0) came from the
+# flipped spawn and stay uninformative; every later v60 run is a NEW configuration.
+
+class _QuatOrder:
+    """Pin the stack's quaternion order for bhl_robust.quat_order (native_quat, unpack_wxyz)."""
+
+    def __init__(self, order):
+        if str(REPO / "src") not in sys.path:
+            sys.path.insert(0, str(REPO / "src"))
+        from unittest import mock
+        from bhl_robust import quat_order as qo
+        self.qo = qo
+        self.patches = [mock.patch.object(qo, "quat_order", lambda: order),
+                        mock.patch.object(qo, "_CACHED_ORDER", order)]
+
+    def __enter__(self):
+        for p in self.patches:
+            p.start()
+        return self.qo
+
+    def __exit__(self, *exc):
+        for p in self.patches:
+            p.stop()
+
+
+class CubeTiltQuatFixTests(unittest.TestCase):
+    S2 = math.sqrt(0.5)
+
+    def setUp(self):
+        self.mod = _load()
+        self.mod._coop = lambda: _FakeCoopStand3(torch.zeros(1), torch.zeros(1), torch.zeros(1, 3))
+
+    def env(self, stored):
+        obj = types.SimpleNamespace(data=types.SimpleNamespace(root_quat_w=stored))
+        return types.SimpleNamespace(scene={"object": obj})
+
+    def tilt(self, rows_wxyz, order):
+        with _QuatOrder(order) as qo:
+            stored = torch.tensor([qo.reorder(r, order) for r in rows_wxyz])
+            return self.mod._cube_tilt_deg(self.env(stored)).tolist()
+
+    def test_zero_at_the_fixed_spawn_and_90_after_a_roll_v60(self):
+        with _QuatOrder("xyzw") as qo:
+            spawn = torch.tensor([qo.native_quat((1.0, 0.0, 0.0, 0.0))])     # what the cfg now writes
+            self.assertEqual(spawn.tolist(), [[0.0, 0.0, 0.0, 1.0]])
+            self.assertAlmostEqual(self.mod._cube_tilt_deg(self.env(spawn)).tolist()[0], 0.0, places=4)
+        s = self.S2
+        got = self.tilt([(s, s, 0.0, 0.0), (s, 0.0, s, 0.0), (s, 0.0, 0.0, s)], "xyzw")
+        for v, want in zip(got, (90.0, 90.0, 0.0)):        # roll x, pitch y, yaw z
+            self.assertAlmostEqual(v, want, places=3)
+
+    def test_old_raw_spawn_read_180_on_v60(self):
+        # the pre-fix literal stored as-is on v60: why cube_tilted was 1.0 from iteration 0
+        with _QuatOrder("xyzw"):
+            old = torch.tensor([[1.0, 0.0, 0.0, 0.0]])
+            self.assertAlmostEqual(self.mod._cube_tilt_deg(self.env(old)).tolist()[0], 180.0, places=3)
+            self.assertEqual(self.mod.cube_tilted_share(self.env(old), None), 1.0)
+
+    def test_share_at_spawn_is_zero_v60(self):
+        s = self.S2
+        with _QuatOrder("xyzw") as qo:
+            rows = [qo.native_quat((1.0, 0.0, 0.0, 0.0))] * 3 + [qo.reorder((s, s, 0.0, 0.0), "xyzw")]
+            self.assertEqual(self.mod.cube_tilted_share(self.env(torch.tensor(rows[:3])), None), 0.0)
+            self.assertEqual(self.mod.cube_tilted_share(self.env(torch.tensor(rows)), None), 0.25)
+
+    def test_v51_unchanged(self):
+        s = self.S2
+        got = self.tilt([(1.0, 0.0, 0.0, 0.0), (s, s, 0.0, 0.0), (s, 0.0, 0.0, s)], "wxyz")
+        for v, want in zip(got, (0.0, 90.0, 0.0)):
+            self.assertAlmostEqual(v, want, places=3)
+        with _QuatOrder("wxyz") as qo:
+            self.assertEqual(qo.native_quat((1.0, 0.0, 0.0, 0.0)), (1.0, 0.0, 0.0, 0.0))
+
+
 if __name__ == "__main__":
     unittest.main()

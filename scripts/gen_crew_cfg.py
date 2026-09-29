@@ -51,9 +51,16 @@ from isaaclab.utils.noise import AdditiveUniformNoiseCfg as Unoise
 from berkeley_humanoid_lite_assets.robots.berkeley_humanoid_lite import HUMANOID_LITE_JOINTS
 from berkeley_humanoid_lite.tasks.locomotion.velocity import mdp
 
+from bhl_robust.quat_order import native_quat
+
 from . import coop_lift_mdp as coop
 from .coop_depth_env_cfg import COOP_CAM_POOL, coop_depth_obs, make_coop_depth_camera
 from .coop_lift_env_cfg import _COLLISION, _RIGID, CoopLiftEnvCfg, CurriculumCfg, _robot
+
+# Payload rot goes through ``native_quat`` since 2026-09-28: the raw (1, 0, 0, 0)
+# was 180 deg about x on v60 (Isaac Lab 3.0 reads x, y, z, w). Every later v60
+# crew run is a NEW configuration, never compared with or used to re-score the
+# crew / CoopLift / Stand results recorded before it. v51 unchanged.
 '''
 
 
@@ -108,7 +115,7 @@ def emit(n, vision):
         L.append(f'    {r}: ArticulationCfg = _robot("{{ENV_REGEX_NS}}/{r}", ({CREW_RADIUS*math.cos(th):.6f}, {CREW_RADIUS*math.sin(th):.6f}, 0.0), ({q[0]:.6f}, 0.0, 0.0, {q[3]:.6f}))')
     L += ['    object: RigidObjectCfg = RigidObjectCfg(',
           '        prim_path="{ENV_REGEX_NS}/object",',
-          f'        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, {edge/2:.6f}), rot=(1.0, 0.0, 0.0, 0.0)),',
+          f'        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, {edge/2:.6f}), rot=native_quat((1.0, 0.0, 0.0, 0.0))),',
           '        spawn=sim_utils.CuboidCfg(',
           f'            size=({edge:.6f}, {edge:.6f}, {edge:.6f}), rigid_props=_RIGID, collision_props=_COLLISION,',
           f'            mass_props=sim_utils.MassPropertiesCfg(mass={mass:.4f}),',
