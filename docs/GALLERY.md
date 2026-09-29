@@ -5,6 +5,12 @@ Renderer is in the folder name:
 scored episode from the harness that produced the numbers, except `squat_pick`,
 which says on its face that it is scripted.
 
+## September 29: the hero episode with the robot's sensors (display-only panels)
+
+| Actual recording | Result and scope |
+|---|---|
+| [Randomized maze, sensor panels](gifs/random-maze-explore-sensors.gif) · [sidecar](gifs/random-maze-explore-sensors.json) · [clean view](gifs/random-maze-explore.gif) | The README hero episode (hard 6×6 maze seed 1, goal in **73.1 s**, 0 wall contacts) re-rendered with `maze_explore.py --imu-panel --rig-panels`; the rendered episode matches the published one exactly (sidecar `episode_matches_table`). Added, **display only**: a **simulated IM10A-like 10-axis IMU** at 100 Hz with the Hiwonder datasheet noise upper bounds (gyro 0.07 °/s rms + 1 °/s bias, accel 1 mg rms + 40 mg bias, baro 0.5 Pa), gyro and accelerometer traces, a 6-axis Mahony attitude against truth (its yaw drifts, as a real 6-axis unit's does), and simulated magnetometer and barometer readouts that are not used; the **stereo rig's RGB and 160×120 rendered depth** per eye (same mount, pitch and field of view as the 8×8 ray-cast depth the brake reads); **left-eye optical flow** (Farneback; hue = direction). The controller is unchanged: learned gait, scripted A* on the lidar map, oracle pose. GIF at 5× (badged); 4.94 MB |
+
 ## September 27: a learned navigation policy on the physics biped (exploratory)
 
 | Actual recording | Result and scope |
