@@ -1,0 +1,52 @@
+{
+  "run": "arms-turn-turnrest-ft-s1",
+  "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-09-27_15-40-28_arms-turn-turnrest-ft-s1/exported/deploy.yaml",
+  "verdict": "NOT QUALIFIED",
+  "detail": "turn 10/10 (need 9), walk 3/3 (need 2), push 31/60 = 0.5167 (need <= 0.15); arms-turn-turnrest-ft-s1 is a single checkpoint, not a reliable recipe",
+  "clauses": {
+    "turn": {
+      "ok_runs": 10,
+      "of": 10,
+      "need": 9,
+      "pass": true,
+      "yaw_deg": [
+        224.9,
+        -217.0,
+        223.6,
+        -219.2,
+        223.2,
+        -217.8,
+        224.5,
+        -216.7,
+        227.2,
+        -214.3
+      ]
+    },
+    "walk": {
+      "ok_runs": 3,
+      "of": 3,
+      "need": 2,
+      "pass": true,
+      "drift_deg": [
+        -4.2,
+        -4.4,
+        -3.9
+      ]
+    },
+    "push": {
+      "falls": 31,
+      "n": 60,
+      "rate": 0.5167,
+      "max_falls": 9,
+      "pass": false
+    }
+  },
+  "label": "LEARNED policy, MuJoCo replay (CPU); single checkpoint, not a reliable recipe",
+  "predeclared": "QUALIFIED iff >= 9/10 turn runs (reset seeds 10-14 x +/-0.6 rad/s, 3 s settle, 6 s) reach >= 150 deg in the commanded direction with no fall, |drift| <= 15 deg with no fall on >= 2/3 walk seeds (10-12), and push fall rate <= 0.15 (<= 9/60; run_eval 0.5 m/s every 3 s, 12 s, --seeds 10, --variant humanoid)",
+  "reference": "arms-dr1.0-s0 push 3/30 = 0.10; arms-dr1.0 s0+s1 7/60 = 0.117 (results/push-matched-20260923)",
+  "overlap": "scored seeds (turn 10-14, walk 10-12, push eval seeds 0-9) disjoint from every run previously inspected on this checkpoint (reset seeds 0-2; never push-evaluated)",
+  "inputs": {
+    "v2x_json": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/turn-20260927/qualify/arms-turn-turnrest-ft-s1__v2x.json",
+    "push_csv": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/turn-20260927/qualify/arms-turn-turnrest-ft-s1__p0.5_n60.csv"
+  }
+}

@@ -1,0 +1,12 @@
+{
+ "label": "s1",
+ "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-09-27_20-03-28_v2-cubetoshelfstand3-blind-s1",
+ "checkpoint": "model_7999.pt",
+ "src_root": "/scratch/sanchej7/tmp/stand3-replay-src-21470828/s1/src",
+ "out_prefix": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/stand3_replay_2026-09-28/21470828/s1",
+ "seed": 1000,
+ "num_envs": 32,
+ "episodes": 3,
+ "enable_cameras": true,
+ "config_check_mode": "gate"
+}

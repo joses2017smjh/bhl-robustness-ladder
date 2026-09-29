@@ -1,0 +1,434 @@
+{
+  "instrument": "MuJoCo replay of a LEARNED policy (no scripted control), pure-turn command after a zero-command settle",
+  "wz": 0.6,
+  "warm_s": 3.0,
+  "seconds": 6.0,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "runs": {
+    "arms-turn-turnrestpush-ft-s0": [
+      {
+        "seed": 0,
+        "cmd": [
+          0.0,
+          0.0,
+          0.6
+        ],
+        "warm_s": 3.0,
+        "seconds": 6.0,
+        "fell_at_s": null,
+        "yaw_deg": 17.9,
+        "feet": {
+          "left": {
+            "liftoffs_turn": 0,
+            "air_s_turn": 0.0,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0006,
+            "foot_yaw_in_contact_deg": -0.3
+          },
+          "right": {
+            "liftoffs_turn": 0,
+            "air_s_turn": 0.0,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0021,
+            "foot_yaw_in_contact_deg": 12.0
+          }
+        },
+        "yaw_deg_while_a_foot_airborne": 0.0,
+        "yaw_deg_in_double_stance": 17.9,
+        "joint_motion": {
+          "hip_roll": {
+            "rms_rad_turn": 0.0275,
+            "rms_rad_last2s_settle": 0.0174
+          },
+          "hip_yaw": {
+            "rms_rad_turn": 0.041,
+            "rms_rad_last2s_settle": 0.0197,
+            "mean_left_minus_right_rad_turn": 0.3124
+          },
+          "hip_pitch": {
+            "rms_rad_turn": 0.0322,
+            "rms_rad_last2s_settle": 0.006
+          },
+          "knee": {
+            "rms_rad_turn": 0.0091,
+            "rms_rad_last2s_settle": 0.0055
+          },
+          "ankle_pitch": {
+            "rms_rad_turn": 0.028,
+            "rms_rad_last2s_settle": 0.0038
+          },
+          "ankle_roll": {
+            "rms_rad_turn": 0.0343,
+            "rms_rad_last2s_settle": 0.0099
+          }
+        },
+        "action_response": {
+          "mean_norm_a_cmd_minus_a_zero": 2.3874,
+          "mean_norm_legs_only": 2.038,
+          "mean_norm_a": 60.4525
+        }
+      },
+      {
+        "seed": 0,
+        "cmd": [
+          0.0,
+          0.0,
+          -0.6
+        ],
+        "warm_s": 3.0,
+        "seconds": 6.0,
+        "fell_at_s": null,
+        "yaw_deg": -56.6,
+        "feet": {
+          "left": {
+            "liftoffs_turn": 3,
+            "air_s_turn": 0.165,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0057,
+            "foot_yaw_in_contact_deg": -38.5
+          },
+          "right": {
+            "liftoffs_turn": 3,
+            "air_s_turn": 0.165,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0105,
+            "foot_yaw_in_contact_deg": -26.7
+          }
+        },
+        "yaw_deg_while_a_foot_airborne": -11.5,
+        "yaw_deg_in_double_stance": -45.1,
+        "joint_motion": {
+          "hip_roll": {
+            "rms_rad_turn": 0.0501,
+            "rms_rad_last2s_settle": 0.0174
+          },
+          "hip_yaw": {
+            "rms_rad_turn": 0.0446,
+            "rms_rad_last2s_settle": 0.0197,
+            "mean_left_minus_right_rad_turn": 0.2344
+          },
+          "hip_pitch": {
+            "rms_rad_turn": 0.0319,
+            "rms_rad_last2s_settle": 0.006
+          },
+          "knee": {
+            "rms_rad_turn": 0.0459,
+            "rms_rad_last2s_settle": 0.0055
+          },
+          "ankle_pitch": {
+            "rms_rad_turn": 0.0475,
+            "rms_rad_last2s_settle": 0.0038
+          },
+          "ankle_roll": {
+            "rms_rad_turn": 0.0288,
+            "rms_rad_last2s_settle": 0.0099
+          }
+        },
+        "action_response": {
+          "mean_norm_a_cmd_minus_a_zero": 1.9927,
+          "mean_norm_legs_only": 1.9533,
+          "mean_norm_a": 57.4814
+        }
+      },
+      {
+        "seed": 1,
+        "cmd": [
+          0.0,
+          0.0,
+          0.6
+        ],
+        "warm_s": 3.0,
+        "seconds": 6.0,
+        "fell_at_s": null,
+        "yaw_deg": 17.8,
+        "feet": {
+          "left": {
+            "liftoffs_turn": 0,
+            "air_s_turn": 0.0,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0006,
+            "foot_yaw_in_contact_deg": -1.1
+          },
+          "right": {
+            "liftoffs_turn": 0,
+            "air_s_turn": 0.0,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0019,
+            "foot_yaw_in_contact_deg": 11.8
+          }
+        },
+        "yaw_deg_while_a_foot_airborne": 0.0,
+        "yaw_deg_in_double_stance": 17.8,
+        "joint_motion": {
+          "hip_roll": {
+            "rms_rad_turn": 0.0284,
+            "rms_rad_last2s_settle": 0.012
+          },
+          "hip_yaw": {
+            "rms_rad_turn": 0.0436,
+            "rms_rad_last2s_settle": 0.0073,
+            "mean_left_minus_right_rad_turn": 0.2974
+          },
+          "hip_pitch": {
+            "rms_rad_turn": 0.0317,
+            "rms_rad_last2s_settle": 0.0067
+          },
+          "knee": {
+            "rms_rad_turn": 0.0091,
+            "rms_rad_last2s_settle": 0.0101
+          },
+          "ankle_pitch": {
+            "rms_rad_turn": 0.0283,
+            "rms_rad_last2s_settle": 0.0059
+          },
+          "ankle_roll": {
+            "rms_rad_turn": 0.0359,
+            "rms_rad_last2s_settle": 0.0104
+          }
+        },
+        "action_response": {
+          "mean_norm_a_cmd_minus_a_zero": 2.3874,
+          "mean_norm_legs_only": 2.0434,
+          "mean_norm_a": 60.3776
+        }
+      },
+      {
+        "seed": 1,
+        "cmd": [
+          0.0,
+          0.0,
+          -0.6
+        ],
+        "warm_s": 3.0,
+        "seconds": 6.0,
+        "fell_at_s": null,
+        "yaw_deg": -56.2,
+        "feet": {
+          "left": {
+            "liftoffs_turn": 2,
+            "air_s_turn": 0.085,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0033,
+            "foot_yaw_in_contact_deg": -48.6
+          },
+          "right": {
+            "liftoffs_turn": 4,
+            "air_s_turn": 0.175,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0069,
+            "foot_yaw_in_contact_deg": -25.9
+          }
+        },
+        "yaw_deg_while_a_foot_airborne": -7.4,
+        "yaw_deg_in_double_stance": -48.8,
+        "joint_motion": {
+          "hip_roll": {
+            "rms_rad_turn": 0.049,
+            "rms_rad_last2s_settle": 0.012
+          },
+          "hip_yaw": {
+            "rms_rad_turn": 0.0455,
+            "rms_rad_last2s_settle": 0.0073,
+            "mean_left_minus_right_rad_turn": 0.2235
+          },
+          "hip_pitch": {
+            "rms_rad_turn": 0.0287,
+            "rms_rad_last2s_settle": 0.0067
+          },
+          "knee": {
+            "rms_rad_turn": 0.0403,
+            "rms_rad_last2s_settle": 0.0101
+          },
+          "ankle_pitch": {
+            "rms_rad_turn": 0.0425,
+            "rms_rad_last2s_settle": 0.0059
+          },
+          "ankle_roll": {
+            "rms_rad_turn": 0.0263,
+            "rms_rad_last2s_settle": 0.0104
+          }
+        },
+        "action_response": {
+          "mean_norm_a_cmd_minus_a_zero": 2.015,
+          "mean_norm_legs_only": 1.9769,
+          "mean_norm_a": 57.7654
+        }
+      },
+      {
+        "seed": 2,
+        "cmd": [
+          0.0,
+          0.0,
+          0.6
+        ],
+        "warm_s": 3.0,
+        "seconds": 6.0,
+        "fell_at_s": null,
+        "yaw_deg": 18.4,
+        "feet": {
+          "left": {
+            "liftoffs_turn": 0,
+            "air_s_turn": 0.0,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0005,
+            "foot_yaw_in_contact_deg": -1.1
+          },
+          "right": {
+            "liftoffs_turn": 0,
+            "air_s_turn": 0.0,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.002,
+            "foot_yaw_in_contact_deg": 12.1
+          }
+        },
+        "yaw_deg_while_a_foot_airborne": 0.0,
+        "yaw_deg_in_double_stance": 18.4,
+        "joint_motion": {
+          "hip_roll": {
+            "rms_rad_turn": 0.0288,
+            "rms_rad_last2s_settle": 0.0091
+          },
+          "hip_yaw": {
+            "rms_rad_turn": 0.0449,
+            "rms_rad_last2s_settle": 0.0056,
+            "mean_left_minus_right_rad_turn": 0.2897
+          },
+          "hip_pitch": {
+            "rms_rad_turn": 0.0322,
+            "rms_rad_last2s_settle": 0.0047
+          },
+          "knee": {
+            "rms_rad_turn": 0.0093,
+            "rms_rad_last2s_settle": 0.0058
+          },
+          "ankle_pitch": {
+            "rms_rad_turn": 0.0285,
+            "rms_rad_last2s_settle": 0.0029
+          },
+          "ankle_roll": {
+            "rms_rad_turn": 0.0363,
+            "rms_rad_last2s_settle": 0.0049
+          }
+        },
+        "action_response": {
+          "mean_norm_a_cmd_minus_a_zero": 2.3938,
+          "mean_norm_legs_only": 2.0534,
+          "mean_norm_a": 60.3046
+        }
+      },
+      {
+        "seed": 2,
+        "cmd": [
+          0.0,
+          0.0,
+          -0.6
+        ],
+        "warm_s": 3.0,
+        "seconds": 6.0,
+        "fell_at_s": null,
+        "yaw_deg": -59.8,
+        "feet": {
+          "left": {
+            "liftoffs_turn": 3,
+            "air_s_turn": 0.13,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0059,
+            "foot_yaw_in_contact_deg": -50.3
+          },
+          "right": {
+            "liftoffs_turn": 3,
+            "air_s_turn": 0.145,
+            "liftoffs_last2s_settle": 0,
+            "air_s_last2s_settle": 0.0,
+            "peak_clearance_m_turn": 0.0077,
+            "foot_yaw_in_contact_deg": -30.0
+          }
+        },
+        "yaw_deg_while_a_foot_airborne": -8.4,
+        "yaw_deg_in_double_stance": -51.4,
+        "joint_motion": {
+          "hip_roll": {
+            "rms_rad_turn": 0.0487,
+            "rms_rad_last2s_settle": 0.0091
+          },
+          "hip_yaw": {
+            "rms_rad_turn": 0.0439,
+            "rms_rad_last2s_settle": 0.0056,
+            "mean_left_minus_right_rad_turn": 0.2258
+          },
+          "hip_pitch": {
+            "rms_rad_turn": 0.0312,
+            "rms_rad_last2s_settle": 0.0047
+          },
+          "knee": {
+            "rms_rad_turn": 0.0431,
+            "rms_rad_last2s_settle": 0.0058
+          },
+          "ankle_pitch": {
+            "rms_rad_turn": 0.0452,
+            "rms_rad_last2s_settle": 0.0029
+          },
+          "ankle_roll": {
+            "rms_rad_turn": 0.0268,
+            "rms_rad_last2s_settle": 0.0049
+          }
+        },
+        "action_response": {
+          "mean_norm_a_cmd_minus_a_zero": 2.0048,
+          "mean_norm_legs_only": 1.9641,
+          "mean_norm_a": 57.8106
+        }
+      }
+    ]
+  },
+  "summary": {
+    "arms-turn-turnrestpush-ft-s0": {
+      "n_runs": 6,
+      "n_fell": 0,
+      "n_fell_before_turn": 0,
+      "yaw_deg_in_commanded_direction": [
+        17.9,
+        56.6,
+        17.8,
+        56.2,
+        18.4,
+        59.8
+      ],
+      "n_ge_150deg": 0,
+      "liftoffs_turn_total_per_run": [
+        0,
+        6,
+        0,
+        6,
+        0,
+        6
+      ],
+      "median_liftoffs_turn": 3.0,
+      "median_action_response": 2.201,
+      "median_hip_yaw_rms_turn": 0.04425,
+      "yaw_share_while_airborne": [
+        0.0,
+        0.2,
+        0.0,
+        0.13,
+        0.0,
+        0.14
+      ]
+    }
+  }
+}

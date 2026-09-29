@@ -1,0 +1,122 @@
+{
+ "task": "TaskV2-BHL-CubeToShelfStand3-Blind-v0",
+ "num_envs": 16,
+ "steps": 20,
+ "seed": 100,
+ "label": "SCRIPTED probe (zero / N(0,1) actions); config + reward wiring only",
+ "status": "ok",
+ "quat_order": "xyzw",
+ "native_identity": [
+  0.0,
+  0.0,
+  0.0,
+  1.0
+ ],
+ "cfg_object_rot": [
+  0.0,
+  0.0,
+  0.0,
+  1.0
+ ],
+ "cfg_robot_rots": {
+  "robot_a": [
+   0.0,
+   0.0,
+   -0.70710678,
+   0.70710678
+  ],
+  "robot_b": [
+   0.0,
+   0.0,
+   0.70710678,
+   0.70710678
+  ]
+ },
+ "reset": {
+  "root_quat_w_env0": [
+   0.0,
+   0.0,
+   0.0,
+   1.0
+  ],
+  "object_tilt_max": 0.0,
+  "cube_tilt_deg_max": 0.0,
+  "cube_tilted_share": 0.0
+ },
+ "live_agreement": {
+  "max_abs_err_object_tilt": 0.0,
+  "max_abs_err_tilt_deg": 0.0,
+  "max_cube_tilt_deg_seen": 1.9785304069519043,
+  "n_checks": 21
+ },
+ "known": {
+  "names": [
+   "identity",
+   "roll_x_90",
+   "pitch_y_90",
+   "yaw_z_90",
+   "roll_x_180"
+  ],
+  "quats_native": [
+   [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   [
+    0.7071068286895752,
+    0.0,
+    0.0,
+    0.7071067690849304
+   ],
+   [
+    0.0,
+    0.7071068286895752,
+    0.0,
+    0.7071067690849304
+   ],
+   [
+    0.0,
+    0.0,
+    0.7071068286895752,
+    0.7071067690849304
+   ],
+   [
+    1.0,
+    0.0,
+    -0.0,
+    -4.371138828673793e-08
+   ]
+  ],
+  "object_tilt": [
+   0.0,
+   1.000000238418579,
+   1.000000238418579,
+   0.0,
+   4.0
+  ],
+  "cube_tilt_deg": [
+   0.0,
+   90.00000762939453,
+   90.00000762939453,
+   0.0,
+   180.0
+  ],
+  "want_object_tilt": [
+   0.0,
+   1.0,
+   1.0,
+   0.0,
+   4.0
+  ],
+  "want_cube_tilt_deg": [
+   0.0,
+   90.0,
+   90.0,
+   0.0,
+   180.0
+  ],
+  "isaac_identity_equals_cfg_rot": true
+ }
+}
