@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=maze-sensors-gif
 #SBATCH --account=eecs
-#SBATCH --partition=gpu,dgxh,ampere
+#SBATCH --partition=gpu,dgxh,ampere,dgx2
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
@@ -17,9 +17,11 @@
 # Nothing new enters the control loop: the IMU draws from its own random stream on a read-only substep
 # hook, the eye renders only read the state. The sidecar records whether the rendered episode reproduces
 # the published table episode (outcome and completion time); a mismatch is reported, not hidden.
-# EGL: not on dgx2 (EGL context creation fails on dgx2-1, 2026-09-29).
+# EGL on dgx2: MuJoCo's default device search picks a GPU outside the job there and fails; device 0
+# (the job's own V100) renders (checked on dgx2-1, 2026-09-29), so it is pinned on dgx2 nodes only.
 set -euo pipefail
 export MUJOCO_GL=egl
+case "$(hostname)" in dgx2-*) export MUJOCO_EGL_DEVICE_ID=${MUJOCO_EGL_DEVICE_ID:-0} ;; esac
 REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
 PY=/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python
 U=$REPO/external/Berkeley-Humanoid-Lite

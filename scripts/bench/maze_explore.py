@@ -632,9 +632,9 @@ class ExploreRecorder:
                                                  f"rendered depth {dl.shape[1]}x{dl.shape[0]}, L / R",
                                                  subtitle="display only; the brake reads the 8x8 above"))
             st = self.flow.last_stats if self.flow is not None else None
-            col_b.append(panels.image_panel(flow, (self.side_w, h_flow),
-                                            "optical flow, left eye (Farneback)" + (
-                                                f" | median {st['median_px_per_s']:.0f} px/s" if st else "")))
+            col_b.append(panels.image_panel(flow, (self.side_w, h_flow), "optical flow, left eye (Farneback)",
+                                            "hue = direction, brightness = speed" + (
+                                                f" | {st['median_px_per_s']:.0f} px/s" if st else "")))
             hb -= h_rgb + h_dep + h_flow
         if self.imu is not None:
             col_b.append(panels.imu_readout_panel(
@@ -675,10 +675,12 @@ class ExploreRecorder:
             self.frames += 1
 
     def close(self):
-        if self.render:
-            self.top.close()
-        if self.rig is not None:
-            self.rig.close()
+        # EGL teardown can raise on some nodes (dgx2) after every frame is written; never lose the clip to it
+        for closer in ((self.top.close,) if self.render else ()) + ((self.rig.close,) if self.rig is not None else ()):
+            try:
+                closer()
+            except Exception as exc:                      # noqa: BLE001
+                print(f"[render] renderer close failed ({exc!r}); frames are already written", flush=True)
         return self.sink.close()
 
 

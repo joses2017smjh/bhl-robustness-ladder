@@ -115,6 +115,16 @@ never-seen 6×6 goals with 0 falls, against A*'s 12/12
 (`docs/gifs/navgym-learned-maze.gif`). A matched-seed v2 control and a v4 that
 prices stalling are queued.
 
+## Sensor panels (2026-09-29)
+
+`maze_explore.py --imu-panel --rig-panels` adds display-only panels to a clip: a
+simulated IM10A-like IMU (Hiwonder datasheet noise, 100 Hz; gyro and accelerometer
+traces, 6-axis attitude filter against truth, magnetometer and barometer shown but
+not used), the stereo rig's RGB and 160×120 rendered depth, and left-eye optical
+flow. They read the simulator only; the hero episode's trace is identical with and
+without them. The README hero, `docs/gifs/random-maze-explore-sensors.gif`, is that
+episode; the noise model switches to measured values once the real IM10A is recorded (SF-05).
+
 ## The 22-DoF humanoid on the same mission (2026-09-28)
 
 `maze_explore.py --variant humanoid` swaps in the full-body humanoid with the
