@@ -106,5 +106,33 @@ under a maze-size curriculum, evaluates on mazes with seeds ≥ 10 000 (never
 trained on) and exports the deterministic actor to ONNX;
 `scripts/bench/maze_explore.py --policy actor.onnx` then drives the physics
 robot with it. Jobs `21412154` / `21412155`; the predeclared transfer test is in
-`SLURM_JOBS.md`. Results land here when they exist.
+`SLURM_JOBS.md`.
+
+Results so far (all in `SLURM_JOBS.md`): v1 NEGATIVE; v2 missed its held-out bar
+by one clause; v3 (action-std cap) NEGATIVE 0/3 on fresh mazes. **Exploratory
+transfer** (`21442350`): the best v2 actor drove the physics biped to **10/12**
+never-seen 6×6 goals with 0 falls, against A*'s 12/12
+(`docs/gifs/navgym-learned-maze.gif`). A matched-seed v2 control and a v4 that
+prices stalling are queued.
+
+## The 22-DoF humanoid on the same mission (2026-09-28)
+
+`maze_explore.py --variant humanoid` swaps in the full-body humanoid with the
+only qualified turning gait, `arms-turn-turnboth-s0` (one checkpoint: turn
+10/10, walk 3/3, push 7/60; it marches in place at zero command and turns
+while stepping). Same lidar map, planner, turn-then-walk controller and judge;
+settings frozen on pilot mazes ≥ 100 (cruise 0.30 m/s, turn 0.6 rad/s,
+inflation 0.50 m for its 0.31 m footprint). Scored once on hard 6×6 maze
+seeds 12–23, never run before (job `21463686`, predeclared PASS ≥ 10/12 with
+0 falls):
+
+| Robot (learned gait) | Reached | Falls | Clean | Median time |
+|---|---|---|---|---|
+| 22-DoF humanoid, TurnBoth-s0 | **12 / 12** | 0 | 12 / 12 | 70.5 s |
+| 12-DoF biped, dr-default-s0 (reference) | 12 / 12 | 0 | 12 / 12 | 58.2 s |
+
+**PASS.** Labels: LEARNED gait; SCRIPTED planner and controller; ORACLE pose
+and goal. The humanoid's lidar sits at 0.66 m, and when the body pitches a few
+rays pass over the 1.10 m walls (0.67 % on a pilot seed); not scored.
+`results/maze-humanoid-20260928/verdict.json`.
 
