@@ -1,0 +1,31 @@
+{
+ "report_only": "REPORT-ONLY diagnostic: no gate; changes no recorded verdict (Stand3 NEGATIVE stands)",
+ "synthetic": false,
+ "label": "learned (PPO checkpoint model_7999.pt, deterministic mean action, observation noise as trained); cube and robot state read from the simulator (oracle) only to classify; nothing scripted",
+ "task": "TaskV2-BHL-CubeToShelfStand3-Blind-v0",
+ "train_job": "21443327",
+ "readings": {
+  "s0": {
+   "code": "INCOMPLETE",
+   "text": "no readable replay JSON (FileNotFoundError(2, 'No such file or directory'))"
+  },
+  "s1": {
+   "code": "INCOMPLETE",
+   "text": "no readable replay JSON (FileNotFoundError(2, 'No such file or directory'))"
+  }
+ },
+ "pair": {
+  "funding": "NO_STAND4_ON_THIS_EVIDENCE",
+  "kind": null,
+  "codes": {
+   "s0": "INCOMPLETE",
+   "s1": "INCOMPLETE"
+  },
+  "text": "no Stand4 on this evidence: a replay is INCOMPLETE"
+ },
+ "files": {
+  "s0": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/stand3_replay_2026-09-28/21463687/replay_s0.json",
+  "s1": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/stand3_replay_2026-09-28/21463687/replay_s1.json"
+ },
+ "rule": "Stand4 justified only if both checkpoints give the same R2, R4 or R5 reading"
+}

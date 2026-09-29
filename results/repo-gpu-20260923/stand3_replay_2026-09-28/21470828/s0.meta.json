@@ -1,0 +1,152 @@
+{
+ "label": "s0",
+ "synthetic": false,
+ "report_only": "REPORT-ONLY diagnostic: no gate; changes no recorded verdict (Stand3 NEGATIVE stands)",
+ "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-09-27_17-56-20_v2-cubetoshelfstand3-blind-s0",
+ "checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-09-27_17-56-20_v2-cubetoshelfstand3-blind-s0/model_7999.pt",
+ "checkpoint_sha256": "e00bbc064ae29ef8995fbf378c0ca0133b9c3616aff18949b4f533a8c5ff67d8",
+ "task": "TaskV2-BHL-CubeToShelfStand3-Blind-v0",
+ "train_job": "21443327",
+ "trained_seed": 0,
+ "replay_seed": 1000,
+ "num_envs": 32,
+ "episodes_per_env": 3,
+ "src_root": "/scratch/sanchej7/tmp/stand3-replay-src-21470828/s0/src",
+ "trained_object_rot": [
+  1.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "args": {
+  "label": "s0",
+  "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-09-27_17-56-20_v2-cubetoshelfstand3-blind-s0",
+  "checkpoint": "model_7999.pt",
+  "src_root": "/scratch/sanchej7/tmp/stand3-replay-src-21470828/s0/src",
+  "out_prefix": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/stand3_replay_2026-09-28/21470828/s0",
+  "seed": 1000,
+  "num_envs": 32,
+  "episodes": 3,
+  "enable_cameras": true,
+  "config_check_mode": "gate"
+ },
+ "source": {
+  "src_root": "/scratch/sanchej7/tmp/stand3-replay-src-21470828/s0/src",
+  "bhl_robust_file": "/scratch/sanchej7/tmp/stand3-replay-src-21470828/s0/src/bhl_robust/__init__.py",
+  "quat_order": "xyzw",
+  "object_init_rot_live": [
+   1.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "pre_quat_fix": true,
+  "note": "config as trained, BEFORE the 2026-09-28 quaternion fix: cube spawn literal rot=(1,0,0,0) read as xyzw = 180 deg about x; object_tilt_l2 indexes wxyz. The policy observation has no cube orientation, so the fix would not change its inputs."
+ },
+ "config_check": {
+  "verdict": "PASS",
+  "gated_diffs": [],
+  "n_gated": 0,
+  "reported_diffs": [],
+  "n_reported": 0,
+  "allowlisted": [
+   {
+    "path": "sim.log_dir",
+    "trained": "'/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/isaa...",
+    "live": "'/scratch/sanchej7/tmp/stand3-replay-isaaclab-1629158'"
+   },
+   {
+    "path": "seed",
+    "trained": "0",
+    "live": "1000"
+   },
+   {
+    "path": "scene.num_envs",
+    "trained": "1024",
+    "live": "32"
+   },
+   {
+    "path": "scene.terrain.num_envs",
+    "trained": "1024",
+    "live": "32"
+   }
+  ],
+  "allowlist": [
+   "seed",
+   "scene.num_envs",
+   "scene.terrain.num_envs",
+   "sim.device",
+   "sim.log_dir"
+  ],
+  "report_only_top": [
+   "rewards",
+   "curriculum",
+   "viewer",
+   "video_recorder",
+   "recorders",
+   "ui_window_class_type",
+   "teleop_devices",
+   "isaac_teleop",
+   "xr",
+   "export_io_descriptors",
+   "log_dir",
+   "wait_for_textures",
+   "rerender_on_reset",
+   "num_rerenders_on_reset"
+  ],
+  "mode": "gate"
+ },
+ "cfg_path": "isaaclab_tasks.utils.hydra.resolve_task_config (no overrides), as scripts/train.py",
+ "stack": "v60",
+ "cube_size": [
+  0.28,
+  0.28,
+  0.28
+ ],
+ "step_dt": 0.04,
+ "max_episode_length": 500,
+ "trace_complete": true,
+ "agent_check": {
+  "n_diffs": 0,
+  "diffs": [],
+  "allowlist": [
+   "seed",
+   "run_name",
+   "device",
+   "max_iterations",
+   "resume",
+   "load_run",
+   "load_checkpoint"
+  ],
+  "note": "report-only; runner.load(strict=True) is the architecture guard"
+ },
+ "robot_root_body": {
+  "a": "base",
+  "b": "base"
+ },
+ "contact_proxy": {
+  "available": true,
+  "error": null,
+  "hand_near_m": 0.05,
+  "hand_force_n": 1.0,
+  "columns": [
+   "a_left",
+   "a_right",
+   "b_left",
+   "b_right"
+  ]
+ },
+ "determinism": {
+  "action_mode": "rsl-rl 5 MLPModel.forward(stochastic_output=False) -> distribution mean",
+  "repeat_equal": true,
+  "action_dim": 44
+ },
+ "trace_file": "s0.trace.npz",
+ "num_steps": 1500,
+ "episodes_done_min": 3,
+ "convention_check": {
+  "max_abs_R22_minus_quat_upz": 5.960464477539063e-08,
+  "ok": true,
+  "note": "matrix_from_quat vs unpack_wxyz (the fall check's) up-z; lean/yaw valid iff ok"
+ }
+}

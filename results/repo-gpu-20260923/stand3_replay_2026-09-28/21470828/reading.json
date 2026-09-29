@@ -1,0 +1,34 @@
+{
+ "report_only": "REPORT-ONLY diagnostic: no gate; changes no recorded verdict (Stand3 NEGATIVE stands)",
+ "synthetic": false,
+ "label": "learned (PPO checkpoint model_7999.pt, deterministic mean action, observation noise as trained); cube and robot state read from the simulator (oracle) only to classify; nothing scripted",
+ "task": "TaskV2-BHL-CubeToShelfStand3-Blind-v0",
+ "train_job": "21443327",
+ "readings": {
+  "s0": {
+   "code": "R4",
+   "kind": "lowering/hold",
+   "text": "LOWERING/HOLD (S=0.010 R=0.208 M=0.144 m D=0.050): carried over the seat band but not set down in most such episodes -- a Stand4 aimed at lowering/release is justified by this checkpoint"
+  },
+  "s1": {
+   "code": "R2",
+   "kind": "reach gap",
+   "within_twist_envelope": false,
+   "text": "REACH-SHORT (S=0.010 R=0.052 M=0.120 m D=0.200): shifted but short of the 0.19 m seat band, median carry partly beyond the 0.119 m feet-planted envelope: leans or shuffles, not far enough -- a Stand4 that closes the reach gap is justified by this checkpoint"
+  }
+ },
+ "pair": {
+  "funding": "NO_STAND4_ON_THIS_EVIDENCE",
+  "kind": null,
+  "codes": {
+   "s0": "R4",
+   "s1": "R2"
+  },
+  "text": "no Stand4 on this evidence: the checkpoints disagree ({'s0': 'R4', 's1': 'R2'})"
+ },
+ "files": {
+  "s0": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/stand3_replay_2026-09-28/21470828/replay_s0.json",
+  "s1": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/stand3_replay_2026-09-28/21470828/replay_s1.json"
+ },
+ "rule": "Stand4 justified only if both checkpoints give the same R2, R4 or R5 reading"
+}
