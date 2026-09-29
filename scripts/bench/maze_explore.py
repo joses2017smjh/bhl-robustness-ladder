@@ -632,8 +632,8 @@ class ExploreRecorder:
                                                  f"rendered depth {dl.shape[1]}x{dl.shape[0]}, L / R",
                                                  subtitle="display only; the brake reads the 8x8 above"))
             st = self.flow.last_stats if self.flow is not None else None
-            col_b.append(panels.image_panel(flow, (self.side_w, h_flow),
-                                            "optical flow, left eye (Farneback)" + (
+            col_b.append(panels.image_panel(flow, (self.side_w, h_flow), "optical flow, left eye (Farneback)",
+                                            "hue = direction, brightness = speed" + (
                                                 f" | median {st['median_px_per_s']:.0f} px/s" if st else "")))
             hb -= h_rgb + h_dep + h_flow
         if self.imu is not None:

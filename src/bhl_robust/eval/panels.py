@@ -196,15 +196,18 @@ def lidar_panel(sector_m, max_range: float, size: tuple[int, int], title: str, w
     return img
 
 
-def image_panel(rgb, size: tuple[int, int], title: str) -> Image.Image:
+def image_panel(rgb, size: tuple[int, int], title: str, subtitle: str | None = None) -> Image.Image:
     w, h = size
     img = Image.new("RGB", (w, h), PANEL_BG)
     draw = ImageDraw.Draw(img)
     top = _title(draw, w, title)
+    sub_h = 16 if subtitle else 0
     if rgb is not None:
         pic = Image.fromarray(np.ascontiguousarray(np.asarray(rgb)[..., :3].astype(np.uint8)))
-        pic = pic.resize((w, max(1, h - top)), Image.BILINEAR)
+        pic = pic.resize((w, max(1, h - top - sub_h)), Image.BILINEAR)
         img.paste(pic, (0, top))
+    if subtitle:
+        draw.text((8, h - 15), subtitle, font=load_font(11), fill=DIM)
     return img
 
 
