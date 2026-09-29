@@ -675,10 +675,12 @@ class ExploreRecorder:
             self.frames += 1
 
     def close(self):
-        if self.render:
-            self.top.close()
-        if self.rig is not None:
-            self.rig.close()
+        # EGL teardown can raise on some nodes (dgx2) after every frame is written; never lose the clip to it
+        for closer in ((self.top.close,) if self.render else ()) + ((self.rig.close,) if self.rig is not None else ()):
+            try:
+                closer()
+            except Exception as exc:                      # noqa: BLE001
+                print(f"[render] renderer close failed ({exc!r}); frames are already written", flush=True)
         return self.sink.close()
 
 
