@@ -230,7 +230,7 @@ def test_lift_hold_rule_numbers_are_the_predeclared_ones():
     assert (r["tilt_rad"], r["floor_contact"], r["pass_min"]) == (0.78, False, 8)
     assert r["seeds"] == list(range(10)) and "carry_m" not in r
     assert sc.LIFT_HOLD_NOTE == "cooperative lift and hold — carry not achieved"
-    assert sc.PROTOCOLS == ("carry", "lift_hold")
+    assert sc.PROTOCOLS == ("carry", "lift_hold", "lift_place")     # lift_place added 2026-09-27
 
 
 def test_carry_rule_and_params_are_unchanged():
@@ -425,3 +425,279 @@ def test_lift_hold_render_refuses_a_carry_json_and_skips_a_negative(tmp_path, ca
     assert mod.render(args) == 0
     assert "COOP_LIFT_HOLD_RENDER=SKIPPED verdict=NEGATIVE" in capsys.readouterr().out
     assert sorted(p.name for p in tmp_path.iterdir()) == ["score_crew2.json", "score_lifthold_crew2.json"]
+
+
+# ------------------------------------------------------------------ lift, hold and place
+
+def _final(dz=0.0, speed=0.0, off=(0.01, -0.02), contact=False):
+    return {"dz_m": dz, "speed_mps": speed, "offset_xy_m": list(off), "cube_tilt_rad": 1.57,
+            "robot_contact": contact, "normal_N": {"b": 0.0, "a": 0.0, "plinth": 4.9}}
+
+
+def _place_series(hold_s=4.0, peak=0.18):
+    """Up at 6.2 s, >= 5 cm for `hold_s`, back on the plinth (lift 0) to the end of 20 s."""
+    n = int(sc.LIFT_PLACE_RULE["episode_s"] / DT)
+    t = np.arange(n) * DT
+    return np.where((t >= 6.2) & (t < 6.2 + hold_s - 1e-9), peak, 0.0)
+
+
+def _score_lp(lift=None, final=None, **kw):
+    args = {"max_tilt": 0.2, "floor": False, "failed": None}
+    args.update(kw)
+    return sc.score_lift_place(_place_series() if lift is None else lift, DT,
+                               final=_final() if final is None else final, **args)
+
+
+def test_lift_place_rule_numbers_are_the_predeclared_ones():
+    r = sc.LIFT_PLACE_RULE
+    assert r["protocol"] == "lift_place" and r["episode_s"] == 20.0
+    assert (r["lift_peak_m"], r["lift_hold_m"], r["lift_hold_s"]) == (0.10, 0.05, 3.0)
+    assert (r["final_height_tol_m"], r["final_speed_mps"], r["plinth_half_m"]) == (0.03, 0.05, 0.09)
+    assert r["released"] is True and r["tilt_rad"] == 0.78 and r["floor_contact"] is False
+    assert r["seeds"] == list(range(10, 20)) and r["pass_min"] == 8
+    # never scored on the seeds of the other protocols; footprint = the harness's plinth
+    assert not set(r["seeds"]) & set(sc.SUCCESS_RULE["seeds"]) and not set(r["seeds"]) & set(sc.LIFT_HOLD_RULE["seeds"])
+    assert r["plinth_half_m"] == sc.CarryParams().plinth_half
+    assert "lift_place" in sc.PROTOCOLS
+
+
+def test_good_lift_place_succeeds():
+    row = _score_lp()
+    assert row["success"] and row["first_failed_check"] is None
+    assert row["lift_hold_s"] == pytest.approx(4.0, abs=DT) and row["hold_start_s"] == pytest.approx(6.2, abs=DT)
+
+
+@pytest.mark.parametrize("kw,check", [
+    ({"lift": _place_series(peak=0.09)}, "lift_peak"),
+    ({"lift": _place_series(hold_s=2.96)}, "lift_hold"),
+    ({"final": _final(dz=-0.031)}, "on_plinth_height"),
+    ({"final": _final(dz=-0.19)}, "on_plinth_height"),      # on the floor
+    ({"final": _final(dz=None)}, "on_plinth_height"),
+    ({"final": _final(speed=0.05)}, "at_rest"),
+    ({"final": _final(off=(0.091, 0.0))}, "on_plinth_footprint"),
+    ({"final": _final(off=(0.0, -0.091))}, "on_plinth_footprint"),
+    ({"final": _final(contact=True)}, "released"),
+    ({"max_tilt": 0.79}, "no_fall"), ({"floor": True}, "no_floor_contact"),
+    ({"failed": "nonfinite_state"}, "finite"),
+    ({"lift": _place_series()[:-10]}, "full_episode"),
+])
+def test_each_lift_place_check_fails_on_its_own(kw, check):
+    row = _score_lp(**kw)
+    assert not row["success"] and not row["checks"][check]
+    assert sum(not v for v in row["checks"].values()) == 1
+
+
+def test_lift_place_edges_pass():
+    assert _score_lp(lift=_place_series(hold_s=3.0))["success"]
+    assert _score_lp(final=_final(dz=0.03, speed=0.049, off=(0.09, -0.09)))["success"]
+
+
+def _lp_episodes(wins, n_pairs=1, seeds=None, holds=None):
+    seeds = list(range(10, 10 + len(wins))) if seeds is None else seeds
+    eps = []
+    for i, (s, w) in enumerate(zip(seeds, wins)):
+        row = _score_lp() if w else _score_lp(final=_final(dz=-0.19))
+        if holds:
+            row["lift_hold_s"] = holds[i]
+        eps.append({"seed": s, "pairs": [dict(row, pair=k) for k in range(n_pairs)]})
+    return eps
+
+
+def _lp_payload(wins, scored=True, rule=None, n_pairs=1, seeds=None):
+    return {"protocol": "lift_place", "rule": dict(rule or sc.LIFT_PLACE_RULE), "scored_run": scored,
+            "crew": 2 * n_pairs, "pairs": n_pairs, "label": sc.LABEL,
+            "episodes": _lp_episodes(wins, n_pairs=n_pairs, seeds=seeds)}
+
+
+def test_lift_place_summary_gate_is_eight_of_ten_on_seeds_10_to_19():
+    s = sc.summarize_lift_place(_lp_episodes([True] * 8 + [False] * 2), 1)
+    assert s["complete"] and s["pass"] and s["per_pair"][0]["placed_on_plinth"] == 8
+    assert not sc.summarize_lift_place(_lp_episodes([True] * 7 + [False] * 3), 1)["pass"]
+    # seeds 0-9 or >= 100 never count toward the verdict
+    s = sc.summarize_lift_place(_lp_episodes([True] * 10, seeds=list(range(10))), 1)
+    assert not s["complete"] and not s["pass"] and s["per_pair"][0]["episodes"] == 0
+
+
+def test_lift_place_verdict_line_is_computed_from_the_json():
+    line = sc.lift_place_verdict_line(_lp_payload([True] * 8 + [False] * 2))
+    assert line.startswith("COOP-LIFT-PLACE crew 2: PASS |") and "pair0=8/10" in line
+    assert sc.LIFT_PLACE_NOTE in line and sc.LABEL in line
+    assert sc.lift_place_verdict_line(_lp_payload([True] * 7 + [False] * 3)).startswith(
+        "COOP-LIFT-PLACE crew 2: NEGATIVE |")
+    assert sc.lift_place_verdict_line(_lp_payload([True] * 10, scored=False)).startswith(
+        "COOP-LIFT-PLACE crew 2: INCOMPLETE |")
+    assert sc.lift_place_verdict_line(_lp_payload([True] * 9)).startswith("COOP-LIFT-PLACE crew 2: INCOMPLETE |")
+    for relaxed in (dict(sc.LIFT_PLACE_RULE, lift_hold_s=2.0), dict(sc.LIFT_PLACE_RULE, released=False),
+                    dict(sc.LIFT_PLACE_RULE, seeds=list(range(10)))):
+        assert sc.lift_place_verdict_line(_lp_payload([True] * 10, rule=relaxed)).startswith(
+            "COOP-LIFT-PLACE crew 2: INVALID")
+    assert "INVALID" in sc.lift_place_verdict_line(dict(_lp_payload([True] * 10), protocol="lift_hold"))
+    p4 = _lp_payload([True] * 10, n_pairs=2)
+    for e in p4["episodes"][:3]:
+        e["pairs"][1]["success"] = False
+        e["pairs"][1]["first_failed_check"] = "released"
+    assert sc.lift_place_verdict_line(p4).startswith("COOP-LIFT-PLACE crew 4: NEGATIVE |")
+
+
+def test_place_script_matches_the_arm_script_through_the_lift():
+    p, q = sc.CarryParams(), sc.PlaceParams()
+    arm, place = sc.ArmScript(p), sc.PlaceScript(p, q)
+    for t in np.arange(0, place.t_lift_done, 0.04):
+        assert np.allclose(arm(t), place(t)), t
+        assert arm.phase(t) == place.phase(t)
+    assert place.t_lift_done == pytest.approx(arm.t_lift_done)
+
+
+def test_place_script_is_continuous_and_ends_at_rest():
+    p = sc.CarryParams()
+    for q in (sc.PlaceParams(), sc.PlaceParams(lower_to=None),
+              sc.PlaceParams(t_via=0.5, lower_via=(-0.5, 1.1, 0, 0, 0), t_unload=0.5,
+                             release_via=(0, 1.1, 0, 1.0, 0))):
+        s = sc.PlaceScript(p, q)
+        ts = np.arange(0, 20, 0.01)
+        qs = np.array([s(t) for t in ts])
+        assert np.abs(np.diff(qs, axis=0)).max() < 0.05
+        assert np.allclose(s(19.9), sc.KEYFRAMES_LEFT["rest"]) and s.phase(19.9) == "stand"
+        assert np.allclose(s(s.t_lower_start - 1e-6), sc.KEYFRAMES_LEFT["lift"])
+        assert np.allclose(s(s.t_end["lower"] - 1e-6), s.lower_target, atol=1e-4)
+        assert s.open_target[1] == sc.KEYFRAMES_LEFT["reach"][1]
+    rev = sc.PlaceScript(p, sc.PlaceParams(lower_to=None))
+    assert np.allclose(rev.lower_target, sc.KEYFRAMES_LEFT["squeeze"])          # pure reverse keyframe
+    assert np.allclose(rev.open_target, sc.KEYFRAMES_LEFT["reach"])
+
+
+def test_frozen_place_params_and_lowering_window():
+    p, q = sc.CarryParams(), sc.PlaceParams()
+    s = sc.PlaceScript(p, q)
+    # lowering 9.2 -> 10.7 s: after the arm settles in the lift pose, done before the earliest
+    # lift_hold grip slip seen on exploration seeds 100-119 (11.36 s)
+    assert s.t_lower_start == pytest.approx(9.2) and s.t_end["lower"] == pytest.approx(10.7)
+    assert s.t_end["lower"] < 11.36
+    assert tuple(q.lower_to) == (0.6, 1.1, 0.0, 1.0, 0.0) and q.lower_via is None and q.release_via is None
+    assert q.station_keep is False
+
+
+def test_station_command_points_home_and_is_capped():
+    q = sc.PlaceParams(station_keep=True)
+    c = sc.station_command([0.1, 0.0], [0.0, 0.0], 0.0, q)
+    assert c[0] < 0 and abs(c[1]) < 1e-12 and c[2] == 0.0
+    c = sc.station_command([0.0, 1.0], [0.0, 0.0], np.pi / 2, q)      # facing +y: -y world = backward
+    assert c[0] == pytest.approx(-q.v_station_max) and abs(c[1]) < 1e-9
+    q2 = sc.PlaceParams(station_keep=True, v_station_min=0.1)
+    assert not sc.station_command([0.01, 0.0], [0.0, 0.0], 0.0, q2).any()
+
+
+def test_rules_and_protocols_do_not_cross():
+    with pytest.raises(ValueError):
+        sc.run_episode(None, [], [], None, None, 0, sc.CarryParams(), rule=sc.LIFT_PLACE_RULE)
+    with pytest.raises(ValueError):
+        sc.run_episode(None, [], [], None, None, 0, sc.CarryParams(), rule=sc.LIFT_PLACE_RULE,
+                       protocol="lift_hold")
+    with pytest.raises(ValueError):
+        sc.run_place_episode(None, [], [], None, None, 0, sc.CarryParams(), rule=sc.LIFT_HOLD_RULE)
+    with pytest.raises(ValueError):
+        sc.run_episode(None, [], [], None, None, 0, sc.CarryParams(), rule=sc.LIFT_HOLD_RULE,
+                       protocol="lift_place")
+
+
+@pytest.mark.parametrize("seeds", ["0-9", "9", "5,100", "10-19,3"])
+def test_lift_place_score_never_runs_seeds_0_to_9(tmp_path, seeds):
+    import argparse
+    mod = _script()
+    args = argparse.Namespace(protocol="lift_place", out=tmp_path / "s.json", seeds=seeds, seconds=None, crew=2)
+    with pytest.raises(SystemExit, match="seeds 0-9"):
+        mod.score(args)
+    assert not (tmp_path / "s.json").exists()
+
+
+def test_lift_place_score_refuses_to_overwrite(tmp_path):
+    import argparse
+    mod = _script()
+    out = tmp_path / "score_liftplace_crew2.json"
+    out.write_text("{}")
+    args = argparse.Namespace(protocol="lift_place", out=out, seeds="10-19", seconds=None, crew=2)
+    with pytest.raises(SystemExit, match="REFUSED"):
+        mod.score(args)
+    assert out.read_text() == "{}"
+
+
+def test_lift_place_render_refuses_other_json_and_skips_a_negative(tmp_path, capsys):
+    import argparse
+    import json
+    mod = _script()
+    hold = tmp_path / "score_lifthold_crew2.json"
+    hold.write_text(json.dumps({"crew": 2, "protocol": "lift_hold", "scored_run": True,
+                                "summary": {"verdict": "PASS", "median_seed": 0}}))
+    args = argparse.Namespace(protocol="lift_place", render_from=hold, pipeline_check_seed=None,
+                              no_render=True, crew=2, out_dir=tmp_path, gif=None, seconds=None)
+    with pytest.raises(SystemExit, match="protocol"):
+        mod.render(args)
+    neg = tmp_path / "score_liftplace_crew2.json"
+    neg.write_text(json.dumps(_lp_payload([True] * 7 + [False] * 3)))
+    args.render_from = neg
+    assert mod.render(args) == 0
+    assert "COOP_LIFT_PLACE_RENDER=SKIPPED verdict=NEGATIVE" in capsys.readouterr().out
+    # a JSON that CLAIMS PASS in its summary is still judged from its episodes
+    lie = tmp_path / "score_liftplace_lie.json"
+    lie.write_text(json.dumps(dict(_lp_payload([False] * 10), summary={"verdict": "PASS", "median_seed": 10})))
+    args.render_from = lie
+    assert mod.render(args) == 0
+    assert "SKIPPED verdict=NEGATIVE" in capsys.readouterr().out
+    args.pipeline_check_seed = 12
+    args.render_from = neg
+    with pytest.raises(SystemExit, match="scored seed"):
+        mod.render(args)
+    assert sorted(p.name for p in tmp_path.iterdir()) == [
+        "score_lifthold_crew2.json", "score_liftplace_crew2.json", "score_liftplace_lie.json"]
+
+
+def test_lowering_target_description_matches_the_numbers():
+    # the frozen target reverses the shoulder pitch only; roll AND elbow are the lift keyframe's
+    d = sc.describe_lower_target(sc.PlaceScript(sc.CarryParams(), sc.PlaceParams()).lower_target)
+    assert "pitch-only lowering" in d and "tuned target" in d
+    assert "shoulder pitch -0.5 -> 0.6" in d
+    assert "shoulder roll 1.1 held at the lift keyframe's value" in d
+    assert "elbow pitch 1 held at the lift keyframe's value" in d
+    assert "squeeze keyframe's elbow" not in d
+    assert sc.KEYFRAMES_LEFT["lift"][3] == 1.0 and sc.KEYFRAMES_LEFT["squeeze"][3] == 0.5
+    assert "pure reverse" in sc.describe_lower_target(sc.KEYFRAMES_LEFT["squeeze"])
+    # labels never describe the frozen lowering as a plain keyframe reverse
+    assert "reverse-keyframe" not in sc.LIFT_PLACE_LABEL_DETAIL
+    assert "pitch-only lowering" in sc.LIFT_PLACE_LABEL_DETAIL
+    src = (REPO / "scripts/bench/coop_scripted_carry.py").read_text()
+    assert "squeeze keyframe's elbow" not in src and "sc.describe_lower_target(" in src
+
+
+@pytest.mark.parametrize("seeds,seconds", [("10-14", None), ("15", None), ("10-19,100", None),
+                                           ("10-19", 3.0), ("100,110", None)])
+def test_lift_place_score_refuses_partial_use_of_reserved_seeds(tmp_path, seeds, seconds):
+    import argparse
+    mod = _script()
+    args = argparse.Namespace(protocol="lift_place", out=tmp_path / "s.json", seeds=seeds, seconds=seconds, crew=2)
+    if seeds == "100,110":
+        # no reserved seed: allowed past the gate (stop at model load)
+        mod.load = lambda a: (_ for _ in ()).throw(RuntimeError("stop"))
+        with pytest.raises(RuntimeError, match="stop"):
+            mod.score(args)
+    else:
+        with pytest.raises(SystemExit, match="reserved"):
+            mod.score(args)
+    assert not (tmp_path / "s.json").exists()
+
+
+def test_lift_place_render_seed_is_recomputed_from_the_episodes(tmp_path):
+    import argparse
+    import json
+    mod = _script()
+    wins = [True] * 10
+    pay = _lp_payload(wins)
+    truth = sc.median_seed_by_hold(pay["episodes"])
+    pay["summary"] = {"verdict": "PASS", "median_seed": 19 if truth != 19 else 10}   # tampered
+    f = tmp_path / "score_liftplace_crew2.json"
+    f.write_text(json.dumps(pay))
+    args = argparse.Namespace(protocol="lift_place", render_from=f, pipeline_check_seed=None,
+                              no_render=True, crew=2, out_dir=tmp_path, gif=None, seconds=None)
+    mod.load = lambda a: (_ for _ in ()).throw(RuntimeError("stop"))
+    with pytest.raises(RuntimeError, match="stop"):
+        mod.render(args)
+    assert args.seed_used == truth

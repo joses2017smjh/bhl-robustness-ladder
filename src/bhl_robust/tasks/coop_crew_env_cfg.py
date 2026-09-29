@@ -53,6 +53,8 @@ from isaaclab.utils.noise import AdditiveUniformNoiseCfg as Unoise
 from berkeley_humanoid_lite_assets.robots.berkeley_humanoid_lite import HUMANOID_LITE_JOINTS
 from berkeley_humanoid_lite.tasks.locomotion.velocity import mdp
 
+from bhl_robust.quat_order import native_quat
+
 from . import coop_lift_mdp as coop
 from .coop_lift_env_cfg import (
     _COLLISION,
@@ -125,9 +127,13 @@ def _crew_payload(n: int, kind: str) -> RigidObjectCfg:
     else:
         spawn = sim_utils.CuboidCfg(size=(edge, edge, edge), **common)
         z = edge / 2.0
+    # Through ``native_quat`` since 2026-09-28 (see ``coop_lift_env_cfg._object``):
+    # the raw (1, 0, 0, 0) was 180 deg about x on v60. Every later v60 crew run
+    # is a NEW configuration, never compared with or used to re-score earlier
+    # crew / CoopLift / Stand results. v51 unchanged.
     return RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/object",
-        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, z), rot=(1.0, 0.0, 0.0, 0.0)),
+        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, z), rot=native_quat((1.0, 0.0, 0.0, 0.0))),
         spawn=spawn,
     )
 

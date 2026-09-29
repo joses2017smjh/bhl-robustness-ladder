@@ -72,6 +72,9 @@ Protocols. `run_episode(protocol=...)`:
   episode, so after the lift the pair stands and holds the cube until the end
   of a 20 s episode. The oracle cube pose is used only to score. Outputs of
   this protocol say `LIFT_HOLD_NOTE` ("carry not achieved").
+* "lift_place" (`LIFT_PLACE_RULE`, `run_place_episode`, 2026-09-27): lift,
+  hold, lower the cube back onto its plinth, open the hands, stand; scored on
+  seeds 10-19 only. See the lift-place section below.
 """
 
 from __future__ import annotations
@@ -121,7 +124,7 @@ SUCCESS_RULE = {
     "pass_min": 8,              # PASS iff >= 8/10 seeds succeed (per pair for crew 4)
 }
 
-PROTOCOLS = ("carry", "lift_hold")
+PROTOCOLS = ("carry", "lift_hold", "lift_place")
 
 #: Cooperative LIFT-AND-HOLD rule, a separate experiment predeclared in
 #: SLURM_JOBS.md ("cooperative LIFT-AND-HOLD, a separate experiment") before
@@ -608,12 +611,16 @@ def run_episode(model, slots, pairs, cfg, policy, seed: int, p: CarryParams,
     protocol "lift_hold": `LIFT_HOLD_RULE`, no velocity command ever (the
     pair stands and holds after the lift), scored by `score_lift_hold`.
     `rule` defaults to the protocol's own rule."""
+    if protocol == "lift_place":
+        # separate code path (the carry / lift_hold paths below are untouched)
+        return run_place_episode(model, slots, pairs, cfg, policy, seed, p, frame_hook=frame_hook,
+                                 rule=rule, keyframes=keyframes)
     if protocol not in PROTOCOLS:
         raise ValueError(f"unknown protocol {protocol!r}")
     lift_hold = protocol == "lift_hold"
     if rule is None:
         rule = LIFT_HOLD_RULE if lift_hold else SUCCESS_RULE
-    if lift_hold != (rule.get("protocol") == "lift_hold"):
+    if rule.get("protocol") == "lift_place" or lift_hold != (rule.get("protocol") == "lift_hold"):
         raise ValueError(f"rule does not belong to protocol {protocol!r}")
     from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController
 
@@ -914,3 +921,426 @@ def enforce_gif_budget(gif: dict | None, gif_path, sidecar_path=None) -> dict:
             f.unlink()
             deleted.append(str(f))
     return {"kept": False, "deleted": deleted}
+
+
+# ------------------------------------------------------------------ lift, hold and place
+#
+# A third, separate experiment (`protocol="lift_place"`): the same harness,
+# layout, hand pads, kp-30 grasping arm, cube and label, but after the lift the
+# pair holds the cube briefly, LOWERS it back onto its plinth by reversing the
+# lift's shoulder pitch only (pitch-only lowering: lift keyframe -> PlaceParams.
+# lower_to = (0.6, 1.1, 0, 1.0, 0), i.e. shoulder pitch -0.5 -> +0.6, past the
+# squeeze keyframe's 0.0, with the lift keyframe's roll 1.1 and elbow 1.0 held;
+# a TUNED target, not a plain reverse of the keyframes -- see "exploration"
+# below), opens the hands (shoulder roll -> the reach keyframe's -0.2), lets the
+# arms hang (-> rest) and stands to the end of a 20 s episode. The robots never
+# walk.
+#
+# Modelling choices of this protocol (recorded in every output):
+# * lowering time: the lowering starts early enough that the cube is back on
+#   the plinth before the earliest grip slip seen under the lift_hold protocol
+#   on exploration seeds 100-119 (slip = end of the longest >= 5 cm run; 20
+#   seeds, 11.36-18.92 s, never a scored seed 0-19);
+# * lowering target: pitch-only lowering from the lift keyframe to
+#   PlaceParams.lower_to (tuned on exploration seeds 100-102 and 110-114; pure
+#   reverse-keyframe lowering, lift -> squeeze, placed 0/11 and was rejected);
+# * station keeping (optional, `PlaceParams.station_keep`): small velocity
+#   commands from the ORACLE robot base poses that pull each robot back toward
+#   the xy it stood on at the end of settling.
+#
+# Exploration (2026-09-27, seeds >= 100 only; no seed 0-19 of this protocol run):
+# * slip times under lift_hold, crew 2, seeds 100-119 (end of the longest >= 5 cm
+#   run): 11.36, 11.68, 11.80, 12.44, 12.84, 13.04, 13.24, 14.04, 14.36, 15.28,
+#   15.64, 15.96, 16.08, 16.32, 16.64, 16.84, 17.32, 17.52, 17.88, 18.92 s. The
+#   cube is >= 5 cm up from 6.2-6.6 s; the arm keeps rising until ~9 s (seed
+#   101: 0.095 m at 8 s), so lowering runs 9.2 -> 10.7 s. Robot bases drift only
+#   3-5 cm after settling; the 0.36-0.42 m "drift" in the lift_hold notes is the
+#   cube's horizontal travel (it rolls ~90 deg about x and moves ~0.25 m forward,
+#   y 0.10 -> 0.35, during the lift).
+# * lowering target (crew 2): pure reverse (lift -> squeeze) placed 0/11 (three
+#   timings, seeds 100-102 and 110-114): the cube comes down ~12 cm forward of the plinth centre,
+#   lands on the front edge and tips off at release. Also tried and rejected:
+#   an elbow-first via point (grip lost mid-air), roll-held targets, pitched-back
+#   targets with the squeeze elbow, a slower lowering, a slower opening, two
+#   "unload" via points before opening, and station keeping. Best: shoulder pitch
+#   reversed past the squeeze pitch with elbow and roll held, -> (0.6, 1.1, 0, 1.0,
+#   0): 1/5 on seeds 110-114 (tie with pitch 0.3 broken by fewer floor contacts),
+#   frozen as `PlaceParams` defaults.
+# * pilot of the frozen setting: crew 2 seeds 100-109 1/10 (station keeping on:
+#   0/10; robot-a drift hold->release max 0.19 m off, 0.07 m on); crew 4 seeds
+#   100-104 0/5 per pair. The hand that ends on the cube's top face drags it off
+#   the plinth as it opens, often pulling that robot over.
+
+LIFT_PLACE_NOTE = "cooperative lift, hold and place — scripted arms, frozen learned gait; carry not achieved"
+LIFT_PLACE_LABEL_DETAIL = (
+    "legs + outer arm: frozen learned PPO gait, unmodified observation | grasping arm (one per "
+    "robot): scripted joint targets reach/squeeze/lift/hold, pitch-only lowering (tuned target), open, rest; "
+    "PD kp 30 (deploy 10), 4 Nm cap | cube pose: simulator oracle (scoring only) | robot base "
+    "poses: simulator oracle (station keeping, when on) | contact: MuJoCo, added box pads = "
+    "hand-mesh AABB, no welds")
+
+#: Cooperative LIFT, HOLD and PLACE rule. Proposed after the pilot on
+#: seeds >= 100 and recorded in SLURM_JOBS.md before any scored seed 10-19 ran.
+LIFT_PLACE_RULE = {
+    "protocol": "lift_place",
+    "episode_s": 20.0,
+    "lift_peak_m": 0.10,          # cube rises >= 10 cm above its plinth rest height
+    "lift_hold_m": 0.05,          # ...and stays >= 5 cm up
+    "lift_hold_s": 3.0,           # ...for >= 3.0 s continuously
+    "final_height_tol_m": 0.03,   # final step: |cube z - rest z| <= 3 cm
+    "final_speed_mps": 0.05,      # final step: cube linear speed < 5 cm/s
+    "plinth_half_m": 0.09,        # final step: cube centre within the plinth top (|dx|, |dy| <= 9 cm)
+    "released": True,            # final step: no robot geom touches the cube
+    "tilt_rad": TILT_LIMIT,       # no robot of the pair tilts past this at any policy step
+    "floor_contact": False,       # the cube never touches the floor (every physics step)
+    "seeds": list(range(10, 20)),  # reset-jitter seeds reserved for this protocol
+    "pass_min": 8,                # PASS iff >= 8/10 seeds succeed (per pair for crew 4)
+}
+
+
+@dataclass
+class PlaceParams:
+    """What the lift-hold-place script adds to `CarryParams` (which it uses
+    unchanged). Recorded in every output."""
+    t_hold: float = 2.2             # hold after the lift keyframe is reached: lowering 9.2 -> 10.7 s
+    t_via: float = 0.0              # lift -> lower_via (0 = no via point)
+    t_lower: float = 1.5            # (lower_via or lift) -> lower_to
+    t_unload: float = 0.0           # lower_to -> release_via (0 = no via point)
+    t_release: float = 1.0          # -> (release_via or lower_to) with the reach keyframe's roll (hands open)
+    t_retract: float = 1.0          # -> rest (arms hang), then stand
+    lower_via: tuple | None = None  # optional intermediate LEFT-arm pose (e.g. pull back at height)
+    # None = the squeeze keyframe (pure reverse-keyframe lowering). Frozen choice: reverse the lift's
+    # shoulder pitch only, past the squeeze pitch (-0.5 -> +0.6), elbow and roll held at the lift
+    # keyframe's values -- see "exploration" in the lift-place section header.
+    lower_to: tuple | None = (0.6, 1.1, 0.0, 1.0, 0.0)
+    release_via: tuple | None = None  # optional pose after lowering, before the hands open
+    station_keep: bool = False      # oracle-pose velocity commands toward each robot's settle xy
+    k_station: float = 2.0          # command (m/s) per metre of displacement
+    v_station_max: float = 0.30     # command cap (m/s)
+    v_station_min: float = 0.0      # commands below this are sent as 0
+    station_from: str = "settle"    # station keeping on from t_settle ...
+    station_until: str = "release"  # ... to the end of this phase ("release" | "episode")
+
+
+_ARM_JOINTS = ("shoulder pitch", "shoulder roll", "shoulder yaw", "elbow pitch", "elbow roll")  # = ARM_JOINTS_L order
+
+
+def describe_lower_target(target) -> str:
+    """Human-readable provenance of a LEFT-arm lowering target: for each joint,
+    whether it is held at the lift keyframe's value, equals the squeeze
+    keyframe's, or moves to a new value. Computed from the numbers, so the
+    recorded description can never disagree with the target."""
+    t = np.asarray(target, dtype=float)
+    lift, sq = np.asarray(KEYFRAMES_LEFT["lift"]), np.asarray(KEYFRAMES_LEFT["squeeze"])
+    if np.allclose(t, sq):
+        return "= the squeeze keyframe (pure reverse-keyframe lowering, lift -> squeeze)"
+    moved = [i for i in range(len(t)) if not np.isclose(t[i], lift[i])]
+    parts = []
+    for i, name in enumerate(_ARM_JOINTS):
+        if np.isclose(t[i], lift[i]) and np.isclose(t[i], sq[i]):
+            parts.append(f"{name} {t[i]:g} (lift = squeeze keyframe)")
+        elif np.isclose(t[i], lift[i]):
+            parts.append(f"{name} {t[i]:g} held at the lift keyframe's value")
+        elif np.isclose(t[i], sq[i]):
+            parts.append(f"{name} {lift[i]:g} -> {t[i]:g} (the squeeze keyframe's value)")
+        else:
+            parts.append(f"{name} {lift[i]:g} -> {t[i]:g} (the squeeze keyframe has {sq[i]:g})")
+    kind = ("pitch-only lowering" if moved == [0] else
+            "lowering moving " + ", ".join(_ARM_JOINTS[i] for i in moved))
+    return f"from the lift keyframe, {kind} (tuned target): " + "; ".join(parts)
+
+
+def place_params_dict(q: PlaceParams) -> dict:
+    return asdict(q)
+
+
+class PlaceScript:
+    """Grasping-arm schedule of the lift-hold-place protocol (LEFT-arm targets;
+    the right grasping arm uses -q). Identical to `ArmScript` up to the end of
+    the lift, then hold -> lower -> release -> retract -> stand."""
+
+    PHASES = ("settle", "reach", "squeeze", "lift", "hold", "lower_via", "lower", "unload", "release",
+              "retract")
+
+    def __init__(self, p: CarryParams, q: PlaceParams, keyframes: dict = KEYFRAMES_LEFT):
+        k = {n: np.asarray(v, dtype=float) for n, v in keyframes.items()}
+        lower = k["squeeze"].copy() if q.lower_to is None else np.asarray(q.lower_to, dtype=float)
+        via = k["lift"].copy() if q.lower_via is None else np.asarray(q.lower_via, dtype=float)
+        if q.lower_via is None and q.t_via != 0.0:
+            raise ValueError("t_via without lower_via")
+        unload = lower.copy() if q.release_via is None else np.asarray(q.release_via, dtype=float)
+        if q.release_via is None and q.t_unload != 0.0:
+            raise ValueError("t_unload without release_via")
+        opened = unload.copy()
+        opened[1] = k["reach"][1]                      # open: the reach keyframe's shoulder roll
+        self.lower_target, self.via_target, self.open_target = lower, via, opened
+        ts = np.cumsum([p.t_settle, p.t_reach, p.t_squeeze, p.t_lift, q.t_hold, q.t_via, q.t_lower,
+                        q.t_unload, q.t_release, q.t_retract])
+        self.t_end = {n: float(t) for n, t in zip(self.PHASES, ts)}
+        pts = [k["rest"], k["rest"], k["reach"], k["squeeze"], k["lift"], k["lift"], via, lower,
+               unload, opened, k["rest"]]
+        starts = [0.0] + [float(t) for t in ts[:-1]]
+        self.segs = [(a, float(b), pts[i], pts[i + 1]) for i, (a, b) in enumerate(zip(starts, ts))]
+        self.t_lift_done = self.t_end["lift"]
+        self.t_lower_start = self.t_end["hold"]
+        self.t_released = self.t_end["release"]
+        self.final = k["rest"]
+
+    def phase(self, t: float) -> str:
+        for (_, b, _, _), n in zip(self.segs, self.PHASES):
+            if t < b:
+                return n
+        return "stand"
+
+    def __call__(self, t: float) -> np.ndarray:
+        for a, b, q0, q1 in self.segs:
+            if t < b:
+                return q0 + _smooth((t - a) / max(b - a, 1e-6)) * (q1 - q0)
+        return self.final.copy()
+
+
+def station_command(xy, ref, yaw: float, q: PlaceParams) -> np.ndarray:
+    """Body-frame (vx, vy, wz) pulling a robot back toward `ref` (oracle pose)."""
+    v = -q.k_station * (np.asarray(xy, dtype=float) - np.asarray(ref, dtype=float))
+    n = float(np.linalg.norm(v))
+    if n > q.v_station_max:
+        v = v * (q.v_station_max / n)
+        n = q.v_station_max
+    if n < q.v_station_min:
+        return np.zeros(3)
+    b = body_frame_command(yaw, v)
+    return np.array([b[0], b[1], 0.0])
+
+
+def _cube_robot_contact(runner, pair: Pair) -> bool:
+    """True iff any robot geom touches this pair's cube right now."""
+    for k in range(runner.d.ncon):
+        c = runner.d.contact[k]
+        if pair.cube_geom == c.geom1 and runner.owner[c.geom2] >= 0:
+            return True
+        if pair.cube_geom == c.geom2 and runner.owner[c.geom1] >= 0:
+            return True
+    return False
+
+
+def run_place_episode(model, slots, pairs, cfg, policy, seed: int, p: CarryParams,
+                      q: PlaceParams | None = None, frame_hook=None, rule: dict | None = None,
+                      keyframes: dict = KEYFRAMES_LEFT) -> dict:
+    """One seeded lift-hold-place episode for every pair in the model, scored
+    by `score_lift_place` under `rule` (default `LIFT_PLACE_RULE`)."""
+    q = PlaceParams() if q is None else q
+    rule = LIFT_PLACE_RULE if rule is None else rule
+    if rule.get("protocol") != "lift_place":
+        raise ValueError("rule does not belong to protocol 'lift_place'")
+    from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController
+
+    controllers = [RlController(cfg) for _ in slots]
+    for c in controllers:
+        c.policy = policy
+    rest_l = np.asarray(keyframes["rest"], dtype=float)
+    grasp_rest, grasp_side = {}, {}
+    for pr in pairs:
+        grasp_rest[pr.robot_b], grasp_side[pr.robot_b] = (RIGHT, -rest_l), "right"
+        grasp_rest[pr.robot_a], grasp_side[pr.robot_a] = (LEFT, rest_l), "left"
+    runner = CarryRunner(model, slots, pairs, cfg, controllers, p, grasp_rest)
+    for s in slots:
+        if actuator_joint_names(model, s) != list(cfg.joints):
+            raise RuntimeError(f"{s.prefix} actuator order differs from deploy.yaml joints")
+    runner.reset(np.random.default_rng(seed))
+    dt = float(cfg.policy_dt)
+    script = PlaceScript(p, q, keyframes)
+    n_steps = int(round(rule["episode_s"] / dt))
+    t_on = p.t_settle if q.station_from == "settle" else script.t_lift_done
+    t_off = script.t_released if q.station_until == "release" else np.inf
+
+    rest_z = rest_xy = ref_xy = None
+    floor_at = [None] * len(pairs)                     # (t, phase) of the first cube-floor contact
+    grip_lost_at = [None] * len(pairs)                 # first step after the lift with no robot contact
+    lift = np.zeros((len(pairs), n_steps))
+    horiz = np.zeros((len(pairs), n_steps))
+    tilt_series = np.zeros((len(slots), n_steps))
+    disp = np.zeros((len(slots), n_steps))
+    trace, failed, n_done, t = [], None, 0, 0.0
+    for step in range(n_steps):
+        t = step * dt
+        if not (np.isfinite(runner.d.qpos).all() and np.isfinite(runner.d.qvel).all()):
+            failed = "nonfinite_state"
+            break
+        tilt_series[:, step] = [runner.tilt(i) for i in range(len(slots))]
+        cube = np.array([runner.d.xpos[pr.cube_body].copy() for pr in pairs])
+        if rest_z is None and t >= p.t_settle - 1e-9:
+            rest_z, rest_xy = cube[:, 2].copy(), cube[:, :2].copy()   # on the plinth, settled
+            ref_xy = [runner.xy(i) for i in range(len(slots))]        # station-keeping reference
+        if rest_z is not None:
+            lift[:, step] = cube[:, 2] - rest_z
+            horiz[:, step] = np.linalg.norm(cube[:, :2] - rest_xy, axis=1)
+            disp[:, step] = [np.linalg.norm(runner.xy(i) - ref_xy[i]) for i in range(len(slots))]
+
+        commands = [np.zeros(3) for _ in slots]
+        if q.station_keep and ref_xy is not None and t_on - 1e-9 <= t < t_off:
+            commands = [station_command(runner.xy(i), ref_xy[i], runner.yaw(i), q)
+                        for i in range(len(slots))]
+
+        left_q = script(t)
+        targets = []
+        for i, c in enumerate(controllers):
+            a = c.update(runner.observe(i, commands[i]))
+            targets.append(compose_arm_targets(a, left_q, grasp_side[i], p))
+        if not all(np.isfinite(x).all() for x in targets):
+            failed = "nonfinite_action"
+            break
+        runner.step(targets)
+        n_done = step + 1
+        for k, pr in enumerate(pairs):
+            if floor_at[k] is None and runner.cube_floor[k]:
+                floor_at[k] = (round(t, 3), script.phase(t))
+            if (grip_lost_at[k] is None and script.t_lift_done <= t < script.t_lower_start + q.t_via
+                    + q.t_lower and not _cube_robot_contact(runner, pr)):
+                grip_lost_at[k] = (round(t, 3), script.phase(t))
+        if frame_hook is not None:
+            frame_hook(step=step, t=t, runner=runner, script=script, pairs=pairs,
+                       lift=lift[:, step].copy(), horiz=horiz[:, step].copy(),
+                       carry_on=[False] * len(pairs), carry_done=[False] * len(pairs),
+                       commands=commands)
+        if step % 25 == 0:
+            trace.append({
+                "t": round(t, 2), "phase": script.phase(t),
+                "cube": cube.round(4).tolist(),
+                "lift_m": lift[:, step].round(4).tolist(),
+                "cube_tilt_rad": [round(runner.cube_tilt(pr), 3) for pr in pairs],
+                "robots_xy": [runner.xy(i).round(3).tolist() for i in range(len(slots))],
+                "tilt": tilt_series[:, step].round(3).tolist(),
+                "station_disp_m": disp[:, step].round(3).tolist(),
+                "cube_normal_N": [{kk: round(v, 2) for kk, v in runner.cube_forces(pr).items()}
+                                  for pr in pairs],
+                "commands": [np.round(c, 3).tolist() for c in commands]})
+    rows = []
+    i_hold = int(round(script.t_lift_done / dt))
+    i_rel = int(round(script.t_released / dt))
+    for k, pr in enumerate(pairs):
+        mt = float(tilt_series[[pr.robot_a, pr.robot_b], :n_done].max()) if n_done else 0.0
+        plinth_xy = model.geom_pos[pr.plinth_geom][:2]
+        cube_now = runner.d.xpos[pr.cube_body]
+        jadr = model.body_jntadr[pr.cube_body]
+        vel = runner.d.qvel[model.jnt_dofadr[jadr]:model.jnt_dofadr[jadr] + 3]
+        final = {
+            "dz_m": float(cube_now[2] - rest_z[k]) if rest_z is not None else None,
+            "speed_mps": float(np.linalg.norm(vel)),
+            "offset_xy_m": [float(v) for v in (cube_now[:2] - plinth_xy)],
+            "cube_tilt_rad": runner.cube_tilt(pr),
+            "robot_contact": _cube_robot_contact(runner, pr),
+            "normal_N": {kk: round(v, 2) for kk, v in runner.cube_forces(pr).items()},
+        }
+        row = score_lift_place(lift[k, :n_done], dt, max_tilt=mt, floor=bool(runner.cube_floor[k]),
+                               failed=failed, final=final, rule=rule)
+        both = [pr.robot_b, pr.robot_a]
+        row.update({
+            "pair": k, "seed": seed,
+            # diagnostics (never scored): when the cube first touched the floor, and the first
+            # step between the end of the lift and the end of the lowering with no hand on it
+            "floor_contact_first": None if floor_at[k] is None else
+                {"t_s": floor_at[k][0], "phase": floor_at[k][1]},
+            "grip_lost_first": None if grip_lost_at[k] is None else
+                {"t_s": grip_lost_at[k][0], "phase": grip_lost_at[k][1]},
+            "station_disp_max_m": {
+                "hold_to_release": [round(float(disp[i, i_hold:min(i_rel, n_done)].max()), 4)
+                                    if n_done > i_hold else None for i in both],
+                "episode": [round(float(disp[i, :n_done].max()), 4) if n_done else None for i in both]},
+            "lift_series_m": lift[k, :n_done:5].round(4).tolist(),
+            "horiz_series_m": horiz[k, :n_done:5].round(4).tolist(),
+            "series_dt_s": round(5 * dt, 3)})
+        rows.append(row)
+    return {"seed": seed, "pairs": rows, "failed": failed, "steps": n_done,
+            "elapsed_s": round(n_done * dt, 3), "trace": trace, "protocol": "lift_place",
+            "place_params": place_params_dict(q),
+            "script_times_s": {n: round(v, 3) for n, v in script.t_end.items()}}
+
+
+def score_lift_place(lift, dt: float, *, max_tilt: float, floor: bool, failed: str | None,
+                     final: dict, rule: dict = LIFT_PLACE_RULE) -> dict:
+    """`LIFT_PLACE_RULE` applied to one pair: the lift-hold clauses (longest
+    contiguous run, as `score_lift_hold`) plus the final cube state."""
+    lift = np.asarray(lift, dtype=float)
+    up = lift >= rule["lift_hold_m"]
+    best, start = _longest_run(up)
+    hold_s = best * dt
+    peak = float(lift.max()) if lift.size else 0.0
+    dz = final.get("dz_m")
+    off = final.get("offset_xy_m") or [np.inf, np.inf]
+    checks = {
+        "lift_peak": peak >= rule["lift_peak_m"],
+        "lift_hold": hold_s >= rule["lift_hold_s"] - 1e-9,
+        "on_plinth_height": dz is not None and abs(dz) <= rule["final_height_tol_m"],
+        "at_rest": final.get("speed_mps", np.inf) < rule["final_speed_mps"],
+        "on_plinth_footprint": max(abs(off[0]), abs(off[1])) <= rule["plinth_half_m"],
+        "released": (not final.get("robot_contact", True)) if rule.get("released") else True,
+        "no_fall": max_tilt <= rule["tilt_rad"],
+        "no_floor_contact": not floor,
+        "finite": failed is None,
+        "full_episode": lift.size * dt >= rule["episode_s"] - 1e-6,
+    }
+    success = all(checks.values())
+    return {"success": bool(success),
+            "first_failed_check": None if success else next(k for k, v in checks.items() if not v),
+            "checks": checks, "lift_peak_m": round(peak, 4), "lift_hold_s": round(hold_s, 3),
+            "hold_start_s": round(start * dt, 3) if best else None,
+            "hold_end_s": round((start + best) * dt, 3) if best else None,
+            "max_tilt_rad": round(max_tilt, 4), "cube_floor_contact": bool(floor),
+            "final_dz_m": None if dz is None else round(float(dz), 4),
+            "final_speed_mps": round(float(final.get("speed_mps", np.nan)), 4),
+            "final_offset_xy_m": [round(float(v), 4) for v in off],
+            "final_cube_tilt_rad": round(float(final.get("cube_tilt_rad", np.nan)), 4),
+            "final_robot_contact": bool(final.get("robot_contact", True)),
+            "final_normal_N": final.get("normal_N"),
+            "final_lift_m": round(float(lift[-1]), 4) if lift.size else None}
+
+
+def summarize_lift_place(episodes: list[dict], n_pairs: int, rule: dict = LIFT_PLACE_RULE) -> dict:
+    """Per-pair success counts and the PASS verdict under `LIFT_PLACE_RULE`.
+    Complete only when every predeclared seed has been run."""
+    seeds_run = sorted({e["seed"] for e in episodes})
+    complete = all(s in seeds_run for s in rule["seeds"])
+    per_pair = []
+    for k in range(n_pairs):
+        rows = [e["pairs"][k] for e in episodes if e["seed"] in rule["seeds"]]
+        wins = [r for r in rows if r["success"]]
+        failed = sorted({r["first_failed_check"] for r in rows} - {None})
+        per_pair.append({
+            "pair": k, "episodes": len(rows), "successes": len(wins),
+            "pass": bool(complete and len(wins) >= rule["pass_min"]),
+            "first_failed_check_counts": {c: sum(1 for r in rows if r["first_failed_check"] == c)
+                                          for c in failed},
+            "lift_peak_m_median": float(np.median([r["lift_peak_m"] for r in rows])) if rows else None,
+            "lift_hold_s_median": float(np.median([r["lift_hold_s"] for r in rows])) if rows else None,
+            "placed_on_plinth": sum(1 for r in rows if r["checks"]["on_plinth_height"]
+                                    and r["checks"]["on_plinth_footprint"]),
+            "falls": sum(1 for r in rows if r["max_tilt_rad"] > rule["tilt_rad"]),
+            "floor_contacts": sum(1 for r in rows if r["cube_floor_contact"]),
+        })
+    return {"per_pair": per_pair, "complete": bool(complete), "seeds_run": seeds_run,
+            "pass": bool(complete and all(pp["pass"] for pp in per_pair))}
+
+
+def lift_place_verdict_line(payload: dict, crew=None) -> str:
+    """`COOP-LIFT-PLACE crew N: PASS|NEGATIVE|INCOMPLETE|INVALID ...`, computed
+    from a lift-hold-place score JSON (its episodes, re-summarised here)."""
+    crew = payload.get("crew", crew) if crew is None else crew
+    label = payload.get("label", LABEL)
+    if payload.get("protocol") != "lift_place" or payload.get("rule") != LIFT_PLACE_RULE:
+        return (f"COOP-LIFT-PLACE crew {crew}: INVALID (not a lift_place score JSON under the "
+                f"predeclared LIFT_PLACE_RULE) | {LIFT_PLACE_NOTE} | {label}")
+    n_pairs = int(payload.get("pairs", int(crew) // 2))
+    eps = payload.get("episodes", [])
+    s = summarize_lift_place(eps, n_pairs, LIFT_PLACE_RULE)
+    median = median_seed_by_hold([e for e in eps if e["seed"] in LIFT_PLACE_RULE["seeds"]])
+    if not (payload.get("scored_run") and s["complete"]):
+        verdict = "INCOMPLETE"
+    else:
+        verdict = "PASS" if s["pass"] else "NEGATIVE"
+    pp = " ".join(
+        f"pair{p['pair']}={p['successes']}/{p['episodes']} (first failed: {p['first_failed_check_counts']}, "
+        f"median lift {p['lift_peak_m_median']:.3f} m, median hold {p['lift_hold_s_median']:.2f} s, "
+        f"placed {p['placed_on_plinth']}, falls {p['falls']}, floor contacts {p['floor_contacts']})"
+        for p in s["per_pair"] if p["episodes"])
+    return (f"COOP-LIFT-PLACE crew {crew}: {verdict} | {pp or 'no scored episodes'} | "
+            f"median_seed_by_hold={median} | {LIFT_PLACE_NOTE} | {label}")

@@ -45,6 +45,22 @@ NavGym v3 (2026-09-27) = the v2 env + --ppo v3:
   verdict-v3 ROOT   (`navgym_train.py verdict-v3 <root> --seeds 2 3 4`) applies the
                     predeclared v3 rule to <root>/armV3-s<seed>/summary.json.
 
+NavGym v4 (2026-09-28) = v2 exactly (--env-version 2 --ppo v2) + ONE change that prices stalling:
+
+  --idle-cost 0.008 MazeNavEnv(version=2, idle_cost=0.008) in the TRAINING envs: an extra -0.008 on
+                    every step whose commanded forward action a[0] <= -0.9 (v_cmd <= 5 % of V_MAX)
+                    while the straight-line goal distance at the start of the step is > 0.5 m. An
+                    endless idle stall is then worth (-0.002 - 0.008) / (1 - 0.998) = -5.0 (the crash)
+                    instead of -1.0 (SB3 bootstraps truncations). Chosen over a raised step cost
+                    (-0.010) by a pilot on training-range mazes (slurm/repo20260923/cpu_navgym_v4.sbatch
+                    header). Default None = off: no env keyword, no config key, no summary key.
+                    The held-out evaluations are unaffected (the idle cost changes no outcome).
+                    Logged per rollout as stall/idle_charged_frac; summary.json "stall_price".
+  verdict-v4 ROOT   applies the predeclared v4 rule (maze seeds 40000-40047) to <root>/armV4-s<seed>/.
+  reading-v2ctl ROOT
+                    the report-only reading of the v2 matched-seed control (v2 recipe on seeds 2-4)
+                    against the v3 twins (cpu_navgym_v2ctl.sbatch header).
+
 Every run: VecMonitor (rollout/ep_rew_mean, ep_len_mean), held-out success /
 collision / time-out rates to TensorBoard and eval_history.json, the best
 checkpoint by held-out 6x6 success (tie-break 5x5) kept in best/, and at the
@@ -74,12 +90,21 @@ from stable_baselines3.common.torch_layers import BaseFeaturesExtractor  # noqa:
 from stable_baselines3.common.vec_env import SubprocVecEnv, DummyVecEnv, VecMonitor  # noqa: E402
 
 from bhl_robust.navgym.env import FRESH_BASE, HELDOUT_BASE, MazeNavEnv, MAP_CROP, heldout_env  # noqa: E402
+from bhl_robust.navgym.env import V2_STEP_COST, V4_IDLE_A0_MAX, V4_IDLE_COST, V4_IDLE_FAR_M  # noqa: E402
 
 CURRICULUM = [((3, 3),), ((3, 3), (4, 4)), ((4, 4), (5, 5)), ((5, 5), (6, 6))]
 EVAL_SIZES = ((4, 4), (5, 5), (6, 6))
 V2_PERIODIC_EVAL_SIZES = ((5, 5), (6, 6))      # v2 episodes are up to 3x longer; 4x4 only in the final eval
 STD_FLOOR = 0.2
 STD_CEILING_V3 = 1.0
+# NavGym v4's stall price, as summary.json records it (the v4 verdict requires exactly this)
+V4_STALL_PRICE = {"lever": "idle_cost", "idle_cost": V4_IDLE_COST, "idle_a0_max": V4_IDLE_A0_MAX, "idle_far_m": V4_IDLE_FAR_M,
+                  "step_cost": V2_STEP_COST}
+
+
+def stall_price(idle_cost: float) -> dict:
+    return {"lever": "idle_cost", "idle_cost": float(idle_cost), "idle_a0_max": V4_IDLE_A0_MAX, "idle_far_m": V4_IDLE_FAR_M,
+            "step_cost": V2_STEP_COST}
 
 PPO_SETTINGS = {
     # v1: exactly the settings of results/navgym-20260924
@@ -115,10 +140,13 @@ class NavExtractor(BaseFeaturesExtractor):
         return self.out(torch.cat([self.cnn(obs["map"]), self.mlp(vec)], dim=1))
 
 
-def make_env(rank: int, seed: int, sizes, randomize: bool = True, version: int = 1, gamma: float = 0.998):
+def make_env(rank: int, seed: int, sizes, randomize: bool = True, version: int = 1, gamma: float = 0.998, env_kwargs: dict | None = None):
+    """`env_kwargs` (v2 only; None = the v2 env exactly) are extra MazeNavEnv keywords, e.g. the v4 idle_cost."""
     def _init():
         if version == 1:
             env = MazeNavEnv(sizes=sizes, randomize_dynamics=randomize)
+        elif env_kwargs:
+            env = MazeNavEnv(sizes=sizes, randomize_dynamics=randomize, version=version, gamma=gamma, **env_kwargs)
         else:
             env = MazeNavEnv(sizes=sizes, randomize_dynamics=randomize, version=version, gamma=gamma)
         env.reset(seed=seed + rank)
@@ -261,6 +289,30 @@ class StdFloor(BaseCallback):
         return True
 
 
+class IdleMonitor(BaseCallback):
+    """v4 only (added when --idle-cost is set): fraction of training steps the env charged the idle cost
+    (info["idle_charged"]), logged once per rollout as stall/idle_charged_frac. Reads infos only."""
+
+    def __init__(self):
+        super().__init__()
+        self.n = self.k = 0
+        self.total_n = self.total_k = 0
+
+    def _on_step(self) -> bool:
+        for info in self.locals.get("infos", []):
+            if "idle_charged" in info:
+                self.n += 1
+                self.k += bool(info["idle_charged"])
+        return True
+
+    def _on_rollout_end(self) -> None:
+        if self.n:
+            self.logger.record("stall/idle_charged_frac", self.k / self.n)
+        self.total_n += self.n
+        self.total_k += self.k
+        self.n = self.k = 0
+
+
 class CurriculumAndEval(BaseCallback):
     def __init__(self, out: Path, eval_every: int, n_eval: int = 24, promote_at: float = 0.8, version: int = 1, gamma: float = 0.998,
                  eval_sizes=EVAL_SIZES, pool: HeldoutPool | None = None):
@@ -365,7 +417,7 @@ def export_onnx(model, path: Path):
     return {"onnx": str(path), "inputs": list(keys), "max_abs_diff_vs_torch": err}
 
 
-def main() -> int:
+def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--seed", type=int, default=0)
@@ -385,9 +437,19 @@ def main() -> int:
     ap.add_argument("--final-eval-fresh-base", type=int, default=None,
                     help="also evaluate the final and best actors on the fresh held-out set maze seed BASE + k (v3: 20000); "
                          "default None = only the original set (10 000 + k), as every earlier run")
+    ap.add_argument("--idle-cost", type=float, default=None,
+                    help="v4 stall price (env v2 only; v4: 0.008): subtract this on training steps with forward command ~0 "
+                         "(a[0] <= -0.9) more than 0.5 m from the goal; default None = off, as every earlier run")
+    return ap
+
+
+def main() -> int:
+    ap = build_parser()
     args = ap.parse_args()
     if args.final_eval_fresh_base is not None and args.final_eval_fresh_base < 10_000 + 1_000:
         ap.error("--final-eval-fresh-base must be clear of the training seeds (< 10 000) and the original held-out set (10 000 + k)")
+    if args.idle_cost is not None and (args.env_version != 2 or not args.idle_cost > 0):
+        ap.error("--idle-cost needs --env-version 2 and a value > 0")
     args.out.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(max(1, min(4, args.n_envs)))
     P = dict(PPO_SETTINGS[args.ppo])
@@ -401,7 +463,8 @@ def main() -> int:
     # pays nothing for stalling, cannot be farmed by cycling under a discounted objective, and gives
     # ~+6.6 discounted for a 20 m route against ~-1 for stalling and -5 for a crash.
     env_gamma = 1.0 if version == 2 else gamma
-    fns = [make_env(i, args.seed * 1000, CURRICULUM[0], version=version, gamma=env_gamma) for i in range(args.n_envs)]
+    env_kwargs = {"idle_cost": args.idle_cost} if args.idle_cost is not None else None
+    fns = [make_env(i, args.seed * 1000, CURRICULUM[0], version=version, gamma=env_gamma, env_kwargs=env_kwargs) for i in range(args.n_envs)]
     venv = DummyVecEnv(fns) if args.dummy_vec else SubprocVecEnv(fns, start_method="forkserver")
     venv = VecMonitor(venv)                   # rollout/ep_rew_mean and ep_len_mean (logging only)
     if P["lr_final"] is None:
@@ -417,9 +480,13 @@ def main() -> int:
                 gae_lambda=P["gae_lambda"], clip_range=P["clip"], ent_coef=P["ent_coef"], vf_coef=0.5, max_grad_norm=1.0, target_kl=P["target_kl"],
                 seed=args.seed, device="cpu", verbose=0, tensorboard_log=str(args.out / "tb"), policy_kwargs=policy_kwargs)
     eval_sizes = EVAL_SIZES if version == 1 else V2_PERIODIC_EVAL_SIZES
-    (args.out / "config.json").write_text(json.dumps({**vars(args), "out": str(args.out), "curriculum": CURRICULUM, "eval_sizes": eval_sizes,
+    cfg_args = dict(vars(args))
+    if cfg_args.get("idle_cost") is None:
+        cfg_args.pop("idle_cost", None)         # off: config.json exactly as before the flag existed
+    (args.out / "config.json").write_text(json.dumps({**cfg_args, "out": str(args.out), "curriculum": CURRICULUM, "eval_sizes": eval_sizes,
                                                        "final_eval_sizes": EVAL_SIZES, "env_version": version, "env_shaping_gamma": env_gamma if version == 2 else None,
-                                                       "ppo": P}, indent=2, default=str) + "\n")
+                                                       "ppo": P, **({"stall_price": stall_price(args.idle_cost)} if args.idle_cost is not None else {})},
+                                                      indent=2, default=str) + "\n")
     n_eval_workers = 0 if version == 1 else (args.n_envs if args.eval_workers is None else args.eval_workers)
     pool = HeldoutPool(n_eval_workers, version, env_gamma) if n_eval_workers > 0 and not args.dummy_vec else None
 
@@ -434,6 +501,10 @@ def main() -> int:
     if P["std_floor"] is not None:
         floor = StdFloor(P["std_floor"], P.get("std_ceiling"))
         cb.append(floor)
+    idle_mon = None
+    if args.idle_cost is not None:
+        idle_mon = IdleMonitor()
+        cb.append(idle_mon)
     t0 = time.time()
     model.learn(total_timesteps=args.total_steps, callback=cb, progress_bar=False)
     model.save(str(args.out / "ppo_final.zip"))
@@ -463,6 +534,10 @@ def main() -> int:
         summary["std_ceiling"] = P.get("std_ceiling")
         summary["std_ceiling_clamps"] = floor.ceiling_clamps if floor is not None else None
         summary["policy_std_final_per_dim"] = [float(x) for x in torch.exp(model.policy.log_std.detach())]
+    if args.idle_cost is not None:
+        # v4 addition (absent from every run without --idle-cost)
+        summary["stall_price"] = stall_price(args.idle_cost)
+        summary["idle_charged_frac_training"] = (idle_mon.total_k / idle_mon.total_n) if idle_mon.total_n else None
     if fresh is not None:
         summary["final_eval_fresh_48"] = final_fresh
         summary["fresh_set"] = {"maze_seeds": f"{fresh} + k, k = 0..{args.n_final_eval - 1}", "dynamics": f"reset(seed={fresh} + k)",
@@ -558,7 +633,256 @@ def verdict_main(argv) -> int:
     return 0
 
 
+# ---------------------------------------------------------------- v2 matched-seed control (2026-09-28): REPORT-ONLY reading
+V2CTL_READING = {"seeds": (2, 3, 4), "own_dir": "armV2C-s{}", "twin_dir": "armV3-s{}", "set": "final_eval_heldout_48",
+                 "never_used_set": "final_eval_fresh_48", "never_used_base": 40_000, "total_steps": 30_000_000, "n": 48,
+                 "match_rel_tol": 1e-6, "b_seed": 2, "b_not_caused_below": 0.30, "b_caused_at": 0.60,
+                 "c_raised_by": 0.10, "c_within": 0.05, "c_min_seeds": 2}
+V2CTL_TEXT = ("REPORT-ONLY reading (not a gate), predeclared 2026-09-28 before any v2ctl run. v2ctl = the v2 recipe (--ppo v2 "
+              "--env-version 2) on training seeds 2, 3, 4, each the twin of the v3 run with the same seed. "
+              "(a) determinism: if the v2ctl run's rollout/ep_rew_mean equals its v3 twin's (relative tolerance 1e-6) at every "
+              "point logged at a step strictly below that twin's first logged std-ceiling clamp, the pair is a SINGLE-FACTOR "
+              "comparison, else a SEED-MATCHED REPLICATE (first divergence reported). (b) s2: v2ctl-s2 final 5x5 success on the "
+              "10000-set < 0.30 -> the s2 collapse is not caused by the ceiling; >= 0.60 -> the ceiling caused or deepened it; "
+              "else inconclusive. (c) on the 10000-set: >= 2/3 v2ctl seeds with 6x6 collision at least 0.10 lower than the v3 "
+              "twin -> the ceiling raised collisions; >= 2/3 within 0.05 -> it did not; else inconclusive. The never-used set "
+              "(maze seeds 40000-40047) and a 5-seed v2 estimate (Arm A s0, s1 + v2ctl s2-s4, 10000-set) are reported, not read.")
+
+
+def _tb_scalars(run: Path, tags) -> dict:
+    """{tag: [(step, value), ...] or None} for TensorBoard scalars of a navgym_train.py run (the newest tb/PPO_<n>
+    directory, i.e. the last start of the run), each event file read once."""
+    dirs = sorted((d for d in (run / "tb").glob("PPO_*") if d.is_dir()), key=lambda d: int(d.name.split("_")[-1]))
+    if not dirs:
+        return {t: None for t in tags}
+    from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
+    ea = EventAccumulator(str(dirs[-1]), size_guidance={"scalars": 0})
+    ea.Reload()
+    have = set(ea.Tags().get("scalars", []))
+    return {t: ([(int(e.step), float(e.value)) for e in ea.Scalars(t)] if t in have else None) for t in tags}
+
+
+def determinism_check(own: list | None, twin: list | None, twin_clamps: list | None, rel_tol: float = 1e-6) -> dict:
+    """Reading (a): own vs twin rollout/ep_rew_mean at every step strictly below the twin's first ceiling clamp.
+    The clamp is applied at a rollout start and logged with that rollout's dump, so the first logged clamp step S is
+    the first point whose rollout can differ; every point < S comes from identical computation if training is deterministic."""
+    if own is None or twin is None or twin_clamps is None:
+        return {"result": "no result", "why": "missing TensorBoard data"}
+    first = next((s for s, v in twin_clamps if v > 0), None)
+    if first is None:
+        return {"result": "no result", "why": "the twin never clamped"}
+    a = {s: v for s, v in own if s < first}
+    b = {s: v for s, v in twin if s < first}
+    steps = sorted(set(a) | set(b))
+    div = None
+    for s in steps:
+        if s not in a or s not in b or abs(a[s] - b[s]) > rel_tol * max(1.0, abs(b[s])):
+            div = s
+            break
+    same = div is None and len(steps) > 0
+    return {"result": "single-factor comparison" if same else "seed-matched replicate", "first_ceiling_clamp_step": first,
+            "points_compared": len(steps), "first_divergence_step": div,
+            "max_abs_diff": max((abs(a[s] - b[s]) for s in steps if s in a and s in b), default=None)}
+
+
+def _v2ctl_config_ok(s: dict, rule: dict = V2CTL_READING) -> dict:
+    ev, fr = s.get(rule["set"]) or {}, s.get(rule["never_used_set"]) or {}
+    fs = s.get("fresh_set") or {}
+    return {"config_v2": s.get("ppo") == "v2" and s.get("env_version") == 2 and s.get("std_ceiling") is None,
+            "reached_last_step": bool(s.get("reached_last_step")) and int(s.get("num_timesteps", 0)) >= rule["total_steps"]
+            and int(s.get("total_steps", 0)) == rule["total_steps"],
+            "n48": all((ev.get(k) or {}).get("n") == rule["n"] for k in ("5x5", "6x6")),
+            "never_used_set_is_40000": str(fs.get("maze_seeds", "")).startswith(f"{rule['never_used_base']} + k")
+            and all((fr.get(k) or {}).get("n") == rule["n"] for k in ("5x5", "6x6"))}
+
+
+def reading_v2ctl(root: Path, v3_root: Path, v2_root: Path | None = None, rule: dict = V2CTL_READING, tb: bool = True) -> dict:
+    """The predeclared report-only reading of the v2 matched-seed control (V2CTL_TEXT)."""
+    load = lambda p: json.loads(p.read_text()) if p.is_file() else None   # noqa: E731
+    per = {}
+    for sd in rule["seeds"]:
+        own_dir, twin_dir = root / rule["own_dir"].format(sd), v3_root / rule["twin_dir"].format(sd)
+        s, t = load(own_dir / "summary.json"), load(twin_dir / "summary.json")
+        r = {"summary_exists": s is not None, "twin_summary_exists": t is not None}
+        if s is not None:
+            r["checks"] = _v2ctl_config_ok(s, rule)
+            r["valid"] = all(r["checks"].values())
+            r["heldout_10000"] = {k: s[rule["set"]][k] for k in ("4x4", "5x5", "6x6") if k in s.get(rule["set"], {})}
+            r["never_used_40000_not_read"] = {k: v for k, v in (s.get(rule["never_used_set"]) or {}).items()}
+        if t is not None:
+            r["twin_heldout_10000"] = {k: t[rule["set"]][k] for k in ("4x4", "5x5", "6x6") if k in t.get(rule["set"], {})}
+        if tb:
+            mine = _tb_scalars(own_dir, ("rollout/ep_rew_mean",))
+            twin = _tb_scalars(twin_dir, ("rollout/ep_rew_mean", "train/std_ceiling_clamps"))
+            r["a_determinism"] = determinism_check(mine["rollout/ep_rew_mean"], twin["rollout/ep_rew_mean"],
+                                                   twin["train/std_ceiling_clamps"], rule["match_rel_tol"])
+        if r.get("valid") and t is not None:
+            d = t[rule["set"]]["6x6"]["collision"] - s[rule["set"]]["6x6"]["collision"]
+            r["c_twin_minus_own_6x6_collision"] = d
+            r["c_class"] = "lower by >= 0.10" if d >= rule["c_raised_by"] else ("within 0.05" if abs(d) <= rule["c_within"] else "neither")
+        per[str(sd)] = r
+    # (b)
+    b = per[str(rule["b_seed"])]
+    if b.get("valid"):
+        x = b["heldout_10000"]["5x5"]["success"]
+        b_read = ("the collapse is not caused by the ceiling" if x < rule["b_not_caused_below"] else
+                  "the ceiling caused or deepened it" if x >= rule["b_caused_at"] else "inconclusive")
+        b_out = {"v2ctl_s2_5x5_success_10000": x, "reading": b_read}
+    else:
+        b_out = {"reading": "no result (v2ctl-s2 has no valid summary)"}
+    # (c)
+    n_low = sum(r.get("c_class") == "lower by >= 0.10" for r in per.values())
+    n_within = sum(r.get("c_class") == "within 0.05" for r in per.values())
+    n_pairs = sum("c_class" in r for r in per.values())
+    c_read = ("the ceiling raised collisions" if n_low >= rule["c_min_seeds"] else
+              "the ceiling did not raise collisions" if n_within >= rule["c_min_seeds"] else
+              "inconclusive" if n_pairs >= rule["c_min_seeds"] else f"no result ({n_pairs} valid pairs)")
+    # 5-seed v2 estimate (10000-set, final actors; not a reading)
+    est = {}
+    if v2_root is not None:
+        for sd in (0, 1):
+            s = load(v2_root / f"armA-s{sd}" / "summary.json")
+            if s is not None:
+                est[f"armA-s{sd}"] = {k: s["final_eval_heldout_48"][k] for k in ("5x5", "6x6")}
+    for sd in rule["seeds"]:
+        if per[str(sd)].get("valid"):
+            est[f"v2ctl-s{sd}"] = {k: per[str(sd)]["heldout_10000"][k] for k in ("5x5", "6x6")}
+    pooled = None
+    if est:
+        pooled = {"n_seeds": len(est),
+                  **{f"{sz}_{m}_mean": float(np.mean([v[sz][m] for v in est.values()])) for sz in ("5x5", "6x6") for m in ("success", "collision", "time_out")}}
+    return {"rule": {**rule, "seeds": list(rule["seeds"]), "text": V2CTL_TEXT}, "label": "learned actors (deterministic mean); pose and goal are oracle inputs",
+            "per_seed": per, "a": {str(sd): per[str(sd)].get("a_determinism") for sd in rule["seeds"]}, "b": b_out,
+            "c": {"n_lower_by_0.10": n_low, "n_within_0.05": n_within, "n_valid_pairs": n_pairs, "reading": c_read},
+            "v2_five_seed_estimate_10000_not_read": {"per_seed": est, "pooled": pooled}}
+
+
+def reading_v2ctl_main(argv) -> int:
+    ap = argparse.ArgumentParser(prog="navgym_train.py reading-v2ctl")
+    ap.add_argument("root", type=Path)
+    ap.add_argument("--v3-root", type=Path, default=REPO / "results" / "navgym-v3-20260927")
+    ap.add_argument("--v2-root", type=Path, default=REPO / "results" / "navgym-v2-20260926")
+    ap.add_argument("--out", type=Path, default=None, help="default: <root>/reading_v2ctl.json (never written into the v3 or v2 dirs)")
+    a = ap.parse_args(argv)
+    out = a.out or a.root / "reading_v2ctl.json"
+    if out.resolve().parent in (a.v3_root.resolve(), a.v2_root.resolve()):
+        ap.error("the reading is never written into the v3 or v2 result directories")
+    v = reading_v2ctl(a.root, a.v3_root, a.v2_root)
+    out.write_text(json.dumps(v, indent=2) + "\n")
+    rd = json.loads(out.read_text())            # the printed reading is recomputed from the file just written
+    parts = []
+    for sd, r in rd["per_seed"].items():
+        ad = r.get("a_determinism") or {}
+        if not r.get("valid"):
+            parts.append(f"s{sd}: {'no valid summary' if r.get('summary_exists') else 'no summary'} (a: {ad.get('result')})")
+            continue
+        h, tw = r["heldout_10000"], r.get("twin_heldout_10000") or {}
+        nu = r.get("never_used_40000_not_read") or {}
+        parts.append(f"s{sd}: 10000-set 5x5 {h['5x5']['success']:.3f} 6x6 {h['6x6']['success']:.3f} coll {h['6x6']['collision']:.3f}"
+                     + (f" vs v3 twin coll {tw['6x6']['collision']:.3f}" if "6x6" in tw else "")
+                     + (f" | 40000-set 5x5 {nu['5x5']['success']:.3f} 6x6 {nu['6x6']['success']:.3f} coll {nu['6x6']['collision']:.3f}" if "6x6" in nu else "")
+                     + f" | (a) {ad.get('result')}")
+    print(f"NAVGYM-V2CTL READING (report-only, not a gate; learned actors, oracle pose+goal): (b) {rd['b']['reading']} | "
+          f"(c) {rd['c']['reading']} ({rd['c']['n_lower_by_0.10']} lower by >= 0.10, {rd['c']['n_within_0.05']} within 0.05) | "
+          + " | ".join(parts), flush=True)
+    return 0
+
+
+# ---------------------------------------------------------------- v4 verdict (2026-09-28)
+V4_RULE = {"5x5_success_min": 0.80, "6x6_success_min": 0.70, "6x6_collision_max": 0.15, "n": 48, "total_steps": 30_000_000,
+           "seeds": (5, 6, 7), "min_seeds_passing": 2, "set": "final_eval_fresh_48", "fresh_base": 40_000}
+V4_TEXT = ("PASS iff >= 2 of 3 NEW training seeds (5, 6, 7) meet every clause with their FINAL actor (deterministic) on the "
+           "NEVER-USED set (maze seeds 40000-40047, dynamics reset(seed=40000 + k), v2 time limit): 5x5 success >= 0.80, 6x6 "
+           "success >= 0.70, 6x6 collision <= 0.15, n = 48 per size, the run reached its last step (num_timesteps >= 30 000 000), "
+           "and it is the declared v4 configuration (--ppo v2, --env-version 2, no std ceiling, the frozen stall price). "
+           "Anything else is NEGATIVE. Seeds 10000-10047 and the best checkpoint are reported, not gated.")
+
+
+def judge_v4(summary: dict | None, rule: dict = V4_RULE) -> dict:
+    """Per-seed checks of the predeclared v4 rule on one summary.json (None = no summary: the run did not finish)."""
+    if summary is None:
+        return {"meets": False, "checks": {"summary_exists": False}, "numbers": None}
+    ev = summary.get(rule["set"]) or {}
+    a, b = ev.get("5x5"), ev.get("6x6")
+    fs = summary.get("fresh_set") or {}
+    checks = {"summary_exists": True,
+              "config_v4": summary.get("ppo") == "v2" and summary.get("env_version") == 2 and summary.get("std_ceiling") is None
+              and summary.get("stall_price") == V4_STALL_PRICE,
+              "reached_last_step": bool(summary.get("reached_last_step")) and int(summary.get("num_timesteps", 0)) >= rule["total_steps"]
+              and int(summary.get("total_steps", 0)) == rule["total_steps"],
+              "never_used_set_is_40000": str(fs.get("maze_seeds", "")).startswith(f"{rule['fresh_base']} + k"),
+              "n48": bool(a and b and a["n"] == rule["n"] and b["n"] == rule["n"]),
+              "5x5_success": bool(a and a["success"] >= rule["5x5_success_min"]),
+              "6x6_success": bool(b and b["success"] >= rule["6x6_success_min"]),
+              "6x6_collision": bool(b and b["collision"] <= rule["6x6_collision_max"])}
+    nums = None
+    if a and b:
+        ho = summary.get("final_eval_heldout_48") or {}
+        nums = {"never_used_40000": {k: ev[k] for k in ("4x4", "5x5", "6x6") if k in ev},
+                "heldout_10000_for_comparability": {k: ho[k] for k in ("4x4", "5x5", "6x6") if k in ho},
+                "num_timesteps": summary.get("num_timesteps"), "stall_price": summary.get("stall_price"),
+                "std_pre_clamp_last": summary.get("std_pre_clamp_per_dim_last_update"), "std_floor_clamps": summary.get("std_floor_clamps")}
+        best = summary.get("best") or {}
+        if best:
+            nums["best_checkpoint_not_gated"] = {"timesteps": best.get("timesteps"), "never_used_40000": best.get("final_eval_fresh_48"),
+                                                 "heldout_10000_selection_biased": best.get("final_eval_heldout_48")}
+    return {"meets": all(checks.values()), "checks": checks, "numbers": nums}
+
+
+def verdict_v4(root: Path, seeds=V4_RULE["seeds"], rule: dict = V4_RULE, final: bool = False) -> dict:
+    """The v4 arm verdict (as verdict_v3): a missing summary is PENDING while the array runs, a miss with `final`."""
+    per = {}
+    for sd in seeds:
+        p = root / f"armV4-s{sd}" / "summary.json"
+        per[str(sd)] = judge_v4(json.loads(p.read_text()) if p.is_file() else None, rule)
+    n_pass = sum(v["meets"] for v in per.values())
+    missing = 0 if final else sum(not v["checks"].get("summary_exists") for v in per.values())
+    if n_pass >= rule["min_seeds_passing"]:
+        verdict = "PASS"
+    elif n_pass + missing >= rule["min_seeds_passing"]:
+        verdict = "PENDING"
+    else:
+        verdict = "NEGATIVE"
+    return {"rule": {**rule, "seeds": list(rule["seeds"]), "stall_price": V4_STALL_PRICE, "text": V4_TEXT},
+            "label": "learned actors (deterministic mean); pose and goal are oracle inputs",
+            "final": bool(final), "seeds_passing": n_pass, "verdict": verdict, "per_seed": per}
+
+
+def verdict_v4_main(argv) -> int:
+    ap = argparse.ArgumentParser(prog="navgym_train.py verdict-v4")
+    ap.add_argument("root", type=Path)
+    ap.add_argument("--seeds", type=int, nargs="+", default=list(V4_RULE["seeds"]))
+    ap.add_argument("--out", type=Path, default=None, help="default: <root>/verdict_v4.json")
+    ap.add_argument("--final", action="store_true", help="every array task has ended: a missing summary counts as a miss")
+    a = ap.parse_args(argv)
+    v = verdict_v4(a.root, tuple(a.seeds), final=a.final)
+    out = a.out or a.root / "verdict_v4.json"
+    out.write_text(json.dumps(v, indent=2) + "\n")
+    rd = json.loads(out.read_text())            # the printed verdict is recomputed from the file just written
+    parts = []
+    for sd, r in rd["per_seed"].items():
+        n = r["numbers"]
+        if n is None:
+            parts.append(f"s{sd}: " + ("summary without a 5x5 + 6x6 never-used evaluation (a miss)" if r["checks"].get("summary_exists")
+                                       else "no summary"))
+        else:
+            f5, f6 = n["never_used_40000"]["5x5"], n["never_used_40000"]["6x6"]
+            h = n["heldout_10000_for_comparability"]
+            cmp_ = (f" [10000-set 5x5 {h['5x5']['success']:.3f} 6x6 {h['6x6']['success']:.3f}]" if "5x5" in h and "6x6" in h else "")
+            bad = [k for k, ok in r["checks"].items() if not ok]
+            parts.append(f"s{sd}: {'MEETS' if r['meets'] else 'misses'} 40000-set 5x5 {f5['success']:.3f} 6x6 {f6['success']:.3f} "
+                         f"(coll {f6['collision']:.3f}; last step {r['checks']['reached_last_step']}"
+                         + (f"; failed {bad}" if bad else "") + f"){cmp_}")
+    print(f"NAVGYM-V4 VERDICT: {rd['verdict']} ({rd['seeds_passing']}/{len(rd['per_seed'])} seeds meet the bar; learned actors, "
+          f"oracle pose+goal) | " + " | ".join(parts), flush=True)
+    return 0
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "verdict-v3":
         sys.exit(verdict_main(sys.argv[2:]))
+    if len(sys.argv) > 1 and sys.argv[1] == "reading-v2ctl":
+        sys.exit(reading_v2ctl_main(sys.argv[2:]))
+    if len(sys.argv) > 1 and sys.argv[1] == "verdict-v4":
+        sys.exit(verdict_v4_main(sys.argv[2:]))
     sys.exit(main())

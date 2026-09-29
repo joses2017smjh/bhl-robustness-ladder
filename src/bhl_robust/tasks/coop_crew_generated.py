@@ -24,9 +24,16 @@ from isaaclab.utils.noise import AdditiveUniformNoiseCfg as Unoise
 from berkeley_humanoid_lite_assets.robots.berkeley_humanoid_lite import HUMANOID_LITE_JOINTS
 from berkeley_humanoid_lite.tasks.locomotion.velocity import mdp
 
+from bhl_robust.quat_order import native_quat
+
 from . import coop_lift_mdp as coop
 from .coop_depth_env_cfg import COOP_CAM_POOL, coop_depth_obs, make_coop_depth_camera
 from .coop_lift_env_cfg import _COLLISION, _RIGID, CoopLiftEnvCfg, CurriculumCfg, _robot
+
+# Payload rot goes through ``native_quat`` since 2026-09-28: the raw (1, 0, 0, 0)
+# was 180 deg about x on v60 (Isaac Lab 3.0 reads x, y, z, w). Every later v60
+# crew run is a NEW configuration, never compared with or used to re-score the
+# crew / CoopLift / Stand results recorded before it. v51 unchanged.
 
 
 # --- crew of 3 ------------------------
@@ -44,7 +51,7 @@ class Crew3SceneCfg(InteractiveSceneCfg):
     robot_2: ArticulationCfg = _robot("{ENV_REGEX_NS}/robot_2", (0.415692, -0.240000, 0.0), (-0.258819, 0.0, 0.0, -0.965926))
     object: RigidObjectCfg = RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/object",
-        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.160260), rot=(1.0, 0.0, 0.0, 0.0)),
+        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.160260), rot=native_quat((1.0, 0.0, 0.0, 0.0))),
         spawn=sim_utils.CuboidCfg(
             size=(0.320520, 0.320520, 0.320520), rigid_props=_RIGID, collision_props=_COLLISION,
             mass_props=sim_utils.MassPropertiesCfg(mass=0.7500),
@@ -210,7 +217,7 @@ class Crew3DepthSceneCfg(InteractiveSceneCfg):
     robot_2: ArticulationCfg = _robot("{ENV_REGEX_NS}/robot_2", (0.415692, -0.240000, 0.0), (-0.258819, 0.0, 0.0, -0.965926))
     object: RigidObjectCfg = RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/object",
-        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.160260), rot=(1.0, 0.0, 0.0, 0.0)),
+        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.160260), rot=native_quat((1.0, 0.0, 0.0, 0.0))),
         spawn=sim_utils.CuboidCfg(
             size=(0.320520, 0.320520, 0.320520), rigid_props=_RIGID, collision_props=_COLLISION,
             mass_props=sim_utils.MassPropertiesCfg(mass=0.7500),
@@ -386,7 +393,7 @@ class Crew4SceneCfg(InteractiveSceneCfg):
     robot_3: ArticulationCfg = _robot("{ENV_REGEX_NS}/robot_3", (0.480000, -0.000000, 0.0), (-0.000000, 0.0, 0.0, -1.000000))
     object: RigidObjectCfg = RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/object",
-        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.176389), rot=(1.0, 0.0, 0.0, 0.0)),
+        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.176389), rot=native_quat((1.0, 0.0, 0.0, 0.0))),
         spawn=sim_utils.CuboidCfg(
             size=(0.352778, 0.352778, 0.352778), rigid_props=_RIGID, collision_props=_COLLISION,
             mass_props=sim_utils.MassPropertiesCfg(mass=1.0000),
@@ -575,7 +582,7 @@ class Crew4DepthSceneCfg(InteractiveSceneCfg):
     robot_3: ArticulationCfg = _robot("{ENV_REGEX_NS}/robot_3", (0.480000, -0.000000, 0.0), (-0.000000, 0.0, 0.0, -1.000000))
     object: RigidObjectCfg = RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/object",
-        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.176389), rot=(1.0, 0.0, 0.0, 0.0)),
+        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.176389), rot=native_quat((1.0, 0.0, 0.0, 0.0))),
         spawn=sim_utils.CuboidCfg(
             size=(0.352778, 0.352778, 0.352778), rigid_props=_RIGID, collision_props=_COLLISION,
             mass_props=sim_utils.MassPropertiesCfg(mass=1.0000),

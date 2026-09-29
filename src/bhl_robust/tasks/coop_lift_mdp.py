@@ -352,10 +352,26 @@ def object_tilt_l2(
     env: "ManagerBasedRLEnv",
     object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
 ) -> torch.Tensor:
-    """Roll/pitch of the payload. Synchronous lift keeps this near zero."""
+    """Roll/pitch of the payload: (1 - R22)^2, R22 = cos of the angle between the
+    object's own z axis and world up. 0 upright or yawed, 1 on its side (90 deg
+    about world x or y), 4 upside down. Synchronous lift keeps this near zero.
+
+    Unpacked in the running stack's layout (`unpack_wxyz`) since 2026-09-28.
+    It used to index `q[:, 1]`, `q[:, 2]` as x, y, which is right on v51
+    (w, x, y, z) and on v60 (x, y, z, w) reads y and z instead: it penalised
+    rotation about y and yaw, and ignored rotation about x. The payload's spawn
+    was flipped 180 deg about x on v60 by the same bug (`coop_lift_env_cfg.
+    _object`), and the two cancelled at rest; fixing this term alone would
+    charge 4 x weight per step for an untouched cube. The spawn and this term
+    were fixed together. v51: numerically identical (same two columns).
+
+    Every v60 coop-lift / TaskV2 / crew run from this change on is a NEW
+    configuration, never compared with or used to re-score the Stand / Stand2 /
+    Stand3 / CoopLift results recorded before it.
+    """
     obj: RigidObject = env.scene[object_cfg.name]
-    q = _t(obj.data.root_quat_w)
-    up_z = 1.0 - 2.0 * (q[:, 1] * q[:, 1] + q[:, 2] * q[:, 2])
+    w, x, y, z = unpack_wxyz(_t(obj.data.root_quat_w))
+    up_z = 1.0 - 2.0 * (x * x + y * y)      # R[2, 2]
     return torch.square(1.0 - up_z)
 
 

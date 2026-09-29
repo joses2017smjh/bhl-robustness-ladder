@@ -235,3 +235,19 @@ class HumanoidTurnRestCfg(HumanoidTurnBothCfg):
             direct_lin_vel_y=(-0.25, 0.25),
             direct_ang_vel_z=(-1.0, 1.0),
         )
+
+
+# --- Turning gait, arm TurnRestPush (2026-09-27) ------------------------------
+#
+# TurnRest turned both ways 6/6 on 2/2 seeds but fell in 29/60 and 31/60 matched
+# pushes (gate <= 9/60) against 7/60 for its parent TurnBoth-s0; neither trained
+# with pushes. TurnRestPush = TurnRest unchanged (rewards + command mix) + the
+# interval push with the competence-gated push curriculum, exactly as
+# Velocity-BHL-Arms-PushAdaptive-v0. Fine-tuned from arms-turn-turnboth-s0 by
+# slurm/repo20260923/gpu_turngait_v5.sbatch, beside a continued-TurnBoth control.
+@configclass
+class HumanoidTurnRestPushCfg(HumanoidTurnRestCfg):
+    """Arm F: TurnRest + interval push with the adaptive push curriculum."""
+
+    events: ArmsPushEventsCfg = ArmsPushEventsCfg()
+    curriculum: ArmsPushCurriculumCfg = ArmsPushCurriculumCfg()

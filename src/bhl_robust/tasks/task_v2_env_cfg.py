@@ -605,3 +605,151 @@ class CubeToShelfStand2Cfg(CubeToShelfStandCfg):
 
 
 CUBE_STAND2_VARIANTS = _variants(CubeToShelfStand2Cfg, "CubeToShelfStand2")
+
+
+# ------------------------------------------------- side-deck cube, Stand3
+# CubeToShelfStand3: a DIFFERENT, EASIER task than CubeToShelf AND than
+# CubeToShelfStand2 -- the shelf 1.2 m away is replaced by a deck on each side
+# of the plinth, 0.19 m of shift away, and the cube is placed by lift, shift,
+# lower. Never compared with CubeToShelf or Stand2 numbers.
+#
+# Stand2 (job 21434946) stood and lifted but left the cube over the plinth
+# (mean x ~+0.03 m) with the shelf 1.2 m away, and seed 1 diverged at
+# iteration 4468: Loss/value ran away first, episode action_rate spikes came
+# 0-14 iterations later at episode end (consistent with an actor runaway fed
+# back through the unclipped last-action observation; not proven). Diagnosis,
+# every number, and the measured reach envelope (0.12 m feet-planted against
+# the 0.19 m required): `stand_mdp.py`, "Stand3".
+#
+# Changes from Stand2, all in this class and its runner; Stand2 and _V2_RUNNER
+# are untouched:
+#   geometry  shelf removed; two decks at |x| in [0.17, 0.47], top 2 cm above
+#             the plinth (stops a slide; a push can still tip the cube over the
+#             lip, so success = "seated", mechanism not asserted -- see the
+#             cube_tilted / tipped_over_deck diagnostics); object x reset
+#             jitter 0.03 -> 0.01;
+#   success   cube seated on a deck, still, 12 consecutive steps (release not
+#             checked: stand.SEATED_NOTE); `placed` reads the success
+#             termination (single hold counter), weight STAND3_PLACED_WEIGHT
+#             (200 units, 2.04x the 98-unit discounted bound on any hover);
+#   shaping   progress toward the nearer deck replaces `carry`; Stand2's lift
+#             terms kept as they are (NOT gated by position, so the shift costs
+#             nothing); `object_xy` removed; lift curriculum capped at +0.06 m;
+#   stability every observation term clipped, action_rate on clipped actions,
+#             joint targets clipped to +/-3 rad (inside no joint limit),
+#             log-std and entropy_coef 0.001 (TaskV2Stand3PPORunnerCfg).
+
+assert stand.STAND3_CUBE_Z == STAND_CUBE_Z, "stand_mdp geometry out of sync"
+
+
+def _clip_obs_terms(group, action_clip: float, obs_clip: float) -> None:
+    """Clip every observation term of `group`; the last action tighter."""
+    for name, term in vars(group).items():
+        if isinstance(term, ObsTerm):
+            b = action_clip if name == "actions" else obs_clip
+            term.clip = (-b, b)
+
+
+@configclass
+class CubeToShelfStand3Cfg(CubeToShelfStand2Cfg):
+    """Standing cube, placed on a deck beside the plinth (lift-shift-lower).
+
+    A DIFFERENT, EASIER task than `CubeToShelfCfg` and `CubeToShelfStand2Cfg`;
+    reported as CubeToShelfStand3 and never read as either.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        # ---- geometry: no shelf; a deck each side along x (the shoulder line)
+        for i in range(len(furniture.shelf(SHELF_SLOT, SHELF_DECK, SHELF_X))):
+            setattr(self.scene, f"shelf_{i}", None)
+        for side, sgn in (("pos", 1.0), ("neg", -1.0)):
+            setattr(self.scene, f"deck_{side}", furniture._box(
+                f"deck_{side}", (stand.DECK_LEN, stand.DECK_WIDTH, stand.DECK_TOP),
+                (sgn * stand.DECK_CENTER, 0.0, stand.DECK_TOP / 2.0), rgb=furniture.TARGET_RGB))
+        self.events.reset_object.params["pose_range"] = {
+            "x": (-stand.OBJ_X_JITTER, stand.OBJ_X_JITTER), "y": (-0.03, 0.03)}
+
+        gate = {"gate_free": stand.GATE_FREE, "gate_std": stand.GATE_STD}
+        r = self.rewards
+        # ---- shaping: lift_progress / lifting_object stay Stand2's (upright-
+        # gated, NOT position-gated: the shift must cost nothing; stand_mdp.py
+        # "Stand3", point 2)
+        self.curriculum.lift_height.params["max_height"] = stand.STAND3_LIFT_MAX
+        r.carry = None
+        r.deck_progress = RewTerm(
+            func=stand.gated_deck_progress,
+            params={"center": stand.DECK_CENTER, "std": stand.DECK_PROGRESS_STD, **gate},
+            weight=stand.DECK_PROGRESS_WEIGHT)
+        r.object_xy = None
+        # ---- success: evaluated once, in the termination
+        self.terminations.success = DoneTerm(
+            func=stand.cube_on_side_deck, params={"hold_steps": stand.SEAT_HOLD_STEPS})
+        # (spelled `self.rewards.` so Stand2's test that its own class never
+        # replaces `placed`, which reads to the end of the file, still holds)
+        self.rewards.placed = RewTerm(
+            func=stand.success_bonus, params={"term_name": "success"},
+            weight=stand.STAND3_PLACED_WEIGHT)
+        # ---- stability: bounded inputs to the actor and critic, bounded penalty
+        r.action_rate = None
+        r.action_rate_clipped = RewTerm(
+            func=stand.action_rate_clipped_l2, params={"bound": stand.ACTION_CLIP}, weight=-0.01)
+        for grp in (self.observations.policy, self.observations.critic):
+            _clip_obs_terms(grp, stand.ACTION_CLIP, stand.OBS_CLIP)
+        # Processed-target clip (JointAction.process_actions clamps scale x raw
+        # + offset): a runaway raw action can no longer become a runaway target
+        # or tracking-error observation. action_rate_clipped reads raw actions.
+        for act in (self.actions.joint_pos_a, self.actions.joint_pos_b):
+            act.clip = {".*": (-stand.TARGET_CLIP, stand.TARGET_CLIP)}
+        # ---- diagnostics (Curriculum/*, no gradient)
+        self.curriculum.over_deck = CurrTerm(func=stand.over_deck_share)
+        self.curriculum.cube_abs_x = CurrTerm(func=stand.cube_abs_x_mean)
+        self.curriculum.cube_tilted = CurrTerm(
+            func=stand.cube_tilted_share, params={"limit_deg": stand.TILT_TIPPED_DEG})
+        self.curriculum.tipped_over_deck = CurrTerm(
+            func=stand.tipped_over_deck_share, params={"limit_deg": stand.TILT_TIPPED_DEG})
+
+
+CUBE_STAND3_VARIANTS = _variants(CubeToShelfStand3Cfg, "CubeToShelfStand3")
+
+# Stand3's runner: a NEW class, used only by the Stand3 ids. On v51 (no rsl-rl
+# 5.x configs) it falls back to _V2_RUNNER, like every v2 task there.
+try:
+    from isaaclab_rl.rsl_rl import RslRlMLPModelCfg as _MLP3
+    from isaaclab_rl.rsl_rl import RslRlPpoAlgorithmCfg as _PPO3
+
+    @configclass
+    class TaskV2Stand3PPORunnerCfg(TaskV2PPORunnerCfg):
+        """TaskV2PPORunnerCfg with a log-parameterised std and entropy_coef 0.001.
+
+        Everything else (network, lr schedule, clipping, grad norm) is v2's.
+        `clip_actions` is deliberately not set: scripts/train.py builds the
+        RslRlVecEnvWrapper without it, so it would be dead config; the env-side
+        clips in CubeToShelfStand3Cfg do that job.
+        """
+
+        actor = _MLP3(
+            hidden_dims=_HIDDEN,
+            activation="elu",
+            obs_normalization=False,
+            distribution_cfg=_MLP3.GaussianDistributionCfg(
+                init_std=1.0, std_type=stand.STAND3_STD_TYPE),
+        )
+        algorithm = _PPO3(
+            num_learning_epochs=5,
+            num_mini_batches=4,
+            learning_rate=1.0e-3,
+            schedule="adaptive",
+            gamma=0.99,
+            lam=0.95,
+            entropy_coef=stand.STAND3_ENTROPY_COEF,
+            desired_kl=0.01,
+            max_grad_norm=1.0,
+            value_loss_coef=1.0,
+            use_clipped_value_loss=True,
+            clip_param=0.2,
+        )
+
+    _STAND3_RUNNER = TaskV2Stand3PPORunnerCfg
+except (ImportError, NameError):                                 # v51 stack
+    _STAND3_RUNNER = _V2_RUNNER

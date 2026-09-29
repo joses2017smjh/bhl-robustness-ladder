@@ -21,26 +21,13 @@ Lab · MuJoCo · ONNX · Slurm/HPC.
 [Architecture](#architecture) · [Job ledger](SLURM_JOBS.md)
 
 <p align="center">
-  <a href="results/weekend-20260919/inspection-maze.mp4"><img src="docs/gifs/weekend-inspection.gif" width="720" alt="MuJoCo humanoid completes two ordered inspection stops and exits a two-turn maze. Caption identifies learned gait, oracle waypoints and sensor braking."></a><br>
-  <sub>Actual MuJoCo rollout, 17.36 s. Frozen Isaac-trained gait, known map/pose,
-  and lidar/depth braking. Stations are proximity dwells, not SSD recognition.
-  <a href="docs/gifs/weekend-inspection-failure.gif">Wrong-branch control</a> ·
-  <a href="docs/gifs/weekend-team3.gif">Three-robot mission</a>.</sub>
-</p>
-
-<p align="center">
-  <sub>The new maze PPO checkpoints below are evaluated in Isaac, not the
-  checkpoints driving this MuJoCo video. The video uses the older August 18
-  full-body gait. <a href="docs/GALLERY.md">Success and failure gallery</a>.</sub>
+  <img src="docs/gifs/random-maze-explore.gif" width="760" alt="Top view of a randomized 6x6 maze. A biped turns in place and walks forward along an orange breadcrumb path to a green goal. Side panels show its ray depth, lidar sectors and the occupancy map it builds from its own lidar, with the A* plan. Badge: GOAL REACHED 73.1 s, GIF at 5x."><br>
+  <sub>A new maze every seed, so the route cannot be memorized. Learned gait; scripted A* on a map the robot builds from its own lidar;
+  it turns in place, then walks forward. Oracle pose and goal. <b>24/24</b> goals (12 at 5×5, 12 at 6×6), no falls, no wall contact;
+  the 22-DoF humanoid runs the same mission at <b>12/12</b> on never-seen mazes. <a href="docs/RANDOM_MAZE.md">Tables and stress tests</a></sub>
 </p>
 
 ## Highlights
-
-<p align="center">
-  <img src="docs/gifs/random-maze-explore.gif" width="760" alt="Top view of a randomized 6x6 maze. A biped turns in place and walks forward along an orange breadcrumb path to a green goal. Side panels show its ray depth, lidar sectors and the occupancy map it builds from its own lidar, with the A* plan. Badge: GOAL REACHED 73.1 s, GIF at 5x."><br>
-  <sub>A new maze every seed, so the route cannot be memorized. Learned gait; scripted A* on a map built from the robot's own lidar; oracle pose and goal.
-  <b>24/24</b> goals (12 at 5×5, 12 at 6×6), no falls, no wall contact. <a href="docs/RANDOM_MAZE.md">Tables and stress tests</a></sub>
-</p>
 
 <table>
   <tr>
@@ -58,7 +45,7 @@ Lab · MuJoCo · ONNX · Slurm/HPC.
   <tr>
     <td width="50%" align="center">
       <img src="docs/gifs/inspection-maze-panels.gif" width="420" alt="The hero inspection episode from above, with robot-eye view, 8x8 stereo ray depth and 36-sector lidar panels. Badge: COMPLETED 17.36 s."><br>
-      <sub>The inspection episode above, with the lidar and ray depth that drive its speed brake. Learned gait, oracle waypoints. <b>3/3</b>; both failure controls <b>0/3</b>.</sub>
+      <sub>Two ordered inspection stops and the exit of a two-turn maze, with the lidar and ray depth that drive its speed brake. Learned gait, oracle waypoints. <b>3/3</b>; both failure controls <b>0/3</b> (<a href="docs/gifs/weekend-inspection-failure.gif">wrong-branch control</a>).</sub>
     </td>
     <td width="50%" align="center">
       <img src="docs/gifs/weekend-team3.gif" width="420" alt="Three humanoids in one MuJoCo world wait at a red airlock door, cross, and meet on green rendezvous discs. Caption: COMPLETED, learned gait plus oracle team supervisor, 1.1x."><br>
@@ -85,7 +72,7 @@ Oracle = simulator ground truth (pose, goal, waypoints) given to the controller.
 
 | Experiment | Evidence | Boundary |
 |---|---|---|
-| Randomized-maze mission (Sept 24–27) | **24/24** unseen mazes, 0 falls, 0 wall contacts; 6×6 at 35 % packet dropout: **12/12** reached, 11 clean | Learned gait, scripted A* on the robot's own lidar map, oracle pose and goal; MuJoCo only |
+| Randomized-maze mission (Sept 24–28) | **24/24** unseen mazes, 0 falls, 0 wall contacts; 6×6 at 35 % packet dropout: **12/12** reached, 11 clean; 22-DoF humanoid (one qualified turning checkpoint) **12/12** never-seen 6×6, 0 falls | Learned gait, scripted A* on the robot's own lidar map, oracle pose and goal; MuJoCo only |
 | Learned navigation on the physics biped (Sept 27) | **10/12** never-seen 6×6 mazes, 0 falls (A* 12/12) | Exploratory: the gym policy missed its predeclared held-out bar by one clause; oracle pose and goal |
 | Turning gait, cooperative lift, standing cube-to-shelf (Sept 27) | Turning: 1 of 12 seeds qualifies; scripted lift-and-hold **0/10**; standing policy stands but never places | Negatives, recorded with their mechanisms in [status](docs/STATUS.md) |
 | Repaired goal-reaching PPO | **379/384** final-stage first episodes; 4 sensor conditions × 3 seeds × 32 envs; all 36 curriculum jobs completed | 12-DoF biped, fixed corridor, oracle waypoints, observation noise disabled; not a sensor-benefit claim |

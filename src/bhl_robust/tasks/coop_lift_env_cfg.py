@@ -128,10 +128,28 @@ def _robot(prim: str, pos: tuple[float, float, float], rot: tuple[float, float, 
     )
 
 
+#: The payload's spawn orientation, written (w, x, y, z) like every other literal.
+_OBJECT_ROT_WXYZ = (1.0, 0.0, 0.0, 0.0)
+
+
 def _object(spawn: sim_utils.CuboidCfg | sim_utils.SphereCfg, z: float) -> RigidObjectCfg:
+    # Through ``native_quat`` since 2026-09-28. Before that this was the raw
+    # literal rot=(1, 0, 0, 0): the identity on v51 (w, x, y, z), but on v60
+    # Isaac Lab 3.0 reads (x, y, z, w), so every v60 payload spawned turned 180
+    # deg about x. A cube looks the same after that turn, so geometry and
+    # physics were unaffected; the quaternion was not (Stand3 `cube_tilted` was
+    # 1.0000 from iteration 0, and `object_tilt_l2` read the wrong axes -- the
+    # two errors cancelled at rest). On v51 the conversion is the identity and
+    # nothing moves.
+    #
+    # Every v60 coop-lift / TaskV2 / crew run from this change on is a NEW
+    # configuration: it is never compared with, pooled with, or used to
+    # re-score the Stand / Stand2 / Stand3 / CoopLift results recorded before
+    # it (those trained on the flipped spawn; reproduce them from commit
+    # 7c6ef05 or earlier).
     return RigidObjectCfg(
         prim_path="{ENV_REGEX_NS}/object",
-        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, z), rot=(1.0, 0.0, 0.0, 0.0)),
+        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, z), rot=native_quat(_OBJECT_ROT_WXYZ)),
         spawn=spawn,
     )
 

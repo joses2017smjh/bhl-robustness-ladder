@@ -44,6 +44,24 @@ agree), `stuck` (true position stayed within 0.2 m for the final 20 s) or
 `time_out`. Neither counts as reached; `outcome` and `success` are unchanged.
 `maze_explore.py sf-verdict <root>` applies the predeclared sweep rule
 (`sf_sweep_verdict`) to the per-seed JSONs of `slurm/repo20260923/cpu_maze_sf.sbatch`.
+
+`--variant humanoid` (opt-in, 2026-09-28; the default `biped` path is unchanged
+step for step): the 22-DoF humanoid (`berkeley_humanoid_lite.xml`) driven by
+the one QUALIFIED turning checkpoint, arms-turn-turnboth-s0 (LEARNED gait, one
+checkpoint of 12 seeds; it marches in place at zero command and turns while
+stepping). Same SCRIPTED lidar map + A* + turn-then-walk, ORACLE pose and goal,
+same judge (goal radius 0.30 m, first entry ends the episode). Differences, all
+gated on the flag: the team_sensors deck mounts (lidar 0.72 m / stereo 0.70 m
+above the base frame, which sits at the feet: world z ~0.66 / 0.64 m, under the
+1.1 m walls), each scan mapped from the lidar's own pose (`scan_rays_from_sensor`:
+the deck lidar rides ~0.2 m ahead of the base, which smeared walls into a
+corridor on pilot seed 106), the run_eval fall rule (tilt > 0.78 rad OR root
+sink > 0.25 m, the rule behind the 7/60 push qualification), the settings
+frozen from the seed >= 100 pilot (`HUMANOID_FROZEN`), diagnostics (wall
+contacts per controller state, planner failures, floor returns), and every
+frame/footer/JSON label.
+`maze_explore.py humanoid-verdict <root>` applies the predeclared rule of
+`slurm/repo20260923/cpu_maze_humanoid.sbatch` (`humanoid_maze_verdict`).
 """
 from __future__ import annotations
 
@@ -76,6 +94,33 @@ from bhl_robust.eval.team_sensors import (DEPTH_RANGE, LIDAR_RANGE, TeamSensors)
 LIDAR_MOUNT_BIPED = (0.0, 0.0, 0.34)
 STEREO_CENTER_BIPED = (0.12, 0.0, 0.30)
 GAIT_DEFAULT = "logs/rsl_rl/biped/2026-08-17_09-54-10_dr-default-s0/exported/deploy.yaml"
+
+# ------------------------------------------------- 22-DoF humanoid (--variant humanoid)
+# The only QUALIFIED turning checkpoint (cpu_turn_qualify.sbatch, 2026-09-27: turn 10/10, walk 3/3,
+# push 7/60). ONE checkpoint (1 of 12 turning-arm seeds), not a recipe; every output says so.
+HUMANOID_RUN = "arms-turn-turnboth-s0"
+HUMANOID_GAIT_GLOB = f"logs/rsl_rl/humanoid/*_{HUMANOID_RUN}/exported/deploy.yaml"
+# Fall = the run_eval / harness rule that produced the 7/60 push rate (copied, not imported: harness pulls
+# in torch). tests/test_maze_humanoid.py asserts both equal bhl_robust.eval.harness.TILT_LIMIT_RAD / MAX_SINK_M.
+HUMANOID_TILT_LIMIT_RAD = 0.78
+HUMANOID_MAX_SINK_M = 0.25
+# Measured 2026-09-28 (standing 3 s at zero command, MuJoCo, collision-geom AABB corners in the base frame):
+# humanoid planar radius 0.309 m (arms at +-0.307 m), biped 0.204 m; maze corridor clear width
+# CELL - WALL_T = 1.32 m. Recorded in every humanoid JSON beside the planner inflation.
+HUMANOID_RADIUS_M = 0.309
+BIPED_RADIUS_M = 0.204
+# Frozen from the pilot on maze seeds >= 100 only (hard 6x6 and base 5x5; every pilot seed is listed in
+# the launcher header). Planner inflation must be a multiple of --map-res (0.10): Planner rounds it to cells.
+HUMANOID_FROZEN = {"cruise": 0.30, "turn_rate": 0.6, "inflate": 0.50, "settle_s": 1.0,
+                   "turn_enter": None, "turn_exit": None, "wz_walk": None, "waypoint_radius": None}
+# The predeclared scored block (never run by anything before 2026-09-28; checked by grep over results/).
+HUMANOID_SCORED = {"n": 6, "m": 6, "extra_openings": 1, "time_limit": 180.0, "seeds": list(range(12, 24))}
+HUMANOID_PASS_REACHED = 10
+HUMANOID_MAZE_RULE = ("PASS iff >= 10 of the 12 humanoid episodes (hard 6x6, 1 extra opening, maze seeds 12-23, "
+                      "180 s each, frozen settings) reach the goal AND there are 0 falls in the 12; else FAIL; "
+                      "INCOMPLETE if any humanoid seed JSON or the humanoid summary is missing or does not match "
+                      "the declared gait/maze/settings. Clean (no wall contact) counts and median completion times "
+                      "are reported beside the biped A* reference on the same seeds, not gated.")
 
 
 def yaw_of(q):
@@ -239,8 +284,199 @@ def load_sweep(root: Path) -> dict:
     return rows
 
 
+def _arm_counts(rows) -> dict:
+    """sf_counts plus completion times; the median is summary.json's convention (times[n // 2] of the successes)."""
+    c = sf_counts(rows)
+    times = sorted(r["completion_s"] for r in rows if r["success"])
+    c["median_completion_s"] = times[len(times) // 2] if times else None
+    c["completion_s"] = times
+    c["wall_contact_steps"] = {r["seed"]: r["wall_contact_steps"] for r in sorted(rows, key=lambda r: r["seed"])}
+    return c
+
+
+BIPED_REFERENCE_SETTINGS = {"cruise": 0.30, "turn_rate": 0.6, "inflate": 0.30}   # the published hard-6x6 table's
+
+
+def _arm_problems(name, rows, summary, humanoid, declared, frozen):
+    p = []
+    got = sorted(r.get("seed") for r in rows)
+    if got != sorted(declared["seeds"]):
+        p.append(f"{name}: seeds {got} != declared {sorted(declared['seeds'])}")
+    want_maze = (declared["n"], declared["m"], declared["extra_openings"])
+    bad_maze = sorted(r.get("seed") for r in rows if tuple(r.get("maze", {}).get(k) for k in ("n", "m", "extra_openings")) != want_maze)
+    if bad_maze:
+        p.append(f"{name}: seeds {bad_maze} are not the declared {want_maze} maze")
+    if summary is None:
+        p.append(f"{name}: no summary.json")
+    else:
+        s = summary.get("settings", {})
+        bad = {k: (s.get(k), declared[k]) for k in ("n", "m", "extra_openings", "time_limit") if s.get(k) != declared[k]}
+        want = frozen if humanoid else BIPED_REFERENCE_SETTINGS
+        bad.update({k: (s.get(k), v) for k, v in want.items() if s.get(k) != v})
+        if bad:
+            p.append(f"{name}: settings differ from the declared ones (got, want): {bad}")
+    for r in rows:
+        deploy = str(r.get("gait", {}).get("deploy", ""))
+        if humanoid and (r.get("variant") != "humanoid" or f"_{HUMANOID_RUN}/" not in deploy):
+            p.append(f"{name}: seed {r.get('seed')} is not the humanoid {HUMANOID_RUN} gait ({deploy})")
+        if not humanoid and (r.get("variant", "biped") != "biped" or "/biped/" not in deploy):
+            p.append(f"{name}: seed {r.get('seed')} is not the biped gait ({deploy})")
+    return p
+
+
+def humanoid_maze_verdict(h_rows, h_summary, b_rows, b_summary, declared=None, frozen=None) -> dict:
+    """The predeclared rule of cpu_maze_humanoid.sbatch (HUMANOID_MAZE_RULE), from per-seed JSONs only.
+    PASS / FAIL read the humanoid arm alone; the biped A* reference is reported beside it, never gated."""
+    declared = HUMANOID_SCORED if declared is None else declared
+    frozen = HUMANOID_FROZEN if frozen is None else frozen
+    n = len(declared["seeds"])
+    hp = _arm_problems("humanoid", h_rows, h_summary, True, declared, frozen)
+    bp = _arm_problems("biped", b_rows, b_summary, False, declared, frozen)
+    hc = _arm_counts(h_rows) if h_rows else None
+    bc = _arm_counts(b_rows) if b_rows else None
+    if hp:
+        verdict = "INCOMPLETE"
+    else:
+        verdict = "PASS" if hc["reached"] >= HUMANOID_PASS_REACHED and hc["falls"] == 0 else "FAIL"
+
+    def line(c):
+        if c is None:
+            return "no episodes"
+        return (f"{c['reached']}/{c['n']} reached, {c['falls']} falls, clean {c['clean']}/{c['n']}, "
+                f"median {c['median_completion_s']} s (upper median of the successes), stuck {c['stuck']}, time-out {c['time_out']}")
+    detail = (f"humanoid ({HUMANOID_RUN}, LEARNED gait, one checkpoint): {line(hc)} (need >= {HUMANOID_PASS_REACHED}/{n} and 0 falls)"
+              f" | biped A* reference (dr-default-s0): {line(bc)}" + ("" if not bp else " [reference INCOMPLETE]"))
+    return {"verdict": verdict, "detail": detail, "rule": HUMANOID_MAZE_RULE, "declared": declared, "frozen_humanoid_settings": frozen,
+            "humanoid": hc, "biped_reference": bc, "problems": hp,
+            "reference_status": "COMPLETE" if not bp else "INCOMPLETE: " + "; ".join(bp),
+            "labels": {"humanoid": humanoid_labels(HUMANOID_RUN),
+                       "biped_reference": {"gait": "LEARNED biped gait dr-default-s0 (frozen, 12-DoF)",
+                                           "planner": "SCRIPTED A* on the lidar log-odds map + turn-then-walk",
+                                           "pose": "ORACLE (simulator pose)", "goal": "ORACLE goal coordinate"}},
+            "median_convention": "times[n // 2] of the sorted successful completion times (summary.json's convention)",
+            "comparability": ("same maze seeds, judge (0.30 m goal radius, first entry ends the episode), 180 s limit, lidar, "
+                              "planner and controller code; differences: the humanoid maps each scan from the lidar's own pose "
+                              "(0.12 m forward, 0.72 m up; ~0.21-0.23 m ahead of the base while walking) with floor returns "
+                              "clearing only, the biped from the base xy as published (lidar over the base); planner inflation "
+                              "0.50 m (humanoid, radius 0.309 m) vs 0.30 m (biped, radius 0.204 m); fall rule tilt > 0.78 rad "
+                              "or sink > 0.25 m (humanoid, run_eval's) vs tilt >= 0.78 rad (biped, published)"),
+            "not_scored": ["stopping at the goal: the judge ends the episode on first entry into the 0.30 m radius",
+                           "localization: oracle pose; goal: oracle coordinate"]}
+
+
+def load_arm(d: Path):
+    """(per-seed rows, summary or None) from <d>/seed<k>.json and <d>/summary.json."""
+    import re
+    d = Path(d)
+    if not d.is_dir():
+        return [], None
+    rows = [json.loads(f.read_text()) for f in sorted(d.iterdir()) if re.fullmatch(r"seed\d+\.json", f.name)]
+    s = d / "summary.json"
+    return rows, (json.loads(s.read_text()) if s.is_file() else None)
+
+
 def _pose_error_on(args) -> bool:
     return bool(getattr(args, "pose_yaw_deg", 0.0) or getattr(args, "pose_bias_m", 0.0) or getattr(args, "pose_noise_m", 0.0))
+
+
+# ------------------------------------------------------------ humanoid helpers
+def is_humanoid(args) -> bool:
+    return getattr(args, "variant", "biped") == "humanoid"
+
+
+def gait_run_name(deploy) -> str:
+    """'.../<YYYY-MM-DD_hh-mm-ss>_<run>/exported/deploy.yaml' -> '<run>'."""
+    import re
+    return re.sub(r"^\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}_", "", Path(deploy).parent.parent.name)
+
+
+def humanoid_labels(run: str, pose_error: bool = False, imu_filter: bool = False) -> dict:
+    """The honest labels every humanoid output carries: what is learned, scripted and oracle."""
+    gait = f"LEARNED gait {run} (one checkpoint, frozen; 22-DoF humanoid)"
+    if run == HUMANOID_RUN:
+        gait += ("; QUALIFIED 2026-09-27 as a single checkpoint (turn 10/10, walk 3/3, push 7/60), "
+                 "1 of 12 turning-arm seeds, not a recipe; marches in place at zero command, turns while stepping")
+    return {"gait": gait + ("; attitude = filter in the loop" if imu_filter else ""),
+            "planner": "SCRIPTED A* on the lidar log-odds map (unknown = free) + turn-then-walk (never sideways)",
+            "pose": "ORACLE + injected error (the estimated pose)" if pose_error else "ORACLE (simulator pose)",
+            "goal": "ORACLE goal coordinate"}
+
+
+def humanoid_footer(run: str, pose_error: bool = False, imu_filter: bool = False) -> str:
+    return (f"LEARNED gait {run} (one checkpoint) | SCRIPTED A* planner + turn-then-walk | "
+            + ("ORACLE goal, pose = oracle + injected error" if pose_error else "ORACLE pose and goal")
+            + (" | attitude: filter in the loop" if imu_filter else ""))
+
+
+def humanoid_fell(tilt: float, sink: float) -> bool:
+    """run_eval's fall rule (harness.TILT_LIMIT_RAD / MAX_SINK_M): tilt past 0.78 rad or the root 0.25 m low."""
+    return tilt > HUMANOID_TILT_LIMIT_RAD or sink > HUMANOID_MAX_SINK_M
+
+
+FLOOR_HIT_Z_M = 0.02      # a lidar return whose 3-D end point is this close to the floor plane is the floor, not a wall
+
+
+def scan_rays_from_sensor(base_pos, base_rot, mount, dirs_body, ranges, max_range, xy_est=None, yaw_err=0.0):
+    """Map rays of one lidar scan integrated from the SENSOR's pose (humanoid path).
+
+    The biped path integrates every scan from the base xy with the body yaw; its lidar sits over the base
+    (mount x = 0, 0.34 m up, body tilt ~0.03 rad), so the error is ~1 cm. The humanoid's deck lidar is
+    0.12 m forward and 0.72 m up, and the marching gait pitches the body ~0.14 rad, so its origin is up to
+    ~0.2 m ahead of the base: integrated from the base, walls it faces are drawn ~0.1-0.2 m too close
+    (pilot seed 106: a 1.32 m corridor closed to A*). Here each ray is rotated by the full body rotation
+    at capture, starts at base + R @ mount, is projected onto the floor plane (reach = r * horizontal
+    fraction), and a return that ends on the floor (z < FLOOR_HIT_Z_M, the pitched rays of a 0.66 m
+    lidar reach it at ~4-5 m) clears the cells it crossed but marks nothing occupied.
+    With pose error (SF-02) the estimate replaces the base xy and adds `yaw_err` to every azimuth; the
+    mount offset is rotated by the same error. Returns (origin_xy, azimuths, reaches, hits)."""
+    base_pos, base_rot = np.asarray(base_pos, float), np.asarray(base_rot, float).reshape(3, 3)
+    origin = base_pos + base_rot @ np.asarray(mount, float)
+    d = np.asarray(dirs_body, float) @ base_rot.T
+    r = np.minimum(np.asarray(ranges, float), max_range)
+    hit = r < max_range - 1e-3
+    floor = hit & (origin[2] + r * d[:, 2] < FLOOR_HIT_Z_M)
+    offset = origin[:2] - base_pos[:2]
+    if xy_est is not None:
+        c, s = math.cos(yaw_err), math.sin(yaw_err)
+        offset = np.array([c * offset[0] - s * offset[1], s * offset[0] + c * offset[1]])
+        origin_xy = np.asarray(xy_est, float) + offset
+    else:
+        origin_xy = base_pos[:2] + offset
+    return origin_xy, np.arctan2(d[:, 1], d[:, 0]) + yaw_err, r * np.hypot(d[:, 0], d[:, 1]), hit & ~floor
+
+
+def integrate_scan(grid, origin_xy, azimuths, reaches, hits):
+    """OccupancyGrid.update's log-odds model with a world azimuth and an explicit hit flag per ray: free
+    cells along the reach, occupied at its end only for a wall hit. With azimuths = yaw + angles,
+    reaches = min(r, max_range) and hits = r < max_range - 1e-3 it is OccupancyGrid.update, cell for
+    cell (tests/test_maze_humanoid.py)."""
+    ox, oy = float(origin_xy[0]), float(origin_xy[1])
+    half = grid.res * 0.5
+    for a, reach, hit in zip(azimuths, reaches, hits):
+        reach = float(reach)
+        ca, sa = math.cos(a), math.sin(a)
+        n = int(reach / half)
+        for k in range(n):
+            dd = k * half
+            if dd >= reach - half:
+                break
+            i, j = grid.to_cell(ox + dd * ca, oy + dd * sa)
+            if grid.inside(i, j):
+                grid.l[i, j] = max(grid.L_MIN, grid.l[i, j] + grid.L_FREE * 0.5)
+        if hit:
+            i, j = grid.to_cell(ox + reach * ca, oy + reach * sa)
+            if grid.inside(i, j):
+                grid.l[i, j] = min(grid.L_MAX, grid.l[i, j] + grid.L_OCC)
+    grid.updates += 1
+
+
+CONTROLLER_KNOBS = ("turn_enter", "turn_exit", "wz_walk", "waypoint_radius")
+
+
+def controller_overrides(args) -> dict:
+    """TurnWalkController keyword overrides that were set (None = the constructor default). goal_radius is
+    the judge's 0.30 m and is deliberately not a knob."""
+    return {k: getattr(args, k) for k in CONTROLLER_KNOBS if getattr(args, k, None) is not None}
 
 
 # ------------------------------------------------------------------ recorder
@@ -348,12 +584,17 @@ class ExploreRecorder:
         else:
             header = (f"random maze seed {self.maze.seed} ({self.maze.n}x{self.maze.m}, walls seen only through the lidar) | t = {now:5.1f} s"
                       f" | LEARNED NavGym policy | mapped {100 * known:3.0f} % | 1x")
-        footer = ("gait: learned PPO (biped dr-default), frozen | map: lidar log-odds | "
-                  + ("pose: oracle + injected error | " if _pose_error_on(self.args) else "pose: oracle | ")
-                  + ("attitude: filter in the loop | " if getattr(self.args, "imu_source", "truth") == "estimated" else "")
-                  + ("commands: LEARNED NavGym policy (PPO in the gym, deployed on the physics robot) | goal: oracle | no sideways"
-                     if self.args.policy is not None
-                     else "plan: A* on the map, unknown = free | turn in place, then walk forward; never sideways"))
+        if is_humanoid(self.args):
+            header = "22-DoF humanoid | " + header
+            footer = humanoid_footer(self.args.gait_run, _pose_error_on(self.args),
+                                     getattr(self.args, "imu_source", "truth") == "estimated")
+        else:
+            footer = ("gait: learned PPO (biped dr-default), frozen | map: lidar log-odds | "
+                      + ("pose: oracle + injected error | " if _pose_error_on(self.args) else "pose: oracle | ")
+                      + ("attitude: filter in the loop | " if getattr(self.args, "imu_source", "truth") == "estimated" else "")
+                      + ("commands: LEARNED NavGym policy (PPO in the gym, deployed on the physics robot) | goal: oracle | no sideways"
+                         if self.args.policy is not None
+                         else "plan: A* on the map, unknown = free | turn in place, then walk forward; never sideways"))
         frame = panels.compose_frame(top_rgb, [dp, lp, mp], header, footer, side_w=self.side_w)
         self.last_frame = frame
         self.sink.add(np.ascontiguousarray(frame))
@@ -387,7 +628,9 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
     _WORLDS["random_maze"] = rm.world_xml(maze, textured=not args.plain_world)
     cache = Path(args.cache_dir) / f"maze{seed}"
     cache.mkdir(parents=True, exist_ok=True)
-    model, slots = build_multi(Path(args.upstream), cache, 1, ["explorer"], variant="biped", world="random_maze")
+    humanoid = is_humanoid(args)
+    model, slots = build_multi(Path(args.upstream), cache, 1, ["explorer"], variant="humanoid" if humanoid else "biped",
+                               world="random_maze")
     controller = RlController(cfg)
     controller.policy = policy
     runner = ContactRunner(model, slots, [cfg], [controller])
@@ -402,11 +645,27 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
     owners = np.array([0 if (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_BODY, int(model.geom_bodyid[g])) or "").startswith(slot.prefix)
                        else -1 for g in range(model.ngeom)])
     runner.configure_contacts(owners)
-    sensors = TeamSensors(model, slots, owners, mode=args.sensor_mode, seed=seed, dropout_probability=args.dropout_probability,
-                          lidar_mount=LIDAR_MOUNT_BIPED, stereo_center=STEREO_CENTER_BIPED)
+    if humanoid:
+        # team_sensors' own defaults are the full humanoid's deck mounts (lidar +0.72 m, stereo +0.70 m, 0.12 m forward)
+        sensors = TeamSensors(model, slots, owners, mode=args.sensor_mode, seed=seed, dropout_probability=args.dropout_probability)
+    else:
+        sensors = TeamSensors(model, slots, owners, mode=args.sensor_mode, seed=seed, dropout_probability=args.dropout_probability,
+                              lidar_mount=LIDAR_MOUNT_BIPED, stereo_center=STEREO_CENTER_BIPED)
     grid = rm.OccupancyGrid(maze.bounds(), res=args.map_res, margin=0.6)
     planner = rm.Planner(grid, inflate_m=args.inflate)
-    ctrl = rm.TurnWalkController(cruise=args.cruise, turn_rate=args.turn_rate)
+    ctrl = rm.TurnWalkController(cruise=args.cruise, turn_rate=args.turn_rate, **controller_overrides(args))
+    if humanoid:
+        # judge-side fall bookkeeping (run_eval's rule) and where the wall contacts happen
+        spawn_z = float(runner.d.qpos[slot.qpos_adr + 2])
+        rot0, pos0 = runner.d.xmat[slot.body_id].reshape(3, 3), runner.d.xpos[slot.body_id]
+        mounts = {"lidar_body_m": [round(float(v), 3) for v in sensors.lidar_mount],
+                  "stereo_centre_body_m": [round(float(v), 3) for v in sensors.stereo_center],
+                  "lidar_world_z_at_spawn_m": round(float((pos0 + rot0 @ sensors.lidar_mount)[2]), 3),
+                  "stereo_world_z_at_spawn_m": round(float((pos0 + rot0 @ sensors.stereo_center)[2]), 3),
+                  "wall_height_m": rm.WALL_H}
+        hum = {"max_tilt": 0.0, "max_sink": -1e9, "wall_by_state": {}, "steps_by_state": {}, "floor_returns": 0,
+               "origin_offset_max": 0.0, "planner_failures": 0}
+        cap, cap_stamp = None, None
     learned = None
     if args.policy is not None:
         import onnxruntime as ort
@@ -452,7 +711,15 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         pkt = sensors.packets[0]
         if pkt is not None and pkt["stamp_s"] != last_stamp:
             last_stamp = pkt["stamp_s"]
-            grid.update(xy_e[0], xy_e[1], yaw_e, sensors.angles, np.asarray(pkt["lidar_raw_m"]), LIDAR_RANGE)
+            if humanoid:
+                # from the sensor's own pose at capture (scan_rays_from_sensor); the biped line below is unchanged
+                o_xy, az, reach, hits = scan_rays_from_sensor(cap[0], cap[1], sensors.lidar_mount, sensors.lidar_dirs,
+                                                              pkt["lidar_raw_m"], LIDAR_RANGE, cap[2] if pose.active else None, cap[3])
+                integrate_scan(grid, o_xy, az, reach, hits)
+                hum["floor_returns"] += int(np.sum((np.asarray(pkt["lidar_raw_m"]) < LIDAR_RANGE - 1e-3) & ~hits))
+                hum["origin_offset_max"] = max(hum["origin_offset_max"], float(np.hypot(*(o_xy - np.asarray(cap[2] if pose.active else cap[0][:2])))))
+            else:
+                grid.update(xy_e[0], xy_e[1], yaw_e, sensors.angles, np.asarray(pkt["lidar_raw_m"]), LIDAR_RANGE)
             if learned is not None:
                 learned["emap"].update(xy_e[0], xy_e[1], yaw_e, sensors.angles, np.asarray(pkt["lidar_raw_m"]))
         # plan on a timer, or when there is no plan yet (never with --policy: the learned actor does not use a plan)
@@ -461,6 +728,8 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
             last_plan_t = now
             if new_plan:
                 plan, wp_index = new_plan, 1 if len(new_plan) > 1 else 0
+            elif humanoid:
+                hum["planner_failures"] += 1        # diagnostic only: the previous plan is kept, as on the biped path
         if learned is not None:
             # the gym's observation, built by the gym's own builder from the packet's raw rays and the ego map
             raw_m = np.asarray(pkt["lidar_raw_m"]) if pkt is not None else np.full(108, learned["range"])
@@ -490,6 +759,10 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
                 arrived_true_d = math.hypot(xy[0] - goal[0], xy[1] - goal[1])
                 arrived_est_d = math.hypot(xy_e[0] - goal[0], xy_e[1] - goal[1])
         command = sensors.filter_commands(runner.d, [raw], now)[0]
+        if humanoid and sensors.packets[0] is not None and sensors.packets[0]["stamp_s"] != cap_stamp:
+            # the pose the new packet was captured at (runner.d is unchanged since the loop top)
+            cap_stamp = sensors.packets[0]["stamp_s"]
+            cap = (runner.d.xpos[slot.body_id].copy(), runner.d.xmat[slot.body_id].copy(), np.array(xy_e, dtype=float), yaw_e - yaw)
         obs = runner.observe(0, command)
         if imu is not None:
             obs = imu.apply(obs, runner.d, dt)
@@ -499,6 +772,10 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
             break
         runner.step([target])
         wall_steps += int(runner.hit_wall)
+        if humanoid:
+            hum["steps_by_state"][state] = hum["steps_by_state"].get(state, 0) + 1
+            if runner.hit_wall:
+                hum["wall_by_state"][state] = hum["wall_by_state"].get(state, 0) + 1
         after = runner.d.xpos[slot.body_id, :2].copy()
         path_m += float(np.linalg.norm(after - prior_xy))
         prior_xy = after
@@ -514,7 +791,13 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         if rec is not None:
             rec(step=step, now=now, runner=runner, sensors=sensors, xy=after, yaw=yaw, state=state, err=err, plan=plan[wp_index:] if plan else None,
                 grid=grid, blocked=planner.last_blocked, known=known, replans=planner.replans)
-        if runner.tilt(0) >= 0.78:
+        if humanoid:
+            tilt_now, sink_now = runner.tilt(0), spawn_z - float(runner.d.qpos[slot.qpos_adr + 2])
+            hum["max_tilt"], hum["max_sink"] = max(hum["max_tilt"], tilt_now), max(hum["max_sink"], sink_now)
+            fell_now = humanoid_fell(tilt_now, sink_now)
+        else:
+            fell_now = runner.tilt(0) >= 0.78
+        if fell_now:
             outcome = "fall"
             t_done = now
             break
@@ -560,6 +843,35 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         "pose_error": pose.summary(),
         "imu": imu.summary() if imu is not None else {"source": "truth"},
     }
+    if humanoid:
+        labels = humanoid_labels(args.gait_run, pose.active, imu is not None)
+        result["control"] = (f"frozen LEARNED humanoid gait {args.gait_run} (one checkpoint, 22-DoF) + SCRIPTED lidar_occupancy_map"
+                             "+astar_unknown_free+turn_then_walk; "
+                             + ("ORACLE pose and goal" if oracle_pose else "ORACLE goal; pose = oracle + injected error (pose_error)")
+                             + ("" if imu is None else "; gait attitude = filter in the loop (imu)"))
+        result["labels"] = labels
+        result["variant"] = "humanoid"
+        result["time_limit_s"] = args.time_limit
+        result["settle_s"] = args.settle_s
+        result["controller"].update({"turn_enter": ctrl.turn_enter, "turn_exit": ctrl.turn_exit, "wz_walk": ctrl.wz_walk,
+                                     "k_yaw": ctrl.k_yaw, "waypoint_radius": ctrl.waypoint_radius, "goal_radius": ctrl.goal_radius,
+                                     "overrides": controller_overrides(args)})
+        result["robot"] = {"model": "berkeley_humanoid_lite.xml (22-DoF)", "sensor_mounts": mounts,
+                           "planar_radius_m": HUMANOID_RADIUS_M, "biped_planar_radius_m": BIPED_RADIUS_M,
+                           "planner_inflate_m": args.inflate, "planner_inflate_cells": planner.r_cells,
+                           "corridor_clear_m": round(rm.CELL - rm.WALL_T, 3),
+                           "nominal_free_channel_m": round(rm.CELL - rm.WALL_T - 2 * args.inflate, 3),
+                           "note": "free channel = corridor - 2 x inflation, before the 0.10 m grid discretization (about 0.1 m less)"}
+        result["fall_rule"] = {"rule": f"tilt > {HUMANOID_TILT_LIMIT_RAD} rad OR root sink > {HUMANOID_MAX_SINK_M} m below spawn "
+                                       "(run_eval / harness, the rule behind the 7/60 push qualification)",
+                               "max_tilt_rad": round(hum["max_tilt"], 3), "max_sink_m": round(hum["max_sink"], 3)}
+        result["map_integration"] = {"rule": "each scan from the lidar's own pose at capture (base + R @ mount, full body rotation), "
+                                             "rays projected on the floor plane; floor returns clear cells, mark nothing",
+                                     "floor_returns": hum["floor_returns"], "max_origin_offset_from_base_m": round(hum["origin_offset_max"], 3)}
+        result["planner_failures"] = {"count": hum["planner_failures"], "of_replans": planner.replans,
+                                      "note": "A* found no path on the inflated map; the previous plan was kept (same as the biped path)"}
+        result["wall_contact_steps_by_state"] = hum["wall_by_state"]
+        result["steps_by_state"] = hum["steps_by_state"]
     if rec is not None:
         banner = f"GOAL REACHED  {t_done:.1f} s" if success else f"{outcome.upper().replace('_', ' ')}  {now:.1f} s"
         rec.hold(1.5, banner, colour=(20, 110, 60) if success else (150, 40, 40))
@@ -609,6 +921,18 @@ def main() -> int:
     ap.add_argument("--policy", type=Path, default=None,
                     help="NavGym actor (.onnx from navgym_train.py): replaces the A* planner + turn-then-walk with the learned "
                          "policy; same lidar sectors, the same 0.2 m egocentric map built from the same raw rays, oracle pose + goal")
+    ap.add_argument("--no-overwrite", action="store_true",
+                    help="refuse to run if any per-seed JSON or the summary this run would write already exists")
+    hm = ap.add_argument_group("22-DoF humanoid (opt-in; the default is the biped path, unchanged)")
+    hm.add_argument("--variant", choices=("biped", "humanoid"), default="biped",
+                    help="'humanoid': berkeley_humanoid_lite.xml + the QUALIFIED turning checkpoint arms-turn-turnboth-s0 "
+                         "(default --gait for this variant), team_sensors deck mounts, run_eval's fall rule, humanoid labels")
+    for knob, what in (("turn_enter", "heading error (rad) that starts a turn in place (default 0.40)"),
+                       ("turn_exit", "heading error (rad) that ends it (default 0.15)"),
+                       ("wz_walk", "yaw-rate cap while walking (rad/s, default 0.4)"),
+                       ("waypoint_radius", "intermediate-waypoint acceptance radius (m, default 0.30); the goal radius "
+                                           "is the judge's 0.30 m and is not a knob")):
+        hm.add_argument("--" + knob.replace("_", "-"), type=float, default=None, help=what)
     sf = ap.add_argument_group("sensor-fusion stress (all off by default; SF-02 / SF-03b conventions of inspection_maze.py)")
     sf.add_argument("--pose-yaw-deg", type=float, default=0.0, help="constant heading error of the estimated pose")
     sf.add_argument("--pose-bias-m", type=float, default=0.0, help="constant position offset magnitude, random direction per seed")
@@ -638,10 +962,31 @@ def main() -> int:
     if args.imu_source == "estimated" and args.imu_rate_hz > 0 and args.imu_delay_steps:
         ap.error("--imu-delay-steps is the policy-rate delay; with --imu-rate-hz > 0 use --imu-delay-ms")
 
-    gait = args.gait or (Path(args.upstream) / GAIT_DEFAULT)
-    cfg = OmegaConf.load(gait)
-    if cfg.num_actions != 12:
-        raise SystemExit("this mission uses the 12-DoF biped gait (the humanoid gait does not turn in place)")
+    if is_humanoid(args):
+        if args.policy is not None:
+            ap.error("--policy (the NavGym actor, scaled for the biped) is not supported with --variant humanoid")
+        if args.gait is None:
+            import glob
+            hits = sorted(glob.glob(str(Path(args.upstream) / HUMANOID_GAIT_GLOB)))
+            if len(hits) != 1:
+                raise SystemExit(f"expected exactly one exported {HUMANOID_RUN} deploy.yaml, found {len(hits)}: {hits}")
+            args.gait = Path(hits[0])
+        gait = args.gait
+        cfg = OmegaConf.load(gait)
+        if cfg.num_actions != 22 or cfg.num_joints != 22 or cfg.num_observations != 75:
+            raise SystemExit("--variant humanoid needs the 22-DoF, 75-observation humanoid gait")
+        args.gait_run = gait_run_name(gait)
+    else:
+        gait = args.gait or (Path(args.upstream) / GAIT_DEFAULT)
+        cfg = OmegaConf.load(gait)
+        if cfg.num_actions != 12:
+            raise SystemExit("the default (biped) variant needs the 12-DoF biped gait; a 22-DoF humanoid gait "
+                             "runs with --variant humanoid")
+    if args.no_overwrite:
+        targets = [args.out_dir / f"seed{args.seed_start + k}{args.tag}.json" for k in range(args.seeds)] + [args.out_dir / f"summary{args.tag}.json"]
+        present = [str(p) for p in targets if p.exists()]
+        if present:
+            raise SystemExit(f"--no-overwrite: refusing to run, outputs already exist: {present}")
     policy = CpuPolicy(cfg.policy_checkpoint_path)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     results = []
@@ -655,6 +1000,8 @@ def main() -> int:
         res = run_seed(args, cfg, policy, seed, factory)
         res["gait"] = {"deploy": str(gait), "checkpoint": str(cfg.policy_checkpoint_path),
                        "checkpoint_sha256": sha256(Path(cfg.policy_checkpoint_path)) if Path(cfg.policy_checkpoint_path).is_file() else None}
+        if is_humanoid(args):
+            res["gait"].update({"variant": "humanoid", "run": args.gait_run, "label": res["labels"]["gait"]})
         (args.out_dir / f"seed{seed}{args.tag}.json").write_text(json.dumps(res, indent=2) + "\n")
         results.append(res)
         print(json.dumps({k_: res[k_] for k_ in ("seed", "outcome", "outcome_class", "completion_s", "wall_contact_steps", "path_length_m", "turns", "replans",
@@ -682,6 +1029,19 @@ def main() -> int:
                          "imu": ({k_: getattr(args, k_) for k_ in ("imu_source", "imu_filter", "imu_init", "imu_kp", "imu_ki", "imu_rate_hz",
                                                                    "imu_delay_ms", "imu_delay_steps") + imu_opts[:4]}
                                  if args.imu_source == "estimated" else {"imu_source": "truth"})}
+    if is_humanoid(args):
+        summary["variant"] = "humanoid"
+        summary["labels"] = humanoid_labels(args.gait_run, _pose_error_on(args), args.imu_source == "estimated")
+        summary["settings"].update({"settle_s": args.settle_s, **{k_: getattr(args, k_) for k_ in CONTROLLER_KNOBS}})
+        summary["frozen_humanoid_settings"] = HUMANOID_FROZEN
+        summary["settings_match_frozen"] = all(summary["settings"][k_] == v for k_, v in HUMANOID_FROZEN.items())
+        summary["humanoid_diagnostics"] = {
+            "max_tilt_rad": [r["fall_rule"]["max_tilt_rad"] for r in results],
+            "max_sink_m": [r["fall_rule"]["max_sink_m"] for r in results],
+            "wall_contact_steps_by_state": [r["wall_contact_steps_by_state"] for r in results],
+            "planner_failures": [r["planner_failures"]["count"] for r in results],
+            "floor_returns": [r["map_integration"]["floor_returns"] for r in results],
+            "max_origin_offset_from_base_m": [r["map_integration"]["max_origin_offset_from_base_m"] for r in results]}
     (args.out_dir / f"summary{args.tag}.json").write_text(json.dumps(summary, indent=2) + "\n")
     print("MAZE-EXPLORE SUMMARY " + json.dumps({k_: summary[k_] for k_ in ("n", "success", "clean_success", "falls", "time_outs", "median_completion_s",
                                                                           "median_clean_seed_by_time", "arrived_not_judged", "stuck")}), flush=True)
@@ -706,6 +1066,12 @@ def main() -> int:
         if args.policy is not None:
             side["policy"] = {"onnx": os.path.relpath(args.policy, REPO), "onnx_sha256": sha256(Path(args.policy)),
                               "label": "LEARNED (PPO in NavGym, deployed on the physics robot); oracle pose + goal"}
+        if is_humanoid(args):
+            side["labels"] = r["labels"]
+            side["scope"] = (f"MuJoCo {mujoco.__version__} | 22-DoF humanoid | LEARNED gait {args.gait_run} (ONE checkpoint, frozen) | "
+                             "SCRIPTED lidar log-odds map + A* (unknown = free) + turn-then-walk (no sideways) | ORACLE pose and goal "
+                             "coordinate; the maze itself is unknown to the planner | one seed = one maze; the multi-seed table is the "
+                             "evidence, this clip the illustration")
         args.gif.with_suffix(".json").write_text(json.dumps(side, indent=2) + "\n")
         print(f"GIF {side['output']} {g['mb']} MB")
     return 0
@@ -724,7 +1090,33 @@ def verdict_main(argv) -> int:
     return 0
 
 
+def humanoid_verdict_main(argv) -> int:
+    """`maze_explore.py humanoid-verdict <root>`: HUMANOID_MAZE_RULE over <root>/humanoid-hard-6x6 and
+    <root>/biped-hard-6x6. An existing verdict JSON is never overwritten: it is re-printed."""
+    ap = argparse.ArgumentParser(prog="maze_explore.py humanoid-verdict")
+    ap.add_argument("root", type=Path)
+    ap.add_argument("--humanoid-dir", default="humanoid-hard-6x6")
+    ap.add_argument("--biped-dir", default="biped-hard-6x6")
+    ap.add_argument("--out", type=Path, default=None, help="default: <root>/verdict.json")
+    a = ap.parse_args(argv)
+    out = a.out or a.root / "verdict.json"
+    if out.exists():
+        v = json.loads(out.read_text())
+        print(f"verdict already recorded, not overwritten: {out}")
+    else:
+        v = humanoid_maze_verdict(*load_arm(a.root / a.humanoid_dir), *load_arm(a.root / a.biped_dir))
+        if v["verdict"] != "INCOMPLETE":           # an INCOMPLETE reading is printed, not recorded
+            out.write_text(json.dumps(v, indent=2) + "\n")
+            print(f"wrote {out}")
+        else:
+            print("INCOMPLETE problems: " + "; ".join(v["problems"]))
+    print(f"MAZE-HUMANOID VERDICT: {v['verdict']} -- {v['detail']}", flush=True)
+    return 0
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "sf-verdict":
         sys.exit(verdict_main(sys.argv[2:]))
+    if len(sys.argv) > 1 and sys.argv[1] == "humanoid-verdict":
+        sys.exit(humanoid_verdict_main(sys.argv[2:]))
     sys.exit(main())
