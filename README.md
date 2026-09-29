@@ -18,7 +18,7 @@ Lab · MuJoCo · ONNX · Slurm/HPC.
 
 [Results, September 20](docs/WEEKEND_RESULTS_2026-09-20.md) ·
 [Reproduce and inspect](docs/REPRODUCIBILITY.md) ·
-[Architecture](#architecture) · [Job ledger](SLURM_JOBS.md)
+[Architecture](#architecture) · [Job ledger](SLURM_JOBS.md) · [Roadmap and stretch goals](docs/ROADMAP.md)
 
 <p align="center">
   <img src="docs/gifs/random-maze-explore.gif" width="760" alt="Top view of a randomized 6x6 maze. A biped turns in place and walks forward along an orange breadcrumb path to a green goal. Side panels show its ray depth, lidar sectors and the occupancy map it builds from its own lidar, with the A* plan. Badge: GOAL REACHED 73.1 s, GIF at 5x."><br>
