@@ -272,3 +272,117 @@ def write_gif(src_mp4: Path, out_gif: Path, *, fps: int = 8, speed: float = 1.0,
             break
     tmp.cleanup()
     return last
+
+
+AXIS_COLOURS = ((235, 90, 80), (90, 200, 110), (90, 150, 255))     # x red, y green, z blue
+
+
+def _trace_box(draw, box, series, t_now, window_s, lo, hi, label, unit, font, zero=True):
+    """Three time series (t, (3,)) in a box; the newest sample at the right edge."""
+    x0, y0, x1, y1 = box
+    draw.rectangle(box, outline=GRID)
+    if zero and lo < 0 < hi:
+        yz = y1 - (0 - lo) / (hi - lo) * (y1 - y0)
+        draw.line((x0, yz, x1, yz), fill=GRID)
+    draw.text((x0 + 4, y0 + 2), label, font=font, fill=TEXT)
+    draw.text((x1 - 4 - draw.textlength(f"{hi:g}", font=font), y0 + 2), f"{hi:g}", font=font, fill=DIM)
+    draw.text((x1 - 4 - draw.textlength(f"{lo:g} {unit}", font=font), y1 - 14), f"{lo:g} {unit}", font=font, fill=DIM)
+    if len(series) < 2:
+        return
+    ts = np.array([s[0] for s in series])
+    vals = np.array([s[1] for s in series])
+    xs = x1 - (t_now - ts) / window_s * (x1 - x0)
+    for k in range(3):
+        v = np.clip(vals[:, k], lo, hi)
+        ys = y1 - (v - lo) / (hi - lo) * (y1 - y0)
+        pts = [(float(a), float(b)) for a, b in zip(xs, ys) if a >= x0]
+        if len(pts) > 1:
+            draw.line(pts, fill=AXIS_COLOURS[k], width=2)
+
+
+def imu_strip(hist, latest, size: tuple[int, int], title: str, window_s: float = 4.0,
+              gyro_range: float = 100.0, accel_range: tuple[float, float] = (-5.0, 25.0)) -> Image.Image:
+    """Gyro (deg/s) and specific force (m/s^2) traces, x/y/z, over the last `window_s`."""
+    w, h = size
+    img = Image.new("RGB", (w, h), PANEL_BG)
+    draw = ImageDraw.Draw(img)
+    top = _title(draw, w, title)
+    font = load_font(12)
+    if latest is None:
+        draw.text((8, top + 8), "no IMU sample yet", font=load_font(13), fill=STALE)
+        return img
+    t_now = latest["t"]
+    gap, pad = 12, 8
+    bw = (w - 2 * pad - gap) // 2
+    y0, y1 = top + 6, h - 22
+    gy = [(t, g) for t, g, _ in hist]
+    ac = [(t, a) for t, _, a in hist]
+    _trace_box(draw, (pad, y0, pad + bw, y1), gy, t_now, window_s, -gyro_range, gyro_range,
+               "gyro (deg/s)", "deg/s", font)
+    _trace_box(draw, (pad + bw + gap, y0, pad + 2 * bw + gap, y1), ac, t_now, window_s,
+               accel_range[0], accel_range[1], "accelerometer, specific force (m/s^2)", "m/s^2", font)
+    legend_x = pad
+    for k, name in enumerate(("x forward", "y left", "z up")):
+        draw.rectangle((legend_x, h - 16, legend_x + 10, h - 8), fill=AXIS_COLOURS[k])
+        draw.text((legend_x + 14, h - 19), name, font=font, fill=DIM)
+        legend_x += 90
+    g, a = latest["gyro_dps"], latest["accel"]
+    draw.text((legend_x + 10, h - 19), f"now: gyro [{g[0]:+6.1f} {g[1]:+6.1f} {g[2]:+6.1f}]  "
+              f"accel [{a[0]:+5.2f} {a[1]:+5.2f} {a[2]:+5.2f}]  last {window_s:g} s", font=font, fill=DIM)
+    return img
+
+
+def imu_readout_panel(latest, size: tuple[int, int], title: str, notes: list[str]) -> Image.Image:
+    """Attitude estimate vs truth, plus the magnetometer and barometer channels."""
+    w, h = size
+    img = Image.new("RGB", (w, h), PANEL_BG)
+    draw = ImageDraw.Draw(img)
+    top = _title(draw, w, title)
+    font, small = load_font(13), load_font(11)
+    if latest is None:
+        draw.text((8, top + 8), "no IMU sample yet", font=font, fill=STALE)
+        return img
+    y = top + 6
+    draw.text((8, y), "attitude     filter    truth    error", font=small, fill=DIM)
+    y += 16
+    for k, name in enumerate(("roll", "pitch", "yaw")):
+        e, t, err = latest["rpy_est"][k], latest["rpy_true"][k], latest["rpy_err"][k]
+        draw.text((8, y), f"{name:<6} {e:+8.1f}° {t:+8.1f}° {err:+6.1f}°", font=font, fill=TEXT)
+        y += 17
+    y += 4
+    m = latest["mag_ut"]
+    draw.text((8, y), f"mag  |B| {np.linalg.norm(m):5.1f} µT  hdg {latest['mag_heading_deg']:+6.1f}°",
+              font=small, fill=DIM)
+    y += 15
+    draw.text((8, y), f"baro {latest['baro_pa'] / 100:8.2f} hPa  Δalt {latest['baro_dalt_m']:+5.2f} m",
+              font=small, fill=DIM)
+    y += 17
+    for line in notes:
+        if y > h - 14:
+            break
+        draw.text((8, y), line, font=small, fill=DIM)
+        y += 14
+    return img
+
+
+def stereo_rgb_panel(left, right, size: tuple[int, int], title: str, subtitle: str | None = None) -> Image.Image:
+    """Two RGB eye renders side by side."""
+    w, h = size
+    img = Image.new("RGB", (w, h), PANEL_BG)
+    draw = ImageDraw.Draw(img)
+    top = _title(draw, w, title)
+    gap = 6
+    tile_w = (w - 3 * gap) // 2
+    avail = h - top - 8 - (16 if subtitle else 0)
+    for i, rgb in enumerate((left, right)):
+        if rgb is None:
+            continue
+        pic = Image.fromarray(np.ascontiguousarray(np.asarray(rgb)[..., :3].astype(np.uint8)))
+        th = min(avail, int(tile_w * pic.size[1] / pic.size[0]))
+        pic = pic.resize((tile_w, th), Image.BILINEAR)
+        x0 = gap + i * (tile_w + gap)
+        img.paste(pic, (x0, top + 4))
+        draw.text((x0 + 3, top + 4), "L" if i == 0 else "R", font=load_font(12), fill=TEXT)
+    if subtitle:
+        draw.text((8, h - 15), subtitle, font=load_font(11), fill=DIM)
+    return img

@@ -494,6 +494,10 @@ class ExploreRecorder:
         self.frames = 0
         self.last_frame = None
         self.crumbs: list[tuple[float, float, float]] = []      # (x, y, t)
+        # optional display-only extras (--imu-panel / --rig-panels), attached by run_seed
+        self.imu, self.rig, self.flow = None, None, None
+        self.strip_h = 190
+        self.eff_side_w = self.side_w
         xmin, xmax, ymin, ymax = maze.bounds()
         self.centre = ((xmin + xmax) / 2, (ymin + ymax) / 2)
         if self.render:
@@ -562,6 +566,7 @@ class ExploreRecorder:
             return
         if not self.crumbs or math.hypot(xy[0] - self.crumbs[-1][0], xy[1] - self.crumbs[-1][1]) > 0.2:
             self.crumbs.append((float(xy[0]), float(xy[1]), now))
+        self._runner_d = runner.d
         if self.render:
             self.top.update_scene(runner.d, camera=self.cam)
             self._draw_crumbs(now)
@@ -577,7 +582,9 @@ class ExploreRecorder:
                                      stale=stale, subtitle="10 Hz packets; feeds the speed brake only")
         lp = panels.lidar_panel(lidar, LIDAR_RANGE, (self.side_w, 170), "lidar: 36 sector minima of 108 rays",
                                 window_m=4.0, stale=stale, brake=brake, subtitle="forward is up; raw rays build the map")
-        mp = self.map_panel(grid, blocked, xy, yaw, plan, size=(self.side_w, max(160, self.h - 340)))
+        extras = self.imu is not None or self.rig is not None
+        total_h = self.h + (self.strip_h if self.imu is not None else 0)
+        mp = self.map_panel(grid, blocked, xy, yaw, plan, size=(self.side_w, max(160, total_h - 340)))
         if self.args.policy is None:
             header = (f"random maze seed {self.maze.seed} ({self.maze.n}x{self.maze.m}, unknown to the planner) | t = {now:5.1f} s"
                       f" | {state} | mapped {100 * known:3.0f} % | replans {replans} | 1x")
@@ -595,10 +602,61 @@ class ExploreRecorder:
                       + ("commands: LEARNED NavGym policy (PPO in the gym, deployed on the physics robot) | goal: oracle | no sideways"
                          if self.args.policy is not None
                          else "plan: A* on the map, unknown = free | turn in place, then walk forward; never sideways"))
-        frame = panels.compose_frame(top_rgb, [dp, lp, mp], header, footer, side_w=self.side_w)
+        if extras:
+            frame = self._compose_extras(top_rgb, [dp, lp, mp], header, footer, total_h)
+        else:
+            frame = panels.compose_frame(top_rgb, [dp, lp, mp], header, footer, side_w=self.side_w)
         self.last_frame = frame
         self.sink.add(np.ascontiguousarray(frame))
         self.frames += 1
+
+    def _compose_extras(self, top_rgb, col_a, header, footer, total_h):
+        """Main view (+ IMU strip) | column A (ray depth, lidar, map) | column B (RGB, depth, flow, IMU readout)."""
+        from PIL import Image
+        main = np.asarray(top_rgb)[..., :3]
+        if self.imu is not None:
+            strip = panels.imu_strip(self.imu.hist, self.imu.latest, (main.shape[1], self.strip_h),
+                                     f"IMU: simulated IM10A @ {self.imu.rate_hz:.0f} Hz, datasheet noise "
+                                     "(gyro 0.07 deg/s rms + 1 deg/s bias; accel 1 mg rms + 40 mg bias) | display only")
+            main = np.vstack([main, np.asarray(strip)])
+        col_b = []
+        hb = total_h
+        if self.rig is not None:
+            rl, rr, dl, dr = self.rig.render(self._runner_d)
+            flow = self.flow.update(rl, self.args.stride * self._dt) if self.flow is not None else None
+            h_rgb = h_dep = 170
+            h_flow = 250
+            col_b.append(panels.stereo_rgb_panel(rl, rr, (self.side_w, h_rgb), "stereo rig RGB, L / R (render)",
+                                                 "display only: the brake reads no RGB"))
+            col_b.append(panels.depth_pair_panel(np.stack([dl, dr]), DEPTH_RANGE, (self.side_w, h_dep),
+                                                 f"rendered depth {dl.shape[1]}x{dl.shape[0]}, L / R",
+                                                 subtitle="display only; the brake reads the 8x8 above"))
+            st = self.flow.last_stats if self.flow is not None else None
+            col_b.append(panels.image_panel(flow, (self.side_w, h_flow),
+                                            "optical flow, left eye (Farneback)" + (
+                                                f" | median {st['median_px_per_s']:.0f} px/s" if st else "")))
+            hb -= h_rgb + h_dep + h_flow
+        if self.imu is not None:
+            col_b.append(panels.imu_readout_panel(
+                self.imu.latest, (self.side_w, max(120, hb)), "IMU: 6-axis filter vs truth; mag + baro",
+                ["filter: Mahony on the noisy gyro + accel;", "heading from gyro only (drifts, as a",
+                 "6-axis unit does). Magnetometer (field", "approx.) and barometer are simulated", "and NOT used: mag off indoors,",
+                 "baro too coarse for a flat maze."]))
+        elif col_b:
+            col_b.append(Image.new("RGB", (self.side_w, max(1, hb)), panels.PANEL_BG))
+        col_a_img = Image.new("RGB", (self.side_w, total_h), panels.PANEL_BG)
+        y = 0
+        for p in col_a:
+            col_a_img.paste(p, (0, y))
+            y += p.size[1]
+        cols = Image.new("RGB", (2 * self.side_w, total_h), panels.PANEL_BG)
+        cols.paste(col_a_img, (0, 0))
+        y = 0
+        for p in col_b:
+            cols.paste(p, (self.side_w, y))
+            y += p.size[1]
+        self.eff_side_w = 2 * self.side_w
+        return panels.compose_frame(main, [cols], header, footer, side_w=2 * self.side_w)
 
     def hold(self, seconds: float, banner: str, colour=(20, 110, 60)):
         if self.last_frame is None:
@@ -608,7 +666,7 @@ class ExploreRecorder:
         draw = ImageDraw.Draw(img)
         font = panels.load_font(30)
         tw = draw.textlength(banner, font=font)
-        x, y = (img.size[0] - self.side_w - tw) / 2, 60
+        x, y = (img.size[0] - self.eff_side_w - tw) / 2, 60
         draw.rectangle((x - 14, y - 8, x + tw + 14, y + 40), fill=colour)
         draw.text((x, y), banner, font=font, fill=(255, 255, 255))
         arr = np.asarray(img)
@@ -619,6 +677,8 @@ class ExploreRecorder:
     def close(self):
         if self.render:
             self.top.close()
+        if self.rig is not None:
+            self.rig.close()
         return self.sink.close()
 
 
@@ -689,6 +749,19 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         from inspection_maze import EstimatedAttitude
         imu = EstimatedAttitude(args, model, slot, seed)
         imu.bind_sensor_rate(runner, float(cfg.physics_dt))
+    if rec is not None and getattr(args, "imu_panel", False):
+        # display only: reads the IMU site on its own random stream, chained after any bound hook
+        from bhl_robust.eval.imu_sim import SimIM10A
+        rec.imu = SimIM10A(model, slot, seed, float(cfg.physics_dt), rate_hz=args.imu_panel_rate,
+                           kp=args.imu_kp, ki=args.imu_ki)
+        rec.imu.attach(runner)
+    if rec is not None and getattr(args, "rig_panels", False) and rec.render:
+        from bhl_robust.eval.rig_views import FlowView, RigCameras
+        rw, rh = (int(v) for v in args.rig_res.lower().split("x"))
+        rec.rig = RigCameras(model, slot, sensors.stereo_center, width=rw, height=rh)
+        rec.flow = FlowView()
+    if rec is not None:
+        rec._dt = dt
 
     plan, wp_index, last_stamp, last_plan_t = None, 0, None, -1e9
     outcome, t_done, wall_steps, path_m = None, None, 0, 0.0
@@ -918,6 +991,14 @@ def main() -> int:
     ap.add_argument("--gif-fps", type=int, default=8)
     ap.add_argument("--gif-width", type=int, default=860)
     ap.add_argument("--tag", default="", help="suffix for per-seed files")
+    ap.add_argument("--imu-panel", action="store_true",
+                    help="with --render: add a simulated IM10A-like 10-axis IMU (datasheet noise, 100 Hz) as a trace strip "
+                         "under the main view and a readout panel; display only, never in the control loop")
+    ap.add_argument("--imu-panel-rate", type=float, default=100.0, help="simulated IMU output rate, Hz (IM10A: 0.2-200)")
+    ap.add_argument("--rig-panels", action="store_true",
+                    help="with --render: add a second column with RGB and rendered depth per eye from the stereo mount and "
+                         "left-eye optical flow; display only (the brake still reads the 8x8 ray depth)")
+    ap.add_argument("--rig-res", default="160x120", help="per-eye render size for --rig-panels, WxH")
     ap.add_argument("--policy", type=Path, default=None,
                     help="NavGym actor (.onnx from navgym_train.py): replaces the A* planner + turn-then-walk with the learned "
                          "policy; same lidar sectors, the same 0.2 m egocentric map built from the same raw rays, oracle pose + goal")
@@ -1072,6 +1153,16 @@ def main() -> int:
                              "SCRIPTED lidar log-odds map + A* (unknown = free) + turn-then-walk (no sideways) | ORACLE pose and goal "
                              "coordinate; the maze itself is unknown to the planner | one seed = one maze; the multi-seed table is the "
                              "evidence, this clip the illustration")
+        if getattr(args, "imu_panel", False):
+            from bhl_robust.eval.imu_sim import IM10A_DATASHEET
+            side["imu_panel"] = {"label": "SIMULATED IM10A-like 10-axis IMU, display only (never in the control loop)",
+                                 "rate_hz": args.imu_panel_rate, "noise": IM10A_DATASHEET,
+                                 "filter": f"Mahony kp={args.imu_kp} ki={args.imu_ki}, 6-axis, own random stream",
+                                 "not_used": "magnetometer (approx. local field) and barometer are simulated and not used"}
+        if getattr(args, "rig_panels", False):
+            side["rig_panels"] = {"label": "display only: the brake reads the 8x8 ray-cast depth, the map the lidar",
+                                  "rgb_depth": f"MuJoCo renders at the stereo mount, {args.rig_res} per eye, 20 deg down, 60.5 deg vfov",
+                                  "optical_flow": "OpenCV Farneback on consecutive left-eye frames (HSV: hue = direction)"}
         args.gif.with_suffix(".json").write_text(json.dumps(side, indent=2) + "\n")
         print(f"GIF {side['output']} {g['mb']} MB")
     return 0
