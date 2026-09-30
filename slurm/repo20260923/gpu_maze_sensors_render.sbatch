@@ -28,17 +28,28 @@ U=$REPO/external/Berkeley-Humanoid-Lite
 cd "$REPO"
 export PYTHONPATH="$REPO/src" OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 PYTHONUNBUFFERED=1
 CACHE=${TMPDIR:-/tmp}/bhl-maze-sensors-$SLURM_JOB_ID; mkdir -p "$CACHE"
-SEED=${MAZE_SEED:-1}
-OUT=$REPO/results/maze-explore-20260924/hard-6x6
-GIF=${MAZE_SENSORS_GIF:-$REPO/docs/gifs/random-maze-explore-sensors.gif}
+# MAZE_VARIANT=biped (default): the README biped episode, hard 6x6 seed 1 (published 73.12 s).
+# MAZE_VARIANT=humanoid (2026-09-30): the 22-DoF humanoid with arms, LEARNED gait arms-turn-turnboth-s0 (the one
+#   qualified turning checkpoint), frozen settings of the scored run 21463686 (maze_explore.HUMANOID_FROZEN), on
+#   that run's median-time episode (summary.json median_clean_seed_by_time = seed 12, 70.48 s) -- chosen by that
+#   rule, not by eye.
+VARIANT=${MAZE_VARIANT:-biped}
+case "$VARIANT" in
+  biped)    SEED=${MAZE_SEED:-1};  OUT=$REPO/results/maze-explore-20260924/hard-6x6
+            GIF=${MAZE_SENSORS_GIF:-$REPO/docs/gifs/random-maze-explore-sensors.gif}; VFLAGS=() ;;
+  humanoid) SEED=${MAZE_SEED:-12}; OUT=$REPO/results/maze-humanoid-20260928/humanoid-hard-6x6
+            GIF=${MAZE_SENSORS_GIF:-$REPO/docs/gifs/random-maze-humanoid-sensors.gif}
+            VFLAGS=(--variant humanoid --cruise 0.30 --turn-rate 0.6 --inflate 0.50 --settle-s 1.0) ;;
+  *) echo "unknown MAZE_VARIANT $VARIANT"; exit 2 ;;
+esac
 for f in "$GIF" "${GIF%.gif}.json" "$OUT/seed${SEED}_sensors.json" "$OUT/seed${SEED}_sensors.mp4"; do
     [ -e "$f" ] && { echo "REFUSING: $f exists (never overwrite a published clip or episode)"; exit 3; }
 done
 "$PY" -c "import mujoco; r = mujoco.Renderer(mujoco.MjModel.from_xml_string('<mujoco><worldbody><geom size=\"1\"/></worldbody></mujoco>'), 64, 64); r.render(); r.close(); print('EGL render preflight OK', mujoco.__version__)"
-echo "=== node: $(hostname) | HEAD $(git rev-parse --short HEAD) | hard 6x6 seed $SEED + IMU and rig panels | $(date) ==="
+echo "=== node: $(hostname) | HEAD $(git rev-parse --short HEAD) | $VARIANT | hard 6x6 seed $SEED + IMU and rig panels | $(date) ==="
 "$PY" scripts/bench/maze_explore.py --upstream "$U" --cache-dir "$CACHE" --seeds 1 --seed-start "$SEED" --n 6 --m 6 --extra-openings 1 \
     --time-limit 180 --out-dir "$OUT" --tag "_sensors" --render --frames-root "$CACHE/frames" --stride 2 \
-    --imu-panel --rig-panels \
+    --imu-panel --rig-panels "${VFLAGS[@]}" \
     --gif "$GIF" --gif-speed "${MAZE_GIF_SPEED:-5.0}" --gif-fps 8 --gif-width "${MAZE_GIF_WIDTH:-1100}" 2>&1 | grep -v "^\[\|libEGL"
 rm -rf "$CACHE"
 [ -f "${GIF%.gif}.json" ] || { echo "NO GIF written (see above)"; exit 1; }
