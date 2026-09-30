@@ -5,6 +5,12 @@ Renderer is in the folder name:
 scored episode from the harness that produced the numbers, except `squat_pick`,
 which says on its face that it is scripted.
 
+## September 30: the 22-DoF humanoid in the randomized maze (README hero)
+
+| Actual recording | Result and scope |
+|---|---|
+| [Humanoid, randomized maze, sensor panels](gifs/random-maze-humanoid-sensors.gif) · [sidecar](gifs/random-maze-humanoid-sensors.json) | The **22-DoF humanoid with arms**, LEARNED gait `arms-turn-turnboth-s0` (the one qualified turning checkpoint), SCRIPTED A* on its own lidar map + turn-then-walk, ORACLE pose and goal, on the scored run's median-time episode (hard 6×6 maze seed 12, goal in **70.5 s**, chosen by the median rule, not by eye). The render reproduces the scored episode exactly (`episode_matches_table.match = true`; job `21487485`). Same display-only panels as the biped clip below (simulated IM10A IMU with datasheet noise, stereo RGB, 160×120 rendered depth, optical flow). The scored run (`21463686`): **12/12** never-seen hard mazes, 0 falls, 0 wall contacts. GIF at 5× (badged); 4.4 MB |
+
 ## September 29: the hero episode with the robot's sensors (display-only panels)
 
 | Actual recording | Result and scope |

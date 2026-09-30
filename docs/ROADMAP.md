@@ -1,6 +1,6 @@
 # Roadmap: pending work and stretch goals
 
-Updated 2026-09-30. Done since the last update: README hero with sensor panels; NavGym v4 passed its gate. One line per item; evidence and rules live in
+Updated 2026-09-30. Done since the last update: README hero is now the 22-DoF humanoid with sensor panels; NavGym v4 passed its gate. One line per item; evidence and rules live in
 [`STATUS.md`](STATUS.md), [`REPO_TASKS.md`](REPO_TASKS.md) and the
 [job ledger](../SLURM_JOBS.md). Every run gets a pass rule written down before it starts.
 
@@ -14,7 +14,6 @@ Updated 2026-09-30. Done since the last update: README hero with sensor panels; 
 | Item | Why | Done when |
 |---|---|---|
 | **SF-05: record the real IM10A** over ROS 2 (10 min still, then slow rotations per axis) | replace the datasheet noise in the sim IMU with measured noise, bias and rate | Allan-variance sigmas committed; sim IMU and panel read "measured on your IM10A" |
-| Humanoid maze clip (TurnBoth-s0, 12/12) | the result has no GIF yet | GIF reproduces a scored episode |
 | Fix the cloth task's spawn quaternion | same bug as the fixed cube tasks; guard test allowlists it | cloth driver removes the allowlist entry |
 
 ## Stretch goals

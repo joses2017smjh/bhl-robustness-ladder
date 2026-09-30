@@ -21,13 +21,13 @@ Lab · MuJoCo · ONNX · Slurm/HPC.
 [Architecture](#architecture) · [Job ledger](SLURM_JOBS.md) · [Roadmap and stretch goals](docs/ROADMAP.md)
 
 <p align="center">
-  <a href="docs/gifs/random-maze-explore-sensors.gif"><img src="docs/gifs/random-maze-explore-sensors.gif" width="100%" alt="Top view of a randomized 6x6 maze: a biped turns in place and walks forward along an orange breadcrumb path to a green goal. Under the view, simulated IMU gyro and accelerometer traces. Right: the brake's 8x8 ray depth, lidar sectors and the lidar-built map with the A* plan; then the stereo rig's RGB, 160x120 rendered depth, left-eye optical flow, and the IMU attitude filter against truth. Badge: GIF at 5x."></a><br>
-  <sub>A new maze every seed, so the route cannot be memorized. Learned gait; scripted A* on a map the robot builds from its own lidar;
-  it turns in place, then walks forward. Oracle pose and goal. <b>24/24</b> goals (12 at 5×5, 12 at 6×6), no falls, no wall contact;
-  the 22-DoF humanoid runs the same mission at <b>12/12</b> on never-seen mazes.
+  <a href="docs/gifs/random-maze-humanoid-sensors.gif"><img src="docs/gifs/random-maze-humanoid-sensors.gif" width="100%" alt="Top view of a randomized 6x6 maze: the 22-DoF humanoid (arms and legs) turns in place and walks forward along an orange breadcrumb path to a green goal. Under the view, simulated IMU gyro and accelerometer traces. Right: the brake's 8x8 ray depth, lidar sectors and the lidar-built map with the A* plan; then the stereo rig's RGB, 160x120 rendered depth, left-eye optical flow, and the IMU attitude filter against truth. Badge: GIF at 5x."></a><br>
+  <sub>The 22-DoF humanoid in a maze it has never seen: a new maze every seed, so the route cannot be memorized. Learned gait
+  (one qualified turning checkpoint); scripted A* on a map the robot builds from its own lidar; it turns in place, then walks forward.
+  Oracle pose and goal. <b>12/12</b> never-seen hard mazes, no falls, no wall contact; the 12-DoF biped runs the same mission at <b>24/24</b>.
   Right-hand column and IMU strip are <b>display only</b>: stereo RGB, rendered depth, optical flow and a simulated
-  IM10A IMU with datasheet noise (its 6-axis yaw drifts, as a real one would). Click for full size ·
-  <a href="docs/gifs/random-maze-explore.gif">clean view</a> · <a href="docs/RANDOM_MAZE.md">tables and stress tests</a></sub>
+  IM10A IMU with datasheet noise. Click for full size &middot;
+  <a href="docs/gifs/random-maze-explore-sensors.gif">biped version</a> &middot; <a href="docs/RANDOM_MAZE.md">tables and stress tests</a></sub>
 </p>
 
 ## Highlights
