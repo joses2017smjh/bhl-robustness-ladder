@@ -1,6 +1,6 @@
 # Roadmap: pending work and stretch goals
 
-Updated 2026-09-29. One line per item; evidence and rules live in
+Updated 2026-09-30. Done since the last update: README hero with sensor panels; NavGym v4 passed its gate. One line per item; evidence and rules live in
 [`STATUS.md`](STATUS.md), [`REPO_TASKS.md`](REPO_TASKS.md) and the
 [job ledger](../SLURM_JOBS.md). Every run gets a pass rule written down before it starts.
 
@@ -9,7 +9,6 @@ Updated 2026-09-29. One line per item; evidence and rules live in
 | Item | State | Done when |
 |---|---|---|
 | NavGym v4 on the physics biped (the two gate-passing actors) | queued | each reaches ≥ 10/12 never-seen hard mazes with 0 falls |
-| Sensor panels on the hero clip: simulated IM10A IMU, stereo RGB + rendered depth, optical flow | built and tested; render job on a GPU node | clip reproduces the published 73.12 s episode; display only, labelled |
 
 ## Next (small, unblocked)
 
