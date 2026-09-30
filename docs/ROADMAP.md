@@ -8,8 +8,7 @@ Updated 2026-09-29. One line per item; evidence and rules live in
 
 | Item | State | Done when |
 |---|---|---|
-| NavGym v4: price stalling (idle cost when commanding a stop far from the goal) | queued (`21463690`, CPU), behind maintenance | ≥ 2/3 seeds meet 5×5 ≥ 0.80, 6×6 ≥ 0.70, collisions ≤ 0.15 on never-used mazes 40000–40047 |
-| NavGym v2 matched-seed control | queued (`21463688`, CPU) | report-only reading: did v3's noise cap cause its collapse? |
+| NavGym v4 on the physics biped (the two gate-passing actors) | queued | each reaches ≥ 10/12 never-seen hard mazes with 0 falls |
 | Sensor panels on the hero clip: simulated IM10A IMU, stereo RGB + rendered depth, optical flow | built and tested; render job on a GPU node | clip reproduces the published 73.12 s episode; display only, labelled |
 
 ## Next (small, unblocked)
@@ -26,7 +25,7 @@ Updated 2026-09-29. One line per item; evidence and rules live in
 |---|---|---|---|
 | **Drop the oracle pose**: visual-inertial odometry (optical flow / stereo + IMU) drives the randomized maze | maze works 24/24 with oracle pose; pose error > 0.05 m already breaks goal judging | offline VO from the rig renders + sim IMU on recorded episodes; compare to truth | ≥ 10/12 hard mazes with estimated pose, 0 falls |
 | **A turning humanoid recipe**, not one lucky checkpoint | 1/12 seeds qualifies; fine-tunes trade turning for push robustness (v5) | train turn + push together from the start, 3 seeds | ≥ 2/3 seeds pass the turn test and push falls ≤ 0.15 |
-| **Learned navigation that passes its own gate**, then runs the physics robot | v2 missed by one clause; transfer 10/12 (exploratory) | NavGym v4 (queued) | gate PASS, then ≥ 10/12 never-seen mazes on the physics biped |
+| **Learned navigation that passes its own gate**, then runs the physics robot | **gate PASSED** (v4, 2/3 seeds, 2026-09-30); v2's exploratory transfer 10/12 | physics transfer of the passing actors (queued) | ≥ 10/12 never-seen mazes on the physics biped, each passing actor |
 | **Cube placement** | Stand3 stands but never places; replay: checkpoints fail differently | pick lowering-vs-reach only when evidence agrees | success ≥ 0.10 on ≥ 1 of 2 seeds |
 | **Sim-to-real** on the Berkeley Humanoid Lite with lidar, stereo and IM10A | sim only; IMU latency budget ≈ 30 ms | SF-05 recordings, then a sensor-only bench check | a hardware claim backed by recorded data |
 | Mission 7 route controller | blocked at 9/10 in replay (gate 10/10) | a new crossing idea | 10/10 in replay, then fresh layouts |
