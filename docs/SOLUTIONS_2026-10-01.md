@@ -194,7 +194,7 @@ Not planned: C3, a payload held by geometry (forearm tray, 0.9–1.35 Nm per arm
 - Absolute latency, which needs a reference sensor of known latency; without one the delay setting stays 0.
 - The mounting transform and yaw reference. Each recording covers one unit, one temperature and one power cycle.
 
-**Disk** [V]: project 30762 holds 1.529 TB against a 1.5 TB soft limit (2 TB hard), with 3 weeks 5 days of grace (`lfs quota -p 30762`, 2026-10-01). STATUS.md's largest reclaim candidate is `results/weekend-20260919/fold-adapt-s{0,1}`, ≈ 60 GB if only the last checkpoint is kept; that is the user's decision.
+**Disk** [V]: project 30762 holds 1.529 TB against a 1.5 TB soft limit (2 TB hard), with 3 weeks 5 days of grace (`lfs quota -p 30762`, 2026-10-01). STATUS.md's ≈ 60 GB reclaim estimate for `results/weekend-20260919/fold-adapt-s{0,1}` is stale: those folders now hold 4.3 GB each (checked 2026-10-01). What to prune is the user's decision.
 
 | # | Exact change | Predeclarable rule | Cost | Risk |
 |---|---|---|---|---|
