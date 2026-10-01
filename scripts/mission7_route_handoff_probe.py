@@ -25,6 +25,7 @@ import numpy as np
 
 from bhl_robust.mission.approach_debug import (DebugEnv, PlateSafeRouteController,
                                                wrap, yaw_of)
+from mission7_gates import route_gate_block
 from mission7_plate_stage import PlateStage
 
 
@@ -1049,6 +1050,11 @@ def run(args):
         "route_episode_count": len(rows),
         "guarded_stage_activations": sum(row["guarded_stage_activated"] for row in rows),
         "guarded_stage_completions": sum(row["guarded_stage_completed"] for row in rows),
+        # The route gate this probe is released for (m7_replay_gate_followup.sbatch):
+        # >= 16/16 successes per stage on validation layouts 0-15.  Until 2026-10-01
+        # no criterion was written here.  Runs over other or fewer layouts report
+        # NOT_GATE_PROTOCOL, never a pass.
+        "gate": route_gate_block(rows, stages),
         "episodes_are_summaries": True,
         "episodes": summaries,
     }
@@ -1059,6 +1065,7 @@ def run(args):
         "guarded_stage_activations": result["guarded_stage_activations"],
         "guarded_stage_completions": result["guarded_stage_completions"],
         "intervention_status": intervention_status,
+        "gate": {stage: entry["verdict"] for stage, entry in result["gate"]["stages"].items()},
         "out": str(args.out),
     }, sort_keys=True), flush=True)
     # A requested intervention that never fired, or that reproduced the command

@@ -11,7 +11,13 @@ import mujoco
 
 from bhl_robust.mission.approach_debug import DebugEnv, PlateSafeRouteController, physical_sample
 from bhl_robust.mission.approach_debug import command_action
+from mission7_gates import route_stage_passed
 from mission7_overnight import write
+
+
+GATE_RULE = ("replay_10_no_falls: >= 10 replay episodes without a fall; doors_16 / transport_16: the stage "
+             "scored >= 16 successes, i.e. 16/16 on validation layouts 0-15 (docs/MISSION7_TASKS.md). "
+             "Until 2026-10-01 these two keys counted episodes, not successes (21398514 read true at 1/16, 0/16)")
 
 
 def selected_failures(campaign):
@@ -110,6 +116,14 @@ def summarize(rows):
     }
 
 
+def gate(replay_summary, route_summaries):
+    """result.json gate (pure).  The route keys count successes, as the docs
+    read the gate; a smoke or partial run cannot reach 16."""
+    return {"replay_10_no_falls": replay_summary["no_fall"] >= 10,
+            "doors_16": route_stage_passed(route_summaries["doors"]),
+            "transport_16": route_stage_passed(route_summaries["transport"])}
+
+
 def routes(a, out):
     rows = []
     summaries = {}
@@ -148,14 +162,14 @@ if __name__ == "__main__":
     replay_out.mkdir(exist_ok=True)
     replay(args, replay_out)
     summaries = routes(args, args.out)
+    replay_summary = json.loads((replay_out / "replay.json").read_text())["summary"]
     write(args.out / "result.json", {
         "complete": True, "status": "COMPLETED_DIAGNOSTIC",
-        "replay": json.loads((replay_out / "replay.json").read_text())["summary"],
+        "replay": replay_summary,
         "routes": summaries, "geometry_unchanged": True,
         "plate_collision_enabled": True,
         "controller": "MeasuredRouteController plus 1.0 s standstill after physical plate contact or gate activation",
-        "gate": {"replay_10_no_falls": json.loads((replay_out / "replay.json").read_text())["summary"]["no_fall"] >= 10,
-                 "doors_16": summaries["doors"]["episodes"] >= 16,
-                 "transport_16": summaries["transport"]["episodes"] >= 16},
+        "gate": gate(replay_summary, summaries),
+        "gate_rule": GATE_RULE,
     })
     print("MISSION7_PLATE_SAFE_COMPLETE", flush=True)

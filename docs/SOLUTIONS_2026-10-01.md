@@ -140,6 +140,8 @@ Not planned: report A's option (4), a learned local crossing (fine-tune on 3 cm 
 
 **Recommended next step:** M1, with no episodes. Propose no Mission 7 episode until the user reconciles the budget and authorizes a bench line (M2: 106 episodes): under the ledger's reading the line is already ≈ 53 episodes over.
 
+**Done, same day (no episodes):** M1 is in code (`scripts/mission7_gates.py`, used by `mission7_plate_safe.py`, the route-handoff probe and the replay follow-up). 21398514 now reads FAIL as the docs say, and 21405537 / 21405541 read 4 and 1 real clears of 7. Two independent reviewers checked it; `tests/test_mission7_gates.py` holds 51 tests. The budget is still the user's to reconcile.
+
 ## 4. Cooperative lift and placement
 
 **What the logs show**

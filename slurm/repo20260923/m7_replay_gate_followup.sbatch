@@ -13,9 +13,10 @@
 # 1. Reads <gate_dir>/result.json (written by scripts/mission7_plate_stage.py on
 #    cn-c22) and <gate_dir>/submission.json (the snapshot submitter's receipt),
 #    writes <gate_dir>/summary.json (compact: verdict, upright, per-layout falls,
-#    probe args, job id) and rebuilds <campaign>/replay-gate-matrix-summary.json
-#    from every replay-gate-*/result.json (idempotent, so the last follow-up in
-#    the chain leaves a complete matrix).
+#    probe args, job id, and the real crossing clears that scripts/mission7_gates.py
+#    reads from the raw episodes.json(.gz)) and rebuilds
+#    <campaign>/replay-gate-matrix-summary.json from every replay-gate-*/result.json
+#    (idempotent, so the last follow-up in the chain leaves a complete matrix).
 # 2. PREDECLARED RULE: only an exact 10/10 (complete, 10 episodes, 10 upright,
 #    0 falls, exact_replay_gate_passed == true) may proceed to the route gate.
 #    Anything else prints FAIL or INCOMPLETE and submits nothing.  The route
@@ -50,10 +51,17 @@ echo "m7 replay-gate follow-up: tag=$tag gate_dir=$gate_dir max_route_gates=$max
 
 # ---- 1. verdict + compact summaries -------------------------------------------------------------
 verdict_file=$(mktemp)
-"$PY" - "$gate_dir" "$tag" "$campaign" "$verdict_file" <<'PYEOF'
+"$PY" - "$gate_dir" "$tag" "$campaign" "$verdict_file" "$REPO" "$DRY_RUN" <<'PYEOF'
 import datetime as dt, json, pathlib, sys
 gate = pathlib.Path(sys.argv[1]).resolve(); tag = sys.argv[2]
 campaign = pathlib.Path(sys.argv[3]).resolve(); verdict_file = pathlib.Path(sys.argv[4])
+repo = pathlib.Path(sys.argv[5]).resolve(); compacts = sys.argv[6] == "0"   # step 2 gzips the trace only at DRY_RUN=0
+sys.path[:0] = [str(repo / "scripts"), str(repo / "src")]   # nothing in this job sets PYTHONPATH
+try:   # guarded: a failed import (numpy missing, a broken live mission7_gates.py) nulls the clears, never the verdict
+    import mission7_gates as gates
+    gates_error = None
+except Exception as exc:
+    gates, gates_error = None, f"import mission7_gates: {type(exc).__name__}: {exc}"
 
 def load(path):
     try:
@@ -61,9 +69,28 @@ def load(path):
     except (OSError, ValueError):
         return None
 
+def crossings(gate_dir, rows):
+    # Real clears from the raw trace (episodes.json here, before step 2 gzips it; .gz for older gates),
+    # which must be complete and must be the trace of result.json's rows (else ValueError).  A failed
+    # import, or a missing, partial, mismatched or unreadable trace, reports null and the reason --
+    # never the hand-back count -- and stops neither this follow-up nor the matrix rebuild: the 10/10
+    # verdict does not read it.
+    if gates is None:
+        return None, gates_error
+    trace = None
+    try:
+        trace = gates.replay_trace_path(gate_dir)
+        if trace is None:
+            return None, "raw trace missing (no episodes.json or episodes.json.gz)"
+        return gates.replay_gate_crossings(trace, rows), None
+    except Exception as exc:
+        return None, f"{trace.name + ': ' if trace else ''}{type(exc).__name__}: {exc}"
+
 def summarize(gate_dir):
     result = load(gate_dir / "result.json"); submission = load(gate_dir / "submission.json")
     rows = (result or {}).get("episode_comparison") or []
+    traced, trace_error = crossings(gate_dir, rows)
+    by_layout = {} if traced is None else {t["layout_index"]: t["crossings"] for t in traced["layouts"]}
     upright = int((result or {}).get("upright") or 0); falls = int((result or {}).get("falls") or 0)
     episodes = int((result or {}).get("episodes") or 0)
     complete = bool(result and result.get("complete"))
@@ -80,32 +107,46 @@ def summarize(gate_dir):
         "probe_args": (submission or {}).get("probe_args"), "git_commit": (submission or {}).get("git_commit"),
         "source_sha256_plate_stage": ((submission or {}).get("source_sha256") or {}).get("scripts/mission7_plate_stage.py"),
         "layouts": [{"layout_index": r.get("layout_index"), "fall": r.get("fall"), "first_fall_s": r.get("first_fall_s"),
-                     "maximum_tilt": r.get("maximum_tilt"), "phases": [h.get("phase") for h in r.get("stage_history", [])]}
+                     "maximum_tilt": r.get("maximum_tilt"), "phases": [h.get("phase") for h in r.get("stage_history", [])],
+                     "crossings": by_layout.get(r.get("layout_index"))}
                     for r in rows],
         "fallen_layouts": [r.get("layout_index") for r in rows if r.get("fall")],
         # A layout whose recorded trace ends before the stage reaches `cross` counts as upright
         # trivially (9/12/13 did so in the local V3/V4 replays); the gate is 10/10 upright as
         # documented, but the reader must see how many crossings the pass actually exercised.
         "crossings_started": sum(1 for r in rows if "cross" in [h.get("phase") for h in r.get("stage_history", [])]),
-        "crossings_completed": sum(1 for r in rows if (lambda ph: "cross" in ph and "recorded" in ph[ph.index("cross"):])(
+        # What crossings_completed counted until 2026-10-01, renamed: episodes whose history has
+        # 'recorded' after 'cross'.  PlateStage appends that entry on a clear, a 4.04 s time-out and a
+        # fall alike, so it counts hand-backs (21405537 / 21405541: 7 each, against 4 and 1 real clears).
+        "crossings_handed_back": sum(1 for r in rows if (lambda ph: "cross" in ph and "recorded" in ph[ph.index("cross"):])(
             [h.get("phase") for h in r.get("stage_history", [])])),
+        "crossings_completed": None if traced is None else traced["real_clears"],
+        "crossings_traced": None if traced is None else traced["crossings"],
+        "crossings_completed_definition": None if gates is None else gates.CLEAR_DEFINITION,
+        "crossings_trace": None if traced is None else traced["trace"],
+        "crossings_trace_error": trace_error,
         "gate_dir": str(gate_dir),
         "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
         "summarized_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
     }
 
 mine = summarize(gate)
+if compacts and mine["crossings_trace"] == str(gate / "episodes.json") and not (gate / "episodes.json.gz").is_file():
+    mine["crossings_trace"] += ".gz"   # where step 2 leaves the trace it just read (same condition as step 2)
 (gate / "summary.json").write_text(json.dumps(mine, indent=2) + "\n")
 matrix = {"rule": mine["rule"], "reference_v2_job": "21401689 (7/10 FAIL: --pre-point=0.45 --cross-clear=0.35 --cross-kick, settle 0.40)",
           "rebuilt_utc": mine["summarized_utc"], "gates": []}
 for d in sorted(campaign.glob("replay-gate-*")):
     if d.is_dir() and (d / "submission.json").exists():
-        s = summarize(d); s.pop("layouts", None); matrix["gates"].append(s)
+        # this gate's trace was just read; every other gate's is streamed once (seconds each)
+        s = dict(mine) if d.resolve() == gate else summarize(d); s.pop("layouts", None); matrix["gates"].append(s)
 (campaign / "replay-gate-matrix-summary.json").write_text(json.dumps(matrix, indent=2) + "\n")
 verdict_file.write_text(mine["verdict"] + "\n")
 print(f"M7 REPLAY GATE {tag}: {mine['verdict']} {mine['upright']}/{mine['episodes']} upright, falls {mine['falls']} "
-      f"(fallen layouts {mine['fallen_layouts']}); crossings started {mine['crossings_started']}, completed "
-      f"{mine['crossings_completed']} of {mine['episodes']}; job {mine['job_id']}; summary -> {gate / 'summary.json'}")
+      f"(fallen layouts {mine['fallen_layouts']}); crossings started {mine['crossings_started']}, handed back "
+      f"{mine['crossings_handed_back']}, real clears {mine['crossings_completed']} of {mine['crossings_traced']}"
+      f"{'' if mine['crossings_trace_error'] is None else ' (' + mine['crossings_trace_error'] + ')'}; "
+      f"job {mine['job_id']}; summary -> {gate / 'summary.json'}")
 PYEOF
 verdict=$(cat "$verdict_file"); rm -f "$verdict_file"
 
