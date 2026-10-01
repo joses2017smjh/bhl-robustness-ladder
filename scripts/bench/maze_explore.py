@@ -739,7 +739,9 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         # the actor's own input names decide the observation: v1 (lidar, map, goal), v2 (lidar, near, map, goal)
         keys = tuple(i.name for i in sess.get_inputs())
         learned = {"sess": sess, "keys": keys, "emap": EgoMap(maze.bounds()), "prev": np.zeros(2, np.float32),
-                   "scale": (V_MAX, W_MAX), "build": build_obs, "range": NAV_RANGE}
+                   "scale": (V_MAX, W_MAX), "build": build_obs, "range": NAV_RANGE,
+                   # --policy-capture-pose: (x, y, yaw, stamp) estimated pose when the newest packet was captured
+                   "cap": None, "cap_used": 0, "cap_missing": 0}
     goal = maze.centre(maze.goal)
     dt = float(cfg.policy_dt)
     rec = recorder_factory(model, slot, maze, dt) if recorder_factory else None
@@ -796,7 +798,16 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
             else:
                 grid.update(xy_e[0], xy_e[1], yaw_e, sensors.angles, np.asarray(pkt["lidar_raw_m"]), LIDAR_RANGE)
             if learned is not None:
-                learned["emap"].update(xy_e[0], xy_e[1], yaw_e, sensors.angles, np.asarray(pkt["lidar_raw_m"]))
+                ex, ey, eyaw = xy_e[0], xy_e[1], yaw_e
+                if args.policy_capture_pose:
+                    # the estimated pose this packet was captured at (recorded after filter_commands below), as the
+                    # humanoid branch does for its grid; without the flag: this step's loop-top pose (as scored in 21484212)
+                    if learned["cap"] is not None and learned["cap"][3] == last_stamp:
+                        ex, ey, eyaw = learned["cap"][:3]
+                        learned["cap_used"] += 1
+                    else:
+                        learned["cap_missing"] += 1
+                learned["emap"].update(ex, ey, eyaw, sensors.angles, np.asarray(pkt["lidar_raw_m"]))
         # plan on a timer, or when there is no plan yet (never with --policy: the learned actor does not use a plan)
         if learned is None and (plan is None or now - last_plan_t >= args.replan_s):
             new_plan = planner.plan(xy_e, goal)
@@ -834,6 +845,10 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
                 arrived_true_d = math.hypot(xy[0] - goal[0], xy[1] - goal[1])
                 arrived_est_d = math.hypot(xy_e[0] - goal[0], xy_e[1] - goal[1])
         command = sensors.filter_commands(runner.d, [raw], now)[0]
+        if (learned is not None and args.policy_capture_pose and sensors.packets[0] is not None
+                and (learned["cap"] is None or sensors.packets[0]["stamp_s"] != learned["cap"][3])):
+            # a new packet was captured at this step's loop-top state (runner.d is unchanged since the loop top)
+            learned["cap"] = (float(xy_e[0]), float(xy_e[1]), float(yaw_e), sensors.packets[0]["stamp_s"])
         if humanoid and sensors.packets[0] is not None and sensors.packets[0]["stamp_s"] != cap_stamp:
             # the pose the new packet was captured at (runner.d is unchanged since the loop top)
             cap_stamp = sensors.packets[0]["stamp_s"]
@@ -918,6 +933,10 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         "pose_error": pose.summary(),
         "imu": imu.summary() if imu is not None else {"source": "truth"},
     }
+    if learned is not None and args.policy_capture_pose:
+        # opt-in only, so a default --policy run writes exactly the keys it wrote before
+        result["policy_map_integration"] = {"mode": "capture_pose", "updates_at_capture_pose": learned["cap_used"],
+                                            "updates_at_loop_top_pose": learned["cap_missing"]}
     if humanoid:
         labels = humanoid_labels(args.gait_run, pose.active, imu is not None)
         result["control"] = (f"frozen LEARNED humanoid gait {args.gait_run} (one checkpoint, 22-DoF) + SCRIPTED lidar_occupancy_map"
@@ -1004,6 +1023,10 @@ def main() -> int:
     ap.add_argument("--policy", type=Path, default=None,
                     help="NavGym actor (.onnx from navgym_train.py): replaces the A* planner + turn-then-walk with the learned "
                          "policy; same lidar sectors, the same 0.2 m egocentric map built from the same raw rays, oracle pose + goal")
+    ap.add_argument("--policy-capture-pose", action="store_true",
+                    help="with --policy (opt-in, 2026-10-01): integrate each lidar packet into the learned ego map at the "
+                         "estimated pose it was captured at, as the humanoid branch does for its grid; the default integrates "
+                         "it at the next step's loop-top pose, as scored in 21484212")
     ap.add_argument("--no-overwrite", action="store_true",
                     help="refuse to run if any per-seed JSON or the summary this run would write already exists")
     hm = ap.add_argument_group("22-DoF humanoid (opt-in; the default is the biped path, unchanged)")
@@ -1045,6 +1068,8 @@ def main() -> int:
     if args.imu_source == "estimated" and args.imu_rate_hz > 0 and args.imu_delay_steps:
         ap.error("--imu-delay-steps is the policy-rate delay; with --imu-rate-hz > 0 use --imu-delay-ms")
 
+    if args.policy_capture_pose and args.policy is None:
+        ap.error("--policy-capture-pose changes only the learned --policy path's ego map; it needs --policy")
     if is_humanoid(args):
         if args.policy is not None:
             ap.error("--policy (the NavGym actor, scaled for the biped) is not supported with --variant humanoid")
@@ -1102,6 +1127,8 @@ def main() -> int:
                "settings": {k_: getattr(args, k_) for k_ in ("n", "m", "extra_openings", "time_limit", "cruise", "turn_rate", "inflate", "replan_s",
                                                              "map_res", "sensor_mode", "random_heading")},
                "gait": results[0]["gait"] if results else None}
+    if args.policy_capture_pose:
+        summary["settings"]["policy_capture_pose"] = True      # opt-in only: default summaries keep their keys
     classes = [r["outcome_class"] for r in results]
     summary["outcome_classes"] = {c: classes.count(c) for c in sorted(set(classes))}
     summary["reached_no_fall"] = len(succ)      # a fall ends the episode, so reached == reached with no fall
