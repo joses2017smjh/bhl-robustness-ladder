@@ -1,0 +1,826 @@
+{
+  "tool": "imu_allan.py 1.1.0",
+  "input": "csv:/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/_tmp/C7_rotations.csv",
+  "time_source": "header",
+  "rate_hz": 200.0000000000001,
+  "frame_ids": [],
+  "holds": [
+    {
+      "start": 50,
+      "stop": 5937,
+      "t0_s": 0.25,
+      "t1_s": 29.680000000000064,
+      "face": "+Z",
+      "tilt_deg": 1.5578408039965657,
+      "specific_force_m_s2": [
+        0.11777931228869665,
+        -0.2452206244971065,
+        10.002841931308655
+      ],
+      "gyro_mean_rad_s": [
+        0.005225370812702967,
+        -0.008714316779079563,
+        0.00350452082646144
+      ],
+      "samples": 5887,
+      "specific_force_corrected_m_s2": [
+        0.0019633118226960677,
+        -0.0018105190529036773,
+        9.807650722309196
+      ]
+    },
+    {
+      "start": 6663,
+      "stop": 8537,
+      "t0_s": 33.315000000000055,
+      "t1_s": 42.680000000000064,
+      "face": "+Y",
+      "tilt_deg": 0.7329575576495136,
+      "specific_force_m_s2": [
+        0.11770072307625083,
+        9.531116923205882,
+        0.031849054556356615
+      ],
+      "gyro_mean_rad_s": [
+        0.005254828866336779,
+        -0.00871298812709404,
+        0.0034452800669136415
+      ],
+      "samples": 1874,
+      "specific_force_corrected_m_s2": [
+        0.0018850930805787195,
+        9.80665,
+        -0.14411205611585384
+      ]
+    },
+    {
+      "start": 9262,
+      "stop": 11138,
+      "t0_s": 46.309999999999945,
+      "t1_s": 55.684999999999945,
+      "face": "+Z",
+      "tilt_deg": 0.7238659786954679,
+      "specific_force_m_s2": [
+        0.11732747552120446,
+        -0.04690375145450091,
+        10.000813310842743
+      ],
+      "gyro_mean_rad_s": [
+        0.005221544319748321,
+        -0.008725818300743867,
+        0.0034863651221705145
+      ],
+      "samples": 1876,
+      "specific_force_corrected_m_s2": [
+        0.001513605018216059,
+        0.197157981166021,
+        9.805626014249153
+      ]
+    },
+    {
+      "start": 11863,
+      "stop": 13738,
+      "t0_s": 59.315000000000055,
+      "t1_s": 68.68499999999995,
+      "face": "-Y",
+      "tilt_deg": 2.8442222888551254,
+      "specific_force_m_s2": [
+        0.11739967918158073,
+        -10.017948993091233,
+        0.4836660961780144
+      ],
+      "gyro_mean_rad_s": [
+        0.005212616061259987,
+        -0.00871614540346694,
+        0.0034688838078992504
+      ],
+      "samples": 1875,
+      "specific_force_corrected_m_s2": [
+        0.0015854683098197803,
+        -9.80665,
+        0.3068336092804164
+      ]
+    },
+    {
+      "start": 14462,
+      "stop": 16337,
+      "t0_s": 72.30999999999995,
+      "t1_s": 81.68000000000006,
+      "face": "+Z",
+      "tilt_deg": 1.0922308804376306,
+      "specific_force_m_s2": [
+        0.11815495853986299,
+        -0.14967980497732666,
+        10.00219242233954
+      ],
+      "gyro_mean_rad_s": [
+        0.005269234061772507,
+        -0.00871213832108971,
+        0.0034890006912821317
+      ],
+      "samples": 1875,
+      "specific_force_corrected_m_s2": [
+        0.0023371872737013486,
+        0.09404422733296541,
+        9.80700246598578
+      ]
+    },
+    {
+      "start": 17063,
+      "stop": 18938,
+      "t0_s": 85.31500000000005,
+      "t1_s": 94.68499999999995,
+      "face": "-X",
+      "tilt_deg": 1.0907489632316685,
+      "specific_force_m_s2": [
+        -9.73729089844428,
+        -0.14996757767207863,
+        0.10899634999519593
+      ],
+      "gyro_mean_rad_s": [
+        0.005225811780814941,
+        -0.008765890213091838,
+        0.003496676942956522
+      ],
+      "samples": 1875,
+      "specific_force_corrected_m_s2": [
+        -9.80665,
+        0.09375550907818304,
+        -0.06711354727182084
+      ]
+    },
+    {
+      "start": 19662,
+      "stop": 21538,
+      "t0_s": 98.30999999999995,
+      "t1_s": 107.68499999999995,
+      "face": "+Z",
+      "tilt_deg": 1.4249859927510966,
+      "specific_force_m_s2": [
+        -0.19789944896869366,
+        -0.15060377760051152,
+        9.99717278538077
+      ],
+      "gyro_mean_rad_s": [
+        0.005211866342486647,
+        -0.00870705009990827,
+        0.0034830622303946668
+      ],
+      "samples": 1876,
+      "specific_force_corrected_m_s2": [
+        -0.31222733661700114,
+        0.09311721873174093,
+        9.801992509919723
+      ]
+    },
+    {
+      "start": 22262,
+      "stop": 24138,
+      "t0_s": 111.30999999999995,
+      "t1_s": 120.68499999999995,
+      "face": "+X",
+      "tilt_deg": 2.734235379575186,
+      "specific_force_m_s2": [
+        9.96890430156312,
+        -0.14971346672614103,
+        0.4519392854473983
+      ],
+      "gyro_mean_rad_s": [
+        0.0052643415693455564,
+        -0.0087467743365437,
+        0.0034894890573210166
+      ],
+      "samples": 1876,
+      "specific_force_corrected_m_s2": [
+        9.80665,
+        0.09401045497878503,
+        0.27516798700891376
+      ]
+    },
+    {
+      "start": 24863,
+      "stop": 26737,
+      "t0_s": 124.31500000000005,
+      "t1_s": 133.68000000000006,
+      "face": "+Z",
+      "tilt_deg": 0.8939676844610382,
+      "specific_force_m_s2": [
+        0.04192774077616507,
+        -0.15032416311178515,
+        10.00143268084739
+      ],
+      "gyro_mean_rad_s": [
+        0.005234514517148605,
+        -0.008737389151249522,
+        0.003472423763894116
+      ],
+      "samples": 1874,
+      "specific_force_corrected_m_s2": [
+        -0.07353069462793409,
+        0.09339775197436329,
+        9.806244189734231
+      ]
+    },
+    {
+      "start": 27463,
+      "stop": 29338,
+      "t0_s": 137.31500000000005,
+      "t1_s": 146.68499999999995,
+      "face": "+Z",
+      "tilt_deg": 1.5790299717759544,
+      "specific_force_m_s2": [
+        0.2153131375018606,
+        -0.17222220116165346,
+        10.002000891792553
+      ],
+      "gyro_mean_rad_s": [
+        0.005237486765539548,
+        -0.00872378581347338,
+        0.0034835711130529017
+      ],
+      "samples": 1875,
+      "specific_force_corrected_m_s2": [
+        0.09903736161454174,
+        0.0714277616166432,
+        9.806811304825406
+      ]
+    },
+    {
+      "start": 30063,
+      "stop": 31954,
+      "t0_s": 150.31500000000005,
+      "t1_s": 159.7650000000001,
+      "face": "+Z",
+      "tilt_deg": 0.8818479399614274,
+      "specific_force_m_s2": [
+        0.04514937542509244,
+        -0.14718597603910924,
+        10.00204391900205
+      ],
+      "gyro_mean_rad_s": [
+        0.005230631874454953,
+        -0.008750732439384684,
+        0.0034712973826685725
+      ],
+      "samples": 1891,
+      "specific_force_corrected_m_s2": [
+        -0.07032424679675744,
+        0.09654625046406366,
+        9.806854249052446
+      ]
+    },
+    {
+      "start": 33046,
+      "stop": 34954,
+      "t0_s": 165.23000000000002,
+      "t1_s": 174.7650000000001,
+      "face": "-Z",
+      "tilt_deg": 1.145915760224059,
+      "specific_force_m_s2": [
+        0.04497701255706484,
+        -0.18769942356395228,
+        -9.6493601095818
+      ],
+      "gyro_mean_rad_s": [
+        0.005233523330909728,
+        -0.00874933010334323,
+        0.0034944446754877926
+      ],
+      "samples": 1908,
+      "specific_force_corrected_m_s2": [
+        -0.07049579714451226,
+        0.055899684344677764,
+        -9.80665
+      ]
+    },
+    {
+      "start": 36046,
+      "stop": 41950,
+      "t0_s": 180.23000000000002,
+      "t1_s": 209.7449999999999,
+      "face": "+Z",
+      "tilt_deg": 1.2549319137579862,
+      "specific_force_m_s2": [
+        0.04486947916944729,
+        -0.2144745603947897,
+        10.00254832052398
+      ],
+      "gyro_mean_rad_s": [
+        0.005231689019263901,
+        -0.00871082820201169,
+        0.0034936715156093597
+      ],
+      "samples": 5904,
+      "specific_force_corrected_m_s2": [
+        -0.07060282361867196,
+        0.029036570093961957,
+        9.807357677783504
+      ]
+    }
+  ],
+  "moves": [
+    {
+      "from_hold": 1,
+      "t0_s": 29.684999999999945,
+      "t1_s": 33.309999999999945,
+      "integrated_deg": [
+        90.8490865626151,
+        0.012263624091386987,
+        0.003463725470662018
+      ],
+      "label": "+X91",
+      "dominant_axis": "X",
+      "signed_angle_deg": 90.8490865626151,
+      "axis_purity": 0.9999999901621885,
+      "gravity_prediction_error_deg": 0.0076733174282803745,
+      "gravity_prediction_error_raw_accel_deg": 0.36613872343604853,
+      "q_rel_gyro_wxyz": [
+        0.701848,
+        0.712327,
+        0.000106,
+        1.5e-05
+      ]
+    },
+    {
+      "from_hold": 2,
+      "t0_s": 42.684999999999945,
+      "t1_s": 46.305000000000064,
+      "integrated_deg": [
+        -89.67883767792553,
+        0.00198933249851885,
+        0.00904819383942582
+      ],
+      "label": "-X90",
+      "dominant_axis": "X",
+      "signed_angle_deg": -89.67883767792553,
+      "axis_purity": 0.9999999946640067,
+      "gravity_prediction_error_deg": 0.014825569958393434,
+      "gravity_prediction_error_raw_accel_deg": 0.4006640814233198,
+      "q_rel_gyro_wxyz": [
+        0.709086,
+        -0.705122,
+        -3.4e-05,
+        5.9e-05
+      ]
+    },
+    {
+      "from_hold": 3,
+      "t0_s": 55.690000000000055,
+      "t1_s": 59.309999999999945,
+      "integrated_deg": [
+        -89.3754623529893,
+        -0.0048823049638034586,
+        -0.0006803282565789288
+      ],
+      "label": "-X89",
+      "dominant_axis": "X",
+      "signed_angle_deg": -89.3754623529893,
+      "axis_purity": 0.9999999984789791,
+      "gravity_prediction_error_deg": 0.015698575027952164,
+      "gravity_prediction_error_raw_accel_deg": 2.4080897214670807,
+      "q_rel_gyro_wxyz": [
+        0.71095,
+        -0.703242,
+        3e-06,
+        -1.2e-05
+      ]
+    },
+    {
+      "from_hold": 4,
+      "t0_s": 68.69000000000005,
+      "t1_s": 72.30500000000006,
+      "integrated_deg": [
+        88.76961340292341,
+        0.001831872690605,
+        -0.0008219496288767156
+      ],
+      "label": "+X89",
+      "dominant_axis": "X",
+      "signed_angle_deg": 88.76961340292341,
+      "axis_purity": 0.9999999997442045,
+      "gravity_prediction_error_deg": 0.013386887008048921,
+      "gravity_prediction_error_raw_accel_deg": 2.3908975055892263,
+      "q_rel_gyro_wxyz": [
+        0.714658,
+        0.699474,
+        5e-06,
+        6e-06
+      ]
+    },
+    {
+      "from_hold": 5,
+      "t0_s": 81.68499999999995,
+      "t1_s": 85.30999999999995,
+      "integrated_deg": [
+        -0.004937933839941112,
+        90.40251827933196,
+        0.003149888845354121
+      ],
+      "label": "+Y90",
+      "dominant_axis": "Y",
+      "signed_angle_deg": 90.40251827933196,
+      "axis_purity": 0.9999999979012233,
+      "gravity_prediction_error_deg": 0.005036970822281135,
+      "gravity_prediction_error_raw_accel_deg": 0.36819172000850453,
+      "q_rel_gyro_wxyz": [
+        0.704619,
+        -7.2e-05,
+        0.709586,
+        9.7e-05
+      ]
+    },
+    {
+      "from_hold": 6,
+      "t0_s": 94.69000000000005,
+      "t1_s": 98.30500000000006,
+      "integrated_deg": [
+        0.004181127248450426,
+        -88.55224068451658,
+        -0.0055464251419238084
+      ],
+      "label": "-Y89",
+      "dominant_axis": "Y",
+      "signed_angle_deg": -88.55224068451658,
+      "axis_purity": 0.9999999969237607,
+      "gravity_prediction_error_deg": 0.01742751246975303,
+      "gravity_prediction_error_raw_accel_deg": 0.3279952508241356,
+      "q_rel_gyro_wxyz": [
+        0.715984,
+        5.5e-05,
+        -0.698117,
+        -1e-06
+      ]
+    },
+    {
+      "from_hold": 7,
+      "t0_s": 107.69000000000005,
+      "t1_s": 111.30500000000006,
+      "integrated_deg": [
+        -0.00455590071908351,
+        -90.22195606523569,
+        -0.001767625743267062
+      ],
+      "label": "-Y90",
+      "dominant_axis": "Y",
+      "signed_angle_deg": -90.22195606523569,
+      "axis_purity": 0.9999999985331248,
+      "gravity_prediction_error_deg": 0.007365828217461794,
+      "gravity_prediction_error_raw_accel_deg": 1.6834893379597515,
+      "q_rel_gyro_wxyz": [
+        0.705736,
+        -2.4e-05,
+        -0.708475,
+        -1.8e-05
+      ]
+    },
+    {
+      "from_hold": 8,
+      "t0_s": 120.69000000000005,
+      "t1_s": 124.30999999999995,
+      "integrated_deg": [
+        -0.001922288869797622,
+        88.82602237525815,
+        -0.007953502006706178
+      ],
+      "label": "+Y89",
+      "dominant_axis": "Y",
+      "signed_angle_deg": 88.82602237525815,
+      "axis_purity": 0.9999999957571065,
+      "gravity_prediction_error_deg": 0.005132929127232756,
+      "gravity_prediction_error_raw_accel_deg": 1.661637048085112,
+      "q_rel_gyro_wxyz": [
+        0.714314,
+        -4.4e-05,
+        0.699826,
+        -4.8e-05
+      ]
+    },
+    {
+      "from_hold": 9,
+      "t0_s": 133.68499999999995,
+      "t1_s": 137.30999999999995,
+      "integrated_deg": [
+        0.002943574843347324,
+        -0.0039462291767868776,
+        91.37348370863309
+      ],
+      "label": "+Z91",
+      "dominant_axis": "Z",
+      "signed_angle_deg": 91.37348370863309,
+      "axis_purity": 0.9999999985485072,
+      "gravity_prediction_error_deg": 0.018551922328066486,
+      "gravity_prediction_error_raw_accel_deg": 2.2324536319230655,
+      "q_rel_gyro_wxyz": [
+        0.698581,
+        5.1e-05,
+        -3e-06,
+        0.715531
+      ]
+    },
+    {
+      "from_hold": 10,
+      "t0_s": 146.69000000000005,
+      "t1_s": 150.30999999999995,
+      "integrated_deg": [
+        -0.0028884124845672933,
+        0.001030891792182384,
+        -89.46806438538165
+      ],
+      "label": "-Z89",
+      "dominant_axis": "Z",
+      "signed_angle_deg": -89.46806438538165,
+      "axis_purity": 0.999999999412479,
+      "gravity_prediction_error_deg": 0.014502182154648081,
+      "gravity_prediction_error_raw_accel_deg": 2.1885195677352485,
+      "q_rel_gyro_wxyz": [
+        0.710382,
+        -2e-06,
+        6.3e-05,
+        -0.703817
+      ]
+    },
+    {
+      "from_hold": 11,
+      "t0_s": 159.76999999999998,
+      "t1_s": 165.2249999999999,
+      "integrated_deg": [
+        179.09227238677488,
+        0.008379551297377122,
+        0.01096181385433201
+      ],
+      "label": "+X179",
+      "dominant_axis": "X",
+      "signed_angle_deg": 179.09227238677488,
+      "axis_purity": 0.9999999970322068,
+      "gravity_prediction_error_deg": 0.01936745465523406,
+      "gravity_prediction_error_raw_accel_deg": 2.865154668880976,
+      "q_rel_gyro_wxyz": [
+        0.007921,
+        0.999969,
+        -1e-06,
+        7.1e-05
+      ]
+    },
+    {
+      "from_hold": 12,
+      "t0_s": 174.76999999999998,
+      "t1_s": 180.2249999999999,
+      "integrated_deg": [
+        -179.48789313502107,
+        0.002894674099965371,
+        0.014688217964940482
+      ],
+      "label": "-X179",
+      "dominant_axis": "X",
+      "signed_angle_deg": -179.48789313502107,
+      "axis_purity": 0.999999996521549,
+      "gravity_prediction_error_deg": 0.020190955033482047,
+      "gravity_prediction_error_raw_accel_deg": 2.854917085514668,
+      "q_rel_gyro_wxyz": [
+        0.004469,
+        -0.99999,
+        -5.9e-05,
+        0.000104
+      ]
+    }
+  ],
+  "gyro_accel_consistency": {
+    "identity_rms_error_deg": 0.014292431136861065,
+    "best_rms_error_deg": 0.014292431136861065,
+    "identity_rms_error_raw_accel_deg": 1.9100900126361875,
+    "accel_corrected_with_six_position": true,
+    "best_gyro_to_accel_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "best_scale": "rad/s",
+    "identity_is_best": true
+  },
+  "six_position": {
+    "faces_seen": [
+      "+X",
+      "+Y",
+      "+Z",
+      "-X",
+      "-Y",
+      "-Z"
+    ],
+    "local_g_m_s2": 9.80665,
+    "local_g_source": "standard gravity 9.80665 (pass --local-g or --latitude-deg for local g)",
+    "axes": {
+      "X": {
+        "bias_m_s2": 0.11580670155941952,
+        "bias_mg": 11.808997115163642,
+        "scale_error_pct": 0.473633707776866
+      },
+      "Y": {
+        "bias_m_s2": -0.24341603494267527,
+        "bias_mg": -24.821527732984787,
+        "scale_error_pct": -0.32750268288804785
+      },
+      "Z": {
+        "bias_m_s2": 0.1762395828455281,
+        "bias_mg": 17.971435999605177,
+        "scale_error_pct": 0.19323308599092925
+      }
+    },
+    "bias_mg": [
+      11.808997115163642,
+      -24.821527732984787,
+      17.971435999605177
+    ],
+    "bias_norm_mg": 32.84102866466245,
+    "used_to_correct_consistency_check": true
+  },
+  "expected_sequence": {
+    "faces": [
+      {
+        "hold": 1,
+        "expected": "+Z",
+        "seen": "+Z",
+        "ok": true
+      },
+      {
+        "hold": 2,
+        "expected": "+Y",
+        "seen": "+Y",
+        "ok": true
+      },
+      {
+        "hold": 3,
+        "expected": "+Z",
+        "seen": "+Z",
+        "ok": true
+      },
+      {
+        "hold": 4,
+        "expected": "-Y",
+        "seen": "-Y",
+        "ok": true
+      },
+      {
+        "hold": 5,
+        "expected": "+Z",
+        "seen": "+Z",
+        "ok": true
+      },
+      {
+        "hold": 6,
+        "expected": "-X",
+        "seen": "-X",
+        "ok": true
+      },
+      {
+        "hold": 7,
+        "expected": "+Z",
+        "seen": "+Z",
+        "ok": true
+      },
+      {
+        "hold": 8,
+        "expected": "+X",
+        "seen": "+X",
+        "ok": true
+      },
+      {
+        "hold": 9,
+        "expected": "+Z",
+        "seen": "+Z",
+        "ok": true
+      },
+      {
+        "hold": 10,
+        "expected": "+Z",
+        "seen": "+Z",
+        "ok": true
+      },
+      {
+        "hold": 11,
+        "expected": "+Z",
+        "seen": "+Z",
+        "ok": true
+      },
+      {
+        "hold": 12,
+        "expected": "-Z",
+        "seen": "-Z",
+        "ok": true
+      },
+      {
+        "hold": 13,
+        "expected": "+Z",
+        "seen": "+Z",
+        "ok": true
+      }
+    ],
+    "moves": [
+      {
+        "move": 1,
+        "expected": "+X90",
+        "seen": "+X91",
+        "ok": true
+      },
+      {
+        "move": 2,
+        "expected": "-X90",
+        "seen": "-X90",
+        "ok": true
+      },
+      {
+        "move": 3,
+        "expected": "-X90",
+        "seen": "-X89",
+        "ok": true
+      },
+      {
+        "move": 4,
+        "expected": "+X90",
+        "seen": "+X89",
+        "ok": true
+      },
+      {
+        "move": 5,
+        "expected": "+Y90",
+        "seen": "+Y90",
+        "ok": true
+      },
+      {
+        "move": 6,
+        "expected": "-Y90",
+        "seen": "-Y89",
+        "ok": true
+      },
+      {
+        "move": 7,
+        "expected": "-Y90",
+        "seen": "-Y90",
+        "ok": true
+      },
+      {
+        "move": 8,
+        "expected": "+Y90",
+        "seen": "+Y89",
+        "ok": true
+      },
+      {
+        "move": 9,
+        "expected": "+Z90",
+        "seen": "+Z91",
+        "ok": true
+      },
+      {
+        "move": 10,
+        "expected": "-Z90",
+        "seen": "-Z89",
+        "ok": true
+      },
+      {
+        "move": 11,
+        "expected": "+X180",
+        "seen": "+X179",
+        "ok": true
+      },
+      {
+        "move": 12,
+        "expected": "-X180",
+        "seen": "-X179",
+        "ok": true
+      }
+    ]
+  },
+  "quaternion": {
+    "by_interpretation": {
+      "xyzw fields, body->world (ROS / IMU_INPUT.md contract)": {
+        "hold_tilt_error_deg_median": 1.5707449685472863,
+        "move_rotation_mismatch_deg_median": 0.008417021204631576
+      },
+      "xyzw fields, world->body (conjugate)": {
+        "hold_tilt_error_deg_median": 1.1170158464235977,
+        "move_rotation_mismatch_deg_median": 177.98404796858142
+      },
+      "w stored in x slot (wxyz order), body->world": {
+        "hold_tilt_error_deg_median": 3.1397056237638807,
+        "move_rotation_mismatch_deg_median": 149.6003254383065
+      },
+      "w stored in x slot (wxyz order), world->body": {
+        "hold_tilt_error_deg_median": 3.1387324713371707,
+        "move_rotation_mismatch_deg_median": 149.34267878109324
+      }
+    },
+    "best": "xyzw fields, body->world (ROS / IMU_INPUT.md contract)"
+  },
+  "warnings": []
+}

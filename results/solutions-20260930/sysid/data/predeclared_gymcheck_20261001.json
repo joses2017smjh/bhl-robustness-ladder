@@ -1,0 +1,98 @@
+{
+ "written": "2026-10-01 before running any of the runs listed here (sysid follow-up agent)",
+ "protocol": "eval_sysid_gym.py <config> <arm> <maze_start> 24; 6x6, extra_openings 1, NavGym v2 env, deterministic clipped mean; training-range maze seeds only (< 10000)",
+ "status_of_blocks": {
+  "9000-9023": "EXPLORATORY (13 configs were tried on it by the previous agent)",
+  "9024-9047": "REPLICATE for s5 (base/dyn/full already run); s6 runs below are new",
+  "9048-9071": "FRESH replicate for s5, never evaluated before"
+ },
+ "full_pipeline_config": "dyn+brake+obs10+h0+settle",
+ "runs": [
+  [
+   "base",
+   "armV4-s6",
+   9024
+  ],
+  [
+   "dyn",
+   "armV4-s6",
+   9024
+  ],
+  [
+   "dyn+brake+obs10+h0+settle",
+   "armV4-s6",
+   9024
+  ],
+  [
+   "dyn+brake+obs10+h0+settle+fix",
+   "armV4-s6",
+   9000
+  ],
+  [
+   "base",
+   "armV4-s5",
+   9048
+  ],
+  [
+   "dyn",
+   "armV4-s5",
+   9048
+  ],
+  [
+   "dyn+brake+obs10+h0+settle",
+   "armV4-s5",
+   9048
+  ]
+ ],
+ "predictions": {
+  "P1_dynamics_alone_no_gap": "for each arm and block: |goals(dyn) - goals(base)| <= 2 of 24",
+  "P2_s5_full_pipeline_gap": "s5 9048-9071: goals(full) <= goals(base) - 3; failures mostly time_out (not collision); mean braked fraction >= 0.25",
+  "P3_s6_full_pipeline_no_gap": "s6 9024-9047: goals(full) >= goals(base) - 1",
+  "P4_capture_fix_harmless_for_s6": "s6 9000-9023: goals(full+fix) >= goals(full) - 1 (full = 24/24)"
+ },
+ "optional_exploratory_if_time": "dyn+brake+obs10+h0+settle+lpf0.25 for s5 and s6 on one block (gym-nominal tau as a deployment low-pass); labelled exploratory, no prediction",
+ "addendum_1": {
+  "written": "2026-10-01T11:34:12 while the two runs below were running, before their results were read",
+  "runs": [
+   [
+    "dyn+brake+obs10+h0+settle+fix",
+    "armV4-s5",
+    9048
+   ],
+   [
+    "dyn+brake+obs10+h0+settle+lpf0.25",
+    "armV4-s5",
+    9024
+   ]
+  ],
+  "predictions": {
+   "P5_capture_fix_helps_s5_on_9048": "goals(full+fix, 9048) >= goals(full, 9048) + 2",
+   "lpf0.25": "exploratory, no prediction"
+  }
+ },
+ "addendum_2": {
+  "written": "2026-10-01T11:36:24 before starting the two runs below",
+  "runs": [
+   [
+    "dyn+brake+obs10+h0+settle+fix",
+    "armV4-s6",
+    9024
+   ],
+   [
+    "dyn+brake+obs10+h0+settle+lpf0.25",
+    "armV4-s6",
+    9024
+   ]
+  ],
+  "predictions": {
+   "P6_capture_fix_harmless_for_s6_on_9024": "goals(full+fix, 9024) >= goals(full, 9024) - 1 (full = 20)",
+   "lpf0.25": "exploratory, no prediction"
+  }
+ },
+ "addendum_3": {
+  "written": "2026-10-01T11:39:24 before starting the run below",
+  "run": "phys_closedloop_capfix.py armV4-s5 9001 (ONE MuJoCo episode, training-range maze 9001, 180 s limit)",
+  "context": "physics without the fix: time_out/stuck, braked 81 % (data/physloop/armV4-s5_none/seed9001.json); with lpf0.15: also stuck; gym full pipeline on 9001: time_out; gym full+fix on 9001: goal",
+  "prediction": "P7: with capture-pose map integration the physics episode reaches the goal within 180 s with 0 wall contacts and no fall (n = 1: an illustration of the mechanism, not evidence of a rate)"
+ }
+}

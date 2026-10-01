@@ -1,0 +1,175 @@
+{
+  "gyro_noise_dps": 0.049535170000089446,
+  "gyro_bias_dps": 0.00015659995265898758,
+  "accel_noise_mg": 0.9954197569263241,
+  "accel_bias_mg": 0.005320171878751791,
+  "mag_resolution_mgauss": 0.0667,
+  "baro_noise_pa": 0.5,
+  "max_rate_hz": 200.0,
+  "source": "measured with imu_allan.py 1.1.0 from csv:/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/_tmp/tap_stat.csv (0.08 h at 200.0 Hz), 2026-10-01",
+  "rate_hz": 200.0,
+  "noise_density": {
+    "gyro_rad_s_rthz": 6.113304489782543e-05,
+    "gyro_dps_rthz": 0.003502665461429168,
+    "gyro_arw_deg_rth": 0.2101599276857501,
+    "accel_m_s2_rthz": 0.0006902587713047412,
+    "accel_mg_rthz": 0.07038680602496686
+  },
+  "gyro_noise_dps_datasheet_equiv_100hz_bw": 0.049535170000089446,
+  "accel_noise_mg_datasheet_equiv_100hz_bw": 0.9954197569263241,
+  "datasheet_equiv_note": "N*sqrt(2*100 Hz): rms in an ideal one-sided 100 Hz band, for comparison with the manual's 'Band width=100Hz' rms (0.028-0.07 deg/s, 0.75-1 mg) only",
+  "per_sample_std_at": {
+    "25": {
+      "gyro_dps": 0.01751332730714584,
+      "gyro_rad_s": 0.00030566522448912715,
+      "accel_mg": 0.3519340301248343,
+      "accel_m_s2": 0.0034512938565237064
+    },
+    "50": {
+      "gyro_dps": 0.024767585000044723,
+      "gyro_rad_s": 0.00043227590601834035,
+      "accel_mg": 0.49770987846316206,
+      "accel_m_s2": 0.004880866579630768
+    },
+    "100": {
+      "gyro_dps": 0.03502665461429168,
+      "gyro_rad_s": 0.0006113304489782543,
+      "accel_mg": 0.7038680602496686,
+      "accel_m_s2": 0.006902587713047413
+    },
+    "200": {
+      "gyro_dps": 0.049535170000089446,
+      "gyro_rad_s": 0.0008645518120366807,
+      "accel_mg": 0.9954197569263241,
+      "accel_m_s2": 0.009761733159261536
+    }
+  },
+  "gyro_bias_instability_rad_s": 1.0092367511281586e-05,
+  "gyro_bias_instability_dps": 0.000578250063691385,
+  "gyro_bias_instability_deg_h": 2.081700229288986,
+  "gyro_bias_instability_is_upper_bound": true,
+  "gyro_rate_random_walk_rad_s_rtsec": null,
+  "gyro_bias_walk_rad_s_rtsec": 5.3183443104307785e-06,
+  "gyro_bias_walk_kind": "upper bound (rate random walk not visible in this record)",
+  "accel_bias_instability_mg": 0.021837040689375996,
+  "accel_bias_instability_m_s2": 0.0002141482150764691,
+  "accel_rate_random_walk_m_s2_rtsec": null,
+  "accel_bias_walk_m_s2_rtsec": 7.891627853660523e-05,
+  "accel_bias_walk_kind": "upper bound (rate random walk not visible in this record)",
+  "imu_tap_offset_ms": 23.701581404000276,
+  "imu_latency_ms": 27.701581404000276,
+  "imu_latency_note": "tap offset 23.70 ms + reference latency 4 ms (tap --ref-latency-ms): stamp latency; add the consumer's processing for end-to-end. imu_noise.delay_steps = round(imu_latency_ms * rate / 1000)",
+  "imu_noise": {
+    "gyro_std": 0.0008645518120366807,
+    "accel_std": 0.009761733159261536,
+    "gyro_bias": 2.7331847823665823e-06,
+    "gyro_bias_walk": 5.3183443104307785e-06,
+    "delay_steps": 6
+  },
+  "imu_noise_rate_hz": 200.0,
+  "imu_noise_by_rate": {
+    "25": {
+      "gyro_std": 0.00030566522448912715,
+      "accel_std": 0.0034512938565237064,
+      "gyro_bias": 2.7331847823665823e-06,
+      "gyro_bias_walk": 5.3183443104307785e-06,
+      "delay_steps": 1
+    },
+    "50": {
+      "gyro_std": 0.00043227590601834035,
+      "accel_std": 0.004880866579630768,
+      "gyro_bias": 2.7331847823665823e-06,
+      "gyro_bias_walk": 5.3183443104307785e-06,
+      "delay_steps": 1
+    },
+    "100": {
+      "gyro_std": 0.0006113304489782543,
+      "accel_std": 0.006902587713047413,
+      "gyro_bias": 2.7331847823665823e-06,
+      "gyro_bias_walk": 5.3183443104307785e-06,
+      "delay_steps": 3
+    },
+    "200": {
+      "gyro_std": 0.0008645518120366807,
+      "accel_std": 0.009761733159261536,
+      "gyro_bias": 2.7331847823665823e-06,
+      "gyro_bias_walk": 5.3183443104307785e-06,
+      "delay_steps": 6
+    }
+  },
+  "per_axis": {
+    "gyro": {
+      "x": {
+        "N": 6.112821414079248e-05,
+        "B": 9.131661033758755e-06,
+        "tau_B_s": 59.38,
+        "K": null,
+        "K_upper": 4.224503499789675e-06,
+        "sample_std": 0.0008650921828086306
+      },
+      "y": {
+        "N": 6.11266278698436e-05,
+        "B": 8.75296553127887e-06,
+        "tau_B_s": 59.38,
+        "K": null,
+        "K_upper": 4.2208973504977085e-06,
+        "sample_std": 0.0008646791679661777
+      },
+      "z": {
+        "N": 6.113304489782543e-05,
+        "B": 1.0092367511281586e-05,
+        "tau_B_s": 59.38,
+        "K": null,
+        "K_upper": 5.3183443104307785e-06,
+        "sample_std": 0.0008658822705689204
+      }
+    },
+    "accel": {
+      "x": {
+        "N": 0.0006862734964335382,
+        "B": 0.00011489211631416327,
+        "tau_B_s": 59.38,
+        "K": null,
+        "K_upper": 5.7983884018087625e-05,
+        "sample_std": 0.009742062428829017
+      },
+      "y": {
+        "N": 0.0006867563080912741,
+        "B": 9.247706380407001e-05,
+        "tau_B_s": 59.38,
+        "K": null,
+        "K_upper": 4.4361759429752636e-05,
+        "sample_std": 0.009753883339742307
+      },
+      "z": {
+        "N": 0.0006902587713047412,
+        "B": 0.0002141482150764691,
+        "tau_B_s": 41.95,
+        "K": null,
+        "K_upper": 7.891627853660523e-05,
+        "sample_std": 0.009760932387100168
+      }
+    }
+  },
+  "per_axis_units": "SI: N in unit/sqrt(Hz), B and sample_std in unit, K in unit/sqrt(s); unit = rad/s or m/s^2",
+  "provenance": {
+    "gyro_noise_dps": "measured: max-axis Allan N * sqrt(200.00 Hz) (per-sample std at the measured rate)",
+    "gyro_bias_dps": "measured: |mean gyro vector| over the stationary record (one power cycle; incl. Earth rate)",
+    "accel_noise_mg": "measured: max-axis Allan N * sqrt(200.00 Hz)",
+    "accel_bias_mg": "measured, PARTIAL: | |mean specific force| - local g |, the along-gravity component only (a lower bound on |bias|; also absorbs scale error). Run the rotations capture and pass --rotations-report for the per-axis bias",
+    "mag_resolution_mgauss": "datasheet fallback (no magnetometer data or no visible quantization)",
+    "baro_noise_pa": "datasheet fallback (no pressure data in the recording)",
+    "max_rate_hz": "datasheet device capability (SimIM10A rejects rate_hz above it; the delivered rate is 'rate_hz')",
+    "source": "provenance string of this file"
+  },
+  "conversions": "per-sample std = N*sqrt(rate) (Allan N, two-sided white level); B = ADEV_min/0.6643; K from sigma = K*sqrt(tau/3) = ImuNoise.gyro_bias_walk; 1 mg = 9.80665e-3 m/s^2; 1 mGauss = 1e-7 T. See imu_allan.py docstring.",
+  "warnings": [
+    "record is 5 min; bias instability/rate random walk need >= 2 h (30 min minimum, see RECORDING.md)",
+    "gyro x: Allan minimum at the edge of the usable tau range: B is an upper bound (record too short)",
+    "gyro y: Allan minimum at the edge of the usable tau range: B is an upper bound (record too short)",
+    "gyro z: Allan minimum at the edge of the usable tau range: B is an upper bound (record too short)",
+    "accel x: Allan minimum at the edge of the usable tau range: B is an upper bound (record too short)",
+    "accel y: Allan minimum at the edge of the usable tau range: B is an upper bound (record too short)",
+    "gyro mean bias < 0.02 deg/s on every axis (datasheet zero drift is 0.5-1 deg/s): vendor gyro auto-calibration was probably ON; the bias/B/K then describe the auto-calibrated output"
+  ]
+}

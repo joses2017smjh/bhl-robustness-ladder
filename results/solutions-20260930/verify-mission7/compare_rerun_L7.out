@@ -1,0 +1,9 @@
+gate samples 1112 rerun samples 1112 gate first_fall 18.280000000002747 rerun first_fall 18.280000000002747
+diff at 0 0.04000000000000003 ['tilt']
+diff at 1 0.08000000000000006 ['tilt']
+diff at 3 0.16000000000000011 ['tilt']
+samples differing: 834 of 1112
+header keys differing: ['maximum_tilt', 'peak_plate_tangent_force_N']
+max abs diff per field: {'.command': 2.7755575615628914e-16, '.command_world': 1.249000902703301e-16, '.contact_events': 1.4210854715202004e-14, '.effective_command': 2.7755575615628914e-16, '.tilt': 2.220446049250313e-16, '.velocity_body': 3.3306690738754696e-16, '.yaw': 2.220446049250313e-16}
+non-numeric differing fields: []
+header maximum_tilt 1.791858832890507 1.7918588328905067 peak_tan 72.24685681719647 72.24685681719649

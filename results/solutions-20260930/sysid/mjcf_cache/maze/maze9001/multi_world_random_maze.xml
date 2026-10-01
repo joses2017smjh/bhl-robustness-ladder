@@ -1,0 +1,71 @@
+<mujoco model="bhl-random-maze-9001">
+      <compiler angle="radian"/><option timestep=".0005"/>
+      <visual>
+        <global offwidth="1280" offheight="720"/>
+        <headlight diffuse="0.40 0.40 0.40" ambient="0.30 0.30 0.32" specular="0 0 0"/>
+        <quality shadowsize="4096"/>
+        <rgba haze="0.16 0.18 0.22 1"/>
+      </visual>
+      <asset>
+        <texture type="skybox" builtin="gradient" rgb1="0.50 0.56 0.64" rgb2="0.10 0.12 0.16" width="512" height="3072"/>
+        <texture type="2d" name="tile" builtin="checker" mark="edge" rgb1="0.66 0.65 0.62" rgb2="0.53 0.53 0.51"
+                 markrgb="0.40 0.40 0.40" width="300" height="300"/>
+        <material name="tile" texture="tile" texuniform="true" texrepeat="6 6" reflectance="0.0" specular="0.05" shininess="0.05"/>
+        <texture type="2d" name="brick" builtin="checker" mark="edge" rgb1="0.52 0.57 0.64" rgb2="0.46 0.51 0.58"
+                 markrgb="0.36 0.40 0.46" width="128" height="128"/>
+        <material name="wall" texture="brick" texuniform="true" texrepeat="3 3" reflectance="0.0" specular="0.1" shininess="0.1"/>
+      </asset>
+      <worldbody>
+      <light pos="3.5 3.5 7" dir="0 0 -1" castshadow="true" diffuse="0.55 0.55 0.55" specular="0.05 0.05 0.05"/>
+      <light pos="0.5 6.5 5" dir="0.45 -0.55 -0.7" directional="true" castshadow="false" diffuse="0.30 0.30 0.32"/>
+      <geom name="floor" type="plane" size="12 12 .05" material="tile"/>
+    <geom name="wall_maze_0" type="box" pos="0.0 0.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_1" type="box" pos="-0.7 0.0 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_2" type="box" pos="0.0 -0.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_3" type="box" pos="-0.7 1.4 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_4" type="box" pos="0.7 2.8 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_5" type="box" pos="-0.7 2.8 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_6" type="box" pos="0.7 4.2 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_7" type="box" pos="-0.7 4.2 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_8" type="box" pos="0.0 6.3 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_9" type="box" pos="-0.7 5.6 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_10" type="box" pos="0.0 7.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_11" type="box" pos="-0.7 7.0 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_12" type="box" pos="2.1 0.0 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_13" type="box" pos="1.4 -0.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_14" type="box" pos="2.1 1.4 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_15" type="box" pos="1.4 2.1 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_16" type="box" pos="2.1 4.2 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_17" type="box" pos="1.4 4.9 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_18" type="box" pos="2.1 5.6 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_19" type="box" pos="1.4 7.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_20" type="box" pos="2.8 -0.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_21" type="box" pos="3.5 1.4 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_22" type="box" pos="3.5 2.8 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_23" type="box" pos="2.8 4.9 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_24" type="box" pos="3.5 7.0 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_25" type="box" pos="2.8 7.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_26" type="box" pos="4.2 -0.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_27" type="box" pos="4.9 1.4 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_28" type="box" pos="4.2 3.5 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_29" type="box" pos="4.2 4.9 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_30" type="box" pos="4.9 5.6 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_31" type="box" pos="4.2 7.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_32" type="box" pos="6.3 0.0 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_33" type="box" pos="5.6 -0.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_34" type="box" pos="5.6 2.1 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_35" type="box" pos="5.6 3.5 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_36" type="box" pos="6.3 5.6 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_37" type="box" pos="5.6 6.3 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_38" type="box" pos="5.6 7.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_39" type="box" pos="7.7 0.0 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_40" type="box" pos="7.0 -0.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_41" type="box" pos="7.7 1.4 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_42" type="box" pos="7.7 2.8 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_43" type="box" pos="7.0 3.5 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="wall_maze_44" type="box" pos="7.7 4.2 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_45" type="box" pos="7.7 5.6 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_46" type="box" pos="7.7 7.0 0.55" size="0.04 0.74 0.55" material="wall"/>
+<geom name="wall_maze_47" type="box" pos="7.0 7.7 0.55" size="0.74 0.04 0.55" material="wall"/>
+<geom name="start_marker" type="cylinder" pos="0.0 0.0 .002" size=".23 .001" rgba=".96 .63 .12 1" contype="0" conaffinity="0"/>
+<geom name="goal_marker" type="cylinder" pos="7.0 7.0 .002" size=".26 .001" rgba=".15 .8 .35 1" contype="0" conaffinity="0"/></worldbody></mujoco>

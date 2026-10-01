@@ -1,0 +1,34 @@
+
+== csv:/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/_tmp/tap_stat.csv  (time source: header)
+samples 60000, 0.083 h, delivered rate 200.000 Hz (median-dt rate 200 Hz), Allan rate 200.000 Hz
+dt ms: median 5.000 std 0.000 p01 5.000 p99 5.000 max 5.0; gaps 0, missing ~0 (0.000%); duplicates 0 (0.000%)
+                   N           B   tau_B           K        K<=        mean    hp std
+gx         0.0035024       1.884      59         n/a   0.000242 -0.00010856   0.04957
+gy         0.0035023       1.805      59         n/a   0.000242 -9.1294e-05   0.04954
+gz         0.0035027       2.082      59         n/a   0.000305  6.6362e-05   0.04961
+ax           0.06998     0.01172      59         n/a    0.00591       13.96    0.9934
+ay           0.07003     0.00943      59         n/a    0.00452      20.932    0.9946
+az          0.070387     0.02184      42         n/a    0.00805      999.68    0.9953
+units: gyro N (deg/s)/sqrt(Hz), B deg/h, K (deg/s)/sqrt(s), mean deg/s; accel N mg/sqrt(Hz), B mg, K mg/sqrt(s), mean mg (incl. gravity)
+gravity |f| = 9.80660 m/s^2 vs local 9.80665 (-0.01 mg), up axis +Z, tilt 1.44 deg
+
+imu_measured.json headline:
+  gyro_noise_dps                   0.049535170000089446   [measured: max-axis Allan N * sqrt(200.00 Hz) (per-sample std at the me]
+  gyro_bias_dps                  0.00015659995265898758   [measured: |mean gyro vector| over the stationary record (one power cyc]
+  accel_noise_mg                     0.9954197569263241   [measured: max-axis Allan N * sqrt(200.00 Hz)]
+  accel_bias_mg                    0.005320171878751791   [measured, PARTIAL: | |mean specific force| - local g |, the along-grav]
+  mag_resolution_mgauss                          0.0667   [datasheet fallback (no magnetometer data or no visible quantization)]
+  baro_noise_pa                                     0.5   [datasheet fallback (no pressure data in the recording)]
+  max_rate_hz                                     200.0   [datasheet device capability (SimIM10A rejects rate_hz above it; the de]
+  source                   'measured with imu_allan.py 1.1.0 from csv:/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/_tmp/tap_stat.csv (0.08 h at 200.0 Hz), 2026-10-01'   [provenance string of this file]
+  imu_noise @ 200 Hz: {"gyro_std": 0.0008645518120366807, "accel_std": 0.009761733159261536, "gyro_bias": 2.7331847823665823e-06, "gyro_bias_walk": 5.3183443104307785e-06, "delay_steps": 6}
+WARNING: record is 5 min; bias instability/rate random walk need >= 2 h (30 min minimum, see RECORDING.md)
+WARNING: gyro x: Allan minimum at the edge of the usable tau range: B is an upper bound (record too short)
+WARNING: gyro y: Allan minimum at the edge of the usable tau range: B is an upper bound (record too short)
+WARNING: gyro z: Allan minimum at the edge of the usable tau range: B is an upper bound (record too short)
+WARNING: accel x: Allan minimum at the edge of the usable tau range: B is an upper bound (record too short)
+WARNING: accel y: Allan minimum at the edge of the usable tau range: B is an upper bound (record too short)
+WARNING: gyro mean bias < 0.02 deg/s on every axis (datasheet zero drift is 0.5-1 deg/s): vendor gyro auto-calibration was probably ON; the bias/B/K then describe the auto-calibrated output
+
+--- stderr ---
+wrote /nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/C8b_tap_merge/imu_measured.json and /nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/C8b_tap_merge/imu_allan_report.json

@@ -1,0 +1,126 @@
+[
+ {
+  "seed": 0,
+  "wz": 0.6,
+  "vx": 0.0,
+  "noise_mult": 1.0,
+  "noise_joints": "arms",
+  "fell_at_s": null,
+  "yaw_deg_cmd_dir": 56.3,
+  "lo_settle": [
+   0,
+   0
+  ],
+  "lo_turn": [
+   2,
+   1
+  ],
+  "abs_a_arm": 13.61,
+  "abs_a_leg": 0.7,
+  "abs_a_leg_perjoint": [
+   0.69,
+   0.8,
+   0.38,
+   0.42,
+   1.51,
+   0.35
+  ],
+  "leg_sat_frac_turn": 0.1,
+  "leg_sat_frac_settle": 0.005,
+  "run_name": "arms-turn-turncmd-s0",
+  "ckpt": "model_5999.pt"
+ },
+ {
+  "seed": 0,
+  "wz": -0.6,
+  "vx": 0.0,
+  "noise_mult": 1.0,
+  "noise_joints": "arms",
+  "fell_at_s": null,
+  "yaw_deg_cmd_dir": 63.8,
+  "lo_settle": [
+   0,
+   0
+  ],
+  "lo_turn": [
+   2,
+   3
+  ],
+  "abs_a_arm": 13.97,
+  "abs_a_leg": 0.7,
+  "abs_a_leg_perjoint": [
+   1.56,
+   0.27,
+   0.45,
+   0.84,
+   0.37,
+   0.56
+  ],
+  "leg_sat_frac_turn": 0.045,
+  "leg_sat_frac_settle": 0.005,
+  "run_name": "arms-turn-turncmd-s0",
+  "ckpt": "model_5999.pt"
+ },
+ {
+  "seed": 0,
+  "wz": 0.6,
+  "vx": 0.0,
+  "noise_mult": 1.0,
+  "noise_joints": "arms",
+  "fell_at_s": null,
+  "yaw_deg_cmd_dir": 210.5,
+  "lo_settle": [
+   3,
+   4
+  ],
+  "lo_turn": [
+   17,
+   15
+  ],
+  "abs_a_arm": 7.6,
+  "abs_a_leg": 0.94,
+  "abs_a_leg_perjoint": [
+   0.77,
+   0.73,
+   0.79,
+   1.21,
+   1.47,
+   0.48
+  ],
+  "leg_sat_frac_turn": 0.126,
+  "leg_sat_frac_settle": 0.093,
+  "run_name": "arms-turn-turnboth-s1",
+  "ckpt": "model_5999.pt"
+ },
+ {
+  "seed": 0,
+  "wz": -0.6,
+  "vx": 0.0,
+  "noise_mult": 1.0,
+  "noise_joints": "arms",
+  "fell_at_s": null,
+  "yaw_deg_cmd_dir": 243.0,
+  "lo_settle": [
+   3,
+   4
+  ],
+  "lo_turn": [
+   20,
+   24
+  ],
+  "abs_a_arm": 8.96,
+  "abs_a_leg": 1.07,
+  "abs_a_leg_perjoint": [
+   1.66,
+   0.48,
+   0.7,
+   1.46,
+   1.39,
+   0.63
+  ],
+  "leg_sat_frac_turn": 0.16,
+  "leg_sat_frac_settle": 0.093,
+  "run_name": "arms-turn-turnboth-s1",
+  "ckpt": "model_5999.pt"
+ }
+]

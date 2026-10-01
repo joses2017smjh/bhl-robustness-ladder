@@ -1,0 +1,156 @@
+[
+ {
+  "variant": "base",
+  "pads": [
+   {
+    "name": "r0_arm_left_hand_pad",
+    "condim": 3,
+    "friction": [
+     1.0,
+     0.005,
+     0.0001
+    ]
+   },
+   {
+    "name": "r0_arm_right_hand_pad",
+    "condim": 3,
+    "friction": [
+     1.0,
+     0.005,
+     0.0001
+    ]
+   },
+   {
+    "name": "r1_arm_left_hand_pad",
+    "condim": 3,
+    "friction": [
+     1.0,
+     0.005,
+     0.0001
+    ]
+   },
+   {
+    "name": "r1_arm_right_hand_pad",
+    "condim": 3,
+    "friction": [
+     1.0,
+     0.005,
+     0.0001
+    ]
+   }
+  ],
+  "solver": {
+   "cone": 0,
+   "impratio": 1.0,
+   "noslip_iterations": 0
+  },
+  "rows": [
+   {
+    "variant": "base",
+    "seed": 100,
+    "wall_s": 17.3,
+    "lift_peak_m": 0.1834,
+    "lift_hold_s": 8.16,
+    "hold_end_s": 14.36,
+    "floor": true,
+    "max_robot_tilt": 0.1795,
+    "success_lift_hold_rule": false,
+    "cube_tilt_at_t": {
+     "5s": 0.116,
+     "6s": 1.092,
+     "7s": 1.203,
+     "8s": 1.307,
+     "10s": 1.434,
+     "12s": 1.492,
+     "15s": 1.571,
+     "19s": 1.571
+    },
+    "max_cube_tilt_rad_before_9s": 1.783,
+    "pad_contact_z_rel_cube_centre_5to9s": {
+     "p10": 0.01,
+     "p50": 0.057,
+     "p90": 0.1
+    },
+    "pad_contact_points_per_frame_5to9s_median": 2.0,
+    "total_normal_N_5to9s_median": 14.61
+   }
+  ]
+ },
+ {
+  "variant": "tors04_ell",
+  "pads": [
+   {
+    "name": "r0_arm_left_hand_pad",
+    "condim": 4,
+    "friction": [
+     1.0,
+     0.04,
+     0.0001
+    ]
+   },
+   {
+    "name": "r0_arm_right_hand_pad",
+    "condim": 4,
+    "friction": [
+     1.0,
+     0.04,
+     0.0001
+    ]
+   },
+   {
+    "name": "r1_arm_left_hand_pad",
+    "condim": 4,
+    "friction": [
+     1.0,
+     0.04,
+     0.0001
+    ]
+   },
+   {
+    "name": "r1_arm_right_hand_pad",
+    "condim": 4,
+    "friction": [
+     1.0,
+     0.04,
+     0.0001
+    ]
+   }
+  ],
+  "solver": {
+   "cone": 1,
+   "impratio": 10.0,
+   "noslip_iterations": 0
+  },
+  "rows": [
+   {
+    "variant": "tors04_ell",
+    "seed": 100,
+    "wall_s": 19.0,
+    "lift_peak_m": 0.2641,
+    "lift_hold_s": 14.44,
+    "hold_end_s": 20.0,
+    "floor": false,
+    "max_robot_tilt": 0.1649,
+    "success_lift_hold_rule": true,
+    "cube_tilt_at_t": {
+     "5s": 0.082,
+     "6s": 0.509,
+     "7s": 0.912,
+     "8s": 0.933,
+     "10s": 0.933,
+     "12s": 0.933,
+     "15s": 0.932,
+     "19s": 0.932
+    },
+    "max_cube_tilt_rad_before_9s": 0.934,
+    "pad_contact_z_rel_cube_centre_5to9s": {
+     "p10": -0.034,
+     "p50": -0.004,
+     "p90": 0.038
+    },
+    "pad_contact_points_per_frame_5to9s_median": 4.0,
+    "total_normal_N_5to9s_median": 17.42
+   }
+  ]
+ }
+]

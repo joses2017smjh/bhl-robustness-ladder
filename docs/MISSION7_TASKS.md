@@ -34,7 +34,7 @@ replaced it). Route failures are never dropped from a denominator.
   standstill without a lateral component *and* holds the ten-fall replay at
   10/10; (b) privileged Approach — **passed** 62/64 with fine centring (`21401966`); (c) sensor-release and four-sensor
   studies — closed until (a) and (b) pass.
-- **Budget:** 411 / 512 episodes; **101 unspent by decision**. Retained
+- **Budget:** 411 / 512 episodes; **101 unspent by decision** as written here. **Unresolved 2026-10-01:** the ledger records 1 remaining after `21401987` and 54 more charged on 09-24 (≈ 53 over); no Mission 7 episode until the user reconciles the line. Retained
   artifacts 7.7 GB of 10 GB after trimming raw traces of withdrawn arms and
   failed gates (compact results and receipts kept); disk ≥ 130 GB free.
 - **Validation:** 176 tests; every job preflighted and hash-frozen; replay
@@ -44,8 +44,8 @@ replaced it). Route failures are never dropped from a denominator.
 
 | Gate | Status | Evidence |
 |---|---|---|
-| Pressure-plate exact replay, 10/10 upright | **PASS** | `21397732` |
-| Doors ≥16 and Transport ≥16 (documented route protocol) | **FAIL** 1/16, 0/16 | `21398514` |
+| Pressure-plate exact replay, 10/10 upright | **PASS** (2026-10-01: its staged crossings never cleared a plate and door 0 was already open, so the replay cannot certify a crossing) | `21397732` |
+| Doors ≥16 and Transport ≥16 (documented route protocol) | **FAIL** 1/16, 0/16 (2026-10-01: the code's `doors_16`/`transport_16` count episodes, not successes, and read true here; a recorded code bug) | `21398514` |
 | Privileged Approach ≥60/64, zero falls, ≥14/16 per direction | **PASS** 62/64, 0 falls, −x 14/16 (`center_bias`) | `21401966` |
 | Sensor-only Both readiness | **CLOSED** — route gate still fails | — |
 | Four-sensor comparison | **CLOSED** | — |
@@ -72,7 +72,7 @@ replaced it). Route failures are never dropped from a denominator.
 
 ≤512 new episodes total · ≤8 concurrent Slurm jobs · ≤10 GB new retained
 artifacts · keep ≥100 GB free on `/nfs/hpc/share` · `--constraint=haswell&el8`
-by default, `--node cn-c22` only for bitwise replay. Episodes used: 0 / 512.
+by default, `--node cn-c22` only for bitwise replay. Episodes used: see **Budget** above (inconsistent with the ledger; unresolved 2026-10-01).
 
 ## Job ledger for this campaign
 

@@ -1,0 +1,158 @@
+[
+ {
+  "seed": 0,
+  "wz": 0.6,
+  "vx": 0.0,
+  "noise_mult": 0.0,
+  "noise_joints": "all",
+  "fell_at_s": null,
+  "yaw_deg_cmd_dir": 229.9,
+  "lo_settle": [
+   6,
+   6
+  ],
+  "lo_turn": [
+   20,
+   17
+  ],
+  "noise_until": 1000000000.0,
+  "obs_noise": 1.0,
+  "tail_s": 3.0,
+  "tail_yaw_deg_cmd_dir": 116.3,
+  "lo_tail": [
+   9,
+   9
+  ],
+  "abs_a_arm": 7.44,
+  "abs_a_leg": 1.16,
+  "abs_a_leg_perjoint": [
+   0.96,
+   0.7,
+   0.94,
+   1.55,
+   1.86,
+   0.62
+  ],
+  "leg_sat_frac_turn": 0.189,
+  "leg_sat_frac_settle": 0.207,
+  "run_name": "arms-turn-turnboth-s1",
+  "ckpt": "model_5999.pt"
+ },
+ {
+  "seed": 0,
+  "wz": -0.6,
+  "vx": 0.0,
+  "noise_mult": 0.0,
+  "noise_joints": "all",
+  "fell_at_s": null,
+  "yaw_deg_cmd_dir": 258.1,
+  "lo_settle": [
+   6,
+   6
+  ],
+  "lo_turn": [
+   19,
+   22
+  ],
+  "noise_until": 1000000000.0,
+  "obs_noise": 1.0,
+  "tail_s": 3.0,
+  "tail_yaw_deg_cmd_dir": 132.4,
+  "lo_tail": [
+   9,
+   10
+  ],
+  "abs_a_arm": 8.75,
+  "abs_a_leg": 1.22,
+  "abs_a_leg_perjoint": [
+   1.69,
+   0.48,
+   1.0,
+   1.63,
+   1.67,
+   0.64
+  ],
+  "leg_sat_frac_turn": 0.21,
+  "leg_sat_frac_settle": 0.207,
+  "run_name": "arms-turn-turnboth-s1",
+  "ckpt": "model_5999.pt"
+ },
+ {
+  "seed": 0,
+  "wz": 0.6,
+  "vx": 0.0,
+  "noise_mult": 0.0,
+  "noise_joints": "all",
+  "fell_at_s": null,
+  "yaw_deg_cmd_dir": 142.4,
+  "lo_settle": [
+   2,
+   5
+  ],
+  "lo_turn": [
+   11,
+   11
+  ],
+  "noise_until": 1000000000.0,
+  "obs_noise": 1.0,
+  "tail_s": 3.0,
+  "tail_yaw_deg_cmd_dir": 68.0,
+  "lo_tail": [
+   4,
+   6
+  ],
+  "abs_a_arm": 13.95,
+  "abs_a_leg": 0.91,
+  "abs_a_leg_perjoint": [
+   1.19,
+   0.87,
+   0.61,
+   0.96,
+   1.39,
+   0.43
+  ],
+  "leg_sat_frac_turn": 0.181,
+  "leg_sat_frac_settle": 0.148,
+  "run_name": "arms-turn-turncmd-s0",
+  "ckpt": "model_5999.pt"
+ },
+ {
+  "seed": 0,
+  "wz": -0.6,
+  "vx": 0.0,
+  "noise_mult": 0.0,
+  "noise_joints": "all",
+  "fell_at_s": null,
+  "yaw_deg_cmd_dir": 185.0,
+  "lo_settle": [
+   2,
+   5
+  ],
+  "lo_turn": [
+   13,
+   12
+  ],
+  "noise_until": 1000000000.0,
+  "obs_noise": 1.0,
+  "tail_s": 3.0,
+  "tail_yaw_deg_cmd_dir": 101.4,
+  "lo_tail": [
+   6,
+   6
+  ],
+  "abs_a_arm": 13.98,
+  "abs_a_leg": 0.99,
+  "abs_a_leg_perjoint": [
+   1.79,
+   0.47,
+   0.8,
+   1.29,
+   0.92,
+   0.52
+  ],
+  "leg_sat_frac_turn": 0.184,
+  "leg_sat_frac_settle": 0.148,
+  "run_name": "arms-turn-turncmd-s0",
+  "ckpt": "model_5999.pt"
+ }
+]

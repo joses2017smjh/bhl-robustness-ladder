@@ -1,0 +1,88 @@
+{
+ "claims": [
+  {
+   "claim": "(1) The gym replay builds the SAME 12 maze layouts as the physics transfer (same generator, 6x6, extra_openings=1, maze seeds 50000-50011).",
+   "verdict": "confirmed",
+   "evidence": "verify-navgym/layout_check.py (mazes built only; no policy stepped, nothing scored) recomputes sha256(rm.world_xml(maze, textured=False))[:16], the exact expression at scripts/bench/maze_explore.py:891, for the maze MazeNavEnv builds under all six gym_replay.py constructions per seed (5 randomized resets seed*10+r, 1 nominal reset seed): episode_seed == maze seed (seed_span=1), extra_openings=1, 48 wall boxes, and all 12 hashes equal 'maze.layout_sha256' in the armV4-s5, armV4-s6 and astar physics JSONs (e.g. 50009 = 8db40820a63b7534). Both paths call bhl_robust.eval.random_maze.generate (env.py:86,491; maze_explore.py:689). Output: verify-navgym/layout_check.json."
+  },
+  {
+   "claim": "(2) Actor inference in gym_replay.py matches the trainer's deterministic evaluation (obs keys, clipping, ONNX = mean action).",
+   "verdict": "confirmed",
+   "evidence": "ONNX inputs are lidar, near, map, goal (= OBS_KEYS_V2), taken from the ONNX input names in gym_replay.py and maze_explore.py:740. The ONNX is ActorOnnx = policy.action_net(latent), the Gaussian mean (navgym_train.py:370-383); export check max|onnx-torch| = 1.24e-5 (s5) and 4.77e-6 (s6) (results/navgym-v4-20260928/armV4-s*/summary.json). The trainer evaluates with model.predict(deterministic=True) (navgym_train.py:174,222). In the installed SB3 2.7.0 that is distribution.mode() = mean (distributions.py:186), then np.clip to the [-1,1] Box (policies.py:379), the same as np.clip(onnx,-1,1) in gym_replay.py and maze_explore.py:813. prev_action is the clipped action in all three. Training has no VecNormalize, only VecMonitor. Actor sha256 equals verdict.json onnx_sha256 (e3595cc1..., 83f0fc53...); file mtimes are s5 2026-09-30 01:48 and s6 2026-09-29 23:22, both before the physics run (09-30 09:51-10:14) and the replay (09-30 14:54). Protocol caveats: the five randomized draws use reset seeds seed*10+r and the route-scaled limit of 3018-4500 steps (50009: 3018 = 121 s; 50007: 3154; 50010: 3659; 50001: 3812), which is shorter than physics' 180 s on 8 of 12 mazes. Only the nominal column runs 4500 steps. The 'nominal' run is one stochastic draw at Dynamics() defaults (v_noise 0.02, w_noise 0.05, latency 1, drift -0.02). Physics-only differences, absent from the gym by design: 10 Hz lidar packets reused across policy steps, a 1.0 s settle with zero command while prev = policy output (maze_explore.py:813-827), and a speed brake on (vx, vy) only."
+  },
+  {
+   "claim": "(3a) armV4-s6's physics failures 50001, 50002, 50009 are the same mazes it fails in the gym (50001 0/5 + nominal t/o; 50002 2/5 + nominal t/o; 50009 0/5 + nominal t/o), so there is ~no transfer gap for s6.",
+   "verdict": "confirmed",
+   "evidence": "In physics, s6 times out on exactly 50001, 50002 and 50009 (armV4-s6/seed500xx.json, 0 wall contacts). In gym_replay.json the s6 nominal time-outs are exactly {50001, 50002, 50009}, with randomized 0/5, 2/5, 0/5. The gym also shows partial s6 failures on mazes that succeed in physics: 50007 3/5 (2 collisions; physics goal at 145.0 s) and 50011 4/5. Expected failures from the randomized rates, sum(1-p) = 3.2, against 3 observed."
+  },
+  {
+   "claim": "(3b) armV4-s5: the gym fails only 50009 (nominal) yet physics failed 50000, 50002, 50009, 50010, a real gap of ~3 mazes.",
+   "verdict": "partly",
+   "evidence": "Physics s5 failures are exactly 50000 (t/o), 50002 (stuck), 50009 (t/o) and 50010 (t/o), and the gym nominal run fails only 50009, so the gap is 3 against the nominal baseline. The randomized draws also fail 50010 2/5, 50002 1/5, 50003 1/5 and 50005 1/5: sum(1-p) = 2.0 expected against 4 observed, a gap of about 2. Two of the three extra physics failures were marginal in the gym nominal run too: 50000 took 2785 steps (111 s) and 50002 took 3814 steps (153 of 180 s). Only 50010 is a quick gym success (1134 steps, 45 s) that fails in physics, with the brake active on 3468 of 4500 steps."
+  },
+  {
+   "claim": "Maze 50009 (shortest route, detour 1.23) defeats both actors in every condition.",
+   "verdict": "confirmed",
+   "evidence": "Geodesic route 12.214 m, the smallest of the 12 (next is 12.85 m on 50007); straight line 9.899 m; ratio 1.234; 11 cells on the shortest route. Gym: s5 0/5 (4 collisions, 1 t/o) + nominal t/o; s6 0/5 (5 t/o) + nominal t/o. Physics: both time out. A* reaches it in 41.0 s."
+  },
+  {
+   "claim": "(4a) traj_50009.png: both actors drive greedily along the bottom corridor into the dead-end pocket nearest the goal.",
+   "verdict": "partly",
+   "evidence": "True for both gym (orange) runs and for s6 in physics: 6 one-way corridor traverses arriving at 18.0/46.2/67.0/96.6/117.6/148.2 s, it enters pocket cell (5,1), and y never exceeds 1.33 m (verify-navgym/traces_check.py). False for s5 in physics: its x never exceeds 3.07 m, so it never reaches the pocket (x >= 6.3). It turns up the x=2 column through (2,1),(2,2),(2,3),(1,3),(1,2), part of a 21-cell loop route, dithers (longest stall 87.2 s) and ends at (2.98, 2.01). The pocket is the straight-line-nearest opening: the (5,1) centre is 5.60 m from the goal against 5.77 m for route cell (4,1)."
+  },
+  {
+   "claim": "(4b) s6 shuttles start<->dead end with no memory of the visited dead end; its 3x24x24 egocentric crop never shows the route up.",
+   "verdict": "partly",
+   "evidence": "The shuttle is confirmed (3 round trips in 180 s), but the crop sub-claim is refuted. The crop is 24 x 0.2 m = 4.8 m, sampled at +2.4..-2.2 m forward and lateral (env.py:91-92,370-375). The shortest route branches up at (4,0)->(4,1): the opening is 0.7 m and (4,1)'s centre 1.4 m from (4,0), both inside the window. verify-navgym/crop_recon.py rebuilds the crop by ideal raycast from the saved s6 physics trace poses (0.2 s; no policy stepped). In all 134 samples with s6 in (4,0), the crop contains (4,1)'s interior (35-37 crop cells, mean 0.83 marked free), and part of (4,2). The pocket (5,1)'s top-wall region is also inside the window, with mapped occupancy ~0.4 of a 0.25 m band at 0.2 m resolution (crop_s6_50009_t63.6.png). So the crop shows the route's first leg on every pass. What it cannot show is that the leg continues: the route turns east at (4,2)->(5,2), 2.8 m up and around a corner, past the 2.4 m crop edge, and occluded from the corridor. From the corridor the column ends at a wall at y~3.5 m, like the dead-end column at x=3. EgoMap is a persistent log-odds map, so walls are remembered; what is missing is visitation history."
+  },
+  {
+   "claim": "(5) The actors turn bang-bang: |wz| saturated 94-99% of steps in physics, sign flips ~15-18 times/s in the gym; A* never saturates.",
+   "verdict": "partly",
+   "evidence": "Saved physics traces (every 5th step, settle excluded; the brake scales only vx and vy, so cmd[2] is the raw wz) give |wz| >= 0.99 per maze: s5 0.896-0.984 (50009 0.896, others 0.957-0.984) and s6 0.943-0.987. So 94-99% holds for 23 of 24 episodes; the exception is s5 on 50009 at 89.6% (verify-navgym/wz_sat_physics.json). gym_replay.json (means over the 5 randomized draws only): wz_sat s5 0.97-0.98, s6 0.95-0.97; flips s5 14.75-18.45/s, s6 11.6-16.21/s, so '~15-18' fits s5 only. The physics flip rate cannot be checked from 0.2 s-sampled traces (aliased, max 5/s), so it is unverified. A*'s max |wz| = 0.6 rad/s = turn_rate < W_MAX 1.0, so non-saturation holds by construction. Consistent with final policy std 9.39 (s5) and 13.69 (s6) (summary.json policy_std_final): v4 used --ppo v2, which has no v3 std ceiling."
+  },
+  {
+   "claim": "Physics failures are loops (revisit fraction 0.48-0.83) or slow dithering, with 0 falls and 0 wall contacts.",
+   "verdict": "confirmed",
+   "evidence": "wall_contact_steps is 0 in all 36 physics episodes, with 0 falls (verdict.json). The report's revisit definition was not recorded. Taking 'fraction of trace samples within 0.3 m of a sample >= 10 s earlier' gives 0.484-0.827 over the 7 failures (s5: 50000 0.746, 50002 0.484, 50009 0.768, 50010 0.610; s6: 50001 0.770, 50002 0.562, 50009 0.827), which reproduces the range. Dithering: longest stalls s5 50002 67.1 s, 50009 87.2 s, 50010 62.3 s; s6 50002 43.9 s."
+  },
+  {
+   "claim": "Gym 'collisions' become physics 'time-outs' (the speed brake stops the robot at the wall).",
+   "verdict": "partly",
+   "evidence": "Of the 6 (actor, maze) pairs with at least one gym collision in the randomized draws, 3 fail in physics: s5 50009 t/o, s5 50010 t/o (brake on 3468/4500 steps), s5 50002 stuck (2680/4500). The other 3 succeed: s5 50005 in 42.8 s, s6 50007 in 145.0 s (brake 1365/4500), s6 50011 in 46.3 s. The brake stops translation at <= 0.42 m clearance within +-25 deg of travel (team_sensors.brake_command)."
+  },
+  {
+   "claim": "The gym's goal observation is straight-line (distance and bearing) only.",
+   "verdict": "confirmed",
+   "evidence": "env.py:399-403: goal = [min(Euclidean dist/10, 1), sin(bearing), cos(bearing), prev a0, prev a1]. The geodesic enters only the reward (FineGeodesic shaping in _finish_v2). Physics uses the same build_obs (maze_explore.py:811) with goal = maze.centre(maze.goal). The only other route-relevant inputs are 36 lidar sector minima to 12 m, 36 near sectors to 2 m, and the 4.8 m crop."
+  },
+  {
+   "claim": "N1 premise: the learned actor is faster than A* turn-then-walk where it succeeds.",
+   "verdict": "partly",
+   "evidence": "On matched mazes the learned actor is faster in 12 of 17 successes: s5 5/8 (slower on 50003 81.7 vs 80.3 s, 50008 103.9 vs 78.6 s, 50011 126.0 vs 59.2 s) and s6 7/9 (slower on 50005 62.4 vs 52.2 s, 50007 145.0 vs 99.1 s). Data: verify-navgym/matched_times.json."
+  },
+  {
+   "claim": "Ledger SLURM_JOBS.md:3096: 'the gym-to-physics gap (gait response lag, the speed brake, 10 Hz lidar) costs 3-4 goals in 12'.",
+   "verdict": "refuted",
+   "evidence": "On the hash-identical mazes the s6 gap is 0 goals (nominal) and about 0 against the randomized expectation (3.2 vs 3). The s5 gap is 3 (nominal) or about 2 (randomized expectation 2.0 vs 4). The clause attributes every miss to gait lag, the brake and 10 Hz lidar, none of which exist in the 2-D gym, yet the gym reproduces all three s6 misses and s5's 50009. ROADMAP.md:25 carries the same framing ('close the gym-to-physics gap'). The trailing comparison 'much as v2's exploratory transfer (10/12 fresh) did' was not checked: unverified."
+  }
+ ],
+ "corrections_for_ledger": [
+  "SLURM_JOBS.md:3096 (NavGym v4 physics transfer, job 21484212): replace the clause 'the gym-to-physics gap (gait response lag, the speed brake, 10 Hz lidar) costs 3–4 goals in 12, much as v2's exploratory transfer (10/12 fresh) did' with the five sentences below. The v2 comparison was not re-checked: unverified.",
+  "A diagnostic replay of both actors in the 2-D gym on the same 12 layouts (layout hashes identical to the physics JSONs; solutions-20260930/navgym/gym_replay.json) shows the misses are mostly the policies' own.",
+  "At nominal dynamics, heading 0 and 180 s, armV4-s6 fails exactly the three mazes it fails in physics (50001, 50002, 50009): its gym-to-physics gap is 0 goals.",
+  "armV4-s5 fails only 50009 in that run against 50000, 50002, 50009 and 50010 in physics, so the gap (gait response lag, the speed brake, 10 Hz lidar) costs s5 at most 3 goals, about 2 against its five randomized-dynamics gym draws (50010 3/5, 50002 4/5, 50003 4/5, 50005 4/5, 50009 0/5); two of the three (50000, 50002) already needed 111 s and 153 s of 180 s in the gym.",
+  "Maze 50009 (shortest route, 12.2 m) defeats both actors in gym and physics while A* solves it in 41.0 s; s6 shuttles three round trips between the start and the dead-end pocket (5,0)–(5,1) beside the route's branch at (4,0).",
+  "Yaw is bang-bang in both worlds (|wz| at the 1 rad/s limit on 95–98% of gym steps and 90–99% of sampled physics steps; final policy std 9.4 and 13.7), so it is a policy property, not a transfer artefact.",
+  "ROADMAP.md:25 ('Next step' cell) carries the same framing; replace 'close the gym-to-physics gap: train with the gait's measured response lag and the brake in the gym' with 'route-level navigation first, since s6's physics misses are its gym misses (an A* sub-goal on the lidar map, or a visitation channel / recurrent policy, judged on fresh maze seeds); gym-side lag and brake modelling is scoped to s5's 2–3-goal residual'."
+ ],
+ "caveats_for_solutions": [
+  "Rule compliance: verify-navgym/layout_check.py only built the 12 mazes (no policy). crop_recon.py only ray-cast saved s6 trace poses: no policy stepped, no episode run, no outcome produced on 50000-50011. Every other number comes from saved JSONs (physics per-seed JSONs, gym_replay.json, trainer summary.json).",
+  "N1 (A* sub-goal hybrid): A* solved 12/12 of these mazes in physics (median 67.0 s), so the hybrid can be tested without retraining. Tune and judge it only on fresh maze seeds; 50000-50011 and 40000-40047 are scored. Its speed premise holds in 12 of 17 matched successes (s5 5/8, s6 7/9), not uniformly.",
+  "N2: the ego map already retains walls (persistent log-odds), and the crop shows the route's first leg every time s6 passes (4,0). What is missing is visitation history. The decisive turn (4,2)->(5,2) is 2.8 m from the branch, past the 2.4 m crop edge and occluded, so from the corridor the x=4 route column and the x=3 dead-end column both look like closed 2-cell columns. A visitation channel addresses the shuttle; a wider or coarser channel, or a sub-goal (N1), addresses the look-alike columns.",
+  "N3: the bang-bang yaw is the same in gym and physics, so a yaw-rate penalty or a bounded/squashed policy fixes the policy, not the transfer. v4 ran --ppo v2 with no std ceiling (final std 9.4/13.7). The v3 std ceiling (--ppo v3) is the existing lever; check its recorded verdict before reusing it. Identified physics dynamics address only s5's residual 2-3 goals.",
+  "Do not generalize one 50009 mechanism to both actors. s6 shuttles to the pocket in gym and physics. s5 in physics instead turns up the x=2 column, dithers for 87 s and never passes x=3.07 m, unlike its gym pocket loop.",
+  "The randomized gym columns use the route-scaled limit (121-180 s; 121 s on 50009) against physics' 180 s, so their 0/5 time-out counts are not time-matched. The nominal column is time-matched but n=1 per maze: one stochastic draw with nominal noise and latency.",
+  "s5's clean gap case is 50010: the gym nominal run reaches the goal in 45 s, while physics times out 1.8 m from the goal with the brake active on 3468 of 4500 steps. 50000 and 50002 were already marginal in the gym (111 s and 153 s), so a gym-side dynamics fix may not recover them.",
+  "The goal input is straight-line only (distance/10 and the sin and cos of the bearing). On 50009 the dead-end pocket (5,1) is closer to the goal in straight line (5.60 m) than route cell (4,1) (5.77 m), so a greedy reading of the goal input favours the trap."
+ ]
+}

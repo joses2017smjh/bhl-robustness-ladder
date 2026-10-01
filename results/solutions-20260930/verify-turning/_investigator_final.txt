@@ -1,0 +1,176 @@
+# Why the humanoid turning recipe works on only 1 of 12 seeds
+
+## Bottom line
+The recipes don't mainly fail to teach turning. They fail at the handoff from training to test. Training always adds noise to the policy's actions and to its observations. The MuJoCo gate and the Isaac probe both run the policy with no noise at all. With the noise that training uses, 12 of 13 checkpoints turn at least 150° both ways from a settled stand. Without noise, only TurnBoth-s0 does. The noise makes the robot step, so PPO never has to teach the policy itself to start or keep stepping.
+
+The fix should make the policy step on its own. My top recommendation is a gait-clock observation plus a contact-schedule reward that pays for stepping at every command, including zero. Cutting the noise alone won't work: even a quarter of the training noise still sets stepping off.
+
+I did not edit the repo or submit jobs. All scripts, logs and JSON are in `/scratch/.../scratchpad/solutions/turning/`. The policy was replayed in MuJoCo from `model_*.pt` using my own float32 numpy copy of the actor, which lands within about 3% of the ONNX export (TurnBoth-s0, reset seed 0: +283° vs +290.7°).
+
+## 1. Findings and evidence
+
+**F1. Noise does the stepping, and the policy steers** (`exp1_noise.log`, `exp2*.log`)
+- Four non-turners (TurnCmd-s0, TurnCmd-s1, TurnBoth-s1, TurnHip-s0), reset seeds 0–1, ±0.6 rad/s after a 3 s settle:
+  - Without noise: 0/16 runs reach 150°. They turn 10–18° with 0 lift-offs.
+  - With each checkpoint's own training action noise: 16/16 turn 164–256° in the commanded direction, with 14–28 lift-offs per foot and no falls.
+- At zero command the noisy policies march in place but don't rotate (−7.5° to +4.2°), so the direction comes from the policy and the stepping comes from the noise.
+- A quarter of the noise is enough to start TurnBoth-s1 stepping (232°/240°). TurnCmd-s0 needs about half (152°/191°).
+- Noise on the legs alone is enough. Noise on the arms alone is enough for TurnBoth-s1.
+
+**F2. Two kinds of non-turner** (`exp4a/b`: noise only during the settle, then a noise-free turn)
+- **Stuck at rest but able to step:** TurnBoth-s1 keeps stepping and turning after the noise stops (last 4 s: 155°/169°, 14–19 lift-offs). Its policy has a stepping-turn gait but also a stable standing pose, and from a settled stand it stays in the standing pose. TurnHip-s0 behaves the same way in the + direction only.
+- **Steps only while noise is present:** TurnCmd-s0 and the shipped arms-dr1.0-s0 stop stepping as soon as the noise stops (0 lift-offs). The arm that trained most on pure turns (TurnCmd, 25%) came out the most noise-dependent. It also kept the largest leg noise (1.36).
+
+**F3. Observation noise alone does it too** (`v2_obsnoise_x1.0.log`, `exp5`, `exp6`)
+- I re-ran the v2 protocol on all 13 checkpoints with the training observation noise switched on and no action noise.
+  - 10 of the 11 non-turning arm seeds pass v2. TurnCmd-s0 turns 5/6.
+  - The shipped gait turns 6/6 but fails the walk-drift clause (−23°).
+- No single observation channel is responsible: joint-velocity noise alone or everything except joint velocity both work.
+- A quarter of the observation noise still starts TurnBoth-s1 turning (212°/240°).
+- This changes how the ledger's "not a sim2sim gap" entry should be read. The Isaac probe set `enable_corruption=False`, so Isaac and MuJoCo both tested a noise-free loop the policies never trained in. Isaac with the noise on is unverified.
+
+**F4. The noise grows during training instead of shrinking** (`summ_base.txt`, checkpoint std values)
+- Mean action std starts at 1.0, falls to about 0.8 by iteration 100, then climbs to a peak of 1.75–1.95 around iterations 2000–3000.
+- At 6000 iterations the leg std is 0.88–1.37 in raw action units (the arms' elbow pitch is 5.4).
+- With action scale 0.25, kp 20 and a 6 Nm effort limit, torque saturates at about 0.3 rad of target error. The leg noise is 0.22–0.34 rad, so under noise the leg torque is at its limit 25–33% of the time, against 0–16% without noise.
+- The steepest rise happens during the first ~1500 iterations. In that phase about 95% of episodes end in falls and episodes last only 60–100 steps.
+- The 27–35% training fall rate at 6000 iterations goes down whenever the noise goes down (CONT 0.17, TurnRest 0.08). That is an association only; I haven't shown the noise causes the falls.
+
+**F5. The turner is invisible in TensorBoard** (`exp3_evol.log`, `exp4c`)
+- At 6000 iterations the three TurnBoth seeds log the same numbers:
+
+| Seed | air-time | yaw reward | episode length | fall rate |
+|---|---|---|---|---|
+| s0 (turns) | 0.078 | 0.455 | 420 | 0.276 |
+| s1 | 0.079 | 0.449 | 415 | 0.279 |
+| s2 | 0.079 | 0.462 | 421 | 0.269 |
+
+- Noise-free, TurnBoth-s0 doesn't turn at iterations 1000–4000. It turns one way at 5000 and both ways only by 5999.
+- TurnBoth-s1 never turns noise-free. At iteration 3000 it did march at zero command (7 and 9 lift-offs), yet it still stopped stepping once the yaw command arrived.
+- With noise, TurnBoth-s1 turns at iterations 2000 (183°/187°) and 4000 (228°/252°).
+- So nothing locks in early. The difference between seeds exists only in the noise-free policy, which training never sees.
+
+**F6. Marching in place at zero command predicts the noise-free turn**
+- Across the 22 diagnosed checkpoints, every one that marches during the settle (about 9–15 lift-offs per run) passes 5/6 or 6/6: TurnBoth-s0, CONT×3 and TurnRest×3, 7/7 in total.
+- None of the other 15 turns reliably. TurnTrack-s0 manages 2/6 in one direction only.
+- This fits the qualified TurnBoth-s0, which marches at zero command and drove the maze 12/12.
+
+**F7. Commands and the stepping reward** (`cmd_dist.py`)
+- With heading control on, the yaw command is 0.5 × heading error, clipped to ±1.5. A sustained pure turn is only 0.27–1.27% of steps, and the median yaw command is 0.05.
+- Unlike legged_gym, Isaac Lab never zeroes small linear commands.
+- `feet_air_time_positive_biped` pays only during single stance: the shorter of the stance foot's contact time and the swing foot's air time, capped at 0.5 s. It pays nothing in double stance.
+- The stock version is gated on linear speed above 0.1, so a pure yaw command never pays for stepping. TurnBoth's version is gated on the full command, so it does pay.
+- Paying for stepping still isn't enough: TurnCmd paid for it on 25% of commands, and noise collected that reward instead.
+
+**F8. What push robustness tracks** (`push_corr.py`; 10 checkpoints from one lineage, variables move together, so these are not independent)
+- The cleanest piece is CONT: same task and commands as its parent, but the leg noise fell from 1.19 to 1.03 and push falls tripled (0.117 → 0.32–0.42).
+- Push fall rate correlates with:
+  - training fall rate at the end (ρ = −0.98)
+  - leg noise (−0.93)
+  - action rate (+0.97)
+  - yaw error during the push runs (−0.91)
+- It correlates only weakly with base height (+0.74, with a spread of 4 mm) and settle stepping frequency (+0.73).
+- Falls concentrate on the turning command (0,0,0.5): TurnRest 7–8/10, CONT 4–7/10, parent 2/10, shipped gait 0/10 (it doesn't turn).
+- TurnRestPush's pushes grew to about 1.0 m/s. It stopped marching (0 settle lift-offs) and lost the turn, which is consistent with nothing in its reward requiring it to step.
+
+**F9. A cheap "fallback" I measured and rejected: deploying with the training noise switched on** (`batch6.log`)
+- It turns (F3), but it fails the push gate. On the n=60 regression:
+  - TurnBoth-s0: 13/60 with noise, against 7/60 recorded without.
+  - TurnBoth-s1: 18/60 with noise, 9/60 without. The 9/60 is a new measurement and sits exactly on the gate.
+- Seeds I have now used:
+  - push eval seeds 0–9 on TurnBoth-s0 and TurnBoth-s1;
+  - reset seeds 0–2 with noise on all 13 checkpoints.
+  - The v2x seeds 10–14 remain unseen.
+
+**F10. Arms (secondary).** Raw arm actions average 7–14, so the arms sit against their joint limits at saturated torque. That doesn't explain the standing problem.
+
+## 2. Root cause
+PPO optimizes the noisy closed loop. The action noise grows to a level that saturates the torques, and the observation noise is heavy too. Together they reliably knock the robot out of double stance whenever a turn is commanded, and the noisy loop earns most of the yaw and air-time reward. So the policy is never pushed to start or keep a stepping gait under pure yaw.
+
+The test is noise-free. There, the policy has a stable standing pose that some seeds can leave only with a kick (TurnBoth-s1, TurnHip-s0) and others can't leave at all (TurnCmd, the shipped gait). Only a policy that happens to march at zero command never reaches that pose. That was 1 seed in 12, and it only became true between iterations 4000 and 6000.
+
+Confidence:
+- **High** on the mechanism (16/16 vs 0/16, the settle-only-noise tests, 10/11 passing under observation noise).
+- **Moderate** that the recipes below will qualify; none of them has been trained.
+
+## 3. Recipes, ranked by expected value
+
+The gate is the same for all three, declared before any run:
+- A seed passes if it passes `turn_test.py --protocol v2` noise-free in MuJoCo.
+- An arm passes if at least 2 of 3 seeds pass.
+- Each passing seed then runs `cpu_turn_qualify.sbatch` unchanged: v2x at least 9/10 turns on reset seeds 10–14, walk drift within 15° on at least 2 of 3, and push falls at most 9/60.
+- The arm is usable only if at least 2 of 3 seeds qualify. It is INCOMPLETE if any output file is missing.
+- Also declare, as report-only: my `mj_probe.py` noise-free settle-and-turn test on checkpoints 3000/4500/6000. F5 shows this gap can't be seen in TensorBoard, so it has to be watched from outside the trainer.
+
+Cost for each arm: seeds 0–2, 6000 iterations, 4096 envs, DR scale 1.0, v51. That is about 4 GPU-h per seed, 12 GPU-h per arm, roughly 8 h wall-clock running two at a time. Add about 0.3 GPU-h for a smoke test and about 1.5 CPU-h per qualify run.
+
+**R1 — Gait clock plus contact-schedule reward, paid at every command** (strongest fix; 77 observations)
+
+Config:
+- **Env class:** new `HumanoidTurnClockCfg(HumanoidTurnRestCfg)` in `arms_env_cfg.py`, with the TurnRest command mix.
+- **Clock observation:** a `gait_phase` term giving the sine and cosine of the phase, where the phase is episode time (`episode_length_buf × step_dt`) modulo 0.6 s, divided by 0.6. Append it last so the existing 75 offsets don't move. The observation grows from 75 to 77.
+- **New reward `feet_gait`** (the unitree_rl_lab form): period 0.6, offsets [0, 0.5], stance threshold 0.55, weight 1.0, with `command_name=None` so it pays at every command.
+- **Paying at every command is deliberate.** It removes the standing pose that the v2 settle tests, and marching at zero command is already what the qualified gait does.
+- **Other rewards:**
+  - add foot clearance at about 4 cm above rest height, weight 0.5;
+  - set `feet_air_time` weight to 0 (its 0.5 s cap conflicts with a 0.27 s scheduled swing);
+  - keep the rest of TurnBoth's rewards.
+- **Pushes:** fixed ±0.5 m/s every 3–6 s, not the adaptive curriculum.
+- **PPO:** default noise settings, so the noise-linked robustness in F8 is kept.
+- **Period (unverified):** 0.6 s is a guess from leg length. The hip-pitch to ankle-roll length is 0.36 m against about 0.65 m on the G1, which uses 0.8 s.
+- **Smoke check:** at about iteration 2000, the `feet_gait` reward should reach at least 0.7 of its maximum.
+
+Deploy cost:
+- There are 13 `RlController(` construction sites in 12 files. The gate needs 3 of them converted to a clock-aware controller that resets the phase with `runner.reset` (`turn_test.py`, `run_eval.py`, `turn_diagnose.py`). The mission harnesses can follow later.
+- `gpu_turngait.sbatch` greps for 75 observations and diffs the exported `deploy.yaml` against the shipped one, so R1 needs its own launcher.
+
+Why it should work: noise-driven random stepping can't match a clock schedule; it scores about the same as standing still. So the policy itself has to produce the gait. The clock input also makes a stationary noise-free pose impossible. Supporting sources: unitree_rl_gym G1, Humanoid-Gym, unitree_rl_lab, Siekmann 2021, Singh 2022.
+
+Risks: a fixed cadence can clash with recovery steps after a push, and the phase timing must match between Isaac and MuJoCo.
+
+**R2 — Same reward, clock visible only to the critic** (zero deploy cost; 75-observation policy)
+
+Config: the same as R1, except `gait_phase` goes only into the critic's observations. unitree_rl_lab ships its G1 policy with the phase observation commented out. The export and all harnesses stay unchanged.
+
+Risk: the policy can't see the phase, so it has to keep its own rhythm from reset and can't resynchronise after a push.
+
+Early kill check: if the `feet_gait` reward at about iteration 2000 plateaus near the standing-still level (about 0.55 of the maximum), stop the arm. Running it next to R1 costs 24 GPU-h in total.
+
+**R3 — Low-noise TurnRest with pushes** (cheapest to set up; lowest confidence)
+
+Config:
+- the TurnRest environment plus fixed 0.5 m/s pushes;
+- Hydra overrides `agent.algorithm.entropy_coef=0.001 agent.policy.init_noise_std=0.5`;
+- a new `BHL_STD_MAX=0.35` overlay in `scripts/train.py` that clamps `runner.alg.policy.std` after each update (the scalar std in rsl_rl 3.0.1);
+- joint-velocity observation noise cut from ±2.0 to ±0.5, and base angular-velocity noise from ±0.3 to ±0.1.
+
+Why confidence is low: a quarter of the action noise (F1) or observation noise (F3) still kicks a stuck-at-rest policy into stepping. Reducing noise can only close the gap if it goes to roughly zero, which PPO can't do. The likely result is that a noise-dependent policy like TurnCmd becomes a stuck-at-rest one like TurnBoth-s1, not a marcher. Lower noise also removes the robustness F8 links to push survival.
+
+**Optional add-on for R1 and R2: mirror augmentation** (`BHL_SYMMETRY=aug`). It targets the one-direction turners (TurnTrack-s0, and TurnBoth-s0 in Isaac). It needs a new 22-joint, 75-observation mirror function: the current `bhl_symmetry` handles only the 12-joint, 45-observation biped, and the arm joint signs have to be checked empirically first.
+
+**Options I would not run**
+- **Only widening the air-time gate:** TurnCmd shows noise collects that reward instead.
+- **More fine-tunes of TurnBoth-s0.**
+- **Adaptive pushes up to 1.0 m/s with no requirement to step:** TurnRestPush shows the policy just learns to stand.
+- **Deploying with the training noise on:** measured in F9; it fails the push gate.
+
+## Sources
+- Siekmann et al. 2021: https://arxiv.org/abs/2011.01387
+- van Marum et al. 2024 (single-foot-contact reward, five command categories including rotate-in-place, mirror loss, "tuning exploration noise"): https://arxiv.org/abs/2404.19173
+- Mittal et al. 2024: https://arxiv.org/abs/2403.04359
+- Gu et al. 2024 (Humanoid-Gym): https://arxiv.org/abs/2404.05695
+- Singh et al. 2022: https://arxiv.org/abs/2207.12644
+- unitree_rl_gym G1 environment: https://raw.githubusercontent.com/unitreerobotics/unitree_rl_gym/main/legged_gym/envs/g1/g1_env.py
+- unitree_rl_lab G1 29-DoF config: https://github.com/unitreerobotics/unitree_rl_lab/blob/main/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/robots/g1/29dof/velocity_env_cfg.py
+- unitree_rl_lab rewards: https://github.com/unitreerobotics/unitree_rl_lab/blob/main/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/mdp/rewards.py
+- Humanoid-Gym environment: https://raw.githubusercontent.com/roboterax/humanoid-gym/main/humanoid/envs/custom/humanoid_env.py
+- legged_gym base robot: https://raw.githubusercontent.com/leggedrobotics/legged_gym/master/legged_gym/envs/base/legged_robot.py
+
+Everything is in `/scratch/sanchej7/tmp/claude-19646/-nfs-hpc-share-sanchej7-Computer-Vision/cc4dca4e-228f-469e-9df3-2f9b1f7d605a/scratchpad/solutions/turning/`:
+- `mj_probe.py`, `mj_probe2.py` — the probes
+- `exp1`–`exp6` logs and JSON
+- `v2_obsnoise_x1.0.json` — v2 re-run with observation noise
+- `push_*_obs*.csv`, `batch6.log` — push regression with and without noise
+- `summ_base.txt`, `summ_ft.txt`, `tb_scalars.pkl` — training metrics
+- `push_corr.json` — push correlations
+- `cmd_dist.py` — command-distribution simulation

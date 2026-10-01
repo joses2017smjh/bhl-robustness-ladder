@@ -1,0 +1,37 @@
+
+== csv:/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/_tmp/C7b_rot_faults.csv: 13 holds, 12 moves at 200.0 Hz
+hold  1     0.2-   29.7 s  +Z  tilt  1.6 deg  f = [ +0.118  -0.245 +10.003] m/s^2
+hold  2    33.3-   42.7 s  +Y  tilt  1.6 deg  f = [ +0.119  +9.532  +0.245] m/s^2
+hold  3    46.3-   55.7 s  +Z  tilt  2.8 deg  f = [ +0.117  -0.468 +10.000] m/s^2
+hold  4    59.3-   68.7 s  -Y  tilt  1.6 deg  f = [ +0.118 -10.013  -0.259] m/s^2
+hold  5    72.3-   81.7 s  +Z  tilt  3.5 deg  f = [ +0.118  -0.599  +9.996] m/s^2
+hold  6    85.3-   94.7 s  -X  tilt  3.7 deg  f = [ -9.732  -0.600  +0.198] m/s^2
+hold  7    98.3-  107.7 s  +Z  tilt  3.5 deg  f = [ -0.113  -0.600  +9.994] m/s^2
+hold  8   111.3-  120.7 s  +X  tilt  4.8 deg  f = [ +9.958  -0.600  +0.587] m/s^2
+hold  9   124.3-  133.7 s  +Z  tilt  4.4 deg  f = [ -0.467  -0.600  +9.979] m/s^2
+hold 10   137.3-  146.7 s  +Z  tilt  2.4 deg  f = [ -0.253  +0.327  +9.979] m/s^2
+hold 11   150.3-  159.8 s  +Z  tilt  4.4 deg  f = [ -0.460  -0.611  +9.979] m/s^2
+hold 12   165.2-  174.8 s  -Z  tilt  2.8 deg  f = [ -0.460  +0.066  -9.628] m/s^2
+hold 13   180.2-  209.7 s  +Z  tilt  5.2 deg  f = [ -0.460  -0.786  +9.971] m/s^2
+move  1    +X90  integrated [  +89.6    +0.0    +0.0] deg  purity 1.00  gravity-prediction error 0.04 deg
+move  2    -X91  integrated [  -90.9    -0.0    +0.0] deg  purity 1.00  gravity-prediction error 0.05 deg
+move  3    -X91  integrated [  -91.2    -0.0    +0.0] deg  purity 1.00  gravity-prediction error 0.01 deg
+move  4    +X90  integrated [  +90.5    +0.0    +0.0] deg  purity 1.00  gravity-prediction error 0.02 deg
+move  5    -Y90  integrated [   -0.0   -89.9    +0.0] deg  purity 1.00  gravity-prediction error 175.80 deg
+move  6    +Y89  integrated [   -0.0   +88.5    +0.0] deg  purity 1.00  gravity-prediction error 174.90 deg
+move  7    +Y89  integrated [   +0.0   +88.9    +0.0] deg  purity 1.00  gravity-prediction error 175.29 deg
+move  8    -Y91  integrated [   +0.0   -91.0    -0.0] deg  purity 1.00  gravity-prediction error 175.34 deg
+move  9    +Z89  integrated [   -0.0    -0.0   +88.6] deg  purity 1.00  gravity-prediction error 0.05 deg
+move 10    -Z90  integrated [   +0.0    +0.0   -89.8] deg  purity 1.00  gravity-prediction error 0.05 deg
+move 11   +X180  integrated [ +180.3    +0.0    -0.0] deg  purity 1.00  gravity-prediction error 0.05 deg
+move 12   -X181  integrated [ -181.3    -0.0    +0.0] deg  purity 1.00  gravity-prediction error 0.05 deg
+expected faces: ALL PASS
+expected moves: FAIL at [{'move': 5, 'expected': '+Y90', 'seen': '-Y90', 'ok': False}, {'move': 6, 'expected': '-Y90', 'seen': '+Y89', 'ok': False}, {'move': 7, 'expected': '-Y90', 'seen': '+Y89', 'ok': False}, {'move': 8, 'expected': '+Y90', 'seen': '-Y91', 'ok': False}]
+gyro-vs-accel: identity 101.23 deg rms (six-position-corrected accel; 99.70 with raw accel); best 0.04 deg with [[1, 0, 0], [0, -1, 0], [0, 0, 1]] (rad/s)
+six-position: faces ['+X', '+Y', '+Z', '-X', '-Y', '-Z'], bias [11.56, -24.55, 18.32] mg, |bias| 32.74 mg, scale error % [0.391, -0.35, 0.01]
+quaternion best interpretation: w stored in x slot (wxyz order), body->world
+WARNING: gyro and accel frames disagree: gyro' = [[1, 0, 0], [0, -1, 0], [0, 0, 1]] x gyro (rad/s) explains the gravity changes with 0.0 deg rms vs 101.2 deg as published
+WARNING: quaternion matches 'w stored in x slot (wxyz order), body->world', not the body->world xyzw contract of IMU_INPUT.md
+
+--- stderr ---
+wrote /nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/C7b_rot_faults/rotations_report.json

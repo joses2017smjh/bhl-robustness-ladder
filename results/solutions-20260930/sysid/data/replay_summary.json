@@ -1,0 +1,194 @@
+[
+ {
+  "arm": "armV4-s5",
+  "maze": 9000,
+  "steps": 1500,
+  "phys_mean_rate": 0.0168221421026565,
+  "best_in_range_params": {
+   "K": 1.0465878704600418,
+   "tau": 0.15,
+   "lat": 0
+  },
+  "best_unconstrained_params": {
+   "K": 1.021,
+   "tau": 0.07,
+   "lat": 0
+  },
+  "gym_nominal": {
+   "rmse_0.2s_rad": 0.0745,
+   "rmse_0.48s_rad": 0.0984,
+   "rmse_2s_rad": 0.1861
+  },
+  "gym_best_in_range": {
+   "rmse_0.2s_rad": 0.062,
+   "rmse_0.48s_rad": 0.0567,
+   "rmse_2s_rad": 0.1169
+  },
+  "best_unconstrained": {
+   "rmse_0.2s_rad": 0.0598,
+   "rmse_0.48s_rad": 0.0468,
+   "rmse_2s_rad": 0.104
+  },
+  "phys_identified": {
+   "rmse_0.2s_rad": 0.0602,
+   "rmse_0.48s_rad": 0.0476,
+   "rmse_2s_rad": 0.106
+  },
+  "per_step_abs_dyaw_deg": {
+   "median": 0.97,
+   "p90": 2.81,
+   "max": 5.92
+  },
+  "abs_dyaw_over_3_steps_deg": {
+   "median": 2.82,
+   "p90": 6.66
+  },
+  "speed_phys_mean": 0.3468792345457015,
+  "speed_cmd_mean": 0.3499999940395355,
+  "speed_model_mean": 0.33556980129806196
+ },
+ {
+  "arm": "armV4-s5",
+  "maze": 9003,
+  "steps": 1500,
+  "phys_mean_rate": 0.2527745391532455,
+  "best_in_range_params": {
+   "K": 1.0952840221790534,
+   "tau": 0.15,
+   "lat": 0
+  },
+  "best_unconstrained_params": {
+   "K": 1.081,
+   "tau": 0.08,
+   "lat": 0
+  },
+  "gym_nominal": {
+   "rmse_0.2s_rad": 0.0734,
+   "rmse_0.48s_rad": 0.0978,
+   "rmse_2s_rad": 0.1452
+  },
+  "gym_best_in_range": {
+   "rmse_0.2s_rad": 0.0608,
+   "rmse_0.48s_rad": 0.0563,
+   "rmse_2s_rad": 0.0767
+  },
+  "best_unconstrained": {
+   "rmse_0.2s_rad": 0.057,
+   "rmse_0.48s_rad": 0.042,
+   "rmse_2s_rad": 0.0684
+  },
+  "phys_identified": {
+   "rmse_0.2s_rad": 0.0562,
+   "rmse_0.48s_rad": 0.0413,
+   "rmse_2s_rad": 0.0714
+  },
+  "per_step_abs_dyaw_deg": {
+   "median": 1.03,
+   "p90": 2.88,
+   "max": 4.53
+  },
+  "abs_dyaw_over_3_steps_deg": {
+   "median": 3.35,
+   "p90": 7.9
+  },
+  "speed_phys_mean": 0.3017491551676999,
+  "speed_cmd_mean": 0.30598494795958203,
+  "speed_model_mean": 0.2939837330644196
+ },
+ {
+  "arm": "armV4-s6",
+  "maze": 9000,
+  "steps": 1500,
+  "phys_mean_rate": 0.017606327629387353,
+  "best_in_range_params": {
+   "K": 1.0646468468135069,
+   "tau": 0.15,
+   "lat": 0
+  },
+  "best_unconstrained_params": {
+   "K": 1.032,
+   "tau": 0.07,
+   "lat": 0
+  },
+  "gym_nominal": {
+   "rmse_0.2s_rad": 0.0807,
+   "rmse_0.48s_rad": 0.1018,
+   "rmse_2s_rad": 0.1818
+  },
+  "gym_best_in_range": {
+   "rmse_0.2s_rad": 0.0654,
+   "rmse_0.48s_rad": 0.0604,
+   "rmse_2s_rad": 0.1195
+  },
+  "best_unconstrained": {
+   "rmse_0.2s_rad": 0.0602,
+   "rmse_0.48s_rad": 0.0482,
+   "rmse_2s_rad": 0.0942
+  },
+  "phys_identified": {
+   "rmse_0.2s_rad": 0.0603,
+   "rmse_0.48s_rad": 0.0486,
+   "rmse_2s_rad": 0.095
+  },
+  "per_step_abs_dyaw_deg": {
+   "median": 1.04,
+   "p90": 2.88,
+   "max": 5.31
+  },
+  "abs_dyaw_over_3_steps_deg": {
+   "median": 3.03,
+   "p90": 7.31
+  },
+  "speed_phys_mean": 0.3410416557513972,
+  "speed_cmd_mean": 0.3499999940395355,
+  "speed_model_mean": 0.3362805370320152
+ },
+ {
+  "arm": "armV4-s6",
+  "maze": 9003,
+  "steps": 1265,
+  "phys_mean_rate": -0.00883209399283532,
+  "best_in_range_params": {
+   "K": 1.076507344052909,
+   "tau": 0.15,
+   "lat": 0
+  },
+  "best_unconstrained_params": {
+   "K": 1.03,
+   "tau": 0.08,
+   "lat": 0
+  },
+  "gym_nominal": {
+   "rmse_0.2s_rad": 0.096,
+   "rmse_0.48s_rad": 0.1362,
+   "rmse_2s_rad": 0.2232
+  },
+  "gym_best_in_range": {
+   "rmse_0.2s_rad": 0.0722,
+   "rmse_0.48s_rad": 0.0789,
+   "rmse_2s_rad": 0.1523
+  },
+  "best_unconstrained": {
+   "rmse_0.2s_rad": 0.0628,
+   "rmse_0.48s_rad": 0.0596,
+   "rmse_2s_rad": 0.129
+  },
+  "phys_identified": {
+   "rmse_0.2s_rad": 0.0619,
+   "rmse_0.48s_rad": 0.061,
+   "rmse_2s_rad": 0.1332
+  },
+  "per_step_abs_dyaw_deg": {
+   "median": 1.35,
+   "p90": 2.92,
+   "max": 5.74
+  },
+  "abs_dyaw_over_3_steps_deg": {
+   "median": 3.36,
+   "p90": 7.5
+  },
+  "speed_phys_mean": 0.3337158690936367,
+  "speed_cmd_mean": 0.34308299810990045,
+  "speed_model_mean": 0.33215794273178684
+ }
+]

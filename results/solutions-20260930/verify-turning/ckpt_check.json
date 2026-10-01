@@ -1,0 +1,128 @@
+{
+ "arms-turn-turncmd-s0": {
+  "ckpt": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-09-26_16-34-37_arms-turn-turncmd-s0/model_5999.pt",
+  "iter": 5999,
+  "nonmlp_keys": [
+   "std"
+  ],
+  "std_arms_mean": 2.247,
+  "std_legs_mean": 1.355,
+  "std_legs_minmax": [
+   0.855,
+   1.888
+  ],
+  "std_arms_minmax": [
+   0.916,
+   5.354
+  ],
+  "np_vs_onnx_maxabs": 1.9073486328125e-05,
+  "np_vs_onnx_rel": 2.684084847714985e-07,
+  "np_vs_ts_maxabs": 1.9073486328125e-05,
+  "onnx_input": "obs"
+ },
+ "arms-turn-turncmd-s1": {
+  "ckpt": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-09-26_16-37-07_arms-turn-turncmd-s1/model_5999.pt",
+  "iter": 5999,
+  "nonmlp_keys": [
+   "std"
+  ],
+  "std_arms_mean": 2.239,
+  "std_legs_mean": 1.366,
+  "std_legs_minmax": [
+   0.839,
+   1.878
+  ],
+  "std_arms_minmax": [
+   0.918,
+   5.363
+  ],
+  "np_vs_onnx_maxabs": 1.71661376953125e-05,
+  "np_vs_onnx_rel": 2.789375628253765e-07,
+  "np_vs_ts_maxabs": 1.52587890625e-05,
+  "onnx_input": "obs"
+ },
+ "arms-turn-turnboth-s1": {
+  "ckpt": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-09-25_18-57-20_arms-turn-turnboth-s1/model_5999.pt",
+  "iter": 5999,
+  "nonmlp_keys": [
+   "std"
+  ],
+  "std_arms_mean": 2.28,
+  "std_legs_mean": 1.235,
+  "std_legs_minmax": [
+   0.656,
+   1.859
+  ],
+  "std_arms_minmax": [
+   0.839,
+   5.446
+  ],
+  "np_vs_onnx_maxabs": 1.71661376953125e-05,
+  "np_vs_onnx_rel": 3.037939109162835e-07,
+  "np_vs_ts_maxabs": 1.9073486328125e-05,
+  "onnx_input": "obs"
+ },
+ "arms-turn-turnhip-s0": {
+  "ckpt": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-09-24_18-58-11_arms-turn-turnhip-s0/model_5999.pt",
+  "iter": 5999,
+  "nonmlp_keys": [
+   "std"
+  ],
+  "std_arms_mean": 2.25,
+  "std_legs_mean": 1.301,
+  "std_legs_minmax": [
+   0.843,
+   1.867
+  ],
+  "std_arms_minmax": [
+   0.987,
+   5.366
+  ],
+  "np_vs_onnx_maxabs": 1.52587890625e-05,
+  "np_vs_onnx_rel": 2.799335732106556e-07,
+  "np_vs_ts_maxabs": 1.71661376953125e-05,
+  "onnx_input": "obs"
+ },
+ "arms-turn-turnboth-s0": {
+  "ckpt": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-09-25_18-54-44_arms-turn-turnboth-s0/model_5999.pt",
+  "iter": 5999,
+  "nonmlp_keys": [
+   "std"
+  ],
+  "std_arms_mean": 2.276,
+  "std_legs_mean": 1.191,
+  "std_legs_minmax": [
+   0.626,
+   1.627
+  ],
+  "std_arms_minmax": [
+   0.83,
+   5.449
+  ],
+  "np_vs_onnx_maxabs": 1.52587890625e-05,
+  "np_vs_onnx_rel": 2.8232972226760467e-07,
+  "np_vs_ts_maxabs": 1.52587890625e-05,
+  "onnx_input": "obs"
+ },
+ "arms-dr1.0-s0": {
+  "ckpt": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/model_5999.pt",
+  "iter": 5999,
+  "nonmlp_keys": [
+   "std"
+  ],
+  "std_arms_mean": 2.163,
+  "std_legs_mean": 0.97,
+  "std_legs_minmax": [
+   0.536,
+   1.489
+  ],
+  "std_arms_minmax": [
+   0.865,
+   5.148
+  ],
+  "np_vs_onnx_maxabs": 1.9073486328125e-05,
+  "np_vs_onnx_rel": 2.9237665444270533e-07,
+  "np_vs_ts_maxabs": 1.9073486328125e-05,
+  "onnx_input": "obs"
+ }
+}

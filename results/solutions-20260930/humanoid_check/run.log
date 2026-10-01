@@ -1,0 +1,10 @@
+[vost#0:0/libx264 @ 0x68969c0] Error while opening encoder - maybe incorrect parameters such as bit_rate, rate, width or height.
+[vf#0:0 @ 0x689b4c0] Error sending frames to consumers: Generic error in an external library
+[vf#0:0 @ 0x689b4c0] Task finished with error code: -542398533 (Generic error in an external library)
+[vf#0:0 @ 0x689b4c0] Terminating thread with return code -542398533 (Generic error in an external library)
+[vost#0:0/libx264 @ 0x68969c0] Could not open encoder before EOF
+[vost#0:0/libx264 @ 0x68969c0] Task finished with error code: -22 (Invalid argument)
+[vost#0:0/libx264 @ 0x68969c0] Terminating thread with return code -22 (Invalid argument)
+[out#0/mp4 @ 0x6895c40] Nothing was written into output file, because at least one of its streams received no packets.
+{"seed": 12, "outcome": "goal", "outcome_class": "goal", "completion_s": 70.48, "wall_contact_steps": 0, "path_length_m": 23.33, "turns": 20, "replans": 166, "mapped_fraction_end": 0.546, "wall_seconds": 159.8, "route_cells": 15}
+MAZE-EXPLORE SUMMARY {"n": 1, "success": 1, "clean_success": 1, "falls": 0, "time_outs": 0, "median_completion_s": 70.48, "median_clean_seed_by_time": 12, "arrived_not_judged": 0, "stuck": 0}
