@@ -8,6 +8,7 @@ Updated 2026-10-01. Done since the last update: README hero is now the 22-DoF hu
 
 | Item | State | Done when |
 |---|---|---|
+| **NavGym N0: capture-pose map integration** for the learned actors on the physics biped ([plan](SOLUTIONS_2026-10-01.md), §1) | `21501509`: screen on training-range mazes 9120–9143, with vs without the flag; if it passes, both actors with the flag on never-used mazes 60000–60011 | both `verdict.json` files under `results/navgym-v4-capture-pose-20261001/` read by their predeclared rules |
 
 ## Next (small, unblocked)
 
