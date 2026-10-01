@@ -1,0 +1,36 @@
+checkpoint                         settle LO per run (L+R, last 2 s)        diag yaw>=150 | v2 turns_ok verdict walk
+arms-dr1.0-s0                      [0, 0, 0, 0, 0, 0]                               0/6 | 0/6 FAIL walk -18.4
+arms-turn-turnboth-cont-s0         [14, 14, 14, 14, 17, 17]                         6/6 | 6/6 FAIL walk -28.5
+arms-turn-turnboth-cont-s1         [12, 12, 13, 13, 12, 12]                         6/6 | 6/6 FAIL walk -23.4
+arms-turn-turnboth-cont-s2         [13, 13, 13, 13, 13, 13]                         6/6 | 6/6 PASS walk -1.2
+arms-turn-turnboth-s0              [11, 11, 2, 2, 14, 14]                           5/6 | 5/6 FAIL walk -0.1
+arms-turn-turnboth-s1              [3, 3, 2, 2, 0, 0]                               0/6 | 0/6 FAIL walk -24.0
+arms-turn-turnboth-s2              [0, 0, 1, 1, 0, 0]                               0/6 | 0/6 FAIL walk -15.5
+arms-turn-turncmd-s0               [0, 0, 0, 0, 0, 0]                               0/6 | 0/6 FAIL walk 10.5
+arms-turn-turncmd-s1               [0, 0, 0, 0, 0, 0]                               0/6 | 0/6 FAIL walk 18.8
+arms-turn-turncmd-s2               [0, 0, 0, 0, 0, 0]                               0/6 | 0/6 FAIL walk 33.0
+arms-turn-turnhip-s0               [2, 2, 2, 2, 4, 4]                               0/6 | 0/6 FAIL walk -20.8
+arms-turn-turnhip-s1               [0, 0, 0, 0, 0, 0]                               0/6 | 0/6 FAIL walk -21.1
+arms-turn-turnhip-s2               [0, 0, 0, 0, 0, 0]                               0/6 | 0/6 FAIL walk 8.8
+arms-turn-turnrest-ft-s0           [14, 14, 16, 16, 2, 2]                           6/6 | 6/6 PASS walk -0.9
+arms-turn-turnrest-ft-s1           [14, 14, 14, 14, 14, 14]                         6/6 | 6/6 PASS walk -3.6
+arms-turn-turnrest-ft-s2           [14, 14, 14, 14, 14, 14]                         6/6 | 6/6 PASS walk 12.1
+arms-turn-turnrestpush-ft-s0       [0, 0, 0, 0, 0, 0]                               0/6 | 0/6 FAIL walk 3.4
+arms-turn-turnrestpush-ft-s1       [0, 0, 0, 0, 0, 0]                               0/6 | 0/6 FAIL walk 0.3
+arms-turn-turnrestpush-ft-s2       [0, 0, 0, 0, 0, 0]                               0/6 | 0/6 FAIL walk 0.1
+arms-turn-turntrack-s0             [0, 0, 11, 11, 0, 0]                             2/6 | 2/6 FAIL walk -0.1
+arms-turn-turntrack-s1             [0, 0, 0, 0, 0, 0]                               0/6 | 0/6 FAIL walk -2.7
+arms-turn-turntrack-s2             [0, 0, 0, 0, 9, 9]                               0/6 | 0/6 FAIL walk -9.4
+n checkpoints: 22 v2 files: 22
+
+per-run: settle lift-offs (L+R) -> diagnose yaw (from turn start) / v2 yaw (from reset)
+arms-turn-turnboth-cont-s0     s0+ LO14  +244.5/ +238.3* | s0- LO14  -278.0/ -284.2* | s1+ LO14  +246.8/ +242.9* | s1- LO14  -275.6/ -279.6* | s2+ LO17  +242.5/ +236.8* | s2- LO17  -278.0/ -283.6*
+arms-turn-turnboth-cont-s1     s0+ LO12  +248.8/ +239.0* | s0- LO12  -279.7/ -289.5* | s1+ LO13  +248.2/ +241.4* | s1- LO13  -280.0/ -286.8* | s2+ LO12  +247.9/ +240.9* | s2- LO12  -280.1/ -287.1*
+arms-turn-turnboth-cont-s2     s0+ LO13  +284.8/ +288.5* | s0- LO13  -280.7/ -277.0* | s1+ LO13  +292.0/ +297.5* | s1- LO13  -280.9/ -275.4* | s2+ LO13  +287.9/ +293.3* | s2- LO13  -280.9/ -275.5*
+arms-turn-turnboth-s0          s0+ LO11  +284.1/ +290.7* | s0- LO11  -251.4/ -244.8* | s1+ LO 2  +212.4/ +218.0* | s1- LO 2   -17.1/  -11.4  | s2+ LO14  +285.9/ +296.1* | s2- LO14  -249.5/ -239.4*
+arms-turn-turnrest-ft-s0       s0+ LO14  +233.2/ +236.4* | s0- LO14  -215.7/ -212.5* | s1+ LO16  +230.8/ +234.7* | s1- LO16  -214.9/ -211.0* | s2+ LO 2  +213.3/ +214.5* | s2- LO 2  -212.3/ -211.1*
+arms-turn-turnrest-ft-s1       s0+ LO14  +223.3/ +223.7* | s0- LO14  -216.3/ -215.9* | s1+ LO14  +222.9/ +224.7* | s1- LO14  -216.8/ -215.0* | s2+ LO14  +223.6/ +223.4* | s2- LO14  -218.6/ -218.8*
+arms-turn-turnrest-ft-s2       s0+ LO14  +240.7/ +242.7* | s0- LO14  -208.4/ -206.5* | s1+ LO14  +237.8/ +241.2* | s1- LO14  -209.2/ -205.8* | s2+ LO14  +242.0/ +245.8* | s2- LO14  -208.0/ -204.1*
+arms-turn-turntrack-s0         s0+ LO 0    +8.8/  +11.1  | s0- LO 0  -230.9/ -228.6* | s1+ LO11    +8.4/  +13.1  | s1- LO11  -259.0/ -254.3* | s2+ LO 0    +9.9/  +14.5  | s2- LO 0    -7.1/   -2.5 
+arms-turn-turntrack-s2         s0+ LO 0   +11.5/   +3.3  | s0- LO 0    -9.8/  -18.0  | s1+ LO 0   +11.8/   +5.1  | s1- LO 0    -9.2/  -15.9  | s2+ LO 9    +9.0/   +4.7  | s2- LO 9   -12.8/  -17.1 
+runs with >=9 settle lift-offs: v2-turn ok [39, 42] ; runs with <9: [4, 90]

@@ -1,0 +1,8067 @@
+{
+ "gref_21397732": [
+  {
+   "layout": 0,
+   "T": 55.04,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     22.72,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     24.04,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     24.48,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     25.72,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999998
+     ],
+     "t0": 24.48,
+     "t1": 25.72,
+     "dur": 1.24,
+     "along0": -0.353,
+     "along_end": -0.277,
+     "along_end_prefall": -0.277,
+     "along_max": -0.239,
+     "disp_end": 0.076,
+     "disp_max": 0.113,
+     "lat0": -0.097,
+     "lat_end": -0.122,
+     "yaw_err0": -1.534,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.021,
+      0.289,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 271.04343441449925
+     }
+    }
+   ],
+   "takeover_s": [
+    22.72
+   ],
+   "end_minus_first_takeover_s": 32.32,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.027,
+     "t_min": 26.6,
+     "base_inside_s": 6.84,
+     "base_traversed": false,
+     "along_at_end": -1.991,
+     "lat_at_end": 1.762
+    },
+    "plate_0_1": {
+     "min_dist": 0.685,
+     "t_min": 23.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.991,
+     "lat_at_end": -2.602
+    },
+    "plate_1_-1": {
+     "min_dist": 2.909,
+     "t_min": 54.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.498,
+     "lat_at_end": -1.509
+    },
+    "plate_1_1": {
+     "min_dist": 2.572,
+     "t_min": 54.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.498,
+     "lat_at_end": 0.669
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 32844,
+     "peakN": 452.3,
+     "t_first": 24.76,
+     "t_last": 36.32,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 1,
+   "T": 43.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     16.56,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     19.76,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     20.2,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     21.44,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      1.0,
+      0.0
+     ],
+     "t0": 20.2,
+     "t1": 21.44,
+     "dur": 1.24,
+     "along0": -0.402,
+     "along_end": -0.187,
+     "along_end_prefall": -0.187,
+     "along_max": -0.142,
+     "disp_end": 0.215,
+     "disp_max": 0.26,
+     "lat0": 0.145,
+     "lat_end": 0.193,
+     "yaw_err0": -0.094,
+     "sideways": false,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.289,
+      0.027,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 380.9451421134563,
+      "plate_0_-1:r0_leg_right_ankle_roll": 331.90738087357624
+     }
+    }
+   ],
+   "takeover_s": [
+    16.56
+   ],
+   "end_minus_first_takeover_s": 27.12,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.138,
+     "t_min": 26.4,
+     "base_inside_s": 3.44,
+     "base_traversed": false,
+     "along_at_end": 4.096,
+     "lat_at_end": -2.032
+    },
+    "plate_0_1": {
+     "min_dist": 0.313,
+     "t_min": 29.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 4.096,
+     "lat_at_end": 1.192
+    },
+    "plate_1_-1": {
+     "min_dist": 2.129,
+     "t_min": 43.08,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.492,
+     "lat_at_end": 1.604
+    },
+    "plate_1_1": {
+     "min_dist": 2.838,
+     "t_min": 43.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.492,
+     "lat_at_end": -2.444
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 16817,
+     "peakN": 393.9,
+     "t_first": 18.72,
+     "t_last": 28.2,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 1949,
+     "peakN": 229.9,
+     "t_first": 28.28,
+     "t_last": 29.72,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 4,
+   "T": 45.08,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.4,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     15.76,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     16.2,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     17.44,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 16.2,
+     "t1": 17.44,
+     "dur": 1.24,
+     "along0": -0.343,
+     "along_end": -0.328,
+     "along_end_prefall": -0.328,
+     "along_max": -0.258,
+     "disp_end": 0.015,
+     "disp_max": 0.085,
+     "lat0": -0.077,
+     "lat_end": -0.08,
+     "yaw_err0": -1.519,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.015,
+      0.29,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 105.66010511785994
+     }
+    }
+   ],
+   "takeover_s": [
+    14.4
+   ],
+   "end_minus_first_takeover_s": 30.68,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.123,
+     "t_min": 18.48,
+     "base_inside_s": 2.28,
+     "base_traversed": false,
+     "along_at_end": 0.208,
+     "lat_at_end": 0.232
+    },
+    "plate_0_1": {
+     "min_dist": 0.675,
+     "t_min": 14.68,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.208,
+     "lat_at_end": -1.072
+    },
+    "plate_1_-1": {
+     "min_dist": 2.568,
+     "t_min": 40.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.628,
+     "lat_at_end": -0.508
+    },
+    "plate_1_1": {
+     "min_dist": 2.518,
+     "t_min": 40.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.628,
+     "lat_at_end": -0.332
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 20197,
+     "peakN": 373.4,
+     "t_first": 16.48,
+     "t_last": 45.08,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 5,
+   "T": 42.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     15.2,
+     0,
+     1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    15.2
+   ],
+   "end_minus_first_takeover_s": 27.4,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 27.4,
+   "approach_path_len_m": 1.05,
+   "approach_net_disp_m": 0.5,
+   "approach_along_range": [
+    -0.184,
+    0.131
+   ],
+   "approach_lat_range": [
+    0.319,
+    0.759
+   ],
+   "approach_dist_to_prepoint_min": 0.341,
+   "approach_last20s_path_m": 0.057,
+   "approach_last20s_net_m": 0.025,
+   "approach_plate_contacts": {
+    "plate_0_1:r0_leg_left_ankle_roll": [
+     98806,
+     147.5,
+     16.52,
+     42.6
+    ],
+    "plate_0_1:r0_leg_right_ankle_roll": [
+     100269,
+     159.9,
+     16.64,
+     42.6
+    ]
+   },
+   "approach_eff_cmd_last": [
+    0.277,
+    -0.116,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 1.171,
+     "t_min": 18.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.172,
+     "lat_at_end": -1.19
+    },
+    "plate_0_1": {
+     "min_dist": 0.355,
+     "t_min": 18.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.172,
+     "lat_at_end": 0.35
+    },
+    "plate_1_-1": {
+     "min_dist": 5.489,
+     "t_min": 9.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.51,
+     "lat_at_end": -5.812
+    },
+    "plate_1_1": {
+     "min_dist": 4.649,
+     "t_min": 9.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.51,
+     "lat_at_end": 4.972
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 199075,
+     "peakN": 159.9,
+     "t_first": 16.52,
+     "t_last": 42.6,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 7,
+   "T": 44.48,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.24,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     15.8,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     16.24,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     17.48,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": 1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 16.24,
+     "t1": 17.48,
+     "dur": 1.24,
+     "along0": -0.362,
+     "along_end": -0.219,
+     "along_end_prefall": -0.219,
+     "along_max": -0.219,
+     "disp_end": 0.143,
+     "disp_max": 0.143,
+     "lat0": -0.001,
+     "lat_end": 0.005,
+     "yaw_err0": -1.517,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.015,
+      0.29,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 161.29942156436954
+     }
+    }
+   ],
+   "takeover_s": [
+    14.24
+   ],
+   "end_minus_first_takeover_s": 30.24,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.702,
+     "t_min": 17.96,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.972,
+     "lat_at_end": 0.103
+    },
+    "plate_0_1": {
+     "min_dist": 0.096,
+     "t_min": 18.56,
+     "base_inside_s": 3.28,
+     "base_traversed": true,
+     "along_at_end": 0.972,
+     "lat_at_end": -0.943
+    },
+    "plate_1_-1": {
+     "min_dist": 1.027,
+     "t_min": 44.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.732,
+     "lat_at_end": 0.757
+    },
+    "plate_1_1": {
+     "min_dist": 1.703,
+     "t_min": 44.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.732,
+     "lat_at_end": -1.597
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 10909,
+     "peakN": 412.8,
+     "t_first": 16.6,
+     "t_last": 21.08,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 9,
+   "T": 20.88,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     18.28,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    18.28
+   ],
+   "end_minus_first_takeover_s": 2.6,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.6,
+   "approach_path_len_m": 0.98,
+   "approach_net_disp_m": 0.697,
+   "approach_along_range": [
+    -0.353,
+    0.015
+   ],
+   "approach_lat_range": [
+    0.171,
+    0.79
+   ],
+   "approach_dist_to_prepoint_min": 0.174,
+   "approach_last20s_path_m": 7.933,
+   "approach_last20s_net_m": 4.755,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     811,
+     149.8,
+     20.16,
+     20.88
+    ]
+   },
+   "approach_eff_cmd_last": [
+    0.106,
+    0.281,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.371,
+     "t_min": 20.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.353,
+     "lat_at_end": 0.185
+    },
+    "plate_0_1": {
+     "min_dist": 1.063,
+     "t_min": 20.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.353,
+     "lat_at_end": -1.025
+    },
+    "plate_1_-1": {
+     "min_dist": 3.528,
+     "t_min": 20.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.485,
+     "lat_at_end": 0.607
+    },
+    "plate_1_1": {
+     "min_dist": 3.77,
+     "t_min": 20.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.485,
+     "lat_at_end": -1.447
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 811,
+     "peakN": 149.8,
+     "t_first": 20.16,
+     "t_last": 20.88,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 12,
+   "T": 13.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     11.44,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    11.44
+   ],
+   "end_minus_first_takeover_s": 2.16,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.16,
+   "approach_path_len_m": 1.01,
+   "approach_net_disp_m": 0.68,
+   "approach_along_range": [
+    -0.218,
+    0.026
+   ],
+   "approach_lat_range": [
+    0.125,
+    0.765
+   ],
+   "approach_dist_to_prepoint_min": 0.155,
+   "approach_last20s_path_m": 5.204,
+   "approach_last20s_net_m": 1.362,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     433,
+     544.3,
+     12.84,
+     13.6
+    ],
+    "plate_0_-1:r0_leg_right_ankle_roll": [
+     631,
+     241.7,
+     13.28,
+     13.6
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.225,
+    -0.199,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.209,
+     "t_min": 13.48,
+     "base_inside_s": 0.2,
+     "base_traversed": false,
+     "along_at_end": -0.215,
+     "lat_at_end": 0.129
+    },
+    "plate_0_1": {
+     "min_dist": 0.981,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.215,
+     "lat_at_end": -0.969
+    },
+    "plate_1_-1": {
+     "min_dist": 7.968,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 6.855,
+     "lat_at_end": 5.431
+    },
+    "plate_1_1": {
+     "min_dist": 8.462,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 6.855,
+     "lat_at_end": -6.271
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 1064,
+     "peakN": 544.3,
+     "t_first": 12.84,
+     "t_last": 13.6,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 13,
+   "T": 15.24,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     12.2,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    12.2
+   ],
+   "end_minus_first_takeover_s": 3.04,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 3.04,
+   "approach_path_len_m": 1.25,
+   "approach_net_disp_m": 0.665,
+   "approach_along_range": [
+    -0.308,
+    0.029
+   ],
+   "approach_lat_range": [
+    0.153,
+    0.784
+   ],
+   "approach_dist_to_prepoint_min": 0.162,
+   "approach_last20s_path_m": 5.493,
+   "approach_last20s_net_m": 2.913,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     1220,
+     426.7,
+     14.12,
+     15.24
+    ],
+    "plate_0_-1:r0_leg_right_ankle_roll": [
+     173,
+     292.0,
+     15.24,
+     15.24
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.232,
+    0.191,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.255,
+     "t_min": 15.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.204,
+     "lat_at_end": 0.153
+    },
+    "plate_0_1": {
+     "min_dist": 1.014,
+     "t_min": 15.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.204,
+     "lat_at_end": -0.993
+    },
+    "plate_1_-1": {
+     "min_dist": 3.864,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.453,
+     "lat_at_end": -3.944
+    },
+    "plate_1_1": {
+     "min_dist": 3.067,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.453,
+     "lat_at_end": 3.104
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 1393,
+     "peakN": 426.7,
+     "t_first": 14.12,
+     "t_last": 15.24,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 14,
+   "T": 37.16,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.72,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     19.24,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     19.68,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     20.92,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 19.68,
+     "t1": 20.92,
+     "dur": 1.24,
+     "along0": -0.274,
+     "along_end": -0.254,
+     "along_end_prefall": -0.254,
+     "along_max": -0.239,
+     "disp_end": 0.02,
+     "disp_max": 0.034,
+     "lat0": 0.129,
+     "lat_end": 0.13,
+     "yaw_err0": -1.345,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.081,
+      0.279,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 74.80010427746863
+     }
+    }
+   ],
+   "takeover_s": [
+    14.72
+   ],
+   "end_minus_first_takeover_s": 22.44,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.977,
+     "t_min": 19.36,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.136,
+     "lat_at_end": -4.545
+    },
+    "plate_0_1": {
+     "min_dist": 0.256,
+     "t_min": 16.76,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.136,
+     "lat_at_end": 3.705
+    },
+    "plate_1_-1": {
+     "min_dist": 4.359,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.405,
+     "lat_at_end": 4.364
+    },
+    "plate_1_1": {
+     "min_dist": 5.199,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.405,
+     "lat_at_end": -5.204
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 57913,
+     "peakN": 187.3,
+     "t_first": 16.04,
+     "t_last": 24.4,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 15,
+   "T": 40.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     13.48,
+     0,
+     1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    13.48
+   ],
+   "end_minus_first_takeover_s": 27.2,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 27.2,
+   "approach_path_len_m": 0.93,
+   "approach_net_disp_m": 0.505,
+   "approach_along_range": [
+    -0.215,
+    0.074
+   ],
+   "approach_lat_range": [
+    0.31,
+    0.764
+   ],
+   "approach_dist_to_prepoint_min": 0.324,
+   "approach_last20s_path_m": 0.055,
+   "approach_last20s_net_m": 0.024,
+   "approach_plate_contacts": {
+    "plate_0_1:r0_leg_left_ankle_roll": [
+     98158,
+     185.2,
+     15.24,
+     40.68
+    ],
+    "plate_0_1:r0_leg_right_ankle_roll": [
+     101071,
+     187.6,
+     14.88,
+     40.68
+    ]
+   },
+   "approach_eff_cmd_last": [
+    0.281,
+    -0.104,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 1.166,
+     "t_min": 16.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.203,
+     "lat_at_end": -1.182
+    },
+    "plate_0_1": {
+     "min_dist": 0.358,
+     "t_min": 16.0,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.203,
+     "lat_at_end": 0.342
+    },
+    "plate_1_-1": {
+     "min_dist": 6.225,
+     "t_min": 15.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -5.442,
+     "lat_at_end": 3.103
+    },
+    "plate_1_1": {
+     "min_dist": 6.674,
+     "t_min": 15.36,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -5.442,
+     "lat_at_end": -3.943
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 199229,
+     "peakN": 187.6,
+     "t_first": 14.88,
+     "t_last": 40.68,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  }
+ ],
+ "waitopen2_21400863": [
+  {
+   "layout": 0,
+   "T": 55.04,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     22.72,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     24.04,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     24.48,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     25.72,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999998
+     ],
+     "t0": 24.48,
+     "t1": 25.72,
+     "dur": 1.24,
+     "along0": -0.353,
+     "along_end": -0.277,
+     "along_end_prefall": -0.277,
+     "along_max": -0.239,
+     "disp_end": 0.076,
+     "disp_max": 0.113,
+     "lat0": -0.097,
+     "lat_end": -0.122,
+     "yaw_err0": -1.534,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.021,
+      0.289,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 271.04343441449925
+     }
+    }
+   ],
+   "takeover_s": [
+    22.72
+   ],
+   "end_minus_first_takeover_s": 32.32,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.027,
+     "t_min": 26.6,
+     "base_inside_s": 6.84,
+     "base_traversed": false,
+     "along_at_end": -1.991,
+     "lat_at_end": 1.762
+    },
+    "plate_0_1": {
+     "min_dist": 0.685,
+     "t_min": 23.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.991,
+     "lat_at_end": -2.602
+    },
+    "plate_1_-1": {
+     "min_dist": 2.909,
+     "t_min": 54.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.498,
+     "lat_at_end": -1.509
+    },
+    "plate_1_1": {
+     "min_dist": 2.572,
+     "t_min": 54.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.498,
+     "lat_at_end": 0.669
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 32844,
+     "peakN": 452.3,
+     "t_first": 24.76,
+     "t_last": 36.32,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 1,
+   "T": 43.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     16.56,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     19.76,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     20.2,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     21.44,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      1.0,
+      0.0
+     ],
+     "t0": 20.2,
+     "t1": 21.44,
+     "dur": 1.24,
+     "along0": -0.402,
+     "along_end": -0.187,
+     "along_end_prefall": -0.187,
+     "along_max": -0.142,
+     "disp_end": 0.215,
+     "disp_max": 0.26,
+     "lat0": 0.145,
+     "lat_end": 0.193,
+     "yaw_err0": -0.094,
+     "sideways": false,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.289,
+      0.027,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 380.9451421134563,
+      "plate_0_-1:r0_leg_right_ankle_roll": 331.90738087357624
+     }
+    }
+   ],
+   "takeover_s": [
+    16.56
+   ],
+   "end_minus_first_takeover_s": 27.12,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.138,
+     "t_min": 26.4,
+     "base_inside_s": 3.44,
+     "base_traversed": false,
+     "along_at_end": 4.096,
+     "lat_at_end": -2.032
+    },
+    "plate_0_1": {
+     "min_dist": 0.313,
+     "t_min": 29.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 4.096,
+     "lat_at_end": 1.192
+    },
+    "plate_1_-1": {
+     "min_dist": 2.129,
+     "t_min": 43.08,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.492,
+     "lat_at_end": 1.604
+    },
+    "plate_1_1": {
+     "min_dist": 2.838,
+     "t_min": 43.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.492,
+     "lat_at_end": -2.444
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 16817,
+     "peakN": 393.9,
+     "t_first": 18.72,
+     "t_last": 28.2,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 1949,
+     "peakN": 229.9,
+     "t_first": 28.28,
+     "t_last": 29.72,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 4,
+   "T": 45.08,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.4,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     15.76,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     16.2,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     17.44,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 16.2,
+     "t1": 17.44,
+     "dur": 1.24,
+     "along0": -0.343,
+     "along_end": -0.328,
+     "along_end_prefall": -0.328,
+     "along_max": -0.258,
+     "disp_end": 0.015,
+     "disp_max": 0.085,
+     "lat0": -0.077,
+     "lat_end": -0.08,
+     "yaw_err0": -1.519,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.015,
+      0.29,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 105.66010511785994
+     }
+    }
+   ],
+   "takeover_s": [
+    14.4
+   ],
+   "end_minus_first_takeover_s": 30.68,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.123,
+     "t_min": 18.48,
+     "base_inside_s": 2.28,
+     "base_traversed": false,
+     "along_at_end": 0.208,
+     "lat_at_end": 0.232
+    },
+    "plate_0_1": {
+     "min_dist": 0.675,
+     "t_min": 14.68,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.208,
+     "lat_at_end": -1.072
+    },
+    "plate_1_-1": {
+     "min_dist": 2.568,
+     "t_min": 40.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.628,
+     "lat_at_end": -0.508
+    },
+    "plate_1_1": {
+     "min_dist": 2.518,
+     "t_min": 40.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.628,
+     "lat_at_end": -0.332
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 20197,
+     "peakN": 373.4,
+     "t_first": 16.48,
+     "t_last": 45.08,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 5,
+   "T": 42.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     15.2,
+     0,
+     1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    15.2
+   ],
+   "end_minus_first_takeover_s": 27.4,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 27.4,
+   "approach_path_len_m": 1.05,
+   "approach_net_disp_m": 0.5,
+   "approach_along_range": [
+    -0.184,
+    0.131
+   ],
+   "approach_lat_range": [
+    0.319,
+    0.759
+   ],
+   "approach_dist_to_prepoint_min": 0.341,
+   "approach_last20s_path_m": 0.057,
+   "approach_last20s_net_m": 0.025,
+   "approach_plate_contacts": {
+    "plate_0_1:r0_leg_left_ankle_roll": [
+     98806,
+     147.5,
+     16.52,
+     42.6
+    ],
+    "plate_0_1:r0_leg_right_ankle_roll": [
+     100269,
+     159.9,
+     16.64,
+     42.6
+    ]
+   },
+   "approach_eff_cmd_last": [
+    0.277,
+    -0.116,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 1.171,
+     "t_min": 18.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.172,
+     "lat_at_end": -1.19
+    },
+    "plate_0_1": {
+     "min_dist": 0.355,
+     "t_min": 18.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.172,
+     "lat_at_end": 0.35
+    },
+    "plate_1_-1": {
+     "min_dist": 5.489,
+     "t_min": 9.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.51,
+     "lat_at_end": -5.812
+    },
+    "plate_1_1": {
+     "min_dist": 4.649,
+     "t_min": 9.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.51,
+     "lat_at_end": 4.972
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 199075,
+     "peakN": 159.9,
+     "t_first": 16.52,
+     "t_last": 42.6,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 7,
+   "T": 44.48,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.24,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     15.8,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     16.24,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     17.48,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": 1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 16.24,
+     "t1": 17.48,
+     "dur": 1.24,
+     "along0": -0.362,
+     "along_end": -0.219,
+     "along_end_prefall": -0.219,
+     "along_max": -0.219,
+     "disp_end": 0.143,
+     "disp_max": 0.143,
+     "lat0": -0.001,
+     "lat_end": 0.005,
+     "yaw_err0": -1.517,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.015,
+      0.29,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 161.29942156436954
+     }
+    }
+   ],
+   "takeover_s": [
+    14.24
+   ],
+   "end_minus_first_takeover_s": 30.24,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.702,
+     "t_min": 17.96,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.972,
+     "lat_at_end": 0.103
+    },
+    "plate_0_1": {
+     "min_dist": 0.096,
+     "t_min": 18.56,
+     "base_inside_s": 3.28,
+     "base_traversed": true,
+     "along_at_end": 0.972,
+     "lat_at_end": -0.943
+    },
+    "plate_1_-1": {
+     "min_dist": 1.027,
+     "t_min": 44.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.732,
+     "lat_at_end": 0.757
+    },
+    "plate_1_1": {
+     "min_dist": 1.703,
+     "t_min": 44.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.732,
+     "lat_at_end": -1.597
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 10909,
+     "peakN": 412.8,
+     "t_first": 16.6,
+     "t_last": 21.08,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 9,
+   "T": 20.88,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     18.28,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    18.28
+   ],
+   "end_minus_first_takeover_s": 2.6,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.6,
+   "approach_path_len_m": 0.98,
+   "approach_net_disp_m": 0.697,
+   "approach_along_range": [
+    -0.353,
+    0.015
+   ],
+   "approach_lat_range": [
+    0.171,
+    0.79
+   ],
+   "approach_dist_to_prepoint_min": 0.174,
+   "approach_last20s_path_m": 7.933,
+   "approach_last20s_net_m": 4.755,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     811,
+     149.8,
+     20.16,
+     20.88
+    ]
+   },
+   "approach_eff_cmd_last": [
+    0.106,
+    0.281,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.371,
+     "t_min": 20.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.353,
+     "lat_at_end": 0.185
+    },
+    "plate_0_1": {
+     "min_dist": 1.063,
+     "t_min": 20.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.353,
+     "lat_at_end": -1.025
+    },
+    "plate_1_-1": {
+     "min_dist": 3.528,
+     "t_min": 20.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.485,
+     "lat_at_end": 0.607
+    },
+    "plate_1_1": {
+     "min_dist": 3.77,
+     "t_min": 20.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.485,
+     "lat_at_end": -1.447
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 811,
+     "peakN": 149.8,
+     "t_first": 20.16,
+     "t_last": 20.88,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 12,
+   "T": 13.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     11.44,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    11.44
+   ],
+   "end_minus_first_takeover_s": 2.16,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.16,
+   "approach_path_len_m": 1.01,
+   "approach_net_disp_m": 0.68,
+   "approach_along_range": [
+    -0.218,
+    0.026
+   ],
+   "approach_lat_range": [
+    0.125,
+    0.765
+   ],
+   "approach_dist_to_prepoint_min": 0.155,
+   "approach_last20s_path_m": 5.204,
+   "approach_last20s_net_m": 1.362,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     433,
+     544.3,
+     12.84,
+     13.6
+    ],
+    "plate_0_-1:r0_leg_right_ankle_roll": [
+     631,
+     241.7,
+     13.28,
+     13.6
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.225,
+    -0.199,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.209,
+     "t_min": 13.48,
+     "base_inside_s": 0.2,
+     "base_traversed": false,
+     "along_at_end": -0.215,
+     "lat_at_end": 0.129
+    },
+    "plate_0_1": {
+     "min_dist": 0.981,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.215,
+     "lat_at_end": -0.969
+    },
+    "plate_1_-1": {
+     "min_dist": 7.968,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 6.855,
+     "lat_at_end": 5.431
+    },
+    "plate_1_1": {
+     "min_dist": 8.462,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 6.855,
+     "lat_at_end": -6.271
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 1064,
+     "peakN": 544.3,
+     "t_first": 12.84,
+     "t_last": 13.6,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 13,
+   "T": 15.24,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     12.2,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    12.2
+   ],
+   "end_minus_first_takeover_s": 3.04,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 3.04,
+   "approach_path_len_m": 1.25,
+   "approach_net_disp_m": 0.665,
+   "approach_along_range": [
+    -0.308,
+    0.029
+   ],
+   "approach_lat_range": [
+    0.153,
+    0.784
+   ],
+   "approach_dist_to_prepoint_min": 0.162,
+   "approach_last20s_path_m": 5.493,
+   "approach_last20s_net_m": 2.913,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     1220,
+     426.7,
+     14.12,
+     15.24
+    ],
+    "plate_0_-1:r0_leg_right_ankle_roll": [
+     173,
+     292.0,
+     15.24,
+     15.24
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.232,
+    0.191,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.255,
+     "t_min": 15.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.204,
+     "lat_at_end": 0.153
+    },
+    "plate_0_1": {
+     "min_dist": 1.014,
+     "t_min": 15.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.204,
+     "lat_at_end": -0.993
+    },
+    "plate_1_-1": {
+     "min_dist": 3.864,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.453,
+     "lat_at_end": -3.944
+    },
+    "plate_1_1": {
+     "min_dist": 3.067,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.453,
+     "lat_at_end": 3.104
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 1393,
+     "peakN": 426.7,
+     "t_first": 14.12,
+     "t_last": 15.24,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 14,
+   "T": 37.16,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.72,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     19.24,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     19.68,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     20.92,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 19.68,
+     "t1": 20.92,
+     "dur": 1.24,
+     "along0": -0.274,
+     "along_end": -0.254,
+     "along_end_prefall": -0.254,
+     "along_max": -0.239,
+     "disp_end": 0.02,
+     "disp_max": 0.034,
+     "lat0": 0.129,
+     "lat_end": 0.13,
+     "yaw_err0": -1.345,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.081,
+      0.279,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 74.80010427746863
+     }
+    }
+   ],
+   "takeover_s": [
+    14.72
+   ],
+   "end_minus_first_takeover_s": 22.44,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.977,
+     "t_min": 19.36,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.136,
+     "lat_at_end": -4.545
+    },
+    "plate_0_1": {
+     "min_dist": 0.256,
+     "t_min": 16.76,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.136,
+     "lat_at_end": 3.705
+    },
+    "plate_1_-1": {
+     "min_dist": 4.359,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.405,
+     "lat_at_end": 4.364
+    },
+    "plate_1_1": {
+     "min_dist": 5.199,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.405,
+     "lat_at_end": -5.204
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 57913,
+     "peakN": 187.3,
+     "t_first": 16.04,
+     "t_last": 24.4,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 15,
+   "T": 40.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     13.48,
+     0,
+     1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    13.48
+   ],
+   "end_minus_first_takeover_s": 27.2,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 27.2,
+   "approach_path_len_m": 0.93,
+   "approach_net_disp_m": 0.505,
+   "approach_along_range": [
+    -0.215,
+    0.074
+   ],
+   "approach_lat_range": [
+    0.31,
+    0.764
+   ],
+   "approach_dist_to_prepoint_min": 0.324,
+   "approach_last20s_path_m": 0.055,
+   "approach_last20s_net_m": 0.024,
+   "approach_plate_contacts": {
+    "plate_0_1:r0_leg_left_ankle_roll": [
+     98158,
+     185.2,
+     15.24,
+     40.68
+    ],
+    "plate_0_1:r0_leg_right_ankle_roll": [
+     101071,
+     187.6,
+     14.88,
+     40.68
+    ]
+   },
+   "approach_eff_cmd_last": [
+    0.281,
+    -0.104,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 1.166,
+     "t_min": 16.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.203,
+     "lat_at_end": -1.182
+    },
+    "plate_0_1": {
+     "min_dist": 0.358,
+     "t_min": 16.0,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.203,
+     "lat_at_end": 0.342
+    },
+    "plate_1_-1": {
+     "min_dist": 6.225,
+     "t_min": 15.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -5.442,
+     "lat_at_end": 3.103
+    },
+    "plate_1_1": {
+     "min_dist": 6.674,
+     "t_min": 15.36,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -5.442,
+     "lat_at_end": -3.943
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 199229,
+     "peakN": 187.6,
+     "t_first": 14.88,
+     "t_last": 40.68,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  }
+ ],
+ "v2align_21405537": [
+  {
+   "layout": 0,
+   "T": 55.04,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     22.72,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     23.72,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     24.16,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     24.16,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     27.68,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999998
+     ],
+     "t0": 24.16,
+     "t1": 27.68,
+     "dur": 3.52,
+     "along0": -0.457,
+     "along_end": 0.352,
+     "along_end_prefall": 0.352,
+     "along_max": 0.352,
+     "disp_end": 0.809,
+     "disp_max": 0.809,
+     "lat0": -0.14,
+     "lat_end": -0.441,
+     "yaw_err0": -1.102,
+     "sideways": true,
+     "cleared": true,
+     "cleared_349": true,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.231,
+      0.159,
+      0.314
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 152.6231590781343,
+      "plate_0_-1:r0_leg_right_ankle_roll": 215.8117496186794
+     }
+    }
+   ],
+   "takeover_s": [
+    22.72
+   ],
+   "end_minus_first_takeover_s": 32.32,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.315,
+     "t_min": 26.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 3.903,
+     "lat_at_end": 1.693
+    },
+    "plate_0_1": {
+     "min_dist": 0.409,
+     "t_min": 27.08,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 3.903,
+     "lat_at_end": -2.533
+    },
+    "plate_1_-1": {
+     "min_dist": 3.112,
+     "t_min": 10.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.567,
+     "lat_at_end": -7.403
+    },
+    "plate_1_1": {
+     "min_dist": 3.142,
+     "t_min": 12.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.567,
+     "lat_at_end": 6.563
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 3392,
+     "peakN": 215.8,
+     "t_first": 24.76,
+     "t_last": 26.6,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 1,
+   "T": 43.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     16.56,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     19.64,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     20.08,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     20.08,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     23.16,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      1.0,
+      0.0
+     ],
+     "t0": 20.08,
+     "t1": 23.16,
+     "dur": 3.08,
+     "along0": -0.459,
+     "along_end": 0.357,
+     "along_end_prefall": 0.357,
+     "along_max": 0.357,
+     "disp_end": 0.816,
+     "disp_max": 0.816,
+     "lat0": 0.073,
+     "lat_end": 0.186,
+     "yaw_err0": 0.021,
+     "sideways": false,
+     "cleared": true,
+     "cleared_349": true,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.294,
+      0.027,
+      0.11
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_right_ankle_roll": 378.53591315640404,
+      "plate_0_-1:r0_leg_left_ankle_roll": 490.6915448073596
+     }
+    }
+   ],
+   "takeover_s": [
+    16.56
+   ],
+   "end_minus_first_takeover_s": 27.12,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.141,
+     "t_min": 22.04,
+     "base_inside_s": 1.68,
+     "base_traversed": true,
+     "along_at_end": 2.242,
+     "lat_at_end": -0.075
+    },
+    "plate_0_1": {
+     "min_dist": 0.584,
+     "t_min": 27.48,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 2.242,
+     "lat_at_end": -0.765
+    },
+    "plate_1_-1": {
+     "min_dist": 3.463,
+     "t_min": 33.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.465,
+     "lat_at_end": 3.458
+    },
+    "plate_1_1": {
+     "min_dist": 4.297,
+     "t_min": 33.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.465,
+     "lat_at_end": -4.298
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 7454,
+     "peakN": 490.7,
+     "t_first": 20.6,
+     "t_last": 23.12,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 4,
+   "T": 45.08,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.4,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     15.68,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     16.08,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     16.08,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     20.12,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 16.08,
+     "t1": 20.12,
+     "dur": 4.04,
+     "along0": -0.462,
+     "along_end": 0.297,
+     "along_end_prefall": 0.297,
+     "along_max": 0.297,
+     "disp_end": 0.759,
+     "disp_max": 0.759,
+     "lat0": -0.115,
+     "lat_end": -0.377,
+     "yaw_err0": -1.046,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.257,
+      0.114,
+      0.253
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 206.85052723661207,
+      "plate_0_-1:r0_leg_right_ankle_roll": 226.54577401676363
+     }
+    }
+   ],
+   "takeover_s": [
+    14.4
+   ],
+   "end_minus_first_takeover_s": 30.68,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.306,
+     "t_min": 18.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 1.798,
+     "lat_at_end": -1.484
+    },
+    "plate_0_1": {
+     "min_dist": 0.442,
+     "t_min": 19.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 1.798,
+     "lat_at_end": 0.644
+    },
+    "plate_1_-1": {
+     "min_dist": 2.919,
+     "t_min": 16.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -4.344,
+     "lat_at_end": -2.098
+    },
+    "plate_1_1": {
+     "min_dist": 3.076,
+     "t_min": 16.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -4.344,
+     "lat_at_end": 1.258
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 4068,
+     "peakN": 226.5,
+     "t_first": 16.56,
+     "t_last": 18.72,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 5,
+   "T": 42.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     15.2,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     19.12,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     19.56,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     19.56,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     22.84,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 19.56,
+     "t1": 22.84,
+     "dur": 3.28,
+     "along0": -0.471,
+     "along_end": 0.355,
+     "along_end_prefall": 0.355,
+     "along_max": 0.355,
+     "disp_end": 0.826,
+     "disp_max": 0.826,
+     "lat0": 0.064,
+     "lat_end": 0.058,
+     "yaw_err0": -0.125,
+     "sideways": false,
+     "cleared": true,
+     "cleared_349": true,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.296,
+      0.009,
+      0.035
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 130.39124245127175,
+      "plate_0_1:r0_leg_right_ankle_roll": 163.597390335696
+     }
+    }
+   ],
+   "takeover_s": [
+    15.2
+   ],
+   "end_minus_first_takeover_s": 27.4,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.877,
+     "t_min": 20.6,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.618,
+     "lat_at_end": -4.289
+    },
+    "plate_0_1": {
+     "min_dist": 0.057,
+     "t_min": 22.04,
+     "base_inside_s": 2.2,
+     "base_traversed": true,
+     "along_at_end": -0.618,
+     "lat_at_end": 3.449
+    },
+    "plate_1_-1": {
+     "min_dist": 5.489,
+     "t_min": 9.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.589,
+     "lat_at_end": -6.258
+    },
+    "plate_1_1": {
+     "min_dist": 4.649,
+     "t_min": 9.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.589,
+     "lat_at_end": 5.418
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 24440,
+     "peakN": 211.9,
+     "t_first": 16.56,
+     "t_last": 26.0,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 7,
+   "T": 44.48,
+   "fall": true,
+   "first_fall_s": 18.280000000002747,
+   "history": [
+    [
+     14.24,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     15.48,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     15.88,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     15.88,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     19.92,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": 1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 15.88,
+     "t1": 19.92,
+     "dur": 4.04,
+     "along0": -0.536,
+     "along_end": -0.609,
+     "along_end_prefall": -0.45,
+     "along_max": -0.287,
+     "disp_end": -0.073,
+     "disp_max": 0.249,
+     "lat0": -0.038,
+     "lat_end": -0.025,
+     "yaw_err0": -1.02,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": true,
+     "fall_after_cross_start": 2.4,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.233,
+      0.166,
+      0.343
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 263.38161074400045,
+      "plate_0_1:r0_leg_right_ankle_roll": 120.20238644074749
+     }
+    }
+   ],
+   "takeover_s": [
+    14.24
+   ],
+   "end_minus_first_takeover_s": 30.24,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.744,
+     "t_min": 18.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.651,
+     "lat_at_end": -0.75
+    },
+    "plate_0_1": {
+     "min_dist": 0.293,
+     "t_min": 17.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.651,
+     "lat_at_end": -0.09
+    },
+    "plate_1_-1": {
+     "min_dist": 1.633,
+     "t_min": 18.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.891,
+     "lat_at_end": 1.61
+    },
+    "plate_1_1": {
+     "min_dist": 2.389,
+     "t_min": 14.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.891,
+     "lat_at_end": -2.45
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 2775,
+     "peakN": 263.4,
+     "t_first": 16.72,
+     "t_last": 18.08,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 9,
+   "T": 20.88,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     18.28,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    18.28
+   ],
+   "end_minus_first_takeover_s": 2.6,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.6,
+   "approach_path_len_m": 1.03,
+   "approach_net_disp_m": 0.726,
+   "approach_along_range": [
+    -0.424,
+    0.015
+   ],
+   "approach_lat_range": [
+    0.198,
+    0.79
+   ],
+   "approach_dist_to_prepoint_min": 0.232,
+   "approach_last20s_path_m": 7.988,
+   "approach_last20s_net_m": 4.689,
+   "approach_plate_contacts": {},
+   "approach_eff_cmd_last": [
+    -0.031,
+    0.298,
+    -0.016
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.466,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.422,
+     "lat_at_end": 0.198
+    },
+    "plate_0_1": {
+     "min_dist": 1.12,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.422,
+     "lat_at_end": -1.038
+    },
+    "plate_1_-1": {
+     "min_dist": 3.539,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.498,
+     "lat_at_end": 0.538
+    },
+    "plate_1_1": {
+     "min_dist": 3.76,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.498,
+     "lat_at_end": -1.378
+    }
+   },
+   "plate_contacts_by_geom": {}
+  },
+  {
+   "layout": 12,
+   "T": 13.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     11.44,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    11.44
+   ],
+   "end_minus_first_takeover_s": 2.16,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.16,
+   "approach_path_len_m": 1.04,
+   "approach_net_disp_m": 0.764,
+   "approach_along_range": [
+    -0.415,
+    0.026
+   ],
+   "approach_lat_range": [
+    0.137,
+    0.765
+   ],
+   "approach_dist_to_prepoint_min": 0.173,
+   "approach_last20s_path_m": 5.225,
+   "approach_last20s_net_m": 1.182,
+   "approach_plate_contacts": {},
+   "approach_eff_cmd_last": [
+    -0.238,
+    0.183,
+    0.35
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.394,
+     "t_min": 13.0,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.415,
+     "lat_at_end": 0.141
+    },
+    "plate_0_1": {
+     "min_dist": 1.058,
+     "t_min": 13.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.415,
+     "lat_at_end": -0.981
+    },
+    "plate_1_-1": {
+     "min_dist": 7.968,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 7.055,
+     "lat_at_end": 5.419
+    },
+    "plate_1_1": {
+     "min_dist": 8.462,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 7.055,
+     "lat_at_end": -6.259
+    }
+   },
+   "plate_contacts_by_geom": {}
+  },
+  {
+   "layout": 13,
+   "T": 15.24,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     12.2,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    12.2
+   ],
+   "end_minus_first_takeover_s": 3.04,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 3.04,
+   "approach_path_len_m": 1.23,
+   "approach_net_disp_m": 0.675,
+   "approach_along_range": [
+    -0.436,
+    0.029
+   ],
+   "approach_lat_range": [
+    0.225,
+    0.784
+   ],
+   "approach_dist_to_prepoint_min": 0.252,
+   "approach_last20s_path_m": 5.475,
+   "approach_last20s_net_m": 2.747,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     492,
+     66.6,
+     14.36,
+     14.92
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.107,
+    0.28,
+    0.224
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.468,
+     "t_min": 15.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.395,
+     "lat_at_end": 0.251
+    },
+    "plate_0_1": {
+     "min_dist": 1.143,
+     "t_min": 14.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.395,
+     "lat_at_end": -1.091
+    },
+    "plate_1_-1": {
+     "min_dist": 3.864,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.551,
+     "lat_at_end": -4.135
+    },
+    "plate_1_1": {
+     "min_dist": 3.067,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.551,
+     "lat_at_end": 3.295
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 492,
+     "peakN": 66.6,
+     "t_first": 14.36,
+     "t_last": 14.92,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 14,
+   "T": 37.16,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.72,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     19.08,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     19.52,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     19.52,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     23.56,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 19.52,
+     "t1": 23.56,
+     "dur": 4.04,
+     "along0": -0.464,
+     "along_end": -0.375,
+     "along_end_prefall": -0.375,
+     "along_max": -0.204,
+     "disp_end": 0.089,
+     "disp_max": 0.259,
+     "lat0": 0.05,
+     "lat_end": 0.035,
+     "yaw_err0": -0.081,
+     "sideways": false,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.297,
+      0.014,
+      0.057
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 206.47054478198328,
+      "plate_0_1:r0_leg_right_ankle_roll": 176.03447091300404
+     }
+    }
+   ],
+   "takeover_s": [
+    14.72
+   ],
+   "end_minus_first_takeover_s": 22.44,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.898,
+     "t_min": 20.84,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.51,
+     "lat_at_end": -3.623
+    },
+    "plate_0_1": {
+     "min_dist": 0.207,
+     "t_min": 20.84,
+     "base_inside_s": 0.2,
+     "base_traversed": false,
+     "along_at_end": -0.51,
+     "lat_at_end": 2.783
+    },
+    "plate_1_-1": {
+     "min_dist": 4.359,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.483,
+     "lat_at_end": 5.01
+    },
+    "plate_1_1": {
+     "min_dist": 5.199,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.483,
+     "lat_at_end": -5.85
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 12982,
+     "peakN": 206.5,
+     "t_first": 16.2,
+     "t_last": 24.24,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 15,
+   "T": 40.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     13.48,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     17.44,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     17.88,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     17.88,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     20.64,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0000000000000002
+     ],
+     "t0": 17.88,
+     "t1": 20.64,
+     "dur": 2.76,
+     "along0": -0.466,
+     "along_end": 0.353,
+     "along_end_prefall": 0.353,
+     "along_max": 0.353,
+     "disp_end": 0.819,
+     "disp_max": 0.819,
+     "lat0": 0.075,
+     "lat_end": 0.077,
+     "yaw_err0": -0.072,
+     "sideways": false,
+     "cleared": true,
+     "cleared_349": true,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.295,
+      0.012,
+      0.05
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 176.08239408530417,
+      "plate_0_1:r0_leg_right_ankle_roll": 205.61140401055565
+     }
+    }
+   ],
+   "takeover_s": [
+    13.48
+   ],
+   "end_minus_first_takeover_s": 27.2,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.884,
+     "t_min": 19.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.801,
+     "lat_at_end": -2.299
+    },
+    "plate_0_1": {
+     "min_dist": 0.062,
+     "t_min": 19.64,
+     "base_inside_s": 1.68,
+     "base_traversed": true,
+     "along_at_end": 0.801,
+     "lat_at_end": 1.459
+    },
+    "plate_1_-1": {
+     "min_dist": 5.672,
+     "t_min": 21.36,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -6.559,
+     "lat_at_end": 2.099
+    },
+    "plate_1_1": {
+     "min_dist": 6.059,
+     "t_min": 21.36,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -6.559,
+     "lat_at_end": -2.939
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 19701,
+     "peakN": 219.7,
+     "t_first": 14.92,
+     "t_last": 20.72,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  }
+ ],
+ "v3s190_21405539": [
+  {
+   "layout": 0,
+   "T": 55.04,
+   "fall": true,
+   "first_fall_s": 27.999999999980094,
+   "history": [
+    [
+     22.72,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     23.84,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     25.76,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     25.76,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     29.8,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999998
+     ],
+     "t0": 25.76,
+     "t1": 29.8,
+     "dur": 4.04,
+     "along0": -0.472,
+     "along_end": -0.498,
+     "along_end_prefall": -0.424,
+     "along_max": -0.183,
+     "disp_end": -0.026,
+     "disp_max": 0.288,
+     "lat0": -0.129,
+     "lat_end": 0.104,
+     "yaw_err0": -1.501,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": true,
+     "fall_after_cross_start": 2.24,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.05,
+      0.278,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 703.8383123264178,
+      "plate_0_-1:r0_leg_right_ankle_roll": 119.88817039931128,
+      "plate_0_-1:r0_leg_right_hip_pitch": 30.974056253685443
+     }
+    }
+   ],
+   "takeover_s": [
+    22.72
+   ],
+   "end_minus_first_takeover_s": 32.32,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.185,
+     "t_min": 27.84,
+     "base_inside_s": 0.16,
+     "base_traversed": false,
+     "along_at_end": -0.494,
+     "lat_at_end": -0.19
+    },
+    "plate_0_1": {
+     "min_dist": 0.701,
+     "t_min": 23.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.494,
+     "lat_at_end": -0.65
+    },
+    "plate_1_-1": {
+     "min_dist": 3.112,
+     "t_min": 10.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -4.45,
+     "lat_at_end": -3.006
+    },
+    "plate_1_1": {
+     "min_dist": 3.142,
+     "t_min": 12.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -4.45,
+     "lat_at_end": 2.166
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 108004,
+     "peakN": 703.8,
+     "t_first": 26.56,
+     "t_last": 55.04,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll",
+      "r0_leg_right_hip_pitch"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 1,
+   "T": 43.68,
+   "fall": true,
+   "first_fall_s": 28.15999999997972,
+   "history": [
+    [
+     16.56,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     19.64,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     21.56,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     21.56,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     24.8,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      1.0,
+      0.0
+     ],
+     "t0": 21.56,
+     "t1": 24.8,
+     "dur": 3.24,
+     "along0": -0.474,
+     "along_end": 0.352,
+     "along_end_prefall": 0.352,
+     "along_max": 0.352,
+     "disp_end": 0.826,
+     "disp_max": 0.826,
+     "lat0": 0.071,
+     "lat_end": -0.022,
+     "yaw_err0": 0.064,
+     "sideways": false,
+     "cleared": true,
+     "cleared_349": true,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": true,
+     "cmd_mean_abs": [
+      0.277,
+      0.085,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 454.00191837251725,
+      "plate_0_-1:r0_leg_right_ankle_roll": 391.6333966158801
+     }
+    }
+   ],
+   "takeover_s": [
+    16.56
+   ],
+   "end_minus_first_takeover_s": 27.12,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.024,
+     "t_min": 23.84,
+     "base_inside_s": 1.64,
+     "base_traversed": true,
+     "along_at_end": 0.27,
+     "lat_at_end": -0.229
+    },
+    "plate_0_1": {
+     "min_dist": 0.254,
+     "t_min": 28.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.27,
+     "lat_at_end": -0.611
+    },
+    "plate_1_-1": {
+     "min_dist": 5.164,
+     "t_min": 25.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.311,
+     "lat_at_end": 5.43
+    },
+    "plate_1_1": {
+     "min_dist": 6.001,
+     "t_min": 25.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.311,
+     "lat_at_end": -6.27
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 6072,
+     "peakN": 454.0,
+     "t_first": 22.2,
+     "t_last": 24.96,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 149802,
+     "peakN": 991.2,
+     "t_first": 27.32,
+     "t_last": 43.68,
+     "bodies": [
+      "r0_arm_left_elbow_roll",
+      "r0_arm_left_shoulder_yaw",
+      "r0_arm_right_elbow_roll",
+      "r0_arm_right_shoulder_yaw",
+      "r0_base",
+      "r0_leg_left_ankle_roll",
+      "r0_leg_left_knee_pitch"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 4,
+   "T": 45.08,
+   "fall": true,
+   "first_fall_s": 19.799999999999205,
+   "history": [
+    [
+     14.4,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     15.52,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     17.44,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     17.44,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     21.48,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 17.44,
+     "t1": 21.48,
+     "dur": 4.04,
+     "along0": -0.471,
+     "along_end": -0.43,
+     "along_end_prefall": -0.416,
+     "along_max": -0.234,
+     "disp_end": 0.041,
+     "disp_max": 0.237,
+     "lat0": -0.103,
+     "lat_end": 0.124,
+     "yaw_err0": -1.534,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": true,
+     "fall_after_cross_start": 2.36,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.031,
+      0.291,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 216.71208953637586,
+      "plate_0_-1:r0_arm_left_elbow_roll": 189.3242634284229,
+      "plate_0_-1:r0_leg_left_hip_pitch": 520.1082918570567,
+      "plate_0_-1:r0_arm_left_shoulder_yaw": 1102.0856830709827,
+      "plate_0_-1:r0_base": 110.08556917269927,
+      "plate_0_-1:r0_leg_right_ankle_roll": 141.35887685410074
+     }
+    }
+   ],
+   "takeover_s": [
+    14.4
+   ],
+   "end_minus_first_takeover_s": 30.68,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.259,
+     "t_min": 19.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.47,
+     "lat_at_end": -0.108
+    },
+    "plate_0_1": {
+     "min_dist": 0.678,
+     "t_min": 14.48,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.47,
+     "lat_at_end": -0.732
+    },
+    "plate_1_-1": {
+     "min_dist": 2.597,
+     "t_min": 20.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.968,
+     "lat_at_end": 0.17
+    },
+    "plate_1_1": {
+     "min_dist": 2.765,
+     "t_min": 20.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.968,
+     "lat_at_end": -1.01
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 118097,
+     "peakN": 1102.1,
+     "t_first": 18.4,
+     "t_last": 45.08,
+     "bodies": [
+      "r0_arm_left_elbow_roll",
+      "r0_arm_left_shoulder_yaw",
+      "r0_base",
+      "r0_leg_left_ankle_roll",
+      "r0_leg_left_hip_pitch",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 5,
+   "T": 42.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     15.2,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     18.48,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     20.4,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     20.4,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     24.44,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 20.4,
+     "t1": 24.44,
+     "dur": 4.04,
+     "along0": -0.402,
+     "along_end": 0.147,
+     "along_end_prefall": 0.147,
+     "along_max": 0.147,
+     "disp_end": 0.549,
+     "disp_max": 0.549,
+     "lat0": 0.123,
+     "lat_end": 0.078,
+     "yaw_err0": -1.508,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.034,
+      0.294,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 167.50276892469006,
+      "plate_0_1:r0_leg_right_ankle_roll": 219.67080984901855
+     }
+    }
+   ],
+   "takeover_s": [
+    15.2
+   ],
+   "end_minus_first_takeover_s": 27.4,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.885,
+     "t_min": 22.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.678,
+     "lat_at_end": -4.227
+    },
+    "plate_0_1": {
+     "min_dist": 0.07,
+     "t_min": 23.76,
+     "base_inside_s": 3.04,
+     "base_traversed": false,
+     "along_at_end": 0.678,
+     "lat_at_end": 3.387
+    },
+    "plate_1_-1": {
+     "min_dist": 4.96,
+     "t_min": 34.84,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.527,
+     "lat_at_end": -4.962
+    },
+    "plate_1_1": {
+     "min_dist": 4.125,
+     "t_min": 34.84,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.527,
+     "lat_at_end": 4.122
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 32082,
+     "peakN": 267.2,
+     "t_first": 16.8,
+     "t_last": 25.64,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 7,
+   "T": 44.48,
+   "fall": true,
+   "first_fall_s": 19.36000000000023,
+   "history": [
+    [
+     14.24,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     15.24,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     17.16,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     17.16,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     21.2,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": 1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 17.16,
+     "t1": 21.2,
+     "dur": 4.04,
+     "along0": -0.509,
+     "along_end": -0.348,
+     "along_end_prefall": -0.395,
+     "along_max": -0.08,
+     "disp_end": 0.161,
+     "disp_max": 0.429,
+     "lat0": -0.043,
+     "lat_end": -0.308,
+     "yaw_err0": -1.539,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": true,
+     "fall_after_cross_start": 2.2,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.014,
+      0.293,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 463.6692697494441,
+      "plate_0_1:r0_leg_right_ankle_roll": 166.0984399366632,
+      "plate_0_1:r0_arm_right_elbow_roll": 86.86512717264796,
+      "plate_0_1:r0_arm_right_shoulder_yaw": 185.24204252787086
+     }
+    }
+   ],
+   "takeover_s": [
+    14.24
+   ],
+   "end_minus_first_takeover_s": 30.24,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.611,
+     "t_min": 19.28,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.355,
+     "lat_at_end": -0.695
+    },
+    "plate_0_1": {
+     "min_dist": 0.131,
+     "t_min": 19.04,
+     "base_inside_s": 0.32,
+     "base_traversed": false,
+     "along_at_end": -0.355,
+     "lat_at_end": -0.145
+    },
+    "plate_1_-1": {
+     "min_dist": 1.501,
+     "t_min": 19.28,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.595,
+     "lat_at_end": 1.555
+    },
+    "plate_1_1": {
+     "min_dist": 2.308,
+     "t_min": 19.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.595,
+     "lat_at_end": -2.395
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 144318,
+     "peakN": 463.7,
+     "t_first": 18.16,
+     "t_last": 44.48,
+     "bodies": [
+      "r0_arm_right_elbow_roll",
+      "r0_arm_right_shoulder_yaw",
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 9,
+   "T": 20.88,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     18.28,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    18.28
+   ],
+   "end_minus_first_takeover_s": 2.6,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.6,
+   "approach_path_len_m": 1.03,
+   "approach_net_disp_m": 0.725,
+   "approach_along_range": [
+    -0.423,
+    0.015
+   ],
+   "approach_lat_range": [
+    0.199,
+    0.79
+   ],
+   "approach_dist_to_prepoint_min": 0.234,
+   "approach_last20s_path_m": 7.981,
+   "approach_last20s_net_m": 4.688,
+   "approach_plate_contacts": {},
+   "approach_eff_cmd_last": [
+    -0.023,
+    0.299,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.467,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.422,
+     "lat_at_end": 0.199
+    },
+    "plate_0_1": {
+     "min_dist": 1.122,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.422,
+     "lat_at_end": -1.039
+    },
+    "plate_1_-1": {
+     "min_dist": 3.54,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.499,
+     "lat_at_end": 0.538
+    },
+    "plate_1_1": {
+     "min_dist": 3.761,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.499,
+     "lat_at_end": -1.378
+    }
+   },
+   "plate_contacts_by_geom": {}
+  },
+  {
+   "layout": 12,
+   "T": 13.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     11.44,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    11.44
+   ],
+   "end_minus_first_takeover_s": 2.16,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.16,
+   "approach_path_len_m": 1.01,
+   "approach_net_disp_m": 0.728,
+   "approach_along_range": [
+    -0.329,
+    0.026
+   ],
+   "approach_lat_range": [
+    0.123,
+    0.765
+   ],
+   "approach_dist_to_prepoint_min": 0.126,
+   "approach_last20s_path_m": 5.201,
+   "approach_last20s_net_m": 1.256,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     109,
+     130.0,
+     13.08,
+     13.4
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.203,
+    -0.221,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.282,
+     "t_min": 13.36,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.329,
+     "lat_at_end": 0.129
+    },
+    "plate_0_1": {
+     "min_dist": 1.007,
+     "t_min": 13.36,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.329,
+     "lat_at_end": -0.969
+    },
+    "plate_1_-1": {
+     "min_dist": 7.968,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 6.969,
+     "lat_at_end": 5.431
+    },
+    "plate_1_1": {
+     "min_dist": 8.462,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 6.969,
+     "lat_at_end": -6.271
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 109,
+     "peakN": 130.0,
+     "t_first": 13.08,
+     "t_last": 13.4,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 13,
+   "T": 15.24,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     12.2,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    12.2
+   ],
+   "end_minus_first_takeover_s": 3.04,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 3.04,
+   "approach_path_len_m": 1.26,
+   "approach_net_disp_m": 0.676,
+   "approach_along_range": [
+    -0.435,
+    0.029
+   ],
+   "approach_lat_range": [
+    0.224,
+    0.785
+   ],
+   "approach_dist_to_prepoint_min": 0.251,
+   "approach_last20s_path_m": 5.506,
+   "approach_last20s_net_m": 2.718,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     627,
+     134.7,
+     14.36,
+     15.2
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.135,
+    0.268,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.462,
+     "t_min": 15.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.42,
+     "lat_at_end": 0.272
+    },
+    "plate_0_1": {
+     "min_dist": 1.142,
+     "t_min": 14.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.42,
+     "lat_at_end": -1.112
+    },
+    "plate_1_-1": {
+     "min_dist": 3.864,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.572,
+     "lat_at_end": -4.16
+    },
+    "plate_1_1": {
+     "min_dist": 3.067,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.572,
+     "lat_at_end": 3.32
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 627,
+     "peakN": 134.7,
+     "t_first": 14.36,
+     "t_last": 15.2,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 14,
+   "T": 37.16,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.72,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     19.12,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     21.04,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     21.04,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     25.08,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 21.04,
+     "t1": 25.08,
+     "dur": 4.04,
+     "along0": -0.347,
+     "along_end": -0.329,
+     "along_end_prefall": -0.329,
+     "along_max": -0.283,
+     "disp_end": 0.018,
+     "disp_max": 0.064,
+     "lat0": 0.105,
+     "lat_end": 0.164,
+     "yaw_err0": -1.722,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.014,
+      0.296,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 107.68105520292659
+     }
+    }
+   ],
+   "takeover_s": [
+    14.72
+   ],
+   "end_minus_first_takeover_s": 22.44,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.963,
+     "t_min": 21.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.651,
+     "lat_at_end": -1.917
+    },
+    "plate_0_1": {
+     "min_dist": 0.267,
+     "t_min": 17.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.651,
+     "lat_at_end": 1.077
+    },
+    "plate_1_-1": {
+     "min_dist": 3.837,
+     "t_min": 30.92,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.223,
+     "lat_at_end": 3.849
+    },
+    "plate_1_1": {
+     "min_dist": 4.676,
+     "t_min": 30.92,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.223,
+     "lat_at_end": -4.689
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 8840,
+     "peakN": 251.6,
+     "t_first": 16.2,
+     "t_last": 25.52,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 15,
+   "T": 40.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     13.48,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     17.64,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     19.56,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     19.56,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     23.6,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0000000000000002
+     ],
+     "t0": 19.56,
+     "t1": 23.6,
+     "dur": 4.04,
+     "along0": -0.364,
+     "along_end": -0.217,
+     "along_end_prefall": -0.217,
+     "along_max": -0.2,
+     "disp_end": 0.148,
+     "disp_max": 0.165,
+     "lat0": 0.134,
+     "lat_end": 0.104,
+     "yaw_err0": -1.35,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.045,
+      0.294,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 139.01166671545897
+     }
+    }
+   ],
+   "takeover_s": [
+    13.48
+   ],
+   "end_minus_first_takeover_s": 27.2,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.191,
+     "t_min": 31.88,
+     "base_inside_s": 0.68,
+     "base_traversed": false,
+     "along_at_end": -0.819,
+     "lat_at_end": 1.852
+    },
+    "plate_0_1": {
+     "min_dist": 0.176,
+     "t_min": 29.12,
+     "base_inside_s": 6.28,
+     "base_traversed": false,
+     "along_at_end": -0.819,
+     "lat_at_end": -2.692
+    },
+    "plate_1_-1": {
+     "min_dist": 4.362,
+     "t_min": 36.76,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.408,
+     "lat_at_end": 3.719
+    },
+    "plate_1_1": {
+     "min_dist": 5.079,
+     "t_min": 36.64,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.408,
+     "lat_at_end": -4.559
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 4452,
+     "peakN": 308.4,
+     "t_first": 30.68,
+     "t_last": 32.72,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 76217,
+     "peakN": 306.1,
+     "t_first": 15.0,
+     "t_last": 30.24,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  }
+ ],
+ "v4s080_21405541": [
+  {
+   "layout": 0,
+   "T": 55.04,
+   "fall": true,
+   "first_fall_s": 26.599999999983357,
+   "history": [
+    [
+     22.72,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     23.84,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     24.68,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     24.68,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     28.72,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999998
+     ],
+     "t0": 24.68,
+     "t1": 28.72,
+     "dur": 4.04,
+     "along0": -0.458,
+     "along_end": -0.362,
+     "along_end_prefall": -0.289,
+     "along_max": -0.186,
+     "disp_end": 0.096,
+     "disp_max": 0.272,
+     "lat0": -0.115,
+     "lat_end": -0.197,
+     "yaw_err0": -1.493,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": true,
+     "fall_after_cross_start": 1.92,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.032,
+      0.291,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 344.0132677031378,
+      "plate_0_-1:r0_arm_left_elbow_roll": 965.5562065894193,
+      "plate_0_-1:r0_leg_left_hip_pitch": 182.60599970160797,
+      "plate_0_-1:r0_leg_right_ankle_roll": 139.7752325922967
+     }
+    }
+   ],
+   "takeover_s": [
+    22.72
+   ],
+   "end_minus_first_takeover_s": 32.32,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.254,
+     "t_min": 26.96,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.36,
+     "lat_at_end": -0.332
+    },
+    "plate_0_1": {
+     "min_dist": 0.607,
+     "t_min": 28.48,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.36,
+     "lat_at_end": -0.508
+    },
+    "plate_1_-1": {
+     "min_dist": 3.112,
+     "t_min": 10.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -4.592,
+     "lat_at_end": -3.14
+    },
+    "plate_1_1": {
+     "min_dist": 3.142,
+     "t_min": 12.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -4.592,
+     "lat_at_end": 2.3
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 110201,
+     "peakN": 965.6,
+     "t_first": 25.44,
+     "t_last": 55.04,
+     "bodies": [
+      "r0_arm_left_elbow_roll",
+      "r0_leg_left_ankle_roll",
+      "r0_leg_left_hip_pitch",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 1,
+   "T": 43.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     16.56,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     19.64,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     20.48,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     20.48,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     24.08,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      1.0,
+      0.0
+     ],
+     "t0": 20.48,
+     "t1": 24.08,
+     "dur": 3.6,
+     "along0": -0.473,
+     "along_end": 0.367,
+     "along_end_prefall": 0.367,
+     "along_max": 0.367,
+     "disp_end": 0.84,
+     "disp_max": 0.84,
+     "lat0": 0.072,
+     "lat_end": 0.044,
+     "yaw_err0": 0.066,
+     "sideways": false,
+     "cleared": true,
+     "cleared_349": true,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.295,
+      0.029,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 396.49964777474514,
+      "plate_0_-1:r0_leg_right_ankle_roll": 352.28578014401137
+     }
+    }
+   ],
+   "takeover_s": [
+    16.56
+   ],
+   "end_minus_first_takeover_s": 27.12,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.059,
+     "t_min": 22.96,
+     "base_inside_s": 2.04,
+     "base_traversed": true,
+     "along_at_end": 1.03,
+     "lat_at_end": -1.323
+    },
+    "plate_0_1": {
+     "min_dist": 0.386,
+     "t_min": 28.52,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 1.03,
+     "lat_at_end": 0.483
+    },
+    "plate_1_-1": {
+     "min_dist": 4.672,
+     "t_min": 35.0,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.783,
+     "lat_at_end": 4.67
+    },
+    "plate_1_1": {
+     "min_dist": 5.505,
+     "t_min": 40.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.783,
+     "lat_at_end": -5.51
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 7293,
+     "peakN": 396.5,
+     "t_first": 21.08,
+     "t_last": 24.12,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 4,
+   "T": 45.08,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.4,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     15.52,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     16.36,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     16.36,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     20.4,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 16.36,
+     "t1": 20.4,
+     "dur": 4.04,
+     "along0": -0.469,
+     "along_end": -0.239,
+     "along_end_prefall": -0.239,
+     "along_max": -0.223,
+     "disp_end": 0.231,
+     "disp_max": 0.247,
+     "lat0": -0.1,
+     "lat_end": -0.161,
+     "yaw_err0": -1.533,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.06,
+      0.289,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 185.34301850916808
+     }
+    }
+   ],
+   "takeover_s": [
+    14.4
+   ],
+   "end_minus_first_takeover_s": 30.68,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.273,
+     "t_min": 29.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.656,
+     "lat_at_end": 0.265
+    },
+    "plate_0_1": {
+     "min_dist": 0.678,
+     "t_min": 14.48,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.656,
+     "lat_at_end": -1.105
+    },
+    "plate_1_-1": {
+     "min_dist": 2.531,
+     "t_min": 30.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.595,
+     "lat_at_end": 2.356
+    },
+    "plate_1_1": {
+     "min_dist": 2.674,
+     "t_min": 31.84,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.595,
+     "lat_at_end": -3.196
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 23646,
+     "peakN": 188.4,
+     "t_first": 17.08,
+     "t_last": 30.36,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 5,
+   "T": 42.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     15.2,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     18.48,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     19.32,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     19.32,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     23.36,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 19.32,
+     "t1": 23.36,
+     "dur": 4.04,
+     "along0": -0.402,
+     "along_end": -0.111,
+     "along_end_prefall": -0.111,
+     "along_max": -0.11,
+     "disp_end": 0.291,
+     "disp_max": 0.292,
+     "lat0": 0.123,
+     "lat_end": 0.052,
+     "yaw_err0": -1.509,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.021,
+      0.296,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 259.14722120523476,
+      "plate_0_1:r0_leg_right_ankle_roll": 94.9414334134374
+     }
+    }
+   ],
+   "takeover_s": [
+    15.2
+   ],
+   "end_minus_first_takeover_s": 27.4,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.88,
+     "t_min": 21.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.691,
+     "lat_at_end": -3.66
+    },
+    "plate_0_1": {
+     "min_dist": 0.113,
+     "t_min": 24.32,
+     "base_inside_s": 4.36,
+     "base_traversed": false,
+     "along_at_end": 0.691,
+     "lat_at_end": 2.82
+    },
+    "plate_1_-1": {
+     "min_dist": 4.93,
+     "t_min": 33.92,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.04,
+     "lat_at_end": -4.949
+    },
+    "plate_1_1": {
+     "min_dist": 4.09,
+     "t_min": 33.92,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.04,
+     "lat_at_end": 4.109
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 36319,
+     "peakN": 267.2,
+     "t_first": 16.8,
+     "t_last": 26.04,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 7,
+   "T": 44.48,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.24,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     15.24,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     16.04,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     16.04,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     20.08,
+     0,
+     1,
+     "recorded"
+    ],
+    [
+     32.88,
+     1,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": 1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 16.04,
+     "t1": 20.08,
+     "dur": 4.04,
+     "along0": -0.506,
+     "along_end": -0.09,
+     "along_end_prefall": -0.09,
+     "along_max": -0.086,
+     "disp_end": 0.417,
+     "disp_max": 0.42,
+     "lat0": -0.041,
+     "lat_end": -0.096,
+     "yaw_err0": -1.529,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.033,
+      0.295,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 405.01201828613154,
+      "plate_0_1:r0_leg_right_ankle_roll": 100.47606574594857
+     }
+    }
+   ],
+   "takeover_s": [
+    14.24,
+    32.88
+   ],
+   "end_minus_first_takeover_s": 30.24,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 11.6,
+   "approach_path_len_m": 4.17,
+   "approach_net_disp_m": 0.483,
+   "approach_along_range": [
+    -0.209,
+    0.298
+   ],
+   "approach_lat_range": [
+    0.526,
+    0.715
+   ],
+   "approach_dist_to_prepoint_min": 0.56,
+   "approach_last20s_path_m": 6.024,
+   "approach_last20s_net_m": 1.12,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     8212,
+     257.6,
+     32.88,
+     37.88
+    ],
+    "plate_0_-1:r0_leg_right_ankle_roll": [
+     19431,
+     329.4,
+     32.88,
+     40.4
+    ]
+   },
+   "approach_eff_cmd_last": [
+    0.275,
+    0.12,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.068,
+     "t_min": 32.64,
+     "base_inside_s": 1.0,
+     "base_traversed": false,
+     "along_at_end": 0.411,
+     "lat_at_end": 0.257
+    },
+    "plate_0_1": {
+     "min_dist": 0.071,
+     "t_min": 28.0,
+     "base_inside_s": 13.36,
+     "base_traversed": false,
+     "along_at_end": 0.411,
+     "lat_at_end": -1.097
+    },
+    "plate_1_-1": {
+     "min_dist": 0.527,
+     "t_min": 38.76,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.171,
+     "lat_at_end": 0.603
+    },
+    "plate_1_1": {
+     "min_dist": 1.367,
+     "t_min": 38.76,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.171,
+     "lat_at_end": -1.443
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 35399,
+     "peakN": 329.4,
+     "t_first": 31.76,
+     "t_last": 40.4,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 38505,
+     "peakN": 405.0,
+     "t_first": 17.16,
+     "t_last": 31.48,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 9,
+   "T": 20.88,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     18.28,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    18.28
+   ],
+   "end_minus_first_takeover_s": 2.6,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.6,
+   "approach_path_len_m": 1.03,
+   "approach_net_disp_m": 0.725,
+   "approach_along_range": [
+    -0.423,
+    0.015
+   ],
+   "approach_lat_range": [
+    0.199,
+    0.79
+   ],
+   "approach_dist_to_prepoint_min": 0.234,
+   "approach_last20s_path_m": 7.981,
+   "approach_last20s_net_m": 4.688,
+   "approach_plate_contacts": {},
+   "approach_eff_cmd_last": [
+    -0.023,
+    0.299,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.467,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.422,
+     "lat_at_end": 0.199
+    },
+    "plate_0_1": {
+     "min_dist": 1.122,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.422,
+     "lat_at_end": -1.039
+    },
+    "plate_1_-1": {
+     "min_dist": 3.54,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.499,
+     "lat_at_end": 0.538
+    },
+    "plate_1_1": {
+     "min_dist": 3.761,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.499,
+     "lat_at_end": -1.378
+    }
+   },
+   "plate_contacts_by_geom": {}
+  },
+  {
+   "layout": 12,
+   "T": 13.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     11.44,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    11.44
+   ],
+   "end_minus_first_takeover_s": 2.16,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.16,
+   "approach_path_len_m": 1.01,
+   "approach_net_disp_m": 0.728,
+   "approach_along_range": [
+    -0.329,
+    0.026
+   ],
+   "approach_lat_range": [
+    0.123,
+    0.765
+   ],
+   "approach_dist_to_prepoint_min": 0.126,
+   "approach_last20s_path_m": 5.201,
+   "approach_last20s_net_m": 1.256,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     109,
+     130.0,
+     13.08,
+     13.4
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.203,
+    -0.221,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.282,
+     "t_min": 13.36,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.329,
+     "lat_at_end": 0.129
+    },
+    "plate_0_1": {
+     "min_dist": 1.007,
+     "t_min": 13.36,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.329,
+     "lat_at_end": -0.969
+    },
+    "plate_1_-1": {
+     "min_dist": 7.968,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 6.969,
+     "lat_at_end": 5.431
+    },
+    "plate_1_1": {
+     "min_dist": 8.462,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 6.969,
+     "lat_at_end": -6.271
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 109,
+     "peakN": 130.0,
+     "t_first": 13.08,
+     "t_last": 13.4,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 13,
+   "T": 15.24,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     12.2,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    12.2
+   ],
+   "end_minus_first_takeover_s": 3.04,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 3.04,
+   "approach_path_len_m": 1.26,
+   "approach_net_disp_m": 0.676,
+   "approach_along_range": [
+    -0.435,
+    0.029
+   ],
+   "approach_lat_range": [
+    0.224,
+    0.785
+   ],
+   "approach_dist_to_prepoint_min": 0.251,
+   "approach_last20s_path_m": 5.506,
+   "approach_last20s_net_m": 2.718,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     627,
+     134.7,
+     14.36,
+     15.2
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.135,
+    0.268,
+    0.0
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.462,
+     "t_min": 15.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.42,
+     "lat_at_end": 0.272
+    },
+    "plate_0_1": {
+     "min_dist": 1.142,
+     "t_min": 14.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.42,
+     "lat_at_end": -1.112
+    },
+    "plate_1_-1": {
+     "min_dist": 3.864,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.572,
+     "lat_at_end": -4.16
+    },
+    "plate_1_1": {
+     "min_dist": 3.067,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.572,
+     "lat_at_end": 3.32
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 627,
+     "peakN": 134.7,
+     "t_first": 14.36,
+     "t_last": 15.2,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 14,
+   "T": 37.16,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.72,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     19.12,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     19.96,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     19.96,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     24.0,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 19.96,
+     "t1": 24.0,
+     "dur": 4.04,
+     "along0": -0.346,
+     "along_end": -0.326,
+     "along_end_prefall": -0.326,
+     "along_max": -0.27,
+     "disp_end": 0.02,
+     "disp_max": 0.076,
+     "lat0": 0.104,
+     "lat_end": 0.155,
+     "yaw_err0": -1.723,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.012,
+      0.296,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 147.54796086882018
+     }
+    }
+   ],
+   "takeover_s": [
+    14.72
+   ],
+   "end_minus_first_takeover_s": 22.44,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.961,
+     "t_min": 20.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.645,
+     "lat_at_end": -2.346
+    },
+    "plate_0_1": {
+     "min_dist": 0.267,
+     "t_min": 17.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.645,
+     "lat_at_end": 1.506
+    },
+    "plate_1_-1": {
+     "min_dist": 3.85,
+     "t_min": 31.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.206,
+     "lat_at_end": 3.855
+    },
+    "plate_1_1": {
+     "min_dist": 4.689,
+     "t_min": 31.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.206,
+     "lat_at_end": -4.695
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 8588,
+     "peakN": 251.6,
+     "t_first": 16.2,
+     "t_last": 24.84,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 15,
+   "T": 40.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     13.48,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     17.64,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     18.48,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     18.48,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     22.52,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0000000000000002
+     ],
+     "t0": 18.48,
+     "t1": 22.52,
+     "dur": 4.04,
+     "along0": -0.363,
+     "along_end": -0.21,
+     "along_end_prefall": -0.21,
+     "along_max": -0.191,
+     "disp_end": 0.153,
+     "disp_max": 0.172,
+     "lat0": 0.134,
+     "lat_end": 0.106,
+     "yaw_err0": -1.361,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.037,
+      0.295,
+      0.0
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 186.1351035515196
+     }
+    }
+   ],
+   "takeover_s": [
+    13.48
+   ],
+   "end_minus_first_takeover_s": 27.2,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.136,
+     "t_min": 33.56,
+     "base_inside_s": 1.28,
+     "base_traversed": false,
+     "along_at_end": 0.303,
+     "lat_at_end": 1.842
+    },
+    "plate_0_1": {
+     "min_dist": 0.176,
+     "t_min": 29.08,
+     "base_inside_s": 9.6,
+     "base_traversed": false,
+     "along_at_end": 0.303,
+     "lat_at_end": -2.682
+    },
+    "plate_1_-1": {
+     "min_dist": 3.46,
+     "t_min": 38.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.418,
+     "lat_at_end": 2.597
+    },
+    "plate_1_1": {
+     "min_dist": 4.105,
+     "t_min": 38.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.418,
+     "lat_at_end": -3.437
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 9922,
+     "peakN": 425.8,
+     "t_first": 30.6,
+     "t_last": 34.64,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 85410,
+     "peakN": 306.1,
+     "t_first": 15.0,
+     "t_last": 30.4,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  }
+ ],
+ "v3s190a_21405543": [
+  {
+   "layout": 0,
+   "T": 55.04,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     22.72,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     23.72,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     25.64,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     25.64,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     29.56,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999998
+     ],
+     "t0": 25.64,
+     "t1": 29.56,
+     "dur": 3.92,
+     "along0": -0.457,
+     "along_end": 0.369,
+     "along_end_prefall": 0.369,
+     "along_max": 0.369,
+     "disp_end": 0.826,
+     "disp_max": 0.826,
+     "lat0": -0.149,
+     "lat_end": -0.431,
+     "yaw_err0": -1.119,
+     "sideways": true,
+     "cleared": true,
+     "cleared_349": true,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.246,
+      0.132,
+      0.278
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 171.91553211585915,
+      "plate_0_-1:r0_leg_right_ankle_roll": 218.09024305415025
+     }
+    }
+   ],
+   "takeover_s": [
+    22.72
+   ],
+   "end_minus_first_takeover_s": 32.32,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.307,
+     "t_min": 27.92,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 3.908,
+     "lat_at_end": 1.695
+    },
+    "plate_0_1": {
+     "min_dist": 0.413,
+     "t_min": 28.64,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 3.908,
+     "lat_at_end": -2.535
+    },
+    "plate_1_-1": {
+     "min_dist": 3.112,
+     "t_min": 10.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.565,
+     "lat_at_end": -7.408
+    },
+    "plate_1_1": {
+     "min_dist": 3.142,
+     "t_min": 12.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.565,
+     "lat_at_end": 6.568
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 3847,
+     "peakN": 218.1,
+     "t_first": 26.16,
+     "t_last": 28.2,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 1,
+   "T": 43.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     16.56,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     19.64,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     21.56,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     21.56,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     25.6,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      1.0,
+      0.0
+     ],
+     "t0": 21.56,
+     "t1": 25.6,
+     "dur": 4.04,
+     "along0": -0.472,
+     "along_end": -0.303,
+     "along_end_prefall": -0.303,
+     "along_max": -0.293,
+     "disp_end": 0.169,
+     "disp_max": 0.179,
+     "lat0": 0.071,
+     "lat_end": 0.064,
+     "yaw_err0": 0.013,
+     "sideways": false,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.296,
+      0.019,
+      0.075
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 214.70781424703688,
+      "plate_0_-1:r0_leg_right_ankle_roll": 167.49846154274584
+     }
+    }
+   ],
+   "takeover_s": [
+    16.56
+   ],
+   "end_minus_first_takeover_s": 27.12,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.299,
+     "t_min": 23.0,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 1.87,
+     "lat_at_end": -2.524
+    },
+    "plate_0_1": {
+     "min_dist": 0.008,
+     "t_min": 30.24,
+     "base_inside_s": 1.36,
+     "base_traversed": true,
+     "along_at_end": 1.87,
+     "lat_at_end": 1.684
+    },
+    "plate_1_-1": {
+     "min_dist": 3.657,
+     "t_min": 40.04,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.984,
+     "lat_at_end": 3.83
+    },
+    "plate_1_1": {
+     "min_dist": 4.487,
+     "t_min": 40.52,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.984,
+     "lat_at_end": -4.67
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 13928,
+     "peakN": 214.7,
+     "t_first": 22.16,
+     "t_last": 26.48,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 14064,
+     "peakN": 243.6,
+     "t_first": 29.08,
+     "t_last": 31.28,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 4,
+   "T": 45.08,
+   "fall": true,
+   "first_fall_s": 25.119999999986806,
+   "history": [
+    [
+     14.4,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     15.68,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     17.6,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     17.6,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     21.64,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 17.6,
+     "t1": 21.64,
+     "dur": 4.04,
+     "along0": -0.458,
+     "along_end": -0.319,
+     "along_end_prefall": -0.319,
+     "along_max": -0.305,
+     "disp_end": 0.139,
+     "disp_max": 0.153,
+     "lat0": -0.118,
+     "lat_end": -0.142,
+     "yaw_err0": -1.036,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": true,
+     "cmd_mean_abs": [
+      0.236,
+      0.172,
+      0.347
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 143.11848495284846,
+      "plate_0_-1:r0_leg_right_ankle_roll": 120.32750188900388
+     }
+    }
+   ],
+   "takeover_s": [
+    14.4
+   ],
+   "end_minus_first_takeover_s": 30.68,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.332,
+     "t_min": 18.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.622,
+     "lat_at_end": -0.57
+    },
+    "plate_0_1": {
+     "min_dist": 0.238,
+     "t_min": 25.16,
+     "base_inside_s": 0.04,
+     "base_traversed": false,
+     "along_at_end": -0.622,
+     "lat_at_end": -0.27
+    },
+    "plate_1_-1": {
+     "min_dist": 2.916,
+     "t_min": 17.68,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.43,
+     "lat_at_end": 0.322
+    },
+    "plate_1_1": {
+     "min_dist": 3.072,
+     "t_min": 17.68,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.43,
+     "lat_at_end": -1.162
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 10351,
+     "peakN": 534.5,
+     "t_first": 18.16,
+     "t_last": 25.72,
+     "bodies": [
+      "r0_arm_right_elbow_roll",
+      "r0_arm_right_shoulder_yaw",
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 4319,
+     "peakN": 286.2,
+     "t_first": 23.72,
+     "t_last": 24.88,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 5,
+   "T": 42.6,
+   "fall": true,
+   "first_fall_s": 26.43999999998373,
+   "history": [
+    [
+     15.2,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     19.12,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     21.04,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     21.04,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     24.32,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 21.04,
+     "t1": 24.32,
+     "dur": 3.28,
+     "along0": -0.471,
+     "along_end": 0.365,
+     "along_end_prefall": 0.365,
+     "along_max": 0.365,
+     "disp_end": 0.836,
+     "disp_max": 0.836,
+     "lat0": 0.068,
+     "lat_end": 0.046,
+     "yaw_err0": -0.122,
+     "sideways": false,
+     "cleared": true,
+     "cleared_349": true,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": true,
+     "cmd_mean_abs": [
+      0.296,
+      0.01,
+      0.04
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_right_ankle_roll": 191.76885915966054,
+      "plate_0_1:r0_leg_left_ankle_roll": 175.70698135455586
+     }
+    }
+   ],
+   "takeover_s": [
+    15.2
+   ],
+   "end_minus_first_takeover_s": 27.4,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.87,
+     "t_min": 23.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.414,
+     "lat_at_end": -0.854
+    },
+    "plate_0_1": {
+     "min_dist": 0.032,
+     "t_min": 23.32,
+     "base_inside_s": 2.04,
+     "base_traversed": true,
+     "along_at_end": 0.414,
+     "lat_at_end": 0.014
+    },
+    "plate_1_-1": {
+     "min_dist": 5.489,
+     "t_min": 9.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.846,
+     "lat_at_end": -5.226
+    },
+    "plate_1_1": {
+     "min_dist": 4.649,
+     "t_min": 9.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -2.846,
+     "lat_at_end": 4.386
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 215625,
+     "peakN": 1982.6,
+     "t_first": 16.56,
+     "t_last": 42.6,
+     "bodies": [
+      "r0_arm_right_elbow_roll",
+      "r0_arm_right_shoulder_yaw",
+      "r0_base",
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 7,
+   "T": 44.48,
+   "fall": true,
+   "first_fall_s": 19.83999999999911,
+   "history": [
+    [
+     14.24,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     15.48,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     17.4,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     17.4,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     21.44,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": 1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 17.4,
+     "t1": 21.44,
+     "dur": 4.04,
+     "along0": -0.535,
+     "along_end": -0.143,
+     "along_end_prefall": -0.22,
+     "along_max": -0.05,
+     "disp_end": 0.393,
+     "disp_max": 0.485,
+     "lat0": -0.029,
+     "lat_end": -0.094,
+     "yaw_err0": -1.02,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": true,
+     "fall_after_cross_start": 2.44,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.217,
+      0.192,
+      0.344
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 329.5461405517873,
+      "plate_0_1:r0_leg_right_ankle_roll": 217.49554456316025
+     }
+    }
+   ],
+   "takeover_s": [
+    14.24
+   ],
+   "end_minus_first_takeover_s": 30.24,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.562,
+     "t_min": 19.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.141,
+     "lat_at_end": -0.816
+    },
+    "plate_0_1": {
+     "min_dist": 0.138,
+     "t_min": 29.0,
+     "base_inside_s": 25.32,
+     "base_traversed": false,
+     "along_at_end": -0.141,
+     "lat_at_end": -0.024
+    },
+    "plate_1_-1": {
+     "min_dist": 1.455,
+     "t_min": 19.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.381,
+     "lat_at_end": 1.676
+    },
+    "plate_1_1": {
+     "min_dist": 2.277,
+     "t_min": 19.32,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.381,
+     "lat_at_end": -2.516
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 99295,
+     "peakN": 329.5,
+     "t_first": 18.2,
+     "t_last": 44.48,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 9,
+   "T": 20.88,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     18.28,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    18.28
+   ],
+   "end_minus_first_takeover_s": 2.6,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.6,
+   "approach_path_len_m": 1.03,
+   "approach_net_disp_m": 0.726,
+   "approach_along_range": [
+    -0.424,
+    0.015
+   ],
+   "approach_lat_range": [
+    0.198,
+    0.79
+   ],
+   "approach_dist_to_prepoint_min": 0.232,
+   "approach_last20s_path_m": 7.988,
+   "approach_last20s_net_m": 4.689,
+   "approach_plate_contacts": {},
+   "approach_eff_cmd_last": [
+    -0.031,
+    0.298,
+    -0.016
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.466,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.422,
+     "lat_at_end": 0.198
+    },
+    "plate_0_1": {
+     "min_dist": 1.12,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.422,
+     "lat_at_end": -1.038
+    },
+    "plate_1_-1": {
+     "min_dist": 3.539,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.498,
+     "lat_at_end": 0.538
+    },
+    "plate_1_1": {
+     "min_dist": 3.76,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.498,
+     "lat_at_end": -1.378
+    }
+   },
+   "plate_contacts_by_geom": {}
+  },
+  {
+   "layout": 12,
+   "T": 13.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     11.44,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    11.44
+   ],
+   "end_minus_first_takeover_s": 2.16,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.16,
+   "approach_path_len_m": 1.04,
+   "approach_net_disp_m": 0.764,
+   "approach_along_range": [
+    -0.415,
+    0.026
+   ],
+   "approach_lat_range": [
+    0.137,
+    0.765
+   ],
+   "approach_dist_to_prepoint_min": 0.173,
+   "approach_last20s_path_m": 5.225,
+   "approach_last20s_net_m": 1.182,
+   "approach_plate_contacts": {},
+   "approach_eff_cmd_last": [
+    -0.238,
+    0.183,
+    0.35
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.394,
+     "t_min": 13.0,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.415,
+     "lat_at_end": 0.141
+    },
+    "plate_0_1": {
+     "min_dist": 1.058,
+     "t_min": 13.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.415,
+     "lat_at_end": -0.981
+    },
+    "plate_1_-1": {
+     "min_dist": 7.968,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 7.055,
+     "lat_at_end": 5.419
+    },
+    "plate_1_1": {
+     "min_dist": 8.462,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 7.055,
+     "lat_at_end": -6.259
+    }
+   },
+   "plate_contacts_by_geom": {}
+  },
+  {
+   "layout": 13,
+   "T": 15.24,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     12.2,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    12.2
+   ],
+   "end_minus_first_takeover_s": 3.04,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 3.04,
+   "approach_path_len_m": 1.23,
+   "approach_net_disp_m": 0.675,
+   "approach_along_range": [
+    -0.436,
+    0.029
+   ],
+   "approach_lat_range": [
+    0.225,
+    0.784
+   ],
+   "approach_dist_to_prepoint_min": 0.252,
+   "approach_last20s_path_m": 5.475,
+   "approach_last20s_net_m": 2.747,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     492,
+     66.6,
+     14.36,
+     14.92
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.107,
+    0.28,
+    0.224
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.468,
+     "t_min": 15.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.395,
+     "lat_at_end": 0.251
+    },
+    "plate_0_1": {
+     "min_dist": 1.143,
+     "t_min": 14.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.395,
+     "lat_at_end": -1.091
+    },
+    "plate_1_-1": {
+     "min_dist": 3.864,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.551,
+     "lat_at_end": -4.135
+    },
+    "plate_1_1": {
+     "min_dist": 3.067,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.551,
+     "lat_at_end": 3.295
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 492,
+     "peakN": 66.6,
+     "t_first": 14.36,
+     "t_last": 14.92,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 14,
+   "T": 37.16,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.72,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     19.08,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     21.0,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     21.0,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     25.04,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 21.0,
+     "t1": 25.04,
+     "dur": 4.04,
+     "along0": -0.458,
+     "along_end": -0.317,
+     "along_end_prefall": -0.317,
+     "along_max": -0.313,
+     "disp_end": 0.141,
+     "disp_max": 0.145,
+     "lat0": 0.049,
+     "lat_end": 0.072,
+     "yaw_err0": -0.092,
+     "sideways": false,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.297,
+      0.01,
+      0.04
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_right_ankle_roll": 159.4905874124836,
+      "plate_0_1:r0_leg_left_ankle_roll": 161.98561741155973
+     }
+    }
+   ],
+   "takeover_s": [
+    14.72
+   ],
+   "end_minus_first_takeover_s": 22.44,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.941,
+     "t_min": 21.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.537,
+     "lat_at_end": -3.583
+    },
+    "plate_0_1": {
+     "min_dist": 0.32,
+     "t_min": 22.08,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.537,
+     "lat_at_end": 2.743
+    },
+    "plate_1_-1": {
+     "min_dist": 4.359,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.443,
+     "lat_at_end": 5.037
+    },
+    "plate_1_1": {
+     "min_dist": 5.199,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.443,
+     "lat_at_end": -5.877
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 28725,
+     "peakN": 164.7,
+     "t_first": 16.2,
+     "t_last": 25.44,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 15,
+   "T": 40.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     13.48,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     17.44,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     19.36,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     19.36,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     23.4,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0000000000000002
+     ],
+     "t0": 19.36,
+     "t1": 23.4,
+     "dur": 4.04,
+     "along0": -0.466,
+     "along_end": 0.105,
+     "along_end_prefall": 0.105,
+     "along_max": 0.105,
+     "disp_end": 0.571,
+     "disp_max": 0.571,
+     "lat0": 0.087,
+     "lat_end": 0.085,
+     "yaw_err0": -0.07,
+     "sideways": false,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.297,
+      0.009,
+      0.036
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_right_ankle_roll": 216.0008062999275,
+      "plate_0_1:r0_leg_left_ankle_roll": 198.8730878942352
+     }
+    }
+   ],
+   "takeover_s": [
+    13.48
+   ],
+   "end_minus_first_takeover_s": 27.2,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.911,
+     "t_min": 23.28,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.79,
+     "lat_at_end": -2.023
+    },
+    "plate_0_1": {
+     "min_dist": 0.074,
+     "t_min": 23.04,
+     "base_inside_s": 1.8,
+     "base_traversed": true,
+     "along_at_end": 0.79,
+     "lat_at_end": 1.183
+    },
+    "plate_1_-1": {
+     "min_dist": 5.865,
+     "t_min": 23.6,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -6.283,
+     "lat_at_end": 2.11
+    },
+    "plate_1_1": {
+     "min_dist": 6.298,
+     "t_min": 23.6,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -6.283,
+     "lat_at_end": -2.95
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 26607,
+     "peakN": 257.9,
+     "t_first": 14.92,
+     "t_last": 24.84,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  }
+ ],
+ "v4s080a_21405545": [
+  {
+   "layout": 0,
+   "T": 55.04,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     22.72,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     23.72,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     24.56,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     24.56,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     28.6,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999998
+     ],
+     "t0": 24.56,
+     "t1": 28.6,
+     "dur": 4.04,
+     "along0": -0.454,
+     "along_end": 0.019,
+     "along_end_prefall": 0.019,
+     "along_max": 0.019,
+     "disp_end": 0.473,
+     "disp_max": 0.473,
+     "lat0": -0.148,
+     "lat_end": -0.254,
+     "yaw_err0": -1.11,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.245,
+      0.144,
+      0.316
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 144.91623266208805,
+      "plate_0_-1:r0_leg_right_ankle_roll": 233.35500851451653
+     }
+    }
+   ],
+   "takeover_s": [
+    22.72
+   ],
+   "end_minus_first_takeover_s": 32.32,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.255,
+     "t_min": 28.6,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 3.905,
+     "lat_at_end": 0.09
+    },
+    "plate_0_1": {
+     "min_dist": 0.212,
+     "t_min": 30.64,
+     "base_inside_s": 2.32,
+     "base_traversed": false,
+     "along_at_end": 3.905,
+     "lat_at_end": -0.93
+    },
+    "plate_1_-1": {
+     "min_dist": 3.112,
+     "t_min": 10.16,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -4.17,
+     "lat_at_end": -7.405
+    },
+    "plate_1_1": {
+     "min_dist": 3.142,
+     "t_min": 12.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -4.17,
+     "lat_at_end": 6.565
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 6576,
+     "peakN": 233.4,
+     "t_first": 25.08,
+     "t_last": 28.72,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 24799,
+     "peakN": 307.7,
+     "t_first": 29.36,
+     "t_last": 34.56,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 1,
+   "T": 43.68,
+   "fall": true,
+   "first_fall_s": 31.559999999971797,
+   "history": [
+    [
+     16.56,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     19.64,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     20.48,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     20.48,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     24.52,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      1.0,
+      0.0
+     ],
+     "t0": 20.48,
+     "t1": 24.52,
+     "dur": 4.04,
+     "along0": -0.471,
+     "along_end": -0.303,
+     "along_end_prefall": -0.303,
+     "along_max": -0.298,
+     "disp_end": 0.167,
+     "disp_max": 0.172,
+     "lat0": 0.073,
+     "lat_end": 0.063,
+     "yaw_err0": 0.014,
+     "sideways": false,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": true,
+     "cmd_mean_abs": [
+      0.297,
+      0.014,
+      0.055
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_right_ankle_roll": 157.95132212613387,
+      "plate_0_-1:r0_leg_left_ankle_roll": 199.3537363860708
+     }
+    }
+   ],
+   "takeover_s": [
+    16.56
+   ],
+   "end_minus_first_takeover_s": 27.12,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.305,
+     "t_min": 22.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.119,
+     "lat_at_end": -0.751
+    },
+    "plate_0_1": {
+     "min_dist": 0.094,
+     "t_min": 31.64,
+     "base_inside_s": 12.16,
+     "base_traversed": false,
+     "along_at_end": -0.119,
+     "lat_at_end": -0.089
+    },
+    "plate_1_-1": {
+     "min_dist": 5.798,
+     "t_min": 16.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.211,
+     "lat_at_end": 5.819
+    },
+    "plate_1_1": {
+     "min_dist": 6.619,
+     "t_min": 16.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.211,
+     "lat_at_end": -6.659
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 13943,
+     "peakN": 208.4,
+     "t_first": 21.0,
+     "t_last": 25.16,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 6192,
+     "peakN": 436.1,
+     "t_first": 29.2,
+     "t_last": 31.08,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 4,
+   "T": 45.08,
+   "fall": true,
+   "first_fall_s": 23.59999999999035,
+   "history": [
+    [
+     14.4,
+     0,
+     -1,
+     "approach"
+    ],
+    [
+     15.68,
+     0,
+     -1,
+     "settle"
+    ],
+    [
+     16.52,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     16.52,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     20.56,
+     0,
+     -1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": -1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 16.52,
+     "t1": 20.56,
+     "dur": 4.04,
+     "along0": -0.455,
+     "along_end": -0.321,
+     "along_end_prefall": -0.321,
+     "along_max": -0.307,
+     "disp_end": 0.135,
+     "disp_max": 0.148,
+     "lat0": -0.119,
+     "lat_end": -0.136,
+     "yaw_err0": -1.041,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": true,
+     "cmd_mean_abs": [
+      0.22,
+      0.196,
+      0.347
+     ],
+     "plate_contact_peakN": {
+      "plate_0_-1:r0_leg_left_ankle_roll": 139.49518014494168,
+      "plate_0_-1:r0_leg_right_ankle_roll": 54.86508729794859
+     }
+    }
+   ],
+   "takeover_s": [
+    14.4
+   ],
+   "end_minus_first_takeover_s": 30.68,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.329,
+     "t_min": 17.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.038,
+     "lat_at_end": -0.67
+    },
+    "plate_0_1": {
+     "min_dist": 0.143,
+     "t_min": 24.16,
+     "base_inside_s": 21.12,
+     "base_traversed": false,
+     "along_at_end": 0.038,
+     "lat_at_end": -0.17
+    },
+    "plate_1_-1": {
+     "min_dist": 2.917,
+     "t_min": 16.6,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.53,
+     "lat_at_end": -0.338
+    },
+    "plate_1_1": {
+     "min_dist": 3.072,
+     "t_min": 16.6,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.53,
+     "lat_at_end": -0.502
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 14384,
+     "peakN": 148.9,
+     "t_first": 17.04,
+     "t_last": 21.24,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 63584,
+     "peakN": 313.9,
+     "t_first": 22.24,
+     "t_last": 45.08,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 5,
+   "T": 42.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     15.2,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     19.12,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     19.96,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     19.96,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     24.0,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 19.96,
+     "t1": 24.0,
+     "dur": 4.04,
+     "along0": -0.471,
+     "along_end": -0.314,
+     "along_end_prefall": -0.314,
+     "along_max": -0.298,
+     "disp_end": 0.157,
+     "disp_max": 0.173,
+     "lat0": 0.065,
+     "lat_end": 0.187,
+     "yaw_err0": -0.119,
+     "sideways": false,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.297,
+      0.016,
+      0.062
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 232.404725200341,
+      "plate_0_1:r0_leg_right_ankle_roll": 194.90500763506532
+     }
+    }
+   ],
+   "takeover_s": [
+    15.2
+   ],
+   "end_minus_first_takeover_s": 27.4,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.962,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.613,
+     "lat_at_end": -3.874
+    },
+    "plate_0_1": {
+     "min_dist": 0.309,
+     "t_min": 20.92,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.613,
+     "lat_at_end": 3.034
+    },
+    "plate_1_-1": {
+     "min_dist": 5.489,
+     "t_min": 9.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.174,
+     "lat_at_end": -6.253
+    },
+    "plate_1_1": {
+     "min_dist": 4.649,
+     "t_min": 9.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.174,
+     "lat_at_end": 5.413
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 17266,
+     "peakN": 232.4,
+     "t_first": 16.56,
+     "t_last": 24.44,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 7,
+   "T": 44.48,
+   "fall": true,
+   "first_fall_s": 18.200000000002934,
+   "history": [
+    [
+     14.24,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     15.48,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     16.32,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     16.32,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     20.36,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": 1,
+     "door_dir": [
+      0.0,
+      0.9999999999999999
+     ],
+     "t0": 16.32,
+     "t1": 20.36,
+     "dur": 4.04,
+     "along0": -0.538,
+     "along_end": -0.269,
+     "along_end_prefall": -0.368,
+     "along_max": -0.236,
+     "disp_end": 0.268,
+     "disp_max": 0.302,
+     "lat0": -0.032,
+     "lat_end": -0.056,
+     "yaw_err0": -1.019,
+     "sideways": true,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": true,
+     "fall_after_cross_start": 1.88,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.189,
+      0.222,
+      0.343
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 381.7581163469684,
+      "plate_0_1:r0_arm_left_elbow_roll": 662.416055015428,
+      "plate_0_1:r0_leg_left_knee_pitch": 398.6094167456714,
+      "plate_0_-1:r0_arm_right_elbow_roll": 52.497254315724895,
+      "plate_0_1:r0_leg_left_hip_pitch": 264.9418646640035
+     }
+    }
+   ],
+   "takeover_s": [
+    14.24
+   ],
+   "end_minus_first_takeover_s": 30.24,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.404,
+     "t_min": 19.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.303,
+     "lat_at_end": -0.58
+    },
+    "plate_0_1": {
+     "min_dist": 0.252,
+     "t_min": 17.68,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.303,
+     "lat_at_end": -0.26
+    },
+    "plate_1_-1": {
+     "min_dist": 1.273,
+     "t_min": 19.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.543,
+     "lat_at_end": 1.44
+    },
+    "plate_1_1": {
+     "min_dist": 2.072,
+     "t_min": 19.12,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.543,
+     "lat_at_end": -2.28
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 116,
+     "peakN": 52.5,
+     "t_first": 18.96,
+     "t_last": 19.0,
+     "bodies": [
+      "r0_arm_right_elbow_roll"
+     ]
+    },
+    "plate_0_1": {
+     "n": 99183,
+     "peakN": 662.4,
+     "t_first": 17.12,
+     "t_last": 44.48,
+     "bodies": [
+      "r0_arm_left_elbow_roll",
+      "r0_leg_left_ankle_roll",
+      "r0_leg_left_hip_pitch",
+      "r0_leg_left_knee_pitch"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 9,
+   "T": 20.88,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     18.28,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    18.28
+   ],
+   "end_minus_first_takeover_s": 2.6,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.6,
+   "approach_path_len_m": 1.03,
+   "approach_net_disp_m": 0.726,
+   "approach_along_range": [
+    -0.424,
+    0.015
+   ],
+   "approach_lat_range": [
+    0.198,
+    0.79
+   ],
+   "approach_dist_to_prepoint_min": 0.232,
+   "approach_last20s_path_m": 7.988,
+   "approach_last20s_net_m": 4.689,
+   "approach_plate_contacts": {},
+   "approach_eff_cmd_last": [
+    -0.031,
+    0.298,
+    -0.016
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.466,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.422,
+     "lat_at_end": 0.198
+    },
+    "plate_0_1": {
+     "min_dist": 1.12,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.422,
+     "lat_at_end": -1.038
+    },
+    "plate_1_-1": {
+     "min_dist": 3.539,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.498,
+     "lat_at_end": 0.538
+    },
+    "plate_1_1": {
+     "min_dist": 3.76,
+     "t_min": 20.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -3.498,
+     "lat_at_end": -1.378
+    }
+   },
+   "plate_contacts_by_geom": {}
+  },
+  {
+   "layout": 12,
+   "T": 13.6,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     11.44,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    11.44
+   ],
+   "end_minus_first_takeover_s": 2.16,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 2.16,
+   "approach_path_len_m": 1.04,
+   "approach_net_disp_m": 0.764,
+   "approach_along_range": [
+    -0.415,
+    0.026
+   ],
+   "approach_lat_range": [
+    0.137,
+    0.765
+   ],
+   "approach_dist_to_prepoint_min": 0.173,
+   "approach_last20s_path_m": 5.225,
+   "approach_last20s_net_m": 1.182,
+   "approach_plate_contacts": {},
+   "approach_eff_cmd_last": [
+    -0.238,
+    0.183,
+    0.35
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.394,
+     "t_min": 13.0,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.415,
+     "lat_at_end": 0.141
+    },
+    "plate_0_1": {
+     "min_dist": 1.058,
+     "t_min": 13.56,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.415,
+     "lat_at_end": -0.981
+    },
+    "plate_1_-1": {
+     "min_dist": 7.968,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 7.055,
+     "lat_at_end": 5.419
+    },
+    "plate_1_1": {
+     "min_dist": 8.462,
+     "t_min": 10.4,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 7.055,
+     "lat_at_end": -6.259
+    }
+   },
+   "plate_contacts_by_geom": {}
+  },
+  {
+   "layout": 13,
+   "T": 15.24,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     12.2,
+     0,
+     -1,
+     "approach"
+    ]
+   ],
+   "crossings": [],
+   "takeover_s": [
+    12.2
+   ],
+   "end_minus_first_takeover_s": 3.04,
+   "last_phase": "approach",
+   "stuck_in_approach_s": 3.04,
+   "approach_path_len_m": 1.23,
+   "approach_net_disp_m": 0.675,
+   "approach_along_range": [
+    -0.436,
+    0.029
+   ],
+   "approach_lat_range": [
+    0.225,
+    0.784
+   ],
+   "approach_dist_to_prepoint_min": 0.252,
+   "approach_last20s_path_m": 5.475,
+   "approach_last20s_net_m": 2.747,
+   "approach_plate_contacts": {
+    "plate_0_-1:r0_leg_left_ankle_roll": [
+     492,
+     66.6,
+     14.36,
+     14.92
+    ]
+   },
+   "approach_eff_cmd_last": [
+    -0.107,
+    0.28,
+    0.224
+   ],
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.468,
+     "t_min": 15.24,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.395,
+     "lat_at_end": 0.251
+    },
+    "plate_0_1": {
+     "min_dist": 1.143,
+     "t_min": 14.88,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.395,
+     "lat_at_end": -1.091
+    },
+    "plate_1_-1": {
+     "min_dist": 3.864,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.551,
+     "lat_at_end": -4.135
+    },
+    "plate_1_1": {
+     "min_dist": 3.067,
+     "t_min": 12.2,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.551,
+     "lat_at_end": 3.295
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_-1": {
+     "n": 492,
+     "peakN": 66.6,
+     "t_first": 14.36,
+     "t_last": 14.92,
+     "bodies": [
+      "r0_leg_left_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 14,
+   "T": 37.16,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     14.72,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     19.08,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     19.92,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     19.92,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     23.96,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0
+     ],
+     "t0": 19.92,
+     "t1": 23.96,
+     "dur": 4.04,
+     "along0": -0.457,
+     "along_end": -0.322,
+     "along_end_prefall": -0.322,
+     "along_max": -0.318,
+     "disp_end": 0.135,
+     "disp_max": 0.139,
+     "lat0": 0.045,
+     "lat_end": 0.076,
+     "yaw_err0": -0.09,
+     "sideways": false,
+     "cleared": false,
+     "cleared_349": false,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.297,
+      0.012,
+      0.047
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_left_ankle_roll": 124.82058664093992,
+      "plate_0_1:r0_leg_right_ankle_roll": 192.36368242360192
+     }
+    }
+   ],
+   "takeover_s": [
+    14.72
+   ],
+   "end_minus_first_takeover_s": 22.44,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.954,
+     "t_min": 20.0,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.517,
+     "lat_at_end": -3.503
+    },
+    "plate_0_1": {
+     "min_dist": 0.329,
+     "t_min": 21.08,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -0.517,
+     "lat_at_end": 2.663
+    },
+    "plate_1_-1": {
+     "min_dist": 4.359,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.363,
+     "lat_at_end": 5.017
+    },
+    "plate_1_1": {
+     "min_dist": 5.199,
+     "t_min": 13.44,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -1.363,
+     "lat_at_end": -5.857
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 32912,
+     "peakN": 192.4,
+     "t_first": 16.2,
+     "t_last": 24.44,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  },
+  {
+   "layout": 15,
+   "T": 40.68,
+   "fall": false,
+   "first_fall_s": null,
+   "history": [
+    [
+     13.48,
+     0,
+     1,
+     "approach"
+    ],
+    [
+     17.44,
+     0,
+     1,
+     "settle"
+    ],
+    [
+     18.28,
+     0,
+     null,
+     "cross"
+    ],
+    [
+     18.28,
+     0,
+     null,
+     "cross_kick"
+    ],
+    [
+     21.4,
+     0,
+     1,
+     "recorded"
+    ]
+   ],
+   "crossings": [
+    {
+     "door": 0,
+     "side": 1,
+     "correct_side": -1,
+     "door_dir": [
+      0.0,
+      1.0000000000000002
+     ],
+     "t0": 18.28,
+     "t1": 21.4,
+     "dur": 3.12,
+     "along0": -0.465,
+     "along_end": 0.373,
+     "along_end_prefall": 0.373,
+     "along_max": 0.373,
+     "disp_end": 0.838,
+     "disp_max": 0.838,
+     "lat0": 0.087,
+     "lat_end": 0.098,
+     "yaw_err0": -0.073,
+     "sideways": false,
+     "cleared": true,
+     "cleared_349": true,
+     "fell_in_cross": false,
+     "fall_after_cross_start": null,
+     "post_stage_fall": false,
+     "cmd_mean_abs": [
+      0.296,
+      0.008,
+      0.034
+     ],
+     "plate_contact_peakN": {
+      "plate_0_1:r0_leg_right_ankle_roll": 149.72730303469942,
+      "plate_0_1:r0_leg_left_ankle_roll": 207.0194231227664
+     }
+    }
+   ],
+   "takeover_s": [
+    13.48
+   ],
+   "end_minus_first_takeover_s": 27.2,
+   "last_phase": "recorded",
+   "plate_proximity": {
+    "plate_0_-1": {
+     "min_dist": 0.933,
+     "t_min": 20.0,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": 0.788,
+     "lat_at_end": -2.349
+    },
+    "plate_0_1": {
+     "min_dist": 0.105,
+     "t_min": 20.48,
+     "base_inside_s": 1.76,
+     "base_traversed": true,
+     "along_at_end": 0.788,
+     "lat_at_end": 1.509
+    },
+    "plate_1_-1": {
+     "min_dist": 5.668,
+     "t_min": 21.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -6.609,
+     "lat_at_end": 2.112
+    },
+    "plate_1_1": {
+     "min_dist": 6.052,
+     "t_min": 21.8,
+     "base_inside_s": 0.0,
+     "base_traversed": false,
+     "along_at_end": -6.609,
+     "lat_at_end": -2.952
+    }
+   },
+   "plate_contacts_by_geom": {
+    "plate_0_1": {
+     "n": 24019,
+     "peakN": 219.7,
+     "t_first": 14.92,
+     "t_last": 21.48,
+     "bodies": [
+      "r0_leg_left_ankle_roll",
+      "r0_leg_right_ankle_roll"
+     ]
+    }
+   }
+  }
+ ]
+}

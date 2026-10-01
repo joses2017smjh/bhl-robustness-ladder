@@ -1,0 +1,53 @@
+gate layout yaw_err0 side? along0 along_max cleared edge_stall_s fell_in_cross fall_after post_fall |lat| |yaw|
+guarded(21397732,PASS) L 0 d0 -1.53 SIDE -0.353 -0.239 stall 0.08      None  0.29 0.00
+guarded(21397732,PASS) L 1 d0 -0.09 fwd  -0.402 -0.142 stall 0.00      None  0.03 0.00
+guarded(21397732,PASS) L 4 d0 -1.52 SIDE -0.343 -0.258 stall 0.28      None  0.29 0.00
+guarded(21397732,PASS) L 7 d0 -1.52 SIDE -0.362 -0.219 stall 0.00      None  0.29 0.00
+guarded(21397732,PASS) L14 d0 -1.35 SIDE -0.274 -0.239 stall 0.48      None  0.28 0.00
+waitopen2(21400863,PAS L 0 d0 -1.53 SIDE -0.353 -0.239 stall 0.08      None  0.29 0.00
+waitopen2(21400863,PAS L 1 d0 -0.09 fwd  -0.402 -0.142 stall 0.00      None  0.03 0.00
+waitopen2(21400863,PAS L 4 d0 -1.52 SIDE -0.343 -0.258 stall 0.28      None  0.29 0.00
+waitopen2(21400863,PAS L 7 d0 -1.52 SIDE -0.362 -0.219 stall 0.00      None  0.29 0.00
+waitopen2(21400863,PAS L14 d0 -1.35 SIDE -0.274 -0.239 stall 0.48      None  0.28 0.00
+v2-align(21405537)     L 0 d0 -1.10 SIDE -0.457 +0.352 CLEAR 0.00      None  0.16 0.31
+v2-align(21405537)     L 1 d0 +0.02 fwd  -0.459 +0.357 CLEAR 0.00      None  0.03 0.11
+v2-align(21405537)     L 4 d0 -1.05 SIDE -0.462 +0.297 stall 0.00      None  0.11 0.25
+v2-align(21405537)     L 5 d0 -0.13 fwd  -0.471 +0.355 CLEAR 0.00      None  0.01 0.04
+v2-align(21405537)     L 7 d0 -1.02 SIDE -0.536 -0.287 stall 0.40 FELL 2.4  0.17 0.34
+v2-align(21405537)     L14 d0 -0.08 fwd  -0.464 -0.204 stall 0.08      None  0.01 0.06
+v2-align(21405537)     L15 d0 -0.07 fwd  -0.466 +0.353 CLEAR 0.00      None  0.01 0.05
+v3-settle190(21405539) L 0 d0 -1.50 SIDE -0.472 -0.183 stall 0.04 FELL 2.24  0.28 0.00
+v3-settle190(21405539) L 1 d0 +0.06 fwd  -0.474 +0.352 CLEAR 0.00      None POSTFALL 0.09 0.00
+v3-settle190(21405539) L 4 d0 -1.53 SIDE -0.471 -0.234 stall 0.20 FELL 2.36  0.29 0.00
+v3-settle190(21405539) L 5 d0 -1.51 SIDE -0.402 +0.147 stall 0.00      None  0.29 0.00
+v3-settle190(21405539) L 7 d0 -1.54 SIDE -0.509 -0.080 stall 0.04 FELL 2.2  0.29 0.00
+v3-settle190(21405539) L14 d0 -1.72 SIDE -0.347 -0.283 stall 1.80      None  0.30 0.00
+v3-settle190(21405539) L15 d0 -1.35 SIDE -0.364 -0.200 stall 2.24      None  0.29 0.00
+v4-settle080(21405541) L 0 d0 -1.49 SIDE -0.458 -0.186 stall 0.08 FELL 1.92  0.29 0.00
+v4-settle080(21405541) L 1 d0 +0.07 fwd  -0.473 +0.367 CLEAR 0.00      None  0.03 0.00
+v4-settle080(21405541) L 4 d0 -1.53 SIDE -0.469 -0.223 stall 1.76      None  0.29 0.00
+v4-settle080(21405541) L 5 d0 -1.51 SIDE -0.402 -0.110 stall 0.12      None  0.30 0.00
+v4-settle080(21405541) L 7 d0 -1.53 SIDE -0.506 -0.086 stall 0.00      None  0.29 0.00
+v4-settle080(21405541) L14 d0 -1.72 SIDE -0.346 -0.270 stall 1.84      None  0.30 0.00
+v4-settle080(21405541) L15 d0 -1.36 SIDE -0.363 -0.191 stall 2.32      None  0.29 0.00
+v3-settle190-align(214 L 0 d0 -1.12 SIDE -0.457 +0.369 CLEAR 0.00      None  0.13 0.28
+v3-settle190-align(214 L 1 d0 +0.01 fwd  -0.472 -0.293 stall 2.36      None  0.02 0.08
+v3-settle190-align(214 L 4 d0 -1.04 SIDE -0.458 -0.305 stall 2.52      None POSTFALL 0.17 0.35
+v3-settle190-align(214 L 5 d0 -0.12 fwd  -0.471 +0.365 CLEAR 0.00      None POSTFALL 0.01 0.04
+v3-settle190-align(214 L 7 d0 -1.02 SIDE -0.535 -0.050 stall 0.04 FELL 2.44  0.19 0.34
+v3-settle190-align(214 L14 d0 -0.09 fwd  -0.458 -0.313 stall 2.60      None  0.01 0.04
+v3-settle190-align(214 L15 d0 -0.07 fwd  -0.466 +0.105 stall 0.20      None  0.01 0.04
+v4-settle080-align(214 L 0 d0 -1.11 SIDE -0.454 +0.019 stall 1.36      None  0.14 0.32
+v4-settle080-align(214 L 1 d0 +0.01 fwd  -0.471 -0.298 stall 2.12      None POSTFALL 0.01 0.05
+v4-settle080-align(214 L 4 d0 -1.04 SIDE -0.455 -0.307 stall 2.48      None POSTFALL 0.20 0.35
+v4-settle080-align(214 L 5 d0 -0.12 fwd  -0.471 -0.298 stall 0.76      None  0.02 0.06
+v4-settle080-align(214 L 7 d0 -1.02 SIDE -0.538 -0.236 stall 0.04 FELL 1.88  0.22 0.34
+v4-settle080-align(214 L14 d0 -0.09 fwd  -0.457 -0.318 stall 2.52      None  0.01 0.05
+v4-settle080-align(214 L15 d0 -0.07 fwd  -0.465 +0.373 CLEAR 0.00      None  0.01 0.03
+
+cross-clear variants: crossings 35
+sideways n 21 cleared 2 fell_in_cross 7 edge-stalled(>=0.4s) 9 falls among edge-stalled 1
+forward n 14 cleared 7 fell_in_cross 0 edge-stalled(>=0.4s) 5 falls among edge-stalled 0
+never-cleared crossings 26 of which fell in cross 7
+cleared crossings 9 of which post-stage fall 2
+never-cleared & survived crossing 19 of which post-stage fall 3

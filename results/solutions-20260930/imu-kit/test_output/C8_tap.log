@@ -1,0 +1,7 @@
+
+== tap: 15 IMU taps, 15 reference taps, 15 pairs
+offset (IMU - reference): median 23.7 ms, mean 23.77 ms, std 0.6306 ms  [cross-correlation of high-passed |accel| envelopes around each paired tap]
+stamp latency estimate (offset + --ref-latency-ms): 27.7 ms
+
+--- stderr ---
+wrote /nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/C8_tap/tap_report.json

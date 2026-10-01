@@ -1,0 +1,210 @@
+{
+ "s0": {
+  "valid_steps": 44990,
+  "robot_a_to_b_unit_xy_median": [
+   -0.171,
+   -0.985
+  ],
+  "h0.04_thr0.59": {
+   "thr_z": 0.59,
+   "share_of_valid": 0.857,
+   "steps": 38557,
+   "tilt_deg": {
+    "p5": 20.6484,
+    "p50": 39.8327,
+    "p95": 44.7218,
+    "n": 38557
+   },
+   "share_tilt_gt_15": 0.9949,
+   "share_resting(<1cm clearance)": 0.3931,
+   "share_airborne(>2cm clearance)": 0.5503,
+   "lowest_corner_z": {
+    "p5": 0.3993,
+    "p50": 0.41,
+    "p95": 0.4301,
+    "n": 38557
+   },
+   "share_lowest_corner_on_deck_top(0.42-0.44)": 0.1515,
+   "share_lowest_corner_on_plinth_top(0.40-0.42)": 0.773,
+   "share_flat_lt8deg": 0.0001,
+   "centre_minus_lowest_corner_m": {
+    "p5": 0.1884,
+    "p50": 0.2047,
+    "p95": 0.2137,
+    "n": 38557
+   }
+  },
+  "investigator_thr": {
+   "thr_z": 0.6055,
+   "share_of_valid": 0.7374,
+   "steps": 33177,
+   "tilt_deg": {
+    "p5": 23.0296,
+    "p50": 40.0772,
+    "p95": 44.7345,
+    "n": 33177
+   },
+   "share_tilt_gt_15": 0.9948,
+   "share_resting(<1cm clearance)": 0.4111,
+   "share_airborne(>2cm clearance)": 0.5388,
+   "lowest_corner_z": {
+    "p5": 0.4023,
+    "p50": 0.41,
+    "p95": 0.4311,
+    "n": 33177
+   },
+   "share_lowest_corner_on_deck_top(0.42-0.44)": 0.1754,
+   "share_lowest_corner_on_plinth_top(0.40-0.42)": 0.799,
+   "share_flat_lt8deg": 0.0001,
+   "centre_minus_lowest_corner_m": {
+    "p5": 0.1904,
+    "p50": 0.2056,
+    "p95": 0.2138,
+    "n": 33177
+   }
+  },
+  "h0.06_thr0.61": {
+   "thr_z": 0.61,
+   "share_of_valid": 0.6653,
+   "steps": 29933,
+   "tilt_deg": {
+    "p5": 22.9618,
+    "p50": 40.0599,
+    "p95": 44.7446,
+    "n": 29933
+   },
+   "share_tilt_gt_15": 0.9975,
+   "share_resting(<1cm clearance)": 0.4059,
+   "share_airborne(>2cm clearance)": 0.5395,
+   "lowest_corner_z": {
+    "p5": 0.4025,
+    "p50": 0.41,
+    "p95": 0.4322,
+    "n": 29933
+   },
+   "share_lowest_corner_on_deck_top(0.42-0.44)": 0.191,
+   "share_lowest_corner_on_plinth_top(0.40-0.42)": 0.7827,
+   "share_flat_lt8deg": 0.0001,
+   "centre_minus_lowest_corner_m": {
+    "p5": 0.1904,
+    "p50": 0.2062,
+    "p95": 0.214,
+    "n": 29933
+   }
+  },
+  "episodes": 96,
+  "episodes_face_changed": 76,
+  "episodes_max_tilt_gt30": 93,
+  "at_max_tilt_|cos(tilt_axis, robot_a->b line)|": {
+   "p10": 0.9074,
+   "p50": 0.9917,
+   "p90": 0.9997,
+   "n": 96
+  },
+  "share_eps_tilt_axis_within_30deg_of_robot_line": 0.9271
+ },
+ "s1": {
+  "valid_steps": 40510,
+  "robot_a_to_b_unit_xy_median": [
+   0.019,
+   -0.999
+  ],
+  "h0.04_thr0.59": {
+   "thr_z": 0.59,
+   "share_of_valid": 0.8145,
+   "steps": 32995,
+   "tilt_deg": {
+    "p5": 21.8571,
+    "p50": 42.8151,
+    "p95": 46.7692,
+    "n": 32995
+   },
+   "share_tilt_gt_15": 0.9897,
+   "share_resting(<1cm clearance)": 0.1968,
+   "share_airborne(>2cm clearance)": 0.7037,
+   "lowest_corner_z": {
+    "p5": 0.3885,
+    "p50": 0.409,
+    "p95": 0.4303,
+    "n": 32995
+   },
+   "share_lowest_corner_on_deck_top(0.42-0.44)": 0.1436,
+   "share_lowest_corner_on_plinth_top(0.40-0.42)": 0.6556,
+   "share_flat_lt8deg": 0.0001,
+   "centre_minus_lowest_corner_m": {
+    "p5": 0.192,
+    "p50": 0.2162,
+    "p95": 0.2347,
+    "n": 32995
+   }
+  },
+  "investigator_thr": {
+   "thr_z": 0.6083,
+   "share_of_valid": 0.7523,
+   "steps": 30477,
+   "tilt_deg": {
+    "p5": 34.199,
+    "p50": 43.1258,
+    "p95": 46.8337,
+    "n": 30477
+   },
+   "share_tilt_gt_15": 0.9973,
+   "share_resting(<1cm clearance)": 0.156,
+   "share_airborne(>2cm clearance)": 0.7432,
+   "lowest_corner_z": {
+    "p5": 0.3885,
+    "p50": 0.4085,
+    "p95": 0.4319,
+    "n": 30477
+   },
+   "share_lowest_corner_on_deck_top(0.42-0.44)": 0.1302,
+   "share_lowest_corner_on_plinth_top(0.40-0.42)": 0.6677,
+   "share_flat_lt8deg": 0.0,
+   "centre_minus_lowest_corner_m": {
+    "p5": 0.1986,
+    "p50": 0.2174,
+    "p95": 0.2349,
+    "n": 30477
+   }
+  },
+  "h0.06_thr0.61": {
+   "thr_z": 0.61,
+   "share_of_valid": 0.7404,
+   "steps": 29993,
+   "tilt_deg": {
+    "p5": 34.7173,
+    "p50": 43.1643,
+    "p95": 46.84,
+    "n": 29993
+   },
+   "share_tilt_gt_15": 0.9981,
+   "share_resting(<1cm clearance)": 0.146,
+   "share_airborne(>2cm clearance)": 0.7522,
+   "lowest_corner_z": {
+    "p5": 0.3886,
+    "p50": 0.4083,
+    "p95": 0.4328,
+    "n": 29993
+   },
+   "share_lowest_corner_on_deck_top(0.42-0.44)": 0.1268,
+   "share_lowest_corner_on_plinth_top(0.40-0.42)": 0.6702,
+   "share_flat_lt8deg": 0.0,
+   "centre_minus_lowest_corner_m": {
+    "p5": 0.1989,
+    "p50": 0.2176,
+    "p95": 0.2349,
+    "n": 29993
+   }
+  },
+  "episodes": 96,
+  "episodes_face_changed": 61,
+  "episodes_max_tilt_gt30": 79,
+  "at_max_tilt_|cos(tilt_axis, robot_a->b line)|": {
+   "p10": 0.4361,
+   "p50": 0.8371,
+   "p90": 0.9938,
+   "n": 96
+  },
+  "share_eps_tilt_axis_within_30deg_of_robot_line": 0.4271
+ }
+}

@@ -1,0 +1,131 @@
+{
+  "tool": "imu_allan.py 1.1.0",
+  "input": "csv:/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/_tmp/tap_main.csv",
+  "time_source": "header",
+  "main": {
+    "topic": null,
+    "rate_hz": 200.0,
+    "taps": 15,
+    "stamp_latency": null
+  },
+  "reference": {
+    "source": "csv:/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/imu-kit/test_output/_tmp/tap_ref.csv",
+    "topic": null,
+    "rate_hz": 400.0,
+    "taps": 15,
+    "stamp_latency": null
+  },
+  "method": "cross-correlation of high-passed |accel| envelopes around each paired tap",
+  "pairs": [
+    {
+      "t_main_s": 3.192647907707865,
+      "onset_offset_ms": -17.12741650257188,
+      "xcorr_offset_ms": 23.122583497428266,
+      "xcorr_peak": 0.9908721050467914
+    },
+    {
+      "t_main_s": 5.189435525016275,
+      "onset_offset_ms": 20.686442217746404,
+      "xcorr_offset_ms": 24.436442217746517,
+      "xcorr_peak": 0.9876473726102089
+    },
+    {
+      "t_main_s": 8.052463401682687,
+      "onset_offset_ms": 21.19153874700075,
+      "xcorr_offset_ms": 23.441538747000862,
+      "xcorr_peak": 0.9946862121186206
+    },
+    {
+      "t_main_s": 10.44475772697547,
+      "onset_offset_ms": -7.3763642635213955,
+      "xcorr_offset_ms": 23.123635736478743,
+      "xcorr_peak": 0.9942085850368224
+    },
+    {
+      "t_main_s": 13.052615421804104,
+      "onset_offset_ms": 21.84976860303678,
+      "xcorr_offset_ms": 23.349768603036893,
+      "xcorr_peak": 0.9893322814775648
+    },
+    {
+      "t_main_s": 15.171066032316816,
+      "onset_offset_ms": 23.451581404000166,
+      "xcorr_offset_ms": 23.701581404000276,
+      "xcorr_peak": 0.9947532308638934
+    },
+    {
+      "t_main_s": 17.678663906768026,
+      "onset_offset_ms": 22.512861884070645,
+      "xcorr_offset_ms": 24.26286188407076,
+      "xcorr_peak": 0.9870987353852131
+    },
+    {
+      "t_main_s": 20.253029271851897,
+      "onset_offset_ms": 21.49560578162024,
+      "xcorr_offset_ms": 23.995605781620355,
+      "xcorr_peak": 0.986882122962388
+    },
+    {
+      "t_main_s": 23.234052155146816,
+      "onset_offset_ms": 22.07759521516195,
+      "xcorr_offset_ms": 22.82759521516206,
+      "xcorr_peak": 0.9942171246031221
+    },
+    {
+      "t_main_s": 25.327861597585308,
+      "onset_offset_ms": 21.70877713345476,
+      "xcorr_offset_ms": 23.458777133454873,
+      "xcorr_peak": 0.9880739819591183
+    },
+    {
+      "t_main_s": 28.00093513083219,
+      "onset_offset_ms": 22.80339473256987,
+      "xcorr_offset_ms": 24.303394732569984,
+      "xcorr_peak": 0.993354559268174
+    },
+    {
+      "t_main_s": 30.739194555571224,
+      "onset_offset_ms": 23.560297577127187,
+      "xcorr_offset_ms": 24.5602975771273,
+      "xcorr_peak": 0.9884739032454838
+    },
+    {
+      "t_main_s": 33.07406648803716,
+      "onset_offset_ms": 16.846247974044104,
+      "xcorr_offset_ms": 23.09624797404422,
+      "xcorr_peak": 0.9952794127455227
+    },
+    {
+      "t_main_s": 35.27261357033717,
+      "onset_offset_ms": 22.272427021462704,
+      "xcorr_offset_ms": 24.022427021462818,
+      "xcorr_peak": 0.9878758767492747
+    },
+    {
+      "t_main_s": 37.90346893215764,
+      "onset_offset_ms": 24.6568575355397,
+      "xcorr_offset_ms": 24.90685753553981,
+      "xcorr_peak": 0.9919897571224056
+    }
+  ],
+  "offset_ms": {
+    "n": 15,
+    "median": 23.701581404000276,
+    "mean": 23.773974337382917,
+    "std": 0.6306453169857419,
+    "min": 22.82759521516206,
+    "max": 24.90685753553981
+  },
+  "onset_offset_ms": {
+    "n": 15,
+    "median": 21.84976860303678,
+    "mean": 17.373974337382798,
+    "std": 12.29057424080614,
+    "min": -17.12741650257188,
+    "max": 24.6568575355397
+  },
+  "interpretation": "positive = this IMU's stamps lag the reference for the same physical tap; IMU stamp latency = offset + the reference's own latency (+ consumer processing for end-to-end)",
+  "warnings": [],
+  "ref_latency_ms": 4.0,
+  "latency_ms_estimate": 27.701581404000276
+}

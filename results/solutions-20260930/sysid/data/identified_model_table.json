@@ -1,0 +1,453 @@
+{
+ "source": "Identified-model table: physics (MuJoCo biped, frozen gait dr-default-s0) vs the NavGym v2/v4 randomization box,",
+ "rows": [
+  {
+   "ch": "yaw",
+   "q": "steady-state gain at |u|=1 (walking 0.15-0.35 m/s)",
+   "phys": [
+    0.977,
+    1.126
+   ],
+   "gym": [
+    0.9,
+    1.4
+   ],
+   "verdict": "inside"
+  },
+  {
+   "ch": "yaw",
+   "q": "steady-state gain at |u|=1 (in place)",
+   "phys": [
+    1.081,
+    1.173
+   ],
+   "gym": [
+    0.9,
+    1.4
+   ],
+   "verdict": "inside"
+  },
+  {
+   "ch": "yaw",
+   "q": "gain at |u|=0.6 (all speeds)",
+   "phys": [
+    1.211,
+    1.271
+   ],
+   "gym": [
+    0.9,
+    1.4
+   ],
+   "verdict": "inside"
+  },
+  {
+   "ch": "yaw",
+   "q": "gain at |u|=0.3 walking (concave input map)",
+   "phys": [
+    1.328,
+    1.54
+   ],
+   "gym": [
+    0.9,
+    1.4
+   ],
+   "verdict": "outside (above at 0.15 m/s; gym is linear)"
+  },
+  {
+   "ch": "yaw",
+   "q": "gain at |u|=0.3 in place (dead zone)",
+   "phys": [
+    -0.017,
+    -0.014
+   ],
+   "gym": [
+    0.9,
+    1.4
+   ],
+   "verdict": "outside (no turn)"
+  },
+  {
+   "ch": "yaw",
+   "q": "first-order tau, continuous FOPDT on the integrated step (s)",
+   "phys": [
+    0.01,
+    0.115
+   ],
+   "gym": [
+    0.11,
+    0.43
+   ],
+   "gym_note": "gym fitted by the same procedure",
+   "verdict": "outside (faster)"
+  },
+  {
+   "ch": "yaw",
+   "q": "tau in the gym's own discrete form, PRBS fit (s) / latency (steps)",
+   "phys": [
+    0.060000000000000005,
+    0.07
+   ],
+   "phys_latency": [
+    0
+   ],
+   "gym": [
+    0.15,
+    0.45
+   ],
+   "gym_latency": [
+    0,
+    2
+   ],
+   "verdict": "outside (faster)"
+  },
+  {
+   "ch": "yaw",
+   "q": "dead time (s), continuous fit",
+   "phys": [
+    0.0,
+    0.005
+   ],
+   "gym": [
+    0.0,
+    0.08
+   ],
+   "verdict": "inside (lower edge: latency 0 only)"
+  },
+  {
+   "ch": "yaw",
+   "q": "FIR step response after 1 / 2 policy steps (PRBS p=0.02-0.7)",
+   "phys": [
+    [
+     0.6105,
+     0.6528
+    ],
+    [
+     1.03,
+     1.0943
+    ]
+   ],
+   "gym_nominal": [
+    -0.0009,
+    0.1854
+   ],
+   "verdict": "outside (faster)"
+  },
+  {
+   "ch": "yaw",
+   "q": "max rate at the interface limit |u|=1 (rad/s)",
+   "phys": [
+    0.987,
+    1.174
+   ],
+   "phys_at_1.5": {
+    "vx0.0": 1.496,
+    "vx0.35": 1.317
+   },
+   "gym": [
+    0.9,
+    1.4
+   ],
+   "note": "|u|=1.5 (not reachable through W_MAX=1): 1.50 in place, 1.31 at 0.35 m/s -> the gait is not rate-saturated at 1 rad/s",
+   "verdict": "inside"
+  },
+  {
+   "ch": "yaw",
+   "q": "bang-bang square wave +-1 at 0.35 m/s: gain of the fundamental 0.5/1.5/3/6.25 Hz, every-step flip (12.5 Hz)",
+   "phys": [
+    1.024,
+    0.741,
+    1.112,
+    0.758,
+    0.263
+   ],
+   "gym": [
+    [
+     0.697,
+     0.282,
+     0.147,
+     0.077,
+     0.054
+    ],
+    [
+     1.085,
+     0.748,
+     0.456,
+     0.252,
+     0.18
+    ]
+   ],
+   "gym_note": "slow corner (1.17, 0.45 s, 2 steps) and fast corner (1.17, 0.15 s, 0 steps)",
+   "verdict": "outside (4-6x bandwidth)"
+  },
+  {
+   "ch": "yaw",
+   "q": "square-wave phase lag at 0.5/1.5/3/6.25 Hz (deg)",
+   "phys": [
+    -5.247,
+    -2.02,
+    -24.217,
+    -41.433
+   ],
+   "gym": [
+    [
+     -18.642,
+     -40.314,
+     -47.165,
+     -36.254
+    ],
+    [
+     -64.291,
+     -108.685,
+     -148.099,
+     137.665
+    ]
+   ],
+   "verdict": "outside (less lag)"
+  },
+  {
+   "ch": "yaw",
+   "q": "mean of a +-1 chatter while walking (0.3 m/s): realized rate for duty-cycle mean m=0.33/0.5/0.75, iid chatter",
+   "phys": [
+    0.386,
+    0.548,
+    0.81
+   ],
+   "phys_const": [
+    0.446,
+    0.614,
+    0.823
+   ],
+   "gym": "linear: w_gain * mean",
+   "verdict": "inside (mean survives, 0.8-1.1x of const)"
+  },
+  {
+   "ch": "yaw",
+   "q": "in place: realized rate for const / fastest-PWM / iid chatter of mean 0.33, 0.5, 0.75",
+   "phys": {
+    "const": [
+     -0.004,
+     0.581,
+     0.929
+    ],
+    "pwm": [
+     -0.005,
+     -0.005,
+     0.726
+    ],
+    "chat": [
+     0.312,
+     0.379,
+     0.733
+    ]
+   },
+   "gym": "linear",
+   "verdict": "outside (dead zone; PWM of mean <= 0.5 does not turn)"
+  },
+  {
+   "ch": "yaw",
+   "q": "braked to standstill in a maze (s5, training maze 9001, physics closed loop): 0.48 s windows",
+   "phys": {
+    "windows_0.48s": 212,
+    "slope_net_rate_per_mean_cmd": 0.68,
+    "mean_abs_net_rate_rad_s": 0.054,
+    "mean_abs_cmd_mean": 0.093
+   },
+   "gym": "no brake, no standstill mode",
+   "verdict": "outside"
+  },
+  {
+   "ch": "yaw",
+   "q": "per-step heading change under the actors' own chatter (deg, median / p90)",
+   "phys": [
+    [
+     0.97,
+     1.35
+    ],
+    [
+     2.81,
+     2.92
+    ]
+   ],
+   "gym": "s5 0.32 / 2.00, s6 0.77 / 2.14 (gym_actor_*_maze9000-9005)",
+   "verdict": "outside (1.3-3x more jitter)"
+  },
+  {
+   "ch": "yaw",
+   "q": "stride wobble: yaw-rate RMS (rad/s) / heading p-p (deg) / freq (Hz) at 0.35 m/s",
+   "phys": [
+    0.2795,
+    3.8972,
+    1.7143
+   ],
+   "gym": "white w_noise 0-0.10 rad/s",
+   "verdict": "outside (periodic, larger RMS; heading effect only +-2 deg)"
+  },
+  {
+   "ch": "yaw",
+   "q": "heading drift walking straight (rad/s) at 0.15 / 0.25 / 0.35 m/s",
+   "phys": [
+    0.0171,
+    -0.0091,
+    0.0005
+   ],
+   "phys_deg_per_m": [
+    8.2495,
+    -2.2162,
+    1.3269
+   ],
+   "gym": "+-0.06 * v/V_MAX (+-0.026 at 0.15, +-0.06 at 0.35)",
+   "verdict": "inside"
+  },
+  {
+   "ch": "fwd",
+   "q": "steady-state gain at 0.15 / 0.25 / 0.35 m/s",
+   "phys": [
+    0.7701,
+    0.9484,
+    1.0117
+   ],
+   "map": "v = max(0, 1.19 v_cmd - 0.063): no motion below 0.053 m/s",
+   "gym": [
+    0.85,
+    1.05
+   ],
+   "verdict": "inside at 0.25-0.35; outside at 0.15 and below 0.053 (dead zone)"
+  },
+  {
+   "ch": "fwd",
+   "q": "start tau (s) from standstill at 0.25 / 0.35 m/s",
+   "phys": [
+    [
+     0.172,
+     0.095,
+     0.22
+    ],
+    [
+     0.122,
+     0.085,
+     0.17
+    ]
+   ],
+   "gym": [
+    0.15,
+    0.45
+   ],
+   "verdict": "inside (lower edge)"
+  },
+  {
+   "ch": "fwd",
+   "q": "start from standstill at 0.15 m/s",
+   "phys": {
+    "tau_fit_s": 3.0,
+    "gain_ss": 0.7701
+   },
+   "gym": [
+    0.15,
+    0.45
+   ],
+   "verdict": "outside (slower, ~1.5 s to start stepping)"
+  },
+  {
+   "ch": "fwd",
+   "q": "stop tau (s) from 0.25-0.35 m/s",
+   "phys": [
+    0.01,
+    0.03
+   ],
+   "gym": [
+    0.15,
+    0.45
+   ],
+   "verdict": "outside (faster; gym lags the stop like the start)"
+  },
+  {
+   "ch": "fwd",
+   "q": "dead time (s)",
+   "phys": [
+    0.0,
+    0.025
+   ],
+   "gym": [
+    0.0,
+    0.08
+   ],
+   "verdict": "inside"
+  },
+  {
+   "ch": "fwd",
+   "q": "max speed at v_cmd = V_MAX (m/s)",
+   "phys": [
+    0.354,
+    0.3542
+   ],
+   "gym": [
+    0.2975,
+    0.3675
+   ],
+   "verdict": "inside"
+  },
+  {
+   "ch": "coupling",
+   "q": "speed ratio during a constant turn at 0.35 m/s, |u|=1 / |u|=1.5",
+   "phys": [
+    0.9876,
+    0.9701,
+    0.92
+   ],
+   "gym": "none",
+   "verdict": "inside (<= 3 % at |u|<=1)"
+  },
+  {
+   "ch": "coupling",
+   "q": "speed ratio under +-1 chatter: PRBS p=0.5/0.7 (0.3 m/s) / 3 Hz square / the actors' own sequences",
+   "phys": {
+    "prbs0.5": [
+     0.906,
+     0.927,
+     0.919
+    ],
+    "prbs0.7": [
+     0.95,
+     0.903,
+     0.933
+    ],
+    "square3Hz": 0.742,
+    "actor_replays_phys_over_cmd": [
+     0.991,
+     0.986,
+     0.974,
+     0.973
+    ]
+   },
+   "gym": "none",
+   "verdict": "outside (5-10 % loss under PRBS, 26 % at 3 Hz; 1-3 % on the actors' own sequences)"
+  },
+  {
+   "ch": "coupling",
+   "q": "lateral sway: lateral-speed RMS (m/s) at 0.35 m/s",
+   "phys": 0.2339,
+   "gym": "none (unicycle)",
+   "verdict": "outside (about +-3 cm of sway)"
+  },
+  {
+   "ch": "brake",
+   "q": "team_sensors speed brake: v *= clip((clear - 0.42)/0.48, 0, 1), +-25 deg forward cone, 10 Hz packets (+ depth term)",
+   "phys": {
+    "maze_braked_frac_s5": 0.336,
+    "maze_braked_frac_s6": 0.179,
+    "maze_braked_frac_astar": 0.05,
+    "flat_floor_false_brake_straight_0.35": 0.0062,
+    "flat_floor_false_brake_prbs0.7_0.35": 0.032
+   },
+   "gym": "absent (collision ends the episode at 0.22 m)",
+   "verdict": "outside (absent from the gym)"
+  },
+  {
+   "ch": "obs",
+   "q": "lidar/map pipeline: 10 Hz packets held 2-3 steps; biped --policy path integrates each packet at the NEXT step's pose",
+   "phys": "maze_explore.py run_seed (biped branch, learned['emap'].update at the loop top)",
+   "gym": "fresh scan each step at the current pose",
+   "verdict": "outside (pipeline)"
+  }
+ ]
+}

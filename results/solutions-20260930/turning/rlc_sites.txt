@@ -1,0 +1,13 @@
+scripts/render_multi.py:311:        rc = DepthRlController(c)
+scripts/render_depth.py:67:    controller = RlController(cfg)
+scripts/bench/turn_test.py:68:    ctrl = RlController(cfg)
+scripts/bench/maze_explore.py:696:    controller = RlController(cfg)
+scripts/bench/inspection_maze.py:151:    controller = RlController(cfg)
+scripts/bench/lab_traverse.py:141:        rc = RlController(c)
+scripts/bench/turn_diagnose.py:107:    ctrl = RlController(cfg)
+scripts/bench/team_airlock.py:66:    controllers = [RlController(cfg) for _ in slots]
+src/bhl_robust/mission/env.py:120:        controller = RlController(self.cfg)
+src/bhl_robust/eval/depth_controller.py:32:class DepthRlController(RlController):
+src/bhl_robust/eval/run_eval.py:85:    controller = RlController(cfg)
+src/bhl_robust/eval/scripted_carry.py:627:    controllers = [RlController(cfg) for _ in slots]
+src/bhl_robust/eval/scripted_carry.py:1137:    controllers = [RlController(cfg) for _ in slots]

@@ -1,0 +1,74 @@
+phys {'variant': 'armV4-s5_capfix', 'seed': 9001, 'outcome': 'goal', 'completion_s': 50.08, 'wall_contact_steps': 0, 'braked_frac': 0.345, 'path_m': 17.38, 'capture_pose_substitution': {'updates': 501, 'pose_shift_m_median': 0.012232946593578854, 'pose_shift_m_max': 0.03739345440407121, 'yaw_shift_deg_median': 0.811822086963099, 'yaw_shift_deg_p90': 2.64393026527174, 'yaw_shift_deg_max': 4.390864056931357}, 'gym_same_maze': {'base': 'goal', 'dyn+brake+obs10+h0+settle': 'time_out', 'dyn+brake+obs10+h0+settle+fix': 'goal', 'dyn+brake+obs10+h0+settle+lpf0.15': 'goal'}}
+phys {'variant': 'armV4-s5_lpf0.15', 'seed': 9001, 'outcome': 'stuck', 'completion_s': None, 'wall_contact_steps': 0, 'braked_frac': 0.819, 'path_m': 16.49, 'capture_pose_substitution': None, 'gym_same_maze': {'base': 'goal', 'dyn+brake+obs10+h0+settle': 'time_out', 'dyn+brake+obs10+h0+settle+fix': 'goal', 'dyn+brake+obs10+h0+settle+lpf0.15': 'goal'}}
+phys {'variant': 'armV4-s5_none', 'seed': 9000, 'outcome': 'goal', 'completion_s': 69.28, 'wall_contact_steps': 0, 'braked_frac': 0.336, 'path_m': 25.86, 'capture_pose_substitution': None, 'gym_same_maze': {'base': 'goal', 'dyn+brake+obs10+h0+settle': 'time_out', 'dyn+brake+obs10+h0+settle+fix': 'goal', 'dyn+brake+obs10+h0+settle+lpf0.15': 'goal'}}
+phys {'variant': 'armV4-s5_none', 'seed': 9001, 'outcome': 'stuck', 'completion_s': None, 'wall_contact_steps': 0, 'braked_frac': 0.814, 'path_m': 26.99, 'capture_pose_substitution': None, 'gym_same_maze': {'base': 'goal', 'dyn+brake+obs10+h0+settle': 'time_out', 'dyn+brake+obs10+h0+settle+fix': 'goal', 'dyn+brake+obs10+h0+settle+lpf0.15': 'goal'}}
+phys {'variant': 'armV4-s5_none', 'seed': 9002, 'outcome': 'goal', 'completion_s': 57.84, 'wall_contact_steps': 0, 'braked_frac': 0.13, 'path_m': 23.11, 'capture_pose_substitution': None, 'gym_same_maze': {'base': 'goal', 'dyn+brake+obs10+h0+settle': 'goal', 'dyn+brake+obs10+h0+settle+fix': 'goal', 'dyn+brake+obs10+h0+settle+lpf0.15': 'goal'}}
+== armV4-s5 9000-9023 (exploratory)
+   base                                     G 16 C  4 T  4  braked 0.000 flips/s  17.3
+   dyn                                      G 15 C  4 T  5  braked 0.000 flips/s  19.3 | lost 2 won 1 p=1.0
+   brake                                    G 16 C  2 T  6  braked 0.182 flips/s  18.4 | lost 1 won 1 p=1.0
+   obs10                                    G 16 C  6 T  2  braked 0.000 flips/s  16.8 | lost 2 won 2 p=1.0
+   dynlin                                   G 15 C  4 T  5  braked 0.000 flips/s  19.4 | lost 2 won 1 p=1.0
+   dyn+brake                                G 14 C  0 T 10  braked 0.275 flips/s  20.4 | lost 3 won 1 p=0.625
+   h0+settle                                G 17 C  3 T  4  braked 0.000 flips/s  17.7 | lost 0 won 1 p=1.0
+   dyn+obs10+h0+settle                      G 15 C  5 T  4  braked 0.000 flips/s  19.0 | lost 3 won 2 p=1.0
+   brake+obs10+h0+settle                    G 14 C  2 T  8  braked 0.252 flips/s  17.9 | lost 4 won 2 p=0.688
+   dyn+brake+obs10+h0+settle                G  9 C  0 T 15  braked 0.413 flips/s  21.0 | lost 8 won 1 p=0.039
+   dyn+brakeR+obs10+h0+settle               G 14 C  6 T  4  braked 0.015 flips/s  19.0 | lost 4 won 2 p=0.688
+   dyn+brake+obs10+h0+settle+fix            G 14 C  2 T  8  braked 0.294 flips/s  20.5 | lost 4 won 2 p=0.688
+   dyn+brake+obs10+h0+settle+lpf0.15        G 13 C  3 T  8  braked 0.293 flips/s  19.7 | lost 4 won 1 p=0.375
+== armV4-s5 9024-9047 (replicate)
+   base                                     G 14 C  3 T  7  braked 0.000 flips/s  17.9
+   dyn                                      G 15 C  0 T  9  braked 0.000 flips/s  19.1 | lost 1 won 2 p=1.0
+   dyn+brake+obs10+h0+settle                G 11 C  1 T 12  braked 0.382 flips/s  21.1 | lost 4 won 1 p=0.375
+   dyn+brake+obs10+h0+settle+fix            G 15 C  1 T  8  braked 0.265 flips/s  20.2 | lost 1 won 2 p=1.0
+   dyn+brake+obs10+h0+settle+lpf0.25        G 13 C  0 T 11  braked 0.283 flips/s  18.9 | lost 4 won 3 p=1.0
+== armV4-s5 9048-9071 (fresh replicate)
+   base                                     G 20 C  1 T  3  braked 0.000 flips/s  17.9
+   dyn                                      G 17 C  2 T  5  braked 0.000 flips/s  19.6 | lost 3 won 0 p=0.25
+   dyn+brake+obs10+h0+settle                G 13 C  1 T 10  braked 0.355 flips/s  20.4 | lost 8 won 1 p=0.039
+   dyn+brake+obs10+h0+settle+fix            G 19 C  1 T  4  braked 0.178 flips/s  19.9 | lost 2 won 1 p=1.0
+== armV4-s6 9000-9023 (exploratory)
+   base                                     G 22 C  1 T  1  braked 0.000 flips/s  14.2
+   dyn                                      G 22 C  1 T  1  braked 0.000 flips/s  18.9 | lost 0 won 0 p=1.0
+   brake                                    G 22 C  1 T  1  braked 0.059 flips/s  14.1 | lost 0 won 0 p=1.0
+   obs10                                    G 23 C  1 T  0  braked 0.000 flips/s  13.0 | lost 0 won 1 p=1.0
+   dynlin                                   G 22 C  1 T  1  braked 0.000 flips/s  18.6 | lost 0 won 0 p=1.0
+   dyn+brake                                G 22 C  1 T  1  braked 0.053 flips/s  19.1 | lost 0 won 0 p=1.0
+   h0+settle                                G 22 C  1 T  1  braked 0.000 flips/s  13.6 | lost 1 won 1 p=1.0
+   brake+obs10+h0+settle                    G 22 C  1 T  1  braked 0.073 flips/s  12.7 | lost 1 won 1 p=1.0
+   dyn+brake+obs10+h0+settle                G 24 C  0 T  0  braked 0.065 flips/s  18.4 | lost 0 won 2 p=0.5
+   dyn+brakeR+obs10+h0+settle               G 24 C  0 T  0  braked 0.003 flips/s  18.4 | lost 0 won 2 p=0.5
+   dyn+brake+obs10+h0+settle+fix            G 22 C  0 T  2  braked 0.071 flips/s  18.5 | lost 1 won 1 p=1.0
+   dyn+brake+obs10+h0+settle+lpf0.15        G 24 C  0 T  0  braked 0.062 flips/s  14.6 | lost 0 won 2 p=0.5
+== armV4-s6 9024-9047 (replicate)
+   base                                     G 22 C  2 T  0  braked 0.000 flips/s  14.7
+   dyn                                      G 20 C  3 T  1  braked 0.000 flips/s  18.9 | lost 2 won 0 p=0.5
+   dyn+brake+obs10+h0+settle                G 20 C  1 T  3  braked 0.104 flips/s  19.0 | lost 2 won 0 p=0.5
+   dyn+brake+obs10+h0+settle+fix            G 20 C  1 T  3  braked 0.079 flips/s  18.7 | lost 2 won 0 p=0.5
+   dyn+brake+obs10+h0+settle+lpf0.25        G 23 C  1 T  0  braked 0.047 flips/s  14.8 | lost 1 won 2 p=1.0
+== pooled
+   armV4-s5 base {'blocks': ['9000-9023 (exploratory)', '9024-9047 (replicate)', '9048-9071 (fresh replicate)'], 'goal': 50, 'n': 72}
+   armV4-s5 dyn {'blocks': ['9000-9023 (exploratory)', '9024-9047 (replicate)', '9048-9071 (fresh replicate)'], 'goal': 47, 'n': 72, 'lost_vs_base': 6, 'won_vs_base': 3, 'mcnemar_p': 0.5078}
+   armV4-s5 dyn+brake+obs10+h0+settle {'blocks': ['9000-9023 (exploratory)', '9024-9047 (replicate)', '9048-9071 (fresh replicate)'], 'goal': 33, 'n': 72, 'lost_vs_base': 20, 'won_vs_base': 3, 'mcnemar_p': 0.0005}
+   armV4-s5 dyn+brake+obs10+h0+settle+fix {'blocks': ['9000-9023 (exploratory)', '9024-9047 (replicate)', '9048-9071 (fresh replicate)'], 'goal': 48, 'n': 72, 'lost_vs_base': 7, 'won_vs_base': 5, 'mcnemar_p': 0.7744}
+   armV4-s5 base [replicates only] {'blocks': ['9024-9047 (replicate)', '9048-9071 (fresh replicate)'], 'goal': 34, 'n': 48}
+   armV4-s5 dyn [replicates only] {'blocks': ['9024-9047 (replicate)', '9048-9071 (fresh replicate)'], 'goal': 32, 'n': 48, 'lost_vs_base': 4, 'won_vs_base': 2, 'mcnemar_p': 0.6875}
+   armV4-s5 dyn+brake+obs10+h0+settle [replicates only] {'blocks': ['9024-9047 (replicate)', '9048-9071 (fresh replicate)'], 'goal': 24, 'n': 48, 'lost_vs_base': 12, 'won_vs_base': 2, 'mcnemar_p': 0.0129}
+   armV4-s5 dyn+brake+obs10+h0+settle+fix [replicates only] {'blocks': ['9024-9047 (replicate)', '9048-9071 (fresh replicate)'], 'goal': 34, 'n': 48, 'lost_vs_base': 3, 'won_vs_base': 3, 'mcnemar_p': 1.0}
+   armV4-s6 base {'blocks': ['9000-9023 (exploratory)', '9024-9047 (replicate)'], 'goal': 44, 'n': 48}
+   armV4-s6 dyn {'blocks': ['9000-9023 (exploratory)', '9024-9047 (replicate)'], 'goal': 42, 'n': 48, 'lost_vs_base': 2, 'won_vs_base': 0, 'mcnemar_p': 0.5}
+   armV4-s6 dyn+brake+obs10+h0+settle {'blocks': ['9000-9023 (exploratory)', '9024-9047 (replicate)'], 'goal': 44, 'n': 48, 'lost_vs_base': 2, 'won_vs_base': 2, 'mcnemar_p': 1.0}
+   armV4-s6 dyn+brake+obs10+h0+settle+fix {'blocks': ['9000-9023 (exploratory)', '9024-9047 (replicate)'], 'goal': 42, 'n': 48, 'lost_vs_base': 3, 'won_vs_base': 1, 'mcnemar_p': 0.625}
+   armV4-s6 base [replicates only] {'blocks': ['9024-9047 (replicate)'], 'goal': 22, 'n': 24}
+   armV4-s6 dyn [replicates only] {'blocks': ['9024-9047 (replicate)'], 'goal': 20, 'n': 24, 'lost_vs_base': 2, 'won_vs_base': 0, 'mcnemar_p': 0.5}
+   armV4-s6 dyn+brake+obs10+h0+settle [replicates only] {'blocks': ['9024-9047 (replicate)'], 'goal': 20, 'n': 24, 'lost_vs_base': 2, 'won_vs_base': 0, 'mcnemar_p': 0.5}
+   armV4-s6 dyn+brake+obs10+h0+settle+fix [replicates only] {'blocks': ['9024-9047 (replicate)'], 'goal': 20, 'n': 24, 'lost_vs_base': 2, 'won_vs_base': 0, 'mcnemar_p': 0.5}
+   armV4-s6 dyn+brake+obs10+h0+settle+lpf0.25 [replicates only] {'blocks': ['9024-9047 (replicate)'], 'goal': 23, 'n': 24, 'lost_vs_base': 1, 'won_vs_base': 2, 'mcnemar_p': 1.0}
+== predeclared
+   P1_dynamics_alone_no_gap (|dyn-base| <= 2 per arm/block) [{'arm': 'armV4-s5', 'block': 9000, 'base': 16, 'dyn': 15, 'holds': True}, {'arm': 'armV4-s5', 'block': 9024, 'base': 14, 'dyn': 15, 'holds': True}, {'arm': 'armV4-s5', 'block': 9048, 'base': 20, 'dyn': 17, 'holds': False}, {'arm': 'armV4-s6', 'block': 9000, 'base': 22, 'dyn': 22, 'holds': True}, {'arm': 'armV4-s6', 'block': 9024, 'base': 22, 'dyn': 20, 'holds': True}]
+   P2_s5_full_gap_on_9048 (full <= base-3; mostly time-outs; braked >= 0.25) {'base': 20, 'full': 13, 'collision': 1, 'time_out': 10, 'mean_braked_frac': 0.355, 'holds': True}
+   P3_s6_full_no_gap_on_9024 (full >= base-1) {'base': 22, 'full': 20, 'holds': False}
+   P4_s6_capture_fix_harmless_on_9000 (full+fix >= full-1) {'full': 24, 'full+fix': 22, 'holds': False}
+   P5_s5_capture_fix_helps_on_9048 (full+fix >= full+2; addendum_1) {'full': 13, 'full+fix': 19, 'holds': True}
+   P6_s6_capture_fix_harmless_on_9024 (full+fix >= full-1; addendum_2) {'full': 20, 'full+fix': 20, 'holds': True}
