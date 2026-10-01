@@ -62,6 +62,8 @@ Not planned as a separate step: sysid change 5, the identified ranges in the gym
 
 **Recommended next step:** N0's screen. It fixes a deploy-side correctness bug whatever comes after, isolates one factor and needs no training. N1 and N2 follow for the s6 and 50009-type misses. Never run 40000–40047 or 50000–50011.
 
+**Result, same day (`21501509`, rule predeclared in the ledger): N0's screen is NEGATIVE.** armV4-s5 went 15 → 17/24 (won 4, lost 2, net +2; McNemar p 0.69; the rule needed net ≥ +4 with ≤ 1 lost), armV4-s6 23 → 23/24, 0 falls, wall contacts 14 → 11 and 0 → 0. The fresh set 60000–60011 was not run and stays unused. The fix is correct and harmless but recovers far less than the gym re-creation predicted (+5/24), so the next step is N1 or N2.
+
 ## 2. Turning recipe
 
 **What the logs show**
