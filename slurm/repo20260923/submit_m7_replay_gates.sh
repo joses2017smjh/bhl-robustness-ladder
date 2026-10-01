@@ -117,7 +117,7 @@ RULE
 [ -f "$DEFAULT_SOURCE_CAMPAIGN/fullroute/legacy-doors.json" ] || { echo "replay source missing" >&2; exit 1; }
 [ -f "$DEFAULT_BASELINE/result.json" ] || { echo "authoritative baseline missing" >&2; exit 1; }
 bash -n "$FOLLOWUP"
-"$PY" -m py_compile "$SUBMITTER" scripts/mission7_plate_stage.py scripts/submit_mission7_route_handoff.py
+"$PY" -m py_compile "$SUBMITTER" scripts/mission7_plate_stage.py scripts/submit_mission7_route_handoff.py scripts/mission7_gates.py
 # The snapshot submitter records `git rev-parse HEAD` in every receipt; a dirty snapshot file would misrepresent it.
 snapshot_files=(src/bhl_robust/mission/*.py src/bhl_robust/__init__.py src/bhl_robust/sensor_io.py src/bhl_robust/eval/__init__.py
                 src/bhl_robust/eval/multi_robot.py src/bhl_robust/eval/mjcf_assets.py src/bhl_robust/eval/livery.py
