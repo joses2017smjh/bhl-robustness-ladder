@@ -3344,3 +3344,4 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - Smoke `21506664` (on the final files) passed: 50 k steps, ONNX export with inputs lidar/near/map_visit/map_coarse/goal, a 30 s physics episode on training maze 9150, and the verdict/transfer gate paths.
   - Tests: `tests/test_navgym_v5.py` and `tests/test_navgym.py`.
 - **Wall time:** 36 h per seed (≈ 16 h of training on the slower node class).
+- Submitted (code `ae27a5e`): NavGym v5 smoke of the committed code `21506833`, then training seeds 8–10 `21506834` (afterok on the smoke), then gym verdict `21506836` (afterany on the training), then physics transfer `21506837` (afterok on the verdict; runs episodes only on a final gym PASS). If the smoke fails, the rest of the chain is cancelled by hand.
