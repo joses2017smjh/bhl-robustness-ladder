@@ -3546,3 +3546,8 @@ Frozen designs, written before any implementation or episode. Each gets its full
   - Checked before deletion: no run lost its final checkpoint, and no run dated 09-29 or later was touched.
   - Manifest of every deleted file: `/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/ckpt_deleted_20261002.tsv`; script `delete_intermediate_ckpts.py` (same folder).
   - Project 30762 quota: 1.549 TB → 1.514 TB, still about 14 GB over the 1.5 TB soft limit (grace about 3 weeks 4 days). Any further deletion needs the user's choice.
+- **Display-only render, declared before it runs (2026-10-02 15:24): turning-ablation README clip** (`slurm/repo20260923/gpu_turngait_clip.sbatch`, `scripts/bench/turn_clip.py`, `tests/test_turn_clip.py`). Not a gate, and no new seed is scored.
+  - What it shows: the turn_test v2 turn command (3 s standing, then ±0.6 rad/s for 6 s) on reset seed 0, side by side. Left: `arms-turngait-clock-s2` (R1, the 1 of 3 R1 seeds that qualifies; all 3 turn). Right: `arms-turngait-critic-s0` (R2, the first of 3 seeds; none turns).
+  - Selection by rule, not by eye: reset seed 0 is the first scored v2 seed; R2 seed 0 is the first R2 seed.
+  - Provenance: the script repeats `turn_test.run_command` step for step (the test checks the source); the sidecar puts each run's yaw next to the scored JSON's (match within 0.5°). A mismatch is reported in the sidecar and the README caption, not hidden.
+  - Outputs: `docs/gifs/turngait-clock-actor-vs-critic.gif` + `.json`, MP4 under `results/turngait-clip-20261002/`. The launcher refuses to overwrite any of them.
