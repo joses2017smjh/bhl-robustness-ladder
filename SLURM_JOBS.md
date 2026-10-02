@@ -3581,3 +3581,4 @@ Files: `slurm/repo20260923/gpu_platecross.sbatch`; task `Velocity-BHL-Arms-Plate
 - **Pre-submission evidence:**
   - Smokes: `21516523` FAIL (a wrong probe sanity check, since fixed); `21516656` PASS; `21516760` PASS; `21517240` PASS on the final code.
   - Clean-checkout test (HEAD + B's files only): 134 passed, 1 skipped (R1's qualify JSONs are not tracked).
+- Submitted: PlateCross smoke `21517361` (array 0, 1 h, PLATECROSS_SMOKE=1, committed code `2b93da1`), then the real array `21517362` (0–2%3, `--dependency=afterok:21517361`). Selection: `results/repo-gpu-20260923/platecross-20261002/selection.json`.
