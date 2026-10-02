@@ -35,6 +35,8 @@ MATCH_TOL_DEG = 0.5
 TURN_MIN_DEG = 150.0          # turn_test's default --turn-min-deg (drawn on the result card; nothing is gated here)
 OK = (110, 210, 120)
 BAD = (235, 95, 85)
+CARD_OK_FILL = (30, 110, 52)
+CARD_BAD_FILL = (150, 34, 30)
 HEAD_H, FOOT_H, BANNER_H = 58, 46, 34
 
 
@@ -150,11 +152,14 @@ def side_panel(rgb: np.ndarray, title: str, subtitle: str, turned_deg: float, wz
     font = load_font(18)
     draw.text((cx - draw.textlength(shown, font=font) / 2, cy + r + 6), shown, font=font, fill=TEXT)
     if card:
+        # Solid fills, not coloured text: the GIF palette (ffmpeg palettegen, stats_mode=diff) dropped the red of a
+        # thin red outline and red text in the first render (21516846), so the failure card came out grey.
         font = load_font(18)
         tw = draw.textlength(card, font=font)
         x0, y0 = (w - tw) / 2 - 12, HEAD_H + h - 52
-        draw.rectangle((x0, y0, x0 + tw + 24, y0 + 36), fill=(18, 20, 24), outline=OK if card_ok else BAD, width=3)
-        draw.text((x0 + 12, y0 + 8), card, font=font, fill=OK if card_ok else BAD)
+        draw.rectangle((x0, y0, x0 + tw + 24, y0 + 36), fill=CARD_OK_FILL if card_ok else CARD_BAD_FILL,
+                       outline=OK if card_ok else BAD, width=3)
+        draw.text((x0 + 12, y0 + 8), card, font=font, fill=(255, 255, 255))
     return img
 
 
