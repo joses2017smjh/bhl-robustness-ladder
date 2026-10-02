@@ -3420,3 +3420,29 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - The bench's run-up loses 26/64 crossings before the stage acts, independent of the stage gait, so the predeclared ≥ 62/64 is unreachable by any stage. A bench without the run-up is needed first, so M3's judging protocol is not M2's bench as predeclared.
   - A bench v2 (no run-up) and the M3 stage (shipped gait, turn while stepping, stall watchdog) will be built, reviewed and smoke-tested. They will be predeclared, but not submitted until the user approves.
   - M2's FAIL stands as recorded.
+
+**Mission 7 bench v2 + M3 BUILT, NOT SUBMITTED (2026-10-02 07:08; awaiting the user's approval).** Workflow `wf_03e18b87-2cd` built it: an implementer, two adversarial reviewers (10 minor findings, 9 confirmed and fixed or disclosed) and a fixer. Code: `scripts/mission7_plate_bench_v2.py`, `slurm/repo20260923/cpu_m7_plate_bench_v2.sbatch`, and `scripts/mission7_plate_stage.py --stage-gait m3`. The shipped and turnboth paths and the v1 bench are byte-identical; the v1 sha256 still matches the M2 bench's provenance.
+- **Bench v2 (no run-up):**
+  - Standstill crossings spawn at the pre-point with the entry yaw. Walking crossings spawn 0.30 m behind it along their own heading and walk forward 1 s. Every crossing settles 3.0 s first, and falls count in every phase.
+  - The drop rule uses geometry only, decided before any episode: no wall or closed door within the 0.316 m planar radius along the 1 s path, and no foot on a plate at the spawn. It drops 23/32 walking crossings, including all 8 at 180°, so N = 41 (0°: 12, +90°: 11, −90°: 10, 180°: 8).
+  - Rule, the scale-free form of M2's: PASS iff clears ≥ N − 2 (39/41), 0 falls, and ≥ N_h − 1 per heading (11/10/9/7). The clear definition is unchanged (v1's `score_crossing`). Re-scoring the 38 M2 crossings that reached the stage reproduces all 38 recorded clears.
+  - Bench v2 was introduced after M2's FAIL revealed the run-up confound; M2's FAIL stands.
+- **M3 stage:**
+  - The shipped gait (no policy swap) turns while stepping at 0.30 m/s forward and 0.40 rad/s until within 0.25 rad, crosses at 0.30 m/s with heading hold clip(1.2 × error, ±0.35), then turns back.
+  - Stall watchdog: if the base moves < 0.05 m in 1.2 s, zero prev_actions, step back 0.30 m/s for 0.40 s and resume. At most 2 recoveries, pooled per crossing, then hand back.
+  - 0.30 m/s came from a sweep on exploration layout 255 whose selection rule was written before the result was read: 0.15 and 0.20 never stepped, 0.25 stepped one way only, 0.30 stepped both ways.
+- **Pending decisions, with the coded defaults:**
+  - (i) Six standstill spawns start with an elbow 1.3–9.3 mm inside a wall: (a) keep them at the pre-point (coded; N = 41), (b) shift them, or (c) drop them (N = 35).
+  - (ii) M3 acts after the stage's unchanged approach and settle, not at takeover: accept (coded) or change it.
+  - (iii) Polling jitter: the 0.40 s settle lasts 0.40 or 0.60 s and the 4.0 s cross bound lasts 4.0 or 4.2 s; the 180° timeline is 10.0–10.2 s. Keep this disclosed (coded) or add an epsilon.
+  - Any choice other than the coded one reopens the code and needs a new review and smoke.
+- **Disclosed:**
+  - The first M3 smoke `21508726` ran `--stage-gait m3` on validation layout 0, one of the scored replay-gate layouts: a watchdog hand-back at 30.8 s, then a fall at 34.04 s. That step was removed from the smoke (the re-smoke `21509267` passes without it), and the pre-read stands.
+  - The forward-speed sweep ran MuJoCo physics episodes under srun on an exploration layout, and agents ran `python3` on the interactive node twice.
+- **Smoke observations (exploration layouts, not scored):**
+  - 1/3 bench crossings cleared inside 10 s.
+  - The watchdog fired in every stage.
+  - Every stage had wall contact.
+  - A route-integration run on layout 252 ended with excessive_collision during the turn.
+  - Prediction: bench v2 FAILs, and the replay would fail even after a bench PASS. The shipped gait steps only from 0.30 m/s, and the 0.40 rad/s cap then makes 0.68–0.75 m turning arcs that do not fit 1.5–1.7 m cells.
+- **If approved:** budget 41 + 10 + 32 = 83 episodes of the conditional line; a fresh smoke of the committed code, then the bench afterok. A bench-v2 PASS releases the replay through `m3_bench_gate`.

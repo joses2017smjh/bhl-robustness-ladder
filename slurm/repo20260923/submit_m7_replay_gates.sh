@@ -57,6 +57,12 @@ ARMS=(
   # the bench's provenance.json record.  The five arms above ran on 2026-09-24 and their destinations exist,
   # so a run without --only stops at the destination check.
   "m2-turnboth           --stage-gait turnboth"
+  # M3 (2026-10-02; conditional on M2's bench FAIL): every stage flag at its replay default, the stage on the SHIPPED
+  # gait (turn while stepping, straight crossing, turn back, stall watchdog).  Released ONLY by a bench v2 PASS:
+  # slurm/repo20260923/cpu_m7_plate_bench_v2.sbatch runs `$0 --only m3-shipped-step --submit` after reading its
+  # verdict.json.  Enforced here too (m3_bench_gate, --submit only): refused unless $M3_BENCH_VERDICT is a scored
+  # bench-v2 PASS with --stage-gait m3 and every source the replay snapshot copies matches its provenance.json.
+  "m3-shipped-step       --stage-gait m3"
 )
 set -euo pipefail
 REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
@@ -68,6 +74,8 @@ DEFAULT_SOURCE_CAMPAIGN=results/mission7-replay-smoke-20260921
 DEFAULT_BASELINE=results/mission7-approach-followup-20260922/replay-diagnose-cn-c22
 # The scored M2 bench verdict that alone releases m2-turnboth (overridable for tests; the bench job passes its own).
 M2_BENCH_VERDICT=${M7_BENCH_VERDICT:-$CAMPAIGN/m2-plate-bench/verdict.json}
+# The scored bench-v2 verdict (--stage-gait m3) that alone releases m3-shipped-step (the bench-v2 job passes its own).
+M3_BENCH_VERDICT=${M7_BENCH_V2_VERDICT:-$CAMPAIGN/m3-plate-bench-v2/verdict.json}
 cd "$REPO"
 
 submit=0; only=""; max_route=1; after=""
@@ -112,7 +120,11 @@ PREDECLARED RULE (Mission 7 crossing, exact replay gates -> route gate)
      unspent; unreconciled with the ledger, set aside by the user 2026-10-01):
      five gates = 50, one route gate = 32.  m2-turnboth: the 106-episode line
      authorized 2026-10-01 (64 bench + 10 this replay + 32 route gate), released
-     only by a bench PASS (cpu_m7_plate_bench.sbatch).  The route gate is
+     only by a bench PASS (cpu_m7_plate_bench.sbatch).  m3-shipped-step: M3's
+     line of the same size (conditional on M2's bench FAIL; bench v2 runs the
+     64 grid crossings minus its geometry-dropped walking entries + 10 this
+     replay + 32 route gate), released only by a bench-v2 PASS with --stage-gait
+     m3 (cpu_m7_plate_bench_v2.sbatch).  The route gate is
      released for the FIRST 10/10 in chain order only (route-gate slots:
      $max_route); later passes are recorded PASS and their route-gate commands
      printed as ROUTE_GATE_DEFERRED for explicit re-authorization.
@@ -158,6 +170,44 @@ changed = [name for name in files if name not in recorded or not Path(name).is_f
 if changed:
     blocked(f"sources changed since the bench (or absent from its provenance): {changed}")
 print(f"m2 bench gate: scored PASS at {verdict_path}; {len(files)} snapshot sources identical to the bench's record")
+PYEOF
+}
+
+# M3 bench-v2 gate, applied to m3-shipped-step with --submit only: exit 3 (RELEASE_BLOCKED) unless $1 is a scored
+# bench-v2 PASS run with --stage-gait m3 and every file in $2.. has the sha256 recorded in the provenance.json beside it.
+m3_bench_gate() {
+  "$PY" - "$@" <<'PYEOF' || return 3
+import hashlib, json, sys
+from pathlib import Path
+
+
+def blocked(why):
+    print(f"RELEASE_BLOCKED m3-shipped-step: {why}", file=sys.stderr)
+    sys.exit(3)
+
+
+verdict_path, files = Path(sys.argv[1]), sys.argv[2:]
+if not verdict_path.is_file():
+    blocked(f"no bench-v2 verdict at {verdict_path}")
+try:
+    verdict = json.loads(verdict_path.read_text())
+    provenance = json.loads((verdict_path.parent / "provenance.json").read_text())
+    recorded = provenance["sources_sha256"]
+    if not isinstance(verdict, dict) or not isinstance(recorded, dict):
+        raise TypeError("verdict or sources_sha256 is not a JSON object")
+except (OSError, ValueError, KeyError, TypeError) as exc:
+    blocked(f"unreadable bench-v2 verdict or provenance beside {verdict_path}: {type(exc).__name__}: {exc}")
+if (verdict.get("bench"), verdict.get("mode"), verdict.get("stage_gait"), verdict.get("verdict")) != ("v2", "scored", "m3", "PASS") \
+        or (provenance.get("bench"), provenance.get("mode"), provenance.get("stage_gait")) != ("v2", "scored", "m3"):
+    blocked(f"{verdict_path} is bench {verdict.get('bench')!r}, mode {verdict.get('mode')!r}, stage gait "
+            f"{verdict.get('stage_gait')!r}, verdict {verdict.get('verdict')!r}; only a scored bench-v2 m3 PASS releases")
+if not files:
+    blocked("no snapshot sources to compare")
+changed = [name for name in files if name not in recorded or not Path(name).is_file()
+           or hashlib.sha256(Path(name).read_bytes()).hexdigest() != recorded[name]]
+if changed:
+    blocked(f"sources changed since the bench (or absent from its provenance): {changed}")
+print(f"m3 bench gate: scored bench-v2 m3 PASS at {verdict_path}; {len(files)} snapshot sources identical to the bench's record")
 PYEOF
 }
 
@@ -208,14 +258,20 @@ for arm in "${selected[@]}"; do
 done
 rule
 m2_selected=0; for arm in "${selected[@]}"; do [ "${arm%% *}" != m2-turnboth ] || m2_selected=1; done
+m3_selected=0; for arm in "${selected[@]}"; do [ "${arm%% *}" != m3-shipped-step ] || m3_selected=1; done
 if [ "$submit" = 0 ]; then
   [ "$m2_selected" = 0 ] || echo "note: --submit queues m2-turnboth only if m2_bench_gate passes: $M2_BENCH_VERDICT must be a scored bench PASS and ${#m2_gate_files[@]} snapshot sources must match its provenance.json"
+  [ "$m3_selected" = 0 ] || echo "note: --submit queues m3-shipped-step only if m3_bench_gate passes: $M3_BENCH_VERDICT must be a scored bench-v2 m3 PASS and ${#m2_gate_files[@]} snapshot sources must match its provenance.json"
   echo "DRY RUN: nothing submitted.  Re-run with --submit to queue ${#selected[@]} gate(s) + ${#selected[@]} follow-up(s)."
   exit 0
 fi
 # M2: checked last, right before anything is queued; a refusal (RELEASE_BLOCKED, exit 3) submits nothing.
 if [ "$m2_selected" = 1 ]; then
   m2_bench_gate "$M2_BENCH_VERDICT" "${m2_gate_files[@]}" || exit 3
+fi
+# M3: the same placement and the same snapshot set, against the bench-v2 verdict.
+if [ "$m3_selected" = 1 ]; then
+  m3_bench_gate "$M3_BENCH_VERDICT" "${m2_gate_files[@]}" || exit 3
 fi
 
 # ---- submit the chain ----------------------------------------------------------------------------

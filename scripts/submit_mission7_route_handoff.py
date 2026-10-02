@@ -55,6 +55,8 @@ def _probe_args(args):
         probe_args.append("--allow-inactive-intervention")
     if args.stage_gait == "turnboth":
         probe_args.append("--stage-gait=turnboth")
+    elif args.stage_gait == "m3":
+        probe_args.append("--stage-gait=m3")
     return probe_args
 
 
@@ -97,8 +99,8 @@ def main():
     parser.add_argument("--exit-ramp-center", action="store_true")
     parser.add_argument("--align-yaw", action="store_true")
     parser.add_argument("--exit-ramp", type=float, default=0.)
-    parser.add_argument("--stage-gait", choices=("shipped", "turnboth"), default=None,
-                        help="forwarded as --stage-gait=turnboth; omitted = the shipped stage gait")
+    parser.add_argument("--stage-gait", choices=("shipped", "turnboth", "m3"), default=None,
+                        help="forwarded as --stage-gait=turnboth or --stage-gait=m3; omitted = the shipped stage gait")
     parser.add_argument("--submit", action="store_true")
     args = parser.parse_args()
     campaign = args.campaign.resolve()
@@ -110,12 +112,14 @@ def main():
         parser.error(f"destination exists; preserve it and choose a new campaign: {out}")
     if args.stage_gait == "turnboth" and (args.align_yaw or args.stage_press_hold):
         parser.error("--stage-gait turnboth does not compose with --align-yaw or --stage-press-hold")
+    if args.stage_gait == "m3" and (args.align_yaw or args.stage_press_hold):
+        parser.error("--stage-gait m3 does not compose with --align-yaw or --stage-press-hold")
     probe_args = _probe_args(args)
     if not args.submit:
         plan = {"planned_output": str(out), "stage": args.stage,
                 "indices": args.indices, "node": args.node,
                 "constraint": None if args.node else args.constraint}
-        if args.stage_gait == "turnboth":   # the default plan is unchanged
+        if args.stage_gait in ("turnboth", "m3"):   # the default plan is unchanged
             plan["stage_gait"] = args.stage_gait
             plan["probe_args"] = probe_args
         print(json.dumps(plan, indent=2))
@@ -187,7 +191,7 @@ def main():
         "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "submitted_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
     }
-    if args.stage_gait == "turnboth":   # default receipts keep their keys
+    if args.stage_gait in ("turnboth", "m3"):   # default receipts keep their keys
         row["stage_gait"] = args.stage_gait
     (out / "submission.json").write_text(json.dumps(row, indent=2) + "\n")
     with (ROOT / "SLURM_JOBS.md").open("a") as stream:
@@ -196,7 +200,7 @@ def main():
             f"{args.stage} layouts `{args.indices}`, "
             f"{'node `' + args.node + '`' if args.node else 'constraint `' + args.constraint + '`'}"
             f", 2 CPUs / 12 GB / 0 GPUs / 2 h; "
-            f"{'PlateStage on the `turnboth` stage gait (TurnBoth-s0 swapped in for the stage)' if args.stage_gait == 'turnboth' else 'unchanged PlateStage'}"
+            f"{'PlateStage on the `turnboth` stage gait (TurnBoth-s0 swapped in for the stage)' if args.stage_gait == 'turnboth' else 'PlateStage on the `m3` stage path (shipped gait: turn while stepping + stall watchdog)' if args.stage_gait == 'm3' else 'unchanged PlateStage'}"
             f" with `{args.handoff}` route handoff"
             f" and rejoin diagnostic `{args.rejoin_diagnostic}`, chain trace `{args.chain_trace}`, "
             f"fix `{args.rejoin_fix}`; "

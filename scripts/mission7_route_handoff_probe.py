@@ -26,7 +26,7 @@ import numpy as np
 from bhl_robust.mission.approach_debug import (DebugEnv, PlateSafeRouteController,
                                                wrap, yaw_of)
 from mission7_gates import route_gate_block
-from mission7_plate_stage import STAGE_GAITS, PlateStage, turnboth_check, turnboth_description
+from mission7_plate_stage import STAGE_GAITS, PlateStage, m3_constants, stage_gait_description, turnboth_check
 
 
 # Body-frame command scales (vx, vy, wz) shared by every conversion below.
@@ -978,6 +978,8 @@ def run(args):
             )
             if getattr(args, "stage_gait", "shipped") != "shipped":   # default rows keep their keys
                 row.update(stage_gait=args.stage_gait, gait_events=controller.stage.gait_events)
+                if args.stage_gait == "m3":   # turnboth rows keep their keys
+                    row["m3_events"] = controller.stage.m3_events
             record_name = f"{stage}-{index}.json"
             (args.out / record_name).write_text(json.dumps(row, indent=2) + "\n")
             summary = compact_episode(row, record_name)
@@ -1065,7 +1067,7 @@ def run(args):
                                 f"stage gait on {args.handoff} handoff")
         result["plate_stage_internal_behavior_unchanged"] = False
         result["stage_gait"] = args.stage_gait
-        result["stage_gait_description"] = turnboth_description()
+        result["stage_gait_description"] = stage_gait_description(args.stage_gait)
     (args.out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps({
         "status": result["status"],
@@ -1143,14 +1145,17 @@ if __name__ == "__main__":
                         help="record a requested-but-ineffective intervention as a "
                              "null result instead of failing the run")
     parser.add_argument("--stage-gait", choices=STAGE_GAITS, default="shipped",
-                        help="gait the PlateStage runs on: shipped (default) or turnboth (TurnBoth-s0 swapped "
-                             "in for the stage: turn in place, straight crossing, turn back)")
+                        help="gait the PlateStage runs on: shipped (default), turnboth (TurnBoth-s0 swapped "
+                             "in for the stage: turn in place, straight crossing, turn back) or m3 (shipped gait: "
+                             "turn while stepping, straight crossing, turn back, stall watchdog)")
     parser.add_argument("--preflight", action="store_true",
                         help="validate interpreter, imports and arguments, then exit "
                              "without running any episode")
     args = parser.parse_args()
     if args.stage_gait == "turnboth" and (args.align_yaw or args.stage_press_hold):
         parser.error("--stage-gait turnboth does not compose with --align-yaw or --stage-press-hold")
+    if args.stage_gait == "m3" and (args.align_yaw or args.stage_press_hold):
+        parser.error("--stage-gait m3 does not compose with --align-yaw or --stage-press-hold")
     args.repo = args.repo.resolve()
     args.out = args.out.resolve()
     if not args.out.is_relative_to(args.repo):
@@ -1177,7 +1182,8 @@ if __name__ == "__main__":
         }
         if args.stage_gait != "shipped":   # the default preflight line is unchanged
             preflight["stage_gait"] = args.stage_gait
-            preflight["stage_gait_check"] = turnboth_check(args.repo / "external/Berkeley-Humanoid-Lite")
+            preflight["stage_gait_check"] = (turnboth_check(args.repo / "external/Berkeley-Humanoid-Lite")
+                                             if args.stage_gait == "turnboth" else m3_constants())
         print(json.dumps(preflight, sort_keys=True), flush=True)
         raise SystemExit(0)
     run(args)

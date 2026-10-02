@@ -43,6 +43,10 @@
 #    printed under ROUTE_GATE_DEFERRED for explicit re-authorization.  Nothing
 #    is weakened.  A replay gate run with --stage-gait turnboth releases a route
 #    gate run with --stage-gait turnboth (step 3 translates the flag).
+#    M3 (2026-10-02, conditional on M2's bench FAIL, a line of the same size):
+#    tag m3-shipped-step, --stage-gait m3, released only by a bench-v2 PASS
+#    (cpu_m7_plate_bench_v2.sbatch); its route gate runs --stage-gait m3
+#    (step 3 translates the flag the same way).
 #
 # DRY_RUN=1 runs the same logic without sbatch (plans the route submission via
 # the submitter's non---submit mode and touches no lock).
