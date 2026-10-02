@@ -300,3 +300,120 @@ class TurnRestMixVelocityCommandCfg(TurnMixVelocityCommandCfg):
 
     rest_time_range: tuple[float, float] = (1.5, 4.0)
     """Seconds of zero command before the turn (the turn test settles 3.0 s)."""
+
+
+# --- turning-hold ---
+# R1H (Velocity-BHL-Arms-TurnGaitClockHold-v0, 2026-10-02; SLURM_JOBS.md "(C') revised design", frozen before any
+# implementation; launcher slurm/repo20260923/gpu_turngait_hold.sbatch). Additive: nothing above is changed, and
+# no existing task uses these names.
+#
+# R1 trains in upstream's heading mode in EVERY env (heading_command=True, rel_heading_envs=1.0): its wz is
+# clip(0.5 * wrap(heading_target - yaw), +/-1.5), recomputed every step, so the open-loop wz = 0 of the gate's
+# straight walk never occurs in training. TurnHoldMixVelocityCommand is TurnMixVelocityCommand's DIRECT mechanism,
+# unchanged, configured by the task as
+#   rel_pure_turn_envs = 0.0   no PURE_TURN envs (pure_turn_ang_vel_abs is then never read)
+#   rel_direct_envs    = 0.30  per resample, each env is EXPLICIT (DIRECT mode) with probability 0.3; its
+#                              is_heading_env is cleared, so its sampled command survives until its next resample
+#   direct ranges      = the task's own cfg.ranges (R1: vx (-1.0, 1.0), vy (-0.5, 0.5), wz (-1.5, 1.5))
+# plus ONE addition: direct_zero_wz_prob = 0.5, an independent U[0, 1) coin per resampled env; an EXPLICIT env whose
+# coin is < 0.5 gets wz = 0.0 exactly, the others keep their DIRECT draw wz ~ U(direct_ang_vel_z). The other 70 %
+# keep upstream's heading mode unchanged, and the 2 % standing draw is upstream's (a standing env is zeroed whatever
+# its mode).
+#
+# psi_ref of the heading_hold reward (gait_clock_mdp.heading_hold) is `yaw_at_resample`, written HERE, in
+# _resample_command, from the command asset's heading_w. That is how the resample is detected from the command term
+# itself: CommandTerm._resample(env_ids) is the only path to a new command, and it calls _resample_command for both
+# kinds of resample -- the time-out resample (CommandTerm.compute, at the end of ManagerBasedRLEnv.step, after the
+# reward) and the episode reset (CommandTerm.reset, called by ManagerBasedRLEnv._reset_idx AFTER the "reset" events
+# have written the new root pose). So psi_ref is the base yaw at the env's last resample, and after an episode reset
+# it is the yaw of the new episode's initial pose. (command_counter is not used: CommandTerm.reset zeroes it before
+# the reset resample, so an episode reset can leave it at the value it had.)
+
+
+def check_zero_wz_prob(p: float) -> None:
+    """Raise ValueError unless 0 <= p <= 1."""
+    if not 0.0 <= float(p) <= 1.0:
+        raise ValueError(f"direct_zero_wz_prob must be in [0, 1], got {p}")
+
+
+def zero_direct_wz(vel: torch.Tensor, modes: torch.Tensor, coin: torch.Tensor,
+                   p_zero: float) -> tuple[torch.Tensor, torch.Tensor]:
+    """DIRECT rows whose coin is < p_zero get wz = 0.0 exactly; vx, vy and every other row are unchanged.
+
+    vel (n, 3), modes (n,), coin (n,) uniform [0, 1). Returns (new vel, zero mask (n,) bool); inputs untouched."""
+    vel = vel.clone()
+    zero = (modes == DIRECT) & (coin < p_zero)
+    vel[zero, 2] = 0.0
+    return vel, zero
+
+
+class TurnHoldMixVelocityCommand(TurnMixVelocityCommand):
+    """TurnMix's DIRECT (explicit) envs with wz = 0 exactly on a share of them, and the base yaw at each resample."""
+
+    cfg: "TurnHoldMixVelocityCommandCfg"
+
+    def __init__(self, cfg, env):
+        super().__init__(cfg, env)
+        check_zero_wz_prob(cfg.direct_zero_wz_prob)
+        self.zero_wz_env = torch.zeros(self.num_envs, dtype=torch.bool, device=self.device)
+        self.yaw_at_resample = torch.zeros(self.num_envs, device=self.device)
+        self._first_resample_logged = False
+        # Logged at episode end: the fraction of resetting envs whose last command was explicit with wz = 0.
+        self.metrics["zero_wz_env"] = torch.zeros(self.num_envs, device=self.device)
+        print(f"[turn_command] TurnHoldMixVelocityCommand: explicit {float(cfg.rel_direct_envs)} "
+              f"zero_wz_p {float(cfg.direct_zero_wz_prob)} pure {float(cfg.rel_pure_turn_envs)} "
+              f"vx {tuple(float(x) for x in cfg.direct_lin_vel_x)} vy {tuple(float(x) for x in cfg.direct_lin_vel_y)} "
+              f"wz {tuple(float(x) for x in cfg.direct_ang_vel_z)} heading_command {bool(cfg.heading_command)} "
+              f"rel_heading {float(cfg.rel_heading_envs)} stiffness {float(cfg.heading_control_stiffness)} "
+              f"rel_standing {float(cfg.rel_standing_envs)}", flush=True)
+
+    def __str__(self) -> str:
+        return super().__str__() + f"\n\tExplicit-env zero-wz probability: {self.cfg.direct_zero_wz_prob}"
+
+    @property
+    def explicit_env(self) -> torch.Tensor:
+        """(num_envs,) bool: the EXPLICIT envs -- DIRECT mode since their last resample, out of heading control."""
+        return (self.turn_mode == DIRECT) & ~self.is_heading_env
+
+    def _resample_command(self, env_ids: Sequence[int]):
+        super()._resample_command(env_ids)              # upstream's sample, then TurnMix's DIRECT / UPSTREAM draw
+        if isinstance(env_ids, slice):
+            ids = torch.arange(self.num_envs, device=self.device)[env_ids]
+        else:
+            ids = torch.as_tensor(env_ids, device=self.device, dtype=torch.long).reshape(-1)
+        if ids.numel() == 0:
+            return
+        vel, zero = zero_direct_wz(self.vel_command_b[ids], self.turn_mode[ids],
+                                   torch.rand(ids.numel(), device=self.device), self.cfg.direct_zero_wz_prob)
+        self.vel_command_b[ids] = vel
+        self.zero_wz_env[ids] = zero
+        self.metrics["zero_wz_env"][ids] = zero.float()
+        self.yaw_at_resample[ids] = self.robot.data.heading_w[ids]       # psi_ref of heading_hold
+        if not self._first_resample_logged:
+            self._first_resample_logged = True
+            direct = self.turn_mode[ids] == DIRECT
+            n_dir = int(direct.sum())
+            print(f"[turn_command] TurnHoldMix first resample: n {ids.numel()} explicit {n_dir / ids.numel():.3f} "
+                  f"zero_wz {float(zero.float().mean()):.3f} (of explicit "
+                  f"{(int(zero.sum()) / n_dir) if n_dir else float('nan'):.3f}) "
+                  f"heading_cleared_iff_explicit {bool(((~self.is_heading_env[ids]) == direct).all())} "
+                  f"standing {float(self.is_standing_env[ids].float().mean()):.3f}", flush=True)
+
+
+@configclass
+class TurnHoldMixVelocityCommandCfg(TurnMixVelocityCommandCfg):
+    """TurnMixVelocityCommandCfg with R1H's explicit-command mix (see the turning-hold note above). The task builds
+    it from its own base_velocity cfg and sets the direct ranges to that cfg's ranges."""
+
+    class_type: type = TurnHoldMixVelocityCommand
+
+    rel_pure_turn_envs: float = 0.0
+    rel_direct_envs: float = 0.30
+
+    direct_lin_vel_x: tuple[float, float] = (-1.0, 1.0)
+    direct_lin_vel_y: tuple[float, float] = (-0.5, 0.5)
+    direct_ang_vel_z: tuple[float, float] = (-1.5, 1.5)
+
+    direct_zero_wz_prob: float = 0.5
+    """Probability, per resample of an EXPLICIT (DIRECT) env, that its wz is 0.0 exactly."""
+# --- end turning-hold ---

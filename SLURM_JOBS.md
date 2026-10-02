@@ -3588,3 +3588,25 @@ Files: `slurm/repo20260923/gpu_platecross.sbatch`; task `Velocity-BHL-Arms-Plate
   - Fix (plumbing only; the rule and every gate are unchanged): `n_runs=$( (ls … || true) | wc -l)`.
   - New tests run the launcher's real-mode prefix on a fake tree: no run dir → continues with `n_runs=0`; an incomplete or duplicate run dir → still refused; a complete one → reused. `tests/test_platecross.py`: 79 passed.
 - Resubmitted (code `8213f14`): fresh PlateCross smoke `21517542`, then the real array `21517543` (0–2%3, `--dependency=afterok:21517542`). It replaces `21517362`.
+
+**Predeclared now (2026-10-02 16:22, before any R1H run; frozen design "(C') revised design" of 14:44): turning follow-up R1H. A new task, `Velocity-BHL-Arms-TurnGaitClockHold-v0`, = R1 + explicit straight-walk commands + a heading-hold reward.**
+Files: `slurm/repo20260923/gpu_turngait_hold.sbatch`; appended classes in `turn_command.py`, `gait_clock_mdp.py` and `arms_env_cfg.py`; verdict and recipe check `scripts/bench/turngait_hold_verdict.py`; tests `tests/test_turngait_hold.py`.
+- **What changes (exactly two, both chosen, not tuned):**
+  - (i) `TurnHoldMixVelocityCommand`: per resample, 30 % of envs leave heading control and take explicit commands from R1's own ranges, with wz = 0 exactly at p = 0.5. The other 70 % keep R1's heading mode, and the 2 % standing draw is upstream's.
+  - (ii) `heading_hold`: exp(−(wrap(yaw − ψ_ref)/0.2)²), weight 1.0, only in explicit envs while |wz_cmd| < 0.05. ψ_ref = the yaw at that env's last resample, read from the command term (the reset resample runs after the reset events).
+  - The term's ceiling is half of R1's track_ang_vel_z_exp (weight 2.0), and it is active in about 16 % of envs.
+  - Trained from scratch: 6000 iterations, seeds 0–2, array 0–2%3, 20 h limit.
+- **PREDECLARED RULE (v5's joint rule, verbatim):** "PASS iff >= 2/3 seeds both PASS turn_test v2 AND are QUALIFIED by cpu_turn_qualify's unchanged rule (v2x >= 9/10 on reset seeds 10-14, walk <= 15 deg on >= 2/3, push <= 9/60); else FAIL; INCOMPLETE if any JSON is missing. A seed that fails v2 does not count even if it qualifies through v2x." Training counts only if the run dir holds model_5999.pt and the training log shows the arm's task id, the feet_gait term, the heading_hold term, the explicit-command mix and the push event. A new task, never presented as a fine-tune of R1. Labels: LEARNED gait; MuJoCo gates.
+- **Disclosed:**
+  - the arm changes the command mix (the training distribution), so it tests explicit straight-walk commands and the hold reward together, not the reward alone;
+  - R1's drift is not a constant bias.
+- **Accepted exception, inherited from R12's smoke:** the smoke's export rewrites `$UPSTREAM/configs/policy_latest.yaml` (serialised by the shared export lock; nothing reads it as a default input), and Isaac writes its log under `$UPSTREAM/logs/rsl_rl/humanoid/isaaclab/`.
+- **Review:** 2 reviewers, 0 blocking, 4 distinct minor findings.
+  - The tests pinned three files this workstream does not own; fixed to an identifier check.
+  - A temporary recipe block sat in `eval/gait_clock.py` from about 15:00 to 15:18; it was removed, the file is byte-identical to HEAD, and no clocks2 job ran meanwhile.
+  - One empty `python3 -` ran on the interactive node; no effect.
+- **Pre-submission evidence:**
+  - Smokes `21516686` and `21516835` PASS (Isaac probe 21/21: explicit share 0.307, wz = 0 share of explicit 0.491; ψ_ref = heading after reset, partial reset and time-out resample; live heading_hold = formula).
+  - Clean checkout (HEAD + C's files only): 281 passed, 1 skipped.
+  - The real-mode launcher prefix on a fake tree with no run dirs reaches the GPU section (the PlateCross startup bug does not apply).
+  - The four touched task modules only add lines.

@@ -133,3 +133,57 @@ def feet_swing_height(env, target_height: float, sensor_cfg, asset_cfg, foot_hei
               f"median {float(z_origin[in_contact].median()):.4f} m (n={int(in_contact.sum())}); "
               f"foot_height_offset {foot_height_offset} m, target {target_height} m", flush=True)
     return swing_height_penalty(z_origin - foot_height_offset, in_contact, target_height)
+
+
+# --- turning-hold ---
+# R1H heading_hold (Velocity-BHL-Arms-TurnGaitClockHold-v0; 2026-10-02, SLURM_JOBS.md "(C') revised design"; FROZEN,
+# chosen, not tuned). Additive: R1/R2's terms above are unchanged.
+#   Active only in the command term's EXPLICIT envs (turn_command.TurnHoldMixVelocityCommand.explicit_env: DIRECT
+#   mode, out of heading control) while |wz_cmd| < 0.05 rad/s, and zero everywhere else:
+#     reward = exp(-(dpsi / 0.2 rad)^2),  dpsi = wrap(base yaw - psi_ref),  weight 1.0,
+#   psi_ref = the env's base yaw at its last command resample (and at episode reset), recorded by the command term
+#   itself (TurnHoldMixVelocityCommand.yaw_at_resample, written in its _resample_command; see turn_command.py), and
+#   base yaw = the same asset's heading_w (the command term's own robot), read at reward time.
+#   Scale: R1's track_ang_vel_z_exp has weight 2.0 and std 0.25 rad/s (exp(-(wz_cmd - wz)^2 / 0.25^2)), so this
+#   term's ceiling (1.0 per step, times step_dt like every term) is HALF the yaw-rate term's; it is active in about
+#   16 % of envs: 0.30 explicit x P(|wz_cmd| < 0.05 | explicit) = 0.30 x (1 - 0.98 x 0.5 x (1 - 0.1 / 3.0)) = 0.158.
+#   Only torch is used (no isaaclab import), like the terms above.
+HOLD_STD_RAD = 0.2
+HOLD_WZ_THRESHOLD = 0.05            # rad/s
+HOLD_WEIGHT = 1.0
+HOLD_COMMAND_NAME = "base_velocity"
+
+
+def wrap_to_pi(angles: torch.Tensor) -> torch.Tensor:
+    """isaaclab.utils.math.wrap_to_pi, verbatim logic: angles wrapped to (-pi, pi]."""
+    wrapped = (angles + torch.pi) % (2 * torch.pi)
+    return torch.where((wrapped == 0) & (angles > 0), torch.pi, wrapped - torch.pi)
+
+
+def heading_hold_reward(yaw: torch.Tensor, psi_ref: torch.Tensor, wz_cmd: torch.Tensor, explicit: torch.Tensor,
+                        std: float, wz_threshold: float) -> torch.Tensor:
+    """(N,) exp(-(wrap(yaw - psi_ref) / std)^2) where explicit and |wz_cmd| < wz_threshold, else 0."""
+    active = explicit.bool() & (wz_cmd.abs() < wz_threshold)
+    dpsi = wrap_to_pi(yaw - psi_ref)
+    return torch.where(active, torch.exp(-torch.square(dpsi / std)), torch.zeros_like(dpsi))
+
+
+def heading_hold(env, command_name: str, std: float, wz_threshold: float) -> torch.Tensor:
+    """Reward term: heading_hold_reward on the command term's explicit envs, its psi_ref and its asset's yaw.
+    The command term must be a TurnHoldMixVelocityCommand (explicit_env, yaw_at_resample, vel_command_b, robot)."""
+    term = env.command_manager.get_term(command_name)
+    missing = [a for a in ("explicit_env", "yaw_at_resample", "vel_command_b", "robot") if not hasattr(term, a)]
+    if missing:
+        raise TypeError(f"heading_hold: command term {command_name!r} ({type(term).__name__}) lacks {missing}; "
+                        f"it needs turn_command.TurnHoldMixVelocityCommand")
+    explicit = term.explicit_env
+    wz_cmd = term.vel_command_b[:, 2]
+    reward = heading_hold_reward(term.robot.data.heading_w, term.yaw_at_resample, wz_cmd, explicit, std, wz_threshold)
+    if "heading_hold" not in _LOGGED:
+        _LOGGED.add("heading_hold")
+        active = explicit & (wz_cmd.abs() < wz_threshold)
+        print(f"[gait_clock_mdp] heading_hold command {command_name} ({type(term).__name__}) std {std} "
+              f"wz_threshold {wz_threshold}: active in {int(active.sum())} of {int(wz_cmd.shape[0])} envs "
+              f"(explicit {int(explicit.sum())})", flush=True)
+    return reward
+# --- end turning-hold ---
