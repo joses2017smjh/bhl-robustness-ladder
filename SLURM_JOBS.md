@@ -3485,3 +3485,18 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - Smokes `21508726` and `21509267` PASS. The 38 M2 crossings re-score to their recorded clears.
   - Release-script dry run at 2026-10-02 12:27: preflight OK, nothing submitted.
 - Submitted (code `e33e44f`, ledger `54e4262`): bench-v2 smoke of the committed code `21514945`, then bench v2 with M3 `21514946` (afterok). A bench-v2 PASS releases the exact replay through `m3_bench_gate`, then the route gate.
+- **Mission 7 bench v2 + M3** `21514946` (smoke `21514945` PASS): COMPLETED in 5:10. **FAIL by the predeclared rule.**
+  - Result: 16/41 crossings cleared within 10 s (the rule needed 39), with 5 falls. Per heading: 0° 5/12, +90° 5/11, −90° 6/10, 180° 0/8 (needed 11/10/9/7).
+  - The chain stopped: neither the exact replay nor the route gate was submitted (0 of their 42 episodes). Episodes spent: 41 of the 83-episode M3 line.
+  - Recounted by the coordinator (2026-10-02 12:41) from the 41 per-crossing records (`results/mission7-campaign-20260923/m3-plate-bench-v2/verdict.json`).
+  - Breakdown:
+    - The run-up confound is gone: 40/41 crossings reached the stage, and 1 walking entry timed out.
+    - The failure is M3's own: wall contact in 30/41 crossings (median 82 stage samples), 16 watchdog hand-backs and 1 turn time-out.
+    - Falls: 3 while crossing, 1 while turning, 1 after hand-back. No crossing cleared late.
+    - 180° went 0/8, as the predeclared arc geometry predicted (0.68–0.75 m arcs in 1.5–1.7 m cells).
+    - Standstill entries cleared 13/32 and walking entries 3/9.
+  - Reading: under the Mission 7 interface's 0.40 rad/s cap, neither the shipped gait turning while stepping (M3) nor TurnBoth-s0 turning in place (M2) crosses the 3 cm plate reliably. Both predeclared crossing plans are now NEGATIVE.
+  - Next candidates, which need the user's approval and new episodes:
+    - (a) the new qualified R1 checkpoint `arms-turngait-clock-s2` as the stage gait on bench v2 (it turns in place reliably at ±0.6 rad/s; untested at 0.40);
+    - (b) report A's option (4), a learned local crossing (a fine-tune on 3 cm discs), the plan's last resort once M2 and M3 both fail.
+  - Labels: LEARNED shipped gait, SCRIPTED M3 stage, ORACLE layout and plate pose.
