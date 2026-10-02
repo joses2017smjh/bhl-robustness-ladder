@@ -47,6 +47,7 @@ replaced it). Route failures are never dropped from a denominator.
 | Pressure-plate exact replay, 10/10 upright | **PASS** (2026-10-01: its staged crossings never cleared a plate and door 0 was already open, so the replay cannot certify a crossing) | `21397732` |
 | Doors ≥16 and Transport ≥16 (documented route protocol) | **FAIL** 1/16, 0/16 (2026-10-01: the code's `doors_16`/`transport_16` counted episodes, not successes, and read true here; fixed in code the same day by `scripts/mission7_gates.py`, under which 21398514 reads false/false) | `21398514` |
 | Privileged Approach ≥60/64, zero falls, ≥14/16 per direction | **PASS** 62/64, 0 falls, −x 14/16 (`center_bias`) | `21401966` |
+| M2 plate bench (TurnBoth-s0 stage gait) ≥62/64, 0 falls, ≥15/16 per heading | **FAIL** 8/64, 8 falls (26/64 lost in the bench's run-up; turns stall at 0.4 rad/s); replay and route gate not run | `21507962` |
 | Sensor-only Both readiness | **CLOSED** — route gate still fails | — |
 | Four-sensor comparison | **CLOSED** | — |
 

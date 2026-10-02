@@ -3404,3 +3404,19 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - Reading, not part of the gate: with flush pads the UNCHANGED LIFT_HOLD_RULE passed on 5/5 probe seeds (lift 0.19–0.20 m, hold 14.3–14.4 s, robot tilt ≤ 0.18 rad, no floor contact), so the pads fix the grip but not the roll. The cube rolls with the hands as they rotate about the pinch axis during the lift keyframe (≈ 1 rad, as the kinematics predicted). A non-rolling grip needs a lift motion that holds the wrist orientation, not only flush pads.
   - Labels: MODIFIED END-EFFECTOR (flush pads) + HARNESS CHANGE (elliptic cone, impratio 10); LEARNED gait + SCRIPTED arms + ORACLE cube pose. `results/coop-flushpad-20261002/{probe,scored}/verdict.json`.
 - Submitted (code `a6c64e0`, ledger `02f7054`): Mission 7 plate-bench smoke `21507961`, then the 64-crossing bench `21507962` (afterok). A bench PASS releases the exact replay and the route gate through `m2_bench_gate`.
+- **Mission 7 plate bench** `21507962` (smoke `21507961` PASS): COMPLETED in 10:39. **FAIL by the predeclared rule.**
+  - Result: 8/64 crossings cleared within 10 s, with 8 falls. Per heading: 0° 3/16, +90° 4/16, −90° 1/16, 180° 0/16. The rule needed ≥ 62/64, 0 falls and ≥ 15/16 per heading.
+  - The chain stopped: neither the exact replay nor the route gate was submitted (0 of their 42 episodes). Episodes spent: 64 of the 106-episode line (the smoke is not counted).
+  - Recounted by the coordinator from the 64 per-crossing records (`results/mission7-campaign-20260923/m2-plate-bench/verdict.json`).
+  - Breakdown:
+    - 26/64 ended before takeover: 19 run-up time-outs, 6 run-up falls and 1 fall while standing at the pre-point. They occurred on every heading, including 0° (0° 5, +90° 4, −90° 8, 180° 9).
+    - Of the 38 that reached the stage: 8 cleared within 10 s, 2 cleared late (12.6 s and 19.9 s), 14 turns timed out at 0.40 rad/s, and 1 fell during the settle.
+  - Three separate causes:
+    1. the bench's own run-up: the shipped gait walks from route[k−1] to the pre-point holding the entry yaw;
+    2. TurnBoth-s0's turn at the interface's 0.40 rad/s stalls;
+    3. TurnBoth-s0's straight crossing stalls at the plate edge, even when facing the door (0°: 3/11 of those reaching the stage cleared).
+  - Labels: LEARNED gaits (shipped + TurnBoth-s0), SCRIPTED stage, ORACLE layout and plate pose.
+- **M3 decision (2026-10-02 05:27, before any new episode):** M3 is NOT run on this bench.
+  - The bench's run-up loses 26/64 crossings before the stage acts, independent of the stage gait, so the predeclared ≥ 62/64 is unreachable by any stage. A bench without the run-up is needed first, so M3's judging protocol is not M2's bench as predeclared.
+  - A bench v2 (no run-up) and the M3 stage (shipped gait, turn while stepping, stall watchdog) will be built, reviewed and smoke-tested. They will be predeclared, but not submitted until the user approves.
+  - M2's FAIL stands as recorded.

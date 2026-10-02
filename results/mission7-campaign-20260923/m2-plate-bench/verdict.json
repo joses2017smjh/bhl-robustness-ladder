@@ -1,0 +1,2420 @@
+{
+  "verdict": "FAIL",
+  "rule": "Bench: PASS iff >= 62/64 crossings clear (base along >= +0.35 m past the plate centre along the door direction, within 10 s of takeover, by mission7_gates' clear definition), 0 falls (tilt >= 0.78), and >= 15/16 clears per heading. Otherwise FAIL; INCOMPLETE if any of the 64 is missing.",
+  "clears": 8,
+  "falls": 8,
+  "crossings_scored": 64,
+  "expected": 64,
+  "per_heading": {
+    "0": {
+      "clears": 3,
+      "crossings": 16
+    },
+    "90": {
+      "clears": 4,
+      "crossings": 16
+    },
+    "-90": {
+      "clears": 1,
+      "crossings": 16
+    },
+    "180": {
+      "clears": 0,
+      "crossings": 16
+    }
+  },
+  "per_cell": {
+    "0/round/standstill": {
+      "clears": 1,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "0/round/walking": {
+      "clears": 1,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "90/round/standstill": {
+      "clears": 0,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "90/round/walking": {
+      "clears": 2,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "-90/round/standstill": {
+      "clears": 1,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "-90/round/walking": {
+      "clears": 0,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "180/round/standstill": {
+      "clears": 0,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "180/round/walking": {
+      "clears": 0,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "0/square/standstill": {
+      "clears": 1,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "0/square/walking": {
+      "clears": 0,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "90/square/standstill": {
+      "clears": 0,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "90/square/walking": {
+      "clears": 2,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "-90/square/standstill": {
+      "clears": 0,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "-90/square/walking": {
+      "clears": 0,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "180/square/standstill": {
+      "clears": 0,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    },
+    "180/square/walking": {
+      "clears": 0,
+      "crossings": 4,
+      "doors": [
+        2,
+        2
+      ]
+    }
+  },
+  "missing": [],
+  "problems": [],
+  "misses": [
+    [
+      1,
+      0
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      6,
+      0
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      7,
+      0
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      8,
+      0
+    ],
+    [
+      8,
+      1
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      10,
+      0
+    ],
+    [
+      10,
+      1
+    ],
+    [
+      11,
+      0
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      12,
+      0
+    ],
+    [
+      12,
+      1
+    ],
+    [
+      13,
+      1
+    ],
+    [
+      14,
+      0
+    ],
+    [
+      14,
+      1
+    ],
+    [
+      15,
+      0
+    ],
+    [
+      15,
+      1
+    ],
+    [
+      16,
+      0
+    ],
+    [
+      16,
+      1
+    ],
+    [
+      17,
+      0
+    ],
+    [
+      18,
+      0
+    ],
+    [
+      18,
+      1
+    ],
+    [
+      19,
+      0
+    ],
+    [
+      19,
+      1
+    ],
+    [
+      20,
+      0
+    ],
+    [
+      20,
+      1
+    ],
+    [
+      21,
+      0
+    ],
+    [
+      22,
+      0
+    ],
+    [
+      22,
+      1
+    ],
+    [
+      23,
+      0
+    ],
+    [
+      23,
+      1
+    ],
+    [
+      24,
+      0
+    ],
+    [
+      24,
+      1
+    ],
+    [
+      25,
+      0
+    ],
+    [
+      25,
+      1
+    ],
+    [
+      26,
+      0
+    ],
+    [
+      26,
+      1
+    ],
+    [
+      27,
+      0
+    ],
+    [
+      27,
+      1
+    ],
+    [
+      28,
+      0
+    ],
+    [
+      29,
+      0
+    ],
+    [
+      29,
+      1
+    ],
+    [
+      30,
+      0
+    ],
+    [
+      30,
+      1
+    ],
+    [
+      31,
+      0
+    ],
+    [
+      31,
+      1
+    ]
+  ],
+  "fallen": [
+    [
+      3,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      12,
+      0
+    ],
+    [
+      20,
+      0
+    ],
+    [
+      23,
+      0
+    ],
+    [
+      29,
+      1
+    ]
+  ],
+  "chain": "a chain, each step only after the previous PASSES: bench -> the unchanged exact ten-fall replay once with --stage-gait turnboth (complete, 10 episodes, 10 upright, 0 falls) -> the route gate as coded by M1 (Doors and Transport each >= 16/16 successes on validation layouts 0-15, 32 episodes); M3 (turn while stepping with the shipped gait + a stall watchdog) is predeclared as conditional on a bench FAIL",
+  "labels": {
+    "gaits": "LEARNED (shipped arms-dr1.0-s0 outside the stage; TurnBoth-s0 during the stage)",
+    "stage": "SCRIPTED (PlateStage, stage_gait=turnboth)",
+    "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"
+  },
+  "stage_kwargs": {
+    "stage_gait": "turnboth"
+  },
+  "mode": "scored",
+  "plate_activation_not_gated": {
+    "round_target_pressed_during_stage": 19,
+    "square_target_pressed_during_stage": 19,
+    "crossings": 64
+  },
+  "wall_contacts_not_gated": {
+    "crossings_with_stage_contact": 9
+  },
+  "end_reasons": {
+    "complete": 37,
+    "fall": 8,
+    "runup_timeout": 19
+  },
+  "runup_over_opposite_plate_not_gated": {
+    "crossings": [
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        13,
+        0
+      ],
+      [
+        16,
+        0
+      ],
+      [
+        18,
+        1
+      ],
+      [
+        22,
+        1
+      ],
+      [
+        25,
+        0
+      ],
+      [
+        26,
+        0
+      ],
+      [
+        28,
+        1
+      ],
+      [
+        29,
+        0
+      ],
+      [
+        29,
+        1
+      ],
+      [
+        30,
+        0
+      ]
+    ],
+    "count": 17,
+    "fallen": [
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        29,
+        1
+      ]
+    ],
+    "fallen_before_takeover": [
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        29,
+        1
+      ]
+    ]
+  },
+  "falls_by_phase_not_gated": {
+    "bench_runup": 6,
+    "bench_standstill": 1,
+    "stage_settle": 1
+  },
+  "crossings": [
+    {
+      "layout": 0,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 4.200000000005133,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.14563476746461684,
+      "takeover_s": 10.200000000000975,
+      "handback_s": 14.400000000006107,
+      "takeover_speed_mps": 0.0012827186933998575,
+      "along_start_m": -0.45781022777525326,
+      "along_max_m": 0.3573608836337075,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 0,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 4.360000000003907,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.18921626897360558,
+      "takeover_s": 7.199999999998729,
+      "handback_s": 11.600000000002685,
+      "takeover_speed_mps": 1.1208730468537351,
+      "along_start_m": -0.4347139670805786,
+      "along_max_m": 0.40479406564697834,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 1,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.2622882368665086,
+      "takeover_s": 10.600000000001463,
+      "handback_s": 34.39999999998223,
+      "takeover_speed_mps": 0.06602917887586826,
+      "along_start_m": -0.12729006857832692,
+      "along_max_m": -0.08837854974946335,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 1,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 7.040000000007183,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1640253621069648,
+      "takeover_s": 7.199999999998729,
+      "handback_s": 17.200000000005264,
+      "takeover_speed_mps": 0.3934123414156148,
+      "along_start_m": -0.5448246682651899,
+      "along_max_m": 0.6204792838970555,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 2,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 8.399999999996764,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.16393691140488703,
+      "takeover_s": 11.400000000002441,
+      "handback_s": 23.399999999990815,
+      "takeover_speed_mps": 0.0013157296482949061,
+      "along_start_m": -0.5263119392411267,
+      "along_max_m": 0.432814074557243,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 2,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.11137399284233775,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 3,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "fall",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": true,
+      "fall_phase": "bench_runup",
+      "maximum_tilt": 0.9024371409399229,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 3,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "fall",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": true,
+      "fall_phase": "bench_runup",
+      "maximum_tilt": 0.9382833450269489,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 4,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.11939615990107627,
+      "takeover_s": 10.400000000001219,
+      "handback_s": 15.600000000007574,
+      "takeover_speed_mps": 0.0015259087534031134,
+      "along_start_m": -0.3698908658430442,
+      "along_max_m": -0.34120650794394436,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 4,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "fall",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": true,
+      "fall_phase": "bench_runup",
+      "maximum_tilt": 0.8000329371672207,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 5,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.11398070910750542,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 5,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.20447062230043866,
+      "takeover_s": 11.000000000001952,
+      "handback_s": 32.19999999997172,
+      "takeover_speed_mps": 1.3005112514537898,
+      "along_start_m": -0.5565940016082651,
+      "along_max_m": -0.3011139166605368,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 4,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 6,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.14096035708595375,
+      "takeover_s": 11.600000000002685,
+      "handback_s": 35.59999999998796,
+      "takeover_speed_mps": 0.0006399125823151919,
+      "along_start_m": -0.5254363490813179,
+      "along_max_m": -0.3106190134856557,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 6,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.15237581164463637,
+      "takeover_s": 8.599999999999019,
+      "handback_s": 24.399999999988484,
+      "takeover_speed_mps": 0.15122715862036246,
+      "along_start_m": -0.5406607359273097,
+      "along_max_m": -0.343632592524159,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 7,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.09877566732894716,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 7,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.11196419496986676,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 8,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.10347367501837021,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 8,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1804566847440654,
+      "takeover_s": 10.400000000001219,
+      "handback_s": 15.200000000007085,
+      "takeover_speed_mps": 0.0008201656836796472,
+      "along_start_m": -0.47457674539646166,
+      "along_max_m": -0.3406507057804688,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 9,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "fall",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": true,
+      "fall_phase": "bench_runup",
+      "maximum_tilt": 0.8441574146379301,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 9,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.13187275444030508,
+      "takeover_s": 10.200000000000975,
+      "handback_s": 30.79999999997357,
+      "takeover_speed_mps": 0.001358851926703778,
+      "along_start_m": -0.3763443649268181,
+      "along_max_m": -0.3648314590126134,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 10,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": true,
+      "clear_after_takeover_s": 12.600000000002252,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.5645628207402198,
+      "takeover_s": 6.199999999999283,
+      "handback_s": 22.19999999999361,
+      "takeover_speed_mps": 1.5300017352349233,
+      "along_start_m": -0.35904683428526507,
+      "along_max_m": 0.45136389374930985,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 6,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 10,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1047518792851241,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 11,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.2429869057207755,
+      "takeover_s": 7.399999999998618,
+      "handback_s": 37.39999999999655,
+      "takeover_speed_mps": 0.4503961252913674,
+      "along_start_m": -0.4878892811332848,
+      "along_max_m": 0.27780498677938126,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 68,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 11,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.14969962951615778,
+      "takeover_s": 9.600000000000241,
+      "handback_s": 45.80000000003666,
+      "takeover_speed_mps": 8.57643027152573e-05,
+      "along_start_m": -0.35846094921089433,
+      "along_max_m": -0.3411849229195971,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 12,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "fall",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": true,
+      "fall_phase": "stage_settle",
+      "maximum_tilt": 0.9018749513445378,
+      "takeover_s": 8.399999999998775,
+      "handback_s": null,
+      "takeover_speed_mps": 0.685598605412732,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [
+        "approach",
+        "settle"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 12,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.11266602594322982,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 13,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 7.400000000004779,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.24502095318662578,
+      "takeover_s": 9.800000000000486,
+      "handback_s": 20.199999999998273,
+      "takeover_speed_mps": 0.4349877832507918,
+      "along_start_m": -0.5958668789461612,
+      "along_max_m": 0.6075436284666713,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 21,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 13,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.12312058647089916,
+      "takeover_s": 10.200000000000975,
+      "handback_s": 30.79999999997357,
+      "takeover_speed_mps": 0.0001250406046812149,
+      "along_start_m": -0.38137214040703693,
+      "along_max_m": -0.3736483477266379,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 14,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.10733523095771136,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 14,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1088799755614405,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 15,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1732195613758198,
+      "takeover_s": 6.599999999999062,
+      "handback_s": 32.19999999997172,
+      "takeover_speed_mps": 0.8425310101680397,
+      "along_start_m": -0.586909216511311,
+      "along_max_m": -0.25627636049191294,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 15,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.09813782439515113,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 16,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.11365200620252185,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 16,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.17983696672709734,
+      "takeover_s": 6.799999999998951,
+      "handback_s": 11.600000000002685,
+      "takeover_speed_mps": 0.3581823510416291,
+      "along_start_m": -0.43721754142446667,
+      "along_max_m": 0.2719362832490406,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 17,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.12642294814645536,
+      "takeover_s": 10.800000000001708,
+      "handback_s": 31.39999999997217,
+      "takeover_speed_mps": 0.00022241695521587327,
+      "along_start_m": -0.3843858345424835,
+      "along_max_m": -0.3732274649740938,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 17,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.640000000007404,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1470558189816839,
+      "takeover_s": 7.5999999999985075,
+      "handback_s": 18.400000000002468,
+      "takeover_speed_mps": 0.27620011659404564,
+      "along_start_m": -0.5607414084121943,
+      "along_max_m": 0.6757505986527835,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 18,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.13837031012784756,
+      "takeover_s": 10.800000000001708,
+      "handback_s": 21.399999999995476,
+      "takeover_speed_mps": 0.00029576143851632163,
+      "along_start_m": -0.4924179964923131,
+      "along_max_m": -0.3455592158466629,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 11,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 18,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.14218924083710888,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 19,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.103202660208876,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 19,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.17050254264125317,
+      "takeover_s": 6.199999999999283,
+      "handback_s": 42.60000000002138,
+      "takeover_speed_mps": 0.5521974585183728,
+      "along_start_m": -0.4473656082514098,
+      "along_max_m": 0.19932093796090028,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 20,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "fall",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": true,
+      "fall_phase": "bench_standstill",
+      "maximum_tilt": 0.8538504401768984,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 20,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.12805317236573896,
+      "takeover_s": 7.5999999999985075,
+      "handback_s": 12.200000000003419,
+      "takeover_speed_mps": 0.20275942566832683,
+      "along_start_m": -0.23441310957752834,
+      "along_max_m": 0.2624627264449905,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 21,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.12360092091133926,
+      "takeover_s": 9.800000000000486,
+      "handback_s": 30.3999999999745,
+      "takeover_speed_mps": 0.0002667799289755055,
+      "along_start_m": -0.3651973563904285,
+      "along_max_m": -0.35888319134260094,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 21,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 8.200000000008956,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.16538366407967392,
+      "takeover_s": 7.399999999998618,
+      "handback_s": 18.600000000002,
+      "takeover_speed_mps": 0.9678366398956744,
+      "along_start_m": -0.5859869169038312,
+      "along_max_m": 0.38319449382268767,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 22,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1933350285292932,
+      "takeover_s": 9.600000000000241,
+      "handback_s": 30.3999999999745,
+      "takeover_speed_mps": 0.0006452398208469347,
+      "along_start_m": -0.1976010650468658,
+      "along_max_m": -0.19637310678908104,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 22,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.18141021071695776,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 23,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "fall",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": true,
+      "fall_phase": "bench_runup",
+      "maximum_tilt": 0.8727323431411127,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 23,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.16587439789678032,
+      "takeover_s": 6.199999999999283,
+      "handback_s": 33.99999999998032,
+      "takeover_speed_mps": 0.18127187645721407,
+      "along_start_m": -0.5534438283579286,
+      "along_max_m": -0.3320742765667224,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 24,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.17646077440645053,
+      "takeover_s": 8.399999999998775,
+      "handback_s": 12.800000000004152,
+      "takeover_speed_mps": 0.6437198080175645,
+      "along_start_m": -0.40881915809743985,
+      "along_max_m": 0.3104085475600282,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 24,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.14830249409811588,
+      "takeover_s": 10.200000000000975,
+      "handback_s": 15.40000000000733,
+      "takeover_speed_mps": 8.165506029223062e-05,
+      "along_start_m": -0.2609054390084298,
+      "along_max_m": -0.24845480110662965,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 25,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.2952704746041207,
+      "takeover_s": 10.00000000000073,
+      "handback_s": 40.40000000001088,
+      "takeover_speed_mps": 0.6764227788933792,
+      "along_start_m": -0.14753519638377946,
+      "along_max_m": -0.01895085520403317,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 25,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.126437974808977,
+      "takeover_s": 9.600000000000241,
+      "handback_s": 30.199999999974967,
+      "takeover_speed_mps": 0.0005618870061597593,
+      "along_start_m": -0.3776787151544454,
+      "along_max_m": -0.3657183422752248,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 26,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.10757536061923861,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 26,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.10077353410850297,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 27,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.10523296181827639,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 27,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.10929808675788473,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 28,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.19083602009351677,
+      "takeover_s": 7.799999999998397,
+      "handback_s": 12.200000000003419,
+      "takeover_speed_mps": 0.2263006454963686,
+      "along_start_m": -0.2892970964990224,
+      "along_max_m": -0.27599268642656133,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 28,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 3.5199999999967684,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.21141249116747343,
+      "takeover_s": 14.600000000006352,
+      "handback_s": 18.200000000002934,
+      "takeover_speed_mps": 0.00032489796803098885,
+      "along_start_m": -0.4809344815117108,
+      "along_max_m": 0.42154604878300084,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 29,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "runup_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.11811538450972964,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 29,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "fall",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": true,
+      "fall_phase": "bench_runup",
+      "maximum_tilt": 0.8878699181048573,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 30,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.18492865765957361,
+      "takeover_s": 9.199999999999752,
+      "handback_s": 29.7999999999759,
+      "takeover_speed_mps": 1.307573787673417,
+      "along_start_m": -0.19709929736564868,
+      "along_max_m": -0.18452893440968765,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 3,
+      "runup_over_opposite_plate": true
+    },
+    {
+      "layout": 30,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1949614823431123,
+      "takeover_s": 12.600000000003908,
+      "handback_s": 33.39999999997745,
+      "takeover_speed_mps": 0.0005061671102120614,
+      "along_start_m": -0.2574080622245356,
+      "along_max_m": -0.25525528010819176,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 506,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 31,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.17308456336219677,
+      "takeover_s": 6.599999999999062,
+      "handback_s": 34.39999999998223,
+      "takeover_speed_mps": 0.00863356739309,
+      "along_start_m": -0.44390324863037156,
+      "along_max_m": -0.2086306669799991,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 25,
+      "runup_over_opposite_plate": false
+    },
+    {
+      "layout": 31,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": true,
+      "clear_after_takeover_s": 19.919999999977023,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.16397370066269343,
+      "takeover_s": 9.399999999999997,
+      "handback_s": 37.39999999999655,
+      "takeover_speed_mps": 0.0004671986240672929,
+      "along_start_m": -0.48499622254943375,
+      "along_max_m": 0.647007448732432,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 58,
+      "runup_over_opposite_plate": false
+    }
+  ],
+  "written_utc": "2026-10-02T12:24:06.184078+00:00"
+}
