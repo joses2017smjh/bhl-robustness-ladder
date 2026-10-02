@@ -3345,3 +3345,28 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - Tests: `tests/test_navgym_v5.py` and `tests/test_navgym.py`.
 - **Wall time:** 36 h per seed (≈ 16 h of training on the slower node class).
 - Submitted (code `ae27a5e`): NavGym v5 smoke of the committed code `21506833`, then training seeds 8–10 `21506834` (afterok on the smoke), then gym verdict `21506836` (afterany on the training), then physics transfer `21506837` (afterok on the verdict; runs episodes only on a final gym PASS). If the smoke fails, the rest of the chain is cancelled by hand.
+
+**Predeclared now (2026-10-02 04:59, before any probe or scored episode): flush-pad wrist mechanism probe (C1 of `docs/SOLUTIONS_2026-10-01.md` §4)** (`slurm/repo20260923/cpu_coop_flushpad.sbatch`; opt-in code in the flush-pad section of `src/bhl_robust/eval/scripted_carry.py` and `scripts/bench/coop_scripted_carry.py --flushpad-stage`).
+- **What runs:**
+  - MODIFIED END-EFFECTOR, not the stock robot: each hand's box pad (stock size and centre) is re-oriented so its faces are parallel to the cube faces at the squeeze pose. This comes from kinematics only; the stock pad is 26.2° off-face. Pads use condim 4 and torsional friction 0.04 m.
+  - HARNESS CHANGE: elliptic friction cone + impratio 10 (global options, which also change foot-floor contact; the robot-fall clauses are unchanged).
+  - Placement lowering is the reverse keyframe (`lower_to=None`), frozen now.
+  - Labels: LEARNED gait (frozen arms-dr1.0-s0) + SCRIPTED arms + ORACLE cube pose (scoring only).
+  - The stock harness is byte-identical (insertions only; stock crew-2/4 models and a stock episode are identical to `094797e`).
+- **PREDECLARED RULES (verbatim):**
+  - "Probe on exploration seeds 120-124 (state the grep evidence that they were never used). PROCEED iff the cube tilt stays <= 0.35 rad throughout lift-hold on >= 4/5 seeds, with LIFT_HOLD_RULE's robot-fall clauses unchanged. Otherwise STOP: NEGATIVE, the flush pad does not stop the roll."
+  - "Scored, only after PROCEED (state the evidence that seeds 20-39 were never used): lift-hold on seeds 20-29 and lift-place on seeds 30-39, each with its UNCHANGED rule (LIFT_HOLD_RULE / LIFT_PLACE_RULE, pass_min 8) PLUS cube tilt <= 0.35 rad (hold: throughout the hold; place: at release and when seated), >= 8/10 per crew or pair as the existing rules define them. PASS iff every crew/pair meets it; otherwise NEGATIVE; INCOMPLETE if any episode is missing."
+- **Clauses as applied** (decided before any episode; each stricter than or equal to the text):
+  - Tilt is the cube's own z axis against world z, at every policy step.
+  - "Throughout lift-hold" covers every state of the 20 s episode.
+  - A probe seed also needs a finite state, no MuJoCo auto-reset and the full 20 s. Crew 2.
+  - Hold tilt covers every state of the hold that LIFT_HOLD_RULE scores. Place tilt covers states 268–293 (end of lowering to hands open) and the final seated state.
+  - Six pairs must each reach ≥ 8/10: lift-hold crew 2, crew 4 pairs 0 and 1, and lift-place the same.
+  - A numerical blow-up is a scored failure, including one MuJoCo auto-resets, which is detected from sim time and its warning counters.
+  - INVALID covers any JSON that is not this variant, rule, lowering or model.
+- **Disclosed (review F3, kept as frozen):** the rule names only LIFT_HOLD_RULE's robot-fall clauses, so the probe does not gate lift. A probe episode that never lifts the cube passes the tilt clause. The scored stage keeps every LIFT_HOLD_RULE clause, so there is no false PASS. On tuning seed 119 (diagnostic only) the flush pad lifted the cube, which then tilted 0.45–0.75 rad, so the probe is expected to read NEGATIVE.
+- **Seed evidence (grep, 2026-10-02):** the harness's score JSONs and logs hold seeds 0–9, 10–19 and 100–119 (tuning, including the investigators' 100–104). Seeds 120–124 and 20–39 appear nowhere in this harness.
+- **Checks before submission:**
+  - Workflow `wf_6b06a8c9-d3d`: an implementer and two adversarial reviewers. F1 (auto-reset detection and null-safe JSON) and F2 (the smoke records its unit tests; the run refuses otherwise) are fixed; F3 is disclosed.
+  - Smoke `21507767` on the final bytes: SMOKE PASS (pytest 211, both episodes exit 0, no auto-reset).
+  - The run refuses unless a fresh smoke of the same bytes passed (sha256 of the code, the test file and the launcher).
