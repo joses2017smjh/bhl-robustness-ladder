@@ -20,6 +20,40 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CAMPAIGN = "results/mission7-replay-smoke-20260921"
 DEFAULT_BASELINE = "results/mission7-approach-followup-20260922/replay-diagnose-cn-c22"
+# --- m7-clocks2 --- the export stage gaits swap in a controller built by bhl_robust.eval.gait_clock, which the snapshot
+# job (PYTHONPATH = the snapshot only) must find in the snapshot: it is added for these gaits only.  The path is
+# composed rather than written as one quoted path literal because tests/test_mission7_plate_bench.py reads those
+# literals as the DEFAULT snapshot set (unchanged); the clocks2 bench's provenance hashes gait_clock.py and the release
+# gate compares it.
+EXPORT_STAGE_GAITS = ("clocks2", "export")
+GAIT_CLOCK_MODULE = Path("src/bhl_robust/eval") / "gait_clock.py"
+
+
+def _export_args(parser, args):
+    """--- m7-clocks2 --- the forwarded flags of an export stage gait ([] for every other gait).
+
+    clocks2 is a preset whose policy sha256 the stage pins itself; export forwards its directory (absolute) and the
+    sha256 of its policy.onnx as read at submission, so the job refuses weights changed in between.
+    """
+    if args.stage_gait not in EXPORT_STAGE_GAITS:
+        if args.stage_gait_export is not None or args.stage_gait_export_sha256 is not None:
+            parser.error("--stage-gait-export / --stage-gait-export-sha256 go with --stage-gait export only")
+        return []
+    if args.align_yaw or args.press_hold:
+        parser.error(f"--stage-gait {args.stage_gait} does not compose with --align-yaw or --press-hold")
+    if args.stage_gait == "clocks2":
+        if args.stage_gait_export is not None or args.stage_gait_export_sha256 is not None:
+            parser.error("--stage-gait clocks2 is a pinned preset; --stage-gait-export* go with --stage-gait export")
+        return ["--stage-gait=clocks2"]
+    if args.stage_gait_export is None:
+        parser.error("--stage-gait export needs --stage-gait-export <exported dir>")
+    export = args.stage_gait_export.resolve()
+    if not (export / "policy.onnx").is_file():
+        parser.error(f"no policy.onnx in {export}")
+    digest = hashlib.sha256((export / "policy.onnx").read_bytes()).hexdigest()
+    if args.stage_gait_export_sha256 is not None and args.stage_gait_export_sha256 != digest:
+        parser.error(f"{export}/policy.onnx has sha256 {digest}, not {args.stage_gait_export_sha256}")
+    return ["--stage-gait=export", f"--stage-gait-export={export}", f"--stage-gait-export-sha256={digest}"]
 
 
 def main():
@@ -36,9 +70,15 @@ def main():
     parser.add_argument("--settle-s", type=float, default=None)
     parser.add_argument("--cross-kick", action="store_true")
     parser.add_argument("--align-yaw", action="store_true")
-    parser.add_argument("--stage-gait", choices=("shipped", "turnboth", "m3"), default=None,
-                        help="forwarded as --stage-gait=turnboth or --stage-gait=m3; omitted = the shipped gait (exact "
+    parser.add_argument("--stage-gait", choices=("shipped", "turnboth", "m3") + EXPORT_STAGE_GAITS, default=None,
+                        help="forwarded as --stage-gait=turnboth, --stage-gait=m3, --stage-gait=clocks2 or "
+                             "--stage-gait=export (with --stage-gait-export); omitted = the shipped gait (exact "
                              "replay behaviour)")
+    parser.add_argument("--stage-gait-export", type=Path, default=None,
+                        help="--stage-gait export only: the exported directory; forwarded with its policy.onnx "
+                             "sha256 as read here, so the replay refuses different weights")
+    parser.add_argument("--stage-gait-export-sha256", default=None,
+                        help="--stage-gait export only: the expected policy.onnx sha256 (checked here and in the job)")
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument("--node", default="cn-c22",
                         help="the replay gate is bitwise; it stays pinned to the original physics node")
@@ -81,6 +121,8 @@ def main():
         if args.align_yaw or args.press_hold:
             parser.error("--stage-gait m3 does not compose with --align-yaw or --press-hold")
         probe_args.append("--stage-gait=m3")
+    export_args = _export_args(parser, args)   # --- m7-clocks2 --- [] unless --stage-gait clocks2 | export
+    probe_args += export_args
     if args.smoke:
         probe_args.append("--smoke")
     if not args.submit:
@@ -96,6 +138,8 @@ def main():
         "src/bhl_robust/eval/team_sensors.py", "slurm/mission7_plate_stage.sbatch",
     )]
     files += list((ROOT / "scripts").glob("mission7*.py"))
+    if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- see GAIT_CLOCK_MODULE
+        files.append(ROOT / GAIT_CLOCK_MODULE)
     hashes = {}
     for source in files:
         relative = source.relative_to(ROOT)
@@ -126,6 +170,9 @@ def main():
            "submitted_utc": dt.datetime.now(dt.timezone.utc).isoformat()}
     if args.stage_gait in ("turnboth", "m3"):   # default receipts keep their keys
         row["stage_gait"] = args.stage_gait
+    if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 ---
+        row["stage_gait"] = args.stage_gait
+        row["stage_gait_export_args"] = export_args
     (out / "submission.json").write_text(json.dumps(row, indent=2) + "\n")
     with (ROOT / "SLURM_JOBS.md").open("a") as stream:
         stream.write(
@@ -133,6 +180,7 @@ def main():
             f"`{args.node}`, PlateStage lateral `{'plate centre' if args.stage_lateral is None else f'{args.stage_lateral} m'}`, wait-open `{args.wait_open} s`; "
             f"{'stage gait `turnboth` (TurnBoth-s0 swapped in for the stage); ' if args.stage_gait == 'turnboth' else ''}"
             f"{'stage gait `m3` (shipped gait: turn while stepping + stall watchdog); ' if args.stage_gait == 'm3' else ''}"
+            f"{'stage gait `' + args.stage_gait + '` (its controller swapped in for the stage, M2 turnboth law); ' if args.stage_gait in EXPORT_STAGE_GAITS else ''}"
             f"geometry, activation schedule and fall predicate unchanged; receipt/source hashes: "
             f"`{out.relative_to(ROOT)}/submission.json`.\n")
         stream.flush(); os.fsync(stream.fileno())

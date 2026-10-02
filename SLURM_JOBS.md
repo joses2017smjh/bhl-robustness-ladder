@@ -3611,3 +3611,30 @@ Files: `slurm/repo20260923/gpu_turngait_hold.sbatch`; appended classes in `turn_
   - The real-mode launcher prefix on a fake tree with no run dirs reaches the GPU section (the PlateCross startup bug does not apply).
   - The four touched task modules only add lines.
 - Submitted: R1H smoke `21517587` (array 0, 1 h, TURNGAIT_SMOKE=1, committed code `ef40f3d`), then the real array `21517588` (0–2%3, 20 h, `--dependency=afterok:21517587`). Verdict: `results/repo-gpu-20260923/turngait-hold-20261002/verdict/R1H.json`.
+
+**Predeclared now (2026-10-02 16:29, before any scored clocks2 episode; frozen design (A) of 'User approval recorded 2026-10-02 14:15'): Mission 7 bench v2 with `arms-turngait-clock-s2` as the stage gait.**
+Files:
+- `slurm/repo20260923/cpu_m7_plate_bench_v2_clocks2.sbatch` (new; the M3 launcher is untouched);
+- an opt-in `--stage-gait clocks2|export` override in `scripts/mission7_plate_stage.py`;
+- plumbing through bench v2, the route probe, both snapshot submitters, `submit_m7_replay_gates.sh` (new arm `m7-clocks2` with `clocks2_bench_gate`) and the follow-up;
+- tests `tests/test_mission7_clocks2.py`.
+**What changes:**
+- At takeover the stage swaps the CONTROLLER to a fresh `make_controller` of clock-s2's pinned export (policy sha256 `c1862f1e…`; deploy.yaml checked at load). prev_actions start at 0 and the clock at phase 0. At hand-back the shipped controller returns, with prev_actions zeroed.
+- The stage law is M2's turnboth law, unchanged, which isolates the gait factor.
+- The shipped, turnboth and m3 paths are byte-identical to `e33e44f` (smoke identity checks on 5 paths).
+**PREDECLARED RULE (bench v2's rule verbatim, unchanged; the chain as M3's):**
+- "Bench v2: with N crossings run (64 minus the dropped set) and N_h per heading, bench v2 PASSES iff clears >= N - 2, 0 falls, and clears >= N_h - 1 for every heading. Otherwise FAIL; INCOMPLETE if any declared crossing is missing."
+- Clear: mission7_gates' real clear, within 10 s of takeover. N = 41, so PASS needs ≥ 39/41, 0 falls, and ≥ 11/10/9/7 per heading.
+- Then the exact ten-fall replay with `--stage-gait clocks2` (10/10 upright, 0 falls). Then the route gate: Doors and Transport each ≥ 16/16.
+- Budget: 83 episodes (41 + 10 + 32).
+- Labels: LEARNED shipped gait + LEARNED clock-s2 stage gait, SCRIPTED stage, ORACLE layout and plate pose.
+**Disclosed:**
+- Clock-s2 was qualified at ±0.6 rad/s and is untested at the stage's 0.40 rad/s.
+- 180° timing: (π − 0.15)/0.40 = 7.48 s of turning + 0.40–0.60 s settle + about 2.17 s of crossing = 10.05–10.25 s against the 10 s window. The 180° clause (≥ 7/8) is therefore likely to fail on timing alone. **A FAIL is predicted.**
+- Coverage, as M2's note: in the replay and the route gate, clock-s2 also drives the capture-to-pre-point approach (from 0.78 m), which the bench never exercises.
+- Route-gate snapshot (inherited from M2/M3): the route gate snapshots the live tree with no comparison against the bench's provenance. The coordinator therefore edits no Mission 7 / gait_clock source between the bench and the route-gate submission, and compares the submission sha256s afterwards.
+**Review:** 2 reviewers, 0 blocking, 5 minor findings, all resolved by header disclosures.
+- The first smoke's "all files predate it" claim was false. `21516422` is cited only as a machinery smoke of the uncommitted tree.
+**Pre-submission evidence:**
+- Smoke `21517413` (final, uncommitted tree): PASS. Clock-s2 cleared 1 of 3 exploration crossings, with 0 falls.
+- Clean checkout (HEAD + A's files only): 455 passed, 10 skipped (gitignored or untracked bench records).

@@ -27,12 +27,26 @@ crosses straight forward with a heading hold once aligned, then turns back to
 the takeover heading the same way; a stall watchdog (turn and cross) recovers a
 bounded number of times and then hands back.  Constants and their sources are
 declared at M3_* below.  LEARNED gait, SCRIPTED stage, ORACLE layout and plate pose.
+
+``--stage-gait clocks2`` and ``--stage-gait export --stage-gait-export <exported dir>``
+(opt-in; m7-clocks2, SLURM_JOBS.md "User approval recorded 2026-10-02 14:15", item A)
+swap the CONTROLLER for the stage, not only the policy: at takeover env.controller
+becomes a fresh bhl_robust.eval.gait_clock.make_controller(<export>/deploy.yaml) (a
+GaitClockRlController for a 77-observation clock export, upstream's RlController for a
+75-observation one) running that export's policy, so prev_actions is zero and the
+gait-clock phase starts at 0, as at an Isaac episode start; at hand-back the shipped
+controller object it replaced comes back with prev_actions zeroed.  ``clocks2`` is the
+preset arms-turngait-clock-s2 (Turning R1's qualified seed; policy sha256 pinned, deploy.yaml
+checked at load).  The stage LAW is M2's turnboth law, unchanged (the same
+_turnboth_command), so the stage gait is the one changed factor.  LEARNED gaits, SCRIPTED
+stage, ORACLE layout and plate pose.  The shipped, turnboth and m3 paths are unchanged.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import os
 from collections import Counter
 from pathlib import Path
 
@@ -111,6 +125,135 @@ def m3_constants():
             "turn_max_s": M3_TURN_MAX_S, "cross_vx_mps": M3_CROSS_VX, "k_yaw": M3_K_YAW, "wz_hold_rps": M3_WZ_HOLD,
             "cross_clear_m": M3_CROSS_CLEAR_M, "stall_window_s": M3_STALL_WINDOW_S, "stall_min_m": M3_STALL_MIN_M,
             "recover_vx_mps": -M3_RECOVER_VX, "recover_s": M3_RECOVER_S, "max_recoveries": M3_MAX_RECOVERIES}
+
+
+# ---- --stage-gait clocks2 | export (m7-clocks2) -------------------------------------------------------------------
+# Declared 2026-10-02 (SLURM_JOBS.md, "User approval recorded 2026-10-02 14:15", item A) before any bench, replay or
+# route episode ran with it; nothing here is tuned on a result.  The stage LAW is M2's turnboth law, unchanged: the
+# same _turnboth_command and TURNBOTH_* constants (turn in place at 0.40 rad/s until |error| < 0.15 rad, cross straight
+# at 0.30 m/s x max(0, cos error) with heading hold clip(1.2 x error, +-0.40), no lateral command, turn back), so the
+# stage gait is the one changed factor against M2.  The gait is swapped as a CONTROLLER: at takeover env.controller :=
+# a fresh bhl_robust.eval.gait_clock.make_controller(<export>/deploy.yaml) running the export's policy (prev_actions 0,
+# a zero observation buffer, gait-clock phase 0: an Isaac episode start); at hand-back env.controller := the shipped
+# controller object it replaced, prev_actions := 0.  MissionEnv and the route probe keep building their RlController
+# directly; only PlateStage swaps, through env.controller, which MissionEnv.step, the replay and both benches read at
+# every gait update.
+EXPORT_STAGE_GAITS = ("clocks2", "export")
+TURNBOTH_LAW_GAITS = ("turnboth",) + EXPORT_STAGE_GAITS
+# clocks2 = arms-turngait-clock-s2, Turning R1's QUALIFIED seed (results/repo-gpu-20260923/turngait-r12-20261001/
+# qualify/arms-turngait-clock-s2__qualify.json: turn 10/10 at +-0.6 rad/s, walk 2/3, push 9/60); 77 observations
+# (upstream's 75 + sin/cos of the gait clock, period 0.8 s).  Qualified at +-0.6 rad/s; untested at 0.40 rad/s.
+CLOCKS2_EXPORT = "logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported"
+CLOCKS2_POLICY_SHA256 = "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de"
+# The only deploy.yaml keys an export may change against the shipped gait's (clock-s2's differ in exactly these).
+# MultiRunner takes physics_dt, policy_dt, joint_kp, joint_kd, effort_limits and default_joint_positions from cfgs[0],
+# the SHIPPED cfg, for the whole episode, and the controller takes action_scale, the action limits and the default
+# positions from its own cfg: any other differing key would make the swap non-equivalent to running the export alone.
+EXPORT_FREE_DEPLOY_KEYS = ("policy_checkpoint_path", "command_velocity", "num_observations", "gait_clock")
+EXPORT_NUM_ACTIONS = 22
+_EXPORT_CACHE = {}
+_EXPORT_SELECTION = {}
+
+
+def select_export_gait(export_dir, sha256=None):
+    """--stage-gait export: the export every later PlateStage(stage_gait="export") swaps in (set by the CLIs)."""
+    _EXPORT_SELECTION.clear()
+    _EXPORT_SELECTION.update(export=str(Path(export_dir).resolve()), sha256=sha256)
+
+
+def export_dir_for(upstream, stage_gait):
+    """(export directory, pinned policy sha256 or None) of an export stage gait."""
+    if stage_gait == "clocks2":
+        return Path(upstream) / CLOCKS2_EXPORT, CLOCKS2_POLICY_SHA256
+    if stage_gait == "export":
+        if not _EXPORT_SELECTION.get("export"):
+            raise RuntimeError("--stage-gait export needs --stage-gait-export <exported dir> (select_export_gait)")
+        return Path(_EXPORT_SELECTION["export"]), _EXPORT_SELECTION.get("sha256")
+    raise ValueError(f"not an export stage gait: {stage_gait!r}")
+
+
+def turnboth_law_constants():
+    """The stage law the export gaits run: M2's turnboth law, unchanged."""
+    return {"law": "M2 turnboth law, unchanged (PlateStage._turnboth_command)", "turn_rate_rps": TURNBOTH_TURN_RATE,
+            "turn_exit_rad": TURNBOTH_TURN_EXIT, "turn_max_s": TURNBOTH_TURN_MAX_S, "cruise_mps": TURNBOTH_CRUISE,
+            "k_yaw": TURNBOTH_K_YAW, "wz_walk_rps": TURNBOTH_WZ_WALK, "cross_clear_m": TURNBOTH_CROSS_CLEAR_M,
+            "lateral_command": 0.}
+
+
+def _checked_export(upstream, export, pinned_sha256=None, shipped_cfg=None):
+    """(CpuPolicy, deploy cfg, provenance) of an export, verified before it may be swapped in as the stage controller.
+
+    policy.onnx must have the pinned sha256 when one is given; deploy.yaml must equal the shipped gait's in every key
+    but EXPORT_FREE_DEPLOY_KEYS; 22 actions, history 0; 77 observations with a gait_clock block of the frozen period
+    and offset (bhl_robust.eval.gait_clock), 75 without one; its policy_checkpoint_path must be this export's
+    policy.onnx; the ONNX input is num_observations wide and the output 22.
+    """
+    from omegaconf import OmegaConf
+    from bhl_robust.eval.gait_clock import (CLOCK_KEY, EXPECTED_PERIOD_S, EXPECTED_PHASE_OFFSET, base_obs_width,
+                                            has_clock)
+    upstream, export = Path(upstream), Path(export)
+    onnx, deploy = export / "policy.onnx", export / "deploy.yaml"
+    if not (onnx.is_file() and deploy.is_file()):
+        raise RuntimeError(f"{export} is not an export: policy.onnx and deploy.yaml expected")
+    digest = hashlib.sha256(onnx.read_bytes()).hexdigest()
+    if pinned_sha256 is not None and digest != pinned_sha256:
+        raise RuntimeError(f"stage-gait policy {onnx} has sha256 {digest}, expected {pinned_sha256}")
+    if shipped_cfg is None:
+        shipped_cfg = OmegaConf.load(upstream / SHIPPED_EXPORT / "deploy.yaml")
+    cfg = OmegaConf.load(deploy)
+    mine, shipped = OmegaConf.to_container(cfg), OmegaConf.to_container(shipped_cfg)
+    differing = sorted(key for key in set(mine) | set(shipped) if mine.get(key) != shipped.get(key))
+    unexpected = [key for key in differing if key not in EXPORT_FREE_DEPLOY_KEYS]
+    if unexpected:
+        raise RuntimeError(f"{deploy} differs from the shipped gait's deploy.yaml in {unexpected}; a controller swap "
+                           "would not be equivalent to running the export")
+    clock = has_clock(cfg)
+    n_actions, n_obs, history = int(cfg.num_actions), int(cfg.num_observations), int(cfg.history_length)
+    want = base_obs_width(EXPORT_NUM_ACTIONS) + (2 if clock else 0)
+    if (n_actions, history, n_obs) != (EXPORT_NUM_ACTIONS, 0, want):
+        raise RuntimeError(f"{deploy}: {n_actions} actions, history {history}, {n_obs} observations; a "
+                           f"{'clock' if clock else 'plain'} export needs {EXPORT_NUM_ACTIONS}, 0, {want}")
+    gait_clock = None
+    if clock:
+        gait_clock = {"period_s": float(cfg[CLOCK_KEY]["period_s"]), "phase_offset": float(cfg[CLOCK_KEY]["phase_offset"])}
+        if (gait_clock["period_s"], gait_clock["phase_offset"]) != (EXPECTED_PERIOD_S, EXPECTED_PHASE_OFFSET):
+            raise RuntimeError(f"{deploy}: gait_clock {gait_clock} differs from the frozen period {EXPECTED_PERIOD_S} "
+                               f"s / offset {EXPECTED_PHASE_OFFSET}")
+    try:
+        own = os.path.samefile(str(cfg.policy_checkpoint_path), str(onnx))
+    except OSError:
+        own = False
+    if not own:
+        raise RuntimeError(f"{deploy}: policy_checkpoint_path {cfg.policy_checkpoint_path} is not {onnx}")
+    from bhl_robust.mission.env import CpuPolicy   # the class MissionEnv runs the shipped gait with
+    policy = CpuPolicy(onnx)
+    width_in = policy.session.get_inputs()[0].shape[-1]
+    width_out = policy.session.get_outputs()[0].shape[-1]
+    if width_in != n_obs or width_out != n_actions:
+        raise RuntimeError(f"{onnx}: ONNX input {width_in} / output {width_out}, deploy.yaml says {n_obs} / {n_actions}")
+    info = {"export": str(export), "policy": str(onnx), "policy_sha256": digest, "pinned_sha256": pinned_sha256,
+            "deploy_yaml": str(deploy), "deploy_yaml_sha256": hashlib.sha256(deploy.read_bytes()).hexdigest(),
+            "deploy_keys_differing": differing, "num_observations": n_obs, "onnx_input_width": int(width_in),
+            "gait_clock": gait_clock, "controller": "GaitClockRlController" if clock else "RlController",
+            "swap": "env.controller := make_controller(deploy.yaml) at takeover (prev_actions 0, clock phase 0); the "
+                    "shipped controller object and prev_actions := 0 at hand-back",
+            "stage_law": turnboth_law_constants()}
+    return policy, cfg, info
+
+
+def export_check(upstream, export, pinned_sha256=None, shipped_cfg=None):
+    """Verify an export before it is swapped in (preflight); return its provenance (see _checked_export)."""
+    return _checked_export(upstream, export, pinned_sha256, shipped_cfg)[2]
+
+
+def load_export_gait(env, stage_gait):
+    """(CpuPolicy, deploy cfg, provenance) of the clocks2 / export stage gait, checked once per export and pin."""
+    export, pinned = export_dir_for(env.upstream, stage_gait)
+    key = (stage_gait, str(Path(export).resolve()), pinned)
+    if key not in _EXPORT_CACHE:
+        policy, cfg, info = _checked_export(env.upstream, export, pinned, env.cfg)
+        _EXPORT_CACHE[key] = (policy, cfg, dict(info, stage_gait=stage_gait))
+    return _EXPORT_CACHE[key]
 
 
 def turnboth_check(upstream, shipped_cfg=None):
@@ -197,7 +340,7 @@ class PlateStage:
                  stage_lateral_m=None, wait_open_s=0., press_hold=False,
                  creep_mps=.15, creep_max_m=.45, pre_point_m=.30, cross_clear_m=None,
                  cross_max_s=4.0, cross_kick=False, align_yaw=False, align_tol_rad=.20,
-                 align_max_s=1.5, stage_gait="shipped", turnboth_policy=None):
+                 align_max_s=1.5, stage_gait="shipped", turnboth_policy=None, export_gait=None):
         self.env = env
         self.approach_radius = float(approach_radius)
         self.settle_s = float(settle_s)
@@ -268,8 +411,8 @@ class PlateStage:
         self.done = set()
         self.history = []
         # Opt-in stage gait (module header).  "shipped" leaves every line above and below as it was.
-        if stage_gait not in STAGE_GAITS:
-            raise ValueError(f"stage_gait must be one of {STAGE_GAITS}, got {stage_gait!r}")
+        if stage_gait not in STAGE_GAITS + EXPORT_STAGE_GAITS:
+            raise ValueError(f"stage_gait must be one of {STAGE_GAITS + EXPORT_STAGE_GAITS}, got {stage_gait!r}")
         self.stage_gait = stage_gait
         if stage_gait == "turnboth":
             if self.align_yaw or self.press_hold:
@@ -299,6 +442,19 @@ class PlateStage:
             self.m3_resume = None
             self.m3_recover_until = None
             self.m3_track = []
+        elif stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- M2's turnboth law on a swapped-in controller
+            if self.align_yaw or self.press_hold:
+                raise ValueError(f"--stage-gait {stage_gait} turns in place itself; --align-yaw and --press-hold "
+                                 "do not compose with it")
+            if export_gait is None:
+                export_gait = load_export_gait(env, stage_gait)
+            self.export_policy, self.export_cfg, self.export_provenance = export_gait
+            self.turnboth_clear_m = (TURNBOTH_CROSS_CLEAR_M if self.cross_clear_m is None
+                                     else self.cross_clear_m)
+            self.shipped_controller = None
+            self.takeover_yaw = None
+            self.turn_start_s = None
+            self.gait_events = []
 
     # ---- M3 (stage_gait == "m3") ---------------------------------------------------------------
     def _m3_segment(self, now, xy):
@@ -393,8 +549,48 @@ class PlateStage:
                                      turn_back_timed_out=bool(abs(err) >= M3_ALIGN_EXIT))
         raise AssertionError(self.phase)
 
+    def _swap_controller(self, now, to):
+        """clocks2 / export: swap env.controller itself (--- m7-clocks2 ---).
+
+        Takeover (to = the stage gait): a FRESH make_controller(export deploy.yaml) running the export's policy, so
+        prev_actions and the observation buffer are zero and the gait-clock phase starts at 0 (Isaac's episode start;
+        GaitClockRlController restarts its clock on a zero buffer); the shipped controller object is kept aside.
+        Hand-back (to = "shipped"): that same shipped object again, with prev_actions := 0.  Each event records what
+        the smoke checks after the fact: controller class, observation width, clock step, buffer state.
+        """
+        from bhl_robust.eval.gait_clock import make_controller
+        env = self.env
+        before = env.controller
+        event = {"time_s": float(now), "door": int(self.door), "event": f"swap_to_{to}",
+                 "prev_actions_before_norm": float(np.linalg.norm(before.prev_actions))}
+        if to == "shipped":
+            if self.shipped_controller is None:
+                raise RuntimeError("PlateStage hand-back without a takeover controller swap")
+            clock = hasattr(before, "clock_step")
+            event.update(stage_controller=type(before).__name__,
+                         stage_controller_clock_step=getattr(before, "clock_step", None),
+                         stage_controller_obs_width=int(before.policy_observations.shape[-1]),
+                         stage_controller_last_clock=(before.policy_observations[0, -2:].astype(float).tolist()
+                                                      if clock else None))
+            controller, self.shipped_controller = self.shipped_controller, None
+        else:
+            controller = make_controller(self.export_cfg)
+            controller.policy = self.export_policy
+            if hasattr(controller, "reset_phase"):
+                controller.reset_phase()
+            self.shipped_controller = before
+        controller.prev_actions[:] = 0.
+        env.controller = controller
+        event.update(controller=type(controller).__name__, obs_width=int(controller.policy_observations.shape[-1]),
+                     clock_step=getattr(controller, "clock_step", None),
+                     policy_observations_zero=bool(not controller.policy_observations.any()),
+                     prev_actions_after_norm=float(np.linalg.norm(controller.prev_actions)))
+        self.gait_events.append(event)
+
     def _swap_gait(self, now, to):
         """Swap env.controller.policy for the stage and zero prev_actions (turnboth only)."""
+        if self.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- the controller, not only the policy
+            return self._swap_controller(now, to)
         controller = self.env.controller
         before = float(np.linalg.norm(controller.prev_actions))
         if to == "turnboth":
@@ -490,6 +686,10 @@ class PlateStage:
             self.m3_recoveries = 0
             self.m3_events.append({"time_s": float(now), "door": int(door), "event": "takeover",
                                    "takeover_yaw_rad": self.takeover_yaw})
+        elif self.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- the CONTROLLER is swapped at takeover
+            self.takeover_yaw = _yaw(self.env)
+            self._swap_gait(now, self.stage_gait)
+            self.gait_events[-1]["takeover_yaw_rad"] = self.takeover_yaw
 
     def command(self, recorded):
         env, runner, slot = self.env, self.env.runner, self.env.slot
@@ -556,7 +756,7 @@ class PlateStage:
                 if now < self.wait_open_until:
                     return np.zeros(3), self.phase
             self.wait_open_until = None
-            if self.stage_gait == "turnboth":
+            if self.stage_gait in TURNBOTH_LAW_GAITS:   # turnboth; clocks2 / export run the same law (m7-clocks2)
                 self.phase = "turn"
                 self.turn_start_s = now
                 self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase,
@@ -574,7 +774,7 @@ class PlateStage:
             self.cross_start_s = now
             self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase})
             self._kick(now)
-        if self.stage_gait == "turnboth" and self.phase in ("turn", "cross", "turn_back"):
+        if self.stage_gait in TURNBOTH_LAW_GAITS and self.phase in ("turn", "cross", "turn_back"):
             return self._turnboth_command(recorded, now, xy, direction)
         if self.stage_gait == "m3" and self.phase in M3_PHASES:
             return self._m3_command(recorded, now, xy, direction)
@@ -727,13 +927,33 @@ def run(args, out):
         report["stage_gait"] = args.stage_gait
         report["stage_gait_provenance"] = (load_turnboth_policy(env)[1] if args.stage_gait == "turnboth"
                                            else m3_constants())
+    if getattr(args, 'stage_gait', 'shipped') in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- the export's own record
+        report["stage_gait_provenance"] = load_export_gait(env, args.stage_gait)[2]
     write(out / "episodes.json", {"complete": True, "episodes": rows})
     write(out / "result.json", report)
 
 
 def stage_gait_description(stage_gait):
     """The intervention text of a non-default stage gait (turnboth's is unchanged)."""
+    if stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 ---
+        return export_description(stage_gait)
     return {"turnboth": turnboth_description, "m3": m3_description}[stage_gait]()
+
+
+def export_description(stage_gait):
+    """--- m7-clocks2 --- the intervention text of the clocks2 / export stage gait."""
+    gait = ("arms-turngait-clock-s2 (Turning R1's qualified seed, 77 observations with the gait clock)"
+            if stage_gait == "clocks2" else f"the export {_EXPORT_SELECTION.get('export')}")
+    return (f"staged plate maneuver with {gait} as the stage gait (LEARNED gaits, SCRIPTED stage, ORACLE layout and "
+            "plate pose): at takeover env.controller := a fresh make_controller(<export>/deploy.yaml) running its "
+            "policy (prev_actions 0, gait-clock phase 0); pre-plate approach and settle unchanged; M2's turnboth law "
+            f"unchanged: turn in place to the door direction at {TURNBOTH_TURN_RATE:.2f} rad/s until within "
+            f"{TURNBOTH_TURN_EXIT:.2f} rad (bounded {TURNBOTH_TURN_MAX_S:.2f} s); straight-forward crossing at "
+            f"{TURNBOTH_CRUISE:.2f} m/s x max(0, cos heading error) with heading hold clip({TURNBOTH_K_YAW:.1f} x error, "
+            f"+-{TURNBOTH_WZ_WALK:.2f}) and no lateral command, until the base is --cross-clear (default "
+            f"{TURNBOTH_CROSS_CLEAR_M:.2f} m) past the plate centre or cross_max_s pass; turn back to the takeover "
+            "heading the same way; at hand-back the shipped controller and prev_actions := 0; wrong-side staging only "
+            "when the correct plate is over 1.0 m away")
 
 
 def m3_description():
@@ -785,16 +1005,35 @@ if __name__ == "__main__":
     parser.add_argument("--cross-kick", action="store_true", help="zero prev_actions once at the start of the crossing")
     parser.add_argument("--align-yaw", action="store_true", help="turn in place toward the door direction during the settle")
     parser.add_argument("--only", default="", help="comma-separated layout indices to replay (local checks); default all ten")
-    parser.add_argument("--stage-gait", choices=STAGE_GAITS, default="shipped",
-                        help="gait the stage runs on: shipped (default, the exact replay behaviour), turnboth "
-                             "(TurnBoth-s0 swapped in for the stage: turn in place, straight crossing, turn back) or "
-                             "m3 (shipped gait: turn while stepping, straight crossing, turn back, stall watchdog)")
+    stage_gait_action = parser.add_argument("--stage-gait", choices=STAGE_GAITS, default="shipped",
+                                            help="gait the stage runs on: shipped (default, the exact replay "
+                                                 "behaviour), turnboth (TurnBoth-s0 swapped in for the stage: turn in "
+                                                 "place, straight crossing, turn back) or m3 (shipped gait: turn while "
+                                                 "stepping, straight crossing, turn back, stall watchdog); clocks2 "
+                                                 "(arms-turngait-clock-s2) or export (--stage-gait-export): that "
+                                                 "export's controller swapped in for the stage, M2's turnboth law")
+    # --- m7-clocks2 --- the opt-in export stage gaits (the choices line above stays as the M2/M3 tests pin it)
+    stage_gait_action.choices = STAGE_GAITS + EXPORT_STAGE_GAITS
+    parser.add_argument("--stage-gait-export", type=Path, default=None,
+                        help="--stage-gait export only: the exported directory (policy.onnx + deploy.yaml, 75 or 77 "
+                             "observations) swapped in as the stage controller")
+    parser.add_argument("--stage-gait-export-sha256", default=None,
+                        help="--stage-gait export only: refuse the export unless its policy.onnx has this sha256")
     parser.add_argument("--preflight", action="store_true")
     args = parser.parse_args()
     if args.stage_gait == "turnboth" and (args.align_yaw or args.press_hold):
         parser.error("--stage-gait turnboth does not compose with --align-yaw or --press-hold")
     if args.stage_gait == "m3" and (args.align_yaw or args.press_hold):
         parser.error("--stage-gait m3 does not compose with --align-yaw or --press-hold")
+    # --- m7-clocks2 ---
+    if args.stage_gait in EXPORT_STAGE_GAITS and (args.align_yaw or args.press_hold):
+        parser.error(f"--stage-gait {args.stage_gait} does not compose with --align-yaw or --press-hold")
+    if (args.stage_gait == "export") != (args.stage_gait_export is not None):
+        parser.error("--stage-gait-export <exported dir> is required with --stage-gait export, and only with it")
+    if args.stage_gait_export_sha256 is not None and args.stage_gait != "export":
+        parser.error("--stage-gait-export-sha256 pins a --stage-gait export only")
+    if args.stage_gait == "export":
+        select_export_gait(args.stage_gait_export, args.stage_gait_export_sha256)
     args.repo = args.repo.resolve()
     args.campaign = args.campaign.resolve()
     args.baseline = args.baseline.resolve()
@@ -810,6 +1049,9 @@ if __name__ == "__main__":
             preflight["stage_gait"] = args.stage_gait
             preflight["stage_gait_check"] = (turnboth_check(args.repo / "external/Berkeley-Humanoid-Lite")
                                              if args.stage_gait == "turnboth" else m3_constants())
+        if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- the export check, before any queue time
+            upstream = args.repo / "external/Berkeley-Humanoid-Lite"
+            preflight["stage_gait_check"] = export_check(upstream, *export_dir_for(upstream, args.stage_gait))
         print(json.dumps(preflight, sort_keys=True), flush=True)
         raise SystemExit(0)
     args.out.mkdir(parents=True, exist_ok=True)

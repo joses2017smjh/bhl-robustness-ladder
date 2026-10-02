@@ -63,6 +63,14 @@ ARMS=(
   # verdict.json.  Enforced here too (m3_bench_gate, --submit only): refused unless $M3_BENCH_VERDICT is a scored
   # bench-v2 PASS with --stage-gait m3 and every source the replay snapshot copies matches its provenance.json.
   "m3-shipped-step       --stage-gait m3"
+  # --- m7-clocks2 --- (2026-10-02; SLURM_JOBS.md "User approval recorded 2026-10-02 14:15", item A): every stage flag
+  # at its replay default, the stage on arms-turngait-clock-s2's CONTROLLER swapped in at takeover (M2's turnboth law).
+  # Released ONLY by a bench v2 PASS with --stage-gait clocks2: slurm/repo20260923/cpu_m7_plate_bench_v2_clocks2.sbatch
+  # runs `$0 --only m7-clocks2 --submit` after reading its verdict.json.  Enforced here too (clocks2_bench_gate,
+  # --submit only): refused unless $CLOCKS2_BENCH_VERDICT is a scored bench-v2 clocks2 PASS whose provenance.json
+  # records the pinned clock-s2 weights, the export on disk still has them, and every source the replay snapshot copies
+  # (src/bhl_robust/eval/gait_clock.py included) matches its record.
+  "m7-clocks2            --stage-gait clocks2"
 )
 set -euo pipefail
 REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
@@ -76,6 +84,11 @@ DEFAULT_BASELINE=results/mission7-approach-followup-20260922/replay-diagnose-cn-
 M2_BENCH_VERDICT=${M7_BENCH_VERDICT:-$CAMPAIGN/m2-plate-bench/verdict.json}
 # The scored bench-v2 verdict (--stage-gait m3) that alone releases m3-shipped-step (the bench-v2 job passes its own).
 M3_BENCH_VERDICT=${M7_BENCH_V2_VERDICT:-$CAMPAIGN/m3-plate-bench-v2/verdict.json}
+# --- m7-clocks2 --- the scored bench-v2 verdict (--stage-gait clocks2) that alone releases m7-clocks2 (the clocks2
+# bench job passes its own), and the clock-s2 weights that bench must have run (= mission7_plate_stage.CLOCKS2_*).
+CLOCKS2_BENCH_VERDICT=${M7_CLOCKS2_BENCH_VERDICT:-$CAMPAIGN/clocks2-plate-bench-v2/verdict.json}
+CLOCKS2_POLICY=external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported/policy.onnx
+CLOCKS2_POLICY_SHA256=c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de
 cd "$REPO"
 
 submit=0; only=""; max_route=1; after=""
@@ -124,7 +137,10 @@ PREDECLARED RULE (Mission 7 crossing, exact replay gates -> route gate)
      line of the same size (conditional on M2's bench FAIL; bench v2 runs the
      64 grid crossings minus its geometry-dropped walking entries + 10 this
      replay + 32 route gate), released only by a bench-v2 PASS with --stage-gait
-     m3 (cpu_m7_plate_bench_v2.sbatch).  The route gate is
+     m3 (cpu_m7_plate_bench_v2.sbatch).  m7-clocks2: the 83-episode line
+     approved 2026-10-02 (41 bench v2 + 10 this replay + 32 route gate),
+     released only by a bench-v2 PASS with --stage-gait clocks2
+     (cpu_m7_plate_bench_v2_clocks2.sbatch).  The route gate is
      released for the FIRST 10/10 in chain order only (route-gate slots:
      $max_route); later passes are recorded PASS and their route-gate commands
      printed as ROUTE_GATE_DEFERRED for explicit re-authorization.
@@ -211,6 +227,55 @@ print(f"m3 bench gate: scored bench-v2 m3 PASS at {verdict_path}; {len(files)} s
 PYEOF
 }
 
+# --- m7-clocks2 --- bench-v2 gate, applied to m7-clocks2 with --submit only: exit 3 (RELEASE_BLOCKED) unless $1 is a
+# scored bench-v2 PASS run with --stage-gait clocks2, its provenance.json records the clock-s2 policy sha256 $2, the
+# policy file $3 still has it, and every file in $4.. (the snapshot sources, gait_clock.py among them) has the sha256
+# recorded there.
+clocks2_bench_gate() {
+  "$PY" - "$@" <<'PYEOF' || return 3
+import hashlib, json, sys
+from pathlib import Path
+
+
+def blocked(why):
+    print(f"RELEASE_BLOCKED m7-clocks2: {why}", file=sys.stderr)
+    sys.exit(3)
+
+
+if len(sys.argv) < 4:
+    blocked("usage: clocks2_bench_gate VERDICT PINNED_SHA256 POLICY SOURCES...")
+verdict_path, pinned, policy, files = Path(sys.argv[1]), sys.argv[2], Path(sys.argv[3]), sys.argv[4:]
+if not verdict_path.is_file():
+    blocked(f"no bench-v2 clocks2 verdict at {verdict_path}")
+try:
+    verdict = json.loads(verdict_path.read_text())
+    provenance = json.loads((verdict_path.parent / "provenance.json").read_text())
+    recorded, weights = provenance["sources_sha256"], provenance["weights_sha256"]
+    if not all(isinstance(x, dict) for x in (verdict, recorded, weights)):
+        raise TypeError("verdict, sources_sha256 or weights_sha256 is not a JSON object")
+except (OSError, ValueError, KeyError, TypeError) as exc:
+    blocked(f"unreadable bench-v2 verdict or provenance beside {verdict_path}: {type(exc).__name__}: {exc}")
+if (verdict.get("bench"), verdict.get("mode"), verdict.get("stage_gait"), verdict.get("verdict")) != ("v2", "scored", "clocks2", "PASS") \
+        or (provenance.get("bench"), provenance.get("mode"), provenance.get("stage_gait")) != ("v2", "scored", "clocks2"):
+    blocked(f"{verdict_path} is bench {verdict.get('bench')!r}, mode {verdict.get('mode')!r}, stage gait "
+            f"{verdict.get('stage_gait')!r}, verdict {verdict.get('verdict')!r}; only a scored bench-v2 clocks2 PASS releases")
+if weights.get("clocks2") != pinned:
+    blocked(f"the bench ran clock-s2 weights {weights.get('clocks2')!r}, not the pinned {pinned}")
+if not policy.is_file() or hashlib.sha256(policy.read_bytes()).hexdigest() != pinned:
+    blocked(f"{policy} is missing or no longer has the pinned sha256 {pinned}")
+if not files:
+    blocked("no snapshot sources to compare")
+if "src/bhl_robust/eval/gait_clock.py" not in files:
+    blocked("src/bhl_robust/eval/gait_clock.py (in the clocks2 snapshot) is not among the compared sources")
+changed = [name for name in files if name not in recorded or not Path(name).is_file()
+           or hashlib.sha256(Path(name).read_bytes()).hexdigest() != recorded[name]]
+if changed:
+    blocked(f"sources changed since the bench (or absent from its provenance): {changed}")
+print(f"clocks2 bench gate: scored bench-v2 clocks2 PASS at {verdict_path}; pinned clock-s2 weights; {len(files)} "
+      "snapshot sources identical to the bench's record")
+PYEOF
+}
+
 # ---- pre-checks (both modes) ------------------------------------------------------------------
 [ -x "$PY" ] || { echo "venv python missing: $PY" >&2; exit 1; }
 [ -f "$DEFAULT_SOURCE_CAMPAIGN/fullroute/legacy-doors.json" ] || { echo "replay source missing" >&2; exit 1; }
@@ -240,6 +305,14 @@ for arm in "${selected[@]}"; do
     [ ! -e "$CAMPAIGN/$d" ] || { echo "destination exists, choose a new tag: $CAMPAIGN/$d" >&2; exit 1; }
   done
 done
+# --- m7-clocks2 --- its snapshot also copies the clock controller module (both submitters add it for the export stage
+# gaits), so the receipt's `git rev-parse HEAD` must describe that file too; clocks2_bench_gate compares it as well.
+c2_selected=0; for arm in "${selected[@]}"; do [ "${arm%% *}" != m7-clocks2 ] || c2_selected=1; done
+clocks2_gate_files=("${m2_gate_files[@]}" src/bhl_robust/eval/gait_clock.py)
+if [ "$c2_selected" = 1 ] && ! git diff --quiet -- src/bhl_robust/eval/gait_clock.py; then
+  echo "src/bhl_robust/eval/gait_clock.py has uncommitted changes; commit it before submitting a hash-frozen m7-clocks2 gate" >&2
+  exit 1
+fi
 if [ -e "$CAMPAIGN/replay-gate-route-lock-1" ]; then
   echo "note: route-gate slot 1 already held ($(cat "$CAMPAIGN/replay-gate-route-lock-1/holder" 2>/dev/null)); a new PASS will be DEFERRED unless --max-route-gates is raised" >&2
 fi
@@ -262,6 +335,7 @@ m3_selected=0; for arm in "${selected[@]}"; do [ "${arm%% *}" != m3-shipped-step
 if [ "$submit" = 0 ]; then
   [ "$m2_selected" = 0 ] || echo "note: --submit queues m2-turnboth only if m2_bench_gate passes: $M2_BENCH_VERDICT must be a scored bench PASS and ${#m2_gate_files[@]} snapshot sources must match its provenance.json"
   [ "$m3_selected" = 0 ] || echo "note: --submit queues m3-shipped-step only if m3_bench_gate passes: $M3_BENCH_VERDICT must be a scored bench-v2 m3 PASS and ${#m2_gate_files[@]} snapshot sources must match its provenance.json"
+  [ "$c2_selected" = 0 ] || echo "note: --submit queues m7-clocks2 only if clocks2_bench_gate passes: $CLOCKS2_BENCH_VERDICT must be a scored bench-v2 clocks2 PASS with the pinned clock-s2 weights and ${#clocks2_gate_files[@]} snapshot sources must match its provenance.json"
   echo "DRY RUN: nothing submitted.  Re-run with --submit to queue ${#selected[@]} gate(s) + ${#selected[@]} follow-up(s)."
   exit 0
 fi
@@ -272,6 +346,10 @@ fi
 # M3: the same placement and the same snapshot set, against the bench-v2 verdict.
 if [ "$m3_selected" = 1 ]; then
   m3_bench_gate "$M3_BENCH_VERDICT" "${m2_gate_files[@]}" || exit 3
+fi
+# --- m7-clocks2 --- the same placement, against the clocks2 bench-v2 verdict, gait_clock.py among the compared sources.
+if [ "$c2_selected" = 1 ]; then
+  clocks2_bench_gate "$CLOCKS2_BENCH_VERDICT" "$CLOCKS2_POLICY_SHA256" "$CLOCKS2_POLICY" "${clocks2_gate_files[@]}" || exit 3
 fi
 
 # ---- submit the chain ----------------------------------------------------------------------------
