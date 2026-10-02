@@ -3529,3 +3529,14 @@ Frozen designs, written before any implementation or episode. Each gets its full
   - R1 (`Velocity-BHL-Arms-TurnGaitClock-v0`) + `heading_hold`: when |wz_cmd| < 0.05 rad/s, reward exp(−(Δψ / 0.2 rad)²) with weight 1.0, where Δψ = wrap(base yaw − ψ_ref). ψ_ref is the base yaw at the last command resample, reset at episode reset. The term is zero when |wz_cmd| ≥ 0.05. Chosen, not tuned, and checked against R1's `track_ang_vel_z` weight.
   - Before freezing, the implementer checks the command config's `heading_command` mode. If it is True anywhere in R1's chain, the term is redundant and the design returns to the coordinator.
   - 3 seeds from scratch, 6000 iterations. Rule: v5's joint rule verbatim (per arm).
+- **(C) STOPPED at its predeclared STEP 0 (2026-10-02 14:44; workflow `wf_26dd8de8-51c`, no build, no job).**
+  - R1's whole chain trains with `heading_command=True` and `rel_heading_envs=1.0` (upstream humanoid `CommandsCfg`; all three R1 env.yaml files; the whole turning lineage, TurnBoth-s0 included). Every env gets a closed-loop command, wz = clip(0.5·wrap(heading_target − yaw), ±1.5), so the policy never trains on an open-loop wz = 0 while drifting.
+  - The gate's walk test is exactly that open-loop case: (0.35, 0, 0) for 1 s warm-up + 6 s.
+  - Under heading mode the frozen heading-hold term would rarely be active, and it would duplicate the command's own heading loop.
+  - A reviewer corrected the drift model: it is not a constant bias (signs and sizes vary with the reset seed; s1 −37° to −54° over 7 s).
+- **(C') revised design, issued by the coordinator (2026-10-02 14:44) to keep the user's approved intent ("add a reward for holding heading on straight walks"), before any implementation.** R1H = R1 + two changes, both chosen, not tuned:
+  - (i) Command mix: per resample, 30 % of envs leave heading control (is_heading_env cleared) and take explicit commands, via the repo's `TurnMixVelocityCommand` DIRECT mechanism. vx and vy come from R1's own ranges; wz = 0 exactly with probability 0.5, otherwise U(R1's ang_vel_z range). The other 70 % keep R1's heading mode unchanged. No PURE_TURN envs.
+  - (ii) `heading_hold`: active only in those explicit envs while |wz_cmd| < 0.05, paying exp(−(Δψ / 0.2 rad)²) with weight 1.0. Δψ = wrap(yaw − ψ_ref), and ψ_ref is the yaw at that env's last resample (and at episode reset).
+  - Everything else is R1's.
+  - Disclosed: (i) changes the command mix, the training distribution, so the arm tests the pair (explicit straight-walk commands + the hold reward), not the reward alone.
+  - 3 seeds from scratch, 6000 iterations. Rule: v5's joint rule verbatim; the gate is unchanged.
