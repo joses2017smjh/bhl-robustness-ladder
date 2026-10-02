@@ -3587,3 +3587,4 @@ Files: `slurm/repo20260923/gpu_platecross.sbatch`; task `Velocity-BHL-Arms-Plate
   - Nothing was created: no run dir, and no file under `results/repo-gpu-20260923/platecross-20261002/` (the directories are empty). No scored seed was touched.
   - Fix (plumbing only; the rule and every gate are unchanged): `n_runs=$( (ls … || true) | wc -l)`.
   - New tests run the launcher's real-mode prefix on a fake tree: no run dir → continues with `n_runs=0`; an incomplete or duplicate run dir → still refused; a complete one → reused. `tests/test_platecross.py`: 79 passed.
+- Resubmitted (code `8213f14`): fresh PlateCross smoke `21517542`, then the real array `21517543` (0–2%3, `--dependency=afterok:21517542`). It replaces `21517362`.
