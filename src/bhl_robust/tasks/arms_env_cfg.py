@@ -251,3 +251,130 @@ class HumanoidTurnRestPushCfg(HumanoidTurnRestCfg):
 
     events: ArmsPushEventsCfg = ArmsPushEventsCfg()
     curriculum: ArmsPushCurriculumCfg = ArmsPushCurriculumCfg()
+
+
+# --- Turning gait R1 / R2: gait clock + contact schedule (2026-10-01) ---------
+#
+# docs/SOLUTIONS_2026-10-01.md section 2: the arm checkpoints step only under their
+# own training noise, so the noise-free gates and the robot see a standing mean
+# policy, and nothing pays stepping at zero command. Two NEW tasks, trained from
+# scratch (no parent checkpoint) by slurm/repo20260923/gpu_turngait_r12.sbatch.
+# Each = TurnBoth's rewards and command mix (upstream UniformVelocityCommand) with
+# these changes ONLY (frozen constants in gait_clock_mdp.py):
+#   + feet_gait          contact schedule, period 0.8 s, offsets [0.0, 0.5] (L, R),
+#                        stance < 0.55, weight 0.5, paid at every command incl. zero
+#   + feet_swing_height  -20 x sum over swing feet of (z_foot - 0.05)^2
+#   feet_air_time        weight 0
+#   + push_robot         interval 5-9 s (PUSH_INTERVAL_S), x and y in [-0.5, 0.5] m/s,
+#                        fixed magnitude from iteration 0, no push curriculum
+# R1 TurnGaitClock: sin/cos(2 pi phase_left) appended to the actor AND critic
+#   observations (actor 75 -> 77; deploy via bhl_robust.eval.gait_clock).
+# R2 TurnGaitCritic: the clock goes to the critic only; the actor keeps its 75.
+from isaaclab.managers import ObservationTermCfg as ObsTerm
+from isaaclab.managers import RewardTermCfg as RewTerm
+
+from berkeley_humanoid_lite.tasks.locomotion.velocity.config.humanoid.env_cfg import (
+    ObservationsCfg as _HumanoidObservationsCfg,
+    RewardsCfg as _HumanoidRewardsCfg,
+)
+
+from bhl_robust.tasks import gait_clock_mdp
+
+# (left, right) in this order: preserve_order makes body_ids follow the patterns, so
+# feet_gait's offsets [0.0, 0.5] land on (left, right).
+_FEET_LR = [".*_left_ankle_roll", ".*_right_ankle_roll"]
+
+
+@configclass
+class TurnGaitRewardsCfg(_HumanoidRewardsCfg):
+    """Upstream humanoid rewards + the contact schedule and the swing-height penalty."""
+
+    feet_gait = RewTerm(
+        func=gait_clock_mdp.feet_gait,
+        weight=gait_clock_mdp.FEET_GAIT_WEIGHT,
+        params={
+            "period": gait_clock_mdp.GAIT_PERIOD_S,
+            "offset": list(gait_clock_mdp.GAIT_OFFSETS),
+            "threshold": gait_clock_mdp.STANCE_THRESHOLD,
+            "sensor_cfg": SceneEntityCfg("contact_forces", body_names=list(_FEET_LR), preserve_order=True),
+        },
+    )
+    feet_swing_height = RewTerm(
+        func=gait_clock_mdp.feet_swing_height,
+        weight=gait_clock_mdp.SWING_HEIGHT_WEIGHT,
+        params={
+            "target_height": gait_clock_mdp.SWING_HEIGHT_TARGET_M,
+            "foot_height_offset": gait_clock_mdp.FOOT_ORIGIN_ABOVE_SOLE_M,
+            "force_threshold": gait_clock_mdp.CONTACT_FORCE_THRESHOLD_N,
+            "sensor_cfg": SceneEntityCfg("contact_forces", body_names=list(_FEET_LR), preserve_order=True),
+            "asset_cfg": SceneEntityCfg("robot", body_names=list(_FEET_LR), preserve_order=True),
+        },
+    )
+
+
+@configclass
+class ArmsFixedPushEventsCfg(EventsCfg):
+    """Upstream humanoid events + the interval push at a FIXED +/-0.5 m/s (no curriculum)."""
+
+    push_robot = EventTerm(
+        func=mdp.push_by_setting_velocity,
+        mode="interval",
+        interval_range_s=PUSH_INTERVAL_S,
+        params={"velocity_range": {"x": (-gait_clock_mdp.PUSH_VELOCITY_MPS, gait_clock_mdp.PUSH_VELOCITY_MPS),
+                                   "y": (-gait_clock_mdp.PUSH_VELOCITY_MPS, gait_clock_mdp.PUSH_VELOCITY_MPS)}},
+    )
+
+
+@configclass
+class _GaitClockPolicyObsCfg(_HumanoidObservationsCfg.PolicyCfg):
+    """Upstream actor terms (75) + gait_clock (2), appended last: 77."""
+
+    gait_clock = ObsTerm(func=gait_clock_mdp.gait_clock, params={"period": gait_clock_mdp.GAIT_PERIOD_S})
+
+
+@configclass
+class _GaitClockCriticObsCfg(_HumanoidObservationsCfg.CriticCfg):
+    """Upstream critic terms (78) + gait_clock (2), appended last: 80."""
+
+    gait_clock = ObsTerm(func=gait_clock_mdp.gait_clock, params={"period": gait_clock_mdp.GAIT_PERIOD_S})
+
+
+@configclass
+class GaitClockActorObservationsCfg(_HumanoidObservationsCfg):
+    """R1: the clock in the actor and the critic."""
+
+    policy: _GaitClockPolicyObsCfg = _GaitClockPolicyObsCfg()
+    critic: _GaitClockCriticObsCfg = _GaitClockCriticObsCfg()
+
+
+@configclass
+class GaitClockCriticObservationsCfg(_HumanoidObservationsCfg):
+    """R2: the clock in the critic only; the actor keeps upstream's 75."""
+
+    critic: _GaitClockCriticObsCfg = _GaitClockCriticObsCfg()
+
+
+@configclass
+class _HumanoidTurnGaitBaseCfg(HumanoidTurnBothCfg):
+    """TurnBoth rewards + feet_gait + feet_swing_height, feet_air_time weight 0, fixed pushes."""
+
+    rewards: TurnGaitRewardsCfg = TurnGaitRewardsCfg()
+    events: ArmsFixedPushEventsCfg = ArmsFixedPushEventsCfg()
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.rewards.feet_air_time.weight = 0.0
+
+
+@configclass
+class HumanoidTurnGaitClockCfg(_HumanoidTurnGaitBaseCfg):
+    """R1 (Velocity-BHL-Arms-TurnGaitClock-v0): gait clock in the actor, 77 actor observations."""
+
+    observations: GaitClockActorObservationsCfg = GaitClockActorObservationsCfg()
+
+
+@configclass
+class HumanoidTurnGaitCriticCfg(_HumanoidTurnGaitBaseCfg):
+    """R2 (Velocity-BHL-Arms-TurnGaitCritic-v0): gait clock in the critic only, 75 actor observations."""
+
+    observations: GaitClockCriticObservationsCfg = GaitClockCriticObservationsCfg()

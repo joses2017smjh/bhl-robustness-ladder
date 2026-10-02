@@ -112,6 +112,10 @@ for _id, _cfg in (
     # 2026-09-27: TurnRest + interval push with the adaptive push curriculum (TurnRest
     # failed its push regression); fine-tuned by gpu_turngait_v5.sbatch.
     ("Velocity-BHL-Arms-TurnRestPush-v0", arms_env_cfg.HumanoidTurnRestPushCfg),
+    # 2026-10-01 R1 / R2 (docs/SOLUTIONS_2026-10-01.md section 2): TurnBoth + feet_gait contact schedule at
+    # every command + swing height + fixed pushes, from scratch (gpu_turngait_r12.sbatch); clock in actor / critic only.
+    ("Velocity-BHL-Arms-TurnGaitClock-v0", arms_env_cfg.HumanoidTurnGaitClockCfg),
+    ("Velocity-BHL-Arms-TurnGaitCritic-v0", arms_env_cfg.HumanoidTurnGaitCriticCfg),
 ):
     gym.register(
         id=_id,

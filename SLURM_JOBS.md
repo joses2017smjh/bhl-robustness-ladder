@@ -3266,3 +3266,30 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
 - **Navigation:** N2 (fully learned, no planner in the loop) replaces N1 (the A* sub-goal hybrid), at the user's direction.
 - **R1/R2 (turning) and C1 (flush-pad mechanism probe):** authorized.
 - Every run still gets its rule predeclared here before it is submitted, and no gate is weakened.
+
+**Predeclared now (2026-10-02 03:04, before any R1/R2 training): turning recipe R1/R2** (`slurm/repo20260923/gpu_turngait_r12.sbatch`; verdict `scripts/bench/turngait_r12_verdict.py`; plan `docs/SOLUTIONS_2026-10-01.md` §2; authorized 2026-10-01).
+- **What trains:** two NEW tasks, from scratch, 6000 iterations, seeds 0–2 each (array 0-5%3).
+  - R1 `Velocity-BHL-Arms-TurnGaitClock-v0`: a gait clock (sin/cos) in the actor and the critic; 77 actor observations.
+  - R2 `Velocity-BHL-Arms-TurnGaitCritic-v0`: the clock in the critic only; 75 actor observations.
+  - Each = TurnBoth's rewards and command mix plus:
+    - a `feet_gait` contact schedule paid at every command (period 0.8 s, offsets [0, 0.5], stance < 0.55, weight 0.5);
+    - a foot swing-height penalty, −20 × Σ (z_sole − 0.05)² over swing feet, with z_sole = ankle_roll origin z − 0.060 m;
+    - `feet_air_time` weight 0;
+    - fixed ±0.5 m/s pushes every 5–9 s from iteration 0;
+    - default PPO noise.
+  - Disclosed: 0.060 m is a tilted-foot box-corner height; the flat sole sits 0.050 m below the origin, so the swing target is ≈ 6 cm of sole clearance, not 5 cm. Frozen as declared, not tuned.
+- **MuJoCo harness:** R1 exports run through a clock-aware controller (`bhl_robust.eval.gait_clock.make_controller`) whose phase is bit-identical to Isaac's float32 clock and restarts at the harness reset. The 75-observation path is unchanged.
+- **PASS rule (v5's joint rule verbatim, per arm, each arm judged separately):** PASS iff ≥ 2/3 seeds both PASS turn_test v2 AND are QUALIFIED by cpu_turn_qualify's unchanged rule (v2x ≥ 9/10 on reset seeds 10–14, walk ≤ 15° on ≥ 2/3, push ≤ 9/60); else FAIL; INCOMPLETE if any JSON is missing. A seed that fails v2 does not count even if it qualifies through v2x.
+  - Training counts only if the run dir holds model_5999.pt and the training log shows the arm's task id, the feet_gait term and the push event.
+  - Beyond that clause, the launcher's wrong-arm guard (observation widths, reward/event rows, env.yaml = TurnBoth-s0's + the declared changes only) must pass; a seed that fails it runs no gate and stays INCOMPLETE.
+  - The arms are new tasks, never presented as fine-tunes of TurnBoth-s0. Labels: LEARNED gait; MuJoCo gates.
+- **Disclosed priors:**
+  - The v5 PUSH arm (`21443377`) kept push falls ≤ 0.10 but turned 0/10 on all three seeds.
+  - 22-DoF from-scratch push training showed no detectable benefit at four seeds.
+  - The period and weight follow the unitree_rl_lab G1 precedent.
+  - No Unitree repo has tested a clockless actor (R2) that marches at zero command.
+- **Checks before submission:**
+  - Workflow `wf_0ec8b9df-34a`: an implementer and two adversarial reviewers; six minor findings fixed (a resubmit could bypass the wrong-arm guard; the smoke's run_eval touched push seed 0).
+  - Smokes `21505878` and, after the fixes, `21506426`: SMOKE PASS on both arms (R1 77/80, R2 75/80; recipe = TurnBoth + the declared changes only; exports 77 stamped / 75 plain; the clock-aware MuJoCo rollout passes). Every rollout of the fixed smoke runs on exploration seed 100.
+  - Disclosed: the first smoke's run_eval ran one 3-iteration checkpoint on push seed 0, a qualify seed. The test files pass (107).
+- **Provenance:** jobs run from the live working tree, which also holds other workstreams' uncommitted in-progress edits. R1/R2 import only their own committed code, plus the eager import of `task_v2_env_cfg` (Stand4, in progress; it loaded cleanly in both smokes).
