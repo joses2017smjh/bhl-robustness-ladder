@@ -49,6 +49,14 @@ ARMS=(
   "v4-settle080          --pre-point 0.45 --cross-clear 0.35 --cross-kick --settle-s 0.80"              # V4 (task fallback): V2 with a longer settle, modest step
   "v3-settle190-align    --pre-point 0.45 --cross-clear 0.35 --cross-kick --settle-s 1.90 --align-yaw"  # V3 + align_yaw
   "v4-settle080-align    --pre-point 0.45 --cross-clear 0.35 --cross-kick --settle-s 0.80 --align-yaw"  # V4 + align_yaw
+  # M2 (docs/SOLUTIONS_2026-10-01.md section 3; 2026-10-02): every stage flag at its replay default, the stage
+  # running on TurnBoth-s0 (turn in place, straight crossing, turn back).  Released ONLY by a bench PASS:
+  # slurm/repo20260923/cpu_m7_plate_bench.sbatch runs `$0 --only m2-turnboth --submit` after reading its
+  # verdict.json.  Enforced here too (m2_bench_gate, --submit only): the arm is refused unless
+  # $M2_BENCH_VERDICT is a scored bench PASS and every source the replay snapshot copies is byte-identical to
+  # the bench's provenance.json record.  The five arms above ran on 2026-09-24 and their destinations exist,
+  # so a run without --only stops at the destination check.
+  "m2-turnboth           --stage-gait turnboth"
 )
 set -euo pipefail
 REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
@@ -58,6 +66,8 @@ SUBMITTER=scripts/submit_mission7_plate_stage.py
 FOLLOWUP=slurm/repo20260923/m7_replay_gate_followup.sbatch
 DEFAULT_SOURCE_CAMPAIGN=results/mission7-replay-smoke-20260921
 DEFAULT_BASELINE=results/mission7-approach-followup-20260922/replay-diagnose-cn-c22
+# The scored M2 bench verdict that alone releases m2-turnboth (overridable for tests; the bench job passes its own).
+M2_BENCH_VERDICT=${M7_BENCH_VERDICT:-$CAMPAIGN/m2-plate-bench/verdict.json}
 cd "$REPO"
 
 submit=0; only=""; max_route=1; after=""
@@ -98,11 +108,14 @@ PREDECLARED RULE (Mission 7 crossing, exact replay gates -> route gate)
      construction and are not tuned to gate results.
      Route-gate criterion (docs/MISSION7_TASKS.md): Doors >= 16/16 AND
      Transport >= 16/16.  Anything below stays FAIL; every episode counts.
-  4. Episode envelope (docs/MISSION7_TASKS.md: 101 of 512 unspent): five gates
-     = 50, one route gate = 32.  The route gate is released for the FIRST 10/10
-     in chain order only (route-gate slots: $max_route); later passes are
-     recorded PASS and their route-gate commands printed as ROUTE_GATE_DEFERRED
-     for explicit re-authorization.
+  4. Episode envelope.  2026-09-24 arms (docs/MISSION7_TASKS.md: 101 of 512
+     unspent; unreconciled with the ledger, set aside by the user 2026-10-01):
+     five gates = 50, one route gate = 32.  m2-turnboth: the 106-episode line
+     authorized 2026-10-01 (64 bench + 10 this replay + 32 route gate), released
+     only by a bench PASS (cpu_m7_plate_bench.sbatch).  The route gate is
+     released for the FIRST 10/10 in chain order only (route-gate slots:
+     $max_route); later passes are recorded PASS and their route-gate commands
+     printed as ROUTE_GATE_DEFERRED for explicit re-authorization.
      A layout whose recorded trace ends before the stage reaches \`cross\` is
      upright trivially; summary.json therefore also reports crossings_started
      and crossings_completed, and a 10/10 is reported together with them.
@@ -110,6 +123,42 @@ PREDECLARED RULE (Mission 7 crossing, exact replay gates -> route gate)
      with a local 9/10 behind it; the reference V2 (7/10, 21401689) is not rerun.
 ================================================================================
 RULE
+}
+
+# M2 bench gate, applied to m2-turnboth with --submit only: exit 3 (RELEASE_BLOCKED) unless $1 is a scored bench
+# PASS and every file in $2.. (the sources the replay snapshot will copy) has the sha256 the bench recorded in the
+# provenance.json beside that verdict, so the replay runs the code the bench validated.
+m2_bench_gate() {
+  "$PY" - "$@" <<'PYEOF' || return 3
+import hashlib, json, sys
+from pathlib import Path
+
+
+def blocked(why):
+    print(f"RELEASE_BLOCKED m2-turnboth: {why}", file=sys.stderr)
+    sys.exit(3)
+
+
+verdict_path, files = Path(sys.argv[1]), sys.argv[2:]
+if not verdict_path.is_file():
+    blocked(f"no bench verdict at {verdict_path}")
+try:
+    verdict = json.loads(verdict_path.read_text())
+    recorded = json.loads((verdict_path.parent / "provenance.json").read_text())["sources_sha256"]
+    if not isinstance(verdict, dict) or not isinstance(recorded, dict):
+        raise TypeError("verdict or sources_sha256 is not a JSON object")
+except (OSError, ValueError, KeyError, TypeError) as exc:
+    blocked(f"unreadable bench verdict or provenance beside {verdict_path}: {type(exc).__name__}: {exc}")
+if verdict.get("mode") != "scored" or verdict.get("verdict") != "PASS":
+    blocked(f"{verdict_path} is mode {verdict.get('mode')!r}, verdict {verdict.get('verdict')!r}; only a scored PASS releases")
+if not files:
+    blocked("no snapshot sources to compare")
+changed = [name for name in files if name not in recorded or not Path(name).is_file()
+           or hashlib.sha256(Path(name).read_bytes()).hexdigest() != recorded[name]]
+if changed:
+    blocked(f"sources changed since the bench (or absent from its provenance): {changed}")
+print(f"m2 bench gate: scored PASS at {verdict_path}; {len(files)} snapshot sources identical to the bench's record")
+PYEOF
 }
 
 # ---- pre-checks (both modes) ------------------------------------------------------------------
@@ -126,6 +175,8 @@ if ! git diff --quiet -- "${snapshot_files[@]}"; then
   echo "snapshot sources have uncommitted changes; commit or stash before submitting a hash-frozen gate:" >&2
   git status --short -- "${snapshot_files[@]}" >&2; exit 1
 fi
+# m2_bench_gate compares these: every snapshot source except the replay's own sbatch, which the bench never ran.
+m2_gate_files=(); for f in "${snapshot_files[@]}"; do [ "$f" = slurm/mission7_plate_stage.sbatch ] || m2_gate_files+=("$f"); done
 selected=()
 for arm in "${ARMS[@]}"; do
   tag=${arm%% *}
@@ -156,9 +207,15 @@ for arm in "${selected[@]}"; do
   "$PY" "$SUBMITTER" --out-campaign "$CAMPAIGN" --output-name "replay-gate-$tag" $flags | sed "s/^/plan $tag: /"
 done
 rule
+m2_selected=0; for arm in "${selected[@]}"; do [ "${arm%% *}" != m2-turnboth ] || m2_selected=1; done
 if [ "$submit" = 0 ]; then
+  [ "$m2_selected" = 0 ] || echo "note: --submit queues m2-turnboth only if m2_bench_gate passes: $M2_BENCH_VERDICT must be a scored bench PASS and ${#m2_gate_files[@]} snapshot sources must match its provenance.json"
   echo "DRY RUN: nothing submitted.  Re-run with --submit to queue ${#selected[@]} gate(s) + ${#selected[@]} follow-up(s)."
   exit 0
+fi
+# M2: checked last, right before anything is queued; a refusal (RELEASE_BLOCKED, exit 3) submits nothing.
+if [ "$m2_selected" = 1 ]; then
+  m2_bench_gate "$M2_BENCH_VERDICT" "${m2_gate_files[@]}" || exit 3
 fi
 
 # ---- submit the chain ----------------------------------------------------------------------------
@@ -209,7 +266,7 @@ done
   printf '  "chain": [\n'; printf '    %s,\n' "${rows[@]}" | sed '$ s/,$//'; printf '  ]\n}\n'
 } > "$receipt"
 {
-  printf '\nMission7 replay-gate chain (2026-09-24): **SUBMITTED** %d exact ten-fall replay gates sequentially on `cn-c22` (afterany), each with a follow-up that writes `summary.json` and releases the route gate (Doors 16 + Transport 16, validation 0-15, `submit_mission7_route_handoff.py`) only for a 10/10, first PASS in chain order only (%s route-gate slot). Arms:' "${#rows[@]}" "$max_route"
+  printf '\nMission7 replay-gate chain (%s): **SUBMITTED** %d exact ten-fall replay gates sequentially on `cn-c22` (afterany), each with a follow-up that writes `summary.json` and releases the route gate (Doors 16 + Transport 16, validation 0-15, `submit_mission7_route_handoff.py`) only for a 10/10, first PASS in chain order only (%s route-gate slot). Arms:' "$(date -u +%F)" "${#rows[@]}" "$max_route"
   printf '%s' "$ledger_arms"
   printf ' chain receipt: `%s`.\n' "$receipt"
 } >> SLURM_JOBS.md

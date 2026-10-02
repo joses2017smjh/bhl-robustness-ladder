@@ -30,12 +30,19 @@
 #    --stage-activate --rejoin-advance --exit-ramp-center --exit-ramp=1.2
 #    --rejoin-fix none.  Route-side flags are outside the replay by
 #    construction (like F2/F3 were) and are fixed here, not tuned to results.
-# 3. Episode envelope (docs/MISSION7_TASKS.md: 101 of 512 unspent): five gates
-#    spend 50, one route gate 32.  A second passing variant would exceed the
-#    envelope, so the route gate fires for the FIRST 10/10 in chain order only
-#    (atomic mkdir lock, slots = max_route_gates, default 1).  Later passes are
-#    recorded PASS and their route-gate commands printed under
-#    ROUTE_GATE_DEFERRED for explicit re-authorization.  Nothing is weakened.
+# 3. Episode envelope: the Mission 7 line of 106 episodes the user authorized on
+#    2026-10-01 for M2 of docs/SOLUTIONS_2026-10-01.md (SLURM_JOBS.md, "User
+#    authorizations recorded 2026-10-01"): 64 bench crossings
+#    (cpu_m7_plate_bench.sbatch) + 10 exact-replay episodes (this gate, tag
+#    m2-turnboth, --stage-gait turnboth, released only by a bench PASS) + 32
+#    route-gate episodes (Doors 16 + Transport 16).  The older line (the docs'
+#    "101 of 512", the ledger's "~53 over") is unreconciled; the user set it
+#    aside.  One route gate fits the line, so the route gate fires for the FIRST
+#    10/10 in chain order only (atomic mkdir lock, slots = max_route_gates,
+#    default 1).  Later passes are recorded PASS and their route-gate commands
+#    printed under ROUTE_GATE_DEFERRED for explicit re-authorization.  Nothing
+#    is weakened.  A replay gate run with --stage-gait turnboth releases a route
+#    gate run with --stage-gait turnboth (step 3 translates the flag).
 #
 # DRY_RUN=1 runs the same logic without sbatch (plans the route submission via
 # the submitter's non---submit mode and touches no lock).
@@ -177,6 +184,7 @@ for a in args:
     elif key == "--stage-lateral": out += ["--stage-lateral", val]
     elif key == "--wait-open": wait_open = val
     elif key == "--press-hold": out.append("--stage-press-hold")
+    elif key == "--stage-gait": out += ["--stage-gait", val]
     elif key == "--smoke": raise SystemExit("a --smoke gate is not a gate; refusing to release the route gate")
     else: raise SystemExit(f"unknown replay-gate flag {a!r}; refusing to guess a route translation")
 out += ["--stage-wait-open", wait_open]

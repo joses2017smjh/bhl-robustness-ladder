@@ -26,7 +26,7 @@ import numpy as np
 from bhl_robust.mission.approach_debug import (DebugEnv, PlateSafeRouteController,
                                                wrap, yaw_of)
 from mission7_gates import route_gate_block
-from mission7_plate_stage import PlateStage
+from mission7_plate_stage import STAGE_GAITS, PlateStage, turnboth_check, turnboth_description
 
 
 # Body-frame command scales (vx, vy, wz) shared by every conversion below.
@@ -157,7 +157,7 @@ class RouteHandoffController:
                  stage_activate=False, exit_ramp_s=0., stage_press_hold=False,
                  stage_wait_open_s=2.0, pre_point_m=.30, cross_clear_m=None, stall_min_s=.8,
                  settle_s=.40, cross_kick=False, rejoin_advance=False, exit_ramp_center=False,
-                 align_yaw=False):
+                 align_yaw=False, stage_gait="shipped"):
         self.env = env
         self.handoff_mode = handoff_mode
         self.rejoin_diagnostic = bool(rejoin_diagnostic)
@@ -187,7 +187,7 @@ class RouteHandoffController:
                                              if (stage_activate or stage_press_hold) else 0.),
                                 press_hold=stage_press_hold, pre_point_m=pre_point_m,
                                 cross_clear_m=cross_clear_m, settle_s=settle_s, cross_kick=cross_kick,
-                                align_yaw=align_yaw)
+                                align_yaw=align_yaw, stage_gait=stage_gait)
         # Exposure criterion: no progress toward the waypoint for stall_min_s.
         # 0.8 s is what Campaigns A/B used; the two genuine stalls never moved
         # again while the three pauses resumed within 0.36-0.64 s, so 3.0 s
@@ -784,7 +784,7 @@ def run(args):
                 cross_clear_m=args.cross_clear, stall_min_s=args.stall_min_s,
                 settle_s=args.settle_s, cross_kick=args.cross_kick,
                 rejoin_advance=args.rejoin_advance, exit_ramp_center=args.exit_ramp_center,
-                align_yaw=args.align_yaw)
+                align_yaw=args.align_yaw, stage_gait=getattr(args, "stage_gait", "shipped"))
             while True:
                 env.runner.contact_trace = []
                 effective_action = controller.action()
@@ -976,6 +976,8 @@ def run(args):
                     controller.rejoin_fix_forward_delta > COMMAND_EPSILON_MPS),
                 rejoin_diagnostic=rejoin_diagnostic,
             )
+            if getattr(args, "stage_gait", "shipped") != "shipped":   # default rows keep their keys
+                row.update(stage_gait=args.stage_gait, gait_events=controller.stage.gait_events)
             record_name = f"{stage}-{index}.json"
             (args.out / record_name).write_text(json.dumps(row, indent=2) + "\n")
             summary = compact_episode(row, record_name)
@@ -1058,6 +1060,12 @@ def run(args):
         "episodes_are_summaries": True,
         "episodes": summaries,
     }
+    if getattr(args, "stage_gait", "shipped") != "shipped":   # the default result is unchanged
+        result["controller"] = (f"PlateSafeRouteController plus guarded PlateStage on the {args.stage_gait} "
+                                f"stage gait on {args.handoff} handoff")
+        result["plate_stage_internal_behavior_unchanged"] = False
+        result["stage_gait"] = args.stage_gait
+        result["stage_gait_description"] = turnboth_description()
     (args.out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps({
         "status": result["status"],
@@ -1134,10 +1142,15 @@ if __name__ == "__main__":
     parser.add_argument("--allow-inactive-intervention", action="store_true",
                         help="record a requested-but-ineffective intervention as a "
                              "null result instead of failing the run")
+    parser.add_argument("--stage-gait", choices=STAGE_GAITS, default="shipped",
+                        help="gait the PlateStage runs on: shipped (default) or turnboth (TurnBoth-s0 swapped "
+                             "in for the stage: turn in place, straight crossing, turn back)")
     parser.add_argument("--preflight", action="store_true",
                         help="validate interpreter, imports and arguments, then exit "
                              "without running any episode")
     args = parser.parse_args()
+    if args.stage_gait == "turnboth" and (args.align_yaw or args.stage_press_hold):
+        parser.error("--stage-gait turnboth does not compose with --align-yaw or --stage-press-hold")
     args.repo = args.repo.resolve()
     args.out = args.out.resolve()
     if not args.out.is_relative_to(args.repo):
@@ -1150,7 +1163,7 @@ if __name__ == "__main__":
         # forwarded argument, and the output path validated.  Seconds here, in
         # place of hours of queue wait followed by an immediate crash.
         import mujoco
-        print(json.dumps({
+        preflight = {
             "status": "PREFLIGHT_OK",
             "python": sys.executable,
             "numpy": np.__version__,
@@ -1161,6 +1174,10 @@ if __name__ == "__main__":
             "rejoin_fix": args.rejoin_fix,
             "rejoin_diagnostic": args.rejoin_diagnostic,
             "out": str(args.out),
-        }, sort_keys=True), flush=True)
+        }
+        if args.stage_gait != "shipped":   # the default preflight line is unchanged
+            preflight["stage_gait"] = args.stage_gait
+            preflight["stage_gait_check"] = turnboth_check(args.repo / "external/Berkeley-Humanoid-Lite")
+        print(json.dumps(preflight, sort_keys=True), flush=True)
         raise SystemExit(0)
     run(args)

@@ -3345,3 +3345,62 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - Tests: `tests/test_navgym_v5.py` and `tests/test_navgym.py`.
 - **Wall time:** 36 h per seed (≈ 16 h of training on the slower node class).
 - Submitted (code `ae27a5e`): NavGym v5 smoke of the committed code `21506833`, then training seeds 8–10 `21506834` (afterok on the smoke), then gym verdict `21506836` (afterany on the training), then physics transfer `21506837` (afterok on the verdict; runs episodes only on a final gym PASS). If the smoke fails, the rest of the chain is cancelled by hand.
+
+**Predeclared now (2026-10-02 04:59, before any probe or scored episode): flush-pad wrist mechanism probe (C1 of `docs/SOLUTIONS_2026-10-01.md` §4)** (`slurm/repo20260923/cpu_coop_flushpad.sbatch`; opt-in code in the flush-pad section of `src/bhl_robust/eval/scripted_carry.py` and `scripts/bench/coop_scripted_carry.py --flushpad-stage`).
+- **What runs:**
+  - MODIFIED END-EFFECTOR, not the stock robot: each hand's box pad (stock size and centre) is re-oriented so its faces are parallel to the cube faces at the squeeze pose. This comes from kinematics only; the stock pad is 26.2° off-face. Pads use condim 4 and torsional friction 0.04 m.
+  - HARNESS CHANGE: elliptic friction cone + impratio 10 (global options, which also change foot-floor contact; the robot-fall clauses are unchanged).
+  - Placement lowering is the reverse keyframe (`lower_to=None`), frozen now.
+  - Labels: LEARNED gait (frozen arms-dr1.0-s0) + SCRIPTED arms + ORACLE cube pose (scoring only).
+  - The stock harness is byte-identical (insertions only; stock crew-2/4 models and a stock episode are identical to `094797e`).
+- **PREDECLARED RULES (verbatim):**
+  - "Probe on exploration seeds 120-124 (state the grep evidence that they were never used). PROCEED iff the cube tilt stays <= 0.35 rad throughout lift-hold on >= 4/5 seeds, with LIFT_HOLD_RULE's robot-fall clauses unchanged. Otherwise STOP: NEGATIVE, the flush pad does not stop the roll."
+  - "Scored, only after PROCEED (state the evidence that seeds 20-39 were never used): lift-hold on seeds 20-29 and lift-place on seeds 30-39, each with its UNCHANGED rule (LIFT_HOLD_RULE / LIFT_PLACE_RULE, pass_min 8) PLUS cube tilt <= 0.35 rad (hold: throughout the hold; place: at release and when seated), >= 8/10 per crew or pair as the existing rules define them. PASS iff every crew/pair meets it; otherwise NEGATIVE; INCOMPLETE if any episode is missing."
+- **Clauses as applied** (decided before any episode; each stricter than or equal to the text):
+  - Tilt is the cube's own z axis against world z, at every policy step.
+  - "Throughout lift-hold" covers every state of the 20 s episode.
+  - A probe seed also needs a finite state, no MuJoCo auto-reset and the full 20 s. Crew 2.
+  - Hold tilt covers every state of the hold that LIFT_HOLD_RULE scores. Place tilt covers states 268–293 (end of lowering to hands open) and the final seated state.
+  - Six pairs must each reach ≥ 8/10: lift-hold crew 2, crew 4 pairs 0 and 1, and lift-place the same.
+  - A numerical blow-up is a scored failure, including one MuJoCo auto-resets, which is detected from sim time and its warning counters.
+  - INVALID covers any JSON that is not this variant, rule, lowering or model.
+- **Disclosed (review F3, kept as frozen):** the rule names only LIFT_HOLD_RULE's robot-fall clauses, so the probe does not gate lift. A probe episode that never lifts the cube passes the tilt clause. The scored stage keeps every LIFT_HOLD_RULE clause, so there is no false PASS. On tuning seed 119 (diagnostic only) the flush pad lifted the cube, which then tilted 0.45–0.75 rad, so the probe is expected to read NEGATIVE.
+- **Seed evidence (grep, 2026-10-02):** the harness's score JSONs and logs hold seeds 0–9, 10–19 and 100–119 (tuning, including the investigators' 100–104). Seeds 120–124 and 20–39 appear nowhere in this harness.
+- **Checks before submission:**
+  - Workflow `wf_6b06a8c9-d3d`: an implementer and two adversarial reviewers. F1 (auto-reset detection and null-safe JSON) and F2 (the smoke records its unit tests; the run refuses otherwise) are fixed; F3 is disclosed.
+  - Smoke `21507767` on the final bytes: SMOKE PASS (pytest 211, both episodes exit 0, no auto-reset).
+  - The run refuses unless a fresh smoke of the same bytes passed (sha256 of the code, the test file and the launcher).
+
+**Predeclared now (2026-10-02 05:04, before any bench, replay or route episode with the TurnBoth-s0 stage gait): Mission 7 plate bench (M2 of `docs/SOLUTIONS_2026-10-01.md` §3)** (`slurm/repo20260923/cpu_m7_plate_bench.sbatch`, `scripts/mission7_plate_bench.py`; stage `scripts/mission7_plate_stage.py --stage-gait turnboth`; code `a6c64e0`). The 106-episode Mission 7 line authorized 2026-10-01 covers 64 bench + 10 exact replay + 32 route gate. The older line (docs "101 of 512" vs this ledger's "≈ 53 over") stays unreconciled; the user set it aside.
+- **Labels:** LEARNED gaits (shipped arms-dr1.0-s0 outside the stage; TurnBoth-s0, one qualified checkpoint, during the stage), SCRIPTED stage, ORACLE layout and plate pose.
+- **PREDECLARED RULES (frozen; a chain, each step only after the previous PASSES):**
+  - Bench: PASS iff ≥ 62/64 crossings clear (base along ≥ +0.35 m past the plate centre along the door direction, within 10 s of takeover, by `mission7_gates`' clear definition), 0 falls (tilt ≥ 0.78), and ≥ 15/16 clears per heading. Otherwise FAIL; INCOMPLETE if any of the 64 is missing.
+  - Then the unchanged exact ten-fall replay once with `--stage-gait turnboth`, through the existing replay-gate machinery (complete, 10 episodes, 10 upright, 0 falls).
+  - Then the route gate as coded by M1: Doors and Transport each ≥ 16/16 successes on validation layouts 0–15 (32 episodes).
+  - M3 (turn while stepping with the shipped gait + a stall watchdog) is conditional on a bench FAIL and not implemented.
+- **Grid:** one crossing per TRAINING layout L = 0–31 and door d = 0/1, 16 cells × 4.
+  - Heading 0/+90/−90/180° for L mod 4.
+  - Round (correct) plate when ⌊L/4⌋ mod 2 = 0, square (wrong) plate when it is 1.
+  - Standstill entry when d XOR (⌊L/8⌋ mod 2) = 0, walking entry when it is 1.
+  - The bench layouts are disjoint from the replay (validation 0, 1, 4, 5, 7, 9, 12–15) and the route gate (validation 0–15).
+- **Declared stage constants:** turn in place at 0.40 rad/s, the largest yaw rate Mission 7's command interface admits (tanh × 0.4), until |error| < 0.15 rad (bound 15.7 s); cross straight at 0.30 m/s × max(0, cos error), heading hold clip(1.2 × error, ±0.40), no lateral command, until +0.35 m or 4.0 s; turn back to the takeover heading; swap the policy and zero prev_actions at takeover and at hand-back.
+- **Disclosed before the bench, accepted as declared (coordinator decision: no re-route, no re-tune):**
+  - F1: TurnBoth-s0 was qualified at ±0.6 rad/s; its turn at 0.40 rad/s was unmeasured when the protocol was declared. On exploration layouts in smoke, 2/3 turns timed out (15.7–15.8 s, 0.68–0.85 rad left) and 0/2 bench crossings cleared inside 10 s. A 180° entry needs 10.05 s at nominal tracking. The bench is therefore predicted to FAIL, which would trigger M3's conditional request.
+  - F2: in 17/64 crossings the bench's own run-up walks the shipped gait across the door's opposite plate before takeover. Falls in any phase count, so a run-up fall FAILS the bench. Reported per crossing, not gated.
+  - F3: a bench PASS does not cover TurnBoth-s0's capture-to-pre-point approach; the exact replay exercises that phase first. One route-integration smoke fell there.
+- **Guards:**
+  - `m2_bench_gate` refuses the replay release unless the bench verdict is a scored PASS and all 36 replay-snapshot sources still match the bench's sha256 provenance.
+  - The bench refuses a dirty tree or an existing output directory.
+  - The smoke enforces its own job name and a time limit of 1 h or less.
+- **Checks before submission:**
+  - Workflow `wf_01dca9fc-e9e`: an implementer and two adversarial reviewers; 7 minor findings, 5 fixed in code and 2 disclosed.
+  - Smoke `21507687` PASS, with the default path byte-identical to the pre-M2 stage.
+  - The release-script dry run passes preflight (TurnBoth-s0 policy sha256 562ceed7…5c95).
+- Submitted (code `71c26f6`): flush-pad smoke `21507880`, then the run `21507881` (afterok, `FLUSHPAD_SMOKE_JOB=21507880`).
+- **Flush-pad probe** `21507881`: COMPLETED in 1:49. **NEGATIVE by the predeclared rule.**
+  - 0/5 exploration seeds (120–124) kept the cube tilt ≤ 0.35 rad (maximum 0.742, 0.724, 0.704, 0.730 and 0.727 rad; every seed first exceeded 0.35 rad at t ≈ 5.84–5.88 s, when the lift begins). The rule needed ≥ 4/5.
+  - The scored stage did NOT run, as predeclared, so seeds 20–39 stay unused. BYTES-CHECK passed against smoke `21507880`.
+  - Recounted by the coordinator from the per-step tilt series in `results/coop-flushpad-20261002/probe/score_probe_crew2.json`.
+  - Reading, not part of the gate: with flush pads the UNCHANGED LIFT_HOLD_RULE passed on 5/5 probe seeds (lift 0.19–0.20 m, hold 14.3–14.4 s, robot tilt ≤ 0.18 rad, no floor contact), so the pads fix the grip but not the roll. The cube rolls with the hands as they rotate about the pinch axis during the lift keyframe (≈ 1 rad, as the kinematics predicted). A non-rolling grip needs a lift motion that holds the wrist orientation, not only flush pads.
+  - Labels: MODIFIED END-EFFECTOR (flush pads) + HARNESS CHANGE (elliptic cone, impratio 10); LEARNED gait + SCRIPTED arms + ORACLE cube pose. `results/coop-flushpad-20261002/{probe,scored}/verdict.json`.
+- Submitted (code `a6c64e0`, ledger `02f7054`): Mission 7 plate-bench smoke `21507961`, then the 64-crossing bench `21507962` (afterok). A bench PASS releases the exact replay and the route gate through `m2_bench_gate`.

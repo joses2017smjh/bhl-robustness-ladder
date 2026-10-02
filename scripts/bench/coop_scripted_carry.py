@@ -321,6 +321,206 @@ def score_lift_place(args) -> int:
     return 0
 
 
+# ------------------------------------------------------------------ flush-pad variant (C1, opt-in)
+#
+# `--flushpad-stage {probe,hold,place,smoke}` only (no flag = every path above, unchanged). A MODIFIED
+# END-EFFECTOR, not the stock robot: `scripted_carry.FlushPadParams` (flush hand pads, condim 4, torsional
+# friction 0.04 m) plus the HARNESS CHANGE (elliptic cone, impratio 10), and for lift_place the frozen
+# reverse-keyframe lowering (`FlushPadPlaceParams`). Labels: LEARNED gait (frozen arms-dr1.0-s0) + SCRIPTED arms +
+# ORACLE cube pose (scoring only). Seeds are fixed per stage: probe 120-124 (crew 2), hold 20-29 and place 30-39
+# (crews 2 and 4), smoke only on the declared tuning seeds 100-119. Score JSONs are never overwritten; the stage
+# verdict JSONs are written from them by `flushpad_verdict_cli` (slurm/repo20260923/cpu_coop_flushpad.sbatch).
+
+TASKS_FLUSHPAD = {"probe": "coop_flushpad_probe_v1", "hold": "coop_flushpad_lift_hold_v1",
+                  "place": "coop_flushpad_lift_place_v1", "smoke": "coop_flushpad_smoke_v1"}
+FLUSHPAD_STAGE_HELP = ("OPT-IN C1 flush-pad variant (MODIFIED END-EFFECTOR + harness change): probe (120-124), "
+                       "hold (20-29), place (30-39) or smoke (tuning seeds 100-119); no flag = stock paths")
+
+
+def flushpad_guard(args) -> tuple:
+    """(rule, protocol, seeds) of a --flushpad-stage run; SystemExit before anything is loaded or written."""
+    stage = args.flushpad_stage
+    if stage not in sc.FLUSHPAD_STAGES:
+        raise SystemExit(f"COOP-FLUSHPAD: REFUSED (unknown stage {stage!r})")
+    if getattr(args, "render_from", None):
+        raise SystemExit("COOP-FLUSHPAD: REFUSED (the flush-pad variant has no render mode)")
+    if args.out is None:
+        raise SystemExit("COOP-FLUSHPAD: REFUSED (--flushpad-stage needs --out)")
+    if args.out.exists():
+        raise SystemExit(f"COOP-FLUSHPAD: REFUSED ({args.out} exists; score JSONs are never overwritten)")
+    seeds = parse_seeds(args.seeds)
+    if stage == "smoke":
+        if not seeds or any(s not in sc.FLUSHPAD_SMOKE_SEEDS for s in seeds):
+            raise SystemExit("COOP-FLUSHPAD: REFUSED (smoke runs only on the declared tuning seeds 100-119; "
+                             "120-124 are the probe's and 20-39 the scored stage's)")
+        if args.protocol not in ("lift_hold", "lift_place"):
+            raise SystemExit("COOP-FLUSHPAD: REFUSED (smoke needs --protocol lift_hold or lift_place)")
+        if args.crew not in (2, 4):
+            raise SystemExit("COOP-FLUSHPAD: REFUSED (crew 2 or 4)")
+        return sc.flushpad_stage_rule("smoke", args.protocol, seeds), args.protocol, seeds
+    rule = sc.flushpad_stage_rule(stage)
+    if args.protocol != rule["protocol"]:
+        raise SystemExit(f"COOP-FLUSHPAD: REFUSED (stage {stage} is protocol {rule['protocol']})")
+    if seeds != list(rule["seeds"]) or args.seconds is not None:
+        raise SystemExit(f"COOP-FLUSHPAD: REFUSED (stage {stage} runs exactly seeds {rule['seeds'][0]}-"
+                         f"{rule['seeds'][-1]}, full-length episodes)")
+    if args.crew not in rule["crews"]:
+        raise SystemExit(f"COOP-FLUSHPAD: REFUSED (stage {stage} runs crew {rule['crews']})")
+    return rule, rule["protocol"], seeds
+
+
+def load_flushpad(args):
+    """`load` with `FlushPadParams` (the stock `load` is unchanged)."""
+    from omegaconf import OmegaConf
+    from team_airlock import CpuPolicy
+
+    cfg = OmegaConf.load(args.deploy)
+    if cfg.num_actions != 22 or cfg.num_joints != 22 or cfg.num_observations != 75:
+        raise SystemExit("requires the full 22-DoF, 75-observation humanoid locomotion policy")
+    policy = CpuPolicy(cfg.policy_checkpoint_path)
+    p = sc.FlushPadParams()
+    model, slots, pairs = sc.build_carry(args.upstream, args.cache_dir, args.crew // 2, p)
+    return cfg, policy, p, model, slots, pairs
+
+
+def provenance_flushpad(args, cfg, p, model, stage: str, rule: dict, protocol: str) -> dict:
+    out = provenance(args, cfg, p)
+    place = protocol == "lift_place"
+    q = sc.FlushPadPlaceParams()
+    out.update({
+        "task": TASKS_FLUSHPAD[stage], "variant": sc.FLUSHPAD_VARIANT, "stage": stage, "protocol": protocol,
+        "note": sc.LIFT_PLACE_NOTE if place else sc.LIFT_HOLD_NOTE,
+        "label": sc.FLUSHPAD_LABEL, "label_detail": sc.FLUSHPAD_LABEL_DETAIL,
+        "end_effector": sc.FLUSHPAD_NOTE, "harness_change": sc.FLUSHPAD_HARNESS_NOTE,
+        "learned": "22-DoF locomotion gait arms-dr1.0-s0 (legs + each robot's outer arm), frozen",
+        "scripted": ("each robot's grasping arm: joint keyframes reach/squeeze/lift (unchanged), "
+                     + ("hold, lower (reverse keyframe: lift -> squeeze), open, rest" if place else "then held")),
+        "oracle": "cube pose from the simulator, used only to score; every velocity command is zero",
+        "modelling_choices": [
+            "MODIFIED END-EFFECTOR: one box collision pad per hand = the hand-mesh AABB (stock size and centre), "
+            "re-oriented in the hand-link frame so its faces are parallel to the cube faces at the squeeze pose "
+            "(squeeze keyframe, shoulder roll stopped where the pad meets the cube face plane); see flush_pad_design",
+            f"pad contact condim {p.pad_condim}, friction [{p.pad_friction}, {p.pad_torsional_friction}, 0.0001] "
+            "(torsional 0.04 m)",
+            f"HARNESS CHANGE: cone {p.solver_cone}, impratio {p.solver_impratio} (global MuJoCo options; they also "
+            "change the foot-floor contact; robot-fall clauses unchanged)",
+            f"grasping-arm PD kp {p.grasp_kp} (deploy.yaml 10); kd and the 4 Nm arm effort cap unchanged",
+            "grasping arm spawned in the script's rest pose; arm keyframes and timeline unchanged",
+            "cube tilt (scoring only) = angle of the cube's z axis from world z at every policy-step state",
+            "numerical blow-ups: MuJoCo's automatic reset (qpos0, time 0, on a NaN or |x| > 1e10 in qpos/qvel/qacc) "
+            "is detected after every policy step (episode field sim_reset) and fails the episode (no_sim_reset); "
+            "a non-finite stop's NaNs are written as null (nonfinite_values_nulled) and it is scored as a failure",
+        ] + ([f"lowering target: {sc.describe_lower_target(sc.PlaceScript(p, q).lower_target)} (FROZEN "
+              "2026-10-02 before any probe or scored episode)"] if place else []),
+        "rule": rule, "rule_text": (sc.FLUSHPAD_PROBE_RULE_TEXT if stage == "probe" else sc.FLUSHPAD_SCORED_RULE_TEXT),
+        "clauses_as_applied": list(sc.FLUSHPAD_CLAUSES_AS_APPLIED),
+        "seed_evidence": list(sc.FLUSHPAD_SEED_EVIDENCE),
+        "base_rule": sc.LIFT_PLACE_RULE if place else sc.LIFT_HOLD_RULE,
+        "flush_pad_design": sc.flushpad_design(args.upstream, args.cache_dir, p),
+        "model_check": sc.flushpad_model_check(model),
+    })
+    if place:
+        out["place_params"] = sc.place_params_dict(q)
+    return out
+
+
+def score_flushpad(args) -> int:
+    """Score mode of the flush-pad variant. Never overwrites --out; refuses any seed outside its stage."""
+    rule, protocol, seeds = flushpad_guard(args)
+    if args.seconds is not None:
+        # smoke only (the guard refuses --seconds for probe/hold/place): a pipeline check, never scored
+        rule = dict(rule, episode_s=float(args.seconds))
+    cfg, policy, p, model, slots, pairs = load_flushpad(args)
+    payload = provenance_flushpad(args, cfg, p, model, args.flushpad_stage, rule, protocol)
+    if not sc.flushpad_model_ok(payload["model_check"], len(slots)):
+        raise SystemExit(f"COOP-FLUSHPAD: model check failed: {payload['model_check']}")
+    payload["scored_run"] = args.flushpad_stage != "smoke"
+    payload["episodes"] = []
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    dt = float(cfg.policy_dt)
+    for seed in seeds:
+        t0 = time.time()
+        ep = sc.run_flushpad_episode(model, slots, pairs, cfg, policy, seed, p, rule=rule)
+        ep["wall_s"] = round(time.time() - t0, 1)
+        payload["episodes"].append(ep)
+        for k, r in enumerate(ep["pairs"]):
+            fc = sc.flushpad_clauses(rule, ep, k, dt)
+            print(json.dumps({"variant": sc.FLUSHPAD_VARIANT, "stage": args.flushpad_stage, "protocol": protocol,
+                              "crew": args.crew, "seed": seed, "pair": r["pair"],
+                              "flushpad_success": fc["success"], "flushpad_first_failed": fc["first_failed_check"],
+                              "base_rule_success": r["success"], "base_first_failed": r["first_failed_check"],
+                              "cube_tilt_max_rad": max([v for v in r["cube_tilt_series_rad"] if v is not None],
+                                                       default=None),
+                              "lift_peak_m": r["lift_peak_m"], "lift_hold_s": r["lift_hold_s"],
+                              "max_robot_tilt_rad": r["max_tilt_rad"], "floor": r["cube_floor_contact"],
+                              "wall_s": ep["wall_s"]}), flush=True)
+        payload["summary"] = sc.flushpad_file_summary(payload)
+        args.out.write_text(json.dumps(payload, indent=1, allow_nan=False) + "\n")
+    # the line is computed from the JSON as written
+    print(sc.flushpad_verdict_line(sc.flushpad_file_summary(json.loads(args.out.read_text())))
+          + f" | json={args.out}", flush=True)
+    return 0
+
+
+def flushpad_verdict_cli(argv) -> int:
+    """Stage verdict of the flush-pad launcher, from score JSONs only (`python -c` entry of
+    cpu_coop_flushpad.sbatch): argv = [STAGE, VERDICT_JSON, KEY=PATH, ...] with STAGE
+      probe          KEY probe (the probe score JSON)                    -> PROCEED|NEGATIVE|INCOMPLETE|INVALID
+      scored         KEYS hold_crew2 hold_crew4 place_crew2 place_crew4  -> PASS|NEGATIVE|INCOMPLETE|INVALID
+      scored_not_run KEY probe_verdict (the probe verdict JSON)          -> NOT_RUN
+      smoke          KEY step_status (the launcher's step exit statuses, unit tests included) and any other
+                     KEYS (smoke score JSONs)                            -> SMOKE_PASS|SMOKE_FAIL
+    A missing or unreadable input reads as missing. Refuses to overwrite VERDICT_JSON. Returns 0 whatever the
+    verdict: the launcher reads the verdict from the JSON, never from this exit status."""
+    if len(argv) < 3:
+        raise SystemExit("usage: STAGE VERDICT_JSON KEY=PATH ...")
+    stage, out = argv[0], Path(argv[1])
+    if out.exists():
+        raise SystemExit(f"COOP-FLUSHPAD-VERDICT: REFUSED ({out} exists; verdicts are never overwritten)")
+    paths = {}
+    for kv in argv[2:]:
+        k, _, v = kv.partition("=")
+        if not k or not v:
+            raise SystemExit(f"COOP-FLUSHPAD-VERDICT: bad input {kv!r} (KEY=PATH)")
+        paths[k] = Path(v)
+
+    def read(path):
+        try:
+            return json.loads(Path(path).read_text())
+        except (OSError, ValueError):
+            return None
+
+    if stage == "probe":
+        v = sc.flushpad_probe_verdict(read(paths["probe"]) if "probe" in paths else None)
+    elif stage == "scored":
+        v = sc.flushpad_scored_verdict({k: read(paths[k]) if k in paths else None for k in sc.FLUSHPAD_SCORED_KEYS})
+    elif stage == "scored_not_run":
+        v = sc.flushpad_not_run_verdict(read(paths["probe_verdict"]) if "probe_verdict" in paths else None)
+    elif stage == "smoke":
+        status = read(paths["step_status"]) if "step_status" in paths else None
+        step_problems = sc.flushpad_smoke_step_problems(status)
+        unit_ok = isinstance(status, dict) and type(status.get("pytest")) is int and status["pytest"] == 0
+        checks = {k: sc.flushpad_smoke_check(read(path)) for k, path in paths.items() if k != "step_status"}
+        ok = bool(checks) and all(c["verdict"] == "SMOKE_PASS" for c in checks.values()) and not step_problems
+        v = {**sc._flushpad_head("smoke"), "verdict": "SMOKE_PASS" if ok else "SMOKE_FAIL",
+             "step_status": status, "unit_tests_passed": bool(unit_ok),
+             "episodes": [r for c in checks.values() for r in c["episodes"]],
+             "problems": [f"step_status: {p}" for p in step_problems]
+             + [f"{k}: {p}" for k, c in checks.items() for p in c["problems"]], "checks": checks,
+             "note": "pipeline check on a declared tuning seed; outcomes are diagnostics, never a verdict"}
+    else:
+        raise SystemExit(f"COOP-FLUSHPAD-VERDICT: unknown stage {stage!r}")
+    v["inputs"] = {k: {"path": str(path), "sha256": sha256(path)} for k, path in paths.items()}
+    v["code_sha256"] = {"scripted_carry.py": sha256(REPO / "src/bhl_robust/eval/scripted_carry.py"),
+                        "coop_scripted_carry.py": sha256(Path(__file__))}
+    v["git_head"] = git_head()
+    v["written_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(v, indent=1, allow_nan=False) + "\n")
+    print(sc.flushpad_verdict_line(v) + f" | verdict_json={out}", flush=True)
+    return 0
+
+
 # ------------------------------------------------------------------ render
 
 class Recorder:
@@ -831,7 +1031,10 @@ def main() -> int:
     ap.add_argument("--gif-speed", type=float, default=2.0)
     ap.add_argument("--gif-fps", type=int, default=8)
     ap.add_argument("--gif-width", type=int, default=860)
+    ap.add_argument("--flushpad-stage", choices=sc.FLUSHPAD_STAGES, default=None, help=FLUSHPAD_STAGE_HELP)
     args = ap.parse_args()
+    if args.flushpad_stage is not None:
+        return score_flushpad(args)
     if args.render_from:
         if not args.out_dir:
             ap.error("--render-from needs --out-dir")

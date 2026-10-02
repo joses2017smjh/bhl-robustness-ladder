@@ -7,10 +7,22 @@ straight crossing with yaw correction frozen. Correct-side staging is retained;
 wrong-side staging is allowed only when the correct plate is more than 1.0 m
 away. Geometry, activation schedule, fall predicate, and deterministic reset
 stream are unchanged.
+
+``--stage-gait turnboth`` (opt-in; M2 of docs/SOLUTIONS_2026-10-01.md) swaps
+the gait for the stage only: at the stage's start env.controller.policy becomes
+TurnBoth-s0's (arms-turn-turnboth-s0, the one qualified turning checkpoint; its
+deploy.yaml differs from the shipped gait's only in the policy path and the
+unused command_velocity, checked at load) and prev_actions is zeroed.  After the
+unchanged approach and settle the stage turns in place to the door direction,
+crosses straight forward (no lateral command) until the base is past the plate,
+turns back to the heading it had at takeover, and at hand-back restores the
+shipped policy and zeroes prev_actions again.  LEARNED gaits, SCRIPTED stage,
+ORACLE layout and plate pose.  The default ``shipped`` path is unchanged.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from collections import Counter
 from pathlib import Path
@@ -20,6 +32,71 @@ import numpy as np
 
 from bhl_robust.mission.approach_debug import DebugEnv, command_action, physical_sample, wrap
 from mission7_overnight import write
+
+
+# ---- --stage-gait turnboth (M2) ----------------------------------------------------------------
+# Declared 2026-10-02 before any bench, replay or route episode ran with it; nothing below is tuned
+# on a result.  The laws are TurnBoth-s0's scored maze controller (random_maze.TurnWalkController:
+# turn in place, then walk forward with a heading hold, never sideways), except the turn rate.
+STAGE_GAITS = ("shipped", "turnboth")
+SHIPPED_EXPORT = "logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported"   # = MissionEnv's gait
+TURNBOTH_EXPORT = "logs/rsl_rl/humanoid/2026-09-25_18-54-44_arms-turn-turnboth-s0/exported"
+TURNBOTH_POLICY_SHA256 = "562ceed71e04df2bc317edd352c9ebf59fb13fee5d0cc6708fa82aff33b55c95"
+TURNBOTH_FREE_DEPLOY_KEYS = ("policy_checkpoint_path", "command_velocity")   # the only keys allowed to differ
+# 0.40 rad/s is the largest yaw rate Mission 7's command interface admits (tanh x 0.4 in
+# MissionEnv.step); TurnWalkController's 0.6 cannot be commanded through it.  TurnBoth-s0 was
+# qualified at +-0.6 rad/s; its turn at 0.4 rad/s was unmeasured before this protocol was declared;
+# smoke showed 2/3 turns timing out (cpu_m7_plate_bench.sbatch header); nothing was changed in response.
+TURNBOTH_TURN_RATE = .40
+TURNBOTH_TURN_EXIT = .15          # rad, TurnWalkController.turn_exit
+TURNBOTH_TURN_MAX_S = 2 * np.pi / TURNBOTH_TURN_RATE   # a full revolution; no turn needs more than half
+TURNBOTH_CRUISE = .30             # m/s, TurnWalkController.cruise = the stage's crossing speed
+TURNBOTH_K_YAW = 1.2              # TurnWalkController.k_yaw: heading hold while crossing
+TURNBOTH_WZ_WALK = .40            # TurnWalkController.wz_walk
+TURNBOTH_CROSS_CLEAR_M = .35      # = mission7_gates.CLEAR_ALONG_M, used when --cross-clear is not given
+_TURNBOTH_CACHE = {}
+
+
+def turnboth_check(upstream, shipped_cfg=None):
+    """Verify the TurnBoth-s0 export before it is swapped in; return its provenance.
+
+    The policy file must have the pinned sha256, and its deploy.yaml must equal
+    the shipped gait's in every key but TURNBOTH_FREE_DEPLOY_KEYS, so swapping
+    env.controller.policy alone is functionally the same as running TurnBoth-s0's
+    own RlController (action scale, defaults, limits, gains, 75 observations,
+    history 0).
+    """
+    from omegaconf import OmegaConf
+    upstream = Path(upstream)
+    export = upstream / TURNBOTH_EXPORT
+    policy = export / "policy.onnx"
+    digest = hashlib.sha256(policy.read_bytes()).hexdigest()
+    if digest != TURNBOTH_POLICY_SHA256:
+        raise RuntimeError(f"TurnBoth-s0 policy {policy} has sha256 {digest}, expected {TURNBOTH_POLICY_SHA256}")
+    if shipped_cfg is None:
+        shipped_cfg = OmegaConf.load(upstream / SHIPPED_EXPORT / "deploy.yaml")
+    turnboth = OmegaConf.to_container(OmegaConf.load(export / "deploy.yaml"))
+    shipped = OmegaConf.to_container(shipped_cfg)
+    differing = sorted(key for key in set(turnboth) | set(shipped)
+                       if turnboth.get(key) != shipped.get(key))
+    unexpected = [key for key in differing if key not in TURNBOTH_FREE_DEPLOY_KEYS]
+    if unexpected:
+        raise RuntimeError(f"TurnBoth-s0 deploy.yaml differs from the shipped gait's in {unexpected}; "
+                           "a policy swap would not be equivalent")
+    if (turnboth["num_actions"], turnboth["num_observations"], turnboth["history_length"]) != (22, 75, 0):
+        raise RuntimeError("TurnBoth-s0 is not a 22-action, 75-observation, history-0 export")
+    return {"export": str(export), "policy": str(policy), "policy_sha256": digest,
+            "deploy_keys_differing": differing}
+
+
+def load_turnboth_policy(env):
+    """TurnBoth-s0 as a CPU ONNX policy for env's RlController, checked once per export."""
+    key = str(Path(env.upstream) / TURNBOTH_EXPORT)
+    if key not in _TURNBOTH_CACHE:
+        from bhl_robust.mission.env import CpuPolicy   # the class MissionEnv runs the shipped gait with
+        info = turnboth_check(env.upstream, env.cfg)
+        _TURNBOTH_CACHE[key] = (CpuPolicy(info["policy"]), info)
+    return _TURNBOTH_CACHE[key]
 
 
 def _source(campaign):
@@ -64,7 +141,7 @@ class PlateStage:
                  stage_lateral_m=None, wait_open_s=0., press_hold=False,
                  creep_mps=.15, creep_max_m=.45, pre_point_m=.30, cross_clear_m=None,
                  cross_max_s=4.0, cross_kick=False, align_yaw=False, align_tol_rad=.20,
-                 align_max_s=1.5):
+                 align_max_s=1.5, stage_gait="shipped", turnboth_policy=None):
         self.env = env
         self.approach_radius = float(approach_radius)
         self.settle_s = float(settle_s)
@@ -134,6 +211,83 @@ class PlateStage:
         self.phase_until = 0.
         self.done = set()
         self.history = []
+        # Opt-in stage gait (module header).  "shipped" leaves every line above and below as it was.
+        if stage_gait not in STAGE_GAITS:
+            raise ValueError(f"stage_gait must be one of {STAGE_GAITS}, got {stage_gait!r}")
+        self.stage_gait = stage_gait
+        if stage_gait == "turnboth":
+            if self.align_yaw or self.press_hold:
+                raise ValueError("--stage-gait turnboth turns in place itself; --align-yaw and --press-hold "
+                                 "do not compose with it")
+            if turnboth_policy is None:
+                turnboth_policy, self.turnboth_provenance = load_turnboth_policy(env)
+            else:
+                self.turnboth_provenance = {"policy": "supplied by the caller"}
+            self.turnboth_policy = turnboth_policy
+            self.turnboth_clear_m = (TURNBOTH_CROSS_CLEAR_M if self.cross_clear_m is None
+                                     else self.cross_clear_m)
+            self.shipped_policy = None
+            self.takeover_yaw = None
+            self.turn_start_s = None
+            self.gait_events = []
+
+    def _swap_gait(self, now, to):
+        """Swap env.controller.policy for the stage and zero prev_actions (turnboth only)."""
+        controller = self.env.controller
+        before = float(np.linalg.norm(controller.prev_actions))
+        if to == "turnboth":
+            self.shipped_policy = controller.policy
+            controller.policy = self.turnboth_policy
+        else:
+            controller.policy = self.shipped_policy
+            self.shipped_policy = None
+        controller.prev_actions[:] = 0.
+        self.gait_events.append({"time_s": float(now), "door": int(self.door), "event": f"swap_to_{to}",
+                                 "prev_actions_before_norm": before,
+                                 "prev_actions_after_norm": float(np.linalg.norm(controller.prev_actions))})
+
+    def _turnboth_command(self, recorded, now, xy, direction):
+        """turn -> cross -> turn_back -> hand-back, after the unchanged approach and settle."""
+        env = self.env
+        heading = float(np.arctan2(direction[1], direction[0]))
+        if self.phase == "turn":
+            err = wrap(heading - _yaw(env))
+            if abs(err) >= TURNBOTH_TURN_EXIT and now < self.turn_start_s + TURNBOTH_TURN_MAX_S:
+                return np.array([0., 0., float(np.copysign(TURNBOTH_TURN_RATE, err))]), self.phase
+            # Every crossing starts with a "cross" history entry: mission7_gates scores it from there.
+            self.phase = "cross"
+            self.cross_start_s = now
+            self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase,
+                                 "yaw_error_rad": float(err),
+                                 "turn_timed_out": bool(abs(err) >= TURNBOTH_TURN_EXIT)})
+            self._kick(now)
+        if self.phase == "cross":
+            err = wrap(heading - _yaw(env))
+            along = float((xy - _plate_state(env, self.door, self.side)[0]) @ direction)
+            if along < self.turnboth_clear_m and now < self.cross_start_s + self.cross_max_s:
+                # Straight forward with TurnWalkController's walk law: no lateral command.
+                return np.array([TURNBOTH_CRUISE * max(0., float(np.cos(err))), 0.,
+                                 float(np.clip(TURNBOTH_K_YAW * err, -TURNBOTH_WZ_WALK, TURNBOTH_WZ_WALK))]), self.phase
+            self.phase = "turn_back"
+            self.turn_start_s = now
+            self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase,
+                                 "along_m": along, "cleared": bool(along >= self.turnboth_clear_m)})
+        if self.phase == "turn_back":
+            err = wrap(self.takeover_yaw - _yaw(env))
+            if abs(err) >= TURNBOTH_TURN_EXIT and now < self.turn_start_s + TURNBOTH_TURN_MAX_S:
+                return np.array([0., 0., float(np.copysign(TURNBOTH_TURN_RATE, err))]), self.phase
+            # Hand-back: the shipped policy and a zeroed prev_actions, recorded before the
+            # "recorded" entry, which stays the last one (the route probe reads history[-1]["door"]).
+            self._swap_gait(now, "shipped")
+            self.done.add(self.door)
+            self.history.append({"time_s": now, "door": int(self.door), "side": int(self.side),
+                                 "phase": "recorded", "yaw_error_rad": float(err),
+                                 "turn_back_timed_out": bool(abs(err) >= TURNBOTH_TURN_EXIT)})
+            self.door = None
+            self.side = None
+            self.phase = "recorded"
+            return np.asarray(recorded, dtype=float), "recorded"
+        raise AssertionError(self.phase)
 
     def _with_yaw(self, env, command, direction):
         """Moving yaw correction toward the door direction (the frozen gait does
@@ -165,6 +319,10 @@ class PlateStage:
         self.phase_until = float(now)
         self.history.append({"time_s": float(now), "door": int(door),
                              "side": int(side), "phase": self.phase})
+        if self.stage_gait == "turnboth":
+            self.takeover_yaw = _yaw(self.env)
+            self._swap_gait(now, "turnboth")
+            self.gait_events[-1]["takeover_yaw_rad"] = self.takeover_yaw
 
     def command(self, recorded):
         env, runner, slot = self.env, self.env.runner, self.env.slot
@@ -231,11 +389,19 @@ class PlateStage:
                 if now < self.wait_open_until:
                     return np.zeros(3), self.phase
             self.wait_open_until = None
+            if self.stage_gait == "turnboth":
+                self.phase = "turn"
+                self.turn_start_s = now
+                self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase,
+                                     "yaw_error_rad": wrap(float(np.arctan2(direction[1], direction[0])) - _yaw(env))})
+                return self._turnboth_command(recorded, now, xy, direction)
             self.phase = "cross"
             self.phase_until = now + self.cross_s
             self.cross_start_s = now
             self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase})
             self._kick(now)
+        if self.stage_gait == "turnboth" and self.phase in ("turn", "cross", "turn_back"):
+            return self._turnboth_command(recorded, now, xy, direction)
         if self.phase == "creep":
             travelled = float(np.linalg.norm(xy - self.creep_origin))
             if env.state.open[self.door] or travelled >= self.creep_max_m:
@@ -275,11 +441,12 @@ class PlateStage:
 
 
 def _episode(env, index, source_episode, baseline, stage_lateral_m=None, wait_open_s=0., press_hold=False,
-             pre_point_m=.30, cross_clear_m=None, settle_s=.40, cross_kick=False, align_yaw=False):
+             pre_point_m=.30, cross_clear_m=None, settle_s=.40, cross_kick=False, align_yaw=False,
+             stage_gait="shipped"):
     runner = env.runner
     stage = PlateStage(env, stage_lateral_m=stage_lateral_m, wait_open_s=wait_open_s, press_hold=press_hold,
                        pre_point_m=pre_point_m, cross_clear_m=cross_clear_m, settle_s=settle_s, cross_kick=cross_kick,
-                       align_yaw=align_yaw)
+                       align_yaw=align_yaw, stage_gait=stage_gait)
     samples = []
     maximum_recorded_pose_difference = 0.
     for reference in source_episode["diagnostic_trace"]:
@@ -308,7 +475,7 @@ def _episode(env, index, source_episode, baseline, stage_lateral_m=None, wait_op
     falls = [sample for sample in samples if sample["tilt"] >= .78]
     contacts = [event for sample in samples for event in sample["contact_events"]
                 if event["world_geom"].startswith("plate_")]
-    return {
+    row = {
         "layout_index": index,
         "layout_seed": source_episode["layout"]["seed"],
         "original_elapsed_s": source_episode["elapsed_s"],
@@ -324,8 +491,12 @@ def _episode(env, index, source_episode, baseline, stage_lateral_m=None, wait_op
         "stage_history": stage.history,
         "baseline": {key: baseline.get(key) for key in ("fall_time_s", "fall_phase", "minimum_clearances_m",
                                                          "failure_stage_relative_to_plate")},
-        "samples": samples,
     }
+    if stage_gait != "shipped":   # the default row keeps its keys and their order
+        row["stage_gait"] = stage_gait
+        row["gait_events"] = stage.gait_events
+    row["samples"] = samples
+    return row
 
 
 def run(args, out):
@@ -356,7 +527,8 @@ def run(args, out):
                              cross_clear_m=getattr(args, 'cross_clear', None),
                              settle_s=getattr(args, 'settle_s', .40),
                              cross_kick=getattr(args, 'cross_kick', False),
-                             align_yaw=getattr(args, 'align_yaw', False)))
+                             align_yaw=getattr(args, 'align_yaw', False),
+                             stage_gait=getattr(args, 'stage_gait', 'shipped')))
         write(out / "episodes.json", {"complete": False, "episodes": rows})
     report = {
         "complete": True,
@@ -372,8 +544,25 @@ def run(args, out):
         "exact_replay_gate_passed": len(rows) == 10 and sum(not row["fall"] for row in rows) == 10,
         "episode_comparison": [{key: value for key, value in row.items() if key != "samples"} for row in rows],
     }
+    if getattr(args, 'stage_gait', 'shipped') != "shipped":   # the default report is unchanged
+        report["intervention"] = turnboth_description()
+        report["stage_gait"] = args.stage_gait
+        report["stage_gait_provenance"] = load_turnboth_policy(env)[1]
     write(out / "episodes.json", {"complete": True, "episodes": rows})
     write(out / "result.json", report)
+
+
+def turnboth_description():
+    return ("staged plate maneuver with the TurnBoth-s0 stage gait (LEARNED gaits, SCRIPTED stage, ORACLE layout "
+            "and plate pose): at takeover env.controller.policy := TurnBoth-s0 and prev_actions := 0; pre-plate "
+            "approach and settle unchanged; turn in place to the door direction at "
+            f"{TURNBOTH_TURN_RATE:.2f} rad/s until within {TURNBOTH_TURN_EXIT:.2f} rad (bounded "
+            f"{TURNBOTH_TURN_MAX_S:.2f} s); straight-forward crossing at {TURNBOTH_CRUISE:.2f} m/s x max(0, cos "
+            f"heading error) with heading hold clip({TURNBOTH_K_YAW:.1f} x error, +-{TURNBOTH_WZ_WALK:.2f}) and no "
+            "lateral command, until the base is --cross-clear (default "
+            f"{TURNBOTH_CROSS_CLEAR_M:.2f} m) past the plate centre or cross_max_s pass; turn back to the takeover "
+            "heading the same way; at hand-back the shipped policy and prev_actions := 0; wrong-side staging only "
+            "when the correct plate is over 1.0 m away")
 
 
 if __name__ == "__main__":
@@ -398,19 +587,28 @@ if __name__ == "__main__":
     parser.add_argument("--cross-kick", action="store_true", help="zero prev_actions once at the start of the crossing")
     parser.add_argument("--align-yaw", action="store_true", help="turn in place toward the door direction during the settle")
     parser.add_argument("--only", default="", help="comma-separated layout indices to replay (local checks); default all ten")
+    parser.add_argument("--stage-gait", choices=STAGE_GAITS, default="shipped",
+                        help="gait the stage runs on: shipped (default, the exact replay behaviour) or turnboth "
+                             "(TurnBoth-s0 swapped in for the stage: turn in place, straight crossing, turn back)")
     parser.add_argument("--preflight", action="store_true")
     args = parser.parse_args()
+    if args.stage_gait == "turnboth" and (args.align_yaw or args.press_hold):
+        parser.error("--stage-gait turnboth does not compose with --align-yaw or --press-hold")
     args.repo = args.repo.resolve()
     args.campaign = args.campaign.resolve()
     args.baseline = args.baseline.resolve()
     args.out = args.out.resolve()
     if args.preflight:
         import sys
-        print(json.dumps({"status": "PREFLIGHT_OK", "python": sys.executable, "mujoco": mujoco.__version__,
-                          "stage_lateral_m": args.stage_lateral, "wait_open_s": args.wait_open,
-                          "pre_point_m": args.pre_point, "cross_clear_m": args.cross_clear,
-                          "settle_s": args.settle_s, "cross_kick": args.cross_kick, "align_yaw": args.align_yaw, "campaign": str(args.campaign),
-                          "baseline": str(args.baseline), "out": str(args.out)}, sort_keys=True), flush=True)
+        preflight = {"status": "PREFLIGHT_OK", "python": sys.executable, "mujoco": mujoco.__version__,
+                     "stage_lateral_m": args.stage_lateral, "wait_open_s": args.wait_open,
+                     "pre_point_m": args.pre_point, "cross_clear_m": args.cross_clear,
+                     "settle_s": args.settle_s, "cross_kick": args.cross_kick, "align_yaw": args.align_yaw, "campaign": str(args.campaign),
+                     "baseline": str(args.baseline), "out": str(args.out)}
+        if args.stage_gait != "shipped":   # the default preflight line is unchanged
+            preflight["stage_gait"] = args.stage_gait
+            preflight["stage_gait_check"] = turnboth_check(args.repo / "external/Berkeley-Humanoid-Lite")
+        print(json.dumps(preflight, sort_keys=True), flush=True)
         raise SystemExit(0)
     args.out.mkdir(parents=True, exist_ok=True)
     run(args, args.out)

@@ -299,11 +299,16 @@ def build_carry(upstream: Path, cache_dir: Path, n_pairs: int, p: CarryParams):
 
     centres = pair_centres(n_pairs, p.pair_pitch)
     pads = hand_pad_frames(robot_xml) if p.hand_pads else None
+    flush = is_flushpad(p)        # opt-in C1 flush-pad variant (FlushPadParams); False for a stock CarryParams
+    if flush:
+        pads = flush_pad_frames(robot_xml, p)["frames"]
     for i, c in enumerate(centres):
         for j, sx in enumerate((-1.0, +1.0)):          # b then a
             child = mujoco.MjSpec.from_file(str(robot_xml))
             if pads:
                 add_hand_pads(child, pads, p.pad_friction)
+                if flush:
+                    set_flushpad_contact(child, pads, p)
             frame = spec.worldbody.add_frame()
             frame.pos = [c + sx * p.side_off, 0.0, 0.0]
             frame.quat = _yaw_quat(np.pi / 2)            # facing +y
@@ -330,6 +335,8 @@ def build_carry(upstream: Path, cache_dir: Path, n_pairs: int, p: CarryParams):
         cg.friction = [CUBE_FRICTION, 0.005, 0.0001]
         cg.rgba = PAYLOAD_RGBA
 
+    if flush:
+        set_flushpad_harness_options(spec, p)
     model = spec.compile()
 
     def sid(name):
@@ -1344,3 +1351,911 @@ def lift_place_verdict_line(payload: dict, crew=None) -> str:
         for p in s["per_pair"] if p["episodes"])
     return (f"COOP-LIFT-PLACE crew {crew}: {verdict} | {pp or 'no scored episodes'} | "
             f"median_seed_by_hold={median} | {LIFT_PLACE_NOTE} | {label}")
+
+
+# ------------------------------------------------------------------ flush-pad wrist variant (C1, opt-in)
+#
+# OPT-IN, 2026-10-02: C1 of docs/SOLUTIONS_2026-10-01.md (section 4); launcher
+# slurm/repo20260923/cpu_coop_flushpad.sbatch. A MODIFIED END-EFFECTOR, not the stock robot. Nothing in this
+# section runs unless the caller passes a `FlushPadParams`: `build_carry` branches only on
+# `pad_geometry == "flush"`, a field a stock `CarryParams` does not have, so the stock model, scripts, rules and
+# outputs are unchanged (tests/test_coop_flushpad.py: the stock model is byte-identical to commit 094797e's, a short
+# stock episode is identical step for step, and this file's diff to 094797e is insertions only).
+#
+# * Pad geometry (`flush_pad_frames`; kinematics only: no episode, no seed, no tuned number). The stock pad box
+#   (hand-mesh AABB half-sizes and centre in the hand-link frame, both unchanged) is re-oriented about its centre in
+#   the hand-link frame so that at the SQUEEZE POSE its faces are parallel to the cube's faces. The squeeze pose is
+#   the squeeze keyframe (0, 0.9, 0, 0.5, 0) with the shoulder roll stopped where the pad's outer face reaches the
+#   cube face plane (side_off - CUBE_HALF = 0.30 m from the base's sagittal plane; base upright, as spawned): the
+#   cube stops the squeeze short of its keyframe, so this is the pose in which the pad presses on the cube. The
+#   target attitude is the cube-aligned attitude nearest to the stock pad's at the stock pad's own contact roll (the
+#   proper signed axis permutation with the smallest rotation), so the pad keeps its stock contact face. Left and
+#   right are computed independently by the same rule; both hands of every robot get the flush pad.
+# * Pad contact: condim 4 (sliding + torsional friction), torsional friction 0.04 m; sliding (pad 1.0, the cube's
+#   1.2 wins) and rolling terms unchanged.
+# * HARNESS CHANGE: elliptic friction cone and impratio 10. These are global MuJoCo options, so they also change
+#   the foot-floor contact of the frozen gait; the robot-fall clauses are kept unchanged.
+# * Placement lowering (lift_place): the reverse keyframe, `PlaceParams.lower_to = None` (lift -> squeeze), FROZEN
+#   2026-10-02 before any probe or scored episode of this variant (`FlushPadPlaceParams`).
+# * Unchanged: arm keyframes, timeline, grasping-arm kp 30, 4 Nm arm cap, cube, plinth, layout, the gait.
+# * Cube tilt (ORACLE, scoring only): `CarryRunner.cube_tilt`, the angle between the cube's body z axis and world
+#   z (the measure behind the "held rolled 0.63-0.93 rad" finding), at every policy-step state (`CubeTiltRecorder`).
+# * Numerical blow-ups (review fix 2026-10-02, before any probe or scored episode): MuJoCo resets the simulation by
+#   itself (qpos0, time 0) when qpos, qvel or qacc holds a NaN or a value beyond mjMAXVAL = 1e10, and keeps stepping,
+#   so the stock non-finite check almost never fires and a blow-up would put the cube back flat on its plinth.
+#   `CubeTiltRecorder` detects that reset after every policy step (`sim_reset_signal`) and the episode records it
+#   (`sim_reset`); a detected reset fails the episode (check `no_sim_reset`). A non-finite stop's NaNs are written as
+#   null (`_json_safe`), so the score JSON holds the episode and it is scored as the failure it is.
+
+FLUSHPAD_VARIANT = "flushpad_v1"
+FLUSHPAD_TILT_MAX_RAD = 0.35
+#: The declared tuning/exploration seeds of this harness (module docstring and lift-place notes): the only seeds a
+#: flush-pad smoke may run. 120-124 belong to the probe and 20-39 to the scored stage.
+FLUSHPAD_SMOKE_SEEDS = tuple(range(100, 120))
+
+FLUSHPAD_NOTE = "MODIFIED END-EFFECTOR (flush hand pads) — not the stock robot"
+FLUSHPAD_HARNESS_NOTE = ("HARNESS CHANGE: elliptic friction cone + impratio 10 are global MuJoCo options and also "
+                         "change the foot-floor contact of the frozen gait; the robot-fall clauses are kept unchanged")
+FLUSHPAD_LABEL = ("LEARNED gait (frozen arms-dr1.0-s0) + SCRIPTED arms + ORACLE cube pose (scoring only) | "
+                  + FLUSHPAD_NOTE)
+FLUSHPAD_LABEL_DETAIL = (
+    "legs + outer arm: frozen learned PPO gait arms-dr1.0-s0, unmodified observation, zero velocity command all "
+    "episode | grasping arm (one per robot): scripted joint keyframes (unchanged), PD kp 30 (deploy 10), 4 Nm cap | "
+    "cube pose: simulator oracle, scoring only | contact: MuJoCo, no welds | MODIFIED END-EFFECTOR: hand pad = "
+    "hand-mesh AABB box re-oriented flush to the cube faces at the squeeze pose, condim 4, torsional friction "
+    "0.04 m | HARNESS CHANGE: elliptic friction cone, impratio 10 (global; also foot-floor contact)")
+
+#: The C1 PREDECLARED RULES, verbatim (FROZEN 2026-10-02; the launcher header repeats them word for word).
+FLUSHPAD_PROBE_RULE_TEXT = (
+    "Probe on exploration seeds 120-124 (state the grep evidence that they were never used). PROCEED iff the cube "
+    "tilt stays <= 0.35 rad throughout lift-hold on >= 4/5 seeds, with LIFT_HOLD_RULE's robot-fall clauses "
+    "unchanged. Otherwise STOP: NEGATIVE, the flush pad does not stop the roll.")
+FLUSHPAD_SCORED_RULE_TEXT = (
+    "Scored, only after PROCEED (state the evidence that seeds 20-39 were never used): lift-hold on seeds 20-29 and "
+    "lift-place on seeds 30-39, each with its UNCHANGED rule (LIFT_HOLD_RULE / LIFT_PLACE_RULE, pass_min 8) PLUS "
+    "cube tilt <= 0.35 rad (hold: throughout the hold; place: at release and when seated), >= 8/10 per crew or pair "
+    "as the existing rules define them. PASS iff every crew/pair meets it; otherwise NEGATIVE; INCOMPLETE if any "
+    "episode is missing.")
+
+#: How the frozen rules are applied (decided 2026-10-02, before any episode of this variant). Each reading is
+#: stricter than or equal to the rule text; none is chosen from results.
+FLUSHPAD_CLAUSES_AS_APPLIED = (
+    "cube tilt = the angle between the cube's own z axis and world z (CarryRunner.cube_tilt; a cube rolled 90 deg "
+    "reads 1.571 rad), logged at every policy-step state (t = i * 0.04 s, i = 0..500) in full float precision; "
+    "<= 0.35 rad passes, anything larger or non-finite fails",
+    "probe 'throughout lift-hold' = every policy-step state of the 20 s lift_hold episode, t = 0 to 20 s inclusive "
+    "(stricter than the hold alone). A probe seed passes iff that tilt clause, LIFT_HOLD_RULE's robot-fall clause "
+    "unchanged (no robot of the pair tilts > 0.78 rad at any policy step) and the validity clauses (finite state, "
+    "no MuJoCo auto-reset, full 20 s) all hold; crew 2 (one pair), seeds 120-124, PROCEED iff >= 4 of 5",
+    "probe disclosure: the rule text names only the robot-fall clauses of LIFT_HOLD_RULE, so its lift, hold and "
+    "floor clauses are not gated in the probe (they are reported per seed as diagnostics). A probe episode that "
+    "never lifts the cube therefore passes the probe's tilt clause; the scored stage keeps every LIFT_HOLD_RULE "
+    "clause",
+    "hold 'throughout the hold' = every policy-step state of the hold LIFT_HOLD_RULE scores (its longest contiguous "
+    ">= 0.05 m run, hold_start_s inclusive to hold_end_s exclusive); no hold = the clause fails",
+    "place 'at release' = every policy-step state from the first at or after the end of the lowering "
+    "(PlaceScript t_end['unload'] = 10.7 s: state 268, t = 10.72 s) through the first at or after the hands are "
+    "fully open (t_end['release'] = 11.7 s: state 293, t = 11.72 s), inclusive; 'when seated' = the final state "
+    "(t = 20 s), where LIFT_PLACE_RULE checks the seated cube",
+    "crews as the existing rules and launchers define them: crew 2 (one pair) and crew 4 (two pairs, two cubes, one "
+    "world), >= 8/10 per pair; PASS iff all six pairs (lift-hold crew 2, crew 4 pair 0, crew 4 pair 1; lift-place "
+    "the same) meet it",
+    "an episode stopped by a non-finite state is a scored failure (as cpu_coop_lift_place.sbatch reads it); its "
+    "non-finite numbers are written as null so the score JSON holds it. A numerical blow-up that MuJoCo catches "
+    "itself is a scored failure too, in every stage (check no_sim_reset): MuJoCo 3.3.5 resets the state "
+    "automatically (qpos0, time 0) when qpos, qvel or qacc holds a NaN or a value beyond 1e10, so the harness's own "
+    "non-finite check never sees it; it is detected after every policy step from the simulated time (not "
+    "steps x policy step) and MuJoCo's bad-qpos/qvel/qacc warning counters. An episode that is absent, shorter "
+    "than 20 s without a recorded failure, or has no tilt log or no auto-reset record is MISSING (INCOMPLETE)",
+    "INVALID (never PROCEED, never PASS): a score JSON that is not this variant's or its stage's, not under the "
+    "frozen rule, parameters, keyframes or lowering, not a scored run, or whose compiled model does not show the "
+    "designed flush pads with condim 4, torsional friction 0.04 m, elliptic cone and impratio 10",
+)
+
+#: Seed-use evidence (grep of results, Slurm logs, the ledger and the investigators' files, 2026-10-02), recorded in
+#: every flush-pad verdict JSON.
+FLUSHPAD_SEED_EVIDENCE = (
+    "results/scripted-carry-20260926/score_crew2.json, score_crew4.json, score_lifthold_crew2.json and "
+    "score_lifthold_crew4.json hold seeds 0-9 only; results/scripted-carry-20260927/score_liftplace_crew2.json and "
+    "score_liftplace_crew4.json hold seeds 10-19 only",
+    "Slurm logs of this harness: scripted-carry-21434982 and coop-lift-hold-21435079 ran seeds 0-9, "
+    "coop-lift-place-21443282 seeds 10-19; the render jobs 21435080 and 21443283 skipped (no PASS)",
+    "exploration: this module's docstring and lift-place notes name seeds 100-119 only (100-102, 100-109, 110-114, "
+    "100-104 and the slip times on 100-119); the 2026-09-30 investigators' grip and place mechanism JSONs "
+    "(solutions-20260930/coop and verify-coop) hold seeds 100-104 only",
+    "the ledger (SLURM_JOBS.md) names seeds 0-9 (carry, lift_hold), 10-19 (lift_place) and exploration seeds "
+    ">= 100 for this harness; no score JSON, Slurm log, ledger entry or investigator file of this harness "
+    "contains seed 120-124 or any seed 20-39",
+)
+
+#: Probe (stage 1): crew 2, lift_hold protocol (20 s), seeds 120-124 (see FLUSHPAD_CLAUSES_AS_APPLIED).
+FLUSHPAD_PROBE_RULE = {
+    **LIFT_HOLD_RULE,
+    "variant": FLUSHPAD_VARIANT, "stage": "probe", "clauses": "probe",
+    "cube_tilt_max_rad": FLUSHPAD_TILT_MAX_RAD,
+    "cube_tilt_window": "every policy-step state of the 20 s lift-hold episode, t = 0 to 20 s inclusive",
+    "gated_checks": ["cube_tilt", "no_fall", "finite", "no_sim_reset", "full_episode"],
+    "seeds": [120, 121, 122, 123, 124],
+    "crews": [2],
+    "pass_min": 4,
+}
+#: Scored lift-hold (stage 2): LIFT_HOLD_RULE unchanged (every clause, pass_min 8) on seeds 20-29, crews 2 and 4
+#: (crew 4: each pair), PLUS cube tilt <= 0.35 rad at every policy-step state of the scored hold.
+FLUSHPAD_HOLD_RULE = {
+    **LIFT_HOLD_RULE,
+    "variant": FLUSHPAD_VARIANT, "stage": "hold", "clauses": "hold",
+    "cube_tilt_max_rad": FLUSHPAD_TILT_MAX_RAD,
+    "cube_tilt_window": ("every policy-step state of the hold that LIFT_HOLD_RULE scores (the longest contiguous "
+                         ">= 0.05 m run, hold_start_s inclusive to hold_end_s exclusive); no hold = clause fails"),
+    "seeds": list(range(20, 30)),
+    "crews": [2, 4],
+}
+#: Scored lift-place (stage 2): LIFT_PLACE_RULE unchanged (every clause, pass_min 8) on seeds 30-39, crews 2 and 4,
+#: with the frozen reverse-keyframe lowering, PLUS cube tilt <= 0.35 rad at release and when seated.
+FLUSHPAD_PLACE_RULE = {
+    **LIFT_PLACE_RULE,
+    "variant": FLUSHPAD_VARIANT, "stage": "place", "clauses": "place",
+    "cube_tilt_max_rad": FLUSHPAD_TILT_MAX_RAD,
+    "cube_tilt_window": ("at release: every policy-step state from the first at or after the end of the lowering "
+                         "(PlaceScript t_end['unload']) through the first at or after the hands are fully open "
+                         "(t_end['release']), inclusive; when seated: the final state, where LIFT_PLACE_RULE checks "
+                         "the seated cube"),
+    "seeds": list(range(30, 40)),
+    "crews": [2, 4],
+}
+FLUSHPAD_STAGES = ("probe", "hold", "place", "smoke")
+
+
+@dataclass
+class FlushPadParams(CarryParams):
+    """OPT-IN C1 flush-pad wrist variant: `CarryParams` (every stock field and default unchanged) plus the
+    MODIFIED END-EFFECTOR and the HARNESS CHANGE. Frozen 2026-10-02, before any episode of this variant."""
+    pad_geometry: str = "flush"             # hand-mesh AABB box re-oriented flush at the squeeze pose
+    pad_condim: int = 4                     # sliding + torsional friction
+    pad_torsional_friction: float = 0.04    # m
+    solver_cone: str = "elliptic"           # HARNESS CHANGE (global option; also foot-floor contact)
+    solver_impratio: float = 10.0           # HARNESS CHANGE (global option)
+
+
+@dataclass
+class FlushPadPlaceParams(PlaceParams):
+    """`PlaceParams` with the lowering FROZEN 2026-10-02 for the flush-pad variant: the reverse keyframe
+    (lift -> squeeze); every other field keeps the stock default."""
+    lower_to: tuple | None = None
+
+
+def is_flushpad(p) -> bool:
+    """True only for the opt-in flush-pad variant (a stock `CarryParams` has no `pad_geometry`)."""
+    return getattr(p, "pad_geometry", None) == "flush"
+
+
+def proper_signed_permutations() -> list:
+    """The 24 rotations that map each coordinate axis onto a +/- coordinate axis (the cube's symmetries)."""
+    import itertools
+    out = []
+    for perm in itertools.permutations(range(3)):
+        for signs in itertools.product((-1.0, 1.0), repeat=3):
+            P = np.zeros((3, 3))
+            for col, (row, s) in enumerate(zip(perm, signs)):
+                P[row, col] = s
+            if np.linalg.det(P) > 0:
+                out.append(P)
+    return out
+
+
+def nearest_axis_rotation(R) -> np.ndarray:
+    """The axis-aligned attitude closest to rotation matrix `R` (max trace(P^T R) = smallest rotation angle)."""
+    R = np.asarray(R, dtype=float)
+    return max(proper_signed_permutations(), key=lambda P: float(np.trace(P.T @ R)))
+
+
+def rotation_angle_deg(Ra, Rb) -> float:
+    """Angle (deg) of the rotation taking attitude Ra to attitude Rb."""
+    c = (float(np.trace(np.asarray(Ra, dtype=float).T @ np.asarray(Rb, dtype=float))) - 1.0) / 2.0
+    return float(np.degrees(np.arccos(np.clip(c, -1.0, 1.0))))
+
+
+def _bisect_increasing(f, lo: float, hi: float, n: int = 80) -> float:
+    flo, fhi = f(lo), f(hi)
+    if not (flo < 0.0 < fhi):
+        raise RuntimeError(f"no sign change on [{lo}, {hi}]: f = {flo:.4f}, {fhi:.4f}")
+    for _ in range(n):
+        mid = 0.5 * (lo + hi)
+        if f(mid) < 0.0:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
+class PadFK:
+    """Arm forward kinematics of one robot with the given hand-pad frames: free base at the origin, upright, every
+    joint at 0 except the arm being posed. Robot frame: x forward, y left, origin at the base body. The arms hang
+    off the base body, so the pad's pose relative to the base does not depend on the legs: the flush design needs
+    neither deploy.yaml nor the stance height."""
+
+    def __init__(self, robot_xml: Path, frames: dict):
+        spec = mujoco.MjSpec.from_file(str(robot_xml))
+        add_hand_pads(spec, frames, 1.0)
+        self.m = spec.compile()
+        self.d = mujoco.MjData(self.m)
+        self.d.qpos[:] = 0.0
+        for j in range(self.m.njnt):
+            if self.m.jnt_type[j] == mujoco.mjtJoint.mjJNT_FREE:
+                self.d.qpos[self.m.jnt_qposadr[j] + 3] = 1.0
+        self.geom = {s: mujoco.mj_name2id(self.m, mujoco.mjtObj.mjOBJ_GEOM, f"arm_{s}_hand_pad")
+                     for s in ("left", "right")}
+        self.body = {s: mujoco.mj_name2id(self.m, mujoco.mjtObj.mjOBJ_BODY, f"arm_{s}_hand_link")
+                     for s in ("left", "right")}
+
+    def pose(self, side: str, q):
+        """(pad centre, pad rotation, hand-link body rotation, pad half-sizes) with that arm at joints `q`."""
+        names = ARM_JOINTS_L if side == "left" else ARM_JOINTS_R
+        adr = [self.m.jnt_qposadr[mujoco.mj_name2id(self.m, mujoco.mjtObj.mjOBJ_JOINT, n)] for n in names]
+        self.d.qpos[adr] = np.asarray(q, dtype=float)
+        mujoco.mj_kinematics(self.m, self.d)
+        g, b = self.geom[side], self.body[side]
+        return (self.d.geom_xpos[g].copy(), self.d.geom_xmat[g].reshape(3, 3).copy(),
+                self.d.xmat[b].reshape(3, 3).copy(), self.m.geom_size[g].copy())
+
+    def lateral_extent(self, side: str, q) -> float:
+        """Outermost reach of the pad box toward its own side (m)."""
+        c, R, _, h = self.pose(side, q)
+        sgn = 1.0 if side == "left" else -1.0
+        return float(max(sgn * (c + R @ (h * np.array([sx, sy, sz])))[1]
+                         for sx in (-1, 1) for sy in (-1, 1) for sz in (-1, 1)))
+
+
+def flushpad_squeeze_pose(side: str, roll: float, keyframes: dict = KEYFRAMES_LEFT) -> np.ndarray:
+    """That arm's joints at the squeeze keyframe with the shoulder roll set to `roll` (left order; right = -q)."""
+    q = np.asarray(keyframes["squeeze"], dtype=float).copy()
+    q[1] = roll
+    return q if side == "left" else -q
+
+
+def flush_pad_frames(robot_xml: Path, p: CarryParams, keyframes: dict = KEYFRAMES_LEFT) -> dict:
+    """The flush-pad frames (hand-link frame; same keys as `hand_pad_frames`) and their design record.
+
+    Per side: (1) the stock pad's contact roll r0 (its outermost corner reaches the cube face plane, squeeze
+    keyframe otherwise); (2) P = the cube-aligned attitude nearest to the stock pad's at r0; the pad axis P maps
+    onto the pinch axis (+/- y) is the contact axis, half-size h; (3) the flush contact roll r* solves
+    pad-centre lateral offset + h = side_off - CUBE_HALF; (4) the pad's hand-link rotation becomes
+    R_hand(r*)^T P, so at the squeeze pose (squeeze keyframe, roll r*) the pad's attitude is exactly P."""
+    if not p.hand_pads:
+        raise ValueError("the flush-pad variant needs hand_pads=True")
+    stock = hand_pad_frames(robot_xml)
+    fk = PadFK(robot_xml, stock)
+    face = float(p.side_off - CUBE_HALF)
+    frames, design = {}, {}
+    for side in ("left", "right"):
+        sgn = 1.0 if side == "left" else -1.0
+        half = np.asarray(stock[side]["size"], dtype=float)
+        r0 = _bisect_increasing(lambda r: fk.lateral_extent(side, flushpad_squeeze_pose(side, r, keyframes)) - face,
+                                -0.6, 1.2)
+        _, R0, _, _ = fk.pose(side, flushpad_squeeze_pose(side, r0, keyframes))
+        P = nearest_axis_rotation(R0)
+        axis = int(np.argmax(np.abs(P[1, :])))           # pad axis mapped onto the pinch axis (robot y)
+        rs = _bisect_increasing(
+            lambda r: sgn * fk.pose(side, flushpad_squeeze_pose(side, r, keyframes))[0][1] + half[axis] - face,
+            -0.6, 1.2)
+        c1, R1, Rb, _ = fk.pose(side, flushpad_squeeze_pose(side, rs, keyframes))
+        if not np.array_equal(nearest_axis_rotation(R1), P):
+            raise RuntimeError(f"{side}: the stock pad's nearest cube-aligned attitude differs between r0 and r*")
+        R_local = Rb.T @ P
+        quat = np.zeros(4)
+        mujoco.mju_mat2Quat(quat, R_local.flatten())
+        frames[side] = {"pos": list(stock[side]["pos"]), "quat": quat.tolist(), "size": list(stock[side]["size"])}
+        _, Rk, _, _ = fk.pose(side, sgn * np.asarray(keyframes["squeeze"], dtype=float))
+        design[side] = {                          # joint values in full precision: the pose the pad is flush at
+            "squeeze_pose_joints": flushpad_squeeze_pose(side, rs, keyframes).tolist(),
+            "flush_contact_roll_rad": float(rs),
+            "stock_contact_roll_rad": float(r0),
+            "pad_axes_at_squeeze_robot_frame": P.astype(int).tolist(),
+            "contact_axis": axis, "contact_half_m": round(float(half[axis]), 6),
+            "pad_centre_at_squeeze_base_frame_m": c1.round(4).tolist(),
+            "stock_pad_off_cube_attitude_deg_at_stock_contact": round(rotation_angle_deg(P, R0), 2),
+            "stock_pad_off_cube_attitude_deg_at_flush_contact": round(rotation_angle_deg(P, R1), 2),
+            "stock_pad_contact_normal_off_pinch_axis_deg_at_squeeze_keyframe":
+                round(float(np.degrees(np.arccos(np.clip(np.max(np.abs(Rk[1, :])), -1.0, 1.0)))), 2),
+            "pad_rotation_in_hand_frame_deg": round(rotation_angle_deg(R1, P), 2),
+        }
+    return {"frames": frames, "design": design, "face_lateral_m": round(face, 6),
+            "squeeze_pose": ("squeeze keyframe with the shoulder roll stopped where the pad's outer face reaches the "
+                             "cube face plane (base upright at the origin, robot frame x forward, y left)"),
+            "method": "stock pad box (hand-mesh AABB) re-oriented about its centre to the nearest cube-aligned attitude"}
+
+
+def flushpad_design(upstream: Path, cache_dir: Path, p: CarryParams) -> dict:
+    """`flush_pad_frames` on the same MJCF copy `build_carry` uses (recorded in every flush-pad output)."""
+    scene = prepare_mjcf(upstream, cache_dir, "humanoid")
+    return flush_pad_frames(scene.parent / "berkeley_humanoid_lite.xml", p)
+
+
+def set_flushpad_contact(spec, frames: dict, p, prefix: str = "") -> None:
+    """Flush-pad contact on the pads `add_hand_pads` just added: condim 4 and torsional friction."""
+    for side in frames:
+        body = spec.body(f"{prefix}arm_{side}_hand_link")
+        pads = [g for g in body.geoms if g.name == f"{prefix}arm_{side}_hand_pad"]
+        if len(pads) != 1:
+            raise RuntimeError(f"expected one {prefix}arm_{side}_hand_pad, got {len(pads)}")
+        pads[0].condim = int(p.pad_condim)
+        pads[0].friction = [p.pad_friction, float(p.pad_torsional_friction), 0.0001]
+
+
+def set_flushpad_harness_options(spec, p) -> None:
+    """HARNESS CHANGE of the flush-pad variant: global friction cone and impratio (also foot-floor contact)."""
+    cones = {"pyramidal": mujoco.mjtCone.mjCONE_PYRAMIDAL, "elliptic": mujoco.mjtCone.mjCONE_ELLIPTIC}
+    spec.option.cone = cones[p.solver_cone]
+    spec.option.impratio = float(p.solver_impratio)
+
+
+def flushpad_model_check(model) -> dict:
+    """What the compiled model contains, read back from it: every hand pad and the solver options."""
+    pads = []
+    for g in range(model.ngeom):
+        name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, g) or ""
+        if name.endswith("_hand_pad"):
+            pads.append({"name": name, "condim": int(model.geom_condim[g]),
+                         "friction": [round(float(v), 6) for v in model.geom_friction[g]],
+                         "quat": [round(float(v), 6) for v in model.geom_quat[g]],
+                         "size": [round(float(v), 6) for v in model.geom_size[g]]})
+    return {"pads": pads,
+            "cone": "elliptic" if int(model.opt.cone) == int(mujoco.mjtCone.mjCONE_ELLIPTIC) else "pyramidal",
+            "impratio": float(model.opt.impratio), "noslip_iterations": int(model.opt.noslip_iterations)}
+
+
+def flushpad_model_ok(check: dict, n_robots: int | None = None) -> bool:
+    """True iff the model check shows the frozen flush-pad contact and harness options (two pads per robot,
+    condim 4, sliding 1.0, torsional friction 0.04 m, elliptic cone, impratio 10)."""
+    pads = (check or {}).get("pads") or []
+    return (bool(pads) and (n_robots is None or len(pads) == 2 * int(n_robots))
+            and all(pd["condim"] == 4 and abs(pd["friction"][0] - 1.0) < 1e-9
+                    and abs(pd["friction"][1] - 0.04) < 1e-9 for pd in pads)
+            and check.get("cone") == "elliptic" and abs(float(check.get("impratio", 0.0)) - 10.0) < 1e-9)
+
+
+def flushpad_design_matches_model(design: dict, check: dict) -> bool:
+    """True iff every compiled hand pad has its side's designed flush frame (quat and size, to 1e-6)."""
+    frames = (design or {}).get("frames") or {}
+    pads = (check or {}).get("pads") or []
+    if not pads or set(frames) != {"left", "right"}:
+        return False
+    for pd in pads:
+        side = "left" if pd["name"].endswith("arm_left_hand_pad") else "right"
+        f = frames[side]
+        if not (np.allclose(pd["quat"], f["quat"], atol=2e-6) and np.allclose(pd["size"], f["size"], atol=2e-6)):
+            return False
+    return True
+
+
+#: MuJoCo's bad-number warnings: with mjDSBL_AUTORESET clear (the default; this harness never sets it) `mj_step`
+#: calls `mj_resetData` (qpos0, qvel 0, time 0) when qpos, qvel or qacc holds a NaN or |x| > mjMAXVAL = 1e10, then
+#: keeps stepping. The warning counter survives that reset (MuJoCo 3.3.5, checked 2026-10-02: number 1 after it).
+FLUSHPAD_BAD_NUMBER_WARNINGS = ("mjWARN_BADQPOS", "mjWARN_BADQVEL", "mjWARN_BADQACC")
+
+
+def sim_reset_signal(m, d, steps_done: int, substeps: int) -> dict | None:
+    """Evidence that MuJoCo auto-reset the simulation since the episode's own reset, read after `steps_done`
+    policy steps of `substeps` physics steps each; None when there is none. Two signals: the simulated time is not
+    steps_done * substeps * timestep (the reset restarts it at 0; tolerance half a physics step), or a bad-qpos/qvel/
+    qacc warning was counted (the episode's own `mj_resetData` zeroes the counters)."""
+    ts = float(m.opt.timestep)
+    expected = int(steps_done) * int(substeps) * ts
+    warnings = {n: int(d.warning[int(getattr(mujoco.mjtWarning, n))].number) for n in FLUSHPAD_BAD_NUMBER_WARNINGS}
+    time_mismatch = abs(float(d.time) - expected) > 0.5 * ts
+    if not time_mismatch and not any(warnings.values()):
+        return None
+    return {"sim_time_s": float(d.time), "expected_sim_time_s": expected, "time_mismatch": bool(time_mismatch),
+            "bad_number_warnings": warnings}
+
+
+class CubeTiltRecorder:
+    """frame_hook: each pair's cube tilt (`CarryRunner.cube_tilt`) after every policy step. `series(k)` is pair
+    k's tilt at every policy-step state: the pre-step state of each step i (time i * dt, aligned with the lift and
+    robot-tilt series the rules score) followed by the final state. `chain` is called after recording.
+    (The harness trace's `cube_tilt_rad` at trace step i is the post-step value, i.e. `series(k)[i + 1]`.)
+    It also checks after every policy step whether MuJoCo auto-reset the simulation (`sim_reset_signal`) and keeps
+    the first evidence (`sim_reset_record`)."""
+
+    def __init__(self, model, pairs, chain=None):
+        self.post, self.chain = [], chain
+        self.reset_tilt = []
+        self.sim_reset = None                     # first auto-reset evidence, with the policy step it happened in
+        for pr in pairs:                          # the reset state: the cube at qpos0 (runner.reset keeps it)
+            a = model.jnt_qposadr[model.body_jntadr[pr.cube_body]]
+            R = np.zeros(9)
+            mujoco.mju_quat2Mat(R, model.qpos0[a + 3:a + 7])
+            self.reset_tilt.append(float(np.arccos(np.clip(R[8], -1.0, 1.0))))
+
+    def __call__(self, **kw):
+        runner, pairs = kw["runner"], kw["pairs"]
+        self.post.append([runner.cube_tilt(pr) for pr in pairs])
+        if self.sim_reset is None:
+            sig = sim_reset_signal(runner.m, runner.d, int(kw["step"]) + 1, runner.substeps)
+            if sig is not None:
+                self.sim_reset = {"first_step": int(kw["step"]), **sig}
+        if self.chain is not None:
+            self.chain(**kw)
+
+    def series(self, k: int) -> list:
+        return [self.reset_tilt[k]] + [row[k] for row in self.post]
+
+    def sim_reset_record(self) -> dict:
+        r = self.sim_reset
+        return {"detected": r is not None, "first_step": None if r is None else r["first_step"], "evidence": r,
+                "policy_steps": len(self.post),
+                "note": ("MuJoCo auto-reset (qpos0, time 0) on a NaN or |x| > 1e10 in qpos/qvel/qacc, checked after "
+                         "every policy step (simulated time and bad-number warning counters); first_step = the "
+                         "policy step it happened in; detected = the episode fails (no_sim_reset)")}
+
+
+def _json_safe(x) -> tuple:
+    """(`x` as plain JSON types with every non-finite float replaced by None, how many were replaced). A non-finite
+    stop leaves NaN in the stock rows and trace (lift_place's final state; the post-step trace entry), which the
+    score JSON (json.dumps(allow_nan=False)) cannot hold: nulled, the episode is written and scored as a failure."""
+    nulled = 0
+
+    def walk(v):
+        nonlocal nulled
+        if isinstance(v, dict):
+            return {kk: walk(u) for kk, u in v.items()}
+        if isinstance(v, (list, tuple)):
+            return [walk(u) for u in v]
+        if isinstance(v, np.ndarray):
+            return walk(v.tolist())
+        if isinstance(v, (bool, np.bool_)):
+            return bool(v)
+        if isinstance(v, (int, np.integer)):
+            return int(v)
+        if isinstance(v, (float, np.floating)):
+            if np.isfinite(v):
+                return float(v)
+            nulled += 1
+            return None
+        return v
+
+    return walk(x), nulled
+
+
+def _json_tilt(v) -> float | None:
+    """Full float precision (never rounded: a rounded value could pass the 0.35 rad clause it should fail)."""
+    v = float(v)
+    return v if np.isfinite(v) else None
+
+
+def run_flushpad_episode(model, slots, pairs, cfg, policy, seed: int, p, rule: dict,
+                         q: PlaceParams | None = None, frame_hook=None) -> dict:
+    """One flush-pad episode: the stock lift_hold (`run_episode`) or lift_place (`run_place_episode`) protocol on
+    a flush-pad model, unchanged, plus each pair's per-step cube tilt series (`cube_tilt_series_rad`), the MuJoCo
+    auto-reset record (`sim_reset`), and non-finite numbers written as None (`nonfinite_values_nulled` counts them)."""
+    if not is_flushpad(p):
+        raise ValueError("run_flushpad_episode needs FlushPadParams")
+    if rule.get("variant") != FLUSHPAD_VARIANT:
+        raise ValueError("rule is not a flush-pad rule")
+    rec = CubeTiltRecorder(model, pairs, chain=frame_hook)
+    if rule.get("protocol") == "lift_place":
+        q = FlushPadPlaceParams() if q is None else q
+        if q.lower_to is not None:
+            raise ValueError("the flush-pad lowering is FROZEN: reverse keyframe (lower_to=None)")
+        ep = run_place_episode(model, slots, pairs, cfg, policy, seed, p, q=q, frame_hook=rec, rule=rule)
+    else:
+        ep = run_episode(model, slots, pairs, cfg, policy, seed, p, frame_hook=rec, rule=rule, protocol="lift_hold")
+    for k, row in enumerate(ep["pairs"]):
+        row["cube_tilt_series_rad"] = [_json_tilt(v) for v in rec.series(k)]
+    ep["variant"] = FLUSHPAD_VARIANT
+    ep["cube_tilt_series_note"] = ("cube_tilt_series_rad[i] = cube tilt (rad, angle of the cube's z axis from world z) "
+                                   "at the pre-step state of policy step i (t = i * dt); the last entry is the "
+                                   "final state; null = non-finite")
+    ep["sim_reset"] = rec.sim_reset_record()
+    ep, nulled = _json_safe(ep)
+    ep["nonfinite_values_nulled"] = nulled
+    return ep
+
+
+def _tilt_ok(values, limit: float) -> bool:
+    vals = list(values)
+    return bool(vals) and all(v is not None and np.isfinite(v) and float(v) <= limit for v in vals)
+
+
+def flushpad_release_window(script_times_s: dict, dt: float) -> tuple[int, int]:
+    """(first, last) policy-step state indices of the place 'at release' window, both inclusive."""
+    import math
+    k0 = math.ceil(float(script_times_s["unload"]) / dt - 1e-9)
+    k1 = math.ceil(float(script_times_s["release"]) / dt - 1e-9)
+    return k0, k1
+
+
+def _sim_reset_logged(ep: dict) -> tuple[bool, bool]:
+    """(the episode carries a well-formed MuJoCo auto-reset record, that record reads detected)."""
+    rec = ep.get("sim_reset")
+    logged = isinstance(rec, dict) and isinstance(rec.get("detected"), bool)
+    return bool(logged), bool(logged and rec["detected"])
+
+
+def flushpad_clauses(rule: dict, ep: dict, k: int, dt: float) -> dict:
+    """The flush-pad clauses of pair `k` in one stored episode, from the JSON alone (pure). Every clause set
+    includes `no_sim_reset`: no MuJoCo auto-reset in the episode (an absent record is not a pass)."""
+    row = ep["pairs"][k]
+    series = row.get("cube_tilt_series_rad")
+    logged = isinstance(series, list) and len(series) == int(ep.get("steps", -1)) + 1
+    reset_logged, reset = _sim_reset_logged(ep)
+    no_reset = bool(reset_logged and not reset)
+    lim = float(rule["cube_tilt_max_rad"])
+    kind = rule["clauses"]
+    out = {"pair": k, "tilt_logged": bool(logged), "sim_reset_logged": reset_logged, "sim_reset_detected": reset}
+    if kind == "probe":
+        c = row["checks"]
+        checks = {"cube_tilt": bool(logged and _tilt_ok(series, lim)), "no_fall": bool(c["no_fall"]),
+                  "finite": bool(c["finite"]), "no_sim_reset": no_reset, "full_episode": bool(c["full_episode"])}
+        vals = [v for v in series if v is not None] if logged else []
+        out["cube_tilt_max_rad"] = max(vals) if vals else None
+    elif kind == "hold":
+        hs, he = row.get("hold_start_s"), row.get("hold_end_s")
+        win = []
+        if logged and hs is not None and he is not None:
+            win = series[int(round(hs / dt)):int(round(he / dt))]
+        checks = {"rule": bool(row["success"]), "cube_tilt_hold": bool(win) and _tilt_ok(win, lim),
+                  "no_sim_reset": no_reset}
+        vals = [v for v in win if v is not None]
+        out["cube_tilt_hold_max_rad"] = max(vals) if vals else None
+    elif kind == "place":
+        ts = ep.get("script_times_s") or {}
+        win, seated = [], None
+        if logged and "unload" in ts and "release" in ts:
+            k0, k1 = flushpad_release_window(ts, dt)
+            if len(series) > k1 + 1:              # the release window ends before the final state
+                win = series[k0:k1 + 1]
+                out["release_window_states"] = [k0, k1]
+            seated = series[-1]
+        checks = {"rule": bool(row["success"]), "cube_tilt_release": bool(win) and _tilt_ok(win, lim),
+                  "cube_tilt_seated": seated is not None and _tilt_ok([seated], lim), "no_sim_reset": no_reset}
+        vals = [v for v in win if v is not None]
+        out["cube_tilt_release_max_rad"] = max(vals) if vals else None
+        out["cube_tilt_seated_rad"] = seated
+    else:
+        raise ValueError(f"unknown flush-pad clause set {kind!r}")
+    success = all(checks.values())
+    out.update({"success": bool(success), "checks": checks,
+                "first_failed_check": None if success else next(n for n, v in checks.items() if not v)})
+    return out
+
+
+def flushpad_stage_rule(stage: str, protocol: str = "lift_hold", seeds=None) -> dict:
+    """The frozen rule of a stage; "smoke" = the probe (lift_hold) or place (lift_place) clauses on tuning seeds."""
+    if stage == "probe":
+        return FLUSHPAD_PROBE_RULE
+    if stage == "hold":
+        return FLUSHPAD_HOLD_RULE
+    if stage == "place":
+        return FLUSHPAD_PLACE_RULE
+    if stage == "smoke":
+        base = FLUSHPAD_PLACE_RULE if protocol == "lift_place" else FLUSHPAD_PROBE_RULE
+        return {**base, "stage": "smoke", "seeds": sorted(int(s) for s in (seeds or [])), "crews": [2, 4],
+                "pass_min": None, "smoke": "pipeline check on declared tuning seeds 100-119; never scored"}
+    raise ValueError(f"unknown flush-pad stage {stage!r}")
+
+
+def _jsonable(x):
+    import json
+    return json.loads(json.dumps(x))
+
+
+def _flushpad_payload_problem(payload: dict, stage: str, rule: dict, crew: int) -> str | None:
+    """Why a score JSON cannot be read under `rule` (None when it can)."""
+    if not isinstance(payload, dict):
+        return "no score JSON"
+    if payload.get("variant") != FLUSHPAD_VARIANT:
+        return "not a flush-pad score JSON"
+    if payload.get("stage") != stage:
+        return f"stage {payload.get('stage')!r}, expected {stage!r}"
+    if payload.get("rule") != _jsonable(rule):
+        return "rule differs from the frozen flush-pad rule"
+    if payload.get("params") != _jsonable(params_dict(FlushPadParams())):
+        return "params differ from the frozen FlushPadParams"
+    if payload.get("keyframes_left") != _jsonable(KEYFRAMES_LEFT):
+        return "arm keyframes differ"
+    if rule.get("protocol") == "lift_place":
+        frozen = _jsonable(place_params_dict(FlushPadPlaceParams()))
+        if payload.get("place_params") != frozen or any(e.get("place_params") != frozen
+                                                        for e in payload.get("episodes", [])):
+            return "place params differ from the frozen FlushPadPlaceParams (reverse-keyframe lowering)"
+    if int(payload.get("crew", -1)) != int(crew):
+        return f"crew {payload.get('crew')}, expected {crew}"
+    if not payload.get("scored_run"):
+        return "not a scored run"
+    if not flushpad_model_ok(payload.get("model_check") or {}, int(crew)):
+        return "model check does not show the flush-pad contact and harness options"
+    if not flushpad_design_matches_model(payload.get("flush_pad_design") or {}, payload.get("model_check") or {}):
+        return "compiled hand pads differ from the flush-pad design"
+    if "policy_dt" not in payload:
+        return "no policy_dt"
+    return None
+
+
+def _flushpad_rows(payload: dict, rule: dict, k: int) -> tuple[list, list]:
+    """(per-seed clause rows, seeds that are missing, short without a recorded failure, or without a tilt log or an
+    auto-reset record)."""
+    dt = float(payload["policy_dt"])
+    n_full = int(round(float(rule["episode_s"]) / dt))
+    eps = {}
+    for e in payload.get("episodes", []):
+        eps.setdefault(int(e["seed"]), e)
+    rows, missing = [], []
+    for s in rule["seeds"]:
+        e = eps.get(int(s))
+        if e is None or len(e.get("pairs", [])) <= k:
+            missing.append(s)
+            continue
+        if e.get("failed") is None and int(e.get("steps", -1)) != n_full:
+            missing.append(s)
+            continue
+        r = flushpad_clauses(rule, e, k, dt)
+        if not (r["tilt_logged"] and r["sim_reset_logged"]):
+            missing.append(s)
+            continue
+        base = e["pairs"][k]
+        r.update({"seed": int(s), "base_rule_success": bool(base["success"]),
+                  "base_rule_first_failed_check": base["first_failed_check"],
+                  "lift_peak_m": base["lift_peak_m"], "lift_hold_s": base["lift_hold_s"],
+                  "max_robot_tilt_rad": base["max_tilt_rad"], "cube_floor_contact": base["cube_floor_contact"]})
+        rows.append(r)
+    return rows, missing
+
+
+def _flushpad_head(stage: str) -> dict:
+    return {"variant": FLUSHPAD_VARIANT, "stage": stage, "label": FLUSHPAD_LABEL,
+            "label_detail": FLUSHPAD_LABEL_DETAIL, "end_effector": FLUSHPAD_NOTE,
+            "harness_change": FLUSHPAD_HARNESS_NOTE, "clauses_as_applied": list(FLUSHPAD_CLAUSES_AS_APPLIED),
+            "seed_evidence": list(FLUSHPAD_SEED_EVIDENCE)}
+
+
+def flushpad_probe_verdict(payload: dict | None) -> dict:
+    """Stage-1 verdict from the probe score JSON (pure): PROCEED | NEGATIVE | INCOMPLETE | INVALID."""
+    rule = FLUSHPAD_PROBE_RULE
+    out = {**_flushpad_head("probe"), "rule_text": FLUSHPAD_PROBE_RULE_TEXT, "rule": rule}
+    if payload is None:
+        return {**out, "verdict": "INCOMPLETE", "reason": "no probe score JSON", "successes": 0,
+                "of": len(rule["seeds"]), "missing_seeds": list(rule["seeds"]), "per_seed": [],
+                "reading": "no probe score JSON: no decision"}
+    bad = _flushpad_payload_problem(payload, "probe", rule, 2)
+    if bad:
+        return {**out, "verdict": "INVALID", "reason": bad, "successes": 0, "of": len(rule["seeds"]),
+                "missing_seeds": [], "per_seed": [], "reading": f"INVALID ({bad}): no decision"}
+    rows, missing = _flushpad_rows(payload, rule, 0)
+    n_ok = sum(1 for r in rows if r["success"])
+    verdict = "INCOMPLETE" if missing else ("PROCEED" if n_ok >= rule["pass_min"] else "NEGATIVE")
+    reading = {"PROCEED": "the flush pad kept the cube within 0.35 rad on >= 4/5 probe seeds: run the scored stage",
+               "NEGATIVE": "STOP: NEGATIVE, the flush pad does not stop the roll",
+               "INCOMPLETE": ("an episode is missing, short, or has no tilt log or auto-reset record: no "
+                              "decision")}[verdict]
+    return {**out, "verdict": verdict, "successes": n_ok, "of": len(rule["seeds"]), "missing_seeds": missing,
+            "per_seed": rows, "reading": reading,
+            "diagnostic_not_gated": {
+                "lift_hold_rule_successes": sum(1 for r in rows if r["base_rule_success"]),
+                "lifted_ge_0.10_m": sum(1 for r in rows if r["lift_peak_m"] >= LIFT_HOLD_RULE["lift_peak_m"]),
+                "note": "LIFT_HOLD_RULE's lift/hold/floor clauses are not part of the probe rule"}}
+
+
+def flushpad_group_summary(payload: dict, stage: str) -> dict:
+    """Per-pair counts of one scored score JSON (hold or place, one crew), from the JSON alone."""
+    rule = FLUSHPAD_HOLD_RULE if stage == "hold" else FLUSHPAD_PLACE_RULE
+    crew = int(payload.get("crew", -1)) if isinstance(payload, dict) else -1
+    bad = _flushpad_payload_problem(payload, stage, rule, crew) if crew in rule["crews"] else f"crew {crew}"
+    if bad:
+        return {"stage": stage, "crew": crew, "invalid": bad, "complete": False, "groups": []}
+    groups, complete = [], True
+    for k in range(crew // 2):
+        rows, missing = _flushpad_rows(payload, rule, k)
+        n_ok = sum(1 for r in rows if r["success"])
+        complete = complete and not missing
+        groups.append({"stage": stage, "crew": crew, "pair": k, "episodes": len(rows), "successes": n_ok,
+                       "missing_seeds": missing, "pass": bool(not missing and n_ok >= rule["pass_min"]),
+                       "base_rule_successes": sum(1 for r in rows if r["base_rule_success"]),
+                       "first_failed_check_counts": {
+                           c: sum(1 for r in rows if r["first_failed_check"] == c)
+                           for c in sorted({r["first_failed_check"] for r in rows} - {None})},
+                       "per_seed": rows})
+    return {"stage": stage, "crew": crew, "invalid": None, "complete": complete, "groups": groups}
+
+
+FLUSHPAD_SCORED_KEYS = ("hold_crew2", "hold_crew4", "place_crew2", "place_crew4")
+
+
+def flushpad_scored_verdict(payloads: dict) -> dict:
+    """Stage-2 verdict (pure): `payloads` maps "hold_crew2", "hold_crew4", "place_crew2", "place_crew4" to a
+    score JSON or None. PASS iff every crew/pair of both protocols has >= 8/10; INCOMPLETE if any episode is
+    missing; INVALID if a JSON is not under the frozen rule."""
+    out = {**_flushpad_head("scored"), "rule_text": FLUSHPAD_SCORED_RULE_TEXT,
+           "rules": {"hold": FLUSHPAD_HOLD_RULE, "place": FLUSHPAD_PLACE_RULE}}
+    groups, invalid, complete = [], [], True
+    for stage, rule in (("hold", FLUSHPAD_HOLD_RULE), ("place", FLUSHPAD_PLACE_RULE)):
+        for crew in rule["crews"]:
+            key = f"{stage}_crew{crew}"
+            pl = payloads.get(key)
+            if pl is None:
+                complete = False
+                groups.append({"stage": stage, "crew": crew, "pair": None, "missing_json": True, "pass": False})
+                continue
+            s = flushpad_group_summary(pl, stage)
+            if s["invalid"] or int(s["crew"]) != crew:
+                invalid.append(f"{key}: {s['invalid'] or 'crew mismatch'}")
+                continue
+            complete = complete and s["complete"]
+            groups += s["groups"]
+    if invalid:
+        verdict = "INVALID"
+    elif not complete:
+        verdict = "INCOMPLETE"
+    else:
+        verdict = "PASS" if len(groups) == 6 and all(g["pass"] for g in groups) else "NEGATIVE"
+    reading = {"PASS": "every crew/pair met its unchanged rule plus the 0.35 rad tilt clause on >= 8/10 seeds",
+               "NEGATIVE": "at least one crew/pair fell short of 8/10 under its unchanged rule plus the tilt clause",
+               "INCOMPLETE": "a score JSON or an episode is missing: no decision",
+               "INVALID": "a score JSON is not under the frozen rule: no decision"}[verdict]
+    return {**out, "verdict": verdict, "invalid": invalid, "reading": reading,
+            "groups": [{k: v for k, v in g.items() if k != "per_seed"} for g in groups],
+            "per_seed": {f"{g['stage']}_crew{g['crew']}_pair{g['pair']}": g.get("per_seed", []) for g in groups}}
+
+
+def flushpad_not_run_verdict(probe_verdict: dict | None) -> dict:
+    """Stage-2 verdict when the probe did not PROCEED: NOT_RUN, and seeds 20-39 stay unused."""
+    pv = (probe_verdict or {}).get("verdict", "MISSING")
+    return {**_flushpad_head("scored"), "rule_text": FLUSHPAD_SCORED_RULE_TEXT, "verdict": "NOT_RUN",
+            "probe_verdict": pv, "groups": [],
+            "reading": (f"stage 2 not run: the probe verdict is {pv}, not PROCEED (the frozen rule runs the scored "
+                        "stage only after PROCEED); seeds 20-39 stay unused")}
+
+
+def flushpad_smoke_check(payload: dict | None) -> dict:
+    """Pipeline checks of one flush-pad SMOKE score JSON (pure; never a verdict on the variant): the variant built
+    as designed, each episode ran the full 20 s on a declared tuning seed with no MuJoCo auto-reset (its record
+    present and clear), and the cube tilt is logged at every policy-step state, finite, flat at reset, and agrees
+    with the harness's own trace. Outcomes (tilt, lift, falls) are reported as diagnostics, never gated."""
+    problems, rows = [], []
+    if not isinstance(payload, dict):
+        return {**_flushpad_head("smoke"), "verdict": "SMOKE_FAIL", "problems": ["no smoke score JSON"],
+                "episodes": []}
+    crew = int(payload.get("crew", -1))
+    protocol = payload.get("protocol")
+    if payload.get("variant") != FLUSHPAD_VARIANT or payload.get("stage") != "smoke":
+        problems.append("not a flush-pad smoke score JSON")
+    if payload.get("scored_run"):
+        problems.append("a smoke JSON must not be marked scored_run")
+    if crew not in (2, 4) or protocol not in ("lift_hold", "lift_place"):
+        problems.append(f"crew {crew} / protocol {protocol!r}")
+    if payload.get("params") != _jsonable(params_dict(FlushPadParams())):
+        problems.append("params differ from the frozen FlushPadParams")
+    if protocol == "lift_place" and payload.get("place_params") != _jsonable(place_params_dict(FlushPadPlaceParams())):
+        problems.append("place params differ from the frozen FlushPadPlaceParams")
+    mc = payload.get("model_check") or {}
+    if not flushpad_model_ok(mc, crew):
+        problems.append("model check does not show the flush-pad contact and harness options")
+    if not flushpad_design_matches_model(payload.get("flush_pad_design") or {}, mc):
+        problems.append("compiled hand pads differ from the flush-pad design")
+    eps = payload.get("episodes") or []
+    seeds = [int(e["seed"]) for e in eps]
+    if not eps:
+        problems.append("no episode")
+    if any(s not in FLUSHPAD_SMOKE_SEEDS for s in seeds):
+        problems.append("a seed outside the declared tuning seeds 100-119")
+    rule = payload.get("rule") or {}
+    if protocol in ("lift_hold", "lift_place") and rule != _jsonable(flushpad_stage_rule("smoke", protocol, seeds)):
+        problems.append("rule differs from the smoke rule (full-length smoke episodes only)")
+    dt = float(payload.get("policy_dt") or 0.0)
+    n_full = int(round(20.0 / dt)) if dt > 0 else -1
+    for e in eps:
+        seed, steps = int(e["seed"]), int(e.get("steps", -1))
+        if e.get("failed") is not None:
+            problems.append(f"seed {seed}: episode failed ({e['failed']})")
+        if steps != n_full:
+            problems.append(f"seed {seed}: {steps} steps, expected {n_full}")
+        reset_logged, reset = _sim_reset_logged(e)
+        if not reset_logged:
+            problems.append(f"seed {seed}: no MuJoCo auto-reset record (sim_reset)")
+        elif reset:                               # a blown-up episode proves nothing about valid probe data
+            problems.append(f"seed {seed}: MuJoCo auto-reset the simulation (numerical blow-up) in policy step "
+                            f"{(e.get('sim_reset') or {}).get('first_step')}")
+        if len(e.get("pairs", [])) != max(crew // 2, 0):
+            problems.append(f"seed {seed}: {len(e.get('pairs', []))} pairs for crew {crew}")
+        for k, row in enumerate(e.get("pairs", [])):
+            ser = row.get("cube_tilt_series_rad")
+            if not isinstance(ser, list) or len(ser) != steps + 1:
+                problems.append(f"seed {seed} pair {k}: tilt series missing or not steps + 1 long")
+                continue
+            if any(v is None or not np.isfinite(v) for v in ser):
+                problems.append(f"seed {seed} pair {k}: non-finite tilt in the series")
+                continue
+            if abs(float(ser[0])) > 1e-9:
+                problems.append(f"seed {seed} pair {k}: tilt at reset {ser[0]} (the cube spawns flat)")
+            trace = e.get("trace") or []
+            matched = 0
+            for tr in trace:
+                i = int(round(float(tr["t"]) / dt)) if dt > 0 else -1
+                if not (0 <= i < steps):
+                    continue
+                tv = tr["cube_tilt_rad"][k]
+                if tv is None or abs(float(ser[i + 1]) - float(tv)) > 0.0005 + 1e-9:
+                    problems.append(f"seed {seed} pair {k}: tilt series disagrees with the trace at t={tr['t']}")
+                    break
+                matched += 1
+            if matched == 0:
+                problems.append(f"seed {seed} pair {k}: no trace entry to cross-check the tilt series")
+            try:
+                c = flushpad_clauses(rule, e, k, dt)
+                # lift_hold smokes also run the scored hold stage's clause code on this real episode
+                ch = flushpad_clauses(FLUSHPAD_HOLD_RULE, e, k, dt) if protocol == "lift_hold" else None
+            except Exception as exc:  # noqa: BLE001
+                problems.append(f"seed {seed} pair {k}: clauses do not compute ({exc!r})")
+                continue
+            if not c["tilt_logged"] or (ch is not None and not ch["tilt_logged"]):
+                problems.append(f"seed {seed} pair {k}: clauses report no tilt log")
+            rows.append({"seed": seed, "pair": k, "trace_points_checked": matched,
+                         "sim_reset_detected": reset,
+                         "diagnostic_cube_tilt_max_rad": max(ser), "diagnostic_flushpad_clauses": c,
+                         "diagnostic_hold_stage_clauses": ch,
+                         "diagnostic_base_rule_success": bool(row.get("success")),
+                         "diagnostic_base_first_failed_check": row.get("first_failed_check"),
+                         "diagnostic_lift_peak_m": row.get("lift_peak_m"),
+                         "diagnostic_max_robot_tilt_rad": row.get("max_tilt_rad")})
+    return {**_flushpad_head("smoke"), "verdict": "SMOKE_FAIL" if problems else "SMOKE_PASS",
+            "crew": crew, "protocol": protocol, "seeds": seeds, "problems": problems, "episodes": rows,
+            "note": "pipeline check on a declared tuning seed; outcomes are diagnostics, never a verdict"}
+
+
+#: The smoke launcher's steps, whose exit statuses it records in step_status.json (unit tests first).
+FLUSHPAD_SMOKE_STEPS = ("pytest", "smoke_hold_crew2", "smoke_place_crew4")
+
+
+def flushpad_smoke_step_problems(status) -> list:
+    """Problems with the smoke's recorded step exit statuses (pure): every declared step, the unit tests first,
+    recorded as integer 0, and nothing recorded non-zero. The smoke verdict reads SMOKE_PASS only without any, so a
+    smoke id whose unit tests failed can never let a run through."""
+    if not isinstance(status, dict):
+        return ["no step-status record (step_status.json): the unit-test result is unknown"]
+    problems = []
+    for name in FLUSHPAD_SMOKE_STEPS:
+        if name not in status:
+            problems.append(f"step {name}: no recorded exit status")
+    for name, v in status.items():
+        if isinstance(v, bool) or not isinstance(v, int) or v != 0:
+            problems.append(f"step {name}: exit status {v!r}, not 0")
+    return problems
+
+
+def flushpad_file_summary(payload: dict) -> dict:
+    """Summary written into a flush-pad score JSON after every episode (the verdict JSONs are written by the
+    launcher from these files). Smoke runs report the pipeline checks and never a verdict on the variant."""
+    stage = payload.get("stage")
+    if stage == "probe":
+        return flushpad_probe_verdict(payload)
+    if stage in ("hold", "place"):
+        return flushpad_group_summary(payload, stage)
+    return flushpad_smoke_check(payload)
+
+
+def flushpad_verdict_line(v: dict) -> str:
+    """One line for the log, from a verdict / summary dict."""
+    stage = v.get("stage")
+    if stage == "probe":
+        body = (f"{v.get('successes')}/{v.get('of')} seeds kept cube tilt <= {FLUSHPAD_TILT_MAX_RAD} rad with no fall "
+                f"(need >= {FLUSHPAD_PROBE_RULE['pass_min']}); missing {v.get('missing_seeds')}; "
+                + " ".join(f"s{r['seed']}:max_tilt={r.get('cube_tilt_max_rad')},fail={r['first_failed_check']}"
+                           for r in v.get("per_seed", [])))
+        if v.get("reason"):
+            body += f" ({v['reason']})"
+    elif stage == "scored":
+        body = " ".join(f"{g['stage']}/crew{g['crew']}/pair{g['pair']}="
+                        + ("missing" if g.get("missing_json") else f"{g['successes']}/{g['episodes']}")
+                        for g in v.get("groups", [])) or v.get("reading", "")
+        if v.get("invalid"):
+            body += f" invalid: {v['invalid']}"
+    elif stage in ("hold", "place"):
+        body = " ".join(f"crew{g['crew']}/pair{g['pair']}={g['successes']}/{g['episodes']}"
+                        for g in v.get("groups", [])) or f"invalid: {v.get('invalid')}"
+    else:
+        body = (" ".join(f"seed{r['seed']}/pair{r['pair']}:max_tilt={r['diagnostic_cube_tilt_max_rad']:.3f},"
+                         f"base={r['diagnostic_base_first_failed_check'] or 'ok'}" for r in v.get("episodes", []))
+                + (f" problems: {v['problems']}" if v.get("problems") else ""))
+    verdict = v.get("verdict") or ("INVALID" if v.get("invalid") else
+                                   "COMPLETE" if v.get("complete") else "INCOMPLETE")
+    return f"COOP-FLUSHPAD {stage}: {verdict} | {body} | {FLUSHPAD_NOTE} | {FLUSHPAD_HARNESS_NOTE} | {FLUSHPAD_LABEL}"
