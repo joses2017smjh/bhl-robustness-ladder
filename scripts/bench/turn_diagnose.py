@@ -97,14 +97,14 @@ def count_liftoffs(contact: np.ndarray, dt: float, min_air_s: float = MIN_AIR_S)
 def mujoco_run(deploy: Path, upstream: Path, cache: Path, wz: float, warm: float, seconds: float, seed: int) -> dict:
     import mujoco
     from omegaconf import OmegaConf
-    from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController
+    from bhl_robust.eval.gait_clock import make_controller   # RlController(cfg) unless deploy.yaml has a gait_clock block
     from bhl_robust.eval.multi_robot import build_multi
     from team_airlock import ContactRunner, CpuPolicy
 
     cfg = OmegaConf.load(deploy)
     policy = CpuPolicy(cfg.policy_checkpoint_path)
     model, slots = build_multi(upstream, cache / "humanoid", 1, ["t"], variant="humanoid", world="flat")
-    ctrl = RlController(cfg)
+    ctrl = make_controller(cfg)
     ctrl.policy = policy
     runner = ContactRunner(model, slots, [cfg], [ctrl])
     runner.reset(np.random.default_rng(seed))

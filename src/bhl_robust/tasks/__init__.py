@@ -112,6 +112,10 @@ for _id, _cfg in (
     # 2026-09-27: TurnRest + interval push with the adaptive push curriculum (TurnRest
     # failed its push regression); fine-tuned by gpu_turngait_v5.sbatch.
     ("Velocity-BHL-Arms-TurnRestPush-v0", arms_env_cfg.HumanoidTurnRestPushCfg),
+    # 2026-10-01 R1 / R2 (docs/SOLUTIONS_2026-10-01.md section 2): TurnBoth + feet_gait contact schedule at
+    # every command + swing height + fixed pushes, from scratch (gpu_turngait_r12.sbatch); clock in actor / critic only.
+    ("Velocity-BHL-Arms-TurnGaitClock-v0", arms_env_cfg.HumanoidTurnGaitClockCfg),
+    ("Velocity-BHL-Arms-TurnGaitCritic-v0", arms_env_cfg.HumanoidTurnGaitCriticCfg),
 ):
     gym.register(
         id=_id,
@@ -352,6 +356,17 @@ for _vis, _cls in task_v2_env_cfg.CUBE_STAND3_VARIANTS.items():
             "rsl_rl_cfg_entry_point": task_v2_env_cfg._STAND3_RUNNER,
         },
     )
+# Roll-proof lift cube (CubeToShelfStand4, 2026-10-01): a different task from Stand3
+# and CubeToShelf, Stand3's runner. Blind only (the id its launchers train).
+gym.register(
+    id="TaskV2-BHL-CubeToShelfStand4-Blind-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": task_v2_env_cfg.CUBE_STAND4_VARIANTS["blind"],
+        "rsl_rl_cfg_entry_point": task_v2_env_cfg._STAND3_RUNNER,
+    },
+)
 
 # ------------------------------------------------------------------ B3: ice
 # Patchy friction on flat ground. The blind/depth pair is the negative control

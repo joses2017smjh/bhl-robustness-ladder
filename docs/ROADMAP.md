@@ -8,6 +8,9 @@ Updated 2026-10-01. Done since the last update: README hero is now the 22-DoF hu
 
 | Item | State | Done when |
 |---|---|---|
+| **Stand4: roll-proof cube placement** (cooperative crew; hand colliders, lift pay only when lifted clear and flat, success only when seated flat and released; [plan](SOLUTIONS_2026-10-01.md) §4) | smoke `21506757`, then `21506758`: 2 seeds × 8000 iterations, Stand3's kill rule at model_1000 | the two-seed pair verdict (PASS iff ≥ 1 of 2 seeds has last-200 success ≥ 0.10) |
+| **NavGym v5: fully learned navigation** (visitation memory + coarse 14 m map + yaw-change penalty + the brake in the gym; [plan](SOLUTIONS_2026-10-01.md) §1, N2) | smoke `21506833`, then `21506834` (seeds 8–10, 30 M steps each), gym verdict `21506836` on never-used mazes 61000–61047, then physics `21506837` on 63000–63011 | `results/navgym-v5-20261002/verdict_v5.json`, then the transfer `verdict.json` (≥ 10/12 for each gate-passing actor, 0 falls) |
+| **Turning recipe R1/R2** (gait clock + contact schedule at every command, pushes from the start; [plan](SOLUTIONS_2026-10-01.md) §2) | smoke `21506542`, then `21506543`: 2 new tasks × 3 seeds, 6000 iterations from scratch, then turn_test v2 + qualify per seed | `results/repo-gpu-20260923/turngait-r12-20261001/verdict/R1.json` and `R2.json`, read by v5's joint rule |
 
 ## Next (small, unblocked)
 

@@ -3259,3 +3259,89 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - `m7_replay_gate_followup.sbatch`'s `crossings_completed` is now the real-clear count (`21405537`: 4 of 7; `21405541`: 1 of 7). The old count is kept as `crossings_handed_back`, and a missing, partial or unreadable trace reports null with the reason, never the old count.
   - Unchanged: the 10/10 replay verdict rule and `scripts/mission7_plate_stage.py` (sha256 fdde7a55…576). The saved replay-gate summary.json and matrix files keep their old meaning and were not regenerated.
   - Implemented by a workflow agent and checked by two independent adversarial reviewers (both passed; four minor findings fixed); `tests/test_mission7_gates.py` (51 tests). No Mission 7 episode was run; the episode budget remains unresolved.
+
+**User authorizations recorded 2026-10-01 15:45.** In the user's words: "everything looks good do it"; "mission 7 dont worry about the budget implement"; "stand4 OK override it"; "ok do 106 episodes"; "launch everything"; and, in place of N1, "do fully learned navigation".
+- **Mission 7:** the user directs proceeding although the episode-budget line is unresolved (the docs say 101 left; this ledger says ≈ 53 over). It is not reconciled; the user set it aside. A new Mission 7 line of **106 episodes** is authorized for M2 of `docs/SOLUTIONS_2026-10-01.md`: 64 bench + 10 exact replay + 32 route gate. M3 (same size) is predeclared as conditional on an M2 bench FAIL. It falls under "don't worry about the budget" and will be flagged in the report if it runs.
+- **C2 Stand4:** the user explicitly overrides the predeclared funding rule at :3080 ("A Stand4 is justified only if both checkpoints give the same R2, R4 or R5") and its reading at :3086 ("no Stand4 on this evidence"). Stand4 rests instead on the confirmed lift-reward farming finding (2026-10-01 corrections).
+- **Navigation:** N2 (fully learned, no planner in the loop) replaces N1 (the A* sub-goal hybrid), at the user's direction.
+- **R1/R2 (turning) and C1 (flush-pad mechanism probe):** authorized.
+- Every run still gets its rule predeclared here before it is submitted, and no gate is weakened.
+
+**Predeclared now (2026-10-02 03:04, before any R1/R2 training): turning recipe R1/R2** (`slurm/repo20260923/gpu_turngait_r12.sbatch`; verdict `scripts/bench/turngait_r12_verdict.py`; plan `docs/SOLUTIONS_2026-10-01.md` §2; authorized 2026-10-01).
+- **What trains:** two NEW tasks, from scratch, 6000 iterations, seeds 0–2 each (array 0-5%3).
+  - R1 `Velocity-BHL-Arms-TurnGaitClock-v0`: a gait clock (sin/cos) in the actor and the critic; 77 actor observations.
+  - R2 `Velocity-BHL-Arms-TurnGaitCritic-v0`: the clock in the critic only; 75 actor observations.
+  - Each = TurnBoth's rewards and command mix plus:
+    - a `feet_gait` contact schedule paid at every command (period 0.8 s, offsets [0, 0.5], stance < 0.55, weight 0.5);
+    - a foot swing-height penalty, −20 × Σ (z_sole − 0.05)² over swing feet, with z_sole = ankle_roll origin z − 0.060 m;
+    - `feet_air_time` weight 0;
+    - fixed ±0.5 m/s pushes every 5–9 s from iteration 0;
+    - default PPO noise.
+  - Disclosed: 0.060 m is a tilted-foot box-corner height; the flat sole sits 0.050 m below the origin, so the swing target is ≈ 6 cm of sole clearance, not 5 cm. Frozen as declared, not tuned.
+- **MuJoCo harness:** R1 exports run through a clock-aware controller (`bhl_robust.eval.gait_clock.make_controller`) whose phase is bit-identical to Isaac's float32 clock and restarts at the harness reset. The 75-observation path is unchanged.
+- **PASS rule (v5's joint rule verbatim, per arm, each arm judged separately):** PASS iff ≥ 2/3 seeds both PASS turn_test v2 AND are QUALIFIED by cpu_turn_qualify's unchanged rule (v2x ≥ 9/10 on reset seeds 10–14, walk ≤ 15° on ≥ 2/3, push ≤ 9/60); else FAIL; INCOMPLETE if any JSON is missing. A seed that fails v2 does not count even if it qualifies through v2x.
+  - Training counts only if the run dir holds model_5999.pt and the training log shows the arm's task id, the feet_gait term and the push event.
+  - Beyond that clause, the launcher's wrong-arm guard (observation widths, reward/event rows, env.yaml = TurnBoth-s0's + the declared changes only) must pass; a seed that fails it runs no gate and stays INCOMPLETE.
+  - The arms are new tasks, never presented as fine-tunes of TurnBoth-s0. Labels: LEARNED gait; MuJoCo gates.
+- **Disclosed priors:**
+  - The v5 PUSH arm (`21443377`) kept push falls ≤ 0.10 but turned 0/10 on all three seeds.
+  - 22-DoF from-scratch push training showed no detectable benefit at four seeds.
+  - The period and weight follow the unitree_rl_lab G1 precedent.
+  - No Unitree repo has tested a clockless actor (R2) that marches at zero command.
+- **Checks before submission:**
+  - Workflow `wf_0ec8b9df-34a`: an implementer and two adversarial reviewers; six minor findings fixed (a resubmit could bypass the wrong-arm guard; the smoke's run_eval touched push seed 0).
+  - Smokes `21505878` and, after the fixes, `21506426`: SMOKE PASS on both arms (R1 77/80, R2 75/80; recipe = TurnBoth + the declared changes only; exports 77 stamped / 75 plain; the clock-aware MuJoCo rollout passes). Every rollout of the fixed smoke runs on exploration seed 100.
+  - Disclosed: the first smoke's run_eval ran one 3-iteration checkpoint on push seed 0, a qualify seed. The test files pass (107).
+- **Provenance:** jobs run from the live working tree, which also holds other workstreams' uncommitted in-progress edits. R1/R2 import only their own committed code, plus the eager import of `task_v2_env_cfg` (Stand4, in progress; it loaded cleanly in both smokes).
+- Submitted (code `563bb9a`): R1/R2 smoke of the committed code `21506542` (array 0,3), then the real array `21506543` (0-5%3) with `--dependency=afterok:21506542`.
+
+**Predeclared now (2026-10-02 03:25, before any Stand4 training): Stand4 (C2)** (`slurm/repo20260923/gpu_v2_stand4_train.sbatch`, smoke `gpu_v2_stand4_smoke.sbatch` + `inner_v2_stand4_smoke.sh`; code `src/bhl_robust/tasks/stand4_mdp.py`; plan `docs/SOLUTIONS_2026-10-01.md` §4; the predeclared funding rule at :3080 / :3086 is overridden by the user's 2026-10-01 authorization).
+- **What trains:** `TaskV2-BHL-CubeToShelfStand4-Blind-v0`, a different task from Stand3 and CubeToShelf, never compared with their numbers. v60, blind, 1024 envs, 8000 iterations, seeds 0 and 1 (array 0-1), Stand3's runner and resources. It is Stand3's scene, robots, decks, observations and curriculum with these changes only:
+  - Hand colliders from the overlay `assets/cloth/berkeley_humanoid_lite_hand_colliders.usda`, for Stand4's robots only. The base robot USD has no hand-link collider, which is why Stand3's hand force read 0.
+  - Lift pay (`lifting_object`, weight 15, same curriculum) requires the cube's lowest corner ≥ 0.02 m above every support under it (floor, plinth or deck top) AND tilt ≤ 15°.
+  - Success requires Stand3's seated test AND tilt ≤ 8° AND released (every robot-link force on the cube < 1.0 N, from a contact sensor on the cube filtered against 26 named links), held 12 steps. `placed` is inherited.
+  - Logged per step: minimal_height, pinch distance and kernel, upright gate, tilt, corner clearance, roll-proof gate, lift pay, release and max link force.
+- **PASS rule (verbatim, `stand4_mdp.PREDECLARED_RULE`):** "PREDECLARED RULE (frozen; Stand3's structure): the kill rule at model_1000 exactly as Stand3's launcher applies it (copy its condition and window verbatim); a seed is COMPLETE iff it reaches iteration 7999; Stand4 PASSES iff >= 1 of 2 seeds has last-200-iteration success >= 0.10, where success is the Stand4 termination above (seated, tilt <= 8 deg, released). Otherwise NEGATIVE; INCOMPLETE if a seed is neither complete nor stopped by the kill rule. Stand4 is a different task from Stand3 and CubeToShelf and is never compared with their numbers. Labels: LEARNED crew policies; ORACLE privileged observations exactly as Stand3 uses them (say which); MODIFIED hand colliders (the overlay) relative to Stand3."
+- **Clauses as applied** (decided on review 2026-10-02, before any run; each is stricter or equal):
+  - (a) COMPLETE iff the run's events reach iteration 7999 AND every Loss/value, success and time_out value in its last 200 iterations is finite AND that window holds a Loss/value value. This is Stand3's completeness check. A seed that logged to 7999 but went non-finite in its last 200 iterations is INCOMPLETE; the instability count is reported, not gated.
+  - (b) tilt = the angle between the cube's own z axis and world up, for both the 15° lift clause and the 8° success clause. A cube rolled 90° reads 90°, so it never earns the lift pay and never seats.
+  - (c) BYTES-CHECK: the training is submitted `--dependency=afterok:<smoke> --export=ALL,STAND4_SMOKE_JOB=<smoke>` and refuses to start unless that smoke's verdict reads PASS and the six files it depends on match the smoke's sha256 list (stand4_mdp.py, task_v2_env_cfg.py, stand_mdp.py, coop_lift_mdp.py, coop_lift_env_cfg.py, the overlay USD).
+  - The kill rule is Stand3's, evaluated by the same function (`stand_mdp.evaluate_kill3`).
+- **Checks before submission:**
+  - Workflow `wf_0b691ae9-d76`: an implementer and two adversarial reviewers; five minor findings fixed, giving clauses (a)-(c) and a smoke stage that fires the success chain.
+  - Smoke `21506555`: PASS on all 12 clauses. The hand-collider prims are present. The 26-link cube sensor reads 0 N for a free cube and ≥ 1 N for a cube on a hand. Stand3 and Stand4 configs differ only in the declared keys. Cubes placed flat on a deck and released fired success at step 12 (6/10), while cubes rolled 90° never fired.
+  - Tests: `tests/test_stand4.py` (70) plus the related files, 161 passed. The launcher dry run passes 32/32.
+- **Disclosed:** the new hand hulls touch the cube at spawn in most envs (≈ 61 % of jittered resets put a hull inside the cube; smoke training `released` ≈ 0.35), as predicted and not tuned. Release is read at the end of each env step.
+- Submitted (code `4c5af8e`): Stand4 smoke of the committed code `21506757`, then the two-seed training `21506758` (array 0-1) with `--dependency=afterok:21506757 --export=ALL,STAND4_SMOKE_JOB=21506757`.
+
+**Predeclared now (2026-10-02 03:32, before any v5 training or episode): NavGym v5 (N2 of `docs/SOLUTIONS_2026-10-01.md`, fully learned navigation, chosen by the user instead of N1)** (`slurm/repo20260923/cpu_navgym_v5.sbatch`, `slurm/repo20260923/cpu_navgym_v5_transfer.sbatch`; verdicts in `scripts/bench/navgym_train.py`: `V5_RULE` / `judge_v5` / `verdict_v5` and `V5_TRANSFER_RULE` / `judge_v5_transfer`).
+- **What changes:** v5 = the v4 configuration exactly (env v2 dynamics and rewards, `--ppo v2`, the frozen idle cost 0.008, 16 envs, 30 M steps, the v4 curriculum and periodic evaluation) plus env version 3:
+  - a visitation channel: a 0.2 m recency grid, set to 1 under the 0.22 m footprint, decaying as exp(-dt / 60 s), stacked onto the ego map as `map_visit`;
+  - a coarse 0.6 m, 24×24 (14.4 m) map of the same four channels (`map_coarse`);
+  - a yaw-change penalty of 0.005·|Δa_yaw|;
+  - the deployment speed brake's range term (team_sensors' formula, 10 Hz packets).
+  - Policy: `NavExtractorV5` (a second CNN). New training seeds 8, 9, 10.
+- **Disclosed brake gap** (found on review 2026-10-02 with the real `brake_command`): the gym brake is the lidar range term only. In physics the biped's stereo-depth term also brakes for a wall straight ahead:
+  - braking starts at d ≈ 1.08 m (gym 0.90 m);
+  - the robot stops at ≈ 0.57 m (gym 0.42 m);
+  - at d = 0.70 m the scale is 0.26 in physics vs 0.58 in the gym.
+  The sysid note's "likely minor" considered only flat-floor false braking and does not hold for walls ahead. The frozen spec is unchanged.
+- **Gym gate (PASS rule):** V4_RULE's clauses unchanged (5×5 success ≥ 0.80, 6×6 success ≥ 0.70, 6×6 collision ≤ 0.15, n = 48 per size, the run reached its last step (num_timesteps ≥ 30 000 000), and it is the declared v5 configuration). They are judged on each seed's FINAL actor (deterministic) on the NEVER-USED set, maze seeds 61000–61047 (dynamics reset(seed = 61000 + k)). **v5 PASSES iff ≥ 2 of the 3 seeds (8, 9, 10) meet every clause**; otherwise NEGATIVE. Seeds 10000–10047 and the best checkpoint are reported, not gated.
+- **Physics transfer (PASS rule)**, only if the gym gate PASSES, and only for the gate-passing final actors:
+  - MuJoCo 3.3.5, the frozen learned biped gait, LEARNED v5 (vx, wz) commands, ORACLE pose and goal, `--policy-capture-pose`;
+  - hard 6×6, 1 extra opening, maze seeds 63000–63011, 180 s;
+  - **PASS iff EACH gate-passing final actor reaches ≥ 10/12 goals with 0 falls**; otherwise NEGATIVE; INCOMPLETE if a summary is missing or not 12 episodes;
+  - A* on the same mazes is reported, not gated.
+- **Reported, not gated:** yaw flips per second and the |wz| saturation share in the gym evaluation. Maze seeds 40000–40047 and 50000–50011 are never run.
+- **Verdict files:**
+  - `results/navgym-v5-20261002/verdict_v5.json` is written only by the verdict mode (`--final`, after every array task has ended) and never overwritten; a status check only prints.
+  - The transfer reads only a final gym verdict (otherwise exit 4). It refuses (exit 3) on an unfinished earlier run's files; a rerun would be a second touch of 63000–63011 and needs a ledger decision.
+  - Verdicts are read from JSON, never from exit codes.
+- **Never-used sets:** a grep on 2026-10-02 found 61000–61047 and 63000–63011 only as declarations or labels.
+- **Checks before submission:**
+  - Workflow `wf_83066f0f-832`: an implementer and two adversarial reviewers; two minor findings fixed (verdict write timing; refusal after a crashed transfer), and the brake gap disclosed.
+  - Byte-identity of the defaults: a v4 actor through `maze_explore.py --policy` and a v4-config training run are identical to the pre-edit code.
+  - Smoke `21506664` (on the final files) passed: 50 k steps, ONNX export with inputs lidar/near/map_visit/map_coarse/goal, a 30 s physics episode on training maze 9150, and the verdict/transfer gate paths.
+  - Tests: `tests/test_navgym_v5.py` and `tests/test_navgym.py`.
+- **Wall time:** 36 h per seed (≈ 16 h of training on the slower node class).
+- Submitted (code `ae27a5e`): NavGym v5 smoke of the committed code `21506833`, then training seeds 8–10 `21506834` (afterok on the smoke), then gym verdict `21506836` (afterany on the training), then physics transfer `21506837` (afterok on the verdict; runs episodes only on a final gym PASS). If the smoke fails, the rest of the chain is cancelled by hand.

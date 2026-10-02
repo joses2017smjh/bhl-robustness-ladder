@@ -23,8 +23,9 @@ from pathlib import Path
 
 from omegaconf import OmegaConf
 
-from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController
+from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController  # noqa: F401
 
+from bhl_robust.eval.gait_clock import make_controller   # RlController(cfg) unless deploy.yaml has a gait_clock block
 from bhl_robust.eval.harness import (
     EvalConfig,
     HeadlessMujocoEnv,
@@ -82,7 +83,7 @@ def main(argv: list[str] | None = None) -> int:
 
     env = HeadlessMujocoEnv(cfg, scene, terrain_difficulty=args.terrain_difficulty,
                             terrain_seed=args.terrain_seed)
-    controller = RlController(cfg)
+    controller = make_controller(cfg)
     controller.load_policy()
 
     if args.video_dir and not ffmpeg_available():
