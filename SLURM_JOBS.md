@@ -3554,3 +3554,31 @@ Frozen designs, written before any implementation or episode. Each gets its full
   - First render `21516846` (dgxh-2, 55 s): **reproduces all four scored runs exactly** (R1 s2: +196.8° / −206.2°; R2 s0: +16.6° / −14.5°, equal to the scored v2 JSONs). It was not published: GIF palette reduction turned the red failure card grey. It was moved aside (`solutions-20260930/turnclip-preview/first-render-21516846/`) and re-rendered with solid card fills at 8 fps. Simulation, seeds and selection are unchanged.
   - Second render `21516912` also reproduced all four runs exactly and has red/green card fills. It was not published either: the camera followed the base's step sway, so every pixel changed every frame and the GIF fell to 5 fps / 748 px to fit 5 MiB. It was moved aside (`turnclip-preview/second-render-21516912/`). The camera is now fixed at the start pose, since the bases drift ≤ 0.45 m. Re-rendered at 10 fps; simulation, seeds and selection unchanged.
   - **Published: third render `21516970`** (dgxh-2, 43 s, code `d68952a`). It reproduces all four scored runs exactly (`reproduces_scored_runs: true`). GIF 10 fps, 880 px, 128 colours, 5.09 MB, within the 5 MiB budget. The README Highlights and `docs/GALLERY.md` show it.
+
+**Predeclared now (2026-10-02 16:05, before any PlateCross run; frozen design (B) of 'User approval recorded 2026-10-02 14:15'): Mission 7 learned crossing, a fine-tune of `arms-turngait-clock-s2` on Mission 7's plates.**
+Files: `slurm/repo20260923/gpu_platecross.sbatch`; task `Velocity-BHL-Arms-PlateCross-v0` (`src/bhl_robust/tasks/platecross_env_cfg.py`, `platecross_terrain.py`); selection `scripts/bench/platecross_select.py`; tests `tests/test_platecross.py`.
+- **What changes:** R1's env is unchanged except the terrain: flat ground with Mission 7's own plates.
+  - Plates: round r 0.24 m and square 0.48 × 0.48 m, both 0.03 m high (`mission/layout.py:152-153`).
+  - Declared field, chosen and not tuned: square lattice with pitch 1.2 m on 8.4 m tiles; round and square plates in a checkerboard; the tile centre left empty for the spawn; 0.68 plates/m², 14 % of the floor; generator seed 0.
+  - Fine-tune from clock-s2's `model_5999.pt` for 3000 iterations (→ `model_8998.pt`), seeds 0–2.
+- **PREDECLARED RULE (verbatim):** "the three fine-tuned final checkpoints go through the unchanged turn qualification (turn_test v2 + cpu_turn_qualify); the qualified seed with the lowest push-fall rate (tie: lowest seed index) is the SINGLE stage gait run on bench v2 under bench v2's rule (N = 41; >= 39/41 clears, 0 falls, >= 11/10/9/7 per heading) with the generic stage-gait override; no qualified seed -> NEGATIVE (no bench). Labels: LEARNED gait (fine-tuned from clock-s2 on plates); MuJoCo gates; bench v2's 180-deg timing caveat applies."
+- **Reading, stated before any run:**
+  - A seed is qualified iff it PASSES turn_test v2 AND is QUALIFIED by cpu_turn_qualify, as R1/v5 count a seed. A seed that fails v2 does not count, even if QUALIFIED.
+  - Push-fall rate = falls / 60, from the qualify JSON's push clause.
+  - Any missing record → INCOMPLETE, and nothing is written.
+  - Origin: two reviewers found the first implementation counted the qualify verdict alone. The stricter reading was adopted before any run, so no gate is weakened.
+- **Training counts only if** (added, stricter):
+  - the fresh log shows the task id, the parent checkpoint loading, the plates marker, feet_gait and the push event;
+  - R1's recipe check passes;
+  - the whole env.yaml equals clock-s2's except the training seed and the declared terrain fields;
+  - the export equals the final actor within 1e-4.
+- **Disclosed:**
+  - clock-s2's straight-walk drift is inherited (qualify drift 19.8 / 10.8 / 2.4°);
+  - R1's unchanged `feet_swing_height` uses absolute world z, so over a plate its swing-clearance target is 0.03 m lower relative to the plate top;
+  - the smoke trains 64 envs; the 4096-env scene is only probed, without learning;
+  - the time limit is 12 h (v5 used 10 h for the same 3000 iterations).
+- **Bench v2 of the selected gait:** a separate coordinator submission after workstream A's generic stage-gait override lands, under bench v2's unchanged rule. NEGATIVE → no bench.
+- **Pre-submission evidence:**
+  - Smokes: `21516523` FAIL (a wrong probe sanity check, since fixed); `21516656` PASS; `21516760` PASS; `21517240` PASS on the final code.
+  - Clean-checkout test (HEAD + B's files only): 134 passed, 1 skipped (R1's qualify JSONs are not tracked).
+- Submitted: PlateCross smoke `21517361` (array 0, 1 h, PLATECROSS_SMOKE=1, committed code `2b93da1`), then the real array `21517362` (0–2%3, `--dependency=afterok:21517361`). Selection: `results/repo-gpu-20260923/platecross-20261002/selection.json`.
