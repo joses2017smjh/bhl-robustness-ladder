@@ -3639,3 +3639,14 @@ Files:
 - Smoke `21517413` (final, uncommitted tree): PASS. Clock-s2 cleared 1 of 3 exploration crossings, with 0 falls.
 - Clean checkout (HEAD + A's files only): 455 passed, 10 skipped (gitignored or untracked bench records).
 - Submitted: clocks2 bench-v2 smoke `21517667` (committed code `0e014e9`, exploration layouts only), then the scored bench `21517668` (`--dependency=afterok:21517667`). Verdict: `results/mission7-campaign-20260923/clocks2-plate-bench-v2/verdict.json`. Only a PASS auto-releases the exact replay (arm `m7-clocks2`) and then the route gate.
+- **clocks2 bench v2 `21517668`: FAIL by the predeclared rule** (completed in 5:41 at HEAD `9de55d3`, clean sources; smoke `21517667` PASS). Recounted by the coordinator at 16:45 from the 41 crossing records in `results/mission7-campaign-20260923/clocks2-plate-bench-v2/crossings/`; the counts equal `verdict.json`.
+  - **18/41 clears** (need ≥ 39); **1 fall** (L22 d0, −90°, square, standstill, during the stage turn); none missing.
+  - Per heading: 0° **7/12** (need 11), +90° **4/11** (need 10), −90° **7/10** (need 9), 180° **0/8** (need 7).
+  - The chain stopped: the replay and the route gate were not submitted, so 42 of the 83 budgeted episodes stay unused.
+  - **180° failed on timing, as predicted.** 6 of 8 entries reached the clear position, but 10.8–17.3 s after takeover, against the 10 s window. The other 2 never cleared.
+  - **Other misses:** of 15 misses at 0/±90°, 13 never reached the clear position (that includes 0° entries, which need no turn), and 2 cleared late (11–12 s). One walking entry hit its walk time-out.
+  - Clears took 3.4–9.4 s. 28/41 crossings touched the stage (not gated; M3: 30/41).
+  - **Against M3** (shipped gait turning while stepping): 18 vs 16 clears, 1 vs 5 falls. Neither is near the bar.
+  - Reading: swapping in the qualified clock gait removes most falls but does not make the scripted stage clear. 180° is blocked by the turn rate inside the 10 s window, and the 0/±90° misses stall short of the clear position (mechanism not diagnosed here). Three predeclared scripted-stage crossing plans are now NEGATIVE (M2, M3, clock-s2).
+  - The learned crossing (B: PlateCross, array `21517543`) is still running; its selected gait, if any, gets one bench v2 run as predeclared.
+  - Labels: LEARNED shipped gait + LEARNED clock-s2 stage gait, SCRIPTED stage, ORACLE layout and plate pose.
