@@ -3540,3 +3540,9 @@ Frozen designs, written before any implementation or episode. Each gets its full
   - Everything else is R1's.
   - Disclosed: (i) changes the command mix, the training distribution, so the arm tests the pair (explicit straight-walk commands + the hold reward), not the reward alone.
   - 3 seeds from scratch, 6000 iterations. Rule: v5's joint rule verbatim; the gate is unchanged.
+- **Storage, user-approved deletion (2026-10-02 14:58; the user's words: "delete the intermediate checkpoints").** Deleted 16,625 intermediate `model_*.pt` files (49.54 GB apparent size) in 360 finished rsl_rl run dirs under `external/Berkeley-Humanoid-Lite/logs/rsl_rl/`.
+  - Kept, per run: the final checkpoint; every checkpoint cited next to the run's name in the ledger, docs, launchers, scripts, src or text results (3,236 files scanned); and every checkpoint another run resumed from (27 parents, read from params/agent.yaml).
+  - Skipped: run dirs with a checkpoint written in the last 48 h (8) and smoke run dirs (50).
+  - Checked before deletion: no run lost its final checkpoint, and no run dated 09-29 or later was touched.
+  - Manifest of every deleted file: `/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/ckpt_deleted_20261002.tsv`; script `delete_intermediate_ckpts.py` (same folder).
+  - Project 30762 quota: 1.549 TB → 1.514 TB, still about 14 GB over the 1.5 TB soft limit (grace about 3 weeks 4 days). Any further deletion needs the user's choice.
