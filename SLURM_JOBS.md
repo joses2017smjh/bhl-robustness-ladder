@@ -3396,3 +3396,11 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - Workflow `wf_01dca9fc-e9e`: an implementer and two adversarial reviewers; 7 minor findings, 5 fixed in code and 2 disclosed.
   - Smoke `21507687` PASS, with the default path byte-identical to the pre-M2 stage.
   - The release-script dry run passes preflight (TurnBoth-s0 policy sha256 562ceed7…5c95).
+- Submitted (code `71c26f6`): flush-pad smoke `21507880`, then the run `21507881` (afterok, `FLUSHPAD_SMOKE_JOB=21507880`).
+- **Flush-pad probe** `21507881`: COMPLETED in 1:49. **NEGATIVE by the predeclared rule.**
+  - 0/5 exploration seeds (120–124) kept the cube tilt ≤ 0.35 rad (maximum 0.742, 0.724, 0.704, 0.730 and 0.727 rad; every seed first exceeded 0.35 rad at t ≈ 5.84–5.88 s, when the lift begins). The rule needed ≥ 4/5.
+  - The scored stage did NOT run, as predeclared, so seeds 20–39 stay unused. BYTES-CHECK passed against smoke `21507880`.
+  - Recounted by the coordinator from the per-step tilt series in `results/coop-flushpad-20261002/probe/score_probe_crew2.json`.
+  - Reading, not part of the gate: with flush pads the UNCHANGED LIFT_HOLD_RULE passed on 5/5 probe seeds (lift 0.19–0.20 m, hold 14.3–14.4 s, robot tilt ≤ 0.18 rad, no floor contact), so the pads fix the grip but not the roll. The cube rolls with the hands as they rotate about the pinch axis during the lift keyframe (≈ 1 rad, as the kinematics predicted). A non-rolling grip needs a lift motion that holds the wrist orientation, not only flush pads.
+  - Labels: MODIFIED END-EFFECTOR (flush pads) + HARNESS CHANGE (elliptic cone, impratio 10); LEARNED gait + SCRIPTED arms + ORACLE cube pose. `results/coop-flushpad-20261002/{probe,scored}/verdict.json`.
+- Submitted (code `a6c64e0`, ledger `02f7054`): Mission 7 plate-bench smoke `21507961`, then the 64-crossing bench `21507962` (afterok). A bench PASS releases the exact replay and the route gate through `m2_bench_gate`.
