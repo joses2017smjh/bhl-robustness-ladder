@@ -3484,3 +3484,4 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - The first smoke ran `--stage-gait m3` on validation layout 0, a scored replay-gate layout: a watchdog hand-back at 30.8 s, then a fall at 34.04 s.
   - Smokes `21508726` and `21509267` PASS. The 38 M2 crossings re-score to their recorded clears.
   - Release-script dry run at 2026-10-02 12:27: preflight OK, nothing submitted.
+- Submitted (code `e33e44f`, ledger `54e4262`): bench-v2 smoke of the committed code `21514945`, then bench v2 with M3 `21514946` (afterok). A bench-v2 PASS releases the exact replay through `m3_bench_gate`, then the route gate.
