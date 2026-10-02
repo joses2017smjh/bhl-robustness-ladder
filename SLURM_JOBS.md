@@ -3507,3 +3507,25 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
     - So the clock must be an actor input. A clockless actor does not learn to march at zero or pure-yaw command, which matches the disclosed prior that no Unitree repo had tested this.
     - The open problem for R1 is heading drift while walking straight, not the turn.
   - Turning workstream: complete, both arms FAIL; one new QUALIFIED checkpoint (`arms-turngait-clock-s2`).
+
+**User approval recorded 2026-10-02 14:15:** "Yes go ahead and proceed with these", covering three items:
+- Mission 7: test `clock-s2` as the crossing gait on bench v2, and train a crossing behaviour on the plates. Both are run.
+- Turning follow-up: keep the clock and add a heading-hold reward.
+- Storage: "only you can choose what to delete". No deletion is made without the user naming the items; the coordinator measures what is reclaimable inside this project and presents a list.
+
+Frozen designs, written before any implementation or episode. Each gets its full predeclaration at submission.
+- **(A) Mission 7, `clock-s2` as the stage gait on bench v2:**
+  - At takeover the stage swaps the CONTROLLER (not only the policy) to the clock-aware one (`bhl_robust.eval.gait_clock.make_controller` on `arms-turngait-clock-s2`'s deploy.yaml), zeroes prev_actions and starts the gait-clock phase at 0, as at an Isaac episode start. At hand-back it swaps back to the shipped controller and zeroes prev_actions.
+  - The stage law is M2's turnboth law, unchanged, to isolate the gait factor: turn in place at 0.40 rad/s until |error| < 0.15 rad, cross straight at 0.30 m/s with heading hold, turn back.
+  - The override is built generically (any export, 75 or 77 observations), with `clocks2` as a named preset.
+  - Rule: bench v2's rule verbatim (N = 41; ≥ 39/41, 0 falls, ≥ 11/10/9/7 per heading), then the exact replay and the route gate. Budget: 83 more Mission 7 episodes.
+  - Disclosed: `clock-s2` qualified at ±0.6 rad/s and is untested at 0.40. A 180° entry at the commanded 0.40 rad/s needs ≈ 7.5 s of turning + the settle + ≈ 2.2 s of crossing ≈ 10.1–10.3 s against the 10 s clear window, so the 180° clause (≥ 7/8) is likely to fail on timing alone unless the gait turns faster than commanded. That clause and window are an interface question for the user, not something a gait fixes.
+- **(B) Mission 7 learned crossing:**
+  - Fine-tune `arms-turngait-clock-s2` (77-obs clock policy) for 3000 iterations, seeds 0–2, on flat ground scattered with Mission 7's own plates: round disc r 0.24 m and square 0.48 × 0.48 m, both 0.03 m high (as in `bhl_robust.mission.layout`).
+  - It keeps R1's rewards and command mix unchanged; the plates terrain is the one changed factor. It inherits clock-s2's straight-walk drift, which is disclosed as the baseline.
+  - **Selection rule:** the three fine-tuned final checkpoints go through the unchanged turn qualification (turn_test v2 + cpu_turn_qualify). The qualified seed with the lowest push-fall rate (tie: lowest seed index) is the SINGLE stage gait run on bench v2, under bench v2's rule and with the generic override from (A). If no seed qualifies: NEGATIVE, and no bench is run. The launcher computes the selection from JSON.
+  - The bench submission is the coordinator's, after (A)'s override lands.
+- **(C) Turning heading-hold arm R1H:**
+  - R1 (`Velocity-BHL-Arms-TurnGaitClock-v0`) + `heading_hold`: when |wz_cmd| < 0.05 rad/s, reward exp(−(Δψ / 0.2 rad)²) with weight 1.0, where Δψ = wrap(base yaw − ψ_ref). ψ_ref is the base yaw at the last command resample, reset at episode reset. The term is zero when |wz_cmd| ≥ 0.05. Chosen, not tuned, and checked against R1's `track_ang_vel_z` weight.
+  - Before freezing, the implementer checks the command config's `heading_command` mode. If it is True anywhere in R1's chain, the term is redundant and the design returns to the coordinator.
+  - 3 seeds from scratch, 6000 iterations. Rule: v5's joint rule verbatim (per arm).
