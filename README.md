@@ -17,6 +17,7 @@ Seeking robotics ML / simulation engineering roles. Python · PyTorch · Isaac
 Lab · MuJoCo · ONNX · Slurm/HPC.
 
 [Results, September 20](docs/WEEKEND_RESULTS_2026-09-20.md) ·
+[Root causes and tests, October 1–2](docs/SOLUTIONS_2026-10-01.md) ·
 [Reproduce and inspect](docs/REPRODUCIBILITY.md) ·
 [Architecture](#architecture) · [Job ledger](SLURM_JOBS.md) · [Roadmap and stretch goals](docs/ROADMAP.md)
 
@@ -75,6 +76,11 @@ Oracle = simulator ground truth (pose, goal, waypoints) given to the controller.
 
 | Experiment | Evidence | Boundary |
 |---|---|---|
+| Turning gait with a gait clock (Oct 2) | Clock as a policy input: **every seed turns in place** (18/18 turns from a settled stand, 0 falls; 28/30 on fresh seeds). **1 of 3 qualifies**, the second qualified turning checkpoint overall; the other two drift more than 15° on straight walks, so the predeclared recipe rule (2 of 3) **fails**. Same clock in the critic only: **0 of 3** seeds turn | LEARNED gait, MuJoCo gates; a single qualified checkpoint, not a reliable recipe ([R1](results/repo-gpu-20260923/turngait-r12-20261001/verdict/R1.json), [R2](results/repo-gpu-20260923/turngait-r12-20261001/verdict/R2.json)) |
+| Mission 7 plate crossing (Oct 2) | Both predeclared crossing plans **negative**: bench v1 **8/64** clears, 8 falls (26 lost in the bench's own run-up); run-up-free bench v2 with turn-while-stepping **16/41**, 5 falls, wall contact in 30/41, 180° entries **0/8** (pass needs ≥ 39/41) | LEARNED shipped gait, SCRIPTED stage controller, ORACLE layout and plate pose ([v1](results/mission7-campaign-20260923/m2-plate-bench/verdict.json), [v2](results/mission7-campaign-20260923/m3-plate-bench-v2/verdict.json)) |
+| Cooperative carry with flush hand pads (Oct 2) | Probe **negative**: the cube still rolls in the hands; 0/5 seeds stay within 0.35 rad (peak tilt 0.70–0.74 rad), so the scored stage did not run. Reading, not a gate: the unchanged lift-and-hold rule passes **5/5** (stock hands: 0/10) | LEARNED gait, SCRIPTED arms, ORACLE cube pose for scoring only; modified end-effector, not the stock robot ([verdict](results/coop-flushpad-20261002/probe/verdict.json)) |
+| Learned navigation, map updated at each lidar packet's capture pose (Oct 1) | **Negative**: weaker actor 15 → 17/24 mazes (needed net +4), stronger actor 23 → 23/24; 0 falls, fewer wall contacts; the fix stays opt-in | LEARNED gait and NavGym v4 actors; ORACLE pose and goal ([verdict](results/navgym-v4-capture-pose-20261001/screen/verdict.json)) |
+| In flight (Oct 2) | Standing cube-to-shelf with a roll-proof lift reward (2 seeds); NavGym v5 navigator with a visit map (3 seeds), then physics transfer on 12 never-seen mazes | Rules predeclared in the [job ledger](SLURM_JOBS.md) before any run |
 | Randomized-maze mission (Sept 24–28) | **24/24** unseen mazes, 0 falls, 0 wall contacts; 6×6 at 35 % packet dropout: **12/12** reached, 11 clean; 22-DoF humanoid (one qualified turning checkpoint) **12/12** never-seen 6×6, 0 falls | Learned gait, scripted A* on the robot's own lidar map, oracle pose and goal; MuJoCo only |
 | Learned navigation on the physics biped (Sept 27) | **10/12** never-seen 6×6 mazes, 0 falls (A* 12/12) | Exploratory: the gym policy missed its predeclared held-out bar by one clause; oracle pose and goal |
 | Turning gait, cooperative lift, standing cube-to-shelf (Sept 27) | Turning: 1 of 12 seeds qualifies; scripted lift-and-hold **0/10**; standing policy stands but never places | Negatives, recorded with their mechanisms in [status](docs/STATUS.md) |
@@ -215,10 +221,11 @@ What is running, and which Slurm id produced which number:
 
 ## Testing and engineering decisions
 
-The September 20 CPU suite passes **145 tests** in the existing environment:
+The full CPU suite passes **1,252 tests**, 1 skipped (Slurm job `21509357`, October 2):
 
 ```bash
 PYTHONPATH=src python -m pytest -q tests
+sbatch slurm/repo20260923/cpu_pytest_full.sbatch   # the same suite as a 16 GB CPU job
 ```
 
 Unit tests do not certify Isaac rendering or learned task performance. Those
