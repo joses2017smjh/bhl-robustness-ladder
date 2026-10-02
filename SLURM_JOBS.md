@@ -3610,3 +3610,4 @@ Files: `slurm/repo20260923/gpu_turngait_hold.sbatch`; appended classes in `turn_
   - Clean checkout (HEAD + C's files only): 281 passed, 1 skipped.
   - The real-mode launcher prefix on a fake tree with no run dirs reaches the GPU section (the PlateCross startup bug does not apply).
   - The four touched task modules only add lines.
+- Submitted: R1H smoke `21517587` (array 0, 1 h, TURNGAIT_SMOKE=1, committed code `ef40f3d`), then the real array `21517588` (0–2%3, 20 h, `--dependency=afterok:21517587`). Verdict: `results/repo-gpu-20260923/turngait-hold-20261002/verdict/R1H.json`.
