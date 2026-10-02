@@ -3582,3 +3582,8 @@ Files: `slurm/repo20260923/gpu_platecross.sbatch`; task `Velocity-BHL-Arms-Plate
   - Smokes: `21516523` FAIL (a wrong probe sanity check, since fixed); `21516656` PASS; `21516760` PASS; `21517240` PASS on the final code.
   - Clean-checkout test (HEAD + B's files only): 134 passed, 1 skipped (R1's qualify JSONs are not tracked).
 - Submitted: PlateCross smoke `21517361` (array 0, 1 h, PLATECROSS_SMOKE=1, committed code `2b93da1`), then the real array `21517362` (0–2%3, `--dependency=afterok:21517361`). Selection: `results/repo-gpu-20260923/platecross-20261002/selection.json`.
+- **PlateCross array `21517362` FAILED at startup, before any training or gate** (all three tasks: exit 2 in 4 s, empty logs).
+  - Cause: under `set -euo pipefail`, the real-mode run-dir count `n_runs=$(ls -d … | wc -l)` exits 2 when no run dir exists yet, which is always the case on a first run. The smoke skips that block.
+  - Nothing was created: no run dir, and no file under `results/repo-gpu-20260923/platecross-20261002/` (the directories are empty). No scored seed was touched.
+  - Fix (plumbing only; the rule and every gate are unchanged): `n_runs=$( (ls … || true) | wc -l)`.
+  - New tests run the launcher's real-mode prefix on a fake tree: no run dir → continues with `n_runs=0`; an incomplete or duplicate run dir → still refused; a complete one → reused. `tests/test_platecross.py`: 79 passed.

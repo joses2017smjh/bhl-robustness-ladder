@@ -878,3 +878,55 @@ def test_launcher_v2_test_writes_once_and_rereads_on_a_resubmit(tmp_path):
     assert "have " in second and "TURN-V2 arms-platecross-clocks2-s0: PASS" in second
     assert sorted(p.name for p in out.iterdir()) == ["arms-platecross-clocks2-s0.json"]
     assert (out / "arms-platecross-clocks2-s0.json").read_text() == recorded
+
+
+def _real_mode_startup(tmp_path, make_runs):
+    """Run the launcher's real-mode (PLATECROSS_SMOKE=0) prefix, everything before the GPU section, on a fake tree.
+    The smoke never runs the run-dir block, so this is its only test."""
+    import os
+    head = SBATCH.read_text().split("# ---------------------------------------------------------------- GPU from here")[0]
+    env_line = "source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh"
+    assert head.count(env_line) == 1
+    head = head.replace(env_line, "true")
+    up, repo = tmp_path / "up", tmp_path / "repo"
+    logroot = up / "logs/rsl_rl/humanoid"
+    parent = logroot / "2026-10-02_03-58-04_arms-turngait-clock-s2"
+    (parent / "params").mkdir(parents=True)
+    (parent / "exported").mkdir()
+    (parent / "model_5999.pt").write_bytes(b"x")
+    (parent / "params/env.yaml").write_text("x")
+    (parent / "exported/deploy.yaml").write_text("x")
+    repo.mkdir()
+    make_runs(logroot)
+    env = {"PATH": os.environ["PATH"], "UPSTREAM": str(up), "REPO": str(repo), "WORKSPACE": str(tmp_path),
+           "PLATECROSS_SMOKE": "0", "SLURM_ARRAY_TASK_ID": "0", "SLURM_JOB_ID": "1"}
+    return subprocess.run(["bash", "-c", head + '\necho "REACHED-GPU-SECTION n_runs=$n_runs"\n'], env=env,
+                          capture_output=True, text=True, timeout=60)
+
+
+def test_real_mode_startup_survives_a_missing_run_dir(tmp_path):
+    """Regression, array 21517362 (2026-10-02). Every real task died in 4 s with exit 2 and an empty log: under
+    set -euo pipefail, `ls | wc -l` failed when no run dir existed yet."""
+    r = _real_mode_startup(tmp_path, lambda logroot: None)
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert "REACHED-GPU-SECTION n_runs=0" in r.stdout
+
+
+def test_real_mode_startup_still_refuses_incomplete_and_duplicate_run_dirs(tmp_path):
+    def incomplete(logroot):
+        (logroot / "2026-10-02_16-00-00_arms-platecross-clocks2-s0").mkdir()
+    r = _real_mode_startup(tmp_path / "a", incomplete)
+    assert r.returncode == 1 and "an incomplete run dir exists" in r.stdout
+
+    def duplicate(logroot):
+        for ts in ("2026-10-02_16-00-00", "2026-10-02_17-00-00"):
+            (logroot / f"{ts}_arms-platecross-clocks2-s0").mkdir()
+    r = _real_mode_startup(tmp_path / "b", duplicate)
+    assert r.returncode == 1 and "2 run dirs named arms-platecross-clocks2-s0" in r.stdout
+
+    def complete(logroot):
+        d = logroot / "2026-10-02_16-00-00_arms-platecross-clocks2-s0"
+        d.mkdir()
+        (d / "model_8998.pt").write_bytes(b"x")
+    r = _real_mode_startup(tmp_path / "c", complete)
+    assert r.returncode == 0 and "REACHED-GPU-SECTION n_runs=1" in r.stdout, r.stdout + r.stderr

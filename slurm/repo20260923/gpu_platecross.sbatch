@@ -181,7 +181,9 @@ REF_RUN=$(ls -d "$LOGROOT"/*_arms-turn-turnboth-s0 2>/dev/null | sort | tail -1 
 find_run() { ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | sort | tail -1; }
 existing=$(find_run || true)
 if [ "$SMOKE" != 1 ]; then
-    n_runs=$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)
+    # `|| true` inside: with no run dir yet, ls exits 2, and under pipefail the bare pipeline killed every real task
+    # in 4 s with an empty log (array 21517362, 2026-10-02); the smoke never runs this block.
+    n_runs=$( (ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null || true) | wc -l)
     if [ "$n_runs" -gt 1 ]; then
         echo "PLATECROSS RESULT: FAIL ($n_runs run dirs named $RUN_NAME; cpu_turn_qualify needs exactly one; seed stays INCOMPLETE)"; exit 1
     fi
