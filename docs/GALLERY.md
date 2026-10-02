@@ -5,6 +5,12 @@ Renderer is in the folder name:
 scored episode from the harness that produced the numbers, except `squat_pick`,
 which says on its face that it is scripted.
 
+## October 2: the gait clock as a policy input vs a critic-only clock (turning ablation)
+
+| Actual recording | Result and scope |
+|---|---|
+| [Turning ablation, side by side](gifs/turngait-clock-actor-vs-critic.gif) · [sidecar](gifs/turngait-clock-actor-vs-critic.json) · MP4 (1×, not in git: `results/turngait-clip-20261002/`) | The turn_test v2 command, given to two LEARNED 22-DoF gaits from the same launcher (`21506543`) that differ in one place: 3 s standing, then +0.6 rad/s for 6 s; then a fresh reset and the same with −0.6 rad/s. Left: `arms-turngait-clock-s2`, gait clock (sin/cos of a 0.8 s phase) in the actor and critic, the one R1 seed that qualifies. Right: `arms-turngait-critic-s0`, the same clock in the critic only, the first of the three R2 seeds. Reset seed 0 is the first scored seed. Both choices follow that rule, not a look at the footage. `scripts/bench/turn_clip.py` re-simulates the scored runs step for step and matches them exactly (sidecar `reproduces_scored_runs`: +196.8° / −206.2° against +16.6° / −14.5°). Scored: every R1 seed turns (18/18 v2 turns, 28/30 on fresh seeds), but only s2 also walks straight (drift ≤ 15° on 2 of 3 walks), so R1 fails its predeclared recipe rule (1/3, needed 2/3). No R2 seed turns (10–50° per run). Display only; 1×, 10 fps; 5.09 MB (render `21516970`) |
+
 ## September 30: the 22-DoF humanoid in the randomized maze (README hero)
 
 | Actual recording | Result and scope |
@@ -78,6 +84,7 @@ controller evidence lives in [`MISSION7_TASKS.md`](MISSION7_TASKS.md).
 
 | clip | renderer | task / rung | verdict |
 |---|---|---|---|
+| turngait-clock-actor-vs-critic | MuJoCo | 22-DoF turning: gait clock in the actor (R1) vs the critic only (R2) | render works, reproduces the scored runs — every R1 seed turns but the recipe fails 1/3 on walk drift; no R2 seed turns |
 | mission7/approach_negx_centering | MuJoCo | Mission 7 privileged Approach, world −x, test layout 14 | works — gate passed 62/64, 0 falls (privileged pose, scripted centring, frozen gait) |
 | mission7/doors1_stall_vs_crossing_fix | MuJoCo | Mission 7 Doors, validation layout 1 | render works — the crossing fix reaches the goal on this layout; not promoted (replay regression 7–9/10) |
 | [`dr_pair`](#locomotion) | MuJoCo | domain randomization | **works** |

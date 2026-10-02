@@ -62,12 +62,15 @@ Lab · MuJoCo · ONNX · Slurm/HPC.
       <sub>Isaac-trained PPO, scored in MuJoCo. The highest-training-reward policy (right, no randomization) falls in <b>21/90</b> episodes; the default randomization <b>0/90</b>.</sub>
     </td>
     <td width="50%" align="center">
-      <sub><a href="docs/GALLERY.md">Every clip, successes and failures</a> ·
-      <a href="docs/STATUS.md">status of every workstream, negatives included</a> ·
-      <a href="SLURM_JOBS.md">job ledger with predeclared rules</a></sub>
+      <a href="docs/gifs/turngait-clock-actor-vs-critic.gif"><img src="docs/gifs/turngait-clock-actor-vs-critic.gif" width="420" alt="Two 22-DoF humanoids in MuJoCo get the same command: stand 3 s, then turn left at 0.6 rad/s for 6 s; then the same to the right. Left, gait clock as a policy input: turns +197 and -206 degrees. Right, gait clock in the critic only: steps but turns +17 and -14 degrees. Heading dials show the yaw turned; result cards compare it with the 150-degree bar of the scored turn test."></a><br>
+      <sub>One change, same command: the gait clock as a policy input (left) or only in the critic (right). Every clock-input seed turns in place (<b>18/18</b> scored turns); <b>0 of 3</b> critic-only seeds turn. Only 1 of 3 clock-input seeds also walks straight, so that recipe still fails its rule. Learned gaits; the clip re-simulates the scored runs.</sub>
     </td>
   </tr>
 </table>
+
+<sub><a href="docs/GALLERY.md">Every clip, successes and failures</a> ·
+<a href="docs/STATUS.md">status of every workstream, negatives included</a> ·
+<a href="SLURM_JOBS.md">job ledger with predeclared rules</a></sub>
 
 <sub>Learned = PPO policy, frozen at evaluation. Scripted = hand-written planner or supervisor.
 Oracle = simulator ground truth (pose, goal, waypoints) given to the controller.</sub>
