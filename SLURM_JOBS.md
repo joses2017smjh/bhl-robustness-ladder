@@ -3446,3 +3446,41 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - A route-integration run on layout 252 ended with excessive_collision during the turn.
   - Prediction: bench v2 FAILs, and the replay would fail even after a bench PASS. The shipped gait steps only from 0.30 m/s, and the 0.40 rad/s cap then makes 0.68–0.75 m turning arcs that do not fit 1.5–1.7 m cells.
 - **If approved:** budget 41 + 10 + 32 = 83 episodes of the conditional line; a fresh smoke of the committed code, then the bench afterok. A bench-v2 PASS releases the replay through `m3_bench_gate`.
+
+**Turning R1 arm verdict** (`21506543` tasks 0–2; recounted 2026-10-02 12:27 from `results/repo-gpu-20260923/turngait-r12-20261001/{training,turn-test-v2,qualify}/`): **R1 (`Velocity-BHL-Arms-TurnGaitClock-v0`, clock in the actor) FAIL by the predeclared v5 joint rule.** 1/3 seeds both PASS turn_test v2 AND are QUALIFIED; the rule needed 2. All three passed the training clause and the wrong-arm guard.
+- s0: v2 PASS (turns 6/6, 180–234°; walk drift 1.4°); NOT QUALIFIED (v2x turns 10/10, but walks 1/3 with drift 16.5° and 22.7° on two of them; push 8/60).
+- s1: v2 FAIL (turns 6/6, but walk drift −36.7°); NOT QUALIFIED (turns 8/10, walks 0/3, push 8/60).
+- s2: v2 PASS (turns 6/6, drift −4.8°); **QUALIFIED** (turns 10/10, walks 2/3, push 9/60 = 0.15, at the limit).
+- Reading, not part of the gate:
+  - The gait clock + contact schedule makes every R1 seed turn in place (18/18 v2 turns, 150–234°), against 1/12 seeds turning before the recipe.
+  - The failures are now heading drift while walking straight, not the turn.
+  - `arms-turngait-clock-s2` is a second qualified turning checkpoint, after TurnBoth-s0. Like TurnBoth-s0, it is one checkpoint, not a recipe.
+- R2 (`TurnGaitCritic-v0`, clock in the critic only): s0 does not turn (0/6, 12–19°). s1 and s2 are still running.
+
+**User approval recorded 2026-10-02 12:27:** "Ok everything looks good procceed with these changes". This approves Mission 7 bench v2 + M3 as built (`e33e44f`) with the coded options of the three pending decisions:
+- (i) keep the six standstill spawns whose elbow starts 1.3–9.3 mm inside a wall at the pre-point, so N = 41;
+- (ii) accept that M3 acts after the stage's unchanged approach and settle, not at takeover;
+- (iii) keep the polling jitter disclosed: the settle lasts 0.40 or 0.60 s, the cross bound 4.0 or 4.2 s, and the 180° timeline is 10.0–10.2 s.
+
+**Predeclared now (2026-10-02 12:27, before any bench-v2, replay or route episode with `--stage-gait m3`): Mission 7 bench v2 + M3** (`slurm/repo20260923/cpu_m7_plate_bench_v2.sbatch`, `scripts/mission7_plate_bench_v2.py`, stage `scripts/mission7_plate_stage.py --stage-gait m3`; code `e33e44f`; the full header of the launcher is the predeclaration of record).
+- **Labels:** LEARNED shipped gait arms-dr1.0-s0 throughout (M3 never swaps the policy), SCRIPTED stage, ORACLE layout and plate pose.
+- **Budget:** 41 bench + 10 exact replay + 32 route gate = 83 episodes of the conditional M3 line (≤ 106, under "don't worry about the budget"); flagged in the report.
+- **PREDECLARED RULE (frozen; a chain, each step only after the previous PASSES):**
+  - "Bench v2: with N crossings run (64 minus the dropped set) and N_h per heading, bench v2 PASSES iff clears >= N - 2, 0 falls, and clears >= N_h - 1 for every heading. Otherwise FAIL; INCOMPLETE if any declared crossing is missing. The clear definition is unchanged: mission7_gates' real clear (base along >= +0.35 m past the plate centre along the door direction), within 10 s of takeover."
+  - Then the unchanged exact ten-fall replay once with `--stage-gait m3` (complete, 10 episodes, 10 upright, 0 falls; release arm `m3-shipped-step`, guarded by `m3_bench_gate`).
+  - Then the route gate as coded by M1: Doors and Transport each ≥ 16/16 on validation 0–15 (32 episodes).
+- **Numbers:** N = 41 (0°: 12, +90°: 11, −90°: 10, 180°: 8), so PASS needs ≥ 39/41 clears, 0 falls, and ≥ 11/10/9/7 per heading. Falls (tilt ≥ 0.78) count in every phase after the spawn.
+- **Grid and entry:**
+  - The grid is v1's (training layouts 0–31 × doors 0/1, disjoint from the replay and route layouts), with no run-up.
+  - Standstill crossings spawn at the pre-point with the entry yaw. Walking crossings spawn 0.30 m behind it along their own heading, walk forward for 1 s and take over at arrival. Every crossing settles 3.0 s first.
+  - DROPPED by geometry before any episode (23 walking crossings): L3 d1, L4 d1, L5 d1, L6 d1, L7 d1, L9 d0, L10 d0, L11 d0, L12 d0, L13 d0, L14 d0, L15 d0, L16 d1, L19 d1, L21 d1, L22 d1, L23 d1, L24 d0, L26 d0, L27 d0, L29 d0, L30 d0, L31 d0.
+- **M3 constants:**
+  - Turn while stepping at [0.30 m/s, 0, ±0.40 rad/s] until |error| < 0.25 rad. 0.30 m/s comes from one pre-registered open-floor sweep on exploration layout 255; 0.40 rad/s is the interface bound; 0.25 rad is BearingController's tolerance.
+  - Cross at [0.30, 0, clip(1.2 × error, ±0.35)] until +0.35 m or 4.0 s, then turn back.
+  - Stall watchdog: < 0.05 m in 1.2 s triggers a reset of prev_actions and 0.40 s at −0.30 m/s; at most 2 recoveries per crossing, then hand back.
+- **Disclosed before any scored episode:**
+  - Bench v2 was introduced after M2's FAIL revealed the run-up confound; M2's FAIL stands and v1 is unchanged.
+  - The kinematic FAIL prediction: 0.68–0.75 m turning arcs in 1.5–1.7 m cells, and the 180° timeline sits at the 10 s window.
+  - The first smoke ran `--stage-gait m3` on validation layout 0, a scored replay-gate layout: a watchdog hand-back at 30.8 s, then a fall at 34.04 s.
+  - Smokes `21508726` and `21509267` PASS. The 38 M2 crossings re-score to their recorded clears.
+  - Release-script dry run at 2026-10-02 12:27: preflight OK, nothing submitted.
