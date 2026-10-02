@@ -14,6 +14,50 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def _probe_args(args):
+    # Everything after the three paths is forwarded to the probe verbatim, so a
+    # new probe flag needs no change here or in the sbatch.  The old eight
+    # positional slots had to agree across all three files, and when they
+    # stopped agreeing the job still ran and still exited 0.
+    probe_args = ["--stage", args.stage, "--indices", args.indices,
+                  "--handoff", args.handoff, "--rejoin-fix", args.rejoin_fix]
+    if args.rejoin_diagnostic:
+        probe_args.append("--rejoin-diagnostic")
+    if args.chain_trace:
+        probe_args.append("--chain-trace")
+    if args.stage_lateral is not None:
+        probe_args.append(f"--stage-lateral={args.stage_lateral}")
+    if args.stage_activate:
+        probe_args.append("--stage-activate")
+    if args.stage_press_hold:
+        probe_args.append("--stage-press-hold")
+    if args.stage_wait_open is not None:
+        probe_args.append(f"--stage-wait-open={args.stage_wait_open}")
+    if args.pre_point is not None:
+        probe_args.append(f"--pre-point={args.pre_point}")
+    if args.cross_clear is not None:
+        probe_args.append(f"--cross-clear={args.cross_clear}")
+    if args.stall_min_s is not None:
+        probe_args.append(f"--stall-min-s={args.stall_min_s}")
+    if args.settle_s is not None:
+        probe_args.append(f"--settle-s={args.settle_s}")
+    if args.cross_kick:
+        probe_args.append("--cross-kick")
+    if args.rejoin_advance:
+        probe_args.append("--rejoin-advance")
+    if args.exit_ramp_center:
+        probe_args.append("--exit-ramp-center")
+    if args.align_yaw:
+        probe_args.append("--align-yaw")
+    if args.exit_ramp:
+        probe_args.append(f"--exit-ramp={args.exit_ramp}")
+    if args.allow_inactive_intervention:
+        probe_args.append("--allow-inactive-intervention")
+    if args.stage_gait == "turnboth":
+        probe_args.append("--stage-gait=turnboth")
+    return probe_args
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--campaign", type=Path, required=True)
@@ -53,6 +97,8 @@ def main():
     parser.add_argument("--exit-ramp-center", action="store_true")
     parser.add_argument("--align-yaw", action="store_true")
     parser.add_argument("--exit-ramp", type=float, default=0.)
+    parser.add_argument("--stage-gait", choices=("shipped", "turnboth"), default=None,
+                        help="forwarded as --stage-gait=turnboth; omitted = the shipped stage gait")
     parser.add_argument("--submit", action="store_true")
     args = parser.parse_args()
     campaign = args.campaign.resolve()
@@ -62,11 +108,17 @@ def main():
     snapshot = out / "source"
     if out.exists():
         parser.error(f"destination exists; preserve it and choose a new campaign: {out}")
+    if args.stage_gait == "turnboth" and (args.align_yaw or args.stage_press_hold):
+        parser.error("--stage-gait turnboth does not compose with --align-yaw or --stage-press-hold")
+    probe_args = _probe_args(args)
     if not args.submit:
-        print(json.dumps({"planned_output": str(out), "stage": args.stage,
-                          "indices": args.indices, "node": args.node,
-                          "constraint": None if args.node else args.constraint},
-                         indent=2))
+        plan = {"planned_output": str(out), "stage": args.stage,
+                "indices": args.indices, "node": args.node,
+                "constraint": None if args.node else args.constraint}
+        if args.stage_gait == "turnboth":   # the default plan is unchanged
+            plan["stage_gait"] = args.stage_gait
+            plan["probe_args"] = probe_args
+        print(json.dumps(plan, indent=2))
         return
     snapshot.mkdir(parents=True)
     files = list((ROOT / "src/bhl_robust/mission").glob("*.py"))
@@ -87,44 +139,6 @@ def main():
     (snapshot / "sha256.json").write_text(json.dumps(hashes, indent=2) + "\n")
     placement = ([f"--nodelist={args.node}"] if args.node
                  else [f"--constraint={args.constraint}"])
-    # Everything after the three paths is forwarded to the probe verbatim, so a
-    # new probe flag needs no change here or in the sbatch.  The old eight
-    # positional slots had to agree across all three files, and when they
-    # stopped agreeing the job still ran and still exited 0.
-    probe_args = ["--stage", args.stage, "--indices", args.indices,
-                  "--handoff", args.handoff, "--rejoin-fix", args.rejoin_fix]
-    if args.rejoin_diagnostic:
-        probe_args.append("--rejoin-diagnostic")
-    if args.chain_trace:
-        probe_args.append("--chain-trace")
-    if args.stage_lateral is not None:
-        probe_args.append(f"--stage-lateral={args.stage_lateral}")
-    if args.stage_activate:
-        probe_args.append("--stage-activate")
-    if args.stage_press_hold:
-        probe_args.append("--stage-press-hold")
-    if args.stage_wait_open is not None:
-        probe_args.append(f"--stage-wait-open={args.stage_wait_open}")
-    if args.pre_point is not None:
-        probe_args.append(f"--pre-point={args.pre_point}")
-    if args.cross_clear is not None:
-        probe_args.append(f"--cross-clear={args.cross_clear}")
-    if args.stall_min_s is not None:
-        probe_args.append(f"--stall-min-s={args.stall_min_s}")
-    if args.settle_s is not None:
-        probe_args.append(f"--settle-s={args.settle_s}")
-    if args.cross_kick:
-        probe_args.append("--cross-kick")
-    if args.rejoin_advance:
-        probe_args.append("--rejoin-advance")
-    if args.exit_ramp_center:
-        probe_args.append("--exit-ramp-center")
-    if args.align_yaw:
-        probe_args.append("--align-yaw")
-    if args.exit_ramp:
-        probe_args.append(f"--exit-ramp={args.exit_ramp}")
-    if args.allow_inactive_intervention:
-        probe_args.append("--allow-inactive-intervention")
     command = [
         "sbatch", "--parsable", "--job-name=m7-handoff-probe", "--account=eecs",
         "--partition=share", "--cpus-per-task=2", "--mem=12G", "--time=02:00:00",
@@ -173,6 +187,8 @@ def main():
         "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
         "submitted_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
     }
+    if args.stage_gait == "turnboth":   # default receipts keep their keys
+        row["stage_gait"] = args.stage_gait
     (out / "submission.json").write_text(json.dumps(row, indent=2) + "\n")
     with (ROOT / "SLURM_JOBS.md").open("a") as stream:
         stream.write(
@@ -180,7 +196,8 @@ def main():
             f"{args.stage} layouts `{args.indices}`, "
             f"{'node `' + args.node + '`' if args.node else 'constraint `' + args.constraint + '`'}"
             f", 2 CPUs / 12 GB / 0 GPUs / 2 h; "
-            f"unchanged PlateStage with `{args.handoff}` route handoff"
+            f"{'PlateStage on the `turnboth` stage gait (TurnBoth-s0 swapped in for the stage)' if args.stage_gait == 'turnboth' else 'unchanged PlateStage'}"
+            f" with `{args.handoff}` route handoff"
             f" and rejoin diagnostic `{args.rejoin_diagnostic}`, chain trace `{args.chain_trace}`, "
             f"fix `{args.rejoin_fix}`; "
             f"receipt/source hashes: `{out.relative_to(ROOT)}/submission.json`.\n"
