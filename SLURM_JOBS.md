@@ -3312,3 +3312,4 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - Smoke `21506555`: PASS on all 12 clauses. The hand-collider prims are present. The 26-link cube sensor reads 0 N for a free cube and ≥ 1 N for a cube on a hand. Stand3 and Stand4 configs differ only in the declared keys. Cubes placed flat on a deck and released fired success at step 12 (6/10), while cubes rolled 90° never fired.
   - Tests: `tests/test_stand4.py` (70) plus the related files, 161 passed. The launcher dry run passes 32/32.
 - **Disclosed:** the new hand hulls touch the cube at spawn in most envs (≈ 61 % of jittered resets put a hull inside the cube; smoke training `released` ≈ 0.35), as predicted and not tuned. Release is read at the end of each env step.
+- Submitted (code `4c5af8e`): Stand4 smoke of the committed code `21506757`, then the two-seed training `21506758` (array 0-1) with `--dependency=afterok:21506757 --export=ALL,STAND4_SMOKE_JOB=21506757`.
