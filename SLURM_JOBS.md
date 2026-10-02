@@ -3500,3 +3500,10 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
     - (a) the new qualified R1 checkpoint `arms-turngait-clock-s2` as the stage gait on bench v2 (it turns in place reliably at ±0.6 rad/s; untested at 0.40);
     - (b) report A's option (4), a learned local crossing (a fine-tune on 3 cm discs), the plan's last resort once M2 and M3 both fail.
   - Labels: LEARNED shipped gait, SCRIPTED M3 stage, ORACLE layout and plate pose.
+- **Turning R2 arm verdict** (`21506543` tasks 3–5, all COMPLETED; recounted 2026-10-02 12:54 from `verdict/R2.json` and the per-seed files): **R2 (`Velocity-BHL-Arms-TurnGaitCritic-v0`, clock in the critic only) FAIL by the predeclared v5 joint rule.** 0/3 seeds count.
+  - Every seed passed the training clause and failed turn_test v2 with 0/6 turns (10–50°). Walk drift was −17.6°, 22.8° and 36.0°.
+  - No seed qualified: v2x turns 0/10. Push falls were 0/60 on every seed, because the policies stand.
+  - Reading, the R1-vs-R2 contrast, the one declared difference between the arms: with the gait clock in the actor, every seed turns in place (18/18); with it in the critic only, no seed does (0/18).
+    - So the clock must be an actor input. A clockless actor does not learn to march at zero or pure-yaw command, which matches the disclosed prior that no Unitree repo had tested this.
+    - The open problem for R1 is heading drift while walking straight, not the turn.
+  - Turning workstream: complete, both arms FAIL; one new QUALIFIED checkpoint (`arms-turngait-clock-s2`).

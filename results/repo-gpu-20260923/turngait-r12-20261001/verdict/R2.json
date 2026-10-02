@@ -1,0 +1,55 @@
+{
+  "arm": "R2",
+  "task": "Velocity-BHL-Arms-TurnGaitCritic-v0",
+  "what": "gait clock in the critic only (actor 75 obs)",
+  "verdict": "FAIL",
+  "n_counted": 0,
+  "need": 2,
+  "of": 3,
+  "missing_seeds": [],
+  "seeds": [
+    {
+      "run": "arms-turngait-critic-s0",
+      "training": true,
+      "v2": "FAIL",
+      "qualify": "NOT QUALIFIED",
+      "push": {
+        "falls": 0,
+        "n": 60,
+        "rate": 0.0,
+        "max_falls": 9,
+        "pass": true
+      }
+    },
+    {
+      "run": "arms-turngait-critic-s1",
+      "training": true,
+      "v2": "FAIL",
+      "qualify": "NOT QUALIFIED",
+      "push": {
+        "falls": 0,
+        "n": 60,
+        "rate": 0.0,
+        "max_falls": 9,
+        "pass": true
+      }
+    },
+    {
+      "run": "arms-turngait-critic-s2",
+      "training": true,
+      "v2": "FAIL",
+      "qualify": "NOT QUALIFIED",
+      "push": {
+        "falls": 0,
+        "n": 60,
+        "rate": 0.0,
+        "max_falls": 9,
+        "pass": true
+      }
+    }
+  ],
+  "rule": "PASS iff >= 2/3 seeds both PASS turn_test v2 AND are QUALIFIED by cpu_turn_qualify's unchanged rule (v2x >= 9/10 on reset seeds 10-14, walk <= 15 deg on >= 2/3, push <= 9/60); else FAIL; INCOMPLETE if any JSON is missing. A seed that fails v2 does not count even if it qualifies through v2x.",
+  "training_rule": "Training counts only if the run dir holds model_5999.pt and the training log shows the arm's task id, the feet_gait term and the push event.",
+  "label": "LEARNED gait; MuJoCo gates",
+  "note": "new task trained from scratch (no parent checkpoint); not a fine-tune of TurnBoth-s0"
+}
