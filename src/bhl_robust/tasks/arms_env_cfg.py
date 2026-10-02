@@ -378,3 +378,61 @@ class HumanoidTurnGaitCriticCfg(_HumanoidTurnGaitBaseCfg):
     """R2 (Velocity-BHL-Arms-TurnGaitCritic-v0): gait clock in the critic only, 75 actor observations."""
 
     observations: GaitClockCriticObservationsCfg = GaitClockCriticObservationsCfg()
+
+
+# --- turning-hold ---
+# R1H (Velocity-BHL-Arms-TurnGaitClockHold-v0; 2026-10-02, SLURM_JOBS.md "(C') revised design", frozen before any
+# implementation): a NEW task trained from scratch by slurm/repo20260923/gpu_turngait_hold.sbatch, never presented as
+# a fine-tune of R1. = R1 (HumanoidTurnGaitClockCfg: its rewards, its 77-obs clock observations, its events with the
+# fixed pushes, its DR and runner) + exactly two changes, both chosen, not tuned:
+#   (i)  the command mix: turn_command.TurnHoldMixVelocityCommandCfg built from R1's own base_velocity cfg -- per
+#        resample 30 % EXPLICIT envs (is_heading_env cleared; vx, vy, wz from R1's own ranges, wz = 0 exactly with
+#        probability 0.5), no PURE_TURN envs; the other 70 % keep R1's heading mode; the 2 % standing draw is upstream's;
+#   (ii) the reward heading_hold (gait_clock_mdp.heading_hold): weight 1.0, exp(-(dpsi / 0.2 rad)^2), only in the
+#        explicit envs while |wz_cmd| < 0.05 rad/s; psi_ref = the yaw at the env's last resample / episode reset.
+# Disclosed: (i) changes the training distribution, so the arm tests the pair (explicit straight-walk commands + the
+# hold reward), not the reward alone. Obs 77 / actions 22 unchanged (R1's export and deploy path).
+from bhl_robust.tasks.turn_command import TurnHoldMixVelocityCommandCfg
+
+
+@configclass
+class TurnGaitHoldRewardsCfg(TurnGaitRewardsCfg):
+    """R1's rewards (TurnGaitRewardsCfg, unchanged) + heading_hold, appended last."""
+
+    heading_hold = RewTerm(
+        func=gait_clock_mdp.heading_hold,
+        weight=gait_clock_mdp.HOLD_WEIGHT,
+        params={
+            "command_name": gait_clock_mdp.HOLD_COMMAND_NAME,
+            "std": gait_clock_mdp.HOLD_STD_RAD,
+            "wz_threshold": gait_clock_mdp.HOLD_WZ_THRESHOLD,
+        },
+    )
+
+
+@configclass
+class HumanoidTurnGaitClockHoldCfg(HumanoidTurnGaitClockCfg):
+    """R1H (Velocity-BHL-Arms-TurnGaitClockHold-v0): R1 + the explicit-command mix + heading_hold."""
+
+    rewards: TurnGaitHoldRewardsCfg = TurnGaitHoldRewardsCfg()
+
+    def __post_init__(self):
+        super().__post_init__()
+        old = self.commands.base_velocity
+        self.commands.base_velocity = TurnHoldMixVelocityCommandCfg(
+            resampling_time_range=old.resampling_time_range,
+            debug_vis=old.debug_vis,
+            asset_name=old.asset_name,
+            heading_command=old.heading_command,
+            heading_control_stiffness=old.heading_control_stiffness,
+            rel_standing_envs=old.rel_standing_envs,
+            rel_heading_envs=old.rel_heading_envs,
+            ranges=old.ranges,
+            rel_pure_turn_envs=0.0,
+            rel_direct_envs=0.30,
+            direct_lin_vel_x=tuple(old.ranges.lin_vel_x),
+            direct_lin_vel_y=tuple(old.ranges.lin_vel_y),
+            direct_ang_vel_z=tuple(old.ranges.ang_vel_z),
+            direct_zero_wz_prob=0.5,
+        )
+# --- end turning-hold ---

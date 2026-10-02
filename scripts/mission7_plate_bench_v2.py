@@ -36,6 +36,11 @@ Entry protocol (declared before any v2 episode; nothing here is tuned on a resul
 
 Smoke mode runs named crossings on exploration train layouts L >= 250 only, never a scored layout; it is never a
 verdict.
+
+--- m7-clocks2 (2026-10-02, opt-in): --stage-gait clocks2 (arms-turngait-clock-s2) or --stage-gait export
+--stage-gait-export <exported dir> runs the same bench, rule, grid and protocol with PlateStage's export stage gait:
+the stage CONTROLLER is swapped at takeover (scripts/mission7_plate_stage.py, M2's turnboth law unchanged).  Launcher:
+slurm/repo20260923/cpu_m7_plate_bench_v2_clocks2.sbatch; the turnboth and m3 paths are unchanged.
 """
 from __future__ import annotations
 
@@ -69,6 +74,24 @@ DISCLOSURE = (
     "bench v2 was introduced after the M2 bench FAIL (21507962) revealed the run-up confound (26/64 crossings ended "
     "in v1's own run-up before takeover); M2's FAIL stands and v1 is unchanged")
 STAGE_GAITS_V2 = ("turnboth", "m3")
+# --- m7-clocks2 --- the opt-in export stage gaits (= mission7_plate_stage.EXPORT_STAGE_GAITS, which this module does
+# not import at load time: it pulls in MuJoCo), their chain and their disclosure.  RULE_V2 above is theirs verbatim.
+EXPORT_STAGE_GAITS_V2 = ("clocks2", "export")
+CHAIN_V2_CLOCKS2 = (
+    "a chain, each step only after the previous PASSES: bench v2 with --stage-gait clocks2 -> the unchanged exact "
+    "ten-fall replay once with --stage-gait clocks2 (complete, 10 episodes, 10 upright, 0 falls; release arm "
+    "m7-clocks2) -> the route gate as coded by M1 (Doors and Transport each >= 16/16 successes on validation "
+    "layouts 0-15, 32 episodes)")
+CHAIN_V2_EXPORT = (
+    "bench v2 with --stage-gait export only: no replay or route release arm is wired for a generic export; any "
+    "chain step after a PASS needs its own arm and the user's approval")
+DISCLOSURE_CLOCKS2 = (
+    "arms-turngait-clock-s2 was qualified at +-0.6 rad/s and is untested at the interface's 0.40 rad/s; a 180-deg "
+    "entry needs (pi - 0.15)/0.40 = 7.48 s of turning + the 0.40-0.60 s settle as polled + 0.65 m / 0.30 m/s = 2.17 s "
+    "of crossing = 10.05-10.25 s (about 10.1-10.3 s) against the 10 s clear window, so the 180-deg clause (>= 7/8) is "
+    "likely to fail on timing alone unless the gait turns faster than commanded")
+V2_CLOCKS2_LAUNCHER = "slurm/repo20260923/cpu_m7_plate_bench_v2_clocks2.sbatch"
+GAIT_CLOCK_SOURCE = "src/bhl_robust/eval/gait_clock.py"   # the clock controller the export gaits build
 
 BENCH_SPLIT = v1.BENCH_SPLIT              # "train"
 TOTAL_GRID = v1.TOTAL                     # 64
@@ -532,22 +555,43 @@ def compact_result(result):
                 walk_s=arrived.get("walk_s"),
                 watchdog_recoveries=sum(e.get("event") == "stall_recover" for e in events),
                 watchdog_handback=any(e.get("event") == "stall_handback" for e in events))
+    if result.get("stage_gait") in EXPORT_STAGE_GAITS_V2:   # --- m7-clocks2 --- the controller swaps, compact
+        line["controller_swaps"] = [{key: e.get(key) for key in (
+            "event", "time_s", "controller", "obs_width", "clock_step", "stage_controller_clock_step")}
+            for e in result.get("gait_events") or []]
     return line
 
 
-def source_files(repo):
-    """v1's physics-source set (the replay snapshot's files minus its sbatch, plus v1's launcher) plus this launcher."""
-    return sorted(set(v1.source_files(repo)) | {V2_LAUNCHER})
+def source_files(repo, stage_gait=None):
+    """v1's physics-source set (the replay snapshot's files minus its sbatch, plus v1's launcher) plus this launcher.
+
+    --- m7-clocks2 --- an export stage gait also hashes the clock controller module and its own launcher (its replay
+    snapshot copies gait_clock.py too); every other gait's set is unchanged.
+    """
+    names = set(v1.source_files(repo)) | {V2_LAUNCHER}
+    if stage_gait in EXPORT_STAGE_GAITS_V2:
+        names |= {GAIT_CLOCK_SOURCE, V2_CLOCKS2_LAUNCHER}
+    return sorted(names)
+
+
+def chain_for(stage_gait):
+    """The predeclared chain text of a bench-v2 run (m3's unchanged)."""
+    return {"clocks2": CHAIN_V2_CLOCKS2, "export": CHAIN_V2_EXPORT}.get(stage_gait, CHAIN_V2)
 
 
 def provenance(repo, mode, stage_gait, crossings):
     import hashlib
-    sources = source_files(repo)
+    sources = source_files(repo, stage_gait)
     upstream = repo / "external/Berkeley-Humanoid-Lite"
     from mission7_plate_stage import SHIPPED_EXPORT, TURNBOTH_EXPORT, m3_constants
     weights = {"shipped": upstream / SHIPPED_EXPORT / "policy.onnx"}
     if stage_gait == "turnboth":
         weights["turnboth"] = upstream / TURNBOTH_EXPORT / "policy.onnx"
+    export_info = None
+    if stage_gait in EXPORT_STAGE_GAITS_V2:   # --- m7-clocks2 --- the export, checked, and its weights
+        from mission7_plate_stage import export_check, export_dir_for
+        export_info = export_check(upstream, *export_dir_for(upstream, stage_gait))
+        weights[stage_gait] = Path(export_info["policy"])
 
     def sha(path):
         return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -559,7 +603,7 @@ def provenance(repo, mode, stage_gait, crossings):
         except (OSError, subprocess.SubprocessError) as exc:
             return f"unavailable: {exc}"
     import mujoco
-    return {"bench": "v2", "mode": mode, "stage_gait": stage_gait, "crossings": [list(c) for c in crossings],
+    prov = {"bench": "v2", "mode": mode, "stage_gait": stage_gait, "crossings": [list(c) for c in crossings],
             "rule": RULE_V2, "chain": CHAIN_V2, "disclosure": DISCLOSURE, "labels": labels(stage_gait),
             "dropped": [list(c) for c in DROPPED], "standstill_spawn_wall_overlap": [list(c) for c in
                                                                                      STANDSTILL_SPAWN_WALL_OVERLAP],
@@ -579,11 +623,20 @@ def provenance(repo, mode, stage_gait, crossings):
             "host": platform.node(), "python": sys.executable, "mujoco": mujoco.__version__,
             "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
             "started_utc": dt.datetime.now(dt.timezone.utc).isoformat()}
+    if export_info is not None:   # --- m7-clocks2 --- (turnboth and m3 records are unchanged)
+        prov.update(chain=chain_for(stage_gait), stage_constants=export_info, stage_gait_export=export_info["export"])
+        if stage_gait == "clocks2":
+            prov["disclosure_stage_gait"] = DISCLOSURE_CLOCKS2
+    return prov
 
 
 def labels(stage_gait):
     gait = ("LEARNED (the shipped arms-dr1.0-s0 gait throughout; never swapped)" if stage_gait == "m3" else
             "LEARNED (shipped arms-dr1.0-s0 outside the stage; TurnBoth-s0 during the stage)")
+    if stage_gait in EXPORT_STAGE_GAITS_V2:   # --- m7-clocks2 ---
+        gait = ("LEARNED (shipped arms-dr1.0-s0 outside the stage; during the stage the controller is swapped to "
+                + ("arms-turngait-clock-s2, a 77-observation gait-clock policy (Turning R1's qualified seed)"
+                   if stage_gait == "clocks2" else "the --stage-gait-export policy") + ")")
     return {"gaits": gait, "stage": f"SCRIPTED (PlateStage, stage_gait={stage_gait})",
             "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"}
 
@@ -593,13 +646,26 @@ def main(argv=None):
     parser.add_argument("--repo", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--mode", choices=("scored", "smoke", "rescore-m2"), required=True)
-    parser.add_argument("--stage-gait", choices=STAGE_GAITS_V2, default=None)
+    parser.add_argument("--stage-gait", choices=STAGE_GAITS_V2 + EXPORT_STAGE_GAITS_V2, default=None)
     parser.add_argument("--crossings", default="",
                         help="smoke only: comma-separated L:d on exploration train layouts L >= 250")
     parser.add_argument("--m2-dir", type=Path, default=None, help="rescore-m2 only (default the M2 bench directory)")
+    # --- m7-clocks2 --- the generic export stage gait (clocks2 is a pinned preset and takes neither flag)
+    parser.add_argument("--stage-gait-export", type=Path, default=None,
+                        help="--stage-gait export only: the exported directory swapped in as the stage controller")
+    parser.add_argument("--stage-gait-export-sha256", default=None,
+                        help="--stage-gait export only: refuse the export unless its policy.onnx has this sha256")
     parser.add_argument("--preflight", action="store_true")
     args = parser.parse_args(argv)
     args.repo, args.out = args.repo.resolve(), args.out.resolve()
+    if (args.stage_gait == "export") != (args.stage_gait_export is not None):
+        parser.error("--stage-gait-export <exported dir> is required with --stage-gait export, and only with it")
+    if args.stage_gait_export_sha256 is not None and args.stage_gait != "export":
+        parser.error("--stage-gait-export-sha256 pins a --stage-gait export only")
+    if args.stage_gait == "export":
+        from mission7_plate_stage import select_export_gait
+        args.stage_gait_export = args.stage_gait_export.resolve()
+        select_export_gait(args.stage_gait_export, args.stage_gait_export_sha256)
     if args.mode == "rescore-m2":
         out = args.out / "rescore_m2.json"
         if out.exists():
@@ -629,6 +695,10 @@ def main(argv=None):
         from mission7_plate_stage import m3_constants, turnboth_check
         check = (turnboth_check(args.repo / "external/Berkeley-Humanoid-Lite") if args.stage_gait == "turnboth"
                  else m3_constants())
+        if args.stage_gait in EXPORT_STAGE_GAITS_V2:   # --- m7-clocks2 --- the export check, before any episode
+            from mission7_plate_stage import export_check, export_dir_for
+            upstream = args.repo / "external/Berkeley-Humanoid-Lite"
+            check = export_check(upstream, *export_dir_for(upstream, args.stage_gait))
         print(json.dumps({"status": "PREFLIGHT_OK", "bench": "v2", "mode": args.mode, "stage_gait": args.stage_gait,
                           "crossings": len(specs), "dropped": len(DROPPED), "python": sys.executable,
                           "mujoco": mujoco.__version__, "out": str(args.out), "stage_gait_check": check},
@@ -652,7 +722,8 @@ def main(argv=None):
     if args.mode == "smoke":   # a smoke is never a bench verdict
         verdict["verdict"] = "SMOKE_" + ("INCOMPLETE" if verdict["verdict"] == "INCOMPLETE" else "RUN")
         verdict["smoke"] = True
-    verdict.update(bench="v2", stage_gait=args.stage_gait, mode=args.mode, chain=CHAIN_V2, disclosure=DISCLOSURE,
+    verdict.update(bench="v2", stage_gait=args.stage_gait, mode=args.mode, chain=chain_for(args.stage_gait),
+                   disclosure=DISCLOSURE,
                    labels=labels(args.stage_gait), dropped=[list(c) for c in DROPPED],
                    standstill_spawn_wall_overlap_not_gated=[list(c) for c in STANDSTILL_SPAWN_WALL_OVERLAP],
                    plate_activation_not_gated={
@@ -669,6 +740,10 @@ def main(argv=None):
                                 for reason in sorted({r["end_reason"] for r in results}, key=str)},
                    crossings=[compact_result(r) for r in results],
                    written_utc=dt.datetime.now(dt.timezone.utc).isoformat())
+    if args.stage_gait in EXPORT_STAGE_GAITS_V2:   # --- m7-clocks2 --- (turnboth and m3 verdicts are unchanged)
+        verdict["stage_gait_export"] = str(args.stage_gait_export) if args.stage_gait == "export" else "clocks2 preset"
+        if args.stage_gait == "clocks2":
+            verdict["disclosure_stage_gait"] = DISCLOSURE_CLOCKS2
     path = args.out / "verdict.json"
     if path.exists():
         raise FileExistsError(path)

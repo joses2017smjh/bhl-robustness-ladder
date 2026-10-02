@@ -3582,3 +3582,60 @@ Files: `slurm/repo20260923/gpu_platecross.sbatch`; task `Velocity-BHL-Arms-Plate
   - Smokes: `21516523` FAIL (a wrong probe sanity check, since fixed); `21516656` PASS; `21516760` PASS; `21517240` PASS on the final code.
   - Clean-checkout test (HEAD + B's files only): 134 passed, 1 skipped (R1's qualify JSONs are not tracked).
 - Submitted: PlateCross smoke `21517361` (array 0, 1 h, PLATECROSS_SMOKE=1, committed code `2b93da1`), then the real array `21517362` (0–2%3, `--dependency=afterok:21517361`). Selection: `results/repo-gpu-20260923/platecross-20261002/selection.json`.
+- **PlateCross array `21517362` FAILED at startup, before any training or gate** (all three tasks: exit 2 in 4 s, empty logs).
+  - Cause: under `set -euo pipefail`, the real-mode run-dir count `n_runs=$(ls -d … | wc -l)` exits 2 when no run dir exists yet, which is always the case on a first run. The smoke skips that block.
+  - Nothing was created: no run dir, and no file under `results/repo-gpu-20260923/platecross-20261002/` (the directories are empty). No scored seed was touched.
+  - Fix (plumbing only; the rule and every gate are unchanged): `n_runs=$( (ls … || true) | wc -l)`.
+  - New tests run the launcher's real-mode prefix on a fake tree: no run dir → continues with `n_runs=0`; an incomplete or duplicate run dir → still refused; a complete one → reused. `tests/test_platecross.py`: 79 passed.
+- Resubmitted (code `8213f14`): fresh PlateCross smoke `21517542`, then the real array `21517543` (0–2%3, `--dependency=afterok:21517542`). It replaces `21517362`.
+
+**Predeclared now (2026-10-02 16:22, before any R1H run; frozen design "(C') revised design" of 14:44): turning follow-up R1H. A new task, `Velocity-BHL-Arms-TurnGaitClockHold-v0`, = R1 + explicit straight-walk commands + a heading-hold reward.**
+Files: `slurm/repo20260923/gpu_turngait_hold.sbatch`; appended classes in `turn_command.py`, `gait_clock_mdp.py` and `arms_env_cfg.py`; verdict and recipe check `scripts/bench/turngait_hold_verdict.py`; tests `tests/test_turngait_hold.py`.
+- **What changes (exactly two, both chosen, not tuned):**
+  - (i) `TurnHoldMixVelocityCommand`: per resample, 30 % of envs leave heading control and take explicit commands from R1's own ranges, with wz = 0 exactly at p = 0.5. The other 70 % keep R1's heading mode, and the 2 % standing draw is upstream's.
+  - (ii) `heading_hold`: exp(−(wrap(yaw − ψ_ref)/0.2)²), weight 1.0, only in explicit envs while |wz_cmd| < 0.05. ψ_ref = the yaw at that env's last resample, read from the command term (the reset resample runs after the reset events).
+  - The term's ceiling is half of R1's track_ang_vel_z_exp (weight 2.0), and it is active in about 16 % of envs.
+  - Trained from scratch: 6000 iterations, seeds 0–2, array 0–2%3, 20 h limit.
+- **PREDECLARED RULE (v5's joint rule, verbatim):** "PASS iff >= 2/3 seeds both PASS turn_test v2 AND are QUALIFIED by cpu_turn_qualify's unchanged rule (v2x >= 9/10 on reset seeds 10-14, walk <= 15 deg on >= 2/3, push <= 9/60); else FAIL; INCOMPLETE if any JSON is missing. A seed that fails v2 does not count even if it qualifies through v2x." Training counts only if the run dir holds model_5999.pt and the training log shows the arm's task id, the feet_gait term, the heading_hold term, the explicit-command mix and the push event. A new task, never presented as a fine-tune of R1. Labels: LEARNED gait; MuJoCo gates.
+- **Disclosed:**
+  - the arm changes the command mix (the training distribution), so it tests explicit straight-walk commands and the hold reward together, not the reward alone;
+  - R1's drift is not a constant bias.
+- **Accepted exception, inherited from R12's smoke:** the smoke's export rewrites `$UPSTREAM/configs/policy_latest.yaml` (serialised by the shared export lock; nothing reads it as a default input), and Isaac writes its log under `$UPSTREAM/logs/rsl_rl/humanoid/isaaclab/`.
+- **Review:** 2 reviewers, 0 blocking, 4 distinct minor findings.
+  - The tests pinned three files this workstream does not own; fixed to an identifier check.
+  - A temporary recipe block sat in `eval/gait_clock.py` from about 15:00 to 15:18; it was removed, the file is byte-identical to HEAD, and no clocks2 job ran meanwhile.
+  - One empty `python3 -` ran on the interactive node; no effect.
+- **Pre-submission evidence:**
+  - Smokes `21516686` and `21516835` PASS (Isaac probe 21/21: explicit share 0.307, wz = 0 share of explicit 0.491; ψ_ref = heading after reset, partial reset and time-out resample; live heading_hold = formula).
+  - Clean checkout (HEAD + C's files only): 281 passed, 1 skipped.
+  - The real-mode launcher prefix on a fake tree with no run dirs reaches the GPU section (the PlateCross startup bug does not apply).
+  - The four touched task modules only add lines.
+- Submitted: R1H smoke `21517587` (array 0, 1 h, TURNGAIT_SMOKE=1, committed code `ef40f3d`), then the real array `21517588` (0–2%3, 20 h, `--dependency=afterok:21517587`). Verdict: `results/repo-gpu-20260923/turngait-hold-20261002/verdict/R1H.json`.
+
+**Predeclared now (2026-10-02 16:29, before any scored clocks2 episode; frozen design (A) of 'User approval recorded 2026-10-02 14:15'): Mission 7 bench v2 with `arms-turngait-clock-s2` as the stage gait.**
+Files:
+- `slurm/repo20260923/cpu_m7_plate_bench_v2_clocks2.sbatch` (new; the M3 launcher is untouched);
+- an opt-in `--stage-gait clocks2|export` override in `scripts/mission7_plate_stage.py`;
+- plumbing through bench v2, the route probe, both snapshot submitters, `submit_m7_replay_gates.sh` (new arm `m7-clocks2` with `clocks2_bench_gate`) and the follow-up;
+- tests `tests/test_mission7_clocks2.py`.
+**What changes:**
+- At takeover the stage swaps the CONTROLLER to a fresh `make_controller` of clock-s2's pinned export (policy sha256 `c1862f1e…`; deploy.yaml checked at load). prev_actions start at 0 and the clock at phase 0. At hand-back the shipped controller returns, with prev_actions zeroed.
+- The stage law is M2's turnboth law, unchanged, which isolates the gait factor.
+- The shipped, turnboth and m3 paths are byte-identical to `e33e44f` (smoke identity checks on 5 paths).
+**PREDECLARED RULE (bench v2's rule verbatim, unchanged; the chain as M3's):**
+- "Bench v2: with N crossings run (64 minus the dropped set) and N_h per heading, bench v2 PASSES iff clears >= N - 2, 0 falls, and clears >= N_h - 1 for every heading. Otherwise FAIL; INCOMPLETE if any declared crossing is missing."
+- Clear: mission7_gates' real clear, within 10 s of takeover. N = 41, so PASS needs ≥ 39/41, 0 falls, and ≥ 11/10/9/7 per heading.
+- Then the exact ten-fall replay with `--stage-gait clocks2` (10/10 upright, 0 falls). Then the route gate: Doors and Transport each ≥ 16/16.
+- Budget: 83 episodes (41 + 10 + 32).
+- Labels: LEARNED shipped gait + LEARNED clock-s2 stage gait, SCRIPTED stage, ORACLE layout and plate pose.
+**Disclosed:**
+- Clock-s2 was qualified at ±0.6 rad/s and is untested at the stage's 0.40 rad/s.
+- 180° timing: (π − 0.15)/0.40 = 7.48 s of turning + 0.40–0.60 s settle + about 2.17 s of crossing = 10.05–10.25 s against the 10 s window. The 180° clause (≥ 7/8) is therefore likely to fail on timing alone. **A FAIL is predicted.**
+- Coverage, as M2's note: in the replay and the route gate, clock-s2 also drives the capture-to-pre-point approach (from 0.78 m), which the bench never exercises.
+- Route-gate snapshot (inherited from M2/M3): the route gate snapshots the live tree with no comparison against the bench's provenance. The coordinator therefore edits no Mission 7 / gait_clock source between the bench and the route-gate submission, and compares the submission sha256s afterwards.
+**Review:** 2 reviewers, 0 blocking, 5 minor findings, all resolved by header disclosures.
+- The first smoke's "all files predate it" claim was false. `21516422` is cited only as a machinery smoke of the uncommitted tree.
+**Pre-submission evidence:**
+- Smoke `21517413` (final, uncommitted tree): PASS. Clock-s2 cleared 1 of 3 exploration crossings, with 0 falls.
+- Clean checkout (HEAD + A's files only): 455 passed, 10 skipped (gitignored or untracked bench records).
+- Submitted: clocks2 bench-v2 smoke `21517667` (committed code `0e014e9`, exploration layouts only), then the scored bench `21517668` (`--dependency=afterok:21517667`). Verdict: `results/mission7-campaign-20260923/clocks2-plate-bench-v2/verdict.json`. Only a PASS auto-releases the exact replay (arm `m7-clocks2`) and then the route gate.

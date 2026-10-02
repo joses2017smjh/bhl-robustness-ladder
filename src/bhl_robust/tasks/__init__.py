@@ -530,3 +530,20 @@ except Exception as _exc:  # noqa: BLE001
     import sys as _sys
     print(f"[bhl_robust.tasks] m7-platecross id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
 # --- end m7-platecross ---
+
+# --- turning-hold ---
+# Turning follow-up R1H (2026-10-02; SLURM_JOBS.md '(C') revised design'): Velocity-BHL-Arms-TurnGaitClock-v0 (R1)
+# + 30 % explicit-command envs, half of them at wz = 0 (turn_command.TurnHoldMixVelocityCommand) + the heading_hold
+# reward (gait_clock_mdp.heading_hold); a NEW task trained from scratch by slurm/repo20260923/gpu_turngait_hold.sbatch,
+# R1's runner. Guarded like m7-platecross: a failure is printed and only this id is absent.
+try:
+    gym.register(
+        id="Velocity-BHL-Arms-TurnGaitClockHold-v0",
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": arms_env_cfg.HumanoidTurnGaitClockHoldCfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] turning-hold id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end turning-hold ---

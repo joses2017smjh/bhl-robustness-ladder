@@ -47,6 +47,13 @@
 #    tag m3-shipped-step, --stage-gait m3, released only by a bench-v2 PASS
 #    (cpu_m7_plate_bench_v2.sbatch); its route gate runs --stage-gait m3
 #    (step 3 translates the flag the same way).
+#    --- m7-clocks2 --- (2026-10-02, the 83-episode line approved that day):
+#    tag m7-clocks2, --stage-gait clocks2 (arms-turngait-clock-s2's
+#    controller swapped in for the stage), released only by a bench-v2 PASS
+#    with --stage-gait clocks2 (cpu_m7_plate_bench_v2_clocks2.sbatch); its
+#    route gate runs --stage-gait clocks2.  A generic --stage-gait export
+#    gate's --stage-gait-export / --stage-gait-export-sha256 are carried to
+#    the route submitter verbatim (no export arm is wired).
 #
 # DRY_RUN=1 runs the same logic without sbatch (plans the route submission via
 # the submitter's non---submit mode and touches no lock).
@@ -189,6 +196,8 @@ for a in args:
     elif key == "--wait-open": wait_open = val
     elif key == "--press-hold": out.append("--stage-press-hold")
     elif key == "--stage-gait": out += ["--stage-gait", val]
+    elif key == "--stage-gait-export": out += ["--stage-gait-export", val]                # m7-clocks2 (export gait)
+    elif key == "--stage-gait-export-sha256": out += ["--stage-gait-export-sha256", val]  # m7-clocks2 (export gait)
     elif key == "--smoke": raise SystemExit("a --smoke gate is not a gate; refusing to release the route gate")
     else: raise SystemExit(f"unknown replay-gate flag {a!r}; refusing to guess a route translation")
 out += ["--stage-wait-open", wait_open]

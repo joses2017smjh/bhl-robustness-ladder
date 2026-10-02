@@ -27,6 +27,7 @@ from bhl_robust.mission.approach_debug import (DebugEnv, PlateSafeRouteControlle
                                                wrap, yaw_of)
 from mission7_gates import route_gate_block
 from mission7_plate_stage import STAGE_GAITS, PlateStage, m3_constants, stage_gait_description, turnboth_check
+from mission7_plate_stage import EXPORT_STAGE_GAITS, export_check, export_dir_for, select_export_gait  # m7-clocks2
 
 
 # Body-frame command scales (vx, vy, wz) shared by every conversion below.
@@ -766,6 +767,10 @@ def compact_episode(row, record_name):
 
 def run(args):
     args.out.mkdir(parents=True, exist_ok=True)
+    export_provenance = None
+    if getattr(args, "stage_gait", "shipped") in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- checked before any episode
+        upstream = args.repo / "external/Berkeley-Humanoid-Lite"
+        export_provenance = export_check(upstream, *export_dir_for(upstream, args.stage_gait))
     stages = (args.stage,) if args.stage != "both" else ("doors", "transport")
     indices = [int(value) for value in args.indices.split(",") if value.strip()]
     rows = []
@@ -1068,6 +1073,8 @@ def run(args):
         result["plate_stage_internal_behavior_unchanged"] = False
         result["stage_gait"] = args.stage_gait
         result["stage_gait_description"] = stage_gait_description(args.stage_gait)
+    if export_provenance is not None:   # --- m7-clocks2 --- the export's record, checked before the first episode
+        result["stage_gait_provenance"] = export_provenance
     (args.out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps({
         "status": result["status"],
@@ -1144,10 +1151,19 @@ if __name__ == "__main__":
     parser.add_argument("--allow-inactive-intervention", action="store_true",
                         help="record a requested-but-ineffective intervention as a "
                              "null result instead of failing the run")
-    parser.add_argument("--stage-gait", choices=STAGE_GAITS, default="shipped",
-                        help="gait the PlateStage runs on: shipped (default), turnboth (TurnBoth-s0 swapped "
-                             "in for the stage: turn in place, straight crossing, turn back) or m3 (shipped gait: "
-                             "turn while stepping, straight crossing, turn back, stall watchdog)")
+    stage_gait_action = parser.add_argument("--stage-gait", choices=STAGE_GAITS, default="shipped",
+                                            help="gait the PlateStage runs on: shipped (default), turnboth "
+                                                 "(TurnBoth-s0 swapped in for the stage: turn in place, straight "
+                                                 "crossing, turn back) or m3 (shipped gait: turn while stepping, "
+                                                 "straight crossing, turn back, stall watchdog); clocks2 "
+                                                 "(arms-turngait-clock-s2) or export (--stage-gait-export): that "
+                                                 "export's controller swapped in for the stage, M2's turnboth law")
+    # --- m7-clocks2 --- the opt-in export stage gaits (the choices line above stays as the M2/M3 tests pin it)
+    stage_gait_action.choices = STAGE_GAITS + EXPORT_STAGE_GAITS
+    parser.add_argument("--stage-gait-export", type=Path, default=None,
+                        help="--stage-gait export only: the exported directory swapped in as the stage controller")
+    parser.add_argument("--stage-gait-export-sha256", default=None,
+                        help="--stage-gait export only: refuse the export unless its policy.onnx has this sha256")
     parser.add_argument("--preflight", action="store_true",
                         help="validate interpreter, imports and arguments, then exit "
                              "without running any episode")
@@ -1156,6 +1172,15 @@ if __name__ == "__main__":
         parser.error("--stage-gait turnboth does not compose with --align-yaw or --stage-press-hold")
     if args.stage_gait == "m3" and (args.align_yaw or args.stage_press_hold):
         parser.error("--stage-gait m3 does not compose with --align-yaw or --stage-press-hold")
+    # --- m7-clocks2 ---
+    if args.stage_gait in EXPORT_STAGE_GAITS and (args.align_yaw or args.stage_press_hold):
+        parser.error(f"--stage-gait {args.stage_gait} does not compose with --align-yaw or --stage-press-hold")
+    if (args.stage_gait == "export") != (args.stage_gait_export is not None):
+        parser.error("--stage-gait-export <exported dir> is required with --stage-gait export, and only with it")
+    if args.stage_gait_export_sha256 is not None and args.stage_gait != "export":
+        parser.error("--stage-gait-export-sha256 pins a --stage-gait export only")
+    if args.stage_gait == "export":
+        select_export_gait(args.stage_gait_export, args.stage_gait_export_sha256)
     args.repo = args.repo.resolve()
     args.out = args.out.resolve()
     if not args.out.is_relative_to(args.repo):
@@ -1184,6 +1209,9 @@ if __name__ == "__main__":
             preflight["stage_gait"] = args.stage_gait
             preflight["stage_gait_check"] = (turnboth_check(args.repo / "external/Berkeley-Humanoid-Lite")
                                              if args.stage_gait == "turnboth" else m3_constants())
+        if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- the export check, before any queue time
+            upstream = args.repo / "external/Berkeley-Humanoid-Lite"
+            preflight["stage_gait_check"] = export_check(upstream, *export_dir_for(upstream, args.stage_gait))
         print(json.dumps(preflight, sort_keys=True), flush=True)
         raise SystemExit(0)
     run(args)

@@ -12,6 +12,34 @@ import subprocess
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# --- m7-clocks2 --- the export stage gaits swap in a controller built by bhl_robust.eval.gait_clock, which the snapshot
+# job (PYTHONPATH = the snapshot only) must find in the snapshot: it is added for these gaits only (composed path, as in
+# scripts/submit_mission7_plate_stage.py; the default snapshot set is unchanged).
+EXPORT_STAGE_GAITS = ("clocks2", "export")
+GAIT_CLOCK_MODULE = Path("src/bhl_robust/eval") / "gait_clock.py"
+
+
+def _check_export_args(parser, args):
+    """--- m7-clocks2 --- validate the export flags; for --stage-gait export resolve the directory and pin the sha256
+    of its policy.onnx as read here (a given --stage-gait-export-sha256 must match it).  No-op for other gaits."""
+    if args.stage_gait not in EXPORT_STAGE_GAITS or args.stage_gait == "clocks2":
+        if args.stage_gait_export is not None or args.stage_gait_export_sha256 is not None:
+            parser.error("--stage-gait-export / --stage-gait-export-sha256 go with --stage-gait export only")
+        if args.stage_gait == "clocks2" and (args.align_yaw or args.stage_press_hold):
+            parser.error("--stage-gait clocks2 does not compose with --align-yaw or --stage-press-hold")
+        return
+    if args.align_yaw or args.stage_press_hold:
+        parser.error("--stage-gait export does not compose with --align-yaw or --stage-press-hold")
+    if args.stage_gait_export is None:
+        parser.error("--stage-gait export needs --stage-gait-export <exported dir>")
+    args.stage_gait_export = args.stage_gait_export.resolve()
+    policy = args.stage_gait_export / "policy.onnx"
+    if not policy.is_file():
+        parser.error(f"no policy.onnx in {args.stage_gait_export}")
+    digest = hashlib.sha256(policy.read_bytes()).hexdigest()
+    if args.stage_gait_export_sha256 is not None and args.stage_gait_export_sha256 != digest:
+        parser.error(f"{policy} has sha256 {digest}, not {args.stage_gait_export_sha256}")
+    args.stage_gait_export_sha256 = digest
 
 
 def _probe_args(args):
@@ -57,6 +85,11 @@ def _probe_args(args):
         probe_args.append("--stage-gait=turnboth")
     elif args.stage_gait == "m3":
         probe_args.append("--stage-gait=m3")
+    elif args.stage_gait == "clocks2":   # --- m7-clocks2 --- a pinned preset
+        probe_args.append("--stage-gait=clocks2")
+    elif args.stage_gait == "export":    # --- m7-clocks2 --- main() resolves the directory and its policy sha256
+        probe_args += ["--stage-gait=export", f"--stage-gait-export={getattr(args, 'stage_gait_export', None)}",
+                       f"--stage-gait-export-sha256={getattr(args, 'stage_gait_export_sha256', None)}"]
     return probe_args
 
 
@@ -99,8 +132,14 @@ def main():
     parser.add_argument("--exit-ramp-center", action="store_true")
     parser.add_argument("--align-yaw", action="store_true")
     parser.add_argument("--exit-ramp", type=float, default=0.)
-    parser.add_argument("--stage-gait", choices=("shipped", "turnboth", "m3"), default=None,
-                        help="forwarded as --stage-gait=turnboth or --stage-gait=m3; omitted = the shipped stage gait")
+    parser.add_argument("--stage-gait", choices=("shipped", "turnboth", "m3") + EXPORT_STAGE_GAITS, default=None,
+                        help="forwarded as --stage-gait=turnboth, --stage-gait=m3, --stage-gait=clocks2 or "
+                             "--stage-gait=export (with --stage-gait-export); omitted = the shipped stage gait")
+    parser.add_argument("--stage-gait-export", type=Path, default=None,
+                        help="--stage-gait export only: the exported directory; forwarded with its policy.onnx "
+                             "sha256 as read here, so the probe refuses different weights")
+    parser.add_argument("--stage-gait-export-sha256", default=None,
+                        help="--stage-gait export only: the expected policy.onnx sha256 (checked here and in the job)")
     parser.add_argument("--submit", action="store_true")
     args = parser.parse_args()
     campaign = args.campaign.resolve()
@@ -114,12 +153,16 @@ def main():
         parser.error("--stage-gait turnboth does not compose with --align-yaw or --stage-press-hold")
     if args.stage_gait == "m3" and (args.align_yaw or args.stage_press_hold):
         parser.error("--stage-gait m3 does not compose with --align-yaw or --stage-press-hold")
+    _check_export_args(parser, args)   # --- m7-clocks2 --- (no-op for every other gait)
     probe_args = _probe_args(args)
     if not args.submit:
         plan = {"planned_output": str(out), "stage": args.stage,
                 "indices": args.indices, "node": args.node,
                 "constraint": None if args.node else args.constraint}
         if args.stage_gait in ("turnboth", "m3"):   # the default plan is unchanged
+            plan["stage_gait"] = args.stage_gait
+            plan["probe_args"] = probe_args
+        if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 ---
             plan["stage_gait"] = args.stage_gait
             plan["probe_args"] = probe_args
         print(json.dumps(plan, indent=2))
@@ -133,6 +176,8 @@ def main():
         "src/bhl_robust/eval/team_sensors.py", "slurm/mission7_route_handoff_probe.sbatch",
     )]
     files += list((ROOT / "scripts").glob("mission7*.py"))
+    if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- see GAIT_CLOCK_MODULE
+        files.append(ROOT / GAIT_CLOCK_MODULE)
     hashes = {}
     for source in files:
         relative = source.relative_to(ROOT)
@@ -193,6 +238,8 @@ def main():
     }
     if args.stage_gait in ("turnboth", "m3"):   # default receipts keep their keys
         row["stage_gait"] = args.stage_gait
+    if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 ---
+        row["stage_gait"] = args.stage_gait
     (out / "submission.json").write_text(json.dumps(row, indent=2) + "\n")
     with (ROOT / "SLURM_JOBS.md").open("a") as stream:
         stream.write(
@@ -200,7 +247,7 @@ def main():
             f"{args.stage} layouts `{args.indices}`, "
             f"{'node `' + args.node + '`' if args.node else 'constraint `' + args.constraint + '`'}"
             f", 2 CPUs / 12 GB / 0 GPUs / 2 h; "
-            f"{'PlateStage on the `turnboth` stage gait (TurnBoth-s0 swapped in for the stage)' if args.stage_gait == 'turnboth' else 'PlateStage on the `m3` stage path (shipped gait: turn while stepping + stall watchdog)' if args.stage_gait == 'm3' else 'unchanged PlateStage'}"
+            f"{'PlateStage on the `turnboth` stage gait (TurnBoth-s0 swapped in for the stage)' if args.stage_gait == 'turnboth' else 'PlateStage on the `m3` stage path (shipped gait: turn while stepping + stall watchdog)' if args.stage_gait == 'm3' else 'PlateStage on the `' + str(args.stage_gait) + '` stage gait (its controller swapped in for the stage, M2 turnboth law)' if args.stage_gait in EXPORT_STAGE_GAITS else 'unchanged PlateStage'}"
             f" with `{args.handoff}` route handoff"
             f" and rejoin diagnostic `{args.rejoin_diagnostic}`, chain trace `{args.chain_trace}`, "
             f"fix `{args.rejoin_fix}`; "
