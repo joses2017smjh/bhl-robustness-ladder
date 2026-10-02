@@ -3638,3 +3638,4 @@ Files:
 **Pre-submission evidence:**
 - Smoke `21517413` (final, uncommitted tree): PASS. Clock-s2 cleared 1 of 3 exploration crossings, with 0 falls.
 - Clean checkout (HEAD + A's files only): 455 passed, 10 skipped (gitignored or untracked bench records).
+- Submitted: clocks2 bench-v2 smoke `21517667` (committed code `0e014e9`, exploration layouts only), then the scored bench `21517668` (`--dependency=afterok:21517667`). Verdict: `results/mission7-campaign-20260923/clocks2-plate-bench-v2/verdict.json`. Only a PASS auto-releases the exact replay (arm `m7-clocks2`) and then the route gate.
