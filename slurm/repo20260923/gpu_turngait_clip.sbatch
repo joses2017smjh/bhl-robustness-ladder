@@ -49,7 +49,7 @@ echo "=== node: $(hostname) | HEAD $(git rev-parse --short HEAD) | $(date) ==="
     --right-subtitle "arms-turngait-critic-s0: seed 0 of 3; no R2 seed turns" \
     --footer-line "LEARNED gaits (PPO, frozen), MuJoCo physics, real time. Scored: every R1 seed turns (18/18 runs)," \
     --footer-line "1 of 3 qualifies (the others drift on straight walks), so the R1 recipe fails. R2: 0 of 3 seeds turn." \
-    --mp4 "$MP4" --gif "$GIF" --gif-fps 8 --gif-width 880 2>&1 | grep -v "^\[\|libEGL"
+    --mp4 "$MP4" --gif "$GIF" --gif-fps 10 --gif-width 880 2>&1 | grep -v "^\[\|libEGL"
 rm -rf "$CACHE"
 [ -f "${GIF%.gif}.json" ] || { echo "NO sidecar written (see above)"; exit 1; }
 echo "TURN-CLIP COMPLETE"

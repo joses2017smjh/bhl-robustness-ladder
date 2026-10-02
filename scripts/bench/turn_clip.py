@@ -111,7 +111,9 @@ def simulate(deploy: Path, upstream: Path, cache: Path, variant: str, cmd, secon
         runner.step([ctrl.update(obs)])
         yaws.append(yaw_of(runner.d.qpos[slot.qpos_adr + 3:slot.qpos_adr + 7]))
         if now + 1e-9 >= show_from:
-            camera.lookat[:2] = runner.d.xpos[slot.body_id, :2]
+            # Fixed camera (the bases drift <= 0.45 m on the scored seed-0 turns, which stays in frame): a camera
+            # that followed the base's step sway moved the whole floor every frame, and the GIF had to drop to
+            # 5 fps to fit its budget (renders 21516846, 21516912).
             renderer.update_scene(runner.d, camera=camera)
             turned = math.degrees(float(np.unwrap(np.array(yaws))[-1] - yaw0))
             frames.append((renderer.render().copy(), now + dt, float(c[2]), turned))
