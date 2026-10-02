@@ -511,3 +511,22 @@ for _id, _cfg in (
         disable_env_checker=True,
         kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _PPO_CFG},
     )
+
+# --- m7-platecross ---
+# Mission 7 learned crossing (2026-10-02; SLURM_JOBS.md 'User approval recorded 2026-10-02 14:15', item (B)):
+# Velocity-BHL-Arms-TurnGaitClock-v0 (R1) unchanged except the terrain, flat ground scattered with Mission 7's
+# own plates (platecross_env_cfg.py / platecross_terrain.py); fine-tuned from arms-turngait-clock-s2 by
+# slurm/repo20260923/gpu_platecross.sbatch. Guarded like Tier 3: a failure is printed and only this id is absent.
+try:
+    from bhl_robust.tasks import platecross_env_cfg as _platecross  # noqa: E402
+
+    gym.register(
+        id="Velocity-BHL-Arms-PlateCross-v0",
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _platecross.HumanoidPlateCrossCfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] m7-platecross id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end m7-platecross ---
