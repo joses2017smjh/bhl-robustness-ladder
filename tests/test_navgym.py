@@ -622,3 +622,47 @@ def test_v4_verdict_rule(tmp_path):
     assert v["verdict"] == "PASS" and v["seeds_passing"] == 2
     write(7, summ(0.81, 0.71, 0.20))
     assert nt.verdict_v4(tmp_path, final=True)["verdict"] == "NEGATIVE"
+
+
+# ------------------------------------------------------------------ 2026-10-01: v2 golden in the v4 training configuration
+# Recorded on 2026-10-01 from the v2 env at git HEAD 094797e (env.py sha256 9f394b2b...), BEFORE the NavGym v5 (env version 3)
+# edit, by solutions-20260930/campaign-navgym-v5/gold/record_gold.py: the V2_GOLDEN episodes plus one 6x6 random-action
+# crash, each with the frozen v4 stall price (idle_cost = V4_IDLE_COST), i.e. the env every v4 training worker ran.
+# MazeNavEnv(version=2, idle_cost=V4_IDLE_COST) must keep reproducing them exactly.
+V2_V4CFG_GOLDEN = [
+    ("mz", dict(sizes=((3, 3),), version=2, gamma=1.0, randomize_dynamics=False), 0, "descend",
+     dict(maze_seed=8506, t=421, outcome="goal", max_steps=1447, route_m=4.883171858868458, reward_sum=8.046247270277151,
+          reward_last=5.011244706566285, x=2.797079898858059, y=2.5103371072756846, yaw=1.583930207436544, lidar_sum=1694.4702041689306,
+          near_sum=9219.44812014699, map_sum=242496.0, goal_sum=744.3931784438901)),
+    ("mz", dict(sizes=((4, 4),), version=2, gamma=1.0), 2, "descend",
+     dict(maze_seed=8375, t=1020, outcome="goal", max_steps=3305, route_m=13.554978667474233, reward_sum=15.60056621338885,
+          reward_last=5.008400665176615, x=4.197786272625983, y=3.908026584829612, yaw=1.572619374723427, lidar_sum=4128.594295883551,
+          near_sum=22033.803452447057, map_sum=587520.0, goal_sum=1857.3569260610911)),
+    ("mz", dict(sizes=((4, 4),), version=2, gamma=0.998), 5, "descend",
+     dict(maze_seed=6707, t=514, outcome="goal", max_steps=1695, route_m=6.042969833513124, reward_sum=12.789006761652951,
+          reward_last=5.011633654947392, x=4.052444860243608, y=3.9389648744830144, yaw=1.060831704313288, lidar_sum=2440.555840173736,
+          near_sum=12511.52498409152, map_sum=296064.0, goal_sum=1020.2129253945313)),
+    ("ho", dict(size=(5, 5), seed=3, gamma=0.998), None, "random",
+     dict(maze_seed=10003, t=93, outcome="collision", max_steps=2647, route_m=10.483171857868472, reward_sum=-3.7074883439687563,
+          reward_last=-5.002, x=-0.43801968080787884, y=-0.362683028686183, yaw=-2.409068470712409, lidar_sum=344.87228877842426,
+          near_sum=1695.4588338062167, map_sum=53568.0, goal_sum=-20.911093686707318)),
+    ("ho", dict(size=(6, 6), seed=4, gamma=1.0, max_steps=200), None, "stall",
+     dict(maze_seed=10004, t=200, outcome="time_out", max_steps=200, route_m=12.849625289736696, reward_sum=-1.9906813968705204,
+          reward_last=-0.009857289683033557, x=0.013796420748577634, y=-0.04546934815832517, yaw=0.23882599197938026,
+          lidar_sum=639.7048387341201, near_sum=3501.563729286194, map_sum=115200.0, goal_sum=270.9591631293297)),
+    ("mz", dict(sizes=((6, 6),), version=2, gamma=1.0), 11, "random",
+     dict(maze_seed=1338, t=97, outcome="collision", max_steps=4500, route_m=19.881230073987105, reward_sum=-4.63288006978739,
+          reward_last=-5.002, x=0.5288736376451817, y=0.4345733582982594, yaw=0.7013376079641227, lidar_sum=328.41477966308594,
+          near_sum=1758.3770453482866, map_sum=55872.0, goal_sum=209.07616044487804)),
+]
+
+
+@pytest.mark.parametrize("kind,kw,sd,pol,gold", V2_V4CFG_GOLDEN)
+def test_v2_with_the_v4_stall_price_is_reproduced_exactly(kind, kw, sd, pol, gold):
+    env, got, _ = _run_golden(kind, kw, sd, pol, idle_cost=V4_IDLE_COST)
+    assert env.version == 2 and env.idle_cost == V4_IDLE_COST
+    for k, v in gold.items():
+        if isinstance(v, float):
+            assert got[k] == pytest.approx(v, rel=1e-12, abs=1e-12), k
+        else:
+            assert got[k] == v, k

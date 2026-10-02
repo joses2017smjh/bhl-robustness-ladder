@@ -3313,3 +3313,34 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - Tests: `tests/test_stand4.py` (70) plus the related files, 161 passed. The launcher dry run passes 32/32.
 - **Disclosed:** the new hand hulls touch the cube at spawn in most envs (≈ 61 % of jittered resets put a hull inside the cube; smoke training `released` ≈ 0.35), as predicted and not tuned. Release is read at the end of each env step.
 - Submitted (code `4c5af8e`): Stand4 smoke of the committed code `21506757`, then the two-seed training `21506758` (array 0-1) with `--dependency=afterok:21506757 --export=ALL,STAND4_SMOKE_JOB=21506757`.
+
+**Predeclared now (2026-10-02 03:32, before any v5 training or episode): NavGym v5 (N2 of `docs/SOLUTIONS_2026-10-01.md`, fully learned navigation, chosen by the user instead of N1)** (`slurm/repo20260923/cpu_navgym_v5.sbatch`, `slurm/repo20260923/cpu_navgym_v5_transfer.sbatch`; verdicts in `scripts/bench/navgym_train.py`: `V5_RULE` / `judge_v5` / `verdict_v5` and `V5_TRANSFER_RULE` / `judge_v5_transfer`).
+- **What changes:** v5 = the v4 configuration exactly (env v2 dynamics and rewards, `--ppo v2`, the frozen idle cost 0.008, 16 envs, 30 M steps, the v4 curriculum and periodic evaluation) plus env version 3:
+  - a visitation channel: a 0.2 m recency grid, set to 1 under the 0.22 m footprint, decaying as exp(-dt / 60 s), stacked onto the ego map as `map_visit`;
+  - a coarse 0.6 m, 24×24 (14.4 m) map of the same four channels (`map_coarse`);
+  - a yaw-change penalty of 0.005·|Δa_yaw|;
+  - the deployment speed brake's range term (team_sensors' formula, 10 Hz packets).
+  - Policy: `NavExtractorV5` (a second CNN). New training seeds 8, 9, 10.
+- **Disclosed brake gap** (found on review 2026-10-02 with the real `brake_command`): the gym brake is the lidar range term only. In physics the biped's stereo-depth term also brakes for a wall straight ahead:
+  - braking starts at d ≈ 1.08 m (gym 0.90 m);
+  - the robot stops at ≈ 0.57 m (gym 0.42 m);
+  - at d = 0.70 m the scale is 0.26 in physics vs 0.58 in the gym.
+  The sysid note's "likely minor" considered only flat-floor false braking and does not hold for walls ahead. The frozen spec is unchanged.
+- **Gym gate (PASS rule):** V4_RULE's clauses unchanged (5×5 success ≥ 0.80, 6×6 success ≥ 0.70, 6×6 collision ≤ 0.15, n = 48 per size, the run reached its last step (num_timesteps ≥ 30 000 000), and it is the declared v5 configuration). They are judged on each seed's FINAL actor (deterministic) on the NEVER-USED set, maze seeds 61000–61047 (dynamics reset(seed = 61000 + k)). **v5 PASSES iff ≥ 2 of the 3 seeds (8, 9, 10) meet every clause**; otherwise NEGATIVE. Seeds 10000–10047 and the best checkpoint are reported, not gated.
+- **Physics transfer (PASS rule)**, only if the gym gate PASSES, and only for the gate-passing final actors:
+  - MuJoCo 3.3.5, the frozen learned biped gait, LEARNED v5 (vx, wz) commands, ORACLE pose and goal, `--policy-capture-pose`;
+  - hard 6×6, 1 extra opening, maze seeds 63000–63011, 180 s;
+  - **PASS iff EACH gate-passing final actor reaches ≥ 10/12 goals with 0 falls**; otherwise NEGATIVE; INCOMPLETE if a summary is missing or not 12 episodes;
+  - A* on the same mazes is reported, not gated.
+- **Reported, not gated:** yaw flips per second and the |wz| saturation share in the gym evaluation. Maze seeds 40000–40047 and 50000–50011 are never run.
+- **Verdict files:**
+  - `results/navgym-v5-20261002/verdict_v5.json` is written only by the verdict mode (`--final`, after every array task has ended) and never overwritten; a status check only prints.
+  - The transfer reads only a final gym verdict (otherwise exit 4). It refuses (exit 3) on an unfinished earlier run's files; a rerun would be a second touch of 63000–63011 and needs a ledger decision.
+  - Verdicts are read from JSON, never from exit codes.
+- **Never-used sets:** a grep on 2026-10-02 found 61000–61047 and 63000–63011 only as declarations or labels.
+- **Checks before submission:**
+  - Workflow `wf_83066f0f-832`: an implementer and two adversarial reviewers; two minor findings fixed (verdict write timing; refusal after a crashed transfer), and the brake gap disclosed.
+  - Byte-identity of the defaults: a v4 actor through `maze_explore.py --policy` and a v4-config training run are identical to the pre-edit code.
+  - Smoke `21506664` (on the final files) passed: 50 k steps, ONNX export with inputs lidar/near/map_visit/map_coarse/goal, a 30 s physics episode on training maze 9150, and the verdict/transfer gate paths.
+  - Tests: `tests/test_navgym_v5.py` and `tests/test_navgym.py`.
+- **Wall time:** 36 h per seed (≈ 16 h of training on the slower node class).

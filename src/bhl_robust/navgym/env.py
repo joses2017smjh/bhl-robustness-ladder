@@ -72,6 +72,40 @@ v_cmd <= 5 % of V_MAX) while the straight-line goal distance at the start of the
 step cost an endless idle stall is worth (-0.002 - 0.008) / (1 - 0.998) = -5.0 at the
 learner's gamma (SB3 bootstraps truncations), the crash penalty, instead of -1.0. The
 default idle_cost 0.0 leaves every existing path unchanged.
+
+Version 3 (NavGym v5, 2026-10-01; ``MazeNavEnv(version=3)``, ``navgym_train.py --env-version 3``).
+Version 2's dynamics, rewards, time limit and (opt-in) stall price, PLUS exactly these four
+changes, frozen before any v5 training (docs/SOLUTIONS_2026-10-01.md, N2); versions 1 and 2
+never read any of it:
+
+* visitation  a world-fixed recency grid (``VisitMap``) on the ego map's own 0.2 m lattice, r in
+              [0, 1]: every step all cells decay r *= exp(-DT / 60 s), then the cells whose centres
+              lie within ROBOT_RADIUS of the robot are set to 1 (decay first, so the footprint reads
+              exactly 1; the start pose is marked at reset). Cropped and rotated exactly like the
+              ego map and stacked onto it as a 4th channel: obs key "map_visit" (4, 24, 24) =
+              occupied, free, unknown, visitation (replaces v2's "map");
+* coarse map  obs key "map_coarse" (4, 24, 24): the same four channels, block-averaged over 3x3
+              fine cells (0.6 m cells anchored at the fine grid's origin; cells past the grid edge
+              count as unknown, unvisited), cropped 24 x 24 (14.4 m) in the same egocentric frame;
+* yaw change  reward -= 0.005 * |a_yaw(t) - a_yaw(t-1)| on every step (actions in [-1, 1];
+              a_yaw(-1) = 0, the reset's previous action); chosen, not tuned;
+* brake       the deployment speed brake's lidar RANGE TERM only (team_sensors.brake_command's formula,
+              as the frozen spec and the sysid_env.py port give it; not the whole physics brake, see
+              below): v_cmd *= clip((clearance - 0.42) / 0.48, 0, 1), clearance = the minimum of
+              the 10 Hz packet's sector minima whose centres lie within +-25 deg of travel (straight
+              ahead: the gait has no vy). The packet is refreshed on team_sensors' schedule (captured at
+              the top of a step when t * DT >= the next capture time, every 0.1 s: steps 0, 3, 5, 8,
+              10, ...); captured at the step's start pose, it equals the last scan. The brake scales the
+              forward command before the latency queue; the stall price still reads the actor's a[0].
+              Not modelled (as in solutions-20260930/sysid/sysid_env.py): brake_command's stereo-depth
+              tightening and IMU limit -- the gym has no depth camera or IMU. The depth term is not
+              minor for a wall straight ahead: the biped's stereo centre sits 0.12 m ahead of the lidar,
+              pitched 20 deg, so its horizontal pixel row reads ~0.94 x (d - 0.12) for a wall at lidar
+              distance d, and the physics brake starts at d ~ 1.08 m and stops the robot at d ~ 0.57 m
+              (here: 0.90 m and 0.42 m). Disclosed at review, 2026-10-02; the frozen spec is unchanged.
+
+Observation keys "lidar", "near" and "goal" are v2's. ``build_obs(..., visit=VisitMap)`` builds the
+v3 keys, so the physics runner builds them with the same code from the ONNX actor's input names.
 """
 from __future__ import annotations
 
@@ -109,6 +143,19 @@ FINE_RES = 0.05            # m, resolution of the continuous geodesic field
 V4_IDLE_A0_MAX = -0.9      # commanded forward action at or below this is "forward command ~0" (v_cmd <= 0.05 * V_MAX)
 V4_IDLE_FAR_M = 0.5        # m, straight-line goal distance (start of the step) beyond which idling is charged
 V4_IDLE_COST = 0.008       # the v4 value: (V2_STEP_COST - 0.008) / (1 - 0.998) = -5.0 = V2_COLLISION
+
+# ---- version 3 only (NavGym v5, 2026-10-01; versions 1 and 2 never read these). FROZEN: chosen, not tuned.
+V3_VISIT_TAU_S = 60.0      # s, visitation recency decay: r *= exp(-dt / 60 s) every step
+V3_VISIT_RADIUS = ROBOT_RADIUS  # m, cells whose centre lies within this of the robot are set to 1
+V3_COARSE_BLOCK = 3        # fine cells per coarse cell side: 3 x 0.2 m = 0.6 m
+V3_COARSE_RES = 0.6        # m (= V3_COARSE_BLOCK * MAP_RES; recorded, the crop uses the product)
+V3_COARSE_CROP = 24        # coarse cells per side of the coarse crop (14.4 m)
+V3_YAW_CHANGE_COST = 0.005  # reward -= 0.005 * |a_yaw(t) - a_yaw(t-1)|
+V3_BRAKE_LO = 0.42         # m, team_sensors.brake_command: scale = clip((clearance - 0.42) / 0.48, 0, 1)
+V3_BRAKE_SPAN = 0.48       # m
+V3_BRAKE_HALF_ANGLE_DEG = 25.0  # sectors whose centres lie within +-25 deg of travel
+V3_BRAKE_PERIOD_S = 0.1    # the 10 Hz exteroceptive packet the brake reads (team_sensors.EXTERO_PERIOD)
+V3_YAW_SAT = 0.99          # reported only: |a_yaw| >= 0.99 counts as a saturated (full-rate) yaw command
 
 # ---- held-out evaluation sets (training draws maze seeds < 10 000)
 HELDOUT_BASE = 10_000      # the held-out set every run so far is evaluated on (maze seeds 10 000 + k)
@@ -408,14 +455,125 @@ def near_field(ranges: np.ndarray) -> np.ndarray:
     return sector_minima(ranges, clip=NEAR_RANGE)
 
 
+# ------------------------------------------------- version 3 (NavGym v5): visitation, coarse map, brake
+def ego_indices(x0: float, y0: float, nx: int, ny: int, res: float, x: float, y: float, yaw: float, size: int):
+    """Grid indices (ii, jj) and in-grid mask of a (size, size) egocentric crop of a world-fixed grid with origin
+    (x0, y0), shape (nx, ny) and cell `res`: EgoMap.crop's sampling, expression for expression (offsets at whole
+    cells, one more row ahead than behind; forward = up, left = left)."""
+    half = size // 2
+    u = (half - np.arange(size)) * res
+    v = (half - np.arange(size)) * res
+    U, V = np.meshgrid(u, v, indexing="ij")
+    c, s = math.cos(yaw), math.sin(yaw)
+    wx = x + U * c - V * s; wy = y + U * s + V * c
+    ii = np.floor((wx - x0) / res).astype(int); jj = np.floor((wy - y0) / res).astype(int)
+    ok = (ii >= 0) & (ii < nx) & (jj >= 0) & (jj < ny)
+    return ii, jj, ok
+
+
+class VisitMap:
+    """v3 visitation memory: a world-fixed recency grid on the EgoMap lattice for the same bounds (same origin,
+    resolution and shape), r in [0, 1]. ``step(x, y)``: every cell decays r *= exp(-dt / tau), then the cells whose
+    centres lie within `radius` of (x, y) are set to 1. Used, unchanged, by the gym (once per step at the post-step
+    pose, and at reset) and by the physics runner (once per control step at the pose the observation is built at)."""
+
+    def __init__(self, bounds, margin: float = 1.0, res: float = MAP_RES, dt: float = DT, tau: float = V3_VISIT_TAU_S,
+                 radius: float = V3_VISIT_RADIUS):
+        xmin, xmax, ymin, ymax = bounds
+        self.res = float(res)
+        # EgoMap's geometry, the same expressions
+        self.x0, self.y0 = xmin - margin, ymin - margin
+        self.nx = int(math.ceil((xmax - xmin + 2 * margin) / res)); self.ny = int(math.ceil((ymax - ymin + 2 * margin) / res))
+        self.r = np.zeros((self.nx, self.ny), dtype=np.float32)
+        self.dt, self.tau, self.radius = float(dt), float(tau), float(radius)
+        self.decay = math.exp(-self.dt / self.tau)
+        self.updates = 0
+
+    def footprint(self, x: float, y: float):
+        """(ii, jj) of the cells whose centres lie within `radius` of (x, y) (in-grid only)."""
+        i0 = max(0, int(math.floor((x - self.radius - self.x0) / self.res)))
+        i1 = min(self.nx - 1, int(math.floor((x + self.radius - self.x0) / self.res)))
+        j0 = max(0, int(math.floor((y - self.radius - self.y0) / self.res)))
+        j1 = min(self.ny - 1, int(math.floor((y + self.radius - self.y0) / self.res)))
+        if i0 > i1 or j0 > j1:
+            return np.zeros(0, dtype=int), np.zeros(0, dtype=int)
+        ii, jj = np.meshgrid(np.arange(i0, i1 + 1), np.arange(j0, j1 + 1), indexing="ij")
+        cx = self.x0 + (ii + 0.5) * self.res; cy = self.y0 + (jj + 0.5) * self.res
+        inside = (cx - x) ** 2 + (cy - y) ** 2 <= self.radius ** 2
+        return ii[inside], jj[inside]
+
+    def step(self, x: float, y: float) -> None:
+        self.r *= np.float32(self.decay)
+        ii, jj = self.footprint(x, y)
+        self.r[ii, jj] = 1.0
+        self.updates += 1
+
+    def crop(self, x: float, y: float, yaw: float, size: int = MAP_CROP) -> np.ndarray:
+        """(size, size) egocentric crop, sampled exactly as EgoMap.crop; 0 outside the grid."""
+        ii, jj, ok = ego_indices(self.x0, self.y0, self.nx, self.ny, self.res, x, y, yaw, size)
+        out = np.zeros((size, size), dtype=np.float32)
+        out[ok] = self.r[ii[ok], jj[ok]]
+        return out
+
+
+def fine_channels(emap: "EgoMap", visit: VisitMap) -> np.ndarray:
+    """(4, nx, ny) world-fixed fine channels: EgoMap.crop's occupied / free / unknown classes of every cell (the same
+    float32 sigmoid and thresholds) and the visitation value."""
+    if (visit.nx, visit.ny, visit.x0, visit.y0, visit.res) != (emap.nx, emap.ny, emap.x0, emap.y0, emap.res):
+        raise ValueError("the visitation grid and the ego map must share one lattice")
+    p = 1.0 / (1.0 + np.exp(-emap.l))
+    occ = (p > 0.65).astype(np.float32); free = (p < 0.35).astype(np.float32)
+    unk = 1.0 - occ - free
+    return np.stack([occ, free, unk, visit.r.astype(np.float32)])
+
+
+def coarse_grid(emap: "EgoMap", visit: VisitMap, block: int = V3_COARSE_BLOCK) -> np.ndarray:
+    """(4, NX, NY) coarse grid: fine_channels averaged over block x block fine cells, blocks anchored at the fine
+    grid's origin; fine cells past the grid's edge (padding up to a multiple of `block`) count as unknown, unvisited."""
+    ch = fine_channels(emap, visit)
+    nx, ny = ch.shape[1:]
+    NX, NY = -(-nx // block), -(-ny // block)
+    pad = ((0, NX * block - nx), (0, NY * block - ny))
+    padded = np.stack([np.pad(ch[0], pad), np.pad(ch[1], pad), np.pad(ch[2], pad, constant_values=1.0), np.pad(ch[3], pad)])
+    return padded.reshape(4, NX, block, NY, block).mean(axis=(2, 4)).astype(np.float32)
+
+
+def coarse_crop(emap: "EgoMap", visit: VisitMap, x: float, y: float, yaw: float, size: int = V3_COARSE_CROP,
+                block: int = V3_COARSE_BLOCK) -> np.ndarray:
+    """v3 "map_coarse": (4, size, size) egocentric crop of coarse_grid at block * MAP_RES (0.6 m) cells, sampled as
+    EgoMap.crop samples the fine grid (same frame: forward = up); outside the grid: unknown (0, 0, 1, 0)."""
+    grid = coarse_grid(emap, visit, block)
+    ii, jj, ok = ego_indices(emap.x0, emap.y0, grid.shape[1], grid.shape[2], emap.res * block, x, y, yaw, size)
+    out = np.zeros((4, size, size), dtype=np.float32)
+    out[2] = 1.0
+    out[:, ok] = grid[:, ii[ok], jj[ok]]
+    return out
+
+
+_V3_SECTOR_CENTRES = np.linspace(-np.pi, np.pi, LIDAR_RAYS, endpoint=False).reshape(LIDAR_SECTORS, -1).mean(axis=1)
+# team_sensors.brake_command's selection for a forward command (heading = atan2(vy = 0, vx > 0) = 0)
+V3_BRAKE_SECTORS = np.abs(np.arctan2(np.sin(_V3_SECTOR_CENTRES - 0.0), np.cos(_V3_SECTOR_CENTRES - 0.0))) <= np.deg2rad(V3_BRAKE_HALF_ANGLE_DEG)
+
+
+def brake_scale(ranges: np.ndarray) -> float:
+    """team_sensors.brake_command's range term for a forward command, from one raw 108-ray scan: the clearance is the
+    minimum of the sector minima whose centres lie within +-25 deg of travel; scale = clip((clearance - 0.42) / 0.48, 0, 1)."""
+    sec = np.asarray(ranges, dtype=np.float64).reshape(LIDAR_SECTORS, -1).min(axis=1)
+    clearance = float(np.min(sec[V3_BRAKE_SECTORS]))
+    return float(np.clip((clearance - V3_BRAKE_LO) / V3_BRAKE_SPAN, 0.0, 1.0))
+
+
 OBS_KEYS_V1 = ("lidar", "map", "goal")
 OBS_KEYS_V2 = ("lidar", "near", "map", "goal")
+OBS_KEYS_V3 = ("lidar", "near", "map_visit", "map_coarse", "goal")
+V3_VISIT_KEYS = ("map_visit", "map_coarse")   # the keys that need a VisitMap (build_obs(..., visit=...))
 
 
-def build_obs(keys, ranges: np.ndarray, emap: "EgoMap", x: float, y: float, yaw: float, goal_xy, prev_action) -> dict:
+def build_obs(keys, ranges: np.ndarray, emap: "EgoMap", x: float, y: float, yaw: float, goal_xy, prev_action, visit=None) -> dict:
     """The policy observation for the requested keys, from one raw 108-ray scan (body-frame
     angles linspace(-pi, pi, 108, endpoint=False)), the ego map, the pose, the goal and the
-    previous action. Shared by the gym (v2) and the physics runner, so both build it the same way."""
+    previous action. Shared by the gym (v2) and the physics runner, so both build it the same way.
+    The v3 keys "map_visit" and "map_coarse" also need the visitation memory `visit` (a VisitMap)."""
     out = {}
     for k in keys:
         if k == "lidar":
@@ -426,6 +584,13 @@ def build_obs(keys, ranges: np.ndarray, emap: "EgoMap", x: float, y: float, yaw:
             out[k] = emap.crop(x, y, yaw).astype(np.float32)
         elif k == "goal":
             out[k] = goal_features(x, y, yaw, goal_xy, prev_action)
+        elif k in V3_VISIT_KEYS:
+            if visit is None:
+                raise ValueError(f"observation key {k!r} needs the visitation memory (build_obs(..., visit=VisitMap))")
+            if k == "map_visit":
+                out[k] = np.concatenate([emap.crop(x, y, yaw), visit.crop(x, y, yaw)[None]]).astype(np.float32)
+            else:
+                out[k] = coarse_crop(emap, visit, x, y, yaw)
         else:
             raise KeyError(f"unknown observation key {k!r}")
     return out
@@ -442,12 +607,14 @@ class MazeNavEnv(gym.Env):
         docstring). `max_steps` None means the version's default -- v1: a flat 1500; v2: the
         route-scaled limit of `route_time_limit`, set at every reset -- and an int is a flat
         limit in either version. `gamma` is the shaping discount (v2 only; pass the learner's).
-        `idle_cost` (v2 only, >= 0; default 0.0 = off) is the v4 stall price (module docstring)."""
+        `idle_cost` (v2 only, >= 0; default 0.0 = off) is the v4 stall price (module docstring).
+        `version` 3 is NavGym v5 (module docstring): version 2 plus the visitation and coarse map channels, the
+        yaw-change penalty and the speed brake; it takes v2's max_steps, gamma and idle_cost semantics."""
         super().__init__()
-        if version not in (1, 2):
-            raise ValueError(f"MazeNavEnv version must be 1 or 2, got {version!r}")
-        if idle_cost < 0 or (idle_cost and version != 2):
-            raise ValueError(f"idle_cost must be >= 0 and needs version 2, got {idle_cost!r} with version {version!r}")
+        if version not in (1, 2, 3):
+            raise ValueError(f"MazeNavEnv version must be 1, 2 or 3, got {version!r}")
+        if idle_cost < 0 or (idle_cost and version not in (2, 3)):
+            raise ValueError(f"idle_cost must be >= 0 and needs version 2 or 3, got {idle_cost!r} with version {version!r}")
         self.idle_cost = float(idle_cost)
         self.version = int(version)
         self.sizes = tuple(tuple(s) for s in sizes)
@@ -466,7 +633,13 @@ class MazeNavEnv(gym.Env):
         }
         if self.version == 2:
             spaces["near"] = gym.spaces.Box(0.0, 1.0, (LIDAR_SECTORS,), np.float32)
-        self.obs_keys = OBS_KEYS_V1 if self.version == 1 else OBS_KEYS_V2
+        if self.version == 3:
+            # v2's keys with "map" replaced by the 4-channel "map_visit" and the second map input "map_coarse"
+            del spaces["map"]
+            spaces["near"] = gym.spaces.Box(0.0, 1.0, (LIDAR_SECTORS,), np.float32)
+            spaces["map_visit"] = gym.spaces.Box(0.0, 1.0, (4, MAP_CROP, MAP_CROP), np.float32)
+            spaces["map_coarse"] = gym.spaces.Box(0.0, 1.0, (4, V3_COARSE_CROP, V3_COARSE_CROP), np.float32)
+        self.obs_keys = OBS_KEYS_V1 if self.version == 1 else (OBS_KEYS_V2 if self.version == 2 else OBS_KEYS_V3)
         self.observation_space = gym.spaces.Dict(spaces)
         self.action_space = gym.spaces.Box(-1.0, 1.0, (2,), np.float32)
         self._rng = np.random.default_rng(0)
@@ -510,15 +683,26 @@ class MazeNavEnv(gym.Env):
         self.route_m = self.geo(*self.maze.centre(self.maze.start))
         self.max_steps = route_time_limit(self.route_m) if self.max_steps_arg is None else int(self.max_steps_arg)
         self.potential = self.geo(self.x, self.y)          # metres to the goal; phi = -potential
+        if self.version == 3:
+            # v3 state (draws nothing from the RNG, so v3 episodes share v2's mazes, dynamics and starts)
+            self.visit = VisitMap(self.maze.bounds())       # marked at the start pose by _scan below
+            self.next_capture = 0.0                         # the brake's 10 Hz packet schedule (team_sensors)
+            self.brake_k = 1.0                              # brake scale of the current packet (set at the first capture)
+            self.yaw_flips = self.yaw_sat_steps = self.braked_steps = 0
         self._scan()
-        return self._obs(), {"maze_seed": self.episode_seed, "size": (n, m), "version": 2, "max_steps": self.max_steps,
+        return self._obs(), {"maze_seed": self.episode_seed, "size": (n, m), "version": self.version, "max_steps": self.max_steps,
                              "route_m": float(self.route_m)}
 
     def _scan(self):
         self.ranges = cast_rays(self.boxes, (self.x, self.y), self.yaw + self.angles, LIDAR_RANGE)
         self.emap.update(self.x, self.y, self.yaw, self.angles, self.ranges)
+        if self.version == 3:
+            self.visit.step(self.x, self.y)                 # once per step (and at reset), at the pose the obs is built at
 
     def _obs(self):
+        if self.version == 3:
+            return build_obs(OBS_KEYS_V3, self.ranges, self.emap, self.x, self.y, self.yaw, self.goal_xy, self.prev_action,
+                             visit=self.visit)
         if self.version == 2:
             return build_obs(OBS_KEYS_V2, self.ranges, self.emap, self.x, self.y, self.yaw, self.goal_xy, self.prev_action)
         return {"lidar": sector_minima(self.ranges).astype(np.float32), "map": self.emap.crop(self.x, self.y, self.yaw),
@@ -529,9 +713,12 @@ class MazeNavEnv(gym.Env):
         # v4 stall price (off by default): forward command ~0 while > V4_IDLE_FAR_M from the goal, judged at the step start
         idle = bool(self.idle_cost) and float(a[0]) <= V4_IDLE_A0_MAX and \
             math.hypot(self.goal_xy[0] - self.x, self.goal_xy[1] - self.y) > V4_IDLE_FAR_M
+        v3 = self._v3_pre_step(a) if self.version == 3 else None     # reads prev_action: before it is overwritten
         self.prev_action = a.copy()
         v_cmd = (a[0] + 1.0) * 0.5 * V_MAX
         w_cmd = a[1] * W_MAX
+        if v3 is not None:
+            v_cmd = v_cmd * v3["brake_scale"]                         # v3 speed brake, before the latency queue
         self.queue.append(np.array([v_cmd, w_cmd]))
         v_cmd, w_cmd = self.queue.pop(0)
         d = self.dyn
@@ -545,6 +732,8 @@ class MazeNavEnv(gym.Env):
         self.t += 1
         if self.version == 2:
             return self._finish_v2(nx, ny, idle)
+        if self.version == 3:
+            return self._finish_v3(nx, ny, idle, v3)
         terminated, truncated = False, False
         reward = -0.01
         if point_in_wall(self.boxes, nx, ny, ROBOT_RADIUS):
@@ -600,6 +789,31 @@ class MazeNavEnv(gym.Env):
         info["maze_seed"] = self.episode_seed
         info["t"] = self.t
         return self._obs(), float(reward), terminated, truncated, info
+
+    def _v3_pre_step(self, a) -> dict:
+        """v3, at the top of a step, before prev_action is overwritten: refresh the brake's packet when a capture is
+        due (team_sensors.filter_commands' schedule), and the yaw change and yaw statistics against the previous action."""
+        now = self.t * DT
+        if now + 1e-9 >= self.next_capture:
+            while self.next_capture <= now + 1e-9:
+                self.next_capture += V3_BRAKE_PERIOD_S
+            # a packet captured at this step's start pose: that is the pose of the last scan, so the packet is that scan
+            self.brake_k = brake_scale(self.ranges)
+        prev, cur = float(self.prev_action[1]), float(a[1])
+        self.yaw_flips += int(np.sign(cur) * np.sign(prev) < 0)
+        self.yaw_sat_steps += int(abs(cur) >= V3_YAW_SAT)
+        self.braked_steps += int(self.brake_k < 1.0 and float(a[0]) > -1.0)
+        return {"yaw_change": abs(cur - prev), "brake_scale": self.brake_k}
+
+    def _finish_v3(self, nx: float, ny: float, idle: bool, v3: dict):
+        """v3 transition: the v2 transition exactly (its scan also steps the visitation memory, and its observation is
+        the v3 one), minus the yaw-change penalty on every step of any outcome. Episode-cumulative yaw and brake counts
+        ride along in info (reported, never rewarded)."""
+        obs, reward, terminated, truncated, info = self._finish_v2(nx, ny, idle)
+        cost = V3_YAW_CHANGE_COST * v3["yaw_change"]
+        info.update({"yaw_change_cost": cost, "brake_scale": v3["brake_scale"], "yaw_flips": self.yaw_flips,
+                     "yaw_sat_steps": self.yaw_sat_steps, "braked_steps": self.braked_steps})
+        return obs, float(reward - cost), terminated, truncated, info
 
     def heldout_reset(self, size, seed: int, maze_base: int = HELDOUT_BASE, dyn_base: int | None = None) -> dict:
         """Make this env held-out episode `seed` on a `size` maze -- the same episode as

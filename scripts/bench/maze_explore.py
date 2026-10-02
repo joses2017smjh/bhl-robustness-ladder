@@ -742,6 +742,11 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
                    "scale": (V_MAX, W_MAX), "build": build_obs, "range": NAV_RANGE,
                    # --policy-capture-pose: (x, y, yaw, stamp) estimated pose when the newest packet was captured
                    "cap": None, "cap_used": 0, "cap_missing": 0}
+        from bhl_robust.navgym.env import V3_VISIT_KEYS, VisitMap
+        if any(k in V3_VISIT_KEYS for k in keys):
+            # NavGym v5 actor (map_visit / map_coarse inputs): the gym's visitation memory on the ego map's lattice,
+            # stepped once per control step (decay over cfg.policy_dt) at the pose the observation is built at
+            learned["visit"] = VisitMap(maze.bounds(), dt=float(cfg.policy_dt))
     goal = maze.centre(maze.goal)
     dt = float(cfg.policy_dt)
     rec = recorder_factory(model, slot, maze, dt) if recorder_factory else None
@@ -819,7 +824,14 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         if learned is not None:
             # the gym's observation, built by the gym's own builder from the packet's raw rays and the ego map
             raw_m = np.asarray(pkt["lidar_raw_m"]) if pkt is not None else np.full(108, learned["range"])
-            obs_ = learned["build"](learned["keys"], raw_m, learned["emap"], xy_e[0], xy_e[1], yaw_e, goal, learned["prev"])
+            if "visit" in learned:
+                # v5 actor: step the visitation memory at this control step's pose (the pose maze_explore builds the
+                # observation at: oracle unless a pose error is injected), then the same builder with it
+                learned["visit"].step(xy_e[0], xy_e[1])
+                obs_ = learned["build"](learned["keys"], raw_m, learned["emap"], xy_e[0], xy_e[1], yaw_e, goal, learned["prev"],
+                                        visit=learned["visit"])
+            else:
+                obs_ = learned["build"](learned["keys"], raw_m, learned["emap"], xy_e[0], xy_e[1], yaw_e, goal, learned["prev"])
             feeds = {k: np.asarray(v, dtype=np.float32)[None] for k, v in obs_.items()}
             act = np.clip(learned["sess"].run(None, feeds)[0][0], -1.0, 1.0).astype(np.float32)
             learned["prev"] = act
@@ -937,6 +949,12 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         # opt-in only, so a default --policy run writes exactly the keys it wrote before
         result["policy_map_integration"] = {"mode": "capture_pose", "updates_at_capture_pose": learned["cap_used"],
                                             "updates_at_loop_top_pose": learned["cap_missing"]}
+    if learned is not None and "visit" in learned:
+        # v5 actors only, so v1/v2/v4 --policy runs write exactly the keys they wrote before
+        vm = learned["visit"]
+        result["policy_visitation"] = {"updates": vm.updates, "dt_s": vm.dt, "tau_s": vm.tau, "radius_m": vm.radius,
+                                       "pose": "the pose the observation is built at (oracle unless a pose error is injected)",
+                                       "obs_keys": list(learned["keys"])}
     if humanoid:
         labels = humanoid_labels(args.gait_run, pose.active, imu is not None)
         result["control"] = (f"frozen LEARNED humanoid gait {args.gait_run} (one checkpoint, 22-DoF) + SCRIPTED lidar_occupancy_map"
