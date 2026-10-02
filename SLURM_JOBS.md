@@ -3293,3 +3293,4 @@ CubeToShelfStand2 `21434946` **kill rule at model_1000: CONTINUE on both seeds**
   - Smokes `21505878` and, after the fixes, `21506426`: SMOKE PASS on both arms (R1 77/80, R2 75/80; recipe = TurnBoth + the declared changes only; exports 77 stamped / 75 plain; the clock-aware MuJoCo rollout passes). Every rollout of the fixed smoke runs on exploration seed 100.
   - Disclosed: the first smoke's run_eval ran one 3-iteration checkpoint on push seed 0, a qualify seed. The test files pass (107).
 - **Provenance:** jobs run from the live working tree, which also holds other workstreams' uncommitted in-progress edits. R1/R2 import only their own committed code, plus the eager import of `task_v2_env_cfg` (Stand4, in progress; it loaded cleanly in both smokes).
+- Submitted (code `563bb9a`): R1/R2 smoke of the committed code `21506542` (array 0,3), then the real array `21506543` (0-5%3) with `--dependency=afterok:21506542`.

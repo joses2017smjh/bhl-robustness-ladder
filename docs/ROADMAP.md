@@ -8,6 +8,7 @@ Updated 2026-10-01. Done since the last update: README hero is now the 22-DoF hu
 
 | Item | State | Done when |
 |---|---|---|
+| **Turning recipe R1/R2** (gait clock + contact schedule at every command, pushes from the start; [plan](SOLUTIONS_2026-10-01.md) §2) | smoke `21506542`, then `21506543`: 2 new tasks × 3 seeds, 6000 iterations from scratch, then turn_test v2 + qualify per seed | `results/repo-gpu-20260923/turngait-r12-20261001/verdict/R1.json` and `R2.json`, read by v5's joint rule |
 
 ## Next (small, unblocked)
 
