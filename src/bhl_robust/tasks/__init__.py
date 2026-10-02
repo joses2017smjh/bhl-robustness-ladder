@@ -356,6 +356,17 @@ for _vis, _cls in task_v2_env_cfg.CUBE_STAND3_VARIANTS.items():
             "rsl_rl_cfg_entry_point": task_v2_env_cfg._STAND3_RUNNER,
         },
     )
+# Roll-proof lift cube (CubeToShelfStand4, 2026-10-01): a different task from Stand3
+# and CubeToShelf, Stand3's runner. Blind only (the id its launchers train).
+gym.register(
+    id="TaskV2-BHL-CubeToShelfStand4-Blind-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": task_v2_env_cfg.CUBE_STAND4_VARIANTS["blind"],
+        "rsl_rl_cfg_entry_point": task_v2_env_cfg._STAND3_RUNNER,
+    },
+)
 
 # ------------------------------------------------------------------ B3: ice
 # Patchy friction on flat ground. The blind/depth pair is the negative control

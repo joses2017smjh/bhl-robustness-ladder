@@ -753,3 +753,78 @@ try:
     _STAND3_RUNNER = TaskV2Stand3PPORunnerCfg
 except (ImportError, NameError):                                 # v51 stack
     _STAND3_RUNNER = _V2_RUNNER
+
+
+# --------------------------------------------- roll-proof lift cube, Stand4
+# CubeToShelfStand4: a DIFFERENT task from CubeToShelfStand3 and CubeToShelf
+# (2026-10-01, docs/SOLUTIONS_2026-10-01.md section 4, row C2). Never compared
+# with their numbers. Full reasoning and every number: `stand4_mdp.py`.
+#
+# Stand3 earned `lifting_object` by rolling a supported cube (centre height
+# only; replay 21470828). Changes from Stand3, all in this class (Stand3, its
+# runner and every other task untouched; runner = Stand3's):
+#   hands     both robots spawn from the hand-collider overlay USD (the base
+#             USD has no collider on arm_*_hand_link);
+#   lift      `lifting_object` (name, weight, `minimal_height` and curriculum
+#             kept) also needs the lowest corner >= 0.02 m above every support
+#             the cube could rest on AND tilt <= 15 deg;
+#   success   Stand3's seated test AND tilt <= 8 deg AND released (no robot
+#             link pushing on the cube with >= 1 N: a filtered contact sensor
+#             on the cube), held 12 steps; `placed` still reads it (x 5000);
+#   logging   lift level, pinch distance, upright gate, tilt, corner
+#             clearance, release (env._bhl_s4 per step; Curriculum/* means).
+
+from isaaclab.sensors import ContactSensorCfg  # noqa: E402
+
+from bhl_robust.tasks import stand4_mdp as s4  # noqa: E402
+
+
+@configclass
+class CubeToShelfStand4Cfg(CubeToShelfStand3Cfg):
+    """Stand3 with hand colliders, a roll-proof lift term and a flat, released success.
+
+    A DIFFERENT task from `CubeToShelfStand3Cfg` and `CubeToShelfCfg`; reported
+    as CubeToShelfStand4 and never read as either.
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        # ---- hands: the overlay USD (Stand4 robots only)
+        for name in ("robot_a", "robot_b"):
+            rc = getattr(self.scene, name)
+            rc.spawn = rc.spawn.replace(usd_path=str(s4.HAND_COLLIDER_USD))
+        # ---- release sensing: contact reporting on the cube, filtered
+        # one-to-many against every collider-bearing robot link
+        self.scene.object.spawn = self.scene.object.spawn.replace(activate_contact_sensors=True)
+        setattr(self.scene, s4.CUBE_SENSOR, ContactSensorCfg(
+            prim_path="{ENV_REGEX_NS}/object",
+            filter_prim_paths_expr=list(s4.RELEASE_FILTER_EXPRS),
+            history_length=0,
+            update_period=self.sim.dt,
+        ))
+        gate = {"gate_free": stand.GATE_FREE, "gate_std": stand.GATE_STD}
+        r = self.rewards
+        # ---- lift pay: same name, weight and curriculum parameter
+        r.lifting_object = RewTerm(
+            func=s4.stand4_object_is_lifted,
+            params={"minimal_height": r.lifting_object.params["minimal_height"],
+                    "clearance": s4.CORNER_CLEARANCE, "tilt_max_deg": s4.LIFT_TILT_MAX_DEG,
+                    **gate},
+            weight=r.lifting_object.weight)
+        # ---- success (Stand3's `placed` reads this termination, unchanged)
+        self.terminations.success = DoneTerm(
+            func=s4.stand4_cube_placed,
+            params={"hold_steps": stand.SEAT_HOLD_STEPS, "tilt_max_deg": s4.SEAT_TILT_MAX_DEG,
+                    "release_force_n": s4.RELEASE_FORCE_N, "sensor_name": s4.CUBE_SENSOR})
+        # ---- diagnostics (Curriculum/*, no gradient)
+        c = self.curriculum
+        c.pinch_dist = CurrTerm(func=s4.pinch_distance_mean)
+        c.cube_tilt_deg = CurrTerm(func=s4.cube_tilt_mean)
+        c.corner_clear = CurrTerm(func=s4.corner_clearance_mean)
+        c.roll_ok = CurrTerm(func=s4.roll_ok_share)
+        c.lift_paid = CurrTerm(func=s4.lift_paid_share)
+        c.released = CurrTerm(func=s4.released_share)
+        c.robot_force_max = CurrTerm(func=s4.robot_force_max_mean)
+
+
+CUBE_STAND4_VARIANTS = _variants(CubeToShelfStand4Cfg, "CubeToShelfStand4")
