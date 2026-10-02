@@ -36,8 +36,9 @@ def main():
     parser.add_argument("--settle-s", type=float, default=None)
     parser.add_argument("--cross-kick", action="store_true")
     parser.add_argument("--align-yaw", action="store_true")
-    parser.add_argument("--stage-gait", choices=("shipped", "turnboth"), default=None,
-                        help="forwarded as --stage-gait=turnboth; omitted = the shipped gait (exact replay behaviour)")
+    parser.add_argument("--stage-gait", choices=("shipped", "turnboth", "m3"), default=None,
+                        help="forwarded as --stage-gait=turnboth or --stage-gait=m3; omitted = the shipped gait (exact "
+                             "replay behaviour)")
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument("--node", default="cn-c22",
                         help="the replay gate is bitwise; it stays pinned to the original physics node")
@@ -76,6 +77,10 @@ def main():
         if args.align_yaw or args.press_hold:
             parser.error("--stage-gait turnboth does not compose with --align-yaw or --press-hold")
         probe_args.append("--stage-gait=turnboth")
+    elif args.stage_gait == "m3":
+        if args.align_yaw or args.press_hold:
+            parser.error("--stage-gait m3 does not compose with --align-yaw or --press-hold")
+        probe_args.append("--stage-gait=m3")
     if args.smoke:
         probe_args.append("--smoke")
     if not args.submit:
@@ -119,7 +124,7 @@ def main():
            "probe_args": probe_args, "command": command,
            "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
            "submitted_utc": dt.datetime.now(dt.timezone.utc).isoformat()}
-    if args.stage_gait == "turnboth":   # default receipts keep their keys
+    if args.stage_gait in ("turnboth", "m3"):   # default receipts keep their keys
         row["stage_gait"] = args.stage_gait
     (out / "submission.json").write_text(json.dumps(row, indent=2) + "\n")
     with (ROOT / "SLURM_JOBS.md").open("a") as stream:
@@ -127,6 +132,7 @@ def main():
             f"\nMission7 exact replay gate (2026-09-23): **SUBMITTED** `{job_id}` — ten-fall staged replay pinned to "
             f"`{args.node}`, PlateStage lateral `{'plate centre' if args.stage_lateral is None else f'{args.stage_lateral} m'}`, wait-open `{args.wait_open} s`; "
             f"{'stage gait `turnboth` (TurnBoth-s0 swapped in for the stage); ' if args.stage_gait == 'turnboth' else ''}"
+            f"{'stage gait `m3` (shipped gait: turn while stepping + stall watchdog); ' if args.stage_gait == 'm3' else ''}"
             f"geometry, activation schedule and fall predicate unchanged; receipt/source hashes: "
             f"`{out.relative_to(ROOT)}/submission.json`.\n")
         stream.flush(); os.fsync(stream.fileno())

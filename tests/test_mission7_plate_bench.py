@@ -426,7 +426,7 @@ def test_turnboth_rejects_align_yaw_press_hold_and_unknown_gaits():
 
 def test_turnboth_declared_constants():
     m = _stage_module()
-    assert m.STAGE_GAITS == ("shipped", "turnboth")
+    assert m.STAGE_GAITS == ("shipped", "turnboth", "m3")   # m3 added 2026-10-02 (M3, opt-in)
     assert m.TURNBOTH_CROSS_CLEAR_M == gates.CLEAR_ALONG_M
     assert m.TURNBOTH_TURN_RATE == .40 == m.TURNBOTH_WZ_WALK      # Mission 7's |wz| bound (tanh x 0.4)
     assert (m.TURNBOTH_TURN_EXIT, m.TURNBOTH_CRUISE, m.TURNBOTH_K_YAW) == (.15, .30, 1.2)

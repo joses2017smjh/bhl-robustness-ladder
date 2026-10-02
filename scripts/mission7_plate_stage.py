@@ -18,6 +18,15 @@ crosses straight forward (no lateral command) until the base is past the plate,
 turns back to the heading it had at takeover, and at hand-back restores the
 shipped policy and zeroes prev_actions again.  LEARNED gaits, SCRIPTED stage,
 ORACLE layout and plate pose.  The default ``shipped`` path is unchanged.
+
+``--stage-gait m3`` (opt-in; M3 of docs/SOLUTIONS_2026-10-01.md, conditional on
+M2's bench FAIL) keeps the SHIPPED gait (no policy swap).  After the unchanged
+approach and settle it turns WHILE STEPPING toward the door direction (forward
+0.30 m/s plus a 0.40 rad/s yaw command: the shipped gait does not turn in place),
+crosses straight forward with a heading hold once aligned, then turns back to
+the takeover heading the same way; a stall watchdog (turn and cross) recovers a
+bounded number of times and then hands back.  Constants and their sources are
+declared at M3_* below.  LEARNED gait, SCRIPTED stage, ORACLE layout and plate pose.
 """
 from __future__ import annotations
 
@@ -38,7 +47,7 @@ from mission7_overnight import write
 # Declared 2026-10-02 before any bench, replay or route episode ran with it; nothing below is tuned
 # on a result.  The laws are TurnBoth-s0's scored maze controller (random_maze.TurnWalkController:
 # turn in place, then walk forward with a heading hold, never sideways), except the turn rate.
-STAGE_GAITS = ("shipped", "turnboth")
+STAGE_GAITS = ("shipped", "turnboth", "m3")
 SHIPPED_EXPORT = "logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported"   # = MissionEnv's gait
 TURNBOTH_EXPORT = "logs/rsl_rl/humanoid/2026-09-25_18-54-44_arms-turn-turnboth-s0/exported"
 TURNBOTH_POLICY_SHA256 = "562ceed71e04df2bc317edd352c9ebf59fb13fee5d0cc6708fa82aff33b55c95"
@@ -55,6 +64,53 @@ TURNBOTH_K_YAW = 1.2              # TurnWalkController.k_yaw: heading hold while
 TURNBOTH_WZ_WALK = .40            # TurnWalkController.wz_walk
 TURNBOTH_CROSS_CLEAR_M = .35      # = mission7_gates.CLEAR_ALONG_M, used when --cross-clear is not given
 _TURNBOTH_CACHE = {}
+
+# ---- --stage-gait m3 (M3) ----------------------------------------------------------------------
+# Declared 2026-10-02 before any bench-v2, replay or route episode ran with it; nothing is tuned on a
+# bench, replay or route result.  The gait is NEVER swapped: env.controller.policy stays the shipped
+# arms-dr1.0-s0 policy, and prev_actions is touched only by the watchdog's recovery.  Every constant comes
+# from kinematics, the existing code, or ONE pre-registered sweep on open floor built from EXPLORATION train
+# layout 255 (walls, doors and plates disabled as in the 2026-09-21 gait study; selection rule written before
+# the result was read; srun job 21508399): candidates .15/.20/.25/.30 m/s forward with +-0.40 rad/s for 2 s
+# from a 3 s standstill; .15 and .20 never stepped (< 0.08 rad), .25 stepped at +0.40 only, .30 stepped both
+# ways (+0.70 rad / 0.55 m, -0.89 rad / 0.52 m, no fall) -> the smallest candidate turning both ways.
+M3_TURN_VX = .30        # m/s while turning; = the existing "measured 0.30 m/s onset threshold" (PulseApproachController)
+M3_TURN_WZ = .40        # rad/s: the largest yaw rate Mission 7's command interface admits (tanh x 0.4)
+M3_ALIGN_EXIT = .25     # rad: BearingController.heading_tolerance (the shipped gait's turn-then-walk oracle)
+M3_TURN_MAX_S = 2 * np.pi / M3_TURN_WZ   # a full revolution at the commanded rate bounds a turn (as TURNBOTH_TURN_MAX_S)
+M3_CROSS_VX = .30       # m/s: the stage's crossing speed (_world_command) and the route's near-plate cap
+M3_K_YAW = 1.2          # heading hold while crossing: MeasuredRouteController's clip(1.2 x error, +-0.35)
+M3_WZ_HOLD = .35
+M3_CROSS_CLEAR_M = .35  # = mission7_gates.CLEAR_ALONG_M, used when --cross-clear is not given
+# Turn direction: the short way; when the error is within M3_ALIGN_EXIT of +-pi (no short way), the way whose
+# forward arc ends toward the door centreline (kinematics: a forward U-turn at wz > 0 ends 2 vx/wz to the
+# right of the heading it ends on), i.e. wz sign = +side for the turn and -side for the turn back.
+# Stall watchdog (turn and cross only): RecoveryRouteController's predicate, the base moved < 0.05 m over the
+# last 1.2 s; recovery = prev_actions := 0 (the stage's cross-kick, matched evidence of un-sticking this gait,
+# 2/2 genuine stalls) and a 0.40 s pulse at 0.30 m/s (the route's recovery pulse length and speed) BACKWARD,
+# off the plate edge the stalls stand on; then the interrupted phase resumes with a fresh window.  After
+# M3_MAX_RECOVERIES recoveries a further stall hands back to the route (no turn back).
+# Timing as polled (disclosed, not changed): the inherited settle (`now < self.phase_until`) and the m3 cross bound
+# (`now < self.cross_start_s + self.cross_max_s`) compare float-accumulated d.time without an epsilon, so at the
+# bench's 0.2 s polling the declared 0.40 s settle lasts 0.40 or 0.60 s and the 4.0 s cross bound 4.0 or 4.2 s.
+M3_STALL_WINDOW_S = 1.2
+M3_STALL_MIN_M = .05
+M3_RECOVER_VX = .30
+M3_RECOVER_S = .40
+# Pooled per crossing: m3_recoveries resets only at takeover (_start), so either guarded phase may spend both.
+# Sized, not enforced per phase: 2 = the two phases the watchdog guards (turn, cross) x RecoveryRouteController's
+# one recovery per stalled (waypoint, phase).
+M3_MAX_RECOVERIES = 2
+M3_PHASES = ("turn", "cross", "turn_back", "recover")
+
+
+def m3_constants():
+    """The declared M3 constants (provenance and preflight)."""
+    return {"policy": "shipped arms-dr1.0-s0 (env.controller.policy is never swapped)",
+            "turn_vx_mps": M3_TURN_VX, "turn_wz_rps": M3_TURN_WZ, "align_exit_rad": M3_ALIGN_EXIT,
+            "turn_max_s": M3_TURN_MAX_S, "cross_vx_mps": M3_CROSS_VX, "k_yaw": M3_K_YAW, "wz_hold_rps": M3_WZ_HOLD,
+            "cross_clear_m": M3_CROSS_CLEAR_M, "stall_window_s": M3_STALL_WINDOW_S, "stall_min_m": M3_STALL_MIN_M,
+            "recover_vx_mps": -M3_RECOVER_VX, "recover_s": M3_RECOVER_S, "max_recoveries": M3_MAX_RECOVERIES}
 
 
 def turnboth_check(upstream, shipped_cfg=None):
@@ -230,6 +286,112 @@ class PlateStage:
             self.takeover_yaw = None
             self.turn_start_s = None
             self.gait_events = []
+        elif stage_gait == "m3":
+            if self.align_yaw or self.press_hold:
+                raise ValueError("--stage-gait m3 turns while stepping itself; --align-yaw and --press-hold "
+                                 "do not compose with it")
+            self.m3_clear_m = M3_CROSS_CLEAR_M if self.cross_clear_m is None else self.cross_clear_m
+            self.takeover_yaw = None
+            self.turn_start_s = None
+            self.gait_events = []        # M3 never swaps the policy: this stays empty
+            self.m3_events = []          # takeover, watchdog recoveries, resumes, watchdog hand-backs
+            self.m3_recoveries = 0
+            self.m3_resume = None
+            self.m3_recover_until = None
+            self.m3_track = []
+
+    # ---- M3 (stage_gait == "m3") ---------------------------------------------------------------
+    def _m3_segment(self, now, xy):
+        """Start a fresh watchdog window (phase entry or resume after a recovery)."""
+        self.m3_track = [(float(now), np.asarray(xy, dtype=float).copy())]
+
+    def _m3_stalled(self, now, xy):
+        """True when the base moved < M3_STALL_MIN_M since its position M3_STALL_WINDOW_S ago."""
+        xy = np.asarray(xy, dtype=float)
+        self.m3_track.append((float(now), xy.copy()))
+        if now - self.m3_track[0][0] < M3_STALL_WINDOW_S - 1e-9:
+            return False
+        ref = max(i for i, (t, _) in enumerate(self.m3_track) if t <= now - M3_STALL_WINDOW_S + 1e-9)
+        self.m3_track = self.m3_track[ref:]
+        return float(np.linalg.norm(xy - self.m3_track[0][1])) < M3_STALL_MIN_M
+
+    def _m3_turn_sign(self, err, centre_sign):
+        """Short way; within M3_ALIGN_EXIT of +-pi, the way whose arc ends toward the door centreline."""
+        if abs(err) > np.pi - M3_ALIGN_EXIT:
+            return float(centre_sign)
+        return float(np.copysign(1., err))
+
+    def _m3_handback(self, recorded, now, **fields):
+        self.done.add(self.door)
+        self.history.append({"time_s": now, "door": int(self.door), "side": int(self.side),
+                             "phase": "recorded", **fields})
+        self.door = None
+        self.side = None
+        self.phase = "recorded"
+        return np.asarray(recorded, dtype=float), "recorded"
+
+    def _m3_stall(self, recorded, now):
+        """The watchdog fired in self.phase (turn or cross): recover, or hand back once recoveries are spent."""
+        if self.m3_recoveries < M3_MAX_RECOVERIES:
+            self.m3_recoveries += 1
+            controller = self.env.controller
+            before = float(np.linalg.norm(controller.prev_actions))
+            controller.prev_actions[:] = 0.
+            entry = {"time_s": now, "door": int(self.door), "phase": "recover", "resume": self.phase,
+                     "recovery": self.m3_recoveries, "prev_actions_before_norm": before}
+            self.history.append(dict(entry))
+            self.m3_events.append(dict(entry, event="stall_recover"))
+            self.m3_resume = self.phase
+            self.m3_recover_until = now + M3_RECOVER_S
+            self.phase = "recover"
+            return np.array([-M3_RECOVER_VX, 0., 0.]), self.phase
+        self.m3_events.append({"time_s": now, "door": int(self.door), "event": "stall_handback",
+                               "phase": self.phase, "recoveries": self.m3_recoveries})
+        return self._m3_handback(recorded, now, watchdog_handback=True, stalled_in=self.phase)
+
+    def _m3_command(self, recorded, now, xy, direction):
+        """turn (while stepping) -> cross -> turn_back -> hand-back on the shipped gait, after approach and settle."""
+        env = self.env
+        heading = float(np.arctan2(direction[1], direction[0]))
+        if self.phase == "recover":
+            if now < self.m3_recover_until - 1e-9:
+                return np.array([-M3_RECOVER_VX, 0., 0.]), self.phase
+            self.phase, self.m3_resume = self.m3_resume, None
+            self.m3_events.append({"time_s": now, "door": int(self.door), "event": "resume", "phase": self.phase})
+            self._m3_segment(now, xy)
+        if self.phase == "turn":
+            err = wrap(heading - _yaw(env))
+            if abs(err) >= M3_ALIGN_EXIT and now < self.turn_start_s + M3_TURN_MAX_S:
+                if self._m3_stalled(now, xy):
+                    return self._m3_stall(recorded, now)
+                return np.array([M3_TURN_VX, 0., self._m3_turn_sign(err, self.side) * M3_TURN_WZ]), self.phase
+            # Every crossing starts with a "cross" history entry: mission7_gates scores it from there.
+            self.phase = "cross"
+            self.cross_start_s = now
+            self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase,
+                                 "yaw_error_rad": float(err), "turn_timed_out": bool(abs(err) >= M3_ALIGN_EXIT)})
+            self._kick(now)
+            self._m3_segment(now, xy)
+        if self.phase == "cross":
+            err = wrap(heading - _yaw(env))
+            along = float((xy - _plate_state(env, self.door, self.side)[0]) @ direction)
+            if along < self.m3_clear_m and now < self.cross_start_s + self.cross_max_s:
+                if self._m3_stalled(now, xy):
+                    return self._m3_stall(recorded, now)
+                # Straight forward with the route's heading hold: no lateral command.
+                return np.array([M3_CROSS_VX, 0., float(np.clip(M3_K_YAW * err, -M3_WZ_HOLD, M3_WZ_HOLD))]), self.phase
+            self.phase = "turn_back"
+            self.turn_start_s = now
+            self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase,
+                                 "along_m": along, "cleared": bool(along >= self.m3_clear_m)})
+        if self.phase == "turn_back":
+            err = wrap(self.takeover_yaw - _yaw(env))
+            if abs(err) >= M3_ALIGN_EXIT and now < self.turn_start_s + M3_TURN_MAX_S:
+                return np.array([M3_TURN_VX, 0., self._m3_turn_sign(err, -self.side) * M3_TURN_WZ]), self.phase
+            # Hand-back: the "recorded" entry stays the last one (the route probe reads history[-1]["door"]).
+            return self._m3_handback(recorded, now, yaw_error_rad=float(err),
+                                     turn_back_timed_out=bool(abs(err) >= M3_ALIGN_EXIT))
+        raise AssertionError(self.phase)
 
     def _swap_gait(self, now, to):
         """Swap env.controller.policy for the stage and zero prev_actions (turnboth only)."""
@@ -323,6 +485,11 @@ class PlateStage:
             self.takeover_yaw = _yaw(self.env)
             self._swap_gait(now, "turnboth")
             self.gait_events[-1]["takeover_yaw_rad"] = self.takeover_yaw
+        elif self.stage_gait == "m3":   # no swap: the shipped policy keeps running
+            self.takeover_yaw = _yaw(self.env)
+            self.m3_recoveries = 0
+            self.m3_events.append({"time_s": float(now), "door": int(door), "event": "takeover",
+                                   "takeover_yaw_rad": self.takeover_yaw})
 
     def command(self, recorded):
         env, runner, slot = self.env, self.env.runner, self.env.slot
@@ -395,6 +562,13 @@ class PlateStage:
                 self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase,
                                      "yaw_error_rad": wrap(float(np.arctan2(direction[1], direction[0])) - _yaw(env))})
                 return self._turnboth_command(recorded, now, xy, direction)
+            if self.stage_gait == "m3":
+                self.phase = "turn"
+                self.turn_start_s = now
+                self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase,
+                                     "yaw_error_rad": wrap(float(np.arctan2(direction[1], direction[0])) - _yaw(env))})
+                self._m3_segment(now, xy)
+                return self._m3_command(recorded, now, xy, direction)
             self.phase = "cross"
             self.phase_until = now + self.cross_s
             self.cross_start_s = now
@@ -402,6 +576,8 @@ class PlateStage:
             self._kick(now)
         if self.stage_gait == "turnboth" and self.phase in ("turn", "cross", "turn_back"):
             return self._turnboth_command(recorded, now, xy, direction)
+        if self.stage_gait == "m3" and self.phase in M3_PHASES:
+            return self._m3_command(recorded, now, xy, direction)
         if self.phase == "creep":
             travelled = float(np.linalg.norm(xy - self.creep_origin))
             if env.state.open[self.door] or travelled >= self.creep_max_m:
@@ -495,6 +671,8 @@ def _episode(env, index, source_episode, baseline, stage_lateral_m=None, wait_op
     if stage_gait != "shipped":   # the default row keeps its keys and their order
         row["stage_gait"] = stage_gait
         row["gait_events"] = stage.gait_events
+        if stage_gait == "m3":   # the turnboth row keeps its keys too
+            row["m3_events"] = stage.m3_events
     row["samples"] = samples
     return row
 
@@ -545,11 +723,31 @@ def run(args, out):
         "episode_comparison": [{key: value for key, value in row.items() if key != "samples"} for row in rows],
     }
     if getattr(args, 'stage_gait', 'shipped') != "shipped":   # the default report is unchanged
-        report["intervention"] = turnboth_description()
+        report["intervention"] = stage_gait_description(args.stage_gait)
         report["stage_gait"] = args.stage_gait
-        report["stage_gait_provenance"] = load_turnboth_policy(env)[1]
+        report["stage_gait_provenance"] = (load_turnboth_policy(env)[1] if args.stage_gait == "turnboth"
+                                           else m3_constants())
     write(out / "episodes.json", {"complete": True, "episodes": rows})
     write(out / "result.json", report)
+
+
+def stage_gait_description(stage_gait):
+    """The intervention text of a non-default stage gait (turnboth's is unchanged)."""
+    return {"turnboth": turnboth_description, "m3": m3_description}[stage_gait]()
+
+
+def m3_description():
+    return ("staged plate maneuver with M3 on the SHIPPED gait (LEARNED gait, SCRIPTED stage, ORACLE layout and plate "
+            "pose; no policy swap): pre-plate approach and settle unchanged; turn while stepping toward the door "
+            f"direction at {M3_TURN_VX:.2f} m/s forward and {M3_TURN_WZ:.2f} rad/s yaw until within "
+            f"{M3_ALIGN_EXIT:.2f} rad (bounded {M3_TURN_MAX_S:.2f} s; the short way, toward the door centreline when "
+            f"there is none); straight-forward crossing at {M3_CROSS_VX:.2f} m/s with heading hold clip({M3_K_YAW:.1f} "
+            f"x error, +-{M3_WZ_HOLD:.2f}) and no lateral command, until the base is --cross-clear (default "
+            f"{M3_CROSS_CLEAR_M:.2f} m) past the plate centre or cross_max_s pass; turn back to the takeover heading "
+            f"the same way; stall watchdog in the turn and the crossing: base moved < {M3_STALL_MIN_M:.2f} m over "
+            f"{M3_STALL_WINDOW_S:.1f} s -> prev_actions := 0 and {M3_RECOVER_S:.2f} s backward at "
+            f"{M3_RECOVER_VX:.2f} m/s, then the phase resumes, at most {M3_MAX_RECOVERIES} times, then hand-back; "
+            "wrong-side staging only when the correct plate is over 1.0 m away")
 
 
 def turnboth_description():
@@ -588,12 +786,15 @@ if __name__ == "__main__":
     parser.add_argument("--align-yaw", action="store_true", help="turn in place toward the door direction during the settle")
     parser.add_argument("--only", default="", help="comma-separated layout indices to replay (local checks); default all ten")
     parser.add_argument("--stage-gait", choices=STAGE_GAITS, default="shipped",
-                        help="gait the stage runs on: shipped (default, the exact replay behaviour) or turnboth "
-                             "(TurnBoth-s0 swapped in for the stage: turn in place, straight crossing, turn back)")
+                        help="gait the stage runs on: shipped (default, the exact replay behaviour), turnboth "
+                             "(TurnBoth-s0 swapped in for the stage: turn in place, straight crossing, turn back) or "
+                             "m3 (shipped gait: turn while stepping, straight crossing, turn back, stall watchdog)")
     parser.add_argument("--preflight", action="store_true")
     args = parser.parse_args()
     if args.stage_gait == "turnboth" and (args.align_yaw or args.press_hold):
         parser.error("--stage-gait turnboth does not compose with --align-yaw or --press-hold")
+    if args.stage_gait == "m3" and (args.align_yaw or args.press_hold):
+        parser.error("--stage-gait m3 does not compose with --align-yaw or --press-hold")
     args.repo = args.repo.resolve()
     args.campaign = args.campaign.resolve()
     args.baseline = args.baseline.resolve()
@@ -607,7 +808,8 @@ if __name__ == "__main__":
                      "baseline": str(args.baseline), "out": str(args.out)}
         if args.stage_gait != "shipped":   # the default preflight line is unchanged
             preflight["stage_gait"] = args.stage_gait
-            preflight["stage_gait_check"] = turnboth_check(args.repo / "external/Berkeley-Humanoid-Lite")
+            preflight["stage_gait_check"] = (turnboth_check(args.repo / "external/Berkeley-Humanoid-Lite")
+                                             if args.stage_gait == "turnboth" else m3_constants())
         print(json.dumps(preflight, sort_keys=True), flush=True)
         raise SystemExit(0)
     args.out.mkdir(parents=True, exist_ok=True)
