@@ -3722,3 +3722,17 @@ Files:
   - ACCURACY PASS iff balanced accuracy ≥ 0.90 on all 4 booleans, the point hit rate is ≥ 0.95 on cube-visible frames, and control C1 holds (same frames with the cube rendered invisible must score ≤ 0.60 balanced accuracy). INCOMPLETE if any class has fewer than 20 frames. IN-LOOP-ELIGIBLE is a separate verdict: p95 latency ≤ 1.0 s over 50 calls.
   - Labels: LEARNED gait + SCRIPTED arms + EXTERNAL VLM observer (offline).
   - It needs the user's paid-tier API key, kept outside the repo (never logged or committed). Build and mock dry run now; scored calls only once the key exists.
+- **Correction to design (D), 2026-10-03 10:51, before any diagnosis episode:** the frozen layout range "250–289" mostly does not exist. Mission 7's train split is layouts 0–255 (`bhl_robust.mission.layout.SPLITS["train"] = (0, 256)`), and 250–255 yield only 6 crossings, 2 of them with public clock-s2 outcomes from the clocks2 smokes.
+  - Corrected range: train layouts **170–249** (bench v2's construction, capped at 80 crossings by a deterministic rule stated in the launcher header). No Mission 7 crossing record exists anywhere in 32–249.
+  - The intent is unchanged: exploration layouts never used by bench crossings, train 0–31 or validation. D is an investigation, not a gate.
+  - The diagnosis smoke ran on layouts 32, 33 and 38 (outside the run range).
+- **Coordinator re-freeze of (D)'s measurement and classifier, 2026-10-03 11:40, after an independent review and before any run episode on layouts 170–249.** The review found two blocking flaws, using only the smokes (layouts 32/33/38) and synthetic checks; no stall outcome was used.
+  1. Round plates: box-on-cylinder contacts sink, so top-face support was counted as "edge" and loaded feet as unloaded. Fix: classify plate contacts by the contact normal (an upward normal is support; a near-horizontal normal is the edge face), with thresholds frozen in the header; plus a smoke check that a foot standing inside a round plate reads as loaded.
+  2. The edge-blocked swing test had no evidence of obstruction and counted both feet, and the gait's normal flat-ground swings are low (left foot 1.6–3.3 cm), so every flagged swing in the smoke was a false positive. Fix: count only the LEADING foot's swings, and require obstruction evidence. That means edge-face force during the swing, or a touchdown with the toe stopped at the edge (within a band frozen in the header) on the floor side, not on the plate top. Any height clause must be relative to the gait's own flat-ground swing heights, measured on layouts outside 170–249.
+  - Decisions frozen now:
+    - Precedence: wall-blocked > blocked step-up > slow progress > other (conservative for F1); overlaps reported.
+    - Falls are excluded from the stall count and reported separately; the fraction is shown both ways, and the decision uses the non-fall stalls.
+    - 0 non-fall stalls → F1 is not trained. A partial or aborted run is INCOMPLETE and decides nothing.
+    - Specificity check: among the run's crossings that CLEAR, the share whose own edge dwell meets the blocked-step-up criterion must be lower than the stall fraction; otherwise the classifier does not separate stalls from clears, and F1 is not trained.
+    - F1 is trained iff the non-fall blocked-step-up fraction is ≥ 1/3 AND the specificity check holds.
+  - A fresh smoke is required. F23's smokes are restricted to layouts 32–169.
