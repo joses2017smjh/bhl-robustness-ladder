@@ -1,0 +1,22 @@
+{
+  "run": "arms-platecross-clocks2-s1",
+  "task": "Velocity-BHL-Arms-PlateCross-v0",
+  "seed": 1,
+  "final_ckpt": "model_8998.pt",
+  "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_18-17-13_arms-platecross-clocks2-s1",
+  "job": "21517632",
+  "parent_run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2",
+  "parent_ckpt": "model_5999.pt",
+  "parent_ckpt_sha256": "cc849887309b705f4497e2c4507e86e558cee7c77affc706af9d8053d9c4a53e",
+  "final_ckpt_present": true,
+  "task_id_in_log": true,
+  "parent_loaded_in_log": true,
+  "plates_marker_in_log": true,
+  "feet_gait_in_log": true,
+  "push_robot_in_log": true,
+  "guard": [],
+  "env_check": "PLATECROSS ENV: OK /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_18-17-13_arms-platecross-clocks2-s1/params/env.yaml (= arms-turngait-clock-s2's env.yaml + the declared terrain and the training seed only)",
+  "recipe_check": "GAIT-CLOCK RECIPE: OK R1 /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_18-17-13_arms-platecross-clocks2-s1/params/env.yaml (= TurnBoth + the declared changes only)",
+  "clause": "Training counts only if the run dir holds the final checkpoint and the fresh training log shows the PlateCross task id, the parent checkpoint being loaded, the plates terrain marker, the feet_gait term and the push event, with an empty guard list and both env.yaml checks OK.",
+  "note": "fine-tune of arms-turngait-clock-s2/model_5999.pt; written once from this job's fresh training log"
+}

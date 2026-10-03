@@ -3650,3 +3650,37 @@ Files:
   - Reading: swapping in the qualified clock gait removes most falls but does not make the scripted stage clear. 180° is blocked by the turn rate inside the 10 s window, and the 0/±90° misses stall short of the clear position (mechanism not diagnosed here). Three predeclared scripted-stage crossing plans are now NEGATIVE (M2, M3, clock-s2).
   - The learned crossing (B: PlateCross, array `21517543`) is still running; its selected gait, if any, gets one bench v2 run as predeclared.
   - Labels: LEARNED shipped gait + LEARNED clock-s2 stage gait, SCRIPTED stage, ORACLE layout and plate pose.
+
+**Results recorded 2026-10-03 01:28 (verdicts read from JSON, then recounted independently from the raw per-seed / per-episode files by a read-only workflow, `wf_0328178f-abb`; every number below matches the verdict files):**
+- **NavGym v5 (N2, fully learned navigation): gym verdict `21506836` PASS (3/3 seeds); physics transfer `21506837` PASS.**
+  - Gym, final actors (deterministic), never-used mazes 61000–61047, n = 48 per size:
+    - s8: 5×5 41/48 (0.854), 6×6 37/48 (0.771), 6×6 collision 4/48 (0.083);
+    - s9: 42/48, 42/48, 4/48;
+    - s10: 45/48, 43/48, 3/48.
+    - Every clause holds on 3/3 seeds (≥ 2 needed).
+  - Transfer: hard 6×6 + 1 extra opening, never-used 63000–63011, MuJoCo 3.3.5, frozen biped gait `dr-default-s0`, `--policy-capture-pose`.
+    - s8 **11/12** (one time-out, 63006), s9 **12/12**, s10 **12/12**, **0 falls** (≥ 10/12 each needed).
+    - Clean goals (no wall contact): 11/11/11. A* 12/12 (SCRIPTED, not gated).
+  - Recount checks:
+    - the actors scored are the final ones (sha256);
+    - neither maze set had been used before (grep of results, logs and the ledger);
+    - the navigation code did not change between the declaration (`ae27a5e`) and the runs (`994851b`, `110c044`);
+    - the three development smokes before the 03:32 predeclaration used throw-away maze sets only.
+  - Labels: LEARNED gait + LEARNED v5 navigator (no planner in the loop); ORACLE pose and goal.
+  - Reading: the first fully learned navigator here to pass both its predeclared gym bar and its physics-transfer gate. Against v4, it adds visitation memory, a coarse 14 m map, a yaw-change penalty and the brake in the gym, plus capture-pose map integration.
+- **Stand4 `21506758`: NEGATIVE by the predeclared rule** (0/2 seeds with last-200 success ≥ 0.10; 0 killed).
+  - Recounted from the console logs: both seeds complete at 7999 and passed the model_1000 kill rule (CONTINUE).
+  - Last-200 success: s0 0.0064 (fallen 0.044, time-out 0.949), s1 0.0009 (0.023, 0.976).
+  - Reading: the roll-proof lift reward removes the reward farming, and the crews stand, but they neither lift the cube clear nor seat it.
+  - Labels: LEARNED crew policy (blind); ORACLE privileged observations, as Stand3.
+- **PlateCross `21517543`: NEGATIVE, no qualified seed, so no bench run (as predeclared).**
+  - All three fine-tunes trained 3000 iterations (5999 → 8998) with empty guards, and every seed turns 10/10 (v2x).
+  - s0: v2 FAIL (walk −42.5°), push 24/60. s1: v2 FAIL (−32.2°), push 23/60. s2: v2 PASS (−2.4°) and v2x walk 2/3, but push 21/60.
+  - Push falls are more than twice the parent's 9/60 and spread over all six commands, so no reading of the rule qualifies a seed.
+  - Reading: fine-tuning on Mission 7's plates cost the push robustness that clock-s2 only just had.
+- **R1H `21517588`, partial: seeds 0 and 1 do not count, so the arm cannot PASS** (at most 1/3; 2 needed).
+  - s0: v2 FAIL (turns 4/6, walk −65.5°); not qualified (turn 8/10, walk 0/3, push 11/60).
+  - s1: v2 FAIL (5/6, −40.1°); not qualified (walk 0/3; push 4/60).
+  - The verdict JSON becomes FAIL once seed 2's three JSONs exist, and stays INCOMPLETE if any is missing.
+  - Diagnosis of the all-negative walk drift (read-only): **no sign or reference bug.** heading_hold is even in Δψ, and the same bias shows in pure-turn runs, where the term is inactive. R1's seeds were already lateralized one way each.
+  - Design observation: neither the actor nor the critic observes yaw or ψ_ref, so the term can discourage accumulated yaw but cannot teach heading correction.
