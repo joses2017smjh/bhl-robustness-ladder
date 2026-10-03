@@ -1,0 +1,20 @@
+{
+ "verdict": "CONTINUE",
+ "reasons": [],
+ "ep_len": 453.53529968261716,
+ "time_out": 0.8587264168262482,
+ "success": 0.001354166676173918,
+ "nonfall": 0.8600805835024221,
+ "length_clause_skipped": false,
+ "at_iter": 1000,
+ "window": 100,
+ "fallen": 0.1403096554428339,
+ "ready": true,
+ "mode": "kill",
+ "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-10-02_04-16-45_v2-cubetoshelfstand4-blind-s1",
+ "latest_iter_logged": 1011,
+ "task": "CubeToShelfStand4 (blind)",
+ "note": "CubeToShelfStand4 (roll-proof lift): a different task from CubeToShelfStand3 and CubeToShelf; never compared with their numbers",
+ "labels": "LEARNED crew policies (one PPO actor drives both robots, blind); ORACLE privileged observations exactly as Stand3: the actor's object_pos_a/b (simulator cube position in each robot's root frame) and the critic's base_lin_vel_a/b, object_lin_vel, object_ang_vel; MODIFIED hand colliders relative to Stand3 (both robots spawn from assets/cloth/berkeley_humanoid_lite_hand_colliders.usda)",
+ "rule": "PREDECLARED RULE (frozen; Stand3's structure): the kill rule at model_1000 exactly as Stand3's launcher applies it (copy its condition and window verbatim); a seed is COMPLETE iff it reaches iteration 7999; Stand4 PASSES iff >= 1 of 2 seeds has last-200-iteration success >= 0.10, where success is the Stand4 termination above (seated, tilt <= 8 deg, released). Otherwise NEGATIVE; INCOMPLETE if a seed is neither complete nor stopped by the kill rule. Stand4 is a different task from Stand3 and CubeToShelf and is never compared with their numbers. Labels: LEARNED crew policies; ORACLE privileged observations exactly as Stand3 uses them (say which); MODIFIED hand colliders (the overlay) relative to Stand3."
+}

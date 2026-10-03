@@ -1,0 +1,85 @@
+{
+  "verdict": "NEGATIVE",
+  "line": "PLATECROSS SELECTION: NEGATIVE: no qualified seed, no bench (qualified = v2 PASS AND QUALIFIED; s0 v2 FAIL / NOT QUALIFIED (push 24/60), s1 v2 FAIL / NOT QUALIFIED (push 23/60), s2 v2 PASS / NOT QUALIFIED (push 21/60))",
+  "reason": "NEGATIVE: no qualified seed, no bench",
+  "selected": null,
+  "bench": "NEGATIVE: no qualified seed, no bench",
+  "per_seed": {
+    "s0": {
+      "run": "arms-platecross-clocks2-s0",
+      "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_16-26-22_arms-platecross-clocks2-s0",
+      "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_16-26-22_arms-platecross-clocks2-s0/exported/deploy.yaml",
+      "v2_verdict": "FAIL",
+      "qualify_verdict": "NOT QUALIFIED",
+      "qualified": false,
+      "falls": 24,
+      "n": 60,
+      "qualify_detail": "turn 10/10 (need 9), walk 0/3 (need 2), push 24/60 = 0.4 (need <= 0.15); arms-platecross-clocks2-s0 is a single checkpoint, not a reliable recipe",
+      "inputs": {
+        "training": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/platecross-20261002/training/arms-platecross-clocks2-s0.json",
+        "v2": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/platecross-20261002/turn-test-v2/arms-platecross-clocks2-s0.json",
+        "qualify": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/platecross-20261002/qualify/arms-platecross-clocks2-s0__qualify.json"
+      }
+    },
+    "s1": {
+      "run": "arms-platecross-clocks2-s1",
+      "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_18-17-13_arms-platecross-clocks2-s1",
+      "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_18-17-13_arms-platecross-clocks2-s1/exported/deploy.yaml",
+      "v2_verdict": "FAIL",
+      "qualify_verdict": "NOT QUALIFIED",
+      "qualified": false,
+      "falls": 23,
+      "n": 60,
+      "qualify_detail": "turn 10/10 (need 9), walk 1/3 (need 2), push 23/60 = 0.3833 (need <= 0.15); arms-platecross-clocks2-s1 is a single checkpoint, not a reliable recipe",
+      "inputs": {
+        "training": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/platecross-20261002/training/arms-platecross-clocks2-s1.json",
+        "v2": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/platecross-20261002/turn-test-v2/arms-platecross-clocks2-s1.json",
+        "qualify": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/platecross-20261002/qualify/arms-platecross-clocks2-s1__qualify.json"
+      }
+    },
+    "s2": {
+      "run": "arms-platecross-clocks2-s2",
+      "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_20-21-37_arms-platecross-clocks2-s2",
+      "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_20-21-37_arms-platecross-clocks2-s2/exported/deploy.yaml",
+      "v2_verdict": "PASS",
+      "qualify_verdict": "NOT QUALIFIED",
+      "qualified": false,
+      "falls": 21,
+      "n": 60,
+      "qualify_detail": "turn 10/10 (need 9), walk 2/3 (need 2), push 21/60 = 0.35 (need <= 0.15); arms-platecross-clocks2-s2 is a single checkpoint, not a reliable recipe",
+      "inputs": {
+        "training": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/platecross-20261002/training/arms-platecross-clocks2-s2.json",
+        "v2": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/platecross-20261002/turn-test-v2/arms-platecross-clocks2-s2.json",
+        "qualify": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/platecross-20261002/qualify/arms-platecross-clocks2-s2__qualify.json"
+      }
+    }
+  },
+  "rule": "the three fine-tuned final checkpoints go through the unchanged turn qualification (turn_test v2 + cpu_turn_qualify); the qualified seed with the lowest push-fall rate (tie: lowest seed index) is the SINGLE stage gait run on bench v2 under bench v2's rule (N = 41; >= 39/41 clears, 0 falls, >= 11/10/9/7 per heading) with the generic stage-gait override; no qualified seed -> NEGATIVE (no bench).",
+  "labels": "Labels: LEARNED gait (fine-tuned from clock-s2 on plates); MuJoCo gates; bench v2's 180-deg timing caveat applies.",
+  "reading": "A seed is qualified iff it both PASSES turn_test v2 (its <run>.json verdict, under the unchanged v2 protocol) AND is QUALIFIED by cpu_turn_qualify's unchanged rule (its <run>__qualify.json verdict), as the R1 / v5 joint rule counts a seed (turngait_r12_verdict.seed_counts); a seed that fails v2 does not count even if cpu_turn_qualify says QUALIFIED. The push-fall rate is falls / n of the qualify JSON's push clause (n = 60). Every seed needs its training record, v2 JSON (with the unchanged v2 protocol's rule block) and qualify JSON, all for the same exported deploy.yaml; otherwise the selection is INCOMPLETE and nothing is written.",
+  "v2_rule": {
+    "turn_min_deg": 150.0,
+    "drift_max_deg": 15.0,
+    "seconds": 6.0,
+    "turn_seeds": [
+      0,
+      1,
+      2
+    ],
+    "turn_wz": 0.6,
+    "turn_warm_s": 3.0,
+    "walk_cmd": [
+      0.35,
+      0.0,
+      0.0
+    ],
+    "walk_warm_s": 1.0,
+    "walk_seed": 0
+  },
+  "task": "Velocity-BHL-Arms-PlateCross-v0",
+  "parent": "arms-turngait-clock-s2/model_5999.pt (task Velocity-BHL-Arms-TurnGaitClock-v0)",
+  "final_ckpt": "model_8998.pt",
+  "disclosed": "clock-s2's straight-walk drift (R1 walk drift 19.8 / 10.8 / 2.4 deg on qualify walk seeds 10-12) is inherited and is the baseline; R1's feet_swing_height reward (unchanged) measures foot height in absolute world z (gait_clock_mdp.feet_swing_height: flat plane, ground z = 0), so over a plate its swing-clearance target is 0.03 m lower relative to the plate top; feet in contact are excluded, and it is the only absolute-z term among R1's 19 reward and 2 termination terms; bench v2's 180-deg timing caveat applies",
+  "written_by": "21517543",
+  "time": "2026-10-02 22:24:17 PDT"
+}

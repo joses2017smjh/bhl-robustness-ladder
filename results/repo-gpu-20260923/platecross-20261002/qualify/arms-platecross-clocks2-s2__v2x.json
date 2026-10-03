@@ -1,0 +1,239 @@
+{
+  "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_20-21-37_arms-platecross-clocks2-s2/exported/deploy.yaml",
+  "variant": "humanoid",
+  "protocol": "v2x",
+  "turns": [
+    {
+      "name": "turn+_s10",
+      "seed": 10,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": 217.7,
+      "displacement_m": 0.423,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn-_s10",
+      "seed": 10,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        -0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -236.0,
+      "displacement_m": 0.274,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn+_s11",
+      "seed": 11,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": 224.1,
+      "displacement_m": 0.44,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn-_s11",
+      "seed": 11,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        -0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -233.8,
+      "displacement_m": 0.246,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn+_s12",
+      "seed": 12,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": 210.7,
+      "displacement_m": 0.433,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn-_s12",
+      "seed": 12,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        -0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -258.8,
+      "displacement_m": 0.35,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn+_s13",
+      "seed": 13,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": 223.8,
+      "displacement_m": 0.462,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn-_s13",
+      "seed": 13,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        -0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -216.0,
+      "displacement_m": 0.296,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn+_s14",
+      "seed": 14,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": 228.8,
+      "displacement_m": 0.506,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn-_s14",
+      "seed": 14,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        -0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -224.3,
+      "displacement_m": 0.24,
+      "seconds": 6.0,
+      "ok": true
+    }
+  ],
+  "walks": [
+    {
+      "name": "walk_s10",
+      "seed": 10,
+      "warm_s": 1.0,
+      "cmd": [
+        0.35,
+        0.0,
+        0.0
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -13.0,
+      "displacement_m": 1.908,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "walk_s11",
+      "seed": 11,
+      "warm_s": 1.0,
+      "cmd": [
+        0.35,
+        0.0,
+        0.0
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -11.7,
+      "displacement_m": 1.977,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "walk_s12",
+      "seed": 12,
+      "warm_s": 1.0,
+      "cmd": [
+        0.35,
+        0.0,
+        0.0
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -15.3,
+      "displacement_m": 1.887,
+      "seconds": 6.0,
+      "ok": false
+    }
+  ],
+  "turn_ok": true,
+  "walk_ok": true,
+  "n_turn_ok": 10,
+  "n_turn": 10,
+  "n_walk_ok": 2,
+  "n_walk": 3,
+  "n_fell": 0,
+  "verdict": "PASS",
+  "rule": {
+    "turn_min_deg": 150.0,
+    "drift_max_deg": 15.0,
+    "seconds": 6.0,
+    "turn_seeds": [
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "turn_wz": 0.6,
+    "turn_warm_s": 3.0,
+    "walk_cmd": [
+      0.35,
+      0.0,
+      0.0
+    ],
+    "walk_warm_s": 1.0,
+    "walk_seeds": [
+      10,
+      11,
+      12
+    ],
+    "min_turn_ok": 9,
+    "min_walk_ok": 2
+  }
+}
