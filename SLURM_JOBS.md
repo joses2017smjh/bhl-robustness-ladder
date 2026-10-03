@@ -3684,3 +3684,41 @@ Files:
   - The verdict JSON becomes FAIL once seed 2's three JSONs exist, and stays INCOMPLETE if any is missing.
   - Diagnosis of the all-negative walk drift (read-only): **no sign or reference bug.** heading_hold is even in Δψ, and the same bias shows in pure-turn runs, where the term is inactive. R1's seeds were already lateralized one way each.
   - Design observation: neither the actor nor the critic observes yaw or ψ_ref, so the term can discourage accumulated yaw but cannot teach heading correction.
+- **R1H `21517588`: FAIL by the predeclared rule (0/3 seeds count; 2 needed)**, from `verdict/R1H.json` and recounted from the raw files.
+  - s2 nearly qualified. It passes v2 (6/6 turns, walk drift +1.0°) and walks straight in qualification (3/3: −7.9, +5.5, −12.9°), with push 3/60. It fails only the fresh-seed turn clause (8/10; 9 needed).
+  - s0 and s1 fail on walk drift (above).
+  - Reading: the heading-hold pair can make a seed walk straight, but not reliably across seeds, and here at the cost of turn reliability. Final.
+
+**User approval recorded 2026-10-03 09:55** (the user, on the proposals of 2026-10-03 01:55: "do all these changes / please apply all these changes"). Gates are unchanged everywhere; Mission 7's bench v2 rule and its 180° clause stay as they are. Frozen designs follow. Each implementation encodes its rule verbatim in its launcher header, runs a smoke of the committed code, and is predeclared again with its launcher before any scored run.
+
+- **(D) Mission 7 crossing diagnosis (investigation, no gate).**
+  - Clock-s2 as the stage gait with bench v2's exact stage law and settings (as `21517668`), on EXPLORATION train layouts 250–289 only, never on bench crossings, train layouts 0–31 or validation layouts. At most 80 crossings.
+  - Diagnosis-only logging, with no change to any frozen source: per policy step, each foot's world position and height, its along-position relative to the near plate edge, per-foot contact (plate vs floor), base along, commanded vs measured base velocity, and stage phase.
+  - Each stall (edge dwell ≥ 2.0 s, or never past −0.20 m) is classified with thresholds the implementer freezes in the launcher header before any episode: blocked step-up (the leading foot repeatedly fails to get over the 3 cm edge), slow progress, wall-blocked, or other. Output: counts and a report.
+- **(F) Mission 7 crossing fix.** All parts are opt-in; every default path stays byte-identical.
+  - F1 "PlateCross v2" is PlateCross with ONE change: half of the terrain tiles are flat, chosen (not tuned) to keep the flat-ground push robustness that the push gate measures. Seeds 0–2; 3000 iterations from clock-s2 `model_5999`; the same per-seed gates and selection rule (v2 PASS AND QUALIFIED; lowest push-fall rate).
+  - F2 "cross budget": the stage's crossing ends at the clear point, or when 0.2 s of the 10 s clear window remains, instead of at the fixed `cross_max_s = 4.0`. The clear definition is unchanged.
+  - F3 "yaw cap 0.60": a declared interface change. Mission 7's yaw command scale (bench transform, route probe, MissionEnv) becomes 0.60 rad/s in an opt-in mode used consistently across the bench, the replay and the route gate. The stage turn rate becomes 0.60 (the gaits' qualified rate); the crossing heading-hold clip stays at 0.40.
+  - Decision rule: F2 and F3 are built regardless. F1 is trained iff (D) classifies ≥ 1/3 of the stalls as blocked step-up.
+  - Then ONE bench v2 run under bench v2's rule, verbatim and unchanged (N = 41; ≥ 39/41, 0 falls, ≥ 11/10/9/7 per heading). Stage gait: F1's selected seed if F1 ran and selected one, else clock-s2. Options F2 + F3.
+  - A PASS continues M3's chain with the same options: the exact replay 10/10, then the route gate (Doors and Transport 16/16 each on validation layouts 0–15). Budget: 83 episodes.
+  - Disclosed:
+    - Bundling means a PASS is not attributable to one change.
+    - Faster turns in narrow cells add wall-contact and fall risk (6 of 8 180° turns already touched walls at 0.40).
+    - Crossing until clear produced a replay fall before (9/10).
+- **(W) Cooperative scripted lift that holds wrist orientation.**
+  - The flush-pad variant (end-effector and harness change exactly as predeclared on 2026-10-02 04:59), PLUS: during lift and hold, the grasping arm's wrist joints are servoed each control step so that each hand's orientation about the pinch axis stays at its grasp-time value (world frame), by kinematics. Arm PD gains and the 4 Nm cap are unchanged.
+  - Probe on new exploration seeds 125–129 (with grep evidence they were never used), with the flush-pad probe rule otherwise verbatim (PROCEED iff cube tilt ≤ 0.35 rad throughout lift-hold on ≥ 4/5 seeds; robot-fall clauses unchanged).
+  - Only after PROCEED, the flush-pad scored rule verbatim on seeds 20–39 (still unused).
+  - Labels: LEARNED gait + SCRIPTED arms (with a kinematic wrist-orientation hold) + ORACLE cube pose (scoring only); MODIFIED END-EFFECTOR.
+- **(S) Stand5.** Stand4 + two changes.
+  - (i) The actor and critic observe the cube's orientation in each robot's root frame (its z axis; ORACLE, like `object_pos_a/b`).
+  - (ii) The lift curriculum promotes on Stand4's roll-proof lift condition (lowest corner ≥ 2 cm above every support and tilt ≤ 15°) instead of centre height + pinch.
+  - Stand4's rule verbatim: the kill rule at model_1000; COMPLETE at 7999; PASS iff ≥ 1 of 2 seeds is COMPLETE, not killed, with last-200 success ≥ 0.10. 2 seeds × 8000 iterations, Stand4's resources.
+  - Labels: LEARNED crew policy (blind) + ORACLE privileged observations (now including cube orientation).
+- **(G) ER-OBS-1 (Gemini Robotics-ER 2 as an observer).**
+  - Run the unchanged scripted lift-hold-place harness (stock pads, crew 2) on seeds 300–319 (with evidence they were never used). Render one fixed RGB frame per second, 20 frames × 20 episodes, with a segmentation pass and ORACLE labels at the same step.
+  - Call `gemini-robotics-er-2-preview` (thinking low, paid tier) with a fixed prompt and JSON schema, whose sha256 is recorded before any call. The labels are 4 booleans (lifted clear, cube on floor, robot contact > 1 N, seated flat) and a cube point.
+  - ACCURACY PASS iff balanced accuracy ≥ 0.90 on all 4 booleans, the point hit rate is ≥ 0.95 on cube-visible frames, and control C1 holds (same frames with the cube rendered invisible must score ≤ 0.60 balanced accuracy). INCOMPLETE if any class has fewer than 20 frames. IN-LOOP-ELIGIBLE is a separate verdict: p95 latency ≤ 1.0 s over 50 calls.
+  - Labels: LEARNED gait + SCRIPTED arms + EXTERNAL VLM observer (offline).
+  - It needs the user's paid-tier API key, kept outside the repo (never logged or committed). Build and mock dry run now; scored calls only once the key exists.

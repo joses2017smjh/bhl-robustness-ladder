@@ -1,0 +1,19 @@
+{
+  "run": "arms-turngait-hold-s1",
+  "arm": "R1H",
+  "task": "Velocity-BHL-Arms-TurnGaitClockHold-v0",
+  "seed": 1,
+  "final_ckpt": "model_5999.pt",
+  "final_ckpt_present": true,
+  "task_id_in_log": true,
+  "feet_gait_in_log": true,
+  "heading_hold_in_log": true,
+  "command_mix_in_log": true,
+  "push_robot_in_log": true,
+  "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_20-08-09_arms-turngait-hold-s1",
+  "job": "21519327",
+  "wrong_arm_guard": [],
+  "recipe_check": "HOLD RECIPE: OK /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_20-08-09_arms-turngait-hold-s1/params/env.yaml (= R1 /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-31-25_arms-turngait-clock-s0/params/env.yaml + the two declared changes only)",
+  "clause": "Training counts only if the run dir holds model_5999.pt and the training log shows the arm's task id, the feet_gait term, the heading_hold term, the explicit-command mix and the push event.",
+  "note": "from scratch (no parent checkpoint); a new task, never a fine-tune of R1; written once from this job's fresh training log"
+}
