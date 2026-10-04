@@ -828,3 +828,53 @@ class CubeToShelfStand4Cfg(CubeToShelfStand3Cfg):
 
 
 CUBE_STAND4_VARIANTS = _variants(CubeToShelfStand4Cfg, "CubeToShelfStand4")
+
+
+# --- stand5 ---
+# CubeToShelfStand5 (2026-10-03; SLURM_JOBS.md "User approval recorded 2026-10-03 09:55",
+# item (S)): CubeToShelfStand4 plus exactly two changes, both in this class (Stand4, its
+# runner and every other task untouched; runner = Stand3's, as Stand4). Every reason and
+# number: `stand5_mdp.py`.
+#   (i)  the actor (policy group) and the critic observe the cube's own z axis in each
+#        robot's root frame, object_zaxis_a / object_zaxis_b (3 numbers each), ORACLE like
+#        object_pos_a/b: no noise, no scale; clipped +/-OBS_CLIP like every observation
+#        term since Stand3 (it never binds); appended last: policy 194 -> 200, critic
+#        206 -> 212;
+#   (ii) the lift curriculum (`lift_height`: same name, place and parameters) promotes on
+#        Stand4's roll-proof lift condition (lowest corner >= 0.02 m above every support
+#        under the cube AND tilt <= 15 deg) instead of centre height + pinch.
+# Guarded: an exception here is printed and only the Stand5 names are missing (its id then
+# fails to register and its smoke fails); every other task imports as before.
+try:
+    from bhl_robust.tasks import stand5_mdp as s5  # noqa: E402
+
+    @configclass
+    class CubeToShelfStand5Cfg(CubeToShelfStand4Cfg):
+        """Stand4 with the cube's z axis observed (actor and critic) and a roll-proof lift curriculum.
+
+        Reported as CubeToShelfStand5 and judged only by its own predeclared rule.
+        """
+
+        def __post_init__(self):
+            super().__post_init__()
+            # ---- (i) ORACLE cube orientation, last in both groups (the critic group is
+            # its own instance: a term set on the policy group does not reach it)
+            for grp in (self.observations.policy, self.observations.critic):
+                for name, robot in s5.OBS_TERM_ROBOTS:
+                    setattr(grp, name, ObsTerm(
+                        func=s5.object_zaxis_in_root, params={"robot_cfg": SceneEntityCfg(robot)},
+                        clip=(-stand.OBS_CLIP, stand.OBS_CLIP)))
+            # ---- (ii) the lift curriculum: same name (keeps its place), parameters and
+            # target term; it promotes on the roll-proof lift condition
+            lh = self.curriculum.lift_height
+            self.curriculum.lift_height = CurrTerm(
+                func=s5.stand5_lift_height_curriculum,
+                params={**lh.params, "clearance": s4.CORNER_CLEARANCE,
+                        "tilt_max_deg": s4.LIFT_TILT_MAX_DEG})
+
+    CUBE_STAND5_VARIANTS = _variants(CubeToShelfStand5Cfg, "CubeToShelfStand5")
+except Exception as _stand5_exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks.task_v2_env_cfg] stand5 NOT defined: {_stand5_exc!r}",
+          file=_sys.stderr, flush=True)
+# --- end stand5 ---

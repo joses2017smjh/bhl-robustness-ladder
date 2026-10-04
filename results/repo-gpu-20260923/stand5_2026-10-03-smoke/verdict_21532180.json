@@ -1,0 +1,1088 @@
+{
+ "job": "21532180",
+ "head": "3a67bc2",
+ "seed": 100,
+ "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-10-03_11-08-27_v2-cubetoshelfstand5-blind-s100-j21532180-smoke",
+ "task": "TaskV2-BHL-CubeToShelfStand5-Blind-v0",
+ "label": "SCRIPTED probe + 20-iteration PPO smoke (never a result)",
+ "scope": "CubeToShelfStand5: CubeToShelfStand4 plus two changes (the cube's z axis observed by the actor and the critic; the lift curriculum promotes on the roll-proof lift condition); a different configuration from Stand4, judged only by its own predeclared rule; never compared with CubeToShelfStand3 or CubeToShelf numbers",
+ "sha256": [
+  "1abbc2c212206d526b9b560d4e21e167957bb1f287d46dc0e3e279e933f1b2bf  src/bhl_robust/tasks/stand5_mdp.py",
+  "8fac7b6c8e9fae407769960bfdefa28bb75cf2871bcc8af790a085f480db516b  src/bhl_robust/tasks/stand4_mdp.py",
+  "1679efd618cba37b3e2c81e677760a4cfe692c15fb0257dde765049a44b02eaf  src/bhl_robust/tasks/task_v2_env_cfg.py",
+  "da414b848e11827cb0d018a2051200e2dda3663e95fdb4fc6a9ea1be55d3958b  src/bhl_robust/tasks/__init__.py",
+  "53081846295bb72e64ff05de726e8a18ea8e7284844c9eff43434ee57ee3aaea  src/bhl_robust/tasks/stand_mdp.py",
+  "5fc2b8c8a26c311597f18498c99f0eaa791c14d67c8cea39e4e6302569daa3fd  src/bhl_robust/tasks/coop_lift_mdp.py",
+  "a92a2359426c734773436a98fcbe163ce1465b59c999611cb976feb6737a8b89  src/bhl_robust/tasks/coop_lift_env_cfg.py",
+  "59d1921bc95765cb0d5633164003e1f78a15e3a4f7cf66bb231979be6b087ef2  src/bhl_robust/quat_order.py",
+  "2d224f72dc97c56c20517e83a4b2329e5a64c6a5e9f0f537ab7a1b94e683bf04  assets/cloth/berkeley_humanoid_lite_hand_colliders.usda",
+  "e4a11122a3bb6d528ab39fc159ecd317a665cc2263f0d61744f11b77ef87bc96  slurm/repo20260923/gpu_v2_stand5_smoke.sbatch",
+  "7813e466d8320d43c616486fd5d5aef72c57c440696a624901c5ea1ff013d4b8  slurm/inner/inner_v2_stand5_smoke.sh"
+ ],
+ "stand4_reference": {
+  "job": "21506757",
+  "run": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-10-02_03-31-37_v2-cubetoshelfstand4-blind-s100-j21506757-smoke",
+  "verdict_pass": true,
+  "have_sha": true,
+  "have_log": true,
+  "have_params": true
+ },
+ "probe_summary": {
+  "status": "ok",
+  "stage": "done",
+  "quat_order": "xyzw",
+  "cfg_diff_check": {
+   "ok": true,
+   "unexpected": [],
+   "missing": []
+  },
+  "managers": {
+   "reward_terms": [
+    "reaching_coarse",
+    "reaching_fine",
+    "opposing_clamp",
+    "lift_progress",
+    "lifting_object",
+    "object_vel",
+    "object_tilt",
+    "still_alive",
+    "flat_a",
+    "flat_b",
+    "torques_a",
+    "torques_b",
+    "base_contact_a",
+    "base_contact_b",
+    "placed",
+    "fall_penalty",
+    "deck_progress",
+    "action_rate_clipped"
+   ],
+   "termination_terms": [
+    "time_out",
+    "fallen",
+    "success"
+   ],
+   "curriculum_terms": [
+    "lift_height",
+    "stage_lift",
+    "base_height",
+    "upright_gate",
+    "fell_a",
+    "fell_b",
+    "over_deck",
+    "cube_abs_x",
+    "cube_tilted",
+    "tipped_over_deck",
+    "pinch_dist",
+    "cube_tilt_deg",
+    "corner_clear",
+    "roll_ok",
+    "lift_paid",
+    "released",
+    "robot_force_max"
+   ],
+   "obs_terms": {
+    "policy": [
+     "projected_gravity_a",
+     "projected_gravity_b",
+     "base_ang_vel_a",
+     "base_ang_vel_b",
+     "joint_pos_a",
+     "joint_pos_b",
+     "joint_vel_a",
+     "joint_vel_b",
+     "object_pos_a",
+     "object_pos_b",
+     "track_err_a",
+     "track_err_b",
+     "actions",
+     "object_zaxis_a",
+     "object_zaxis_b"
+    ],
+    "critic": [
+     "projected_gravity_a",
+     "projected_gravity_b",
+     "base_ang_vel_a",
+     "base_ang_vel_b",
+     "joint_pos_a",
+     "joint_pos_b",
+     "joint_vel_a",
+     "joint_vel_b",
+     "object_pos_a",
+     "object_pos_b",
+     "track_err_a",
+     "track_err_b",
+     "actions",
+     "base_lin_vel_a",
+     "base_lin_vel_b",
+     "object_lin_vel",
+     "object_ang_vel",
+     "object_zaxis_a",
+     "object_zaxis_b"
+    ]
+   },
+   "obs_term_dims": {
+    "policy": [
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      22
+     ],
+     [
+      22
+     ],
+     [
+      22
+     ],
+     [
+      22
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      22
+     ],
+     [
+      22
+     ],
+     [
+      44
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ]
+    ],
+    "critic": [
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      22
+     ],
+     [
+      22
+     ],
+     [
+      22
+     ],
+     [
+      22
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      22
+     ],
+     [
+      22
+     ],
+     [
+      44
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ],
+     [
+      3
+     ]
+    ]
+   },
+   "obs_group_dims": {
+    "policy": [
+     200
+    ],
+    "critic": [
+     212
+    ]
+   },
+   "lifting_object": {
+    "func": "bhl_robust.tasks.stand4_mdp:stand4_object_is_lifted",
+    "weight": 15.0
+   },
+   "placed": {
+    "func": "bhl_robust.tasks.stand_mdp:success_bonus",
+    "weight": 5000.0
+   },
+   "success": {
+    "func": "bhl_robust.tasks.stand4_mdp:stand4_cube_placed"
+   },
+   "lift_height": {
+    "func": "bhl_robust.tasks.stand5_mdp:stand5_lift_height_curriculum",
+    "params": {
+     "term_name": "lifting_object",
+     "step": 0.02,
+     "min_height": 0.04,
+     "max_height": 0.06,
+     "success_rate_target": 0.35,
+     "clearance": 0.02,
+     "tilt_max_deg": 15.0
+    }
+   },
+   "new_obs": {
+    "policy": {
+     "object_zaxis_a": {
+      "func": "bhl_robust.tasks.stand5_mdp:object_zaxis_in_root",
+      "robot": "robot_a",
+      "noise": "None",
+      "scale": "None",
+      "clip": [
+       -100.0,
+       100.0
+      ]
+     },
+     "object_zaxis_b": {
+      "func": "bhl_robust.tasks.stand5_mdp:object_zaxis_in_root",
+      "robot": "robot_b",
+      "noise": "None",
+      "scale": "None",
+      "clip": [
+       -100.0,
+       100.0
+      ]
+     }
+    },
+    "critic": {
+     "object_zaxis_a": {
+      "func": "bhl_robust.tasks.stand5_mdp:object_zaxis_in_root",
+      "robot": "robot_a",
+      "noise": "None",
+      "scale": "None",
+      "clip": [
+       -100.0,
+       100.0
+      ]
+     },
+     "object_zaxis_b": {
+      "func": "bhl_robust.tasks.stand5_mdp:object_zaxis_in_root",
+      "robot": "robot_b",
+      "noise": "None",
+      "scale": "None",
+      "clip": [
+       -100.0,
+       100.0
+      ]
+     }
+    }
+   }
+  },
+  "stand4_expected": {
+   "reward_terms": [
+    "reaching_coarse",
+    "reaching_fine",
+    "opposing_clamp",
+    "lift_progress",
+    "lifting_object",
+    "object_vel",
+    "object_tilt",
+    "still_alive",
+    "flat_a",
+    "flat_b",
+    "torques_a",
+    "torques_b",
+    "base_contact_a",
+    "base_contact_b",
+    "placed",
+    "fall_penalty",
+    "deck_progress",
+    "action_rate_clipped"
+   ],
+   "termination_terms": [
+    "time_out",
+    "fallen",
+    "success"
+   ],
+   "curriculum_terms": [
+    "lift_height",
+    "stage_lift",
+    "base_height",
+    "upright_gate",
+    "fell_a",
+    "fell_b",
+    "over_deck",
+    "cube_abs_x",
+    "cube_tilted",
+    "tipped_over_deck",
+    "pinch_dist",
+    "cube_tilt_deg",
+    "corner_clear",
+    "roll_ok",
+    "lift_paid",
+    "released",
+    "robot_force_max"
+   ],
+   "obs_terms": {
+    "policy": [
+     "projected_gravity_a",
+     "projected_gravity_b",
+     "base_ang_vel_a",
+     "base_ang_vel_b",
+     "joint_pos_a",
+     "joint_pos_b",
+     "joint_vel_a",
+     "joint_vel_b",
+     "object_pos_a",
+     "object_pos_b",
+     "track_err_a",
+     "track_err_b",
+     "actions"
+    ],
+    "critic": [
+     "projected_gravity_a",
+     "projected_gravity_b",
+     "base_ang_vel_a",
+     "base_ang_vel_b",
+     "joint_pos_a",
+     "joint_pos_b",
+     "joint_vel_a",
+     "joint_vel_b",
+     "object_pos_a",
+     "object_pos_b",
+     "track_err_a",
+     "track_err_b",
+     "actions",
+     "base_lin_vel_a",
+     "base_lin_vel_b",
+     "object_lin_vel",
+     "object_ang_vel"
+    ]
+   },
+   "lift_height_func": "bhl_robust.tasks.coop_lift_mdp:lift_height_curriculum",
+   "lift_height_params": {
+    "term_name": "lifting_object",
+    "step": 0.02,
+    "min_height": 0.04,
+    "max_height": 0.06,
+    "success_rate_target": 0.35
+   }
+  },
+  "steps": {
+   "n_steps": 30,
+   "n_resets": 0,
+   "trace": [
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    },
+    {
+     "n_reset": 0,
+     "lift_h": 0.06,
+     "minimal_height": 0.06
+    }
+   ]
+  },
+  "traceback": null
+ },
+ "obs_recomputed": {
+  "ok_tail": true,
+  "ok_axis": true,
+  "order": "xyzw",
+  "n_valid": 16,
+  "cases_covered": [
+   "identity",
+   "x+90",
+   "x180",
+   "y+90",
+   "z+30"
+  ],
+  "case_err": 2.220446049250313e-16,
+  "isaac_world_err": 2.220446049250313e-16,
+  "host_recompute_err": 2.4623648453570013e-07,
+  "isaac_ref_err": 2.384185791015625e-07,
+  "tail_err": 0.0,
+  "unit_norm": true,
+  "order_control_min_dev": 1.0
+ },
+ "curriculum_recomputed": {
+  "ok": true,
+  "roll_ok_recomputed_equal": true,
+  "roll_ok_matches_design": true,
+  "all_calls_consistent": true,
+  "promotes_on_roll_proof_only": true,
+  "ignores_centre_and_pinch": true,
+  "int32_ids_call": true,
+  "calls": [
+   {
+    "name": "c1_roll_proof_pinch_far",
+    "n": 4,
+    "pre": 0.04,
+    "competence5": 1.0,
+    "competence4": 0.0,
+    "want5": 0.06,
+    "want4": 0.04,
+    "r5": 0.06,
+    "r4": 0.04,
+    "ok": true
+   },
+   {
+    "name": "c2_centre_high_pinched_not_roll_proof",
+    "n": 8,
+    "pre": 0.04,
+    "competence5": 0.0,
+    "competence4": 1.0,
+    "want5": 0.04,
+    "want4": 0.06,
+    "r5": 0.04,
+    "r4": 0.06,
+    "ok": true
+   },
+   {
+    "name": "c3_same_envs_from_the_cap",
+    "n": 8,
+    "pre": 0.06,
+    "competence5": 0.0,
+    "competence4": 0.5,
+    "want5": 0.04,
+    "want4": 0.06,
+    "r5": 0.04,
+    "r4": 0.06,
+    "ok": true
+   },
+   {
+    "name": "c4_all_valid_int32_ids",
+    "n": 16,
+    "pre": 0.04,
+    "competence5": 0.25,
+    "competence4": 0.75,
+    "want5": 0.04,
+    "want4": 0.06,
+    "r5": 0.04,
+    "r4": 0.06,
+    "ok": true
+   }
+  ],
+  "n_valid": 16
+ },
+ "tb_last_iter": 19,
+ "tb_lift_level": [
+  [
+   15,
+   0.03999999910593033
+  ],
+  [
+   16,
+   0.03999999910593033
+  ],
+  [
+   17,
+   0.03999999910593033
+  ],
+  [
+   18,
+   0.03999999910593033
+  ],
+  [
+   19,
+   0.03999999910593033
+  ]
+ ],
+ "logged_iterations": 20,
+ "train_obs_tables": {
+  "policy": {
+   "shape": [
+    200
+   ],
+   "terms": [
+    [
+     "projected_gravity_a",
+     [
+      3
+     ]
+    ],
+    [
+     "projected_gravity_b",
+     [
+      3
+     ]
+    ],
+    [
+     "base_ang_vel_a",
+     [
+      3
+     ]
+    ],
+    [
+     "base_ang_vel_b",
+     [
+      3
+     ]
+    ],
+    [
+     "joint_pos_a",
+     [
+      22
+     ]
+    ],
+    [
+     "joint_pos_b",
+     [
+      22
+     ]
+    ],
+    [
+     "joint_vel_a",
+     [
+      22
+     ]
+    ],
+    [
+     "joint_vel_b",
+     [
+      22
+     ]
+    ],
+    [
+     "object_pos_a",
+     [
+      3
+     ]
+    ],
+    [
+     "object_pos_b",
+     [
+      3
+     ]
+    ],
+    [
+     "track_err_a",
+     [
+      22
+     ]
+    ],
+    [
+     "track_err_b",
+     [
+      22
+     ]
+    ],
+    [
+     "actions",
+     [
+      44
+     ]
+    ],
+    [
+     "object_zaxis_a",
+     [
+      3
+     ]
+    ],
+    [
+     "object_zaxis_b",
+     [
+      3
+     ]
+    ]
+   ]
+  },
+  "critic": {
+   "shape": [
+    212
+   ],
+   "terms": [
+    [
+     "projected_gravity_a",
+     [
+      3
+     ]
+    ],
+    [
+     "projected_gravity_b",
+     [
+      3
+     ]
+    ],
+    [
+     "base_ang_vel_a",
+     [
+      3
+     ]
+    ],
+    [
+     "base_ang_vel_b",
+     [
+      3
+     ]
+    ],
+    [
+     "joint_pos_a",
+     [
+      22
+     ]
+    ],
+    [
+     "joint_pos_b",
+     [
+      22
+     ]
+    ],
+    [
+     "joint_vel_a",
+     [
+      22
+     ]
+    ],
+    [
+     "joint_vel_b",
+     [
+      22
+     ]
+    ],
+    [
+     "object_pos_a",
+     [
+      3
+     ]
+    ],
+    [
+     "object_pos_b",
+     [
+      3
+     ]
+    ],
+    [
+     "track_err_a",
+     [
+      22
+     ]
+    ],
+    [
+     "track_err_b",
+     [
+      22
+     ]
+    ],
+    [
+     "actions",
+     [
+      44
+     ]
+    ],
+    [
+     "base_lin_vel_a",
+     [
+      3
+     ]
+    ],
+    [
+     "base_lin_vel_b",
+     [
+      3
+     ]
+    ],
+    [
+     "object_lin_vel",
+     [
+      3
+     ]
+    ],
+    [
+     "object_ang_vel",
+     [
+      3
+     ]
+    ],
+    [
+     "object_zaxis_a",
+     [
+      3
+     ]
+    ],
+    [
+     "object_zaxis_b",
+     [
+      3
+     ]
+    ]
+   ]
+  }
+ },
+ "train_mlp_in_features": {
+  "actor": 200,
+  "critic": 212
+ },
+ "config_check": {
+  "ok": true,
+  "failed": [],
+  "checks": {
+   "agent_entropy_coef_0.001": true,
+   "agent_std_type_log": true,
+   "lifting_object_stand4_x15": true,
+   "lift_gate_0.02m_15deg": true,
+   "placed_success_bonus_x5000": true,
+   "action_rate_clipped": true,
+   "success_stand4": true,
+   "success_12steps_8deg_1N": true,
+   "robot_a_overlay_usd": true,
+   "robot_b_overlay_usd": true,
+   "cube_contact_reporting": true,
+   "cube_sensor_26_filters": true,
+   "curriculum_terms": true,
+   "lift_curriculum_cap_0.06": true,
+   "obs_policy_stand4_terms_then_zaxis_a_b": true,
+   "obs_critic_stand4_terms_then_zaxis_a_b": true,
+   "lift_curriculum_roll_proof": true
+  }
+ },
+ "dump_diff": {
+  "ok": true,
+  "env": {
+   "ok": true,
+   "unexpected": [],
+   "missing": [],
+   "keys": [
+    "curriculum.lift_height.func",
+    "curriculum.lift_height.params.clearance",
+    "curriculum.lift_height.params.tilt_max_deg",
+    "observations.critic.object_zaxis_a.clip.!python/tuple",
+    "observations.critic.object_zaxis_a.flatten_history_dim",
+    "observations.critic.object_zaxis_a.func",
+    "observations.critic.object_zaxis_a.history_length",
+    "observations.critic.object_zaxis_a.modifiers",
+    "observations.critic.object_zaxis_a.noise",
+    "observations.critic.object_zaxis_a.params.robot_cfg.body_ids.!python/object/apply:builtins.slice",
+    "observations.critic.object_zaxis_a.params.robot_cfg.body_names",
+    "observations.critic.object_zaxis_a.params.robot_cfg.fixed_tendon_ids.!python/object/apply:builtins.slice",
+    "observations.critic.object_zaxis_a.params.robot_cfg.fixed_tendon_names",
+    "observations.critic.object_zaxis_a.params.robot_cfg.joint_ids.!python/object/apply:builtins.slice",
+    "observations.critic.object_zaxis_a.params.robot_cfg.joint_names",
+    "observations.critic.object_zaxis_a.params.robot_cfg.name",
+    "observations.critic.object_zaxis_a.params.robot_cfg.object_collection_ids.!python/object/apply:builtins.slice",
+    "observations.critic.object_zaxis_a.params.robot_cfg.object_collection_names",
+    "observations.critic.object_zaxis_a.params.robot_cfg.preserve_order",
+    "observations.critic.object_zaxis_a.scale",
+    "observations.critic.object_zaxis_b.clip.!python/tuple",
+    "observations.critic.object_zaxis_b.flatten_history_dim",
+    "observations.critic.object_zaxis_b.func",
+    "observations.critic.object_zaxis_b.history_length",
+    "observations.critic.object_zaxis_b.modifiers",
+    "observations.critic.object_zaxis_b.noise",
+    "observations.critic.object_zaxis_b.params.robot_cfg.body_ids.!python/object/apply:builtins.slice",
+    "observations.critic.object_zaxis_b.params.robot_cfg.body_names",
+    "observations.critic.object_zaxis_b.params.robot_cfg.fixed_tendon_ids.!python/object/apply:builtins.slice",
+    "observations.critic.object_zaxis_b.params.robot_cfg.fixed_tendon_names",
+    "observations.critic.object_zaxis_b.params.robot_cfg.joint_ids.!python/object/apply:builtins.slice",
+    "observations.critic.object_zaxis_b.params.robot_cfg.joint_names",
+    "observations.critic.object_zaxis_b.params.robot_cfg.name",
+    "observations.critic.object_zaxis_b.params.robot_cfg.object_collection_ids.!python/object/apply:builtins.slice",
+    "observations.critic.object_zaxis_b.params.robot_cfg.object_collection_names",
+    "observations.critic.object_zaxis_b.params.robot_cfg.preserve_order",
+    "observations.critic.object_zaxis_b.scale",
+    "observations.policy.object_zaxis_a.clip.!python/tuple",
+    "observations.policy.object_zaxis_a.flatten_history_dim",
+    "observations.policy.object_zaxis_a.func",
+    "observations.policy.object_zaxis_a.history_length",
+    "observations.policy.object_zaxis_a.modifiers",
+    "observations.policy.object_zaxis_a.noise",
+    "observations.policy.object_zaxis_a.params.robot_cfg.body_ids.!python/object/apply:builtins.slice",
+    "observations.policy.object_zaxis_a.params.robot_cfg.body_names",
+    "observations.policy.object_zaxis_a.params.robot_cfg.fixed_tendon_ids.!python/object/apply:builtins.slice",
+    "observations.policy.object_zaxis_a.params.robot_cfg.fixed_tendon_names",
+    "observations.policy.object_zaxis_a.params.robot_cfg.joint_ids.!python/object/apply:builtins.slice",
+    "observations.policy.object_zaxis_a.params.robot_cfg.joint_names",
+    "observations.policy.object_zaxis_a.params.robot_cfg.name",
+    "observations.policy.object_zaxis_a.params.robot_cfg.object_collection_ids.!python/object/apply:builtins.slice",
+    "observations.policy.object_zaxis_a.params.robot_cfg.object_collection_names",
+    "observations.policy.object_zaxis_a.params.robot_cfg.preserve_order",
+    "observations.policy.object_zaxis_a.scale",
+    "observations.policy.object_zaxis_b.clip.!python/tuple",
+    "observations.policy.object_zaxis_b.flatten_history_dim",
+    "observations.policy.object_zaxis_b.func",
+    "observations.policy.object_zaxis_b.history_length",
+    "observations.policy.object_zaxis_b.modifiers",
+    "observations.policy.object_zaxis_b.noise",
+    "observations.policy.object_zaxis_b.params.robot_cfg.body_ids.!python/object/apply:builtins.slice",
+    "observations.policy.object_zaxis_b.params.robot_cfg.body_names",
+    "observations.policy.object_zaxis_b.params.robot_cfg.fixed_tendon_ids.!python/object/apply:builtins.slice",
+    "observations.policy.object_zaxis_b.params.robot_cfg.fixed_tendon_names",
+    "observations.policy.object_zaxis_b.params.robot_cfg.joint_ids.!python/object/apply:builtins.slice",
+    "observations.policy.object_zaxis_b.params.robot_cfg.joint_names",
+    "observations.policy.object_zaxis_b.params.robot_cfg.name",
+    "observations.policy.object_zaxis_b.params.robot_cfg.object_collection_ids.!python/object/apply:builtins.slice",
+    "observations.policy.object_zaxis_b.params.robot_cfg.object_collection_names",
+    "observations.policy.object_zaxis_b.params.robot_cfg.preserve_order",
+    "observations.policy.object_zaxis_b.scale"
+   ]
+  },
+  "agent": {
+   "ok": true,
+   "unexpected": [],
+   "missing": [],
+   "keys": [
+    "run_name"
+   ]
+  }
+ },
+ "recorded": {
+  "ok": true,
+  "files": {
+   "agent": {
+    "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/stand5_2026-10-03-smoke/agent_21532180.yaml",
+    "sha256": "6e0a958e6540325d8068d08391b4c76060e9865506f3cf2b48e673d6fc9d5c1a",
+    "source": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-10-03_11-08-27_v2-cubetoshelfstand5-blind-s100-j21532180-smoke/params/agent.yaml",
+    "source_sha256": "6e0a958e6540325d8068d08391b4c76060e9865506f3cf2b48e673d6fc9d5c1a"
+   },
+   "env": {
+    "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/stand5_2026-10-03-smoke/env_21532180.yaml",
+    "sha256": "e539d8e8f6b10c94fabcc9159c962f5ee2e6f7cba5b8db92a52a2debb57cbc4d",
+    "source": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-10-03_11-08-27_v2-cubetoshelfstand5-blind-s100-j21532180-smoke/params/env.yaml",
+    "source_sha256": "e539d8e8f6b10c94fabcc9159c962f5ee2e6f7cba5b8db92a52a2debb57cbc4d"
+   }
+  }
+ },
+ "stand4_sources": {
+  "changed_since_start": [],
+  "ok": true,
+  "failed": [],
+  "checks": {
+   "src/bhl_robust/tasks/stand4_mdp.py": true,
+   "src/bhl_robust/tasks/stand_mdp.py": true,
+   "src/bhl_robust/tasks/coop_lift_mdp.py": true,
+   "src/bhl_robust/tasks/coop_lift_env_cfg.py": true,
+   "assets/cloth/berkeley_humanoid_lite_hand_colliders.usda": true,
+   "src/bhl_robust/tasks/task_v2_env_cfg.py (before the stand5 marker)": true,
+   "hashed files unchanged since the smoke started": true
+  }
+ },
+ "verdict": "PASS",
+ "clauses": {
+  "A1_managers": true,
+  "A2_cfg_diff_declared_only": true,
+  "A3_obs_widths": true,
+  "A4_obs_tail_is_the_terms": true,
+  "A5_axis_order_xyzw": true,
+  "A6_curriculum_roll_proof": true,
+  "B1_logged_tags": true,
+  "B2_training_ran": true,
+  "B3_no_failure_markers": true,
+  "B6_train_obs_tables": true,
+  "B4_config_check": true,
+  "B5_dump_diff_vs_stand4_smoke": true,
+  "C1_stand4_sources_identical": true,
+  "C2_config_recorded": true
+ },
+ "missing": [],
+ "tags_missing": [],
+ "tags_seen": [
+  "Curriculum/base_height",
+  "Curriculum/corner_clear",
+  "Curriculum/cube_abs_x",
+  "Curriculum/cube_tilt_deg",
+  "Curriculum/cube_tilted",
+  "Curriculum/fell_a",
+  "Curriculum/fell_b",
+  "Curriculum/lift_height",
+  "Curriculum/lift_paid",
+  "Curriculum/over_deck",
+  "Curriculum/pinch_dist",
+  "Curriculum/released",
+  "Curriculum/robot_force_max",
+  "Curriculum/roll_ok",
+  "Curriculum/stage_lift",
+  "Curriculum/tipped_over_deck",
+  "Curriculum/upright_gate",
+  "Episode_Reward/action_rate_clipped",
+  "Episode_Reward/base_contact_a",
+  "Episode_Reward/base_contact_b",
+  "Episode_Reward/deck_progress",
+  "Episode_Reward/fall_penalty",
+  "Episode_Reward/flat_a",
+  "Episode_Reward/flat_b",
+  "Episode_Reward/lift_progress",
+  "Episode_Reward/lifting_object",
+  "Episode_Reward/object_tilt",
+  "Episode_Reward/object_vel",
+  "Episode_Reward/opposing_clamp",
+  "Episode_Reward/placed",
+  "Episode_Reward/reaching_coarse",
+  "Episode_Reward/reaching_fine",
+  "Episode_Reward/still_alive",
+  "Episode_Reward/torques_a",
+  "Episode_Reward/torques_b",
+  "Episode_Termination/fallen",
+  "Episode_Termination/success",
+  "Episode_Termination/time_out"
+ ]
+}
