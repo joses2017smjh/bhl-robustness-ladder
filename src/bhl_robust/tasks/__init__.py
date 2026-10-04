@@ -547,3 +547,24 @@ except Exception as _exc:  # noqa: BLE001
     import sys as _sys
     print(f"[bhl_robust.tasks] turning-hold id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
 # --- end turning-hold ---
+
+# --- stand5 ---
+# CubeToShelfStand5 (2026-10-03; SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55', item (S)): the Stand4
+# task plus two changes -- the actor and the critic observe the cube's z axis in each robot's root frame, and the
+# lift curriculum promotes on the roll-proof lift condition (task_v2_env_cfg.CubeToShelfStand5Cfg, stand5_mdp.py).
+# Stand3's runner, as Stand4. Blind only (the id its launchers train). Guarded like m7-platecross: a failure is
+# printed and only this id is absent.
+try:
+    gym.register(
+        id="TaskV2-BHL-CubeToShelfStand5-Blind-v0",
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={
+            "env_cfg_entry_point": task_v2_env_cfg.CUBE_STAND5_VARIANTS["blind"],
+            "rsl_rl_cfg_entry_point": task_v2_env_cfg._STAND3_RUNNER,
+        },
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] stand5 id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end stand5 ---

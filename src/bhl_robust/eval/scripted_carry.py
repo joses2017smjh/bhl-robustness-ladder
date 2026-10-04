@@ -2259,3 +2259,1151 @@ def flushpad_verdict_line(v: dict) -> str:
     verdict = v.get("verdict") or ("INVALID" if v.get("invalid") else
                                    "COMPLETE" if v.get("complete") else "INCOMPLETE")
     return f"COOP-FLUSHPAD {stage}: {verdict} | {body} | {FLUSHPAD_NOTE} | {FLUSHPAD_HARNESS_NOTE} | {FLUSHPAD_LABEL}"
+
+
+# --- coop-wristhold --- (W, opt-in; 2026-10-03) ----------------------------------------------------------------------
+#
+# OPT-IN, 2026-10-03: design (W) of the user approval recorded in SLURM_JOBS.md on 2026-10-03 09:55 ("cooperative
+# scripted lift that holds wrist orientation"); launcher slurm/repo20260923/cpu_coop_wristhold.sbatch; CLI entry
+# `wristhold_main` in scripts/bench/coop_scripted_carry.py (its own entry point: that script's `main()` is unchanged).
+# Nothing in this section runs unless the caller passes a `WristHoldParams` (or asks for the smoke's measure-only
+# baseline); no stock or flush-pad line is changed (tests/test_coop_wristhold.py: this file's diff to 3a67bc2 is this
+# section only, appended; the stock and flush-pad models are byte-identical to 3a67bc2's and short stock and flush-pad
+# episodes are identical step for step).
+#
+# What runs: the flush-pad variant EXACTLY as predeclared on 2026-10-02 04:59 (`WristHoldParams` subclasses
+# `FlushPadParams` with every field and default unchanged: MODIFIED END-EFFECTOR = flush pads, condim 4, torsional
+# friction 0.04 m; HARNESS CHANGE = elliptic cone + impratio 10; lift-place lowering = the reverse keyframe,
+# `FlushPadPlaceParams`), PLUS a kinematic wrist-orientation hold:
+# * The wrist. The BHL arm has no wrist joint: its chain is shoulder pitch -> shoulder roll -> shoulder yaw -> elbow
+#   pitch -> elbow roll -> hand link, and the hand link is welded to the elbow-roll body (upstream MJCF: 'Joint is
+#   "fixed"'), so the elbow roll is the joint the hand hangs from. The hold servoes it (`WristHoldParams.wrist_joints`).
+#   Shoulder yaw is a shoulder joint whose rotation swings the bent forearm and translates the pad (12 cm at its range
+#   limit), which a wrist does not do; it is not used. Frozen from kinematics alone, before any episode.
+# * What is held: each grasping hand's rotation about the pinch axis -- world x, a constant of the scripted layout (the
+#   two robots of a pair stand at x = c -/+ side_off facing +y); never read from the cube -- relative to the hand's
+#   orientation at grasp time, in the world frame: the twist angle of the swing-twist decomposition of R R_ref^T.
+# * Grasp time: the first policy-step state at or after the end of the squeeze segment (t_settle + t_reach + t_squeeze
+#   = 4.5 s): state 113, t = 4.52 s (`wristhold_grasp_state`). The reference is that state's hand orientation.
+# * When: every control step (the harness recomputes every arm target once per policy step, 0.04 s) from the grasp
+#   state on: lift_hold to the end of the episode (lift + hold); lift_place through the end of the release (lift,
+#   hold, lower, release: t < PlaceScript t_end['release'] = 11.7 s). After the release the hold stops and its last
+#   correction is withdrawn over the retract segment (11.7 -> 12.7 s) with the script's own smooth profile, so the wrist
+#   target never jumps (the stock script never jumps a target).
+# * How (`wrist_twist_ik`): from the robot's own measured state (base attitude and arm joint angles read from the
+#   simulator, i.e. exact IMU + encoders; never the cube), the wrist angle that brings the hand's twist back to its
+#   grasp value, or as close as the joint range (+/-0.785 rad) allows: damped Gauss-Newton on the 1-D task, clamped to
+#   the range, with the exact derivative of the twist (`wrist_twist_derivative`: the hand's MuJoCo rotational Jacobian
+#   column of the wrist, mj_jacBody, chained through the swing-twist decomposition), a step accepted only if it
+#   strictly reduces |twist| from the measured angle projected onto the range (so the target is never worse than the
+#   measured state and always within the range), until no step is accepted or a
+#   step moves < 1e-10 rad (at most 50 iterations; damping 0.01, a numerical safeguard). The wrist target becomes that
+#   solution; every other target is the script's or the gait's.
+#   DISCLOSED FIX (2026-10-03, before any smoke, probe or scored episode): the first implementation used the projected
+#   Jacobian (pinch axis . wrist axis) as the derivative and accepted every step. A dry run on throw-away seed 140
+#   showed that with a large swing this is not the twist's derivative: at the release, as the elbow-roll axis passes
+#   perpendicular to the pinch axis, the iteration walked to the opposite range bound and made the twist worse (one hand:
+#   -0.003 -> -0.15 rad; target 0 -> -0.785 rad, a 23.6 Nm PD demand), which contradicts the frozen design. Fixed to the
+#   exact derivative + strictly decreasing |twist|; no frozen choice (wrist, pinch axis, grasp state, window, gains,
+#   cap, keyframes, rules) changed.
+# * Unchanged: the arm keyframes and their timeline, grasping-arm PD kp 30 and kd 2, the 4 Nm arm effort cap (the stock
+#   PD loop computes and clips every torque; the hold only replaces the wrist entry of each grasping arm's target), the
+#   gait, cube, plinth, layout, pads, harness options and scoring.
+# * Measured, never gated (`WristHold`): per grasping hand and policy-step state, its twist and swing relative to grasp
+#   time; per servoed step, the wrist angle against its range, whether the target was clamped, the unclipped PD demand
+#   at the step start against the 4 Nm cap, and the clipped torque applied at the step's last physics substep.
+# * Mechanics: `run_wristhold_episode` calls the stock `run_episode` / `run_place_episode` unchanged with a frame_hook
+#   chain (CubeTiltRecorder -> WristHold -> the caller's hook). On its first call (after policy step 0) `WristHold`
+#   wraps that runner's `step`, so each later call first replaces the grasping arms' wrist targets, then runs the
+#   unchanged stock PD loop. The hold engages at step 113, long after the wrap. The wrapper never emits a non-finite
+#   target (it falls back to the script's target and counts the event).
+# * KINEMATIC PREDICTION (pre-episode; `wristhold_design`, recorded in every output): the cube stops the shoulder roll
+#   near 0 (0.01-0.07 rad), so at the contact pose the arm hangs and the forearm points forward. Joint axis . pinch
+#   axis at the squeeze / lift contact poses: shoulder pitch 1.00 / 1.00, elbow pitch 0.96 / 0.95, shoulder yaw 0.27 /
+#   0.31, elbow roll 0.24 / 0.17, shoulder roll 0.00. The lift keyframe turns the hand ~0.98 rad about the pinch axis,
+#   almost all through the two lift joints. Clamped at its range the elbow roll removes ~0.17 rad of it (~18 %) and
+#   swings the pad ~0.9 rad off the cube face; no admissible wrist set holds the twist (shoulder yaw + elbow roll:
+#   ~31 %). The hold is therefore expected NOT to stop the roll: the probe is expected to read NEGATIVE.
+
+WRISTHOLD_VARIANT = "wristhold_v1"
+WRISTHOLD_TILT_MAX_RAD = 0.35
+WRISTHOLD_PROBE_SEEDS = (125, 126, 127, 128, 129)
+#: Throw-away seeds, the only ones a wrist-hold smoke may run (seed-context grep, 2026-10-03: no coop or scripted-carry
+#: run ever used them; outside 0-39, 100-129 and 300-319). The smoke runs seed 140.
+WRISTHOLD_SMOKE_SEEDS = (140, 141, 142, 143, 144)
+#: The candidate wrist sets the kinematic design record evaluates (the arm joints no keyframe moves); the frozen one is
+#: `WristHoldParams.wrist_joints`.
+WRISTHOLD_CANDIDATE_SETS = (("elbow_roll",), ("shoulder_yaw",), ("shoulder_yaw", "elbow_roll"))
+_WRISTHOLD_ARM = ("shoulder_pitch", "shoulder_roll", "shoulder_yaw", "elbow_pitch", "elbow_roll")  # = ARM_JOINTS_L
+
+WRISTHOLD_HOLD_NOTE = (
+    "WRIST-ORIENTATION HOLD: each grasping arm's wrist (elbow roll, the joint the hand link hangs from) is servoed every "
+    "control step (0.04 s) by kinematics so the hand's rotation about the pinch axis (world x) stays at its grasp-time "
+    "value; arm PD kp 30, the 4 Nm cap and the keyframe timeline unchanged")
+WRISTHOLD_LABEL = ("LEARNED gait (frozen arms-dr1.0-s0) + SCRIPTED arms (with a kinematic wrist-orientation hold) + "
+                   "ORACLE cube pose (scoring only) | " + FLUSHPAD_NOTE)
+WRISTHOLD_LABEL_DETAIL = (
+    "legs + outer arm: frozen learned PPO gait arms-dr1.0-s0, unmodified observation, zero velocity command all "
+    "episode | grasping arm (one per robot): scripted joint keyframes (unchanged) except the wrist (elbow roll), which a "
+    "kinematic hold servoes every control step to keep the hand's rotation about the pinch axis (world x) at its "
+    "grasp-time value from the robot's own state (never the cube); PD kp 30 (deploy 10), 4 Nm cap | cube pose: "
+    "simulator oracle, scoring only | contact: MuJoCo, no welds | MODIFIED END-EFFECTOR: hand pad = hand-mesh AABB box "
+    "re-oriented flush to the cube faces at the squeeze pose, condim 4, torsional friction 0.04 m | HARNESS CHANGE: "
+    "elliptic friction cone, impratio 10 (global; also foot-floor contact)")
+WRISTHOLD_NOHOLD_LABEL = (FLUSHPAD_LABEL + " | NO-HOLD BASELINE of the wrist-hold smoke: the flush-pad variant "
+                          "unchanged, the hand's twist measured only")
+
+#: The W PREDECLARED RULES (user approval 2026-10-03 09:55): the flush-pad probe rule verbatim except the seeds
+#: (120-124 -> 125-129) and the flush-pad scored rule verbatim. The launcher header repeats them word for word.
+WRISTHOLD_PROBE_RULE_TEXT = (
+    "Probe on exploration seeds 125-129 (state the grep evidence that they were never used). PROCEED iff the cube "
+    "tilt stays <= 0.35 rad throughout lift-hold on >= 4/5 seeds, with LIFT_HOLD_RULE's robot-fall clauses "
+    "unchanged. Otherwise STOP: NEGATIVE, the flush pad does not stop the roll.")
+WRISTHOLD_SCORED_RULE_TEXT = (
+    "Scored, only after PROCEED (state the evidence that seeds 20-39 were never used): lift-hold on seeds 20-29 and "
+    "lift-place on seeds 30-39, each with its UNCHANGED rule (LIFT_HOLD_RULE / LIFT_PLACE_RULE, pass_min 8) PLUS "
+    "cube tilt <= 0.35 rad (hold: throughout the hold; place: at release and when seated), >= 8/10 per crew or pair "
+    "as the existing rules define them. PASS iff every crew/pair meets it; otherwise NEGATIVE; INCOMPLETE if any "
+    "episode is missing.")
+
+#: How the frozen rules are applied: the flush-pad clauses as applied (2026-10-02), with the W seeds, plus the hold's
+#: record. Decided 2026-10-03 before any episode of this variant; each reading is stricter than or equal to the text.
+WRISTHOLD_CLAUSES_AS_APPLIED = (
+    "cube tilt = the angle between the cube's own z axis and world z (CarryRunner.cube_tilt; a cube rolled 90 deg "
+    "reads 1.571 rad), logged at every policy-step state (t = i * 0.04 s, i = 0..500) in full float precision; "
+    "<= 0.35 rad passes, anything larger or non-finite fails",
+    "probe 'throughout lift-hold' = every policy-step state of the 20 s lift_hold episode, t = 0 to 20 s inclusive "
+    "(stricter than the hold alone). A probe seed passes iff that tilt clause, LIFT_HOLD_RULE's robot-fall clause "
+    "unchanged (no robot of the pair tilts > 0.78 rad at any policy step) and the validity clauses (finite state, "
+    "no MuJoCo auto-reset, full 20 s) all hold; crew 2 (one pair), seeds 125-129, PROCEED iff >= 4 of 5",
+    "probe disclosure: the rule text names only the robot-fall clauses of LIFT_HOLD_RULE, so its lift, hold and "
+    "floor clauses are not gated in the probe (they are reported per seed as diagnostics). A probe episode that "
+    "never lifts the cube therefore passes the probe's tilt clause (so would a cube the hold drops that lands flat); "
+    "the scored stage keeps every LIFT_HOLD_RULE clause",
+    "hold 'throughout the hold' = every policy-step state of the hold LIFT_HOLD_RULE scores (its longest contiguous "
+    ">= 0.05 m run, hold_start_s inclusive to hold_end_s exclusive); no hold = the clause fails",
+    "place 'at release' = every policy-step state from the first at or after the end of the lowering "
+    "(PlaceScript t_end['unload'] = 10.7 s: state 268, t = 10.72 s) through the first at or after the hands are "
+    "fully open (t_end['release'] = 11.7 s: state 293, t = 11.72 s), inclusive; 'when seated' = the final state "
+    "(t = 20 s), where LIFT_PLACE_RULE checks the seated cube",
+    "crews as the existing rules and launchers define them: crew 2 (one pair) and crew 4 (two pairs, two cubes, one "
+    "world), >= 8/10 per pair; PASS iff all six pairs (lift-hold crew 2, crew 4 pair 0, crew 4 pair 1; lift-place "
+    "the same) meet it",
+    "an episode stopped by a non-finite state is a scored failure; its non-finite numbers are written as null so the "
+    "score JSON holds it. A numerical blow-up that MuJoCo catches itself is a scored failure too, in every stage "
+    "(check no_sim_reset): MuJoCo 3.3.5 resets the state automatically (qpos0, time 0) when qpos, qvel or qacc holds a "
+    "NaN or a value beyond 1e10, so the harness's own non-finite check never sees it; it is detected after every "
+    "policy step from the simulated time and MuJoCo's bad-qpos/qvel/qacc warning counters. An episode that is absent, "
+    "shorter than 20 s without a recorded failure, or has no tilt log or no auto-reset record is MISSING (INCOMPLETE)",
+    "the wrist-orientation hold adds measurements (each hand's twist and swing, the wrist angle against its range, the "
+    "PD demand against the 4 Nm cap), never a gate clause. An episode without a well-formed hold record (hold installed "
+    "after policy step 0, engaged at the grasp state 113, the twist logged at every state) is MISSING (INCOMPLETE)",
+    "INVALID (never PROCEED, never PASS): a score JSON that is not this variant's or its stage's, not under the frozen "
+    "rule, parameters (WristHoldParams), keyframes or lowering, not a scored run, whose compiled model does not show "
+    "the designed flush pads with condim 4, torsional friction 0.04 m, elliptic cone and impratio 10, or whose "
+    "wrist-hold design record does not name the frozen wrist (elbow roll)",
+)
+
+#: Seed-use evidence (grep of results, Slurm logs, the ledger and the investigators' files, 2026-10-03), recorded in
+#: every wrist-hold verdict JSON.
+WRISTHOLD_SEED_EVIDENCE = (
+    "grep -rhoE '\"seed\": *[0-9]+' over results/scripted-carry-20260926, results/scripted-carry-20260927, "
+    "results/coop-flushpad-20261002 and every logs/coop-flushpad-*-smoke directory finds seeds 0-19, 119 and 120-124 "
+    "only: no episode of this harness ran any seed 20-39 or 125-129",
+    "Slurm logs of this harness: scripted-carry-21434982 and coop-lift-hold-21435079 ran seeds 0-9, "
+    "coop-lift-place-21443282 seeds 10-19, the flush-pad smokes seed 119 and the flush-pad probe 21507881 seeds "
+    "120-124; its scored stage did not run (results/coop-flushpad-20261002/scored/verdict.json: NOT_RUN, seeds 20-39 "
+    "stay unused)",
+    "exploration: the harness docstring and lift-place notes name seeds 100-119 only; the 2026-09-30 investigators' "
+    "files (solutions-20260930/coop, verify-coop) hold seeds 100-104 only; the flush-pad workstream's files 119-124",
+    "a seed-context scan (2026-10-03) of the 255 coop / carry / crew / cube / flush files under results/ and logs/, "
+    "the investigators' and flush-pad workstream's files and SLURM_JOBS.md finds seed-like integers <= 1000 only in "
+    "0-39, 99 (a MARL smoke), 100-129 and 300-319; 125-129 appear only in the ledger's 2026-10-03 design (W) and 20-39 "
+    "only as reserved, unused scored seeds (ledger text and the rule text inside the flush-pad JSONs)",
+    "smoke seeds 140-144: the same scan and a targeted grep find them in no seed context; the smoke runs seed 140 only "
+    "(the CLI refuses any seed outside 140-144 in smoke mode, and every probe or scored seed outside its stage)",
+)
+
+#: Probe (stage 1): the flush-pad probe rule with the W seeds; crew 2, lift_hold protocol (20 s), seeds 125-129.
+WRISTHOLD_PROBE_RULE = {**FLUSHPAD_PROBE_RULE, "variant": WRISTHOLD_VARIANT, "seeds": list(WRISTHOLD_PROBE_SEEDS)}
+#: Scored lift-hold and lift-place (stage 2): the flush-pad scored rules verbatim (seeds 20-29 and 30-39, crews 2, 4).
+WRISTHOLD_HOLD_RULE = {**FLUSHPAD_HOLD_RULE, "variant": WRISTHOLD_VARIANT}
+WRISTHOLD_PLACE_RULE = {**FLUSHPAD_PLACE_RULE, "variant": WRISTHOLD_VARIANT}
+WRISTHOLD_STAGES = ("probe", "hold", "place", "smoke", "smoke_nohold")
+
+
+@dataclass
+class WristHoldParams(FlushPadParams):
+    """OPT-IN W variant: `FlushPadParams` (every field and default unchanged: flush pads, condim 4, torsional 0.04 m,
+    elliptic cone, impratio 10) plus the kinematic wrist-orientation hold. Frozen 2026-10-03, before any episode."""
+    wrist_hold: str = "pinch_axis_twist"        # the hand's rotation about the pinch axis (world), held at grasp time
+    wrist_joints: tuple = ("elbow_roll",)       # the BHL arm's wrist: the joint the hand link hangs from
+    pinch_axis_world: tuple = (1.0, 0.0, 0.0)   # world x: the layout's pinch axis (never read from the cube)
+    wrist_ik_damping: float = 0.01              # numerical safeguard; the converged solution does not depend on it
+    wrist_ik_max_iter: int = 50
+    wrist_ik_tol: float = 1e-10                 # rad
+    wrist_release_fade: str = "retract"         # lift_place: the last correction is withdrawn over the retract segment
+
+
+def is_wristhold(p) -> bool:
+    """True only for the opt-in W variant (a stock `CarryParams` or a `FlushPadParams` has no `wrist_hold`)."""
+    return is_flushpad(p) and getattr(p, "wrist_hold", None) == "pinch_axis_twist"
+
+
+def wristhold_grasp_state(dt: float, p=None) -> int:
+    """Index of the grasp state: the first policy-step state at or after the end of the squeeze segment."""
+    import math
+    p = WristHoldParams() if p is None else p
+    return int(math.ceil((p.t_settle + p.t_reach + p.t_squeeze) / float(dt) - 1e-9))
+
+
+def _wristhold_rel_quat(R_ref, R) -> np.ndarray:
+    """Unit quaternion (w >= 0) of the world-frame rotation taking attitude `R_ref` to `R` (R R_ref^T)."""
+    rel = np.asarray(R, dtype=float).reshape(3, 3) @ np.asarray(R_ref, dtype=float).reshape(3, 3).T
+    q = np.zeros(4)
+    mujoco.mju_mat2Quat(q, rel.flatten())
+    return -q if q[0] < 0.0 else q
+
+
+def hand_twist_swing(R_ref, R, axis) -> tuple:
+    """(twist, swing) of the world-frame rotation taking attitude `R_ref` to `R` (R R_ref^T): the twist is its signed
+    angle about `axis` (swing-twist decomposition, in [-pi, pi]); the swing is the angle of the rest, a rotation about
+    an axis normal to `axis`. With q = (w, v) the unit quaternion (w >= 0) and p = v . axis: twist = 2 atan2(p, w),
+    swing = 2 acos(sqrt(w^2 + p^2))."""
+    a = np.asarray(axis, dtype=float)
+    a = a / np.linalg.norm(a)
+    q = _wristhold_rel_quat(R_ref, R)
+    p = float(q[1:] @ a)
+    return float(2.0 * np.arctan2(p, q[0])), float(2.0 * np.arccos(min(1.0, float(np.sqrt(q[0] ** 2 + p ** 2)))))
+
+
+def wrist_twist_derivative(R_ref, R, axis, omegas) -> np.ndarray:
+    """Exact derivative of `hand_twist_swing`'s twist with respect to turning the attitude `R` about each world axis in
+    `omegas` (for a hinge joint: its MuJoCo rotational Jacobian column, i.e. its world axis). With q = (w, v) as in
+    `hand_twist_swing` and p = v . a, turning by d about omega gives dq = (-omega . v, w omega + omega x v) d / 2, so
+    d twist / d = (w (w omega . a + (omega x v) . a) + p omega . v) / (w^2 + p^2). It equals omega . a only when the
+    rotation is a pure twist (no swing); 0 where the twist is undefined (w^2 + p^2 = 0, a half-turn swing)."""
+    a = np.asarray(axis, dtype=float)
+    a = a / np.linalg.norm(a)
+    q = _wristhold_rel_quat(R_ref, R)
+    w, v = float(q[0]), q[1:]
+    p = float(v @ a)
+    n2 = w * w + p * p
+    om = np.asarray(omegas, dtype=float).reshape(-1, 3)
+    if n2 < 1e-12:
+        return np.zeros(len(om))
+    return np.array([(w * (w * float(o @ a) + float(np.cross(o, v) @ a)) + p * float(o @ v)) / n2 for o in om])
+
+
+def wrist_twist_ik(model, data, body: int, joints, R_ref, axis, *, damping: float, max_iter: int, tol: float) -> dict:
+    """The hold's small IK: the values of the hinge `joints` [(joint id, lo, hi), ...] that bring `body`'s twist about
+    `axis` (relative to `R_ref`, world frame) back to 0, or as close as their ranges allow, starting from the
+    configuration in `data` (the measured state; its kinematics need not be current). Damped Gauss-Newton on the 1-D
+    task with each iterate clamped to [lo, hi]; the derivative is exact (`wrist_twist_derivative` of the body's MuJoCo
+    rotational Jacobian columns, mj_jacBody, at those joints' dofs); a step is accepted only if it strictly reduces
+    |twist| (halved up to 40 times otherwise) from the measured angle projected onto the range, so the result is
+    never worse than the measured state (up to that projection: a joint can sit a hair past its soft limit). Stops when no
+    step is accepted, a step moves less than `tol`, or after `max_iter`. `data`'s joint values are restored (and its
+    kinematics recomputed) before returning. Returns q (the solution), the twist before and after, the derivative at
+    the start, the number of iterations, whether a range bound holds the solution, and the unclamped one-step (linear)
+    solution."""
+    a = np.asarray(axis, dtype=float)
+    a = a / np.linalg.norm(a)
+    jids = [int(j) for j, _, _ in joints]
+    adr = np.array([model.jnt_qposadr[j] for j in jids])
+    dof = np.array([model.jnt_dofadr[j] for j in jids])
+    lo = np.array([float(v) for _, v, _ in joints])
+    hi = np.array([float(v) for _, _, v in joints])
+    q0 = data.qpos[adr].copy()
+    jacr = np.zeros((3, model.nv))
+
+    def evaluate(q):
+        data.qpos[adr] = q
+        mujoco.mj_kinematics(model, data)
+        mujoco.mj_comPos(model, data)
+        mujoco.mj_jacBody(model, data, None, jacr, body)
+        R = data.xmat[body]
+        return (hand_twist_swing(R_ref, R, a)[0],
+                wrist_twist_derivative(R_ref, R, a, [jacr[:, k] for k in dof]))
+
+    e0, J0 = evaluate(q0)                         # the hand's twist in the measured state
+    q = np.clip(q0, lo, hi)                       # start: the measured angle, projected onto the range (a joint may
+    e, J = evaluate(q) if np.any(q != q0) else (e0, J0.copy())   # sit a hair past its soft limit)
+    iters = 0
+    for iters in range(1, int(max_iter) + 1):
+        step = -J * e / (float(J @ J) + damping ** 2)
+        alpha, accepted, moved = 1.0, False, 0.0
+        for _ in range(40):
+            qn = np.clip(q + alpha * step, lo, hi)
+            moved = float(np.max(np.abs(qn - q)))
+            if moved < tol:
+                break
+            en, Jn = evaluate(qn)
+            if abs(en) < abs(e):
+                q, e, J, accepted = qn, en, Jn, True
+                break
+            alpha *= 0.5
+        if not accepted or moved < tol:
+            break
+    linear = q0 - J0 * e0 / (float(J0 @ J0) + damping ** 2)
+    data.qpos[adr] = q0
+    mujoco.mj_kinematics(model, data)
+    return {"q": q, "twist_before": float(e0), "twist_after": float(e), "J": J0, "iters": int(iters),
+            "clamped": bool(np.any((q <= lo + 1e-12) | (q >= hi - 1e-12))), "q_linear": linear}
+
+
+def wrist_hold_design(robot_xml: Path, p, keyframes: dict = KEYFRAMES_LEFT, n_sweep: int = 11) -> dict:
+    """Kinematics only (no episode, no seed): the arm chain, each joint axis' projection on the pinch axis at the squeeze
+    and lift contact poses, the hand's twist along the scripted squeeze -> lift sweep without a hold, and what a clamped
+    hold on each candidate wrist set (`WRISTHOLD_CANDIDATE_SETS`) leaves of it. Robot alone, base upright at the origin
+    (robot frame: x forward, y left = the pinch axis, z up), flush pads; along the sweep the shoulder pitch and elbow
+    pitch go linearly from the squeeze to the lift keyframe while the shoulder roll stops where the pad's outer face
+    reaches the cube face plane (the cube stops the squeeze and the lift short of their keyframes, as in
+    `flush_pad_frames`); the reference is the hand at the squeeze contact pose."""
+    if not is_wristhold(p):
+        raise ValueError("wrist_hold_design needs WristHoldParams")
+    flush = flush_pad_frames(robot_xml, p, keyframes)
+    fk = PadFK(robot_xml, flush["frames"])
+    m, d = fk.m, fk.d
+    face = float(p.side_off - CUBE_HALF)
+    a = np.array([0.0, 1.0, 0.0])
+    sq = np.asarray(keyframes["squeeze"], dtype=float)
+    lf = np.asarray(keyframes["lift"], dtype=float)
+    us = [float(u) for u in np.linspace(0.0, 1.0, int(n_sweep))]
+    sides = {}
+    for side in ("left", "right"):
+        sgn = 1.0 if side == "left" else -1.0
+        names = ARM_JOINTS_L if side == "left" else ARM_JOINTS_R
+        jid = {s: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_JOINT, n) for s, n in zip(_WRISTHOLD_ARM, names)}
+        hand, pad = fk.body[side], fk.geom[side]
+
+        def pose_at(u):
+            ql = sq + u * (lf - sq)
+            ql[2] = ql[4] = 0.0
+            ql[1] = _bisect_increasing(
+                lambda r: fk.lateral_extent(side, sgn * np.array([ql[0], r, 0.0, ql[3], 0.0])) - face, -0.6, 1.3)
+            fk.pose(side, sgn * ql)
+            return ql
+
+        ql0 = pose_at(0.0)
+        R_ref = d.xmat[hand].reshape(3, 3).copy()
+        proj, sweep = {}, []
+        for tag, u in (("squeeze_contact", 0.0), ("lift_contact", 1.0)):
+            ql = pose_at(u)
+            proj[tag] = {"joints_left_order": [round(float(v), 6) for v in ql],
+                         "axis_dot_pinch": {s: round(float(a @ d.xaxis[jid[s]]), 4) for s in _WRISTHOLD_ARM}}
+        cands = {"+".join(c): [] for c in WRISTHOLD_CANDIDATE_SETS}
+        for u in us:
+            ql = pose_at(u)
+            c0 = d.geom_xpos[pad].copy()
+            tw0, sw0 = hand_twist_swing(R_ref, d.xmat[hand], a)
+            sweep.append({"u": round(u, 4), "shoulder_roll_at_contact": round(float(ql[1]), 4),
+                          "twist_no_hold_rad": round(tw0, 4), "swing_no_hold_rad": round(sw0, 4)})
+            for c in WRISTHOLD_CANDIDATE_SETS:
+                js = [(jid[s], *m.jnt_range[jid[s]]) for s in c]
+                sol = wrist_twist_ik(m, d, hand, js, R_ref, a, damping=p.wrist_ik_damping,
+                                     max_iter=p.wrist_ik_max_iter, tol=p.wrist_ik_tol)
+                adr = [m.jnt_qposadr[j] for j, _, _ in js]
+                d.qpos[adr] = sol["q"]
+                mujoco.mj_kinematics(m, d)
+                tw1, sw1 = hand_twist_swing(R_ref, d.xmat[hand], a)
+                cands["+".join(c)].append({
+                    "u": round(u, 4), "twist_hold_rad": round(tw1, 4), "swing_hold_rad": round(sw1, 4),
+                    "pad_moved_m": round(float(np.linalg.norm(d.geom_xpos[pad] - c0)), 4),
+                    "wrist_q_actual": [round(float(v), 4) for v in sol["q"]], "clamped": sol["clamped"]})
+                fk.pose(side, sgn * ql)
+        summary = {}
+        tw_end = sweep[-1]["twist_no_hold_rad"]
+        for name, rows in cands.items():
+            end = rows[-1]
+            sat = next((r["u"] for r in rows if r["clamped"]), None)
+            summary[name] = {
+                "twist_at_lift_contact_no_hold_rad": tw_end, "twist_at_lift_contact_hold_rad": end["twist_hold_rad"],
+                "removed_fraction": round(1.0 - abs(end["twist_hold_rad"]) / abs(tw_end), 4) if tw_end else None,
+                "swing_max_hold_rad": max(r["swing_hold_rad"] for r in rows),
+                "pad_moved_max_m": max(r["pad_moved_m"] for r in rows), "range_binds_from_u": sat}
+        sides[side] = {"chain": [n for n in names] + [f"arm_{side}_hand_link (welded to the elbow-roll body)"],
+                       "ranges_rad": {s: [round(float(v), 6) for v in m.jnt_range[jid[s]]] for s in _WRISTHOLD_ARM},
+                       "projections": proj, "sweep_no_hold": sweep, "candidates": cands, "candidate_summary": summary}
+    chosen = "+".join(p.wrist_joints)
+    worst = max(abs(sides[s]["candidate_summary"][chosen]["twist_at_lift_contact_hold_rad"]) for s in sides)
+    best_any = min(abs(sides[s]["candidate_summary"][c]["twist_at_lift_contact_hold_rad"])
+                   for s in sides for c in sides[s]["candidate_summary"])
+    prediction = (
+        f"chosen wrist {chosen}: with the clamped hold the hand's twist at the lift contact pose is "
+        + ", ".join(f"{s} {sides[s]['candidate_summary'][chosen]['twist_at_lift_contact_hold_rad']:+.3f} rad (no hold "
+                    f"{sides[s]['candidate_summary'][chosen]['twist_at_lift_contact_no_hold_rad']:+.3f}, removed "
+                    f"{100 * sides[s]['candidate_summary'][chosen]['removed_fraction']:.0f} %)" for s in sides)
+        + f"; the smallest |twist| any candidate set leaves is {best_any:.3f} rad. "
+        + ("Every candidate leaves more than 0.35 rad, so a cube that rolls with the hands would still tilt past the "
+           "probe's 0.35 rad limit: the hold is expected not to stop the roll (probe expected NEGATIVE)."
+           if best_any > WRISTHOLD_TILT_MAX_RAD else
+           f"The chosen set leaves {worst:.3f} rad."))
+    return {"method": "kinematics only (PadFK, flush pads, base upright at the origin); clamped wrist_twist_ik",
+            "pinch_axis_robot_frame": [0.0, 1.0, 0.0], "pinch_axis_world": [float(v) for v in p.pinch_axis_world],
+            "chosen": list(p.wrist_joints),
+            "selection_rule": ("the wrist = the joint the hand link hangs from: the elbow roll (the hand link is welded "
+                               "to the elbow-roll body). Shoulder yaw is a shoulder joint whose rotation swings the bent "
+                               "forearm and translates the pad (see pad_moved_max_m), which a wrist does not do."),
+            "sides": sides, "prediction": prediction}
+
+
+def wristhold_design(upstream: Path, cache_dir: Path, p) -> dict:
+    """`wrist_hold_design` on the same MJCF copy `build_carry` uses (recorded in every wrist-hold output)."""
+    scene = prepare_mjcf(upstream, cache_dir, "humanoid")
+    return wrist_hold_design(scene.parent / "berkeley_humanoid_lite.xml", p)
+
+
+class WristHold:
+    """frame_hook of the W variant and, with `servo`, the wrist-orientation hold itself.
+
+    As a frame_hook (the stock episode loop calls it after every policy step) it measures, for each pair's grasping
+    hands (robot b's right, robot a's left), the hand's twist and swing relative to its grasp-time orientation at every
+    policy-step state, recording the reference at the grasp state. With `servo` its first call (after policy step 0)
+    wraps that runner's `step`: from the grasp step on, each call replaces the wrist entries of the grasping arms'
+    targets with the hold's (`wrist_twist_ik`, clamped to the joint range) before the unchanged stock PD loop runs, and
+    logs the wrist angle, the clamp, the unclipped PD demand at the step start and the clipped torque applied at the
+    step's last physics substep. `servo=False` only measures (the smoke's no-hold baseline)."""
+
+    def __init__(self, model, slots, pairs, dt: float, hp=None, servo: bool = True, chain=None):
+        self.hp = WristHoldParams() if hp is None else hp
+        if not is_wristhold(self.hp):
+            raise ValueError("WristHold needs WristHoldParams")
+        self.m, self.slots, self.pairs, self.dt = model, slots, pairs, float(dt)
+        self.servo, self.chain = bool(servo), chain
+        a = np.asarray(self.hp.pinch_axis_world, dtype=float)
+        self.axis = a / np.linalg.norm(a)
+        self.k_grasp = wristhold_grasp_state(self.dt, self.hp)
+        if self.k_grasp < 1:
+            raise ValueError("the grasp state must come after policy step 0")
+        self.scratch = mujoco.MjData(model)               # kinematics only; never stepped
+        self.arms = []
+        for k, pr in enumerate(pairs):
+            for i, side in ((pr.robot_b, "right"), (pr.robot_a, "left")):
+                s = slots[i]
+                names = actuator_joint_names(model, s)
+                joints = []
+                for w in self.hp.wrist_joints:
+                    jn = f"arm_{side}_{w}_joint"
+                    jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, s.prefix + jn)
+                    if jid < 0 or jn not in names:
+                        raise RuntimeError(f"no {s.prefix}{jn}")
+                    joints.append({"name": jn, "jid": int(jid), "idx": names.index(jn),
+                                   "qadr": int(model.jnt_qposadr[jid]), "lo": float(model.jnt_range[jid][0]),
+                                   "hi": float(model.jnt_range[jid][1])})
+                hand = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, f"{s.prefix}arm_{side}_hand_link")
+                if hand < 0:
+                    raise RuntimeError(f"no {s.prefix}arm_{side}_hand_link")
+                self.arms.append({"robot": int(i), "pair": int(k), "side": side, "hand": int(hand), "joints": joints,
+                                  "ref": None, "twist": [None], "swing": [None], "delta": None,
+                                  "log": {n: [] for n in ("step", "mode", "q", "target", "clamped", "twist_before_ik",
+                                                          "twist_after_ik", "J", "iters", "q_linear",
+                                                          "pd_demand_nm", "ctrl_after_nm")}})
+        self.runner = self.script = None
+        self.next_step = None
+        self.installed_after_step = None
+        self.window_end_t = self.fade_end_t = None
+        self.active = []
+        self.nonfinite = 0
+
+    # ---- frame_hook: called by the stock loop after every policy step
+    def __call__(self, **kw):
+        runner, step = kw["runner"], int(kw["step"])
+        if self.runner is None:
+            self._install(runner, kw["script"], step)
+        self.next_step = step + 1
+        self._measure(step + 1)
+        if self.chain is not None:
+            self.chain(**kw)
+
+    def _install(self, runner, script, step: int) -> None:
+        if step != 0:
+            raise RuntimeError("WristHold must be chained into the episode from policy step 0")
+        lift_start = float(script.segs[3][0])
+        if abs(lift_start - (self.hp.t_settle + self.hp.t_reach + self.hp.t_squeeze)) > 1e-9:
+            raise RuntimeError("the script's lift segment does not start at the end of the squeeze")
+        self.runner, self.script = runner, script
+        if isinstance(script, PlaceScript):
+            self.window_end_t, self.fade_end_t = float(script.t_end["release"]), float(script.t_end["retract"])
+        else:
+            self.window_end_t = self.fade_end_t = float("inf")
+        if self.servo:
+            original = runner.step
+
+            def step_with_wrist_hold(targets_per_robot):
+                held = self._filter(targets_per_robot)
+                out = original(held)
+                self._after_step()
+                return out
+
+            runner.step = step_with_wrist_hold
+        self.installed_after_step = int(step)
+
+    def _kinematics(self):
+        self.scratch.qpos[:] = self.runner.d.qpos
+        mujoco.mj_kinematics(self.m, self.scratch)
+        return self.scratch
+
+    def _measure(self, state: int) -> None:
+        sd = self._kinematics()
+        for arm in self.arms:
+            R = sd.xmat[arm["hand"]].reshape(3, 3).copy()
+            if state == self.k_grasp:
+                arm["ref"] = R
+            if arm["ref"] is None:
+                arm["twist"].append(None)
+                arm["swing"].append(None)
+            else:
+                tw, sw = hand_twist_swing(arm["ref"], R, self.axis)
+                arm["twist"].append(tw)
+                arm["swing"].append(sw)
+
+    # ---- the hold: wraps runner.step (servo only)
+    def _filter(self, targets_per_robot):
+        k = int(self.next_step)
+        t = k * self.dt
+        self.active = []
+        if k < self.k_grasp:
+            return targets_per_robot
+        if t < self.window_end_t - 1e-9:
+            mode = "hold"
+        elif t < self.fade_end_t - 1e-9:
+            mode = "fade"
+        else:
+            return targets_per_robot
+        out = list(targets_per_robot)
+        sd = self._kinematics()
+        hp, r = self.hp, self.runner
+        for arm in self.arms:
+            if arm["ref"] is None:
+                raise RuntimeError("no grasp reference at a servoed step")
+            i = arm["robot"]
+            new = np.array(targets_per_robot[i], dtype=float)
+            idx = [j["idx"] for j in arm["joints"]]
+            incoming = new[idx].copy()
+            sol = None
+            if mode == "hold":
+                sol = wrist_twist_ik(self.m, sd, arm["hand"], [(j["jid"], j["lo"], j["hi"]) for j in arm["joints"]],
+                                     arm["ref"], self.axis, damping=hp.wrist_ik_damping, max_iter=hp.wrist_ik_max_iter,
+                                     tol=hp.wrist_ik_tol)
+                q_new = np.asarray(sol["q"], dtype=float)
+                if not np.isfinite(q_new).all():
+                    self.nonfinite += 1
+                    q_new = incoming
+                arm["delta"] = q_new - incoming
+            else:
+                u = (t - self.window_end_t) / (self.fade_end_t - self.window_end_t)
+                q_new = incoming + (arm["delta"] if arm["delta"] is not None else 0.0) * (1.0 - _smooth(u))
+            new[idx] = q_new
+            out[i] = new
+            s = self.slots[i]
+            lg = arm["log"]
+            lg["step"].append(k)
+            lg["mode"].append(mode)
+            lg["q"].append([float(r.d.qpos[j["qadr"]]) for j in arm["joints"]])
+            lg["target"].append([float(v) for v in q_new])
+            lg["clamped"].append(bool(sol["clamped"]) if sol else None)
+            lg["twist_before_ik"].append(sol["twist_before"] if sol else None)
+            lg["twist_after_ik"].append(sol["twist_after"] if sol else None)
+            lg["J"].append([float(v) for v in sol["J"]] if sol else None)
+            lg["iters"].append(sol["iters"] if sol else None)
+            lg["q_linear"].append([float(v) for v in sol["q_linear"]] if sol else None)
+            # the first physics substep's PD torque on the wrist, before the stock clip (CarryRunner.step's own formula)
+            lg["pd_demand_nm"].append([float(r.kp_r[i][x] * (q_new[n] - r.d.sensordata[s.jpos_adr[x]])
+                                             - r.kd[x] * r.d.sensordata[s.jvel_adr[x]]) for n, x in enumerate(idx)])
+            self.active.append(arm)
+        return out
+
+    def _after_step(self) -> None:
+        for arm in self.active:
+            s = self.slots[arm["robot"]]
+            arm["log"]["ctrl_after_nm"].append(
+                [float(self.runner.d.ctrl[s.ctrl[j["idx"]]]) for j in arm["joints"]])
+        self.active = []
+
+    # ---- the episode's record
+    def record(self, steps: int) -> dict:
+        """The hold's record for the episode JSON (`steps` = policy steps run)."""
+        r = self.runner
+        i_lift = int(round((self.hp.t_settle + self.hp.t_reach + self.hp.t_squeeze + self.hp.t_lift) / self.dt))
+        arms = []
+        for arm in self.arms:
+            lg = arm["log"]
+            tw = [None if v is None else float(v) for v in arm["twist"]]
+            sw = [None if v is None else float(v) for v in arm["swing"]]
+            held = [v for v in tw if v is not None]
+            q = np.array(lg["q"], dtype=float).reshape(-1, len(arm["joints"]))
+            dem = np.array(lg["pd_demand_nm"], dtype=float).reshape(-1, len(arm["joints"]))
+            ctrl = np.array(lg["ctrl_after_nm"], dtype=float).reshape(-1, len(arm["joints"]))
+            lo = np.array([j["lo"] for j in arm["joints"]])
+            hi = np.array([j["hi"] for j in arm["joints"]])
+            cap = (np.array([float(r.eff[j["idx"]]) for j in arm["joints"]]) if r is not None
+                   else np.full(len(arm["joints"]), np.nan))
+            hold_rows = [n for n, md in enumerate(lg["mode"]) if md == "hold"]
+            clamped = [lg["step"][n] for n in hold_rows if lg["clamped"][n]]
+            above = [lg["step"][n] for n in range(len(lg["step"])) if np.any(np.abs(dem[n]) > cap + 1e-9)]
+            summary = {
+                "twist_at_grasp_rad": tw[self.k_grasp] if len(tw) > self.k_grasp else None,
+                "twist_at_lift_end_rad": tw[i_lift] if len(tw) > i_lift else None,
+                "lift_end_state": i_lift,
+                "twist_final_rad": tw[-1] if held else None,
+                "twist_max_abs_rad": max(abs(v) for v in held) if held else None,
+                "swing_max_rad": max(v for v in sw if v is not None) if held else None,
+                "servoed_steps": len(lg["step"]), "held_steps": len(hold_rows),
+                "wrist_q_min": q.min(axis=0).tolist() if q.size else None,
+                "wrist_q_max": q.max(axis=0).tolist() if q.size else None,
+                "wrist_range": [[j["lo"], j["hi"]] for j in arm["joints"]],
+                "steps_within_0.01_rad_of_a_limit": int(np.sum(np.any((q - lo < 0.01) | (hi - q < 0.01), axis=1)))
+                if q.size else 0,
+                "beyond_range_max_rad": float(np.max(np.maximum(lo - q, q - hi).clip(min=0.0))) if q.size else 0.0,
+                "target_clamped_steps": len(clamped),
+                "first_clamped_t_s": round(clamped[0] * self.dt, 3) if clamped else None,
+                "pd_demand_max_abs_nm": float(np.max(np.abs(dem))) if dem.size else None,
+                "pd_demand_above_cap_steps": len(above),
+                "first_above_cap_t_s": round(above[0] * self.dt, 3) if above else None,
+                "cap_nm": cap.tolist(),
+                "ctrl_after_max_abs_nm": float(np.max(np.abs(ctrl))) if ctrl.size else None,
+                "J_abs_min": float(min(abs(v) for row in lg["J"] if row for v in row)) if hold_rows else None,
+                "J_abs_max": float(max(abs(v) for row in lg["J"] if row for v in row)) if hold_rows else None,
+            }
+            arms.append({
+                "robot": arm["robot"], "pair": arm["pair"], "side": arm["side"],
+                "wrist_joints": [j["name"] for j in arm["joints"]],
+                "reference_quat": (None if arm["ref"] is None else
+                                   [float(v) for v in _mat2quat(arm["ref"])]),
+                "twist_series_rad": tw, "swing_series_rad": sw,
+                "servo_log": {n: v for n, v in lg.items()}, "summary": summary})
+        return {"variant": WRISTHOLD_VARIANT, "servo": self.servo, "installed": self.runner is not None,
+                "installed_after_step": self.installed_after_step, "grasp_state": self.k_grasp,
+                "grasp_t_s": round(self.k_grasp * self.dt, 6), "pinch_axis_world": self.axis.tolist(),
+                "wrist_joints": list(self.hp.wrist_joints),
+                "window": {"from_state": self.k_grasp,
+                           "hold_until_t_s": None if self.window_end_t in (None, float("inf")) else self.window_end_t,
+                           "fade_until_t_s": None if self.fade_end_t in (None, float("inf")) else self.fade_end_t},
+                "ik": {"damping": self.hp.wrist_ik_damping, "max_iter": self.hp.wrist_ik_max_iter,
+                       "tol": self.hp.wrist_ik_tol, "nonfinite_fallbacks": self.nonfinite},
+                "policy_steps": int(steps), "arms": arms,
+                "note": ("twist/swing_series_rad[i] = the hand's twist about the pinch axis / swing relative to the grasp "
+                         "state, at policy-step state i (null before the grasp state); servo_log rows are the servoed "
+                         "policy steps (pre-step state): wrist angle q, target sent, clamped (hold) or null (fade), the "
+                         "IK's twist before/after, the twist derivative J (rad/rad), the unclipped PD demand at the step start "
+                         "and the clipped torque applied at the step's last physics substep (N m)")}
+
+
+def _mat2quat(R) -> np.ndarray:
+    q = np.zeros(4)
+    mujoco.mju_mat2Quat(q, np.asarray(R, dtype=float).flatten())
+    return q
+
+
+def run_wristhold_episode(model, slots, pairs, cfg, policy, seed: int, p, rule: dict,
+                          q: PlaceParams | None = None, frame_hook=None) -> dict:
+    """One W episode: the stock lift_hold (`run_episode`) or lift_place (`run_place_episode`) protocol on the flush-pad
+    model, unchanged, with the wrist-orientation hold (`WristHold`), plus the flush-pad records (per-step cube tilt
+    `cube_tilt_series_rad`, MuJoCo auto-reset `sim_reset`, non-finite numbers as null) and the hold's `wrist_hold`
+    record. A rule of stage "smoke_nohold" runs the flush-pad variant itself (`FlushPadParams`) with the hold's
+    measurement only: the smoke's no-hold baseline."""
+    if rule.get("variant") != WRISTHOLD_VARIANT:
+        raise ValueError("rule is not a wrist-hold rule")
+    nohold = rule.get("stage") == "smoke_nohold"
+    if nohold:
+        if not is_flushpad(p) or is_wristhold(p) or rule.get("protocol") != "lift_hold":
+            raise ValueError("the no-hold baseline runs FlushPadParams under the lift_hold protocol")
+    elif not is_wristhold(p):
+        raise ValueError("run_wristhold_episode needs WristHoldParams")
+    hold = WristHold(model, slots, pairs, float(cfg.policy_dt), None if nohold else p, servo=not nohold,
+                     chain=frame_hook)
+    rec = CubeTiltRecorder(model, pairs, chain=hold)
+    if rule.get("protocol") == "lift_place":
+        q = FlushPadPlaceParams() if q is None else q
+        if q.lower_to is not None:
+            raise ValueError("the flush-pad lowering is FROZEN: reverse keyframe (lower_to=None)")
+        ep = run_place_episode(model, slots, pairs, cfg, policy, seed, p, q=q, frame_hook=rec, rule=rule)
+    else:
+        ep = run_episode(model, slots, pairs, cfg, policy, seed, p, frame_hook=rec, rule=rule, protocol="lift_hold")
+    for k, row in enumerate(ep["pairs"]):
+        row["cube_tilt_series_rad"] = [_json_tilt(v) for v in rec.series(k)]
+    ep["variant"] = WRISTHOLD_VARIANT
+    ep["cube_tilt_series_note"] = ("cube_tilt_series_rad[i] = cube tilt (rad, angle of the cube's z axis from world z) "
+                                   "at the pre-step state of policy step i (t = i * dt); the last entry is the "
+                                   "final state; null = non-finite")
+    ep["sim_reset"] = rec.sim_reset_record()
+    ep["wrist_hold"] = hold.record(int(ep["steps"]))
+    ep, nulled = _json_safe(ep)
+    ep["nonfinite_values_nulled"] = nulled
+    return ep
+
+
+def wristhold_stage_rule(stage: str, protocol: str = "lift_hold", seeds=None) -> dict:
+    """The frozen rule of a stage; "smoke" = the probe (lift_hold) or place (lift_place) clauses on throw-away seeds;
+    "smoke_nohold" = the probe clauses on the no-hold baseline (crew 2, lift_hold)."""
+    if stage == "probe":
+        return WRISTHOLD_PROBE_RULE
+    if stage == "hold":
+        return WRISTHOLD_HOLD_RULE
+    if stage == "place":
+        return WRISTHOLD_PLACE_RULE
+    s = sorted(int(x) for x in (seeds or []))
+    if stage == "smoke":
+        base = WRISTHOLD_PLACE_RULE if protocol == "lift_place" else WRISTHOLD_PROBE_RULE
+        return {**base, "stage": "smoke", "seeds": s, "crews": [2, 4], "pass_min": None,
+                "smoke": "pipeline check on throw-away seeds 140-144; never scored"}
+    if stage == "smoke_nohold":
+        return {**WRISTHOLD_PROBE_RULE, "stage": "smoke_nohold", "seeds": s, "crews": [2], "pass_min": None,
+                "wrist_hold": "OFF: the flush-pad variant unchanged; the hand's twist is measured only",
+                "smoke": "no-hold baseline of the smoke's hand-twist measurement on throw-away seeds 140-144; never scored"}
+    raise ValueError(f"unknown wrist-hold stage {stage!r}")
+
+
+def _wristhold_head(stage: str) -> dict:
+    return {"variant": WRISTHOLD_VARIANT, "stage": stage, "label": WRISTHOLD_LABEL,
+            "label_detail": WRISTHOLD_LABEL_DETAIL, "end_effector": FLUSHPAD_NOTE, "harness_change": FLUSHPAD_HARNESS_NOTE,
+            "wrist_hold": WRISTHOLD_HOLD_NOTE, "clauses_as_applied": list(WRISTHOLD_CLAUSES_AS_APPLIED),
+            "seed_evidence": list(WRISTHOLD_SEED_EVIDENCE)}
+
+
+def _wristhold_record_problem(ep: dict, servo: bool, dt: float) -> str | None:
+    """Why an episode's wrist-hold record is not well formed (None when it is)."""
+    rec = ep.get("wrist_hold") if isinstance(ep, dict) else None
+    if not isinstance(rec, dict):
+        return "no wrist-hold record"
+    if rec.get("variant") != WRISTHOLD_VARIANT:
+        return "wrist-hold record of another variant"
+    if rec.get("servo") is not bool(servo):
+        return f"wrist-hold servo {rec.get('servo')!r}, expected {bool(servo)}"
+    if rec.get("installed") is not True or rec.get("installed_after_step") != 0:
+        return "the hold was not installed after policy step 0"
+    k_g = wristhold_grasp_state(dt)
+    if rec.get("grasp_state") != k_g:
+        return f"grasp state {rec.get('grasp_state')!r}, expected {k_g}"
+    steps = int(ep.get("steps", -1))
+    arms = rec.get("arms")
+    if not isinstance(arms, list) or len(arms) != 2 * len(ep.get("pairs", [])):
+        return "the record does not hold both grasping hands of every pair"
+    stopped = ep.get("failed") is not None        # a stopped episode is a scored failure: its record need only exist
+    for arm in arms:
+        ser = arm.get("twist_series_rad") if isinstance(arm, dict) else None
+        if not isinstance(ser, list) or len(ser) != steps + 1:
+            return "twist series missing or not steps + 1 long"
+        log = (arm.get("servo_log") or {}).get("step")
+        if not servo and log:
+            return "a no-hold record with servoed steps"
+        if stopped:
+            continue
+        if steps >= k_g and (ser[k_g] is None or abs(float(ser[k_g])) > 1e-9):
+            return "the twist is not 0 at the grasp state"
+        if servo and steps > k_g and (not isinstance(log, list) or not log or log[0] != k_g):
+            return "the hold did not engage at the grasp state"
+    return None
+
+
+def _wristhold_payload_problem(payload: dict, stage: str, rule: dict, crew: int) -> str | None:
+    """Why a score JSON cannot be read under `rule` (None when it can)."""
+    if not isinstance(payload, dict):
+        return "no score JSON"
+    if payload.get("variant") != WRISTHOLD_VARIANT:
+        return "not a wrist-hold score JSON"
+    if payload.get("stage") != stage:
+        return f"stage {payload.get('stage')!r}, expected {stage!r}"
+    if payload.get("rule") != _jsonable(rule):
+        return "rule differs from the frozen wrist-hold rule"
+    if payload.get("params") != _jsonable(params_dict(WristHoldParams())):
+        return "params differ from the frozen WristHoldParams"
+    if payload.get("keyframes_left") != _jsonable(KEYFRAMES_LEFT):
+        return "arm keyframes differ"
+    if rule.get("protocol") == "lift_place":
+        frozen = _jsonable(place_params_dict(FlushPadPlaceParams()))
+        if payload.get("place_params") != frozen or any(e.get("place_params") != frozen
+                                                        for e in payload.get("episodes", [])):
+            return "place params differ from the frozen FlushPadPlaceParams (reverse-keyframe lowering)"
+    if int(payload.get("crew", -1)) != int(crew):
+        return f"crew {payload.get('crew')}, expected {crew}"
+    if not payload.get("scored_run"):
+        return "not a scored run"
+    if not flushpad_model_ok(payload.get("model_check") or {}, int(crew)):
+        return "model check does not show the flush-pad contact and harness options"
+    if not flushpad_design_matches_model(payload.get("flush_pad_design") or {}, payload.get("model_check") or {}):
+        return "compiled hand pads differ from the flush-pad design"
+    if (payload.get("wrist_hold_design") or {}).get("chosen") != list(WristHoldParams().wrist_joints):
+        return "the wrist-hold design record does not name the frozen wrist (elbow roll)"
+    if "policy_dt" not in payload:
+        return "no policy_dt"
+    return None
+
+
+def wristhold_pair_summary(ep: dict, k: int) -> list:
+    """The hold's per-hand summaries of pair `k` in one stored episode (diagnostics, never gated)."""
+    rec = ep.get("wrist_hold") or {}
+    return [{"robot": a.get("robot"), "side": a.get("side"), **(a.get("summary") or {})}
+            for a in rec.get("arms") or [] if a.get("pair") == k]
+
+
+def _wristhold_rows(payload: dict, rule: dict, k: int, servo: bool = True) -> tuple:
+    """`_flushpad_rows` (the flush-pad clauses, unchanged) plus the hold's record: a seed whose episode has no
+    well-formed wrist-hold record is missing too."""
+    rows, missing = _flushpad_rows(payload, rule, k)
+    dt = float(payload["policy_dt"])
+    eps = {}
+    for e in payload.get("episodes", []):
+        eps.setdefault(int(e["seed"]), e)
+    keep = []
+    for r in rows:
+        ep = eps[int(r["seed"])]
+        bad = _wristhold_record_problem(ep, servo, dt)
+        if bad:
+            missing.append(int(r["seed"]))
+            continue
+        r["wrist_hold_diagnostic"] = wristhold_pair_summary(ep, k)
+        keep.append(r)
+    return keep, sorted(missing)
+
+
+def wristhold_probe_verdict(payload: dict | None) -> dict:
+    """Stage-1 verdict from the probe score JSON (pure): PROCEED | NEGATIVE | INCOMPLETE | INVALID."""
+    rule = WRISTHOLD_PROBE_RULE
+    out = {**_wristhold_head("probe"), "rule_text": WRISTHOLD_PROBE_RULE_TEXT, "rule": rule}
+    if payload is None:
+        return {**out, "verdict": "INCOMPLETE", "reason": "no probe score JSON", "successes": 0,
+                "of": len(rule["seeds"]), "missing_seeds": list(rule["seeds"]), "per_seed": [],
+                "reading": "no probe score JSON: no decision"}
+    bad = _wristhold_payload_problem(payload, "probe", rule, 2)
+    if bad:
+        return {**out, "verdict": "INVALID", "reason": bad, "successes": 0, "of": len(rule["seeds"]),
+                "missing_seeds": [], "per_seed": [], "reading": f"INVALID ({bad}): no decision"}
+    rows, missing = _wristhold_rows(payload, rule, 0)
+    n_ok = sum(1 for r in rows if r["success"])
+    verdict = "INCOMPLETE" if missing else ("PROCEED" if n_ok >= rule["pass_min"] else "NEGATIVE")
+    reading = {"PROCEED": ("the flush pad with the wrist-orientation hold kept the cube within 0.35 rad on >= 4/5 probe "
+                           "seeds: run the scored stage"),
+               "NEGATIVE": ("STOP: NEGATIVE, the flush pad does not stop the roll (here: the flush pad with the "
+                            "wrist-orientation hold)"),
+               "INCOMPLETE": ("an episode is missing, short, or has no tilt log, auto-reset record or wrist-hold "
+                              "record: no decision")}[verdict]
+    return {**out, "verdict": verdict, "successes": n_ok, "of": len(rule["seeds"]), "missing_seeds": missing,
+            "per_seed": rows, "reading": reading,
+            "diagnostic_not_gated": {
+                "lift_hold_rule_successes": sum(1 for r in rows if r["base_rule_success"]),
+                "lifted_ge_0.10_m": sum(1 for r in rows if r["lift_peak_m"] >= LIFT_HOLD_RULE["lift_peak_m"]),
+                "note": "LIFT_HOLD_RULE's lift/hold/floor clauses and the hold's measurements are not part of the "
+                        "probe rule"}}
+
+
+def wristhold_group_summary(payload: dict, stage: str) -> dict:
+    """Per-pair counts of one scored score JSON (hold or place, one crew), from the JSON alone."""
+    rule = WRISTHOLD_HOLD_RULE if stage == "hold" else WRISTHOLD_PLACE_RULE
+    crew = int(payload.get("crew", -1)) if isinstance(payload, dict) else -1
+    bad = _wristhold_payload_problem(payload, stage, rule, crew) if crew in rule["crews"] else f"crew {crew}"
+    if bad:
+        return {"stage": stage, "crew": crew, "invalid": bad, "complete": False, "groups": []}
+    groups, complete = [], True
+    for k in range(crew // 2):
+        rows, missing = _wristhold_rows(payload, rule, k)
+        n_ok = sum(1 for r in rows if r["success"])
+        complete = complete and not missing
+        groups.append({"stage": stage, "crew": crew, "pair": k, "episodes": len(rows), "successes": n_ok,
+                       "missing_seeds": missing, "pass": bool(not missing and n_ok >= rule["pass_min"]),
+                       "base_rule_successes": sum(1 for r in rows if r["base_rule_success"]),
+                       "first_failed_check_counts": {
+                           c: sum(1 for r in rows if r["first_failed_check"] == c)
+                           for c in sorted({r["first_failed_check"] for r in rows} - {None})},
+                       "per_seed": rows})
+    return {"stage": stage, "crew": crew, "invalid": None, "complete": complete, "groups": groups}
+
+
+WRISTHOLD_SCORED_KEYS = ("hold_crew2", "hold_crew4", "place_crew2", "place_crew4")
+
+
+def wristhold_scored_verdict(payloads: dict) -> dict:
+    """Stage-2 verdict (pure): `payloads` maps "hold_crew2", "hold_crew4", "place_crew2", "place_crew4" to a score
+    JSON or None. PASS iff every crew/pair of both protocols has >= 8/10; INCOMPLETE if any episode is missing; INVALID
+    if a JSON is not under the frozen rule."""
+    out = {**_wristhold_head("scored"), "rule_text": WRISTHOLD_SCORED_RULE_TEXT,
+           "rules": {"hold": WRISTHOLD_HOLD_RULE, "place": WRISTHOLD_PLACE_RULE}}
+    groups, invalid, complete = [], [], True
+    for stage, rule in (("hold", WRISTHOLD_HOLD_RULE), ("place", WRISTHOLD_PLACE_RULE)):
+        for crew in rule["crews"]:
+            key = f"{stage}_crew{crew}"
+            pl = payloads.get(key)
+            if pl is None:
+                complete = False
+                groups.append({"stage": stage, "crew": crew, "pair": None, "missing_json": True, "pass": False})
+                continue
+            s = wristhold_group_summary(pl, stage)
+            if s["invalid"] or int(s["crew"]) != crew:
+                invalid.append(f"{key}: {s['invalid'] or 'crew mismatch'}")
+                continue
+            complete = complete and s["complete"]
+            groups += s["groups"]
+    if invalid:
+        verdict = "INVALID"
+    elif not complete:
+        verdict = "INCOMPLETE"
+    else:
+        verdict = "PASS" if len(groups) == 6 and all(g["pass"] for g in groups) else "NEGATIVE"
+    reading = {"PASS": "every crew/pair met its unchanged rule plus the 0.35 rad tilt clause on >= 8/10 seeds",
+               "NEGATIVE": "at least one crew/pair fell short of 8/10 under its unchanged rule plus the tilt clause",
+               "INCOMPLETE": "a score JSON or an episode is missing: no decision",
+               "INVALID": "a score JSON is not under the frozen rule: no decision"}[verdict]
+    return {**out, "verdict": verdict, "invalid": invalid, "reading": reading,
+            "groups": [{k: v for k, v in g.items() if k != "per_seed"} for g in groups],
+            "per_seed": {f"{g['stage']}_crew{g['crew']}_pair{g['pair']}": g.get("per_seed", []) for g in groups}}
+
+
+def wristhold_not_run_verdict(probe_verdict: dict | None) -> dict:
+    """Stage-2 verdict when the probe did not PROCEED: NOT_RUN, and seeds 20-39 stay unused."""
+    pv = (probe_verdict or {}).get("verdict", "MISSING")
+    return {**_wristhold_head("scored"), "rule_text": WRISTHOLD_SCORED_RULE_TEXT, "verdict": "NOT_RUN",
+            "probe_verdict": pv, "groups": [],
+            "reading": (f"stage 2 not run: the probe verdict is {pv}, not PROCEED (the frozen rule runs the scored "
+                        "stage only after PROCEED); seeds 20-39 stay unused")}
+
+
+def wristhold_smoke_check(payload: dict | None) -> dict:
+    """Pipeline checks of one wrist-hold SMOKE score JSON (stage "smoke", or "smoke_nohold" for the no-hold baseline;
+    pure; never a verdict on the variant): the variant built as designed, each episode ran the full 20 s on a throw-away
+    seed with no MuJoCo auto-reset, the cube tilt is logged at every policy-step state, finite, flat at reset and in
+    agreement with the harness's own trace, and the hold's record is well formed: twist logged at every state and 0 at
+    the grasp state, and (hold) every wrist target within the joint range and every applied wrist torque within the
+    cap. Outcomes (twist, tilt, lift, falls) are diagnostics, never gated."""
+    problems, rows = [], []
+    if not isinstance(payload, dict):
+        return {**_wristhold_head("smoke"), "verdict": "SMOKE_FAIL", "problems": ["no smoke score JSON"],
+                "episodes": []}
+    stage = payload.get("stage")
+    nohold = stage == "smoke_nohold"
+    crew = int(payload.get("crew", -1))
+    protocol = payload.get("protocol")
+    if payload.get("variant") != WRISTHOLD_VARIANT or stage not in ("smoke", "smoke_nohold"):
+        problems.append("not a wrist-hold smoke score JSON")
+    if payload.get("scored_run"):
+        problems.append("a smoke JSON must not be marked scored_run")
+    if crew not in (2, 4) or protocol not in ("lift_hold", "lift_place"):
+        problems.append(f"crew {crew} / protocol {protocol!r}")
+    if nohold and (crew != 2 or protocol != "lift_hold"):
+        problems.append("the no-hold baseline is crew 2, lift_hold")
+    frozen = FlushPadParams() if nohold else WristHoldParams()
+    if payload.get("params") != _jsonable(params_dict(frozen)):
+        problems.append(f"params differ from the frozen {type(frozen).__name__}")
+    if protocol == "lift_place" and payload.get("place_params") != _jsonable(place_params_dict(FlushPadPlaceParams())):
+        problems.append("place params differ from the frozen FlushPadPlaceParams")
+    mc = payload.get("model_check") or {}
+    if not flushpad_model_ok(mc, crew):
+        problems.append("model check does not show the flush-pad contact and harness options")
+    if not flushpad_design_matches_model(payload.get("flush_pad_design") or {}, mc):
+        problems.append("compiled hand pads differ from the flush-pad design")
+    if (payload.get("wrist_hold_design") or {}).get("chosen") != list(WristHoldParams().wrist_joints):
+        problems.append("the wrist-hold design record does not name the frozen wrist (elbow roll)")
+    eps = payload.get("episodes") or []
+    seeds = [int(e["seed"]) for e in eps]
+    if not eps:
+        problems.append("no episode")
+    if any(s not in WRISTHOLD_SMOKE_SEEDS for s in seeds):
+        problems.append("a seed outside the throw-away seeds 140-144")
+    rule = payload.get("rule") or {}
+    if (stage in ("smoke", "smoke_nohold") and protocol in ("lift_hold", "lift_place")
+            and rule != _jsonable(wristhold_stage_rule(stage, protocol, seeds))):
+        problems.append("rule differs from the smoke rule (full-length smoke episodes only)")
+    dt = float(payload.get("policy_dt") or 0.0)
+    n_full = int(round(20.0 / dt)) if dt > 0 else -1
+    for e in eps:
+        seed, steps = int(e["seed"]), int(e.get("steps", -1))
+        if e.get("failed") is not None:
+            problems.append(f"seed {seed}: episode failed ({e['failed']})")
+        if steps != n_full:
+            problems.append(f"seed {seed}: {steps} steps, expected {n_full}")
+        reset_logged, reset = _sim_reset_logged(e)
+        if not reset_logged:
+            problems.append(f"seed {seed}: no MuJoCo auto-reset record (sim_reset)")
+        elif reset:
+            problems.append(f"seed {seed}: MuJoCo auto-reset the simulation (numerical blow-up) in policy step "
+                            f"{(e.get('sim_reset') or {}).get('first_step')}")
+        bad = _wristhold_record_problem(e, not nohold, dt) if dt > 0 else "no policy_dt"
+        if bad:
+            problems.append(f"seed {seed}: {bad}")
+        rec = e.get("wrist_hold") or {}
+        if (rec.get("ik") or {}).get("nonfinite_fallbacks"):
+            problems.append(f"seed {seed}: the hold's IK produced a non-finite target")
+        for arm in rec.get("arms") or []:
+            lg = arm.get("servo_log") or {}
+            for tgt in lg.get("target") or []:
+                rng = (arm.get("summary") or {}).get("wrist_range") or []
+                if any(v is None or not (r[0] - 1e-12 <= v <= r[1] + 1e-12) for v, r in zip(tgt, rng)):
+                    problems.append(f"seed {seed} robot {arm.get('robot')}: a wrist target outside the joint range")
+                    break
+            caps = (arm.get("summary") or {}).get("cap_nm") or []
+            for c in lg.get("ctrl_after_nm") or []:
+                if any(v is None or abs(v) > cap + 1e-9 for v, cap in zip(c, caps)):
+                    problems.append(f"seed {seed} robot {arm.get('robot')}: an applied wrist torque above the cap")
+                    break
+        if len(e.get("pairs", [])) != max(crew // 2, 0):
+            problems.append(f"seed {seed}: {len(e.get('pairs', []))} pairs for crew {crew}")
+        for k, row in enumerate(e.get("pairs", [])):
+            ser = row.get("cube_tilt_series_rad")
+            if not isinstance(ser, list) or len(ser) != steps + 1:
+                problems.append(f"seed {seed} pair {k}: tilt series missing or not steps + 1 long")
+                continue
+            if any(v is None or not np.isfinite(v) for v in ser):
+                problems.append(f"seed {seed} pair {k}: non-finite tilt in the series")
+                continue
+            if abs(float(ser[0])) > 1e-9:
+                problems.append(f"seed {seed} pair {k}: tilt at reset {ser[0]} (the cube spawns flat)")
+            matched = 0
+            for tr in e.get("trace") or []:
+                i = int(round(float(tr["t"]) / dt)) if dt > 0 else -1
+                if not (0 <= i < steps):
+                    continue
+                tv = tr["cube_tilt_rad"][k]
+                if tv is None or abs(float(ser[i + 1]) - float(tv)) > 0.0005 + 1e-9:
+                    problems.append(f"seed {seed} pair {k}: tilt series disagrees with the trace at t={tr['t']}")
+                    break
+                matched += 1
+            if matched == 0:
+                problems.append(f"seed {seed} pair {k}: no trace entry to cross-check the tilt series")
+            try:
+                c = flushpad_clauses(rule, e, k, dt)
+                ch = flushpad_clauses(WRISTHOLD_HOLD_RULE, e, k, dt) if protocol == "lift_hold" else None
+            except Exception as exc:  # noqa: BLE001
+                problems.append(f"seed {seed} pair {k}: clauses do not compute ({exc!r})")
+                continue
+            if not c["tilt_logged"] or (ch is not None and not ch["tilt_logged"]):
+                problems.append(f"seed {seed} pair {k}: clauses report no tilt log")
+            rows.append({"seed": seed, "pair": k, "trace_points_checked": matched, "sim_reset_detected": reset,
+                         "diagnostic_cube_tilt_max_rad": max(ser), "diagnostic_clauses": c,
+                         "diagnostic_hold_stage_clauses": ch,
+                         "diagnostic_base_rule_success": bool(row.get("success")),
+                         "diagnostic_base_first_failed_check": row.get("first_failed_check"),
+                         "diagnostic_lift_peak_m": row.get("lift_peak_m"),
+                         "diagnostic_max_robot_tilt_rad": row.get("max_tilt_rad"),
+                         "diagnostic_wrist_hold": wristhold_pair_summary(e, k)})
+    return {**_wristhold_head(stage if stage in ("smoke", "smoke_nohold") else "smoke"),
+            "verdict": "SMOKE_FAIL" if problems else "SMOKE_PASS", "crew": crew, "protocol": protocol,
+            "seeds": seeds, "problems": problems, "episodes": rows,
+            "note": "pipeline check on a throw-away seed; outcomes are diagnostics, never a verdict"}
+
+
+#: The smoke launcher's steps, whose exit statuses it records in step_status.json (unit tests first).
+WRISTHOLD_SMOKE_STEPS = ("pytest", "smoke_hold_crew2", "smoke_place_crew4", "smoke_nohold_crew2")
+
+
+def wristhold_smoke_step_problems(status) -> list:
+    """Problems with the smoke's recorded step exit statuses (pure): every declared step, the unit tests first,
+    recorded as integer 0, and nothing recorded non-zero."""
+    if not isinstance(status, dict):
+        return ["no step-status record (step_status.json): the unit-test result is unknown"]
+    problems = []
+    for name in WRISTHOLD_SMOKE_STEPS:
+        if name not in status:
+            problems.append(f"step {name}: no recorded exit status")
+    for name, v in status.items():
+        if isinstance(v, bool) or not isinstance(v, int) or v != 0:
+            problems.append(f"step {name}: exit status {v!r}, not 0")
+    return problems
+
+
+def wristhold_smoke_measurement(hold: dict | None, nohold: dict | None, place: dict | None = None) -> dict:
+    """The smoke's measurement (pure; diagnostics, never a verdict): how much of the hand's rotation about the pinch
+    axis the hold removes (the crew-2 lift_hold episode with the hold against the no-hold baseline on the same seed),
+    whether the wrist stays within its range and under the 4 Nm cap, and the cube tilt with and without the hold."""
+    def first(pl):
+        eps = (pl or {}).get("episodes") or []
+        return eps[0] if eps else None
+
+    def hands(ep):
+        return {a.get("side"): a for a in ((ep or {}).get("wrist_hold") or {}).get("arms") or []}
+
+    eh, en = first(hold), first(nohold)
+    out = {"seed_hold": None if eh is None else eh.get("seed"), "seed_nohold": None if en is None else en.get("seed"),
+           "same_seed": eh is not None and en is not None and eh.get("seed") == en.get("seed"), "hands": {},
+           "note": ("twist = the hand's rotation about the pinch axis relative to the grasp state; removed = 1 - "
+                    "|with hold| / |no hold|; diagnostics on a throw-away seed, never a verdict")}
+    hh, hn = hands(eh), hands(en)
+    for side in ("left", "right"):
+        a, b = (hh.get(side) or {}).get("summary") or {}, (hn.get(side) or {}).get("summary") or {}
+
+        def removed(key):
+            x, y = a.get(key), b.get(key)
+            if x is None or y is None or abs(y) < 1e-12:
+                return None
+            return round(1.0 - abs(x) / abs(y), 4)
+        out["hands"][side] = {
+            "twist_at_lift_end_rad": {"hold": a.get("twist_at_lift_end_rad"), "no_hold": b.get("twist_at_lift_end_rad")},
+            "twist_max_abs_rad": {"hold": a.get("twist_max_abs_rad"), "no_hold": b.get("twist_max_abs_rad")},
+            "twist_final_rad": {"hold": a.get("twist_final_rad"), "no_hold": b.get("twist_final_rad")},
+            "swing_max_rad": {"hold": a.get("swing_max_rad"), "no_hold": b.get("swing_max_rad")},
+            "removed_fraction_at_lift_end": removed("twist_at_lift_end_rad"),
+            "removed_fraction_of_max": removed("twist_max_abs_rad"),
+            "wrist": {k: a.get(k) for k in ("wrist_q_min", "wrist_q_max", "wrist_range",
+                                            "steps_within_0.01_rad_of_a_limit", "beyond_range_max_rad",
+                                            "target_clamped_steps", "first_clamped_t_s", "held_steps")},
+            "cap": {k: a.get(k) for k in ("pd_demand_max_abs_nm", "pd_demand_above_cap_steps", "first_above_cap_t_s",
+                                          "cap_nm", "ctrl_after_max_abs_nm")}}
+
+    def cube(ep):
+        if ep is None:
+            return None
+        r = ep["pairs"][0]
+        ser = [v for v in r.get("cube_tilt_series_rad") or [] if v is not None]
+        return {"cube_tilt_max_rad": max(ser) if ser else None, "lift_peak_m": r.get("lift_peak_m"),
+                "lift_hold_s": r.get("lift_hold_s"), "base_rule_success": r.get("success"),
+                "base_first_failed_check": r.get("first_failed_check"), "max_robot_tilt_rad": r.get("max_tilt_rad"),
+                "cube_floor_contact": r.get("cube_floor_contact")}
+    out["cube"] = {"hold": cube(eh), "no_hold": cube(en)}
+    ep_place = first(place)
+    if ep_place is not None:
+        out["place_crew4"] = {
+            "seed": ep_place.get("seed"),
+            "hands": [{"robot": a.get("robot"), "pair": a.get("pair"), "side": a.get("side"),
+                       **{k: (a.get("summary") or {}).get(k) for k in (
+                           "twist_at_lift_end_rad", "twist_max_abs_rad", "swing_max_rad", "target_clamped_steps",
+                           "steps_within_0.01_rad_of_a_limit", "pd_demand_above_cap_steps", "pd_demand_max_abs_nm",
+                           "ctrl_after_max_abs_nm")}}
+                      for a in (ep_place.get("wrist_hold") or {}).get("arms") or []],
+            "pairs": [{"pair": r.get("pair"), "base_rule_success": r.get("success"),
+                       "base_first_failed_check": r.get("first_failed_check"), "lift_peak_m": r.get("lift_peak_m"),
+                       "cube_tilt_max_rad": max([v for v in r.get("cube_tilt_series_rad") or [] if v is not None],
+                                                default=None)} for r in ep_place.get("pairs", [])]}
+    return out
+
+
+def wristhold_file_summary(payload: dict) -> dict:
+    """Summary written into a wrist-hold score JSON after every episode (the verdict JSONs are written by the launcher
+    from these files). Smoke runs report the pipeline checks and never a verdict on the variant."""
+    stage = payload.get("stage")
+    if stage == "probe":
+        return wristhold_probe_verdict(payload)
+    if stage in ("hold", "place"):
+        return wristhold_group_summary(payload, stage)
+    return wristhold_smoke_check(payload)
+
+
+def wristhold_verdict_line(v: dict) -> str:
+    """One line for the log, from a verdict / summary dict."""
+    stage = v.get("stage")
+    if stage == "probe":
+        body = (f"{v.get('successes')}/{v.get('of')} seeds kept cube tilt <= {WRISTHOLD_TILT_MAX_RAD} rad with no fall "
+                f"(need >= {WRISTHOLD_PROBE_RULE['pass_min']}); missing {v.get('missing_seeds')}; "
+                + " ".join(f"s{r['seed']}:max_tilt={r.get('cube_tilt_max_rad')},fail={r['first_failed_check']}"
+                           for r in v.get("per_seed", [])))
+        if v.get("reason"):
+            body += f" ({v['reason']})"
+    elif stage == "scored":
+        body = " ".join(f"{g['stage']}/crew{g['crew']}/pair{g['pair']}="
+                        + ("missing" if g.get("missing_json") else f"{g['successes']}/{g['episodes']}")
+                        for g in v.get("groups", [])) or v.get("reading", "")
+        if v.get("invalid"):
+            body += f" invalid: {v['invalid']}"
+    elif stage in ("hold", "place"):
+        body = " ".join(f"crew{g['crew']}/pair{g['pair']}={g['successes']}/{g['episodes']}"
+                        for g in v.get("groups", [])) or f"invalid: {v.get('invalid')}"
+    else:
+        body = (" ".join(f"seed{r['seed']}/pair{r['pair']}:max_tilt={r['diagnostic_cube_tilt_max_rad']:.3f},"
+                         f"base={r['diagnostic_base_first_failed_check'] or 'ok'},twist_max="
+                         + "/".join(f"{h.get('side')}:{h.get('twist_max_abs_rad')}"
+                                    for h in r.get("diagnostic_wrist_hold") or [])
+                         for r in v.get("episodes", []))
+                + (f" problems: {v['problems']}" if v.get("problems") else ""))
+    verdict = v.get("verdict") or ("INVALID" if v.get("invalid") else
+                                   "COMPLETE" if v.get("complete") else "INCOMPLETE")
+    return f"COOP-WRISTHOLD {stage}: {verdict} | {body} | {WRISTHOLD_HOLD_NOTE} | {WRISTHOLD_LABEL}"
+
+# --- end coop-wristhold ---

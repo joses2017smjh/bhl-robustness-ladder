@@ -9,6 +9,12 @@ step, so the stage can acquire its existing .78 m capture region before
 physical plate contact.  Route navigation, plate geometry, stage internals,
 termination, and the fall predicate remain unchanged.  The selected layout
 indices are intentionally small and are supplied explicitly by the submitter.
+
+--- m7-fix --- (opt-in, --stage-gait clocks2 | export only): --cross-budget window
+(F2) and --yaw-cap 0.6 (F3) go to the PlateStage; with --yaw-cap the env is
+DebugEnv(..., yaw_scale=0.6) and every physical command is encoded with the
+0.60 yaw scale, while the route controller's own actions are re-encoded in wz
+only, so they keep their physical values (cap semantics).
 """
 from __future__ import annotations
 
@@ -28,6 +34,8 @@ from bhl_robust.mission.approach_debug import (DebugEnv, PlateSafeRouteControlle
 from mission7_gates import route_gate_block
 from mission7_plate_stage import STAGE_GAITS, PlateStage, m3_constants, stage_gait_description, turnboth_check
 from mission7_plate_stage import EXPORT_STAGE_GAITS, export_check, export_dir_for, select_export_gait  # m7-clocks2
+from mission7_plate_stage import (FIX_COMMAND_CLIP, FIX_CROSS_BUDGETS, FIX_YAW_CAPS, fix_command_scales,  # m7-fix
+                                  fix_constants, fix_description, fix_kwargs)
 
 
 # Body-frame command scales (vx, vy, wz) shared by every conversion below.
@@ -139,14 +147,24 @@ def summarize_chain(chain, t0, t1, defaults, effort, reference=None):
     return stats
 
 
-def action_to_physical(action):
-    return np.tanh(np.asarray(action, dtype=float)[:3]) * COMMAND_SCALES
+def action_to_physical(action, scales=COMMAND_SCALES):
+    return np.tanh(np.asarray(action, dtype=float)[:3]) * scales
 
 
-def physical_to_action(command, base_action):
+def physical_to_action(command, base_action, scales=COMMAND_SCALES):
     action = np.asarray(base_action, dtype=float).copy()
-    action[:3] = np.arctanh(np.clip(np.asarray(command, dtype=float) / COMMAND_SCALES,
+    action[:3] = np.arctanh(np.clip(np.asarray(command, dtype=float) / scales,
                                     -0.999999, 0.999999))
+    return action
+
+
+def route_action_under_cap(base_action, scales):
+    """--- m7-fix --- F3 with cap semantics: the route controller's own action (its wz encoded at the 0.40 scale by
+    approach_debug.command_action) re-encoded in wz only, so MissionEnv(yaw_scale=scales[2]) delivers the route's
+    physical yaw command unchanged; vx, vy, activate and acquire are untouched."""
+    action = np.asarray(base_action, dtype=float).copy()
+    wz = np.tanh(action[2]) * COMMAND_SCALES[2]
+    action[2] = np.arctanh(np.clip(wz / scales[2], -FIX_COMMAND_CLIP, FIX_COMMAND_CLIP))
     return action
 
 
@@ -158,8 +176,15 @@ class RouteHandoffController:
                  stage_activate=False, exit_ramp_s=0., stage_press_hold=False,
                  stage_wait_open_s=2.0, pre_point_m=.30, cross_clear_m=None, stall_min_s=.8,
                  settle_s=.40, cross_kick=False, rejoin_advance=False, exit_ramp_center=False,
-                 align_yaw=False, stage_gait="shipped"):
+                 align_yaw=False, stage_gait="shipped", cross_budget=None, yaw_cap=None):
         self.env = env
+        # --- m7-fix --- F3: the scales every physical command is encoded with for MissionEnv.step, which must decode
+        # with the same yaw scale (DebugEnv(..., yaw_scale=yaw_cap)); the default is the module's COMMAND_SCALES object.
+        self.yaw_cap = None if yaw_cap is None else float(yaw_cap)
+        self.command_scales = COMMAND_SCALES if yaw_cap is None else fix_command_scales(yaw_cap)
+        if getattr(env, "yaw_scale", None) != self.yaw_cap:
+            raise ValueError(f"the env's yaw_scale {getattr(env, 'yaw_scale', None)!r} differs from --yaw-cap "
+                             f"{self.yaw_cap!r}: MissionEnv would decode the commands with another scale")
         self.handoff_mode = handoff_mode
         self.rejoin_diagnostic = bool(rejoin_diagnostic)
         self.rejoin_fix = rejoin_fix
@@ -188,6 +213,7 @@ class RouteHandoffController:
                                              if (stage_activate or stage_press_hold) else 0.),
                                 press_hold=stage_press_hold, pre_point_m=pre_point_m,
                                 cross_clear_m=cross_clear_m, settle_s=settle_s, cross_kick=cross_kick,
+                                cross_budget=cross_budget, yaw_cap=yaw_cap,   # --- m7-fix --- None: the default path
                                 align_yaw=align_yaw, stage_gait=stage_gait)
         # Exposure criterion: no progress toward the waypoint for stall_min_s.
         # 0.8 s is what Campaigns A/B used; the two genuine stalls never moved
@@ -548,7 +574,7 @@ class RouteHandoffController:
                 if not self.phase_history or self.phase_history[-1].get("phase") != self.env.phase:
                     self.phase_history.append({"time_s": now, "phase": self.env.phase,
                                                "event": "transition"})
-                effective_action = physical_to_action(command, base_action)
+                effective_action = physical_to_action(command, base_action, self.command_scales)
                 if self.stage_activate or self.stage_press_hold:
                     # Same value the route uses in its switch phase.
                     effective_action[3] = 2.
@@ -556,6 +582,9 @@ class RouteHandoffController:
                 effective_action = base_action
         else:
             effective_action = base_action
+        if self.yaw_cap is not None and effective_action is base_action:
+            # --- m7-fix --- F3 (cap semantics): the route's own command keeps its physical value under the 0.60 scale
+            effective_action = route_action_under_cap(base_action, self.command_scales)
         # Stage exit is tracked unconditionally: it is one timestamp, and
         # gating it on --rejoin-diagnostic meant the intervention could not run
         # without also enabling the tracing that monkey-patches route.action and
@@ -662,13 +691,15 @@ class RouteHandoffController:
                 world = self.exit_ramp_direction * .30 + lateral_vec / max(np.linalg.norm(lateral_vec), 1e-9) * min(.25, np.linalg.norm(lateral_vec))
                 body = rot @ world
                 self.env.phase = "exit_ramp_center"
-                effective_action = physical_to_action([np.clip(body[0], 0., .4), np.clip(body[1], -.35, .35), 0.], base_action)
+                effective_action = physical_to_action([np.clip(body[0], 0., .4), np.clip(body[1], -.35, .35), 0.], base_action,
+                                                      self.command_scales)
             else:
                 body = rot @ (self.exit_ramp_direction * .30)
                 self.env.phase = "exit_ramp"
-                effective_action = physical_to_action([np.clip(body[0], 0., .4), 0., 0.], base_action)
+                effective_action = physical_to_action([np.clip(body[0], 0., .4), 0., 0.], base_action,
+                                                      self.command_scales)
         if self.rejoin_fix_until > now:
-            without = action_to_physical(effective_action)
+            without = action_to_physical(effective_action, self.command_scales)
             imposed = np.asarray([REJOIN_PULSE_MPS, 0., 0.], dtype=float)
             delta = imposed - without
             self.rejoin_fix_command_delta = max(
@@ -683,7 +714,7 @@ class RouteHandoffController:
                 "forward_delta_mps": float(abs(delta[0])),
             })
             self.env.phase = "rejoin_recover"
-            effective_action = physical_to_action(imposed, base_action)
+            effective_action = physical_to_action(imposed, base_action, self.command_scales)
         if self.rejoin_diagnostic:
             route_snapshot_after = self._route_snapshot()
             self.decision_events.append({
@@ -778,7 +809,8 @@ def run(args):
     for stage in stages:
         for index in indices:
             env = DebugEnv(args.repo, args.out / f"{stage}-{index}-cache",
-                           stage=stage, split="validation", seed=1000)
+                           stage=stage, split="validation", seed=1000,
+                           yaw_scale=getattr(args, "yaw_cap", None))   # --- m7-fix --- F3 (None: the default env)
             env.reset(index)
             controller = RouteHandoffController(
                 env, handoff_mode=args.handoff, rejoin_diagnostic=args.rejoin_diagnostic,
@@ -789,6 +821,7 @@ def run(args):
                 cross_clear_m=args.cross_clear, stall_min_s=args.stall_min_s,
                 settle_s=args.settle_s, cross_kick=args.cross_kick,
                 rejoin_advance=args.rejoin_advance, exit_ramp_center=args.exit_ramp_center,
+                **fix_kwargs(args),   # --- m7-fix --- {} unless --cross-budget / --yaw-cap
                 align_yaw=args.align_yaw, stage_gait=getattr(args, "stage_gait", "shipped"))
             while True:
                 env.runner.contact_trace = []
@@ -985,6 +1018,8 @@ def run(args):
                 row.update(stage_gait=args.stage_gait, gait_events=controller.stage.gait_events)
                 if args.stage_gait == "m3":   # turnboth rows keep their keys
                     row["m3_events"] = controller.stage.m3_events
+            if fix_kwargs(args):   # --- m7-fix --- (every other row keeps its keys)
+                row.update(stage_fix=fix_constants(**fix_kwargs(args)), env_yaw_scale=env.yaw_scale)
             record_name = f"{stage}-{index}.json"
             (args.out / record_name).write_text(json.dumps(row, indent=2) + "\n")
             summary = compact_episode(row, record_name)
@@ -1075,6 +1110,9 @@ def run(args):
         result["stage_gait_description"] = stage_gait_description(args.stage_gait)
     if export_provenance is not None:   # --- m7-clocks2 --- the export's record, checked before the first episode
         result["stage_gait_provenance"] = export_provenance
+    if fix_kwargs(args):   # --- m7-fix --- F2 / F3 (every other result is unchanged)
+        result["stage_gait_description"] += "; " + fix_description(**fix_kwargs(args))
+        result["stage_fix"] = fix_constants(**fix_kwargs(args))
     (args.out / "result.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps({
         "status": result["status"],
@@ -1164,6 +1202,14 @@ if __name__ == "__main__":
                         help="--stage-gait export only: the exported directory swapped in as the stage controller")
     parser.add_argument("--stage-gait-export-sha256", default=None,
                         help="--stage-gait export only: refuse the export unless its policy.onnx has this sha256")
+    # --- m7-fix --- F2 / F3 (opt-in; --stage-gait clocks2 | export only)
+    parser.add_argument("--cross-budget", choices=FIX_CROSS_BUDGETS, default=None,
+                        help="F2: the stage's crossing ends at the clear point or when 0.2 s of the 10 s window from "
+                             "the stage's takeover (its capture) remains, instead of at the fixed 4.0 s bound")
+    parser.add_argument("--yaw-cap", type=float, choices=FIX_YAW_CAPS, default=None,
+                        help="F3: Mission 7's yaw command scale 0.60 rad/s in MissionEnv and in this probe's "
+                             "encoding (the route's own commands keep their physical values) and the stage's "
+                             "in-place turn at 0.60 rad/s")
     parser.add_argument("--preflight", action="store_true",
                         help="validate interpreter, imports and arguments, then exit "
                              "without running any episode")
@@ -1181,6 +1227,12 @@ if __name__ == "__main__":
         parser.error("--stage-gait-export-sha256 pins a --stage-gait export only")
     if args.stage_gait == "export":
         select_export_gait(args.stage_gait_export, args.stage_gait_export_sha256)
+    # --- m7-fix ---
+    if fix_kwargs(args) and args.stage_gait not in EXPORT_STAGE_GAITS:
+        parser.error("--cross-budget / --yaw-cap compose with --stage-gait clocks2 | export only")
+    if args.cross_budget is not None and args.cross_clear is not None:
+        parser.error("--cross-budget ends the crossing at mission7_gates' clear (0.35 m); --cross-clear does not "
+                     "compose with it")
     args.repo = args.repo.resolve()
     args.out = args.out.resolve()
     if not args.out.is_relative_to(args.repo):
@@ -1212,6 +1264,8 @@ if __name__ == "__main__":
         if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- the export check, before any queue time
             upstream = args.repo / "external/Berkeley-Humanoid-Lite"
             preflight["stage_gait_check"] = export_check(upstream, *export_dir_for(upstream, args.stage_gait))
+        if fix_kwargs(args):   # --- m7-fix --- (every other preflight line is unchanged)
+            preflight["stage_fix"] = fix_constants(**fix_kwargs(args))
         print(json.dumps(preflight, sort_keys=True), flush=True)
         raise SystemExit(0)
     run(args)

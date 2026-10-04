@@ -1,0 +1,136 @@
+{
+  "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_16-28-53_arms-turngait-hold-s0/exported/deploy.yaml",
+  "variant": "humanoid",
+  "protocol": "v2",
+  "turns": [
+    {
+      "name": "turn+_s0",
+      "seed": 0,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": 121.6,
+      "displacement_m": 0.614,
+      "seconds": 6.0,
+      "ok": false
+    },
+    {
+      "name": "turn-_s0",
+      "seed": 0,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        -0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -296.7,
+      "displacement_m": 0.226,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn+_s1",
+      "seed": 1,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": 158.0,
+      "displacement_m": 0.477,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn-_s1",
+      "seed": 1,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        -0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -289.6,
+      "displacement_m": 0.121,
+      "seconds": 6.0,
+      "ok": true
+    },
+    {
+      "name": "turn+_s2",
+      "seed": 2,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": 148.2,
+      "displacement_m": 0.549,
+      "seconds": 6.0,
+      "ok": false
+    },
+    {
+      "name": "turn-_s2",
+      "seed": 2,
+      "warm_s": 3.0,
+      "cmd": [
+        0.0,
+        0.0,
+        -0.6
+      ],
+      "fell_at_s": null,
+      "yaw_deg": -292.7,
+      "displacement_m": 0.19,
+      "seconds": 6.0,
+      "ok": true
+    }
+  ],
+  "walk": {
+    "name": "walk_s0",
+    "seed": 0,
+    "warm_s": 1.0,
+    "cmd": [
+      0.35,
+      0.0,
+      0.0
+    ],
+    "fell_at_s": null,
+    "yaw_deg": -65.5,
+    "displacement_m": 1.931,
+    "seconds": 6.0,
+    "ok": false
+  },
+  "turn_ok": false,
+  "walk_ok": false,
+  "n_turn_ok": 4,
+  "n_turn": 6,
+  "verdict": "FAIL",
+  "rule": {
+    "turn_min_deg": 150.0,
+    "drift_max_deg": 15.0,
+    "seconds": 6.0,
+    "turn_seeds": [
+      0,
+      1,
+      2
+    ],
+    "turn_wz": 0.6,
+    "turn_warm_s": 3.0,
+    "walk_cmd": [
+      0.35,
+      0.0,
+      0.0
+    ],
+    "walk_warm_s": 1.0,
+    "walk_seed": 0
+  }
+}

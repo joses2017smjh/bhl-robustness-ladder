@@ -92,9 +92,14 @@ class MissionRunner(MultiRunner):
 
 class MissionEnv:
     def __init__(self, repo, cache, *, arm="both", stage="approach", split="train", seed=0,
-                 failure="normal", max_seconds=None):
+                 failure="normal", max_seconds=None, yaw_scale=None):
         if stage not in STAGES or split not in SPLITS:
             raise ValueError("unknown curriculum stage or split")
+        # Opt-in yaw command scale (rad/s per unit tanh action; m7-fix F3, Mission 7 yaw cap 0.60).  None keeps the
+        # interface as it is (tanh x 0.4); vx and vy scales never change.
+        if yaw_scale is not None and not (np.isfinite(yaw_scale) and yaw_scale > 0):
+            raise ValueError("yaw_scale must be a positive finite number or None")
+        self.yaw_scale = None if yaw_scale is None else float(yaw_scale)
         self.repo, self.cache = Path(repo), Path(cache)
         self.cache.mkdir(parents=True, exist_ok=True)
         self.upstream = self.repo / "external/Berkeley-Humanoid-Lite"
@@ -194,6 +199,8 @@ class MissionEnv:
         # Smooth bounded action transformation; PPO stores the untransformed action.
         bounded = np.tanh(action)
         command = bounded[:3]*[.4, .35, .4]
+        if self.yaw_scale is not None:   # opt-in (m7-fix F3): the yaw command scale only
+            command[2] = bounded[2]*self.yaw_scale
         reward = 0.
         r, s, m = self.runner, self.slot, self.state
         for _ in range(self.repeat):

@@ -41,6 +41,14 @@ verdict.
 --stage-gait-export <exported dir> runs the same bench, rule, grid and protocol with PlateStage's export stage gait:
 the stage CONTROLLER is swapped at takeover (scripts/mission7_plate_stage.py, M2's turnboth law unchanged).  Launcher:
 slurm/repo20260923/cpu_m7_plate_bench_v2_clocks2.sbatch; the turnboth and m3 paths are unchanged.
+
+--- m7-fix (2026-10-03, opt-in, with --stage-gait clocks2 | export only): --cross-budget window (F2: the crossing ends
+at the clear point or when 0.2 s of the 10 s clear window remains) and --yaw-cap 0.6 (F3: Mission 7's yaw command
+scale 0.60 rad/s through this bench's transform, the stage's in-place turn at 0.60 rad/s) run the same bench, rule,
+grid and protocol through run_crossing_fix (run_crossing with exactly those changes, plus the controller's received
+command per sample).  The smoke of these options runs on exploration train layouts 32-169 except D's smoke layouts 32, 33
+and 38 (FIX_SMOKE_LAYOUTS, FIX_SMOKE_EXCLUDED); 170-249 is the crossing diagnosis (D)'s range.
+Launcher: slurm/repo20260923/cpu_m7_plate_bench_v2_fix.sbatch.  Every other path is unchanged.
 """
 from __future__ import annotations
 
@@ -92,6 +100,27 @@ DISCLOSURE_CLOCKS2 = (
     "likely to fail on timing alone unless the gait turns faster than commanded")
 V2_CLOCKS2_LAUNCHER = "slurm/repo20260923/cpu_m7_plate_bench_v2_clocks2.sbatch"
 GAIT_CLOCK_SOURCE = "src/bhl_robust/eval/gait_clock.py"   # the clock controller the export gaits build
+# --- m7-fix --- (2026-10-03; SLURM_JOBS.md "User approval recorded 2026-10-03 09:55", item F, parts F2 + F3): the
+# opt-in --cross-budget window / --yaw-cap 0.6 with --stage-gait clocks2 | export (= mission7_plate_stage.FIX_*, which
+# this module does not import at load time), their chain, labels and the design's disclosures.  RULE_V2 is theirs
+# verbatim; bench_v2_verdict, the grid, DROPPED and the protocol are unchanged.
+FIX_CROSS_BUDGETS_V2 = ("window",)
+FIX_YAW_CAPS_V2 = (.60,)
+V2_FIX_LAUNCHER = "slurm/repo20260923/cpu_m7_plate_bench_v2_fix.sbatch"
+# The fix smoke's exploration TRAIN layouts: 32-169 (generate("train", L) exists for L < 256 only), except 32, 33 and 38
+# (the crossing diagnosis (D)'s smoke layouts).  Never a bench layout (0-31), never D's diagnosis range 170-249 (the
+# coordinator's correction of 2026-10-03: D's declared 250-289 does not exist), never a validation layout.
+FIX_SMOKE_LAYOUTS = (32, 170)
+FIX_SMOKE_EXCLUDED = (32, 33, 38)
+CHAIN_V2_FIX = (
+    "a chain, each step only after the previous PASSES: bench v2 with --stage-gait clocks2 | export --cross-budget "
+    "window --yaw-cap 0.6 -> the unchanged exact ten-fall replay once with the same stage gait and options (complete, "
+    "10 episodes, 10 upright, 0 falls; release arm m7-fix) -> the route gate as coded by M1 with the same stage gait "
+    "and options (Doors and Transport each >= 16/16 successes on validation layouts 0-15, 32 episodes)")
+DISCLOSURE_FIX = (
+    "Bundling means a PASS is not attributable to one change. Faster turns in narrow cells add wall-contact and fall "
+    "risk (6 of 8 180-deg turns already touched walls at 0.40; the clocks2 bench's only fall, 21517668 L22 d0, was "
+    "during the in-place turn). Crossing until clear produced a replay fall before (9/10).")
 
 BENCH_SPLIT = v1.BENCH_SPLIT              # "train"
 TOTAL_GRID = v1.TOTAL                     # 64
@@ -375,6 +404,39 @@ def parse_smoke_specs(text):
     return specs
 
 
+def parse_fix_smoke_specs(text):
+    """--- m7-fix --- smoke crossings of the F2 / F3 options (pure): parse_smoke_specs' format, labels and drop rule on
+    exploration train layouts FIX_SMOKE_LAYOUTS (32-169) minus FIX_SMOKE_EXCLUDED (D's smoke layouts 32, 33, 38) only --
+    never a bench layout (0-31), never the diagnosis range 170-249, never a validation layout.  Smoke only, never
+    scored."""
+    specs = []
+    lo, hi = FIX_SMOKE_LAYOUTS
+    for item in (x.strip() for x in text.split(",")):
+        if not item:
+            continue
+        parts = item.split(":")
+        if len(parts) not in (2, 5):
+            raise ValueError(f"smoke crossing {item!r} is not L:d or L:d:heading:plate:entry")
+        layout_index, door = int(parts[0]), int(parts[1])
+        if not lo <= layout_index < hi or layout_index in FIX_SMOKE_EXCLUDED or door not in v1.BENCH_DOORS:
+            raise ValueError(f"fix smoke crossings must use exploration train layouts {lo}-{hi - 1} except "
+                             f"{FIX_SMOKE_EXCLUDED} and doors 0/1, never a scored layout or the diagnosis range "
+                             f"170-249: {item!r}")
+        heading, plate, entry = (cell_of(layout_index, door) if len(parts) == 2
+                                 else (int(parts[2]), parts[3], parts[4]))
+        if heading not in v1.HEADINGS_DEG or plate not in v1.PLATES or entry not in v1.ENTRIES:
+            raise ValueError(f"smoke crossing {item!r} has labels outside the grid's")
+        if entry == "walking" and not crossing_geometry(generate(BENCH_SPLIT, layout_index), door, plate, heading,
+                                                        entry)["walking_geometrically_clear"]:
+            raise ValueError(f"smoke walking crossing {item!r} fails the drop rule")
+        specs.append({"layout": layout_index, "door": door, "heading_deg": heading, "plate": plate, "entry": entry})
+    if not specs:
+        raise ValueError("--mode smoke needs --crossings")
+    if len({(s["layout"], s["door"]) for s in specs}) != len(specs):
+        raise ValueError("duplicate smoke crossing")
+    return specs
+
+
 def check_rescore_m2(m2_dir):
     """Re-score every M2 crossing that reached the stage with v2's per-crossing clear computation (evidence)."""
     m2_dir = Path(m2_dir)
@@ -544,6 +606,135 @@ def run_crossing(repo, cache, spec, stage_gait):
     return result
 
 
+def run_crossing_fix(repo, cache, spec, stage_gait, cross_budget=None, yaw_cap=None):
+    """--- m7-fix --- one v2 crossing with --cross-budget / --yaw-cap (F2 / F3): run_crossing with exactly these
+    changes (tests/test_mission7_fix.py diffs the two sources): the stage gets the options, every command passes
+    through capped_command (bitwise v1._route_transform without --yaw-cap; the 0.60 yaw scale with it), each sample
+    records the command the active controller received (policy_command = its observation's first three entries),
+    and the result records the options and its fix_summary (computed here: v1.read_results drops the samples)."""
+    from bhl_robust.mission.approach_debug import DebugEnv, physical_sample, wrap
+    from mission7_plate_stage import PlateStage, _yaw, capped_command, fix_constants
+    layout_index, door = int(spec["layout"]), int(spec["door"])
+    env = DebugEnv(repo, cache, stage="doors", split=BENCH_SPLIT, seed=SEED_BASE + 2 * layout_index + door)
+    env.reset(layout_index)
+    layout, runner = env.layout, env.runner
+    geometry = crossing_geometry(layout, door, spec["plate"], spec["heading_deg"], spec["entry"])
+    entry_yaw, pre = geometry["entry_yaw_rad"], np.asarray(geometry["pre_point"])
+    v1._place(env, np.asarray(geometry["spawn"]), entry_yaw)
+    spawn = {"xy": geometry["spawn"], "yaw_rad": entry_yaw,
+             "base_z_m": float(runner.d.qpos[env.slot.qpos_adr + 2]), "contacts": _spawn_contacts(env)}
+    stage = PlateStage(env, stage_gait=stage_gait, cross_budget=cross_budget, yaw_cap=yaw_cap)
+    walking = spec["entry"] == "walking"
+    samples, events = [], []
+    state, state_s = "bench_settle", float(runner.d.time)
+    takeover_s = handback_s = None
+    end_reason = None
+    fell = False
+    while end_reason is None:
+        now = float(runner.d.time)
+        xy = runner.d.xpos[env.slot.body_id, :2].copy()
+        command = np.zeros(3)
+        if state == "bench_settle" and now + TIME_EPS_S >= state_s + SETTLE_S:
+            if walking:
+                state, state_s = "bench_walk", now
+                events.append({"time_s": now, "event": "walk_start", "distance_to_pre_point_m": float(np.linalg.norm(xy - pre))})
+            else:
+                state = "takeover"
+        if state == "bench_walk":
+            if np.linalg.norm(xy - pre) <= ARRIVE_M:
+                events.append({"time_s": now, "event": "arrived", "distance_m": float(np.linalg.norm(xy - pre)),
+                               "walk_s": now - state_s})
+                state = "takeover"
+            elif now - state_s >= WALK_MAX_S - TIME_EPS_S:
+                end_reason = "walk_timeout"
+                break
+            else:
+                command = np.array([WALK_SPEED, 0., float(np.clip(YAW_HOLD_GAIN * wrap(entry_yaw - _yaw(env)),
+                                                                  -YAW_HOLD_MAX, YAW_HOLD_MAX))])
+        if state == "takeover":
+            stage._start(door, geometry["side"], now)
+            takeover_s, state = now, "stage"
+            events.append({"time_s": now, "event": "takeover",
+                           "speed_mps": float(np.linalg.norm(runner.d.qvel[env.slot.qvel_adr:env.slot.qvel_adr + 2])),
+                           "distance_to_pre_point_m": float(np.linalg.norm(xy - pre)), "yaw_rad": _yaw(env)})
+        if state == "stage":
+            if now - takeover_s >= STAGE_MAX_S:
+                end_reason = "stage_timeout"
+                break
+            command, phase = stage.command(np.zeros(3))
+            if phase == "recorded":
+                handback_s, state, state_s = now, "bench_post", now
+                events.append({"time_s": now, "event": "handback"})
+        if state == "bench_post":
+            if now + TIME_EPS_S >= state_s + POST_HANDBACK_S:
+                end_reason = "complete"
+                break
+            command = np.zeros(3)
+        label = "stage_" + stage.phase if state == "stage" else state
+        applied = capped_command(command, yaw_cap)
+        for _ in range(DECISION_TICKS):
+            targets = env.controller.update(runner.observe(0, applied))
+            received = env.controller.policy_observations[0, :3].astype(float).tolist()
+            runner.step([targets])
+            if not np.isfinite(runner.d.qpos).all() or runner.d.warning.number.sum():
+                raise FloatingPointError("plate-bench-v2 physics warning")
+            sample = physical_sample(env, applied, label)
+            sample["policy_command"] = received
+            sample["plate_presses"] = sorted([int(p), bool(c)] for p, c in runner.button_contacts)
+            samples.append(sample)
+            if sample["tilt"] >= FALL_TILT:
+                fell, end_reason = True, "fall"
+                break
+    tilts = [s["tilt"] for s in samples]
+    fall_s = next((s["time_s"] for s in samples if s["tilt"] >= FALL_TILT), None)
+    row = {"layout_index": layout_index, "layout_seed": int(layout.seed),
+           "replay_elapsed_s": samples[-1]["time_s"] if samples else None,
+           "first_fall_s": fall_s, "maximum_tilt": max(tilts) if tilts else None,
+           "stage_history": stage.history, "samples": samples}
+    scored = score_crossing(row, layout, door, takeover_s)
+    target = [door, spec["plate"] == "round"]
+    stage_samples = [s for s in samples if s["phase"].startswith("stage_")]
+    presses = [s for s in samples if s["plate_presses"]]
+    wall = [s for s in samples if s["contacts"]]
+    result = {
+        **{key: spec[key] for key in ("layout", "door", "heading_deg", "plate", "entry")},
+        "bench": "v2", "stage_gait": stage_gait,
+        "complete": True, "end_reason": end_reason, "geometry": geometry, "spawn": spawn,
+        "layout_seed": int(layout.seed), "cell_m": float(layout.cell_m), "env_seed": SEED_BASE + 2 * layout_index + door,
+        "takeover_s": takeover_s, "handback_s": handback_s, "events": events,
+        "clear": scored["clear"], "real_clear": scored["real_clear"], "first_clear_s": scored["first_clear_s"],
+        "clear_after_takeover_s": scored["clear_after_takeover_s"], "crossing": scored["crossing"],
+        "fell": fell or scored["fell"], "first_fall_s": fall_s,
+        "fall_phase": next((s["phase"] for s in samples if s["tilt"] >= FALL_TILT), None),
+        "maximum_tilt": row["maximum_tilt"],
+        "plate_activation": {   # reported, not gated
+            "target_plate": {"door": door, "side": geometry["side"], "shape": spec["plate"]},
+            "target_pressed_during_stage": any(target in s["plate_presses"] for s in stage_samples),
+            "first_target_press_s": next((s["time_s"] for s in presses if target in s["plate_presses"]), None),
+            "correct_plate_pressed_during_stage": any(any(p[1] for p in s["plate_presses"]) for s in stage_samples),
+            "wrong_plate_pressed_during_stage": any(any(not p[1] for p in s["plate_presses"]) for s in stage_samples),
+            "presses_before_takeover": sorted({tuple(p) for s in presses if not s["phase"].startswith("stage_")
+                                               and (takeover_s is None or s["time_s"] <= takeover_s)
+                                               for p in s["plate_presses"]}),
+        },
+        "wall_contacts": {   # reported, not gated
+            "samples": len(wall), "stage_samples": sum(1 for s in wall if s["phase"].startswith("stage_")),
+            "first_s": wall[0]["time_s"] if wall else None,
+            "geoms": sorted({g for s in wall for g in s["contacts"]}),
+        },
+        "stage_history": stage.history, "gait_events": getattr(stage, "gait_events", []),
+        "m3_events": getattr(stage, "m3_events", None),
+        "policy_is_shipped_at_end": env.controller.policy is env.gait,
+        "stage_kwargs": {"stage_gait": stage_gait, "cross_budget": cross_budget, "yaw_cap": yaw_cap},
+        "stage_fix": fix_constants(cross_budget, yaw_cap),
+        "fix_summary": fix_crossing_summary({"stage_history": stage.history, "samples": samples}),
+        "trace_header": {key: row[key] for key in ("layout_index", "layout_seed", "replay_elapsed_s",
+                                                    "first_fall_s", "maximum_tilt")},
+        "samples": samples,
+    }
+    return result
+
+
 def compact_result(result):
     """v1's per-crossing line plus the v2 fields (spawn contacts, walk, watchdog)."""
     line = v1.compact_result(result)
@@ -559,18 +750,45 @@ def compact_result(result):
         line["controller_swaps"] = [{key: e.get(key) for key in (
             "event", "time_s", "controller", "obs_width", "clock_step", "stage_controller_clock_step")}
             for e in result.get("gait_events") or []]
+    if result.get("stage_fix"):   # --- m7-fix --- how each crossing ended and the yaw rates the stage commanded
+        # the record's own fix_summary (run_crossing_fix computes it while it has the samples; v1.read_results, which
+        # feeds this line, drops them); recomputed only for a result that has no stored summary
+        line["fix"] = result["fix_summary"] if result.get("fix_summary") else fix_crossing_summary(result)
     return line
 
 
-def source_files(repo, stage_gait=None):
+def fix_crossing_summary(result):
+    """--- m7-fix --- per-crossing evidence of F2 / F3 (reported, not gated): the crossing's duration and how it ended
+    (clear or budget, the window left), and the largest |wz| sent and received in the in-place turns and the crossing.
+    The |wz| maxima need the samples: run_crossing_fix stores this summary in its result as fix_summary."""
+    history = result.get("stage_history") or []
+    cross = next((h for h in history if h.get("phase") == "cross"), None)
+    back = next((h for h in history if h.get("phase") == "turn_back"), None)
+    samples = result.get("samples") or []
+
+    def most(phases, key):
+        values = [abs(s[key][2]) for s in samples if s.get("phase") in phases and s.get(key) is not None]
+        return max(values) if values else None
+    return {"cross_s": None if cross is None or back is None else back.get("cross_s"),
+            "cross_ended_by": None if back is None else back.get("cross_ended_by"),
+            "window_left_s": None if back is None else back.get("window_left_s"),
+            "turn_wz_sent_max": most(("stage_turn", "stage_turn_back"), "command"),
+            "turn_wz_received_max": most(("stage_turn", "stage_turn_back"), "policy_command"),
+            "cross_wz_sent_max": most(("stage_cross",), "command")}
+
+
+def source_files(repo, stage_gait=None, fix=False):
     """v1's physics-source set (the replay snapshot's files minus its sbatch, plus v1's launcher) plus this launcher.
 
     --- m7-clocks2 --- an export stage gait also hashes the clock controller module and its own launcher (its replay
-    snapshot copies gait_clock.py too); every other gait's set is unchanged.
+    snapshot copies gait_clock.py too); every other gait's set is unchanged.  --- m7-fix --- with the F2 / F3 options
+    the fix launcher is hashed as well.
     """
     names = set(v1.source_files(repo)) | {V2_LAUNCHER}
     if stage_gait in EXPORT_STAGE_GAITS_V2:
         names |= {GAIT_CLOCK_SOURCE, V2_CLOCKS2_LAUNCHER}
+    if fix:
+        names |= {V2_FIX_LAUNCHER}
     return sorted(names)
 
 
@@ -579,9 +797,19 @@ def chain_for(stage_gait):
     return {"clocks2": CHAIN_V2_CLOCKS2, "export": CHAIN_V2_EXPORT}.get(stage_gait, CHAIN_V2)
 
 
-def provenance(repo, mode, stage_gait, crossings):
+def fix_options(cross_budget=None, yaw_cap=None):
+    """--- m7-fix --- the options a bench-v2 run records ({} when neither is given)."""
+    out = {}
+    if cross_budget is not None:
+        out["cross_budget"] = cross_budget
+    if yaw_cap is not None:
+        out["yaw_cap"] = float(yaw_cap)
+    return out
+
+
+def provenance(repo, mode, stage_gait, crossings, fix=None):
     import hashlib
-    sources = source_files(repo, stage_gait)
+    sources = source_files(repo, stage_gait, fix=bool(fix))
     upstream = repo / "external/Berkeley-Humanoid-Lite"
     from mission7_plate_stage import SHIPPED_EXPORT, TURNBOTH_EXPORT, m3_constants
     weights = {"shipped": upstream / SHIPPED_EXPORT / "policy.onnx"}
@@ -627,18 +855,25 @@ def provenance(repo, mode, stage_gait, crossings):
         prov.update(chain=chain_for(stage_gait), stage_constants=export_info, stage_gait_export=export_info["export"])
         if stage_gait == "clocks2":
             prov["disclosure_stage_gait"] = DISCLOSURE_CLOCKS2
+    if fix:   # --- m7-fix --- F2 / F3 (every other record is unchanged)
+        from mission7_plate_stage import fix_constants
+        prov.update(stage_fix=fix_constants(fix.get("cross_budget"), fix.get("yaw_cap")), chain=CHAIN_V2_FIX,
+                    disclosure_fix=DISCLOSURE_FIX, labels=labels(stage_gait, fix))
     return prov
 
 
-def labels(stage_gait):
+def labels(stage_gait, fix=None):
     gait = ("LEARNED (the shipped arms-dr1.0-s0 gait throughout; never swapped)" if stage_gait == "m3" else
             "LEARNED (shipped arms-dr1.0-s0 outside the stage; TurnBoth-s0 during the stage)")
     if stage_gait in EXPORT_STAGE_GAITS_V2:   # --- m7-clocks2 ---
         gait = ("LEARNED (shipped arms-dr1.0-s0 outside the stage; during the stage the controller is swapped to "
                 + ("arms-turngait-clock-s2, a 77-observation gait-clock policy (Turning R1's qualified seed)"
                    if stage_gait == "clocks2" else "the --stage-gait-export policy") + ")")
-    return {"gaits": gait, "stage": f"SCRIPTED (PlateStage, stage_gait={stage_gait})",
-            "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"}
+    stage = f"SCRIPTED (PlateStage, stage_gait={stage_gait})"
+    if fix:   # --- m7-fix ---
+        stage = (f"SCRIPTED (PlateStage, stage_gait={stage_gait}, "
+                 + ", ".join(f"{key}={value}" for key, value in sorted(fix.items())) + ")")
+    return {"gaits": gait, "stage": stage, "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"}
 
 
 def main(argv=None):
@@ -655,9 +890,20 @@ def main(argv=None):
                         help="--stage-gait export only: the exported directory swapped in as the stage controller")
     parser.add_argument("--stage-gait-export-sha256", default=None,
                         help="--stage-gait export only: refuse the export unless its policy.onnx has this sha256")
+    # --- m7-fix --- F2 / F3 (opt-in; --stage-gait clocks2 | export only)
+    parser.add_argument("--cross-budget", choices=FIX_CROSS_BUDGETS_V2, default=None,
+                        help="F2: the stage's crossing ends at the clear point or when 0.2 s of the 10 s clear window "
+                             "remains, instead of at the fixed 4.0 s cross bound")
+    parser.add_argument("--yaw-cap", type=float, choices=FIX_YAW_CAPS_V2, default=None,
+                        help="F3: Mission 7's yaw command scale 0.60 rad/s in this bench's transform and the stage's "
+                             "in-place turn at 0.60 rad/s; smoke crossings then use exploration train layouts 32-169 "
+                             "except 32, 33 and 38")
     parser.add_argument("--preflight", action="store_true")
     args = parser.parse_args(argv)
     args.repo, args.out = args.repo.resolve(), args.out.resolve()
+    fix = fix_options(args.cross_budget, args.yaw_cap)   # --- m7-fix --- {} on every other path
+    if fix and (args.mode == "rescore-m2" or args.stage_gait not in EXPORT_STAGE_GAITS_V2):
+        parser.error("--cross-budget / --yaw-cap compose with a bench run with --stage-gait clocks2 | export only")
     if (args.stage_gait == "export") != (args.stage_gait_export is not None):
         parser.error("--stage-gait-export <exported dir> is required with --stage-gait export, and only with it")
     if args.stage_gait_export_sha256 is not None and args.stage_gait != "export":
@@ -687,7 +933,7 @@ def main(argv=None):
         specs = declared_crossings()
     else:
         try:
-            specs = parse_smoke_specs(args.crossings)
+            specs = parse_fix_smoke_specs(args.crossings) if fix else parse_smoke_specs(args.crossings)
         except ValueError as exc:
             parser.error(str(exc))
     if args.preflight:
@@ -699,19 +945,27 @@ def main(argv=None):
             from mission7_plate_stage import export_check, export_dir_for
             upstream = args.repo / "external/Berkeley-Humanoid-Lite"
             check = export_check(upstream, *export_dir_for(upstream, args.stage_gait))
-        print(json.dumps({"status": "PREFLIGHT_OK", "bench": "v2", "mode": args.mode, "stage_gait": args.stage_gait,
-                          "crossings": len(specs), "dropped": len(DROPPED), "python": sys.executable,
-                          "mujoco": mujoco.__version__, "out": str(args.out), "stage_gait_check": check},
-                         sort_keys=True), flush=True)
+        line = {"status": "PREFLIGHT_OK", "bench": "v2", "mode": args.mode, "stage_gait": args.stage_gait,
+                "crossings": len(specs), "dropped": len(DROPPED), "python": sys.executable,
+                "mujoco": mujoco.__version__, "out": str(args.out), "stage_gait_check": check}
+        if fix:   # --- m7-fix --- (every other preflight line is unchanged)
+            from mission7_plate_stage import fix_constants
+            line["stage_fix"] = fix_constants(args.cross_budget, args.yaw_cap)
+        print(json.dumps(line, sort_keys=True), flush=True)
         return 0
     if args.out.exists():
         parser.error(f"output exists; a bench result is never overwritten: {args.out}")
     (args.out / "crossings").mkdir(parents=True)
     (args.out / "provenance.json").write_text(json.dumps(
-        provenance(args.repo, args.mode, args.stage_gait, [(s["layout"], s["door"]) for s in specs]), indent=2) + "\n")
+        provenance(args.repo, args.mode, args.stage_gait, [(s["layout"], s["door"]) for s in specs],
+                   fix=fix or None), indent=2) + "\n")
     for spec in specs:
-        result = run_crossing(args.repo, args.out / "cache" / f"L{spec['layout']:03d}-d{spec['door']}", spec,
-                              args.stage_gait)
+        if fix:   # --- m7-fix --- run_crossing with the F2 / F3 options
+            result = run_crossing_fix(args.repo, args.out / "cache" / f"L{spec['layout']:03d}-d{spec['door']}", spec,
+                                      args.stage_gait, args.cross_budget, args.yaw_cap)
+        else:
+            result = run_crossing(args.repo, args.out / "cache" / f"L{spec['layout']:03d}-d{spec['door']}", spec,
+                                  args.stage_gait)
         v1.write_crossing(args.out, result)
         print(json.dumps({"layout": spec["layout"], "door": spec["door"], "heading_deg": spec["heading_deg"],
                           "plate": spec["plate"], "entry": spec["entry"], "end": result["end_reason"],
@@ -744,6 +998,10 @@ def main(argv=None):
         verdict["stage_gait_export"] = str(args.stage_gait_export) if args.stage_gait == "export" else "clocks2 preset"
         if args.stage_gait == "clocks2":
             verdict["disclosure_stage_gait"] = DISCLOSURE_CLOCKS2
+    if fix:   # --- m7-fix --- (every other verdict is unchanged)
+        from mission7_plate_stage import fix_constants
+        verdict.update(stage_fix=fix_constants(args.cross_budget, args.yaw_cap), chain=CHAIN_V2_FIX,
+                       disclosure_fix=DISCLOSURE_FIX, labels=labels(args.stage_gait, fix))
     path = args.out / "verdict.json"
     if path.exists():
         raise FileExistsError(path)
@@ -751,6 +1009,8 @@ def main(argv=None):
     print(f"M7 PLATE BENCH V2 {args.mode} ({args.stage_gait}): {verdict['verdict']} clears {verdict['clears']}/"
           f"{verdict['N']} (need {verdict['required_clears']}) falls {verdict['falls']} per heading "
           f"{ {h: (v['clears'], v['declared']) for h, v in verdict['per_heading'].items()} } -> {path}", flush=True)
+    if fix:   # --- m7-fix ---
+        print(f"M7 PLATE BENCH V2 options: {fix}", flush=True)
     return 0
 
 

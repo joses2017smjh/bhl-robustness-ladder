@@ -17,6 +17,20 @@ ROOT = Path(__file__).resolve().parents[1]
 # scripts/submit_mission7_plate_stage.py; the default snapshot set is unchanged).
 EXPORT_STAGE_GAITS = ("clocks2", "export")
 GAIT_CLOCK_MODULE = Path("src/bhl_robust/eval") / "gait_clock.py"
+# --- m7-fix --- F2 / F3 (= mission7_plate_stage.FIX_CROSS_BUDGETS / FIX_YAW_CAPS; that module is not imported here):
+# forwarded verbatim as --cross-budget=window / --yaw-cap=0.6, with an export stage gait only.
+FIX_CROSS_BUDGETS = ("window",)
+FIX_YAW_CAPS = (.60,)
+
+
+def _check_fix_args(parser, args):
+    """--- m7-fix --- validate --cross-budget / --yaw-cap (no-op when neither is given)."""
+    if args.cross_budget is None and args.yaw_cap is None:
+        return
+    if args.stage_gait not in EXPORT_STAGE_GAITS:
+        parser.error("--cross-budget / --yaw-cap go with --stage-gait clocks2 | export only")
+    if args.cross_budget is not None and args.cross_clear is not None:
+        parser.error("--cross-budget ends the crossing at mission7_gates' clear; --cross-clear does not compose")
 
 
 def _check_export_args(parser, args):
@@ -90,6 +104,10 @@ def _probe_args(args):
     elif args.stage_gait == "export":    # --- m7-clocks2 --- main() resolves the directory and its policy sha256
         probe_args += ["--stage-gait=export", f"--stage-gait-export={getattr(args, 'stage_gait_export', None)}",
                        f"--stage-gait-export-sha256={getattr(args, 'stage_gait_export_sha256', None)}"]
+    if getattr(args, "cross_budget", None) is not None:   # --- m7-fix --- F2
+        probe_args.append(f"--cross-budget={args.cross_budget}")
+    if getattr(args, "yaw_cap", None) is not None:        # --- m7-fix --- F3
+        probe_args.append(f"--yaw-cap={args.yaw_cap}")
     return probe_args
 
 
@@ -140,6 +158,10 @@ def main():
                              "sha256 as read here, so the probe refuses different weights")
     parser.add_argument("--stage-gait-export-sha256", default=None,
                         help="--stage-gait export only: the expected policy.onnx sha256 (checked here and in the job)")
+    parser.add_argument("--cross-budget", choices=FIX_CROSS_BUDGETS, default=None,
+                        help="m7-fix F2, forwarded as --cross-budget=window (an export stage gait only)")
+    parser.add_argument("--yaw-cap", type=float, choices=FIX_YAW_CAPS, default=None,
+                        help="m7-fix F3, forwarded as --yaw-cap=0.6 (an export stage gait only)")
     parser.add_argument("--submit", action="store_true")
     args = parser.parse_args()
     campaign = args.campaign.resolve()
@@ -154,6 +176,7 @@ def main():
     if args.stage_gait == "m3" and (args.align_yaw or args.stage_press_hold):
         parser.error("--stage-gait m3 does not compose with --align-yaw or --stage-press-hold")
     _check_export_args(parser, args)   # --- m7-clocks2 --- (no-op for every other gait)
+    _check_fix_args(parser, args)      # --- m7-fix --- (no-op without --cross-budget / --yaw-cap)
     probe_args = _probe_args(args)
     if not args.submit:
         plan = {"planned_output": str(out), "stage": args.stage,
@@ -240,6 +263,8 @@ def main():
         row["stage_gait"] = args.stage_gait
     if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 ---
         row["stage_gait"] = args.stage_gait
+    if args.cross_budget is not None or args.yaw_cap is not None:   # --- m7-fix ---
+        row.update(cross_budget=args.cross_budget, yaw_cap=args.yaw_cap)
     (out / "submission.json").write_text(json.dumps(row, indent=2) + "\n")
     with (ROOT / "SLURM_JOBS.md").open("a") as stream:
         stream.write(
@@ -248,6 +273,7 @@ def main():
             f"{'node `' + args.node + '`' if args.node else 'constraint `' + args.constraint + '`'}"
             f", 2 CPUs / 12 GB / 0 GPUs / 2 h; "
             f"{'PlateStage on the `turnboth` stage gait (TurnBoth-s0 swapped in for the stage)' if args.stage_gait == 'turnboth' else 'PlateStage on the `m3` stage path (shipped gait: turn while stepping + stall watchdog)' if args.stage_gait == 'm3' else 'PlateStage on the `' + str(args.stage_gait) + '` stage gait (its controller swapped in for the stage, M2 turnboth law)' if args.stage_gait in EXPORT_STAGE_GAITS else 'unchanged PlateStage'}"
+            f"{'; m7-fix options cross budget `' + str(args.cross_budget) + '`, yaw cap `' + str(args.yaw_cap) + '`' if args.cross_budget is not None or args.yaw_cap is not None else ''}"
             f" with `{args.handoff}` route handoff"
             f" and rejoin diagnostic `{args.rejoin_diagnostic}`, chain trace `{args.chain_trace}`, "
             f"fix `{args.rejoin_fix}`; "

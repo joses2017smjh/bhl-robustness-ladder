@@ -1,0 +1,916 @@
+{
+ "design": "SLURM_JOBS.md, 'User approval recorded 2026-10-03 09:55', item (D) Mission 7 crossing diagnosis; 'Correction to design (D)' (layouts 170-249); 'Coordinator re-freeze of (D)'s measurement and classifier, 2026-10-03 11:40'",
+ "mode": "run",
+ "labels": {
+  "gaits": "LEARNED (shipped arms-dr1.0-s0 outside the stage; during the stage the controller is swapped to arms-turngait-clock-s2 = clock-s2, Turning R1's qualified seed, a 77-observation gait-clock policy)",
+  "stage": "SCRIPTED (PlateStage, stage_gait=clocks2, M2's turnboth law; bench v2's run_crossing unchanged)",
+  "layout_and_plate_pose": "ORACLE (as the existing stage uses them)",
+  "purpose": "DIAGNOSIS ONLY (investigation, no gate; nothing here is a bench verdict)"
+ },
+ "thresholds": {
+  "STALL_DWELL_S": 2.0,
+  "ONPLATE_ALONG_M": -0.2,
+  "TOP_NORMAL_MIN_Z": 0.7071,
+  "SUPPORT_MIN_N": 8.0,
+  "SWING_MIN_STEPS": 2,
+  "LEADING_TOL_M": 0.01,
+  "EDGE_FORCE_MIN_N": 1.0,
+  "EDGE_STOP_BEFORE_M": 0.02,
+  "EDGE_STOP_AFTER_M": 0.01,
+  "BLOCKED_MIN_SWINGS": 3,
+  "GAIT_PERIOD_STEPS": 20,
+  "SLOW_MIN_PERIODS": 2,
+  "ADVANCE_MIN_PER_PERIOD_M": 0.004,
+  "ADVANCING_PERIOD_FRACTION": 0.75,
+  "SLOW_MAX_FRACTION": 0.5,
+  "WALL_DOMINANT_FRACTION": 0.5,
+  "PRECEDENCE": [
+   "wall_blocked",
+   "blocked_step_up",
+   "slow_progress",
+   "other"
+  ]
+ },
+ "enumeration": {
+  "mode": "run",
+  "layouts_declared": [
+   170,
+   171,
+   172,
+   173,
+   174,
+   175,
+   176,
+   177,
+   178,
+   179,
+   180,
+   181,
+   182,
+   183,
+   184,
+   185,
+   186,
+   187,
+   188,
+   189,
+   190,
+   191,
+   192,
+   193,
+   194,
+   195,
+   196,
+   197,
+   198,
+   199,
+   200,
+   201,
+   202,
+   203,
+   204,
+   205,
+   206,
+   207,
+   208,
+   209,
+   210,
+   211,
+   212,
+   213,
+   214,
+   215,
+   216,
+   217,
+   218,
+   219,
+   220,
+   221,
+   222,
+   223,
+   224,
+   225,
+   226,
+   227,
+   228,
+   229,
+   230,
+   231,
+   232,
+   233,
+   234,
+   235,
+   236,
+   237,
+   238,
+   239,
+   240,
+   241,
+   242,
+   243,
+   244,
+   245,
+   246,
+   247,
+   248,
+   249
+  ],
+  "layouts_nonexistent": [],
+  "train_split_size": 256,
+  "grid_crossings": 160,
+  "dropped": [
+   [
+    170,
+    0
+   ],
+   [
+    171,
+    0
+   ],
+   [
+    172,
+    0
+   ],
+   [
+    173,
+    0
+   ],
+   [
+    174,
+    0
+   ],
+   [
+    175,
+    0
+   ],
+   [
+    176,
+    1
+   ],
+   [
+    177,
+    1
+   ],
+   [
+    178,
+    1
+   ],
+   [
+    179,
+    1
+   ],
+   [
+    180,
+    1
+   ],
+   [
+    181,
+    1
+   ],
+   [
+    182,
+    1
+   ],
+   [
+    183,
+    1
+   ],
+   [
+    184,
+    0
+   ],
+   [
+    187,
+    0
+   ],
+   [
+    188,
+    0
+   ],
+   [
+    189,
+    0
+   ],
+   [
+    190,
+    0
+   ],
+   [
+    191,
+    0
+   ],
+   [
+    194,
+    1
+   ],
+   [
+    195,
+    1
+   ],
+   [
+    196,
+    1
+   ],
+   [
+    197,
+    1
+   ],
+   [
+    198,
+    1
+   ],
+   [
+    199,
+    1
+   ],
+   [
+    203,
+    0
+   ],
+   [
+    205,
+    0
+   ],
+   [
+    206,
+    0
+   ],
+   [
+    207,
+    0
+   ],
+   [
+    210,
+    1
+   ],
+   [
+    211,
+    1
+   ],
+   [
+    213,
+    1
+   ],
+   [
+    214,
+    1
+   ],
+   [
+    215,
+    1
+   ],
+   [
+    216,
+    0
+   ],
+   [
+    218,
+    0
+   ],
+   [
+    219,
+    0
+   ],
+   [
+    221,
+    0
+   ],
+   [
+    222,
+    0
+   ],
+   [
+    223,
+    0
+   ],
+   [
+    224,
+    1
+   ],
+   [
+    225,
+    1
+   ],
+   [
+    226,
+    1
+   ],
+   [
+    227,
+    1
+   ],
+   [
+    229,
+    1
+   ],
+   [
+    230,
+    1
+   ],
+   [
+    231,
+    1
+   ],
+   [
+    233,
+    0
+   ],
+   [
+    235,
+    0
+   ],
+   [
+    237,
+    0
+   ],
+   [
+    238,
+    0
+   ],
+   [
+    239,
+    0
+   ],
+   [
+    240,
+    1
+   ],
+   [
+    241,
+    1
+   ],
+   [
+    243,
+    1
+   ],
+   [
+    244,
+    1
+   ],
+   [
+    245,
+    1
+   ],
+   [
+    246,
+    1
+   ],
+   [
+    247,
+    1
+   ],
+   [
+    248,
+    0
+   ]
+  ],
+  "kept_before_cap": 99,
+  "capped_out": [
+   [
+    234,
+    1
+   ],
+   [
+    235,
+    1
+   ],
+   [
+    236,
+    0
+   ],
+   [
+    236,
+    1
+   ],
+   [
+    237,
+    1
+   ],
+   [
+    238,
+    1
+   ],
+   [
+    239,
+    1
+   ],
+   [
+    240,
+    0
+   ],
+   [
+    241,
+    0
+   ],
+   [
+    242,
+    0
+   ],
+   [
+    242,
+    1
+   ],
+   [
+    243,
+    0
+   ],
+   [
+    244,
+    0
+   ],
+   [
+    245,
+    0
+   ],
+   [
+    246,
+    0
+   ],
+   [
+    247,
+    0
+   ],
+   [
+    248,
+    1
+   ],
+   [
+    249,
+    0
+   ],
+   [
+    249,
+    1
+   ]
+  ],
+  "cap": 80,
+  "cap_rule": "the kept crossings in grid order (layout ascending, door 0 before door 1), after bench v2's drop rule; the first 80 are run, the rest are listed as capped out and never run"
+ },
+ "crossings": [
+  [
+   170,
+   1
+  ],
+  [
+   171,
+   1
+  ],
+  [
+   172,
+   1
+  ],
+  [
+   173,
+   1
+  ],
+  [
+   174,
+   1
+  ],
+  [
+   175,
+   1
+  ],
+  [
+   176,
+   0
+  ],
+  [
+   177,
+   0
+  ],
+  [
+   178,
+   0
+  ],
+  [
+   179,
+   0
+  ],
+  [
+   180,
+   0
+  ],
+  [
+   181,
+   0
+  ],
+  [
+   182,
+   0
+  ],
+  [
+   183,
+   0
+  ],
+  [
+   184,
+   1
+  ],
+  [
+   185,
+   0
+  ],
+  [
+   185,
+   1
+  ],
+  [
+   186,
+   0
+  ],
+  [
+   186,
+   1
+  ],
+  [
+   187,
+   1
+  ],
+  [
+   188,
+   1
+  ],
+  [
+   189,
+   1
+  ],
+  [
+   190,
+   1
+  ],
+  [
+   191,
+   1
+  ],
+  [
+   192,
+   0
+  ],
+  [
+   192,
+   1
+  ],
+  [
+   193,
+   0
+  ],
+  [
+   193,
+   1
+  ],
+  [
+   194,
+   0
+  ],
+  [
+   195,
+   0
+  ],
+  [
+   196,
+   0
+  ],
+  [
+   197,
+   0
+  ],
+  [
+   198,
+   0
+  ],
+  [
+   199,
+   0
+  ],
+  [
+   200,
+   0
+  ],
+  [
+   200,
+   1
+  ],
+  [
+   201,
+   0
+  ],
+  [
+   201,
+   1
+  ],
+  [
+   202,
+   0
+  ],
+  [
+   202,
+   1
+  ],
+  [
+   203,
+   1
+  ],
+  [
+   204,
+   0
+  ],
+  [
+   204,
+   1
+  ],
+  [
+   205,
+   1
+  ],
+  [
+   206,
+   1
+  ],
+  [
+   207,
+   1
+  ],
+  [
+   208,
+   0
+  ],
+  [
+   208,
+   1
+  ],
+  [
+   209,
+   0
+  ],
+  [
+   209,
+   1
+  ],
+  [
+   210,
+   0
+  ],
+  [
+   211,
+   0
+  ],
+  [
+   212,
+   0
+  ],
+  [
+   212,
+   1
+  ],
+  [
+   213,
+   0
+  ],
+  [
+   214,
+   0
+  ],
+  [
+   215,
+   0
+  ],
+  [
+   216,
+   1
+  ],
+  [
+   217,
+   0
+  ],
+  [
+   217,
+   1
+  ],
+  [
+   218,
+   1
+  ],
+  [
+   219,
+   1
+  ],
+  [
+   220,
+   0
+  ],
+  [
+   220,
+   1
+  ],
+  [
+   221,
+   1
+  ],
+  [
+   222,
+   1
+  ],
+  [
+   223,
+   1
+  ],
+  [
+   224,
+   0
+  ],
+  [
+   225,
+   0
+  ],
+  [
+   226,
+   0
+  ],
+  [
+   227,
+   0
+  ],
+  [
+   228,
+   0
+  ],
+  [
+   228,
+   1
+  ],
+  [
+   229,
+   0
+  ],
+  [
+   230,
+   0
+  ],
+  [
+   231,
+   0
+  ],
+  [
+   232,
+   0
+  ],
+  [
+   232,
+   1
+  ],
+  [
+   233,
+   1
+  ],
+  [
+   234,
+   0
+  ]
+ ],
+ "repo": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-m7-crossdiag/wt-run",
+ "git_head": "744b3d214b3a429bc48a039ca391ba4ff8541291",
+ "sources": {
+  "bench_provenance": "results/mission7-campaign-20260923/clocks2-plate-bench-v2/provenance.json",
+  "bench_git_head": "9de55d39ad3c962bc8b3f563bd962a149e82bd6f",
+  "bench_slurm_job_id": "21517668",
+  "sources_sha256": {
+   "scripts/bench/m7_crossing_diag.py": "039947b5782afe93064ec976757eca1b8b498270d9904b8f8ad9dbcc0da777e7",
+   "scripts/mission7.py": "e88be8edb953c73fc5a62e60897a61c02d9d006b94fd0f989d879e69551862fb",
+   "scripts/mission7_approach_followup.py": "c9db3f397e0e13a7f1c68e26a30c3f4d8b681e8dec241fee00b292c80980f2ed",
+   "scripts/mission7_campaign_analysis.py": "40665ee45272b44ed2d50d4e43be5c7d35219edb923127c0604633b90b92b292",
+   "scripts/mission7_contact_debug.py": "a3b1b50e1af8a0457c9def6c99d3dea06446970dcdbefa60b6108fc894bf8d9b",
+   "scripts/mission7_debug.py": "f69d89fbca126da671167d05328ec432863f67548a24353e7a7013150cb93ee5",
+   "scripts/mission7_debug_audit.py": "2d50fd1529665025b4523d844b3415df5ea7146c0a08e7781973fc529d810c49",
+   "scripts/mission7_debug_replay.py": "c0b22bbf43204ba1fdbeecd6a6de8a1708f9a2debf62c594e9767e312588bb81",
+   "scripts/mission7_debug_report.py": "71fc83a08703b965a6d04d1c92cd1a14a61a61d85696ed32e992378001d10677",
+   "scripts/mission7_debug_status.py": "c1010a14beb660121e2f4f51a415543e15e07a49bf0406b56365b8d83864e63a",
+   "scripts/mission7_debug_train.py": "0c2fdc5893e0c561d4019fcaf53bd64919bcaea42e41c540c39e54e49273e7a1",
+   "scripts/mission7_diagnostic.py": "38879bc361d100e8a2e2cc171ccfa7c77784a9eee1e22c62d15cc55684c901b4",
+   "scripts/mission7_gates.py": "1dc04b4158bbe12d04dcb2071740bb589fc9b48b8b8bd5cc6ceb2d881638738f",
+   "scripts/mission7_overnight.py": "7ec3372af9b90888b2c41b1398761622c9ca4a18c598d70139a329f356c27b5a",
+   "scripts/mission7_plate_bench.py": "3b98e47114eed2ceb82f5b437917d7135a5b6e4e0ded30dca106405f78683182",
+   "scripts/mission7_plate_bench_v2.py": "4e4a9dcb5f63ef6d67b2bbef505c2d9f1f74b71cd93b4931fc033e0c5bed2025",
+   "scripts/mission7_plate_physics.py": "3cb1ac31721ab49bf66f312028747d8098a3566a86086ebca7635e1e8138511d",
+   "scripts/mission7_plate_safe.py": "9cf91d136d2d5ad255eeef8d243d573f9d6e32e29294b1b77b7da4d5ed943578",
+   "scripts/mission7_plate_safe_single.py": "59db250a88f76dad3936a4d0048983eb915bc1f51769c9395d21a03a15ce3411",
+   "scripts/mission7_plate_stage.py": "100ce2147dc4bbb541b412579a72be46ca2b467628c05f40a11454d136b3944b",
+   "scripts/mission7_replay_diagnose.py": "979666906c70f79273bf156349c61248e74717b05b49c931e62dac02cb45d8ae",
+   "scripts/mission7_route_failure_analysis.py": "b9e88800edede181d517e09941f2f4e4cefc46e487fc42a3c9fbf832689cd41b",
+   "scripts/mission7_route_handoff_probe.py": "cf77fab82f17328562fb5d2827b2f4498108bda707ef7d73508cc5afa156bf5e",
+   "slurm/repo20260923/cpu_m7_crossing_diag.sbatch": "897f825c9b0b6b5da3740a432db509678fa8244a886b1aabaeb1f7ae543c0391",
+   "slurm/repo20260923/cpu_m7_plate_bench.sbatch": "dfbd89bbcd7b3ef2aa3b9ea719ad9aeca16d86dfeac69e197203a5bf63d1aead",
+   "slurm/repo20260923/cpu_m7_plate_bench_v2.sbatch": "ec2c0fe4920fb26489105538cabe2c7eb098221df76f1c22f20fd51770417696",
+   "slurm/repo20260923/cpu_m7_plate_bench_v2_clocks2.sbatch": "445984737ff80a3c9ffc694a9c1582acef93fb614dbc783b1b53d3396f244d39",
+   "src/bhl_robust/__init__.py": "290f5d6a451d1a1554e2f87b5bf93588fd2c744ee9cef5f0a26a316311bedc8f",
+   "src/bhl_robust/eval/__init__.py": "1fb9562d8c194ebdc4d49adb59c5443b64985eb575e2cb217cceaa9a7427485e",
+   "src/bhl_robust/eval/gait_clock.py": "eedd6279fd74e9706e8015e4c048900f08570d26f54f9905af3346e54d8f6b98",
+   "src/bhl_robust/eval/livery.py": "b9243aaf7c7693c6e77413e26e4c8b0d22fa0336a36d36427fc63d2428e9a66c",
+   "src/bhl_robust/eval/mjcf_assets.py": "e34e728312ce822e72188f27d3a2cde9137e9fbf7867e5e1fc5e3b67fecb6322",
+   "src/bhl_robust/eval/multi_robot.py": "66f314961d4963462d6c6727994a14087f5cbba08a4ae018cb746dba68627d5a",
+   "src/bhl_robust/eval/team_sensors.py": "e62db263de70cb2d5be4c44a40725114fab79d9aa9b24ef246148a23fc3a51c6",
+   "src/bhl_robust/mission/__init__.py": "c2d4d9a6288265b9477d09d6977fd6a0eb227fcb75eacc449a58aa0b9cb513ca",
+   "src/bhl_robust/mission/approach_debug.py": "c350803af60ac7c678d0e6df5f3576059b4479499c4f0beb0531f002500622da",
+   "src/bhl_robust/mission/env.py": "99cd21167c01d1aa7fd014e2a40b32f13ad06a04bccc1048433d20749f959f9b",
+   "src/bhl_robust/mission/layout.py": "c4c7a6fdd2424b291a24d2cd8b925b8c0843c2c17e5c04fa5e85616cffc628dd",
+   "src/bhl_robust/mission/overnight.py": "e5051472c4d1d78d3cb1e01a999d5c5215c8e9429650cfbd7e2b9b05c22b63c1",
+   "src/bhl_robust/mission/policy.py": "b059ad3bb4cab8d31e0f4b5aa06a4ac808020ed8f7b94daf836fc9a2b7f1db61",
+   "src/bhl_robust/mission/sensors.py": "e05b3abd36ce700811dd14c4cb2853f8ed8cf351048842ac843698b3d832bad0",
+   "src/bhl_robust/mission/state.py": "622c82501cbb6fdce1d0f2815c9c0b901787186dbd37cd84a904bb257af19cfe",
+   "src/bhl_robust/sensor_io.py": "8e1d4e73df4edb12926d492c068bda7d17042ab9234c58084cfa6260137848b8",
+   "tests/test_m7_crossing_diag.py": "c6d18caff163f37280292eeb75b0b2ccff52552e3e5a0920c508c6329cbd6d4f"
+  },
+  "bench_sources_checked": 41,
+  "bench_sources_differing": [],
+  "identical_to_bench": true,
+  "relevant_drift": [],
+  "imported_repo_files": [
+   "scripts/bench/m7_crossing_diag.py",
+   "scripts/mission7_diagnostic.py",
+   "scripts/mission7_gates.py",
+   "scripts/mission7_overnight.py",
+   "scripts/mission7_plate_bench.py",
+   "scripts/mission7_plate_bench_v2.py",
+   "scripts/mission7_plate_stage.py",
+   "src/bhl_robust/__init__.py",
+   "src/bhl_robust/eval/__init__.py",
+   "src/bhl_robust/eval/gait_clock.py",
+   "src/bhl_robust/eval/livery.py",
+   "src/bhl_robust/eval/mjcf_assets.py",
+   "src/bhl_robust/eval/multi_robot.py",
+   "src/bhl_robust/eval/team_sensors.py",
+   "src/bhl_robust/mission/__init__.py",
+   "src/bhl_robust/mission/approach_debug.py",
+   "src/bhl_robust/mission/env.py",
+   "src/bhl_robust/mission/layout.py",
+   "src/bhl_robust/mission/overnight.py",
+   "src/bhl_robust/mission/policy.py",
+   "src/bhl_robust/mission/sensors.py",
+   "src/bhl_robust/mission/state.py",
+   "src/bhl_robust/sensor_io.py"
+  ],
+  "imported_not_in_bench_provenance": [],
+  "imported_upstream_sha256": {
+   "source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/__init__.py": "b0df54307c485e41d1951f0c2a75f55fe22807dcd8ad618978d8c778693ae68b",
+   "source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/rl_controller.py": "ab7b8c282e0888ec6cfb74451c60772ade5abcda17362521fb31bc04b8b5203c"
+  },
+  "bench_weights_sha256": {
+   "shipped": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b",
+   "clocks2": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de"
+  }
+ },
+ "source_drift_allowed": false,
+ "weights": {
+  "shipped": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b",
+  "clocks2": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de",
+  "clocks2_deploy_yaml": "a60cf4f71259492ef6aa764c327481add9959f64307a719125aef7cf7cd5ce20",
+  "export_check": {
+   "export": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-m7-crossdiag/wt-run/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported",
+   "policy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-m7-crossdiag/wt-run/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported/policy.onnx",
+   "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de",
+   "pinned_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de",
+   "deploy_yaml": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-m7-crossdiag/wt-run/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported/deploy.yaml",
+   "deploy_yaml_sha256": "a60cf4f71259492ef6aa764c327481add9959f64307a719125aef7cf7cd5ce20",
+   "deploy_keys_differing": [
+    "command_velocity",
+    "gait_clock",
+    "num_observations",
+    "policy_checkpoint_path"
+   ],
+   "num_observations": 77,
+   "onnx_input_width": 77,
+   "gait_clock": {
+    "period_s": 0.8,
+    "phase_offset": 0.0
+   },
+   "controller": "GaitClockRlController",
+   "swap": "env.controller := make_controller(deploy.yaml) at takeover (prev_actions 0, clock phase 0); the shipped controller object and prev_actions := 0 at hand-back",
+   "stage_law": {
+    "law": "M2 turnboth law, unchanged (PlateStage._turnboth_command)",
+    "turn_rate_rps": 0.4,
+    "turn_exit_rad": 0.15,
+    "turn_max_s": 15.707963267948966,
+    "cruise_mps": 0.3,
+    "k_yaw": 1.2,
+    "wz_walk_rps": 0.4,
+    "cross_clear_m": 0.35,
+    "lateral_command": 0.0
+   }
+  }
+ },
+ "host": "cn-e02.hpc.engr.oregonstate.edu",
+ "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+ "mujoco": "3.3.5",
+ "slurm_job_id": "21544245",
+ "started_utc": "2026-10-04T17:39:09.016385+00:00",
+ "disclosures": [
+  "layouts: 250-289 as first frozen does not exist beyond 255; corrected to 170-249 before any diagnosis episode (coordinator decision 2026-10-03, recorded in the ledger as a correction; SPLITS['train'] = (0, 256), so 250-289 would have yielded only 6 standstill crossings, L250-L255 d1)",
+  "layouts: no Mission 7 crossing record exists for any layout in 170-249, so no run crossing has a public outcome; bench v2's construction yields 160 grid crossings there, its drop rule drops 61 walking ones, and of the 99 kept the first 80 in grid order (layout ascending, door 0 before door 1) are run: L170 d1 through L234 d0; 19 are capped out",
+  "smoke: the instructed smoke layouts 290-299 do not exist; the smoke runs exploration train layouts 32, 33 and 38 (outside 170-249), which run mode refuses",
+  "measurement and classifier re-frozen by the coordinator (2026-10-03 11:40) after an independent review of the smokes and synthetic checks only (no stall outcome): plate contacts classified by the contact normal (box-on-cylinder contacts sink, so contact heights misclassified round-plate support), and a blocked swing must be the leading foot's and show obstruction evidence (the earlier both-feet, low-swing test flagged false positives)",
+  "classifier corrected by the coordinator (2026-10-04 10:45) after the implementer's audit of its own smoke records (layouts 32/33/38 only; no stall outcome): 4 of the 11 swings the re-frozen rule called blocked had touched down on the target plate top after brushing the edge face, so both obstruction evidences now also require a floor-side touchdown (the design's 'fails to get over the 3 cm edge')",
+  "decision: precedence wall-blocked > blocked step-up > slow progress > other; falls excluded from the stall count and reported separately; specificity check on the clears; 0 non-fall stalls -> F1 NOT trained; INCOMPLETE decides nothing",
+  "physics: the bench ran on haswell&el8 (cn-c21); this launcher runs on el9 nodes as instructed, so trajectories are not bit-comparable across CPU types (the layouts differ anyway)",
+  "labels: the stage gait is LEARNED clock-s2, the stage SCRIPTED, layout and plate pose ORACLE"
+ ]
+}
