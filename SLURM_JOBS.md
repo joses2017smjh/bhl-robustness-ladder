@@ -3791,3 +3791,29 @@ Files:
 - Reading: the step-up failure inferred from the clocks2 bench traces is not the main mechanism. Most stalls are the gait stepping near the plate edge without advancing (no edge-face force on the leading foot, no toe stopped at the edge, mean along speed far below the commanded 0.29 m/s, and not the steady slow progress of the slow class).
 - By the frozen decision rule the F23 bench runs with clock-s2 as the stage gait (no F1).
 - Labels: LEARNED gaits, SCRIPTED stage, ORACLE layout and plate pose. Investigation, no gate. The per-crossing records (`crossings/*.json.gz`, 11 MB) and caches are gitignored; they stay on the share.
+
+**Predeclared now (2026-10-04, before any scored F2/F3 episode): (F) parts F2 + F3, bench v2 with clock-s2 as the stage gait** (launcher `slurm/repo20260923/cpu_m7_plate_bench_v2_fix.sbatch`; F1 not trained by (D)'s decision `21544245`, so the stage gait is clock-s2, as the frozen decision rule says).
+- Rule, verbatim from the launcher header:
+```
+PREDECLARED RULE (frozen before any episode; bench v2's rule verbatim, unchanged; the chain as M3's, each step only
+after the previous PASSES, every step with the same stage gait and the same two options):
+- Bench v2: with N crossings run (64 minus the dropped set) and N_h per heading, bench v2 PASSES iff clears >=
+  N - 2, 0 falls, and clears >= N_h - 1 for every heading. Otherwise FAIL; INCOMPLETE if any declared crossing is
+  missing. The clear definition is unchanged: mission7_gates' real clear (base along >= +0.35 m past the plate
+  centre along the door direction), within 10 s of takeover.
+- Then the unchanged exact ten-fall replay once with the same stage gait and --cross-budget window --yaw-cap 0.6,
+  through the existing replay-gate machinery (complete, 10 episodes, 10 upright, 0 falls; release arm m7-fix).
+- Then the route gate as coded by M1 with the same stage gait and options: Doors and Transport each >= 16/16
+  successes on validation layouts 0-15 (32 episodes).
+Here N = 41 (0 deg: 12, +90: 11, -90: 10, 180: 8), so PASS needs >= 39/41 clears, 0 falls, and >= 11, 10, 9, 7 clears
+at 0, +90, -90, 180 deg.  The verdict is scripts/mission7_plate_bench_v2.py bench_v2_verdict(), unchanged, written to
+<out>/verdict.json and read back from that JSON (never from an exit code).  Falls (tilt >= 0.78) count in EVERY
+phase after the spawn: settle, walk, stage, post.  Nothing below is tuned on a bench, replay or route result, and no
+parameter was chosen from a result.  ONE run: the output directory is fixed whatever the stage gait, and refused if
+it exists.
+```
+- Budget: 41 bench-v2 crossings + 10 exact-replay episodes + 32 route-gate episodes = 83 Mission 7 episodes (the frozen design's line).
+- Labels: LEARNED shipped gait + LEARNED stage gait (clock-s2), SCRIPTED stage, ORACLE layout and plate pose. Options F2 (cross budget: the crossing ends at the clear or with 0.2 s of the 10 s window left) and F3 (yaw cap 0.60: a declared interface change, consistent across bench, replay and route; in-place turns at 0.60 rad/s; crossing heading hold still ±0.40).
+- Disclosed (launcher header): bundling (a PASS is not attributable to one change); faster turns in narrow cells add wall-contact and fall risk; crossing until clear produced a replay fall before (9/10); in the replay and the route there is no bench window, so the budget counts from the stage's own takeover and the crossing can get less than 4.0 s when approach + settle + turn take longer than 5.8 s; the 180° timing is a projection (≈ 4.2–4.4 s left for the crossing).
+- Development record: smokes 21531935, 21532094, 21532292, 21532293, 21532778, 21532779 (superseded bytes) and 21539523 (final bytes: PASS, 55 checks, identity to 3a67bc2 on every default path, received |wz| 0.5999994 in turns). A late fix before the final smoke: the verdict's per-crossing fix line had always-null wz maxima because `read_results` drops the samples; the summary is now stored in the result (check (c) in the smoke).
+- Review: coordinator review (single reviewer, 2026-10-04) of the stage, bench v2, env, route-probe and release-script diffs: no blocking finding (default paths unchanged; F2 window counted from the bench's takeover on the bench; the m7-fix release arm releases only a scored bench-v2 PASS recording both options and the pinned weights). The two independent lens reviews planned on 2026-10-03 did not run (API limits). Clean-checkout tests (`21544263`, clone of b72dfd0 + these files): test_mission7_fix 147 passed; existing Mission 7 tests 410 passed, 6 skipped (untracked raw traces); full suite 1,782 passed, 9 skipped.

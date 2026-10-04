@@ -40,6 +40,13 @@ preset arms-turngait-clock-s2 (Turning R1's qualified seed; policy sha256 pinned
 checked at load).  The stage LAW is M2's turnboth law, unchanged (the same
 _turnboth_command), so the stage gait is the one changed factor.  LEARNED gaits, SCRIPTED
 stage, ORACLE layout and plate pose.  The shipped, turnboth and m3 paths are unchanged.
+
+``--cross-budget window`` (F2) and ``--yaw-cap 0.6`` (F3) (opt-in; m7-fix, SLURM_JOBS.md "User
+approval recorded 2026-10-03 09:55", item F) compose with ``--stage-gait clocks2 | export`` only:
+F2 ends the crossing at the clear point or when 0.2 s of the 10 s clear window (from the stage's
+takeover) remains, instead of at cross_max_s; F3 makes Mission 7's yaw command scale 0.60 rad/s
+(cap semantics, applied to the stage's commands here as on the bench and the route) and the stage's
+in-place turn 0.60 rad/s.  Declared at FIX_* below.  Every other path is unchanged.
 """
 from __future__ import annotations
 
@@ -241,6 +248,95 @@ def _checked_export(upstream, export, pinned_sha256=None, shipped_cfg=None):
     return policy, cfg, info
 
 
+# ---- --cross-budget window (F2) and --yaw-cap 0.6 (F3) (m7-fix) ----------------------------------------------------
+# Declared 2026-10-03 (SLURM_JOBS.md, "User approval recorded 2026-10-03 09:55", item (F), parts F2 and F3) before any
+# episode ran with them; nothing here is tuned on a result.  Both are opt-in, compose with the export stage gaits only
+# (clocks2 | export: M2's turnboth law on a swapped-in controller) and change nothing else in the stage law.
+# F2: the crossing ends at the clear point (base along >= mission7_gates.CLEAR_ALONG_M = 0.35 m past the plate centre
+#   along the door direction: the law's own check, unchanged) or when FIX_WINDOW_MARGIN_S of the FIX_CLEAR_WINDOW_S
+#   clear window counted from the stage's takeover remains, whichever comes first, instead of at the fixed cross_max_s
+#   (4.0 s).  The stage's takeover is PlateStage._start: on the bench that IS the bench's takeover (the window bench v2
+#   scores clears in); in the exact replay and the route (no bench window) the same expression counts from the stage's
+#   own takeover, its capture at approach_radius (0.78 m) from the plate, so there the approach, the settle and the turn
+#   run inside the same budget and the crossing can get less than 4.0 s.  Deterministic, no polling jitter: the crossing
+#   ends at the first poll with takeover + 10.0 - now <= 0.2 (+1e-9).  --cross-clear does not compose with it.
+# F3: Mission 7's yaw command scale becomes FIX_YAW_CAP_RPS = 0.60 rad/s with cap semantics (every command below the
+#   cap is delivered unchanged; vx and vy scales unchanged): capped_command() is the interface's saturating transform
+#   (bitwise mission7_plate_bench._route_transform at the 0.40 scale) used by bench v2 and, on the stage's own commands,
+#   by the exact replay; the route probe encodes with fix_command_scales() and MissionEnv(yaw_scale=0.60) decodes.  The
+#   stage turns in place (turn and turn back) at FIX_TURN_RATE = 0.60 rad/s, the gaits' qualified rate; the turn bound
+#   keeps its definition, a full revolution at the commanded rate (2 pi / 0.60 = 10.47 s; 15.71 s at 0.40); the
+#   crossing heading hold stays clip(1.2 x error, +-0.40) (TURNBOTH_WZ_WALK).
+FIX_CROSS_BUDGETS = ("window",)
+FIX_CLEAR_WINDOW_S = 10.0          # bench v2's clear window from takeover (= mission7_plate_bench.CLEAR_WINDOW_S)
+FIX_WINDOW_MARGIN_S = .2           # the crossing ends when this much of the window remains (one 0.2 s bench poll)
+FIX_TIME_EPS_S = 1e-9              # = mission7_plate_bench_v2.TIME_EPS_S
+FIX_YAW_CAPS = (.60,)
+FIX_YAW_CAP_RPS = .60
+FIX_TURN_RATE = FIX_YAW_CAP_RPS    # the stage's in-place turn rate (turn and turn back) under --yaw-cap
+FIX_TURN_MAX_S = 2 * np.pi / FIX_TURN_RATE   # a full revolution at the commanded rate (as TURNBOTH_TURN_MAX_S)
+FIX_COMMAND_CLIP = .999999         # approach_debug.command_action's clip of command / scales
+
+
+def fix_command_scales(yaw_cap=None):
+    """Mission 7's body-frame command scales (vx, vy, wz): [0.4, 0.35, 0.4]; --yaw-cap replaces the wz scale only."""
+    return np.array([.4, .35, .4 if yaw_cap is None else float(yaw_cap)])
+
+
+def capped_command(command, yaw_cap=None):
+    """The interface's saturating transform tanh(arctanh(clip(command / scales, +-0.999999))) x scales.
+
+    With yaw_cap None it is bitwise mission7_plate_bench._route_transform (approach_debug.command_action, then
+    MissionEnv.step's tanh x [0.4, 0.35, 0.4]); --yaw-cap 0.6 changes the wz scale only (F3).
+    """
+    scales = fix_command_scales(yaw_cap)
+    return np.tanh(np.arctanh(np.clip(np.asarray(command) / scales, -FIX_COMMAND_CLIP, FIX_COMMAND_CLIP))) * scales
+
+
+def fix_constants(cross_budget=None, yaw_cap=None):
+    """The declared F2 / F3 settings of a stage (provenance, preflight, records); None when neither is on."""
+    if cross_budget is None and yaw_cap is None:
+        return None
+    capped = yaw_cap is not None
+    return {"design": "SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55', item F (F2 + F3)",
+            "cross_budget": cross_budget, "yaw_cap_rps": None if not capped else float(yaw_cap),
+            "command_scales": fix_command_scales(yaw_cap).tolist(),
+            "turn_rate_rps": FIX_TURN_RATE if capped else TURNBOTH_TURN_RATE,
+            "turn_max_s": FIX_TURN_MAX_S if capped else TURNBOTH_TURN_MAX_S,
+            "turn_exit_rad": TURNBOTH_TURN_EXIT, "cruise_mps": TURNBOTH_CRUISE, "k_yaw": TURNBOTH_K_YAW,
+            "wz_walk_rps": TURNBOTH_WZ_WALK, "clear_along_m": TURNBOTH_CROSS_CLEAR_M,
+            "crossing_end": ("clear (along >= 0.35 m) or takeover + 10.0 - now <= 0.2 s, whichever first; takeover = "
+                             "PlateStage._start (bench: the bench's takeover; replay and route: the capture)"
+                             if cross_budget is not None else "clear (along >= 0.35 m) or cross_max_s (4.0 s)"),
+            "clear_window_s": FIX_CLEAR_WINDOW_S, "window_margin_s": FIX_WINDOW_MARGIN_S,
+            "cap_semantics": "every command below the cap is delivered unchanged; vx and vy scales unchanged"}
+
+
+def fix_kwargs(args):
+    """The PlateStage keyword arguments of --cross-budget / --yaw-cap ({} when neither is given: the default path)."""
+    out = {}
+    if getattr(args, "cross_budget", None) is not None:
+        out["cross_budget"] = args.cross_budget
+    if getattr(args, "yaw_cap", None) is not None:
+        out["yaw_cap"] = float(args.yaw_cap)
+    return out
+
+
+def fix_description(cross_budget=None, yaw_cap=None):
+    """The intervention text of the F2 / F3 options (appended to the stage gait's own)."""
+    parts = []
+    if cross_budget is not None:
+        parts.append(f"F2 cross budget '{cross_budget}': the crossing ends at the clear point (base along >= "
+                     f"{TURNBOTH_CROSS_CLEAR_M:.2f} m past the plate centre) or when {FIX_WINDOW_MARGIN_S:.1f} s of "
+                     f"the {FIX_CLEAR_WINDOW_S:.0f} s clear window counted from the stage's takeover remains, instead "
+                     "of at cross_max_s")
+    if yaw_cap is not None:
+        parts.append(f"F3 yaw cap {float(yaw_cap):.2f} rad/s: Mission 7's yaw command scale {float(yaw_cap):.2f} "
+                     f"(cap semantics), in-place turn and turn back at {FIX_TURN_RATE:.2f} rad/s (bounded "
+                     f"{FIX_TURN_MAX_S:.2f} s), crossing heading hold clip still +-{TURNBOTH_WZ_WALK:.2f}")
+    return "; ".join(parts)
+
+
 def export_check(upstream, export, pinned_sha256=None, shipped_cfg=None):
     """Verify an export before it is swapped in (preflight); return its provenance (see _checked_export)."""
     return _checked_export(upstream, export, pinned_sha256, shipped_cfg)[2]
@@ -340,7 +436,8 @@ class PlateStage:
                  stage_lateral_m=None, wait_open_s=0., press_hold=False,
                  creep_mps=.15, creep_max_m=.45, pre_point_m=.30, cross_clear_m=None,
                  cross_max_s=4.0, cross_kick=False, align_yaw=False, align_tol_rad=.20,
-                 align_max_s=1.5, stage_gait="shipped", turnboth_policy=None, export_gait=None):
+                 align_max_s=1.5, stage_gait="shipped", turnboth_policy=None, export_gait=None,
+                 cross_budget=None, yaw_cap=None):
         self.env = env
         self.approach_radius = float(approach_radius)
         self.settle_s = float(settle_s)
@@ -414,6 +511,21 @@ class PlateStage:
         if stage_gait not in STAGE_GAITS + EXPORT_STAGE_GAITS:
             raise ValueError(f"stage_gait must be one of {STAGE_GAITS + EXPORT_STAGE_GAITS}, got {stage_gait!r}")
         self.stage_gait = stage_gait
+        # --- m7-fix --- opt-in F2 / F3 (FIX_* above); None (the default) leaves every path as it was.
+        if cross_budget is not None or yaw_cap is not None:
+            if stage_gait not in EXPORT_STAGE_GAITS:
+                raise ValueError(f"--cross-budget / --yaw-cap compose with --stage-gait {' | '.join(EXPORT_STAGE_GAITS)} "
+                                 f"only, got {stage_gait!r}")
+            if cross_budget is not None and cross_budget not in FIX_CROSS_BUDGETS:
+                raise ValueError(f"cross_budget must be one of {FIX_CROSS_BUDGETS}, got {cross_budget!r}")
+            if yaw_cap is not None and float(yaw_cap) not in FIX_YAW_CAPS:
+                raise ValueError(f"yaw_cap must be one of {FIX_YAW_CAPS}, got {yaw_cap!r}")
+            if cross_budget is not None and self.cross_clear_m is not None:
+                raise ValueError("--cross-budget ends the crossing at mission7_gates' clear (0.35 m); --cross-clear "
+                                 "does not compose with it")
+        self.cross_budget = cross_budget
+        self.yaw_cap = None if yaw_cap is None else float(yaw_cap)
+        self.fix_takeover_s = None
         if stage_gait == "turnboth":
             if self.align_yaw or self.press_hold:
                 raise ValueError("--stage-gait turnboth turns in place itself; --align-yaw and --press-hold "
@@ -604,14 +716,32 @@ class PlateStage:
                                  "prev_actions_before_norm": before,
                                  "prev_actions_after_norm": float(np.linalg.norm(controller.prev_actions))})
 
+    def _turn_rate_and_bound(self):
+        """(in-place turn rate, turn bound): TURNBOTH_* unless --yaw-cap (--- m7-fix --- F3: FIX_TURN_RATE / _MAX_S)."""
+        if self.yaw_cap is None:
+            return TURNBOTH_TURN_RATE, TURNBOTH_TURN_MAX_S
+        return FIX_TURN_RATE, FIX_TURN_MAX_S
+
+    def _crossing_continues(self, now):
+        """The crossing's time bound: cross_max_s from the crossing's start, unless --cross-budget (--- m7-fix --- F2:
+        it continues while more than FIX_WINDOW_MARGIN_S of the FIX_CLEAR_WINDOW_S window from takeover remains)."""
+        if self.cross_budget is None:
+            return now < self.cross_start_s + self.cross_max_s
+        return self._window_left(now) > FIX_WINDOW_MARGIN_S + FIX_TIME_EPS_S
+
+    def _window_left(self, now):
+        """--- m7-fix --- F2: seconds of the clear window left at ``now`` (counted from the stage's takeover)."""
+        return self.fix_takeover_s + FIX_CLEAR_WINDOW_S - float(now)
+
     def _turnboth_command(self, recorded, now, xy, direction):
         """turn -> cross -> turn_back -> hand-back, after the unchanged approach and settle."""
         env = self.env
         heading = float(np.arctan2(direction[1], direction[0]))
         if self.phase == "turn":
             err = wrap(heading - _yaw(env))
-            if abs(err) >= TURNBOTH_TURN_EXIT and now < self.turn_start_s + TURNBOTH_TURN_MAX_S:
-                return np.array([0., 0., float(np.copysign(TURNBOTH_TURN_RATE, err))]), self.phase
+            rate, bound = self._turn_rate_and_bound()
+            if abs(err) >= TURNBOTH_TURN_EXIT and now < self.turn_start_s + bound:
+                return np.array([0., 0., float(np.copysign(rate, err))]), self.phase
             # Every crossing starts with a "cross" history entry: mission7_gates scores it from there.
             self.phase = "cross"
             self.cross_start_s = now
@@ -622,7 +752,7 @@ class PlateStage:
         if self.phase == "cross":
             err = wrap(heading - _yaw(env))
             along = float((xy - _plate_state(env, self.door, self.side)[0]) @ direction)
-            if along < self.turnboth_clear_m and now < self.cross_start_s + self.cross_max_s:
+            if along < self.turnboth_clear_m and self._crossing_continues(now):
                 # Straight forward with TurnWalkController's walk law: no lateral command.
                 return np.array([TURNBOTH_CRUISE * max(0., float(np.cos(err))), 0.,
                                  float(np.clip(TURNBOTH_K_YAW * err, -TURNBOTH_WZ_WALK, TURNBOTH_WZ_WALK))]), self.phase
@@ -630,10 +760,16 @@ class PlateStage:
             self.turn_start_s = now
             self.history.append({"time_s": now, "door": int(self.door), "phase": self.phase,
                                  "along_m": along, "cleared": bool(along >= self.turnboth_clear_m)})
+            if self.cross_budget is not None:   # --- m7-fix --- F2: how the crossing ended
+                cleared = along >= self.turnboth_clear_m
+                self.history[-1].update(cross_ended_by="clear" if cleared else "budget",
+                                        window_left_s=self._window_left(now),
+                                        cross_s=float(now - self.cross_start_s))
         if self.phase == "turn_back":
             err = wrap(self.takeover_yaw - _yaw(env))
-            if abs(err) >= TURNBOTH_TURN_EXIT and now < self.turn_start_s + TURNBOTH_TURN_MAX_S:
-                return np.array([0., 0., float(np.copysign(TURNBOTH_TURN_RATE, err))]), self.phase
+            rate, bound = self._turn_rate_and_bound()
+            if abs(err) >= TURNBOTH_TURN_EXIT and now < self.turn_start_s + bound:
+                return np.array([0., 0., float(np.copysign(rate, err))]), self.phase
             # Hand-back: the shipped policy and a zeroed prev_actions, recorded before the
             # "recorded" entry, which stays the last one (the route probe reads history[-1]["door"]).
             self._swap_gait(now, "shipped")
@@ -690,6 +826,8 @@ class PlateStage:
             self.takeover_yaw = _yaw(self.env)
             self._swap_gait(now, self.stage_gait)
             self.gait_events[-1]["takeover_yaw_rad"] = self.takeover_yaw
+            if self.cross_budget is not None:   # --- m7-fix --- F2's window counts from the stage's takeover
+                self.fix_takeover_s = float(now)
 
     def command(self, recorded):
         env, runner, slot = self.env, self.env.runner, self.env.slot
@@ -818,10 +956,11 @@ class PlateStage:
 
 def _episode(env, index, source_episode, baseline, stage_lateral_m=None, wait_open_s=0., press_hold=False,
              pre_point_m=.30, cross_clear_m=None, settle_s=.40, cross_kick=False, align_yaw=False,
-             stage_gait="shipped"):
+             stage_gait="shipped", cross_budget=None, yaw_cap=None):
     runner = env.runner
     stage = PlateStage(env, stage_lateral_m=stage_lateral_m, wait_open_s=wait_open_s, press_hold=press_hold,
                        pre_point_m=pre_point_m, cross_clear_m=cross_clear_m, settle_s=settle_s, cross_kick=cross_kick,
+                       cross_budget=cross_budget, yaw_cap=yaw_cap,
                        align_yaw=align_yaw, stage_gait=stage_gait)
     samples = []
     maximum_recorded_pose_difference = 0.
@@ -831,6 +970,10 @@ def _episode(env, index, source_episode, baseline, stage_lateral_m=None, wait_op
         env._gates()
         recorded = np.asarray(reference["command"], dtype=float)
         effective, phase = stage.command(recorded)
+        if yaw_cap is not None and phase != "recorded":
+            # --- m7-fix --- F3: the stage's own command through the 0.60 interface, as bench v2 (capped_command) and
+            # the route (physical_to_action + MissionEnv) deliver it; the recorded route commands stay as replayed.
+            effective = capped_command(effective, yaw_cap)
         runner.contact_trace = []
         runner.step([env.controller.update(runner.observe(0, effective))])
         sample = physical_sample(env, effective, phase)
@@ -873,6 +1016,8 @@ def _episode(env, index, source_episode, baseline, stage_lateral_m=None, wait_op
         row["gait_events"] = stage.gait_events
         if stage_gait == "m3":   # the turnboth row keeps its keys too
             row["m3_events"] = stage.m3_events
+    if cross_budget is not None or yaw_cap is not None:   # --- m7-fix --- (every other row keeps its keys)
+        row["stage_fix"] = fix_constants(cross_budget, yaw_cap)
     row["samples"] = samples
     return row
 
@@ -906,6 +1051,7 @@ def run(args, out):
                              settle_s=getattr(args, 'settle_s', .40),
                              cross_kick=getattr(args, 'cross_kick', False),
                              align_yaw=getattr(args, 'align_yaw', False),
+                             **fix_kwargs(args),   # --- m7-fix --- {} unless --cross-budget / --yaw-cap
                              stage_gait=getattr(args, 'stage_gait', 'shipped')))
         write(out / "episodes.json", {"complete": False, "episodes": rows})
     report = {
@@ -929,6 +1075,9 @@ def run(args, out):
                                            else m3_constants())
     if getattr(args, 'stage_gait', 'shipped') in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- the export's own record
         report["stage_gait_provenance"] = load_export_gait(env, args.stage_gait)[2]
+    if fix_kwargs(args):   # --- m7-fix --- F2 / F3 (every other report is unchanged)
+        report["intervention"] += "; " + fix_description(**fix_kwargs(args))
+        report["stage_fix"] = fix_constants(**fix_kwargs(args))
     write(out / "episodes.json", {"complete": True, "episodes": rows})
     write(out / "result.json", report)
 
@@ -1019,6 +1168,13 @@ if __name__ == "__main__":
                              "observations) swapped in as the stage controller")
     parser.add_argument("--stage-gait-export-sha256", default=None,
                         help="--stage-gait export only: refuse the export unless its policy.onnx has this sha256")
+    # --- m7-fix --- F2 / F3 (opt-in; --stage-gait clocks2 | export only)
+    parser.add_argument("--cross-budget", choices=FIX_CROSS_BUDGETS, default=None,
+                        help="F2: the crossing ends at the clear point or when 0.2 s of the 10 s clear window from the "
+                             "stage's takeover remains, instead of at the fixed 4.0 s cross bound")
+    parser.add_argument("--yaw-cap", type=float, choices=FIX_YAW_CAPS, default=None,
+                        help="F3: Mission 7's yaw command scale 0.60 rad/s (the stage's commands are delivered "
+                             "through it) and the stage's in-place turn at 0.60 rad/s")
     parser.add_argument("--preflight", action="store_true")
     args = parser.parse_args()
     if args.stage_gait == "turnboth" and (args.align_yaw or args.press_hold):
@@ -1034,6 +1190,12 @@ if __name__ == "__main__":
         parser.error("--stage-gait-export-sha256 pins a --stage-gait export only")
     if args.stage_gait == "export":
         select_export_gait(args.stage_gait_export, args.stage_gait_export_sha256)
+    # --- m7-fix ---
+    if fix_kwargs(args) and args.stage_gait not in EXPORT_STAGE_GAITS:
+        parser.error("--cross-budget / --yaw-cap compose with --stage-gait clocks2 | export only")
+    if args.cross_budget is not None and args.cross_clear is not None:
+        parser.error("--cross-budget ends the crossing at mission7_gates' clear (0.35 m); --cross-clear does not "
+                     "compose with it")
     args.repo = args.repo.resolve()
     args.campaign = args.campaign.resolve()
     args.baseline = args.baseline.resolve()
@@ -1052,6 +1214,8 @@ if __name__ == "__main__":
         if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 --- the export check, before any queue time
             upstream = args.repo / "external/Berkeley-Humanoid-Lite"
             preflight["stage_gait_check"] = export_check(upstream, *export_dir_for(upstream, args.stage_gait))
+        if fix_kwargs(args):   # --- m7-fix --- (every other preflight line is unchanged)
+            preflight["stage_fix"] = fix_constants(**fix_kwargs(args))
         print(json.dumps(preflight, sort_keys=True), flush=True)
         raise SystemExit(0)
     args.out.mkdir(parents=True, exist_ok=True)

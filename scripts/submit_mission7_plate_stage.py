@@ -27,6 +27,26 @@ DEFAULT_BASELINE = "results/mission7-approach-followup-20260922/replay-diagnose-
 # gate compares it.
 EXPORT_STAGE_GAITS = ("clocks2", "export")
 GAIT_CLOCK_MODULE = Path("src/bhl_robust/eval") / "gait_clock.py"
+# --- m7-fix --- F2 / F3 (= mission7_plate_stage.FIX_CROSS_BUDGETS / FIX_YAW_CAPS; that module is not imported here):
+# forwarded verbatim as --cross-budget=window / --yaw-cap=0.6, with an export stage gait only.
+FIX_CROSS_BUDGETS = ("window",)
+FIX_YAW_CAPS = (.60,)
+
+
+def _fix_args(parser, args):
+    """--- m7-fix --- the forwarded F2 / F3 flags ([] when neither is given: every other receipt is unchanged)."""
+    out = []
+    if args.cross_budget is None and args.yaw_cap is None:
+        return out
+    if args.stage_gait not in EXPORT_STAGE_GAITS:
+        parser.error("--cross-budget / --yaw-cap go with --stage-gait clocks2 | export only")
+    if args.cross_budget is not None:
+        if args.cross_clear is not None:
+            parser.error("--cross-budget ends the crossing at mission7_gates' clear; --cross-clear does not compose")
+        out.append(f"--cross-budget={args.cross_budget}")
+    if args.yaw_cap is not None:
+        out.append(f"--yaw-cap={args.yaw_cap}")
+    return out
 
 
 def _export_args(parser, args):
@@ -79,6 +99,10 @@ def main():
                              "sha256 as read here, so the replay refuses different weights")
     parser.add_argument("--stage-gait-export-sha256", default=None,
                         help="--stage-gait export only: the expected policy.onnx sha256 (checked here and in the job)")
+    parser.add_argument("--cross-budget", choices=FIX_CROSS_BUDGETS, default=None,
+                        help="m7-fix F2, forwarded as --cross-budget=window (an export stage gait only)")
+    parser.add_argument("--yaw-cap", type=float, choices=FIX_YAW_CAPS, default=None,
+                        help="m7-fix F3, forwarded as --yaw-cap=0.6 (an export stage gait only)")
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument("--node", default="cn-c22",
                         help="the replay gate is bitwise; it stays pinned to the original physics node")
@@ -123,6 +147,8 @@ def main():
         probe_args.append("--stage-gait=m3")
     export_args = _export_args(parser, args)   # --- m7-clocks2 --- [] unless --stage-gait clocks2 | export
     probe_args += export_args
+    fix_args = _fix_args(parser, args)         # --- m7-fix --- [] unless --cross-budget / --yaw-cap
+    probe_args += fix_args
     if args.smoke:
         probe_args.append("--smoke")
     if not args.submit:
@@ -173,6 +199,8 @@ def main():
     if args.stage_gait in EXPORT_STAGE_GAITS:   # --- m7-clocks2 ---
         row["stage_gait"] = args.stage_gait
         row["stage_gait_export_args"] = export_args
+    if fix_args:   # --- m7-fix ---
+        row["stage_fix_args"] = fix_args
     (out / "submission.json").write_text(json.dumps(row, indent=2) + "\n")
     with (ROOT / "SLURM_JOBS.md").open("a") as stream:
         stream.write(
@@ -181,6 +209,7 @@ def main():
             f"{'stage gait `turnboth` (TurnBoth-s0 swapped in for the stage); ' if args.stage_gait == 'turnboth' else ''}"
             f"{'stage gait `m3` (shipped gait: turn while stepping + stall watchdog); ' if args.stage_gait == 'm3' else ''}"
             f"{'stage gait `' + args.stage_gait + '` (its controller swapped in for the stage, M2 turnboth law); ' if args.stage_gait in EXPORT_STAGE_GAITS else ''}"
+            f"{'m7-fix options `' + ' '.join(fix_args) + '`; ' if fix_args else ''}"
             f"geometry, activation schedule and fall predicate unchanged; receipt/source hashes: "
             f"`{out.relative_to(ROOT)}/submission.json`.\n")
         stream.flush(); os.fsync(stream.fileno())
