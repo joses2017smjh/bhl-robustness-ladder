@@ -3736,3 +3736,21 @@ Files:
     - Specificity check: among the run's crossings that CLEAR, the share whose own edge dwell meets the blocked-step-up criterion must be lower than the stall fraction; otherwise the classifier does not separate stalls from clears, and F1 is not trained.
     - F1 is trained iff the non-fall blocked-step-up fraction is ≥ 1/3 AND the specificity check holds.
   - A fresh smoke is required. F23's smokes are restricted to layouts 32–169.
+- **(W) wrist-hold lift: NEGATIVE by construction; the probe is NOT run.** Coordinator decision, 2026-10-03 12:10, before any probe episode.
+  - The variant is built and tested (`src/bhl_robust/eval/scripted_carry.py` wristhold section, insertions only; `scripts/bench/coop_scripted_carry.py`; `slurm/repo20260923/cpu_coop_wristhold.sbatch`; `tests/test_coop_wristhold.py`). The flush-pad rules are reused verbatim, with probe seeds 125–129.
+  - **Kinematics** (the implementer, then an independent reviewer with its own code): the BHL arm has no joint other than the two lift joints that turns the hand about the pinch axis.
+    - Joint axis · pinch axis at squeeze / lift: shoulder pitch 1.00/1.00, elbow pitch 0.96/0.95, shoulder yaw 0.27–0.29/0.31–0.33, elbow roll 0.24–0.25/0.17–0.18, shoulder roll 0.
+    - The hand is welded to the elbow-roll body. The twist at the end of the lift without a hold is −0.98 rad.
+    - Best achievable twist, every case above the probe's 0.35 rad bound:
+      - elbow roll alone (at its ±0.785 limit): 0.79–0.81 rad, 18 % removed;
+      - shoulder yaw alone: 0.73–0.74 rad;
+      - yaw × elbow roll (grid optimum): 0.67 rad;
+      - the same, letting the shoulder roll re-solve to keep the pad on the face: 0.56 rad (42 % removed).
+  - **Smoke `21532354`** (throw-away seed 140): the hold saturated at the elbow-roll limit by about 5.5 s and swung the pads 43–45° off the cube faces. The cube was pushed to 0.26 m and dropped at about 6.9 s.
+    - Held ≥ 5 cm for 1.32 s against 14.28 s without the hold. Tilt 1.615 against 0.760 rad.
+    - Before the drop, the hold was reducing the roll (peak 0.37 rad against 0.69).
+  - **Reading:** "no arm joint except the lift joints can hold the hand's orientation about the pinch axis; the elbow-roll hold saturates and tilts the pads off the faces, losing the grip". It is NOT "the hold does not stop the roll".
+  - **Decision:** following the M3-on-bench-v1 precedent (a run whose bar is unreachable by construction is not run), probe seeds 125–129 and scored seeds 20–39 stay unused.
+  - Out of scope, for the user: a keyframe redesign using all five arm joints reaches at most about 8.4 cm of rise at zero twist with the pad on the face (below the lift rule's 10 cm). This is marginal at best and not proven. A non-rolling lift likely needs the legs (stand-up lift), i.e. a body-height interface the frozen gait does not have.
+  - Evidence (added at commit, 2026-10-03 22:15): smoke outputs `/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/coop-wristhold-21532354-smoke/`. The reviewer's independent kinematics (`kin_indep.py`, `kin_opt.py`, `kin_opt*.out`) were on a node-local /scratch and are recovered to `solutions-20260930/recovered-cn-gpu4-cc4dca4e/scratchpad/`.
+  - Clean-checkout tests of these four files on HEAD `62eb630` (worktree `solutions-20260930/wt-check-w`, test files `test_coop_wristhold.py`, `test_coop_flushpad.py`, `test_scripted_carry.py`): 364 passed, pytest exit 0 (12:51, recovered log), re-run `21539335` (log `logs/wristhold-cleancheck-20261003.txt`).
