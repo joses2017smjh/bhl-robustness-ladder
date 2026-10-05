@@ -3827,3 +3827,4 @@ it exists.
 - Against the same bench without the options (`21517668`, clock-s2): 18/41, 1 fall, 180° 0/8. The bundled options (F2 + F3) add 12 clears and remove the fall, but 180° and +90° stay far below their bars. Bundling means the gain is not attributable to one option.
 - Labels: LEARNED shipped gait + LEARNED stage gait (clock-s2), SCRIPTED stage, ORACLE layout and plate pose; F3 is a declared interface change (yaw scale 0.60).
 - Mission 7 crossing plans so far: M2, M3, clocks2 and now F2 + F3 on bench v2 are all NEGATIVE. Any next step is a new design and needs the user's decision.
+- Correction to the entry above: TWO misses cleared only after the 10 s window (L3 d0 at 10.68 s, L19 d0 at 14.08 s), not three (recounted from all 41 rows).
