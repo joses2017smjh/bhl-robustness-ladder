@@ -68,6 +68,8 @@ RAW_CAP_PREFLIGHT = 65536         # ... and for the preflight (the one place the
 KEY_ENV = "GEMINI_API_KEY_FILE"
 DEFAULT_KEY_FILE = "~/.config/bhl/gemini_api_key"
 PAID_TIER_ENV = "ER_OBS_PAID_TIER_CONFIRMED"
+TIER_ENV = "ER_OBS_TIER"          # tier amendment (2026-10-05): "paid" or "free", the operator's declaration
+TIERS = ("paid", "free")
 
 #: Clock and sleep of the real caller, resolved at call time (tests monkeypatch these module attributes; nothing in
 #: the CLI or the launchers can change them, so a real run is always paced in real time).
@@ -192,6 +194,19 @@ def paid_tier_confirmed(environ=None) -> bool:
     """The operator's confirmation that the key is a PAID-tier, API-restricted key (ER_OBS_PAID_TIER_CONFIRMED=1)."""
     env = os.environ if environ is None else environ
     return env.get(PAID_TIER_ENV) == "1"
+
+
+def declared_tier(environ=None) -> str | None:
+    """The operator's tier declaration (tier amendment, 2026-10-05): "paid" iff ER_OBS_PAID_TIER_CONFIRMED=1 or
+    ER_OBS_TIER=paid, "free" iff ER_OBS_TIER=free; None (refuse) when neither is given, ER_OBS_TIER holds anything
+    else, or the two contradict each other (ER_OBS_PAID_TIER_CONFIRMED=1 with ER_OBS_TIER=free)."""
+    env = os.environ if environ is None else environ
+    raw = env.get(TIER_ENV)
+    if raw is not None and raw not in TIERS:
+        return None
+    if paid_tier_confirmed(env):
+        return None if raw == "free" else "paid"
+    return raw
 
 
 def _inside(path: Path, root: Path) -> bool:

@@ -214,6 +214,21 @@ POST_REVIEW_FIXES = (
     "7 frames run: the resume procedure after a crash is documented in the frames launcher header",
 )
 
+#: Tier amendment, 2026-10-05, before ANY real call (the user supplied a key the same day, after being told the free
+#: and paid tiers' trade-offs; nothing had ever been sent to a Google endpoint). Prompt, schema, request template,
+#: frames, labels and every verdict rule are unchanged. Repeated in every output.
+TIER_AMENDMENT = (
+    "the operator declares the key's tier before any call: ER_OBS_TIER=free, or ER_OBS_TIER=paid / "
+    "ER_OBS_PAID_TIER_CONFIRMED=1 (as before); none, an unknown value or a contradiction refuses before any request",
+    "on the FREE tier Google may use the inputs to improve its products; the inputs are only the rendered frames of a "
+    "simulated scene and the fixed prompt text (no repo data, paths, seeds or user data), which the user accepted",
+    "the declared tier is recorded in every call, preflight and latency output (field 'tier')",
+    "the latency run (IN-LOOP-ELIGIBLE) refuses on the free tier: 50 calls at a 1.0 s gap would measure the free "
+    "tier's rate limit (HTTP 429 counts as a failed call there), not the model; it runs on a paid key only",
+    "accuracy calls run on either tier unchanged: HTTP 429 is never scored (re-sent or stopped, and a resubmission "
+    "resumes), so a free-tier quota can only delay the run, never change an outcome",
+)
+
 #: Seed-use evidence (grep, 2026-10-03 10:08), repeated in every output.
 SEED_EVIDENCE = (
     "results/ and solutions-20260930/: 409 coop/scripted-carry/stand/team JSON files (path matching coop|carry|lift|"

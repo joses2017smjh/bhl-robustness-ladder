@@ -110,6 +110,7 @@ def provenance(**extra) -> dict:
     return {
         "task": E.TASK, "label": E.LABEL, "design_text": E.DESIGN_TEXT, "rule_text": E.RULE_TEXT,
         "clauses_as_applied": list(E.CLAUSES_AS_APPLIED), "post_review_fixes": list(E.POST_REVIEW_FIXES),
+        "tier_amendment": list(E.TIER_AMENDMENT),
         "seed_evidence": list(E.SEED_EVIDENCE),
         "code_root": str(REPO), "git": git_info(REPO),
         "source_sha256": {s: sha256(REPO / s) for s in SOURCES},
@@ -363,10 +364,11 @@ def make_transport(args, man: dict, frames_dir: Path, pre_dir: Path | None, out_
     if args.expect_request_sha256 != C.REQUEST_SHA256:
         raise SystemExit("ER-OBS-1: REFUSED (--expect-request-sha256 does not match the code's request-template sha256 "
                          f"{C.REQUEST_SHA256}; record it in the ledger first)")
-    if not C.paid_tier_confirmed():
-        raise SystemExit(f"ER-OBS-1: REFUSED ({C.PAID_TIER_ENV}=1 is required: the key must be a PAID-tier key "
-                         "(free-tier inputs are used to improve Google's products) and API-restricted (unrestricted "
-                         "keys get HTTP 403); nothing was sent)")
+    if C.declared_tier() is None:
+        raise SystemExit(f"ER-OBS-1: REFUSED (declare the key's tier: {C.PAID_TIER_ENV}=1 or {C.TIER_ENV}=paid for a "
+                         f"PAID-tier key, {C.TIER_ENV}=free for a free-tier key (free-tier inputs are used to improve "
+                         "Google's products), never both; the key must be API-restricted (unrestricted keys get HTTP "
+                         "403); nothing was sent)")
     try:                                     # offline TLS check: requests verifies against certifi's CA bundle
         import certifi
         ca = Path(certifi.where())
@@ -448,7 +450,8 @@ def call_header(args, man: dict) -> dict:
             "request_format_tested_live": False,
             "request_format_source": ("saved official ER 2 docs (2026-10-03): REST example in aidev_robotics-overview."
                                       "txt:211-235 and aidev_robotics-spatial.txt:44-64; answer field output_text"),
-            "frames_manifest": man["_path"], "frames_manifest_sha256": man["_sha256"], "mode": args.mode}
+            "frames_manifest": man["_path"], "frames_manifest_sha256": man["_sha256"], "mode": args.mode,
+            "tier": C.declared_tier() if args.mode == "run" else "mock"}
 
 
 # ------------------------------------------------------------------ the per-frame cache (claims, attempts, outcomes)
@@ -675,6 +678,10 @@ def cmd_latency(args) -> int:
         raise SystemExit("ER-OBS-1: REFUSED (latency mode needs --preflight-frames <a smoke frames directory>)")
     if run:
         refuse_short_classes(man)
+        if C.declared_tier() == "free":
+            raise SystemExit(f"ER-OBS-1 LATENCY: REFUSED ({C.TIER_ENV}=free: on the free tier 50 calls at a "
+                             f"{C.MIN_GAP_S:.1f} s gap would measure the rate limit, not the model; the latency run "
+                             "needs a paid key; nothing was sent)")
     out_json = args.out / "latency.json"
     if out_json.exists():
         raise SystemExit(f"ER-OBS-1 LATENCY: REFUSED ({out_json} exists; outputs are never overwritten)")

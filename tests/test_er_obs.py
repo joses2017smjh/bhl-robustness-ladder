@@ -1238,6 +1238,12 @@ def test_calls_launcher_real_modes_on_a_fake_tree_and_key_refusals(tmp_path):
     for mode in ("run", "latency"):
         r = _launch(launcher, [mode], {**base, C.KEY_ENV: str(good_early)}, cwd=tree)
         assert r.returncode == 1 and "ER_OBS_PAID_TIER_CONFIRMED=1" in r.stdout and "nothing was sent" in r.stdout
+    # tier amendment (2026-10-05): a contradiction refuses; latency refuses on the free tier
+    r = _launch(launcher, ["run"], {**base, C.PAID_TIER_ENV: "1", C.TIER_ENV: "free", C.KEY_ENV: str(good_early)},
+                cwd=tree)
+    assert r.returncode == 1 and "never both" in r.stdout and "nothing was sent" in r.stdout
+    r = _launch(launcher, ["latency"], {**base, C.TIER_ENV: "free", C.KEY_ENV: str(good_early)}, cwd=tree)
+    assert r.returncode == 1 and "rate limit" in r.stdout and "nothing was sent" in r.stdout
     base[C.PAID_TIER_ENV] = "1"
     # key file missing / mode 644 / inside the code root: refused, nothing logged as a call
     r = _launch(launcher, ["run"], {**base, C.KEY_ENV: str(keydir / "missing")}, cwd=tree)
@@ -1272,3 +1278,37 @@ def test_calls_launcher_real_modes_on_a_fake_tree_and_key_refusals(tmp_path):
     assert r.returncode == 1 and "never overwritten" in r.stdout
     r = _launch(launcher, ["latency"], {**base, C.KEY_ENV: str(good)}, cwd=tree)
     assert r.returncode == 1 and "never overwritten" in r.stdout
+
+
+def test_tier_declaration():
+    """Tier amendment (2026-10-05): paid via either variable, free only via ER_OBS_TIER, never both, nothing else."""
+    assert C.declared_tier({}) is None
+    assert C.declared_tier({C.PAID_TIER_ENV: "1"}) == "paid"
+    assert C.declared_tier({C.TIER_ENV: "paid"}) == "paid"
+    assert C.declared_tier({C.TIER_ENV: "paid", C.PAID_TIER_ENV: "1"}) == "paid"
+    assert C.declared_tier({C.TIER_ENV: "free"}) == "free"
+    assert C.declared_tier({C.TIER_ENV: "free", C.PAID_TIER_ENV: "1"}) is None      # a contradiction
+    assert C.declared_tier({C.TIER_ENV: "FREE"}) is None and C.declared_tier({C.PAID_TIER_ENV: "yes"}) is None
+    assert len(E.TIER_AMENDMENT) == 5 and any("latency" in t for t in E.TIER_AMENDMENT)
+
+
+def test_free_tier_runs_the_calls_records_the_tier_and_refuses_latency(tmp_path, monkeypatch, capsys):
+    cli, run, pre = _run_setup(tmp_path, monkeypatch)
+    monkeypatch.delenv(C.PAID_TIER_ENV)
+    monkeypatch.setenv(C.TIER_ENV, "free")
+    hashes = ["--expect-prompt-sha256", C.PROMPT_SCHEMA_SHA256, "--expect-request-sha256", C.REQUEST_SHA256]
+    out = tmp_path / "calls-run"
+    rc = cli.main(["calls", "--mode", "run", "--frames", str(run), "--preflight-frames", str(pre), "--out", str(out),
+                   *hashes])
+    assert rc == 0, capsys.readouterr().out
+    calls = json.loads((out / "calls.json").read_text())
+    assert calls["tier"] == "free" and calls["tier_amendment"] == list(E.TIER_AMENDMENT)
+    assert calls["prompt_schema_sha256"] == C.PROMPT_SCHEMA_SHA256 and calls["request_sha256"] == C.REQUEST_SHA256
+    pre_files = list(out.glob("preflight-*.json"))
+    assert pre_files and all(json.loads(f.read_text())["tier"] == "free" for f in pre_files)
+    n = len(FakeHttp.instances)
+    with pytest.raises(SystemExit, match="ER_OBS_TIER=free"):
+        cli.main(["latency", "--mode", "run", "--frames", str(run), "--preflight-frames", str(pre),
+                  "--out", str(tmp_path / "lat"), *hashes])
+    assert len(FakeHttp.instances) == n and not (tmp_path / "lat").exists()          # nothing was sent
+

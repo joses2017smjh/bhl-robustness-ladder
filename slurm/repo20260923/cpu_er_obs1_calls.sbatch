@@ -96,6 +96,12 @@
 # and the design says paid tier; and (b) API-restricted in AI Studio: the docs say the Gemini API answers requests
 # from unrestricted keys with 403 Forbidden. Run and latency refuse unless ER_OBS_PAID_TIER_CONFIRMED=1 is exported:
 # the operator's confirmation of both, made before any paid call.
+# TIER AMENDMENT (2026-10-05, before any real call; er_obs.TIER_AMENDMENT): the operator may instead declare
+# ER_OBS_TIER=free (the user's choice: the inputs are only rendered frames of a simulated scene and the fixed prompt).
+# Run then proceeds unchanged (a 429 is never scored, so a free-tier quota only delays it; resubmit to resume), the
+# tier is recorded in every output, and latency refuses on the free tier (it would measure the rate limit).
+#   run (free tier): sbatch --time=04:00:00 --export=ALL,ER_OBS_TIER=free,ER_OBS_CALLS_SMOKE_JOB=<MOCK>,ER_OBS_PREFLIGHT_FRAMES=<smoke frames dir> \
+#              slurm/repo20260923/cpu_er_obs1_calls.sbatch run
 # PAID CALLS also refuse when the run manifest's summary.classes_below_20 is not [] (the accuracy verdict would be
 # INCOMPLETE whatever the answers). Expected cost about $6 (about 852 calls at $1/M input, $5/M output incl.
 # thinking); no output cap is set (documented limit 65,536 tokens, at most about $0.33 per call).
@@ -259,10 +265,21 @@ if [ "$(printf '%s' "$HASHES" | json_field /dev/stdin prompt_schema_sha256)" != 
     echo "ER-OBS-1 CALLS RESULT: REFUSED (the code's prompt+schema or request sha256 differs from this launcher's $PROMPT_SHA256 / $REQUEST_SHA256)"
     exit 1
 fi
-if [ "${ER_OBS_PAID_TIER_CONFIRMED:-}" != 1 ]; then
-    echo "ER-OBS-1 CALLS RESULT: REFUSED ($MODE needs --export=ALL,ER_OBS_PAID_TIER_CONFIRMED=1: the operator's confirmation that the key is a PAID-tier, API-restricted key; nothing was sent)"
+TIER=""
+case "${ER_OBS_TIER:-}" in
+    "") [ "${ER_OBS_PAID_TIER_CONFIRMED:-}" = 1 ] && TIER=paid ;;
+    paid) TIER=paid ;;
+    free) [ "${ER_OBS_PAID_TIER_CONFIRMED:-}" = 1 ] || TIER=free ;;
+esac
+if [ -z "$TIER" ]; then
+    echo "ER-OBS-1 CALLS RESULT: REFUSED ($MODE needs the key's tier declared: --export=ALL,ER_OBS_PAID_TIER_CONFIRMED=1 (or ER_OBS_TIER=paid) for a PAID-tier key, or ER_OBS_TIER=free, never both; the key must be API-restricted; nothing was sent)"
     exit 1
 fi
+if [ "$MODE" = latency ] && [ "$TIER" = free ]; then
+    echo "ER-OBS-1 CALLS RESULT: REFUSED (latency on the free tier would measure the rate limit, not the model: it needs a paid key; nothing was sent)"
+    exit 1
+fi
+echo "TIER: $TIER (declared by the operator; recorded in every output)"
 if [ "$MODE" = run ]; then OUT=$DATA/calls-run; else OUT=$DATA/latency-run; fi
 if ! erobs keycheck --forbid "$FR" "$PRE" "$OUT"; then
     echo "ER-OBS-1 CALLS RESULT: REFUSED (API key file; see above; nothing was sent)"
