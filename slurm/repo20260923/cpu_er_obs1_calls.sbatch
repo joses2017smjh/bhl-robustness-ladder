@@ -16,8 +16,8 @@
 #   model   : gemini-robotics-er-2-preview (the standard endpoint, not -streaming), in the documented ER 2 REST shape
 #             (saved docs aidev_robotics-overview.txt:211-235, aidev_robotics-spatial.txt:44-64): POST
 #             https://generativelanguage.googleapis.com/v1beta/interactions, body {model, input: {parts: [inlineData
-#             PNG, text]}, generation_config: {thinking_level: low}} (amended 2026-10-05). The JSON schema travels in
-#             the text (prompt, then "JSON schema of the answer: <schema>"); the answer is output_text. Temperature,
+#             PNG, text]}, ...} as first frozen; AMENDED 2026-10-05 (see REQUEST_SHA256 below). The JSON schema travels in
+#             the text (prompt, then "JSON schema of the answer: <schema>"); the answer is the model_output text. Temperature,
 #             top_p, the output-token cap, media resolution, safety settings, system instruction and storage are at
 #             the API defaults; no tools. The request format is UNTESTED against the live service (no key yet): a
 #             preflight call on a smoke frame (throw-away seed) must pass its format check before any scored call.
@@ -28,9 +28,11 @@
 #     PROMPT_SHA256=873d16aed67f87f36fff88dbe7deb2ad6ec55abd0ce71c1a9e581f059191c20b
 #   request template sha256 (endpoint, body without the image, answer field, timeouts, pacing and re-send policy;
 #   record it too; run and latency refuse any other):
-#     REQUEST_SHA256=915d324d004cfbf118b8bf9a5ca4f949d5b4aab22a086ef32b21c89b1bbdfdeb
-#     (amended 2026-10-05 before any scored call; was 6e12d1a1...: the live preflight 21564188 refused the REST
-#     example's nested thinking_config with HTTP 400, so generation_config is now the SDKs' flat {thinking_level: low})
+#     REQUEST_SHA256=ddc1f3d1cc08ba9ad97399145b119c1566a6f1d6e02789668e69ea356c8d20b2
+#     (amended 2026-10-05 before any scored call; was 6e12d1a1..., then 915d324d...: live preflights 21564188 and
+#     21564286 refused the saved robotics REST example's shape with HTTP 400; the body now follows the live
+#     Interactions API reference: input [{type: image, data, mime_type}, {type: text, text}], generation_config
+#     {thinking_level: low}; the answer is the model_output step's text; er_obs.REQUEST_AMENDMENT)
 #     (python scripts/bench/er_obs.py hashes prints both and the template; key and image never appear)
 #
 # DESIGN (verbatim; SLURM_JOBS.md "User approval recorded 2026-10-03 09:55", item G; er_obs.DESIGN_TEXT):
@@ -43,10 +45,10 @@
 #   logged or committed). Build and mock dry run now; scored calls only once the key exists.
 #
 # CLAUSES AS APPLIED (decided 2026-10-03 before any call; er_obs.CLAUSES_AS_APPLIED, in every output):
-# * MAIN frames: no answer (no output_text), a non-JSON answer, JSON failing the schema check (object; cube_point =
+# * MAIN frames: no answer (no model_output text), a non-JSON answer, JSON failing the schema check (object; cube_point =
 #   two finite numbers in [0, 1000]; the four fields JSON booleans), a final HTTP error, a transport error, or a wall
 #   time over 60 s counts as WRONG: each boolean is scored as the negation of its label and the point as a miss.
-#   output_text counts as JSON iff, trimmed, it is one JSON value or exactly one ``` / ```json code block holding one.
+#   the answer text counts as JSON iff, trimmed, it is one JSON value or exactly one ``` / ```json code block holding one.
 # * C1 frames: the four booleans are parsed on their own, whatever cube_point holds (the point is never scored on C1;
 #   [-1, -1] is an honest answer when no cube is visible). A C1 call without four parsed booleans counts as CORRECT on
 #   every boolean (on a control that must score LOW, "wrong" would help it pass); the C1 failure rate and the C1 BA
@@ -74,7 +76,7 @@
 #   mid-call): never re-sent automatically; the run stays INCOMPLETE (exit 3) until the coordinator, with NO calls
 #   job running, records it in the ledger and moves that .claim aside (mv x.claim x.claim.orphan-<date>); the next
 #   resume then sends that frame (its earlier answer, if any, was never received, so nothing is selected).
-# * PREFLIGHT: one call on a smoke frame must return HTTP 200, an output_text that passes the schema check and a
+# * PREFLIGHT: one call on a smoke frame must return HTTP 200, an answer text that passes the schema check and a
 #   usage object (any top-level field containing "usage"; its thought-token counts are recorded to show the thinking
 #   level applied), else exit 5 BEFORE any scored or measured call, naming the failing layer (request shape, key,
 #   response shape, answer format, service unavailable); the raw response (redacted, 64 KB) is kept.
@@ -133,7 +135,7 @@ CODE=${ER_OBS_CODE:-/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder}
 DATA=${ER_OBS_DATA:-/nfs/hpc/share/sanchej7/Humanoid_Lite/er-obs1-data}
 PY=${ER_OBS_PY:-/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python}
 PROMPT_SHA256=873d16aed67f87f36fff88dbe7deb2ad6ec55abd0ce71c1a9e581f059191c20b
-REQUEST_SHA256=915d324d004cfbf118b8bf9a5ca4f949d5b4aab22a086ef32b21c89b1bbdfdeb
+REQUEST_SHA256=ddc1f3d1cc08ba9ad97399145b119c1566a6f1d6e02789668e69ea356c8d20b2
 CODEFILES=(src/bhl_robust/eval/er_obs/__init__.py src/bhl_robust/eval/er_obs/labels.py
            src/bhl_robust/eval/er_obs/render.py src/bhl_robust/eval/er_obs/client.py
            src/bhl_robust/eval/er_obs/verdict.py scripts/bench/er_obs.py tests/test_er_obs.py)

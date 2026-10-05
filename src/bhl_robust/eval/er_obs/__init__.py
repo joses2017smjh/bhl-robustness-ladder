@@ -139,9 +139,9 @@ CLAUSES_AS_APPLIED = (
     "overview.txt:211-235, aidev_robotics-spatial.txt:44-64): POST https://generativelanguage.googleapis.com/v1beta/"
     "interactions, the key in the x-goog-api-key header, body {model: gemini-robotics-er-2-preview, input: {parts: "
     "[{inlineData: {mimeType: image/png, data: <the PNG, base64>}}, {text: <the prompt, then 'JSON schema of the "
-    "answer: ' and the schema as JSON>}]}, generation_config: {thinking_level: low}} (amended 2026-10-05: the live "
-    "preflight refused the REST example's nested thinking_config, so the SDK examples' flat thinking_level is used; "
-    "see REQUEST_AMENDMENT); no response-schema field is documented for this endpoint, so the schema travels in the prompt text (the "
+    "answer: ' and the schema as JSON>}]}, ...} as first frozen; AMENDED 2026-10-05 before any scored call after two "
+    "live preflights refused it (REQUEST_AMENDMENT): input [{type: image, data, mime_type: image/png}, {type: text, "
+    "text}], generation_config {thinking_level: low}, answer from the model_output step's text; no response-schema field is documented for this endpoint, so the schema travels in the prompt text (the "
     "docs request JSON formats in the prompt) and PROMPT_SCHEMA_SHA256 covers that exact text and the schema; nothing "
     "else is set: temperature, top_p, the output-token cap (documented output limit 65,536; the earlier 8192 cap is "
     "dropped), media resolution, safety settings, system instruction and interaction storage stay at the API "
@@ -149,7 +149,7 @@ CLAUSES_AS_APPLIED = (
     "answer (pre-call; changed after the review): the response's output_text (the field all four documented SDKs "
     "expose); it is JSON iff, after trimming whitespace, it is one JSON value or exactly one markdown code block (an "
     "opening ``` or ```json line, the value, a closing ``` line) with nothing outside it; anything else is non-JSON",
-    "main frames: no answer (no output_text), a non-JSON answer, JSON that fails the schema check (an object with "
+    "main frames: no answer (no model_output text), a non-JSON answer, JSON that fails the schema check (an object with "
     "cube_point = two finite numbers in [0, 1000] and the four fields as JSON booleans), a final HTTP error, a "
     "transport error, or a wall time over 60 s counts as WRONG: each boolean is scored as the negation of its label "
     "and the point as a miss",
@@ -180,7 +180,7 @@ CLAUSES_AS_APPLIED = (
     "with an atomic no-overwrite hard link, so overlapping resumes never call a frame twice; a claim without an "
     "outcome (a job that died mid-call) is never re-sent automatically: the run stays INCOMPLETE until the "
     "coordinator, with no calls job running, moves that claim aside (recorded in the ledger)",
-    "preflight: one call on a SMOKE frame (throw-away seed) must return HTTP 200, an output_text that passes the "
+    "preflight: one call on a SMOKE frame (throw-away seed) must return HTTP 200, an answer text that passes the "
     "schema check and a usage object (any top-level field whose name contains 'usage'; every thought-token count in it "
     "is recorded to show the thinking level applied) before any scored or measured call; otherwise the caller stops "
     "(exit 5) and names the failing layer (request shape, key, response shape, answer format, or service "
@@ -217,13 +217,19 @@ POST_REVIEW_FIXES = (
 #: Request amendment, 2026-10-05, before any SCORED call (only the preflight's throw-away smoke frame was ever sent).
 REQUEST_AMENDMENT = (
     "the first live preflight (job 21564188, smoke frame s900_t01, free tier) returned HTTP 400 \"Unknown parameter "
-    "'thinking_config' at 'generation_config'\": the documented REST example's nested generation_config."
-    "thinking_config.thinking_level does not exist on the live interactions endpoint",
-    "generation_config is now {thinking_level: low}, the flat form all four documented SDK examples use (Python and "
-    "JS generation_config thinking_level, Java GenerationConfig.thinkingLevel, Go ThinkingLevel); the thinking level "
-    "(low), the endpoint, the input parts, the prompt text, the schema and every verdict rule are unchanged",
-    "the request-template sha256 changes accordingly and is re-recorded in the ledger and the calls launcher before "
-    "any scored call; the prompt+schema sha256 is unchanged",
+    "'thinking_config' at 'generation_config'\": the saved robotics REST example's nested thinking_config does not "
+    "exist on the live interactions endpoint; generation_config is now {thinking_level: low}, the flat form all four "
+    "SDK examples use",
+    "the second live preflight (job 21564286, the same smoke frame) returned HTTP 400 \"The 'type' parameter is "
+    "required at 'input'\": the input is now the typed list of the live Interactions API reference and its image-"
+    "understanding REST example: [{type: image, data: <base64 PNG>, mime_type: image/png}, {type: text, text: <the "
+    "prompt text>}] (image first, then text, as before)",
+    "the answer is read from the response's steps (the API reference's Interaction resource: steps[type="
+    "model_output].content[type=text].text, joined in order; its REST JSON has no top-level output_text); a "
+    "top-level output_text is read only when a response has no steps list",
+    "unchanged: the model, endpoint, header, thinking level (low), prompt text, schema, frames, labels, pacing, "
+    "re-send policy and every verdict rule; the request-template sha256 changes accordingly and is re-recorded in the "
+    "ledger and the calls launcher before any scored call; the prompt+schema sha256 is unchanged",
 )
 
 #: Tier amendment, 2026-10-05, before ANY real call (the user supplied a key the same day, after being told the free

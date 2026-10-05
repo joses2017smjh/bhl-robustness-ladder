@@ -394,7 +394,7 @@ def owner_info() -> dict:
 
 
 def preflight_check(res: dict) -> dict:
-    """The preflight's format check: which layer failed, if any. Passing needs HTTP 200, an output_text that passes
+    """The preflight's format check: which layer failed, if any. Passing needs HTTP 200, an answer text that passes
     the schema check, and a usage object (its thought-token counts are the evidence that thinking ran)."""
     f = res["final"]
     if f is None:
@@ -447,9 +447,10 @@ def call_header(args, man: dict) -> dict:
     return {"model": C.MODEL, "endpoint": C.ENDPOINT, "prompt": C.PROMPT, "json_schema": C.SCHEMA,
             "prompt_text": C.TEXT, "prompt_schema_sha256": C.PROMPT_SCHEMA_SHA256, "request_sha256": C.REQUEST_SHA256,
             "request_template": C.request_template(), "call_policy": C.CALL_POLICY,
-            "request_format_tested_live": False,
-            "request_format_source": ("saved official ER 2 docs (2026-10-03): REST example in aidev_robotics-overview."
-                                      "txt:211-235 and aidev_robotics-spatial.txt:44-64; answer field output_text"),
+            "request_format_tested_live": False,    # at code time; the preflight record in this output is the live test
+            "request_format_source": ("live Interactions API reference and its image-understanding REST example "
+                                      "(2026-10-05), after two live preflights refused the saved robotics REST "
+                                      "example's shape (er_obs.REQUEST_AMENDMENT); answer: " + C.ANSWER_FIELD),
             "frames_manifest": man["_path"], "frames_manifest_sha256": man["_sha256"], "mode": args.mode,
             "tier": C.declared_tier() if args.mode == "run" else "mock"}
 
