@@ -3897,3 +3897,15 @@ it exists.
 - Confirmation (an unbiased screen, before any bench episode): the chosen variant on every crossing of the never-run exploration layouts 117–169 that the bench smoke parser accepts (67 crossings: 0° 17, +90° 20, −90° 17, 180° 13; 53 standstill, 14 walking). **GO iff ≥ 64/67 clears (the bench's 39/41 rate) and 0 falls**; otherwise STOP (no bench). It still runs through the runtime patch; the result is recorded either way.
 - Only after GO: the option is implemented as committed opt-in code (stage, bench v2, the exact replay and the route probe, as F2 + F3 were). The committed code must reproduce the patch's records on a set of dev crossings bitwise. Then a fresh smoke, and ONE bench v2 run under bench v2's unchanged rule, predeclared with its options before it is submitted. A PASS continues to the exact replay and the route gate as before.
 - Labels: LEARNED stage gait (clock-s2), SCRIPTED stage, ORACLE layout and plate pose.
+
+**Mission 7 screen v3 complete (2026-10-05 08:12): STOP by the predeclared selection rule (no variant eligible), so no confirmation screen and no bench run. Mission 7's crossing stays NEGATIVE with clock-s2, the only qualified stage gait.** Development set only (76 exploration crossings, layouts 40–99); the confirmation layouts 117–169 and the bench's 41 episodes stay unused.
+| variant (all: clock-s2 + F2 + F3 + backward-180 + 0.40 s stop before hand-back) | clears | falls | eligible (0 falls and ≥ 72/76) |
+|---|---|---|---|
+| forward 0.30 (`21563396`) | 69/76 | 0 | no (clears) |
+| forward 0.40 (`21563397`) | 73/76 | 1 (L57 d1, in the crossing) | no (fall) |
+| forward 0.35 (`21563620`) | 68/76 | 1 (L96 d0, 0°) | no (fall, clears) |
+| forward 0.30, stall boost to 0.40 (`21563623`; boost fired on 33 crossings) | 71/76 | 0 | no (clears: one short) |
+- Every variant's misses include the same 2 pre-stage walk time-outs (L82 d1, L97 d1), which no stage option can change. The 180° entries clear 15/15 in all four (the backward crossing works; the stop removed its only fall).
+- Reading: outcomes are not monotone in the crossing speed (0.35 is worse than both 0.30 and 0.40, and moves misses to different crossings: L48 d1, L61 d1, L74 d1, L96 d0). Which crossing fails flips with small changes to the scripted law, as report A found for the replay variants in 2026-09. Further tuning of scripted parameters on this set would be selection, not evidence. With clock-s2 the scripted stage sits at roughly 90–95% stage clears with occasional falls; the bench needs 95% and 0 falls.
+- What would change this is a stage gait that is both plate-competent and push-qualified. PlateCross v1 s2 cleared 73/76 on the same set with the backward crossing, but failed the push gate (21/60); F1 (half flat) kept the push failure (12–20/60). That is a new training design and needs the user's decision.
+- Labels: LEARNED stage gait (clock-s2), SCRIPTED stage (runtime patch `solutions-20260930/campaign-m7-research/screen_v3.py`), ORACLE layout and plate pose; development only, no verdict.
