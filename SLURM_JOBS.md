@@ -3864,3 +3864,12 @@ it exists.
 - Reading: neither open model reads this sim's cube states from one rendered frame well enough to replace the simulator's ground truth; lifting and dropping are not seen at all. The Gemini arm (G) is unchanged and still waits for a key.
 
 **Stand5 seed 0 (`21544026_0`): complete at 7999, not killed, last-200 success 0.00027** (below 0.10; from its result JSON). The pair verdict waits for seed 1.
+
+**F1 "PlateCross v2" `21548980` (2026-10-04 23:50): NEGATIVE, no qualified seed, so no bench run (as predeclared)** (smoke `21548979` PASS; read from `results/repo-gpu-20260923/platecross2-20261004/selection.json`, written once by the last seed; recounted by the coordinator from the 3 × 3 per-seed JSONs, and the counts match).
+- All three seeds trained 3000 iterations from clock-s2 model_5999 (COMPLETED 1:39 / 2:07 / 2:20), and every seed turns 10/10 in the qualification (173–253°).
+- s0: v2 PASS (walk drift within bounds); NOT QUALIFIED: walk 3/3, push **20/60** (≤ 9 needed).
+- s1: v2 PASS; NOT QUALIFIED: walk 1/3 (drift −29.8°, −29.3°), push **12/60**.
+- s2: v2 FAIL (walk drift +31.2°); NOT QUALIFIED: walk 0/3 (+29.5°, +23.5°, +20.2°), push **17/60**.
+- Against PlateCross v1 (`21517543`, all-plates field: push 24 / 23 / 21 of 60) and the parent clock-s2 (9/60): mixing in flat ground recovers a little push robustness but not enough, and every seed still falls more than the parent. Fine-tuning on plates at this budget costs the push margin that clock-s2 only just had.
+- Consequence for Mission 7, per the plan recorded above: the ONE remaining bench v2 run uses clock-s2 (no F1 seed), with F2 + F3 and the backward-180 crossing only once that option is built, tested and smoked. That run is predeclared, with its options, before it is submitted.
+- Labels: LEARNED gait (fine-tuned from clock-s2 on half plates, half flat ground); MuJoCo gates.
