@@ -75,3 +75,35 @@ class HumanoidPlateCrossCfg(HumanoidTurnGaitClockCfg):
         self.scene.terrain.terrain_generator = PLATES_TERRAINS_CFG
         self.scene.terrain.max_init_terrain_level = None
         self.scene.terrain.visual_material = None
+
+
+# ----------------------------------------------------------------------- PlateCross v2 (F1), additive
+# Frozen design (F), part F1 (SLURM_JOBS.md, "User approval recorded 2026-10-03 09:55"): "PlateCross with ONE
+# change: half of the terrain tiles are flat, chosen (not tuned) to keep the flat-ground push robustness that the
+# push gate measures." Built 2026-10-04. The plate tile is v1's; the curriculum tile layout puts it in columns 0-4
+# and a flat plane in columns 5-9 (platecross_terrain.v2_plate_columns), so half the envs train on plates and half on
+# flat ground in every batch. Everything else is HumanoidPlateCrossCfg's (= R1's env except the terrain).
+from isaaclab.terrains import MeshPlaneTerrainCfg  # noqa: E402
+
+TASK_ID_V2 = "Velocity-BHL-Arms-PlateCross2-v0"
+
+PLATES2_TERRAINS_CFG = TerrainGeneratorCfg(
+    size=(_pt.TILE_M, _pt.TILE_M),
+    border_width=_pt.BORDER_M,
+    num_rows=_pt.NUM_ROWS,
+    num_cols=_pt.NUM_COLS,
+    curriculum=True,                  # column layout by proportion (deterministic); the tiles carry no difficulty
+    seed=_pt.TERRAIN_SEED,
+    use_cache=False,
+    sub_terrains={"plates": PlatesTerrainCfg(proportion=_pt.V2_PROPORTIONS[0]),
+                  "flat": MeshPlaneTerrainCfg(proportion=_pt.V2_PROPORTIONS[1])},
+)
+
+
+@configclass
+class HumanoidPlateCross2Cfg(HumanoidPlateCrossCfg):
+    """PlateCross v2 (F1): v1 with half of the tiles flat (columns 5-9)."""
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.scene.terrain.terrain_generator = PLATES2_TERRAINS_CFG

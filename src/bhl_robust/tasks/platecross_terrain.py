@@ -315,6 +315,39 @@ def spawn_clearance(origins_xy, plates: list) -> float:
     return best
 
 
+# ------------------------------------------------------------------------ PlateCross v2 (F1), additive
+# Frozen design (F), part F1 (SLURM_JOBS.md, "User approval recorded 2026-10-03 09:55"): PlateCross with ONE
+# change, half of the terrain tiles flat, chosen (not tuned) to keep the flat-ground push robustness the push gate
+# measures. Built 2026-10-04 on the user's "fix this". Implementation: Isaac Lab's CURRICULUM tile layout, which
+# assigns sub-terrains to whole COLUMNS by proportion (TerrainGenerator._generate_curriculum_terrains: column c takes
+# sub-terrain min{i : c / num_cols + 0.001 < cumsum(p)[i]}), with "plates" first and "flat" second at 0.5 / 0.5:
+# columns 0-4 hold the declared plate tile, columns 5-9 are flat. Every env is pinned to one column
+# (TerrainImporter: terrain_types = floor(env_id / (num_envs / num_cols))), so exactly half the envs train on
+# plates and half on flat ground in every batch. The plate tile itself is v1's, unchanged.
+V2_SUB_TERRAINS = ("plates", "flat")      # declaration order = the generator's sub-terrain index order
+V2_PROPORTIONS = (0.5, 0.5)
+
+
+def v2_plate_columns(num_cols: int = NUM_COLS, proportions=V2_PROPORTIONS) -> list[int]:
+    """The columns that hold the plate tile under the curriculum layout (sub-terrain index 0 = plates)."""
+    p = np.asarray(proportions, dtype=np.float64)
+    cum = np.cumsum(p / p.sum())
+    return [c for c in range(num_cols) if int(np.min(np.where(c / num_cols + 0.001 < cum)[0])) == 0]
+
+
+def expected_world_plates_v2(num_rows: int = NUM_ROWS, num_cols: int = NUM_COLS, size=(TILE_M, TILE_M),
+                             pitch_m: float = PITCH_M, clear_centre: bool = CLEAR_CENTRE,
+                             proportions=V2_PROPORTIONS):
+    """[(shape, x, y)] of every plate in Isaac's world frame for the v2 field: the v1 tile in the plate columns only
+    (tile_centres is row-major: index r * num_cols + c)."""
+    cols = set(v2_plate_columns(num_cols, proportions))
+    out = []
+    for k, (cx, cy) in enumerate(tile_centres(num_rows, num_cols, size)):
+        if k % num_cols in cols:
+            out.extend((s, cx + x, cy + y) for s, x, y in plate_layout(size, pitch_m, clear_centre))
+    return out
+
+
 if __name__ == "__main__":  # pragma: no cover - a quick look, not a gate
     v, f = tile_arrays()
     print(marker_line((TILE_M, TILE_M), ROUND_RADIUS_M, SQUARE_SIDE_M, PLATE_HEIGHT_M, PITCH_M, DISC_SECTIONS,

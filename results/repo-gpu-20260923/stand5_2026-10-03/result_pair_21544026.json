@@ -1,0 +1,119 @@
+{
+ "verdict": "NEGATIVE (0/2 seeds with last-200 success >= 0.10; 0 killed)",
+ "seeds": [
+  {
+   "complete": true,
+   "killed": false,
+   "decided": true,
+   "passes": false,
+   "bad_config": false,
+   "window_finite": true,
+   "has_value": true,
+   "last_iter": 7999,
+   "success": 0.0002699788418249227,
+   "window": 200,
+   "complete_iter": 7999,
+   "time_out": 0.987282320857048,
+   "ep_len": 496.04949905395506,
+   "fallen": 0.01244771343888715,
+   "lift_level": 0.03999999910593033,
+   "upright_gate": 0.9948391065001487,
+   "diagnostics_last200": {
+    "Curriculum/pinch_dist": 0.02783268168568611,
+    "Curriculum/cube_tilt_deg": 47.46713773727417,
+    "Curriculum/corner_clear": -0.025587234543636442,
+    "Curriculum/roll_ok": 1.5869141006987774e-05,
+    "Curriculum/lift_paid": 1.3224284157331567e-05,
+    "Curriculum/released": 0.11453939124941825,
+    "Curriculum/robot_force_max": 23.33051570892334
+   },
+   "reported_not_gated": {
+    "unstable_iters": 0,
+    "unstable_first": []
+   },
+   "complete_def": "COMPLETE iff the run's events reach iteration 7999 AND every Loss/value, success and time_out value in its last 200 iterations is finite AND that window holds a Loss/value value (Stand3's completeness check); the Loss/value instability count is reported, not gating",
+   "success_def": "success = Stand3's seated test (centre over a deck by 2 cm, |y| < 0.10, within 2 cm of the seated height, speed < 0.05) AND cube tilt <= 8 deg, tilt = the angle between the cube's own z axis and world up (a 90-deg roll onto another face reads 90 deg and never seats) AND released (every robot-link normal force on the cube < 1.0 N, filtered contact sensor), all on the same step, for 12 consecutive steps",
+   "tilt_def": "tilt = the angle between the cube's own z axis and world up (stand_mdp.body_z_tilt_deg via quat_order.unpack_wxyz), for both the 15-deg lift clause and the 8-deg success clause; a cube rolled 90 deg onto another face reads 90 deg, so it never earns the lift pay and never seats (the Stand3 replay's face tilt, the most vertical body axis, is not used: it reads a 90-deg roll as 0)",
+   "mode": "seed",
+   "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-10-04_10-26-38_v2-cubetoshelfstand5-blind-s0",
+   "latest_iter_logged": 7999,
+   "task": "CubeToShelfStand5 (blind)",
+   "note": "CubeToShelfStand5: CubeToShelfStand4 plus two changes (the cube's z axis observed by the actor and the critic; the lift curriculum promotes on the roll-proof lift condition); a different configuration from Stand4, judged only by its own predeclared rule; never compared with CubeToShelfStand3 or CubeToShelf numbers",
+   "labels": "LEARNED crew policy (one PPO actor drives both robots, blind); ORACLE privileged observations, now including cube orientation: the actor and the critic both observe object_pos_a/b (the simulator cube position in each robot's root frame) and object_zaxis_a/b (NEW: the simulator cube's own z axis in each robot's root frame); the critic also base_lin_vel_a/b, object_lin_vel, object_ang_vel; MODIFIED hand colliders (the overlay) relative to Stand3, inherited unchanged from Stand4",
+   "design": [
+    "**(S) Stand5.** Stand4 + two changes.",
+    "(i) The actor and critic observe the cube's orientation in each robot's root frame (its z axis; ORACLE, like `object_pos_a/b`).",
+    "(ii) The lift curriculum promotes on Stand4's roll-proof lift condition (lowest corner \u2265 2 cm above every support and tilt \u2264 15\u00b0) instead of centre height + pinch.",
+    "Stand4's rule verbatim: the kill rule at model_1000; COMPLETE at 7999; PASS iff \u2265 1 of 2 seeds is COMPLETE, not killed, with last-200 success \u2265 0.10. 2 seeds \u00d7 8000 iterations, Stand4's resources.",
+    "Labels: LEARNED crew policy (blind) + ORACLE privileged observations (now including cube orientation)."
+   ],
+   "rule": "Stand4's rule verbatim: the kill rule at model_1000; COMPLETE at 7999; PASS iff \u2265 1 of 2 seeds is COMPLETE, not killed, with last-200 success \u2265 0.10. 2 seeds \u00d7 8000 iterations, Stand4's resources.",
+   "stand4_rule": "PREDECLARED RULE (frozen; Stand3's structure): the kill rule at model_1000 exactly as Stand3's launcher applies it (copy its condition and window verbatim); a seed is COMPLETE iff it reaches iteration 7999; Stand4 PASSES iff >= 1 of 2 seeds has last-200-iteration success >= 0.10, where success is the Stand4 termination above (seated, tilt <= 8 deg, released). Otherwise NEGATIVE; INCOMPLETE if a seed is neither complete nor stopped by the kill rule. Stand4 is a different task from Stand3 and CubeToShelf and is never compared with their numbers. Labels: LEARNED crew policies; ORACLE privileged observations exactly as Stand3 uses them (say which); MODIFIED hand colliders (the overlay) relative to Stand3."
+  },
+  {
+   "complete": true,
+   "killed": false,
+   "decided": true,
+   "passes": false,
+   "bad_config": false,
+   "window_finite": true,
+   "has_value": true,
+   "last_iter": 7999,
+   "success": 9.562174673192203e-06,
+   "window": 200,
+   "complete_iter": 7999,
+   "time_out": 0.9823476311564445,
+   "ep_len": 494.643049621582,
+   "fallen": 0.017642822708003224,
+   "lift_level": 0.040037499200552704,
+   "upright_gate": 0.9838214746117592,
+   "diagnostics_last200": {
+    "Curriculum/pinch_dist": 0.03290524843148887,
+    "Curriculum/cube_tilt_deg": 28.530965690612792,
+    "Curriculum/corner_clear": -0.026998394383117557,
+    "Curriculum/roll_ok": 0.002411905999524606,
+    "Curriculum/lift_paid": 0.00241027839749222,
+    "Curriculum/released": 0.027527466444298626,
+    "Curriculum/robot_force_max": 29.365784788131712
+   },
+   "reported_not_gated": {
+    "unstable_iters": 0,
+    "unstable_first": []
+   },
+   "complete_def": "COMPLETE iff the run's events reach iteration 7999 AND every Loss/value, success and time_out value in its last 200 iterations is finite AND that window holds a Loss/value value (Stand3's completeness check); the Loss/value instability count is reported, not gating",
+   "success_def": "success = Stand3's seated test (centre over a deck by 2 cm, |y| < 0.10, within 2 cm of the seated height, speed < 0.05) AND cube tilt <= 8 deg, tilt = the angle between the cube's own z axis and world up (a 90-deg roll onto another face reads 90 deg and never seats) AND released (every robot-link normal force on the cube < 1.0 N, filtered contact sensor), all on the same step, for 12 consecutive steps",
+   "tilt_def": "tilt = the angle between the cube's own z axis and world up (stand_mdp.body_z_tilt_deg via quat_order.unpack_wxyz), for both the 15-deg lift clause and the 8-deg success clause; a cube rolled 90 deg onto another face reads 90 deg, so it never earns the lift pay and never seats (the Stand3 replay's face tilt, the most vertical body axis, is not used: it reads a 90-deg roll as 0)",
+   "mode": "seed",
+   "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-10-04_10-29-35_v2-cubetoshelfstand5-blind-s1",
+   "latest_iter_logged": 7999,
+   "task": "CubeToShelfStand5 (blind)",
+   "note": "CubeToShelfStand5: CubeToShelfStand4 plus two changes (the cube's z axis observed by the actor and the critic; the lift curriculum promotes on the roll-proof lift condition); a different configuration from Stand4, judged only by its own predeclared rule; never compared with CubeToShelfStand3 or CubeToShelf numbers",
+   "labels": "LEARNED crew policy (one PPO actor drives both robots, blind); ORACLE privileged observations, now including cube orientation: the actor and the critic both observe object_pos_a/b (the simulator cube position in each robot's root frame) and object_zaxis_a/b (NEW: the simulator cube's own z axis in each robot's root frame); the critic also base_lin_vel_a/b, object_lin_vel, object_ang_vel; MODIFIED hand colliders (the overlay) relative to Stand3, inherited unchanged from Stand4",
+   "design": [
+    "**(S) Stand5.** Stand4 + two changes.",
+    "(i) The actor and critic observe the cube's orientation in each robot's root frame (its z axis; ORACLE, like `object_pos_a/b`).",
+    "(ii) The lift curriculum promotes on Stand4's roll-proof lift condition (lowest corner \u2265 2 cm above every support and tilt \u2264 15\u00b0) instead of centre height + pinch.",
+    "Stand4's rule verbatim: the kill rule at model_1000; COMPLETE at 7999; PASS iff \u2265 1 of 2 seeds is COMPLETE, not killed, with last-200 success \u2265 0.10. 2 seeds \u00d7 8000 iterations, Stand4's resources.",
+    "Labels: LEARNED crew policy (blind) + ORACLE privileged observations (now including cube orientation)."
+   ],
+   "rule": "Stand4's rule verbatim: the kill rule at model_1000; COMPLETE at 7999; PASS iff \u2265 1 of 2 seeds is COMPLETE, not killed, with last-200 success \u2265 0.10. 2 seeds \u00d7 8000 iterations, Stand4's resources.",
+   "stand4_rule": "PREDECLARED RULE (frozen; Stand3's structure): the kill rule at model_1000 exactly as Stand3's launcher applies it (copy its condition and window verbatim); a seed is COMPLETE iff it reaches iteration 7999; Stand4 PASSES iff >= 1 of 2 seeds has last-200-iteration success >= 0.10, where success is the Stand4 termination above (seated, tilt <= 8 deg, released). Otherwise NEGATIVE; INCOMPLETE if a seed is neither complete nor stopped by the kill rule. Stand4 is a different task from Stand3 and CubeToShelf and is never compared with their numbers. Labels: LEARNED crew policies; ORACLE privileged observations exactly as Stand3 uses them (say which); MODIFIED hand colliders (the overlay) relative to Stand3."
+  }
+ ],
+ "task": "CubeToShelfStand5 (blind)",
+ "design": [
+  "**(S) Stand5.** Stand4 + two changes.",
+  "(i) The actor and critic observe the cube's orientation in each robot's root frame (its z axis; ORACLE, like `object_pos_a/b`).",
+  "(ii) The lift curriculum promotes on Stand4's roll-proof lift condition (lowest corner \u2265 2 cm above every support and tilt \u2264 15\u00b0) instead of centre height + pinch.",
+  "Stand4's rule verbatim: the kill rule at model_1000; COMPLETE at 7999; PASS iff \u2265 1 of 2 seeds is COMPLETE, not killed, with last-200 success \u2265 0.10. 2 seeds \u00d7 8000 iterations, Stand4's resources.",
+  "Labels: LEARNED crew policy (blind) + ORACLE privileged observations (now including cube orientation)."
+ ],
+ "rule": "Stand4's rule verbatim: the kill rule at model_1000; COMPLETE at 7999; PASS iff \u2265 1 of 2 seeds is COMPLETE, not killed, with last-200 success \u2265 0.10. 2 seeds \u00d7 8000 iterations, Stand4's resources.",
+ "stand4_rule": "PREDECLARED RULE (frozen; Stand3's structure): the kill rule at model_1000 exactly as Stand3's launcher applies it (copy its condition and window verbatim); a seed is COMPLETE iff it reaches iteration 7999; Stand4 PASSES iff >= 1 of 2 seeds has last-200-iteration success >= 0.10, where success is the Stand4 termination above (seated, tilt <= 8 deg, released). Otherwise NEGATIVE; INCOMPLETE if a seed is neither complete nor stopped by the kill rule. Stand4 is a different task from Stand3 and CubeToShelf and is never compared with their numbers. Labels: LEARNED crew policies; ORACLE privileged observations exactly as Stand3 uses them (say which); MODIFIED hand colliders (the overlay) relative to Stand3.",
+ "as_applied": "As applied to Stand5 (Stand4's clauses, unchanged; Stand4's functions, called): kill = Stand3's kill rule at model_1000 (stand_mdp.evaluate_kill3: iterations 901-1000, mean episode length < 100 OR mean (time_out + success) < 0.10, the length clause skipped when mean success >= 0.10), stopped by the same watcher as Stand3 and Stand4; COMPLETE iff the run's events reach iteration 7999 AND every Loss/value, success and time_out value in its last 200 iterations is finite AND that window holds a Loss/value value (Stand3's completeness check); the Loss/value instability count is reported, not gating; success = Stand4's termination, unchanged in Stand5 (success = Stand3's seated test (centre over a deck by 2 cm, |y| < 0.10, within 2 cm of the seated height, speed < 0.05) AND cube tilt <= 8 deg, tilt = the angle between the cube's own z axis and world up (a 90-deg roll onto another face reads 90 deg and never seats) AND released (every robot-link normal force on the cube < 1.0 N, filtered contact sensor), all on the same step, for 12 consecutive steps); PASS iff >= 1 of the 2 seeds is COMPLETE, not killed, with last-200-iteration success >= 0.10; precedence: PASS if any seed that is COMPLETE and not killed has last-200 success >= 0.10, whatever the other seed did; else INCOMPLETE if any seed is neither COMPLETE nor killed by the rule; else NEGATIVE",
+ "precedence": "PASS if any seed that is COMPLETE and not killed has last-200 success >= 0.10, whatever the other seed did; else INCOMPLETE if any seed is neither COMPLETE nor killed by the rule; else NEGATIVE",
+ "complete_def": "COMPLETE iff the run's events reach iteration 7999 AND every Loss/value, success and time_out value in its last 200 iterations is finite AND that window holds a Loss/value value (Stand3's completeness check); the Loss/value instability count is reported, not gating",
+ "tilt_def": "tilt = the angle between the cube's own z axis and world up (stand_mdp.body_z_tilt_deg via quat_order.unpack_wxyz), for both the 15-deg lift clause and the 8-deg success clause; a cube rolled 90 deg onto another face reads 90 deg, so it never earns the lift pay and never seats (the Stand3 replay's face tilt, the most vertical body axis, is not used: it reads a 90-deg roll as 0)",
+ "labels": "LEARNED crew policy (one PPO actor drives both robots, blind); ORACLE privileged observations, now including cube orientation: the actor and the critic both observe object_pos_a/b (the simulator cube position in each robot's root frame) and object_zaxis_a/b (NEW: the simulator cube's own z axis in each robot's root frame); the critic also base_lin_vel_a/b, object_lin_vel, object_ang_vel; MODIFIED hand colliders (the overlay) relative to Stand3, inherited unchanged from Stand4",
+ "note": "CubeToShelfStand5: CubeToShelfStand4 plus two changes (the cube's z axis observed by the actor and the critic; the lift curriculum promotes on the roll-proof lift condition); a different configuration from Stand4, judged only by its own predeclared rule; never compared with CubeToShelfStand3 or CubeToShelf numbers"
+}
