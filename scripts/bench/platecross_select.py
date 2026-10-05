@@ -40,8 +40,19 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 TERRAIN_PATH = REPO / "src/bhl_robust/tasks/platecross_terrain.py"
 
-TASK_ID = "Velocity-BHL-Arms-PlateCross-v0"
-PREFIX = "arms-platecross-clocks2"
+# The variant: v1 = PlateCross (2026-10-02, every tile plated; the default, unchanged); v2 = F1 "PlateCross v2"
+# (2026-10-04, half of the tiles flat: the plate tile in columns 0-4 of the curriculum layout, a plane in 5-9).
+# Chosen by the environment variable PLATECROSS_VARIANT (the v2 launcher exports it); probe-scene takes it from its
+# --task. Every v1 path is unchanged.
+VARIANTS = {"v1": {"task": "Velocity-BHL-Arms-PlateCross-v0", "prefix": "arms-platecross-clocks2",
+                   "trained_on": "plates"},
+            "v2": {"task": "Velocity-BHL-Arms-PlateCross2-v0", "prefix": "arms-platecross2-clocks2",
+                   "trained_on": "half plates, half flat ground (F1)"}}
+VARIANT = os.environ.get("PLATECROSS_VARIANT", "v1")
+if VARIANT not in VARIANTS:
+    raise SystemExit(f"PLATECROSS_VARIANT={VARIANT!r} is not one of {sorted(VARIANTS)}")
+TASK_ID = VARIANTS[VARIANT]["task"]
+PREFIX = VARIANTS[VARIANT]["prefix"]
 PARENT_RUN = "arms-turngait-clock-s2"
 PARENT_TASK = "Velocity-BHL-Arms-TurnGaitClock-v0"
 PARENT_ITER = 5999
@@ -56,8 +67,8 @@ FROZEN_RULE = ("the three fine-tuned final checkpoints go through the unchanged 
                "cpu_turn_qualify); the qualified seed with the lowest push-fall rate (tie: lowest seed index) is the "
                "SINGLE stage gait run on bench v2 under bench v2's rule (N = 41; >= 39/41 clears, 0 falls, >= "
                "11/10/9/7 per heading) with the generic stage-gait override; no qualified seed -> NEGATIVE (no bench).")
-FROZEN_LABELS = ("Labels: LEARNED gait (fine-tuned from clock-s2 on plates); MuJoCo gates; bench v2's 180-deg timing "
-                 "caveat applies.")
+FROZEN_LABELS = (f"Labels: LEARNED gait (fine-tuned from clock-s2 on {VARIANTS[VARIANT]['trained_on']}); MuJoCo "
+                 "gates; bench v2's 180-deg timing caveat applies.")
 # How the launcher reads "qualified" (stated before any run): the frozen rule's "unchanged turn qualification
 # (turn_test v2 + cpu_turn_qualify)" counted per seed as the R1 / v5 joint rule counts it
 # (scripts/bench/turngait_r12_verdict.py seed_counts; SLURM_JOBS.md, the R1/R2 predeclaration).
@@ -416,18 +427,28 @@ def terrain_problems(env: dict) -> list[str]:
     for k, v in want.items():
         if not _near(g.get(k), v):
             p.append(f"terrain_generator.{k} {g.get(k)!r} != {v}")
-    if g.get("curriculum") is not False or g.get("use_cache") is not False:
-        p.append(f"curriculum / use_cache {g.get('curriculum')!r} / {g.get('use_cache')!r} (declared False / False)")
+    want_curriculum = VARIANT == "v2"            # v2: the column layout by proportion (F1); v1: random, one sub-terrain
+    if g.get("curriculum") is not want_curriculum or g.get("use_cache") is not False:
+        p.append(f"curriculum / use_cache {g.get('curriculum')!r} / {g.get('use_cache')!r} (declared "
+                 f"{want_curriculum} / False)")
     size = list(g.get("size") or [])
     if len(size) != 2 or not all(_near(x, pt.TILE_M) for x in size):
         p.append(f"tile size {size!r} != [{pt.TILE_M}, {pt.TILE_M}]")
     subs = g.get("sub_terrains") or {}
-    if sorted(subs) != ["plates"]:
-        p.append(f"sub_terrains {sorted(subs)!r} != ['plates']")
+    want_subs = list(pt.V2_SUB_TERRAINS) if VARIANT == "v2" else ["plates"]
+    if sorted(subs) != sorted(want_subs):        # which tiles hold plates is measured by probe-scene, not read here
+        p.append(f"sub_terrains {sorted(subs)!r} != {sorted(want_subs)!r}")
+    if VARIANT == "v2":
+        f = subs.get("flat") or {}
+        if f.get("function") != "isaaclab.terrains.trimesh.mesh_terrains:flat_terrain":
+            p.append(f"flat function {f.get('function')!r}")
+        if not _near(f.get("proportion"), pt.V2_PROPORTIONS[1]):
+            p.append(f"flat.proportion {f.get('proportion')!r} != {pt.V2_PROPORTIONS[1]}")
     s = subs.get("plates") or {}
     if s.get("function") != "bhl_robust.tasks.platecross_terrain:plates_terrain":
         p.append(f"plates function {s.get('function')!r}")
-    for k, v in (("proportion", 1.0), ("round_radius_m", pt.ROUND_RADIUS_M), ("square_side_m", pt.SQUARE_SIDE_M),
+    plate_share = pt.V2_PROPORTIONS[0] if VARIANT == "v2" else 1.0
+    for k, v in (("proportion", plate_share), ("round_radius_m", pt.ROUND_RADIUS_M), ("square_side_m", pt.SQUARE_SIDE_M),
                  ("height_m", pt.PLATE_HEIGHT_M), ("pitch_m", pt.PITCH_M), ("disc_sections", pt.DISC_SECTIONS)):
         if not _near(s.get(k), v):
             p.append(f"plates.{k} {s.get(k)!r} != {v}")
@@ -689,7 +710,11 @@ def _probe_body(args, res: dict) -> None:
         P.append(f"terrain mesh is not a static collider (CollisionAPI {coll}, enabled {enabled}, RigidBodyAPI on {rigid})")
     # 3. the plates in that mesh against the declared field
     found = pt.find_plates(pts_w, idx.reshape(-1, 3))
-    expected = pt.expected_world_plates(tg.num_rows, tg.num_cols, tuple(tg.size), pt.PITCH_M, pt.CLEAR_CENTRE)
+    if args.task == VARIANTS["v2"]["task"]:     # F1: the plate tile in the plate columns only, a plane elsewhere
+        expected = pt.expected_world_plates_v2(tg.num_rows, tg.num_cols, tuple(tg.size), pt.PITCH_M, pt.CLEAR_CENTRE)
+        res["variant"] = {"name": "v2", "plate_columns": pt.v2_plate_columns(tg.num_cols)}
+    else:
+        expected = pt.expected_world_plates(tg.num_rows, tg.num_cols, tuple(tg.size), pt.PITCH_M, pt.CLEAR_CENTRE)
     summary, probs = pt.check_scene_plates(found, expected)
     res["plates"] = summary
     P.extend(probs)

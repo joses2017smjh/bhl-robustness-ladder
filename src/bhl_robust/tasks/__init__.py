@@ -568,3 +568,22 @@ except Exception as _exc:  # noqa: BLE001
     import sys as _sys
     print(f"[bhl_robust.tasks] stand5 id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
 # --- end stand5 ---
+
+# --- m7-platecross2 ---
+# Mission 7 learned crossing F1 "PlateCross v2" (2026-10-04; SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55',
+# item (F), part F1): Velocity-BHL-Arms-PlateCross-v0 with half of the tiles flat (platecross_env_cfg.py,
+# HumanoidPlateCross2Cfg); fine-tuned from arms-turngait-clock-s2 by slurm/repo20260923/gpu_platecross2.sbatch.
+# Guarded: a failure is printed and only this id is absent.
+try:
+    from bhl_robust.tasks import platecross_env_cfg as _platecross2  # noqa: E402
+
+    gym.register(
+        id=_platecross2.TASK_ID_V2,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _platecross2.HumanoidPlateCross2Cfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] m7-platecross2 id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end m7-platecross2 ---

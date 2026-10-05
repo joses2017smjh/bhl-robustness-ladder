@@ -302,7 +302,12 @@ def test_task_registration_is_one_guarded_block():
     src = TASKS_INIT.read_text()
     start, end = src.index("# --- m7-platecross ---"), src.index("# --- end m7-platecross ---")
     block = src[start:end]
-    assert src.count("# --- m7-platecross ---") == 1 and "PlateCross" not in src[:start] + src[end:]
+    # F1 "PlateCross v2" (2026-10-04) registers its own id in its own guarded block, appended at the end of the file
+    rest = src[:start] + src[end:]
+    if "# --- m7-platecross2 ---" in rest:
+        s2, e2 = rest.index("# --- m7-platecross2 ---"), rest.index("# --- end m7-platecross2 ---")
+        rest = rest[:s2] + rest[e2:]
+    assert src.count("# --- m7-platecross ---") == 1 and "PlateCross" not in rest
     assert "try:" in block and "except Exception as _exc:" in block and "NOT registered" in block
     assert 'id="Velocity-BHL-Arms-PlateCross-v0"' in block
     assert '"env_cfg_entry_point": _platecross.HumanoidPlateCrossCfg' in block
