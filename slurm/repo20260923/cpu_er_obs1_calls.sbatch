@@ -16,7 +16,7 @@
 #   model   : gemini-robotics-er-2-preview (the standard endpoint, not -streaming), in the documented ER 2 REST shape
 #             (saved docs aidev_robotics-overview.txt:211-235, aidev_robotics-spatial.txt:44-64): POST
 #             https://generativelanguage.googleapis.com/v1beta/interactions, body {model, input: {parts: [inlineData
-#             PNG, text]}, generation_config: {thinking_config: {thinking_level: low}}}. The JSON schema travels in
+#             PNG, text]}, generation_config: {thinking_level: low}} (amended 2026-10-05). The JSON schema travels in
 #             the text (prompt, then "JSON schema of the answer: <schema>"); the answer is output_text. Temperature,
 #             top_p, the output-token cap, media resolution, safety settings, system instruction and storage are at
 #             the API defaults; no tools. The request format is UNTESTED against the live service (no key yet): a
@@ -28,7 +28,9 @@
 #     PROMPT_SHA256=873d16aed67f87f36fff88dbe7deb2ad6ec55abd0ce71c1a9e581f059191c20b
 #   request template sha256 (endpoint, body without the image, answer field, timeouts, pacing and re-send policy;
 #   record it too; run and latency refuse any other):
-#     REQUEST_SHA256=6e12d1a17c365a89de0399632cc5fad87640c9eb063828f83e45667ebc18b166
+#     REQUEST_SHA256=915d324d004cfbf118b8bf9a5ca4f949d5b4aab22a086ef32b21c89b1bbdfdeb
+#     (amended 2026-10-05 before any scored call; was 6e12d1a1...: the live preflight 21564188 refused the REST
+#     example's nested thinking_config with HTTP 400, so generation_config is now the SDKs' flat {thinking_level: low})
 #     (python scripts/bench/er_obs.py hashes prints both and the template; key and image never appear)
 #
 # DESIGN (verbatim; SLURM_JOBS.md "User approval recorded 2026-10-03 09:55", item G; er_obs.DESIGN_TEXT):
@@ -131,7 +133,7 @@ CODE=${ER_OBS_CODE:-/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder}
 DATA=${ER_OBS_DATA:-/nfs/hpc/share/sanchej7/Humanoid_Lite/er-obs1-data}
 PY=${ER_OBS_PY:-/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python}
 PROMPT_SHA256=873d16aed67f87f36fff88dbe7deb2ad6ec55abd0ce71c1a9e581f059191c20b
-REQUEST_SHA256=6e12d1a17c365a89de0399632cc5fad87640c9eb063828f83e45667ebc18b166
+REQUEST_SHA256=915d324d004cfbf118b8bf9a5ca4f949d5b4aab22a086ef32b21c89b1bbdfdeb
 CODEFILES=(src/bhl_robust/eval/er_obs/__init__.py src/bhl_robust/eval/er_obs/labels.py
            src/bhl_robust/eval/er_obs/render.py src/bhl_robust/eval/er_obs/client.py
            src/bhl_robust/eval/er_obs/verdict.py scripts/bench/er_obs.py tests/test_er_obs.py)

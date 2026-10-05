@@ -110,7 +110,7 @@ def provenance(**extra) -> dict:
     return {
         "task": E.TASK, "label": E.LABEL, "design_text": E.DESIGN_TEXT, "rule_text": E.RULE_TEXT,
         "clauses_as_applied": list(E.CLAUSES_AS_APPLIED), "post_review_fixes": list(E.POST_REVIEW_FIXES),
-        "tier_amendment": list(E.TIER_AMENDMENT),
+        "tier_amendment": list(E.TIER_AMENDMENT), "request_amendment": list(E.REQUEST_AMENDMENT),
         "seed_evidence": list(E.SEED_EVIDENCE),
         "code_root": str(REPO), "git": git_info(REPO),
         "source_sha256": {s: sha256(REPO / s) for s in SOURCES},

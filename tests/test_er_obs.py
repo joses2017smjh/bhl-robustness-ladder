@@ -589,7 +589,7 @@ def test_request_carries_only_the_frame_and_the_fixed_prompt():
     assert set(req["input"]) == {"parts"} and len(parts) == 2
     assert base64.b64decode(parts[0]["inlineData"]["data"]) == png and parts[0]["inlineData"]["mimeType"] == "image/png"
     assert parts[1] == {"text": C.TEXT} and C.TEXT.startswith(C.PROMPT) and C.SCHEMA_LINE in C.TEXT
-    assert req["generation_config"] == C.GENERATION_CONFIG == {"thinking_config": {"thinking_level": "low"}}
+    assert req["generation_config"] == C.GENERATION_CONFIG == {"thinking_level": "low"}      # request amendment 2026-10-05
     assert C.ENDPOINT == "https://generativelanguage.googleapis.com/v1beta/interactions"
     assert C.PROMPT_SCHEMA_SHA256 == C.sha256_hex(C.canonical({"prompt_text": C.TEXT, "json_schema": C.SCHEMA}))
     assert C.REQUEST_SHA256 == C.sha256_hex(C.canonical(C.request_template()))

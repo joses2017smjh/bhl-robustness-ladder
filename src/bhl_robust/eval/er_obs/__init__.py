@@ -139,9 +139,9 @@ CLAUSES_AS_APPLIED = (
     "overview.txt:211-235, aidev_robotics-spatial.txt:44-64): POST https://generativelanguage.googleapis.com/v1beta/"
     "interactions, the key in the x-goog-api-key header, body {model: gemini-robotics-er-2-preview, input: {parts: "
     "[{inlineData: {mimeType: image/png, data: <the PNG, base64>}}, {text: <the prompt, then 'JSON schema of the "
-    "answer: ' and the schema as JSON>}]}, generation_config: {thinking_config: {thinking_level: low}}}; where the docs "
-    "differ (the SDK examples' flat generation_config.thinking_level and typed input list) the documented REST form "
-    "is used; no response-schema field is documented for this endpoint, so the schema travels in the prompt text (the "
+    "answer: ' and the schema as JSON>}]}, generation_config: {thinking_level: low}} (amended 2026-10-05: the live "
+    "preflight refused the REST example's nested thinking_config, so the SDK examples' flat thinking_level is used; "
+    "see REQUEST_AMENDMENT); no response-schema field is documented for this endpoint, so the schema travels in the prompt text (the "
     "docs request JSON formats in the prompt) and PROMPT_SCHEMA_SHA256 covers that exact text and the schema; nothing "
     "else is set: temperature, top_p, the output-token cap (documented output limit 65,536; the earlier 8192 cap is "
     "dropped), media resolution, safety settings, system instruction and interaction storage stay at the API "
@@ -212,6 +212,18 @@ POST_REVIEW_FIXES = (
     "6 paid tier: ER_OBS_PAID_TIER_CONFIRMED=1 required in run and latency modes; header guidance on paid-tier and "
     "API-restricted keys",
     "7 frames run: the resume procedure after a crash is documented in the frames launcher header",
+)
+
+#: Request amendment, 2026-10-05, before any SCORED call (only the preflight's throw-away smoke frame was ever sent).
+REQUEST_AMENDMENT = (
+    "the first live preflight (job 21564188, smoke frame s900_t01, free tier) returned HTTP 400 \"Unknown parameter "
+    "'thinking_config' at 'generation_config'\": the documented REST example's nested generation_config."
+    "thinking_config.thinking_level does not exist on the live interactions endpoint",
+    "generation_config is now {thinking_level: low}, the flat form all four documented SDK examples use (Python and "
+    "JS generation_config thinking_level, Java GenerationConfig.thinkingLevel, Go ThinkingLevel); the thinking level "
+    "(low), the endpoint, the input parts, the prompt text, the schema and every verdict rule are unchanged",
+    "the request-template sha256 changes accordingly and is re-recorded in the ledger and the calls launcher before "
+    "any scored call; the prompt+schema sha256 is unchanged",
 )
 
 #: Tier amendment, 2026-10-05, before ANY real call (the user supplied a key the same day, after being told the free

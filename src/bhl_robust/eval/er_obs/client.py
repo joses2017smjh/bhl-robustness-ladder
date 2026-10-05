@@ -9,10 +9,13 @@ solutions-20260930/campaign-m7-180-gemini/aidev_robotics-overview.txt:211-235 an
     headers: x-goog-api-key: <key>, Content-Type: application/json
     {"model": "gemini-robotics-er-2-preview",
      "input": {"parts": [{"inlineData": {"mimeType": "image/png", "data": "<base64 PNG>"}}, {"text": TEXT}]},
-     "generation_config": {"thinking_config": {"thinking_level": "low"}}}
+     "generation_config": {"thinking_level": "low"}}
 
-Nothing else: no repo data, no paths, no seeds, no user data. Where the docs differ (the SDK examples use a flat
-`generation_config={"thinking_level": ...}` and a typed input list) the documented REST form is used. No response-
+Nothing else: no repo data, no paths, no seeds, no user data. REQUEST AMENDMENT (2026-10-05, before any scored call):
+the documented REST example's nested `generation_config.thinking_config.thinking_level` was refused by the live
+service at the preflight (job 21564188, a throw-away smoke frame: HTTP 400 "Unknown parameter 'thinking_config' at
+'generation_config'"), so the four SDK examples' flat `generation_config={"thinking_level": ...}` is used; the
+input stays the documented REST `input.parts` form. No response-
 schema field is documented for this endpoint: the docs request a JSON format in the prompt ("adjust the requested JSON
 schema in the prompt", aidev_robotics-agentic.txt:806-809), so the schema travels in the text part, and
 PROMPT_SCHEMA_SHA256 covers that exact text and the schema. The answer is the response's `output_text` (the field all
@@ -113,10 +116,10 @@ SCHEMA = {
 SCHEMA_LINE = "JSON schema of the answer: "
 TEXT = PROMPT + "\n" + SCHEMA_LINE + json.dumps(SCHEMA, sort_keys=True, ensure_ascii=True)
 THINKING_LEVEL = "low"
-GENERATION_CONFIG = {"thinking_config": {"thinking_level": THINKING_LEVEL}}
+GENERATION_CONFIG = {"thinking_level": THINKING_LEVEL}     # flat, as the SDKs (request amendment 2026-10-05)
 #: Left at the API's defaults (recorded): everything the documented REST example does not set.
-API_DEFAULTS_NOTE = ("only generation_config.thinking_config.thinking_level is set (the documented REST example's "
-                     "one config field); temperature, top_p, the output-token cap (documented output limit 65,536), "
+API_DEFAULTS_NOTE = ("only generation_config.thinking_level is set (the documented examples' one config field, in the "
+                     "SDKs' flat form: the live service refused the REST example's nested thinking_config); temperature, top_p, the output-token cap (documented output limit 65,536), "
                      "media resolution, safety settings, system instruction and interaction storage are not set (API "
                      "defaults); single-turn request; no tools")
 
@@ -159,7 +162,7 @@ def build_request(png: bytes) -> dict:
             "input": {"parts": [
                 {"inlineData": {"mimeType": "image/png", "data": base64.b64encode(png).decode("ascii")}},
                 {"text": TEXT}]},
-            "generation_config": {"thinking_config": {"thinking_level": THINKING_LEVEL}}}
+            "generation_config": dict(GENERATION_CONFIG)}
 
 
 def request_template() -> dict:
