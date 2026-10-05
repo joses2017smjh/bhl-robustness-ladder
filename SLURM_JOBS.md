@@ -3854,3 +3854,13 @@ it exists.
 - Development before freezing (throw-away smoke frames only, never scored): probe `21549431` (3 frames × 2 variants per model; every answer parsed; ≈ 1.1 s / 0.9 s per call on an H100 MIG slice); failed attempts `21549333` (a V100: no kernels in this CUDA 13 torch; Molmo2's processor did not load through the generic pipeline, so loading is explicit) and `21549376` (bad partition constraints, never ran).
 - Plan: per model a smoke of the committed code (throw-away frames) → the scored run (afterok) → the latency run on a full GPU (afterok).
 - **ER-OBS-1-OW submitted (2026-10-04 21:41):** molmo2-er smoke 21549475 run 21549476 latency 21549477; qwen3-vl-8b smoke 21549478 run 21549479 latency 21549480; all from `34547e1`.
+
+**ER-OBS-1-OW results (2026-10-04 22:16): both open-weight models NEGATIVE on accuracy and NOT-IN-LOOP-ELIGIBLE on latency** (read from `results/er-obs1-20261004/ow/<model>/verdict_*.json`; smokes 21549475 / 21549478 PASS, 56/56 parsed each).
+- Every one of the 800 answers per model parsed (no failed call), so the misses are perception, not format.
+- Qwen3-VL-8B (`21549479`): NEGATIVE. Balanced accuracy: lifted clear 0.500 and on floor 0.500 (never answers true), robot contact 0.881, seated flat 0.662 (says seated almost always); point hit 118/400 = 0.295; C1 seated flat 0.601 (> 0.60, fails by 0.001), the others 0.50.
+- Molmo2-ER (`21549476`): NEGATIVE. lifted clear 0.500, on floor 0.500 (never true), robot contact 0.567 (true-positive rate 0.14), seated flat 0.903 (the only boolean either model passes); point hit 240/400 = 0.60, but only two distinct points ([500, 500] and [50, 50]): a default, not grounding; C1 holds (all 0.50).
+- Latency on a full NVIDIA A40 (`21549477`, `21549480`; 50 calls after a warm-up): Molmo2-ER p95 2.05 s (median 1.76 s), Qwen3-VL-8B p95 1.86 s (median 1.71 s); both above 1.0 s.
+- For reference, the status-quo rules (C2) against the same strict labels: lifted-by-centre-height 0.951, placed-without-orientation 1.000.
+- Reading: neither open model reads this sim's cube states from one rendered frame well enough to replace the simulator's ground truth; lifting and dropping are not seen at all. The Gemini arm (G) is unchanged and still waits for a key.
+
+**Stand5 seed 0 (`21544026_0`): complete at 7999, not killed, last-200 success 0.00027** (below 0.10; from its result JSON). The pair verdict waits for seed 1.
