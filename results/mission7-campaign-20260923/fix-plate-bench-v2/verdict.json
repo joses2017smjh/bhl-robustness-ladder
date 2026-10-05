@@ -1,0 +1,2866 @@
+{
+  "verdict": "FAIL",
+  "rule": "Bench v2: with N crossings run (64 minus the dropped set) and N_h per heading, bench v2 PASSES iff clears >= N - 2, 0 falls, and clears >= N_h - 1 for every heading. Otherwise FAIL; INCOMPLETE if any declared crossing is missing. The clear definition is unchanged: mission7_gates' real clear (base along >= +0.35 m past the plate centre along the door direction), within 10 s of takeover.",
+  "N": 41,
+  "required_clears": 39,
+  "clears": 30,
+  "falls": 0,
+  "crossings_scored": 41,
+  "per_heading": {
+    "0": {
+      "declared": 12,
+      "required": 11,
+      "crossings": 12,
+      "clears": 12
+    },
+    "90": {
+      "declared": 11,
+      "required": 10,
+      "crossings": 11,
+      "clears": 7
+    },
+    "-90": {
+      "declared": 10,
+      "required": 9,
+      "crossings": 10,
+      "clears": 9
+    },
+    "180": {
+      "declared": 8,
+      "required": 7,
+      "crossings": 8,
+      "clears": 2
+    }
+  },
+  "per_cell": {
+    "0/round/standstill": {
+      "declared": 4,
+      "clears": 4,
+      "crossings": 4
+    },
+    "0/round/walking": {
+      "declared": 2,
+      "clears": 2,
+      "crossings": 2
+    },
+    "90/round/standstill": {
+      "declared": 4,
+      "clears": 3,
+      "crossings": 4
+    },
+    "90/round/walking": {
+      "declared": 3,
+      "clears": 1,
+      "crossings": 3
+    },
+    "-90/round/standstill": {
+      "declared": 4,
+      "clears": 3,
+      "crossings": 4
+    },
+    "-90/round/walking": {
+      "declared": 2,
+      "clears": 2,
+      "crossings": 2
+    },
+    "180/round/standstill": {
+      "declared": 4,
+      "clears": 0,
+      "crossings": 4
+    },
+    "180/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "0/square/standstill": {
+      "declared": 4,
+      "clears": 4,
+      "crossings": 4
+    },
+    "0/square/walking": {
+      "declared": 2,
+      "clears": 2,
+      "crossings": 2
+    },
+    "90/square/standstill": {
+      "declared": 4,
+      "clears": 3,
+      "crossings": 4
+    },
+    "90/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/square/standstill": {
+      "declared": 4,
+      "clears": 4,
+      "crossings": 4
+    },
+    "-90/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/square/standstill": {
+      "declared": 4,
+      "clears": 2,
+      "crossings": 4
+    },
+    "180/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    }
+  },
+  "missing": [],
+  "problems": [],
+  "misses": [
+    [
+      3,
+      0
+    ],
+    [
+      7,
+      0
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      13,
+      1
+    ],
+    [
+      17,
+      0
+    ],
+    [
+      17,
+      1
+    ],
+    [
+      18,
+      0
+    ],
+    [
+      19,
+      0
+    ],
+    [
+      23,
+      0
+    ],
+    [
+      25,
+      0
+    ],
+    [
+      27,
+      1
+    ]
+  ],
+  "fallen": [],
+  "bench": "v2",
+  "stage_gait": "clocks2",
+  "mode": "scored",
+  "chain": "a chain, each step only after the previous PASSES: bench v2 with --stage-gait clocks2 | export --cross-budget window --yaw-cap 0.6 -> the unchanged exact ten-fall replay once with the same stage gait and options (complete, 10 episodes, 10 upright, 0 falls; release arm m7-fix) -> the route gate as coded by M1 with the same stage gait and options (Doors and Transport each >= 16/16 successes on validation layouts 0-15, 32 episodes)",
+  "disclosure": "bench v2 was introduced after the M2 bench FAIL (21507962) revealed the run-up confound (26/64 crossings ended in v1's own run-up before takeover); M2's FAIL stands and v1 is unchanged",
+  "labels": {
+    "gaits": "LEARNED (shipped arms-dr1.0-s0 outside the stage; during the stage the controller is swapped to arms-turngait-clock-s2, a 77-observation gait-clock policy (Turning R1's qualified seed))",
+    "stage": "SCRIPTED (PlateStage, stage_gait=clocks2, cross_budget=window, yaw_cap=0.6)",
+    "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"
+  },
+  "dropped": [
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      10,
+      0
+    ],
+    [
+      11,
+      0
+    ],
+    [
+      12,
+      0
+    ],
+    [
+      13,
+      0
+    ],
+    [
+      14,
+      0
+    ],
+    [
+      15,
+      0
+    ],
+    [
+      16,
+      1
+    ],
+    [
+      19,
+      1
+    ],
+    [
+      21,
+      1
+    ],
+    [
+      22,
+      1
+    ],
+    [
+      23,
+      1
+    ],
+    [
+      24,
+      0
+    ],
+    [
+      26,
+      0
+    ],
+    [
+      27,
+      0
+    ],
+    [
+      29,
+      0
+    ],
+    [
+      30,
+      0
+    ],
+    [
+      31,
+      0
+    ]
+  ],
+  "standstill_spawn_wall_overlap_not_gated": [
+    [
+      4,
+      0
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      22,
+      0
+    ],
+    [
+      24,
+      1
+    ],
+    [
+      30,
+      1
+    ]
+  ],
+  "plate_activation_not_gated": {
+    "round_target_pressed_during_stage": 22,
+    "square_target_pressed_during_stage": 18,
+    "crossings": 41
+  },
+  "wall_contacts_not_gated": {
+    "crossings_with_stage_contact": 27
+  },
+  "falls_by_phase_not_gated": {},
+  "end_reasons": {
+    "complete": 40,
+    "walk_timeout": 1
+  },
+  "crossings": [
+    {
+      "layout": 0,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 4.439999999998427,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.17844526573316025,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 7.799999999998397,
+      "takeover_speed_mps": 0.001171761994740782,
+      "along_start_m": -0.34021256359268476,
+      "along_max_m": 0.4491005667658464,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 7.799999999998397,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 120
+        }
+      ],
+      "fix": {
+        "cross_s": 3.3999999999981156,
+        "cross_ended_by": "clear",
+        "window_left_s": 5.400000000001661,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.4
+      }
+    },
+    {
+      "layout": 0,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 5.760000000000289,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.218476911759225,
+      "takeover_s": 4.200000000000392,
+      "handback_s": 10.400000000001219,
+      "takeover_speed_mps": 0.41407838721958423,
+      "along_start_m": -0.2728105488081391,
+      "along_max_m": 0.5127631738338784,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": 1.2000000000002227,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 4.200000000000392,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 10.400000000001219,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 155
+        }
+      ],
+      "fix": {
+        "cross_s": 5.200000000000671,
+        "cross_ended_by": "clear",
+        "window_left_s": 4.199999999999662,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.4
+      }
+    },
+    {
+      "layout": 1,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 7.04000000000061,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.18884294751016012,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 13.000000000004396,
+      "takeover_speed_mps": 0.0017508330510346852,
+      "along_start_m": -0.3739105208027207,
+      "along_max_m": 0.652071108943034,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 11,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 13.000000000004396,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 250
+        }
+      ],
+      "fix": {
+        "cross_s": 3.800000000001802,
+        "cross_ended_by": "clear",
+        "window_left_s": 2.7999999999991942,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.394959143638296
+      }
+    },
+    {
+      "layout": 1,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.400000000001782,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1749169993654497,
+      "takeover_s": 4.60000000000017,
+      "handback_s": 13.400000000004885,
+      "takeover_speed_mps": 0.5343390022383065,
+      "along_start_m": -0.3982407906490932,
+      "along_max_m": 0.5336123598065922,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": 1.600000000000001,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 4.60000000000017,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 13.400000000004885,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 220
+        }
+      ],
+      "fix": {
+        "cross_s": 3.4000000000034447,
+        "cross_ended_by": "clear",
+        "window_left_s": 3.599999999998218,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.17700766543347562
+      }
+    },
+    {
+      "layout": 2,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 7.840000000001588,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.21745449282672813,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 13.60000000000513,
+      "takeover_speed_mps": 0.04054441340150287,
+      "along_start_m": -0.3815958793857627,
+      "along_max_m": 0.5768508468102159,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 13.60000000000513,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 265
+        }
+      ],
+      "fix": {
+        "cross_s": 2.800000000003422,
+        "cross_ended_by": "clear",
+        "window_left_s": 1.9999999999982165,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.19250457371059956
+      }
+    },
+    {
+      "layout": 2,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.440000000000765,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.17886504179939508,
+      "takeover_s": 4.000000000000503,
+      "handback_s": 13.000000000004396,
+      "takeover_speed_mps": 0.24427492667177045,
+      "along_start_m": -0.49125144947770505,
+      "along_max_m": 0.5885429279747864,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": 1.0000000000003335,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 4.000000000000503,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 13.000000000004396,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 225
+        }
+      ],
+      "fix": {
+        "cross_s": 3.200000000002845,
+        "cross_ended_by": "clear",
+        "window_left_s": 3.3999999999990393,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.33945423412478704
+      }
+    },
+    {
+      "layout": 3,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": true,
+      "clear_after_takeover_s": 10.680000000005059,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.21955248174471179,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 17.600000000004332,
+      "takeover_speed_mps": 0.0005377671048239104,
+      "along_start_m": -0.27544472138323584,
+      "along_max_m": 0.4963547593595292,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 46,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 17.600000000004332,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 365
+        }
+      ],
+      "fix": {
+        "cross_s": 3.0000000000036664,
+        "cross_ended_by": "budget",
+        "window_left_s": 0.1999999999960167,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.3185655558633787
+      }
+    },
+    {
+      "layout": 4,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.359999999999779,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.21407089588347863,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 9.399999999999997,
+      "takeover_speed_mps": 0.0007496470741096247,
+      "along_start_m": -0.3299764869835746,
+      "along_max_m": 0.38617588462976915,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 9,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [
+        "wall_m7_16"
+      ],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 9.399999999999997,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 160
+        }
+      ],
+      "fix": {
+        "cross_s": 5.399999999999494,
+        "cross_ended_by": "clear",
+        "window_left_s": 3.600000000000172,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": 0.16877048002926903
+      }
+    },
+    {
+      "layout": 5,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 7.04000000000061,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.2231294768315918,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 12.800000000004152,
+      "takeover_speed_mps": 0.0011575064115902857,
+      "along_start_m": -0.4716111278179066,
+      "along_max_m": 0.5904881087884324,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 18,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [
+        "wall_m7_13"
+      ],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 12.800000000004152,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 245
+        }
+      ],
+      "fix": {
+        "cross_s": 3.2000000000021345,
+        "cross_ended_by": "clear",
+        "window_left_s": 2.7999999999991942,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.1989261015683156
+      }
+    },
+    {
+      "layout": 6,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 7.880000000001637,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.19792917547272673,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 14.000000000005619,
+      "takeover_speed_mps": 0.0007007701613487177,
+      "along_start_m": -0.483785656337929,
+      "along_max_m": 0.6967313617911137,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 17,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 14.000000000005619,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 275
+        }
+      ],
+      "fix": {
+        "cross_s": 4.60000000000278,
+        "cross_ended_by": "clear",
+        "window_left_s": 1.9999999999982165,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.3875453843955881
+      }
+    },
+    {
+      "layout": 7,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.22406291756992705,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 20.999999999996408,
+      "takeover_speed_mps": 0.0026330942591828335,
+      "along_start_m": -0.3609230070059246,
+      "along_max_m": -0.22423418040135656,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": true,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 221,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 20.999999999996408,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 450
+        }
+      ],
+      "fix": {
+        "cross_s": 0.0,
+        "cross_ended_by": "budget",
+        "window_left_s": -1.0000000000054499,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": null
+      }
+    },
+    {
+      "layout": 8,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 4.5599999999984675,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.16402759983692047,
+      "takeover_s": 4.000000000000503,
+      "handback_s": 8.599999999999019,
+      "takeover_speed_mps": 0.19445779204803806,
+      "along_start_m": -0.3314205938585011,
+      "along_max_m": 0.37181150570398436,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": 1.0000000000003335,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 4.000000000000503,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 8.599999999999019,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 115
+        }
+      ],
+      "fix": {
+        "cross_s": 3.999999999998849,
+        "cross_ended_by": "clear",
+        "window_left_s": 5.400000000001484,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": 0.16927327512447068
+      }
+    },
+    {
+      "layout": 8,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 3.5599999999989147,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.18362239607082903,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 7.799999999998397,
+      "takeover_speed_mps": 0.00021296557588181377,
+      "along_start_m": -0.4425153559321461,
+      "along_max_m": 0.40956141257245526,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 25,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 7.799999999998397,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 120
+        }
+      ],
+      "fix": {
+        "cross_s": 2.999999999998692,
+        "cross_ended_by": "clear",
+        "window_left_s": 6.400000000001107,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.4
+      }
+    },
+    {
+      "layout": 9,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.720000000000219,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.453023015234024,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 12.600000000003908,
+      "takeover_speed_mps": 0.0025741589488111126,
+      "along_start_m": -0.5095417983624833,
+      "along_max_m": 0.4700453150604744,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 12.600000000003908,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 240
+        }
+      ],
+      "fix": {
+        "cross_s": 3.200000000001424,
+        "cross_ended_by": "clear",
+        "window_left_s": 3.199999999999683,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.2583456195877018
+      }
+    },
+    {
+      "layout": 10,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 7.200000000000806,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.2426342099357438,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 12.800000000004152,
+      "takeover_speed_mps": 0.0022081584390264,
+      "along_start_m": -0.44322566908286287,
+      "along_max_m": 0.555010976784037,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 13,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 12.800000000004152,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 245
+        }
+      ],
+      "fix": {
+        "cross_s": 3.2000000000021345,
+        "cross_ended_by": "clear",
+        "window_left_s": 2.7999999999991942,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.2904091069660996
+      }
+    },
+    {
+      "layout": 11,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1948998274866964,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 18.400000000002468,
+      "takeover_speed_mps": 0.0013744292626437682,
+      "along_start_m": -0.504071159005334,
+      "along_max_m": 0.2508886599700568,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 30,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [
+        "wall_m7_28"
+      ],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 18.400000000002468,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 385
+        }
+      ],
+      "fix": {
+        "cross_s": 4.0000000000048885,
+        "cross_ended_by": "budget",
+        "window_left_s": 0.1999999999960167,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.1787827746677139
+      }
+    },
+    {
+      "layout": 12,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 3.5599999999989147,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1766658659131584,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 6.599999999999062,
+      "takeover_speed_mps": 0.00016744174431388234,
+      "along_start_m": -0.44202187665059156,
+      "along_max_m": 0.3916537961841636,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 12,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 6.599999999999062,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 90
+        }
+      ],
+      "fix": {
+        "cross_s": 2.999999999998692,
+        "cross_ended_by": "clear",
+        "window_left_s": 6.400000000001107,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": 0.22802152862774017
+      }
+    },
+    {
+      "layout": 13,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.2101162026777482,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 16.00000000000806,
+      "takeover_speed_mps": 0.0012811271084090115,
+      "along_start_m": -0.5255239403118083,
+      "along_max_m": -0.2638283792775984,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 15,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 16.00000000000806,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 325
+        }
+      ],
+      "fix": {
+        "cross_s": 6.20000000000509,
+        "cross_ended_by": "budget",
+        "window_left_s": 0.1999999999960167,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.3482961181653315
+      }
+    },
+    {
+      "layout": 14,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.880000000000415,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1884857359949359,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 12.600000000003908,
+      "takeover_speed_mps": 0.0015296931057507026,
+      "along_start_m": -0.4445952346940278,
+      "along_max_m": 0.5143277865433044,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 12.600000000003908,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 240
+        }
+      ],
+      "fix": {
+        "cross_s": 3.8000000000014467,
+        "cross_ended_by": "clear",
+        "window_left_s": 2.9999999999994387,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.18468231481611638
+      }
+    },
+    {
+      "layout": 15,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 8.960000000002957,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.18186655679251001,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 17.4000000000048,
+      "takeover_speed_mps": 0.0018764790297109441,
+      "along_start_m": -0.4252446734078887,
+      "along_max_m": 0.6749565373625551,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 35,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 17.4000000000048,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 360
+        }
+      ],
+      "fix": {
+        "cross_s": 2.800000000003422,
+        "cross_ended_by": "clear",
+        "window_left_s": 0.9999999999969944,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.2337004530293996
+      }
+    },
+    {
+      "layout": 16,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 3.519999999998937,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1882199163678535,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 6.99999999999884,
+      "takeover_speed_mps": 0.0004539126942266297,
+      "along_start_m": -0.42796968429250304,
+      "along_max_m": 0.6202633298235379,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 6.99999999999884,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 100
+        }
+      ],
+      "fix": {
+        "cross_s": 2.999999999998692,
+        "cross_ended_by": "clear",
+        "window_left_s": 6.400000000001107,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.3090855124000349
+      }
+    },
+    {
+      "layout": 17,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.20912088276682259,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 23.399999999990815,
+      "takeover_speed_mps": 0.045314153857571426,
+      "along_start_m": -0.46932193865263366,
+      "along_max_m": 0.1501086060185086,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 285,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 23.399999999990815,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 510
+        }
+      ],
+      "fix": {
+        "cross_s": 7.000000000004647,
+        "cross_ended_by": "budget",
+        "window_left_s": 0.1999999999960167,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.34461805142174917
+      }
+    },
+    {
+      "layout": 17,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.18163359756801206,
+      "takeover_s": 4.000000000000503,
+      "handback_s": 17.00000000000573,
+      "takeover_speed_mps": 0.24186534321512912,
+      "along_start_m": -0.666505146760206,
+      "along_max_m": 0.001395203307597903,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 79,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": 1.0000000000003335,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 4.000000000000503,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 17.00000000000573,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 325
+        }
+      ],
+      "fix": {
+        "cross_s": 6.0000000000069775,
+        "cross_ended_by": "budget",
+        "window_left_s": 0.19999999999512852,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.4
+      }
+    },
+    {
+      "layout": 18,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.16255977924720252,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 16.40000000000713,
+      "takeover_speed_mps": 0.002315004824917322,
+      "along_start_m": -0.39611611821335113,
+      "along_max_m": -0.24470578615542843,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 27,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 16.40000000000713,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 335
+        }
+      ],
+      "fix": {
+        "cross_s": 6.000000000005201,
+        "cross_ended_by": "budget",
+        "window_left_s": 0.1999999999960167,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.18371041959646672
+      }
+    },
+    {
+      "layout": 18,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.720000000001463,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.19847602515334004,
+      "takeover_s": 4.200000000000392,
+      "handback_s": 14.000000000005619,
+      "takeover_speed_mps": 0.6968577517021405,
+      "along_start_m": -0.44648498551342,
+      "along_max_m": 0.46311445695292697,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 12,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": 1.2000000000002227,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 4.200000000000392,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 14.000000000005619,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 245
+        }
+      ],
+      "fix": {
+        "cross_s": 3.800000000003223,
+        "cross_ended_by": "clear",
+        "window_left_s": 3.1999999999984396,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.24784120322666567
+      }
+    },
+    {
+      "layout": 19,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": true,
+      "clear_after_takeover_s": 14.080000000005375,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.20426563238979376,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 17.800000000003866,
+      "takeover_speed_mps": 6.32814749251829e-05,
+      "along_start_m": -0.27957948448379527,
+      "along_max_m": 0.3993874475838374,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 31,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 17.800000000003866,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 370
+        }
+      ],
+      "fix": {
+        "cross_s": 1.400000000001711,
+        "cross_ended_by": "budget",
+        "window_left_s": 0.1999999999960167,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.14385534944989445
+      }
+    },
+    {
+      "layout": 20,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 4.359999999998472,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.20917951158680567,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 7.399999999998618,
+      "takeover_speed_mps": 0.00013550160094836171,
+      "along_start_m": -0.31306334942332814,
+      "along_max_m": 0.40025403722736264,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 7.399999999998618,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 110
+        }
+      ],
+      "fix": {
+        "cross_s": 3.3999999999981156,
+        "cross_ended_by": "clear",
+        "window_left_s": 5.60000000000155,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": 0.2914156683513387
+      }
+    },
+    {
+      "layout": 20,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 7.560000000002134,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.17169115032480356,
+      "takeover_s": 4.000000000000503,
+      "handback_s": 11.600000000002685,
+      "takeover_speed_mps": 0.2428864681739228,
+      "along_start_m": -0.3221088124534787,
+      "along_max_m": 0.3749260632839814,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": 1.0000000000003335,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 4.000000000000503,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 11.600000000002685,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 190
+        }
+      ],
+      "fix": {
+        "cross_s": 7.000000000002515,
+        "cross_ended_by": "clear",
+        "window_left_s": 2.399999999997817,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": 0.2770863743594377
+      }
+    },
+    {
+      "layout": 21,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.800000000000317,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.18755376711107605,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 13.200000000004641,
+      "takeover_speed_mps": 0.0010263842489226965,
+      "along_start_m": -0.8051311528954268,
+      "along_max_m": 0.5126736655651003,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 13.200000000004641,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 255
+        }
+      ],
+      "fix": {
+        "cross_s": 3.400000000001313,
+        "cross_ended_by": "clear",
+        "window_left_s": 3.199999999999683,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.26080608219700024
+      }
+    },
+    {
+      "layout": 22,
+      "door": 0,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.760000000000268,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.21132682081446136,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 12.600000000003908,
+      "takeover_speed_mps": 6.503381606210251e-05,
+      "along_start_m": -0.43886428140781286,
+      "along_max_m": 0.6044741301931086,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 25,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [
+        "wall_m7_6"
+      ],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 12.600000000003908,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 240
+        }
+      ],
+      "fix": {
+        "cross_s": 2.8000000000016456,
+        "cross_ended_by": "clear",
+        "window_left_s": 3.199999999999683,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.2422550898458014
+      }
+    },
+    {
+      "layout": 23,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.2020169562528952,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 18.800000000001535,
+      "takeover_speed_mps": 0.00018509370399651494,
+      "along_start_m": -0.31501393770979735,
+      "along_max_m": -0.2210497142406127,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 67,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 18.800000000001535,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 395
+        }
+      ],
+      "fix": {
+        "cross_s": 0.8000000000009777,
+        "cross_ended_by": "budget",
+        "window_left_s": 0.1999999999960167,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.13337318906505394
+      }
+    },
+    {
+      "layout": 24,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 4.239999999998538,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.19048060883941043,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 7.399999999998618,
+      "takeover_speed_mps": 0.001535520209469412,
+      "along_start_m": -0.32995612452284817,
+      "along_max_m": 0.482162185842828,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 2,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [
+        "wall_m7_31"
+      ],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 7.399999999998618,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 110
+        }
+      ],
+      "fix": {
+        "cross_s": 3.3999999999981156,
+        "cross_ended_by": "clear",
+        "window_left_s": 5.60000000000155,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": 0.23249727850705176
+      }
+    },
+    {
+      "layout": 25,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "walk_timeout",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.11316652780167097,
+      "takeover_s": null,
+      "handback_s": null,
+      "takeover_speed_mps": null,
+      "along_start_m": null,
+      "along_max_m": null,
+      "phases": [],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": false,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [],
+      "fix": {
+        "cross_s": null,
+        "cross_ended_by": null,
+        "window_left_s": null,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": null
+      }
+    },
+    {
+      "layout": 25,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 7.720000000001441,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.17856891068398167,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 13.400000000004885,
+      "takeover_speed_mps": 0.0020640165255496386,
+      "along_start_m": -0.41800507497516826,
+      "along_max_m": 0.5843736352151452,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 1,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 13.400000000004885,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 260
+        }
+      ],
+      "fix": {
+        "cross_s": 4.8000000000023135,
+        "cross_ended_by": "clear",
+        "window_left_s": 2.199999999998461,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.4
+      }
+    },
+    {
+      "layout": 26,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 8.84000000000281,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.19770984017825644,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 14.400000000006107,
+      "takeover_speed_mps": 0.00224889474546752,
+      "along_start_m": -0.40312575132656026,
+      "along_max_m": 0.5833352035348423,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 20,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 14.400000000006107,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 285
+        }
+      ],
+      "fix": {
+        "cross_s": 5.800000000003891,
+        "cross_ended_by": "clear",
+        "window_left_s": 0.9999999999969944,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.25188650110996263
+      }
+    },
+    {
+      "layout": 27,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.21656053992244723,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 19.799999999999205,
+      "takeover_speed_mps": 0.00012821606342418234,
+      "along_start_m": -0.6034243596229016,
+      "along_max_m": 0.17067576091439562,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 11,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 19.799999999999205,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 420
+        }
+      ],
+      "fix": {
+        "cross_s": 4.0000000000048885,
+        "cross_ended_by": "budget",
+        "window_left_s": 0.1999999999960167,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.2599430172651468
+      }
+    },
+    {
+      "layout": 28,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 7.800000000003493,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.14150070662184355,
+      "takeover_s": 4.60000000000017,
+      "handback_s": 12.800000000004152,
+      "takeover_speed_mps": 0.3522486365937222,
+      "along_start_m": -0.26365430725224653,
+      "along_max_m": 0.6183635976926983,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": 1.600000000000001,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 4.60000000000017,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 12.800000000004152,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 205
+        }
+      ],
+      "fix": {
+        "cross_s": 7.200000000003826,
+        "cross_ended_by": "clear",
+        "window_left_s": 2.199999999996507,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.1953556614548484
+      }
+    },
+    {
+      "layout": 28,
+      "door": 1,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 3.439999999998981,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.22238474305181757,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 6.599999999999062,
+      "takeover_speed_mps": 0.0005131505064298743,
+      "along_start_m": -0.43831787453343096,
+      "along_max_m": 0.43032056255279094,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 1,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 6.599999999999062,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 90
+        }
+      ],
+      "fix": {
+        "cross_s": 2.999999999998692,
+        "cross_ended_by": "clear",
+        "window_left_s": 6.400000000001107,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": 0.23614795105175532
+      }
+    },
+    {
+      "layout": 29,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.880000000000415,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.21217609454354552,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 13.60000000000513,
+      "takeover_speed_mps": 0.0015379854178129604,
+      "along_start_m": -0.4744593778391373,
+      "along_max_m": 0.6787956462512852,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 37,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 13.60000000000513,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 265
+        }
+      ],
+      "fix": {
+        "cross_s": 3.4000000000016684,
+        "cross_ended_by": "clear",
+        "window_left_s": 2.9999999999994387,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.2800423003326881
+      }
+    },
+    {
+      "layout": 30,
+      "door": 1,
+      "heading_deg": -90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 5.519999999998753,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.23824949354466587,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 12.800000000004152,
+      "takeover_speed_mps": 0.0002480665117503836,
+      "along_start_m": -0.5298385407113821,
+      "along_max_m": 0.645810764484672,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 27,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [
+        "wall_m7_26"
+      ],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 12.800000000004152,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 245
+        }
+      ],
+      "fix": {
+        "cross_s": 3.1999999999992923,
+        "cross_ended_by": "clear",
+        "window_left_s": 4.40000000000115,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.27944461999017717
+      }
+    },
+    {
+      "layout": 31,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 9.760000000003934,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.20915919385425377,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 18.200000000002934,
+      "takeover_speed_mps": 0.0006202468696587499,
+      "along_start_m": -0.5859226702279097,
+      "along_max_m": 0.49621710027609023,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 1,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 18.200000000002934,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 380
+        }
+      ],
+      "fix": {
+        "cross_s": 3.200000000003911,
+        "cross_ended_by": "clear",
+        "window_left_s": 0.1999999999960167,
+        "turn_wz_sent_max": 0.5999994,
+        "turn_wz_received_max": 0.5999994277954102,
+        "cross_wz_sent_max": 0.1613415319607622
+      }
+    }
+  ],
+  "written_utc": "2026-10-04T18:07:55.535551+00:00",
+  "stage_gait_export": "clocks2 preset",
+  "disclosure_stage_gait": "arms-turngait-clock-s2 was qualified at +-0.6 rad/s and is untested at the interface's 0.40 rad/s; a 180-deg entry needs (pi - 0.15)/0.40 = 7.48 s of turning + the 0.40-0.60 s settle as polled + 0.65 m / 0.30 m/s = 2.17 s of crossing = 10.05-10.25 s (about 10.1-10.3 s) against the 10 s clear window, so the 180-deg clause (>= 7/8) is likely to fail on timing alone unless the gait turns faster than commanded",
+  "stage_fix": {
+    "design": "SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55', item F (F2 + F3)",
+    "cross_budget": "window",
+    "yaw_cap_rps": 0.6,
+    "command_scales": [
+      0.4,
+      0.35,
+      0.6
+    ],
+    "turn_rate_rps": 0.6,
+    "turn_max_s": 10.471975511965978,
+    "turn_exit_rad": 0.15,
+    "cruise_mps": 0.3,
+    "k_yaw": 1.2,
+    "wz_walk_rps": 0.4,
+    "clear_along_m": 0.35,
+    "crossing_end": "clear (along >= 0.35 m) or takeover + 10.0 - now <= 0.2 s, whichever first; takeover = PlateStage._start (bench: the bench's takeover; replay and route: the capture)",
+    "clear_window_s": 10.0,
+    "window_margin_s": 0.2,
+    "cap_semantics": "every command below the cap is delivered unchanged; vx and vy scales unchanged"
+  },
+  "disclosure_fix": "Bundling means a PASS is not attributable to one change. Faster turns in narrow cells add wall-contact and fall risk (6 of 8 180-deg turns already touched walls at 0.40; the clocks2 bench's only fall, 21517668 L22 d0, was during the in-place turn). Crossing until clear produced a replay fall before (9/10)."
+}
