@@ -1,0 +1,28 @@
+{
+ "verdict": "CONTINUE",
+ "reasons": [],
+ "ep_len": 475.26780090332034,
+ "time_out": 0.930328796505928,
+ "success": 0.00044799804862122983,
+ "nonfall": 0.9307767945545493,
+ "length_clause_skipped": false,
+ "at_iter": 1000,
+ "window": 100,
+ "fallen": 0.06922322809696198,
+ "ready": true,
+ "mode": "kill",
+ "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-10-04_10-29-35_v2-cubetoshelfstand5-blind-s1",
+ "latest_iter_logged": 1013,
+ "task": "CubeToShelfStand5 (blind)",
+ "note": "CubeToShelfStand5: CubeToShelfStand4 plus two changes (the cube's z axis observed by the actor and the critic; the lift curriculum promotes on the roll-proof lift condition); a different configuration from Stand4, judged only by its own predeclared rule; never compared with CubeToShelfStand3 or CubeToShelf numbers",
+ "labels": "LEARNED crew policy (one PPO actor drives both robots, blind); ORACLE privileged observations, now including cube orientation: the actor and the critic both observe object_pos_a/b (the simulator cube position in each robot's root frame) and object_zaxis_a/b (NEW: the simulator cube's own z axis in each robot's root frame); the critic also base_lin_vel_a/b, object_lin_vel, object_ang_vel; MODIFIED hand colliders (the overlay) relative to Stand3, inherited unchanged from Stand4",
+ "design": [
+  "**(S) Stand5.** Stand4 + two changes.",
+  "(i) The actor and critic observe the cube's orientation in each robot's root frame (its z axis; ORACLE, like `object_pos_a/b`).",
+  "(ii) The lift curriculum promotes on Stand4's roll-proof lift condition (lowest corner \u2265 2 cm above every support and tilt \u2264 15\u00b0) instead of centre height + pinch.",
+  "Stand4's rule verbatim: the kill rule at model_1000; COMPLETE at 7999; PASS iff \u2265 1 of 2 seeds is COMPLETE, not killed, with last-200 success \u2265 0.10. 2 seeds \u00d7 8000 iterations, Stand4's resources.",
+  "Labels: LEARNED crew policy (blind) + ORACLE privileged observations (now including cube orientation)."
+ ],
+ "rule": "Stand4's rule verbatim: the kill rule at model_1000; COMPLETE at 7999; PASS iff \u2265 1 of 2 seeds is COMPLETE, not killed, with last-200 success \u2265 0.10. 2 seeds \u00d7 8000 iterations, Stand4's resources.",
+ "stand4_rule": "PREDECLARED RULE (frozen; Stand3's structure): the kill rule at model_1000 exactly as Stand3's launcher applies it (copy its condition and window verbatim); a seed is COMPLETE iff it reaches iteration 7999; Stand4 PASSES iff >= 1 of 2 seeds has last-200-iteration success >= 0.10, where success is the Stand4 termination above (seated, tilt <= 8 deg, released). Otherwise NEGATIVE; INCOMPLETE if a seed is neither complete nor stopped by the kill rule. Stand4 is a different task from Stand3 and CubeToShelf and is never compared with their numbers. Labels: LEARNED crew policies; ORACLE privileged observations exactly as Stand3 uses them (say which); MODIFIED hand colliders (the overlay) relative to Stand3."
+}
