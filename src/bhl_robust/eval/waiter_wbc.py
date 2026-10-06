@@ -133,6 +133,17 @@ class WaiterWbcController:
         c = q_vec * (np.dot(q_vec, v)) * 2.0
         return a - b + c
 
+    def load_policy(self) -> None:
+        """As upstream RlController.load_policy (run_eval calls it): ONNX or TorchScript by file name."""
+        from berkeley_humanoid_lite_lowlevel.policy.rl_controller import OnnxPolicy, TorchPolicy
+        path = str(self.cfg.policy_checkpoint_path)
+        if ".onnx" in path:
+            self.policy = OnnxPolicy(path)
+        elif ".pt" in path:
+            self.policy = TorchPolicy(path)
+        else:
+            raise ValueError(f"unrecognized policy format: {path}")
+
     def set_upper_body(self, target) -> None:
         """Absolute targets for the 12 upper-body joints (10 arm joints in rad, 2 grippers in rad)."""
         import numpy as np

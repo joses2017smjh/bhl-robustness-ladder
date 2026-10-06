@@ -56,6 +56,7 @@ export PYTHONPATH="$REPO/src:$REPO/scripts" OMP_NUM_THREADS=1 OPENBLAS_NUM_THREA
 JOBTAG=${SLURM_JOB_ID:-local$$}
 CACHE=${TMPDIR:-/tmp}/bhl-turnq-$JOBTAG; mkdir -p "$CACHE"
 RUN=${TURNQ_RUN:-arms-turn-turnboth-s0}
+VARIANT=${TURNQ_VARIANT:-humanoid}     # waiter: the Waiter phase 1 24-DoF model (protocol unchanged)
 OUT=${TURNQ_OUT_DIR:-$REPO/results/repo-gpu-20260923/turn-20260927/qualify}
 mkdir -p "$OUT"
 echo "=== turn qualify $RUN | $(hostname) | HEAD $(git -C "$REPO" rev-parse --short HEAD) | $(date) ==="
@@ -81,7 +82,7 @@ if [ -f "$V2X" ] && "$PY" -c "import json,sys; d=json.load(open(sys.argv[1])); a
 else
     tmp=$OUT/.${RUN}__v2x.$JOBTAG.json; rm -f "$tmp"
     "$PY" scripts/bench/turn_test.py --protocol v2x --deploy "$DEPLOY" --upstream "$U" --cache-dir "$CACHE" \
-        --variant humanoid --turn-seeds 10 11 12 13 14 --walk-seeds 10 11 12 --min-turn-ok 9 --min-walk-ok 2 \
+        --variant "$VARIANT" --turn-seeds 10 11 12 13 14 --walk-seeds 10 11 12 --min-turn-ok 9 --min-walk-ok 2 \
         --turn-min-deg 150 --drift-max-deg 15 --seconds 6 --out "$tmp" 2>&1 | grep -v "^\[" || true
     [ -f "$tmp" ] && mv -f "$tmp" "$V2X"
 fi
@@ -94,7 +95,7 @@ else
     tmpc=$OUT/.${RUN}__p0.5_n60.$JOBTAG.csv; rm -f "$tmpc"
     echo "=== push regression $RUN $(date) ==="
     "$PY" -m bhl_robust.eval.run_eval --deploy-cfg "$DEPLOY" --upstream "$U" --cache-dir "$CACHE" \
-        --out "$tmpc" --label "$RUN" --variant humanoid \
+        --out "$tmpc" --label "$RUN" --variant "$VARIANT" \
         --episode-s 12 --seeds 10 --push-speed 0.5 --terrain-difficulty 0 || echo "EVAL FAILED: $RUN"
     [ -f "$tmpc" ] && mv -f "$tmpc" "$CSV"
 fi
