@@ -43,7 +43,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--cache-dir", required=True, type=Path)
     p.add_argument("--out", required=True, type=Path)
     p.add_argument("--label", required=True, help="run identifier recorded in every row")
-    p.add_argument("--variant", default="biped", choices=["biped", "humanoid"])
+    p.add_argument("--variant", default="biped", choices=["biped", "humanoid", "waiter"])
     p.add_argument("--episode-s", type=float, default=10.0)
     p.add_argument("--seeds", type=int, default=5)
     p.add_argument("--push-speed", type=float, default=0.0,

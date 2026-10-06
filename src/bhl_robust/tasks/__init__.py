@@ -587,3 +587,22 @@ except Exception as _exc:  # noqa: BLE001
     import sys as _sys
     print(f"[bhl_robust.tasks] m7-platecross2 id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
 # --- end m7-platecross2 ---
+
+# --- waiter-wbc ---
+# Waiter program phase 1 (2026-10-05; docs/WAITER_PROGRAM.md, SLURM_JOBS.md 'Predeclared now ... the Waiter
+# program'): the 24-DoF gripper whole-body controller, R1's recipe with the legs as the policy and the arms and
+# grippers following an upper-body command (waiter_env_cfg.HumanoidWaiterWbcCfg); trained from scratch by
+# slurm/repo20260923/gpu_waiter_wbc.sbatch. Guarded: a failure is printed and only this id is absent.
+try:
+    from bhl_robust.tasks import waiter_env_cfg as _waiter  # noqa: E402
+
+    gym.register(
+        id=_waiter.TASK_ID,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _waiter.HumanoidWaiterWbcCfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] waiter-wbc id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end waiter-wbc ---
