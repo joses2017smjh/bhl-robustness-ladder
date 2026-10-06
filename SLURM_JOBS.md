@@ -3993,3 +3993,4 @@ it exists.
 - Launcher `gpu_waiter_wbc.sbatch` with `WAITER_VARIANT=1b`. It FAILs a run whose log lacks the overlay line or shows any "Mean action noise std" above 1.0.
 - Gates and selection exactly as phase 1: Q1 turn_test v2 PASS + cpu_turn_qualify QUALIFIED; Q2 0 falls in 12 and drift <= 15 deg on >= 10/12; the lowest push-fall rate among qualified seeds; none -> NEGATIVE. Gates launcher `cpu_waiter_gates.sbatch` with `WAITER_GATES_PREFIX=waiter-wbc1b WAITER_GATES_SEED0=3`.
 - Labels as phase 1.
+- **Waiter phase 1b smoke `21594898` PASS** (overlay line present, noise std 1.00 every iteration, export 83 -> 12, stamped). **Submitted (2026-10-05 22:19):** training array `21594991` (seeds 3-5) -> gates `21594992` (aftercorr). Selection: `results/waiter-20261005/wbc1b/selection.json`.
