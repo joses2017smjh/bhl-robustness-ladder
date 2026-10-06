@@ -3975,3 +3975,13 @@ it exists.
 - self-contacts in MuJoCo: none, and the robot still falls with them disabled (0.9 s).
 
 **The cause is in training.** The PPO action-noise std ended at **3.74 (s1) and 3.69 (s2)**, against roughly 1.75-1.95 for the R1 gaits (docs/SOLUTIONS_2026-10-01.md F4). Isaac training still ends about half its episodes in falls (base_orientation 0.53 / 0.51, time_out 0.47 / 0.49). The policy learned to survive inside a very noisy loop; its noise-free mean, which the gates run, falls almost at once. Seed 0 crashed when the same growth made the std invalid (`normal expects all elements of std >= 0.0`). Expect phase 1 NEGATIVE from the frozen gates. The fix is a new, predeclared run that bounds the action std.
+
+**Waiter phase 1 WBC: NEGATIVE by the predeclared rule (no seed qualified)** (2026-10-05 22:15; `results/waiter-20261005/wbc/selection.json`, written by `wbc_select.py` in gates `21587787_2`; recounted from the per-seed JSONs).
+- s0: training FAILED (diverged at iteration 2951).
+- s1: turn_test v2 FAIL (turns 2/6, falls 0.5-1.8 s into the standing warm-up); NOT QUALIFIED (turn 3/10, walk 0/3, push 33/60); Q2 FAIL (8/12 falls).
+- **s2: close on everything except straight walking.**
+  - turn_test v2 FAIL (turns 6/6, 0 falls; walk drift 47.5 deg).
+  - NOT QUALIFIED: turn 9/10 (meets 9), push **4/60** (meets <= 9), walk 0/3 (drift 39.0 / 41.2 / 28.7 deg).
+  - Q2 FAIL on one fall: **11/12** episodes upright (T4 random arm motion, seed 1, fell at 1.56 s); drift <= 15 deg on 11/12 at 0.25 m/s.
+- Reported only, s2: push with 0.5 kg per hand in the carry pose 3/20 falls; arm tracking error 0.026-0.071 rad. s1: 13/20.
+- Reading: the noise-std blow-up (~3.7) ended s0, broke s1, and left s2 standing, turning and push-robust but drifting about 7 deg/s while walking straight at 0.35 m/s (clock-s2: 1.4 deg in 6 s).
