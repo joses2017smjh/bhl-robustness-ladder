@@ -26,17 +26,22 @@ LOGROOT=$UPSTREAM/logs/rsl_rl/humanoid
 JOBTAG=${SLURM_JOB_ID:-local$$}
 SMOKE=${WAITER_SMOKE:-0}
 TASK_ID=Velocity-BHL-Waiter-WBC-v0
-PREFIX=waiter-wbc
+VARIANT=${WAITER_VARIANT:-1}         # 1 = phase 1 as frozen; 1b = + action-noise std bounded to <= 1.0, seeds 3-5
+case "$VARIANT" in
+    1)  PREFIX=waiter-wbc;   SEED0=0; RES_NAME=wbc ;;
+    1b) PREFIX=waiter-wbc1b; SEED0=3; RES_NAME=wbc1b; export BHL_STD_MAX=1.0 ;;
+    *)  echo "WAITER-WBC RESULT: FAIL (unknown WAITER_VARIANT $VARIANT)"; exit 2 ;;
+esac
 FULL_ITERS=6000
 OBS_POLICY=83
 if [ "$SMOKE" = 1 ]; then
-    RES=${WAITER_OUT_DIR:-/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/wbc-smoke}
+    RES=${WAITER_OUT_DIR:-/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/$RES_NAME-smoke}
     case "$RES" in *-smoke) ;; *) echo "SMOKE: FAIL (smoke outputs must go to a directory ending in -smoke)"; exit 1;; esac
 else
-    RES=$REPO/results/waiter-20261005/wbc
+    RES=$REPO/results/waiter-20261005/$RES_NAME
 fi
 IDX=${SLURM_ARRAY_TASK_ID:-0}
-case $IDX in 0|1|2) SEED=$IDX;; *) echo "WAITER-WBC RESULT: FAIL (array index $IDX outside 0-2)"; exit 2;; esac
+case $IDX in 0|1|2) SEED=$((SEED0 + IDX));; *) echo "WAITER-WBC RESULT: FAIL (array index $IDX outside 0-2)"; exit 2;; esac
 if [ "$SMOKE" = 1 ]; then
     export MAX_ITER=3 NUM_ENVS=64 RUN_NAME="$PREFIX-s${SEED}-smoke-$JOBTAG"
 else
@@ -47,6 +52,7 @@ FINAL_CKPT="model_$((MAX_ITER - 1)).pt"
 export TASK="$TASK_ID" SEED
 mkdir -p "$RES"/training
 unset BHL_POLICY BHL_RND BHL_SYMMETRY
+[ "$VARIANT" = 1 ] && unset BHL_STD_MAX
 source "$REPO/slurm/dr_levels.sh"
 setup_node_cache
 source "$REPO/slurm/inner/v60_boot_gate.sh"
@@ -67,7 +73,7 @@ if [ "$SMOKE" = 1 ]; then OVR_DIR="$RES/overrides"; else OVR_DIR="$WORKSPACE/ove
 mkdir -p "$OVR_DIR"
 export OVERRIDE_FILE="$OVR_DIR/${RUN_NAME}.txt"
 dr_overrides_scale 1.0 > "$OVERRIDE_FILE"
-export BHL_FORWARD_VARS="$BHL_FORWARD_VARS RUN_DIR"
+export BHL_FORWARD_VARS="$BHL_FORWARD_VARS RUN_DIR BHL_STD_MAX"
 find_run() { ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | sort | tail -1; }
 echo "=== node: $(hostname) | $RUN_NAME | task=$TASK | smoke=$SMOKE | from scratch, $MAX_ITER iters -> $FINAL_CKPT | RES $RES | HEAD $(git -C "$REPO" rev-parse --short HEAD) | $(date) ==="
 git -C "$REPO" status --porcelain -- src/bhl_robust/waiter_asset.py src/bhl_robust/tasks/waiter_env_cfg.py \
@@ -84,6 +90,14 @@ run=$(find_run || true)
 why=""
 [ -n "$run" ] && [ -f "$run/$FINAL_CKPT" ] || why="$why no-$FINAL_CKPT"
 grep -q "waiter-wbc id NOT registered" "$TLOG" && why="$why task-not-registered"
+if [ "$VARIANT" = 1b ] && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
+    grep -q "\[overlay\] action-noise std bounded to \[0.001, 1.0\]" "$TLOG" || why="$why std-bound-overlay-missing"
+    "$PYH" - "$TLOG" <<'PY' || why="$why noise-std-above-1.0"
+import re, sys
+v = [float(x) for x in re.findall(r"Mean action noise std:\s*([0-9.]+)", open(sys.argv[1], errors="ignore").read())]
+sys.exit(0 if v and max(v) <= 1.0 + 1e-6 else 1)
+PY
+fi
 if [ -z "$why" ]; then
     "$PYH" - "$RES/training/$RUN_NAME.json" "$RUN_NAME" "$TASK_ID" "$SEED" "$FINAL_CKPT" "$run" "$JOBTAG" "$TLOG" <<'PY'
 import json, re, sys

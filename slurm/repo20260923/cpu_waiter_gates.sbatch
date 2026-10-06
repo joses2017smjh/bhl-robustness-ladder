@@ -21,8 +21,9 @@ REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
 PY=/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python
 U=$REPO/external/Berkeley-Humanoid-Lite
 RES=${WAITER_GATES_RES:-$REPO/results/waiter-20261005/wbc}
-SEED=${SLURM_ARRAY_TASK_ID:-0}
-RUN=${WAITER_GATES_RUN:-waiter-wbc-s$SEED}
+PREFIX=${WAITER_GATES_PREFIX:-waiter-wbc}
+SEED=$(( ${WAITER_GATES_SEED0:-0} + ${SLURM_ARRAY_TASK_ID:-0} ))
+RUN=${WAITER_GATES_RUN:-$PREFIX-s$SEED}
 JOBTAG=${SLURM_JOB_ID:-local$$}
 export TMPDIR=/tmp PYTHONPATH="$REPO/src:$REPO/scripts" OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONUNBUFFERED=1
 CACHE=/tmp/waiter-gates-$JOBTAG; mkdir -p "$CACHE" "$RES"/{turn-test-v2,qualify,q2}
@@ -45,5 +46,5 @@ Q2=$RES/q2/$RUN.json
 for f in "$V2" "$RES/qualify/${RUN}__qualify.json" "$Q2"; do
     [ -f "$f" ] && echo "$(basename "$f"): $("$PY" -c "import json,sys; print(json.load(open(sys.argv[1]))['verdict'])" "$f")"
 done
-"$PY" scripts/waiter/wbc_select.py --res "$RES" || true
+"$PY" scripts/waiter/wbc_select.py --res "$RES" --prefix "$PREFIX" --seeds $(( ${WAITER_GATES_SEED0:-0} )) $(( ${WAITER_GATES_SEED0:-0} + 1 )) $(( ${WAITER_GATES_SEED0:-0} + 2 )) || true
 echo "=== done $(date)"

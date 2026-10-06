@@ -3985,3 +3985,11 @@ it exists.
   - Q2 FAIL on one fall: **11/12** episodes upright (T4 random arm motion, seed 1, fell at 1.56 s); drift <= 15 deg on 11/12 at 0.25 m/s.
 - Reported only, s2: push with 0.5 kg per hand in the carry pose 3/20 falls; arm tracking error 0.026-0.071 rad. s1: 13/20.
 - Reading: the noise-std blow-up (~3.7) ended s0, broke s1, and left s2 standing, turning and push-robust but drifting about 7 deg/s while walking straight at 0.35 m/s (clock-s2: 1.4 deg in 6 s).
+
+**Predeclared now (2026-10-05 22:16), before any phase 1b run: Waiter phase 1b = phase 1 with ONE change.** The Gaussian action-noise std is bounded to [0.001, 1.0]:
+- Mechanism: `scripts/train.py` overlay `BHL_STD_MAX=1.0`, which clamps rsl-rl's std parameter in place every time the action distribution is built. Unset, the overlay changes nothing.
+- 1.0 is the initial std; phase 1's std grew to ~3.7, and one seed diverged.
+- Same task `Velocity-BHL-Waiter-WBC-v0`, same recipe, same 6000 iterations from scratch. NEW seeds 3, 4, 5; run prefix `waiter-wbc1b`; results in `results/waiter-20261005/wbc1b/`.
+- Launcher `gpu_waiter_wbc.sbatch` with `WAITER_VARIANT=1b`. It FAILs a run whose log lacks the overlay line or shows any "Mean action noise std" above 1.0.
+- Gates and selection exactly as phase 1: Q1 turn_test v2 PASS + cpu_turn_qualify QUALIFIED; Q2 0 falls in 12 and drift <= 15 deg on >= 10/12; the lowest push-fall rate among qualified seeds; none -> NEGATIVE. Gates launcher `cpu_waiter_gates.sbatch` with `WAITER_GATES_PREFIX=waiter-wbc1b WAITER_GATES_SEED0=3`.
+- Labels as phase 1.

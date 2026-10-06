@@ -205,6 +205,29 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         )
         print(f"[overlay] symmetry: {sym_mode}")
 
+    # [overlay] BHL_STD_MAX=<s> bounds the Gaussian action-noise std to [1e-3, s] (Waiter phase 1b, 2026-10-05).
+    # rsl-rl 3.0.1's scalar std is an unconstrained nn.Parameter; with the entropy bonus it grew to ~3.7 in the
+    # Waiter WBC runs and one seed diverged (std < 0). The parameter is clamped in place every time the action
+    # distribution is built, so rollouts and the PPO update both use the bounded std. Unset = unchanged behaviour.
+    std_max = os.environ.get("BHL_STD_MAX", "").strip()
+    if std_max:
+        import math as _math
+        import torch as _torch
+        import rsl_rl.modules.actor_critic as _ac
+        _lo, _hi = 1e-3, float(std_max)
+        _orig_update = _ac.ActorCritic.update_distribution
+
+        def _bounded_update(self, obs, _orig=_orig_update):
+            with _torch.no_grad():
+                if getattr(self, "noise_std_type", "scalar") == "scalar":
+                    self.std.clamp_(_lo, _hi)
+                else:
+                    self.log_std.clamp_(_math.log(_lo), _math.log(_hi))
+            return _orig(self, obs)
+
+        _ac.ActorCritic.update_distribution = _bounded_update
+        print(f"[overlay] action-noise std bounded to [{_lo}, {_hi}]")
+
     # create isaac environment
     env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
     # wrap for video recording
