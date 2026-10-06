@@ -32,6 +32,12 @@ def main(argv=None) -> int:
     per, missing = {}, []
     for s in a.seeds:
         run = f"{a.prefix}-s{s}"
+        failed = a.res / "training" / f"{run}.failed.json"
+        if failed.is_file():                  # training failed (e.g. diverged): recorded, cannot qualify
+            per[f"s{s}"] = {"run": run, "training": "FAILED", "failure": json.loads(failed.read_text()),
+                            "qualified": False, "v2": None, "qualify": None, "q2": None, "q2_falls": None,
+                            "push_falls": None, "inputs": {"failed": str(failed)}}
+            continue
         paths = {"v2": a.res / "turn-test-v2" / f"{run}.json", "qualify": a.res / "qualify" / f"{run}__qualify.json",
                  "q2": a.res / "q2" / f"{run}.json"}
         if not all(p.is_file() for p in paths.values()):
@@ -56,7 +62,8 @@ def main(argv=None) -> int:
     else:
         sel, verdict = None, "NEGATIVE"
         line = "NEGATIVE: no seed qualified (" + "; ".join(
-            f"{k} v2 {d['v2']} / {d['qualify']} / Q2 {d['q2']} (push {d['push_falls']}/60, Q2 falls {d['q2_falls']})"
+            (f"{k} training FAILED" if d.get("training") == "FAILED" else
+             f"{k} v2 {d['v2']} / {d['qualify']} / Q2 {d['q2']} (push {d['push_falls']}/60, Q2 falls {d['q2_falls']})")
             for k, d in per.items()) + ")"
     rec = {"verdict": verdict, "selected": sel, "line": line, "rule": RULE, "per_seed": per}
     fd = os.open(out, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
