@@ -82,8 +82,13 @@ class UpperBodyCommand(CommandTerm):
         if len(env_ids) == 0:
             return
         self.start[env_ids] = self.cur[env_ids]
-        self.goal[env_ids] = sample_goals(len(env_ids), self.device, self.cfg.p_default, self.cfg.p_uniform,
-                                          self.cfg.range_fraction, self.cfg.p_gripper_closed)
+        goals = sample_goals(len(env_ids), self.device, self.cfg.p_default, self.cfg.p_uniform,
+                             self.cfg.range_fraction, self.cfg.p_gripper_closed)
+        if self.cfg.arm_scale != 1.0:
+            # phase 1c's disturbance curriculum (`disturbance_curriculum`) shrinks the arm goals toward the default
+            # pose (0 rad); grippers are unchanged. At the default 1.0 this branch never runs (phase 1 / 1b unchanged).
+            goals[:, :N_ARM] = goals[:, :N_ARM] * self.cfg.arm_scale
+        self.goal[env_ids] = goals
         self.t[env_ids] = 0.0
         lo, hi = self.cfg.interp_time_range
         self.duration[env_ids] = math_utils.sample_uniform(lo, hi, (len(env_ids),), self.device)
@@ -114,6 +119,7 @@ class UpperBodyCommandCfg(CommandTermCfg):
     p_uniform: float = 0.5
     range_fraction: float = 0.7
     p_gripper_closed: float = 0.5
+    arm_scale: float = 1.0          # phase 1c: set by `disturbance_curriculum`; 1.0 = phase 1 / 1b as frozen
     debug_vis: bool = False
 
 
@@ -129,3 +135,46 @@ def hand_forces(env, env_ids: torch.Tensor, force_range: tuple[float, float], p_
     forces = forces * keep
     asset.permanent_wrench_composer.set_forces_and_torques(
         forces=forces, torques=torch.zeros_like(forces), body_ids=asset_cfg.body_ids, env_ids=env_ids)
+
+
+# ---- phase 1c (2026-10-07): the disturbance curriculum ------------------------------------------------------------
+# Phase 1 / 1b switched the arm motion, hand payloads and hand forces on from iteration 0. None of the six resulting
+# checkpoints walks (6 s at 0.35 m/s covers 0.07-0.41 m; clock-s2 1.87-2.02 m), and `track_lin_vel_xy_exp` plateaued
+# from about iteration 3000 while episodes grew longer: the policy learned to survive the disturbances instead of
+# tracking speed. `curricula/push.py` documents the same failure for pushes. Phase 1c holds all three at zero while a
+# gait forms, then ramps them to the frozen phase 1 ranges, on training progress (env.common_step_counter).
+
+
+def disturbance_scale(iteration: float, start_iter: int, end_iter: int) -> float:
+    """0 before start_iter, 1 from end_iter, linear in between. Pure, so it is testable."""
+    if end_iter <= start_iter:
+        raise ValueError(f"end_iter {end_iter} must be > start_iter {start_iter}")
+    if iteration <= start_iter:
+        return 0.0
+    if iteration >= end_iter:
+        return 1.0
+    return float(iteration - start_iter) / float(end_iter - start_iter)
+
+
+def scaled_range(full: tuple[float, float], s: float) -> tuple[float, float]:
+    return (float(full[0]) * s, float(full[1]) * s)
+
+
+def disturbance_curriculum(env, env_ids, start_iter: int, end_iter: int, steps_per_iter: int,
+                           force_range: tuple[float, float], payload_range: tuple[float, float],
+                           command_name: str = "upper_body", force_term: str = "hand_forces",
+                           payload_term: str = "hand_payload") -> float:
+    """Scale the upper-body arm goals, the hand-force range and the hand-payload range by disturbance_scale.
+
+    The iteration is env.common_step_counter // steps_per_iter (the agent's num_steps_per_env; the launcher checks the
+    run's params/agent.yaml). Returns the scale, which the CurriculumManager logs as Curriculum/<term>: the log is the
+    evidence that the ramp moved.
+    """
+    s = disturbance_scale(env.common_step_counter // int(steps_per_iter), start_iter, end_iter)
+    env.command_manager.get_term(command_name).cfg.arm_scale = s
+    for name, full, key in ((force_term, force_range, "force_range"),
+                            (payload_term, payload_range, "mass_distribution_params")):
+        term_cfg = env.event_manager.get_term_cfg(name)
+        term_cfg.params[key] = scaled_range(full, s)
+        env.event_manager.set_term_cfg(name, term_cfg)
+    return s

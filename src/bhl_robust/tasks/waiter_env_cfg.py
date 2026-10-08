@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+from isaaclab.managers import CurriculumTermCfg as CurrTerm
 from isaaclab.managers import EventTermCfg as EventTerm
 from isaaclab.managers import ObservationTermCfg as ObsTerm
 from isaaclab.managers import SceneEntityCfg
@@ -22,6 +23,7 @@ from isaaclab.utils import configclass
 from berkeley_humanoid_lite.tasks.locomotion.velocity import mdp
 from berkeley_humanoid_lite.tasks.locomotion.velocity.config.humanoid.env_cfg import (
     CommandsCfg as _UpstreamCommandsCfg,
+    CurriculumsCfg as _UpstreamCurriculumsCfg,
     ObservationsCfg as _UpstreamObservationsCfg,
 )
 
@@ -118,3 +120,47 @@ class HumanoidWaiterWbcCfg(HumanoidTurnGaitClockCfg):
         self.rewards.dof_pos_limits.params = {"asset_cfg": SceneEntityCfg("robot", joint_names=W.LEG_JOINTS)}
         self.rewards.joint_deviation_shoulder = None
         self.rewards.joint_deviation_elbow = None
+
+
+# ---- phase 1c (2026-10-07; SLURM_JOBS.md "Predeclared now ... Waiter phase 1c") ------------------------------------
+# = phase 1b (this file's HumanoidWaiterWbcCfg + the action-noise std bound, set by the launcher) with ONLY:
+#   * a disturbance curriculum (waiter_wbc_mdp.disturbance_curriculum): the upper-body arm goals, the hand-force range
+#     and the hand-payload range are all scaled by s = 0 before iteration CURRICULUM_START_ITER, rising linearly to 1
+#     at CURRICULUM_END_ITER, then 1 (the frozen phase 1 ranges); grippers, pushes and everything else as phase 1;
+#   * the hand payload therefore moves from a startup event to a reset event, so its range can follow s (Isaac Lab
+#     re-applies the add on the default mass at every call, so nothing accumulates);
+#   * CURRICULUM_ITERS training iterations instead of 6000 (the ramp needs room at both ends).
+CURRICULUM_TASK_ID = "Velocity-BHL-Waiter-WBC-Curriculum-v0"
+CURRICULUM_START_ITER = 4000
+CURRICULUM_END_ITER = 7000
+CURRICULUM_ITERS = 10000
+STEPS_PER_ITER = 24          # the PPO agent's num_steps_per_env; gpu_waiter_wbc.sbatch checks the run's agent.yaml
+
+
+@configclass
+class WaiterCurriculumEventsCfg(WaiterEventsCfg):
+    """Phase 1's events with the hand payload resampled at every reset (range set by the curriculum)."""
+
+    hand_payload = EventTerm(
+        func=mdp.randomize_rigid_body_mass,
+        mode="reset",
+        params={"asset_cfg": SceneEntityCfg("robot", body_names=["arm_left_hand_link", "arm_right_hand_link"]),
+                "mass_distribution_params": HAND_PAYLOAD_KG, "operation": "add"},
+    )
+
+
+@configclass
+class WaiterCurriculumCfg(_UpstreamCurriculumsCfg):
+    disturbance = CurrTerm(
+        func=waiter_wbc_mdp.disturbance_curriculum,
+        params={"start_iter": CURRICULUM_START_ITER, "end_iter": CURRICULUM_END_ITER, "steps_per_iter": STEPS_PER_ITER,
+                "force_range": HAND_FORCE_N, "payload_range": HAND_PAYLOAD_KG},
+    )
+
+
+@configclass
+class HumanoidWaiterWbcCurriculumCfg(HumanoidWaiterWbcCfg):
+    """Phase 1c: phase 1 + the disturbance curriculum (module notes above)."""
+
+    events: WaiterCurriculumEventsCfg = WaiterCurriculumEventsCfg()
+    curriculum: WaiterCurriculumCfg = WaiterCurriculumCfg()

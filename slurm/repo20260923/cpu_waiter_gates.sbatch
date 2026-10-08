@@ -15,6 +15,8 @@
 #        (QUALIFIED: turn 9/10, walk 2/3, push <= 9/60), both protocols unchanged;
 #   Q2 = scripts/waiter/q2_gate.py (0 falls in 12 and drift <= 15 deg on >= 10/12, 0.5 kg per hand);
 # then scripts/waiter/wbc_select.py writes results/waiter-20261005/wbc/selection.json once all three seeds are in.
+# Phase 1c (2026-10-07): WAITER_GATES_RES=.../wbc1c WAITER_GATES_PREFIX=waiter-wbc1c WAITER_GATES_SEED0=6
+# WAITER_GATES_MIN_WALK_M=1.5 adds the predeclared walk-progress clause (wbc_select.py --min-walk-m).
 # usage: sbatch --dependency=aftercorr:<training array> slurm/repo20260923/cpu_waiter_gates.sbatch
 set -uo pipefail
 REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
@@ -46,5 +48,7 @@ Q2=$RES/q2/$RUN.json
 for f in "$V2" "$RES/qualify/${RUN}__qualify.json" "$Q2"; do
     [ -f "$f" ] && echo "$(basename "$f"): $("$PY" -c "import json,sys; print(json.load(open(sys.argv[1]))['verdict'])" "$f")"
 done
-"$PY" scripts/waiter/wbc_select.py --res "$RES" --prefix "$PREFIX" --seeds $(( ${WAITER_GATES_SEED0:-0} )) $(( ${WAITER_GATES_SEED0:-0} + 1 )) $(( ${WAITER_GATES_SEED0:-0} + 2 )) || true
+PROGRESS=()
+[ -n "${WAITER_GATES_MIN_WALK_M:-}" ] && PROGRESS=(--min-walk-m "$WAITER_GATES_MIN_WALK_M")   # phase 1c onward (1.5 m)
+"$PY" scripts/waiter/wbc_select.py --res "$RES" --prefix "$PREFIX" --seeds $(( ${WAITER_GATES_SEED0:-0} )) $(( ${WAITER_GATES_SEED0:-0} + 1 )) $(( ${WAITER_GATES_SEED0:-0} + 2 )) "${PROGRESS[@]}" || true
 echo "=== done $(date)"

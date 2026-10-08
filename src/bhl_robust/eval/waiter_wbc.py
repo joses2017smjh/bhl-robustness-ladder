@@ -18,6 +18,8 @@ from bhl_robust.eval import gait_clock as G
 
 KEY = "waiter_wbc"
 TASK_ID = "Velocity-BHL-Waiter-WBC-v0"
+CURRICULUM_TASK_ID = "Velocity-BHL-Waiter-WBC-Curriculum-v0"     # phase 1c (2026-10-07)
+TASK_IDS = (TASK_ID, CURRICULUM_TASK_ID)
 POLICY_TERMS = ["velocity_commands", "base_ang_vel", "projected_gravity", "joint_pos", "joint_vel", "actions",
                 "upper_body", "gait_clock"]
 CRITIC_TERMS = POLICY_TERMS[:6] + ["base_lin_vel", "upper_body", "gait_clock"]
@@ -52,13 +54,29 @@ def check_layout(cfg, env: dict) -> list[str]:
     return p
 
 
-def stamp(deploy: Path, env_yaml: Path) -> str:
+def check_curriculum(env: dict) -> list[str]:
+    """Phase 1c only: the disturbance curriculum term is present and the hand payload is a reset event ([] = ok).
+    The frozen ramp values are checked by gpu_waiter_wbc.sbatch for full runs (the smoke compresses the ramp)."""
+    p = []
+    term = (env.get("curriculum") or {}).get("disturbance") or {}
+    if "disturbance_curriculum" not in str(term.get("func", "")):
+        p.append(f"curriculum term disturbance missing ({term.get('func')})")
+    if ((env.get("events") or {}).get("hand_payload") or {}).get("mode") != "reset":
+        p.append("hand_payload is not a reset event")
+    return p
+
+
+def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
     from omegaconf import OmegaConf
+    if task not in TASK_IDS:
+        raise ValueError(f"unknown Waiter WBC task {task!r}; expected one of {TASK_IDS}")
     deploy, env_yaml = Path(deploy), Path(env_yaml)
     env = G.load_env_yaml(env_yaml)
     info = G.check_env(env, "R1")                     # gait_clock last in actor and critic, period 0.8, offset 0
     cfg = OmegaConf.load(deploy)
     problems = check_layout(cfg, env)
+    if task == CURRICULUM_TASK_ID:
+        problems += check_curriculum(env)
     if abs(float(cfg.policy_dt) - info["step_dt"]) > 1e-9:
         problems.append(f"policy_dt {cfg.policy_dt} != env step_dt {info['step_dt']}")
     if problems:
@@ -75,7 +93,7 @@ def stamp(deploy: Path, env_yaml: Path) -> str:
              f"  layout: sin_cos_appended_last\n"
              f"  source: {env_yaml}\n"
              f"{KEY}:\n"
-             f"  task: {TASK_ID}\n"
+             f"  task: {task}\n"
              f"  upper_body_joints:\n{joints}"
              f"  upper_body_indices: {list(range(10)) + [22, 23]}\n"
              f"  gripper_closed_rad: {W.GRIPPER_CLOSED_RAD}\n"
@@ -187,9 +205,10 @@ def main(argv=None) -> int:
     s = sub.add_parser("stamp")
     s.add_argument("--deploy", type=Path, required=True)
     s.add_argument("--env-yaml", type=Path, required=True)
+    s.add_argument("--task", default=TASK_ID, choices=TASK_IDS)
     a = ap.parse_args(argv)
     try:
-        print("WAITER-WBC:", stamp(a.deploy, a.env_yaml))
+        print("WAITER-WBC:", stamp(a.deploy, a.env_yaml, a.task))
         return 0
     except Exception as e:  # noqa: BLE001
         print(f"WAITER-WBC: STAMP FAILED ({e})")

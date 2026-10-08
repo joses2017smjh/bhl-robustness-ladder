@@ -18,6 +18,11 @@
 # Smoke: WAITER_SMOKE=1 (3 iterations, 64 envs, outputs under a directory ending in -smoke): the same steps.
 # usage: S=$(slurm_clean sbatch --parsable --array=0 --export=ALL,WAITER_SMOKE=1 slurm/repo20260923/gpu_waiter_wbc.sbatch) && \
 #        slurm_clean sbatch --dependency=afterok:${S%%;*} --export=ALL,WAITER_SMOKE=0 slurm/repo20260923/gpu_waiter_wbc.sbatch
+# WAITER_VARIANT=1c (2026-10-07; SLURM_JOBS.md 'Predeclared now ... Waiter phase 1c'): task
+# Velocity-BHL-Waiter-WBC-Curriculum-v0 (= 1b + the disturbance curriculum: arm goals, hand forces and hand payload
+# scaled 0 before iteration 4000, linear to 1 at 7000, then 1), seeds 6-8, 10000 iterations, std <= 1.0; submit with
+# --time=16:00:00. Its smoke compresses the ramp to iterations 0-2 (Hydra override) so the log shows the term move;
+# its full run must log Curriculum/disturbance 0 first and 1.0 last, with the frozen ramp values in params/env.yaml.
 set -euo pipefail
 export BHL_STACK=v51
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
@@ -27,12 +32,14 @@ JOBTAG=${SLURM_JOB_ID:-local$$}
 SMOKE=${WAITER_SMOKE:-0}
 TASK_ID=Velocity-BHL-Waiter-WBC-v0
 VARIANT=${WAITER_VARIANT:-1}         # 1 = phase 1 as frozen; 1b = + action-noise std bounded to <= 1.0, seeds 3-5
+FULL_ITERS=6000
 case "$VARIANT" in
     1)  PREFIX=waiter-wbc;   SEED0=0; RES_NAME=wbc ;;
     1b) PREFIX=waiter-wbc1b; SEED0=3; RES_NAME=wbc1b; export BHL_STD_MAX=1.0 ;;
+    1c) PREFIX=waiter-wbc1c; SEED0=6; RES_NAME=wbc1c; export BHL_STD_MAX=1.0
+        TASK_ID=Velocity-BHL-Waiter-WBC-Curriculum-v0; FULL_ITERS=10000 ;;
     *)  echo "WAITER-WBC RESULT: FAIL (unknown WAITER_VARIANT $VARIANT)"; exit 2 ;;
 esac
-FULL_ITERS=6000
 OBS_POLICY=83
 if [ "$SMOKE" = 1 ]; then
     RES=${WAITER_OUT_DIR:-/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/$RES_NAME-smoke}
@@ -73,6 +80,10 @@ if [ "$SMOKE" = 1 ]; then OVR_DIR="$RES/overrides"; else OVR_DIR="$WORKSPACE/ove
 mkdir -p "$OVR_DIR"
 export OVERRIDE_FILE="$OVR_DIR/${RUN_NAME}.txt"
 dr_overrides_scale 1.0 > "$OVERRIDE_FILE"
+if [ "$VARIANT" = 1c ] && [ "$SMOKE" = 1 ]; then
+    # smoke only: compress the ramp into the smoke's 3 iterations, so its log shows the term move
+    printf ' env.curriculum.disturbance.params.start_iter=0 env.curriculum.disturbance.params.end_iter=2' >> "$OVERRIDE_FILE"
+fi
 export BHL_FORWARD_VARS="$BHL_FORWARD_VARS RUN_DIR BHL_STD_MAX"
 find_run() { ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | sort | tail -1; }
 echo "=== node: $(hostname) | $RUN_NAME | task=$TASK | smoke=$SMOKE | from scratch, $MAX_ITER iters -> $FINAL_CKPT | RES $RES | HEAD $(git -C "$REPO" rev-parse --short HEAD) | $(date) ==="
@@ -90,12 +101,34 @@ run=$(find_run || true)
 why=""
 [ -n "$run" ] && [ -f "$run/$FINAL_CKPT" ] || why="$why no-$FINAL_CKPT"
 grep -q "waiter-wbc id NOT registered" "$TLOG" && why="$why task-not-registered"
-if [ "$VARIANT" = 1b ] && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
+if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
     grep -q "\[overlay\] action-noise std bounded to \[0.001, 1.0\]" "$TLOG" || why="$why std-bound-overlay-missing"
     "$PYH" - "$TLOG" <<'PY' || why="$why noise-std-above-1.0"
 import re, sys
 v = [float(x) for x in re.findall(r"Mean action noise std:\s*([0-9.]+)", open(sys.argv[1], errors="ignore").read())]
 sys.exit(0 if v and max(v) <= 1.0 + 1e-6 else 1)
+PY
+fi
+if [ "$VARIANT" = 1c ] && [ -n "$run" ] && [ -s "$TLOG" ]; then
+    # phase 1c: the curriculum ran (logged 0 first, and 1.0 last in a full run), the PPO rollout is the 24 steps the
+    # iteration count assumes, and a full run carries the frozen ramp values
+    (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" - "$TLOG" "$run" "$SMOKE" <<'PY') || why="$why curriculum-check"
+import re, sys
+from pathlib import Path
+from bhl_robust.eval.gait_clock import load_env_yaml
+tlog, run, smoke = sys.argv[1], Path(sys.argv[2]), sys.argv[3] == "1"
+v = [float(x) for x in re.findall(r"Curriculum/disturbance:\s*([0-9.]+)", open(tlog, errors="ignore").read())]
+agent = (run / "params" / "agent.yaml").read_text()
+ok = bool(v) and v[0] == 0.0 and re.search(r"^num_steps_per_env: 24$", agent, re.M) is not None
+if smoke:
+    ok = ok and max(v) > 0.0
+else:
+    p = load_env_yaml(run / "params" / "env.yaml")["curriculum"]["disturbance"]["params"]
+    ok = ok and v[-1] >= 0.999 and (p["start_iter"], p["end_iter"], p["steps_per_iter"]) == (4000, 7000, 24) \
+        and list(p["force_range"]) == [-6.0, 6.0] and list(p["payload_range"]) == [0.0, 0.8]
+print(f"curriculum check: {'OK' if ok else 'FAIL'} (logged {len(v)} values, first {v[0] if v else None}, "
+      f"last {v[-1] if v else None}, max {max(v) if v else None})")
+sys.exit(0 if ok else 1)
 PY
 fi
 if [ -z "$why" ]; then
@@ -120,7 +153,7 @@ PY
     if [ -f "$cfg" ] && [ -f "$run/exported/policy.onnx" ]; then
         w=$("$PYH" -c "import onnxruntime as o, sys; s=o.InferenceSession(sys.argv[1], providers=['CPUExecutionProvider']); print(s.get_inputs()[0].shape[-1], s.get_outputs()[0].shape[-1])" "$run/exported/policy.onnx" 2>/dev/null || echo "?")
         [ "$w" = "$OBS_POLICY 12" ] || why="$why onnx-io-$w"
-        s=$( (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" -m bhl_robust.eval.waiter_wbc stamp --deploy "$cfg" --env-yaml "$run/params/env.yaml" 2>&1 | tail -1) || true)
+        s=$( (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" -m bhl_robust.eval.waiter_wbc stamp --deploy "$cfg" --env-yaml "$run/params/env.yaml" --task "$TASK_ID" 2>&1 | tail -1) || true)
         echo "$s"
         case "$s" in "WAITER-WBC: stamped"*|"WAITER-WBC: already stamped"*) ;; *) why="$why stamp";; esac
         cp "$cfg" "$RES/training/$RUN_NAME.deploy.yaml"
