@@ -1,0 +1,63 @@
+{
+  "job_id": "21405726",
+  "node": "cn-gpu6.hpc.engr.oregonstate.edu",
+  "date_utc": "2026-09-24T06:13:18Z",
+  "repo_head": "68370a9",
+  "branch": "mission7-approach-followup",
+  "stack": "v51",
+  "gate_override": "env.stage_lift_on_pinch=true",
+  "num_envs": 8,
+  "max_iterations": 2,
+  "seed": 0,
+  "import": {
+    "verdict": "OK",
+    "registered": "['CoopLift-BHL-Cube-Crew3-Depth-v0', 'CoopLift-BHL-Cube-Crew3-v0', 'CoopLift-BHL-Cube-Crew4-Depth-v0', 'CoopLift-BHL-Cube-Crew4-v0']",
+    "constructed": [
+      "CoopLift-BHL-Cube-Crew3-Depth-v0 crew_size=3 policy_terms=22 robots=['robot_0', 'robot_1', 'robot_2'] pair_terms=[]",
+      "CoopLift-BHL-Cube-Crew3-v0 crew_size=3 policy_terms=19 robots=['robot_0', 'robot_1', 'robot_2'] pair_terms=[]",
+      "CoopLift-BHL-Cube-Crew4-Depth-v0 crew_size=4 policy_terms=29 robots=['robot_0', 'robot_1', 'robot_2', 'robot_3'] pair_terms=[]",
+      "CoopLift-BHL-Cube-Crew4-v0 crew_size=4 policy_terms=25 robots=['robot_0', 'robot_1', 'robot_2', 'robot_3'] pair_terms=[]"
+    ],
+    "log": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/crew-gate/crew_gate_import.log"
+  },
+  "tasks": {
+    "CoopLift-BHL-Cube-Crew3-v0": {
+      "verdict": "PASS",
+      "iterations_logged": 2,
+      "mean_episode_length": 12.88,
+      "last_error": null,
+      "log": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/crew-gate/CoopLift-BHL-Cube-Crew3-v0.log"
+    },
+    "CoopLift-BHL-Cube-Crew4-v0": {
+      "verdict": "PASS",
+      "iterations_logged": 2,
+      "mean_episode_length": 11.38,
+      "last_error": null,
+      "log": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/crew-gate/CoopLift-BHL-Cube-Crew4-v0.log"
+    },
+    "CoopLift-BHL-Cube-Crew3-Depth-v0": {
+      "verdict": "PASS",
+      "iterations_logged": 2,
+      "mean_episode_length": 13.08,
+      "last_error": null,
+      "log": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/crew-gate/CoopLift-BHL-Cube-Crew3-Depth-v0.log"
+    },
+    "CoopLift-BHL-Cube-Crew4-Depth-v0": {
+      "verdict": "PASS",
+      "iterations_logged": 2,
+      "mean_episode_length": 11.56,
+      "last_error": null,
+      "log": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/crew-gate/CoopLift-BHL-Cube-Crew4-Depth-v0.log"
+    }
+  },
+  "verdict": "PASS",
+  "reasons": [],
+  "worktree": {
+    "src/bhl_robust/tasks/coop_crew_generated.py": "clean",
+    "src/bhl_robust/tasks/coop_depth_env_cfg.py": "clean",
+    "src/bhl_robust/tasks/coop_lift_env_cfg.py": "clean",
+    "src/bhl_robust/tasks/depth_env_cfg.py": "modified",
+    "scripts/train.py": "clean",
+    "slurm/inner/train.sh": "clean"
+  }
+}

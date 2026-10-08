@@ -1,0 +1,376 @@
+{
+ "rule": "DEV (maze seeds 72000-72047, scored on 2026-10-06, so development data with no claim): arms wz-lpf and lpf-post-brake (tau 0.2 s) x actors armV5-s8/s9/s10 x {nominal, drop35}, 48 episodes per cell. An arm QUALIFIES iff its 6 cells are complete (48 valid episodes each, layouts paired with 2026-10-06), it has 0 falls over all 288 episodes, and every actor reaches >= 40/48 nominal and >= 36/48 drop35 goals. Selected: the qualifying arm with the most goals over its 288 episodes; tie -> wz-lpf. No arm qualifies -> DEV NEGATIVE and no confirmation runs. The 6 fall episodes of 2026-10-06 are rerun unfiltered (reported, not gated).",
+ "labels": {
+  "learned": "frozen biped gait (PPO, dr-default-s0) + NavGym v5 final actor (vx, wz)",
+  "scripted": "first-order command low-pass (cmd_filter.py) + team_sensors speed brake; A* reference only",
+  "oracle": "pose and goal coordinate",
+  "scope": "simulation (MuJoCo 3.3.5), no hardware"
+ },
+ "tau_s": 0.2,
+ "seeds": [
+  72000,
+  72047
+ ],
+ "arms": {
+  "wz-lpf": {
+   "complete": true,
+   "falls": 0,
+   "goals": 275,
+   "actors_meet_goal_clauses": {
+    "armV5-s8": true,
+    "armV5-s9": true,
+    "armV5-s10": true
+   },
+   "qualifies": true,
+   "cells": {
+    "armV5-s8-nominal": {
+     "n": 48,
+     "goals": 46,
+     "clean": 46,
+     "falls": 0,
+     "time_outs": 2,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 59.6,
+     "gait_wz_flips_per_s_median": 1.379,
+     "actor_wz_flips_per_s_median": 1.3845,
+     "gait_wz_saturated_share_median": 0.1212,
+     "max_tilt_rad_max": 0.1216,
+     "vs_2026_10_06": {
+      "goals_won": 3,
+      "goals_lost": 1,
+      "reference_falls": 1
+     }
+    },
+    "armV5-s8-drop35": {
+     "n": 48,
+     "goals": 44,
+     "clean": 44,
+     "falls": 0,
+     "time_outs": 4,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 72.66,
+     "gait_wz_flips_per_s_median": 1.432,
+     "actor_wz_flips_per_s_median": 1.436,
+     "gait_wz_saturated_share_median": 0.1031,
+     "max_tilt_rad_max": 0.1456,
+     "vs_2026_10_06": {
+      "goals_won": 2,
+      "goals_lost": 1,
+      "reference_falls": 0
+     }
+    },
+    "armV5-s9-nominal": {
+     "n": 48,
+     "goals": 47,
+     "clean": 47,
+     "falls": 0,
+     "time_outs": 1,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 57.8,
+     "gait_wz_flips_per_s_median": 1.7085,
+     "actor_wz_flips_per_s_median": 1.7345,
+     "gait_wz_saturated_share_median": 0.0807,
+     "max_tilt_rad_max": 0.1256,
+     "vs_2026_10_06": {
+      "goals_won": 1,
+      "goals_lost": 0,
+      "reference_falls": 1
+     }
+    },
+    "armV5-s9-drop35": {
+     "n": 48,
+     "goals": 46,
+     "clean": 44,
+     "falls": 0,
+     "time_outs": 2,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 73.96,
+     "gait_wz_flips_per_s_median": 1.7665,
+     "actor_wz_flips_per_s_median": 1.7725,
+     "gait_wz_saturated_share_median": 0.0541,
+     "max_tilt_rad_max": 0.1525,
+     "vs_2026_10_06": {
+      "goals_won": 3,
+      "goals_lost": 1,
+      "reference_falls": 2
+     }
+    },
+    "armV5-s10-nominal": {
+     "n": 48,
+     "goals": 47,
+     "clean": 47,
+     "falls": 0,
+     "time_outs": 1,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 57.16,
+     "gait_wz_flips_per_s_median": 1.6615,
+     "actor_wz_flips_per_s_median": 1.716,
+     "gait_wz_saturated_share_median": 0.0738,
+     "max_tilt_rad_max": 0.1281,
+     "vs_2026_10_06": {
+      "goals_won": 4,
+      "goals_lost": 1,
+      "reference_falls": 2
+     }
+    },
+    "armV5-s10-drop35": {
+     "n": 48,
+     "goals": 45,
+     "clean": 45,
+     "falls": 0,
+     "time_outs": 3,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 73.24,
+     "gait_wz_flips_per_s_median": 1.729,
+     "actor_wz_flips_per_s_median": 1.7585,
+     "gait_wz_saturated_share_median": 0.0485,
+     "max_tilt_rad_max": 0.1652,
+     "vs_2026_10_06": {
+      "goals_won": 1,
+      "goals_lost": 2,
+      "reference_falls": 0
+     }
+    }
+   }
+  },
+  "lpf-post-brake": {
+   "complete": true,
+   "falls": 0,
+   "goals": 269,
+   "actors_meet_goal_clauses": {
+    "armV5-s8": true,
+    "armV5-s9": true,
+    "armV5-s10": true
+   },
+   "qualifies": true,
+   "cells": {
+    "armV5-s8-nominal": {
+     "n": 48,
+     "goals": 44,
+     "clean": 44,
+     "falls": 0,
+     "time_outs": 4,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 57.3,
+     "gait_wz_flips_per_s_median": 1.3925,
+     "actor_wz_flips_per_s_median": 1.3975,
+     "gait_wz_saturated_share_median": 0.1229,
+     "max_tilt_rad_max": 0.1209,
+     "vs_2026_10_06": {
+      "goals_won": 3,
+      "goals_lost": 3,
+      "reference_falls": 1
+     }
+    },
+    "armV5-s8-drop35": {
+     "n": 48,
+     "goals": 44,
+     "clean": 44,
+     "falls": 0,
+     "time_outs": 4,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 70.72,
+     "gait_wz_flips_per_s_median": 1.497,
+     "actor_wz_flips_per_s_median": 1.504,
+     "gait_wz_saturated_share_median": 0.0965,
+     "max_tilt_rad_max": 0.1223,
+     "vs_2026_10_06": {
+      "goals_won": 3,
+      "goals_lost": 2,
+      "reference_falls": 0
+     }
+    },
+    "armV5-s9-nominal": {
+     "n": 48,
+     "goals": 46,
+     "clean": 46,
+     "falls": 0,
+     "time_outs": 2,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 57.8,
+     "gait_wz_flips_per_s_median": 1.7665,
+     "actor_wz_flips_per_s_median": 1.778,
+     "gait_wz_saturated_share_median": 0.0672,
+     "max_tilt_rad_max": 0.1436,
+     "vs_2026_10_06": {
+      "goals_won": 2,
+      "goals_lost": 2,
+      "reference_falls": 1
+     }
+    },
+    "armV5-s9-drop35": {
+     "n": 48,
+     "goals": 46,
+     "clean": 46,
+     "falls": 0,
+     "time_outs": 2,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 72.66,
+     "gait_wz_flips_per_s_median": 1.821,
+     "actor_wz_flips_per_s_median": 1.831,
+     "gait_wz_saturated_share_median": 0.0462,
+     "max_tilt_rad_max": 0.1465,
+     "vs_2026_10_06": {
+      "goals_won": 2,
+      "goals_lost": 0,
+      "reference_falls": 2
+     }
+    },
+    "armV5-s10-nominal": {
+     "n": 48,
+     "goals": 45,
+     "clean": 45,
+     "falls": 0,
+     "time_outs": 3,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 58.24,
+     "gait_wz_flips_per_s_median": 1.673,
+     "actor_wz_flips_per_s_median": 1.74,
+     "gait_wz_saturated_share_median": 0.0699,
+     "max_tilt_rad_max": 0.1233,
+     "vs_2026_10_06": {
+      "goals_won": 3,
+      "goals_lost": 2,
+      "reference_falls": 2
+     }
+    },
+    "armV5-s10-drop35": {
+     "n": 48,
+     "goals": 44,
+     "clean": 44,
+     "falls": 0,
+     "time_outs": 4,
+     "other": 0,
+     "fall_seeds": [],
+     "median_completion_s": 75.26,
+     "gait_wz_flips_per_s_median": 1.7725,
+     "actor_wz_flips_per_s_median": 1.8315,
+     "gait_wz_saturated_share_median": 0.0461,
+     "max_tilt_rad_max": 0.1263,
+     "vs_2026_10_06": {
+      "goals_won": 1,
+      "goals_lost": 3,
+      "reference_falls": 0
+     }
+    }
+   }
+  }
+ },
+ "problems": [],
+ "verdict": "SELECTED",
+ "selected": "wz-lpf",
+ "repro": {
+  "note": "reported, not gated: the 2026-10-06 fall episodes rerun unfiltered (--policy-cmd-filter none)",
+  "episodes": [
+   {
+    "cell": "armV5-s8-nominal",
+    "seed": 72014,
+    "outcome": "fall",
+    "elapsed_s": 31.0,
+    "reference_outcome": "fall",
+    "reference_elapsed_s": 31.0,
+    "reproduced_exactly": true,
+    "gait_wz": {
+     "steps": 751,
+     "flips_per_s": 2.83,
+     "saturated_share": 0.9774,
+     "mean_abs_wz": 0.9902
+    },
+    "max_tilt_rad": 0.8143
+   },
+   {
+    "cell": "armV5-s9-nominal",
+    "seed": 72001,
+    "outcome": "fall",
+    "elapsed_s": 57.96,
+    "reference_outcome": "fall",
+    "reference_elapsed_s": 57.96,
+    "reproduced_exactly": true,
+    "gait_wz": {
+     "steps": 1425,
+     "flips_per_s": 4.386,
+     "saturated_share": 0.9621,
+     "mean_abs_wz": 0.9799
+    },
+    "max_tilt_rad": 0.9649
+   },
+   {
+    "cell": "armV5-s9-drop35",
+    "seed": 72000,
+    "outcome": "fall",
+    "elapsed_s": 96.48,
+    "reference_outcome": "fall",
+    "reference_elapsed_s": 96.48,
+    "reproduced_exactly": true,
+    "gait_wz": {
+     "steps": 2388,
+     "flips_per_s": 3.528,
+     "saturated_share": 0.9682,
+     "mean_abs_wz": 0.9831
+    },
+    "max_tilt_rad": 0.8303
+   },
+   {
+    "cell": "armV5-s9-drop35",
+    "seed": 72005,
+    "outcome": "fall",
+    "elapsed_s": 54.88,
+    "reference_outcome": "fall",
+    "reference_elapsed_s": 54.88,
+    "reproduced_exactly": true,
+    "gait_wz": {
+     "steps": 1348,
+     "flips_per_s": 3.913,
+     "saturated_share": 0.9763,
+     "mean_abs_wz": 0.9874
+    },
+    "max_tilt_rad": 0.789
+   },
+   {
+    "cell": "armV5-s10-nominal",
+    "seed": 72044,
+    "outcome": "fall",
+    "elapsed_s": 12.72,
+    "reference_outcome": "fall",
+    "reference_elapsed_s": 12.72,
+    "reproduced_exactly": true,
+    "gait_wz": {
+     "steps": 294,
+     "flips_per_s": 3.827,
+     "saturated_share": 0.9762,
+     "mean_abs_wz": 0.9841
+    },
+    "max_tilt_rad": 0.9011
+   },
+   {
+    "cell": "armV5-s10-nominal",
+    "seed": 72045,
+    "outcome": "fall",
+    "elapsed_s": 41.2,
+    "reference_outcome": "fall",
+    "reference_elapsed_s": 41.2,
+    "reproduced_exactly": true,
+    "gait_wz": {
+     "steps": 1006,
+     "flips_per_s": 3.106,
+     "saturated_share": 0.9503,
+     "mean_abs_wz": 0.9746
+    },
+    "max_tilt_rad": 0.9053
+   }
+  ],
+  "reproduced_exactly": 6
+ },
+ "final": true
+}

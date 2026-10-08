@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH --job-name=dr-confirm
+#SBATCH --account=eecs
+#SBATCH --partition=share
+#SBATCH --constraint=el9
+#SBATCH --array=0-14%2
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=8G
+#SBATCH --time=04:00:00
+#SBATCH --output=/nfs/stak/users/sanchej7/hpc-share/Computer_Vision/project_results_upgrade/humanoid_confirmatory/jobs/%x-%A_%a.log
+#SBATCH --error=/nfs/stak/users/sanchej7/hpc-share/Computer_Vision/project_results_upgrade/humanoid_confirmatory/jobs/%x-%A_%a.log
+set -euo pipefail
+CAMPAIGN=/nfs/stak/users/sanchej7/hpc-share/Computer_Vision/project_results_upgrade/humanoid_confirmatory
+PY=/nfs/stak/users/sanchej7/hpc-share/Humanoid_Lite/venv/bin/python
+export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1
+export PYTHONUNBUFFERED=1
+exec "$PY" "$CAMPAIGN/dr_confirmatory.py" run --campaign "$CAMPAIGN" --cell "$SLURM_ARRAY_TASK_ID"

@@ -1,0 +1,16 @@
+{
+  "kind": "policy_validation",
+  "passed": false,
+  "split": "validation",
+  "arm": "both",
+  "seed": 0,
+  "stage": "approach",
+  "episode_count": 16,
+  "initial_success_rate": 0.0,
+  "success_rate": 0.0,
+  "checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-20260920/validation-both-s0/model_400.pt",
+  "checkpoint_sha256": "69b99633a246ee93623224b73721ccfbfe7979b6b7135713e82f7b85113381bf",
+  "steps": 25600,
+  "threshold_first_measured_steps": {},
+  "gate_rule": "success>=.30; improve >=.125, or retain already-passing transferred behavior within .125"
+}

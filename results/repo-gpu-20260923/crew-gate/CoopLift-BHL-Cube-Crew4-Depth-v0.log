@@ -1,0 +1,383 @@
+task=CoopLift-BHL-Cube-Crew4-Depth-v0 run=_gate-crew4 seed=0 envs=8 iters=2
+entrypoint=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/scripts/train.py
+overrides: env.stage_lift_on_pinch=true 
+Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/user.config.json'
+[Info] [carb] Logging to file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/logs/Kit/Isaac-Sim/5.1/kit_20260923_231251.log
+2026-09-24T06:12:51Z [3ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/63613e7b-8759-4371-bf5346a7-b13b68d1.dmp'
+2026-09-24T06:12:51Z [7ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/d978d7b9-20c7-40fe-688afcbc-45f2ecc9.dmp'
+2026-09-24T06:12:51Z [8ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/44ceda51-020d-418f-ad61b8ae-9f1889a1.dmp'
+2026-09-24T06:12:51Z [9ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/16b0e915-468a-41e6-967782b5-166e54a1.dmp'
+2026-09-24T06:12:51Z [10ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/803da406-5dc1-4faa-7ccdbd93-2d63002f.dmp'
+2026-09-24T06:12:51Z [12ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/fa36c916-5227-4679-c5cdd0b2-9c0e2924.dmp'
+2026-09-24T06:12:51Z [13ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/5d094fad-4085-4685-35f927bf-d40c26bb.dmp'
+2026-09-24T06:12:51Z [13ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/b6ddc6c8-c45e-41f1-66f10b81-fb56cd6b.dmp'
+2026-09-24T06:12:51Z [14ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/95e36d9c-d997-4a94-37e071a6-e76340bd.dmp'
+2026-09-24T06:12:51Z [14ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/6ae9510b-191b-4e41-2464af8b-ea1710c5.dmp'
+2026-09-24T06:12:51Z [15ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/d32f8e76-8ec4-42a6-f779e38a-1fc195e3.dmp'
+2026-09-24T06:12:51Z [16ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/5920b44d-27f4-4601-9516af85-3caae0d2.dmp'
+2026-09-24T06:12:51Z [18ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/0af54216-434e-4644-2265ed95-d221c0c0.dmp'
+2026-09-24T06:12:51Z [20ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/5933a686-58e4-4f89-bbce209c-084bcef8.dmp'
+2026-09-24T06:12:51Z [22ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/b39b435c-a21c-4f5e-d6f002ab-3afe0484.dmp'
+2026-09-24T06:12:51Z [23ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/46ef5fa7-9c0a-4092-be442aa9-59521f1f.dmp'
+2026-09-24T06:12:51Z [25ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/8f50649c-59c1-4132-d445fd83-d772859a.dmp'
+2026-09-24T06:12:51Z [27ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/c5ef1610-ef44-45e3-ff9c68bc-164e7944.dmp'
+2026-09-24T06:12:51Z [28ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/62a3bd3c-dc11-491b-81c2429b-f14cc2e2.dmp'
+2026-09-24T06:12:51Z [30ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/92807cd9-eedb-4309-78bfe58c-182d510a.dmp'
+2026-09-24T06:12:51Z [31ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/49dd57b6-8469-4851-dfd814a6-cc4a7c5a.dmp'
+2026-09-24T06:12:51Z [595ms] [Warning] [omni.usd_config.extension] Enable omni.materialx.libs extension to use MaterialX
+2026-09-24T06:12:52Z [1,013ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2026-09-24T06:12:52Z [1,300ms] [Warning] [carb] Acquiring non optional plugin interface which is not listed as dependency: [omni::physx::IPhysxBenchmarks v1.0] (plugin: <default plugin>), by client: omni.physics.physx.plugin. Add it to CARB_PLUGIN_IMPL_DEPS() macro of a client.
+2026-09-24T06:12:52Z [1,316ms] [Warning] [omni.isaac.dynamic_control] omni.isaac.dynamic_control is deprecated as of Isaac Sim 4.5. No action is needed from end-users.
+2026-09-24T06:12:57Z [6,793ms] [Warning] [carb.cudainterop.plugin] CUDA_VISIBLE_DEVICES environment variable is set.
+2026-09-24T06:12:57Z [6,793ms] [Warning] [carb.cudainterop.plugin] Note CUDA device enumeration and Omniverse device enumeration are different.
+2026-09-24T06:12:57Z [6,793ms] [Warning] [carb.cudainterop.plugin] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 595.71.05     | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | [bhl_robust.tasks] SF-04 distillation id NOT registered: ImportError("cannot import name 'RslRlMLPModelCfg' from 'isaaclab_rl.rsl_rl' (/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/source/isaaclab_rl/isaaclab_rl/rsl_rl/__init__.py)")
+[INFO][AppLauncher]: Using device: cuda:0
+[INFO][AppLauncher]: Loading experience file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/apps/isaaclab.python.headless.kit
+[INFO]: Parsing configuration from: <class 'bhl_robust.tasks.coop_crew_generated.Crew4DepthCfg'>
+[INFO]: Parsing configuration from: <class 'bhl_robust.tasks.coop_lift_env_cfg.CoopLiftPPORunnerCfg'>
+[INFO] Logging experiment in directory: /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/coop_lift
+
+[36m==============================================================================================================================================================================================[0m
+[36m[1m[INFO][IsaacLab]: Logging to file: /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/coop_lift/isaaclab/isaaclab_2026-09-23_23-13-04.log[0m
+[36m==============================================================================================================================================================================================[0m
+
+[33m23:13:04 [simulation_context.py] WARNING: The `disable_contact_processing` attribute is deprecated and always set to True to avoid unnecessary overhead. Contact processing is automatically enabled when a contact sensor is created, so manual configuration is no longer required.[0m
+[33m23:13:04 [simulation_context.py] WARNING: The `enable_external_forces_every_iteration` parameter in the PhysxCfg is set to False. If you are experiencing noisy velocities, consider enabling this flag. You may need to slightly increase the number of velocity iterations (setting it to 1 or 2 rather than 0), together with this flag, to improve the accuracy of velocity updates.[0m
+[INFO]: Base environment:
+	Environment device    : cuda:0
+	Environment seed      : 0
+	Physics step-size     : 0.005
+	Rendering step-size   : 0.04
+	Environment step-size : 0.04
+[INFO]: Time taken for scene creation : 0.921812 seconds
+[INFO]: Scene manager:  <class InteractiveScene>
+	Number of environments: 8
+	Environment spacing   : 4.0
+	Source prim name      : /World/envs/env_0
+	Global prim paths     : ['/World/ground']
+	Replicate physics     : True
+[INFO]: Starting the simulation. This may take a few seconds. Please wait...
+[33m23:13:06 [actuator_pd.py] WARNING: The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.[0m
+[33m23:13:06 [actuator_pd.py] WARNING: The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.[0m
+[INFO]: Time taken for simulation start : 1.116583 seconds
+[INFO] Command Manager:  <CommandManager> contains 0 active terms.
++------------------------+
+|  Active Command Terms  |
++--------+-------+-------+
+| Index  | Name  |  Type |
++--------+-------+-------+
++--------+-------+-------+
+
+[INFO] Event Manager:  <EventManager> contains 1 active terms.
++-----------------------------------+
+| Active Event Terms in Mode: 'reset' |
++----------+------------------------+
+|  Index   | Name                   |
++----------+------------------------+
+|    0     | reset_joints_0         |
+|    1     | reset_root_0           |
+|    2     | reset_joints_1         |
+|    3     | reset_root_1           |
+|    4     | reset_joints_2         |
+|    5     | reset_root_2           |
+|    6     | reset_joints_3         |
+|    7     | reset_root_3           |
+|    8     | reset_object           |
++----------+------------------------+
+
+[INFO] Recorder Manager:  <RecorderManager> contains 0 active terms.
++---------------------+
+| Active Recorder Terms |
++-----------+---------+
+|   Index   | Name    |
++-----------+---------+
++-----------+---------+
+
+[INFO] Action Manager:  <ActionManager> contains 4 active terms.
++------------------------------------+
+|  Active Action Terms (shape: 88)   |
++--------+--------------+------------+
+| Index  | Name         |  Dimension |
++--------+--------------+------------+
+|   0    | joint_pos_0  |         22 |
+|   1    | joint_pos_1  |         22 |
+|   2    | joint_pos_2  |         22 |
+|   3    | joint_pos_3  |         22 |
++--------+--------------+------------+
+
+[INFO] Observation Manager: <ObservationManager> contains 2 groups.
++-----------------------------------------------------------+
+| Active Observation Terms in Group: 'policy' (shape: (644,)) |
++-----------+-----------------------------------+-----------+
+|   Index   | Name                              |   Shape   |
++-----------+-----------------------------------+-----------+
+|     0     | projected_gravity_0               |    (3,)   |
+|     1     | base_ang_vel_0                    |    (3,)   |
+|     2     | joint_pos_0                       |   (22,)   |
+|     3     | joint_vel_0                       |   (22,)   |
+|     4     | object_pos_0                      |    (3,)   |
+|     5     | track_err_0                       |   (22,)   |
+|     6     | depth_0                           |   (64,)   |
+|     7     | projected_gravity_1               |    (3,)   |
+|     8     | base_ang_vel_1                    |    (3,)   |
+|     9     | joint_pos_1                       |   (22,)   |
+|     10    | joint_vel_1                       |   (22,)   |
+|     11    | object_pos_1                      |    (3,)   |
+|     12    | track_err_1                       |   (22,)   |
+|     13    | depth_1                           |   (64,)   |
+|     14    | projected_gravity_2               |    (3,)   |
+|     15    | base_ang_vel_2                    |    (3,)   |
+|     16    | joint_pos_2                       |   (22,)   |
+|     17    | joint_vel_2                       |   (22,)   |
+|     18    | object_pos_2                      |    (3,)   |
+|     19    | track_err_2                       |   (22,)   |
+|     20    | depth_2                           |   (64,)   |
+|     21    | projected_gravity_3               |    (3,)   |
+|     22    | base_ang_vel_3                    |    (3,)   |
+|     23    | joint_pos_3                       |   (22,)   |
+|     24    | joint_vel_3                       |   (22,)   |
+|     25    | object_pos_3                      |    (3,)   |
+|     26    | track_err_3                       |   (22,)   |
+|     27    | depth_3                           |   (64,)   |
+|     28    | actions                           |   (88,)   |
++-----------+-----------------------------------+-----------+
++-----------------------------------------------------------+
+| Active Observation Terms in Group: 'critic' (shape: (662,)) |
++-----------+-----------------------------------+-----------+
+|   Index   | Name                              |   Shape   |
++-----------+-----------------------------------+-----------+
+|     0     | projected_gravity_0               |    (3,)   |
+|     1     | base_ang_vel_0                    |    (3,)   |
+|     2     | joint_pos_0                       |   (22,)   |
+|     3     | joint_vel_0                       |   (22,)   |
+|     4     | object_pos_0                      |    (3,)   |
+|     5     | track_err_0                       |   (22,)   |
+|     6     | depth_0                           |   (64,)   |
+|     7     | projected_gravity_1               |    (3,)   |
+|     8     | base_ang_vel_1                    |    (3,)   |
+|     9     | joint_pos_1                       |   (22,)   |
+|     10    | joint_vel_1                       |   (22,)   |
+|     11    | object_pos_1                      |    (3,)   |
+|     12    | track_err_1                       |   (22,)   |
+|     13    | depth_1                           |   (64,)   |
+|     14    | projected_gravity_2               |    (3,)   |
+|     15    | base_ang_vel_2                    |    (3,)   |
+|     16    | joint_pos_2                       |   (22,)   |
+|     17    | joint_vel_2                       |   (22,)   |
+|     18    | object_pos_2                      |    (3,)   |
+|     19    | track_err_2                       |   (22,)   |
+|     20    | depth_2                           |   (64,)   |
+|     21    | projected_gravity_3               |    (3,)   |
+|     22    | base_ang_vel_3                    |    (3,)   |
+|     23    | joint_pos_3                       |   (22,)   |
+|     24    | joint_vel_3                       |   (22,)   |
+|     25    | object_pos_3                      |    (3,)   |
+|     26    | track_err_3                       |   (22,)   |
+|     27    | depth_3                           |   (64,)   |
+|     28    | actions                           |   (88,)   |
+|     29    | object_lin_vel                    |    (3,)   |
+|     30    | object_ang_vel                    |    (3,)   |
+|     31    | base_lin_vel_0                    |    (3,)   |
+|     32    | base_lin_vel_1                    |    (3,)   |
+|     33    | base_lin_vel_2                    |    (3,)   |
+|     34    | base_lin_vel_3                    |    (3,)   |
++-----------+-----------------------------------+-----------+
+
+[INFO] Termination Manager:  <TerminationManager> contains 2 active terms.
++-----------------------------+
+|   Active Termination Terms  |
++-------+----------+----------+
+| Index | Name     | Time Out |
++-------+----------+----------+
+|   0   | time_out |   True   |
+|   1   | fallen   |  False   |
++-------+----------+----------+
+
+[INFO] Reward Manager:  <RewardManager> contains 24 active terms.
++---------------------------------------+
+|          Active Reward Terms          |
++-------+---------------------+---------+
+| Index | Name                |  Weight |
++-------+---------------------+---------+
+|   0   | reaching_coarse     |     1.0 |
+|   1   | reaching_fine       |     2.0 |
+|   2   | opposing_clamp      |     2.0 |
+|   3   | crew_spread         |    -2.0 |
+|   4   | lift_progress       |     0.0 |
+|   5   | lifting_object      |     0.0 |
+|   6   | object_tilt         |    -2.0 |
+|   7   | object_xy           |    -1.0 |
+|   8   | object_vel          |   -0.05 |
+|   9   | still_alive         |     1.0 |
+|   10  | termination_penalty |   -10.0 |
+|   11  | action_rate         |   -0.01 |
+|   12  | flat_0              |    -1.0 |
+|   13  | torques_0           | -0.0002 |
+|   14  | base_contact_0      |    -1.0 |
+|   15  | flat_1              |    -1.0 |
+|   16  | torques_1           | -0.0002 |
+|   17  | base_contact_1      |    -1.0 |
+|   18  | flat_2              |    -1.0 |
+|   19  | torques_2           | -0.0002 |
+|   20  | base_contact_2      |    -1.0 |
+|   21  | flat_3              |    -1.0 |
+|   22  | torques_3           | -0.0002 |
+|   23  | base_contact_3      |    -1.0 |
++-------+---------------------+---------+
+
+[INFO] Curriculum Manager:  <CurriculumManager> contains 3 active terms.
++--------------------------+
+| Active Curriculum Terms  |
++---------+----------------+
+|  Index  | Name           |
++---------+----------------+
+|    0    | lift_height    |
+|    1    | stage_lift     |
+|    2    | base_height    |
++---------+----------------+
+/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/rsl_rl/utils/utils.py:244: UserWarning: The observation configuration dictionary 'obs_groups' must contain the 'policy' key. As an observation group with the name 'policy' was found, this is assumed to be the observation set. Consider adding the 'policy' key to the 'obs_groups' dictionary for clarity. This behavior will be removed in a future version.
+  warnings.warn(
+/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/rsl_rl/utils/utils.py:282: UserWarning: The observation configuration dictionary 'obs_groups' must contain the 'critic' key. As an observation group with the name 'critic' was found, this is assumed to be the observation set. Consider adding the 'critic' key to the 'obs_groups' dictionary for clarity. This behavior will be removed in a future version.
+  warnings.warn(
+
+[INFO]: Completed setting up the environment...
+--------------------------------------------------------------------------------
+Resolved observation sets: 
+	 policy :  ['policy']
+	 critic :  ['critic']
+--------------------------------------------------------------------------------
+ActorCritic.__init__ got unexpected arguments, which will be ignored: ['state_dependent_std']
+Actor MLP: MLP(
+  (0): Linear(in_features=644, out_features=256, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Linear(in_features=256, out_features=256, bias=True)
+  (3): ELU(alpha=1.0)
+  (4): Linear(in_features=256, out_features=128, bias=True)
+  (5): ELU(alpha=1.0)
+  (6): Linear(in_features=128, out_features=88, bias=True)
+)
+Critic MLP: MLP(
+  (0): Linear(in_features=662, out_features=256, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Linear(in_features=256, out_features=256, bias=True)
+  (3): ELU(alpha=1.0)
+  (4): Linear(in_features=256, out_features=128, bias=True)
+  (5): ELU(alpha=1.0)
+  (6): Linear(in_features=128, out_features=1, bias=True)
+)
+################################################################################
+                        [1m Learning iteration 0/2 [0m                        
+
+                       Computation: 40 steps/s (collection: 4.578s, learning 0.188s)
+             Mean action noise std: 1.00
+          Mean value_function loss: 0.1019
+               Mean surrogate loss: -0.0646
+                 Mean entropy loss: 124.8791
+                       Mean reward: -0.79
+               Mean episode length: 11.56
+    Episode_Reward/reaching_coarse: 0.0128
+      Episode_Reward/reaching_fine: 0.0007
+     Episode_Reward/opposing_clamp: 0.0004
+        Episode_Reward/crew_spread: -0.0000
+      Episode_Reward/lift_progress: 0.0000
+     Episode_Reward/lifting_object: 0.0000
+        Episode_Reward/object_tilt: 0.0000
+          Episode_Reward/object_xy: -0.0000
+         Episode_Reward/object_vel: -0.0000
+        Episode_Reward/still_alive: 0.0374
+Episode_Reward/termination_penalty: -0.0292
+        Episode_Reward/action_rate: -0.0679
+             Episode_Reward/flat_0: -0.0025
+          Episode_Reward/torques_0: -0.0015
+     Episode_Reward/base_contact_0: 0.0000
+             Episode_Reward/flat_1: -0.0023
+          Episode_Reward/torques_1: -0.0014
+     Episode_Reward/base_contact_1: 0.0000
+             Episode_Reward/flat_2: -0.0030
+          Episode_Reward/torques_2: -0.0015
+     Episode_Reward/base_contact_2: 0.0000
+             Episode_Reward/flat_3: -0.0039
+          Episode_Reward/torques_3: -0.0015
+     Episode_Reward/base_contact_3: 0.0000
+            Curriculum/lift_height: 0.0400
+             Curriculum/stage_lift: 0.0000
+            Curriculum/base_height: -0.0851
+      Episode_Termination/time_out: 0.0677
+        Episode_Termination/fallen: 0.5208
+--------------------------------------------------------------------------------
+                   Total timesteps: 192
+                    Iteration time: 4.77s
+                      Time elapsed: 00:00:04
+                               ETA: 00:00:09
+
+Could not find git repository in /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/rsl_rl/__init__.py. Skipping.
+Storing git diff for 'bhl-robustness-ladder' in: /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/coop_lift/2026-09-23_23-13-04__gate-crew4/git/bhl-robustness-ladder.diff
+################################################################################
+                        [1m Learning iteration 1/2 [0m                        
+
+                       Computation: 58 steps/s (collection: 3.202s, learning 0.095s)
+             Mean action noise std: 1.00
+          Mean value_function loss: 0.0474
+               Mean surrogate loss: -0.1105
+                 Mean entropy loss: 124.9038
+                       Mean reward: -0.81
+               Mean episode length: 11.56
+    Episode_Reward/reaching_coarse: 0.0191
+      Episode_Reward/reaching_fine: 0.0010
+     Episode_Reward/opposing_clamp: 0.0006
+        Episode_Reward/crew_spread: -0.0000
+      Episode_Reward/lift_progress: 0.0000
+     Episode_Reward/lifting_object: 0.0000
+        Episode_Reward/object_tilt: 0.0000
+          Episode_Reward/object_xy: -0.0000
+         Episode_Reward/object_vel: -0.0000
+        Episode_Reward/still_alive: 0.0553
+Episode_Reward/termination_penalty: -0.0500
+        Episode_Reward/action_rate: -0.1031
+             Episode_Reward/flat_0: -0.0046
+          Episode_Reward/torques_0: -0.0023
+     Episode_Reward/base_contact_0: 0.0000
+             Episode_Reward/flat_1: -0.0064
+          Episode_Reward/torques_1: -0.0022
+     Episode_Reward/base_contact_1: 0.0000
+             Episode_Reward/flat_2: -0.0057
+          Episode_Reward/torques_2: -0.0023
+     Episode_Reward/base_contact_2: 0.0000
+             Episode_Reward/flat_3: -0.0052
+          Episode_Reward/torques_3: -0.0023
+     Episode_Reward/base_contact_3: 0.0000
+            Curriculum/lift_height: 0.0400
+             Curriculum/stage_lift: 0.0000
+            Curriculum/base_height: -0.0852
+      Episode_Termination/time_out: 0.0000
+        Episode_Termination/fallen: 1.0000
+--------------------------------------------------------------------------------
+                   Total timesteps: 384
+                    Iteration time: 3.30s
+                      Time elapsed: 00:00:08
+                               ETA: 00:00:04
+
+Quadro RTX 8000                  | Yes: 0 |     | 78838   MB | 10de      | 0          |
+|     |                                  |        |     |            | 1e78      | d38d0f5d.. |
+|     |                                  |        |     |            | 49        |            |
+|=============================================================================================|
+| OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel: 5.14.0-611.55.1.el9_7.x86_64
+| Processor: Intel(R) Xeon(R) Gold 6248R CPU @ 3.00GHz
+| Cores: 48 | Logical Cores: 48
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 772476 | Free Memory: 656138
+| Total Page/Swap (MB): 0 | Free Page/Swap: 0
+|---------------------------------------------------------------------------------------------|
+2026-09-24T06:12:58Z [7,421ms] [Warning] [gpu.foundation.plugin] ECC is enabled on physical device 0
+2026-09-24T06:12:58Z [7,467ms] [Warning] [omni.kvdb.plugin] Disabling key-value database because another kit process is locking it
+train.sh: mean episode length 11.56
+train.sh: reached 2 logged iterations

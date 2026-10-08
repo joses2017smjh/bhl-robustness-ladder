@@ -1,0 +1,476 @@
+{
+  "verdict": "SMOKE_RUN",
+  "rule": "Bench v2: with N crossings run (64 minus the dropped set) and N_h per heading, bench v2 PASSES iff clears >= N - 2, 0 falls, and clears >= N_h - 1 for every heading. Otherwise FAIL; INCOMPLETE if any declared crossing is missing. The clear definition is unchanged: mission7_gates' real clear (base along >= +0.35 m past the plate centre along the door direction), within 10 s of takeover.",
+  "N": 3,
+  "required_clears": 1,
+  "clears": 3,
+  "falls": 0,
+  "crossings_scored": 3,
+  "per_heading": {
+    "0": {
+      "declared": 1,
+      "required": 0,
+      "crossings": 1,
+      "clears": 1
+    },
+    "90": {
+      "declared": 1,
+      "required": 0,
+      "crossings": 1,
+      "clears": 1
+    },
+    "-90": {
+      "declared": 0,
+      "required": 0,
+      "crossings": 0,
+      "clears": 0
+    },
+    "180": {
+      "declared": 1,
+      "required": 0,
+      "crossings": 1,
+      "clears": 1
+    }
+  },
+  "per_cell": {
+    "0/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "0/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "0/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "0/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    }
+  },
+  "missing": [],
+  "problems": [],
+  "misses": [],
+  "fallen": [],
+  "smoke": true,
+  "bench": "v2",
+  "stage_gait": "export",
+  "mode": "smoke",
+  "chain": "a chain, each step only after the previous PASSES: bench v2 with --stage-gait clocks2 | export --cross-budget window --yaw-cap 0.6 -> the unchanged exact ten-fall replay once with the same stage gait and options (complete, 10 episodes, 10 upright, 0 falls; release arm m7-fix) -> the route gate as coded by M1 with the same stage gait and options (Doors and Transport each >= 16/16 successes on validation layouts 0-15, 32 episodes)",
+  "disclosure": "bench v2 was introduced after the M2 bench FAIL (21507962) revealed the run-up confound (26/64 crossings ended in v1's own run-up before takeover); M2's FAIL stands and v1 is unchanged",
+  "labels": {
+    "gaits": "LEARNED (shipped arms-dr1.0-s0 outside the stage; during the stage the controller is swapped to the --stage-gait-export policy)",
+    "stage": "SCRIPTED (PlateStage, stage_gait=export, cross_budget=window, yaw_cap=0.6)",
+    "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"
+  },
+  "dropped": [
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      10,
+      0
+    ],
+    [
+      11,
+      0
+    ],
+    [
+      12,
+      0
+    ],
+    [
+      13,
+      0
+    ],
+    [
+      14,
+      0
+    ],
+    [
+      15,
+      0
+    ],
+    [
+      16,
+      1
+    ],
+    [
+      19,
+      1
+    ],
+    [
+      21,
+      1
+    ],
+    [
+      22,
+      1
+    ],
+    [
+      23,
+      1
+    ],
+    [
+      24,
+      0
+    ],
+    [
+      26,
+      0
+    ],
+    [
+      27,
+      0
+    ],
+    [
+      29,
+      0
+    ],
+    [
+      30,
+      0
+    ],
+    [
+      31,
+      0
+    ]
+  ],
+  "standstill_spawn_wall_overlap_not_gated": [
+    [
+      4,
+      0
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      22,
+      0
+    ],
+    [
+      24,
+      1
+    ],
+    [
+      30,
+      1
+    ]
+  ],
+  "plate_activation_not_gated": {
+    "round_target_pressed_during_stage": 1,
+    "square_target_pressed_during_stage": 2,
+    "crossings": 3
+  },
+  "wall_contacts_not_gated": {
+    "crossings_with_stage_contact": 1
+  },
+  "falls_by_phase_not_gated": {},
+  "end_reasons": {
+    "complete": 3
+  },
+  "crossings": [
+    {
+      "layout": 103,
+      "door": 0,
+      "heading_deg": 180,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 9.56000000000369,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1912820967507031,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 17.200000000005264,
+      "takeover_speed_mps": 0.00015953276324646802,
+      "along_start_m": -0.22655432575675688,
+      "along_max_m": 0.4363819124738201,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "export",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_export",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 17.200000000005264,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 355
+        }
+      ],
+      "fix": {
+        "cross_s": 2.400000000002933,
+        "cross_ended_by": "clear",
+        "window_left_s": 0.3999999999962611,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": null
+      }
+    },
+    {
+      "layout": 113,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.440000000000765,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.2593974058577278,
+      "takeover_s": 4.000000000000503,
+      "handback_s": 13.400000000004885,
+      "takeover_speed_mps": 0.3003946682609501,
+      "along_start_m": -0.5374463917074576,
+      "along_max_m": 0.5178915779600536,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "export",
+      "spawn_wall_contacts": [],
+      "walk_s": 1.0000000000003335,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_export",
+          "time_s": 4.000000000000503,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 13.400000000004885,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 235
+        }
+      ],
+      "fix": {
+        "cross_s": 3.400000000002734,
+        "cross_ended_by": "clear",
+        "window_left_s": 3.3999999999990393,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": null
+      }
+    },
+    {
+      "layout": 116,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.5,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 6.31999999999973,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.20218973498740486,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 9.600000000000241,
+      "takeover_speed_mps": 0.0005199242810259129,
+      "along_start_m": -0.41349557183177255,
+      "along_max_m": 0.49063537681322966,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 5,
+      "stage_gait": "export",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_export",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 9.600000000000241,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 165
+        }
+      ],
+      "fix": {
+        "cross_s": 5.799999999999628,
+        "cross_ended_by": "clear",
+        "window_left_s": 3.600000000000172,
+        "turn_wz_sent_max": null,
+        "turn_wz_received_max": null,
+        "cross_wz_sent_max": null
+      }
+    }
+  ],
+  "written_utc": "2026-10-03T19:17:49.959457+00:00",
+  "stage_gait_export": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported",
+  "stage_fix": {
+    "design": "SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55', item F (F2 + F3)",
+    "cross_budget": "window",
+    "yaw_cap_rps": 0.6,
+    "command_scales": [
+      0.4,
+      0.35,
+      0.6
+    ],
+    "turn_rate_rps": 0.6,
+    "turn_max_s": 10.471975511965978,
+    "turn_exit_rad": 0.15,
+    "cruise_mps": 0.3,
+    "k_yaw": 1.2,
+    "wz_walk_rps": 0.4,
+    "clear_along_m": 0.35,
+    "crossing_end": "clear (along >= 0.35 m) or takeover + 10.0 - now <= 0.2 s, whichever first; takeover = PlateStage._start (bench: the bench's takeover; replay and route: the capture)",
+    "clear_window_s": 10.0,
+    "window_margin_s": 0.2,
+    "cap_semantics": "every command below the cap is delivered unchanged; vx and vy scales unchanged"
+  },
+  "disclosure_fix": "Bundling means a PASS is not attributable to one change. Faster turns in narrow cells add wall-contact and fall risk (6 of 8 180-deg turns already touched walls at 0.40; the clocks2 bench's only fall, 21517668 L22 d0, was during the in-place turn). Crossing until clear produced a replay fall before (9/10)."
+}

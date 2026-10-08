@@ -1,0 +1,26 @@
+{
+  "checked_utc": "2026-09-20T23:28:29.238153+00:00",
+  "cpu_tests": {
+    "passed": 155,
+    "command": "PYTHONPATH=src OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python -m pytest -q tests"
+  },
+  "local_smoke": {
+    "passed": true,
+    "file": "local-smoke-final/smoke.json",
+    "cells": 12,
+    "physics_contact_controls": 4,
+    "placement_controls": 2
+  },
+  "source_sha256": {
+    "src/bhl_robust/mission/sensors.py": "e05b3abd36ce700811dd14c4cb2853f8ed8cf351048842ac843698b3d832bad0",
+    "src/bhl_robust/mission/layout.py": "c4c7a6fdd2424b291a24d2cd8b925b8c0843c2c17e5c04fa5e85616cffc628dd",
+    "src/bhl_robust/mission/__init__.py": "c2d4d9a6288265b9477d09d6977fd6a0eb227fcb75eacc449a58aa0b9cb513ca",
+    "src/bhl_robust/mission/env.py": "36ad76a89731aec713fe61b21f1d1185617d4df96e2eada5df7a28533b28aff7",
+    "src/bhl_robust/mission/policy.py": "b059ad3bb4cab8d31e0f4b5aa06a4ac808020ed8f7b94daf836fc9a2b7f1db61",
+    "src/bhl_robust/mission/state.py": "622c82501cbb6fdce1d0f2815c9c0b901787186dbd37cd84a904bb257af19cfe",
+    "scripts/mission7.py": "e88be8edb953c73fc5a62e60897a61c02d9d006b94fd0f989d879e69551862fb",
+    "tests/test_mission7.py": "a57f45af3c06a99e1bf16d21fc422a1cb3059209d51a734420bf8abfaf203090",
+    "scripts/submit_mission7.py": "3c51a9b87b31cda948501f54d393cd0e76a4aaa2a4e4881c9a19149c9c38ea7d",
+    "slurm/mission7_cpu.sbatch": "7b76d3d506da9c4a85ea99a46b0f7193b64245502c45f7305e002827bbb46d34"
+  }
+}

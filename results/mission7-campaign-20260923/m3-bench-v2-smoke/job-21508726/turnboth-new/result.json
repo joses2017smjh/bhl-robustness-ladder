@@ -1,0 +1,110 @@
+{
+  "complete": true,
+  "status": "COMPLETED_SMOKE",
+  "intervention": "staged plate maneuver with the TurnBoth-s0 stage gait (LEARNED gaits, SCRIPTED stage, ORACLE layout and plate pose): at takeover env.controller.policy := TurnBoth-s0 and prev_actions := 0; pre-plate approach and settle unchanged; turn in place to the door direction at 0.40 rad/s until within 0.15 rad (bounded 15.71 s); straight-forward crossing at 0.30 m/s x max(0, cos heading error) with heading hold clip(1.2 x error, +-0.40) and no lateral command, until the base is --cross-clear (default 0.35 m) past the plate centre or cross_max_s pass; turn back to the takeover heading the same way; at hand-back the shipped policy and prev_actions := 0; wrong-side staging only when the correct plate is over 1.0 m away",
+  "geometry_unchanged": true,
+  "activation_schedule_unchanged": true,
+  "fall_predicate_unchanged": true,
+  "baseline_result": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-approach-followup-20260922/replay-diagnose-cn-c22/result.json",
+  "episodes": 1,
+  "falls": 0,
+  "upright": 1,
+  "exact_replay_gate_passed": false,
+  "episode_comparison": [
+    {
+      "layout_index": 0,
+      "layout_seed": 10000,
+      "original_elapsed_s": 55.04000000008078,
+      "replay_elapsed_s": 55.04000000008078,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.2169438248974192,
+      "maximum_recorded_pose_difference": 4.397845719530554,
+      "plate_contacts": 16272,
+      "peak_plate_normal_force_N": 310.6368336650596,
+      "peak_plate_tangent_force_N": 150.48746102041196,
+      "minimum_plate_distance_m": -0.008864803867091754,
+      "stage_history": [
+        {
+          "time_s": 22.7199999999924,
+          "door": 0,
+          "side": -1,
+          "phase": "approach"
+        },
+        {
+          "time_s": 24.519999999988205,
+          "door": 0,
+          "side": -1,
+          "phase": "settle"
+        },
+        {
+          "time_s": 24.95999999998718,
+          "door": 0,
+          "phase": "turn",
+          "yaw_error_rad": 1.654815782397992
+        },
+        {
+          "time_s": 40.680000000012214,
+          "door": 0,
+          "phase": "cross",
+          "yaw_error_rad": 0.852593550623638,
+          "turn_timed_out": true
+        },
+        {
+          "time_s": 44.68000000003131,
+          "door": 0,
+          "phase": "turn_back",
+          "along_m": -0.3474623858798899,
+          "cleared": false
+        },
+        {
+          "time_s": 47.920000000046784,
+          "door": 0,
+          "side": -1,
+          "phase": "recorded",
+          "yaw_error_rad": -0.13539531553107076,
+          "turn_back_timed_out": false
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 55.04000000008078,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.03612869372423548,
+          "robot_plate_surface_clearance_m": -0.03612869372423548,
+          "robot_plate_edge_clearance_m": -0.06919171048669573,
+          "correct_plate_edge_clearance_m": -0.06919171048669573
+        },
+        "failure_stage_relative_to_plate": "during_plate_traversal"
+      },
+      "stage_gait": "turnboth",
+      "gait_events": [
+        {
+          "time_s": 22.7199999999924,
+          "door": 0,
+          "event": "swap_to_turnboth",
+          "prev_actions_before_norm": 76.19078826904297,
+          "prev_actions_after_norm": 0.0,
+          "takeover_yaw_rad": 0.03349801362629484
+        },
+        {
+          "time_s": 47.920000000046784,
+          "door": 0,
+          "event": "swap_to_shipped",
+          "prev_actions_before_norm": 85.52434539794922,
+          "prev_actions_after_norm": 0.0
+        }
+      ]
+    }
+  ],
+  "stage_gait": "turnboth",
+  "stage_gait_provenance": {
+    "export": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-09-25_18-54-44_arms-turn-turnboth-s0/exported",
+    "policy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-09-25_18-54-44_arms-turn-turnboth-s0/exported/policy.onnx",
+    "policy_sha256": "562ceed71e04df2bc317edd352c9ebf59fb13fee5d0cc6708fa82aff33b55c95",
+    "deploy_keys_differing": [
+      "command_velocity",
+      "policy_checkpoint_path"
+    ]
+  }
+}

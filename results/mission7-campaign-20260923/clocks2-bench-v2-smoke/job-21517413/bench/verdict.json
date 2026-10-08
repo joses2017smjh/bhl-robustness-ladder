@@ -1,0 +1,440 @@
+{
+  "verdict": "SMOKE_RUN",
+  "rule": "Bench v2: with N crossings run (64 minus the dropped set) and N_h per heading, bench v2 PASSES iff clears >= N - 2, 0 falls, and clears >= N_h - 1 for every heading. Otherwise FAIL; INCOMPLETE if any declared crossing is missing. The clear definition is unchanged: mission7_gates' real clear (base along >= +0.35 m past the plate centre along the door direction), within 10 s of takeover.",
+  "N": 3,
+  "required_clears": 1,
+  "clears": 1,
+  "falls": 0,
+  "crossings_scored": 3,
+  "per_heading": {
+    "0": {
+      "declared": 0,
+      "required": 0,
+      "crossings": 0,
+      "clears": 0
+    },
+    "90": {
+      "declared": 2,
+      "required": 1,
+      "crossings": 2,
+      "clears": 1
+    },
+    "-90": {
+      "declared": 0,
+      "required": 0,
+      "crossings": 0,
+      "clears": 0
+    },
+    "180": {
+      "declared": 1,
+      "required": 0,
+      "crossings": 1,
+      "clears": 0
+    }
+  },
+  "per_cell": {
+    "0/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "0/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "0/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "0/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    }
+  },
+  "missing": [],
+  "problems": [],
+  "misses": [
+    [
+      250,
+      0
+    ],
+    [
+      251,
+      1
+    ]
+  ],
+  "fallen": [],
+  "smoke": true,
+  "bench": "v2",
+  "stage_gait": "clocks2",
+  "mode": "smoke",
+  "chain": "a chain, each step only after the previous PASSES: bench v2 with --stage-gait clocks2 -> the unchanged exact ten-fall replay once with --stage-gait clocks2 (complete, 10 episodes, 10 upright, 0 falls; release arm m7-clocks2) -> the route gate as coded by M1 (Doors and Transport each >= 16/16 successes on validation layouts 0-15, 32 episodes)",
+  "disclosure": "bench v2 was introduced after the M2 bench FAIL (21507962) revealed the run-up confound (26/64 crossings ended in v1's own run-up before takeover); M2's FAIL stands and v1 is unchanged",
+  "labels": {
+    "gaits": "LEARNED (shipped arms-dr1.0-s0 outside the stage; during the stage the controller is swapped to arms-turngait-clock-s2, a 77-observation gait-clock policy (Turning R1's qualified seed))",
+    "stage": "SCRIPTED (PlateStage, stage_gait=clocks2)",
+    "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"
+  },
+  "dropped": [
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      10,
+      0
+    ],
+    [
+      11,
+      0
+    ],
+    [
+      12,
+      0
+    ],
+    [
+      13,
+      0
+    ],
+    [
+      14,
+      0
+    ],
+    [
+      15,
+      0
+    ],
+    [
+      16,
+      1
+    ],
+    [
+      19,
+      1
+    ],
+    [
+      21,
+      1
+    ],
+    [
+      22,
+      1
+    ],
+    [
+      23,
+      1
+    ],
+    [
+      24,
+      0
+    ],
+    [
+      26,
+      0
+    ],
+    [
+      27,
+      0
+    ],
+    [
+      29,
+      0
+    ],
+    [
+      30,
+      0
+    ],
+    [
+      31,
+      0
+    ]
+  ],
+  "standstill_spawn_wall_overlap_not_gated": [
+    [
+      4,
+      0
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      22,
+      0
+    ],
+    [
+      24,
+      1
+    ],
+    [
+      30,
+      1
+    ]
+  ],
+  "plate_activation_not_gated": {
+    "round_target_pressed_during_stage": 2,
+    "square_target_pressed_during_stage": 1,
+    "crossings": 3
+  },
+  "wall_contacts_not_gated": {
+    "crossings_with_stage_contact": 2
+  },
+  "falls_by_phase_not_gated": {},
+  "end_reasons": {
+    "complete": 3
+  },
+  "crossings": [
+    {
+      "layout": 250,
+      "door": 0,
+      "heading_deg": 90,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1527317664528209,
+      "takeover_s": 4.200000000000392,
+      "handback_s": 15.40000000000733,
+      "takeover_speed_mps": 0.6495433287412664,
+      "along_start_m": -0.8680331480428237,
+      "along_max_m": -0.7097200578592137,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 47,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": 1.2000000000002227,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 4.200000000000392,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 15.40000000000733,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 280
+        }
+      ]
+    },
+    {
+      "layout": 251,
+      "door": 1,
+      "heading_deg": 180,
+      "plate": "round",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.24691203650130542,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 23.999999999989416,
+      "takeover_speed_mps": 0.00024559115133610703,
+      "along_start_m": -0.5979677875273036,
+      "along_max_m": 0.19474680815509432,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 23.999999999989416,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 525
+        }
+      ]
+    },
+    {
+      "layout": 253,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 9.20000000000325,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1729266499533419,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 16.00000000000806,
+      "takeover_speed_mps": 0.000510750149468582,
+      "along_start_m": -0.6606860863974494,
+      "along_max_m": 0.6209663909016118,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 6,
+      "stage_gait": "clocks2",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 0,
+      "watchdog_handback": false,
+      "controller_swaps": [
+        {
+          "event": "swap_to_clocks2",
+          "time_s": 3.000000000000169,
+          "controller": "GaitClockRlController",
+          "obs_width": 77,
+          "clock_step": 0,
+          "stage_controller_clock_step": null
+        },
+        {
+          "event": "swap_to_shipped",
+          "time_s": 16.00000000000806,
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "stage_controller_clock_step": 325
+        }
+      ]
+    }
+  ],
+  "written_utc": "2026-10-02T23:14:41.240680+00:00",
+  "stage_gait_export": "clocks2 preset",
+  "disclosure_stage_gait": "arms-turngait-clock-s2 was qualified at +-0.6 rad/s and is untested at the interface's 0.40 rad/s; a 180-deg entry needs (pi - 0.15)/0.40 = 7.48 s of turning + the 0.40-0.60 s settle as polled + 0.65 m / 0.30 m/s = 2.17 s of crossing = 10.05-10.25 s (about 10.1-10.3 s) against the 10 s clear window, so the 180-deg clause (>= 7/8) is likely to fail on timing alone unless the gait turns faster than commanded"
+}

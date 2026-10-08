@@ -1,0 +1,530 @@
+preflight OK 3.3.5
+Using ONNX runner
+[1;31m2026-09-23 09:36:57.510576160 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003596, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510627295 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003597, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510616621 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003598, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510635948 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003599, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510644980 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003600, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510656148 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003601, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510664815 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003602, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510674245 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003603, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510682799 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003605, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510699654 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003595, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510691216 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003606, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510715323 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003608, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510702468 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003594, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510700813 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003607, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:36:57.510726647 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1003590, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+dr-default-s0 cmd=(+0.3,+0.0,+0.0) seed=0 fell=1 surv= 3.76s lin_err=0.293 dist=0.89
+dr-default-s0 cmd=(+0.3,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.299 dist=3.49
+dr-default-s0 cmd=(+0.3,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.284 dist=3.58
+dr-default-s0 cmd=(+0.3,+0.0,+0.0) seed=3 fell=1 surv= 4.40s lin_err=0.532 dist=1.27
+dr-default-s0 cmd=(+0.3,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.296 dist=3.76
+dr-default-s0 cmd=(+0.5,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.331 dist=5.44
+dr-default-s0 cmd=(+0.5,+0.0,+0.0) seed=1 fell=1 surv= 4.00s lin_err=0.366 dist=1.57
+dr-default-s0 cmd=(+0.5,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.316 dist=5.43
+dr-default-s0 cmd=(+0.5,+0.0,+0.0) seed=3 fell=1 surv= 3.96s lin_err=0.446 dist=1.84
+dr-default-s0 cmd=(+0.5,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.319 dist=5.43
+dr-default-s0 cmd=(-0.2,+0.0,+0.0) seed=0 fell=1 surv= 3.76s lin_err=0.363 dist=0.52
+dr-default-s0 cmd=(-0.2,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.294 dist=2.54
+dr-default-s0 cmd=(-0.2,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.311 dist=2.56
+dr-default-s0 cmd=(-0.2,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.299 dist=2.30
+dr-default-s0 cmd=(-0.2,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.279 dist=2.34
+dr-default-s0 cmd=(+0.0,+0.2,+0.0) seed=0 fell=1 surv= 7.24s lin_err=0.336 dist=1.31
+dr-default-s0 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv= 3.72s lin_err=0.315 dist=0.63
+dr-default-s0 cmd=(+0.0,+0.2,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.268 dist=2.00
+dr-default-s0 cmd=(+0.0,+0.2,+0.0) seed=3 fell=1 surv=10.16s lin_err=0.323 dist=1.66
+dr-default-s0 cmd=(+0.0,+0.2,+0.0) seed=4 fell=1 surv= 7.60s lin_err=0.396 dist=1.53
+dr-default-s0 cmd=(+0.0,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.231 dist=0.10
+dr-default-s0 cmd=(+0.0,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.237 dist=0.11
+dr-default-s0 cmd=(+0.0,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.229 dist=0.08
+dr-default-s0 cmd=(+0.0,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.237 dist=0.09
+dr-default-s0 cmd=(+0.0,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.232 dist=0.12
+dr-default-s0 cmd=(+0.3,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.308 dist=0.23
+dr-default-s0 cmd=(+0.3,+0.0,+0.5) seed=1 fell=1 surv=10.00s lin_err=0.347 dist=0.48
+dr-default-s0 cmd=(+0.3,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.313 dist=0.39
+dr-default-s0 cmd=(+0.3,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.305 dist=0.32
+dr-default-s0 cmd=(+0.3,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.300 dist=0.48
+
+dr-default-s0: 30 episodes, 10 falls (33.3% fall rate) -> results/push-matched-20260923/dr-default-s0__p0.5.csv
+[1;31m2026-09-23 09:37:59.269175635 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1005001, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.269296209 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1004996, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.269340499 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1005009, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.269225138 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1004997, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.289176497 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1005010, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.289851141 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1005002, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.269250161 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1005003, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Using ONNX runner
+[1;31m2026-09-23 09:37:59.269315875 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1005008, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.266193896 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1005000, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.269165713 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1004999, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.266188470 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1005005, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.266217246 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1004998, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.269158730 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1004992, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.275235843 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1005007, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:37:59.266183764 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1005004, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+dr-default-s1 cmd=(+0.3,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.318 dist=3.59
+dr-default-s1 cmd=(+0.3,+0.0,+0.0) seed=1 fell=1 surv= 3.88s lin_err=0.334 dist=1.01
+dr-default-s1 cmd=(+0.3,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.312 dist=3.56
+dr-default-s1 cmd=(+0.3,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.328 dist=3.59
+dr-default-s1 cmd=(+0.3,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.317 dist=3.82
+dr-default-s1 cmd=(+0.5,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.306 dist=5.72
+dr-default-s1 cmd=(+0.5,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.316 dist=5.68
+dr-default-s1 cmd=(+0.5,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.302 dist=5.68
+dr-default-s1 cmd=(+0.5,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.335 dist=5.49
+dr-default-s1 cmd=(+0.5,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.310 dist=5.89
+dr-default-s1 cmd=(-0.2,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.320 dist=2.54
+dr-default-s1 cmd=(-0.2,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.321 dist=2.63
+dr-default-s1 cmd=(-0.2,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.303 dist=2.59
+dr-default-s1 cmd=(-0.2,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.343 dist=2.30
+dr-default-s1 cmd=(-0.2,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.298 dist=2.44
+dr-default-s1 cmd=(+0.0,+0.2,+0.0) seed=0 fell=1 surv= 6.88s lin_err=0.265 dist=1.07
+dr-default-s1 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv= 3.60s lin_err=0.307 dist=0.52
+dr-default-s1 cmd=(+0.0,+0.2,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.263 dist=1.93
+dr-default-s1 cmd=(+0.0,+0.2,+0.0) seed=3 fell=1 surv= 9.64s lin_err=0.252 dist=1.30
+dr-default-s1 cmd=(+0.0,+0.2,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.288 dist=2.11
+dr-default-s1 cmd=(+0.0,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.195 dist=0.15
+dr-default-s1 cmd=(+0.0,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.204 dist=0.36
+dr-default-s1 cmd=(+0.0,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.204 dist=0.24
+dr-default-s1 cmd=(+0.0,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.185 dist=0.03
+dr-default-s1 cmd=(+0.0,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.189 dist=0.08
+dr-default-s1 cmd=(+0.3,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.312 dist=0.20
+dr-default-s1 cmd=(+0.3,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.314 dist=0.30
+dr-default-s1 cmd=(+0.3,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.320 dist=0.35
+dr-default-s1 cmd=(+0.3,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.306 dist=0.16
+dr-default-s1 cmd=(+0.3,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.341 dist=0.53
+
+dr-default-s1: 30 episodes, 4 falls (13.3% fall rate) -> results/push-matched-20260923/dr-default-s1__p0.5.csv
+[1;31m2026-09-23 09:39:07.745315265 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006528, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.745379365 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006530, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.736569791 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006523, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.762315728 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006532, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.762363285 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006529, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Using ONNX runner
+[1;31m2026-09-23 09:39:07.771180365 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006534, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.762391763 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006531, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.762418692 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006527, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.762478131 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006533, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.791196863 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006535, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.810166467 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006540, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.814170079 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006541, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.818169808 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006539, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.818228069 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006538, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:39:07.791236609 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1006536, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+dr-default-s2 cmd=(+0.3,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.340 dist=3.47
+dr-default-s2 cmd=(+0.3,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.369 dist=3.22
+dr-default-s2 cmd=(+0.3,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.302 dist=3.51
+dr-default-s2 cmd=(+0.3,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.310 dist=3.63
+dr-default-s2 cmd=(+0.3,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.314 dist=3.80
+dr-default-s2 cmd=(+0.5,+0.0,+0.0) seed=0 fell=1 surv= 3.96s lin_err=0.450 dist=1.33
+dr-default-s2 cmd=(+0.5,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.285 dist=5.57
+dr-default-s2 cmd=(+0.5,+0.0,+0.0) seed=2 fell=1 surv= 7.88s lin_err=0.395 dist=2.65
+dr-default-s2 cmd=(+0.5,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.318 dist=5.42
+dr-default-s2 cmd=(+0.5,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.298 dist=5.79
+dr-default-s2 cmd=(-0.2,+0.0,+0.0) seed=0 fell=1 surv=10.52s lin_err=0.357 dist=1.98
+dr-default-s2 cmd=(-0.2,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.307 dist=2.75
+dr-default-s2 cmd=(-0.2,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.284 dist=2.78
+dr-default-s2 cmd=(-0.2,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.343 dist=2.45
+dr-default-s2 cmd=(-0.2,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.269 dist=2.56
+dr-default-s2 cmd=(+0.0,+0.2,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.272 dist=1.75
+dr-default-s2 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv=10.32s lin_err=0.355 dist=1.99
+dr-default-s2 cmd=(+0.0,+0.2,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.250 dist=1.84
+dr-default-s2 cmd=(+0.0,+0.2,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.276 dist=1.84
+dr-default-s2 cmd=(+0.0,+0.2,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.265 dist=2.00
+dr-default-s2 cmd=(+0.0,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.203 dist=0.11
+dr-default-s2 cmd=(+0.0,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.198 dist=0.09
+dr-default-s2 cmd=(+0.0,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.208 dist=0.03
+dr-default-s2 cmd=(+0.0,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.199 dist=0.09
+dr-default-s2 cmd=(+0.0,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.213 dist=0.20
+dr-default-s2 cmd=(+0.3,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.305 dist=0.12
+dr-default-s2 cmd=(+0.3,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.313 dist=0.35
+dr-default-s2 cmd=(+0.3,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.320 dist=0.30
+dr-default-s2 cmd=(+0.3,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.298 dist=0.17
+dr-default-s2 cmd=(+0.3,+0.0,+0.5) seed=4 fell=1 surv= 4.04s lin_err=0.388 dist=1.02
+
+dr-default-s2: 30 episodes, 5 falls (16.7% fall rate) -> results/push-matched-20260923/dr-default-s2__p0.5.csv
+[1;31m2026-09-23 09:40:17.325116849 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008210, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.324971082 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008212, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.325144454 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008221, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.325179410 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008222, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Using ONNX runner
+[1;31m2026-09-23 09:40:17.334173106 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008223, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.355158375 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008206, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.327207398 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008214, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.327247403 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008213, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.325068588 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008211, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.327255617 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008215, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.327254849 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008216, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.325074173 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008218, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.327271022 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008217, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.325100613 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008219, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:17.332213617 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008224, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+dr-off-s0 cmd=(+0.3,+0.0,+0.0) seed=0 fell=1 surv= 3.60s lin_err=0.236 dist=0.81
+dr-off-s0 cmd=(+0.3,+0.0,+0.0) seed=1 fell=1 surv= 3.68s lin_err=0.240 dist=0.63
+dr-off-s0 cmd=(+0.3,+0.0,+0.0) seed=2 fell=1 surv= 6.76s lin_err=0.272 dist=1.31
+dr-off-s0 cmd=(+0.3,+0.0,+0.0) seed=3 fell=1 surv= 3.68s lin_err=0.209 dist=0.85
+dr-off-s0 cmd=(+0.3,+0.0,+0.0) seed=4 fell=1 surv= 6.88s lin_err=0.261 dist=1.62
+dr-off-s0 cmd=(+0.5,+0.0,+0.0) seed=0 fell=1 surv= 3.72s lin_err=0.351 dist=1.42
+dr-off-s0 cmd=(+0.5,+0.0,+0.0) seed=1 fell=1 surv= 3.56s lin_err=0.315 dist=1.35
+dr-off-s0 cmd=(+0.5,+0.0,+0.0) seed=2 fell=1 surv= 3.76s lin_err=0.307 dist=1.37
+dr-off-s0 cmd=(+0.5,+0.0,+0.0) seed=3 fell=1 surv= 3.80s lin_err=0.346 dist=1.47
+dr-off-s0 cmd=(+0.5,+0.0,+0.0) seed=4 fell=1 surv= 3.76s lin_err=0.443 dist=1.65
+dr-off-s0 cmd=(-0.2,+0.0,+0.0) seed=0 fell=1 surv= 4.00s lin_err=0.241 dist=0.42
+dr-off-s0 cmd=(-0.2,+0.0,+0.0) seed=1 fell=1 surv= 3.52s lin_err=0.224 dist=0.36
+dr-off-s0 cmd=(-0.2,+0.0,+0.0) seed=2 fell=1 surv= 3.76s lin_err=0.267 dist=0.45
+dr-off-s0 cmd=(-0.2,+0.0,+0.0) seed=3 fell=1 surv= 3.96s lin_err=0.228 dist=0.38
+dr-off-s0 cmd=(-0.2,+0.0,+0.0) seed=4 fell=1 surv= 6.20s lin_err=0.195 dist=0.69
+dr-off-s0 cmd=(+0.0,+0.2,+0.0) seed=0 fell=1 surv= 2.16s lin_err=0.315 dist=0.07
+dr-off-s0 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv= 3.52s lin_err=0.330 dist=0.13
+dr-off-s0 cmd=(+0.0,+0.2,+0.0) seed=2 fell=1 surv= 3.88s lin_err=0.519 dist=0.18
+dr-off-s0 cmd=(+0.0,+0.2,+0.0) seed=3 fell=1 surv= 2.88s lin_err=0.319 dist=0.10
+dr-off-s0 cmd=(+0.0,+0.2,+0.0) seed=4 fell=1 surv= 3.00s lin_err=0.308 dist=0.12
+dr-off-s0 cmd=(+0.0,+0.0,+0.5) seed=0 fell=1 surv= 6.64s lin_err=0.158 dist=0.16
+dr-off-s0 cmd=(+0.0,+0.0,+0.5) seed=1 fell=1 surv= 4.04s lin_err=0.134 dist=0.06
+dr-off-s0 cmd=(+0.0,+0.0,+0.5) seed=2 fell=1 surv= 3.76s lin_err=0.121 dist=0.04
+dr-off-s0 cmd=(+0.0,+0.0,+0.5) seed=3 fell=1 surv= 9.72s lin_err=0.151 dist=0.16
+dr-off-s0 cmd=(+0.0,+0.0,+0.5) seed=4 fell=1 surv= 3.80s lin_err=0.206 dist=0.19
+dr-off-s0 cmd=(+0.3,+0.0,+0.5) seed=0 fell=1 surv= 6.64s lin_err=0.203 dist=1.14
+dr-off-s0 cmd=(+0.3,+0.0,+0.5) seed=1 fell=1 surv= 4.12s lin_err=0.437 dist=0.89
+dr-off-s0 cmd=(+0.3,+0.0,+0.5) seed=2 fell=1 surv= 3.72s lin_err=0.254 dist=0.83
+dr-off-s0 cmd=(+0.3,+0.0,+0.5) seed=3 fell=1 surv= 9.88s lin_err=0.322 dist=0.73
+dr-off-s0 cmd=(+0.3,+0.0,+0.5) seed=4 fell=1 surv= 3.68s lin_err=0.241 dist=0.78
+
+dr-off-s0: 30 episodes, 30 falls (100.0% fall rate) -> results/push-matched-20260923/dr-off-s0__p0.5.csv
+[1;31m2026-09-23 09:40:49.630117926 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008992, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.630242588 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008994, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.630559767 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008996, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.630562005 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008995, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.632191055 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008993, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.633187585 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008997, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.634196371 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008991, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Using ONNX runner
+[1;31m2026-09-23 09:40:49.660176183 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009001, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.665180145 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009002, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.665903477 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008986, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.670181742 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009003, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.671199177 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009004, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.671286466 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008999, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.671253704 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008998, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:40:49.689344203 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1008990, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+dr-off-s1 cmd=(+0.3,+0.0,+0.0) seed=0 fell=1 surv= 3.88s lin_err=0.309 dist=0.70
+dr-off-s1 cmd=(+0.3,+0.0,+0.0) seed=1 fell=1 surv= 3.80s lin_err=0.264 dist=0.72
+dr-off-s1 cmd=(+0.3,+0.0,+0.0) seed=2 fell=1 surv= 3.76s lin_err=0.259 dist=0.72
+dr-off-s1 cmd=(+0.3,+0.0,+0.0) seed=3 fell=1 surv= 3.76s lin_err=0.291 dist=0.72
+dr-off-s1 cmd=(+0.3,+0.0,+0.0) seed=4 fell=1 surv= 6.68s lin_err=0.286 dist=1.48
+dr-off-s1 cmd=(+0.5,+0.0,+0.0) seed=0 fell=1 surv= 1.88s lin_err=0.826 dist=0.61
+dr-off-s1 cmd=(+0.5,+0.0,+0.0) seed=1 fell=1 surv= 1.84s lin_err=0.676 dist=0.63
+dr-off-s1 cmd=(+0.5,+0.0,+0.0) seed=2 fell=1 surv= 2.12s lin_err=0.768 dist=0.78
+dr-off-s1 cmd=(+0.5,+0.0,+0.0) seed=3 fell=1 surv= 3.60s lin_err=0.366 dist=1.35
+dr-off-s1 cmd=(+0.5,+0.0,+0.0) seed=4 fell=1 surv= 4.12s lin_err=0.440 dist=1.80
+dr-off-s1 cmd=(-0.2,+0.0,+0.0) seed=0 fell=1 surv= 3.40s lin_err=0.204 dist=0.33
+dr-off-s1 cmd=(-0.2,+0.0,+0.0) seed=1 fell=1 surv= 3.48s lin_err=0.174 dist=0.38
+dr-off-s1 cmd=(-0.2,+0.0,+0.0) seed=2 fell=1 surv= 3.64s lin_err=0.214 dist=0.57
+dr-off-s1 cmd=(-0.2,+0.0,+0.0) seed=3 fell=1 surv= 3.52s lin_err=0.227 dist=0.38
+dr-off-s1 cmd=(-0.2,+0.0,+0.0) seed=4 fell=1 surv= 6.96s lin_err=0.223 dist=0.74
+dr-off-s1 cmd=(+0.0,+0.2,+0.0) seed=0 fell=1 surv= 2.20s lin_err=0.310 dist=0.15
+dr-off-s1 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv= 2.12s lin_err=0.326 dist=0.16
+dr-off-s1 cmd=(+0.0,+0.2,+0.0) seed=2 fell=1 surv= 2.36s lin_err=0.290 dist=0.15
+dr-off-s1 cmd=(+0.0,+0.2,+0.0) seed=3 fell=1 surv= 3.72s lin_err=0.294 dist=0.15
+dr-off-s1 cmd=(+0.0,+0.2,+0.0) seed=4 fell=1 surv= 2.72s lin_err=0.289 dist=0.16
+dr-off-s1 cmd=(+0.0,+0.0,+0.5) seed=0 fell=1 surv= 6.84s lin_err=0.174 dist=0.10
+dr-off-s1 cmd=(+0.0,+0.0,+0.5) seed=1 fell=1 surv= 6.72s lin_err=0.168 dist=0.20
+dr-off-s1 cmd=(+0.0,+0.0,+0.5) seed=2 fell=1 surv= 6.76s lin_err=0.161 dist=0.23
+dr-off-s1 cmd=(+0.0,+0.0,+0.5) seed=3 fell=1 surv= 6.60s lin_err=0.192 dist=0.11
+dr-off-s1 cmd=(+0.0,+0.0,+0.5) seed=4 fell=1 surv= 3.72s lin_err=0.169 dist=0.06
+dr-off-s1 cmd=(+0.3,+0.0,+0.5) seed=0 fell=1 surv= 6.72s lin_err=0.239 dist=1.03
+dr-off-s1 cmd=(+0.3,+0.0,+0.5) seed=1 fell=1 surv= 3.88s lin_err=0.312 dist=0.89
+dr-off-s1 cmd=(+0.3,+0.0,+0.5) seed=2 fell=1 surv= 3.56s lin_err=0.228 dist=0.79
+dr-off-s1 cmd=(+0.3,+0.0,+0.5) seed=3 fell=1 surv= 8.52s lin_err=0.332 dist=1.14
+dr-off-s1 cmd=(+0.3,+0.0,+0.5) seed=4 fell=1 surv= 3.68s lin_err=0.339 dist=0.75
+
+dr-off-s1: 30 episodes, 30 falls (100.0% fall rate) -> results/push-matched-20260923/dr-off-s1__p0.5.csv
+[1;31m2026-09-23 09:41:20.005284175 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009741, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.005457656 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009743, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.005338254 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009740, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.005358146 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009742, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.005279848 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009738, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.021232780 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009735, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.005322924 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009739, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Using ONNX runner
+[1;31m2026-09-23 09:41:20.053176457 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009744, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.005290960 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009749, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.005288296 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009737, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.005547294 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009748, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.005569246 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009736, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.034174949 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009747, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.034290431 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009746, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:20.095170246 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1009731, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+dr-off-s2 cmd=(+0.3,+0.0,+0.0) seed=0 fell=1 surv= 3.68s lin_err=0.205 dist=0.72
+dr-off-s2 cmd=(+0.3,+0.0,+0.0) seed=1 fell=1 surv= 4.00s lin_err=0.333 dist=0.56
+dr-off-s2 cmd=(+0.3,+0.0,+0.0) seed=2 fell=1 surv= 7.36s lin_err=0.313 dist=1.14
+dr-off-s2 cmd=(+0.3,+0.0,+0.0) seed=3 fell=1 surv= 3.64s lin_err=0.318 dist=0.62
+dr-off-s2 cmd=(+0.3,+0.0,+0.0) seed=4 fell=1 surv= 3.96s lin_err=0.431 dist=0.89
+dr-off-s2 cmd=(+0.5,+0.0,+0.0) seed=0 fell=1 surv= 3.48s lin_err=0.382 dist=1.12
+dr-off-s2 cmd=(+0.5,+0.0,+0.0) seed=1 fell=1 surv= 3.56s lin_err=0.438 dist=1.16
+dr-off-s2 cmd=(+0.5,+0.0,+0.0) seed=2 fell=1 surv= 6.68s lin_err=0.324 dist=2.42
+dr-off-s2 cmd=(+0.5,+0.0,+0.0) seed=3 fell=1 surv= 3.52s lin_err=0.392 dist=1.19
+dr-off-s2 cmd=(+0.5,+0.0,+0.0) seed=4 fell=1 surv= 2.76s lin_err=0.630 dist=0.69
+dr-off-s2 cmd=(-0.2,+0.0,+0.0) seed=0 fell=1 surv= 3.80s lin_err=0.219 dist=0.44
+dr-off-s2 cmd=(-0.2,+0.0,+0.0) seed=1 fell=1 surv= 3.60s lin_err=0.155 dist=0.56
+dr-off-s2 cmd=(-0.2,+0.0,+0.0) seed=2 fell=1 surv= 3.68s lin_err=0.305 dist=0.40
+dr-off-s2 cmd=(-0.2,+0.0,+0.0) seed=3 fell=1 surv= 3.52s lin_err=0.253 dist=0.37
+dr-off-s2 cmd=(-0.2,+0.0,+0.0) seed=4 fell=1 surv= 6.88s lin_err=0.274 dist=1.00
+dr-off-s2 cmd=(+0.0,+0.2,+0.0) seed=0 fell=1 surv= 3.40s lin_err=0.357 dist=0.16
+dr-off-s2 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv= 2.88s lin_err=0.306 dist=0.13
+dr-off-s2 cmd=(+0.0,+0.2,+0.0) seed=2 fell=1 surv= 2.92s lin_err=0.305 dist=0.13
+dr-off-s2 cmd=(+0.0,+0.2,+0.0) seed=3 fell=1 surv= 2.36s lin_err=0.370 dist=0.12
+dr-off-s2 cmd=(+0.0,+0.2,+0.0) seed=4 fell=1 surv= 2.48s lin_err=0.370 dist=0.13
+dr-off-s2 cmd=(+0.0,+0.0,+0.5) seed=0 fell=1 surv= 6.48s lin_err=0.215 dist=0.23
+dr-off-s2 cmd=(+0.0,+0.0,+0.5) seed=1 fell=1 surv=10.92s lin_err=0.217 dist=0.17
+dr-off-s2 cmd=(+0.0,+0.0,+0.5) seed=2 fell=1 surv= 3.92s lin_err=0.205 dist=0.11
+dr-off-s2 cmd=(+0.0,+0.0,+0.5) seed=3 fell=1 surv= 9.56s lin_err=0.216 dist=0.36
+dr-off-s2 cmd=(+0.0,+0.0,+0.5) seed=4 fell=1 surv= 3.56s lin_err=0.224 dist=0.16
+dr-off-s2 cmd=(+0.3,+0.0,+0.5) seed=0 fell=1 surv= 6.60s lin_err=0.240 dist=1.00
+dr-off-s2 cmd=(+0.3,+0.0,+0.5) seed=1 fell=1 surv= 3.68s lin_err=0.406 dist=0.80
+dr-off-s2 cmd=(+0.3,+0.0,+0.5) seed=2 fell=1 surv= 3.68s lin_err=0.324 dist=0.59
+dr-off-s2 cmd=(+0.3,+0.0,+0.5) seed=3 fell=1 surv= 7.56s lin_err=0.326 dist=1.08
+dr-off-s2 cmd=(+0.3,+0.0,+0.5) seed=4 fell=1 surv= 4.04s lin_err=0.454 dist=0.68
+
+dr-off-s2: 30 episodes, 30 falls (100.0% fall rate) -> results/push-matched-20260923/dr-off-s2__p0.5.csv
+[1;31m2026-09-23 09:41:51.829132591 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010411, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.832398993 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010412, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.836733214 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010405, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.840331756 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010413, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Using ONNX runner
+[1;31m2026-09-23 09:41:51.844283877 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010414, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.848274904 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010415, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.852261233 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010416, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.856281294 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010417, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.860234493 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010418, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.868216487 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010420, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.869276377 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010410, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.873181532 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010423, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.877182763 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010422, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.877226463 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010409, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:41:51.881169465 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1010421, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+push-adaptive-s0 cmd=(+0.3,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.267 dist=3.37
+push-adaptive-s0 cmd=(+0.3,+0.0,+0.0) seed=1 fell=1 surv= 9.88s lin_err=0.258 dist=2.28
+push-adaptive-s0 cmd=(+0.3,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.253 dist=2.86
+push-adaptive-s0 cmd=(+0.3,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.267 dist=3.09
+push-adaptive-s0 cmd=(+0.3,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.275 dist=3.39
+push-adaptive-s0 cmd=(+0.5,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.315 dist=5.69
+push-adaptive-s0 cmd=(+0.5,+0.0,+0.0) seed=1 fell=1 surv= 4.16s lin_err=0.429 dist=1.71
+push-adaptive-s0 cmd=(+0.5,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.319 dist=5.59
+push-adaptive-s0 cmd=(+0.5,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.314 dist=5.77
+push-adaptive-s0 cmd=(+0.5,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.335 dist=5.99
+push-adaptive-s0 cmd=(-0.2,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.213 dist=2.22
+push-adaptive-s0 cmd=(-0.2,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.221 dist=2.18
+push-adaptive-s0 cmd=(-0.2,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.226 dist=2.36
+push-adaptive-s0 cmd=(-0.2,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.212 dist=1.99
+push-adaptive-s0 cmd=(-0.2,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.211 dist=2.01
+push-adaptive-s0 cmd=(+0.0,+0.2,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.272 dist=1.50
+push-adaptive-s0 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv= 3.76s lin_err=0.271 dist=0.33
+push-adaptive-s0 cmd=(+0.0,+0.2,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.251 dist=1.30
+push-adaptive-s0 cmd=(+0.0,+0.2,+0.0) seed=3 fell=1 surv= 9.52s lin_err=0.241 dist=0.83
+push-adaptive-s0 cmd=(+0.0,+0.2,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.250 dist=1.90
+push-adaptive-s0 cmd=(+0.0,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.024 dist=0.02
+push-adaptive-s0 cmd=(+0.0,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.028 dist=0.04
+push-adaptive-s0 cmd=(+0.0,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.027 dist=0.01
+push-adaptive-s0 cmd=(+0.0,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.024 dist=0.02
+push-adaptive-s0 cmd=(+0.0,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.021 dist=0.03
+push-adaptive-s0 cmd=(+0.3,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.254 dist=1.58
+push-adaptive-s0 cmd=(+0.3,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.264 dist=2.02
+push-adaptive-s0 cmd=(+0.3,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.272 dist=1.81
+push-adaptive-s0 cmd=(+0.3,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.248 dist=1.80
+push-adaptive-s0 cmd=(+0.3,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.261 dist=1.49
+
+push-adaptive-s0: 30 episodes, 4 falls (13.3% fall rate) -> results/push-matched-20260923/push-adaptive-s0__p0.5.csv
+[1;31m2026-09-23 09:42:59.252801795 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011937, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.254248578 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011938, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.256401942 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011941, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.256500562 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011946, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.257064967 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011948, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.258178407 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011939, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.259180360 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011940, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.260735233 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011942, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.263180053 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011936, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Using ONNX runner
+[1;31m2026-09-23 09:42:59.276169323 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011935, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.280181221 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011944, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.292163468 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011947, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.292345258 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011931, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.297171836 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011943, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:42:59.302168860 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1011949, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+push-adaptive-s1 cmd=(+0.3,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.273 dist=3.60
+push-adaptive-s1 cmd=(+0.3,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.257 dist=3.50
+push-adaptive-s1 cmd=(+0.3,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.263 dist=3.51
+push-adaptive-s1 cmd=(+0.3,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.266 dist=3.59
+push-adaptive-s1 cmd=(+0.3,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.261 dist=3.76
+push-adaptive-s1 cmd=(+0.5,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.302 dist=5.85
+push-adaptive-s1 cmd=(+0.5,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.298 dist=5.79
+push-adaptive-s1 cmd=(+0.5,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.306 dist=5.49
+push-adaptive-s1 cmd=(+0.5,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.303 dist=5.85
+push-adaptive-s1 cmd=(+0.5,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.310 dist=5.68
+push-adaptive-s1 cmd=(-0.2,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.230 dist=2.16
+push-adaptive-s1 cmd=(-0.2,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.247 dist=2.40
+push-adaptive-s1 cmd=(-0.2,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.254 dist=2.23
+push-adaptive-s1 cmd=(-0.2,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.244 dist=2.02
+push-adaptive-s1 cmd=(-0.2,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.238 dist=2.07
+push-adaptive-s1 cmd=(+0.0,+0.2,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.272 dist=2.32
+push-adaptive-s1 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv= 4.04s lin_err=0.456 dist=0.82
+push-adaptive-s1 cmd=(+0.0,+0.2,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.281 dist=2.45
+push-adaptive-s1 cmd=(+0.0,+0.2,+0.0) seed=3 fell=1 surv= 9.44s lin_err=0.306 dist=1.83
+push-adaptive-s1 cmd=(+0.0,+0.2,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.305 dist=2.53
+push-adaptive-s1 cmd=(+0.0,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.024 dist=0.03
+push-adaptive-s1 cmd=(+0.0,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.028 dist=0.03
+push-adaptive-s1 cmd=(+0.0,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.022 dist=0.02
+push-adaptive-s1 cmd=(+0.0,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.024 dist=0.04
+push-adaptive-s1 cmd=(+0.0,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.019 dist=0.04
+push-adaptive-s1 cmd=(+0.3,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.269 dist=2.19
+push-adaptive-s1 cmd=(+0.3,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.269 dist=1.70
+push-adaptive-s1 cmd=(+0.3,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.258 dist=1.05
+push-adaptive-s1 cmd=(+0.3,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.251 dist=1.90
+push-adaptive-s1 cmd=(+0.3,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.273 dist=1.97
+
+push-adaptive-s1: 30 episodes, 2 falls (6.7% fall rate) -> results/push-matched-20260923/push-adaptive-s1__p0.5.csv
+[1;31m2026-09-23 09:44:08.840532422 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013552, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.853153443 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013554, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.840551749 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013553, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.861750842 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013556, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Using ONNX runner
+[1;31m2026-09-23 09:44:08.840553548 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013555, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.881166306 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013563, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.886174282 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013565, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.840559967 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013548, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.891170327 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013566, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.896184530 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013564, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.875307308 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013557, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.875333680 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013558, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.875353258 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013559, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.875374977 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013560, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:44:08.875392935 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1013561, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+push-c0.2-s0 cmd=(+0.3,+0.0,+0.0) seed=0 fell=1 surv= 4.16s lin_err=0.458 dist=1.47
+push-c0.2-s0 cmd=(+0.3,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.304 dist=3.31
+push-c0.2-s0 cmd=(+0.3,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.293 dist=3.54
+push-c0.2-s0 cmd=(+0.3,+0.0,+0.0) seed=3 fell=1 surv= 4.16s lin_err=0.394 dist=1.04
+push-c0.2-s0 cmd=(+0.3,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.290 dist=3.77
+push-c0.2-s0 cmd=(+0.5,+0.0,+0.0) seed=0 fell=1 surv= 3.76s lin_err=0.290 dist=1.68
+push-c0.2-s0 cmd=(+0.5,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.290 dist=5.80
+push-c0.2-s0 cmd=(+0.5,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.286 dist=5.59
+push-c0.2-s0 cmd=(+0.5,+0.0,+0.0) seed=3 fell=1 surv= 3.72s lin_err=0.291 dist=1.56
+push-c0.2-s0 cmd=(+0.5,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.289 dist=5.90
+push-c0.2-s0 cmd=(-0.2,+0.0,+0.0) seed=0 fell=1 surv= 7.08s lin_err=0.410 dist=1.23
+push-c0.2-s0 cmd=(-0.2,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.321 dist=2.47
+push-c0.2-s0 cmd=(-0.2,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.293 dist=2.55
+push-c0.2-s0 cmd=(-0.2,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.309 dist=2.35
+push-c0.2-s0 cmd=(-0.2,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.291 dist=2.36
+push-c0.2-s0 cmd=(+0.0,+0.2,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.310 dist=1.79
+push-c0.2-s0 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv= 3.96s lin_err=0.452 dist=0.74
+push-c0.2-s0 cmd=(+0.0,+0.2,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.312 dist=1.99
+push-c0.2-s0 cmd=(+0.0,+0.2,+0.0) seed=3 fell=1 surv= 9.88s lin_err=0.365 dist=1.57
+push-c0.2-s0 cmd=(+0.0,+0.2,+0.0) seed=4 fell=1 surv= 6.72s lin_err=0.428 dist=1.28
+push-c0.2-s0 cmd=(+0.0,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.256 dist=0.08
+push-c0.2-s0 cmd=(+0.0,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.248 dist=0.08
+push-c0.2-s0 cmd=(+0.0,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.254 dist=0.08
+push-c0.2-s0 cmd=(+0.0,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.248 dist=0.06
+push-c0.2-s0 cmd=(+0.0,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.281 dist=0.28
+push-c0.2-s0 cmd=(+0.3,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.324 dist=0.07
+push-c0.2-s0 cmd=(+0.3,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.351 dist=0.33
+push-c0.2-s0 cmd=(+0.3,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.329 dist=0.22
+push-c0.2-s0 cmd=(+0.3,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.322 dist=0.05
+push-c0.2-s0 cmd=(+0.3,+0.0,+0.5) seed=4 fell=1 surv= 3.88s lin_err=0.471 dist=1.18
+
+push-c0.2-s0: 30 episodes, 9 falls (30.0% fall rate) -> results/push-matched-20260923/push-c0.2-s0__p0.5.csv
+[1;31m2026-09-23 09:45:09.658219980 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014874, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.658246771 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014875, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.667378573 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014878, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.658287739 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014877, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.667163162 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014883, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.658296634 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014880, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.667175363 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014884, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.658264241 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014876, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.658125940 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014882, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Using ONNX runner
+[1;31m2026-09-23 09:45:09.658320183 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014885, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.666152236 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014873, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.658076870 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014872, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.658055910 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014879, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.666166819 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014867, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:45:09.658098692 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1014871, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+push-c0.2-s1 cmd=(+0.3,+0.0,+0.0) seed=0 fell=1 surv= 3.72s lin_err=0.427 dist=1.15
+push-c0.2-s1 cmd=(+0.3,+0.0,+0.0) seed=1 fell=1 surv= 4.00s lin_err=0.475 dist=1.24
+push-c0.2-s1 cmd=(+0.3,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.305 dist=3.51
+push-c0.2-s1 cmd=(+0.3,+0.0,+0.0) seed=3 fell=1 surv= 3.68s lin_err=0.436 dist=1.16
+push-c0.2-s1 cmd=(+0.3,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.319 dist=3.80
+push-c0.2-s1 cmd=(+0.5,+0.0,+0.0) seed=0 fell=1 surv= 4.16s lin_err=0.429 dist=1.58
+push-c0.2-s1 cmd=(+0.5,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.322 dist=5.56
+push-c0.2-s1 cmd=(+0.5,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.307 dist=5.83
+push-c0.2-s1 cmd=(+0.5,+0.0,+0.0) seed=3 fell=1 surv= 4.20s lin_err=0.420 dist=1.54
+push-c0.2-s1 cmd=(+0.5,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.361 dist=5.46
+push-c0.2-s1 cmd=(-0.2,+0.0,+0.0) seed=0 fell=1 surv= 6.92s lin_err=0.388 dist=1.06
+push-c0.2-s1 cmd=(-0.2,+0.0,+0.0) seed=1 fell=1 surv=10.04s lin_err=0.348 dist=1.88
+push-c0.2-s1 cmd=(-0.2,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.299 dist=2.58
+push-c0.2-s1 cmd=(-0.2,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.302 dist=2.47
+push-c0.2-s1 cmd=(-0.2,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.300 dist=2.47
+push-c0.2-s1 cmd=(+0.0,+0.2,+0.0) seed=0 fell=1 surv= 6.68s lin_err=0.282 dist=1.01
+push-c0.2-s1 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv= 3.56s lin_err=0.321 dist=0.43
+push-c0.2-s1 cmd=(+0.0,+0.2,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.250 dist=1.87
+push-c0.2-s1 cmd=(+0.0,+0.2,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.319 dist=1.85
+push-c0.2-s1 cmd=(+0.0,+0.2,+0.0) seed=4 fell=1 surv= 6.84s lin_err=0.302 dist=1.21
+push-c0.2-s1 cmd=(+0.0,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.224 dist=0.09
+push-c0.2-s1 cmd=(+0.0,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.223 dist=0.17
+push-c0.2-s1 cmd=(+0.0,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.228 dist=0.02
+push-c0.2-s1 cmd=(+0.0,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.232 dist=0.13
+push-c0.2-s1 cmd=(+0.0,+0.0,+0.5) seed=4 fell=1 surv= 3.88s lin_err=0.429 dist=0.28
+push-c0.2-s1 cmd=(+0.3,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.308 dist=0.12
+push-c0.2-s1 cmd=(+0.3,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.339 dist=0.28
+push-c0.2-s1 cmd=(+0.3,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.319 dist=0.32
+push-c0.2-s1 cmd=(+0.3,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.300 dist=0.30
+push-c0.2-s1 cmd=(+0.3,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.322 dist=0.36
+
+push-c0.2-s1: 30 episodes, 11 falls (36.7% fall rate) -> results/push-matched-20260923/push-c0.2-s1__p0.5.csv
+[1;31m2026-09-23 09:46:07.867357094 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016193, index: 7, mask: {16, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867362802 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016186, index: 0, mask: {2, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867333313 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016192, index: 6, mask: {14, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867539834 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016199, index: 13, mask: {9, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867656644 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016194, index: 8, mask: {18, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867556478 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016201, index: 15, mask: {13, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+Using ONNX runner
+[1;31m2026-09-23 09:46:07.867661328 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016203, index: 17, mask: {17, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867605847 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016204, index: 18, mask: {19, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867618518 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016195, index: 9, mask: {1, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867522849 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016197, index: 11, mask: {5, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867667701 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016190, index: 4, mask: {10, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867634345 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016196, index: 10, mask: {3, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867681870 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016191, index: 5, mask: {12, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867643697 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016198, index: 12, mask: {7, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+[1;31m2026-09-23 09:46:07.867662176 [E:onnxruntime:Default, env.cc:234 ThreadMain] pthread_setaffinity_np failed for thread: 1016202, index: 16, mask: {15, }, error code: 22 error msg: Invalid argument. Specify the number of threads explicitly so the affinity is not set.[m
+push-c0.4-s0 cmd=(+0.3,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.308 dist=3.59
+push-c0.4-s0 cmd=(+0.3,+0.0,+0.0) seed=1 fell=1 surv= 3.76s lin_err=0.391 dist=0.79
+push-c0.4-s0 cmd=(+0.3,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.289 dist=3.51
+push-c0.4-s0 cmd=(+0.3,+0.0,+0.0) seed=3 fell=1 surv= 4.12s lin_err=0.452 dist=1.05
+push-c0.4-s0 cmd=(+0.3,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.291 dist=3.71
+push-c0.4-s0 cmd=(+0.5,+0.0,+0.0) seed=0 fell=1 surv= 4.00s lin_err=0.517 dist=1.75
+push-c0.4-s0 cmd=(+0.5,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.310 dist=5.13
+push-c0.4-s0 cmd=(+0.5,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.312 dist=5.23
+push-c0.4-s0 cmd=(+0.5,+0.0,+0.0) seed=3 fell=1 surv= 4.00s lin_err=0.511 dist=1.61
+push-c0.4-s0 cmd=(+0.5,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.307 dist=5.59
+push-c0.4-s0 cmd=(-0.2,+0.0,+0.0) seed=0 fell=0 surv=12.00s lin_err=0.279 dist=2.36
+push-c0.4-s0 cmd=(-0.2,+0.0,+0.0) seed=1 fell=0 surv=12.00s lin_err=0.271 dist=2.44
+push-c0.4-s0 cmd=(-0.2,+0.0,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.277 dist=2.46
+push-c0.4-s0 cmd=(-0.2,+0.0,+0.0) seed=3 fell=0 surv=12.00s lin_err=0.280 dist=2.28
+push-c0.4-s0 cmd=(-0.2,+0.0,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.262 dist=2.28
+push-c0.4-s0 cmd=(+0.0,+0.2,+0.0) seed=0 fell=1 surv= 6.80s lin_err=0.311 dist=0.88
+push-c0.4-s0 cmd=(+0.0,+0.2,+0.0) seed=1 fell=1 surv= 3.48s lin_err=0.347 dist=0.68
+push-c0.4-s0 cmd=(+0.0,+0.2,+0.0) seed=2 fell=0 surv=12.00s lin_err=0.257 dist=1.86
+push-c0.4-s0 cmd=(+0.0,+0.2,+0.0) seed=3 fell=1 surv= 9.48s lin_err=0.275 dist=1.47
+push-c0.4-s0 cmd=(+0.0,+0.2,+0.0) seed=4 fell=0 surv=12.00s lin_err=0.258 dist=2.04
+push-c0.4-s0 cmd=(+0.0,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.156 dist=0.05
+push-c0.4-s0 cmd=(+0.0,+0.0,+0.5) seed=1 fell=0 surv=12.00s lin_err=0.216 dist=0.13
+push-c0.4-s0 cmd=(+0.0,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.093 dist=0.08
+push-c0.4-s0 cmd=(+0.0,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.182 dist=0.13
+push-c0.4-s0 cmd=(+0.0,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.177 dist=0.02
+push-c0.4-s0 cmd=(+0.3,+0.0,+0.5) seed=0 fell=0 surv=12.00s lin_err=0.276 dist=0.76
+push-c0.4-s0 cmd=(+0.3,+0.0,+0.5) seed=1 fell=1 surv= 9.64s lin_err=0.331 dist=0.93
+push-c0.4-s0 cmd=(+0.3,+0.0,+0.5) seed=2 fell=0 surv=12.00s lin_err=0.289 dist=0.54
+push-c0.4-s0 cmd=(+0.3,+0.0,+0.5) seed=3 fell=0 surv=12.00s lin_err=0.309 dist=0.63
+push-c0.4-s0 cmd=(+0.3,+0.0,+0.5) seed=4 fell=0 surv=12.00s lin_err=0.326 dist=0.58
+
+push-c0.4-s0: 30 episodes, 8 falls (26.7% fall rate) -> results/push-matched-20260923/push-c0.4-s0__p0.5.csv
+REPO_CPU_EVAL_COMPLETE

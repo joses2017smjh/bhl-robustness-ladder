@@ -21,5 +21,7 @@ export OV_CACHE=/scratch/$USER/ov-cache-${SLURM_JOB_ID}
 export CUDA_CACHE_PATH=/scratch/$USER/nv-computecache-${SLURM_JOB_ID}
 mkdir -p "$OV_CACHE" "$CUDA_CACHE_PATH" "$REPO/results"
 export NUM_ENVS=${NUM_ENVS:-4}
+# Serialise Isaac Sim 6.0 boots against the other v60 jobs on the shared venv.
+source "$REPO/slurm/inner/v60_boot_gate.sh"; v60_boot_gate
 bhl_exec "$REPO/slurm/inner/_maze_smoke.sh"
 echo "=== done: $(date) ==="

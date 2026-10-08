@@ -1,0 +1,808 @@
+{
+  "ok": true,
+  "problems": [],
+  "wall_s": 393.99094414711,
+  "checks": {
+    "bench-preflight_options_and_export_checked": {
+      "ok": true,
+      "detail": {
+        "stage_fix": {
+          "cap_semantics": "every command below the cap is delivered unchanged; vx and vy scales unchanged",
+          "clear_along_m": 0.35,
+          "clear_window_s": 10.0,
+          "command_scales": [
+            0.4,
+            0.35,
+            0.6
+          ],
+          "cross_budget": "window",
+          "crossing_end": "clear (along >= 0.35 m) or takeover + 10.0 - now <= 0.2 s, whichever first; takeover = PlateStage._start (bench: the bench's takeover; replay and route: the capture)",
+          "cruise_mps": 0.3,
+          "design": "SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55', item F (F2 + F3)",
+          "k_yaw": 1.2,
+          "turn_exit_rad": 0.15,
+          "turn_max_s": 10.471975511965978,
+          "turn_rate_rps": 0.6,
+          "window_margin_s": 0.2,
+          "wz_walk_rps": 0.4,
+          "yaw_cap_rps": 0.6
+        },
+        "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de"
+      }
+    },
+    "bench-export-preflight_options_and_export_checked": {
+      "ok": true,
+      "detail": {
+        "stage_fix": {
+          "cap_semantics": "every command below the cap is delivered unchanged; vx and vy scales unchanged",
+          "clear_along_m": 0.35,
+          "clear_window_s": 10.0,
+          "command_scales": [
+            0.4,
+            0.35,
+            0.6
+          ],
+          "cross_budget": "window",
+          "crossing_end": "clear (along >= 0.35 m) or takeover + 10.0 - now <= 0.2 s, whichever first; takeover = PlateStage._start (bench: the bench's takeover; replay and route: the capture)",
+          "cruise_mps": 0.3,
+          "design": "SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55', item F (F2 + F3)",
+          "k_yaw": 1.2,
+          "turn_exit_rad": 0.15,
+          "turn_max_s": 10.471975511965978,
+          "turn_rate_rps": 0.6,
+          "window_margin_s": 0.2,
+          "wz_walk_rps": 0.4,
+          "yaw_cap_rps": 0.6
+        },
+        "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de"
+      }
+    },
+    "replay-fix-preflight_options_and_export_checked": {
+      "ok": true,
+      "detail": {
+        "stage_fix": {
+          "cap_semantics": "every command below the cap is delivered unchanged; vx and vy scales unchanged",
+          "clear_along_m": 0.35,
+          "clear_window_s": 10.0,
+          "command_scales": [
+            0.4,
+            0.35,
+            0.6
+          ],
+          "cross_budget": "window",
+          "crossing_end": "clear (along >= 0.35 m) or takeover + 10.0 - now <= 0.2 s, whichever first; takeover = PlateStage._start (bench: the bench's takeover; replay and route: the capture)",
+          "cruise_mps": 0.3,
+          "design": "SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55', item F (F2 + F3)",
+          "k_yaw": 1.2,
+          "turn_exit_rad": 0.15,
+          "turn_max_s": 10.471975511965978,
+          "turn_rate_rps": 0.6,
+          "window_margin_s": 0.2,
+          "wz_walk_rps": 0.4,
+          "yaw_cap_rps": 0.6
+        },
+        "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de"
+      }
+    },
+    "replay-fix-export-preflight_options_and_export_checked": {
+      "ok": true,
+      "detail": {
+        "stage_fix": {
+          "cap_semantics": "every command below the cap is delivered unchanged; vx and vy scales unchanged",
+          "clear_along_m": 0.35,
+          "clear_window_s": 10.0,
+          "command_scales": [
+            0.4,
+            0.35,
+            0.6
+          ],
+          "cross_budget": "window",
+          "crossing_end": "clear (along >= 0.35 m) or takeover + 10.0 - now <= 0.2 s, whichever first; takeover = PlateStage._start (bench: the bench's takeover; replay and route: the capture)",
+          "cruise_mps": 0.3,
+          "design": "SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55', item F (F2 + F3)",
+          "k_yaw": 1.2,
+          "turn_exit_rad": 0.15,
+          "turn_max_s": 10.471975511965978,
+          "turn_rate_rps": 0.6,
+          "window_margin_s": 0.2,
+          "wz_walk_rps": 0.4,
+          "yaw_cap_rps": 0.6
+        },
+        "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de"
+      }
+    },
+    "probe-fix-preflight_options_and_export_checked": {
+      "ok": true,
+      "detail": {
+        "stage_fix": {
+          "cap_semantics": "every command below the cap is delivered unchanged; vx and vy scales unchanged",
+          "clear_along_m": 0.35,
+          "clear_window_s": 10.0,
+          "command_scales": [
+            0.4,
+            0.35,
+            0.6
+          ],
+          "cross_budget": "window",
+          "crossing_end": "clear (along >= 0.35 m) or takeover + 10.0 - now <= 0.2 s, whichever first; takeover = PlateStage._start (bench: the bench's takeover; replay and route: the capture)",
+          "cruise_mps": 0.3,
+          "design": "SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55', item F (F2 + F3)",
+          "k_yaw": 1.2,
+          "turn_exit_rad": 0.15,
+          "turn_max_s": 10.471975511965978,
+          "turn_rate_rps": 0.6,
+          "window_margin_s": 0.2,
+          "wz_walk_rps": 0.4,
+          "yaw_cap_rps": 0.6
+        },
+        "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de"
+      }
+    },
+    "stage_gait_controller_known": {
+      "ok": true,
+      "detail": {
+        "controller": "GaitClockRlController",
+        "num_observations": 77
+      }
+    },
+    "no_replay_or_probe_episode": {
+      "ok": true,
+      "detail": "preflight only: validation layouts are scored"
+    },
+    "bench_smoke_verdict_never_pass_and_records_the_options": {
+      "ok": true,
+      "detail": "SMOKE_RUN"
+    },
+    "bench_provenance": {
+      "ok": true,
+      "detail": {
+        "weights": {
+          "shipped": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b",
+          "clocks2": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de"
+        },
+        "n_sources": 42
+      }
+    },
+    "bench_three_crossings_written": {
+      "ok": true,
+      "detail": [
+        "L103-d0.json.gz",
+        "L113-d1.json.gz",
+        "L116-d0.json.gz"
+      ]
+    },
+    "L103-d0_complete": {
+      "ok": true,
+      "detail": "complete"
+    },
+    "L103-d0_phases_valid": {
+      "ok": true,
+      "detail": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ]
+    },
+    "L103-d0_records_the_options": {
+      "ok": true,
+      "detail": {
+        "stage_gait": "clocks2",
+        "cross_budget": "window",
+        "yaw_cap": 0.6
+      }
+    },
+    "L103-d0_turn_wz_sent_and_received_is_0.60": {
+      "ok": true,
+      "detail": {
+        "samples": 270,
+        "sent": [
+          0.5999994
+        ],
+        "received": [
+          0.5999994
+        ]
+      }
+    },
+    "L103-d0_crossing_wz_within_0.40": {
+      "ok": true,
+      "detail": 0.2097683304349278
+    },
+    "L103-d0_every_sample_received_what_was_sent": {
+      "ok": true,
+      "detail": 480
+    },
+    "L103-d0_verdict_fix_line_matches_the_record": {
+      "ok": true,
+      "detail": {
+        "verdict": {
+          "cross_s": 2.400000000002933,
+          "cross_ended_by": "clear",
+          "window_left_s": 0.3999999999962611,
+          "turn_wz_sent_max": 0.5999994,
+          "turn_wz_received_max": 0.5999994277954102,
+          "cross_wz_sent_max": 0.2097683304349278
+        },
+        "record": {
+          "cross_s": 2.400000000002933,
+          "cross_ended_by": "clear",
+          "window_left_s": 0.3999999999962611,
+          "turn_wz_sent_max": 0.5999994,
+          "turn_wz_received_max": 0.5999994277954102,
+          "cross_wz_sent_max": 0.2097683304349278
+        }
+      }
+    },
+    "L103-d0_crossing_ends_at_clear_or_budget": {
+      "ok": true,
+      "detail": {
+        "cross_ended_by": "clear",
+        "along_m": 0.37127502443232624,
+        "window_left_s": 0.3999999999962611,
+        "cross_s": 2.400000000002933,
+        "time_s": 12.600000000003908
+      }
+    },
+    "L103-d0_swap_in_is_a_fresh_stage_controller": {
+      "ok": true,
+      "detail": {
+        "time_s": 3.000000000000169,
+        "door": 0,
+        "event": "swap_to_clocks2",
+        "prev_actions_before_norm": 78.15081787109375,
+        "controller": "GaitClockRlController",
+        "obs_width": 77,
+        "clock_step": 0,
+        "policy_observations_zero": true,
+        "prev_actions_after_norm": 0.0,
+        "takeover_yaw_rad": -1.5314104708808611
+      }
+    },
+    "L103-d0_phase_started_at_takeover_and_swapped_back": {
+      "ok": true,
+      "detail": {
+        "updates_since_takeover": 355,
+        "swap_back": {
+          "time_s": 17.200000000005264,
+          "door": 0,
+          "event": "swap_to_shipped",
+          "prev_actions_before_norm": 63.06918716430664,
+          "stage_controller": "GaitClockRlController",
+          "stage_controller_clock_step": 355,
+          "stage_controller_obs_width": 77,
+          "stage_controller_last_clock": [
+            -0.9510557055473328,
+            -0.3090195655822754
+          ],
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "policy_observations_zero": false,
+          "prev_actions_after_norm": 0.0
+        }
+      }
+    },
+    "L103-d0_outcome_reported": {
+      "ok": true,
+      "detail": {
+        "heading_deg": 180,
+        "plate": "square",
+        "entry": "standstill",
+        "end_reason": "complete",
+        "takeover_s": 3.000000000000169,
+        "handback_s": 17.200000000005264,
+        "clear": true,
+        "real_clear": true,
+        "clear_after_takeover_s": 9.56000000000369,
+        "fell": false,
+        "fall_phase": null,
+        "maximum_tilt": 0.1912820967507031,
+        "phases": [
+          "approach",
+          "settle",
+          "turn",
+          "cross",
+          "turn_back",
+          "recorded"
+        ],
+        "events": [
+          {
+            "time_s": 3.000000000000169,
+            "event": "takeover",
+            "speed_mps": 0.00015953276324646802,
+            "distance_to_pre_point_m": 0.19983916810761812,
+            "yaw_rad": -1.5314104708808611
+          },
+          {
+            "time_s": 17.200000000005264,
+            "event": "handback"
+          }
+        ],
+        "wall_contacts": {
+          "samples": 0,
+          "stage_samples": 0,
+          "first_s": null,
+          "geoms": []
+        },
+        "fix": {
+          "cross_s": 2.400000000002933,
+          "cross_ended_by": "clear",
+          "window_left_s": 0.3999999999962611,
+          "turn_wz_sent_max": 0.5999994,
+          "turn_wz_received_max": 0.5999994277954102,
+          "cross_wz_sent_max": 0.2097683304349278
+        }
+      }
+    },
+    "L113-d1_complete": {
+      "ok": true,
+      "detail": "complete"
+    },
+    "L113-d1_phases_valid": {
+      "ok": true,
+      "detail": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ]
+    },
+    "L113-d1_records_the_options": {
+      "ok": true,
+      "detail": {
+        "stage_gait": "clocks2",
+        "cross_budget": "window",
+        "yaw_cap": 0.6
+      }
+    },
+    "L113-d1_turn_wz_sent_and_received_is_0.60": {
+      "ok": true,
+      "detail": {
+        "samples": 135,
+        "sent": [
+          0.5999994
+        ],
+        "received": [
+          0.5999994
+        ]
+      }
+    },
+    "L113-d1_crossing_wz_within_0.40": {
+      "ok": true,
+      "detail": 0.30157819961949206
+    },
+    "L113-d1_every_sample_received_what_was_sent": {
+      "ok": true,
+      "detail": 385
+    },
+    "L113-d1_verdict_fix_line_matches_the_record": {
+      "ok": true,
+      "detail": {
+        "verdict": {
+          "cross_s": 3.400000000002734,
+          "cross_ended_by": "clear",
+          "window_left_s": 3.3999999999990393,
+          "turn_wz_sent_max": 0.5999994,
+          "turn_wz_received_max": 0.5999994277954102,
+          "cross_wz_sent_max": 0.30157819961949206
+        },
+        "record": {
+          "cross_s": 3.400000000002734,
+          "cross_ended_by": "clear",
+          "window_left_s": 3.3999999999990393,
+          "turn_wz_sent_max": 0.5999994,
+          "turn_wz_received_max": 0.5999994277954102,
+          "cross_wz_sent_max": 0.30157819961949206
+        }
+      }
+    },
+    "L113-d1_crossing_ends_at_clear_or_budget": {
+      "ok": true,
+      "detail": {
+        "cross_ended_by": "clear",
+        "along_m": 0.3912654396605396,
+        "window_left_s": 3.3999999999990393,
+        "cross_s": 3.400000000002734,
+        "time_s": 10.600000000001463
+      }
+    },
+    "L113-d1_swap_in_is_a_fresh_stage_controller": {
+      "ok": true,
+      "detail": {
+        "time_s": 4.000000000000503,
+        "door": 1,
+        "event": "swap_to_clocks2",
+        "prev_actions_before_norm": 73.18610382080078,
+        "controller": "GaitClockRlController",
+        "obs_width": 77,
+        "clock_step": 0,
+        "policy_observations_zero": true,
+        "prev_actions_after_norm": 0.0,
+        "takeover_yaw_rad": 3.0994215617920933
+      }
+    },
+    "L113-d1_phase_started_at_takeover_and_swapped_back": {
+      "ok": true,
+      "detail": {
+        "updates_since_takeover": 235,
+        "swap_back": {
+          "time_s": 13.400000000004885,
+          "door": 1,
+          "event": "swap_to_shipped",
+          "prev_actions_before_norm": 59.26736068725586,
+          "stage_controller": "GaitClockRlController",
+          "stage_controller_clock_step": 235,
+          "stage_controller_obs_width": 77,
+          "stage_controller_last_clock": [
+            -0.9510553479194641,
+            -0.30902063846588135
+          ],
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "policy_observations_zero": false,
+          "prev_actions_after_norm": 0.0
+        }
+      }
+    },
+    "L113-d1_outcome_reported": {
+      "ok": true,
+      "detail": {
+        "heading_deg": 90,
+        "plate": "round",
+        "entry": "walking",
+        "end_reason": "complete",
+        "takeover_s": 4.000000000000503,
+        "handback_s": 13.400000000004885,
+        "clear": true,
+        "real_clear": true,
+        "clear_after_takeover_s": 6.440000000000765,
+        "fell": false,
+        "fall_phase": null,
+        "maximum_tilt": 0.2593974058577278,
+        "phases": [
+          "approach",
+          "settle",
+          "turn",
+          "cross",
+          "turn_back",
+          "recorded"
+        ],
+        "events": [
+          {
+            "time_s": 3.000000000000169,
+            "event": "walk_start",
+            "distance_to_pre_point_m": 0.3439200608662498
+          },
+          {
+            "time_s": 4.000000000000503,
+            "event": "arrived",
+            "distance_m": 0.1297854631366481,
+            "walk_s": 1.0000000000003335
+          },
+          {
+            "time_s": 4.000000000000503,
+            "event": "takeover",
+            "speed_mps": 0.3003946682609501,
+            "distance_to_pre_point_m": 0.1297854631366481,
+            "yaw_rad": 3.0994215617920933
+          },
+          {
+            "time_s": 13.400000000004885,
+            "event": "handback"
+          }
+        ],
+        "wall_contacts": {
+          "samples": 0,
+          "stage_samples": 0,
+          "first_s": null,
+          "geoms": []
+        },
+        "fix": {
+          "cross_s": 3.400000000002734,
+          "cross_ended_by": "clear",
+          "window_left_s": 3.3999999999990393,
+          "turn_wz_sent_max": 0.5999994,
+          "turn_wz_received_max": 0.5999994277954102,
+          "cross_wz_sent_max": 0.30157819961949206
+        }
+      }
+    },
+    "L116-d0_complete": {
+      "ok": true,
+      "detail": "complete"
+    },
+    "L116-d0_phases_valid": {
+      "ok": true,
+      "detail": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ]
+    },
+    "L116-d0_records_the_options": {
+      "ok": true,
+      "detail": {
+        "stage_gait": "clocks2",
+        "cross_budget": "window",
+        "yaw_cap": 0.6
+      }
+    },
+    "L116-d0_turn_wz_sent_and_received_is_0.60": {
+      "ok": true,
+      "detail": {
+        "samples": 5,
+        "sent": [
+          0.5999994
+        ],
+        "received": [
+          0.5999994
+        ]
+      }
+    },
+    "L116-d0_crossing_wz_within_0.40": {
+      "ok": true,
+      "detail": 0.1297676175230256
+    },
+    "L116-d0_every_sample_received_what_was_sent": {
+      "ok": true,
+      "detail": 290
+    },
+    "L116-d0_verdict_fix_line_matches_the_record": {
+      "ok": true,
+      "detail": {
+        "verdict": {
+          "cross_s": 5.799999999999628,
+          "cross_ended_by": "clear",
+          "window_left_s": 3.600000000000172,
+          "turn_wz_sent_max": 0.5999994,
+          "turn_wz_received_max": 0.5999994277954102,
+          "cross_wz_sent_max": 0.1297676175230256
+        },
+        "record": {
+          "cross_s": 5.799999999999628,
+          "cross_ended_by": "clear",
+          "window_left_s": 3.600000000000172,
+          "turn_wz_sent_max": 0.5999994,
+          "turn_wz_received_max": 0.5999994277954102,
+          "cross_wz_sent_max": 0.1297676175230256
+        }
+      }
+    },
+    "L116-d0_crossing_ends_at_clear_or_budget": {
+      "ok": true,
+      "detail": {
+        "cross_ended_by": "clear",
+        "along_m": 0.4062736771238975,
+        "window_left_s": 3.600000000000172,
+        "cross_s": 5.799999999999628,
+        "time_s": 9.399999999999997
+      }
+    },
+    "L116-d0_swap_in_is_a_fresh_stage_controller": {
+      "ok": true,
+      "detail": {
+        "time_s": 3.000000000000169,
+        "door": 0,
+        "event": "swap_to_clocks2",
+        "prev_actions_before_norm": 77.43887329101562,
+        "controller": "GaitClockRlController",
+        "obs_width": 77,
+        "clock_step": 0,
+        "policy_observations_zero": true,
+        "prev_actions_after_norm": 0.0,
+        "takeover_yaw_rad": -0.1099413870680063
+      }
+    },
+    "L116-d0_phase_started_at_takeover_and_swapped_back": {
+      "ok": true,
+      "detail": {
+        "updates_since_takeover": 165,
+        "swap_back": {
+          "time_s": 9.600000000000241,
+          "door": 0,
+          "event": "swap_to_shipped",
+          "prev_actions_before_norm": 61.40129089355469,
+          "stage_controller": "GaitClockRlController",
+          "stage_controller_clock_step": 165,
+          "stage_controller_obs_width": 77,
+          "stage_controller_last_clock": [
+            0.9510561227798462,
+            0.3090181350708008
+          ],
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "policy_observations_zero": false,
+          "prev_actions_after_norm": 0.0
+        }
+      }
+    },
+    "L116-d0_outcome_reported": {
+      "ok": true,
+      "detail": {
+        "heading_deg": 0,
+        "plate": "square",
+        "entry": "standstill",
+        "end_reason": "complete",
+        "takeover_s": 3.000000000000169,
+        "handback_s": 9.600000000000241,
+        "clear": true,
+        "real_clear": true,
+        "clear_after_takeover_s": 6.31999999999973,
+        "fell": false,
+        "fall_phase": null,
+        "maximum_tilt": 0.20218973498740486,
+        "phases": [
+          "approach",
+          "settle",
+          "turn",
+          "cross",
+          "turn_back",
+          "recorded"
+        ],
+        "events": [
+          {
+            "time_s": 3.000000000000169,
+            "event": "takeover",
+            "speed_mps": 0.0005199242810259129,
+            "distance_to_pre_point_m": 0.15765278811844452,
+            "yaw_rad": -0.1099413870680063
+          },
+          {
+            "time_s": 9.600000000000241,
+            "event": "handback"
+          }
+        ],
+        "wall_contacts": {
+          "samples": 11,
+          "stage_samples": 5,
+          "first_s": 0.24000000000000019,
+          "geoms": [
+            "wall_m7_14"
+          ]
+        },
+        "fix": {
+          "cross_s": 5.799999999999628,
+          "cross_ended_by": "clear",
+          "window_left_s": 3.600000000000172,
+          "turn_wz_sent_max": 0.5999994,
+          "turn_wz_received_max": 0.5999994277954102,
+          "cross_wz_sent_max": 0.1297676175230256
+        }
+      }
+    },
+    "bench_turns_exercised": {
+      "ok": true,
+      "detail": 3
+    },
+    "bench_crossings_exercised": {
+      "ok": true,
+      "detail": 3
+    },
+    "bench_standstill_and_walking": {
+      "ok": true,
+      "detail": [
+        "standstill",
+        "walking"
+      ]
+    },
+    "bench_has_180": {
+      "ok": true,
+      "detail": [
+        0,
+        90,
+        180
+      ]
+    },
+    "f2_crossing_beyond_4s_reported": {
+      "ok": true,
+      "detail": [
+        {
+          "crossing": "L116-d0",
+          "cross_s": 5.799999999999628,
+          "ended_by": "clear",
+          "window_left_s": 3.600000000000172
+        }
+      ]
+    },
+    "route_fix_runs_through_missionenv_with_yaw_scale_0.6": {
+      "ok": true,
+      "detail": null
+    },
+    "route_fix_route_steps_deliver_the_routes_physical_command": {
+      "ok": true,
+      "detail": {
+        "steps": 94,
+        "max_abs_route_wz": 0.11140428043559714
+      }
+    },
+    "route_fix_controller_receives_0.60_in_the_turns": {
+      "ok": true,
+      "detail": {
+        "steps": 29,
+        "received": [
+          0.5999994
+        ]
+      }
+    },
+    "route_fix_swaps_through_missionenv_step": {
+      "ok": true,
+      "detail": 53
+    },
+    "route_fix_crossing_ends_at_clear_or_budget": {
+      "ok": true,
+      "detail": [
+        {
+          "cross_ended_by": "clear",
+          "along_m": 0.41194491901435887,
+          "window_left_s": 2.2000000000181785,
+          "cross_s": 2.3999999999944066
+        }
+      ]
+    },
+    "route_fix_outcome_reported": {
+      "ok": true,
+      "detail": {
+        "time_s": 30.79999999997357,
+        "done": false,
+        "failure": null,
+        "open": [
+          true,
+          false
+        ],
+        "phases": [
+          "approach",
+          "settle",
+          "turn",
+          "cross",
+          "turn_back",
+          "recorded"
+        ],
+        "gait_events": [
+          {
+            "time_s": 17.00000000000573,
+            "door": 0,
+            "event": "swap_to_clocks2",
+            "prev_actions_before_norm": 71.83399963378906,
+            "controller": "GaitClockRlController",
+            "obs_width": 77,
+            "clock_step": 0,
+            "policy_observations_zero": true,
+            "prev_actions_after_norm": 0.0,
+            "takeover_yaw_rad": 0.04398422008419254
+          },
+          {
+            "time_s": 27.599999999981026,
+            "door": 0,
+            "event": "swap_to_shipped",
+            "prev_actions_before_norm": 70.06710815429688,
+            "stage_controller": "GaitClockRlController",
+            "stage_controller_clock_step": 265,
+            "stage_controller_obs_width": 77,
+            "stage_controller_last_clock": [
+              0.9510548710823059,
+              0.30902212858200073
+            ],
+            "controller": "RlController",
+            "obs_width": 75,
+            "clock_step": null,
+            "policy_observations_zero": false,
+            "prev_actions_after_norm": 0.0
+          }
+        ]
+      }
+    },
+    "launcher_stage_gait": {
+      "ok": true,
+      "detail": "clocks2"
+    }
+  }
+}

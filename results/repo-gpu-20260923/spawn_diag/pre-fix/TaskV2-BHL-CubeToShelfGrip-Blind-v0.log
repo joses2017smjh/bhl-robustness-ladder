@@ -1,0 +1,268 @@
+The '--headless' CLI argument is deprecated. Omit '--viz' for default headless. If config visualizers are enabled and you want to force headless, use '--viz none'.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1790191816.205053  532702 descriptor_database.cc:633] File already exists in database: grpc/health/v1/health.proto
+W0000 00:00:1790191816.205101  532702 message.cc:301] Protobuf GeneratedMessageFactory: File is already registered: grpc/health/v1/health.proto
+[ISAACLAB] AppLauncher initialization complete
+[INFO]: Base environment:
+	Environment device    : cuda:0
+	Environment seed      : 0
+	Physics step-size     : 0.005
+	Rendering step-size   : 0.04
+	Environment step-size : 0.04
+[INFO]: Registered backend 'physx' for factory Articulation.
+[INFO]: Registered backend 'physx' for factory RigidObject.
+[INFO]: Registered backend 'physx' for factory FrameView.
+[INFO]: Registered backend 'physx' for factory ContactSensor.
+[INFO]: Physics scene prim path: /physicsScene
+Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaacsim/kit/data/Kit/IsaacLab/3.0/user.config.json'
+2026-09-23T19:30:15Z [0ms] [Warning] [omni.ext.plugin] [ext: isaaclab_visualizers] Extensions config 'extension.toml' doesn't exist '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers' or '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers/config'
+2026-09-23T19:30:16Z [728ms] [Warning] [omni.perfmonitor.plugin]  PerfMonitorManager::onStart - error calling pthread_setaffinity_np
+2026-09-23T19:30:16Z [751ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2026-09-23T19:30:16Z [757ms] [Warning] [omni.usd_config.extension] Enable omni.materialx.libs extension to use MaterialX
+2026-09-23T19:30:17Z [2,154ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
+2026-09-23T19:30:17Z [2,154ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
+2026-09-23T19:30:23Z [8,074ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-09-23T19:30:25Z [9,913ms] [Warning] [usdrt.population.plugin] Last global time was not created. Did you call setEnableUsdNoticeHandling?
+2026-09-23T19:30:25Z [10,030ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-09-23T19:30:25Z [10,030ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-09-23T19:30:25Z [10,070ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-09-23T19:30:25Z [10,070ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-09-23T19:30:25Z [10,078ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-09-23T19:30:25Z [10,078ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-09-23T19:30:25Z [10,084ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-09-23T19:30:25Z [10,084ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+[INFO]: Time taken for scene creation Last: 0.590083 s, Mean: 0.590083 s, Std: 0.000000 s, N: 1
+[INFO]: Scene manager:  <class InteractiveScene>
+	Number of environments: 4
+	Environment spacing   : 4.0
+	Source prim name      : /World/envs/env_0
+	Global prim paths     : ['/World/ground']
+	Replicate physics     : True
+[INFO]: Simulation parameters for joints in /World/envs/env_.*/robot_a:
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                         Simulation Joint Information (Prim path: /World/envs/env_.*/robot_a)                                                         |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+| Index | Name                           | Stiffness | Damping | Armature | Static Friction | Dynamic Friction | Viscous Friction | Position Limits  | Velocity Limits | Effort Limits |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+|   0   | arm_left_shoulder_pitch_joint  |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.571, 0.785]  |      15.000     |     4.000     |
+|   1   | arm_right_shoulder_pitch_joint |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 1.571]  |      15.000     |     4.000     |
+|   2   | leg_left_hip_roll_joint        |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.175, 1.571]  |      15.000     |     6.000     |
+|   3   | leg_right_hip_roll_joint       |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.571, 0.175]  |      15.000     |     6.000     |
+|   4   | arm_left_shoulder_roll_joint   |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 1.309]  |      15.000     |     4.000     |
+|   5   | arm_right_shoulder_roll_joint  |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.309, 0.262]  |      15.000     |     4.000     |
+|   6   | leg_left_hip_yaw_joint         |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.982, 0.589]  |      15.000     |     6.000     |
+|   7   | leg_right_hip_yaw_joint        |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.589, 0.982]  |      15.000     |     6.000     |
+|   8   | arm_left_shoulder_yaw_joint    |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   9   | arm_right_shoulder_yaw_joint   |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   10  | leg_left_hip_pitch_joint       |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.898, 0.982]  |      15.000     |     6.000     |
+|   11  | leg_right_hip_pitch_joint      |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.898, 0.982]  |      15.000     |     6.000     |
+|   12  | arm_left_elbow_pitch_joint     |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.000, 1.571]  |      15.000     |     4.000     |
+|   13  | arm_right_elbow_pitch_joint    |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.571, -0.000] |      15.000     |     4.000     |
+|   14  | leg_left_knee_pitch_joint      |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.000, 2.443]  |      15.000     |     6.000     |
+|   15  | leg_right_knee_pitch_joint     |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.000, 2.443]  |      15.000     |     6.000     |
+|   16  | arm_left_elbow_roll_joint      |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   17  | arm_right_elbow_roll_joint     |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   18  | leg_left_ankle_pitch_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     6.000     |
+|   19  | leg_right_ankle_pitch_joint    |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     6.000     |
+|   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
+|   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
+|   22  | arm_left_gripper_joint         |   20.000  |  1.000  |  0.000   |      0.000      |      0.000       |      0.000       |  [0.000, 1.200]  |      6.000      |     2.000     |
+|   23  | arm_right_gripper_joint        |   20.000  |  1.000  |  0.000   |      0.000      |      0.000       |      0.000       |  [0.000, 1.200]  |      6.000      |     2.000     |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+[INFO]: Simulation parameters for joints in /World/envs/env_.*/robot_b:
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                         Simulation Joint Information (Prim path: /World/envs/env_.*/robot_b)                                                         |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+| Index | Name                           | Stiffness | Damping | Armature | Static Friction | Dynamic Friction | Viscous Friction | Position Limits  | Velocity Limits | Effort Limits |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+|   0   | arm_left_shoulder_pitch_joint  |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.571, 0.785]  |      15.000     |     4.000     |
+|   1   | arm_right_shoulder_pitch_joint |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 1.571]  |      15.000     |     4.000     |
+|   2   | leg_left_hip_roll_joint        |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.175, 1.571]  |      15.000     |     6.000     |
+|   3   | leg_right_hip_roll_joint       |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.571, 0.175]  |      15.000     |     6.000     |
+|   4   | arm_left_shoulder_roll_joint   |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 1.309]  |      15.000     |     4.000     |
+|   5   | arm_right_shoulder_roll_joint  |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.309, 0.262]  |      15.000     |     4.000     |
+|   6   | leg_left_hip_yaw_joint         |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.982, 0.589]  |      15.000     |     6.000     |
+|   7   | leg_right_hip_yaw_joint        |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.589, 0.982]  |      15.000     |     6.000     |
+|   8   | arm_left_shoulder_yaw_joint    |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   9   | arm_right_shoulder_yaw_joint   |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   10  | leg_left_hip_pitch_joint       |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.898, 0.982]  |      15.000     |     6.000     |
+|   11  | leg_right_hip_pitch_joint      |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.898, 0.982]  |      15.000     |     6.000     |
+|   12  | arm_left_elbow_pitch_joint     |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.000, 1.571]  |      15.000     |     4.000     |
+|   13  | arm_right_elbow_pitch_joint    |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.571, -0.000] |      15.000     |     4.000     |
+|   14  | leg_left_knee_pitch_joint      |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.000, 2.443]  |      15.000     |     6.000     |
+|   15  | leg_right_knee_pitch_joint     |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.000, 2.443]  |      15.000     |     6.000     |
+|   16  | arm_left_elbow_roll_joint      |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   17  | arm_right_elbow_roll_joint     |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   18  | leg_left_ankle_pitch_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     6.000     |
+|   19  | leg_right_ankle_pitch_joint    |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     6.000     |
+|   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
+|   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
+|   22  | arm_left_gripper_joint         |   20.000  |  1.000  |  0.000   |      0.000      |      0.000       |      0.000       |  [0.000, 1.200]  |      6.000      |     2.000     |
+|   23  | arm_right_gripper_joint        |   20.000  |  1.000  |  0.000   |      0.000      |      0.000       |      0.000       |  [0.000, 1.200]  |      6.000      |     2.000     |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+[INFO]: Time taken for simulation start Last: 1.514030 s, Mean: 1.514030 s, Std: 0.000000 s, N: 1
+[INFO] Command Manager:  <CommandManager> contains 0 active terms.
++------------------------+
+|  Active Command Terms  |
++--------+-------+-------+
+| Index  | Name  |  Type |
++--------+-------+-------+
++--------+-------+-------+
+
+[INFO] Event Manager:  <EventManager> contains 1 active terms.
++-----------------------------------+
+| Active Event Terms in Mode: 'reset' |
++----------+------------------------+
+|  Index   | Name                   |
++----------+------------------------+
+|    0     | reset_joints_a         |
+|    1     | reset_joints_b         |
+|    2     | reset_root_a           |
+|    3     | reset_root_b           |
+|    4     | reset_object           |
++----------+------------------------+
+
+[INFO] Recorder Manager:  <RecorderManager> contains 0 active terms.
++---------------------+
+| Active Recorder Terms |
++-----------+---------+
+|   Index   | Name    |
++-----------+---------+
++-----------+---------+
+
+[INFO]: Resolved joint names for the action term JointPositionAction: ['arm_left_shoulder_pitch_joint', 'arm_left_shoulder_roll_joint', 'arm_left_shoulder_yaw_joint', 'arm_left_elbow_pitch_joint', 'arm_left_elbow_roll_joint', 'arm_right_shoulder_pitch_joint', 'arm_right_shoulder_roll_joint', 'arm_right_shoulder_yaw_joint', 'arm_right_elbow_pitch_joint', 'arm_right_elbow_roll_joint', 'leg_left_hip_roll_joint', 'leg_left_hip_yaw_joint', 'leg_left_hip_pitch_joint', 'leg_left_knee_pitch_joint', 'leg_left_ankle_pitch_joint', 'leg_left_ankle_roll_joint', 'leg_right_hip_roll_joint', 'leg_right_hip_yaw_joint', 'leg_right_hip_pitch_joint', 'leg_right_knee_pitch_joint', 'leg_right_ankle_pitch_joint', 'leg_right_ankle_roll_joint', 'arm_left_gripper_joint', 'arm_right_gripper_joint'] [[0, 4, 8, 12, 16, 1, 5, 9, 13, 17, 2, 6, 10, 14, 18, 20, 3, 7, 11, 15, 19, 21, 22, 23]]
+[INFO]: Resolved joint names for the action term JointPositionAction: ['arm_left_shoulder_pitch_joint', 'arm_left_shoulder_roll_joint', 'arm_left_shoulder_yaw_joint', 'arm_left_elbow_pitch_joint', 'arm_left_elbow_roll_joint', 'arm_right_shoulder_pitch_joint', 'arm_right_shoulder_roll_joint', 'arm_right_shoulder_yaw_joint', 'arm_right_elbow_pitch_joint', 'arm_right_elbow_roll_joint', 'leg_left_hip_roll_joint', 'leg_left_hip_yaw_joint', 'leg_left_hip_pitch_joint', 'leg_left_knee_pitch_joint', 'leg_left_ankle_pitch_joint', 'leg_left_ankle_roll_joint', 'leg_right_hip_roll_joint', 'leg_right_hip_yaw_joint', 'leg_right_hip_pitch_joint', 'leg_right_knee_pitch_joint', 'leg_right_ankle_pitch_joint', 'leg_right_ankle_roll_joint', 'arm_left_gripper_joint', 'arm_right_gripper_joint'] [[0, 4, 8, 12, 16, 1, 5, 9, 13, 17, 2, 6, 10, 14, 18, 20, 3, 7, 11, 15, 19, 21, 22, 23]]
+[INFO] Action Manager:  <ActionManager> contains 2 active terms.
++------------------------------------+
+|  Active Action Terms (shape: 48)   |
++--------+--------------+------------+
+| Index  | Name         |  Dimension |
++--------+--------------+------------+
+|   0    | joint_pos_a  |         24 |
+|   1    | joint_pos_b  |         24 |
++--------+--------------+------------+
+
+[INFO] Observation Manager: <ObservationManager> contains 2 groups.
++-----------------------------------------------------------+
+| Active Observation Terms in Group: 'policy' (shape: (210,)) |
++-----------+-----------------------------------+-----------+
+|   Index   | Name                              |   Shape   |
++-----------+-----------------------------------+-----------+
+|     0     | projected_gravity_a               |    (3,)   |
+|     1     | projected_gravity_b               |    (3,)   |
+|     2     | base_ang_vel_a                    |    (3,)   |
+|     3     | base_ang_vel_b                    |    (3,)   |
+|     4     | joint_pos_a                       |   (24,)   |
+|     5     | joint_pos_b                       |   (24,)   |
+|     6     | joint_vel_a                       |   (24,)   |
+|     7     | joint_vel_b                       |   (24,)   |
+|     8     | object_pos_a                      |    (3,)   |
+|     9     | object_pos_b                      |    (3,)   |
+|     10    | track_err_a                       |   (24,)   |
+|     11    | track_err_b                       |   (24,)   |
+|     12    | actions                           |   (48,)   |
++-----------+-----------------------------------+-----------+
++-----------------------------------------------------------+
+| Active Observation Terms in Group: 'critic' (shape: (222,)) |
++-----------+-----------------------------------+-----------+
+|   Index   | Name                              |   Shape   |
++-----------+-----------------------------------+-----------+
+|     0     | projected_gravity_a               |    (3,)   |
+|     1     | projected_gravity_b               |    (3,)   |
+|     2     | base_ang_vel_a                    |    (3,)   |
+|     3     | base_ang_vel_b                    |    (3,)   |
+|     4     | joint_pos_a                       |   (24,)   |
+|     5     | joint_pos_b                       |   (24,)   |
+|     6     | joint_vel_a                       |   (24,)   |
+|     7     | joint_vel_b                       |   (24,)   |
+|     8     | object_pos_a                      |    (3,)   |
+|     9     | object_pos_b                      |    (3,)   |
+|     10    | track_err_a                       |   (24,)   |
+|     11    | track_err_b                       |   (24,)   |
+|     12    | actions                           |   (48,)   |
+|     13    | base_lin_vel_a                    |    (3,)   |
+|     14    | base_lin_vel_b                    |    (3,)   |
+|     15    | object_lin_vel                    |    (3,)   |
+|     16    | object_ang_vel                    |    (3,)   |
++-----------+-----------------------------------+-----------+
+
+[INFO] Termination Manager:  <TerminationManager> contains 3 active terms.
++-----------------------------+
+|   Active Termination Terms  |
++-------+----------+----------+
+| Index | Name     | Time Out |
++-------+----------+----------+
+|   0   | time_out |   True   |
+|   1   | fallen   |  False   |
+|   2   | success  |  False   |
++-------+----------+----------+
+
+[INFO] Reward Manager:  <RewardManager> contains 19 active terms.
++--------------------------------------+
+|         Active Reward Terms          |
++-------+---------------------+--------+
+| Index | Name                | Weight |
++-------+---------------------+--------+
+|   0   | reaching_coarse     |    1.0 |
+|   1   | reaching_fine       |    1.0 |
+|   2   | opposing_clamp      |    1.5 |
+|   3   | lift_progress       |    2.0 |
+|   4   | lifting_object      |   15.0 |
+|   5   | object_xy           |   -0.8 |
+|   6   | object_vel          |  -0.05 |
+|   7   | object_tilt         |   -1.5 |
+|   8   | still_alive         |    1.0 |
+|   9   | termination_penalty |  -10.0 |
+|   10  | flat_a              |   -1.0 |
+|   11  | flat_b              |   -1.0 |
+|   12  | action_rate         |  -0.01 |
+|   13  | torques_a           | -2e-05 |
+|   14  | torques_b           | -2e-05 |
+|   15  | base_contact_a      |   -1.0 |
+|   16  | base_contact_b      |   -1.0 |
+|   17  | carry               |    3.0 |
+|   18  | placed              |  200.0 |
++-------+---------------------+--------+
+
+[INFO] Curriculum Manager:  <CurriculumManager> contains 3 active terms.
++--------------------------+
+| Active Curriculum Terms  |
++---------+----------------+
+|  Index  | Name           |
++---------+----------------+
+|    0    | lift_height    |
+|    1    | stage_lift     |
+|    2    | base_height    |
++---------+----------------+
+
+[INFO]: Completed setting up the environment...
+task TaskV2-BHL-CubeToShelfGrip-Blind-v0  envs 4  quat_order xyzw  step_dt 0.04  terms ['time_out', 'fallen', 'success']  action_dim 48
+  robot_a: ankle bodies ['leg_left_ankle_roll', 'leg_right_ankle_roll']  shoulder bodies ['arm_left_shoulder_pitch', 'arm_right_shoulder_pitch']  foot sensor bodies []
+  robot_b: ankle bodies ['leg_left_ankle_roll', 'leg_right_ankle_roll']  shoulder bodies ['arm_left_shoulder_pitch', 'arm_right_shoulder_pitch']  foot sensor bodies []
+SPAWN-DIAG TaskV2-BHL-CubeToShelfGrip-Blind-v0 zero TERMINATES: fallen @ step 1  first_fire {'time_out': None, 'fallen': 1, 'success': None}  implied_ep_len [1, 1, 1, 1]  max_tilt_native 1.83605
+    robot_a at reset: tilt_native [0.0, 0.0, 0.0, 0.0], tilt_term [1.68033, 1.48757, 1.63458, 1.57093], n_below [1.0, 1.0, 1.0, 1.0], base_z [-0.0272, -0.0272, -0.0272, -0.0272], root_quat_w [0.0, -0.0, -0.74475, 0.66734] (stack order xyzw)
+    robot_a: _tilt_from_quat reads 1.680 rad at reset while the native tilt is 0.000 rad -- the fallen term sees a fall that the orientation does not have (quaternion-order mismatch in _tilt_from_quat).
+    robot_b at reset: tilt_native [0.0, 0.0, 0.0, 0.0], tilt_term [1.59892, 1.46459, 1.493, 1.57221], n_below [1.0, 1.0, 1.0, 1.0], base_z [-0.0272, -0.0272, -0.0272, -0.0272], root_quat_w [0.0, -0.0, 0.71698, 0.69709] (stack order xyzw)
+    robot_b: _tilt_from_quat reads 1.599 rad at reset while the native tilt is 0.000 rad -- the fallen term sees a fall that the orientation does not have (quaternion-order mismatch in _tilt_from_quat).
+    fallen first fires at step 1 (0.040 s): robot_a tilt_term [1.68085, 1.48894, 1.63271, 1.57339] vs tilt_native [0.00647, 0.00731, 0.00283, 0.00115], base_z [-0.03591, -0.03576, -0.03601, -0.03564], n_below [1.0, 1.0, 1.0, 1.0]
+    fallen first fires at step 1 (0.040 s): robot_b tilt_term [1.59836, 1.46382, 1.49143, 1.57285] vs tilt_native [0.00643, 0.00357, 0.00247, 0.00506], base_z [-0.0361, -0.03584, -0.03584, -0.03593], n_below [1.0, 1.0, 1.0, 1.0]
+    AT FIRST FIRE the termination's tilt (1.681) exceeds 0.78 but no robot's native tilt does (0.007): the robot has not physically fallen by the stack's own quaternion convention.
+wrote /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/spawn_diag/TaskV2-BHL-CubeToShelfGrip-Blind-v0__zero.json
+SPAWN-DIAG TaskV2-BHL-CubeToShelfGrip-Blind-v0 pd_hold TERMINATES: fallen @ step 1  first_fire {'time_out': None, 'fallen': 1, 'success': None}  implied_ep_len [1, 1, 1, 1]  max_tilt_native 1.83605
+    robot_a at reset: tilt_native [0.0, 0.0, 0.0, 0.0], tilt_term [1.68033, 1.48757, 1.63458, 1.57093], n_below [1.0, 1.0, 1.0, 1.0], base_z [-0.0272, -0.0272, -0.0272, -0.0272], root_quat_w [0.0, -0.0, -0.74475, 0.66734] (stack order xyzw)
+    robot_a: _tilt_from_quat reads 1.680 rad at reset while the native tilt is 0.000 rad -- the fallen term sees a fall that the orientation does not have (quaternion-order mismatch in _tilt_from_quat).
+    robot_b at reset: tilt_native [0.0, 0.0, 0.0, 0.0], tilt_term [1.59892, 1.46459, 1.493, 1.57221], n_below [1.0, 1.0, 1.0, 1.0], base_z [-0.0272, -0.0272, -0.0272, -0.0272], root_quat_w [0.0, -0.0, 0.71698, 0.69709] (stack order xyzw)
+    robot_b: _tilt_from_quat reads 1.599 rad at reset while the native tilt is 0.000 rad -- the fallen term sees a fall that the orientation does not have (quaternion-order mismatch in _tilt_from_quat).
+    fallen first fires at step 1 (0.040 s): robot_a tilt_term [1.68085, 1.48894, 1.63271, 1.57339] vs tilt_native [0.00647, 0.00731, 0.00283, 0.00115], base_z [-0.03591, -0.03576, -0.03601, -0.03564], n_below [1.0, 1.0, 1.0, 1.0]
+    fallen first fires at step 1 (0.040 s): robot_b tilt_term [1.59836, 1.46382, 1.49143, 1.57285] vs tilt_native [0.00643, 0.00357, 0.00247, 0.00506], base_z [-0.0361, -0.03584, -0.03584, -0.03593], n_below [1.0, 1.0, 1.0, 1.0]
+    AT FIRST FIRE the termination's tilt (1.681) exceeds 0.78 but no robot's native tilt does (0.007): the robot has not physically fallen by the stack's own quaternion convention.
+wrote /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/spawn_diag/TaskV2-BHL-CubeToShelfGrip-Blind-v0__pd_hold.json
+SPAWN-DIAG TaskV2-BHL-CubeToShelfGrip-Blind-v0 gauss TERMINATES: fallen @ step 1  first_fire {'time_out': None, 'fallen': 1, 'success': None}  implied_ep_len [1, 1, 1, 1]  max_tilt_native 1.84882
+    robot_a at reset: tilt_native [0.0, 0.0, 0.0, 0.0], tilt_term [1.68033, 1.48757, 1.63458, 1.57093], n_below [1.0, 1.0, 1.0, 1.0], base_z [-0.0272, -0.0272, -0.0272, -0.0272], root_quat_w [0.0, -0.0, -0.74475, 0.66734] (stack order xyzw)
+    robot_a: _tilt_from_quat reads 1.680 rad at reset while the native tilt is 0.000 rad -- the fallen term sees a fall that the orientation does not have (quaternion-order mismatch in _tilt_from_quat).
+    robot_b at reset: tilt_native [0.0, 0.0, 0.0, 0.0], tilt_term [1.59892, 1.46459, 1.493, 1.57221], n_below [1.0, 1.0, 1.0, 1.0], base_z [-0.0272, -0.0272, -0.0272, -0.0272], root_quat_w [0.0, -0.0, 0.71698, 0.69709] (stack order xyzw)
+    robot_b: _tilt_from_quat reads 1.599 rad at reset while the native tilt is 0.000 rad -- the fallen term sees a fall that the orientation does not have (quaternion-order mismatch in _tilt_from_quat).
+    fallen first fires at step 1 (0.040 s): robot_a tilt_term [1.67547, 1.4759, 1.64286, 1.56827] vs tilt_native [0.02911, 0.0247, 0.03045, 0.0071], base_z [-0.03686, -0.03522, -0.03497, -0.03579], n_below [1.0, 1.0, 1.0, 1.0]
+    fallen first fires at step 1 (0.040 s): robot_b tilt_term [1.60124, 1.49193, 1.48558, 1.56702] vs tilt_native [0.00812, 0.00533, 0.01695, 0.01746], base_z [-0.03578, -0.03604, -0.03499, -0.03672], n_below [1.0, 1.0, 1.0, 1.0]
+    AT FIRST FIRE the termination's tilt (1.675) exceeds 0.78 but no robot's native tilt does (0.030): the robot has not physically fallen by the stack's own quaternion convention.
+wrote /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/spawn_diag/TaskV2-BHL-CubeToShelfGrip-Blind-v0__gauss.json

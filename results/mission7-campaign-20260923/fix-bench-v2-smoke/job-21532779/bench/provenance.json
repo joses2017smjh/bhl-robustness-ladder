@@ -1,0 +1,287 @@
+{
+  "bench": "v2",
+  "mode": "smoke",
+  "stage_gait": "export",
+  "crossings": [
+    [
+      103,
+      0
+    ],
+    [
+      113,
+      1
+    ],
+    [
+      116,
+      0
+    ]
+  ],
+  "rule": "Bench v2: with N crossings run (64 minus the dropped set) and N_h per heading, bench v2 PASSES iff clears >= N - 2, 0 falls, and clears >= N_h - 1 for every heading. Otherwise FAIL; INCOMPLETE if any declared crossing is missing. The clear definition is unchanged: mission7_gates' real clear (base along >= +0.35 m past the plate centre along the door direction), within 10 s of takeover.",
+  "chain": "a chain, each step only after the previous PASSES: bench v2 with --stage-gait clocks2 | export --cross-budget window --yaw-cap 0.6 -> the unchanged exact ten-fall replay once with the same stage gait and options (complete, 10 episodes, 10 upright, 0 falls; release arm m7-fix) -> the route gate as coded by M1 with the same stage gait and options (Doors and Transport each >= 16/16 successes on validation layouts 0-15, 32 episodes)",
+  "disclosure": "bench v2 was introduced after the M2 bench FAIL (21507962) revealed the run-up confound (26/64 crossings ended in v1's own run-up before takeover); M2's FAIL stands and v1 is unchanged",
+  "labels": {
+    "gaits": "LEARNED (shipped arms-dr1.0-s0 outside the stage; during the stage the controller is swapped to the --stage-gait-export policy)",
+    "stage": "SCRIPTED (PlateStage, stage_gait=export, cross_budget=window, yaw_cap=0.6)",
+    "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"
+  },
+  "dropped": [
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      10,
+      0
+    ],
+    [
+      11,
+      0
+    ],
+    [
+      12,
+      0
+    ],
+    [
+      13,
+      0
+    ],
+    [
+      14,
+      0
+    ],
+    [
+      15,
+      0
+    ],
+    [
+      16,
+      1
+    ],
+    [
+      19,
+      1
+    ],
+    [
+      21,
+      1
+    ],
+    [
+      22,
+      1
+    ],
+    [
+      23,
+      1
+    ],
+    [
+      24,
+      0
+    ],
+    [
+      26,
+      0
+    ],
+    [
+      27,
+      0
+    ],
+    [
+      29,
+      0
+    ],
+    [
+      30,
+      0
+    ],
+    [
+      31,
+      0
+    ]
+  ],
+  "standstill_spawn_wall_overlap": [
+    [
+      4,
+      0
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      22,
+      0
+    ],
+    [
+      24,
+      1
+    ],
+    [
+      30,
+      1
+    ]
+  ],
+  "stage_constants": {
+    "export": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported",
+    "policy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported/policy.onnx",
+    "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de",
+    "pinned_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de",
+    "deploy_yaml": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported/deploy.yaml",
+    "deploy_yaml_sha256": "a60cf4f71259492ef6aa764c327481add9959f64307a719125aef7cf7cd5ce20",
+    "deploy_keys_differing": [
+      "command_velocity",
+      "gait_clock",
+      "num_observations",
+      "policy_checkpoint_path"
+    ],
+    "num_observations": 77,
+    "onnx_input_width": 77,
+    "gait_clock": {
+      "period_s": 0.8,
+      "phase_offset": 0.0
+    },
+    "controller": "GaitClockRlController",
+    "swap": "env.controller := make_controller(deploy.yaml) at takeover (prev_actions 0, clock phase 0); the shipped controller object and prev_actions := 0 at hand-back",
+    "stage_law": {
+      "law": "M2 turnboth law, unchanged (PlateStage._turnboth_command)",
+      "turn_rate_rps": 0.4,
+      "turn_exit_rad": 0.15,
+      "turn_max_s": 15.707963267948966,
+      "cruise_mps": 0.3,
+      "k_yaw": 1.2,
+      "wz_walk_rps": 0.4,
+      "cross_clear_m": 0.35,
+      "lateral_command": 0.0
+    }
+  },
+  "protocol": {
+    "split": "train",
+    "settle_s": 3.0,
+    "walk_speed_mps": 0.3,
+    "walk_distance_m": 0.3,
+    "walk_max_s": 3.0,
+    "yaw_hold": [
+      1.2,
+      0.35
+    ],
+    "arrive_m": 0.13,
+    "stage_max_s": 60.0,
+    "post_handback_s": 2.0,
+    "decision_ticks": 5,
+    "seed_base": 7000,
+    "pre_point_m": 0.3,
+    "clear_window_s": 10.0,
+    "clear_along_m": 0.35,
+    "fall_tilt": 0.78,
+    "robot_planar_radius_m": 0.316,
+    "foot_box_x": [
+      -0.08,
+      0.143
+    ],
+    "foot_box_y": [
+      0.021,
+      0.093
+    ]
+  },
+  "git_head": "62eb6302240f08648933108195baa50fe8c3f669",
+  "git_status_sources": "M scripts/mission7_plate_bench_v2.py\n M scripts/mission7_plate_stage.py\n M scripts/mission7_route_handoff_probe.py\n M src/bhl_robust/mission/env.py\n?? slurm/repo20260923/cpu_m7_plate_bench_v2_fix.sbatch",
+  "sources_sha256": {
+    "scripts/mission7.py": "e88be8edb953c73fc5a62e60897a61c02d9d006b94fd0f989d879e69551862fb",
+    "scripts/mission7_approach_followup.py": "c9db3f397e0e13a7f1c68e26a30c3f4d8b681e8dec241fee00b292c80980f2ed",
+    "scripts/mission7_campaign_analysis.py": "40665ee45272b44ed2d50d4e43be5c7d35219edb923127c0604633b90b92b292",
+    "scripts/mission7_contact_debug.py": "a3b1b50e1af8a0457c9def6c99d3dea06446970dcdbefa60b6108fc894bf8d9b",
+    "scripts/mission7_debug.py": "f69d89fbca126da671167d05328ec432863f67548a24353e7a7013150cb93ee5",
+    "scripts/mission7_debug_audit.py": "2d50fd1529665025b4523d844b3415df5ea7146c0a08e7781973fc529d810c49",
+    "scripts/mission7_debug_replay.py": "c0b22bbf43204ba1fdbeecd6a6de8a1708f9a2debf62c594e9767e312588bb81",
+    "scripts/mission7_debug_report.py": "71fc83a08703b965a6d04d1c92cd1a14a61a61d85696ed32e992378001d10677",
+    "scripts/mission7_debug_status.py": "c1010a14beb660121e2f4f51a415543e15e07a49bf0406b56365b8d83864e63a",
+    "scripts/mission7_debug_train.py": "0c2fdc5893e0c561d4019fcaf53bd64919bcaea42e41c540c39e54e49273e7a1",
+    "scripts/mission7_diagnostic.py": "38879bc361d100e8a2e2cc171ccfa7c77784a9eee1e22c62d15cc55684c901b4",
+    "scripts/mission7_gates.py": "1dc04b4158bbe12d04dcb2071740bb589fc9b48b8b8bd5cc6ceb2d881638738f",
+    "scripts/mission7_overnight.py": "7ec3372af9b90888b2c41b1398761622c9ca4a18c598d70139a329f356c27b5a",
+    "scripts/mission7_plate_bench.py": "3b98e47114eed2ceb82f5b437917d7135a5b6e4e0ded30dca106405f78683182",
+    "scripts/mission7_plate_bench_v2.py": "0c9406eb337d453e4bd1bd50ff4412baf62c1dd8c8d33e9b72027d82b92da695",
+    "scripts/mission7_plate_physics.py": "3cb1ac31721ab49bf66f312028747d8098a3566a86086ebca7635e1e8138511d",
+    "scripts/mission7_plate_safe.py": "9cf91d136d2d5ad255eeef8d243d573f9d6e32e29294b1b77b7da4d5ed943578",
+    "scripts/mission7_plate_safe_single.py": "59db250a88f76dad3936a4d0048983eb915bc1f51769c9395d21a03a15ce3411",
+    "scripts/mission7_plate_stage.py": "a3304cf4ab94fd6411fa4bffbec932d42593af37feaed051d2715e7cac853746",
+    "scripts/mission7_replay_diagnose.py": "979666906c70f79273bf156349c61248e74717b05b49c931e62dac02cb45d8ae",
+    "scripts/mission7_route_failure_analysis.py": "b9e88800edede181d517e09941f2f4e4cefc46e487fc42a3c9fbf832689cd41b",
+    "scripts/mission7_route_handoff_probe.py": "0ec17b9e8e595bb4125d0abfabe4eca6b51432eaf227313671c0677ca662a58f",
+    "slurm/repo20260923/cpu_m7_plate_bench.sbatch": "dfbd89bbcd7b3ef2aa3b9ea719ad9aeca16d86dfeac69e197203a5bf63d1aead",
+    "slurm/repo20260923/cpu_m7_plate_bench_v2.sbatch": "ec2c0fe4920fb26489105538cabe2c7eb098221df76f1c22f20fd51770417696",
+    "slurm/repo20260923/cpu_m7_plate_bench_v2_clocks2.sbatch": "445984737ff80a3c9ffc694a9c1582acef93fb614dbc783b1b53d3396f244d39",
+    "slurm/repo20260923/cpu_m7_plate_bench_v2_fix.sbatch": "68b657a35702a69aea60d1706429024f290842afa6568cab2ddc57e5d4154f91",
+    "src/bhl_robust/__init__.py": "290f5d6a451d1a1554e2f87b5bf93588fd2c744ee9cef5f0a26a316311bedc8f",
+    "src/bhl_robust/eval/__init__.py": "1fb9562d8c194ebdc4d49adb59c5443b64985eb575e2cb217cceaa9a7427485e",
+    "src/bhl_robust/eval/gait_clock.py": "eedd6279fd74e9706e8015e4c048900f08570d26f54f9905af3346e54d8f6b98",
+    "src/bhl_robust/eval/livery.py": "b9243aaf7c7693c6e77413e26e4c8b0d22fa0336a36d36427fc63d2428e9a66c",
+    "src/bhl_robust/eval/mjcf_assets.py": "e34e728312ce822e72188f27d3a2cde9137e9fbf7867e5e1fc5e3b67fecb6322",
+    "src/bhl_robust/eval/multi_robot.py": "66f314961d4963462d6c6727994a14087f5cbba08a4ae018cb746dba68627d5a",
+    "src/bhl_robust/eval/team_sensors.py": "e62db263de70cb2d5be4c44a40725114fab79d9aa9b24ef246148a23fc3a51c6",
+    "src/bhl_robust/mission/__init__.py": "c2d4d9a6288265b9477d09d6977fd6a0eb227fcb75eacc449a58aa0b9cb513ca",
+    "src/bhl_robust/mission/approach_debug.py": "c350803af60ac7c678d0e6df5f3576059b4479499c4f0beb0531f002500622da",
+    "src/bhl_robust/mission/env.py": "b54ff23841c1e8758e4cc34ab8f706a7e7482133f06858779abb9fb4a928b02f",
+    "src/bhl_robust/mission/layout.py": "c4c7a6fdd2424b291a24d2cd8b925b8c0843c2c17e5c04fa5e85616cffc628dd",
+    "src/bhl_robust/mission/overnight.py": "e5051472c4d1d78d3cb1e01a999d5c5215c8e9429650cfbd7e2b9b05c22b63c1",
+    "src/bhl_robust/mission/policy.py": "b059ad3bb4cab8d31e0f4b5aa06a4ac808020ed8f7b94daf836fc9a2b7f1db61",
+    "src/bhl_robust/mission/sensors.py": "e05b3abd36ce700811dd14c4cb2853f8ed8cf351048842ac843698b3d832bad0",
+    "src/bhl_robust/mission/state.py": "622c82501cbb6fdce1d0f2815c9c0b901787186dbd37cd84a904bb257af19cfe",
+    "src/bhl_robust/sensor_io.py": "8e1d4e73df4edb12926d492c068bda7d17042ab9234c58084cfa6260137848b8"
+  },
+  "weights_sha256": {
+    "shipped": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b",
+    "export": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de"
+  },
+  "host": "cn-c21.hpc.engr.oregonstate.edu",
+  "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+  "mujoco": "3.3.5",
+  "slurm_job_id": "21532779",
+  "started_utc": "2026-10-03T19:17:25.237394+00:00",
+  "stage_gait_export": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported",
+  "stage_fix": {
+    "design": "SLURM_JOBS.md 'User approval recorded 2026-10-03 09:55', item F (F2 + F3)",
+    "cross_budget": "window",
+    "yaw_cap_rps": 0.6,
+    "command_scales": [
+      0.4,
+      0.35,
+      0.6
+    ],
+    "turn_rate_rps": 0.6,
+    "turn_max_s": 10.471975511965978,
+    "turn_exit_rad": 0.15,
+    "cruise_mps": 0.3,
+    "k_yaw": 1.2,
+    "wz_walk_rps": 0.4,
+    "clear_along_m": 0.35,
+    "crossing_end": "clear (along >= 0.35 m) or takeover + 10.0 - now <= 0.2 s, whichever first; takeover = PlateStage._start (bench: the bench's takeover; replay and route: the capture)",
+    "clear_window_s": 10.0,
+    "window_margin_s": 0.2,
+    "cap_semantics": "every command below the cap is delivered unchanged; vx and vy scales unchanged"
+  },
+  "disclosure_fix": "Bundling means a PASS is not attributable to one change. Faster turns in narrow cells add wall-contact and fall risk (6 of 8 180-deg turns already touched walls at 0.40; the clocks2 bench's only fall, 21517668 L22 d0, was during the in-place turn). Crossing until clear produced a replay fall before (9/10)."
+}

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="340" viewBox="0 0 880 340" role="img">
+  <rect width="880" height="340" fill="#fcfcfb"/>
+  <text x="36" y="26" font-size="15.5" font-weight="600" fill="#0b0b0b" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">B3 ice, patches under the robots  last-50 terrain level, n=2</text>
+  <text x="36" y="44" font-size="12.5" fill="#52514e" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">Placement probe 21342561: median 0.8 m, reachable fraction 1.000. Visible-ice is proprioception-only and matches blind seed-for-seed.</text>
+  <line x1="100" y1="70" x2="780" y2="70" stroke="#e6e5e1" stroke-width="1"/>
+  <line x1="100" y1="145" x2="780" y2="145" stroke="#e6e5e1" stroke-width="1"/>
+  <line x1="100" y1="220" x2="780" y2="220" stroke="#e6e5e1" stroke-width="1"/>
+  <line x1="100" y1="295" x2="780" y2="295" stroke="#c9c7c1" stroke-width="1"/>
+  <text x="90" y="74" text-anchor="end" font-size="12" fill="#8a8880" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">3.0</text>
+  <text x="90" y="149" text-anchor="end" font-size="12" fill="#8a8880" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">2.0</text>
+  <text x="90" y="224" text-anchor="end" font-size="12" fill="#8a8880" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">1.0</text>
+  <text x="90" y="299" text-anchor="end" font-size="12" fill="#8a8880" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">0</text>
+  <!-- y=295 is 0, y=70 is 3.0; 225px / 3.0 = 75 px per level -->
+  <!-- blind 2.576, 2.605 ’ y = 295 - 2.576*75 = 101.8, 99.6 -->
+  <circle cx="226" cy="101.8" r="6" fill="#8a8880"/><circle cx="254" cy="99.6" r="6" fill="#8a8880"/>
+  <!-- depth 2.854, 2.984 ’ y = 80.95, 71.2 -->
+  <circle cx="426" cy="80.95" r="6" fill="#eb6834"/><circle cx="454" cy="71.2" r="6" fill="#eb6834"/>
+  <!-- visible = blind -->
+  <circle cx="626" cy="101.8" r="6" fill="#2a78d6"/><circle cx="654" cy="99.6" r="6" fill="#2a78d6"/>
+  <text x="240" y="318" text-anchor="middle" font-size="13" fill="#52514e" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">blind 2.59</text>
+  <text x="440" y="318" text-anchor="middle" font-size="13" fill="#52514e" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">depth 2.92</text>
+  <text x="640" y="318" text-anchor="middle" font-size="13" fill="#52514e" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">visible 2.59</text>
+</svg>

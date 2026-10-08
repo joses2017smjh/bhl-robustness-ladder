@@ -1,0 +1,23 @@
+{
+  "label": "both-s0-panels-pathtrace",
+  "searches": {
+    "both-s0-panels-pathtrace": {
+      "outcome": "success",
+      "episode": "both-s0-panels-pathtrace-s100"
+    }
+  },
+  "episodes": [
+    {
+      "episode": "both-s0-panels-pathtrace-s100",
+      "seed": 100,
+      "imu_delay_steps": 0,
+      "outcome": "success",
+      "steps": 161,
+      "terminations_fired": [
+        "button_reached"
+      ],
+      "sensor_frames": 161,
+      "viewport_frames": 0
+    }
+  ]
+}

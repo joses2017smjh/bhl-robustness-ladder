@@ -1,10 +1,26 @@
 # Weekend robotics campaign — 19 September 2026
 
+**September 21 completed Approach diagnosis:** the privileged controller
+reached **54/64 successes with zero falls**, but none of six PPO cells passed
+the stable-learning gate. P4 ended at 2/16; P6 briefly reached 5/16 then fell
+to 0/16. Exact paired replays implicated pressure-plate contact in ten route
+falls. All 18 retained Slurm tasks completed; one invalid replay was cancelled
+and replaced. **11.96 allocated CPU-hours, zero GPUs.** Sensor and full-campaign
+gates remain closed. [Results, plots, jobs and next steps](MISSION7_APPROACH_DEBUG.md).
+
 This campaign repairs the prior experiments, uses measured progress gates,
 and adds a real shared-world task for two and three Berkeley Humanoid Lites.
 Scheduler receipts and source hashes are in
 `results/weekend-20260919/submissions.jsonl`; live job identities and failures
 are maintained in [SLURM_JOBS.md](../SLURM_JOBS.md).
+
+**September 21 — separate Mission7 follow-up:** all 14 overnight tasks finished
+with exit 0; nine training studies and two audits executed, while three sensor
+pilots skipped because their learning prerequisite failed. All nine policies
+ended at 0/8 validation success, including privileged-goal PPO. Scripted
+full-route Doors and Transport each succeeded 4/16. These new procedural
+22-DoF results must not be conflated with the earlier fixed-maze recovery
+results below. [Final Mission7 audit and next steps](MISSION7_OVERNIGHT.md).
 
 | Track | Running implementation | Promotion / evidence | Capability boundary |
 | --- | --- | --- | --- |

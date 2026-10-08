@@ -1,0 +1,119 @@
+{
+  "complete": true,
+  "status": "COMPLETED_DIAGNOSTIC",
+  "learning_gate_passed": false,
+  "study": {
+    "mode": "train",
+    "arm": "both",
+    "seed": 0,
+    "updates": 200,
+    "horizon": 64,
+    "lr": 0.0003,
+    "entropy": 0.01,
+    "noise": 0.5,
+    "schedule": "adaptive",
+    "gamma": 0.995,
+    "lam": 0.95,
+    "epochs": 4,
+    "minibatches": 4,
+    "normalization": false,
+    "reward_scale": 1.0,
+    "approach_distance": 0.65,
+    "oracle": false,
+    "wall_hours": 2,
+    "name": "A4",
+    "study": "stage isolation",
+    "stage": "doors"
+  },
+  "steps": 12800,
+  "validation": [
+    {
+      "update": 0,
+      "episodes": 8,
+      "successes": 0,
+      "success_rate": 0.0,
+      "mean_return": -1.799999999999867,
+      "mean_episode_s": 179.9999999991995,
+      "falls": 0,
+      "collisions": 0,
+      "button_activations": 0,
+      "gate_traversals": 0,
+      "acquisitions": 0,
+      "placements": 0,
+      "failures": {
+        "timeout": 8
+      }
+    },
+    {
+      "update": 50,
+      "episodes": 8,
+      "successes": 0,
+      "success_rate": 0.0,
+      "mean_return": -1.799999999999867,
+      "mean_episode_s": 179.9999999991995,
+      "falls": 0,
+      "collisions": 0,
+      "button_activations": 0,
+      "gate_traversals": 0,
+      "acquisitions": 0,
+      "placements": 0,
+      "failures": {
+        "timeout": 8
+      }
+    },
+    {
+      "update": 100,
+      "episodes": 8,
+      "successes": 0,
+      "success_rate": 0.0,
+      "mean_return": -1.799999999999867,
+      "mean_episode_s": 179.9999999991995,
+      "falls": 0,
+      "collisions": 0,
+      "button_activations": 0,
+      "gate_traversals": 0,
+      "acquisitions": 0,
+      "placements": 0,
+      "failures": {
+        "timeout": 8
+      }
+    },
+    {
+      "update": 150,
+      "episodes": 8,
+      "successes": 0,
+      "success_rate": 0.0,
+      "mean_return": -1.799999999999867,
+      "mean_episode_s": 179.9999999991995,
+      "falls": 0,
+      "collisions": 0,
+      "button_activations": 0,
+      "gate_traversals": 0,
+      "acquisitions": 0,
+      "placements": 0,
+      "failures": {
+        "timeout": 8
+      }
+    },
+    {
+      "update": 200,
+      "episodes": 8,
+      "successes": 0,
+      "success_rate": 0.0,
+      "mean_return": -1.799999999999867,
+      "mean_episode_s": 179.9999999991995,
+      "falls": 0,
+      "collisions": 0,
+      "button_activations": 0,
+      "gate_traversals": 0,
+      "acquisitions": 0,
+      "placements": 0,
+      "failures": {
+        "timeout": 8
+      }
+    }
+  ],
+  "gate_rule": ">=3/8 final successes and >=1/8 improvement over untrained; validation only",
+  "production_promotion": false,
+  "smoke_only": false
+}

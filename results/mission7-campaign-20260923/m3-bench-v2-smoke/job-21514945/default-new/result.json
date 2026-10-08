@@ -1,0 +1,65 @@
+{
+  "complete": true,
+  "status": "COMPLETED_SMOKE",
+  "intervention": "staged plate maneuver: pre-plate approach, 0.40 s settle, 1.20 s straight crossing with yaw correction frozen; wrong-side staging only when the correct plate is over 1.0 m away",
+  "geometry_unchanged": true,
+  "activation_schedule_unchanged": true,
+  "fall_predicate_unchanged": true,
+  "baseline_result": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-approach-followup-20260922/replay-diagnose-cn-c22/result.json",
+  "episodes": 1,
+  "falls": 0,
+  "upright": 1,
+  "exact_replay_gate_passed": false,
+  "episode_comparison": [
+    {
+      "layout_index": 0,
+      "layout_seed": 10000,
+      "original_elapsed_s": 55.04000000008078,
+      "replay_elapsed_s": 55.04000000008078,
+      "fall": false,
+      "first_fall_s": null,
+      "maximum_tilt": 0.2169438248974192,
+      "maximum_recorded_pose_difference": 2.771936337989265,
+      "plate_contacts": 32844,
+      "peak_plate_normal_force_N": 452.31655527902683,
+      "peak_plate_tangent_force_N": 259.55898224252525,
+      "minimum_plate_distance_m": -0.03343242331790039,
+      "stage_history": [
+        {
+          "time_s": 22.7199999999924,
+          "door": 0,
+          "side": -1,
+          "phase": "approach"
+        },
+        {
+          "time_s": 24.039999999989323,
+          "door": 0,
+          "side": -1,
+          "phase": "settle"
+        },
+        {
+          "time_s": 24.479999999988298,
+          "door": 0,
+          "phase": "cross"
+        },
+        {
+          "time_s": 25.719999999985408,
+          "door": 0,
+          "side": -1,
+          "phase": "recorded"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 55.04000000008078,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.03612869372423548,
+          "robot_plate_surface_clearance_m": -0.03612869372423548,
+          "robot_plate_edge_clearance_m": -0.06919171048669573,
+          "correct_plate_edge_clearance_m": -0.06919171048669573
+        },
+        "failure_stage_relative_to_plate": "during_plate_traversal"
+      }
+    }
+  ]
+}

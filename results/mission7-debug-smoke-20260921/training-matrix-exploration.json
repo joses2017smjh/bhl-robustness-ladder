@@ -1,0 +1,90 @@
+{
+  "status": "FROZEN_FOR_SUBMISSION",
+  "rows": [
+    {
+      "seed": 0,
+      "stage": "approach",
+      "observation": "Both plus privileged body-frame goal vector",
+      "updates": 200,
+      "horizon": 64,
+      "hold_ticks": 5,
+      "dense": true,
+      "lr": 0.0003,
+      "schedule": "adaptive",
+      "epochs": 4,
+      "minibatches": 4,
+      "entropy": 0.01,
+      "noise": 0.8,
+      "gamma": 0.995,
+      "lam": 0.95,
+      "name": "P5",
+      "purpose": "exploration std 0.8 paired with P2; other settings identical",
+      "config_sha256": "503ca93eaa90d2f5bd49ec0ea3e2e9365a123fefda7bbfa2416f9710f7a4fa48"
+    },
+    {
+      "seed": 0,
+      "stage": "approach",
+      "observation": "Both plus privileged body-frame goal vector",
+      "updates": 200,
+      "horizon": 16,
+      "hold_ticks": 20,
+      "dense": true,
+      "lr": 0.0003,
+      "schedule": "adaptive",
+      "epochs": 4,
+      "minibatches": 4,
+      "entropy": 0.01,
+      "noise": 0.8,
+      "gamma": 0.980149500625,
+      "lam": 0.8145062499999999,
+      "name": "P6",
+      "purpose": "exploration std 0.8 paired with P3; other settings identical",
+      "config_sha256": "41b9fd2a4be9ceac4a508d3f16928ee3cc3956ead57e70dc360db78868859b2c"
+    }
+  ],
+  "nominal_training_seconds_per_cell": 2560,
+  "validation_layouts": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "validation_updates": [
+    0,
+    25,
+    50,
+    100,
+    150,
+    200
+  ],
+  "release_requires": [
+    "complete gait response",
+    "complete existing reward/PPO audit",
+    "complete matched controller reward audit",
+    "Approach translation success >=75% and falls <=10% over 64 validation episodes"
+  ],
+  "hold_choice_evidence": "0.30 m/s forward command: 0.2 s barely displaces; 0.8 s produces sustained measured displacement. Hold increases by factor four; horizon decreases fourfold and gamma/lambda are exponentiated to preserve their physical-time scale.",
+  "actual_time_caveat": "Terminal episodes can end within a held action; actual simulated seconds are recorded separately from equal nominal budget.",
+  "sensor_release": false,
+  "frozen_utc": "2026-09-21T21:54:44.927145+00:00",
+  "selection_evidence": "All P1/P2/P3 completed validation through update 50 and P4 through 25 command below measured sustained-walking ranges; P3 has one stochastic training success. Two added cells exhaust the preauthorized six-cell PPO cap.",
+  "controlled_change": "Only initial Gaussian action standard deviation, 0.5 to 0.8, relative to P2/P3. No entropy/LR/reward/layout changes.",
+  "exploration_calibration": {
+    "raw_action_for_forward_0.3": 0.9729550745276564,
+    "two_sided_probability_std_0.5": 0.05166553360918439,
+    "two_sided_probability_std_0.8": 0.22391108853944047
+  },
+  "calibration_caveat": "Zero-mean Gaussian estimate for a single vx sample. Not a probability of successful motion or a sustained command sequence."
+}

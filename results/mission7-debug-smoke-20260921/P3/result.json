@@ -1,0 +1,25 @@
+{
+  "complete": true,
+  "status": "COMPLETED_DIAGNOSTIC",
+  "config": {
+    "updates": 2,
+    "horizon": 8,
+    "hold_ticks": 20,
+    "dense": true,
+    "lr": 0.0003,
+    "schedule": "adaptive",
+    "epochs": 1,
+    "minibatches": 2,
+    "entropy": 0.01,
+    "gamma": 0.980149500625,
+    "lam": 0.8145062499999999,
+    "seed": 0
+  },
+  "validation": [],
+  "training_successes": 0,
+  "steps": 16,
+  "simulated_training_s": 12.800000000004152,
+  "stable_within_seed": false,
+  "sensor_comparison_release": false,
+  "gate": "Last two evaluations >=5/16, final improvement >=2/16 and >=3 training successes. Still one seed, privileged actor and diagnostic shaping."
+}

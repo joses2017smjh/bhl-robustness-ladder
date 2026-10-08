@@ -1,0 +1,17 @@
+{
+  "run": "arms-turngait-critic-s1",
+  "arm": "R2",
+  "task": "Velocity-BHL-Arms-TurnGaitCritic-v0",
+  "seed": 1,
+  "final_ckpt": "model_5999.pt",
+  "final_ckpt_present": true,
+  "task_id_in_log": true,
+  "feet_gait_in_log": true,
+  "push_robot_in_log": true,
+  "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_08-19-26_arms-turngait-critic-s1",
+  "job": "21509849",
+  "wrong_arm_guard": [],
+  "recipe_check": "GAIT-CLOCK RECIPE: OK R2 /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_08-19-26_arms-turngait-critic-s1/params/env.yaml (= TurnBoth + the declared changes only)",
+  "clause": "Training counts only if the run dir holds model_5999.pt and the training log shows the arm's task id, the feet_gait term and the push event.",
+  "note": "from scratch (no parent checkpoint); written once from this job's fresh training log"
+}

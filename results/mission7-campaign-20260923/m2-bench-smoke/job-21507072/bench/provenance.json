@@ -1,0 +1,68 @@
+{
+  "mode": "smoke",
+  "crossings": [
+    [
+      250,
+      0
+    ],
+    [
+      251,
+      1
+    ]
+  ],
+  "rule": "Bench: PASS iff >= 62/64 crossings clear (base along >= +0.35 m past the plate centre along the door direction, within 10 s of takeover, by mission7_gates' clear definition), 0 falls (tilt >= 0.78), and >= 15/16 clears per heading. Otherwise FAIL; INCOMPLETE if any of the 64 is missing.",
+  "chain": "a chain, each step only after the previous PASSES: bench -> the unchanged exact ten-fall replay once with --stage-gait turnboth (complete, 10 episodes, 10 upright, 0 falls) -> the route gate as coded by M1 (Doors and Transport each >= 16/16 successes on validation layouts 0-15, 32 episodes); M3 (turn while stepping with the shipped gait + a stall watchdog) is predeclared as conditional on a bench FAIL",
+  "labels": {
+    "gaits": "LEARNED (shipped arms-dr1.0-s0 outside the stage; TurnBoth-s0 during the stage)",
+    "stage": "SCRIPTED (PlateStage, stage_gait=turnboth)",
+    "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"
+  },
+  "stage_kwargs": {
+    "stage_gait": "turnboth"
+  },
+  "protocol": {
+    "split": "train",
+    "settle_s": 3.0,
+    "runup_speed_mps": 0.3,
+    "yaw_hold": [
+      1.2,
+      0.35
+    ],
+    "arrive_m": 0.13,
+    "runup_max_s": 20.0,
+    "stage_max_s": 60.0,
+    "post_handback_s": 2.0,
+    "decision_ticks": 5,
+    "seed_base": 7000,
+    "pre_point_m": 0.3,
+    "clear_window_s": 10.0,
+    "clear_along_m": 0.35,
+    "fall_tilt": 0.78
+  },
+  "git_head": "994851badee1ff7a7888730971494d603349a95c",
+  "git_status_sources": "M scripts/mission7_plate_stage.py\n?? scripts/mission7_plate_bench.py\n?? slurm/repo20260923/cpu_m7_plate_bench.sbatch",
+  "sources_sha256": {
+    "scripts/mission7_plate_bench.py": "b1bb32e8da83a1fcc888b683e3288304a96a9fa3dfd4a60f8050077121a21987",
+    "scripts/mission7_plate_stage.py": "a0cad2fa36b9b839b11c5c108480ff0a1785b1d73f05b6e81c51bcdf8c5ddba0",
+    "scripts/mission7_gates.py": "1dc04b4158bbe12d04dcb2071740bb589fc9b48b8b8bd5cc6ceb2d881638738f",
+    "scripts/mission7_overnight.py": "7ec3372af9b90888b2c41b1398761622c9ca4a18c598d70139a329f356c27b5a",
+    "slurm/repo20260923/cpu_m7_plate_bench.sbatch": "0a681eb86fd081ddb84b16918c23924f1dbb474e9250aae5c8a2a58e6fb0722d",
+    "src/bhl_robust/mission/__init__.py": "c2d4d9a6288265b9477d09d6977fd6a0eb227fcb75eacc449a58aa0b9cb513ca",
+    "src/bhl_robust/mission/approach_debug.py": "c350803af60ac7c678d0e6df5f3576059b4479499c4f0beb0531f002500622da",
+    "src/bhl_robust/mission/env.py": "99cd21167c01d1aa7fd014e2a40b32f13ad06a04bccc1048433d20749f959f9b",
+    "src/bhl_robust/mission/layout.py": "c4c7a6fdd2424b291a24d2cd8b925b8c0843c2c17e5c04fa5e85616cffc628dd",
+    "src/bhl_robust/mission/overnight.py": "e5051472c4d1d78d3cb1e01a999d5c5215c8e9429650cfbd7e2b9b05c22b63c1",
+    "src/bhl_robust/mission/policy.py": "b059ad3bb4cab8d31e0f4b5aa06a4ac808020ed8f7b94daf836fc9a2b7f1db61",
+    "src/bhl_robust/mission/sensors.py": "e05b3abd36ce700811dd14c4cb2853f8ed8cf351048842ac843698b3d832bad0",
+    "src/bhl_robust/mission/state.py": "622c82501cbb6fdce1d0f2815c9c0b901787186dbd37cd84a904bb257af19cfe"
+  },
+  "weights_sha256": {
+    "shipped": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b",
+    "turnboth": "562ceed71e04df2bc317edd352c9ebf59fb13fee5d0cc6708fa82aff33b55c95"
+  },
+  "host": "cn-c21.hpc.engr.oregonstate.edu",
+  "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+  "mujoco": "3.3.5",
+  "slurm_job_id": "21507072",
+  "started_utc": "2026-10-02T11:00:24.291116+00:00"
+}

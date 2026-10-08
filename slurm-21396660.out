@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-approach-followup-20260922/source-plate-stage/scripts/mission7_plate_stage.py", line 19, in <module>
+    from bhl_robust.mission.approach_debug import DebugEnv, command_action, physical_sample, wrap
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-approach-followup-20260922/source-plate-stage/src/bhl_robust/mission/approach_debug.py", line 5, in <module>
+    from bhl_robust.mission.overnight import StudyEnv
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-approach-followup-20260922/source-plate-stage/src/bhl_robust/mission/overnight.py", line 8, in <module>
+    from bhl_robust.mission.env import MissionEnv
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-approach-followup-20260922/source-plate-stage/src/bhl_robust/mission/env.py", line 10, in <module>
+    from bhl_robust.eval.multi_robot import MultiRunner, _WORLDS, build_multi
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-approach-followup-20260922/source-plate-stage/src/bhl_robust/eval/multi_robot.py", line 23, in <module>
+    from bhl_robust.eval.livery import apply_livery
+ModuleNotFoundError: No module named 'bhl_robust.eval.livery'

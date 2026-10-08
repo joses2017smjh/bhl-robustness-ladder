@@ -18,6 +18,8 @@ set -euo pipefail
 export BHL_STACK=v51
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
 setup_node_cache
+source "$REPO/slurm/inner/v60_boot_gate.sh"
+V60_BOOT_LOCK="$WORKSPACE/.v51-boot.lock" v60_boot_gate
 mkdir -p "$WORKSPACE/overrides"
 IDS=(Velocity-BHL-Biped-Ice-v0 Velocity-BHL-Biped-Ice-Depth-v0 Velocity-BHL-Biped-IceVisible-v0)
 export TASK=${IDS[$SLURM_ARRAY_TASK_ID]}

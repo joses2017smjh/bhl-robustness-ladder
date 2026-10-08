@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "status": "VALIDATED",
+  "created_utc": "2026-09-21T00:57:09.664903+00:00",
+  "git_commit": "8201d7c258126f26b55b204ea123d27273f0f921",
+  "source_sha256": {
+    "src/bhl_robust/mission/sensors.py": "e05b3abd36ce700811dd14c4cb2853f8ed8cf351048842ac843698b3d832bad0",
+    "src/bhl_robust/mission/layout.py": "c4c7a6fdd2424b291a24d2cd8b925b8c0843c2c17e5c04fa5e85616cffc628dd",
+    "src/bhl_robust/mission/overnight.py": "e5051472c4d1d78d3cb1e01a999d5c5215c8e9429650cfbd7e2b9b05c22b63c1",
+    "src/bhl_robust/mission/__init__.py": "c2d4d9a6288265b9477d09d6977fd6a0eb227fcb75eacc449a58aa0b9cb513ca",
+    "src/bhl_robust/mission/env.py": "36ad76a89731aec713fe61b21f1d1185617d4df96e2eada5df7a28533b28aff7",
+    "src/bhl_robust/mission/policy.py": "b059ad3bb4cab8d31e0f4b5aa06a4ac808020ed8f7b94daf836fc9a2b7f1db61",
+    "src/bhl_robust/mission/state.py": "622c82501cbb6fdce1d0f2815c9c0b901787186dbd37cd84a904bb257af19cfe",
+    "scripts/mission7_overnight.py": "7ec3372af9b90888b2c41b1398761622c9ca4a18c598d70139a329f356c27b5a",
+    "scripts/submit_mission7_overnight.py": "2c567b2894dc0dcf15bee3b3a8acdf06b2fef8d18778fe6bc548ac77436eacaf",
+    "scripts/mission7_diagnostic.py": "38879bc361d100e8a2e2cc171ccfa7c77784a9eee1e22c62d15cc55684c901b4",
+    "slurm/mission7_overnight.sbatch": "d493658aff5bb5bef7deb9425a48d0fd91e00568b11ccaf0e77d70232398cd56"
+  },
+  "input_sha256": {
+    "results/mission7-20260920/validation-both-s0/model_400.pt": "69b99633a246ee93623224b73721ccfbfe7979b6b7135713e82f7b85113381bf",
+    "external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/policy.onnx": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b",
+    "external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/deploy.yaml": "73d65f0abfef27f00d462c5f465952888034d545122dee35e9127bb1b5dcd257"
+  },
+  "checks": {
+    "full_suite": "160 passed in 53.77s",
+    "final_targeted": "15 passed in 9.27s",
+    "shell": "bash -n passed",
+    "python": "AST parse passed",
+    "smoke": [
+      "privileged B1 PPO: 2 updates, 16 decisions, finite",
+      "easier C4 PPO: 2 updates, 16 decisions, finite",
+      "D1 reward/observation/layout audit: complete smoke",
+      "D2 localized and full-route interaction plumbing: complete smoke"
+    ],
+    "control_probe": "Train layout 1: 0.28 m/s lateral stalled; 0.40 m/s reached next cell in bounded 18 s probe. Not a full-route pass."
+  }
+}

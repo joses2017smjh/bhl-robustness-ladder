@@ -1,0 +1,36 @@
+preflight OK 3.3.5
+  scored 02-01-51_coop-occluded-blind-s0 crew=2  obs=194  vision=off  8 seeds x 200 steps
+  scored 02-01-51_coop-occluded-blind-s0 crew=3  obs=194  vision=off  8 seeds x 200 steps
+  scored 23-55-08_coop-occluded-blind-s0 crew=2  obs=188  vision=off  8 seeds x 200 steps
+  scored 23-55-08_coop-occluded-blind-s0 crew=3  obs=188  vision=off  8 seeds x 200 steps
+  scored 23-37-38_coop-occluded-blind-s1 crew=2  obs=188  vision=off  8 seeds x 200 steps
+  scored 23-37-38_coop-occluded-blind-s1 crew=3  obs=188  vision=off  8 seeds x 200 steps
+  scored 00-31-40_coop-occluded-blind-s2 crew=2  obs=188  vision=off  8 seeds x 200 steps
+  scored 00-31-40_coop-occluded-blind-s2 crew=3  obs=188  vision=off  8 seeds x 200 steps
+  scored 08-17-01_coop-occluded-depth-s0 crew=2  obs=316  vision=on  8 seeds x 200 steps
+  scored 08-17-01_coop-occluded-depth-s0 crew=3  obs=316  vision=on  8 seeds x 200 steps
+  scored 17-42-26_coop-occluded-depth-s0 crew=2  obs=316  vision=on  8 seeds x 200 steps
+  scored 17-42-26_coop-occluded-depth-s0 crew=3  obs=316  vision=on  8 seeds x 200 steps
+
+arm                        crew   pinch m   kernel  peak cm  held cm  in-pinch   fall   n
+02-01-51_coop-occluded-blind-s0    2     0.164    0.122      1.8     -0.0      46%   1.00   8
+02-01-51_coop-occluded-blind-s0    3     0.164    0.122      1.8     -0.0      46%   1.00   8
+02-01-51_coop-occluded-blind-s03 solo     0.460    0.001      0.0     -0.0       0%   0.00   8
+23-55-08_coop-occluded-blind-s0    2     0.138    0.271      8.1     -0.0      12%   1.00   8
+23-55-08_coop-occluded-blind-s0    3     0.138    0.271      8.1      0.6      12%   1.00   8
+23-55-08_coop-occluded-blind-s03 solo     0.346    0.010      6.6     -0.0       0%   1.00   8
+23-37-38_coop-occluded-blind-s1    2     0.170    0.111      0.0     -0.0      95%   0.00   8
+23-37-38_coop-occluded-blind-s1    3     0.170    0.111      0.0     -0.0      95%   0.00   8
+23-37-38_coop-occluded-blind-s13 solo     0.452    0.001      0.0     -0.0       0%   0.00   8
+00-31-40_coop-occluded-blind-s2    2     0.140    0.177      0.0     -0.0      95%   0.00   8
+00-31-40_coop-occluded-blind-s2    3     0.140    0.177      0.0     -0.0      95%   0.00   8
+00-31-40_coop-occluded-blind-s23 solo     0.447    0.001      0.0     -0.0       0%   0.00   8
+08-17-01_coop-occluded-depth-s0    2     0.328    0.008      1.7     -0.0       0%   1.00   8
+08-17-01_coop-occluded-depth-s0    3     0.328    0.008      1.3     -0.0       0%   1.00   8
+08-17-01_coop-occluded-depth-s03 solo     0.541    0.000      0.3     -0.0       0%   1.00   8
+17-42-26_coop-occluded-depth-s0    2     0.338    0.007      0.9      0.5       0%   1.00   8
+17-42-26_coop-occluded-depth-s0    3     0.338    0.007      2.0      0.4       0%   1.00   8
+17-42-26_coop-occluded-depth-s03 solo     0.539    0.000      1.5     -0.0       0%   1.00   8
+
+csv -> results/coop-occluded-20260923/coop_occluded_sim2sim.csv  (144 rows)
+REPO_CPU_EVAL_COMPLETE

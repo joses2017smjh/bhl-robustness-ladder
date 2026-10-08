@@ -1,0 +1,15 @@
+{
+  "submitted_utc": "20260924T053012Z",
+  "git_commit": "348eeb2f976e6a54464662a0a96e94eeae5a61bf",
+  "max_route_gates": 1,
+  "followup_sha256": "da0d259a03fceb35b786fae05840551e53b9314915e5d2901620dd3c3f0c4b14",
+  "wrapper_sha256": "87beb2b3b97c4cce6d65086101f308187082c68e857e38eb7b15ab22235f2f03",
+  "rule": "only a 10/10 exact replay proceeds to the route gate (Doors 16 + Transport 16, validation 0-15); first PASS in chain order only",
+  "chain": [
+    {"tag": "v2-align", "gate_job": "21405537", "gate_dependency": "afterany:21405535", "followup_job": "21405538", "flags": "--pre-point 0.45 --cross-clear 0.35 --cross-kick --align-yaw", "dir": "results/mission7-campaign-20260923/replay-gate-v2-align"},
+    {"tag": "v3-settle190", "gate_job": "21405539", "gate_dependency": "afterany:21405537", "followup_job": "21405540", "flags": "--pre-point 0.45 --cross-clear 0.35 --cross-kick --settle-s 1.90", "dir": "results/mission7-campaign-20260923/replay-gate-v3-settle190"},
+    {"tag": "v4-settle080", "gate_job": "21405541", "gate_dependency": "afterany:21405539", "followup_job": "21405542", "flags": "--pre-point 0.45 --cross-clear 0.35 --cross-kick --settle-s 0.80", "dir": "results/mission7-campaign-20260923/replay-gate-v4-settle080"},
+    {"tag": "v3-settle190-align", "gate_job": "21405543", "gate_dependency": "afterany:21405541", "followup_job": "21405544", "flags": "--pre-point 0.45 --cross-clear 0.35 --cross-kick --settle-s 1.90 --align-yaw", "dir": "results/mission7-campaign-20260923/replay-gate-v3-settle190-align"},
+    {"tag": "v4-settle080-align", "gate_job": "21405545", "gate_dependency": "afterany:21405543", "followup_job": "21405546", "flags": "--pre-point 0.45 --cross-clear 0.35 --cross-kick --settle-s 0.80 --align-yaw", "dir": "results/mission7-campaign-20260923/replay-gate-v4-settle080-align"}
+  ]
+}

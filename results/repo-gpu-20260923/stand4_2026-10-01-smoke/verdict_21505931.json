@@ -1,0 +1,380 @@
+{
+ "job": "21505931",
+ "head": "094797e",
+ "seed": 100,
+ "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/2026-10-02_02-14-07_v2-cubetoshelfstand4-blind-s100-j21505931-smoke",
+ "task": "TaskV2-BHL-CubeToShelfStand4-Blind-v0",
+ "label": "SCRIPTED probe + 20-iteration PPO smoke (never a result)",
+ "scope": "CubeToShelfStand4 (roll-proof lift): a different task from CubeToShelfStand3 and CubeToShelf; never compared with their numbers",
+ "sha256": [
+  "751dd8f8e0d0a8e8a9deb823c5d77c6053908426c87a437f3e967301ced5c0da  src/bhl_robust/tasks/stand4_mdp.py",
+  "c2210bb02d4c8ba867aafce3a546b02f91eb19355c372bcee760559e5e6b3218  src/bhl_robust/tasks/task_v2_env_cfg.py",
+  "4822a5bec8f9b35ab0bc7133aacae0dd707afe03333701ef8392d5b48d41c5ff  src/bhl_robust/tasks/__init__.py",
+  "53081846295bb72e64ff05de726e8a18ea8e7284844c9eff43434ee57ee3aaea  src/bhl_robust/tasks/stand_mdp.py",
+  "5fc2b8c8a26c311597f18498c99f0eaa791c14d67c8cea39e4e6302569daa3fd  src/bhl_robust/tasks/coop_lift_mdp.py",
+  "a92a2359426c734773436a98fcbe163ce1465b59c999611cb976feb6737a8b89  src/bhl_robust/tasks/coop_lift_env_cfg.py",
+  "912f397a26950a999e2b289911b894c62576a563cbb8b88ff0335ed2f88b16cf  slurm/repo20260923/gpu_v2_stand4_smoke.sbatch",
+  "5f695e42b438f8501e1aa063d4e5d743fee1ecf3616754a9f507b1621f51570a  slurm/repo20260923/inner_v2_stand4_smoke.sh",
+  "2d224f72dc97c56c20517e83a4b2329e5a64c6a5e9f0f537ab7a1b94e683bf04  assets/cloth/berkeley_humanoid_lite_hand_colliders.usda"
+ ],
+ "probe_summary": {
+  "status": "ok",
+  "stage": "done",
+  "quat_order": "xyzw",
+  "cfg_diff_check": {
+   "ok": true,
+   "unexpected": [],
+   "missing": []
+  },
+  "managers": {
+   "reward_terms": [
+    "reaching_coarse",
+    "reaching_fine",
+    "opposing_clamp",
+    "lift_progress",
+    "lifting_object",
+    "object_vel",
+    "object_tilt",
+    "still_alive",
+    "flat_a",
+    "flat_b",
+    "torques_a",
+    "torques_b",
+    "base_contact_a",
+    "base_contact_b",
+    "placed",
+    "fall_penalty",
+    "deck_progress",
+    "action_rate_clipped"
+   ],
+   "termination_terms": [
+    "time_out",
+    "fallen",
+    "success"
+   ],
+   "curriculum_terms": [
+    "lift_height",
+    "stage_lift",
+    "base_height",
+    "upright_gate",
+    "fell_a",
+    "fell_b",
+    "over_deck",
+    "cube_abs_x",
+    "cube_tilted",
+    "tipped_over_deck",
+    "pinch_dist",
+    "cube_tilt_deg",
+    "corner_clear",
+    "roll_ok",
+    "lift_paid",
+    "released",
+    "robot_force_max"
+   ],
+   "lifting_object": {
+    "func": "bhl_robust.tasks.stand4_mdp:stand4_object_is_lifted",
+    "weight": 15.0,
+    "params": {
+     "minimal_height": 0.04,
+     "clearance": 0.02,
+     "tilt_max_deg": 15.0,
+     "gate_free": 0.1,
+     "gate_std": 0.25
+    }
+   },
+   "placed": {
+    "func": "bhl_robust.tasks.stand_mdp:success_bonus",
+    "weight": 5000.0,
+    "params": {
+     "term_name": "success"
+    }
+   },
+   "success": {
+    "func": "bhl_robust.tasks.stand4_mdp:stand4_cube_placed",
+    "params": {
+     "hold_steps": 12,
+     "tilt_max_deg": 8.0,
+     "release_force_n": 1.0,
+     "sensor_name": "cube_contact"
+    }
+   }
+  },
+  "hand_colliders": {
+   "/World/envs/env_0/robot_a/arm_left_hand_link/hand_collider": {
+    "valid": true,
+    "collision_api": true,
+    "approximation": "convexHull"
+   },
+   "/World/envs/env_0/robot_a/arm_right_hand_link/hand_collider": {
+    "valid": true,
+    "collision_api": true,
+    "approximation": "convexHull"
+   },
+   "/World/envs/env_0/robot_b/arm_left_hand_link/hand_collider": {
+    "valid": true,
+    "collision_api": true,
+    "approximation": "convexHull"
+   },
+   "/World/envs/env_0/robot_b/arm_right_hand_link/hand_collider": {
+    "valid": true,
+    "collision_api": true,
+    "approximation": "convexHull"
+   }
+  },
+  "usd_paths": {
+   "stand3": {
+    "robot_a": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/usd/berkeley_humanoid_lite.usd",
+    "robot_b": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/usd/berkeley_humanoid_lite.usd"
+   },
+   "stand4": {
+    "robot_a": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/assets/cloth/berkeley_humanoid_lite_hand_colliders.usda",
+    "robot_b": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/assets/cloth/berkeley_humanoid_lite_hand_colliders.usda"
+   }
+  },
+  "sensor": {
+   "force_matrix_shape": [
+    16,
+    1,
+    26,
+    3
+   ],
+   "filter_count": 26,
+   "sensor_count": 16,
+   "filter_paths_head": [
+    "['/World/envs/env_0/robot_a/base', '/World/envs/env_0/robot_a/arm_left_shoulder_yaw', '/World/envs/env_0/robot_a/arm_right_shoulder_yaw', '/World/envs/env_0/robot_a/arm_left_elbow_roll', '/World/envs/env_0/robot_a/arm_right_elbow_roll', '/World/envs/env_0/robot_a/arm_left_hand_link', '/World/envs/env_0/robot_a/arm_right_hand_link', '/World/envs/env_0/robot_a/leg_left_hip_pitch', '/World/envs/env_0/robot_a/leg_right_hip_pitch', '/World/envs/env_0/robot_a/leg_left_knee_pitch', '/World/envs/env_0/robot_a/leg_right_knee_pitch', '/World/envs/env_0/robot_a/leg_left_ankle_roll', '/World/envs/env_0/robot_a/leg_right_ankle_roll', '/World/envs/env_0/robot_b/base', '/World/envs/env_0/robot_b/arm_left_shoulder_yaw', '/World/envs/env_0/robot_b/arm_right_shoulder_yaw', '/World/envs/env_0/robot_b/arm_left_elbow_roll', '/World/envs/env_0/robot_b/arm_right_elbow_roll', '/World/envs/env_0/robot_b/arm_left_hand_link', '/World/envs/env_0/robot_b/arm_right_hand_link', '/World/envs/env_0/robot_b/leg_left_hip_pitch', '/World/envs/env_0/robot_b/leg_right_hip_pitch', '/World/envs/env_0/robot_b/leg_left_knee_pitch', '/World/envs/env_0/robot_b/leg_right_knee_pitch', '/World/envs/env_0/robot_b/leg_left_ankle_roll', '/World/envs/env_0/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_1/robot_a/base', '/World/envs/env_1/robot_a/arm_left_shoulder_yaw', '/World/envs/env_1/robot_a/arm_right_shoulder_yaw', '/World/envs/env_1/robot_a/arm_left_elbow_roll', '/World/envs/env_1/robot_a/arm_right_elbow_roll', '/World/envs/env_1/robot_a/arm_left_hand_link', '/World/envs/env_1/robot_a/arm_right_hand_link', '/World/envs/env_1/robot_a/leg_left_hip_pitch', '/World/envs/env_1/robot_a/leg_right_hip_pitch', '/World/envs/env_1/robot_a/leg_left_knee_pitch', '/World/envs/env_1/robot_a/leg_right_knee_pitch', '/World/envs/env_1/robot_a/leg_left_ankle_roll', '/World/envs/env_1/robot_a/leg_right_ankle_roll', '/World/envs/env_1/robot_b/base', '/World/envs/env_1/robot_b/arm_left_shoulder_yaw', '/World/envs/env_1/robot_b/arm_right_shoulder_yaw', '/World/envs/env_1/robot_b/arm_left_elbow_roll', '/World/envs/env_1/robot_b/arm_right_elbow_roll', '/World/envs/env_1/robot_b/arm_left_hand_link', '/World/envs/env_1/robot_b/arm_right_hand_link', '/World/envs/env_1/robot_b/leg_left_hip_pitch', '/World/envs/env_1/robot_b/leg_right_hip_pitch', '/World/envs/env_1/robot_b/leg_left_knee_pitch', '/World/envs/env_1/robot_b/leg_right_knee_pitch', '/World/envs/env_1/robot_b/leg_left_ankle_roll', '/World/envs/env_1/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_2/robot_a/base', '/World/envs/env_2/robot_a/arm_left_shoulder_yaw', '/World/envs/env_2/robot_a/arm_right_shoulder_yaw', '/World/envs/env_2/robot_a/arm_left_elbow_roll', '/World/envs/env_2/robot_a/arm_right_elbow_roll', '/World/envs/env_2/robot_a/arm_left_hand_link', '/World/envs/env_2/robot_a/arm_right_hand_link', '/World/envs/env_2/robot_a/leg_left_hip_pitch', '/World/envs/env_2/robot_a/leg_right_hip_pitch', '/World/envs/env_2/robot_a/leg_left_knee_pitch', '/World/envs/env_2/robot_a/leg_right_knee_pitch', '/World/envs/env_2/robot_a/leg_left_ankle_roll', '/World/envs/env_2/robot_a/leg_right_ankle_roll', '/World/envs/env_2/robot_b/base', '/World/envs/env_2/robot_b/arm_left_shoulder_yaw', '/World/envs/env_2/robot_b/arm_right_shoulder_yaw', '/World/envs/env_2/robot_b/arm_left_elbow_roll', '/World/envs/env_2/robot_b/arm_right_elbow_roll', '/World/envs/env_2/robot_b/arm_left_hand_link', '/World/envs/env_2/robot_b/arm_right_hand_link', '/World/envs/env_2/robot_b/leg_left_hip_pitch', '/World/envs/env_2/robot_b/leg_right_hip_pitch', '/World/envs/env_2/robot_b/leg_left_knee_pitch', '/World/envs/env_2/robot_b/leg_right_knee_pitch', '/World/envs/env_2/robot_b/leg_left_ankle_roll', '/World/envs/env_2/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_3/robot_a/base', '/World/envs/env_3/robot_a/arm_left_shoulder_yaw', '/World/envs/env_3/robot_a/arm_right_shoulder_yaw', '/World/envs/env_3/robot_a/arm_left_elbow_roll', '/World/envs/env_3/robot_a/arm_right_elbow_roll', '/World/envs/env_3/robot_a/arm_left_hand_link', '/World/envs/env_3/robot_a/arm_right_hand_link', '/World/envs/env_3/robot_a/leg_left_hip_pitch', '/World/envs/env_3/robot_a/leg_right_hip_pitch', '/World/envs/env_3/robot_a/leg_left_knee_pitch', '/World/envs/env_3/robot_a/leg_right_knee_pitch', '/World/envs/env_3/robot_a/leg_left_ankle_roll', '/World/envs/env_3/robot_a/leg_right_ankle_roll', '/World/envs/env_3/robot_b/base', '/World/envs/env_3/robot_b/arm_left_shoulder_yaw', '/World/envs/env_3/robot_b/arm_right_shoulder_yaw', '/World/envs/env_3/robot_b/arm_left_elbow_roll', '/World/envs/env_3/robot_b/arm_right_elbow_roll', '/World/envs/env_3/robot_b/arm_left_hand_link', '/World/envs/env_3/robot_b/arm_right_hand_link', '/World/envs/env_3/robot_b/leg_left_hip_pitch', '/World/envs/env_3/robot_b/leg_right_hip_pitch', '/World/envs/env_3/robot_b/leg_left_knee_pitch', '/World/envs/env_3/robot_b/leg_right_knee_pitch', '/World/envs/env_3/robot_b/leg_left_ankle_roll', '/World/envs/env_3/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_4/robot_a/base', '/World/envs/env_4/robot_a/arm_left_shoulder_yaw', '/World/envs/env_4/robot_a/arm_right_shoulder_yaw', '/World/envs/env_4/robot_a/arm_left_elbow_roll', '/World/envs/env_4/robot_a/arm_right_elbow_roll', '/World/envs/env_4/robot_a/arm_left_hand_link', '/World/envs/env_4/robot_a/arm_right_hand_link', '/World/envs/env_4/robot_a/leg_left_hip_pitch', '/World/envs/env_4/robot_a/leg_right_hip_pitch', '/World/envs/env_4/robot_a/leg_left_knee_pitch', '/World/envs/env_4/robot_a/leg_right_knee_pitch', '/World/envs/env_4/robot_a/leg_left_ankle_roll', '/World/envs/env_4/robot_a/leg_right_ankle_roll', '/World/envs/env_4/robot_b/base', '/World/envs/env_4/robot_b/arm_left_shoulder_yaw', '/World/envs/env_4/robot_b/arm_right_shoulder_yaw', '/World/envs/env_4/robot_b/arm_left_elbow_roll', '/World/envs/env_4/robot_b/arm_right_elbow_roll', '/World/envs/env_4/robot_b/arm_left_hand_link', '/World/envs/env_4/robot_b/arm_right_hand_link', '/World/envs/env_4/robot_b/leg_left_hip_pitch', '/World/envs/env_4/robot_b/leg_right_hip_pitch', '/World/envs/env_4/robot_b/leg_left_knee_pitch', '/World/envs/env_4/robot_b/leg_right_knee_pitch', '/World/envs/env_4/robot_b/leg_left_ankle_roll', '/World/envs/env_4/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_5/robot_a/base', '/World/envs/env_5/robot_a/arm_left_shoulder_yaw', '/World/envs/env_5/robot_a/arm_right_shoulder_yaw', '/World/envs/env_5/robot_a/arm_left_elbow_roll', '/World/envs/env_5/robot_a/arm_right_elbow_roll', '/World/envs/env_5/robot_a/arm_left_hand_link', '/World/envs/env_5/robot_a/arm_right_hand_link', '/World/envs/env_5/robot_a/leg_left_hip_pitch', '/World/envs/env_5/robot_a/leg_right_hip_pitch', '/World/envs/env_5/robot_a/leg_left_knee_pitch', '/World/envs/env_5/robot_a/leg_right_knee_pitch', '/World/envs/env_5/robot_a/leg_left_ankle_roll', '/World/envs/env_5/robot_a/leg_right_ankle_roll', '/World/envs/env_5/robot_b/base', '/World/envs/env_5/robot_b/arm_left_shoulder_yaw', '/World/envs/env_5/robot_b/arm_right_shoulder_yaw', '/World/envs/env_5/robot_b/arm_left_elbow_roll', '/World/envs/env_5/robot_b/arm_right_elbow_roll', '/World/envs/env_5/robot_b/arm_left_hand_link', '/World/envs/env_5/robot_b/arm_right_hand_link', '/World/envs/env_5/robot_b/leg_left_hip_pitch', '/World/envs/env_5/robot_b/leg_right_hip_pitch', '/World/envs/env_5/robot_b/leg_left_knee_pitch', '/World/envs/env_5/robot_b/leg_right_knee_pitch', '/World/envs/env_5/robot_b/leg_left_ankle_roll', '/World/envs/env_5/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_6/robot_a/base', '/World/envs/env_6/robot_a/arm_left_shoulder_yaw', '/World/envs/env_6/robot_a/arm_right_shoulder_yaw', '/World/envs/env_6/robot_a/arm_left_elbow_roll', '/World/envs/env_6/robot_a/arm_right_elbow_roll', '/World/envs/env_6/robot_a/arm_left_hand_link', '/World/envs/env_6/robot_a/arm_right_hand_link', '/World/envs/env_6/robot_a/leg_left_hip_pitch', '/World/envs/env_6/robot_a/leg_right_hip_pitch', '/World/envs/env_6/robot_a/leg_left_knee_pitch', '/World/envs/env_6/robot_a/leg_right_knee_pitch', '/World/envs/env_6/robot_a/leg_left_ankle_roll', '/World/envs/env_6/robot_a/leg_right_ankle_roll', '/World/envs/env_6/robot_b/base', '/World/envs/env_6/robot_b/arm_left_shoulder_yaw', '/World/envs/env_6/robot_b/arm_right_shoulder_yaw', '/World/envs/env_6/robot_b/arm_left_elbow_roll', '/World/envs/env_6/robot_b/arm_right_elbow_roll', '/World/envs/env_6/robot_b/arm_left_hand_link', '/World/envs/env_6/robot_b/arm_right_hand_link', '/World/envs/env_6/robot_b/leg_left_hip_pitch', '/World/envs/env_6/robot_b/leg_right_hip_pitch', '/World/envs/env_6/robot_b/leg_left_knee_pitch', '/World/envs/env_6/robot_b/leg_right_knee_pitch', '/World/envs/env_6/robot_b/leg_left_ankle_roll', '/World/envs/env_6/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_7/robot_a/base', '/World/envs/env_7/robot_a/arm_left_shoulder_yaw', '/World/envs/env_7/robot_a/arm_right_shoulder_yaw', '/World/envs/env_7/robot_a/arm_left_elbow_roll', '/World/envs/env_7/robot_a/arm_right_elbow_roll', '/World/envs/env_7/robot_a/arm_left_hand_link', '/World/envs/env_7/robot_a/arm_right_hand_link', '/World/envs/env_7/robot_a/leg_left_hip_pitch', '/World/envs/env_7/robot_a/leg_right_hip_pitch', '/World/envs/env_7/robot_a/leg_left_knee_pitch', '/World/envs/env_7/robot_a/leg_right_knee_pitch', '/World/envs/env_7/robot_a/leg_left_ankle_roll', '/World/envs/env_7/robot_a/leg_right_ankle_roll', '/World/envs/env_7/robot_b/base', '/World/envs/env_7/robot_b/arm_left_shoulder_yaw', '/World/envs/env_7/robot_b/arm_right_shoulder_yaw', '/World/envs/env_7/robot_b/arm_left_elbow_roll', '/World/envs/env_7/robot_b/arm_right_elbow_roll', '/World/envs/env_7/robot_b/arm_left_hand_link', '/World/envs/env_7/robot_b/arm_right_hand_link', '/World/envs/env_7/robot_b/leg_left_hip_pitch', '/World/envs/env_7/robot_b/leg_right_hip_pitch', '/World/envs/env_7/robot_b/leg_left_knee_pitch', '/World/envs/env_7/robot_b/leg_right_knee_pitch', '/World/envs/env_7/robot_b/leg_left_ankle_roll', '/World/envs/env_7/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_8/robot_a/base', '/World/envs/env_8/robot_a/arm_left_shoulder_yaw', '/World/envs/env_8/robot_a/arm_right_shoulder_yaw', '/World/envs/env_8/robot_a/arm_left_elbow_roll', '/World/envs/env_8/robot_a/arm_right_elbow_roll', '/World/envs/env_8/robot_a/arm_left_hand_link', '/World/envs/env_8/robot_a/arm_right_hand_link', '/World/envs/env_8/robot_a/leg_left_hip_pitch', '/World/envs/env_8/robot_a/leg_right_hip_pitch', '/World/envs/env_8/robot_a/leg_left_knee_pitch', '/World/envs/env_8/robot_a/leg_right_knee_pitch', '/World/envs/env_8/robot_a/leg_left_ankle_roll', '/World/envs/env_8/robot_a/leg_right_ankle_roll', '/World/envs/env_8/robot_b/base', '/World/envs/env_8/robot_b/arm_left_shoulder_yaw', '/World/envs/env_8/robot_b/arm_right_shoulder_yaw', '/World/envs/env_8/robot_b/arm_left_elbow_roll', '/World/envs/env_8/robot_b/arm_right_elbow_roll', '/World/envs/env_8/robot_b/arm_left_hand_link', '/World/envs/env_8/robot_b/arm_right_hand_link', '/World/envs/env_8/robot_b/leg_left_hip_pitch', '/World/envs/env_8/robot_b/leg_right_hip_pitch', '/World/envs/env_8/robot_b/leg_left_knee_pitch', '/World/envs/env_8/robot_b/leg_right_knee_pitch', '/World/envs/env_8/robot_b/leg_left_ankle_roll', '/World/envs/env_8/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_9/robot_a/base', '/World/envs/env_9/robot_a/arm_left_shoulder_yaw', '/World/envs/env_9/robot_a/arm_right_shoulder_yaw', '/World/envs/env_9/robot_a/arm_left_elbow_roll', '/World/envs/env_9/robot_a/arm_right_elbow_roll', '/World/envs/env_9/robot_a/arm_left_hand_link', '/World/envs/env_9/robot_a/arm_right_hand_link', '/World/envs/env_9/robot_a/leg_left_hip_pitch', '/World/envs/env_9/robot_a/leg_right_hip_pitch', '/World/envs/env_9/robot_a/leg_left_knee_pitch', '/World/envs/env_9/robot_a/leg_right_knee_pitch', '/World/envs/env_9/robot_a/leg_left_ankle_roll', '/World/envs/env_9/robot_a/leg_right_ankle_roll', '/World/envs/env_9/robot_b/base', '/World/envs/env_9/robot_b/arm_left_shoulder_yaw', '/World/envs/env_9/robot_b/arm_right_shoulder_yaw', '/World/envs/env_9/robot_b/arm_left_elbow_roll', '/World/envs/env_9/robot_b/arm_right_elbow_roll', '/World/envs/env_9/robot_b/arm_left_hand_link', '/World/envs/env_9/robot_b/arm_right_hand_link', '/World/envs/env_9/robot_b/leg_left_hip_pitch', '/World/envs/env_9/robot_b/leg_right_hip_pitch', '/World/envs/env_9/robot_b/leg_left_knee_pitch', '/World/envs/env_9/robot_b/leg_right_knee_pitch', '/World/envs/env_9/robot_b/leg_left_ankle_roll', '/World/envs/env_9/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_10/robot_a/base', '/World/envs/env_10/robot_a/arm_left_shoulder_yaw', '/World/envs/env_10/robot_a/arm_right_shoulder_yaw', '/World/envs/env_10/robot_a/arm_left_elbow_roll', '/World/envs/env_10/robot_a/arm_right_elbow_roll', '/World/envs/env_10/robot_a/arm_left_hand_link', '/World/envs/env_10/robot_a/arm_right_hand_link', '/World/envs/env_10/robot_a/leg_left_hip_pitch', '/World/envs/env_10/robot_a/leg_right_hip_pitch', '/World/envs/env_10/robot_a/leg_left_knee_pitch', '/World/envs/env_10/robot_a/leg_right_knee_pitch', '/World/envs/env_10/robot_a/leg_left_ankle_roll', '/World/envs/env_10/robot_a/leg_right_ankle_roll', '/World/envs/env_10/robot_b/base', '/World/envs/env_10/robot_b/arm_left_shoulder_yaw', '/World/envs/env_10/robot_b/arm_right_shoulder_yaw', '/World/envs/env_10/robot_b/arm_left_elbow_roll', '/World/envs/env_10/robot_b/arm_right_elbow_roll', '/World/envs/env_10/robot_b/arm_left_hand_link', '/World/envs/env_10/robot_b/arm_right_hand_link', '/World/envs/env_10/robot_b/leg_left_hip_pitch', '/World/envs/env_10/robot_b/leg_right_hip_pitch', '/World/envs/env_10/robot_b/leg_left_knee_pitch', '/World/envs/env_10/robot_b/leg_right_knee_pitch', '/World/envs/env_10/robot_b/leg_left_ankle_roll', '/World/envs/env_10/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_11/robot_a/base', '/World/envs/env_11/robot_a/arm_left_shoulder_yaw', '/World/envs/env_11/robot_a/arm_right_shoulder_yaw', '/World/envs/env_11/robot_a/arm_left_elbow_roll', '/World/envs/env_11/robot_a/arm_right_elbow_roll', '/World/envs/env_11/robot_a/arm_left_hand_link', '/World/envs/env_11/robot_a/arm_right_hand_link', '/World/envs/env_11/robot_a/leg_left_hip_pitch', '/World/envs/env_11/robot_a/leg_right_hip_pitch', '/World/envs/env_11/robot_a/leg_left_knee_pitch', '/World/envs/env_11/robot_a/leg_right_knee_pitch', '/World/envs/env_11/robot_a/leg_left_ankle_roll', '/World/envs/env_11/robot_a/leg_right_ankle_roll', '/World/envs/env_11/robot_b/base', '/World/envs/env_11/robot_b/arm_left_shoulder_yaw', '/World/envs/env_11/robot_b/arm_right_shoulder_yaw', '/World/envs/env_11/robot_b/arm_left_elbow_roll', '/World/envs/env_11/robot_b/arm_right_elbow_roll', '/World/envs/env_11/robot_b/arm_left_hand_link', '/World/envs/env_11/robot_b/arm_right_hand_link', '/World/envs/env_11/robot_b/leg_left_hip_pitch', '/World/envs/env_11/robot_b/leg_right_hip_pitch', '/World/envs/env_11/robot_b/leg_left_knee_pitch', '/World/envs/env_11/robot_b/leg_right_knee_pitch', '/World/envs/env_11/robot_b/leg_left_ankle_roll', '/World/envs/env_11/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_12/robot_a/base', '/World/envs/env_12/robot_a/arm_left_shoulder_yaw', '/World/envs/env_12/robot_a/arm_right_shoulder_yaw', '/World/envs/env_12/robot_a/arm_left_elbow_roll', '/World/envs/env_12/robot_a/arm_right_elbow_roll', '/World/envs/env_12/robot_a/arm_left_hand_link', '/World/envs/env_12/robot_a/arm_right_hand_link', '/World/envs/env_12/robot_a/leg_left_hip_pitch', '/World/envs/env_12/robot_a/leg_right_hip_pitch', '/World/envs/env_12/robot_a/leg_left_knee_pitch', '/World/envs/env_12/robot_a/leg_right_knee_pitch', '/World/envs/env_12/robot_a/leg_left_ankle_roll', '/World/envs/env_12/robot_a/leg_right_ankle_roll', '/World/envs/env_12/robot_b/base', '/World/envs/env_12/robot_b/arm_left_shoulder_yaw', '/World/envs/env_12/robot_b/arm_right_shoulder_yaw', '/World/envs/env_12/robot_b/arm_left_elbow_roll', '/World/envs/env_12/robot_b/arm_right_elbow_roll', '/World/envs/env_12/robot_b/arm_left_hand_link', '/World/envs/env_12/robot_b/arm_right_hand_link', '/World/envs/env_12/robot_b/leg_left_hip_pitch', '/World/envs/env_12/robot_b/leg_right_hip_pitch', '/World/envs/env_12/robot_b/leg_left_knee_pitch', '/World/envs/env_12/robot_b/leg_right_knee_pitch', '/World/envs/env_12/robot_b/leg_left_ankle_roll', '/World/envs/env_12/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_13/robot_a/base', '/World/envs/env_13/robot_a/arm_left_shoulder_yaw', '/World/envs/env_13/robot_a/arm_right_shoulder_yaw', '/World/envs/env_13/robot_a/arm_left_elbow_roll', '/World/envs/env_13/robot_a/arm_right_elbow_roll', '/World/envs/env_13/robot_a/arm_left_hand_link', '/World/envs/env_13/robot_a/arm_right_hand_link', '/World/envs/env_13/robot_a/leg_left_hip_pitch', '/World/envs/env_13/robot_a/leg_right_hip_pitch', '/World/envs/env_13/robot_a/leg_left_knee_pitch', '/World/envs/env_13/robot_a/leg_right_knee_pitch', '/World/envs/env_13/robot_a/leg_left_ankle_roll', '/World/envs/env_13/robot_a/leg_right_ankle_roll', '/World/envs/env_13/robot_b/base', '/World/envs/env_13/robot_b/arm_left_shoulder_yaw', '/World/envs/env_13/robot_b/arm_right_shoulder_yaw', '/World/envs/env_13/robot_b/arm_left_elbow_roll', '/World/envs/env_13/robot_b/arm_right_elbow_roll', '/World/envs/env_13/robot_b/arm_left_hand_link', '/World/envs/env_13/robot_b/arm_right_hand_link', '/World/envs/env_13/robot_b/leg_left_hip_pitch', '/World/envs/env_13/robot_b/leg_right_hip_pitch', '/World/envs/env_13/robot_b/leg_left_knee_pitch', '/World/envs/env_13/robot_b/leg_right_knee_pitch', '/World/envs/env_13/robot_b/leg_left_ankle_roll', '/World/envs/env_13/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_14/robot_a/base', '/World/envs/env_14/robot_a/arm_left_shoulder_yaw', '/World/envs/env_14/robot_a/arm_right_shoulder_yaw', '/World/envs/env_14/robot_a/arm_left_elbow_roll', '/World/envs/env_14/robot_a/arm_right_elbow_roll', '/World/envs/env_14/robot_a/arm_left_hand_link', '/World/envs/env_14/robot_a/arm_right_hand_link', '/World/envs/env_14/robot_a/leg_left_hip_pitch', '/World/envs/env_14/robot_a/leg_right_hip_pitch', '/World/envs/env_14/robot_a/leg_left_knee_pitch', '/World/envs/env_14/robot_a/leg_right_knee_pitch', '/World/envs/env_14/robot_a/leg_left_ankle_roll', '/World/envs/env_14/robot_a/leg_right_ankle_roll', '/World/envs/env_14/robot_b/base', '/World/envs/env_14/robot_b/arm_left_shoulder_yaw', '/World/envs/env_14/robot_b/arm_right_shoulder_yaw', '/World/envs/env_14/robot_b/arm_left_elbow_roll', '/World/envs/env_14/robot_b/arm_right_elbow_roll', '/World/envs/env_14/robot_b/arm_left_hand_link', '/World/envs/env_14/robot_b/arm_right_hand_link', '/World/envs/env_14/robot_b/leg_left_hip_pitch', '/World/envs/env_14/robot_b/leg_right_hip_pitch', '/World/envs/env_14/robot_b/leg_left_knee_pitch', '/World/envs/env_14/robot_b/leg_right_knee_pitch', '/World/envs/env_14/robot_b/leg_left_ankle_roll', '/World/envs/env_14/robot_b/leg_right_ankle_roll']",
+    "['/World/envs/env_15/robot_a/base', '/World/envs/env_15/robot_a/arm_left_shoulder_yaw', '/World/envs/env_15/robot_a/arm_right_shoulder_yaw', '/World/envs/env_15/robot_a/arm_left_elbow_roll', '/World/envs/env_15/robot_a/arm_right_elbow_roll', '/World/envs/env_15/robot_a/arm_left_hand_link', '/World/envs/env_15/robot_a/arm_right_hand_link', '/World/envs/env_15/robot_a/leg_left_hip_pitch', '/World/envs/env_15/robot_a/leg_right_hip_pitch', '/World/envs/env_15/robot_a/leg_left_knee_pitch', '/World/envs/env_15/robot_a/leg_right_knee_pitch', '/World/envs/env_15/robot_a/leg_left_ankle_roll', '/World/envs/env_15/robot_a/leg_right_ankle_roll', '/World/envs/env_15/robot_b/base', '/World/envs/env_15/robot_b/arm_left_shoulder_yaw', '/World/envs/env_15/robot_b/arm_right_shoulder_yaw', '/World/envs/env_15/robot_b/arm_left_elbow_roll', '/World/envs/env_15/robot_b/arm_right_elbow_roll', '/World/envs/env_15/robot_b/arm_left_hand_link', '/World/envs/env_15/robot_b/arm_right_hand_link', '/World/envs/env_15/robot_b/leg_left_hip_pitch', '/World/envs/env_15/robot_b/leg_right_hip_pitch', '/World/envs/env_15/robot_b/leg_left_knee_pitch', '/World/envs/env_15/robot_b/leg_right_knee_pitch', '/World/envs/env_15/robot_b/leg_left_ankle_roll', '/World/envs/env_15/robot_b/leg_right_ankle_roll']"
+   ]
+  },
+  "cache": {
+   "n_steps": 30,
+   "keys_missing": [],
+   "in_extras": true,
+   "shapes_ok": true,
+   "last_means": {
+    "released": 0.0625,
+    "robot_force_max": 41.11777877807617,
+    "seated": 0.0,
+    "placed_now": 0.0,
+    "hold": 0.0,
+    "minimal_height": 0.04,
+    "pinch_d": 0.09269191324710846,
+    "pinch_kernel": 0.3626789450645447,
+    "upright_gate": 0.8350070714950562,
+    "centre_ok": 0.0,
+    "tilt_deg": 0.00349705689586699,
+    "corner_clearance": -0.0037637557834386826,
+    "roll_ok": 0.0,
+    "lift_pay": 0.0
+   },
+   "max_robot_force_per_step": [
+    16.559179306030273,
+    1.7237457036972046,
+    3.33854341506958,
+    3.1047208309173584,
+    8.822254180908203,
+    5.814075469970703,
+    9.914243698120117,
+    11.54166030883789,
+    86.5814208984375,
+    22.459510803222656,
+    30.555965423583984,
+    35.09661865234375,
+    26.800975799560547,
+    26.549102783203125,
+    27.97760772705078,
+    28.705307006835938,
+    96.29264831542969,
+    32.86866760253906,
+    18.92546272277832,
+    15.79216194152832,
+    28.95620346069336,
+    540.705810546875,
+    535.4473266601562,
+    528.795654296875,
+    518.0376586914062,
+    521.1781616210938,
+    515.8340454101562,
+    517.4246826171875,
+    508.73895263671875,
+    518.10986328125
+   ]
+  },
+  "diag_values": {
+   "pinch_dist": 0.09269191324710846,
+   "cube_tilt_deg": 0.00349705689586699,
+   "corner_clear": -0.0037637557834386826,
+   "roll_ok": 0.0,
+   "lift_paid": 0.0,
+   "released": 0.0625,
+   "robot_force_max": 41.11777877807617
+  },
+  "free_space": {
+   "n_valid": 16,
+   "max_force_valid": 0.0,
+   "all_released_valid": true
+  },
+  "overlap": {
+   "column": 5,
+   "n_valid": 16,
+   "n_hand_contact": 16,
+   "n_any_contact": 16,
+   "hand_col_max_per_env": [
+    4927.69580078125,
+    1130.23388671875,
+    931.0240478515625,
+    5.393673896789551,
+    185.5231170654297,
+    2771.75439453125,
+    35.3062858581543,
+    98.90182495117188,
+    2661.584716796875,
+    4666.1025390625,
+    492.2860107421875,
+    2991.227783203125,
+    2627.2421875,
+    14.33995532989502,
+    2450.02978515625,
+    2494.730712890625
+   ],
+   "any_col_max_per_env": [
+    4927.69580078125,
+    2033.3428955078125,
+    2164.19580078125,
+    1505.56591796875,
+    1903.280029296875,
+    2771.75439453125,
+    1048.7684326171875,
+    1007.6058959960938,
+    2661.584716796875,
+    4666.1025390625,
+    978.4122924804688,
+    3126.183837890625,
+    2627.2421875,
+    1294.0731201171875,
+    3117.845703125,
+    2494.730712890625
+   ],
+   "inconsistent": 0,
+   "cache_mismatch": 0,
+   "per_step": [
+    {
+     "n_valid": 16,
+     "n_contact_valid": 16,
+     "hand_col_max": 4927.69580078125,
+     "any_col_max": 4927.69580078125
+    },
+    {
+     "n_valid": 16,
+     "n_contact_valid": 16,
+     "hand_col_max": 1483.8726806640625,
+     "any_col_max": 1483.8726806640625
+    },
+    {
+     "n_valid": 16,
+     "n_contact_valid": 16,
+     "hand_col_max": 2450.02978515625,
+     "any_col_max": 2450.02978515625
+    },
+    {
+     "n_valid": 16,
+     "n_contact_valid": 13,
+     "hand_col_max": 1578.9307861328125,
+     "any_col_max": 4404.978515625
+    }
+   ]
+  },
+  "traceback": null
+ },
+ "tb_last_iter": 19,
+ "logged_iterations": 20,
+ "config_check": {
+  "ok": true,
+  "failed": [],
+  "checks": {
+   "agent_entropy_coef_0.001": true,
+   "agent_std_type_log": true,
+   "lifting_object_stand4_x15": true,
+   "lift_gate_0.02m_15deg": true,
+   "placed_success_bonus_x5000": true,
+   "action_rate_clipped": true,
+   "success_stand4": true,
+   "success_12steps_8deg_1N": true,
+   "robot_a_overlay_usd": true,
+   "robot_b_overlay_usd": true,
+   "cube_contact_reporting": true,
+   "cube_sensor_26_filters": true,
+   "curriculum_terms": true,
+   "lift_curriculum_cap_0.06": true
+  }
+ },
+ "verdict": "PASS",
+ "clauses": {
+  "A1_terms_in_managers": true,
+  "A2_cfg_diff_declared_only": true,
+  "A3_hand_colliders": true,
+  "A4_sensor_26_filters": true,
+  "A5_step_cache_keys": true,
+  "A6_free_cube_released": true,
+  "A7_hand_contact_sensed": true,
+  "B1_logged_tags": true,
+  "B2_training_ran": true,
+  "B3_no_failure_markers": true,
+  "B4_config_check": true
+ },
+ "missing": [],
+ "tags_missing": [],
+ "tags_seen_stand4": [
+  "Curriculum/base_height",
+  "Curriculum/corner_clear",
+  "Curriculum/cube_abs_x",
+  "Curriculum/cube_tilt_deg",
+  "Curriculum/cube_tilted",
+  "Curriculum/fell_a",
+  "Curriculum/fell_b",
+  "Curriculum/lift_height",
+  "Curriculum/lift_paid",
+  "Curriculum/over_deck",
+  "Curriculum/pinch_dist",
+  "Curriculum/released",
+  "Curriculum/robot_force_max",
+  "Curriculum/roll_ok",
+  "Curriculum/stage_lift",
+  "Curriculum/tipped_over_deck",
+  "Curriculum/upright_gate",
+  "Episode_Reward/action_rate_clipped",
+  "Episode_Reward/base_contact_a",
+  "Episode_Reward/base_contact_b",
+  "Episode_Reward/deck_progress",
+  "Episode_Reward/fall_penalty",
+  "Episode_Reward/flat_a",
+  "Episode_Reward/flat_b",
+  "Episode_Reward/lift_progress",
+  "Episode_Reward/lifting_object",
+  "Episode_Reward/object_tilt",
+  "Episode_Reward/object_vel",
+  "Episode_Reward/opposing_clamp",
+  "Episode_Reward/placed",
+  "Episode_Reward/reaching_coarse",
+  "Episode_Reward/reaching_fine",
+  "Episode_Reward/still_alive",
+  "Episode_Reward/torques_a",
+  "Episode_Reward/torques_b",
+  "Episode_Termination/fallen",
+  "Episode_Termination/success",
+  "Episode_Termination/time_out"
+ ]
+}

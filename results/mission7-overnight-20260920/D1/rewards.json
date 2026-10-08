@@ -1,0 +1,358 @@
+{
+  "complete": true,
+  "terms": {
+    "random": {
+      "time": {
+        "episode_mean": -0.15327500000000072,
+        "episode_std": 0.05115940162863566,
+        "episode_min": -0.18000000000000105,
+        "episode_max": -0.011199999999999996,
+        "episode_nonzero_fraction": 1.0,
+        "decision_nonzero_fraction": 1.0,
+        "fraction_total_absolute_contribution": 0.08998840469096339,
+        "fraction_net_return": 0.08998840469096338
+      },
+      "collision": {
+        "episode_mean": -0.3,
+        "episode_std": 0.5196152422706631,
+        "episode_min": -1.2,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.25,
+        "decision_nonzero_fraction": 0.008143322475570033,
+        "fraction_total_absolute_contribution": 0.17613127651142646,
+        "fraction_net_return": 0.17613127651142643
+      },
+      "failure": {
+        "episode_mean": -1.25,
+        "episode_std": 2.165063509461097,
+        "episode_min": -5.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.25,
+        "decision_nonzero_fraction": 0.003257328990228013,
+        "fraction_total_absolute_contribution": 0.7338803187976103,
+        "fraction_net_return": 0.7338803187976102
+      },
+      "correct_button": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "wrong_button": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "door_crossing": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "acquisition": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "success": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      }
+    },
+    "untrained": {
+      "time": {
+        "episode_mean": -0.18000000000000105,
+        "episode_std": 0.0,
+        "episode_min": -0.18000000000000105,
+        "episode_max": -0.18000000000000105,
+        "episode_nonzero_fraction": 1.0,
+        "decision_nonzero_fraction": 1.0,
+        "fraction_total_absolute_contribution": 1.0,
+        "fraction_net_return": 1.0
+      },
+      "collision": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "failure": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "correct_button": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "wrong_button": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "door_crossing": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "acquisition": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "success": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      }
+    },
+    "oracle": {
+      "time": {
+        "episode_mean": -0.06400000000000006,
+        "episode_std": 0.04527493787958225,
+        "episode_min": -0.18000000000000105,
+        "episode_max": -0.017599999999999994,
+        "episode_nonzero_fraction": 1.0,
+        "decision_nonzero_fraction": 1.0,
+        "fraction_total_absolute_contribution": 0.007629038025986415,
+        "fraction_net_return": -0.009680834972016345
+      },
+      "collision": {
+        "episode_mean": -0.2,
+        "episode_std": 0.42426406871192857,
+        "episode_min": -1.2,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.1875,
+        "decision_nonzero_fraction": 0.013513513513513514,
+        "fraction_total_absolute_contribution": 0.023840743831207527,
+        "fraction_net_return": -0.030252609287551056
+      },
+      "failure": {
+        "episode_mean": -0.625,
+        "episode_std": 1.653594569415369,
+        "episode_min": -5.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.125,
+        "decision_nonzero_fraction": 0.003861003861003861,
+        "fraction_total_absolute_contribution": 0.07450232447252352,
+        "fraction_net_return": -0.09453940402359703
+      },
+      "correct_button": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": 0.0
+      },
+      "wrong_button": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": 0.0
+      },
+      "door_crossing": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": 0.0
+      },
+      "acquisition": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": 0.0
+      },
+      "success": {
+        "episode_mean": 7.5,
+        "episode_std": 4.330127018922194,
+        "episode_min": 0.0,
+        "episode_max": 10.0,
+        "episode_nonzero_fraction": 0.75,
+        "decision_nonzero_fraction": 0.023166023166023165,
+        "fraction_total_absolute_contribution": 0.8940278936702822,
+        "fraction_net_return": 1.1344728482831645
+      }
+    },
+    "trained": {
+      "time": {
+        "episode_mean": -0.18000000000000105,
+        "episode_std": 0.0,
+        "episode_min": -0.18000000000000105,
+        "episode_max": -0.18000000000000105,
+        "episode_nonzero_fraction": 1.0,
+        "decision_nonzero_fraction": 1.0,
+        "fraction_total_absolute_contribution": 1.0,
+        "fraction_net_return": 1.0
+      },
+      "collision": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "failure": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "correct_button": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "wrong_button": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "door_crossing": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "acquisition": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      },
+      "success": {
+        "episode_mean": 0.0,
+        "episode_std": 0.0,
+        "episode_min": 0.0,
+        "episode_max": 0.0,
+        "episode_nonzero_fraction": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "fraction_total_absolute_contribution": 0.0,
+        "fraction_net_return": -0.0
+      }
+    }
+  },
+  "checkpoint_sha256": "69b99633a246ee93623224b73721ccfbfe7979b6b7135713e82f7b85113381bf",
+  "structural_flags": [
+    "Approach has no positive reward except terminal success.",
+    "Switch, door and pickup terms are structurally inactive in Approach, not missing signals.",
+    "No oracle distance/progress enters the reward. Sparse success is ground-truth scoring.",
+    "Collision penalties can favor standing still when discovery never reaches a success."
+  ],
+  "empirical_flags": {
+    "random": {
+      "success_nonzero_episode_fraction": 0.0,
+      "dominant_absolute_term": "failure"
+    },
+    "untrained": {
+      "success_nonzero_episode_fraction": 0.0,
+      "dominant_absolute_term": "time"
+    },
+    "oracle": {
+      "success_nonzero_episode_fraction": 0.75,
+      "dominant_absolute_term": "success"
+    },
+    "trained": {
+      "success_nonzero_episode_fraction": 0.0,
+      "dominant_absolute_term": "time"
+    }
+  }
+}

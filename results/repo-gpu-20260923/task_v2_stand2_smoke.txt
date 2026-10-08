@@ -1,0 +1,29 @@
+task                                     obs  success term  note
+TaskV2-BHL-CubeToShelfStand2-Blind-v0    194          True  ok
+TaskV2-BHL-CubeToShelfStand2-Depth-v0    322          True  ok
+TaskV2-BHL-CubeToShelfStand2-Rgb-v0      578          True  ok
+
+3/3 built and stepped
+2026-09-26T23:34:36Z [49,689ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-09-26T23:34:36Z [49,710ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-09-26T23:34:36Z [49,710ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-09-26T23:34:36Z [49,720ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-09-26T23:34:36Z [49,720ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-09-26T23:34:36Z [49,729ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-09-26T23:34:36Z [49,729ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-09-26T23:34:36Z [49,748ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-09-26T23:34:36Z [49,748ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-09-26T23:34:36Z [49,748ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-09-26T23:34:36Z [49,748ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-09-26T23:34:36Z [49,749ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-09-26T23:34:36Z [49,749ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-09-26T23:34:36Z [49,749ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-09-26T23:34:36Z [49,749ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-09-26T23:34:36Z [49,752ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-09-26T23:34:36Z [49,752ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-09-26T23:34:36Z [49,752ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-09-26T23:34:36Z [49,752ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-09-26T23:34:36Z [49,753ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-09-26T23:34:36Z [49,753ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-09-26T23:34:36Z [49,753ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-09-26T23:34:36Z [49,753ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'

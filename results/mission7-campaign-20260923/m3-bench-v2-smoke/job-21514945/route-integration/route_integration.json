@@ -1,0 +1,57 @@
+{
+  "layout": [
+    "train",
+    252
+  ],
+  "time_s": 22.35999999999324,
+  "done": true,
+  "failure": "excessive_collision",
+  "open": [
+    false,
+    false
+  ],
+  "crossed": [
+    false,
+    false
+  ],
+  "stage_activations": [
+    18.800000000001535
+  ],
+  "phases": [
+    "approach",
+    "settle",
+    "turn"
+  ],
+  "history": [
+    {
+      "time_s": 18.800000000001535,
+      "door": 0,
+      "side": -1,
+      "phase": "approach"
+    },
+    {
+      "time_s": 20.999999999996408,
+      "door": 0,
+      "side": -1,
+      "phase": "settle"
+    },
+    {
+      "time_s": 21.59999999999501,
+      "door": 0,
+      "phase": "turn",
+      "yaw_error_rad": 1.716218887461837
+    }
+  ],
+  "gait_events": [],
+  "m3_events": [
+    {
+      "time_s": 18.800000000001535,
+      "door": 0,
+      "event": "takeover",
+      "takeover_yaw_rad": 0.026750798204083943
+    }
+  ],
+  "exit_ramp_events": [],
+  "rejoin_advance_events": [],
+  "policy_ever_swapped": false
+}

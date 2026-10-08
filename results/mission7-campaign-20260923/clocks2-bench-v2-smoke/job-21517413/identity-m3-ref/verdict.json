@@ -1,0 +1,305 @@
+{
+  "verdict": "SMOKE_RUN",
+  "rule": "Bench v2: with N crossings run (64 minus the dropped set) and N_h per heading, bench v2 PASSES iff clears >= N - 2, 0 falls, and clears >= N_h - 1 for every heading. Otherwise FAIL; INCOMPLETE if any declared crossing is missing. The clear definition is unchanged: mission7_gates' real clear (base along >= +0.35 m past the plate centre along the door direction), within 10 s of takeover.",
+  "N": 1,
+  "required_clears": 0,
+  "clears": 1,
+  "falls": 0,
+  "crossings_scored": 1,
+  "per_heading": {
+    "0": {
+      "declared": 0,
+      "required": 0,
+      "crossings": 0,
+      "clears": 0
+    },
+    "90": {
+      "declared": 1,
+      "required": 0,
+      "crossings": 1,
+      "clears": 1
+    },
+    "-90": {
+      "declared": 0,
+      "required": 0,
+      "crossings": 0,
+      "clears": 0
+    },
+    "180": {
+      "declared": 0,
+      "required": 0,
+      "crossings": 0,
+      "clears": 0
+    }
+  },
+  "per_cell": {
+    "0/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "0/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/round/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/round/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "0/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "0/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "90/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/square/standstill": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    },
+    "180/square/walking": {
+      "declared": 0,
+      "clears": 0,
+      "crossings": 0
+    }
+  },
+  "missing": [],
+  "problems": [],
+  "misses": [],
+  "fallen": [],
+  "smoke": true,
+  "bench": "v2",
+  "stage_gait": "m3",
+  "mode": "smoke",
+  "chain": "a chain, each step only after the previous PASSES: bench v2 with --stage-gait m3 -> the unchanged exact ten-fall replay once with --stage-gait m3 (complete, 10 episodes, 10 upright, 0 falls; release arm m3-shipped-step) -> the route gate as coded by M1 (Doors and Transport each >= 16/16 successes on validation layouts 0-15, 32 episodes)",
+  "disclosure": "bench v2 was introduced after the M2 bench FAIL (21507962) revealed the run-up confound (26/64 crossings ended in v1's own run-up before takeover); M2's FAIL stands and v1 is unchanged",
+  "labels": {
+    "gaits": "LEARNED (the shipped arms-dr1.0-s0 gait throughout; never swapped)",
+    "stage": "SCRIPTED (PlateStage, stage_gait=m3)",
+    "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"
+  },
+  "dropped": [
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      7,
+      1
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      10,
+      0
+    ],
+    [
+      11,
+      0
+    ],
+    [
+      12,
+      0
+    ],
+    [
+      13,
+      0
+    ],
+    [
+      14,
+      0
+    ],
+    [
+      15,
+      0
+    ],
+    [
+      16,
+      1
+    ],
+    [
+      19,
+      1
+    ],
+    [
+      21,
+      1
+    ],
+    [
+      22,
+      1
+    ],
+    [
+      23,
+      1
+    ],
+    [
+      24,
+      0
+    ],
+    [
+      26,
+      0
+    ],
+    [
+      27,
+      0
+    ],
+    [
+      29,
+      0
+    ],
+    [
+      30,
+      0
+    ],
+    [
+      31,
+      0
+    ]
+  ],
+  "standstill_spawn_wall_overlap_not_gated": [
+    [
+      4,
+      0
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      22,
+      0
+    ],
+    [
+      24,
+      1
+    ],
+    [
+      30,
+      1
+    ]
+  ],
+  "plate_activation_not_gated": {
+    "round_target_pressed_during_stage": 0,
+    "square_target_pressed_during_stage": 1,
+    "crossings": 1
+  },
+  "wall_contacts_not_gated": {
+    "crossings_with_stage_contact": 1
+  },
+  "falls_by_phase_not_gated": {},
+  "end_reasons": {
+    "complete": 1
+  },
+  "crossings": [
+    {
+      "layout": 253,
+      "door": 1,
+      "heading_deg": 90,
+      "plate": "square",
+      "entry": "standstill",
+      "cell_m": 1.6,
+      "end_reason": "complete",
+      "clear": true,
+      "real_clear": true,
+      "clear_after_takeover_s": 9.640000000003788,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.1732402071965735,
+      "takeover_s": 3.000000000000169,
+      "handback_s": 28.599999999978696,
+      "takeover_speed_mps": 0.000510750149468582,
+      "along_start_m": -0.1588118650295263,
+      "along_max_m": 0.7579086346071009,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "recover",
+        "recover",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 438,
+      "stage_gait": "m3",
+      "spawn_wall_contacts": [],
+      "walk_s": null,
+      "watchdog_recoveries": 2,
+      "watchdog_handback": false
+    }
+  ],
+  "written_utc": "2026-10-02T23:11:50.836390+00:00"
+}

@@ -1,0 +1,609 @@
+"""MDP terms for two 22-DoF humanoids lifting one object.
+
+The recipe is the one that actually trains, not a collage of every paper:
+
+* Spawn already in a pinch formation (OpenAI Dactyl / DexPBT). Walking up to
+  the object is a different task and starves the lift of on-policy contact.
+* Dense constellation reach, two-scale tanh (Isaac Lab Franka uses
+  ``std=0.1`` because the gripper already starts next to the cube; a
+  standing humanoid's hands are ~0.5 m above a floor object, which saturates
+  ``std=0.15``. Coarse 0.40 keeps a gradient at spawn; fine 0.12 is the
+  pinch. Same coarse/fine split as Isaac Lab's goal-tracking terms).
+* Dense lift progress plus a sparse height bonus (Isaac Lab lift weights),
+  both multiplied by the pinch kernel. DexPBT stages ``r_pick`` then gates
+  ``r_targ`` on ``1_picked``; Isaac Lab gates goal tracking on height. The
+  inverse — gate height on pinch — is what stops a toss from looking like a
+  lift. Binary-only is too sparse for 6 Nm; progress-only is tossable.
+* Competence-gated height, not a wall-clock ramp — the same rule as
+  ``push_levels_adaptive``. A schedule that does not look at success will
+  outrun a 16 kg, 6 Nm machine.
+* Privileged critic (object velocity) — Pinto 2017, every Isaac Lab loco task.
+
+One PPO controls both robots. Tightly coupled pinch is a single physical
+system; independent learners spend their samples fighting each other.
+"""
+from __future__ import annotations
+
+import math
+
+from collections.abc import Sequence
+from typing import TYPE_CHECKING
+
+import torch
+
+from isaaclab.assets import Articulation, RigidObject
+from isaaclab.managers import SceneEntityCfg
+from isaaclab.utils.math import subtract_frame_transforms
+
+from bhl_robust.quat_order import unpack_wxyz
+
+if TYPE_CHECKING:
+    from isaaclab.envs import ManagerBasedRLEnv
+
+
+def _hand_midpoint(env: "ManagerBasedRLEnv", robot_cfg: SceneEntityCfg) -> torch.Tensor:
+    robot: Articulation = env.scene[robot_cfg.name]
+    return _t(robot.data.body_pos_w)[:, robot_cfg.body_ids, :].mean(dim=1)
+
+
+def _contact_points(env: "ManagerBasedRLEnv", object_cfg: SceneEntityCfg) -> tuple[torch.Tensor, torch.Tensor]:
+    obj: RigidObject = env.scene[object_cfg.name]
+    # `.dtype` on 3.x asset data is the *warp* dtype (a ctypes array type),
+    # which torch.tensor rejects. Take it from the torch view instead.
+    _root = _t(obj.data.root_pos_w)
+    axis = torch.tensor(env.cfg.contact_axis, device=obj.device, dtype=_root.dtype)
+    offset = float(env.cfg.contact_offset)
+    centre = _root[:, :3]
+    return centre + offset * axis, centre - offset * axis
+
+
+def constellation_reach(
+    env: "ManagerBasedRLEnv",
+    std: float,
+    robot_a_cfg: SceneEntityCfg,
+    robot_b_cfg: SceneEntityCfg,
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """1 - tanh(mean hand-midpoint distance to the two pinch points)."""
+    c_a, c_b = _contact_points(env, object_cfg)
+    d = 0.5 * (
+        torch.norm(_hand_midpoint(env, robot_a_cfg) - c_a, dim=-1)
+        + torch.norm(_hand_midpoint(env, robot_b_cfg) - c_b, dim=-1)
+    )
+    # Cached for the gated lift terms and the height curriculum. Both reach
+    # kernels write the same *d*; the last one to run wins, and they agree.
+    env._bhl_pinch_d = d
+    return 1.0 - torch.tanh(d / std)
+
+
+def _t(v):
+    """Coerce Isaac Lab 3.x's warp-first asset data to a torch tensor.
+
+    3.x returns `ProxyArray` from `asset.data.*`. It forwards indexing and most
+    torch operations, so almost everything keeps working -- but its `.shape` is
+    the *warp* shape, and for a vec3f array that is `(num_envs,)`, not
+    `(num_envs, 3)`. The observation manager reads `.shape` to size each term,
+    strips the env dimension, and gets `()`, then refuses to concatenate a
+    scalar with the rest of the group.
+
+    So a term can be numerically correct and still fail to register. `.torch` is
+    a cached zero-copy view, and a no-op on 2.x where the data is already a
+    tensor, so this costs nothing on either stack.
+    """
+    return v.torch if hasattr(v, "torch") else v
+
+
+def _pinch_weight(env: "ManagerBasedRLEnv", std: float = 0.12) -> torch.Tensor:
+    """Soft pinch in [0, 1]. 1 if the reach term has not run yet this step."""
+    d = getattr(env, "_bhl_pinch_d", None)
+    if d is None:
+        return torch.ones(env.num_envs, device=env.device)
+    return 1.0 - torch.tanh(d / std)
+
+
+def still_alive(env: "ManagerBasedRLEnv") -> torch.Tensor:
+    """Per-step alive bit. Standing spawn with a saturated reach kernel made
+    dying in five steps the highest-reward policy; this stops that shortcut
+    from beating a real pinch."""
+    return (~env.termination_manager.terminated).float()
+
+
+
+#: Height of the lowest leg body when this robot stands, read from the MuJoCo
+#: harness -- the engine in this project that demonstrably spawns this robot
+#: correctly. After `CrewRunner.reset` plants the feet, `ankle_roll` sits at
+#: +0.1403 with only the base frame below ground, hands symmetric at +0.5804 and
+#: shoulders highest at +0.75.
+#:
+#: Taken from MuJoCo rather than derived in Isaac because four separate Isaac
+#: probes in this investigation silently failed to apply the rotation they were
+#: testing, returning byte-identical geometry for quaternions 90 degrees apart.
+SOLE_REF = 0.1403
+
+
+def plant_feet(
+    env: "ManagerBasedRLEnv",
+    env_ids: Sequence[int],
+    asset_cfg: SceneEntityCfg,
+    clearance: float = 0.0,
+) -> None:
+    """Sit the robot on the plane instead of trusting a hardcoded root height.
+
+    `_PINCH_ROOT_Z = -0.07` is a pelvis drop derived on paper from the crouch
+    angles, and Isaac takes it literally. Measured, it spawns 19 of 27 bodies
+    below z = 0 with the hands 26 cm under the floor, against 1 of 27 for the
+    locomotion task on the same asset -- and then PhysX depenetration extrudes
+    the robot over the first ten steps, which is most of an 8-step episode.
+    Nothing terminates on it: both fall tests read orientation, and a robot
+    buried in the floor is perfectly upright.
+
+    The MuJoCo harness has never had this bug, because `CrewRunner.reset` poses
+    the joints, measures the lowest collision geom and translates the base onto
+    the plane -- explicitly declining to assume the two descriptions of the
+    robot put their root frames in the same place. This is that, for Isaac.
+
+    Measuring beats deriving here: the offset then holds for any pose, any
+    jitter and any asset revision, and a frame disagreement shows up as a robot
+    standing slightly high rather than one spawned inside the ground.
+    """
+    robot: Articulation = env.scene[asset_cfg.name]
+    # The joint and root resets have written to the sim but body_pos_w is only
+    # refreshed by a kinematics update; without this the measurement describes
+    # the *previous* episode's pose.
+    robot.update(dt=0.0)
+
+    bodies = _t(robot.data.body_pos_w)[env_ids]            # (n, bodies, 3)
+    origins = env.scene.env_origins[env_ids]               # (n, 3)
+
+    # Legs only, and to a measured reference -- not the lowest body to zero.
+    #
+    # The first version of this drove the *lowest body of any kind* onto the
+    # plane. With the arm asymmetry still open the lowest body is a hand, so it
+    # hoisted the robot until the hand cleared the floor and left the feet 8-20
+    # cm in the air. Every arm then fell on every episode: mean episode length
+    # 5.0, fall rate 1.000, against 428 for the gripper arms before the change.
+    # "0 of 27 bodies below z = 0" was true and was the wrong question.
+    #
+    # SOLE_REF is where the lowest leg body sits when this robot is standing:
+    # measured at +0.1026 on the shipped locomotion task, whose robot spawns at
+    # root z = 0 and walks (`slurm/inner/_sole_ref.sh`). Driving the legs to
+    # that height reproduces a stance the asset is known to hold, and it is
+    # immune to whatever the arms are doing.
+    leg = [i for i, n in enumerate(robot.body_names) if "leg" in n.lower()]
+    if not leg:                       # not a legged asset; nothing to plant on
+        return
+    lowest_leg = bodies[:, leg, 2].min(dim=1).values - origins[:, 2]
+
+    root = _t(robot.data.root_state_w)[env_ids].clone()
+    root[:, 2] += SOLE_REF + clearance - lowest_leg
+    robot.write_root_state_to_sim(root, env_ids=env_ids)
+
+def base_height_mean(env: "ManagerBasedRLEnv", env_ids: Sequence[int]) -> float:
+    """Mean base height of the pair, in metres. Diagnostic, not an objective.
+
+    Nothing in this task has ever constrained how low the robots get. Both fall
+    tests read orientation -- `either_fallen` on a tilt limit, and
+    `flat_orientation_l2` on projected gravity -- so a machine that sinks onto
+    its shins with a level torso is scored as upright and paid `still_alive`
+    for it. Getting low is also worth a lot: it puts the hands at the height of
+    a 28 cm cube, which is three reach terms and the 15.0-weight lift bonus.
+    The gradient points down and nothing pushes back.
+
+    In the MuJoCo replay both cube arms drop ~41 cm within 0.2 s, before they
+    touch the payload, and hold that pose for the rest of the episode. Whether
+    training does the same is unknown, because base height has never been
+    recorded -- `base_contact` sits near zero, but a robot folded onto its
+    shins never puts its torso down either, so that cannot separate a squat
+    from a collapse.
+
+    The signature is exactly `(env, env_ids)` and takes no `SceneEntityCfg`
+    parameters, because the manager resolves those by introspection and then
+    demands the config declare them -- a `SceneEntityCfg` default is not treated
+    as a default at all. The robot names are fixed by the task, so looking them
+    up directly is both simpler and one less thing to keep in sync.
+
+    `env_ids` carries no default on purpose either: a second positional without
+    one is the env-id slice the manager injects, while one *with* a default
+    becomes another parameter it expects the config to supply.
+
+    Registered as a *curriculum* term, not a reward term. The reward manager
+    logs `weight x value`, so the obvious trick -- a reward at weight 0.0, to
+    observe without optimising -- logs 0.0000 forever. It did, for 1,300
+    iterations, before that was noticed. Curriculum terms log their return value
+    directly and touch no gradient, which is the behaviour that was wanted.
+    """
+    # Pair scenes name the robots robot_a/robot_b; crew scenes robot_0..robot_N
+    # (the 2026-09-24 crew gate failed here with KeyError 'robot_a'). Average
+    # whichever robots the scene holds.
+    names = [k for k in ("robot_a", "robot_b") if k in env.scene.keys()]
+    if not names:
+        names = sorted(k for k in env.scene.keys() if k.startswith("robot_"))
+    if not names:
+        return 0.0
+    heights = [_t(env.scene[k].data.root_pos_w)[:, 2] for k in names]
+    a = heights[0]
+    b = heights[1] if len(heights) > 1 else heights[0]
+    if len(heights) > 2:
+        b = sum(heights[1:]) / len(heights[1:])
+    # A scalar, because the curriculum manager logs one number per term rather
+    # than a per-env vector -- the same shape `stage_lift` and `lift_height`
+    # return.
+    return float((0.5 * (a + b)).mean())
+
+
+def object_lift_progress(
+    env: "ManagerBasedRLEnv",
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """z-gain from spawn, clipped at the current lift target, gated on pinch."""
+    obj: RigidObject = env.scene[object_cfg.name]
+    spawn = float(env.cfg.object_spawn_z)
+    target = float(getattr(env, "_bhl_lift_h", env.cfg.lift_success_z))
+    progress = (_t(obj.data.root_pos_w)[:, 2] - spawn) / max(target, 1e-3)
+    progress = progress.clamp(0.0, 1.0)
+    if getattr(env.cfg, "gate_lift_on_pinch", True):
+        progress = progress * _pinch_weight(env)
+    return progress
+
+
+def object_is_lifted(
+    env: "ManagerBasedRLEnv",
+    minimal_height: float,
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """Sparse bonus once the object clears spawn *and* the hands are in a pinch.
+
+    Height alone is a toss (ladder run: lift bonus 3.4, reaching 0.0, *h* at
+    the 22 cm cap). Multiplying by the pinch kernel is the DexPBT / Isaac Lab
+    gate, inverted: they gate carry on lift, we gate lift on pinch.
+    """
+    obj: RigidObject = env.scene[object_cfg.name]
+    lifted = (_t(obj.data.root_pos_w)[:, 2] > (float(env.cfg.object_spawn_z) + minimal_height)).float()
+    if getattr(env.cfg, "gate_lift_on_pinch", True):
+        lifted = lifted * _pinch_weight(env)
+    return lifted
+
+
+def object_xy_drift_l2(
+    env: "ManagerBasedRLEnv",
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """Keep the lift in place. Carry is a later phase; rewarding it now is a toss."""
+    obj: RigidObject = env.scene[object_cfg.name]
+    spawn_xy = _t(obj.data.default_root_state)[:, :2] + env.scene.env_origins[:, :2]
+    return torch.sum(torch.square(_t(obj.data.root_pos_w)[:, :2] - spawn_xy), dim=-1)
+
+
+def object_lin_vel_l2(
+    env: "ManagerBasedRLEnv",
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    obj: RigidObject = env.scene[object_cfg.name]
+    return torch.sum(torch.square(_t(obj.data.root_lin_vel_w)), dim=-1)
+
+
+def object_pos_in_root(
+    env: "ManagerBasedRLEnv",
+    robot_cfg: SceneEntityCfg,
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    robot: Articulation = env.scene[robot_cfg.name]
+    obj: RigidObject = env.scene[object_cfg.name]
+    pos_b, _ = subtract_frame_transforms(
+        _t(robot.data.root_pos_w), _t(robot.data.root_quat_w), _t(obj.data.root_pos_w)[:, :3]
+    )
+    return pos_b
+
+
+def object_lin_vel_w(
+    env: "ManagerBasedRLEnv",
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    obj: RigidObject = env.scene[object_cfg.name]
+    return _t(obj.data.root_lin_vel_w)
+
+
+def object_ang_vel_w(
+    env: "ManagerBasedRLEnv",
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    obj: RigidObject = env.scene[object_cfg.name]
+    return _t(obj.data.root_ang_vel_w)
+
+
+def joint_target_error(
+    env: "ManagerBasedRLEnv",
+    asset_cfg: SceneEntityCfg,
+) -> torch.Tensor:
+    """PD tracking residual: commanded minus measured joint position.
+
+    On the robot this is motor-current / tracking error, the usual proxy for
+    contact when there are no fingers or tactile sensors. COLA / non-prehensile
+    lift papers use it so the policy knows it has a clamp from resistance,
+    not from a binary contact flag that will not exist on hardware.
+    """
+    robot: Articulation = env.scene[asset_cfg.name]
+    return (_t(robot.data.joint_pos)[:, asset_cfg.joint_ids]
+            - _t(robot.data.joint_pos_target)[:, asset_cfg.joint_ids])
+
+
+def opposing_clamp(
+    env: "ManagerBasedRLEnv",
+    robot_a_cfg: SceneEntityCfg,
+    robot_b_cfg: SceneEntityCfg,
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """1 when the two hand-midpoints pull on opposite sides of the object.
+
+    Non-prehensile lift needs opposing force, not two hands on the same face.
+    Gated on pinch so a far-away opposite pose does not pay.
+    """
+    obj: RigidObject = env.scene[object_cfg.name]
+    centre = _t(obj.data.root_pos_w)[:, :3]
+    va = centre - _hand_midpoint(env, robot_a_cfg)
+    vb = centre - _hand_midpoint(env, robot_b_cfg)
+    va = torch.nn.functional.normalize(va, dim=-1, eps=1e-6)
+    vb = torch.nn.functional.normalize(vb, dim=-1, eps=1e-6)
+    opposite = (-(va * vb).sum(dim=-1)).clamp(0.0, 1.0)
+    return opposite * _pinch_weight(env)
+
+
+def object_tilt_l2(
+    env: "ManagerBasedRLEnv",
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """Roll/pitch of the payload: (1 - R22)^2, R22 = cos of the angle between the
+    object's own z axis and world up. 0 upright or yawed, 1 on its side (90 deg
+    about world x or y), 4 upside down. Synchronous lift keeps this near zero.
+
+    Unpacked in the running stack's layout (`unpack_wxyz`) since 2026-09-28.
+    It used to index `q[:, 1]`, `q[:, 2]` as x, y, which is right on v51
+    (w, x, y, z) and on v60 (x, y, z, w) reads y and z instead: it penalised
+    rotation about y and yaw, and ignored rotation about x. The payload's spawn
+    was flipped 180 deg about x on v60 by the same bug (`coop_lift_env_cfg.
+    _object`), and the two cancelled at rest; fixing this term alone would
+    charge 4 x weight per step for an untouched cube. The spawn and this term
+    were fixed together. v51: numerically identical (same two columns).
+
+    Every v60 coop-lift / TaskV2 / crew run from this change on is a NEW
+    configuration, never compared with or used to re-score the Stand / Stand2 /
+    Stand3 / CoopLift results recorded before it.
+    """
+    obj: RigidObject = env.scene[object_cfg.name]
+    w, x, y, z = unpack_wxyz(_t(obj.data.root_quat_w))
+    up_z = 1.0 - 2.0 * (x * x + y * y)      # R[2, 2]
+    return torch.square(1.0 - up_z)
+
+
+def _tilt_from_quat(robot) -> torch.Tensor:
+    """Angle between the robot's own up axis and world up, from the quaternion.
+
+    Not from `projected_gravity_b`. On Isaac Lab 3.x that quantity comes back as
+    [0, +/-1, 0] for these robots -- gravity along body y, not body -z -- so
+    `acos(-pg[:, 2])` evaluates to acos(0) = 1.5708 rad for every environment at
+    spawn, clears the 0.78 limit, and terminates every episode on its first
+    step. That is what made nine v2 arms train 8,000 iterations on one-step
+    episodes while reporting healthy iteration counts.
+
+    The two robots read +y and -y because they are yawed +/-90 degrees, which is
+    the tell: a yaw rotation cannot move gravity out of body z, so the quantity
+    was not the body-frame projection the 2.x convention promised.
+
+    Rotating the body's z axis into the world and taking its z component is
+    convention-independent, and it is the same definition `coop_replay.tilt`
+    uses -- arccos(R[2, 2]) -- so the trainer and the sim2sim judge now agree by
+    construction rather than by coincidence.
+    """
+    # Unpacked in the running stack's layout: Isaac Lab 3.x stores root_quat_w
+    # as xyzw, 2.x as wxyz. Reading xyzw as wxyz made the +/-90 degree yaw spawn
+    # look like a 1.6 rad tilt at reset (spawn diagnostic, 2026-09-23).
+    w, x, y, z = unpack_wxyz(_t(robot.data.root_quat_w))
+    up_z = 1.0 - 2.0 * (x * x + y * y)      # R[2, 2]
+    return torch.acos(up_z.clamp(-1.0, 1.0))
+
+
+def either_fallen(
+    env: "ManagerBasedRLEnv",
+    limit_angle: float,
+    robot_a_cfg: SceneEntityCfg = SceneEntityCfg("robot_a"),
+    robot_b_cfg: SceneEntityCfg = SceneEntityCfg("robot_b"),
+) -> torch.Tensor:
+    """Terminate if either robot exceeds the loco tilt limit (0.78 rad)."""
+    a: Articulation = env.scene[robot_a_cfg.name]
+    b: Articulation = env.scene[robot_b_cfg.name]
+    tilt_a = _tilt_from_quat(a)
+    tilt_b = _tilt_from_quat(b)
+    return (tilt_a > limit_angle) | (tilt_b > limit_angle)
+
+
+def lift_height_curriculum(
+    env: "ManagerBasedRLEnv",
+    env_ids: Sequence[int],
+    term_name: str = "lifting_object",
+    step: float = 0.02,
+    min_height: float = 0.04,
+    max_height: float = 0.22,
+    success_rate_target: float = 0.35,
+) -> float:
+    """Raise the sparse-lift threshold only while the policy is clearing it.
+
+    Same feedback rule as ``push_levels_adaptive``: promote on competence,
+    demote if success collapses. The logged value is the measurement.
+    """
+    obj: RigidObject = env.scene["object"]
+    height = getattr(env, "_bhl_lift_h", min_height)
+    spawn = float(env.cfg.object_spawn_z)
+    if getattr(env.cfg, "clock_lift_height", False):
+        # Wall-clock ramp: ignore competence. Same shape as the push
+        # curriculum that destroyed the policy past 0.7 m/s.
+        t = float(getattr(env, "common_step_counter", 0))
+        frac = min(1.0, t / 72000.0)
+        height = min_height + (max_height - min_height) * frac
+        env._bhl_lift_h = height
+        term_cfg = env.reward_manager.get_term_cfg(term_name)
+        term_cfg.params["minimal_height"] = height
+        env.reward_manager.set_term_cfg(term_name, term_cfg)
+        return height
+    if env_ids is None or len(env_ids) == 0:
+        idx = slice(None)
+        z = _t(obj.data.root_pos_w)[:, 2]
+    else:
+        idx = env_ids
+        z = _t(obj.data.root_pos_w)[env_ids, 2]
+    high_enough = z > (spawn + height)
+    d = getattr(env, "_bhl_pinch_d", None)
+    if (not getattr(env.cfg, "gate_lift_on_pinch", True)) or d is None:
+        pinched = torch.ones_like(z, dtype=torch.bool)
+    else:
+        pinched = (d[idx] < 0.20)
+    success = float((high_enough & pinched).float().mean())
+    if success > success_rate_target:
+        height = min(max_height, height + step)
+    elif success < 0.5 * success_rate_target:
+        height = max(min_height, height - step)
+    env._bhl_lift_h = height
+
+    term_cfg = env.reward_manager.get_term_cfg(term_name)
+    term_cfg.params["minimal_height"] = height
+    env.reward_manager.set_term_cfg(term_name, term_cfg)
+    return height
+
+
+def stage_lift_on_pinch(
+    env: "ManagerBasedRLEnv",
+    env_ids: Sequence[int],
+    progress_weight: float = 2.0,
+    bonus_weight: float = 15.0,
+    enter: float = 0.40,
+) -> float:
+    """DexPBT staging: keep lift weights at 0 until the pinch kernel is on.
+
+    No-op unless ``env.cfg.stage_lift_on_pinch``. Once the batch-mean pinch
+    weight clears ``enter``, lift progress and the sparse bonus turn on and
+    stay on. That is ``r_pick`` then ``r_targ``, not pick-only for 4,000 iters.
+    """
+    if not getattr(env.cfg, "stage_lift_on_pinch", False):
+        return 1.0
+    # ``_pinch_weight`` is 1.0 when the reach term has not run this step.
+    # Curriculum can fire on reset before that, which latched staging on
+    # at iteration 0 for the overnight ``staged`` arm — it became the
+    # control. Missing *d* is "not yet a pinch", not "already pinched".
+    if getattr(env, "_bhl_pinch_d", None) is None and not getattr(env, "_bhl_lift_staged", False):
+        for name in ("lift_progress", "lifting_object"):
+            cfg = env.reward_manager.get_term_cfg(name)
+            cfg.weight = 0.0
+            env.reward_manager.set_term_cfg(name, cfg)
+        return 0.0
+    rate = float(_pinch_weight(env).mean())
+    staged = bool(getattr(env, "_bhl_lift_staged", False) or rate >= enter)
+    env._bhl_lift_staged = staged
+    for name, weight in (("lift_progress", progress_weight), ("lifting_object", bonus_weight)):
+        cfg = env.reward_manager.get_term_cfg(name)
+        cfg.weight = weight if staged else 0.0
+        env.reward_manager.set_term_cfg(name, cfg)
+    return float(staged)
+
+
+# --- N-robot crew ----------------------------------------------------------
+#
+# The two-robot terms above hard-code a pair: two contact points at
+# `centre +/- offset * axis`, and a clamp that is the dot product of two
+# vectors. Neither generalises by adding arguments, so the crew versions below
+# restate them on a ring. At n = 2 they are the same function: two points on a
+# ring 180 degrees apart *are* `centre +/- offset * axis`, and the force-closure
+# residual of two antiparallel unit vectors *is* `-v_a . v_b`.
+
+
+def crew_contact_points(env: "ManagerBasedRLEnv", object_cfg: SceneEntityCfg,
+                        n: int) -> torch.Tensor:
+    """`n` contact points evenly spaced on a horizontal ring around the payload.
+
+    Returns (num_envs, n, 3). Robot *i* is assigned point *i*, and the scene
+    places robot *i* at the same bearing, so the assignment is the identity and
+    no matching problem appears in the reward.
+    """
+    obj: RigidObject = env.scene[object_cfg.name]
+    centre = _t(obj.data.root_pos_w)[:, :3]
+    offset = float(env.cfg.contact_offset)
+    ang = torch.arange(n, device=centre.device, dtype=centre.dtype) * (2.0 * math.pi / n)
+    # Bearing 0 is +x. The pair case sits at +/- 90 degrees, i.e. on +/- y, which
+    # is where `contact_axis = (0, 1, 0)` put it.
+    ang = ang + math.pi / 2.0
+    ring = torch.stack([torch.cos(ang), torch.sin(ang), torch.zeros_like(ang)], dim=-1)
+    return centre.unsqueeze(1) + offset * ring.unsqueeze(0)
+
+
+def crew_reach(
+    env: "ManagerBasedRLEnv",
+    std: float,
+    robot_cfgs: Sequence[SceneEntityCfg],
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """1 - tanh(mean hand-midpoint distance to each robot's own contact point)."""
+    pts = crew_contact_points(env, object_cfg, len(robot_cfgs))
+    d = torch.stack(
+        [torch.norm(_hand_midpoint(env, c) - pts[:, i], dim=-1)
+         for i, c in enumerate(robot_cfgs)],
+        dim=-1,
+    ).mean(dim=-1)
+    # Same cache the pair terms write, so the pinch gate and the height
+    # curriculum work unchanged on a crew.
+    env._bhl_pinch_d = d
+    return 1.0 - torch.tanh(d / std)
+
+
+def crew_force_closure(
+    env: "ManagerBasedRLEnv",
+    robot_cfgs: Sequence[SceneEntityCfg],
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """1 when the crew's inward pushes cancel, 0 when they all shove one way.
+
+    Each robot contributes a unit vector from its hands toward the payload
+    centre. If those sum to zero the payload is squeezed and not accelerated,
+    which is the whole content of "opposing" once there are more than two of
+    them. Gated on pinch, so standing in a tidy circle far away pays nothing.
+    """
+    obj: RigidObject = env.scene[object_cfg.name]
+    centre = _t(obj.data.root_pos_w)[:, :3]
+    v = torch.stack(
+        [torch.nn.functional.normalize(centre - _hand_midpoint(env, c), dim=-1, eps=1e-6)
+         for c in robot_cfgs],
+        dim=1,
+    )
+    residual = torch.norm(v.mean(dim=1), dim=-1)
+    return (1.0 - residual).clamp(0.0, 1.0) * _pinch_weight(env)
+
+
+def crew_spread(
+    env: "ManagerBasedRLEnv",
+    robot_cfgs: Sequence[SceneEntityCfg],
+    object_cfg: SceneEntityCfg = SceneEntityCfg("object"),
+) -> torch.Tensor:
+    """Penalty: variance of hand-to-payload distance across the crew.
+
+    Force closure is satisfied by a crew that is balanced but loose. This is the
+    term that says everyone has to be equally close, which for a non-prehensile
+    lift is what stops three robots carrying while the fourth trails.
+    """
+    obj: RigidObject = env.scene[object_cfg.name]
+    centre = _t(obj.data.root_pos_w)[:, :3]
+    d = torch.stack(
+        [torch.norm(centre - _hand_midpoint(env, c), dim=-1) for c in robot_cfgs], dim=-1
+    )
+    return d.var(dim=-1, unbiased=False)
+
+
+def any_fallen(
+    env: "ManagerBasedRLEnv",
+    limit_angle: float,
+    robot_names: Sequence[str],
+) -> torch.Tensor:
+    """Terminate if any crew member exceeds the loco tilt limit."""
+    out = None
+    for name in robot_names:
+        r: Articulation = env.scene[name]
+        tilt = _tilt_from_quat(r)
+        hit = tilt > limit_angle
+        out = hit if out is None else (out | hit)
+    return out

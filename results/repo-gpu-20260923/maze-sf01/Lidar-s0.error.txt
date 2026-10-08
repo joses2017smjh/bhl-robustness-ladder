@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/scripts/bench/maze_recovery_probe.py", line 228, in run
+    env.unwrapped.reset(seed=args.seed)
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/envs/manager_based_env.py", line 423, in reset
+    self._reset_idx(env_ids)
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/envs/manager_based_rl_env.py", line 394, in _reset_idx
+    info = self.command_manager.reset(env_ids)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/managers/command_manager.py", line 347, in reset
+    metrics = term.reset(env_ids=env_ids)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/envs/mdp/commands/velocity_command.py", line 149, in reset
+    extras = super().reset(env_ids)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/managers/command_manager.py", line 141, in reset
+    self._resample(env_ids)
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab/isaaclab/managers/command_manager.py", line 179, in _resample
+    self._resample_command(env_ids)
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/src/bhl_robust/tasks/maze_recovery_env_cfg.py", line 20, in _resample_command
+    super()._resample_command(env_ids)
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/src/bhl_robust/tasks/maze_mdp.py", line 104, in _resample_command
+    self._wp_idx[ids] = 0
+    ~~~~~~~~~~~~^^^^^
+RuntimeError: Inplace update to inference tensor outside InferenceMode is not allowed.You can make a clone to get a normal tensor before doing inplace update.See https://github.com/pytorch/rfcs/pull/17 for more details.

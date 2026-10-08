@@ -1,0 +1,20 @@
+{
+  "task": "Velocity-BHL-MazeRecovery-Full-BothRobustDistill-v0",
+  "run_name": "sf04-distill-s0",
+  "seed": 0,
+  "num_envs": 1024,
+  "iterations_requested": 2000,
+  "started_epoch": 1790218694,
+  "finished_epoch": 1790225555,
+  "train_rc": 0,
+  "timed_out": false,
+  "iterations_logged": 2000,
+  "last_mean_episode_length": 148.59,
+  "teacher_checkpoint_load_logged": true,
+  "last_behavior_loss": 0.0922,
+  "checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-23_19-58-56_sf04-distill-s0/model_1999.pt",
+  "teacher": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-19_16-25-50_wknd-full-both-s0/model_5997.pt",
+  "runner": "DistillationRunner",
+  "student": "RNNModel lstm 256x1 + MLP [256,128,128] on the degraded policy group",
+  "teacher_model": "MLPModel [256,128,128] on the clean teacher group (PPO actor_state_dict)"
+}

@@ -1,0 +1,50 @@
+{
+  "arm": "both",
+  "seed": 0,
+  "stage": "approach",
+  "updates": 400,
+  "horizon": 64,
+  "control_dt": 0.2,
+  "actor_critic_inputs": "same_sensor_only_history",
+  "algorithm": "installed_rsl_rl.PPO",
+  "gait_deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/deploy.yaml",
+  "gait_sha256": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b",
+  "sensor_provenance": {
+    "lidar": {
+      "rays": 108,
+      "sectors": 36,
+      "max_range_m": 12.0,
+      "body_mount_m": [
+        0.12,
+        0.0,
+        0.72
+      ],
+      "nominal_hz": 10.0
+    },
+    "stereo": {
+      "kind": "paired_idealized_ray_depth_not_rgb_matching",
+      "side": 8,
+      "baseline_m": 0.06,
+      "body_center_m": [
+        0.12,
+        0.0,
+        0.7
+      ],
+      "pitch_down_deg": 20,
+      "vfov_deg": 60.5,
+      "max_range_m": 6.0,
+      "calibration_kind": "analytic ray mounts; no image correspondence"
+    },
+    "imu": {
+      "kind": "mujoco_site_quaternion_gyro_accelerometer",
+      "frame": "body_to_ENU_xyzw",
+      "gravity_unitless": true,
+      "gyro_units": "rad/s",
+      "specific_force_units": "m/s^2",
+      "hardware_calibrated": false
+    },
+    "localization": "none_in_actor_or_critic",
+    "ssd": "not_configured_no_rgb_or_weights",
+    "invalid": "zero value with explicit zero mask; no hit is invalid"
+  }
+}

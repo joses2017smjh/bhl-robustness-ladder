@@ -1,0 +1,36 @@
+{
+  "created_utc": "2026-09-21T00:22:03.304020+00:00",
+  "diagnostic_only": true,
+  "gpus_per_job": 0,
+  "cpus_per_job": 2,
+  "memory_gb_per_job": 12,
+  "walltime_per_job": "02:00:00",
+  "feasibility": {
+    "episodes": 96,
+    "layouts": 16,
+    "seeds": 2,
+    "split": "train",
+    "controllers": [
+      "oracle_slow",
+      "oracle_fast",
+      "stationary"
+    ],
+    "dependency": null
+  },
+  "checkpoint": {
+    "episodes": 64,
+    "layouts": 16,
+    "seeds": 1,
+    "split": "validation",
+    "conditions": [
+      "normal",
+      "lidar_missing",
+      "stereo_missing",
+      "both_missing"
+    ],
+    "dependency": "afterany:21369796",
+    "checkpoint": "../mission7-20260920/validation-both-s0/model_400.pt"
+  },
+  "source_snapshot": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-diagnostics-20260920/source",
+  "task_source": "frozen Phase B implementation"
+}

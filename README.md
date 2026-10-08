@@ -1,25 +1,17 @@
-# bhl-robustness-ladder
+# Humanoid Robustness Ladder
 
-**Robot-learning experiments with checks that distinguish task success from a job that merely ran.**
+**Train humanoid policies in Isaac Lab and test what they actually accomplish.**
 
-Train Berkeley Humanoid Lite policies in Isaac Lab, evaluate selected gaits in
-MuJoCo, and record checkpoints, task scores, negative controls and failures.
-My contribution is the infrastructure around the upstream robot: curricula,
-sensor adapters, shared-world missions and Slurm evaluation gates.
+I built the task curricula, sensor adapters, MuJoCo evaluation harnesses and
+Slurm checkpoint gates around the upstream Berkeley Humanoid Lite. The project
+studies locomotion, goal reaching and multi-robot coordination, with scored
+recordings and negative controls.
 
-Jose Sanchez · MS Artificial Intelligence, Oregon State ·
-[portfolio](https://jose-sanchez-portfolio-com.vercel.app) ·
-[findings](docs/FINDINGS.md) ·
-[gallery](docs/GALLERY.md) ·
-[sanchej7@oregonstate.edu](mailto:sanchej7@oregonstate.edu)
-
-Seeking robotics ML / simulation engineering roles. Python · PyTorch · Isaac
-Lab · MuJoCo · ONNX · Slurm/HPC.
-
-[Results, September 20](docs/WEEKEND_RESULTS_2026-09-20.md) ·
-[Root causes and tests, October 1–2](docs/SOLUTIONS_2026-10-01.md) ·
-[Reproduce and inspect](docs/REPRODUCIBILITY.md) ·
-[Architecture](#architecture) · [Job ledger](SLURM_JOBS.md) · [Roadmap and stretch goals](docs/ROADMAP.md)
+[Watch the demo](results/weekend-20260919/inspection-maze.mp4) ·
+[Results](docs/WEEKEND_RESULTS_2026-09-20.md) ·
+[Success/failure gallery](docs/GALLERY.md) ·
+[Portfolio case study](https://jose-sanchez-portfolio-com.vercel.app/projects/bhl-robustness-ladder/) ·
+[Roadmap and stretch goals](docs/ROADMAP.md)
 
 <p align="center">
   <a href="docs/gifs/random-maze-humanoid-sensors.gif"><img src="docs/gifs/random-maze-humanoid-sensors.gif" width="100%" alt="Top view of a randomized 6x6 maze: the 22-DoF humanoid (arms and legs) turns in place and walks forward along an orange breadcrumb path to a green goal. Under the view, simulated IMU gyro and accelerometer traces. Right: the brake's 8x8 ray depth, lidar sectors and the lidar-built map with the A* plan; then the stereo rig's RGB, 160x120 rendered depth, left-eye optical flow, and the IMU attitude filter against truth. Badge: GIF at 5x."></a><br>
@@ -62,214 +54,197 @@ Lab · MuJoCo · ONNX · Slurm/HPC.
       <sub>Isaac-trained PPO, scored in MuJoCo. The highest-training-reward policy (right, no randomization) falls in <b>21/90</b> episodes; the default randomization <b>0/90</b>.</sub>
     </td>
     <td width="50%" align="center">
-      <a href="docs/gifs/turngait-clock-actor-vs-critic.gif"><img src="docs/gifs/turngait-clock-actor-vs-critic.gif" width="420" alt="Two 22-DoF humanoids in MuJoCo get the same command: stand 3 s, then turn left at 0.6 rad/s for 6 s; then the same to the right. Left, gait clock as a policy input: turns +197 and -206 degrees. Right, gait clock in the critic only: steps but turns +17 and -14 degrees. Heading dials show the yaw turned; result cards compare it with the 150-degree bar of the scored turn test."></a><br>
-      <sub>One change, same command: the gait clock as a policy input (left) or only in the critic (right). Every clock-input seed turns in place (<b>18/18</b> scored turns); <b>0 of 3</b> critic-only seeds turn. Only 1 of 3 clock-input seeds also walks straight, so that recipe still fails its rule. Learned gaits; the clip re-simulates the scored runs.</sub>
+      <sub><a href="docs/GALLERY.md">Every clip, successes and failures</a> ·
+      <a href="docs/STATUS.md">status of every workstream, negatives included</a> ·
+      <a href="SLURM_JOBS.md">job ledger with predeclared rules</a></sub>
     </td>
   </tr>
 </table>
 
-<sub><a href="docs/GALLERY.md">Every clip, successes and failures</a> ·
-<a href="docs/STATUS.md">status of every workstream, negatives included</a> ·
-<a href="SLURM_JOBS.md">job ledger with predeclared rules</a></sub>
-
 <sub>Learned = PPO policy, frozen at evaluation. Scripted = hand-written planner or supervisor.
 Oracle = simulator ground truth (pose, goal, waypoints) given to the controller.</sub>
 
-## Latest measured results
+## Results and limits
 
-| Experiment | Evidence | Boundary |
+| Experiment | Measured result | What the result covers |
 |---|---|---|
-| Turning gait with a gait clock (Oct 2) | Clock as a policy input: **every seed turns in place** (18/18 turns from a settled stand, 0 falls; 28/30 on fresh seeds). **1 of 3 qualifies**, the second qualified turning checkpoint overall; the other two drift more than 15° on straight walks, so the predeclared recipe rule (2 of 3) **fails**. Same clock in the critic only: **0 of 3** seeds turn | LEARNED gait, MuJoCo gates; a single qualified checkpoint, not a reliable recipe ([R1](results/repo-gpu-20260923/turngait-r12-20261001/verdict/R1.json), [R2](results/repo-gpu-20260923/turngait-r12-20261001/verdict/R2.json)) |
-| Mission 7 plate crossing (Oct 2) | All three predeclared scripted-stage plans **negative**: bench v1 **8/64** clears, 8 falls (26 lost in the bench's own run-up); run-up-free bench v2 with turn-while-stepping **16/41**, 5 falls, wall contact in 30/41, 180° entries **0/8**; bench v2 with the qualified gait-clock turning gait as the stage gait **18/41**, 1 fall, 180° **0/8** (6 of 8 clear only after 10.8–17.3 s of a 10 s window). Pass needs ≥ 39/41 | LEARNED gaits, SCRIPTED stage controller, ORACLE layout and plate pose ([v1](results/mission7-campaign-20260923/m2-plate-bench/verdict.json), [v2](results/mission7-campaign-20260923/m3-plate-bench-v2/verdict.json), [v2 clock gait](results/mission7-campaign-20260923/clocks2-plate-bench-v2/verdict.json)) |
-| Cooperative carry with flush hand pads (Oct 2) | Probe **negative**: the cube still rolls in the hands; 0/5 seeds stay within 0.35 rad (peak tilt 0.70–0.74 rad), so the scored stage did not run. Reading, not a gate: the unchanged lift-and-hold rule passes **5/5** (stock hands: 0/10) | LEARNED gait, SCRIPTED arms, ORACLE cube pose for scoring only; modified end-effector, not the stock robot ([verdict](results/coop-flushpad-20261002/probe/verdict.json)) |
-| Learned navigation, map updated at each lidar packet's capture pose (Oct 1) | **Negative**: weaker actor 15 → 17/24 mazes (needed net +4), stronger actor 23 → 23/24; 0 falls, fewer wall contacts; the fix stays opt-in | LEARNED gait and NavGym v4 actors; ORACLE pose and goal ([verdict](results/navgym-v4-capture-pose-20261001/screen/verdict.json)) |
-| In flight (Oct 2) | Standing cube-to-shelf with a roll-proof lift reward (2 seeds); NavGym v5 navigator with a visit map (3 seeds), then physics transfer on 12 never-seen mazes; a learned Mission 7 crossing (the gait-clock gait fine-tuned on Mission 7's plates, 3 seeds); the gait-clock recipe plus explicit straight-walk commands and a heading-hold reward (3 seeds) | Rules predeclared in the [job ledger](SLURM_JOBS.md) before any run |
-| Randomized-maze mission (Sept 24–28) | **24/24** unseen mazes, 0 falls, 0 wall contacts; 6×6 at 35 % packet dropout: **12/12** reached, 11 clean; 22-DoF humanoid (one qualified turning checkpoint) **12/12** never-seen 6×6, 0 falls | Learned gait, scripted A* on the robot's own lidar map, oracle pose and goal; MuJoCo only |
-| Learned navigation on the physics biped (Sept 27) | **10/12** never-seen 6×6 mazes, 0 falls (A* 12/12) | Exploratory: the gym policy missed its predeclared held-out bar by one clause; oracle pose and goal |
-| Turning gait, cooperative lift, standing cube-to-shelf (Sept 27) | Turning: 1 of 12 seeds qualifies; scripted lift-and-hold **0/10**; standing policy stands but never places | Negatives, recorded with their mechanisms in [status](docs/STATUS.md) |
-| Repaired goal-reaching PPO | **379/384** final-stage first episodes; 4 sensor conditions × 3 seeds × 32 envs; all 36 curriculum jobs completed | 12-DoF biped, fixed corridor, oracle waypoints, observation noise disabled; not a sensor-benefit claim |
-| Two-turn inspection mission | **3/3** nominal; **0/3** wrong-branch and **0/3** complete-outage controls | 22-DoF MuJoCo humanoid; known map/pose and frozen gait |
-| Two-/three-robot airlock | **5/5** each; both negative controls **0/5** each | One physical world, explicit synchronization; no carrying or newly trained MARL |
-| Dual-arm cloth folding | Baseline short pants **8/24**, adapted seed 1 **3/24**; only **5/12** evaluation cells completed | No demonstrated adaptation improvement; remaining cells failed/timed out; not humanoid folding |
+| Confirmed locomotion robustness | **3,600** episodes; flat falls **77/360 → 0/360**, push falls **341/360 → 13/360** (randomization off → default) | Five settings × three training seeds × two conditions; frozen 12-DoF biped in MuJoCo; shared command/reset seeds; [full verdict](campaigns/20261006-confirmatory/results/dr_verdict.json) |
+| Confirmed learned navigation (NavGym v5) | Each actor reaches **44–46/48** nominal goals and **43–46/48** under 35% packet dropout; zero-fall gate **NEGATIVE** | Three actors + matched A* on 48 fresh layouts per condition, **384** episodes; learned gait + scripted brake, oracle pose/goal; [per-actor verdict](campaigns/20261006-confirmatory/results/verdict.json) |
+| Goal-reaching PPO | **379/384** successful first episodes in the final stage; all **36** curriculum jobs completed | Four sensor conditions × three seeds × 32 environments; fixed route, oracle waypoints, observation noise disabled |
+| Inspection mission | **3/3** nominal; wrong-branch and complete-outage controls **0/3** each | Frozen gait and supervised navigation in MuJoCo; no object recognition |
+| Two-/three-robot airlock | **5/5** each; both negative controls **0/5** each | Shared physical world and explicit synchronization; no carrying or newly trained MARL |
+| Separate dual-arm folding study | Baseline short pants **8/24**, adapted seed 1 **3/24**; **5/12** evaluation cells completed | Official ever-triggered checker; no demonstrated adaptation improvement |
 
-[Raw result report](results/weekend-20260919/SUMMARY.md) ·
-[Protocols and limits](docs/WEEKEND_CAMPAIGN.md) ·
-[Cloth diagnosis](docs/CLOTH_FOLDING_WEEKEND.md).
+**2026-10-07 confirmatory results:** the locomotion campaign completed its flat-ground replication gate (**PASS**). The navigation campaign completed all 384 episodes but missed its predeclared zero-fall gate (**NEGATIVE**): all three learned actors fell in nominal sensing, and one also fell under packet dropout. A* observed no falls. The smaller demonstration cohorts above remain historical results. [Protocols and saved verdicts](campaigns/20261006-confirmatory/) and the [job ledger](SLURM_JOBS.md) retain the evidence and negative findings.
 
----
+The [dated report](docs/WEEKEND_RESULTS_2026-09-20.md) links per-seed evidence.
+[Published records](docs/PUBLIC_EVIDENCE.md) retain scores, episode outcomes
+and traces while omitting new private machine paths and scheduler receipts.
+[Folding clips](docs/FOLDING_MEDIA.md) distinguish historical checker success
+from the new adaptation failure. A completed rendering job is not a successful fold.
 
-## Problem, solution, result
+## Why this project
 
-| | |
-|---|---|
-| **Problem** | High training reward can hide task failure or poor transfer to another physics engine. |
-| **Solution** | Train in Isaac Lab (PhysX, 4,096 envs). Export ONNX. Score with upstream's own `RlController` in headless MuJoCo — bit-identical observations to the sim2real path. |
-| **Contribution** | Versioned tasks, checkpoint-gated curricula, sensor validity checks, physics-step contact scoring and an auditable job ledger. |
-| **Result** | Transfer **inverts** the training-reward ranking. Highest training reward falls **23%** in MuJoCo; the repo-default randomization falls **0%**. |
+Training reward can hide task failure. The evaluation harness measures arrivals,
+dwells, falls and physics-step contacts, then checks matched failure controls.
+The [historical findings](docs/FINDINGS.md) also preserve corrected and retracted
+claims, including an ice-patch placement error and a camera quaternion mismatch.
 
-Training and evaluation use different simulators **on purpose**.
+Key engineering decisions:
 
----
+- **Gate checkpoint promotion:** each curriculum stage loads the exact checkpoint
+  that passed the preceding task evaluation.
+- **Separate training from evaluation:** Isaac supplies parallel PPO training;
+  selected exported gaits run through the upstream controller in MuJoCo.
+- **Validate sensor input:** timestamps, stale packets, invalid depth and IMU
+  conventions have explicit contracts and tests. RGB stereo matching remains a
+  separate component from the paired ray-depth policy observations.
+- **Keep the denominator:** first-episode scores avoid inflating success by
+  repeatedly completing easier episodes. Partial folding arrays stay incomplete.
 
-## Case studies
+## Portable simulation regression replay
 
-Each row is a short visual argument. The numbers live in
-[docs/FINDINGS.md](docs/FINDINGS.md); every clip is in
-[docs/GALLERY.md](docs/GALLERY.md).
+[Measured replay results](results/resume-revamp-20261007/replay_report.json) ·
+[Raw timing samples](results/resume-revamp-20261007/policy_timing.csv) ·
+[Navigation pilot](results/resume-revamp-20261007/navigation_development.json)
 
-### 1 · Domain randomization vs transfer
+The October 7 revamp packages an actual trained **12-DoF biped** checkpoint,
+upstream controller, deployment configuration, MJCF and referenced meshes with
+30 file hashes and pinned runtime versions. A relocated bundle ran from `/tmp`
+with `PYTHONPATH` unset; it uses no Isaac installation or GPU inference.
 
-<p align="center">
-  <img src="docs/gifs/multi_race.gif" width="720" alt="Four policies taking identical shoves. Three stay up; the un-randomized robot is on the ground."><br>
-  <sub>Identical 0.45 m/s shoves. The un-randomized robot is the one on the ground.</sub>
-</p>
+Five seeded nominal trajectories reproduced exactly on the same host, and
+**40/40 injected sensor, action and contact-scoring regressions** were detected.
+A changed trajectory is a regression relative to the reference; these gates do
+not establish safe behavior under faults or cross-host determinism.
 
-A single scale `s` rewrites every range in upstream's `EventsCfg`. `s = 0` wins
-training by 49% and loses transfer outright. Fall rate has a knee; upstream's
-shipped default sits on the last rung before it.
+Caching immutable validation limits preserves **208/208** tested decisions and
+reduces median observation/inference/validation time **49–69%** in two
+counterbalanced 5,000-call comparisons. A separate 10,000-call warm measurement
+reports **p99 1.09 ms**, max 16.28 ms and **0 observed misses** against the
+configured **40 ms policy period** on an Intel Xeon Platinum 8480CL host. Physics,
+networking, startup and real-time scheduling are excluded; the lower-level
+4 ms control deadline is outside this measurement.
 
-### 2 · Depth without a renderer
+```bash
+# Supply an actual 12-DoF, no-history deployment and its upstream assets.
+PYTHONPATH=src python scripts/bench/sim_regression.py \
+  --deploy path/to/deploy.yaml --checkpoint path/to/policy.onnx \
+  --upstream path/to/Berkeley-Humanoid-Lite --out /tmp/bhl-replay-bundle
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  python /tmp/bhl-replay-bundle/replay.py --bundle /tmp/bhl-replay-bundle \
+  --out /tmp/bhl-replay-results --calls 10000
+```
 
-Isaac Sim 5.1's RTX renderer segfaults on this cluster. Geometric depth never
-needed it: `RayCasterCamera` costs **1.6%** of throughput at 4,096 envs, 2.9%
-mean error vs closed-form floor geometry. On rough terrain, looking ahead raises
-the curriculum; a privileged height map of the ground underfoot does not.
+The builder refuses missing models; replay verifies source, asset and runtime
+hashes before physics. Output directories cannot be reused. This integration
+suite complements the existing unit tests. A manual CI template is available at
+[`ci/replay-workflow.yml.example`](ci/replay-workflow.yml.example); its artifact
+intake passed local checks, and the workflow has not been executed on GitHub. Bundle generation and relocation
+were tested with the existing environment; a fresh dependency installation and
+GitHub-hosted execution remain unverified.
 
-A later "depth helps on invisible ice" result is **retracted**: the friction
-patches spawned a median 72 m from the robots. 4.4% could reach one in an
-episode. The +10.6% was §6's rough-terrain depth gain again.
+The separate fresh navigation pilot evaluated the existing yaw filter on one
+actor, two layouts and two sensing conditions (**8 episodes**). Both baseline and
+candidate reached **2/4** goals with no falls; command flip rates fell about
+**53%**. This establishes reduced chatter in the pilot, without establishing a
+goal-success or fall-rate improvement. The consumed layouts are development data.
 
-### 3 · Arms on a real floor
+## Quickstart: CPU checks
 
-No 12-DoF biped finishes the lab course upright; three of four fall on a
-**2.5 cm cable** (9% of leg length). Two of four 22-DoF policies clear it. At
-terrain `d = 1.0` the humanoid falls **11.7%** where the biped falls **37.8%**.
-Arms buy recoverable perturbation, not a higher step — and one recipe is *worse*
-with arms.
-
-### 4 · Cloth sorting, after the first scene was unreachable
-
-The garment sat 0.74 m away; fingertips reach 0.28 m forward; in Isaac the robot
-faced the other way. Redesigned inside a measured IK table. The shipped hands
-had no colliders. Bare 4 Nm PD lagged 65–72 mm; inverse-dynamics feedforward
-through the same drive tracks 1.4–1.6 mm.
-
-**The free-standing robot sorts 22 of 24 rigid proxies, no falls** (shirt 6/8,
-sock 8/8, jacket 8/8). One 8×8 Newton shirt on a pinned base sorts 4/4 under
-one-way coupling. Two-way coupling goes NaN when the hand pushes the cloth.
-
----
-
-## Results at a glance
-
-**Where it wins**
-
-| | |
-|---|---|
-| Domain randomization | blind policy holds to terrain difficulty d≈0.4; randomized arms reach d≈0.6 |
-| Low-res cloth | **467 env-steps/s** at 81 vertices vs G-C1's 182 at 961 — 2.6× while carrying 3× the DoF |
-| Depth on low friction | final curriculum level **0.65 vs 0.26** blind — 3 seeds, no overlap |
-| Ray-cast depth cost | **1.6%** of throughput at 4,096 envs, 2.9% mean error vs closed form |
-| Restoring the grippers | mean episode length **6.3 → 427.7** steps, 6 cells a side |
-| Free-standing sort | **22 of 24** rigid proxies, no falls |
-
-**Where it loses**
-
-| | |
-|---|---|
-| Cooperative lift | best rollout is 7.8 cm; the pair drops 41 cm before touching the cube |
-| Plank task | 0.0 cm across 18 seeds — contact points exceed the shoulder span |
-| Vision on the lift | depth-conditioned policies fall in almost every episode; blind ones do not |
-| Earlier manipulation tasks | **zero** success on the three tested two-robot object tasks, gripper included; separate from successful airlock navigation |
-| Stereo on terrain | **retracted** — cameras were written `(w, x, y, z)`, Isaac Lab 3.0 reads `(x, y, z, w)`. Pointed down, 4×4 stereo **1.29** vs blind 0.74 |
-| Depth on invisible hazards | **retracted** — ice spawned 72 m away |
-| Limb factorisation | **did not replicate** — +11% on the mean at n=3, not +47% |
-| Historical Isaac spawn | Earlier coop/TaskV2 runs spawned under the floor; quaternion conversion is now corrected. This does not retroactively validate those runs. |
-
-Four findings are retractions of earlier claims here. They stay in: a repo whose
-argument is that the measurement was wrong cannot quietly fix its own
-measurements.
-
----
-
-## Quickstart
-
-Isaac Sim needs a GPU and ~30 GB. These batch scripts contain **Oregon
-State-specific paths, account and partition settings**; adapt them before
-submission elsewhere. They describe the original v51 setup, not the parallel
-v60 campaign environment. See [requirements](docs/REPRODUCIBILITY.md).
+Use Python 3.11 on Linux. No Isaac installation or policy weights are needed for
+the unit tests. The nested upstream assets supply two robot-configuration fixtures.
 
 ```bash
 git clone --recurse-submodules https://github.com/joses2017smjh/bhl-robustness-ladder.git
 cd bhl-robustness-ladder
-sbatch slurm/00_build_container.sbatch    # apptainer image, ~4 min
-sbatch slurm/01_uv_sync.sbatch            # Isaac Lab 2.3.2 + deps, ~45 min, ~30 GB
-sbatch slurm/02_smoke_train.sbatch        # 3 iterations; fails loudly if the stack is broken
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install torch==2.7.0 --index-url https://download.pytorch.org/whl/cpu
+python -m pip install -r requirements-test.txt
+OMP_NUM_THREADS=2 PYTHONPATH=src python -m pytest -q tests
 ```
 
-`02` is the gate. It asserts a training iteration was logged **and** that mean
-episode length exceeds 2 — a task where every episode ends on its first step
-reports healthy iteration counts and learns nothing, which cost nine GPU-days
-here before the check existed.
+The October 7 full CPU suite returned **2,105 passed, two failed, three skipped**.
+Both failures were stale whole-file assertions that rejected existing extra task
+registrations. Narrow assertion fixes preserved the frozen controller behavior
+and the exact registration contract; both affected tests then passed. The full
+suite was not rerun after those assertion fixes.
+[Validation receipt](results/resume-revamp-20261007/final_validation.json).
 
-Scoring a trained policy needs no GPU:
+The publication snapshot previously had **146 passing CPU tests** in Python 3.11. The fresh-environment installation above has not been independently
+validated; [exact versions and prerequisites](docs/REPRODUCIBILITY.md) are recorded.
+Unit tests cover sensor validity, stereo geometry, task gates, contact scoring,
+quaternions, garment splits and robot invariants. They do not certify GPU rendering
+or policy performance.
 
-```bash
-python scripts/bench/coop_sim2sim.py --run-dir <run> --upstream external/Berkeley-Humanoid-Lite \
-    --cache-dir /tmp/mjcf --seeds 8 --crews 2 3 4
-```
+## Architecture and stack
 
-What is running, and which Slurm id produced which number:
-[SLURM_JOBS.md](SLURM_JOBS.md).
+![Isaac training, ONNX export, MuJoCo scoring and recorded results](docs/img/pipeline.svg)
 
-## Testing and engineering decisions
-
-The full CPU suite passes **1,252 tests**, 1 skipped (Slurm job `21509357`, October 2):
-
-```bash
-PYTHONPATH=src python -m pytest -q tests
-sbatch slurm/repo20260923/cpu_pytest_full.sbatch   # the same suite as a 16 GB CPU job
-```
-
-Unit tests do not certify Isaac rendering or learned task performance. Those
-require separate GPU/physics gates and their saved JSON results.
-
-- Keep legacy task IDs unchanged; corrected maze tasks are versioned.
-- Promote only the exact checkpoint that passed a separate task evaluation.
-- Use ray depth for cheap geometric baselines; real stereo matching remains a
-  separate calibrated component, not a claim of deployed perception.
-- Record negative controls and invalid observations. Training loss, surviving
-  to timeout and Slurm `COMPLETED` are not task-success metrics.
-- Use RTX/A40 hardware for the tested rendering path, H100/V100 for compatible
-  learning workloads, and CPUs for MuJoCo scoring.
-
-## Architecture
-
-<p align="center">
-  <img src="docs/img/pipeline.svg" width="100%" alt="Isaac Lab trains at 4096 envs; the checkpoint exports to ONNX; a headless MuJoCo harness scores it into CSV and MP4.">
-</p>
-
-| component | role |
+| Component | Responsibility |
 |---|---|
-| `src/bhl_robust/tasks/` | Isaac Lab env configs — terrain, push, depth, RGB, cooperative lift, cloth-sort |
-| `src/bhl_robust/cloth/` | Isaac-free cloth-sort core: garments, sweep primitive, kinematic C0–C5, cost gate |
-| `src/bhl_robust/eval/` | MuJoCo replay: MJCF patching, crew assembly, scoring, video |
-| `src/bhl_robust/curricula/` | push and terrain-level curricula upstream lacks |
-| `scripts/bench/` | gates. Each answers one question and refuses a verdict without a control |
-| `slurm/` | job scripts; `inner/` holds what runs inside the container |
+| `src/bhl_robust/tasks/` | Isaac task configurations, rewards and curriculum stages |
+| `src/bhl_robust/eval/` | MuJoCo missions, contacts, sensor supervision and recording |
+| `src/bhl_robust/cloth/` | Humanoid sorting primitives and folding-data validation |
+| `scripts/bench/`, `tests/` | Task gates and CPU regression checks |
+| `slurm/` | Cluster launchers, dependencies and checkpoint promotion |
 
-The MuJoCo harness drives the policy through upstream's own `RlController`, so
-observation construction is bit-identical to the sim2real deployment path.
+Python · PyTorch · Isaac Lab / Isaac Sim · MuJoCo · OpenCV · ONNX Runtime ·
+Apptainer · Slurm. The project maintains separate Isaac Lab 2.3.2 / Sim 5.1 and
+Lab 3.0 beta / Sim 6.0 environments; their compatibility limits are documented.
 
-## Stack
+## Training, deployment and remaining work
 
-- Isaac Lab 2.3.2 / Isaac Sim 5.1 (PPO, 4,096 envs) — and a parallel Isaac Lab 3.0 / Isaac Sim 6.0 stack for RGB, because 5.1's RTX renderer segfaults on this cluster
-- MuJoCo 3.x — scoring, replay, video
-- rsl-rl 3.0.1 (v51) / 5.0.1 (v60); skrl 1.4.3 for MAPPO and IPPO
-- PyTorch 2.7, Warp, ONNX Runtime
-- Apptainer, Slurm, `uv`
+GPU training requires external Isaac installations, robot assets and cluster
+configuration. MuJoCo policy evaluation also requires exported weights that are
+not bundled. The Slurm scripts contain site-specific paths and account settings;
+follow [reproducibility](docs/REPRODUCIBILITY.md) before adapting them.
 
-## License
+This is a simulation research repository; no hosted interactive simulator or
+hardware deployment is claimed. Open work includes held-out layouts, reducing
+privileged navigation inputs, completing folding evaluations and validating
+stable terminal folds. [Publication checks](docs/PUBLICATION_CHECK_2026-09-20.md) and the
+[campaign protocol](docs/WEEKEND_CAMPAIGN.md) record the current boundaries.
 
-No repository-level license file is currently provided. Upstream BHL retains
-its own license under `external/`; external assets and models retain theirs.
+## Author and license
+
+Jose Sanchez Gonzalez — seeking **ML/AI engineering and robotics roles**.
+[Portfolio](https://jose-sanchez-portfolio-com.vercel.app) ·
+[Résumé](https://jose-sanchez-portfolio-com.vercel.app/resume.pdf) ·
+[Email](mailto:josejsanchez20172@gmail.com)
+
+No repository-level license has been selected. Upstream code, models and assets
+retain their own licenses; see the nested upstream repositories.
+
+
+<!-- bhl-confirmation-results-2026-10-06 source_sha256=d74574dbc07e93b48655168268d22b84feb481122b232bf220c31b7e227b7b5e -->
+### Recorded confirmation outcomes — campaign 2026-10-06
+Append-only evidence update at `2026-10-06T12:56:38.990567+00:00`. This dated record supersedes the earlier queued-status paragraph for this campaign; historical experiment results above remain their original records.
+**Locomotion: PASS. Navigation: NEGATIVE.** Recorded episode files: locomotion **3600/3,600 planned**; navigation **384/384 planned**. File counts alone do not certify valid episodes.
+| Randomization rung (3 training seeds) | Flat falls / reported episodes | Push04 falls / reported episodes | Flat mean displacement |
+|---|---|---|---|
+| dr-off | 77/360 | 341/360 | 1.408 m |
+| dr-s0.5 | 4/360 | 268/360 | 1.849 m |
+| dr-default | 0/360 | 13/360 | 1.984 m |
+| dr-s1.5 | 0/360 | 0/360 | 1.767 m |
+| dr-aggressive | 60/360 | 60/360 | 0.129 m |
+
+Flat denominators are 360 per rung when complete (3 policies × 6 commands × 20 shared reset seeds), with another 360 disturbed episodes per rung. The flat replication rule requires zero falls for each default policy and fewer falls than its matched unrandomized policy. Push04 is descriptive. Full per-training-seed/command tracking, displacement and paired outcomes remain in `dr_verdict.json`; surviving-step errors alone cannot rank failed policies. When the verdict is INCOMPLETE, reported partial counts do not establish a validated complete experiment.
+
+| Navigation actor | Condition | Goals / reported episodes | Clean | Falls | Complete evidence |
+|---|---|---|---|---|---|
+| armV5-s8 | nominal | 44/48 | 44/48 | 1/48 | True |
+| armV5-s8 | drop35 | 43/48 | 43/48 | 0/48 | True |
+| armV5-s9 | nominal | 46/48 | 44/48 | 1/48 | True |
+| armV5-s9 | drop35 | 44/48 | 44/48 | 2/48 | True |
+| armV5-s10 | nominal | 44/48 | 44/48 | 2/48 | True |
+| armV5-s10 | drop35 | 46/48 | 45/48 | 0/48 | True |
+| astar | nominal | 44/48 | 39/48 | 0/48 | True |
+| astar | drop35 | 45/48 | 42/48 | 0/48 | True |
+
+Each complete navigation cell contains 48 shared held-out 6×6 layouts. Each final learned actor must meet both ≥40/48 nominal and ≥36/48 drop35 goals with zero falls; all actors and the matched A* control are reported. Clean means no wall contact at any physics step. An incomplete cell cannot establish validated success, regardless of its reported partial goal count.
+
+Scope: simulation only. Isaac-trained frozen 12-DoF PPO gait; navigation uses a learned PPO actor with oracle pose/goal and a scripted reactive speed brake; A* is the reference. Shared layouts, commands and reset seeds are clustered observations, not independent trained policies. Neither PASS nor a zero observed fall count certifies hardware deployment.
+
+Immutable JSON sources: `/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_confirmatory/dr_verdict.json` and `/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_confirmatory/verdict.json`. Locomotion JSON SHA256: `7bd2629ae71b8bddd61e1b4c9d88c85d1abd5116f145d00f3783755bd82fcc04`; navigation JSON SHA256: `7b9a1901f1febd48e6ff4849ecbd26a2ca6c15f36326da5be378d2020b9b8393`. Combined source SHA256: `d74574dbc07e93b48655168268d22b84feb481122b232bf220c31b7e227b7b5e`. Executable protocol and publisher are archived in `campaigns/20261006-confirmatory`.

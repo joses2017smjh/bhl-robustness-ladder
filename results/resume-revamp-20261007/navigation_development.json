@@ -1,0 +1,69 @@
+{
+  "status": "COMPLETED_DEVELOPMENT_PILOT",
+  "problems": [],
+  "per_cell": {
+    "none-nominal": {
+      "episodes": 2,
+      "goals": 1,
+      "clean_goals": 1,
+      "falls": 0,
+      "wall_contact_steps": 0,
+      "median_gait_flips_per_s": 2.9375,
+      "median_gait_saturated_share": 0.9795499999999999
+    },
+    "none-drop35": {
+      "episodes": 2,
+      "goals": 1,
+      "clean_goals": 1,
+      "falls": 0,
+      "wall_contact_steps": 0,
+      "median_gait_flips_per_s": 3.412,
+      "median_gait_saturated_share": 0.9682
+    },
+    "wz-lpf-nominal": {
+      "episodes": 2,
+      "goals": 1,
+      "clean_goals": 1,
+      "falls": 0,
+      "wall_contact_steps": 0,
+      "median_gait_flips_per_s": 1.3944999999999999,
+      "median_gait_saturated_share": 0.2099
+    },
+    "wz-lpf-drop35": {
+      "episodes": 2,
+      "goals": 1,
+      "clean_goals": 1,
+      "falls": 0,
+      "wall_contact_steps": 0,
+      "median_gait_flips_per_s": 1.591,
+      "median_gait_saturated_share": 0.08549999999999999
+    }
+  },
+  "paired": {
+    "nominal": {
+      "matched_layouts": 2,
+      "both_goal": 1,
+      "baseline_only_goal": 0,
+      "candidate_only_goal": 0,
+      "matched_success_time_delta_s": [
+        -4.080000000000005
+      ]
+    },
+    "drop35": {
+      "matched_layouts": 2,
+      "both_goal": 1,
+      "baseline_only_goal": 0,
+      "candidate_only_goal": 0,
+      "matched_success_time_delta_s": [
+        -8.11999999999999
+      ]
+    }
+  },
+  "protocol_sha256": "8abf110e88b7a3f64fc93f6ef5adb9fef8d42c5a75b365b5580d99926f3adee6",
+  "limitations": [
+    "DEVELOPMENT ONLY: one frozen actor, two fresh layouts, baseline versus existing yaw LPF; no training/hardware.",
+    "Two shared layouts and one actor; results cannot establish navigation improvement/generalization.",
+    "Existing yaw LPF evaluated; no new training or governor implementation. Default path unchanged.",
+    "Fresh development seeds are consumed by this pilot, not available as a future untouched confirmatory test."
+  ]
+}

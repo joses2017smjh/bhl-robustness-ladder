@@ -1,0 +1,135 @@
+{
+  "complete": true,
+  "status": "COMPLETED_DIAGNOSTIC",
+  "summary": {
+    "episodes": 1,
+    "successes": 0,
+    "success_rate": 0.0,
+    "falls": 0,
+    "collisions": 0,
+    "failures": {
+      "timeout": 1
+    },
+    "mean_return": -0.002,
+    "mean_diagnostic_return": -0.002,
+    "final_distance": {
+      "mean": 0.6556171040309953,
+      "median": 0.6556171040309953,
+      "std": 0.0,
+      "min": 0.6556171040309953,
+      "max": 0.6556171040309953
+    },
+    "minimum_distance": {
+      "mean": 0.5783462631545414,
+      "median": 0.5783462631545414,
+      "std": 0.0,
+      "min": 0.5783462631545414,
+      "max": 0.5783462631545414
+    },
+    "fraction_closed": {
+      "mean": 0.10204552754338653,
+      "median": 0.10204552754338653,
+      "std": 0.0,
+      "min": 0.10204552754338653,
+      "max": 0.10204552754338653
+    },
+    "initial_distance": {
+      "mean": 0.6440708085926766,
+      "median": 0.6440708085926766,
+      "std": 0.0,
+      "min": 0.6440708085926766,
+      "max": 0.6440708085926766
+    }
+  },
+  "cases": {
+    "bearing": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.6556171040309953,
+        "median": 0.6556171040309953,
+        "std": 0.0,
+        "min": 0.6556171040309953,
+        "max": 0.6556171040309953
+      },
+      "minimum_distance": {
+        "mean": 0.5783462631545414,
+        "median": 0.5783462631545414,
+        "std": 0.0,
+        "min": 0.5783462631545414,
+        "max": 0.5783462631545414
+      },
+      "fraction_closed": {
+        "mean": 0.10204552754338653,
+        "median": 0.10204552754338653,
+        "std": 0.0,
+        "min": 0.10204552754338653,
+        "max": 0.10204552754338653
+      },
+      "initial_distance": {
+        "mean": 0.6440708085926766,
+        "median": 0.6440708085926766,
+        "std": 0.0,
+        "min": 0.6440708085926766,
+        "max": 0.6440708085926766
+      }
+    },
+    "translation": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.6556171040309953,
+        "median": 0.6556171040309953,
+        "std": 0.0,
+        "min": 0.6556171040309953,
+        "max": 0.6556171040309953
+      },
+      "minimum_distance": {
+        "mean": 0.5783462631545414,
+        "median": 0.5783462631545414,
+        "std": 0.0,
+        "min": 0.5783462631545414,
+        "max": 0.5783462631545414
+      },
+      "fraction_closed": {
+        "mean": 0.10204552754338653,
+        "median": 0.10204552754338653,
+        "std": 0.0,
+        "min": 0.10204552754338653,
+        "max": 0.10204552754338653
+      },
+      "initial_distance": {
+        "mean": 0.6440708085926766,
+        "median": 0.6440708085926766,
+        "std": 0.0,
+        "min": 0.6440708085926766,
+        "max": 0.6440708085926766
+      }
+    }
+  },
+  "reliable": false,
+  "controller": "translation",
+  "bearing_controller": {
+    "speed": 0.3,
+    "turn_rate": 0.35,
+    "stop_radius": 0.25,
+    "heading_tolerance": 0.25
+  },
+  "reliability_gate": ">=75% success and <=10% falls in 64 validation episodes; diagnostic only"
+}

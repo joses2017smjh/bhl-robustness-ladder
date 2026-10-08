@@ -1,0 +1,761 @@
+{
+  "observed_utc": "2026-09-21T20:39:45.879116+00:00",
+  "complete": true,
+  "slurm_tasks": 14,
+  "executed_studies": 11,
+  "skipped_sensor_studies": 3,
+  "allocated_cpu_hours": 16.221666666666668,
+  "rows": [
+    {
+      "name": "A1",
+      "slurm_id": "21370064_0",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 1829,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC",
+      "validation": [
+        {
+          "update": 0,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 50,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 100,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 150,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 200,
+          "successes": 0,
+          "episodes": 8
+        }
+      ],
+      "learning_gate_passed": false,
+      "training_episodes": 183,
+      "training_successes": 0,
+      "training_failures": {
+        "timeout": 89,
+        "excessive_collision": 94
+      },
+      "training_buttons": 0,
+      "training_gate_crossings": 0,
+      "training_acquisitions": 0,
+      "last_update": {
+        "update": 200,
+        "steps": 12800,
+        "elapsed_s": 1645.8413111779373,
+        "reward": -0.12800000000000009,
+        "episode_metrics": {
+          "episodes": 1,
+          "successes": 0,
+          "success_rate": 0.0,
+          "mean_return": -0.18000000000000105,
+          "mean_episode_s": 18.0000000000034,
+          "falls": 0,
+          "collisions": 0,
+          "button_activations": 0,
+          "gate_traversals": 0,
+          "acquisitions": 0,
+          "placements": 0,
+          "failures": {
+            "timeout": 1
+          }
+        },
+        "action_mean_abs": 0.4870319366455078,
+        "translation_command_mean_norm": 0.24683414893434819,
+        "action_std": [
+          0.505725622177124,
+          0.4983816146850586,
+          0.5064194202423096,
+          0.5016379356384277,
+          0.4949747323989868
+        ],
+        "learning_rate": 1e-05,
+        "value_function": 0.142643210478127,
+        "surrogate": -0.021991881541907787,
+        "entropy": 3.6429940909147263
+      }
+    },
+    {
+      "name": "A2",
+      "slurm_id": "21370064_1",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 2296,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC",
+      "validation": [
+        {
+          "update": 0,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 50,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 100,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 150,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 200,
+          "successes": 0,
+          "episodes": 8
+        }
+      ],
+      "learning_gate_passed": false,
+      "training_episodes": 84,
+      "training_successes": 0,
+      "training_failures": {
+        "fall": 3,
+        "excessive_collision": 58,
+        "timeout": 23
+      },
+      "training_buttons": 0,
+      "training_gate_crossings": 0,
+      "training_acquisitions": 0,
+      "last_update": {
+        "update": 200,
+        "steps": 12800,
+        "elapsed_s": 1891.5439399441238,
+        "reward": -0.12800000000000009,
+        "episode_metrics": null,
+        "action_mean_abs": 0.4605786204338074,
+        "translation_command_mean_norm": 0.24612596820094376,
+        "action_std": [
+          0.5064059495925903,
+          0.498300701379776,
+          0.5209173560142517,
+          0.5080146193504333,
+          0.49182987213134766
+        ],
+        "learning_rate": 1.0000000000000004e-05,
+        "value_function": 0.00642346749373246,
+        "surrogate": -0.0290258233435452,
+        "entropy": 3.678493618965149
+      }
+    },
+    {
+      "name": "A3",
+      "slurm_id": "21370064_2",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 5046,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC",
+      "validation": [
+        {
+          "update": 0,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 50,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 100,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 150,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 200,
+          "successes": 0,
+          "episodes": 8
+        }
+      ],
+      "learning_gate_passed": false,
+      "training_episodes": 106,
+      "training_successes": 0,
+      "training_failures": {
+        "excessive_collision": 106
+      },
+      "training_buttons": 0,
+      "training_gate_crossings": 0,
+      "training_acquisitions": 0,
+      "last_update": {
+        "update": 200,
+        "steps": 12800,
+        "elapsed_s": 3530.5991843829397,
+        "reward": -0.12800000000000009,
+        "episode_metrics": null,
+        "action_mean_abs": 0.44153958559036255,
+        "translation_command_mean_norm": 0.2072283682388142,
+        "action_std": [
+          0.5125799775123596,
+          0.4904671609401703,
+          0.5153043270111084,
+          0.5177860856056213,
+          0.5084964036941528
+        ],
+        "learning_rate": 1e-05,
+        "value_function": 0.029425818589515984,
+        "surrogate": -0.021544661605730653,
+        "entropy": 3.7163822799921036
+      }
+    },
+    {
+      "name": "A4",
+      "slurm_id": "21370064_3",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 5439,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC",
+      "validation": [
+        {
+          "update": 0,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 50,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 100,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 150,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 200,
+          "successes": 0,
+          "episodes": 8
+        }
+      ],
+      "learning_gate_passed": false,
+      "training_episodes": 100,
+      "training_successes": 0,
+      "training_failures": {
+        "excessive_collision": 100
+      },
+      "training_buttons": 1,
+      "training_gate_crossings": 0,
+      "training_acquisitions": 0,
+      "last_update": {
+        "update": 200,
+        "steps": 12800,
+        "elapsed_s": 3792.519893603865,
+        "reward": -0.12800000000000009,
+        "episode_metrics": null,
+        "action_mean_abs": 0.401463121175766,
+        "translation_command_mean_norm": 0.21927371858289385,
+        "action_std": [
+          0.5056490898132324,
+          0.4998754858970642,
+          0.5145126581192017,
+          0.5078906416893005,
+          0.49476924538612366
+        ],
+        "learning_rate": 1e-05,
+        "value_function": 0.02414527500513941,
+        "surrogate": -0.024322468554601073,
+        "entropy": 3.6732778400182724
+      }
+    },
+    {
+      "name": "A5",
+      "slurm_id": "21370064_4",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 5451,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC",
+      "validation": [
+        {
+          "update": 0,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 50,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 100,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 150,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 200,
+          "successes": 0,
+          "episodes": 8
+        }
+      ],
+      "learning_gate_passed": false,
+      "training_episodes": 112,
+      "training_successes": 0,
+      "training_failures": {
+        "excessive_collision": 112
+      },
+      "training_buttons": 0,
+      "training_gate_crossings": 0,
+      "training_acquisitions": 2,
+      "last_update": {
+        "update": 200,
+        "steps": 12800,
+        "elapsed_s": 3811.404202003032,
+        "reward": -0.12800000000000009,
+        "episode_metrics": null,
+        "action_mean_abs": 0.416558176279068,
+        "translation_command_mean_norm": 0.22034352168576848,
+        "action_std": [
+          0.5057211518287659,
+          0.5029484033584595,
+          0.5175197720527649,
+          0.5147231817245483,
+          0.5088308453559875
+        ],
+        "learning_rate": 1.5000000000000005e-05,
+        "value_function": 0.006890598648169544,
+        "surrogate": -0.028889070730656385,
+        "entropy": 3.726913958787918
+      }
+    },
+    {
+      "name": "B1",
+      "slurm_id": "21370064_5",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 1870,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC",
+      "validation": [
+        {
+          "update": 0,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 50,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 100,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 150,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 200,
+          "successes": 0,
+          "episodes": 8
+        }
+      ],
+      "learning_gate_passed": false,
+      "training_episodes": 198,
+      "training_successes": 0,
+      "training_failures": {
+        "timeout": 92,
+        "excessive_collision": 106
+      },
+      "training_buttons": 0,
+      "training_gate_crossings": 0,
+      "training_acquisitions": 0,
+      "last_update": {
+        "update": 200,
+        "steps": 12800,
+        "elapsed_s": 1682.3283012630418,
+        "reward": -0.12800000000000009,
+        "episode_metrics": null,
+        "action_mean_abs": 0.5344759225845337,
+        "translation_command_mean_norm": 0.24214414830905112,
+        "action_std": [
+          0.5005490779876709,
+          0.5099045634269714,
+          0.49430161714553833,
+          0.49503958225250244,
+          0.5057409405708313
+        ],
+        "learning_rate": 1e-05,
+        "value_function": 0.01818196941167116,
+        "surrogate": -0.02107162307947874,
+        "entropy": 3.6392906308174133
+      }
+    },
+    {
+      "name": "C2",
+      "slurm_id": "21370064_6",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 1803,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC",
+      "validation": [
+        {
+          "update": 0,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 50,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 100,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 150,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 200,
+          "successes": 0,
+          "episodes": 8
+        }
+      ],
+      "learning_gate_passed": false,
+      "training_episodes": 201,
+      "training_successes": 0,
+      "training_failures": {
+        "timeout": 85,
+        "excessive_collision": 116
+      },
+      "training_buttons": 0,
+      "training_gate_crossings": 0,
+      "training_acquisitions": 0,
+      "last_update": {
+        "update": 200,
+        "steps": 12800,
+        "elapsed_s": 1628.7900642401073,
+        "reward": -6.326399999999987,
+        "episode_metrics": {
+          "episodes": 1,
+          "successes": 0,
+          "success_rate": 0.0,
+          "mean_return": -6.372400000000001,
+          "mean_episode_s": 17.24000000000517,
+          "falls": 0,
+          "collisions": 6,
+          "button_activations": 0,
+          "gate_traversals": 0,
+          "acquisitions": 0,
+          "placements": 0,
+          "failures": {
+            "excessive_collision": 1
+          }
+        },
+        "action_mean_abs": 0.5565295219421387,
+        "translation_command_mean_norm": 0.2982921978709637,
+        "action_std": [
+          0.8162055015563965,
+          0.8308723568916321,
+          0.8097459077835083,
+          0.8203511834144592,
+          0.830039381980896
+        ],
+        "learning_rate": 1e-05,
+        "value_function": 0.6983799203298986,
+        "surrogate": -0.03664687369018793,
+        "entropy": 6.110985606908798
+      }
+    },
+    {
+      "name": "C3",
+      "slurm_id": "21370064_7",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 1863,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC",
+      "validation": [
+        {
+          "update": 0,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 50,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 100,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 150,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 200,
+          "successes": 0,
+          "episodes": 8
+        }
+      ],
+      "learning_gate_passed": false,
+      "training_episodes": 186,
+      "training_successes": 0,
+      "training_failures": {
+        "timeout": 94,
+        "excessive_collision": 92
+      },
+      "training_buttons": 0,
+      "training_gate_crossings": 0,
+      "training_acquisitions": 0,
+      "last_update": {
+        "update": 200,
+        "steps": 12800,
+        "elapsed_s": 1677.3857779849786,
+        "reward": -0.12800000000000009,
+        "episode_metrics": null,
+        "action_mean_abs": 0.5624567270278931,
+        "translation_command_mean_norm": 0.2281674723049874,
+        "action_std": [
+          0.5016500353813171,
+          0.5022948384284973,
+          0.4981822669506073,
+          0.4944615066051483,
+          0.5019670724868774
+        ],
+        "learning_rate": 0.0001,
+        "value_function": 0.001382846408887417,
+        "surrogate": -0.022721170214936137,
+        "entropy": 3.625376969575882
+      }
+    },
+    {
+      "name": "C4",
+      "slurm_id": "21370064_8",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 1643,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC",
+      "validation": [
+        {
+          "update": 0,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 50,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 100,
+          "successes": 2,
+          "episodes": 8
+        },
+        {
+          "update": 150,
+          "successes": 0,
+          "episodes": 8
+        },
+        {
+          "update": 200,
+          "successes": 0,
+          "episodes": 8
+        }
+      ],
+      "learning_gate_passed": false,
+      "training_episodes": 216,
+      "training_successes": 0,
+      "training_failures": {
+        "timeout": 68,
+        "excessive_collision": 148
+      },
+      "training_buttons": 0,
+      "training_gate_crossings": 0,
+      "training_acquisitions": 0,
+      "last_update": {
+        "update": 200,
+        "steps": 12800,
+        "elapsed_s": 1475.0038319309242,
+        "reward": -0.12800000000000009,
+        "episode_metrics": null,
+        "action_mean_abs": 0.4775758683681488,
+        "translation_command_mean_norm": 0.22539190657133756,
+        "action_std": [
+          0.5040828585624695,
+          0.5147745013237,
+          0.5177303552627563,
+          0.5033772587776184,
+          0.5185802578926086
+        ],
+        "learning_rate": 1e-05,
+        "value_function": 0.006554439547471702,
+        "surrogate": -0.021956145064905286,
+        "entropy": 3.744030177593231
+      }
+    },
+    {
+      "name": "S1",
+      "slurm_id": "21370066_9",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 17,
+        "allocated_cpus": 2
+      },
+      "study_status": "SKIPPED_NOT_LEARNABLE"
+    },
+    {
+      "name": "S2",
+      "slurm_id": "21370066_10",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 17,
+        "allocated_cpus": 2
+      },
+      "study_status": "SKIPPED_NOT_LEARNABLE"
+    },
+    {
+      "name": "S3",
+      "slurm_id": "21370066_11",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 17,
+        "allocated_cpus": 2
+      },
+      "study_status": "SKIPPED_NOT_LEARNABLE"
+    },
+    {
+      "name": "D1",
+      "slurm_id": "21370065_12",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 538,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC"
+    },
+    {
+      "name": "D2",
+      "slurm_id": "21370065_13",
+      "scheduler": {
+        "state": "COMPLETED",
+        "exit_code": "0:0",
+        "elapsed_seconds": 1370,
+        "allocated_cpus": 2
+      },
+      "study_status": "COMPLETED_DIAGNOSTIC"
+    }
+  ],
+  "source_hashes_verified": true,
+  "config_hashes_verified": true,
+  "interactions": {
+    "doors": {
+      "episodes": 16,
+      "successes": 4,
+      "success_rate": 0.25,
+      "mean_return": 2.7978250000000275,
+      "mean_episode_s": 73.96749999990982,
+      "falls": 7,
+      "collisions": 12,
+      "button_activations": 17,
+      "gate_traversals": 15,
+      "acquisitions": 0,
+      "placements": 0,
+      "failures": {
+        "fall": 7,
+        "timeout": 3,
+        "success": 4,
+        "excessive_collision": 2
+      }
+    },
+    "transport": {
+      "episodes": 16,
+      "successes": 4,
+      "success_rate": 0.25,
+      "mean_return": 4.270700000000026,
+      "mean_episode_s": 71.67999999989694,
+      "falls": 8,
+      "collisions": 6,
+      "button_activations": 16,
+      "gate_traversals": 14,
+      "acquisitions": 13,
+      "placements": 4,
+      "failures": {
+        "fall": 8,
+        "excessive_collision": 1,
+        "timeout": 3,
+        "success": 4
+      }
+    }
+  },
+  "components": {
+    "door_0": {
+      "successes": 6,
+      "episodes": 8
+    },
+    "door_1": {
+      "successes": 7,
+      "episodes": 8
+    },
+    "transport": {
+      "successes": 7,
+      "episodes": 8
+    }
+  }
+}

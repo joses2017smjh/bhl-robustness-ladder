@@ -1,0 +1,281 @@
+{
+  "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+  "reference_v2_job": "21401689 (7/10 FAIL: --pre-point=0.45 --cross-clear=0.35 --cross-kick, settle 0.40)",
+  "rebuilt_utc": "2026-09-24T06:38:23.137379+00:00",
+  "gates": [
+    {
+      "tag": "lateral025",
+      "verdict": "FAIL",
+      "exact_replay_gate_passed": false,
+      "upright": 8,
+      "falls": 2,
+      "episodes": 10,
+      "complete": true,
+      "status": "COMPLETED_INTERVENTION",
+      "job_id": "21400805",
+      "requested_node": "cn-c22",
+      "probe_args": [
+        "--stage-lateral=0.25"
+      ],
+      "git_commit": "b78d09bfd156a501c3e2a00e2ac704d92fae6cf0",
+      "source_sha256_plate_stage": "21c8a9c6ec339dbd2598142055be9f967a1256064c444b2f095f7a2ce210213d",
+      "fallen_layouts": [
+        5,
+        7
+      ],
+      "crossings_started": 5,
+      "crossings_completed": 5,
+      "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-lateral025",
+      "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+      "summarized_utc": "2026-09-24T06:38:23.142320+00:00"
+    },
+    {
+      "tag": "lateral035",
+      "verdict": "PASS",
+      "exact_replay_gate_passed": true,
+      "upright": 10,
+      "falls": 0,
+      "episodes": 10,
+      "complete": true,
+      "status": "COMPLETED_INTERVENTION",
+      "job_id": "21400897",
+      "requested_node": "cn-c22",
+      "probe_args": [
+        "--stage-lateral=0.35"
+      ],
+      "git_commit": "9affb3951e933d372f7d8e8aec8be487690bd7db",
+      "source_sha256_plate_stage": "0adfd82a13442d422002fa842c74e945fa4bb57c317e5efb9ab2bfa1037e61b7",
+      "fallen_layouts": [],
+      "crossings_started": 7,
+      "crossings_completed": 7,
+      "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-lateral035",
+      "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+      "summarized_utc": "2026-09-24T06:38:23.143431+00:00"
+    },
+    {
+      "tag": "lateral035-waitopen2",
+      "verdict": "PASS",
+      "exact_replay_gate_passed": true,
+      "upright": 10,
+      "falls": 0,
+      "episodes": 10,
+      "complete": true,
+      "status": "COMPLETED_INTERVENTION",
+      "job_id": "21400953",
+      "requested_node": "cn-c22",
+      "probe_args": [
+        "--stage-lateral=0.35",
+        "--wait-open=2.0"
+      ],
+      "git_commit": "9affb3951e933d372f7d8e8aec8be487690bd7db",
+      "source_sha256_plate_stage": "0adfd82a13442d422002fa842c74e945fa4bb57c317e5efb9ab2bfa1037e61b7",
+      "fallen_layouts": [],
+      "crossings_started": 7,
+      "crossings_completed": 7,
+      "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-lateral035-waitopen2",
+      "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+      "summarized_utc": "2026-09-24T06:38:23.144524+00:00"
+    },
+    {
+      "tag": "v2-align",
+      "verdict": "FAIL",
+      "exact_replay_gate_passed": false,
+      "upright": 9,
+      "falls": 1,
+      "episodes": 10,
+      "complete": true,
+      "status": "COMPLETED_INTERVENTION",
+      "job_id": "21405537",
+      "requested_node": "cn-c22",
+      "probe_args": [
+        "--pre-point=0.45",
+        "--cross-clear=0.35",
+        "--cross-kick",
+        "--align-yaw"
+      ],
+      "git_commit": "348eeb2f976e6a54464662a0a96e94eeae5a61bf",
+      "source_sha256_plate_stage": "fdde7a559bc92d047cc10f6c66775eb24e444db7b211404378bd0e65d3555576",
+      "fallen_layouts": [
+        7
+      ],
+      "crossings_started": 7,
+      "crossings_completed": 7,
+      "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-v2-align",
+      "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+      "summarized_utc": "2026-09-24T06:38:23.145585+00:00"
+    },
+    {
+      "tag": "v2-clear035-kick",
+      "verdict": "FAIL",
+      "exact_replay_gate_passed": false,
+      "upright": 7,
+      "falls": 3,
+      "episodes": 10,
+      "complete": true,
+      "status": "COMPLETED_INTERVENTION",
+      "job_id": "21401689",
+      "requested_node": "cn-c22",
+      "probe_args": [
+        "--pre-point=0.45",
+        "--cross-clear=0.35",
+        "--cross-kick"
+      ],
+      "git_commit": "a6107ff70a989b88da7cb2f82d11a5aaa7d7d755",
+      "source_sha256_plate_stage": "19ef989fb6ee841e1ea132ec8596b80149fb1ec82497388228f0dfcffbe05969",
+      "fallen_layouts": [
+        4,
+        5,
+        7
+      ],
+      "crossings_started": 7,
+      "crossings_completed": 7,
+      "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-v2-clear035-kick",
+      "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+      "summarized_utc": "2026-09-24T06:38:23.146662+00:00"
+    },
+    {
+      "tag": "v3-settle190",
+      "verdict": "FAIL",
+      "exact_replay_gate_passed": false,
+      "upright": 6,
+      "falls": 4,
+      "episodes": 10,
+      "complete": true,
+      "status": "COMPLETED_INTERVENTION",
+      "job_id": "21405539",
+      "requested_node": "cn-c22",
+      "probe_args": [
+        "--pre-point=0.45",
+        "--cross-clear=0.35",
+        "--settle-s=1.9",
+        "--cross-kick"
+      ],
+      "git_commit": "348eeb2f976e6a54464662a0a96e94eeae5a61bf",
+      "source_sha256_plate_stage": "fdde7a559bc92d047cc10f6c66775eb24e444db7b211404378bd0e65d3555576",
+      "fallen_layouts": [
+        0,
+        1,
+        4,
+        7
+      ],
+      "crossings_started": 7,
+      "crossings_completed": 7,
+      "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-v3-settle190",
+      "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+      "summarized_utc": "2026-09-24T06:38:23.147758+00:00"
+    },
+    {
+      "tag": "v3-settle190-align",
+      "verdict": "FAIL",
+      "exact_replay_gate_passed": false,
+      "upright": 7,
+      "falls": 3,
+      "episodes": 10,
+      "complete": true,
+      "status": "COMPLETED_INTERVENTION",
+      "job_id": "21405543",
+      "requested_node": "cn-c22",
+      "probe_args": [
+        "--pre-point=0.45",
+        "--cross-clear=0.35",
+        "--settle-s=1.9",
+        "--cross-kick",
+        "--align-yaw"
+      ],
+      "git_commit": "348eeb2f976e6a54464662a0a96e94eeae5a61bf",
+      "source_sha256_plate_stage": "fdde7a559bc92d047cc10f6c66775eb24e444db7b211404378bd0e65d3555576",
+      "fallen_layouts": [
+        4,
+        5,
+        7
+      ],
+      "crossings_started": 7,
+      "crossings_completed": 7,
+      "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-v3-settle190-align",
+      "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+      "summarized_utc": "2026-09-24T06:38:23.149231+00:00"
+    },
+    {
+      "tag": "v4-settle080",
+      "verdict": "FAIL",
+      "exact_replay_gate_passed": false,
+      "upright": 9,
+      "falls": 1,
+      "episodes": 10,
+      "complete": true,
+      "status": "COMPLETED_INTERVENTION",
+      "job_id": "21405541",
+      "requested_node": "cn-c22",
+      "probe_args": [
+        "--pre-point=0.45",
+        "--cross-clear=0.35",
+        "--settle-s=0.8",
+        "--cross-kick"
+      ],
+      "git_commit": "348eeb2f976e6a54464662a0a96e94eeae5a61bf",
+      "source_sha256_plate_stage": "fdde7a559bc92d047cc10f6c66775eb24e444db7b211404378bd0e65d3555576",
+      "fallen_layouts": [
+        0
+      ],
+      "crossings_started": 7,
+      "crossings_completed": 7,
+      "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-v4-settle080",
+      "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+      "summarized_utc": "2026-09-24T06:38:23.150361+00:00"
+    },
+    {
+      "tag": "v4-settle080-align",
+      "verdict": "FAIL",
+      "exact_replay_gate_passed": false,
+      "upright": 7,
+      "falls": 3,
+      "episodes": 10,
+      "complete": true,
+      "status": "COMPLETED_INTERVENTION",
+      "job_id": "21405545",
+      "requested_node": "cn-c22",
+      "probe_args": [
+        "--pre-point=0.45",
+        "--cross-clear=0.35",
+        "--settle-s=0.8",
+        "--cross-kick",
+        "--align-yaw"
+      ],
+      "git_commit": "348eeb2f976e6a54464662a0a96e94eeae5a61bf",
+      "source_sha256_plate_stage": "fdde7a559bc92d047cc10f6c66775eb24e444db7b211404378bd0e65d3555576",
+      "fallen_layouts": [
+        1,
+        4,
+        7
+      ],
+      "crossings_started": 7,
+      "crossings_completed": 7,
+      "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-v4-settle080-align",
+      "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+      "summarized_utc": "2026-09-24T06:38:23.151561+00:00"
+    },
+    {
+      "tag": "waitopen2",
+      "verdict": "PASS",
+      "exact_replay_gate_passed": true,
+      "upright": 10,
+      "falls": 0,
+      "episodes": 10,
+      "complete": true,
+      "status": "COMPLETED_INTERVENTION",
+      "job_id": "21400863",
+      "requested_node": "cn-c22",
+      "probe_args": [
+        "--wait-open=2.0"
+      ],
+      "git_commit": "0206f3a788bdd826e642fae0260d3df75cca170d",
+      "source_sha256_plate_stage": "3e2c1445e9943b026aea0f917a8404f989eb919bc56d5f70ced5b9d84ad65259",
+      "fallen_layouts": [],
+      "crossings_started": 5,
+      "crossings_completed": 5,
+      "gate_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-waitopen2",
+      "rule": "only a 10/10 exact replay (complete, 10 episodes, 10 upright, 0 falls) proceeds to the route gate",
+      "summarized_utc": "2026-09-24T06:38:23.152593+00:00"
+    }
+  ]
+}

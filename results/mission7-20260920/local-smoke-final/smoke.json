@@ -1,0 +1,1925 @@
+{
+  "kind": "infrastructure_smoke",
+  "complete": true,
+  "passed": true,
+  "cells": [
+    {
+      "arm": "blind",
+      "stage": "approach",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.005414143321104348,
+        "surrogate": 0.1070464551448822,
+        "entropy": 3.6294567584991455
+      }
+    },
+    {
+      "arm": "blind",
+      "stage": "doors",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.02090412611141801,
+        "surrogate": -0.02786935120820999,
+        "entropy": 3.630456805229187
+      }
+    },
+    {
+      "arm": "blind",
+      "stage": "transport",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.008054777223151177,
+        "surrogate": 0.031105756759643555,
+        "entropy": 3.628456711769104
+      }
+    },
+    {
+      "arm": "lidar",
+      "stage": "approach",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.015385140897706151,
+        "surrogate": -0.03314024209976196,
+        "entropy": 3.6274566650390625
+      }
+    },
+    {
+      "arm": "lidar",
+      "stage": "doors",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.022612592671066523,
+        "surrogate": 0.03437051922082901,
+        "entropy": 3.6294567584991455
+      }
+    },
+    {
+      "arm": "lidar",
+      "stage": "transport",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.022617317736148834,
+        "surrogate": -0.020831018686294556,
+        "entropy": 3.630456805229187
+      }
+    },
+    {
+      "arm": "stereo",
+      "stage": "approach",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.016410430427640676,
+        "surrogate": 0.08484606444835663,
+        "entropy": 3.630456805229187
+      }
+    },
+    {
+      "arm": "stereo",
+      "stage": "doors",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.031324532930739224,
+        "surrogate": 0.1192493587732315,
+        "entropy": 3.6294567584991455
+      }
+    },
+    {
+      "arm": "stereo",
+      "stage": "transport",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.019440550822764635,
+        "surrogate": -0.07447292655706406,
+        "entropy": 3.6274566650390625
+      }
+    },
+    {
+      "arm": "both",
+      "stage": "approach",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.022846293810289353,
+        "surrogate": 0.19746360182762146,
+        "entropy": 3.627456784248352
+      }
+    },
+    {
+      "arm": "both",
+      "stage": "doors",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.02744254842400551,
+        "surrogate": 0.04806037247180939,
+        "entropy": 3.6264567375183105
+      }
+    },
+    {
+      "arm": "both",
+      "stage": "transport",
+      "passed": true,
+      "resets": 2,
+      "losses": {
+        "value_function": 0.015044272295199335,
+        "surrogate": 0.01592288911342621,
+        "entropy": 3.627456784248352
+      }
+    }
+  ],
+  "standing": {
+    "stage": "approach",
+    "open": [
+      false,
+      false
+    ],
+    "crossed": [
+      false,
+      false
+    ],
+    "activation_s": [
+      null,
+      null
+    ],
+    "wrong_buttons": 0,
+    "retries": 0,
+    "acquired": false,
+    "carrying": false,
+    "drops": 0,
+    "distance_m": 0.21258662584146,
+    "carried_m": 0.0,
+    "collisions": 0,
+    "dead_end_entries": 0,
+    "hold_s": 0.0,
+    "completed_s": null,
+    "failure": "timeout",
+    "last_s": 1.9999999999998352,
+    "success": false,
+    "layout": {
+      "split": "train",
+      "seed": 0,
+      "cell_m": 1.7,
+      "edges": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          [
+            0,
+            3
+          ]
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        [
+          [
+            0,
+            3
+          ],
+          [
+            0,
+            4
+          ]
+        ],
+        [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        [
+          [
+            0,
+            4
+          ],
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          [
+            0,
+            5
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        [
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        [
+          [
+            1,
+            4
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        [
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            5
+          ]
+        ],
+        [
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ]
+        ],
+        [
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        [
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        [
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            1
+          ]
+        ],
+        [
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ]
+        ],
+        [
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        [
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        [
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            3
+          ]
+        ],
+        [
+          [
+            3,
+            4
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        [
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            4
+          ]
+        ],
+        [
+          [
+            4,
+            0
+          ],
+          [
+            4,
+            1
+          ]
+        ],
+        [
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ]
+        ],
+        [
+          [
+            4,
+            1
+          ],
+          [
+            4,
+            2
+          ]
+        ],
+        [
+          [
+            4,
+            1
+          ],
+          [
+            5,
+            1
+          ]
+        ],
+        [
+          [
+            4,
+            3
+          ],
+          [
+            5,
+            3
+          ]
+        ],
+        [
+          [
+            4,
+            4
+          ],
+          [
+            4,
+            5
+          ]
+        ],
+        [
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            4
+          ]
+        ],
+        [
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        [
+          [
+            5,
+            1
+          ],
+          [
+            5,
+            2
+          ]
+        ],
+        [
+          [
+            5,
+            2
+          ],
+          [
+            5,
+            3
+          ]
+        ]
+      ],
+      "route": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "door_indices": [
+        5,
+        13
+      ],
+      "correct_sides": [
+        1,
+        1
+      ],
+      "object_index": 4,
+      "geometry_sha256": "84c054f6e9b70ea7691d0141e68d8f79779e4ca4a71f3f113970b7e353665a7c",
+      "route_decisions": 7,
+      "route_turns": 14,
+      "centerline_m": 32.3,
+      "decision_ratio_to_one_decision_reference": 7,
+      "legacy_reference_route_m": 3.0
+    },
+    "arm": "both",
+    "seed": 0,
+    "sensor_failure": "normal",
+    "elapsed_s": 1.9999999999998352,
+    "fall": false,
+    "timeout": true,
+    "button_success": false,
+    "door_success": false,
+    "pickup_success": false,
+    "placement_success": false,
+    "wall_contact_intervals": 0,
+    "shortest_centerline_m": 0.65,
+    "path_efficiency": null,
+    "object_xyz": [
+      0.0,
+      0.0,
+      -5.0
+    ],
+    "placement_error_m": 3.8013155617496426,
+    "trace": [
+      {
+        "time_s": 0.20000000000000015,
+        "xy": [
+          1.0440236289667402,
+          3.4049608280817902
+        ],
+        "action": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gates": [
+          false,
+          false
+        ],
+        "carrying": false,
+        "parcel_xyz": [
+          0.0,
+          0.0,
+          -5.0
+        ],
+        "lidar_valid": 1.0,
+        "depth_valid": 1.0
+      },
+      {
+        "time_s": 1.1999999999999234,
+        "xy": [
+          0.9850794859711984,
+          3.3894876430829317
+        ],
+        "action": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gates": [
+          false,
+          false
+        ],
+        "carrying": false,
+        "parcel_xyz": [
+          0.0,
+          0.0,
+          -5.0
+        ],
+        "lidar_valid": 1.0,
+        "depth_valid": 1.0
+      },
+      {
+        "time_s": 1.9999999999998352,
+        "xy": [
+          0.9846211973657181,
+          3.3933870401002633
+        ],
+        "action": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gates": [
+          false,
+          false
+        ],
+        "carrying": false,
+        "parcel_xyz": [
+          0.0,
+          0.0,
+          -5.0
+        ],
+        "lidar_valid": 1.0,
+        "depth_valid": 1.0
+      }
+    ],
+    "transport_kind": "kinematic_attachment_no_grasp_or_payload_dynamics"
+  },
+  "physical_contact_controls": [
+    {
+      "control": "correct",
+      "door_open": true,
+      "wrong_activations": 0,
+      "passed": true
+    },
+    {
+      "control": "wrong",
+      "door_open": false,
+      "wrong_activations": 1,
+      "passed": true
+    },
+    {
+      "control": "no_intent",
+      "door_open": false,
+      "wrong_activations": 0,
+      "passed": true
+    },
+    {
+      "control": "no_contact",
+      "door_open": false,
+      "wrong_activations": 0,
+      "passed": true
+    }
+  ],
+  "placement_controls": [
+    {
+      "object_in_drop_zone": true,
+      "passed": true,
+      "metrics": {
+        "stage": "transport",
+        "open": [
+          true,
+          true
+        ],
+        "crossed": [
+          true,
+          true
+        ],
+        "activation_s": [
+          null,
+          null
+        ],
+        "wrong_buttons": 0,
+        "retries": 0,
+        "acquired": true,
+        "carrying": false,
+        "drops": 0,
+        "distance_m": 0.20879824693975016,
+        "carried_m": 0.0,
+        "collisions": 0,
+        "dead_end_entries": 0,
+        "hold_s": 1.0000000000000002,
+        "completed_s": 1.239999999999919,
+        "failure": null,
+        "last_s": 1.239999999999919,
+        "success": true,
+        "layout": {
+          "split": "train",
+          "seed": 0,
+          "cell_m": 1.7,
+          "edges": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ]
+            ],
+            [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ]
+            ],
+            [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ]
+            ],
+            [
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                4
+              ]
+            ],
+            [
+              [
+                0,
+                5
+              ],
+              [
+                1,
+                5
+              ]
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                1
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            [
+              [
+                1,
+                4
+              ],
+              [
+                1,
+                5
+              ]
+            ],
+            [
+              [
+                1,
+                5
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            [
+              [
+                2,
+                1
+              ],
+              [
+                3,
+                1
+              ]
+            ],
+            [
+              [
+                2,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            [
+              [
+                2,
+                3
+              ],
+              [
+                2,
+                4
+              ]
+            ],
+            [
+              [
+                2,
+                4
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            [
+              [
+                3,
+                0
+              ],
+              [
+                3,
+                1
+              ]
+            ],
+            [
+              [
+                3,
+                0
+              ],
+              [
+                4,
+                0
+              ]
+            ],
+            [
+              [
+                3,
+                2
+              ],
+              [
+                3,
+                3
+              ]
+            ],
+            [
+              [
+                3,
+                3
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            [
+              [
+                3,
+                3
+              ],
+              [
+                4,
+                3
+              ]
+            ],
+            [
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            [
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                4
+              ]
+            ],
+            [
+              [
+                4,
+                0
+              ],
+              [
+                4,
+                1
+              ]
+            ],
+            [
+              [
+                4,
+                0
+              ],
+              [
+                5,
+                0
+              ]
+            ],
+            [
+              [
+                4,
+                1
+              ],
+              [
+                4,
+                2
+              ]
+            ],
+            [
+              [
+                4,
+                1
+              ],
+              [
+                5,
+                1
+              ]
+            ],
+            [
+              [
+                4,
+                3
+              ],
+              [
+                5,
+                3
+              ]
+            ],
+            [
+              [
+                4,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            [
+              [
+                4,
+                4
+              ],
+              [
+                5,
+                4
+              ]
+            ],
+            [
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                5
+              ]
+            ],
+            [
+              [
+                5,
+                1
+              ],
+              [
+                5,
+                2
+              ]
+            ],
+            [
+              [
+                5,
+                2
+              ],
+              [
+                5,
+                3
+              ]
+            ]
+          ],
+          "route": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              1
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "door_indices": [
+            5,
+            13
+          ],
+          "correct_sides": [
+            1,
+            1
+          ],
+          "object_index": 4,
+          "geometry_sha256": "84c054f6e9b70ea7691d0141e68d8f79779e4ca4a71f3f113970b7e353665a7c",
+          "route_decisions": 7,
+          "route_turns": 14,
+          "centerline_m": 32.3,
+          "decision_ratio_to_one_decision_reference": 7,
+          "legacy_reference_route_m": 3.0
+        },
+        "arm": "both",
+        "seed": 0,
+        "sensor_failure": "normal",
+        "elapsed_s": 1.239999999999919,
+        "fall": false,
+        "timeout": false,
+        "button_success": true,
+        "door_success": true,
+        "pickup_success": true,
+        "placement_success": true,
+        "wall_contact_intervals": 0,
+        "shortest_centerline_m": 32.3,
+        "path_efficiency": 1.0,
+        "object_xyz": [
+          1.7,
+          3.4,
+          0.06989224457978356
+        ],
+        "placement_error_m": 0.0,
+        "trace": [
+          {
+            "time_s": 0.20000000000000015,
+            "xy": [
+              -0.005976371033260501,
+              0.004960828081791284
+            ],
+            "action": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "gates": [
+              true,
+              true
+            ],
+            "carrying": false,
+            "parcel_xyz": [
+              1.7,
+              3.4,
+              0.06009918477070415
+            ],
+            "lidar_valid": 1.0,
+            "depth_valid": 0.921875
+          },
+          {
+            "time_s": 1.1999999999999234,
+            "xy": [
+              -0.06492051402880274,
+              -0.010512356917058523
+            ],
+            "action": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "gates": [
+              true,
+              true
+            ],
+            "carrying": false,
+            "parcel_xyz": [
+              1.7,
+              3.4,
+              0.06989224457978356
+            ],
+            "lidar_valid": 1.0,
+            "depth_valid": 0.9765625
+          },
+          {
+            "time_s": 1.239999999999919,
+            "xy": [
+              -0.06486629812816502,
+              -0.010128456458962338
+            ],
+            "action": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "gates": [
+              true,
+              true
+            ],
+            "carrying": false,
+            "parcel_xyz": [
+              1.7,
+              3.4,
+              0.06989224457978356
+            ],
+            "lidar_valid": 1.0,
+            "depth_valid": 0.9765625
+          }
+        ],
+        "transport_kind": "kinematic_attachment_no_grasp_or_payload_dynamics"
+      }
+    },
+    {
+      "object_in_drop_zone": false,
+      "passed": true,
+      "metrics": {
+        "stage": "transport",
+        "open": [
+          true,
+          true
+        ],
+        "crossed": [
+          true,
+          true
+        ],
+        "activation_s": [
+          null,
+          null
+        ],
+        "wrong_buttons": 0,
+        "retries": 0,
+        "acquired": true,
+        "carrying": false,
+        "drops": 0,
+        "distance_m": 0.2122407077060297,
+        "carried_m": 0.0,
+        "collisions": 0,
+        "dead_end_entries": 0,
+        "hold_s": 0.0,
+        "completed_s": null,
+        "failure": "timeout",
+        "last_s": 1.5999999999998793,
+        "success": false,
+        "layout": {
+          "split": "train",
+          "seed": 0,
+          "cell_m": 1.7,
+          "edges": [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ]
+            ],
+            [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ]
+            ],
+            [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                3
+              ]
+            ],
+            [
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                4
+              ]
+            ],
+            [
+              [
+                0,
+                5
+              ],
+              [
+                1,
+                5
+              ]
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                1
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            [
+              [
+                1,
+                4
+              ],
+              [
+                1,
+                5
+              ]
+            ],
+            [
+              [
+                1,
+                5
+              ],
+              [
+                2,
+                5
+              ]
+            ],
+            [
+              [
+                2,
+                1
+              ],
+              [
+                3,
+                1
+              ]
+            ],
+            [
+              [
+                2,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            [
+              [
+                2,
+                3
+              ],
+              [
+                2,
+                4
+              ]
+            ],
+            [
+              [
+                2,
+                4
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            [
+              [
+                3,
+                0
+              ],
+              [
+                3,
+                1
+              ]
+            ],
+            [
+              [
+                3,
+                0
+              ],
+              [
+                4,
+                0
+              ]
+            ],
+            [
+              [
+                3,
+                2
+              ],
+              [
+                3,
+                3
+              ]
+            ],
+            [
+              [
+                3,
+                3
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            [
+              [
+                3,
+                3
+              ],
+              [
+                4,
+                3
+              ]
+            ],
+            [
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ],
+            [
+              [
+                3,
+                4
+              ],
+              [
+                4,
+                4
+              ]
+            ],
+            [
+              [
+                4,
+                0
+              ],
+              [
+                4,
+                1
+              ]
+            ],
+            [
+              [
+                4,
+                0
+              ],
+              [
+                5,
+                0
+              ]
+            ],
+            [
+              [
+                4,
+                1
+              ],
+              [
+                4,
+                2
+              ]
+            ],
+            [
+              [
+                4,
+                1
+              ],
+              [
+                5,
+                1
+              ]
+            ],
+            [
+              [
+                4,
+                3
+              ],
+              [
+                5,
+                3
+              ]
+            ],
+            [
+              [
+                4,
+                4
+              ],
+              [
+                4,
+                5
+              ]
+            ],
+            [
+              [
+                4,
+                4
+              ],
+              [
+                5,
+                4
+              ]
+            ],
+            [
+              [
+                4,
+                5
+              ],
+              [
+                5,
+                5
+              ]
+            ],
+            [
+              [
+                5,
+                1
+              ],
+              [
+                5,
+                2
+              ]
+            ],
+            [
+              [
+                5,
+                2
+              ],
+              [
+                5,
+                3
+              ]
+            ]
+          ],
+          "route": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              1
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          "door_indices": [
+            5,
+            13
+          ],
+          "correct_sides": [
+            1,
+            1
+          ],
+          "object_index": 4,
+          "geometry_sha256": "84c054f6e9b70ea7691d0141e68d8f79779e4ca4a71f3f113970b7e353665a7c",
+          "route_decisions": 7,
+          "route_turns": 14,
+          "centerline_m": 32.3,
+          "decision_ratio_to_one_decision_reference": 7,
+          "legacy_reference_route_m": 3.0
+        },
+        "arm": "both",
+        "seed": 0,
+        "sensor_failure": "normal",
+        "elapsed_s": 1.5999999999998793,
+        "fall": false,
+        "timeout": true,
+        "button_success": true,
+        "door_success": true,
+        "pickup_success": true,
+        "placement_success": false,
+        "wall_contact_intervals": 0,
+        "shortest_centerline_m": 32.3,
+        "path_efficiency": null,
+        "object_xyz": [
+          5.1,
+          1.7,
+          0.06989224457978356
+        ],
+        "placement_error_m": 3.801315561749642,
+        "trace": [
+          {
+            "time_s": 0.20000000000000015,
+            "xy": [
+              -0.00597637103326063,
+              0.00496082808179131
+            ],
+            "action": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "gates": [
+              true,
+              true
+            ],
+            "carrying": false,
+            "parcel_xyz": [
+              5.1,
+              1.7,
+              0.06988167659559796
+            ],
+            "lidar_valid": 1.0,
+            "depth_valid": 0.921875
+          },
+          {
+            "time_s": 1.1999999999999234,
+            "xy": [
+              -0.06492051402880579,
+              -0.010512356917057902
+            ],
+            "action": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "gates": [
+              true,
+              true
+            ],
+            "carrying": false,
+            "parcel_xyz": [
+              5.1,
+              1.7,
+              0.06989224457978356
+            ],
+            "lidar_valid": 1.0,
+            "depth_valid": 0.9765625
+          },
+          {
+            "time_s": 1.5999999999998793,
+            "xy": [
+              -0.06509609419944186,
+              -0.006713892884877581
+            ],
+            "action": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "gates": [
+              true,
+              true
+            ],
+            "carrying": false,
+            "parcel_xyz": [
+              5.1,
+              1.7,
+              0.06989224457978356
+            ],
+            "lidar_valid": 1.0,
+            "depth_valid": 0.9765625
+          }
+        ],
+        "transport_kind": "kinematic_attachment_no_grasp_or_payload_dynamics"
+      }
+    }
+  ],
+  "policy_success_claim": false
+}

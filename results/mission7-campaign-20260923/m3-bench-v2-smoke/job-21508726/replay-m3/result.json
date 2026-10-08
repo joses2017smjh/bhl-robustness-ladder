@@ -1,0 +1,148 @@
+{
+  "complete": true,
+  "status": "COMPLETED_SMOKE",
+  "intervention": "staged plate maneuver with M3 on the SHIPPED gait (LEARNED gait, SCRIPTED stage, ORACLE layout and plate pose; no policy swap): pre-plate approach and settle unchanged; turn while stepping toward the door direction at 0.30 m/s forward and 0.40 rad/s yaw until within 0.25 rad (bounded 15.71 s; the short way, toward the door centreline when there is none); straight-forward crossing at 0.30 m/s with heading hold clip(1.2 x error, +-0.35) and no lateral command, until the base is --cross-clear (default 0.35 m) past the plate centre or cross_max_s pass; turn back to the takeover heading the same way; stall watchdog in the turn and the crossing: base moved < 0.05 m over 1.2 s -> prev_actions := 0 and 0.40 s backward at 0.30 m/s, then the phase resumes, at most 2 times, then hand-back; wrong-side staging only when the correct plate is over 1.0 m away",
+  "geometry_unchanged": true,
+  "activation_schedule_unchanged": true,
+  "fall_predicate_unchanged": true,
+  "baseline_result": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/mission7-approach-followup-20260922/replay-diagnose-cn-c22/result.json",
+  "episodes": 1,
+  "falls": 1,
+  "upright": 0,
+  "exact_replay_gate_passed": false,
+  "episode_comparison": [
+    {
+      "layout_index": 0,
+      "layout_seed": 10000,
+      "original_elapsed_s": 55.04000000008078,
+      "replay_elapsed_s": 55.04000000008078,
+      "fall": true,
+      "first_fall_s": 34.03999999998051,
+      "maximum_tilt": 1.7430234979252903,
+      "maximum_recorded_pose_difference": 4.614800895662674,
+      "plate_contacts": 110276,
+      "peak_plate_normal_force_N": 829.0015306942812,
+      "peak_plate_tangent_force_N": 286.7283306693721,
+      "minimum_plate_distance_m": -0.031189516333287818,
+      "stage_history": [
+        {
+          "time_s": 22.7199999999924,
+          "door": 0,
+          "side": -1,
+          "phase": "approach"
+        },
+        {
+          "time_s": 24.039999999989323,
+          "door": 0,
+          "side": -1,
+          "phase": "settle"
+        },
+        {
+          "time_s": 24.479999999988298,
+          "door": 0,
+          "phase": "turn",
+          "yaw_error_rad": 1.5336399146397461
+        },
+        {
+          "time_s": 26.879999999982704,
+          "door": 0,
+          "phase": "recover",
+          "resume": "turn",
+          "recovery": 1,
+          "prev_actions_before_norm": 68.2717056274414
+        },
+        {
+          "time_s": 28.879999999978043,
+          "door": 0,
+          "phase": "recover",
+          "resume": "turn",
+          "recovery": 2,
+          "prev_actions_before_norm": 68.36659240722656
+        },
+        {
+          "time_s": 30.839999999973475,
+          "door": 0,
+          "side": -1,
+          "phase": "recorded",
+          "watchdog_handback": true,
+          "stalled_in": "turn"
+        }
+      ],
+      "baseline": {
+        "fall_time_s": 55.04000000008078,
+        "fall_phase": "advance",
+        "minimum_clearances_m": {
+          "robot_obstacle_clearance_m": -0.03612869372423548,
+          "robot_plate_surface_clearance_m": -0.03612869372423548,
+          "robot_plate_edge_clearance_m": -0.06919171048669573,
+          "correct_plate_edge_clearance_m": -0.06919171048669573
+        },
+        "failure_stage_relative_to_plate": "during_plate_traversal"
+      },
+      "stage_gait": "m3",
+      "gait_events": [],
+      "m3_events": [
+        {
+          "time_s": 22.7199999999924,
+          "door": 0,
+          "event": "takeover",
+          "takeover_yaw_rad": 0.03349801362629484
+        },
+        {
+          "time_s": 26.879999999982704,
+          "door": 0,
+          "phase": "recover",
+          "resume": "turn",
+          "recovery": 1,
+          "prev_actions_before_norm": 68.2717056274414,
+          "event": "stall_recover"
+        },
+        {
+          "time_s": 27.279999999981772,
+          "door": 0,
+          "event": "resume",
+          "phase": "turn"
+        },
+        {
+          "time_s": 28.879999999978043,
+          "door": 0,
+          "phase": "recover",
+          "resume": "turn",
+          "recovery": 2,
+          "prev_actions_before_norm": 68.36659240722656,
+          "event": "stall_recover"
+        },
+        {
+          "time_s": 29.27999999997711,
+          "door": 0,
+          "event": "resume",
+          "phase": "turn"
+        },
+        {
+          "time_s": 30.839999999973475,
+          "door": 0,
+          "event": "stall_handback",
+          "phase": "turn",
+          "recoveries": 2
+        }
+      ]
+    }
+  ],
+  "stage_gait": "m3",
+  "stage_gait_provenance": {
+    "policy": "shipped arms-dr1.0-s0 (env.controller.policy is never swapped)",
+    "turn_vx_mps": 0.3,
+    "turn_wz_rps": 0.4,
+    "align_exit_rad": 0.25,
+    "turn_max_s": 15.707963267948966,
+    "cross_vx_mps": 0.3,
+    "k_yaw": 1.2,
+    "wz_hold_rps": 0.35,
+    "cross_clear_m": 0.35,
+    "stall_window_s": 1.2,
+    "stall_min_m": 0.05,
+    "recover_vx_mps": -0.3,
+    "recover_s": 0.4,
+    "max_recoveries": 2
+  }
+}

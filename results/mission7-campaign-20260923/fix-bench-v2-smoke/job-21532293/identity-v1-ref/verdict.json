@@ -1,0 +1,109 @@
+{
+  "verdict": "SMOKE_INCOMPLETE",
+  "rule": "Bench: PASS iff >= 62/64 crossings clear (base along >= +0.35 m past the plate centre along the door direction, within 10 s of takeover, by mission7_gates' clear definition), 0 falls (tilt >= 0.78), and >= 15/16 clears per heading. Otherwise FAIL; INCOMPLETE if any of the 64 is missing.",
+  "clears": 0,
+  "falls": 0,
+  "crossings_scored": 1,
+  "expected": 1,
+  "per_heading": {
+    "0": {
+      "clears": 0,
+      "crossings": 1
+    },
+    "90": {
+      "clears": 0,
+      "crossings": 0
+    },
+    "-90": {
+      "clears": 0,
+      "crossings": 0
+    },
+    "180": {
+      "clears": 0,
+      "crossings": 0
+    }
+  },
+  "per_cell": {
+    "0/round/walking": {
+      "clears": 0,
+      "crossings": 1,
+      "doors": [
+        1,
+        0
+      ]
+    }
+  },
+  "missing": [],
+  "problems": [],
+  "misses": [
+    [
+      104,
+      0
+    ]
+  ],
+  "fallen": [],
+  "smoke": true,
+  "chain": "a chain, each step only after the previous PASSES: bench -> the unchanged exact ten-fall replay once with --stage-gait turnboth (complete, 10 episodes, 10 upright, 0 falls) -> the route gate as coded by M1 (Doors and Transport each >= 16/16 successes on validation layouts 0-15, 32 episodes); M3 (turn while stepping with the shipped gait + a stall watchdog) is predeclared as conditional on a bench FAIL",
+  "labels": {
+    "gaits": "LEARNED (shipped arms-dr1.0-s0 outside the stage; TurnBoth-s0 during the stage)",
+    "stage": "SCRIPTED (PlateStage, stage_gait=turnboth)",
+    "layout_and_plate_pose": "ORACLE (as the existing stage uses them)"
+  },
+  "stage_kwargs": {
+    "stage_gait": "turnboth"
+  },
+  "mode": "smoke",
+  "plate_activation_not_gated": {
+    "round_target_pressed_during_stage": 1,
+    "square_target_pressed_during_stage": 0,
+    "crossings": 1
+  },
+  "wall_contacts_not_gated": {
+    "crossings_with_stage_contact": 0
+  },
+  "end_reasons": {
+    "complete": 1
+  },
+  "runup_over_opposite_plate_not_gated": {
+    "crossings": [],
+    "count": 0,
+    "fallen": [],
+    "fallen_before_takeover": []
+  },
+  "falls_by_phase_not_gated": {},
+  "crossings": [
+    {
+      "layout": 104,
+      "door": 0,
+      "heading_deg": 0,
+      "plate": "round",
+      "entry": "walking",
+      "cell_m": 1.7,
+      "end_reason": "complete",
+      "clear": false,
+      "real_clear": false,
+      "clear_after_takeover_s": null,
+      "fell": false,
+      "fall_phase": null,
+      "maximum_tilt": 0.22680222121028323,
+      "takeover_s": 7.399999999998618,
+      "handback_s": 13.200000000004641,
+      "takeover_speed_mps": 0.6396726451853638,
+      "along_start_m": -0.5016775225453303,
+      "along_max_m": -0.32498821567322755,
+      "phases": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ],
+      "turn_timed_out": false,
+      "target_pressed_during_stage": true,
+      "wall_contact_stage_samples": 0,
+      "runup_over_opposite_plate": false
+    }
+  ],
+  "written_utc": "2026-10-03T18:19:15.589365+00:00"
+}

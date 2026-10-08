@@ -174,6 +174,13 @@ def main():
 
     # create isaac environment
     env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
+    if clip_on and args_cli.task and "Maze" in args_cli.task:
+        try:
+            from bhl_robust.terrains.maze_viz import spawn_maze_clip_color
+            n_viz = spawn_maze_clip_color(env.unwrapped)
+            print(f"[INFO]: spawned {n_viz} maze clip-colour overlays")
+        except Exception as exc:                                 # noqa: BLE001
+            print(f"[WARN]: maze clip-colour overlays skipped ({exc!r})")
     # wrap for video recording
     if args_cli.video:
         video_kwargs = {

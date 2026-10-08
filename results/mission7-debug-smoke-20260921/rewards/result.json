@@ -1,0 +1,1239 @@
+{
+  "complete": true,
+  "status": "COMPLETED_DIAGNOSTIC",
+  "summaries": {
+    "standstill-0.65": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.6556171040309953,
+        "median": 0.6556171040309953,
+        "std": 0.0,
+        "min": 0.6556171040309953,
+        "max": 0.6556171040309953
+      },
+      "minimum_distance": {
+        "mean": 0.5783462631545414,
+        "median": 0.5783462631545414,
+        "std": 0.0,
+        "min": 0.5783462631545414,
+        "max": 0.5783462631545414
+      },
+      "fraction_closed": {
+        "mean": 0.10204552754338653,
+        "median": 0.10204552754338653,
+        "std": 0.0,
+        "min": 0.10204552754338653,
+        "max": 0.10204552754338653
+      },
+      "initial_distance": {
+        "mean": 0.6440708085926766,
+        "median": 0.6440708085926766,
+        "std": 0.0,
+        "min": 0.6440708085926766,
+        "max": 0.6440708085926766
+      }
+    },
+    "random-0.65": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.6682464456283314,
+        "median": 0.6682464456283314,
+        "std": 0.0,
+        "min": 0.6682464456283314,
+        "max": 0.6682464456283314
+      },
+      "minimum_distance": {
+        "mean": 0.5788716876779159,
+        "median": 0.5788716876779159,
+        "std": 0.0,
+        "min": 0.5788716876779159,
+        "max": 0.5788716876779159
+      },
+      "fraction_closed": {
+        "mean": 0.1012297406510687,
+        "median": 0.1012297406510687,
+        "std": 0.0,
+        "min": 0.1012297406510687,
+        "max": 0.1012297406510687
+      },
+      "initial_distance": {
+        "mean": 0.6440708085926766,
+        "median": 0.6440708085926766,
+        "std": 0.0,
+        "min": 0.6440708085926766,
+        "max": 0.6440708085926766
+      }
+    },
+    "scripted-0.65": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.6556171040309953,
+        "median": 0.6556171040309953,
+        "std": 0.0,
+        "min": 0.6556171040309953,
+        "max": 0.6556171040309953
+      },
+      "minimum_distance": {
+        "mean": 0.5783462631545414,
+        "median": 0.5783462631545414,
+        "std": 0.0,
+        "min": 0.5783462631545414,
+        "max": 0.5783462631545414
+      },
+      "fraction_closed": {
+        "mean": 0.10204552754338653,
+        "median": 0.10204552754338653,
+        "std": 0.0,
+        "min": 0.10204552754338653,
+        "max": 0.10204552754338653
+      },
+      "initial_distance": {
+        "mean": 0.6440708085926766,
+        "median": 0.6440708085926766,
+        "std": 0.0,
+        "min": 0.6440708085926766,
+        "max": 0.6440708085926766
+      }
+    },
+    "untrained-0.65": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.6487729420096241,
+        "median": 0.6487729420096241,
+        "std": 0.0,
+        "min": 0.6487729420096241,
+        "max": 0.6487729420096241
+      },
+      "minimum_distance": {
+        "mean": 0.5783458791530293,
+        "median": 0.5783458791530293,
+        "std": 0.0,
+        "min": 0.5783458791530293,
+        "max": 0.5783458791530293
+      },
+      "fraction_closed": {
+        "mean": 0.10204612375347247,
+        "median": 0.10204612375347247,
+        "std": 0.0,
+        "min": 0.10204612375347247,
+        "max": 0.10204612375347247
+      },
+      "initial_distance": {
+        "mean": 0.6440708085926766,
+        "median": 0.6440708085926766,
+        "std": 0.0,
+        "min": 0.6440708085926766,
+        "max": 0.6440708085926766
+      }
+    },
+    "c4_100-0.65": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.6518410249478287,
+        "median": 0.6518410249478287,
+        "std": 0.0,
+        "min": 0.6518410249478287,
+        "max": 0.6518410249478287
+      },
+      "minimum_distance": {
+        "mean": 0.5784153379166721,
+        "median": 0.5784153379166721,
+        "std": 0.0,
+        "min": 0.5784153379166721,
+        "max": 0.5784153379166721
+      },
+      "fraction_closed": {
+        "mean": 0.10193828038793537,
+        "median": 0.10193828038793537,
+        "std": 0.0,
+        "min": 0.10193828038793537,
+        "max": 0.10193828038793537
+      },
+      "initial_distance": {
+        "mean": 0.6440708085926766,
+        "median": 0.6440708085926766,
+        "std": 0.0,
+        "min": 0.6440708085926766,
+        "max": 0.6440708085926766
+      }
+    },
+    "standstill-0.4": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.4060139924697254,
+        "median": 0.4060139924697254,
+        "std": 0.0,
+        "min": 0.4060139924697254,
+        "max": 0.4060139924697254
+      },
+      "minimum_distance": {
+        "mean": 0.3287862133654054,
+        "median": 0.3287862133654054,
+        "std": 0.0,
+        "min": 0.3287862133654054,
+        "max": 0.3287862133654054
+      },
+      "fraction_closed": {
+        "mean": 0.1662197023496635,
+        "median": 0.1662197023496635,
+        "std": 0.0,
+        "min": 0.1662197023496635,
+        "max": 0.1662197023496635
+      },
+      "initial_distance": {
+        "mean": 0.39433195326389076,
+        "median": 0.39433195326389076,
+        "std": 0.0,
+        "min": 0.39433195326389076,
+        "max": 0.39433195326389076
+      }
+    },
+    "random-0.4": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.41884989759486374,
+        "median": 0.41884989759486374,
+        "std": 0.0,
+        "min": 0.41884989759486374,
+        "max": 0.41884989759486374
+      },
+      "minimum_distance": {
+        "mean": 0.3293630839650366,
+        "median": 0.3293630839650366,
+        "std": 0.0,
+        "min": 0.3293630839650366,
+        "max": 0.3293630839650366
+      },
+      "fraction_closed": {
+        "mean": 0.1647567963009489,
+        "median": 0.1647567963009489,
+        "std": 0.0,
+        "min": 0.1647567963009489,
+        "max": 0.1647567963009489
+      },
+      "initial_distance": {
+        "mean": 0.39433195326389076,
+        "median": 0.39433195326389076,
+        "std": 0.0,
+        "min": 0.39433195326389076,
+        "max": 0.39433195326389076
+      }
+    },
+    "scripted-0.4": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.4060139924697254,
+        "median": 0.4060139924697254,
+        "std": 0.0,
+        "min": 0.4060139924697254,
+        "max": 0.4060139924697254
+      },
+      "minimum_distance": {
+        "mean": 0.3287862133654054,
+        "median": 0.3287862133654054,
+        "std": 0.0,
+        "min": 0.3287862133654054,
+        "max": 0.3287862133654054
+      },
+      "fraction_closed": {
+        "mean": 0.1662197023496635,
+        "median": 0.1662197023496635,
+        "std": 0.0,
+        "min": 0.1662197023496635,
+        "max": 0.1662197023496635
+      },
+      "initial_distance": {
+        "mean": 0.39433195326389076,
+        "median": 0.39433195326389076,
+        "std": 0.0,
+        "min": 0.39433195326389076,
+        "max": 0.39433195326389076
+      }
+    },
+    "untrained-0.4": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.3991705645700022,
+        "median": 0.3991705645700022,
+        "std": 0.0,
+        "min": 0.3991705645700022,
+        "max": 0.3991705645700022
+      },
+      "minimum_distance": {
+        "mean": 0.32877739979478654,
+        "median": 0.32877739979478654,
+        "std": 0.0,
+        "min": 0.32877739979478654,
+        "max": 0.32877739979478654
+      },
+      "fraction_closed": {
+        "mean": 0.16624205298735828,
+        "median": 0.16624205298735828,
+        "std": 0.0,
+        "min": 0.16624205298735828,
+        "max": 0.16624205298735828
+      },
+      "initial_distance": {
+        "mean": 0.39433195326389076,
+        "median": 0.39433195326389076,
+        "std": 0.0,
+        "min": 0.39433195326389076,
+        "max": 0.39433195326389076
+      }
+    },
+    "c4_100-0.4": {
+      "episodes": 1,
+      "successes": 0,
+      "success_rate": 0.0,
+      "falls": 0,
+      "collisions": 0,
+      "failures": {
+        "timeout": 1
+      },
+      "mean_return": -0.002,
+      "mean_diagnostic_return": -0.002,
+      "final_distance": {
+        "mean": 0.39996829195613254,
+        "median": 0.39996829195613254,
+        "std": 0.0,
+        "min": 0.39996829195613254,
+        "max": 0.39996829195613254
+      },
+      "minimum_distance": {
+        "mean": 0.3288911408429759,
+        "median": 0.3288911408429759,
+        "std": 0.0,
+        "min": 0.3288911408429759,
+        "max": 0.3288911408429759
+      },
+      "fraction_closed": {
+        "mean": 0.16595361314055432,
+        "median": 0.16595361314055432,
+        "std": 0.0,
+        "min": 0.16595361314055432,
+        "max": 0.16595361314055432
+      },
+      "initial_distance": {
+        "mean": 0.39433195326389076,
+        "median": 0.39433195326389076,
+        "std": 0.0,
+        "min": 0.39433195326389076,
+        "max": 0.39433195326389076
+      }
+    }
+  },
+  "reward_terms": {
+    "standstill-0.65": {
+      "time": {
+        "mean": -0.002,
+        "median": -0.002,
+        "std": 0.0,
+        "min": -0.002,
+        "max": -0.002,
+        "decision_nonzero_fraction": 1.0,
+        "absolute_contribution_fraction": 1.0
+      },
+      "collision": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "failure": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "correct_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "wrong_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "door_crossing": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "acquisition": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "success": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "privileged_distance_progress": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      }
+    },
+    "random-0.65": {
+      "time": {
+        "mean": -0.002,
+        "median": -0.002,
+        "std": 0.0,
+        "min": -0.002,
+        "max": -0.002,
+        "decision_nonzero_fraction": 1.0,
+        "absolute_contribution_fraction": 1.0
+      },
+      "collision": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "failure": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "correct_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "wrong_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "door_crossing": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "acquisition": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "success": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "privileged_distance_progress": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      }
+    },
+    "scripted-0.65": {
+      "time": {
+        "mean": -0.002,
+        "median": -0.002,
+        "std": 0.0,
+        "min": -0.002,
+        "max": -0.002,
+        "decision_nonzero_fraction": 1.0,
+        "absolute_contribution_fraction": 1.0
+      },
+      "collision": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "failure": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "correct_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "wrong_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "door_crossing": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "acquisition": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "success": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "privileged_distance_progress": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      }
+    },
+    "untrained-0.65": {
+      "time": {
+        "mean": -0.002,
+        "median": -0.002,
+        "std": 0.0,
+        "min": -0.002,
+        "max": -0.002,
+        "decision_nonzero_fraction": 1.0,
+        "absolute_contribution_fraction": 1.0
+      },
+      "collision": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "failure": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "correct_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "wrong_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "door_crossing": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "acquisition": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "success": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "privileged_distance_progress": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      }
+    },
+    "c4_100-0.65": {
+      "time": {
+        "mean": -0.002,
+        "median": -0.002,
+        "std": 0.0,
+        "min": -0.002,
+        "max": -0.002,
+        "decision_nonzero_fraction": 1.0,
+        "absolute_contribution_fraction": 1.0
+      },
+      "collision": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "failure": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "correct_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "wrong_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "door_crossing": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "acquisition": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "success": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "privileged_distance_progress": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      }
+    },
+    "standstill-0.4": {
+      "time": {
+        "mean": -0.002,
+        "median": -0.002,
+        "std": 0.0,
+        "min": -0.002,
+        "max": -0.002,
+        "decision_nonzero_fraction": 1.0,
+        "absolute_contribution_fraction": 1.0
+      },
+      "collision": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "failure": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "correct_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "wrong_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "door_crossing": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "acquisition": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "success": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "privileged_distance_progress": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      }
+    },
+    "random-0.4": {
+      "time": {
+        "mean": -0.002,
+        "median": -0.002,
+        "std": 0.0,
+        "min": -0.002,
+        "max": -0.002,
+        "decision_nonzero_fraction": 1.0,
+        "absolute_contribution_fraction": 1.0
+      },
+      "collision": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "failure": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "correct_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "wrong_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "door_crossing": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "acquisition": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "success": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "privileged_distance_progress": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      }
+    },
+    "scripted-0.4": {
+      "time": {
+        "mean": -0.002,
+        "median": -0.002,
+        "std": 0.0,
+        "min": -0.002,
+        "max": -0.002,
+        "decision_nonzero_fraction": 1.0,
+        "absolute_contribution_fraction": 1.0
+      },
+      "collision": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "failure": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "correct_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "wrong_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "door_crossing": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "acquisition": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "success": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "privileged_distance_progress": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      }
+    },
+    "untrained-0.4": {
+      "time": {
+        "mean": -0.002,
+        "median": -0.002,
+        "std": 0.0,
+        "min": -0.002,
+        "max": -0.002,
+        "decision_nonzero_fraction": 1.0,
+        "absolute_contribution_fraction": 1.0
+      },
+      "collision": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "failure": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "correct_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "wrong_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "door_crossing": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "acquisition": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "success": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "privileged_distance_progress": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      }
+    },
+    "c4_100-0.4": {
+      "time": {
+        "mean": -0.002,
+        "median": -0.002,
+        "std": 0.0,
+        "min": -0.002,
+        "max": -0.002,
+        "decision_nonzero_fraction": 1.0,
+        "absolute_contribution_fraction": 1.0
+      },
+      "collision": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "failure": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "correct_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "wrong_button": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "door_crossing": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "acquisition": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "success": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      },
+      "privileged_distance_progress": {
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "decision_nonzero_fraction": 0.0,
+        "absolute_contribution_fraction": 0.0
+      }
+    }
+  },
+  "interpretation": "Standstill is not a global reward optimum when reliable completion is possible; compare its expected return with the actual movement controllers. No upright/survival reward exists."
+}

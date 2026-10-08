@@ -1,0 +1,634 @@
+{
+  "ok": true,
+  "problems": [],
+  "wall_s": 297.8387289047241,
+  "checks": {
+    "bench-preflight_export_checked": {
+      "ok": true,
+      "detail": {
+        "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de",
+        "num_observations": 77,
+        "controller": "GaitClockRlController",
+        "deploy_keys_differing": [
+          "command_velocity",
+          "gait_clock",
+          "num_observations",
+          "policy_checkpoint_path"
+        ],
+        "gait_clock": {
+          "period_s": 0.8,
+          "phase_offset": 0.0
+        }
+      }
+    },
+    "replay-clocks2-preflight_export_checked": {
+      "ok": true,
+      "detail": {
+        "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de",
+        "num_observations": 77,
+        "controller": "GaitClockRlController",
+        "deploy_keys_differing": [
+          "command_velocity",
+          "gait_clock",
+          "num_observations",
+          "policy_checkpoint_path"
+        ],
+        "gait_clock": {
+          "period_s": 0.8,
+          "phase_offset": 0.0
+        }
+      }
+    },
+    "replay-export-preflight_export_checked": {
+      "ok": true,
+      "detail": {
+        "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de",
+        "num_observations": 77,
+        "controller": "GaitClockRlController",
+        "deploy_keys_differing": [
+          "command_velocity",
+          "gait_clock",
+          "num_observations",
+          "policy_checkpoint_path"
+        ],
+        "gait_clock": {
+          "period_s": 0.8,
+          "phase_offset": 0.0
+        }
+      }
+    },
+    "probe-clocks2-preflight_export_checked": {
+      "ok": true,
+      "detail": {
+        "policy_sha256": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de",
+        "num_observations": 77,
+        "controller": "GaitClockRlController",
+        "deploy_keys_differing": [
+          "command_velocity",
+          "gait_clock",
+          "num_observations",
+          "policy_checkpoint_path"
+        ],
+        "gait_clock": {
+          "period_s": 0.8,
+          "phase_offset": 0.0
+        }
+      }
+    },
+    "no_replay_or_probe_episode": {
+      "ok": true,
+      "detail": "preflight only: validation layouts are scored"
+    },
+    "bench_smoke_verdict_never_pass": {
+      "ok": true,
+      "detail": "SMOKE_RUN"
+    },
+    "bench_provenance": {
+      "ok": true,
+      "detail": {
+        "weights": {
+          "shipped": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b",
+          "clocks2": "c1862f1e4429c1e6ac2e4fae1391f3f40ccc353382c8bbf4b88efee4c6c8d8de"
+        },
+        "n_sources": 41
+      }
+    },
+    "bench_three_crossings_written": {
+      "ok": true,
+      "detail": [
+        "L250-d0.json.gz",
+        "L251-d1.json.gz",
+        "L253-d1.json.gz"
+      ]
+    },
+    "L250-d0_complete": {
+      "ok": true,
+      "detail": "complete"
+    },
+    "L250-d0_phases_valid": {
+      "ok": true,
+      "detail": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ]
+    },
+    "L250-d0_swap_in_is_a_fresh_clock_controller": {
+      "ok": true,
+      "detail": {
+        "time_s": 4.200000000000392,
+        "door": 0,
+        "event": "swap_to_clocks2",
+        "prev_actions_before_norm": 73.2880859375,
+        "controller": "GaitClockRlController",
+        "obs_width": 77,
+        "clock_step": 0,
+        "policy_observations_zero": true,
+        "prev_actions_after_norm": 0.0,
+        "takeover_yaw_rad": 1.5303356450616756
+      }
+    },
+    "L250-d0_phase_started_at_takeover_and_swapped_back": {
+      "ok": true,
+      "detail": {
+        "updates_since_takeover": 280,
+        "expected_last_clock": [
+          -0.30901920795440674,
+          0.9510558247566223
+        ],
+        "swap_back": {
+          "time_s": 15.40000000000733,
+          "door": 0,
+          "event": "swap_to_shipped",
+          "prev_actions_before_norm": 63.86448669433594,
+          "stage_controller": "GaitClockRlController",
+          "stage_controller_clock_step": 280,
+          "stage_controller_obs_width": 77,
+          "stage_controller_last_clock": [
+            -0.30901920795440674,
+            0.9510558247566223
+          ],
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "policy_observations_zero": false,
+          "prev_actions_after_norm": 0.0
+        }
+      }
+    },
+    "L250-d0_outcome_reported": {
+      "ok": true,
+      "detail": {
+        "heading_deg": 90,
+        "plate": "round",
+        "entry": "walking",
+        "end_reason": "complete",
+        "takeover_s": 4.200000000000392,
+        "handback_s": 15.40000000000733,
+        "clear": false,
+        "real_clear": false,
+        "clear_after_takeover_s": null,
+        "fell": false,
+        "fall_phase": null,
+        "maximum_tilt": 0.1527317664528209,
+        "phases": [
+          "approach",
+          "settle",
+          "turn",
+          "cross",
+          "turn_back",
+          "recorded"
+        ],
+        "gait_events": [
+          {
+            "time_s": 4.200000000000392,
+            "door": 0,
+            "event": "swap_to_clocks2",
+            "prev_actions_before_norm": 73.2880859375,
+            "controller": "GaitClockRlController",
+            "obs_width": 77,
+            "clock_step": 0,
+            "policy_observations_zero": true,
+            "prev_actions_after_norm": 0.0,
+            "takeover_yaw_rad": 1.5303356450616756
+          },
+          {
+            "time_s": 15.40000000000733,
+            "door": 0,
+            "event": "swap_to_shipped",
+            "prev_actions_before_norm": 63.86448669433594,
+            "stage_controller": "GaitClockRlController",
+            "stage_controller_clock_step": 280,
+            "stage_controller_obs_width": 77,
+            "stage_controller_last_clock": [
+              -0.30901920795440674,
+              0.9510558247566223
+            ],
+            "controller": "RlController",
+            "obs_width": 75,
+            "clock_step": null,
+            "policy_observations_zero": false,
+            "prev_actions_after_norm": 0.0
+          }
+        ],
+        "events": [
+          {
+            "time_s": 3.000000000000169,
+            "event": "walk_start",
+            "distance_to_pre_point_m": 0.349688004254662
+          },
+          {
+            "time_s": 4.200000000000392,
+            "event": "arrived",
+            "distance_m": 0.07494300557443992,
+            "walk_s": 1.2000000000002227
+          },
+          {
+            "time_s": 4.200000000000392,
+            "event": "takeover",
+            "speed_mps": 0.6495433287412664,
+            "distance_to_pre_point_m": 0.07494300557443992,
+            "yaw_rad": 1.5303356450616756
+          },
+          {
+            "time_s": 15.40000000000733,
+            "event": "handback"
+          }
+        ],
+        "wall_contacts": {
+          "samples": 48,
+          "stage_samples": 47,
+          "first_s": 7.239999999998707,
+          "geoms": [
+            "wall_m7_20"
+          ]
+        },
+        "plate_activation": {
+          "target_plate": {
+            "door": 0,
+            "side": 1,
+            "shape": "round"
+          },
+          "target_pressed_during_stage": true,
+          "first_target_press_s": 3.6000000000003696,
+          "correct_plate_pressed_during_stage": true,
+          "wrong_plate_pressed_during_stage": false,
+          "presses_before_takeover": [
+            [
+              0,
+              true
+            ]
+          ]
+        },
+        "samples": 435
+      }
+    },
+    "L251-d1_complete": {
+      "ok": true,
+      "detail": "complete"
+    },
+    "L251-d1_phases_valid": {
+      "ok": true,
+      "detail": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ]
+    },
+    "L251-d1_swap_in_is_a_fresh_clock_controller": {
+      "ok": true,
+      "detail": {
+        "time_s": 3.000000000000169,
+        "door": 1,
+        "event": "swap_to_clocks2",
+        "prev_actions_before_norm": 78.59923553466797,
+        "controller": "GaitClockRlController",
+        "obs_width": 77,
+        "clock_step": 0,
+        "policy_observations_zero": true,
+        "prev_actions_after_norm": 0.0,
+        "takeover_yaw_rad": -0.0563527831418434
+      }
+    },
+    "L251-d1_phase_started_at_takeover_and_swapped_back": {
+      "ok": true,
+      "detail": {
+        "updates_since_takeover": 525,
+        "expected_last_clock": [
+          0.9510535597801208,
+          0.30902615189552307
+        ],
+        "swap_back": {
+          "time_s": 23.999999999989416,
+          "door": 1,
+          "event": "swap_to_shipped",
+          "prev_actions_before_norm": 62.01511764526367,
+          "stage_controller": "GaitClockRlController",
+          "stage_controller_clock_step": 525,
+          "stage_controller_obs_width": 77,
+          "stage_controller_last_clock": [
+            0.9510535597801208,
+            0.30902615189552307
+          ],
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "policy_observations_zero": false,
+          "prev_actions_after_norm": 0.0
+        }
+      }
+    },
+    "L251-d1_outcome_reported": {
+      "ok": true,
+      "detail": {
+        "heading_deg": 180,
+        "plate": "round",
+        "entry": "standstill",
+        "end_reason": "complete",
+        "takeover_s": 3.000000000000169,
+        "handback_s": 23.999999999989416,
+        "clear": false,
+        "real_clear": false,
+        "clear_after_takeover_s": null,
+        "fell": false,
+        "fall_phase": null,
+        "maximum_tilt": 0.24691203650130542,
+        "phases": [
+          "approach",
+          "settle",
+          "turn",
+          "cross",
+          "turn_back",
+          "recorded"
+        ],
+        "gait_events": [
+          {
+            "time_s": 3.000000000000169,
+            "door": 1,
+            "event": "swap_to_clocks2",
+            "prev_actions_before_norm": 78.59923553466797,
+            "controller": "GaitClockRlController",
+            "obs_width": 77,
+            "clock_step": 0,
+            "policy_observations_zero": true,
+            "prev_actions_after_norm": 0.0,
+            "takeover_yaw_rad": -0.0563527831418434
+          },
+          {
+            "time_s": 23.999999999989416,
+            "door": 1,
+            "event": "swap_to_shipped",
+            "prev_actions_before_norm": 62.01511764526367,
+            "stage_controller": "GaitClockRlController",
+            "stage_controller_clock_step": 525,
+            "stage_controller_obs_width": 77,
+            "stage_controller_last_clock": [
+              0.9510535597801208,
+              0.30902615189552307
+            ],
+            "controller": "RlController",
+            "obs_width": 75,
+            "clock_step": null,
+            "policy_observations_zero": false,
+            "prev_actions_after_norm": 0.0
+          }
+        ],
+        "events": [
+          {
+            "time_s": 3.000000000000169,
+            "event": "takeover",
+            "speed_mps": 0.00024559115133610703,
+            "distance_to_pre_point_m": 0.07827823512462809,
+            "yaw_rad": -0.0563527831418434
+          },
+          {
+            "time_s": 23.999999999989416,
+            "event": "handback"
+          }
+        ],
+        "wall_contacts": {
+          "samples": 0,
+          "stage_samples": 0,
+          "first_s": null,
+          "geoms": []
+        },
+        "plate_activation": {
+          "target_plate": {
+            "door": 1,
+            "side": 1,
+            "shape": "round"
+          },
+          "target_pressed_during_stage": true,
+          "first_target_press_s": 0.08000000000000006,
+          "correct_plate_pressed_during_stage": true,
+          "wrong_plate_pressed_during_stage": false,
+          "presses_before_takeover": [
+            [
+              1,
+              true
+            ]
+          ]
+        },
+        "samples": 650
+      }
+    },
+    "L253-d1_complete": {
+      "ok": true,
+      "detail": "complete"
+    },
+    "L253-d1_phases_valid": {
+      "ok": true,
+      "detail": [
+        "approach",
+        "settle",
+        "turn",
+        "cross",
+        "turn_back",
+        "recorded"
+      ]
+    },
+    "L253-d1_swap_in_is_a_fresh_clock_controller": {
+      "ok": true,
+      "detail": {
+        "time_s": 3.000000000000169,
+        "door": 1,
+        "event": "swap_to_clocks2",
+        "prev_actions_before_norm": 79.51045989990234,
+        "controller": "GaitClockRlController",
+        "obs_width": 77,
+        "clock_step": 0,
+        "policy_observations_zero": true,
+        "prev_actions_after_norm": 0.0,
+        "takeover_yaw_rad": -1.4511981030307037
+      }
+    },
+    "L253-d1_phase_started_at_takeover_and_swapped_back": {
+      "ok": true,
+      "detail": {
+        "updates_since_takeover": 325,
+        "expected_last_clock": [
+          0.9510561227798462,
+          0.3090181350708008
+        ],
+        "swap_back": {
+          "time_s": 16.00000000000806,
+          "door": 1,
+          "event": "swap_to_shipped",
+          "prev_actions_before_norm": 62.4505729675293,
+          "stage_controller": "GaitClockRlController",
+          "stage_controller_clock_step": 325,
+          "stage_controller_obs_width": 77,
+          "stage_controller_last_clock": [
+            0.9510561227798462,
+            0.3090181350708008
+          ],
+          "controller": "RlController",
+          "obs_width": 75,
+          "clock_step": null,
+          "policy_observations_zero": false,
+          "prev_actions_after_norm": 0.0
+        }
+      }
+    },
+    "L253-d1_outcome_reported": {
+      "ok": true,
+      "detail": {
+        "heading_deg": 90,
+        "plate": "square",
+        "entry": "standstill",
+        "end_reason": "complete",
+        "takeover_s": 3.000000000000169,
+        "handback_s": 16.00000000000806,
+        "clear": true,
+        "real_clear": true,
+        "clear_after_takeover_s": 9.20000000000325,
+        "fell": false,
+        "fall_phase": null,
+        "maximum_tilt": 0.1729266499533419,
+        "phases": [
+          "approach",
+          "settle",
+          "turn",
+          "cross",
+          "turn_back",
+          "recorded"
+        ],
+        "gait_events": [
+          {
+            "time_s": 3.000000000000169,
+            "door": 1,
+            "event": "swap_to_clocks2",
+            "prev_actions_before_norm": 79.51045989990234,
+            "controller": "GaitClockRlController",
+            "obs_width": 77,
+            "clock_step": 0,
+            "policy_observations_zero": true,
+            "prev_actions_after_norm": 0.0,
+            "takeover_yaw_rad": -1.4511981030307037
+          },
+          {
+            "time_s": 16.00000000000806,
+            "door": 1,
+            "event": "swap_to_shipped",
+            "prev_actions_before_norm": 62.4505729675293,
+            "stage_controller": "GaitClockRlController",
+            "stage_controller_clock_step": 325,
+            "stage_controller_obs_width": 77,
+            "stage_controller_last_clock": [
+              0.9510561227798462,
+              0.3090181350708008
+            ],
+            "controller": "RlController",
+            "obs_width": 75,
+            "clock_step": null,
+            "policy_observations_zero": false,
+            "prev_actions_after_norm": 0.0
+          }
+        ],
+        "events": [
+          {
+            "time_s": 3.000000000000169,
+            "event": "takeover",
+            "speed_mps": 0.000510750149468582,
+            "distance_to_pre_point_m": 0.04647496912968356,
+            "yaw_rad": -1.4511981030307037
+          },
+          {
+            "time_s": 16.00000000000806,
+            "event": "handback"
+          }
+        ],
+        "wall_contacts": {
+          "samples": 6,
+          "stage_samples": 6,
+          "first_s": 9.319999999999899,
+          "geoms": [
+            "door_1",
+            "wall_m7_31"
+          ]
+        },
+        "plate_activation": {
+          "target_plate": {
+            "door": 1,
+            "side": 1,
+            "shape": "square"
+          },
+          "target_pressed_during_stage": true,
+          "first_target_press_s": 0.08000000000000006,
+          "correct_plate_pressed_during_stage": false,
+          "wrong_plate_pressed_during_stage": true,
+          "presses_before_takeover": [
+            [
+              1,
+              false
+            ]
+          ]
+        },
+        "samples": 450
+      }
+    },
+    "bench_swap_exercised": {
+      "ok": true,
+      "detail": 3
+    },
+    "bench_standstill_and_walking": {
+      "ok": true,
+      "detail": [
+        "standstill",
+        "walking"
+      ]
+    },
+    "bench_has_90_or_180": {
+      "ok": true,
+      "detail": [
+        90,
+        180
+      ]
+    },
+    "route_clocks2_runs_without_error": {
+      "ok": true,
+      "detail": "excessive_collision"
+    },
+    "route_clocks2_swaps_through_missionenv_step": {
+      "ok": true,
+      "detail": 51
+    },
+    "route_clocks2_outcome_reported": {
+      "ok": true,
+      "detail": {
+        "time_s": 28.879999999978043,
+        "done": true,
+        "failure": "excessive_collision",
+        "open": [
+          false,
+          false
+        ],
+        "phases": [
+          "approach",
+          "settle",
+          "turn"
+        ],
+        "gait_events": [
+          {
+            "time_s": 18.800000000001535,
+            "door": 0,
+            "event": "swap_to_clocks2",
+            "prev_actions_before_norm": 64.5440444946289,
+            "controller": "GaitClockRlController",
+            "obs_width": 77,
+            "clock_step": 0,
+            "policy_observations_zero": true,
+            "prev_actions_after_norm": 0.0,
+            "takeover_yaw_rad": 0.026750798204083943
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,9732 @@
+{
+ "task": "coop_flushpad_probe_v1",
+ "label": "LEARNED gait (frozen arms-dr1.0-s0) + SCRIPTED arms + ORACLE cube pose (scoring only) | MODIFIED END-EFFECTOR (flush hand pads) \u2014 not the stock robot",
+ "label_detail": "legs + outer arm: frozen learned PPO gait arms-dr1.0-s0, unmodified observation, zero velocity command all episode | grasping arm (one per robot): scripted joint keyframes (unchanged), PD kp 30 (deploy 10), 4 Nm cap | cube pose: simulator oracle, scoring only | contact: MuJoCo, no welds | MODIFIED END-EFFECTOR: hand pad = hand-mesh AABB box re-oriented flush to the cube faces at the squeeze pose, condim 4, torsional friction 0.04 m | HARNESS CHANGE: elliptic friction cone, impratio 10 (global; also foot-floor contact)",
+ "learned": "22-DoF locomotion gait arms-dr1.0-s0 (legs + each robot's outer arm), frozen",
+ "scripted": "each robot's grasping arm: joint keyframes reach/squeeze/lift (unchanged), then held",
+ "oracle": "cube pose from the simulator, used only to score; every velocity command is zero",
+ "modelling_choices": [
+  "MODIFIED END-EFFECTOR: one box collision pad per hand = the hand-mesh AABB (stock size and centre), re-oriented in the hand-link frame so its faces are parallel to the cube faces at the squeeze pose (squeeze keyframe, shoulder roll stopped where the pad meets the cube face plane); see flush_pad_design",
+  "pad contact condim 4, friction [1.0, 0.04, 0.0001] (torsional 0.04 m)",
+  "HARNESS CHANGE: cone elliptic, impratio 10.0 (global MuJoCo options; they also change the foot-floor contact; robot-fall clauses unchanged)",
+  "grasping-arm PD kp 30.0 (deploy.yaml 10); kd and the 4 Nm arm effort cap unchanged",
+  "grasping arm spawned in the script's rest pose; arm keyframes and timeline unchanged",
+  "cube tilt (scoring only) = angle of the cube's z axis from world z at every policy-step state",
+  "numerical blow-ups: MuJoCo's automatic reset (qpos0, time 0, on a NaN or |x| > 1e10 in qpos/qvel/qacc) is detected after every policy step (episode field sim_reset) and fails the episode (no_sim_reset); a non-finite stop's NaNs are written as null (nonfinite_values_nulled) and it is scored as a failure"
+ ],
+ "rule": {
+  "protocol": "lift_hold",
+  "episode_s": 20.0,
+  "lift_peak_m": 0.1,
+  "lift_hold_m": 0.05,
+  "lift_hold_s": 5.0,
+  "tilt_rad": 0.78,
+  "floor_contact": false,
+  "seeds": [
+   120,
+   121,
+   122,
+   123,
+   124
+  ],
+  "pass_min": 4,
+  "variant": "flushpad_v1",
+  "stage": "probe",
+  "clauses": "probe",
+  "cube_tilt_max_rad": 0.35,
+  "cube_tilt_window": "every policy-step state of the 20 s lift-hold episode, t = 0 to 20 s inclusive",
+  "gated_checks": [
+   "cube_tilt",
+   "no_fall",
+   "finite",
+   "no_sim_reset",
+   "full_episode"
+  ],
+  "crews": [
+   2
+  ]
+ },
+ "params": {
+  "side_off": 0.44,
+  "cube_fwd": 0.1,
+  "cube_z": 0.33,
+  "plinth_half": 0.09,
+  "pair_pitch": 1.5,
+  "hand_pads": true,
+  "pad_friction": 1.0,
+  "t_settle": 1.5,
+  "t_reach": 1.5,
+  "t_squeeze": 1.5,
+  "t_lift": 2.5,
+  "t_hold": 1.5,
+  "carry_speed": 0.4,
+  "carry_goal_m": 1.25,
+  "carry_gate_lift_m": 0.08,
+  "k_sync": 5.0,
+  "v_max": 0.8,
+  "v_min": 0.25,
+  "grasp_kp": 30.0,
+  "grasp_arm_mode": "override",
+  "outer_arm_mode": "policy",
+  "reset_jitter": 0.02,
+  "xy_jitter": 0.01,
+  "pad_geometry": "flush",
+  "pad_condim": 4,
+  "pad_torsional_friction": 0.04,
+  "solver_cone": "elliptic",
+  "solver_impratio": 10.0
+ },
+ "keyframes_left": {
+  "rest": [
+   0.0,
+   -0.1,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "reach": [
+   0.0,
+   -0.2,
+   0.0,
+   0.5,
+   0.0
+  ],
+  "squeeze": [
+   0.0,
+   0.9,
+   0.0,
+   0.5,
+   0.0
+  ],
+  "lift": [
+   -0.5,
+   1.1,
+   0.0,
+   1.0,
+   0.0
+  ]
+ },
+ "crew": 2,
+ "pairs": 1,
+ "simulator": "MuJoCo 3.3.5",
+ "physics_dt": 0.0005,
+ "policy_dt": 0.04,
+ "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/deploy.yaml",
+ "checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/policy.onnx",
+ "checkpoint_sha256": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b",
+ "module_sha256": "fa298cbe56c5643f2ecd0909af21ee7aa0321f1f246f98b2645b1826477a1961",
+ "script_sha256": "d8962764619c41f531cfe67692019b024cee42e49390ce780a58cb93b47b4b17",
+ "git_head": "a6c64e0",
+ "variant": "flushpad_v1",
+ "stage": "probe",
+ "protocol": "lift_hold",
+ "note": "cooperative lift and hold \u2014 carry not achieved",
+ "end_effector": "MODIFIED END-EFFECTOR (flush hand pads) \u2014 not the stock robot",
+ "harness_change": "HARNESS CHANGE: elliptic friction cone + impratio 10 are global MuJoCo options and also change the foot-floor contact of the frozen gait; the robot-fall clauses are kept unchanged",
+ "rule_text": "Probe on exploration seeds 120-124 (state the grep evidence that they were never used). PROCEED iff the cube tilt stays <= 0.35 rad throughout lift-hold on >= 4/5 seeds, with LIFT_HOLD_RULE's robot-fall clauses unchanged. Otherwise STOP: NEGATIVE, the flush pad does not stop the roll.",
+ "clauses_as_applied": [
+  "cube tilt = the angle between the cube's own z axis and world z (CarryRunner.cube_tilt; a cube rolled 90 deg reads 1.571 rad), logged at every policy-step state (t = i * 0.04 s, i = 0..500) in full float precision; <= 0.35 rad passes, anything larger or non-finite fails",
+  "probe 'throughout lift-hold' = every policy-step state of the 20 s lift_hold episode, t = 0 to 20 s inclusive (stricter than the hold alone). A probe seed passes iff that tilt clause, LIFT_HOLD_RULE's robot-fall clause unchanged (no robot of the pair tilts > 0.78 rad at any policy step) and the validity clauses (finite state, no MuJoCo auto-reset, full 20 s) all hold; crew 2 (one pair), seeds 120-124, PROCEED iff >= 4 of 5",
+  "probe disclosure: the rule text names only the robot-fall clauses of LIFT_HOLD_RULE, so its lift, hold and floor clauses are not gated in the probe (they are reported per seed as diagnostics). A probe episode that never lifts the cube therefore passes the probe's tilt clause; the scored stage keeps every LIFT_HOLD_RULE clause",
+  "hold 'throughout the hold' = every policy-step state of the hold LIFT_HOLD_RULE scores (its longest contiguous >= 0.05 m run, hold_start_s inclusive to hold_end_s exclusive); no hold = the clause fails",
+  "place 'at release' = every policy-step state from the first at or after the end of the lowering (PlaceScript t_end['unload'] = 10.7 s: state 268, t = 10.72 s) through the first at or after the hands are fully open (t_end['release'] = 11.7 s: state 293, t = 11.72 s), inclusive; 'when seated' = the final state (t = 20 s), where LIFT_PLACE_RULE checks the seated cube",
+  "crews as the existing rules and launchers define them: crew 2 (one pair) and crew 4 (two pairs, two cubes, one world), >= 8/10 per pair; PASS iff all six pairs (lift-hold crew 2, crew 4 pair 0, crew 4 pair 1; lift-place the same) meet it",
+  "an episode stopped by a non-finite state is a scored failure (as cpu_coop_lift_place.sbatch reads it); its non-finite numbers are written as null so the score JSON holds it. A numerical blow-up that MuJoCo catches itself is a scored failure too, in every stage (check no_sim_reset): MuJoCo 3.3.5 resets the state automatically (qpos0, time 0) when qpos, qvel or qacc holds a NaN or a value beyond 1e10, so the harness's own non-finite check never sees it; it is detected after every policy step from the simulated time (not steps x policy step) and MuJoCo's bad-qpos/qvel/qacc warning counters. An episode that is absent, shorter than 20 s without a recorded failure, or has no tilt log or no auto-reset record is MISSING (INCOMPLETE)",
+  "INVALID (never PROCEED, never PASS): a score JSON that is not this variant's or its stage's, not under the frozen rule, parameters, keyframes or lowering, not a scored run, or whose compiled model does not show the designed flush pads with condim 4, torsional friction 0.04 m, elliptic cone and impratio 10"
+ ],
+ "seed_evidence": [
+  "results/scripted-carry-20260926/score_crew2.json, score_crew4.json, score_lifthold_crew2.json and score_lifthold_crew4.json hold seeds 0-9 only; results/scripted-carry-20260927/score_liftplace_crew2.json and score_liftplace_crew4.json hold seeds 10-19 only",
+  "Slurm logs of this harness: scripted-carry-21434982 and coop-lift-hold-21435079 ran seeds 0-9, coop-lift-place-21443282 seeds 10-19; the render jobs 21435080 and 21443283 skipped (no PASS)",
+  "exploration: this module's docstring and lift-place notes name seeds 100-119 only (100-102, 100-109, 110-114, 100-104 and the slip times on 100-119); the 2026-09-30 investigators' grip and place mechanism JSONs (solutions-20260930/coop and verify-coop) hold seeds 100-104 only",
+  "the ledger (SLURM_JOBS.md) names seeds 0-9 (carry, lift_hold), 10-19 (lift_place) and exploration seeds >= 100 for this harness; no score JSON, Slurm log, ledger entry or investigator file of this harness contains seed 120-124 or any seed 20-39"
+ ],
+ "base_rule": {
+  "protocol": "lift_hold",
+  "episode_s": 20.0,
+  "lift_peak_m": 0.1,
+  "lift_hold_m": 0.05,
+  "lift_hold_s": 5.0,
+  "tilt_rad": 0.78,
+  "floor_contact": false,
+  "seeds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "pass_min": 8
+ },
+ "flush_pad_design": {
+  "frames": {
+   "left": {
+    "pos": [
+     -0.002430869931331066,
+     0.004534438725243464,
+     -0.0673791566959002
+    ],
+    "quat": [
+     -0.033890089490608545,
+     -0.13272434595967808,
+     0.2450717872158544,
+     0.9597788958581661
+    ],
+    "size": [
+     0.030897365575983615,
+     0.04326992546063618,
+     0.0690730405654365
+    ]
+   },
+   "right": {
+    "pos": [
+     -0.0024308775969811795,
+     0.004534438803596656,
+     -0.0673791542503665
+    ],
+    "quat": [
+     0.03569106461598428,
+     0.13977753611862856,
+     0.24481598591878512,
+     0.958777096796641
+    ],
+    "size": [
+     0.030897366054007877,
+     0.04326992570313069,
+     0.06907303879042255
+    ]
+   }
+  },
+  "design": {
+   "left": {
+    "squeeze_pose_joints": [
+     0.0,
+     0.013030077002889093,
+     0.0,
+     0.5,
+     0.0
+    ],
+    "flush_contact_roll_rad": 0.013030077002889093,
+    "stock_contact_roll_rad": -0.03848083006214932,
+    "pad_axes_at_squeeze_robot_frame": [
+     [
+      0,
+      -1,
+      0
+     ],
+     [
+      1,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      1
+     ]
+    ],
+    "contact_axis": 0,
+    "contact_half_m": 0.030897,
+    "pad_centre_at_squeeze_base_frame_m": [
+     0.0953,
+     0.2691,
+     0.4465
+    ],
+    "stock_pad_off_cube_attitude_deg_at_stock_contact": 18.99,
+    "stock_pad_off_cube_attitude_deg_at_flush_contact": 21.07,
+    "stock_pad_contact_normal_off_pinch_axis_deg_at_squeeze_keyframe": 26.16,
+    "pad_rotation_in_hand_frame_deg": 21.07
+   },
+   "right": {
+    "squeeze_pose_joints": [
+     -0.0,
+     -0.02773521651618492,
+     -0.0,
+     -0.5,
+     -0.0
+    ],
+    "flush_contact_roll_rad": 0.02773521651618492,
+    "stock_contact_roll_rad": -0.033714651921372726,
+    "pad_axes_at_squeeze_robot_frame": [
+     [
+      0,
+      -1,
+      0
+     ],
+     [
+      1,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      1
+     ]
+    ],
+    "contact_axis": 0,
+    "contact_half_m": 0.030897,
+    "pad_centre_at_squeeze_base_frame_m": [
+     0.0953,
+     -0.2691,
+     0.4465
+    ],
+    "stock_pad_off_cube_attitude_deg_at_stock_contact": 19.26,
+    "stock_pad_off_cube_attitude_deg_at_flush_contact": 21.8,
+    "stock_pad_contact_normal_off_pinch_axis_deg_at_squeeze_keyframe": 27.12,
+    "pad_rotation_in_hand_frame_deg": 21.8
+   }
+  },
+  "face_lateral_m": 0.3,
+  "squeeze_pose": "squeeze keyframe with the shoulder roll stopped where the pad's outer face reaches the cube face plane (base upright at the origin, robot frame x forward, y left)",
+  "method": "stock pad box (hand-mesh AABB) re-oriented about its centre to the nearest cube-aligned attitude"
+ },
+ "model_check": {
+  "pads": [
+   {
+    "name": "r0_arm_left_hand_pad",
+    "condim": 4,
+    "friction": [
+     1.0,
+     0.04,
+     0.0001
+    ],
+    "quat": [
+     -0.03389,
+     -0.132724,
+     0.245072,
+     0.959779
+    ],
+    "size": [
+     0.030897,
+     0.04327,
+     0.069073
+    ]
+   },
+   {
+    "name": "r0_arm_right_hand_pad",
+    "condim": 4,
+    "friction": [
+     1.0,
+     0.04,
+     0.0001
+    ],
+    "quat": [
+     0.035691,
+     0.139778,
+     0.244816,
+     0.958777
+    ],
+    "size": [
+     0.030897,
+     0.04327,
+     0.069073
+    ]
+   },
+   {
+    "name": "r1_arm_left_hand_pad",
+    "condim": 4,
+    "friction": [
+     1.0,
+     0.04,
+     0.0001
+    ],
+    "quat": [
+     -0.03389,
+     -0.132724,
+     0.245072,
+     0.959779
+    ],
+    "size": [
+     0.030897,
+     0.04327,
+     0.069073
+    ]
+   },
+   {
+    "name": "r1_arm_right_hand_pad",
+    "condim": 4,
+    "friction": [
+     1.0,
+     0.04,
+     0.0001
+    ],
+    "quat": [
+     0.035691,
+     0.139778,
+     0.244816,
+     0.958777
+    ],
+    "size": [
+     0.030897,
+     0.04327,
+     0.069073
+    ]
+   }
+  ],
+  "cone": "elliptic",
+  "impratio": 10.0,
+  "noslip_iterations": 0
+ },
+ "scored_run": true,
+ "episodes": [
+  {
+   "seed": 120,
+   "pairs": [
+    {
+     "success": true,
+     "first_failed_check": null,
+     "checks": {
+      "lift_peak": true,
+      "lift_hold": true,
+      "no_fall": true,
+      "no_floor_contact": true,
+      "finite": true,
+      "full_episode": true
+     },
+     "lift_peak_m": 0.1924,
+     "lift_hold_s": 14.4,
+     "hold_start_s": 5.6,
+     "hold_end_s": 20.0,
+     "max_tilt_rad": 0.1772,
+     "cube_floor_contact": false,
+     "horiz_max_m": 0.2631,
+     "final_lift_m": 0.1857,
+     "pair": 0,
+     "seed": 120,
+     "carry_started_s": null,
+     "carry_stopped_s": null,
+     "lift_series_m": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0016,
+      0.0058,
+      0.0109,
+      0.014,
+      0.0148,
+      0.014,
+      0.0141,
+      0.0176,
+      0.0248,
+      0.0361,
+      0.0521,
+      0.0727,
+      0.0967,
+      0.1218,
+      0.1462,
+      0.1668,
+      0.1826,
+      0.1911,
+      0.1923,
+      0.1923,
+      0.1922,
+      0.192,
+      0.1919,
+      0.1917,
+      0.1916,
+      0.1915,
+      0.1914,
+      0.1914,
+      0.1913,
+      0.1912,
+      0.1911,
+      0.191,
+      0.1909,
+      0.1908,
+      0.1907,
+      0.1906,
+      0.1905,
+      0.1904,
+      0.1903,
+      0.1902,
+      0.1901,
+      0.19,
+      0.1899,
+      0.1898,
+      0.1897,
+      0.1896,
+      0.1895,
+      0.1894,
+      0.1893,
+      0.1892,
+      0.1891,
+      0.189,
+      0.1889,
+      0.1887,
+      0.1886,
+      0.1885,
+      0.1884,
+      0.1883,
+      0.1882,
+      0.1881,
+      0.188,
+      0.1879,
+      0.1878,
+      0.1877,
+      0.1876,
+      0.1875,
+      0.1874,
+      0.1873,
+      0.1872,
+      0.1871,
+      0.187,
+      0.1869,
+      0.1867,
+      0.1866,
+      0.1865,
+      0.1864,
+      0.1863,
+      0.1862,
+      0.1861,
+      0.186,
+      0.1859,
+      0.1858
+     ],
+     "horiz_series_m": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0031,
+      0.006,
+      0.0114,
+      0.013,
+      0.0106,
+      0.0105,
+      0.0135,
+      0.0268,
+      0.0482,
+      0.0755,
+      0.1071,
+      0.14,
+      0.1714,
+      0.1976,
+      0.2194,
+      0.236,
+      0.2477,
+      0.2542,
+      0.2557,
+      0.2562,
+      0.2566,
+      0.2569,
+      0.2572,
+      0.2574,
+      0.2576,
+      0.2577,
+      0.2579,
+      0.258,
+      0.2581,
+      0.2583,
+      0.2584,
+      0.2585,
+      0.2586,
+      0.2587,
+      0.2588,
+      0.2589,
+      0.2591,
+      0.2592,
+      0.2593,
+      0.2594,
+      0.2595,
+      0.2596,
+      0.2596,
+      0.2597,
+      0.2598,
+      0.2599,
+      0.26,
+      0.2601,
+      0.2602,
+      0.2603,
+      0.2604,
+      0.2605,
+      0.2606,
+      0.2607,
+      0.2608,
+      0.2609,
+      0.2609,
+      0.261,
+      0.2611,
+      0.2612,
+      0.2613,
+      0.2614,
+      0.2615,
+      0.2616,
+      0.2616,
+      0.2617,
+      0.2618,
+      0.2619,
+      0.262,
+      0.2621,
+      0.2622,
+      0.2622,
+      0.2623,
+      0.2624,
+      0.2625,
+      0.2626,
+      0.2627,
+      0.2627,
+      0.2628,
+      0.2629,
+      0.263,
+      0.2631
+     ],
+     "series_dt_s": 0.2,
+     "cube_tilt_series_rad": [
+      0.0,
+      0.0030323852150658946,
+      0.0012404465715778947,
+      0.000569318002028242,
+      0.0003172406522325536,
+      0.00017958040264994942,
+      0.00010198172051815198,
+      5.8124219342212736e-05,
+      3.33249836807625e-05,
+      1.9299483278333763e-05,
+      1.1366314295467179e-05,
+      6.878899593826417e-06,
+      4.341406707494823e-06,
+      2.9053443266213736e-06,
+      2.093440796250743e-06,
+      1.6353303096676443e-06,
+      1.3756766218033729e-06,
+      1.2283293900521055e-06,
+      1.1470023034767432e-06,
+      1.0989543239768278e-06,
+      1.0731940019149602e-06,
+      1.059345757196966e-06,
+      1.0510337337603072e-06,
+      1.0464817205715321e-06,
+      1.0429748412727062e-06,
+      1.042229440811068e-06,
+      1.0396697248526332e-06,
+      1.0394561306593462e-06,
+      1.0392424925663162e-06,
+      1.0392424925663162e-06,
+      1.0391356570489363e-06,
+      1.0391356570489363e-06,
+      1.0391356570489363e-06,
+      1.0391356570489363e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0390288105464638e-06,
+      1.0391356570489363e-06,
+      1.0391356570489363e-06,
+      1.0391356570489363e-06,
+      1.0391356570489363e-06,
+      0.003337808420868231,
+      0.015129888960876811,
+      0.02186283320014499,
+      0.0241422613708714,
+      0.025642235218242194,
+      0.027489742660914612,
+      0.02927057759794381,
+      0.031011371972328994,
+      0.03301494977236207,
+      0.03564393128563889,
+      0.03910287131501264,
+      0.04348007713152349,
+      0.04880247586964689,
+      0.054532361036939016,
+      0.0598770350623863,
+      0.06500721009650015,
+      0.07006951471496539,
+      0.07438783199951403,
+      0.07656584633865868,
+      0.0775788080596497,
+      0.07750169678997719,
+      0.07746133825839406,
+      0.0778780976264079,
+      0.07843103403211106,
+      0.0786836751468268,
+      0.07862493180588608,
+      0.07845706844197739,
+      0.07835240178707482,
+      0.07833825109728801,
+      0.07827874821197317,
+      0.07798169993196663,
+      0.07731301615909693,
+      0.07622440676741335,
+      0.07487996687882043,
+      0.07350099329087349,
+      0.07240820723219508,
+      0.0719616077549316,
+      0.07249298707874875,
+      0.07429439548714617,
+      0.07759600439027056,
+      0.08252437417589499,
+      0.08910666508858558,
+      0.09728973745397063,
+      0.10696199719490035,
+      0.1179721831715423,
+      0.13014432901027226,
+      0.1434732512240123,
+      0.15787784629885906,
+      0.17325624498807132,
+      0.18948752555325277,
+      0.20645070639408636,
+      0.22403803947769227,
+      0.24215819663674426,
+      0.2607281263169392,
+      0.27966960675524494,
+      0.2989077447578363,
+      0.31837049728211475,
+      0.33798550964497687,
+      0.357683224365842,
+      0.37740142625507184,
+      0.39709111340459935,
+      0.41705383232914345,
+      0.43665079551636354,
+      0.4553483165088993,
+      0.4745880322361811,
+      0.49432984612633774,
+      0.5112836284559229,
+      0.5283089980125802,
+      0.5462627817390562,
+      0.563816993567612,
+      0.5790754601505693,
+      0.5948082314556589,
+      0.6114149923792134,
+      0.6247603083859552,
+      0.6371766865792683,
+      0.6506165318430674,
+      0.6641378788928084,
+      0.6747388717101303,
+      0.6848760003943762,
+      0.6952725139489571,
+      0.7050403885075004,
+      0.713102277185593,
+      0.7205802518680049,
+      0.7274751659837893,
+      0.7336696138707844,
+      0.7381542745968871,
+      0.7402347006256939,
+      0.741351697529489,
+      0.7417028886266951,
+      0.7416118445521372,
+      0.7412869693442986,
+      0.7407895489544493,
+      0.7401936915843241,
+      0.7395693081477172,
+      0.7389453489125012,
+      0.7383224948234688,
+      0.7376972822790737,
+      0.7370698486143902,
+      0.7364429582996249,
+      0.7358204464225169,
+      0.7352047287136028,
+      0.7345971963758433,
+      0.7339979883331513,
+      0.7334068528903459,
+      0.7328240332838588,
+      0.732249754755448,
+      0.7316841004404974,
+      0.7311270035816214,
+      0.7305782953529976,
+      0.7300377498284628,
+      0.7295052129183616,
+      0.7289806390290672,
+      0.7284638119114716,
+      0.7279547996167229,
+      0.7274540380259915,
+      0.7269612400773388,
+      0.7264759569668559,
+      0.7259977711438154,
+      0.7255263077070512,
+      0.7250612430520406,
+      0.7246022860085032,
+      0.7241491651693219,
+      0.7237016444692821,
+      0.7232594930444528,
+      0.7228224854553049,
+      0.7223904114374265,
+      0.7219630756898106,
+      0.7215402907732157,
+      0.7211218830790048,
+      0.7207076892305503,
+      0.7202975563039011,
+      0.7198913415775725,
+      0.7194889120244602,
+      0.7190901329888829,
+      0.7186948894601416,
+      0.7183030701028716,
+      0.7179145699074739,
+      0.7175292831342627,
+      0.7171471160886824,
+      0.7167679864117134,
+      0.7163918028845947,
+      0.7160184839600507,
+      0.7156479536154391,
+      0.7152801362433204,
+      0.7149149559980873,
+      0.7145523445631754,
+      0.714192237719936,
+      0.713834573156307,
+      0.7134792853298012,
+      0.7131263166913289,
+      0.7127756142959126,
+      0.7124271260192163,
+      0.7120807945461066,
+      0.7117365719346722,
+      0.7113944160390816,
+      0.7110542776733098,
+      0.7107161138448933,
+      0.7103798790721872,
+      0.7100455300543315,
+      0.7097130256458006,
+      0.7093823246419786,
+      0.7090533901038361,
+      0.7087261895938386,
+      0.7084006844454694,
+      0.7080768365392515,
+      0.707754612291806,
+      0.7074339816318054,
+      0.7071149060499735,
+      0.7067973607001725,
+      0.7064813120112986,
+      0.7061667322926554,
+      0.7058535920397592,
+      0.7055418557981046,
+      0.7052314973603706,
+      0.7049224927949507,
+      0.7046148132570362,
+      0.7043084294049629,
+      0.7040033195603609,
+      0.70369946006836,
+      0.7033968301355554,
+      0.7030954009561776,
+      0.7027951507963165,
+      0.7024960569094242,
+      0.7021980947639274,
+      0.7019012400540263,
+      0.7016054726847614,
+      0.7013107691368679,
+      0.7010171166769317,
+      0.7007244957987471,
+      0.700432882420018,
+      0.7001422561300829,
+      0.6998525993759985,
+      0.699563890109529,
+      0.699276112953574,
+      0.6989892510567829,
+      0.6987032868081947,
+      0.6984182073312525,
+      0.6981339926133454,
+      0.6978506192430007,
+      0.6975680715382113,
+      0.6972863355196341,
+      0.6970054000516239,
+      0.6967252497572267,
+      0.6964458669865509,
+      0.6961672420422126,
+      0.6958893609270194,
+      0.69561220508485,
+      0.6953357555914399,
+      0.695060004282169,
+      0.6947849327729971,
+      0.6945105304192175,
+      0.6942367853658868,
+      0.6939636928039014,
+      0.6936912372413504,
+      0.6934194019084423,
+      0.6931481761692074,
+      0.6928775479372531,
+      0.6926075068487432,
+      0.6923380398204486,
+      0.6920691349027511,
+      0.691800787871131,
+      0.6915329887712222,
+      0.6912657257389162,
+      0.6909989892217907,
+      0.6907327667938444,
+      0.6904670476455576,
+      0.6902018192078136,
+      0.6899370808232104,
+      0.6896728179133137,
+      0.6894090201714652,
+      0.6891456827746473,
+      0.6888827936266414,
+      0.688620339938022,
+      0.6883583214341152,
+      0.6880967302173956,
+      0.687835557925874,
+      0.6875747979620641,
+      0.6873144406832726,
+      0.6870544757414324,
+      0.6867948959942245,
+      0.6865356977150509,
+      0.6862768668599967,
+      0.6860183977198939,
+      0.6857602899665903,
+      0.685502536129378,
+      0.6852451212214345,
+      0.6849880427200975,
+      0.6847312962832693,
+      0.6844748771788964,
+      0.6842187795151959,
+      0.6839629996329643,
+      0.6837075301876131,
+      0.6834523632195614,
+      0.6831975012209588,
+      0.6829429324869081,
+      0.6826886415203265,
+      0.6824346265393686,
+      0.6821808869842951,
+      0.6819274170609128,
+      0.6816742095180037,
+      0.6814212622157952,
+      0.6811685685977916,
+      0.680916119045397,
+      0.6806639080848529,
+      0.6804119353255544,
+      0.6801601962257294,
+      0.6799086870358741,
+      0.6796574005828845,
+      0.6794063323581437,
+      0.6791554821692174,
+      0.6789048442613538,
+      0.6786544167809008,
+      0.6784041943069405,
+      0.6781541732744959,
+      0.6779043497952024,
+      0.6776547235982747,
+      0.6774052856457141,
+      0.6771560356921464,
+      0.6769069671450604,
+      0.6766580810088254,
+      0.6764093787390826,
+      0.6761608508998538,
+      0.6759124945833509,
+      0.6756643063599029,
+      0.6754162752676095,
+      0.675168406054478,
+      0.6749206980667248,
+      0.6746731463173118,
+      0.6744257516824209,
+      0.6741785089270282,
+      0.6739314144160562,
+      0.6736844674835,
+      0.6734376692941376,
+      0.6731910110777701,
+      0.6729444871694772,
+      0.6726980971663099,
+      0.6724518411642476,
+      0.672205717356861,
+      0.6719597207449318,
+      0.6717138520637241,
+      0.6714681112670713,
+      0.6712224899841269,
+      0.6709769884061088,
+      0.6707316105295155,
+      0.6704863543648403,
+      0.6702412166202377,
+      0.6699961915707167,
+      0.6697512764700452,
+      0.6695064724615513,
+      0.6692617787325194,
+      0.6690171901219671,
+      0.6687727070323554,
+      0.6685283268564945,
+      0.6682840455106561,
+      0.6680398598121852,
+      0.6677957721003956,
+      0.6675517818414672,
+      0.6673078865064314,
+      0.6670640857426614,
+      0.6668203762786097,
+      0.6665767533320534,
+      0.6663332215366676,
+      0.6660897821161256,
+      0.665846430997953,
+      0.6656031675669457,
+      0.6653599919035587,
+      0.6651168977326076,
+      0.6648738879099925,
+      0.66463096224455,
+      0.6643881182551142,
+      0.6641453572473999,
+      0.6639026810980314,
+      0.6636600891773793,
+      0.6634175735206589,
+      0.6631751319053251,
+      0.6629327674832366,
+      0.6626904829764904,
+      0.6624482730064468,
+      0.6622061346615249,
+      0.6619640687894528,
+      0.6617220766601339,
+      0.661480156868736,
+      0.6612383066241798,
+      0.6609965275852204,
+      0.6607548187582247,
+      0.6605131809591613,
+      0.660271615332885,
+      0.660030113465571,
+      0.6597886766604903,
+      0.6595473058693654,
+      0.6593059995811787,
+      0.6590647616586224,
+      0.6588235892622067,
+      0.658582476657282,
+      0.6583414234644538,
+      0.6581004285856307,
+      0.6578594976743203,
+      0.6576186260801009,
+      0.6573778149241407,
+      0.6571370667775845,
+      0.6568963790155361,
+      0.6566557464967179,
+      0.6564151676261967,
+      0.6561746410556661,
+      0.6559341616187431,
+      0.6556937289113858,
+      0.655453340086454,
+      0.6552129963148285,
+      0.6549726945882046,
+      0.6547324335315001,
+      0.6544922138930388,
+      0.6542520322631942,
+      0.6540118875425427,
+      0.6537717776879237,
+      0.6535317078677538,
+      0.6532916784835885,
+      0.6530516879675939,
+      0.6528117395116664,
+      0.6525718316423206,
+      0.6523319653219705,
+      0.6520921439380197,
+      0.6518523625928814,
+      0.6516126204121975,
+      0.6513729159174987,
+      0.6511332535016499,
+      0.6508936307568938,
+      0.6506540464244654,
+      0.6504145042931224,
+      0.6501750011994858,
+      0.6499355317698314,
+      0.6496960988252396,
+      0.6494567088000803,
+      0.6492173577926065,
+      0.648978043418314,
+      0.6487387682803324,
+      0.6484995375320477,
+      0.6482603455025481,
+      0.6480211930165334,
+      0.64778208081762,
+      0.6475430174049482,
+      0.6473040053757302,
+      0.6470650408056277,
+      0.6468261164379467,
+      0.6465872250947812,
+      0.6463483678392881,
+      0.6461095458241412,
+      0.6458707689142021,
+      0.6456320347193435,
+      0.6453933446086753,
+      0.6451546941721913,
+      0.6449160830862585,
+      0.6446775113874946,
+      0.6444389818116363
+     ]
+    }
+   ],
+   "failed": null,
+   "steps": 500,
+   "elapsed_s": 20.0,
+   "trace": [
+    {
+     "t": 0.0,
+     "phase": "settle",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.33
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.003
+     ],
+     "robots_xy": [
+      [
+       -0.444,
+       0.046
+      ],
+      [
+       0.424,
+       0.034
+      ]
+     ],
+     "tilt": [
+      0.0,
+      0.0
+     ],
+     "yaw": [
+      1.586,
+      1.56
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.88
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 1.0,
+     "phase": "settle",
+     "cube": [
+      [
+       -0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.435,
+       -0.042
+      ],
+      [
+       0.44,
+       -0.052
+      ]
+     ],
+     "tilt": [
+      0.097,
+      0.083
+     ],
+     "yaw": [
+      1.599,
+      1.567
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.9
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 2.0,
+     "phase": "reach",
+     "cube": [
+      [
+       -0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.436,
+       -0.044
+      ],
+      [
+       0.438,
+       -0.052
+      ]
+     ],
+     "tilt": [
+      0.099,
+      0.082
+     ],
+     "yaw": [
+      1.598,
+      1.567
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.9
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 3.0,
+     "phase": "squeeze",
+     "cube": [
+      [
+       -0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.437,
+       -0.046
+      ],
+      [
+       0.435,
+       -0.055
+      ]
+     ],
+     "tilt": [
+      0.102,
+      0.084
+     ],
+     "yaw": [
+      1.596,
+      1.569
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.9
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 4.0,
+     "phase": "squeeze",
+     "cube": [
+      [
+       0.0087,
+       0.1073,
+       0.3407
+      ]
+     ],
+     "lift_m": [
+      0.0109
+     ],
+     "cube_tilt_rad": [
+      0.055
+     ],
+     "robots_xy": [
+      [
+       -0.458,
+       -0.051
+      ],
+      [
+       0.451,
+       -0.062
+      ]
+     ],
+     "tilt": [
+      0.106,
+      0.102
+     ],
+     "yaw": [
+      1.625,
+      1.546
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.68,
+       "a": 7.05,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 5.0,
+     "phase": "lift",
+     "cube": [
+      [
+       0.0033,
+       0.1266,
+       0.3474
+      ]
+     ],
+     "lift_m": [
+      0.0176
+     ],
+     "cube_tilt_rad": [
+      0.074
+     ],
+     "robots_xy": [
+      [
+       -0.465,
+       -0.054
+      ],
+      [
+       0.447,
+       -0.064
+      ]
+     ],
+     "tilt": [
+      0.11,
+      0.105
+     ],
+     "yaw": [
+      1.635,
+      1.547
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.53,
+       "a": 6.88,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 6.0,
+     "phase": "lift",
+     "cube": [
+      [
+       -0.0096,
+       0.2711,
+       0.4265
+      ]
+     ],
+     "lift_m": [
+      0.0967
+     ],
+     "cube_tilt_rad": [
+      0.455
+     ],
+     "robots_xy": [
+      [
+       -0.466,
+       -0.063
+      ],
+      [
+       0.446,
+       -0.062
+      ]
+     ],
+     "tilt": [
+      0.142,
+      0.119
+     ],
+     "yaw": [
+      1.641,
+      1.543
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.97,
+       "a": 7.03,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 7.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0441,
+       0.3503,
+       0.5209
+      ]
+     ],
+     "lift_m": [
+      0.1911
+     ],
+     "cube_tilt_rad": [
+      0.742
+     ],
+     "robots_xy": [
+      [
+       -0.477,
+       -0.074
+      ],
+      [
+       0.443,
+       -0.061
+      ]
+     ],
+     "tilt": [
+      0.171,
+      0.14
+     ],
+     "yaw": [
+      1.62,
+      1.524
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.05,
+       "a": 7.23,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 8.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0465,
+       0.353,
+       0.5216
+      ]
+     ],
+     "lift_m": [
+      0.1919
+     ],
+     "cube_tilt_rad": [
+      0.728
+     ],
+     "robots_xy": [
+      [
+       -0.477,
+       -0.076
+      ],
+      [
+       0.443,
+       -0.059
+      ]
+     ],
+     "tilt": [
+      0.176,
+      0.138
+     ],
+     "yaw": [
+      1.618,
+      1.518
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.25,
+       "a": 7.31,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 9.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0475,
+       0.3536,
+       0.5211
+      ]
+     ],
+     "lift_m": [
+      0.1914
+     ],
+     "cube_tilt_rad": [
+      0.717
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.077
+      ],
+      [
+       0.443,
+       -0.058
+      ]
+     ],
+     "tilt": [
+      0.176,
+      0.137
+     ],
+     "yaw": [
+      1.618,
+      1.514
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.36,
+       "a": 7.37,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 10.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0481,
+       0.3541,
+       0.5207
+      ]
+     ],
+     "lift_m": [
+      0.1909
+     ],
+     "cube_tilt_rad": [
+      0.708
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.077
+      ],
+      [
+       0.443,
+       -0.058
+      ]
+     ],
+     "tilt": [
+      0.176,
+      0.136
+     ],
+     "yaw": [
+      1.618,
+      1.512
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.44,
+       "a": 7.4,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 11.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0485,
+       0.3546,
+       0.5202
+      ]
+     ],
+     "lift_m": [
+      0.1904
+     ],
+     "cube_tilt_rad": [
+      0.701
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.077
+      ],
+      [
+       0.443,
+       -0.057
+      ]
+     ],
+     "tilt": [
+      0.177,
+      0.135
+     ],
+     "yaw": [
+      1.618,
+      1.511
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.49,
+       "a": 7.43,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 12.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0488,
+       0.355,
+       0.5197
+      ]
+     ],
+     "lift_m": [
+      0.1899
+     ],
+     "cube_tilt_rad": [
+      0.694
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.077
+      ],
+      [
+       0.443,
+       -0.057
+      ]
+     ],
+     "tilt": [
+      0.177,
+      0.135
+     ],
+     "yaw": [
+      1.619,
+      1.509
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.52,
+       "a": 7.45,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 13.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0491,
+       0.3555,
+       0.5192
+      ]
+     ],
+     "lift_m": [
+      0.1894
+     ],
+     "cube_tilt_rad": [
+      0.687
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.077
+      ],
+      [
+       0.443,
+       -0.057
+      ]
+     ],
+     "tilt": [
+      0.177,
+      0.135
+     ],
+     "yaw": [
+      1.619,
+      1.507
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.55,
+       "a": 7.46,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 14.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0492,
+       0.3559,
+       0.5186
+      ]
+     ],
+     "lift_m": [
+      0.1889
+     ],
+     "cube_tilt_rad": [
+      0.681
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.077
+      ],
+      [
+       0.443,
+       -0.056
+      ]
+     ],
+     "tilt": [
+      0.177,
+      0.134
+     ],
+     "yaw": [
+      1.62,
+      1.506
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.57,
+       "a": 7.47,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 15.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0494,
+       0.3564,
+       0.5181
+      ]
+     ],
+     "lift_m": [
+      0.1883
+     ],
+     "cube_tilt_rad": [
+      0.674
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.077
+      ],
+      [
+       0.443,
+       -0.056
+      ]
+     ],
+     "tilt": [
+      0.177,
+      0.134
+     ],
+     "yaw": [
+      1.62,
+      1.505
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.58,
+       "a": 7.48,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 16.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0495,
+       0.3568,
+       0.5176
+      ]
+     ],
+     "lift_m": [
+      0.1878
+     ],
+     "cube_tilt_rad": [
+      0.668
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.077
+      ],
+      [
+       0.443,
+       -0.056
+      ]
+     ],
+     "tilt": [
+      0.177,
+      0.133
+     ],
+     "yaw": [
+      1.621,
+      1.503
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.59,
+       "a": 7.48,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 17.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0497,
+       0.3572,
+       0.5171
+      ]
+     ],
+     "lift_m": [
+      0.1873
+     ],
+     "cube_tilt_rad": [
+      0.662
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.076
+      ],
+      [
+       0.443,
+       -0.056
+      ]
+     ],
+     "tilt": [
+      0.177,
+      0.133
+     ],
+     "yaw": [
+      1.622,
+      1.502
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.6,
+       "a": 7.49,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 18.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0498,
+       0.3576,
+       0.5165
+      ]
+     ],
+     "lift_m": [
+      0.1867
+     ],
+     "cube_tilt_rad": [
+      0.656
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.076
+      ],
+      [
+       0.443,
+       -0.055
+      ]
+     ],
+     "tilt": [
+      0.177,
+      0.132
+     ],
+     "yaw": [
+      1.622,
+      1.5
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.61,
+       "a": 7.49,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 19.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0499,
+       0.358,
+       0.516
+      ]
+     ],
+     "lift_m": [
+      0.1862
+     ],
+     "cube_tilt_rad": [
+      0.65
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.076
+      ],
+      [
+       0.443,
+       -0.055
+      ]
+     ],
+     "tilt": [
+      0.177,
+      0.132
+     ],
+     "yaw": [
+      1.623,
+      1.499
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.62,
+       "a": 7.49,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    }
+   ],
+   "protocol": "lift_hold",
+   "variant": "flushpad_v1",
+   "cube_tilt_series_note": "cube_tilt_series_rad[i] = cube tilt (rad, angle of the cube's z axis from world z) at the pre-step state of policy step i (t = i * dt); the last entry is the final state; null = non-finite",
+   "sim_reset": {
+    "detected": false,
+    "first_step": null,
+    "evidence": null,
+    "policy_steps": 500,
+    "note": "MuJoCo auto-reset (qpos0, time 0) on a NaN or |x| > 1e10 in qpos/qvel/qacc, checked after every policy step (simulated time and bad-number warning counters); first_step = the policy step it happened in; detected = the episode fails (no_sim_reset)"
+   },
+   "nonfinite_values_nulled": 0,
+   "wall_s": 18.0
+  },
+  {
+   "seed": 121,
+   "pairs": [
+    {
+     "success": true,
+     "first_failed_check": null,
+     "checks": {
+      "lift_peak": true,
+      "lift_hold": true,
+      "no_fall": true,
+      "no_floor_contact": true,
+      "finite": true,
+      "full_episode": true
+     },
+     "lift_peak_m": 0.1915,
+     "lift_hold_s": 14.36,
+     "hold_start_s": 5.64,
+     "hold_end_s": 20.0,
+     "max_tilt_rad": 0.1694,
+     "cube_floor_contact": false,
+     "horiz_max_m": 0.2614,
+     "final_lift_m": 0.1863,
+     "pair": 0,
+     "seed": 121,
+     "carry_started_s": null,
+     "carry_stopped_s": null,
+     "lift_series_m": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      0.0034,
+      0.0067,
+      0.0096,
+      0.0091,
+      0.0079,
+      0.0072,
+      0.0072,
+      0.0113,
+      0.0189,
+      0.0304,
+      0.0469,
+      0.0679,
+      0.0922,
+      0.118,
+      0.1431,
+      0.1648,
+      0.1809,
+      0.189,
+      0.1907,
+      0.191,
+      0.1907,
+      0.1904,
+      0.1902,
+      0.1899,
+      0.1897,
+      0.1898,
+      0.1905,
+      0.1915,
+      0.1912,
+      0.1909,
+      0.1907,
+      0.1905,
+      0.1904,
+      0.1903,
+      0.1902,
+      0.1901,
+      0.19,
+      0.1899,
+      0.1898,
+      0.1897,
+      0.1896,
+      0.1896,
+      0.1895,
+      0.1894,
+      0.1893,
+      0.1892,
+      0.1892,
+      0.1891,
+      0.189,
+      0.1889,
+      0.1888,
+      0.1888,
+      0.1887,
+      0.1886,
+      0.1885,
+      0.1884,
+      0.1884,
+      0.1883,
+      0.1882,
+      0.1881,
+      0.188,
+      0.188,
+      0.1879,
+      0.1878,
+      0.1877,
+      0.1876,
+      0.1875,
+      0.1875,
+      0.1874,
+      0.1873,
+      0.1872,
+      0.1871,
+      0.1871,
+      0.187,
+      0.1869,
+      0.1868,
+      0.1868,
+      0.1867,
+      0.1866,
+      0.1865,
+      0.1864,
+      0.1864
+     ],
+     "horiz_series_m": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0056,
+      0.0081,
+      0.0127,
+      0.0142,
+      0.0147,
+      0.0147,
+      0.0146,
+      0.0242,
+      0.0458,
+      0.0726,
+      0.104,
+      0.1366,
+      0.1678,
+      0.1954,
+      0.218,
+      0.2349,
+      0.2459,
+      0.2512,
+      0.2522,
+      0.2529,
+      0.2535,
+      0.254,
+      0.2544,
+      0.2549,
+      0.2552,
+      0.2556,
+      0.2561,
+      0.2567,
+      0.2567,
+      0.2569,
+      0.2571,
+      0.2572,
+      0.2573,
+      0.2575,
+      0.2576,
+      0.2577,
+      0.2578,
+      0.2578,
+      0.2579,
+      0.258,
+      0.2581,
+      0.2582,
+      0.2583,
+      0.2583,
+      0.2584,
+      0.2585,
+      0.2586,
+      0.2587,
+      0.2587,
+      0.2588,
+      0.2589,
+      0.259,
+      0.2591,
+      0.2591,
+      0.2592,
+      0.2593,
+      0.2594,
+      0.2595,
+      0.2595,
+      0.2596,
+      0.2597,
+      0.2598,
+      0.2599,
+      0.2599,
+      0.26,
+      0.2601,
+      0.2602,
+      0.2602,
+      0.2603,
+      0.2604,
+      0.2605,
+      0.2605,
+      0.2606,
+      0.2607,
+      0.2608,
+      0.2609,
+      0.2609,
+      0.261,
+      0.2611,
+      0.2612,
+      0.2613,
+      0.2613
+     ],
+     "series_dt_s": 0.2,
+     "cube_tilt_series_rad": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0033912299587917022,
+      0.0156911581510071,
+      0.030327165634996104,
+      0.03543515780018621,
+      0.037472591685300566,
+      0.04016021727288023,
+      0.041804397802695833,
+      0.043681252437217453,
+      0.04546311323059346,
+      0.046826160379834524,
+      0.04824971982501303,
+      0.049897349870983446,
+      0.051771322052529246,
+      0.053941773298186974,
+      0.0557764389579628,
+      0.05671784251409011,
+      0.057506194567089004,
+      0.058494173013414114,
+      0.05948858485252645,
+      0.060362572498540656,
+      0.061191863867515066,
+      0.061998455901725064,
+      0.0627532244399149,
+      0.063422729350162,
+      0.0639836699474169,
+      0.06443663023280313,
+      0.06475912567108079,
+      0.06460167207762801,
+      0.0644688149585118,
+      0.06447178901864768,
+      0.06454220880361779,
+      0.06462828983487835,
+      0.0647240169046009,
+      0.06478631641666402,
+      0.06459391807352202,
+      0.06355006732441879,
+      0.06080748864498364,
+      0.05910098095560641,
+      0.060217314038055025,
+      0.06407998746995047,
+      0.06968853782812774,
+      0.07641189382162483,
+      0.08416706782280468,
+      0.09312669755070994,
+      0.10346114837629153,
+      0.11520822167600493,
+      0.12826638778743885,
+      0.14245766074951094,
+      0.15759143732688877,
+      0.17349889709953686,
+      0.19004415712512152,
+      0.20712205025355757,
+      0.22465324754546767,
+      0.2425759808639404,
+      0.26084128798563694,
+      0.2793990318154047,
+      0.29819564436039786,
+      0.3172958424800637,
+      0.33627865869209184,
+      0.35529456296466205,
+      0.37429523803896125,
+      0.3932626133957499,
+      0.41214739834609887,
+      0.4309011509594433,
+      0.4494754700197418,
+      0.4678178924374189,
+      0.48587496057791485,
+      0.5035960717930976,
+      0.5209340314785399,
+      0.5378438344628502,
+      0.5542819439950121,
+      0.5702046319579662,
+      0.5855661103577872,
+      0.6003227139516986,
+      0.6144362733344748,
+      0.6278726683258729,
+      0.6405991261674857,
+      0.6525812396108377,
+      0.6637862666990846,
+      0.6741862647371717,
+      0.6837516978660417,
+      0.69243850009362,
+      0.7002647364988974,
+      0.7072631461943624,
+      0.7119034507977738,
+      0.7158569180353259,
+      0.7191599601721488,
+      0.7224606699772606,
+      0.7235336454917835,
+      0.7230784379041818,
+      0.7228844276914873,
+      0.7226753391423725,
+      0.7221072447407062,
+      0.7214470503999924,
+      0.7207393689875936,
+      0.7199371601477322,
+      0.7190554324046682,
+      0.7181217442193434,
+      0.7171575095610246,
+      0.7161700723163836,
+      0.7151605619127207,
+      0.7141325676481222,
+      0.7130915242377474,
+      0.7120423081375559,
+      0.7109894276862467,
+      0.7099357140927092,
+      0.7088826138446179,
+      0.7078307222000363,
+      0.7067801536698081,
+      0.7057308224460076,
+      0.7046825960176681,
+      0.7036352572108786,
+      0.7025885149499729,
+      0.7015420785727144,
+      0.7004957598070519,
+      0.6994520442326849,
+      0.6984163124805899,
+      0.6973938836063889,
+      0.6963903626147185,
+      0.695411715006781,
+      0.6944643351732082,
+      0.6935551493180316,
+      0.692691739929175,
+      0.6918824994881385,
+      0.6911368250115822,
+      0.690465352175029,
+      0.6898802423687255,
+      0.6893955411982697,
+      0.689027636943287,
+      0.6887958405089345,
+      0.6887231280037918,
+      0.688837084708886,
+      0.6891711930316939,
+      0.6897665341516979,
+      0.69067696371568,
+      0.6919443122756043,
+      0.6920624437328743,
+      0.6915027731393731,
+      0.690724264282841,
+      0.6897736934687781,
+      0.688790127684634,
+      0.6878558031082384,
+      0.6869814181414371,
+      0.686251683881984,
+      0.6855819742348159,
+      0.6849311640835458,
+      0.6842977789026149,
+      0.6836839136467593,
+      0.6830924049230155,
+      0.6825252475784784,
+      0.6819830324297572,
+      0.6814651245141939,
+      0.6809701158491807,
+      0.6804962697205303,
+      0.6800411432628648,
+      0.6796018835622185,
+      0.6791763979422099,
+      0.6787636709522331,
+      0.678362869505771,
+      0.6779732290371673,
+      0.6775940435959955,
+      0.6772246719850438,
+      0.6768645298971838,
+      0.6765131126640856,
+      0.6761699816810389,
+      0.6758347401007517,
+      0.6755070129735505,
+      0.6751864472258234,
+      0.6748726899617817,
+      0.6745653928241501,
+      0.6742642186461045,
+      0.6739688440692606,
+      0.6736789638279781,
+      0.6733942849006477,
+      0.6731145383538325,
+      0.672839467027751,
+      0.6725688299000626,
+      0.6723024052461135,
+      0.6720399846990406,
+      0.6717813730554074,
+      0.6715263810793157,
+      0.6712748309967713,
+      0.6710265561033049,
+      0.6707814014676234,
+      0.6705392201811775,
+      0.6702998722960384,
+      0.6700632310675648,
+      0.669829169478999,
+      0.6695975663239966,
+      0.6693683094519077,
+      0.6691412946649742,
+      0.6689164242800378,
+      0.6686936068838525,
+      0.6684727527240701,
+      0.6682537225932448,
+      0.6680362971508526,
+      0.667820424782856,
+      0.6676060591627561,
+      0.6673931430442689,
+      0.6671816109278977,
+      0.6669713942429193,
+      0.6667624246797433,
+      0.6665546396203575,
+      0.6663479848754201,
+      0.6661424077452808,
+      0.66593786368519,
+      0.6657343075784263,
+      0.6655317002448982,
+      0.6653300069911317,
+      0.6651291869242395,
+      0.6649292005870421,
+      0.6647300126900283,
+      0.6645315883285257,
+      0.6643338961945924,
+      0.6641369064310306,
+      0.6639405878028707,
+      0.6637449187178747,
+      0.6635498719000689,
+      0.6633554216644063,
+      0.6631615411834547,
+      0.662968212846926,
+      0.6627754146354308,
+      0.662583133615645,
+      0.6623913489060842,
+      0.662200038684343,
+      0.662009184461977,
+      0.6618187761459159,
+      0.6616287983137967,
+      0.6614392308474988,
+      0.661250053991837,
+      0.6610612460917276,
+      0.6608728026725205,
+      0.6606847134036896,
+      0.6604969633878904,
+      0.66030953468276,
+      0.6601224254906688,
+      0.6599356271183304,
+      0.6597491282167632,
+      0.6595629194786491,
+      0.6593769930659943,
+      0.6591913463200897,
+      0.6590059705738046,
+      0.6588208627966118,
+      0.6586360133629614,
+      0.658451411868093,
+      0.65826705213623,
+      0.6580829261469964,
+      0.6578990285158817,
+      0.6577153563850234,
+      0.6575319037896461,
+      0.6573486646228506,
+      0.6571656329844905,
+      0.656982801814164,
+      0.6568001692565333,
+      0.6566177365136123,
+      0.656435496368418,
+      0.6562534363594518,
+      0.6560715530697244,
+      0.6558898477609868,
+      0.6557083151855854,
+      0.6555269526515881,
+      0.655345756819396,
+      0.6551647244185775,
+      0.6549838524200682,
+      0.6548031382286357,
+      0.6546225798058862,
+      0.654442174402953,
+      0.654261911422034,
+      0.654081791485906,
+      0.653901813476419,
+      0.6537219709960314,
+      0.6535422625354974,
+      0.6533626870071,
+      0.6531832462300381,
+      0.6530039411812786,
+      0.6528247676144392,
+      0.6526457159443438,
+      0.6524667786970378,
+      0.6522879587824937,
+      0.6521092616806703,
+      0.6519306843376529,
+      0.6517522257968936,
+      0.6515738853163466,
+      0.6513956564750633,
+      0.6512175368885227,
+      0.6510395260437546,
+      0.6508616218975463,
+      0.6506838188465667,
+      0.6505061203754228,
+      0.6503285236434597,
+      0.6501510262724434,
+      0.6499736272572566,
+      0.6497963268278596,
+      0.649619119784089,
+      0.6494420055194924,
+      0.6492649851903586,
+      0.6490880568126912,
+      0.6489112187115813,
+      0.6487344677942665,
+      0.6485578025308116,
+      0.6483812248450935,
+      0.6482047356395582,
+      0.64802833003535,
+      0.6478520093783479,
+      0.6476757734612179,
+      0.6474996215164117,
+      0.6473235456559725,
+      0.647147545631001,
+      0.6469716221008002,
+      0.646795778678987,
+      0.6466200129713995,
+      0.6464443217525586,
+      0.6462687066571317,
+      0.6460931631558353,
+      0.6459176882283543,
+      0.645742283186653,
+      0.6455669486125661,
+      0.6453916867377228,
+      0.6452164936966104,
+      0.6450413656674437,
+      0.6448663086484526,
+      0.6446913212250149,
+      0.6445163992446468,
+      0.6443415409535259,
+      0.6441667458743319,
+      0.6439920141065718,
+      0.6438173430743652,
+      0.6436427305142643,
+      0.6434681832093988,
+      0.6432937002190798,
+      0.6431192735795707,
+      0.6429449056358785,
+      0.6427706018382187,
+      0.6425963516674962,
+      0.6424221496851769,
+      0.6422480036298922,
+      0.6420739151703303,
+      0.6418998857544789,
+      0.6417259163344856,
+      0.641552001834115,
+      0.6413781751075894,
+      0.641204476294212,
+      0.6410309155387514,
+      0.6408574954168367,
+      0.640684216307127,
+      0.6405110741783698,
+      0.6403380660137207,
+      0.6401651849051357,
+      0.6399924264125539,
+      0.6398197791180239,
+      0.639647235430112,
+      0.6394747851581569,
+      0.639302424739787,
+      0.6391301519746001,
+      0.6389579596305192,
+      0.6387858391821677,
+      0.6386137855856148,
+      0.6384417961821489,
+      0.6382698701019296,
+      0.6380980074962167,
+      0.6379262030108694,
+      0.6377544575174601,
+      0.6375827675983885,
+      0.6374111332232304,
+      0.6372395520910452,
+      0.6370680210020844,
+      0.6368965435729773,
+      0.6367251174386462,
+      0.6365537409196526,
+      0.6363824154695272,
+      0.6362111421030106,
+      0.6360399179361309,
+      0.6358687417854769,
+      0.6356976148608513,
+      0.6355265297266858,
+      0.6353554829535769,
+      0.6351844758883054,
+      0.6350135147051637,
+      0.6348425973324926,
+      0.6346717241140549,
+      0.6345008916646172,
+      0.6343300972734414,
+      0.6341593447964332,
+      0.6339886345576006,
+      0.6338179697696588,
+      0.6336473468767078,
+      0.6334767635484969,
+      0.6333062203615308,
+      0.6331357153093993,
+      0.6329652411015996,
+      0.6327948049897024,
+      0.632624400705013,
+      0.6324540297852246,
+      0.6322836995525832,
+      0.6321134057988735,
+      0.631943146941248,
+      0.6317729238137536,
+      0.6316027368202064,
+      0.6314325882210224,
+      0.6312624747899628,
+      0.631092395129998,
+      0.630922347214405,
+      0.63075232852178,
+      0.6305823433527097,
+      0.6304123914517952,
+      0.6302424742464146,
+      0.6300725905152369,
+      0.6299027395922673,
+      0.6297329219440482,
+      0.6295631382491437,
+      0.629393385629006,
+      0.6292236651720087,
+      0.6290539737457299,
+      0.628884312713912
+     ]
+    }
+   ],
+   "failed": null,
+   "steps": 500,
+   "elapsed_s": 20.0,
+   "trace": [
+    {
+     "t": 0.0,
+     "phase": "settle",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.33
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.44,
+       0.027
+      ],
+      [
+       0.439,
+       0.03
+      ]
+     ],
+     "tilt": [
+      0.0,
+      0.0
+     ],
+     "yaw": [
+      1.578,
+      1.558
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.92
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 1.0,
+     "phase": "settle",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.432,
+       -0.049
+      ],
+      [
+       0.453,
+       -0.053
+      ]
+     ],
+     "tilt": [
+      0.083,
+      0.087
+     ],
+     "yaw": [
+      1.532,
+      1.582
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 2.0,
+     "phase": "reach",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      -0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.433,
+       -0.05
+      ],
+      [
+       0.449,
+       -0.053
+      ]
+     ],
+     "tilt": [
+      0.084,
+      0.085
+     ],
+     "yaw": [
+      1.528,
+      1.584
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 3.0,
+     "phase": "squeeze",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      -0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.434,
+       -0.053
+      ],
+      [
+       0.448,
+       -0.056
+      ]
+     ],
+     "tilt": [
+      0.089,
+      0.086
+     ],
+     "yaw": [
+      1.525,
+      1.587
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 4.0,
+     "phase": "squeeze",
+     "cube": [
+      [
+       0.0115,
+       0.1054,
+       0.3394
+      ]
+     ],
+     "lift_m": [
+      0.0096
+     ],
+     "cube_tilt_rad": [
+      0.056
+     ],
+     "robots_xy": [
+      [
+       -0.45,
+       -0.056
+      ],
+      [
+       0.466,
+       -0.064
+      ]
+     ],
+     "tilt": [
+      0.091,
+      0.107
+     ],
+     "yaw": [
+      1.554,
+      1.564
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.69,
+       "a": 7.06,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 5.0,
+     "phase": "lift",
+     "cube": [
+      [
+       0.0131,
+       0.1203,
+       0.3411
+      ]
+     ],
+     "lift_m": [
+      0.0113
+     ],
+     "cube_tilt_rad": [
+      0.064
+     ],
+     "robots_xy": [
+      [
+       -0.446,
+       -0.059
+      ],
+      [
+       0.462,
+       -0.065
+      ]
+     ],
+     "tilt": [
+      0.099,
+      0.106
+     ],
+     "yaw": [
+      1.558,
+      1.566
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.78,
+       "a": 7.02,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 6.0,
+     "phase": "lift",
+     "cube": [
+      [
+       0.0147,
+       0.2671,
+       0.4219
+      ]
+     ],
+     "lift_m": [
+      0.0922
+     ],
+     "cube_tilt_rad": [
+      0.449
+     ],
+     "robots_xy": [
+      [
+       -0.447,
+       -0.066
+      ],
+      [
+       0.46,
+       -0.064
+      ]
+     ],
+     "tilt": [
+      0.128,
+      0.124
+     ],
+     "yaw": [
+      1.566,
+      1.562
+     ],
+     "cube_normal_N": [
+      {
+       "b": 7.09,
+       "a": 7.41,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 7.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0091,
+       0.351,
+       0.5188
+      ]
+     ],
+     "lift_m": [
+      0.189
+     ],
+     "cube_tilt_rad": [
+      0.723
+     ],
+     "robots_xy": [
+      [
+       -0.454,
+       -0.078
+      ],
+      [
+       0.456,
+       -0.064
+      ]
+     ],
+     "tilt": [
+      0.162,
+      0.145
+     ],
+     "yaw": [
+      1.575,
+      1.549
+     ],
+     "cube_normal_N": [
+      {
+       "b": 7.93,
+       "a": 7.75,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 8.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0165,
+       0.3539,
+       0.5199
+      ]
+     ],
+     "lift_m": [
+      0.1902
+     ],
+     "cube_tilt_rad": [
+      0.7
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.063
+      ]
+     ],
+     "tilt": [
+      0.167,
+      0.144
+     ],
+     "yaw": [
+      1.574,
+      1.543
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.19,
+       "a": 7.85,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 9.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0337,
+       0.3545,
+       0.5213
+      ]
+     ],
+     "lift_m": [
+      0.1915
+     ],
+     "cube_tilt_rad": [
+      0.69
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.062
+      ]
+     ],
+     "tilt": [
+      0.167,
+      0.143
+     ],
+     "yaw": [
+      1.573,
+      1.539
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.55,
+       "a": 7.84,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 10.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0347,
+       0.355,
+       0.5202
+      ]
+     ],
+     "lift_m": [
+      0.1904
+     ],
+     "cube_tilt_rad": [
+      0.676
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.061
+      ]
+     ],
+     "tilt": [
+      0.168,
+      0.141
+     ],
+     "yaw": [
+      1.571,
+      1.536
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.6,
+       "a": 7.82,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 11.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0349,
+       0.3555,
+       0.5197
+      ]
+     ],
+     "lift_m": [
+      0.1899
+     ],
+     "cube_tilt_rad": [
+      0.669
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.169,
+      0.14
+     ],
+     "yaw": [
+      1.572,
+      1.535
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.63,
+       "a": 7.84,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 12.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0351,
+       0.3559,
+       0.5193
+      ]
+     ],
+     "lift_m": [
+      0.1895
+     ],
+     "cube_tilt_rad": [
+      0.664
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.169,
+      0.14
+     ],
+     "yaw": [
+      1.573,
+      1.534
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.66,
+       "a": 7.85,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 13.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0351,
+       0.3563,
+       0.5189
+      ]
+     ],
+     "lift_m": [
+      0.1891
+     ],
+     "cube_tilt_rad": [
+      0.659
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.169,
+      0.139
+     ],
+     "yaw": [
+      1.574,
+      1.533
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.68,
+       "a": 7.87,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 14.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0351,
+       0.3567,
+       0.5185
+      ]
+     ],
+     "lift_m": [
+      0.1887
+     ],
+     "cube_tilt_rad": [
+      0.655
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.169,
+      0.139
+     ],
+     "yaw": [
+      1.575,
+      1.532
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.7,
+       "a": 7.88,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 15.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0351,
+       0.3571,
+       0.5181
+      ]
+     ],
+     "lift_m": [
+      0.1883
+     ],
+     "cube_tilt_rad": [
+      0.65
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.059
+      ]
+     ],
+     "tilt": [
+      0.169,
+      0.139
+     ],
+     "yaw": [
+      1.575,
+      1.531
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.71,
+       "a": 7.89,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 16.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0351,
+       0.3575,
+       0.5177
+      ]
+     ],
+     "lift_m": [
+      0.1879
+     ],
+     "cube_tilt_rad": [
+      0.646
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.059
+      ]
+     ],
+     "tilt": [
+      0.169,
+      0.139
+     ],
+     "yaw": [
+      1.576,
+      1.53
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.72,
+       "a": 7.9,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 17.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0351,
+       0.3579,
+       0.5172
+      ]
+     ],
+     "lift_m": [
+      0.1875
+     ],
+     "cube_tilt_rad": [
+      0.642
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.059
+      ]
+     ],
+     "tilt": [
+      0.169,
+      0.138
+     ],
+     "yaw": [
+      1.577,
+      1.529
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.73,
+       "a": 7.9,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 18.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0351,
+       0.3583,
+       0.5169
+      ]
+     ],
+     "lift_m": [
+      0.1871
+     ],
+     "cube_tilt_rad": [
+      0.637
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.059
+      ]
+     ],
+     "tilt": [
+      0.169,
+      0.138
+     ],
+     "yaw": [
+      1.578,
+      1.528
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.74,
+       "a": 7.91,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 19.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0351,
+       0.3586,
+       0.5165
+      ]
+     ],
+     "lift_m": [
+      0.1867
+     ],
+     "cube_tilt_rad": [
+      0.633
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.081
+      ],
+      [
+       0.456,
+       -0.059
+      ]
+     ],
+     "tilt": [
+      0.169,
+      0.138
+     ],
+     "yaw": [
+      1.578,
+      1.527
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.75,
+       "a": 7.91,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    }
+   ],
+   "protocol": "lift_hold",
+   "variant": "flushpad_v1",
+   "cube_tilt_series_note": "cube_tilt_series_rad[i] = cube tilt (rad, angle of the cube's z axis from world z) at the pre-step state of policy step i (t = i * dt); the last entry is the final state; null = non-finite",
+   "sim_reset": {
+    "detected": false,
+    "first_step": null,
+    "evidence": null,
+    "policy_steps": 500,
+    "note": "MuJoCo auto-reset (qpos0, time 0) on a NaN or |x| > 1e10 in qpos/qvel/qacc, checked after every policy step (simulated time and bad-number warning counters); first_step = the policy step it happened in; detected = the episode fails (no_sim_reset)"
+   },
+   "nonfinite_values_nulled": 0,
+   "wall_s": 18.2
+  },
+  {
+   "seed": 122,
+   "pairs": [
+    {
+     "success": true,
+     "first_failed_check": null,
+     "checks": {
+      "lift_peak": true,
+      "lift_hold": true,
+      "no_fall": true,
+      "no_floor_contact": true,
+      "finite": true,
+      "full_episode": true
+     },
+     "lift_peak_m": 0.1992,
+     "lift_hold_s": 14.36,
+     "hold_start_s": 5.64,
+     "hold_end_s": 20.0,
+     "max_tilt_rad": 0.1763,
+     "cube_floor_contact": false,
+     "horiz_max_m": 0.2647,
+     "final_lift_m": 0.1932,
+     "pair": 0,
+     "seed": 122,
+     "carry_started_s": null,
+     "carry_stopped_s": null,
+     "lift_series_m": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      0.0016,
+      0.0047,
+      0.0086,
+      0.0109,
+      0.0109,
+      0.0103,
+      0.01,
+      0.0135,
+      0.0211,
+      0.0325,
+      0.0492,
+      0.0703,
+      0.095,
+      0.1213,
+      0.1466,
+      0.1685,
+      0.1858,
+      0.1961,
+      0.1991,
+      0.1988,
+      0.1982,
+      0.1978,
+      0.1976,
+      0.1974,
+      0.1972,
+      0.1971,
+      0.197,
+      0.1969,
+      0.1968,
+      0.1968,
+      0.1967,
+      0.1966,
+      0.1965,
+      0.1965,
+      0.1964,
+      0.1963,
+      0.1963,
+      0.1962,
+      0.1962,
+      0.1961,
+      0.196,
+      0.196,
+      0.1959,
+      0.1958,
+      0.1958,
+      0.1957,
+      0.1957,
+      0.1956,
+      0.1955,
+      0.1955,
+      0.1954,
+      0.1953,
+      0.1953,
+      0.1952,
+      0.1951,
+      0.1951,
+      0.195,
+      0.1949,
+      0.1949,
+      0.1948,
+      0.1947,
+      0.1947,
+      0.1946,
+      0.1945,
+      0.1945,
+      0.1944,
+      0.1943,
+      0.1943,
+      0.1942,
+      0.1941,
+      0.1941,
+      0.194,
+      0.1939,
+      0.1939,
+      0.1938,
+      0.1937,
+      0.1936,
+      0.1936,
+      0.1935,
+      0.1934,
+      0.1934,
+      0.1933
+     ],
+     "horiz_series_m": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0032,
+      0.0052,
+      0.0101,
+      0.0109,
+      0.0092,
+      0.009,
+      0.009,
+      0.0224,
+      0.0467,
+      0.0741,
+      0.106,
+      0.1392,
+      0.171,
+      0.1993,
+      0.222,
+      0.2384,
+      0.25,
+      0.2569,
+      0.2589,
+      0.2591,
+      0.2593,
+      0.2596,
+      0.2598,
+      0.26,
+      0.2601,
+      0.2603,
+      0.2604,
+      0.2605,
+      0.2606,
+      0.2607,
+      0.2607,
+      0.2608,
+      0.2609,
+      0.261,
+      0.2611,
+      0.2611,
+      0.2612,
+      0.2613,
+      0.2614,
+      0.2615,
+      0.2615,
+      0.2616,
+      0.2617,
+      0.2618,
+      0.2618,
+      0.2619,
+      0.262,
+      0.2621,
+      0.2622,
+      0.2622,
+      0.2623,
+      0.2624,
+      0.2625,
+      0.2625,
+      0.2626,
+      0.2627,
+      0.2628,
+      0.2628,
+      0.2629,
+      0.263,
+      0.2631,
+      0.2631,
+      0.2632,
+      0.2633,
+      0.2634,
+      0.2634,
+      0.2635,
+      0.2636,
+      0.2636,
+      0.2637,
+      0.2638,
+      0.2639,
+      0.2639,
+      0.264,
+      0.2641,
+      0.2642,
+      0.2642,
+      0.2643,
+      0.2644,
+      0.2645,
+      0.2645,
+      0.2646
+     ],
+     "series_dt_s": 0.2,
+     "cube_tilt_series_rad": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.011834041933641043,
+      0.02167428442969581,
+      0.02230827097299386,
+      0.02400184543711653,
+      0.025606770081199545,
+      0.02751664047711791,
+      0.029837006704907666,
+      0.03285893292076173,
+      0.03656733256025204,
+      0.041055891068359836,
+      0.0464380320718021,
+      0.052662394841881906,
+      0.058613384431772414,
+      0.0640458978595775,
+      0.06928004052290408,
+      0.0740980545189833,
+      0.07818634585090876,
+      0.08139331705247799,
+      0.08359136287873066,
+      0.08471976445785823,
+      0.08549616135711549,
+      0.08633198389707743,
+      0.08701002989907036,
+      0.08723555014609502,
+      0.08676282374299862,
+      0.0861739105502179,
+      0.08559694103397929,
+      0.08502801270612133,
+      0.08444431071812424,
+      0.0838452296036858,
+      0.08323747588150764,
+      0.08260292002586288,
+      0.08156081281965319,
+      0.07941340272173311,
+      0.07498479320817389,
+      0.07003070025189764,
+      0.06673380860484897,
+      0.06589400576076794,
+      0.06719274559849706,
+      0.07026551870016805,
+      0.07494348544188743,
+      0.08122454757755007,
+      0.08919871386392629,
+      0.09891962264877327,
+      0.11030583562453358,
+      0.12315381806466637,
+      0.13721445548265976,
+      0.15226599802371332,
+      0.16813407502628303,
+      0.1846763234118151,
+      0.20177871440444836,
+      0.2193560638125994,
+      0.2373389831958917,
+      0.255663287998551,
+      0.2742631828871592,
+      0.29307241881892004,
+      0.31202900113205184,
+      0.33107349652015655,
+      0.35014632766969017,
+      0.3691896606833716,
+      0.3881462762080086,
+      0.40695969837303547,
+      0.42557496297724423,
+      0.44393887293342976,
+      0.4620021194240037,
+      0.47971682896974294,
+      0.497034123918351,
+      0.5139026655379717,
+      0.5302868486065343,
+      0.5469309118359724,
+      0.56158723250632,
+      0.5751087925914333,
+      0.5888694374709779,
+      0.603699028960827,
+      0.6153495466767405,
+      0.6254857990557936,
+      0.6358775894109105,
+      0.6473498914150797,
+      0.6566085591135129,
+      0.6644504790213664,
+      0.6719182994621613,
+      0.6792191383371684,
+      0.6860763165052993,
+      0.690999700203265,
+      0.6953594870661621,
+      0.6993909552084985,
+      0.7033540228527182,
+      0.7042667334674682,
+      0.7044589987045398,
+      0.7037038539670839,
+      0.702893868814921,
+      0.7021979624781343,
+      0.7014871084902595,
+      0.7006588007357413,
+      0.699716769805294,
+      0.6987334103967083,
+      0.6977462393363869,
+      0.6967761956297118,
+      0.6958255362876901,
+      0.6948998209867109,
+      0.6940014486405247,
+      0.6931305545850058,
+      0.6922885869534576,
+      0.6914855469214688,
+      0.6907933014521326,
+      0.6901517141711944,
+      0.6895395507768348,
+      0.688948854302236,
+      0.6883786004356635,
+      0.6878296896425444,
+      0.6873020854227295,
+      0.6867950855361007,
+      0.6863076242153086,
+      0.6858384774493422,
+      0.6853864267206362,
+      0.6849503431219843,
+      0.6845292078194486,
+      0.684122088361717,
+      0.6837281137806575,
+      0.6833464556672377,
+      0.6829763230484752,
+      0.682616981988638,
+      0.6822677662286475,
+      0.6819280784772778,
+      0.6815973846296537,
+      0.6812752071719829,
+      0.6809610763987002,
+      0.6806541987219011,
+      0.6803540099360436,
+      0.6800601184000578,
+      0.6797721718696847,
+      0.6794898445719866,
+      0.6792128277995684,
+      0.6789408378538268,
+      0.6786736060276842,
+      0.6784109128405941,
+      0.6781526637583543,
+      0.677898719341888,
+      0.6776488707378631,
+      0.6774029153326105,
+      0.677160653331057,
+      0.6769218876130214,
+      0.676686431696887,
+      0.6764541100387416,
+      0.6762247545316934,
+      0.6759982073111772,
+      0.675774323993092,
+      0.6755529709532628,
+      0.6753340263296075,
+      0.6751173741599709,
+      0.6749029019290492,
+      0.674690322521343,
+      0.6744794834870821,
+      0.6742703568942722,
+      0.674062890298406,
+      0.6738570147760098,
+      0.6736526582398051,
+      0.6734497500706773,
+      0.6732482390820743,
+      0.6730480775831331,
+      0.6728492145822856,
+      0.672651599846703,
+      0.6724551900768599,
+      0.6722599408646639,
+      0.6720658110344098,
+      0.6718727654859842,
+      0.671680754718796,
+      0.6714897406594899,
+      0.6712996866349824,
+      0.6711105554565254,
+      0.670922311206976,
+      0.6707349131995176,
+      0.6705483299854759,
+      0.6703625297278043,
+      0.6701774817149981,
+      0.6699931594067873,
+      0.669809537334553,
+      0.6696265828767909,
+      0.6694442685193001,
+      0.6692625740941284,
+      0.6690814827268825,
+      0.66890097431023,
+      0.6687210282015403,
+      0.6685416187254416,
+      0.6683627243579195,
+      0.6681843281555785,
+      0.6680064177841587,
+      0.6678289755085406,
+      0.6676519842930645,
+      0.6674754330461976,
+      0.6672993049861843,
+      0.6671235876131952,
+      0.6669482678295132,
+      0.6667733321523565,
+      0.6665987671847055,
+      0.666424559048334,
+      0.666250697174431,
+      0.6660771699205297,
+      0.6659039634821763,
+      0.6657310730913034,
+      0.6655584923204582,
+      0.6653862139125875,
+      0.6652142284641027,
+      0.6650425258101178,
+      0.6648710927281549,
+      0.6646999238373148,
+      0.6645290155710215,
+      0.6643583568323824,
+      0.664187940219252,
+      0.6640177582495392,
+      0.6638478059019719,
+      0.663678074422931,
+      0.6635085633940054,
+      0.6633392711934547,
+      0.663170185669487,
+      0.6630013020751897,
+      0.662832618231227,
+      0.6626641308193983,
+      0.6624958332003266,
+      0.6623277157854783,
+      0.6621597779265382,
+      0.6619920139196463,
+      0.6618244196998747,
+      0.6616569885823246,
+      0.6614897152498015,
+      0.661322596245041,
+      0.6611556333420974,
+      0.6609888228552449,
+      0.6608221619439841,
+      0.6606556504970714,
+      0.6604892809627034,
+      0.6603230535249602,
+      0.6601569612452076,
+      0.6599909985227772,
+      0.6598251617240305,
+      0.6596594495908953,
+      0.6594938622008253,
+      0.6593284056102549,
+      0.6591630716556168,
+      0.6589978533661214,
+      0.6588327517717534,
+      0.658667766990612,
+      0.6585028916008655,
+      0.6583381254341624,
+      0.6581734643476556,
+      0.6580089080499077,
+      0.6578444552059529,
+      0.6576801013433307,
+      0.6575158446410702,
+      0.6573516910965447,
+      0.6571876392316304,
+      0.6570236829110323,
+      0.6568598175401483,
+      0.6566960405817671,
+      0.6565323512978594,
+      0.6563687491142575,
+      0.6562052346498346,
+      0.6560418062405775,
+      0.655878460871682,
+      0.6557151965857175,
+      0.6555520106268963,
+      0.6553889051178878,
+      0.6552258770849485,
+      0.65506292830699,
+      0.654900056502525,
+      0.6547372590765757,
+      0.6545745369659658,
+      0.6544118875066689,
+      0.6542493093260284,
+      0.654086800146412,
+      0.6539243611472219,
+      0.6537619986448397,
+      0.6535997091365675,
+      0.6534374952717347,
+      0.6532753491022874,
+      0.6531132623077098,
+      0.6529512353579391,
+      0.6527892725574774,
+      0.652627372033276,
+      0.6524655352419928,
+      0.6523037672354338,
+      0.6521420668127367,
+      0.6519804286817588,
+      0.6518188508744972,
+      0.6516573384217796,
+      0.6514958899212995,
+      0.651334498804013,
+      0.6511731708840259,
+      0.6510119043944932,
+      0.6508506963210419,
+      0.650689546925904,
+      0.6505284519407857,
+      0.6503674129986026,
+      0.6502064332290177,
+      0.6500455119350173,
+      0.6498846497538654,
+      0.6497238463035369,
+      0.6495630983800257,
+      0.6494024057222656,
+      0.6492417697731692,
+      0.64908118999979,
+      0.6489206681383347,
+      0.6487601991063733,
+      0.648599782823939,
+      0.6484394237878847,
+      0.6482791212400802,
+      0.6481188789567633,
+      0.6479586892310121,
+      0.6477985482673314,
+      0.6476384584827365,
+      0.6474784252471288,
+      0.6473184444875068,
+      0.647158518592743,
+      0.6469986489318253,
+      0.6468388290170498,
+      0.6466790556849434,
+      0.6465193300693798,
+      0.6463596567868815,
+      0.646200031166816,
+      0.6460404544932773,
+      0.6458809346690764,
+      0.6457214731099838,
+      0.6455620577371499,
+      0.6454026941960402,
+      0.6452433773481879,
+      0.6450841040389493,
+      0.6449248713715486,
+      0.6447656810934628,
+      0.644606535637564,
+      0.644447433178681,
+      0.6442883712843039,
+      0.6441293439034333,
+      0.6439703531123456,
+      0.643811400611826,
+      0.6436524863674097,
+      0.643493609735586,
+      0.6433347698807483,
+      0.6431759627691692,
+      0.643017193270067,
+      0.642858459714858,
+      0.6426997603161619,
+      0.642541099064401,
+      0.6423824741636774,
+      0.6422238822160771,
+      0.6420653251480407,
+      0.6419068020245954,
+      0.6417483105496019,
+      0.6415898428965876,
+      0.6414313969238673,
+      0.6412729710077295,
+      0.6411145731590185,
+      0.6409562009747366,
+      0.6407978606713016,
+      0.6406395560720661,
+      0.6404812835714802,
+      0.6403230433469141,
+      0.6401648343257532,
+      0.640006654206794,
+      0.6398485077616836,
+      0.6396903966357028,
+      0.6395323135191926,
+      0.6393742571019673,
+      0.6392162298926034,
+      0.63905822930794,
+      0.638900253263259,
+      0.6387423060961978,
+      0.6385843917244856,
+      0.6384265119647394,
+      0.6382686609128667,
+      0.6381108378954893,
+      0.6379530406731638,
+      0.637795268633237,
+      0.6376375238556057,
+      0.6374798080015784,
+      0.6373221228147167,
+      0.6371644657453504,
+      0.6370068402858982,
+      0.6368492439566598,
+      0.6366916773364689,
+      0.6365341340390006,
+      0.636376613579081,
+      0.6362191159163335,
+      0.6360616420876886,
+      0.6359041892743751,
+      0.6357467611716457,
+      0.6355893612444222,
+      0.6354319883121232,
+      0.6352746325121197,
+      0.6351172895274199,
+      0.6349599644033391,
+      0.6348026495781712,
+      0.6346453388956191,
+      0.6344880371691763,
+      0.634330747840003,
+      0.6341734693271958,
+      0.6340161965830413,
+      0.6338589282662509,
+      0.6337016681813996,
+      0.6335444160096334,
+      0.6333871683761998,
+      0.6332299336347329,
+      0.6330727111395473,
+      0.6329154966857171,
+      0.6327582885634963,
+      0.6326010877812179,
+      0.6324438980014527,
+      0.6322867175679799,
+      0.6321295421730837,
+      0.6319723678655044,
+      0.6318151974062464,
+      0.631658033646744,
+      0.6315008764924032
+     ]
+    }
+   ],
+   "failed": null,
+   "steps": 500,
+   "elapsed_s": 20.0,
+   "trace": [
+    {
+     "t": 0.0,
+     "phase": "settle",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.33
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.457,
+       0.029
+      ],
+      [
+       0.427,
+       0.025
+      ]
+     ],
+     "tilt": [
+      0.0,
+      0.0
+     ],
+     "yaw": [
+      1.582,
+      1.558
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.92
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 1.0,
+     "phase": "settle",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.442,
+       -0.052
+      ],
+      [
+       0.451,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.094,
+      0.092
+     ],
+     "yaw": [
+      1.564,
+      1.565
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 2.0,
+     "phase": "reach",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      -0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.444,
+       -0.053
+      ],
+      [
+       0.448,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.095,
+      0.091
+     ],
+     "yaw": [
+      1.562,
+      1.566
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 3.0,
+     "phase": "squeeze",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      -0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.444,
+       -0.055
+      ],
+      [
+       0.446,
+       -0.063
+      ]
+     ],
+     "tilt": [
+      0.099,
+      0.093
+     ],
+     "yaw": [
+      1.56,
+      1.569
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 4.0,
+     "phase": "squeeze",
+     "cube": [
+      [
+       0.0084,
+       0.1056,
+       0.3384
+      ]
+     ],
+     "lift_m": [
+      0.0086
+     ],
+     "cube_tilt_rad": [
+      0.059
+     ],
+     "robots_xy": [
+      [
+       -0.462,
+       -0.059
+      ],
+      [
+       0.463,
+       -0.071
+      ]
+     ],
+     "tilt": [
+      0.102,
+      0.112
+     ],
+     "yaw": [
+      1.587,
+      1.547
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.58,
+       "a": 6.97,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 5.0,
+     "phase": "lift",
+     "cube": [
+      [
+       0.0026,
+       0.1222,
+       0.3433
+      ]
+     ],
+     "lift_m": [
+      0.0135
+     ],
+     "cube_tilt_rad": [
+      0.066
+     ],
+     "robots_xy": [
+      [
+       -0.469,
+       -0.063
+      ],
+      [
+       0.459,
+       -0.072
+      ]
+     ],
+     "tilt": [
+      0.107,
+      0.113
+     ],
+     "yaw": [
+      1.597,
+      1.55
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.5,
+       "a": 6.8,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 6.0,
+     "phase": "lift",
+     "cube": [
+      [
+       -0.0039,
+       0.271,
+       0.4248
+      ]
+     ],
+     "lift_m": [
+      0.095
+     ],
+     "cube_tilt_rad": [
+      0.426
+     ],
+     "robots_xy": [
+      [
+       -0.47,
+       -0.071
+      ],
+      [
+       0.458,
+       -0.071
+      ]
+     ],
+     "tilt": [
+      0.139,
+      0.129
+     ],
+     "yaw": [
+      1.606,
+      1.545
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.84,
+       "a": 7.05,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 7.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0463,
+       0.3527,
+       0.5259
+      ]
+     ],
+     "lift_m": [
+      0.1961
+     ],
+     "cube_tilt_rad": [
+      0.704
+     ],
+     "robots_xy": [
+      [
+       -0.478,
+       -0.083
+      ],
+      [
+       0.456,
+       -0.068
+      ]
+     ],
+     "tilt": [
+      0.171,
+      0.146
+     ],
+     "yaw": [
+      1.599,
+      1.525
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.52,
+       "a": 7.52,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 8.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0519,
+       0.3546,
+       0.5273
+      ]
+     ],
+     "lift_m": [
+      0.1976
+     ],
+     "cube_tilt_rad": [
+      0.686
+     ],
+     "robots_xy": [
+      [
+       -0.48,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.066
+      ]
+     ],
+     "tilt": [
+      0.174,
+      0.144
+     ],
+     "yaw": [
+      1.592,
+      1.515
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.58,
+       "a": 7.53,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 9.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0524,
+       0.3552,
+       0.5267
+      ]
+     ],
+     "lift_m": [
+      0.1969
+     ],
+     "cube_tilt_rad": [
+      0.678
+     ],
+     "robots_xy": [
+      [
+       -0.48,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.065
+      ]
+     ],
+     "tilt": [
+      0.175,
+      0.142
+     ],
+     "yaw": [
+      1.593,
+      1.514
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.64,
+       "a": 7.56,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 10.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0526,
+       0.3555,
+       0.5263
+      ]
+     ],
+     "lift_m": [
+      0.1965
+     ],
+     "cube_tilt_rad": [
+      0.672
+     ],
+     "robots_xy": [
+      [
+       -0.48,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.064
+      ]
+     ],
+     "tilt": [
+      0.175,
+      0.141
+     ],
+     "yaw": [
+      1.594,
+      1.513
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.67,
+       "a": 7.59,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 11.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0528,
+       0.3559,
+       0.526
+      ]
+     ],
+     "lift_m": [
+      0.1962
+     ],
+     "cube_tilt_rad": [
+      0.668
+     ],
+     "robots_xy": [
+      [
+       -0.48,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.064
+      ]
+     ],
+     "tilt": [
+      0.175,
+      0.14
+     ],
+     "yaw": [
+      1.594,
+      1.513
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.71,
+       "a": 7.61,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 12.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0529,
+       0.3563,
+       0.5257
+      ]
+     ],
+     "lift_m": [
+      0.1959
+     ],
+     "cube_tilt_rad": [
+      0.664
+     ],
+     "robots_xy": [
+      [
+       -0.48,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.064
+      ]
+     ],
+     "tilt": [
+      0.175,
+      0.14
+     ],
+     "yaw": [
+      1.595,
+      1.512
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.74,
+       "a": 7.64,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 13.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0529,
+       0.3567,
+       0.5254
+      ]
+     ],
+     "lift_m": [
+      0.1956
+     ],
+     "cube_tilt_rad": [
+      0.659
+     ],
+     "robots_xy": [
+      [
+       -0.48,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.063
+      ]
+     ],
+     "tilt": [
+      0.176,
+      0.139
+     ],
+     "yaw": [
+      1.596,
+      1.511
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.76,
+       "a": 7.66,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 14.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.053,
+       0.357,
+       0.5251
+      ]
+     ],
+     "lift_m": [
+      0.1953
+     ],
+     "cube_tilt_rad": [
+      0.655
+     ],
+     "robots_xy": [
+      [
+       -0.48,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.063
+      ]
+     ],
+     "tilt": [
+      0.176,
+      0.139
+     ],
+     "yaw": [
+      1.597,
+      1.51
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.78,
+       "a": 7.68,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 15.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0531,
+       0.3574,
+       0.5247
+      ]
+     ],
+     "lift_m": [
+      0.1949
+     ],
+     "cube_tilt_rad": [
+      0.651
+     ],
+     "robots_xy": [
+      [
+       -0.48,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.063
+      ]
+     ],
+     "tilt": [
+      0.176,
+      0.138
+     ],
+     "yaw": [
+      1.598,
+      1.509
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.8,
+       "a": 7.69,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 16.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0532,
+       0.3578,
+       0.5244
+      ]
+     ],
+     "lift_m": [
+      0.1946
+     ],
+     "cube_tilt_rad": [
+      0.647
+     ],
+     "robots_xy": [
+      [
+       -0.48,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.063
+      ]
+     ],
+     "tilt": [
+      0.176,
+      0.138
+     ],
+     "yaw": [
+      1.598,
+      1.508
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.81,
+       "a": 7.7,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 17.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0533,
+       0.3581,
+       0.5241
+      ]
+     ],
+     "lift_m": [
+      0.1943
+     ],
+     "cube_tilt_rad": [
+      0.643
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.062
+      ]
+     ],
+     "tilt": [
+      0.176,
+      0.137
+     ],
+     "yaw": [
+      1.599,
+      1.507
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.83,
+       "a": 7.71,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 18.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0534,
+       0.3585,
+       0.5237
+      ]
+     ],
+     "lift_m": [
+      0.1939
+     ],
+     "cube_tilt_rad": [
+      0.639
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.062
+      ]
+     ],
+     "tilt": [
+      0.176,
+      0.137
+     ],
+     "yaw": [
+      1.6,
+      1.506
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.84,
+       "a": 7.72,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 19.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0535,
+       0.3588,
+       0.5234
+      ]
+     ],
+     "lift_m": [
+      0.1936
+     ],
+     "cube_tilt_rad": [
+      0.635
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.085
+      ],
+      [
+       0.455,
+       -0.062
+      ]
+     ],
+     "tilt": [
+      0.176,
+      0.136
+     ],
+     "yaw": [
+      1.6,
+      1.504
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.85,
+       "a": 7.73,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    }
+   ],
+   "protocol": "lift_hold",
+   "variant": "flushpad_v1",
+   "cube_tilt_series_note": "cube_tilt_series_rad[i] = cube tilt (rad, angle of the cube's z axis from world z) at the pre-step state of policy step i (t = i * dt); the last entry is the final state; null = non-finite",
+   "sim_reset": {
+    "detected": false,
+    "first_step": null,
+    "evidence": null,
+    "policy_steps": 500,
+    "note": "MuJoCo auto-reset (qpos0, time 0) on a NaN or |x| > 1e10 in qpos/qvel/qacc, checked after every policy step (simulated time and bad-number warning counters); first_step = the policy step it happened in; detected = the episode fails (no_sim_reset)"
+   },
+   "nonfinite_values_nulled": 0,
+   "wall_s": 18.1
+  },
+  {
+   "seed": 123,
+   "pairs": [
+    {
+     "success": true,
+     "first_failed_check": null,
+     "checks": {
+      "lift_peak": true,
+      "lift_hold": true,
+      "no_fall": true,
+      "no_floor_contact": true,
+      "finite": true,
+      "full_episode": true
+     },
+     "lift_peak_m": 0.1946,
+     "lift_hold_s": 14.44,
+     "hold_start_s": 5.56,
+     "hold_end_s": 20.0,
+     "max_tilt_rad": 0.1838,
+     "cube_floor_contact": false,
+     "horiz_max_m": 0.2616,
+     "final_lift_m": 0.1857,
+     "pair": 0,
+     "seed": 123,
+     "carry_started_s": null,
+     "carry_stopped_s": null,
+     "lift_series_m": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      0.0011,
+      0.0049,
+      0.0094,
+      0.0124,
+      0.0142,
+      0.0141,
+      0.0143,
+      0.0181,
+      0.0257,
+      0.0378,
+      0.0544,
+      0.0755,
+      0.1001,
+      0.1257,
+      0.1503,
+      0.1713,
+      0.1862,
+      0.1938,
+      0.1945,
+      0.1946,
+      0.1945,
+      0.1944,
+      0.1943,
+      0.1942,
+      0.1941,
+      0.1939,
+      0.1938,
+      0.1937,
+      0.1935,
+      0.1934,
+      0.1933,
+      0.1931,
+      0.193,
+      0.1928,
+      0.1927,
+      0.1925,
+      0.1924,
+      0.1922,
+      0.1921,
+      0.192,
+      0.1918,
+      0.1917,
+      0.1915,
+      0.1914,
+      0.1912,
+      0.1911,
+      0.1909,
+      0.1908,
+      0.1906,
+      0.1905,
+      0.1904,
+      0.1902,
+      0.1901,
+      0.1899,
+      0.1898,
+      0.1896,
+      0.1895,
+      0.1894,
+      0.1892,
+      0.1891,
+      0.1889,
+      0.1888,
+      0.1886,
+      0.1885,
+      0.1883,
+      0.1882,
+      0.188,
+      0.1879,
+      0.1878,
+      0.1876,
+      0.1875,
+      0.1873,
+      0.1872,
+      0.187,
+      0.1869,
+      0.1867,
+      0.1866,
+      0.1864,
+      0.1863,
+      0.1861,
+      0.186,
+      0.1859
+     ],
+     "horiz_series_m": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0024,
+      0.0058,
+      0.0121,
+      0.0126,
+      0.0104,
+      0.0102,
+      0.0133,
+      0.0267,
+      0.0481,
+      0.0754,
+      0.1066,
+      0.1394,
+      0.1713,
+      0.1992,
+      0.2207,
+      0.2366,
+      0.2472,
+      0.2529,
+      0.2543,
+      0.2549,
+      0.2553,
+      0.2557,
+      0.256,
+      0.2562,
+      0.2564,
+      0.2566,
+      0.2568,
+      0.257,
+      0.2571,
+      0.2573,
+      0.2574,
+      0.2575,
+      0.2576,
+      0.2577,
+      0.2578,
+      0.2579,
+      0.258,
+      0.2581,
+      0.2582,
+      0.2583,
+      0.2584,
+      0.2585,
+      0.2586,
+      0.2587,
+      0.2588,
+      0.2588,
+      0.2589,
+      0.259,
+      0.2591,
+      0.2592,
+      0.2592,
+      0.2593,
+      0.2594,
+      0.2595,
+      0.2596,
+      0.2596,
+      0.2597,
+      0.2598,
+      0.2599,
+      0.2599,
+      0.26,
+      0.2601,
+      0.2602,
+      0.2602,
+      0.2603,
+      0.2604,
+      0.2605,
+      0.2605,
+      0.2606,
+      0.2607,
+      0.2608,
+      0.2608,
+      0.2609,
+      0.261,
+      0.2611,
+      0.2611,
+      0.2612,
+      0.2613,
+      0.2613,
+      0.2614,
+      0.2615,
+      0.2616
+     ],
+     "series_dt_s": 0.2,
+     "cube_tilt_series_rad": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.008798027024536997,
+      0.015952410733130418,
+      0.016968228298606936,
+      0.0195461753040367,
+      0.02208168113509194,
+      0.024205706052183744,
+      0.026672227435085606,
+      0.029860413703850893,
+      0.03375927695598985,
+      0.03848440399322046,
+      0.04426563885685457,
+      0.050480972930416,
+      0.05614282243052209,
+      0.06133096777512871,
+      0.06638155444948535,
+      0.07118268691011465,
+      0.07567359495844035,
+      0.07965434276886256,
+      0.08277905629163694,
+      0.08509199054562357,
+      0.08603357394157021,
+      0.08552845586516669,
+      0.08491497149576928,
+      0.08464156277367824,
+      0.08457706456724924,
+      0.08458884093538897,
+      0.08435996853606033,
+      0.08405695041935396,
+      0.08381202612447328,
+      0.08329610775822598,
+      0.08230203149025757,
+      0.08094431407518633,
+      0.07938369940806211,
+      0.0778886570947352,
+      0.07671070841433868,
+      0.076138697322985,
+      0.07647663189765821,
+      0.07798633896758055,
+      0.08089255049212182,
+      0.08541659303105996,
+      0.09168074809670275,
+      0.0996576604207311,
+      0.10922777023255469,
+      0.12024768819785475,
+      0.13256594873063063,
+      0.14602666142363854,
+      0.16047051485744376,
+      0.17572834544618102,
+      0.19165273686754677,
+      0.2081315014642076,
+      0.22506757196777868,
+      0.24236053974189262,
+      0.2601116692312825,
+      0.27836252244284054,
+      0.297021832482386,
+      0.31598116367493395,
+      0.3351476032107398,
+      0.35443643610814024,
+      0.373772068789385,
+      0.39309152745121095,
+      0.4123419848495469,
+      0.4314703796550711,
+      0.4504263083340427,
+      0.4691668397695469,
+      0.4875029217892143,
+      0.5064452951239031,
+      0.5232328457027313,
+      0.5397687847057396,
+      0.557490007622052,
+      0.5731046893319178,
+      0.587530024468146,
+      0.6026861149410723,
+      0.6183872713930341,
+      0.6311918866785227,
+      0.6433538258113559,
+      0.6559523902835203,
+      0.6681077562130137,
+      0.6777396494873411,
+      0.6869303067214414,
+      0.6963906684153898,
+      0.7038429967523675,
+      0.7100062313131361,
+      0.7156601939876522,
+      0.7205897207165426,
+      0.7245870680806725,
+      0.7275223704850402,
+      0.7292898149999576,
+      0.7298886834334677,
+      0.7296769129608948,
+      0.7292494444708282,
+      0.7287958433668301,
+      0.7283574705453266,
+      0.7279304099375902,
+      0.7274991751612573,
+      0.7270550969704908,
+      0.7265980412828225,
+      0.7261308702678438,
+      0.7256572676529595,
+      0.7251805125638825,
+      0.7247043011555195,
+      0.7242304196054791,
+      0.7237595141634535,
+      0.7232919118326758,
+      0.722827823739845,
+      0.7223672054719041,
+      0.7219101696610962,
+      0.7214570373994249,
+      0.7210082427181607,
+      0.7205638571923669,
+      0.7201237243346443,
+      0.7196876664838393,
+      0.7192555269895291,
+      0.7188271765948513,
+      0.718402499584762,
+      0.7179813847416258,
+      0.7175637278860063,
+      0.7171494301827915,
+      0.7167383852770445,
+      0.716330485396404,
+      0.7159256214983012,
+      0.7155236902931822,
+      0.715124590507114,
+      0.7147282275709904,
+      0.7143345099330475,
+      0.7139433532113294,
+      0.7135546796615073,
+      0.7131684207758551,
+      0.7127845073695757,
+      0.712402868397036,
+      0.7120234432043895,
+      0.7116461720464943,
+      0.7112709895026131,
+      0.7108978481105824,
+      0.7105266894667572,
+      0.7101574601415657,
+      0.7097901147653376,
+      0.7094246125213344,
+      0.7090609114539155,
+      0.7086989603161693,
+      0.7083387178104075,
+      0.7079801480467561,
+      0.7076232091439038,
+      0.707267866682577,
+      0.7069140936679096,
+      0.7065618548999503,
+      0.7062111144201667,
+      0.7058618471544128,
+      0.7055140201223407,
+      0.7051676034456373,
+      0.7048225679542761,
+      0.7044788860323292,
+      0.7041365304522541,
+      0.7037954688982823,
+      0.7034556778401295,
+      0.7031171362833127,
+      0.7027798204366138,
+      0.7024437032271158,
+      0.7021087688074952,
+      0.7017749891151307,
+      0.7014423442442214,
+      0.7011108092941917,
+      0.7007803698117917,
+      0.7004510022401667,
+      0.7001226819336674,
+      0.6997953913740169,
+      0.6994691085837867,
+      0.6991438194066395,
+      0.6988195017255511,
+      0.6984961389867786,
+      0.6981737104358507,
+      0.6978522024020937,
+      0.6975316052405235,
+      0.697211895608464,
+      0.696893051358908,
+      0.6965750605763373,
+      0.6962579072997678,
+      0.6959415715496069,
+      0.6956260389273512,
+      0.69531129505249,
+      0.694997329610091,
+      0.6946841233170677,
+      0.6943716615614018,
+      0.6940599351518784,
+      0.6937489321338526,
+      0.6934386336366283,
+      0.693129025189028,
+      0.6928200918588217,
+      0.6925118195520941,
+      0.692204197316727,
+      0.6918972113583286,
+      0.6915908440211216,
+      0.6912850838605659,
+      0.6909799397799468,
+      0.6906754269529385,
+      0.6903715334711141,
+      0.6900682504889507,
+      0.6897655667894358,
+      0.689463468896656,
+      0.6891619385765022,
+      0.6888609662220846,
+      0.6885605375933499,
+      0.6882606428718323,
+      0.6879612688050197,
+      0.6876624014522964,
+      0.6873640359696541,
+      0.6870661552026555,
+      0.6867687453185674,
+      0.6864718010541251,
+      0.6861753081266311,
+      0.685879256314881,
+      0.6855836425680298,
+      0.6852884475631943,
+      0.684993668146691,
+      0.6846992954119059,
+      0.6844053154286113,
+      0.6841117219323809,
+      0.6838185031051789,
+      0.6835256515776293,
+      0.6832331602953564,
+      0.6829410194612298,
+      0.6826492180835931,
+      0.6823577492783129,
+      0.682066603416691,
+      0.6817757753384313,
+      0.681485258621212,
+      0.6811950434985709,
+      0.6809051229908575,
+      0.6806154943929468,
+      0.6803261501313846,
+      0.6800370822274368,
+      0.6797482812983036,
+      0.6794597396880586,
+      0.6791714521365709,
+      0.678883415680021,
+      0.6785956213561382,
+      0.6783080645466053,
+      0.6780207420991783,
+      0.677733645129994,
+      0.6774467693709596,
+      0.6771601126680991,
+      0.6768736653012221,
+      0.6765874220342751,
+      0.6763013790634823,
+      0.6760155323123621,
+      0.6757298739721316,
+      0.6754444038282164,
+      0.6751591144480016,
+      0.674874002934979,
+      0.6745890672675267,
+      0.6743042997940938,
+      0.6740196926818299,
+      0.6737352448810223,
+      0.6734509542937074,
+      0.6731668134894965,
+      0.6728828219181535,
+      0.6725989753163244,
+      0.6723152682899901,
+      0.6720316975681087,
+      0.6717482609260044,
+      0.6714649539256002,
+      0.67118177286415,
+      0.6708987165319836,
+      0.6706157776226244,
+      0.6703329539449363,
+      0.6700502437578534,
+      0.6697676421249195,
+      0.6694851529937264,
+      0.6692027714886191,
+      0.668920498171158,
+      0.6686383249320343,
+      0.6683562428805268,
+      0.6680742536115842,
+      0.6677923559858657,
+      0.6675105492466776,
+      0.6672288277157272,
+      0.6669471907503972,
+      0.666665638461081,
+      0.6663841628641026,
+      0.6661027627490077,
+      0.6658214392075337,
+      0.6655401924725255,
+      0.6652590162512291,
+      0.6649779147349391,
+      0.6646968826009526,
+      0.664415913149059,
+      0.6641350102023584,
+      0.6638541701846061,
+      0.6635733851701905,
+      0.6632926523171818,
+      0.6630119689920259,
+      0.662731336812679,
+      0.6624507633120365,
+      0.6621702414321756,
+      0.6618897753717103,
+      0.6616093633457293,
+      0.6613290040144766,
+      0.6610486925084047,
+      0.6607684186863877,
+      0.660488175995862,
+      0.6602079702423622,
+      0.6599278081225208,
+      0.659647686728919,
+      0.6593676026400371,
+      0.6590875562256928,
+      0.6588075442197893,
+      0.6585275718341931,
+      0.6582476376711166,
+      0.6579677328227205,
+      0.6576878547521144,
+      0.65740800814451,
+      0.6571281874225876,
+      0.6568483881138815,
+      0.6565686143698043,
+      0.6562888678051668,
+      0.656009144961945,
+      0.6557294439089864,
+      0.6554497626704084,
+      0.6551701055078263,
+      0.6548904730308127,
+      0.6546108590854453,
+      0.6543312601971963,
+      0.6540516764799489,
+      0.6537721144961972,
+      0.6534925712257631,
+      0.6532130485299469,
+      0.6529335362771141,
+      0.6526540322871951,
+      0.6523745399975184,
+      0.6520950633577995,
+      0.6518156026144529,
+      0.6515361567562281,
+      0.6512567225585153,
+      0.650977297412766,
+      0.6506978811002998,
+      0.6504184746779771,
+      0.6501390818924011,
+      0.6498596989860513,
+      0.6495803261600727,
+      0.6493009548045015,
+      0.649021589002019,
+      0.6487422315810811,
+      0.6484628800099613,
+      0.648183529479129,
+      0.6479041799510664,
+      0.6476248370788059,
+      0.6473455007478622,
+      0.6470661688401528,
+      0.6467868412031076,
+      0.6465075183311954,
+      0.6462282021024864,
+      0.6459488840955373,
+      0.6456695641925385,
+      0.6453902424573945,
+      0.6451109226523242,
+      0.6448316053239056,
+      0.6445522865720116,
+      0.6442729722133392,
+      0.6439936603541538,
+      0.643714345555614,
+      0.6434350323656204,
+      0.643155717569747,
+      0.6428764010173281,
+      0.6425970808978464,
+      0.6423177572067241,
+      0.6420384322250032,
+      0.6417591058976402,
+      0.6414797760453748,
+      0.6412004418085225,
+      0.6409211040232794,
+      0.6406417654825204,
+      0.6403624284289601,
+      0.6400830906650422,
+      0.639803750075989,
+      0.6395244042695251,
+      0.6392450492724956,
+      0.6389656880007648,
+      0.6386863284610108,
+      0.6384069664240681,
+      0.6381275985415892,
+      0.6378482215198752,
+      0.6375688390080393,
+      0.6372894484216933,
+      0.6370100502596177,
+      0.6367306483627019,
+      0.6364512408244073,
+      0.6361718272667407,
+      0.6358924071698537,
+      0.6356129837332297,
+      0.635333559527725,
+      0.6350541252561108,
+      0.6347746771879141,
+      0.6344952225059097,
+      0.6342157663299948,
+      0.6339363051023618,
+      0.6336568399202163,
+      0.6333773668229675,
+      0.6330978879629143,
+      0.6328183970670324,
+      0.63253889472425,
+      0.6322593856755387,
+      0.6319798753237663,
+      0.6317003624912013,
+      0.6314208437950851,
+      0.6311413198057813,
+      0.6308617900808153,
+      0.6305822527954952,
+      0.6303027075660149,
+      0.6300231514550974,
+      0.6297435894467466,
+      0.6294640194957924,
+      0.6291844389077746,
+      0.6289048528412923
+     ]
+    }
+   ],
+   "failed": null,
+   "steps": 500,
+   "elapsed_s": 20.0,
+   "trace": [
+    {
+     "t": 0.0,
+     "phase": "settle",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.33
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.448,
+       0.034
+      ],
+      [
+       0.446,
+       0.032
+      ]
+     ],
+     "tilt": [
+      0.0,
+      0.0
+     ],
+     "yaw": [
+      1.584,
+      1.556
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.92
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 1.0,
+     "phase": "settle",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.439,
+       -0.056
+      ],
+      [
+       0.43,
+       -0.056
+      ]
+     ],
+     "tilt": [
+      0.101,
+      0.089
+     ],
+     "yaw": [
+      1.611,
+      1.624
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 2.0,
+     "phase": "reach",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      -0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.441,
+       -0.058
+      ],
+      [
+       0.449,
+       -0.054
+      ]
+     ],
+     "tilt": [
+      0.103,
+      0.09
+     ],
+     "yaw": [
+      1.61,
+      1.618
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.9
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 3.0,
+     "phase": "squeeze",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      -0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.441,
+       -0.059
+      ],
+      [
+       0.447,
+       -0.057
+      ]
+     ],
+     "tilt": [
+      0.106,
+      0.093
+     ],
+     "yaw": [
+      1.607,
+      1.62
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 4.0,
+     "phase": "squeeze",
+     "cube": [
+      [
+       0.0098,
+       0.1072,
+       0.3392
+      ]
+     ],
+     "lift_m": [
+      0.0094
+     ],
+     "cube_tilt_rad": [
+      0.056
+     ],
+     "robots_xy": [
+      [
+       -0.46,
+       -0.065
+      ],
+      [
+       0.465,
+       -0.064
+      ]
+     ],
+     "tilt": [
+      0.108,
+      0.113
+     ],
+     "yaw": [
+      1.635,
+      1.595
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.62,
+       "a": 7.02,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 5.0,
+     "phase": "lift",
+     "cube": [
+      [
+       0.003,
+       0.1266,
+       0.3479
+      ]
+     ],
+     "lift_m": [
+      0.0181
+     ],
+     "cube_tilt_rad": [
+      0.078
+     ],
+     "robots_xy": [
+      [
+       -0.47,
+       -0.069
+      ],
+      [
+       0.461,
+       -0.066
+      ]
+     ],
+     "tilt": [
+      0.115,
+      0.116
+     ],
+     "yaw": [
+      1.646,
+      1.595
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.43,
+       "a": 6.79,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 6.0,
+     "phase": "lift",
+     "cube": [
+      [
+       -0.0252,
+       0.2694,
+       0.4298
+      ]
+     ],
+     "lift_m": [
+      0.1001
+     ],
+     "cube_tilt_rad": [
+      0.45
+     ],
+     "robots_xy": [
+      [
+       -0.47,
+       -0.078
+      ],
+      [
+       0.46,
+       -0.065
+      ]
+     ],
+     "tilt": [
+      0.147,
+      0.129
+     ],
+     "yaw": [
+      1.659,
+      1.596
+     ],
+     "cube_normal_N": [
+      {
+       "b": 7.13,
+       "a": 6.97,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 7.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.049,
+       0.3481,
+       0.5235
+      ]
+     ],
+     "lift_m": [
+      0.1938
+     ],
+     "cube_tilt_rad": [
+      0.73
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.089
+      ],
+      [
+       0.457,
+       -0.063
+      ]
+     ],
+     "tilt": [
+      0.177,
+      0.147
+     ],
+     "yaw": [
+      1.638,
+      1.583
+     ],
+     "cube_normal_N": [
+      {
+       "b": 7.98,
+       "a": 7.28,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 8.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0507,
+       0.3509,
+       0.5241
+      ]
+     ],
+     "lift_m": [
+      0.1943
+     ],
+     "cube_tilt_rad": [
+      0.719
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.09
+      ],
+      [
+       0.457,
+       -0.062
+      ]
+     ],
+     "tilt": [
+      0.182,
+      0.146
+     ],
+     "yaw": [
+      1.639,
+      1.578
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.04,
+       "a": 7.25,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 9.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0515,
+       0.3517,
+       0.5235
+      ]
+     ],
+     "lift_m": [
+      0.1937
+     ],
+     "cube_tilt_rad": [
+      0.709
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.062
+      ]
+     ],
+     "tilt": [
+      0.182,
+      0.145
+     ],
+     "yaw": [
+      1.64,
+      1.576
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.11,
+       "a": 7.28,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 10.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.052,
+       0.3523,
+       0.5228
+      ]
+     ],
+     "lift_m": [
+      0.193
+     ],
+     "cube_tilt_rad": [
+      0.7
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.061
+      ]
+     ],
+     "tilt": [
+      0.183,
+      0.145
+     ],
+     "yaw": [
+      1.641,
+      1.575
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.15,
+       "a": 7.31,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 11.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0522,
+       0.3528,
+       0.522
+      ]
+     ],
+     "lift_m": [
+      0.1922
+     ],
+     "cube_tilt_rad": [
+      0.693
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.061
+      ]
+     ],
+     "tilt": [
+      0.183,
+      0.144
+     ],
+     "yaw": [
+      1.642,
+      1.574
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.18,
+       "a": 7.32,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 12.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0523,
+       0.3532,
+       0.5213
+      ]
+     ],
+     "lift_m": [
+      0.1915
+     ],
+     "cube_tilt_rad": [
+      0.685
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.061
+      ]
+     ],
+     "tilt": [
+      0.183,
+      0.144
+     ],
+     "yaw": [
+      1.643,
+      1.574
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.19,
+       "a": 7.33,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 13.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0524,
+       0.3536,
+       0.5206
+      ]
+     ],
+     "lift_m": [
+      0.1908
+     ],
+     "cube_tilt_rad": [
+      0.678
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.061
+      ]
+     ],
+     "tilt": [
+      0.183,
+      0.144
+     ],
+     "yaw": [
+      1.644,
+      1.573
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.2,
+       "a": 7.34,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 14.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0525,
+       0.354,
+       0.5199
+      ]
+     ],
+     "lift_m": [
+      0.1901
+     ],
+     "cube_tilt_rad": [
+      0.671
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.061
+      ]
+     ],
+     "tilt": [
+      0.183,
+      0.144
+     ],
+     "yaw": [
+      1.644,
+      1.572
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.21,
+       "a": 7.34,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 15.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0525,
+       0.3544,
+       0.5191
+      ]
+     ],
+     "lift_m": [
+      0.1894
+     ],
+     "cube_tilt_rad": [
+      0.664
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.183,
+      0.143
+     ],
+     "yaw": [
+      1.645,
+      1.572
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.21,
+       "a": 7.35,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 16.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0525,
+       0.3548,
+       0.5184
+      ]
+     ],
+     "lift_m": [
+      0.1886
+     ],
+     "cube_tilt_rad": [
+      0.657
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.183,
+      0.143
+     ],
+     "yaw": [
+      1.646,
+      1.571
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.21,
+       "a": 7.35,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 17.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0525,
+       0.3552,
+       0.5177
+      ]
+     ],
+     "lift_m": [
+      0.1879
+     ],
+     "cube_tilt_rad": [
+      0.65
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.184,
+      0.143
+     ],
+     "yaw": [
+      1.647,
+      1.571
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.21,
+       "a": 7.35,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 18.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0526,
+       0.3556,
+       0.517
+      ]
+     ],
+     "lift_m": [
+      0.1872
+     ],
+     "cube_tilt_rad": [
+      0.643
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.184,
+      0.143
+     ],
+     "yaw": [
+      1.648,
+      1.57
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.21,
+       "a": 7.34,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 19.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0526,
+       0.3559,
+       0.5162
+      ]
+     ],
+     "lift_m": [
+      0.1864
+     ],
+     "cube_tilt_rad": [
+      0.636
+     ],
+     "robots_xy": [
+      [
+       -0.481,
+       -0.091
+      ],
+      [
+       0.456,
+       -0.06
+      ]
+     ],
+     "tilt": [
+      0.184,
+      0.143
+     ],
+     "yaw": [
+      1.649,
+      1.569
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.2,
+       "a": 7.34,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    }
+   ],
+   "protocol": "lift_hold",
+   "variant": "flushpad_v1",
+   "cube_tilt_series_note": "cube_tilt_series_rad[i] = cube tilt (rad, angle of the cube's z axis from world z) at the pre-step state of policy step i (t = i * dt); the last entry is the final state; null = non-finite",
+   "sim_reset": {
+    "detected": false,
+    "first_step": null,
+    "evidence": null,
+    "policy_steps": 500,
+    "note": "MuJoCo auto-reset (qpos0, time 0) on a NaN or |x| > 1e10 in qpos/qvel/qacc, checked after every policy step (simulated time and bad-number warning counters); first_step = the policy step it happened in; detected = the episode fails (no_sim_reset)"
+   },
+   "nonfinite_values_nulled": 0,
+   "wall_s": 17.9
+  },
+  {
+   "seed": 124,
+   "pairs": [
+    {
+     "success": true,
+     "first_failed_check": null,
+     "checks": {
+      "lift_peak": true,
+      "lift_hold": true,
+      "no_fall": true,
+      "no_floor_contact": true,
+      "finite": true,
+      "full_episode": true
+     },
+     "lift_peak_m": 0.193,
+     "lift_hold_s": 14.32,
+     "hold_start_s": 5.68,
+     "hold_end_s": 20.0,
+     "max_tilt_rad": 0.172,
+     "cube_floor_contact": false,
+     "horiz_max_m": 0.2682,
+     "final_lift_m": 0.1767,
+     "pair": 0,
+     "seed": 124,
+     "carry_started_s": null,
+     "carry_stopped_s": null,
+     "lift_series_m": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      0.0011,
+      0.0044,
+      0.0077,
+      0.0073,
+      0.0061,
+      0.0054,
+      0.0058,
+      0.0097,
+      0.0172,
+      0.0291,
+      0.0459,
+      0.0673,
+      0.0922,
+      0.1187,
+      0.1446,
+      0.167,
+      0.1833,
+      0.1917,
+      0.193,
+      0.193,
+      0.1928,
+      0.1927,
+      0.1926,
+      0.1924,
+      0.1922,
+      0.192,
+      0.1918,
+      0.1916,
+      0.1914,
+      0.1911,
+      0.1909,
+      0.1907,
+      0.1904,
+      0.1902,
+      0.1899,
+      0.1897,
+      0.1894,
+      0.1892,
+      0.1889,
+      0.1887,
+      0.1884,
+      0.1881,
+      0.1879,
+      0.1876,
+      0.1874,
+      0.1871,
+      0.1868,
+      0.1866,
+      0.1863,
+      0.186,
+      0.1858,
+      0.1855,
+      0.1852,
+      0.1849,
+      0.1847,
+      0.1844,
+      0.1841,
+      0.1838,
+      0.1836,
+      0.1833,
+      0.183,
+      0.1827,
+      0.1824,
+      0.1822,
+      0.1819,
+      0.1816,
+      0.1813,
+      0.181,
+      0.1807,
+      0.1804,
+      0.1802,
+      0.1799,
+      0.1796,
+      0.1793,
+      0.179,
+      0.1787,
+      0.1784,
+      0.1781,
+      0.1778,
+      0.1775,
+      0.1772,
+      0.1769
+     ],
+     "horiz_series_m": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0017,
+      0.0037,
+      0.0074,
+      0.0085,
+      0.0086,
+      0.0083,
+      0.0105,
+      0.0232,
+      0.0443,
+      0.0719,
+      0.1035,
+      0.1363,
+      0.1677,
+      0.1958,
+      0.2192,
+      0.2367,
+      0.2483,
+      0.2545,
+      0.2562,
+      0.2569,
+      0.2574,
+      0.2579,
+      0.2582,
+      0.2586,
+      0.2588,
+      0.2591,
+      0.2593,
+      0.2595,
+      0.2597,
+      0.2599,
+      0.2601,
+      0.2603,
+      0.2605,
+      0.2607,
+      0.2608,
+      0.261,
+      0.2612,
+      0.2614,
+      0.2615,
+      0.2617,
+      0.2619,
+      0.262,
+      0.2622,
+      0.2624,
+      0.2625,
+      0.2627,
+      0.2628,
+      0.263,
+      0.2632,
+      0.2633,
+      0.2635,
+      0.2636,
+      0.2638,
+      0.264,
+      0.2641,
+      0.2643,
+      0.2644,
+      0.2646,
+      0.2647,
+      0.2649,
+      0.265,
+      0.2652,
+      0.2653,
+      0.2655,
+      0.2656,
+      0.2658,
+      0.2659,
+      0.2661,
+      0.2662,
+      0.2664,
+      0.2665,
+      0.2667,
+      0.2668,
+      0.2669,
+      0.2671,
+      0.2672,
+      0.2674,
+      0.2675,
+      0.2677,
+      0.2678,
+      0.2679,
+      0.2681
+     ],
+     "series_dt_s": 0.2,
+     "cube_tilt_series_rad": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.006544306782950058,
+      0.011986510011647241,
+      0.013002241948404084,
+      0.015048772685857734,
+      0.017257227364043563,
+      0.019256330871231367,
+      0.020526706001280707,
+      0.021422997645140808,
+      0.02223460713208789,
+      0.02310693968247653,
+      0.024004010870131647,
+      0.024925862104626068,
+      0.025962979851362238,
+      0.026844565745237033,
+      0.027493305025171784,
+      0.028209093321872693,
+      0.028930742837152502,
+      0.029593577210862317,
+      0.030296972640041296,
+      0.03105686718788614,
+      0.031852747806491846,
+      0.03264994419011753,
+      0.03340848992929412,
+      0.03409842654395376,
+      0.0347001660375627,
+      0.03520725510970271,
+      0.035644885366332375,
+      0.03598757438879609,
+      0.03614737347561917,
+      0.035754900807217944,
+      0.03424888643269375,
+      0.03150117710311641,
+      0.02789081647722086,
+      0.02402256977037255,
+      0.02095066910369392,
+      0.020206462943258435,
+      0.022921508839436337,
+      0.02880570315257574,
+      0.03689645719400829,
+      0.04651242291841631,
+      0.05730932183136696,
+      0.06917837962290044,
+      0.08206721080461038,
+      0.09588726251210737,
+      0.11054329588122003,
+      0.1259437565862152,
+      0.14200616833923316,
+      0.15865953288430856,
+      0.17584454228537738,
+      0.1935018420204675,
+      0.21157283490563844,
+      0.23000208877576128,
+      0.24873824005217038,
+      0.26772886676108637,
+      0.2869211002946543,
+      0.30626529242641487,
+      0.32571066203862775,
+      0.3452064641716021,
+      0.3647021272608944,
+      0.384146521479119,
+      0.40349000416596165,
+      0.4226835680998521,
+      0.4416802854611656,
+      0.460434564725263,
+      0.4789040239276287,
+      0.4970492864251896,
+      0.5148346287120885,
+      0.5322280376953631,
+      0.5492016478660807,
+      0.5657319437755735,
+      0.5817775226450322,
+      0.5970556847956782,
+      0.6115652881525327,
+      0.625426768564076,
+      0.6385552469347859,
+      0.6508904891047895,
+      0.6624123955601144,
+      0.6730837450426922,
+      0.6828713947585772,
+      0.6917487326689142,
+      0.6996946118467458,
+      0.7066880272957433,
+      0.7127042297030352,
+      0.7177180238179292,
+      0.7217033790104921,
+      0.7246385621617878,
+      0.7265085056814273,
+      0.7273019784271922,
+      0.7271873045803711,
+      0.7267295889295845,
+      0.7261776458671053,
+      0.7256042227891615,
+      0.7250373611209966,
+      0.7244832192993075,
+      0.7239333238570674,
+      0.7233750436550375,
+      0.7228055838937673,
+      0.7222281111592831,
+      0.7216476152737703,
+      0.7210681118391125,
+      0.7204921778586557,
+      0.7199211616470814,
+      0.7193555025777155,
+      0.7187951326865586,
+      0.718239837028158,
+      0.7176881397449949,
+      0.7171379831469348,
+      0.7165888396069606,
+      0.716040727231842,
+      0.7154937556048804,
+      0.7149480091226932,
+      0.7144035259084154,
+      0.7138603185719002,
+      0.7133183884333053,
+      0.7127777248080631,
+      0.7122383104007919,
+      0.7117001287782349,
+      0.7111631564931696,
+      0.7106273624957928,
+      0.7100927134849828,
+      0.7095591713587893,
+      0.7090266938760469,
+      0.7084952266857395,
+      0.707964721294744,
+      0.707435140225733,
+      0.7069062589713861,
+      0.7063777087874248,
+      0.7058494063274909,
+      0.705321327755577,
+      0.7047934295535717,
+      0.7042656636983501,
+      0.7037379740984129,
+      0.7032103050081627,
+      0.7026826148838996,
+      0.7021548760249892,
+      0.7016270538147258,
+      0.7010991181183179,
+      0.7005710458219828,
+      0.7000428117601398,
+      0.6995143877708624,
+      0.6989857536199903,
+      0.6984568841266664,
+      0.6979277604060729,
+      0.6973983632422402,
+      0.6968686738074567,
+      0.6963386717469016,
+      0.6958083386354482,
+      0.6952776556449254,
+      0.6947466046836465,
+      0.6942151719124474,
+      0.6936833472279553,
+      0.6931511153560491,
+      0.6926184549565472,
+      0.692085352788334,
+      0.6915518021207893,
+      0.6910177968179728,
+      0.6904833267711787,
+      0.689948379507521,
+      0.6894129504118222,
+      0.6888770304435881,
+      0.6883406111255309,
+      0.68780368181302,
+      0.6872663056823459,
+      0.6867286136237661,
+      0.6861906337058025,
+      0.6856523817874698,
+      0.6851138662576355,
+      0.6845750949072393,
+      0.684036074877308,
+      0.6834968091517043,
+      0.6829572991640159,
+      0.68241755433429,
+      0.6818775822839725,
+      0.681337393936636,
+      0.6807969982525455,
+      0.6802564027260537,
+      0.6797156104385776,
+      0.6791746215433577,
+      0.6786334384287263,
+      0.6780920655416105,
+      0.6775505099260472,
+      0.6770087734749283,
+      0.6764668569654133,
+      0.6759247642683436,
+      0.6753824952002079,
+      0.6748400552420311,
+      0.6742974445258897,
+      0.67375466202168,
+      0.6732117090100408,
+      0.6726685935439506,
+      0.672125310108759,
+      0.6715818666682309,
+      0.6710382697777872,
+      0.6704945176751241,
+      0.6699506126868167,
+      0.6694065556718529,
+      0.6688623375086962,
+      0.6683179602281826,
+      0.6677734227950042,
+      0.6672287273962016,
+      0.6666838780065263,
+      0.6661388741918607,
+      0.6655937225571341,
+      0.6650484177520236,
+      0.6645029621105184,
+      0.6639573586328229,
+      0.6634116034370195,
+      0.6628656955975107,
+      0.6623196361078059,
+      0.6617734267157813,
+      0.6612270661306476,
+      0.6606805526285675,
+      0.6601338863160606,
+      0.6595870648343218,
+      0.6590400911511975,
+      0.6584929664008493,
+      0.6579456934281741,
+      0.6573982661871725,
+      0.6568506822891746,
+      0.6563029422449994,
+      0.6557550490550353,
+      0.6552070020363199,
+      0.6546587964958592,
+      0.6541104333311072,
+      0.6535619111818497,
+      0.6530132253791341,
+      0.6524643785637705,
+      0.6519153695190744,
+      0.6513661984851051,
+      0.6508168682944668,
+      0.6502673743555554,
+      0.6497177144591975,
+      0.6491678824144548,
+      0.6486178825620297,
+      0.6480677141496358,
+      0.6475173755618708,
+      0.6469668664551849,
+      0.6464161867892891,
+      0.6458653321885618,
+      0.6453142979839444,
+      0.6447630876751247,
+      0.6442117032779635,
+      0.6436601403812037,
+      0.6431084064281329,
+      0.6425564932623405,
+      0.6420043972817737,
+      0.641452117300825,
+      0.6408996531449385,
+      0.6403469978037729,
+      0.6397941451193294,
+      0.6392411014359266,
+      0.6386878634709258,
+      0.6381344329292529,
+      0.6375808113442187,
+      0.6370269906694668,
+      0.6364729755781326,
+      0.6359187629051317,
+      0.6353643517431995,
+      0.6348097385834636,
+      0.6342549221139893,
+      0.6336999007669657,
+      0.6331446713398708,
+      0.6325892304407388,
+      0.6320335794496522,
+      0.6314777174563473,
+      0.6309216475836931,
+      0.6303653664903646,
+      0.6298088702715376,
+      0.629252158778219,
+      0.6286952345416658,
+      0.6281380931705156,
+      0.6275807328152609,
+      0.6270231494633953,
+      0.6264653436152078,
+      0.6259073140036092,
+      0.6253490543510465,
+      0.6247905674379434,
+      0.6242318470171988,
+      0.6236728937551484,
+      0.6231137031387787,
+      0.6225542784518984,
+      0.6219946173312823,
+      0.6214347197838856,
+      0.6208745886513157,
+      0.6203142246685537,
+      0.6197536209580088,
+      0.6191927777866904,
+      0.6186316903683786,
+      0.6180703516529886,
+      0.6175087620015502,
+      0.6169469277443066,
+      0.616384843703107,
+      0.6158225089606773,
+      0.615259926240675,
+      0.6146970923688594,
+      0.6141340042908227,
+      0.6135706611593696,
+      0.6130070631154054,
+      0.6124432086222887,
+      0.6118790881373931,
+      0.6113147032067827,
+      0.6107500517474374,
+      0.6101851364833611,
+      0.6096199539432441,
+      0.6090545035819505,
+      0.608488782467161,
+      0.6079227926108931,
+      0.607356535261259,
+      0.6067900024805633,
+      0.6062232028069444,
+      0.60565613253188,
+      0.6050887874430855,
+      0.604521173081068,
+      0.6039532838023874,
+      0.6033851111935524,
+      0.6028166602543239,
+      0.6022479228762403,
+      0.6016788955650433,
+      0.6011095882796068,
+      0.6005399972426338,
+      0.5999701241697262,
+      0.5993999635024889,
+      0.5988295123881373,
+      0.598258774129381,
+      0.5976877460076356,
+      0.597116422907828,
+      0.5965448065310351,
+      0.5959728956160908,
+      0.5954006911091815,
+      0.5948281902859189,
+      0.5942553893406104,
+      0.5936822913285142,
+      0.5931088989577676,
+      0.592535213034182,
+      0.5919612230807215,
+      0.5913869309773276,
+      0.5908123366979178,
+      0.5902374407997991,
+      0.5896622429466502,
+      0.5890867372369905,
+      0.5885109262820755,
+      0.5879348101964746,
+      0.5873583862818836,
+      0.5867816562772192,
+      0.5862046196567028,
+      0.5856272770089582,
+      0.5850496192564001,
+      0.5844716462802158,
+      0.5838933583707454,
+      0.5833147586241535,
+      0.5827358478979544,
+      0.582156621713782,
+      0.5815770795306561,
+      0.5809972225136132,
+      0.5804170429038384,
+      0.5798365454721731,
+      0.5792557337026275,
+      0.5786746093379938,
+      0.5780931690233917,
+      0.5775114098001348,
+      0.5769293298993088,
+      0.5763469221084249,
+      0.5757641870497987,
+      0.5751811268069967,
+      0.5745977455950236,
+      0.5740140457397757,
+      0.5734300289068905,
+      0.5728456898469454,
+      0.5722610291058918,
+      0.5716760498349234,
+      0.571090743736908,
+      0.5705051089615697,
+      0.5699191385753872,
+      0.5693328353791984,
+      0.5687462016188694,
+      0.5681592438989131,
+      0.5675719594023633,
+      0.5669843440479593,
+      0.5663963945439103,
+      0.56580810869096,
+      0.565219500113377,
+      0.5646305703194333,
+      0.564041305840962,
+      0.56345171258205,
+      0.5628617897652073,
+      0.562271533326698,
+      0.5616809377038603,
+      0.5610900073696564,
+      0.5604987437315369,
+      0.5599071417391446,
+      0.5593152097665169,
+      0.5587229486781303,
+      0.5581303489223546,
+      0.5575374085592093,
+      0.5569441347055288,
+      0.5563505264423814,
+      0.5557565839490999,
+      0.5551623067720097,
+      0.5545676986151569,
+      0.5539727602624817,
+      0.5533774836732651,
+      0.5527818715323035,
+      0.5521859224481434,
+      0.5515896395959389,
+      0.5509930228713046,
+      0.5503960684467133,
+      0.5497987749071661,
+      0.549201143414162,
+      0.548603182024134,
+      0.5480048834342496,
+      0.5474062441882069,
+      0.5468072666715109
+     ]
+    }
+   ],
+   "failed": null,
+   "steps": 500,
+   "elapsed_s": 20.0,
+   "trace": [
+    {
+     "t": 0.0,
+     "phase": "settle",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.33
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.44,
+       0.029
+      ],
+      [
+       0.442,
+       0.023
+      ]
+     ],
+     "tilt": [
+      0.0,
+      0.0
+     ],
+     "yaw": [
+      1.579,
+      1.558
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.92
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 1.0,
+     "phase": "settle",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.447,
+       -0.048
+      ],
+      [
+       0.444,
+       -0.062
+      ]
+     ],
+     "tilt": [
+      0.087,
+      0.084
+     ],
+     "yaw": [
+      1.539,
+      1.593
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 2.0,
+     "phase": "reach",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      -0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.448,
+       -0.05
+      ],
+      [
+       0.443,
+       -0.061
+      ]
+     ],
+     "tilt": [
+      0.088,
+      0.081
+     ],
+     "yaw": [
+      1.538,
+      1.593
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 3.0,
+     "phase": "squeeze",
+     "cube": [
+      [
+       0.0,
+       0.1,
+       0.3298
+      ]
+     ],
+     "lift_m": [
+      -0.0
+     ],
+     "cube_tilt_rad": [
+      0.0
+     ],
+     "robots_xy": [
+      [
+       -0.448,
+       -0.051
+      ],
+      [
+       0.441,
+       -0.064
+      ]
+     ],
+     "tilt": [
+      0.092,
+      0.082
+     ],
+     "yaw": [
+      1.535,
+      1.596
+     ],
+     "cube_normal_N": [
+      {
+       "b": 0.0,
+       "a": 0.0,
+       "plinth": 4.91
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 4.0,
+     "phase": "squeeze",
+     "cube": [
+      [
+       0.0045,
+       0.1058,
+       0.3374
+      ]
+     ],
+     "lift_m": [
+      0.0077
+     ],
+     "cube_tilt_rad": [
+      0.026
+     ],
+     "robots_xy": [
+      [
+       -0.459,
+       -0.054
+      ],
+      [
+       0.459,
+       -0.073
+      ]
+     ],
+     "tilt": [
+      0.096,
+      0.104
+     ],
+     "yaw": [
+      1.564,
+      1.572
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.72,
+       "a": 6.87,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 5.0,
+     "phase": "lift",
+     "cube": [
+      [
+       0.0052,
+       0.1226,
+       0.3395
+      ]
+     ],
+     "lift_m": [
+      0.0097
+     ],
+     "cube_tilt_rad": [
+      0.029
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.057
+      ],
+      [
+       0.455,
+       -0.074
+      ]
+     ],
+     "tilt": [
+      0.102,
+      0.106
+     ],
+     "yaw": [
+      1.569,
+      1.572
+     ],
+     "cube_normal_N": [
+      {
+       "b": 6.78,
+       "a": 6.91,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 6.0,
+     "phase": "lift",
+     "cube": [
+      [
+       -0.0007,
+       0.2677,
+       0.422
+      ]
+     ],
+     "lift_m": [
+      0.0922
+     ],
+     "cube_tilt_rad": [
+      0.442
+     ],
+     "robots_xy": [
+      [
+       -0.456,
+       -0.065
+      ],
+      [
+       0.453,
+       -0.072
+      ]
+     ],
+     "tilt": [
+      0.129,
+      0.121
+     ],
+     "yaw": [
+      1.579,
+      1.57
+     ],
+     "cube_normal_N": [
+      {
+       "b": 7.31,
+       "a": 7.26,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 7.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0247,
+       0.3533,
+       0.5215
+      ]
+     ],
+     "lift_m": [
+      0.1917
+     ],
+     "cube_tilt_rad": [
+      0.727
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.076
+      ],
+      [
+       0.449,
+       -0.072
+      ]
+     ],
+     "tilt": [
+      0.164,
+      0.142
+     ],
+     "yaw": [
+      1.595,
+      1.557
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.12,
+       "a": 7.56,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 8.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0272,
+       0.3568,
+       0.5223
+      ]
+     ],
+     "lift_m": [
+      0.1926
+     ],
+     "cube_tilt_rad": [
+      0.714
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.078
+      ],
+      [
+       0.448,
+       -0.071
+      ]
+     ],
+     "tilt": [
+      0.171,
+      0.141
+     ],
+     "yaw": [
+      1.599,
+      1.552
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.14,
+       "a": 7.51,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 9.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0281,
+       0.358,
+       0.5214
+      ]
+     ],
+     "lift_m": [
+      0.1916
+     ],
+     "cube_tilt_rad": [
+      0.701
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.079
+      ],
+      [
+       0.448,
+       -0.071
+      ]
+     ],
+     "tilt": [
+      0.171,
+      0.141
+     ],
+     "yaw": [
+      1.6,
+      1.55
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.18,
+       "a": 7.52,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 10.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0285,
+       0.3589,
+       0.5202
+      ]
+     ],
+     "lift_m": [
+      0.1904
+     ],
+     "cube_tilt_rad": [
+      0.687
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.079
+      ],
+      [
+       0.448,
+       -0.071
+      ]
+     ],
+     "tilt": [
+      0.172,
+      0.14
+     ],
+     "yaw": [
+      1.601,
+      1.549
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.21,
+       "a": 7.54,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 11.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0286,
+       0.3598,
+       0.5189
+      ]
+     ],
+     "lift_m": [
+      0.1892
+     ],
+     "cube_tilt_rad": [
+      0.674
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.079
+      ],
+      [
+       0.448,
+       -0.07
+      ]
+     ],
+     "tilt": [
+      0.172,
+      0.14
+     ],
+     "yaw": [
+      1.602,
+      1.548
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.24,
+       "a": 7.56,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 12.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0286,
+       0.3606,
+       0.5177
+      ]
+     ],
+     "lift_m": [
+      0.1879
+     ],
+     "cube_tilt_rad": [
+      0.66
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.079
+      ],
+      [
+       0.448,
+       -0.07
+      ]
+     ],
+     "tilt": [
+      0.172,
+      0.14
+     ],
+     "yaw": [
+      1.604,
+      1.548
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.25,
+       "a": 7.57,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 13.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0285,
+       0.3615,
+       0.5163
+      ]
+     ],
+     "lift_m": [
+      0.1866
+     ],
+     "cube_tilt_rad": [
+      0.646
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.079
+      ],
+      [
+       0.448,
+       -0.07
+      ]
+     ],
+     "tilt": [
+      0.172,
+      0.139
+     ],
+     "yaw": [
+      1.605,
+      1.547
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.26,
+       "a": 7.58,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 14.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0285,
+       0.3623,
+       0.515
+      ]
+     ],
+     "lift_m": [
+      0.1852
+     ],
+     "cube_tilt_rad": [
+      0.633
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.079
+      ],
+      [
+       0.448,
+       -0.07
+      ]
+     ],
+     "tilt": [
+      0.172,
+      0.139
+     ],
+     "yaw": [
+      1.606,
+      1.546
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.27,
+       "a": 7.58,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 15.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0284,
+       0.363,
+       0.5136
+      ]
+     ],
+     "lift_m": [
+      0.1838
+     ],
+     "cube_tilt_rad": [
+      0.619
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.079
+      ],
+      [
+       0.448,
+       -0.07
+      ]
+     ],
+     "tilt": [
+      0.172,
+      0.139
+     ],
+     "yaw": [
+      1.607,
+      1.545
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.27,
+       "a": 7.59,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 16.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0283,
+       0.3638,
+       0.5122
+      ]
+     ],
+     "lift_m": [
+      0.1824
+     ],
+     "cube_tilt_rad": [
+      0.605
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.079
+      ],
+      [
+       0.448,
+       -0.07
+      ]
+     ],
+     "tilt": [
+      0.172,
+      0.139
+     ],
+     "yaw": [
+      1.608,
+      1.545
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.27,
+       "a": 7.59,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 17.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0282,
+       0.3646,
+       0.5108
+      ]
+     ],
+     "lift_m": [
+      0.181
+     ],
+     "cube_tilt_rad": [
+      0.59
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.079
+      ],
+      [
+       0.448,
+       -0.07
+      ]
+     ],
+     "tilt": [
+      0.172,
+      0.139
+     ],
+     "yaw": [
+      1.609,
+      1.544
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.26,
+       "a": 7.58,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 18.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.028,
+       0.3653,
+       0.5094
+      ]
+     ],
+     "lift_m": [
+      0.1796
+     ],
+     "cube_tilt_rad": [
+      0.576
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.079
+      ],
+      [
+       0.448,
+       -0.07
+      ]
+     ],
+     "tilt": [
+      0.172,
+      0.139
+     ],
+     "yaw": [
+      1.61,
+      1.543
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.26,
+       "a": 7.58,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    },
+    {
+     "t": 19.0,
+     "phase": "hold",
+     "cube": [
+      [
+       -0.0279,
+       0.3661,
+       0.5079
+      ]
+     ],
+     "lift_m": [
+      0.1781
+     ],
+     "cube_tilt_rad": [
+      0.561
+     ],
+     "robots_xy": [
+      [
+       -0.463,
+       -0.078
+      ],
+      [
+       0.448,
+       -0.07
+      ]
+     ],
+     "tilt": [
+      0.172,
+      0.139
+     ],
+     "yaw": [
+      1.611,
+      1.542
+     ],
+     "cube_normal_N": [
+      {
+       "b": 8.25,
+       "a": 7.57,
+       "plinth": 0.0
+      }
+     ],
+     "commands": [
+      [
+       0.0,
+       0.0,
+       0.0
+      ],
+      [
+       0.0,
+       0.0,
+       0.0
+      ]
+     ]
+    }
+   ],
+   "protocol": "lift_hold",
+   "variant": "flushpad_v1",
+   "cube_tilt_series_note": "cube_tilt_series_rad[i] = cube tilt (rad, angle of the cube's z axis from world z) at the pre-step state of policy step i (t = i * dt); the last entry is the final state; null = non-finite",
+   "sim_reset": {
+    "detected": false,
+    "first_step": null,
+    "evidence": null,
+    "policy_steps": 500,
+    "note": "MuJoCo auto-reset (qpos0, time 0) on a NaN or |x| > 1e10 in qpos/qvel/qacc, checked after every policy step (simulated time and bad-number warning counters); first_step = the policy step it happened in; detected = the episode fails (no_sim_reset)"
+   },
+   "nonfinite_values_nulled": 0,
+   "wall_s": 18.5
+  }
+ ],
+ "summary": {
+  "variant": "flushpad_v1",
+  "stage": "probe",
+  "label": "LEARNED gait (frozen arms-dr1.0-s0) + SCRIPTED arms + ORACLE cube pose (scoring only) | MODIFIED END-EFFECTOR (flush hand pads) \u2014 not the stock robot",
+  "label_detail": "legs + outer arm: frozen learned PPO gait arms-dr1.0-s0, unmodified observation, zero velocity command all episode | grasping arm (one per robot): scripted joint keyframes (unchanged), PD kp 30 (deploy 10), 4 Nm cap | cube pose: simulator oracle, scoring only | contact: MuJoCo, no welds | MODIFIED END-EFFECTOR: hand pad = hand-mesh AABB box re-oriented flush to the cube faces at the squeeze pose, condim 4, torsional friction 0.04 m | HARNESS CHANGE: elliptic friction cone, impratio 10 (global; also foot-floor contact)",
+  "end_effector": "MODIFIED END-EFFECTOR (flush hand pads) \u2014 not the stock robot",
+  "harness_change": "HARNESS CHANGE: elliptic friction cone + impratio 10 are global MuJoCo options and also change the foot-floor contact of the frozen gait; the robot-fall clauses are kept unchanged",
+  "clauses_as_applied": [
+   "cube tilt = the angle between the cube's own z axis and world z (CarryRunner.cube_tilt; a cube rolled 90 deg reads 1.571 rad), logged at every policy-step state (t = i * 0.04 s, i = 0..500) in full float precision; <= 0.35 rad passes, anything larger or non-finite fails",
+   "probe 'throughout lift-hold' = every policy-step state of the 20 s lift_hold episode, t = 0 to 20 s inclusive (stricter than the hold alone). A probe seed passes iff that tilt clause, LIFT_HOLD_RULE's robot-fall clause unchanged (no robot of the pair tilts > 0.78 rad at any policy step) and the validity clauses (finite state, no MuJoCo auto-reset, full 20 s) all hold; crew 2 (one pair), seeds 120-124, PROCEED iff >= 4 of 5",
+   "probe disclosure: the rule text names only the robot-fall clauses of LIFT_HOLD_RULE, so its lift, hold and floor clauses are not gated in the probe (they are reported per seed as diagnostics). A probe episode that never lifts the cube therefore passes the probe's tilt clause; the scored stage keeps every LIFT_HOLD_RULE clause",
+   "hold 'throughout the hold' = every policy-step state of the hold LIFT_HOLD_RULE scores (its longest contiguous >= 0.05 m run, hold_start_s inclusive to hold_end_s exclusive); no hold = the clause fails",
+   "place 'at release' = every policy-step state from the first at or after the end of the lowering (PlaceScript t_end['unload'] = 10.7 s: state 268, t = 10.72 s) through the first at or after the hands are fully open (t_end['release'] = 11.7 s: state 293, t = 11.72 s), inclusive; 'when seated' = the final state (t = 20 s), where LIFT_PLACE_RULE checks the seated cube",
+   "crews as the existing rules and launchers define them: crew 2 (one pair) and crew 4 (two pairs, two cubes, one world), >= 8/10 per pair; PASS iff all six pairs (lift-hold crew 2, crew 4 pair 0, crew 4 pair 1; lift-place the same) meet it",
+   "an episode stopped by a non-finite state is a scored failure (as cpu_coop_lift_place.sbatch reads it); its non-finite numbers are written as null so the score JSON holds it. A numerical blow-up that MuJoCo catches itself is a scored failure too, in every stage (check no_sim_reset): MuJoCo 3.3.5 resets the state automatically (qpos0, time 0) when qpos, qvel or qacc holds a NaN or a value beyond 1e10, so the harness's own non-finite check never sees it; it is detected after every policy step from the simulated time (not steps x policy step) and MuJoCo's bad-qpos/qvel/qacc warning counters. An episode that is absent, shorter than 20 s without a recorded failure, or has no tilt log or no auto-reset record is MISSING (INCOMPLETE)",
+   "INVALID (never PROCEED, never PASS): a score JSON that is not this variant's or its stage's, not under the frozen rule, parameters, keyframes or lowering, not a scored run, or whose compiled model does not show the designed flush pads with condim 4, torsional friction 0.04 m, elliptic cone and impratio 10"
+  ],
+  "seed_evidence": [
+   "results/scripted-carry-20260926/score_crew2.json, score_crew4.json, score_lifthold_crew2.json and score_lifthold_crew4.json hold seeds 0-9 only; results/scripted-carry-20260927/score_liftplace_crew2.json and score_liftplace_crew4.json hold seeds 10-19 only",
+   "Slurm logs of this harness: scripted-carry-21434982 and coop-lift-hold-21435079 ran seeds 0-9, coop-lift-place-21443282 seeds 10-19; the render jobs 21435080 and 21443283 skipped (no PASS)",
+   "exploration: this module's docstring and lift-place notes name seeds 100-119 only (100-102, 100-109, 110-114, 100-104 and the slip times on 100-119); the 2026-09-30 investigators' grip and place mechanism JSONs (solutions-20260930/coop and verify-coop) hold seeds 100-104 only",
+   "the ledger (SLURM_JOBS.md) names seeds 0-9 (carry, lift_hold), 10-19 (lift_place) and exploration seeds >= 100 for this harness; no score JSON, Slurm log, ledger entry or investigator file of this harness contains seed 120-124 or any seed 20-39"
+  ],
+  "rule_text": "Probe on exploration seeds 120-124 (state the grep evidence that they were never used). PROCEED iff the cube tilt stays <= 0.35 rad throughout lift-hold on >= 4/5 seeds, with LIFT_HOLD_RULE's robot-fall clauses unchanged. Otherwise STOP: NEGATIVE, the flush pad does not stop the roll.",
+  "rule": {
+   "protocol": "lift_hold",
+   "episode_s": 20.0,
+   "lift_peak_m": 0.1,
+   "lift_hold_m": 0.05,
+   "lift_hold_s": 5.0,
+   "tilt_rad": 0.78,
+   "floor_contact": false,
+   "seeds": [
+    120,
+    121,
+    122,
+    123,
+    124
+   ],
+   "pass_min": 4,
+   "variant": "flushpad_v1",
+   "stage": "probe",
+   "clauses": "probe",
+   "cube_tilt_max_rad": 0.35,
+   "cube_tilt_window": "every policy-step state of the 20 s lift-hold episode, t = 0 to 20 s inclusive",
+   "gated_checks": [
+    "cube_tilt",
+    "no_fall",
+    "finite",
+    "no_sim_reset",
+    "full_episode"
+   ],
+   "crews": [
+    2
+   ]
+  },
+  "verdict": "NEGATIVE",
+  "successes": 0,
+  "of": 5,
+  "missing_seeds": [],
+  "per_seed": [
+   {
+    "pair": 0,
+    "tilt_logged": true,
+    "sim_reset_logged": true,
+    "sim_reset_detected": false,
+    "cube_tilt_max_rad": 0.7417028886266951,
+    "success": false,
+    "checks": {
+     "cube_tilt": false,
+     "no_fall": true,
+     "finite": true,
+     "no_sim_reset": true,
+     "full_episode": true
+    },
+    "first_failed_check": "cube_tilt",
+    "seed": 120,
+    "base_rule_success": true,
+    "base_rule_first_failed_check": null,
+    "lift_peak_m": 0.1924,
+    "lift_hold_s": 14.4,
+    "max_robot_tilt_rad": 0.1772,
+    "cube_floor_contact": false
+   },
+   {
+    "pair": 0,
+    "tilt_logged": true,
+    "sim_reset_logged": true,
+    "sim_reset_detected": false,
+    "cube_tilt_max_rad": 0.7235336454917835,
+    "success": false,
+    "checks": {
+     "cube_tilt": false,
+     "no_fall": true,
+     "finite": true,
+     "no_sim_reset": true,
+     "full_episode": true
+    },
+    "first_failed_check": "cube_tilt",
+    "seed": 121,
+    "base_rule_success": true,
+    "base_rule_first_failed_check": null,
+    "lift_peak_m": 0.1915,
+    "lift_hold_s": 14.36,
+    "max_robot_tilt_rad": 0.1694,
+    "cube_floor_contact": false
+   },
+   {
+    "pair": 0,
+    "tilt_logged": true,
+    "sim_reset_logged": true,
+    "sim_reset_detected": false,
+    "cube_tilt_max_rad": 0.7044589987045398,
+    "success": false,
+    "checks": {
+     "cube_tilt": false,
+     "no_fall": true,
+     "finite": true,
+     "no_sim_reset": true,
+     "full_episode": true
+    },
+    "first_failed_check": "cube_tilt",
+    "seed": 122,
+    "base_rule_success": true,
+    "base_rule_first_failed_check": null,
+    "lift_peak_m": 0.1992,
+    "lift_hold_s": 14.36,
+    "max_robot_tilt_rad": 0.1763,
+    "cube_floor_contact": false
+   },
+   {
+    "pair": 0,
+    "tilt_logged": true,
+    "sim_reset_logged": true,
+    "sim_reset_detected": false,
+    "cube_tilt_max_rad": 0.7298886834334677,
+    "success": false,
+    "checks": {
+     "cube_tilt": false,
+     "no_fall": true,
+     "finite": true,
+     "no_sim_reset": true,
+     "full_episode": true
+    },
+    "first_failed_check": "cube_tilt",
+    "seed": 123,
+    "base_rule_success": true,
+    "base_rule_first_failed_check": null,
+    "lift_peak_m": 0.1946,
+    "lift_hold_s": 14.44,
+    "max_robot_tilt_rad": 0.1838,
+    "cube_floor_contact": false
+   },
+   {
+    "pair": 0,
+    "tilt_logged": true,
+    "sim_reset_logged": true,
+    "sim_reset_detected": false,
+    "cube_tilt_max_rad": 0.7273019784271922,
+    "success": false,
+    "checks": {
+     "cube_tilt": false,
+     "no_fall": true,
+     "finite": true,
+     "no_sim_reset": true,
+     "full_episode": true
+    },
+    "first_failed_check": "cube_tilt",
+    "seed": 124,
+    "base_rule_success": true,
+    "base_rule_first_failed_check": null,
+    "lift_peak_m": 0.193,
+    "lift_hold_s": 14.32,
+    "max_robot_tilt_rad": 0.172,
+    "cube_floor_contact": false
+   }
+  ],
+  "reading": "STOP: NEGATIVE, the flush pad does not stop the roll",
+  "diagnostic_not_gated": {
+   "lift_hold_rule_successes": 5,
+   "lifted_ge_0.10_m": 5,
+   "note": "LIFT_HOLD_RULE's lift/hold/floor clauses are not part of the probe rule"
+  }
+ }
+}

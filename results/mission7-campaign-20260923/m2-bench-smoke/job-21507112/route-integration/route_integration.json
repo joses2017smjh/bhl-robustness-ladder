@@ -1,0 +1,44 @@
+{
+  "layout": [
+    "train",
+    252
+  ],
+  "time_s": 20.919999999996595,
+  "done": true,
+  "failure": "fall",
+  "open": [
+    false,
+    false
+  ],
+  "crossed": [
+    false,
+    false
+  ],
+  "stage_activations": [
+    18.800000000001535
+  ],
+  "phases": [
+    "approach"
+  ],
+  "history": [
+    {
+      "time_s": 18.800000000001535,
+      "door": 0,
+      "side": -1,
+      "phase": "approach"
+    }
+  ],
+  "gait_events": [
+    {
+      "time_s": 18.800000000001535,
+      "door": 0,
+      "event": "swap_to_turnboth",
+      "prev_actions_before_norm": 64.5440444946289,
+      "prev_actions_after_norm": 0.0,
+      "takeover_yaw_rad": 0.026750798204083943
+    }
+  ],
+  "exit_ramp_events": [],
+  "rejoin_advance_events": [],
+  "policy_restored": null
+}

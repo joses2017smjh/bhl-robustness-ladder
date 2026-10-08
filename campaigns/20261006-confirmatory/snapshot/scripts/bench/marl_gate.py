@@ -1,0 +1,191 @@
+"""G-B4: is the limb factorisation exactly a factorisation?
+
+Three questions, cheapest first. The first two need no simulator at all, so a
+broken partition is caught in milliseconds rather than after a GPU allocation.
+
+  G-B4a  Does each partition cover all 22 joints exactly once, and does
+         split -> reassemble round-trip to the identity?
+  G-B4b  Does `reassemble` respect joint ORDER, not just membership? A
+         concatenation in dict order passes a naive round-trip and still
+         permutes the robot's joints, which would be a silent limb swap.
+  G-B4c  Does the wrapped env construct, reset and step, with each agent
+         receiving an action slice of the declared width -- and does the joined
+         action equal what the single-agent env would have been given?
+
+If G-B4c fails, MAPPO is not being compared against PPO. It is being compared
+against a different robot, and every Tier 1 row would be measuring the
+partition instead of the algorithm.
+"""
+
+from __future__ import annotations
+
+import argparse
+import os
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--task", type=str, default="Velocity-BHL-Arms-Bumpy-v0")
+parser.add_argument("--num_envs", type=int, default=8)
+parser.add_argument("--steps", type=int, default=4)
+parser.add_argument("--offline", action="store_true",
+                    help="run only the simulator-free checks")
+parser.add_argument("--partition", type=str, default=None,
+                    choices=("limb4", "limb2", "legs2", "limb1"),
+                    help="check ONE partition. Isaac Sim does not survive "
+                         "tearing a scene down and building another in the same "
+                         "process -- the first version of this gate checked "
+                         "limb4, then hung for an hour on limb2 and was killed "
+                         "by the wall clock. One partition per process.")
+
+_known, _ = parser.parse_known_args()
+if not _known.offline:
+    from isaaclab.app import AppLauncher
+    AppLauncher.add_app_launcher_args(parser)
+    args_cli = parser.parse_args()
+    args_cli.headless = True
+    app_launcher = AppLauncher(args_cli)
+    simulation_app = app_launcher.app
+else:
+    args_cli = parser.parse_args()
+
+import torch  # noqa: E402
+
+from bhl_robust.limb_partition import (  # noqa: E402
+    JOINTS, N_JOINTS, PARTITIONS, partition_for, reassemble, reassemble_n,
+    split, validate,
+)
+
+
+#: Every (partition, DoF) pair a job can train. The biped's 12 joints split
+#: only as legs2 or limb1; limb4 and limb2 there would build armless arm agents,
+#: which `partition_for` refuses -- checked below as a refusal, not skipped.
+LIVE = [("limb4", 22), ("limb4", 24), ("limb2", 22), ("limb2", 24),
+        ("limb1", 12), ("limb1", 22), ("legs2", 12)]
+REFUSED = [("limb4", 12), ("limb2", 12), ("legs2", 22)]
+
+
+def offline_checks() -> bool:
+    ok = True
+    print("G-B4a  partition coverage and round-trip, every live joint layout")
+    for kind, n in LIVE:
+      if True:
+        part = partition_for(kind, n)
+        try:
+            validate(part, n)
+        except ValueError as e:
+            print(f"  {kind:8} FAIL {e}")
+            ok = False
+            continue
+        x = torch.randn(7, n)
+        back = reassemble_n(split(x, part), part, n)
+        exact = torch.equal(x, back)
+        widths = {k: len(v) for k, v in part.items()}
+        print(f"  {kind:8} {n:2d} DoF {'ok' if exact else 'ROUND-TRIP MISMATCH'}  "
+              f"widths={widths} sum={sum(widths.values())}")
+        ok &= exact
+
+    print("\nG-B4b  order is preserved, not merely membership")
+    for kind, n in LIVE:
+      if True:
+        part = partition_for(kind, n)
+        # A marker per joint index; if reassemble concatenated in dict order
+        # instead of scattering, this comes back permuted.
+        x = torch.arange(n, dtype=torch.float32).unsqueeze(0)
+        back = reassemble_n(split(x, part), part, n)
+        exact = torch.equal(x, back)
+        if not exact:
+            bad = [(i, int(back[0, i])) for i in range(n)
+                   if int(back[0, i]) != i][:4]
+            print(f"  {kind:8} {n:2d} DoF PERMUTED at {bad}")
+        else:
+            print(f"  {kind:8} {n:2d} DoF ok")
+        ok &= exact
+
+    print("\nG-B4d  impossible pairs are refused, not silently built")
+    for kind, n in REFUSED:
+        try:
+            partition_for(kind, n)
+            print(f"  {kind:8} {n:2d} DoF BUILT -- should have been refused")
+            ok = False
+        except ValueError as e:
+            print(f"  {kind:8} {n:2d} DoF refused ok ({e})")
+    return ok
+
+
+def online_checks() -> bool:
+    import gymnasium as gym
+
+    import bhl_robust.tasks  # noqa: F401
+    from bhl_robust.tasks.limb_marl import LimbMarlEnv, ablate_arm_deviation
+
+    ok = True
+    print(f"\nG-B4c  wrapped env on {args_cli.task}")
+    kinds = [args_cli.partition] if args_cli.partition else ["limb4", "limb2"]
+    for kind in kinds:
+        try:
+            say = lambda m: print(f"    [{kind}] {m}", flush=True)
+            say("building cfg")
+            cfg = gym.spec(args_cli.task).kwargs["env_cfg_entry_point"]()
+            cfg.scene.num_envs = args_cli.num_envs
+            ablated = ablate_arm_deviation(cfg)
+            say("gym.make")
+            base = gym.make(args_cli.task, cfg=cfg, disable_env_checker=True)
+            say("wrapping")
+            env = LimbMarlEnv(base, partition=kind)
+            say("reset")
+            obs, _ = env.reset()
+            say("stepping")
+
+            widths_ok = True
+            for _ in range(args_cli.steps):
+                acts = {a: torch.zeros((env.num_envs, n), device=env.device)
+                        for a, n in env.num_actions.items()}
+                joined = reassemble_n(acts, env.partition, env.n_dof)
+                if tuple(joined.shape) != (env.num_envs, env.n_dof):
+                    widths_ok = False
+                obs, rew, term, trunc, _ = env.step(acts)
+            say("stepped ok")
+
+            agents_ok = set(obs) == set(env.possible_agents)
+            print(f"  {kind:8} agents={len(env.possible_agents)} "
+                  f"act={env.num_actions} obs={env.num_observations[env.possible_agents[0]]} "
+                  f"state={env.num_states} arm_ablation={ablated or 'NONE FOUND'}")
+            # An ablation that finds nothing is a failure, not a note. The row
+            # would otherwise train with the penalty on and be reported as
+            # having it off.
+            ok &= widths_ok and agents_ok and (bool(ablated) or env.n_dof < 22)
+            try:
+                env.close()
+            except Exception:                                    # noqa: BLE001
+                pass
+        except Exception as e:                                   # noqa: BLE001
+            import traceback
+            print(f"  {kind:8} FAIL {type(e).__name__}: {e}")
+            traceback.print_exc()
+            ok = False
+    return ok
+
+
+def main() -> None:
+    ok = offline_checks()
+    if not args_cli.offline:
+        ok &= online_checks()
+
+    # Verdict FIRST, then teardown. The previous run reached "stepped ok" and
+    # then produced nothing for eighty more minutes until the wall clock killed
+    # it: `simulation_app.close()` hung, and because it sat between the checks
+    # and the print, a passing run was recorded as a timeout. A gate that
+    # computes an answer and loses it to teardown is worse than one that fails.
+    print(f"\nG-B4 {'PASS' if ok else 'FAIL'}", flush=True)
+
+    if not args_cli.offline:
+        try:
+            simulation_app.close()
+        except Exception:                                        # noqa: BLE001
+            pass
+    # Hard exit rather than a clean return: Isaac Sim's teardown can block
+    # indefinitely, and the verdict is already on stdout.
+    os._exit(0 if ok else 1)
+
+
+if __name__ == "__main__":
+    main()

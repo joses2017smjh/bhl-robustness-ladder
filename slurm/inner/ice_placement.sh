@@ -7,4 +7,4 @@ for task in Velocity-BHL-Biped-Ice-Depth-v0; do
 done
 grep -E "^task |^robot|^patch 0|^terrain origin|^reach bound|^ICE-PLACEMENT" "$OUT.log" > "$OUT"
 cat "$OUT"
-grep -q "^ICE-PLACEMENT" "$OUT"
+grep -q "^ICE-PLACEMENT REACHABLE" "$OUT"

@@ -1,0 +1,60 @@
+{
+  "rows": [
+    {
+      "updates": 200,
+      "horizon": 64,
+      "hold_ticks": 5,
+      "dense": false,
+      "lr": 0.0003,
+      "schedule": "adaptive",
+      "epochs": 4,
+      "minibatches": 4,
+      "entropy": 0.01,
+      "gamma": 0.995,
+      "lam": 0.95,
+      "seed": 0
+    },
+    {
+      "updates": 200,
+      "horizon": 64,
+      "hold_ticks": 5,
+      "dense": true,
+      "lr": 0.0003,
+      "schedule": "adaptive",
+      "epochs": 4,
+      "minibatches": 4,
+      "entropy": 0.01,
+      "gamma": 0.995,
+      "lam": 0.95,
+      "seed": 0
+    },
+    {
+      "updates": 200,
+      "horizon": 16,
+      "hold_ticks": 20,
+      "dense": true,
+      "lr": 0.0003,
+      "schedule": "adaptive",
+      "epochs": 4,
+      "minibatches": 4,
+      "entropy": 0.01,
+      "gamma": 0.980149500625,
+      "lam": 0.8145062499999999,
+      "seed": 0
+    },
+    {
+      "updates": 200,
+      "horizon": 64,
+      "hold_ticks": 5,
+      "dense": true,
+      "lr": 0.0001,
+      "schedule": "fixed",
+      "epochs": 2,
+      "minibatches": 4,
+      "entropy": 0.01,
+      "gamma": 0.995,
+      "lam": 0.95,
+      "seed": 0
+    }
+  ]
+}

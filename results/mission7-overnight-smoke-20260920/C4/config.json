@@ -1,0 +1,23 @@
+{
+  "mode": "train",
+  "arm": "both",
+  "seed": 0,
+  "updates": 2,
+  "horizon": 8,
+  "lr": 0.0003,
+  "entropy": 0.01,
+  "noise": 0.5,
+  "schedule": "adaptive",
+  "gamma": 0.995,
+  "lam": 0.95,
+  "epochs": 1,
+  "minibatches": 2,
+  "normalization": false,
+  "reward_scale": 1.0,
+  "approach_distance": 0.4,
+  "oracle": false,
+  "wall_hours": 2,
+  "name": "C4",
+  "study": "easier approach / sensor Both",
+  "stage": "approach"
+}

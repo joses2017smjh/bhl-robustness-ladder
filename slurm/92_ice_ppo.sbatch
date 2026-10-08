@@ -7,7 +7,7 @@
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:1
 #SBATCH --time=24:00:00
-#SBATCH --array=0-5
+#SBATCH --array=0-5%2
 #SBATCH --output=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%A_%a.out
 #SBATCH --error=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/%x-%A_%a.out
 
@@ -19,17 +19,22 @@
 # the same height field either way. If depth helps here it is not because it
 # sees the ice -- which is the question section 6 left open when depth beat
 # blind 2.5x on uniform low friction and inverted its own prediction.
+#
+# Run names are ``ppo-ice-placed-*``, not ``ppo-ice-*``. The latter are the
+# retracted 72 m runs (21328532). Placement now passes (21342561, median 0.8 m).
 set -euo pipefail
 export BHL_STACK=v51
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
 setup_node_cache
+source "$REPO/slurm/inner/v60_boot_gate.sh"
+V60_BOOT_LOCK="$WORKSPACE/.v51-boot.lock" v60_boot_gate
 mkdir -p "$WORKSPACE/overrides"
 IDX=$SLURM_ARRAY_TASK_ID
 CASES=(Ice-v0:blind Ice-Depth-v0:depth IceVisible-v0:visible)
 C=${CASES[$(( IDX / 2 ))]}
 export TASK="Velocity-BHL-Biped-${C%%:*}"
 export SEED=$(( IDX % 2 ))
-export RUN_NAME="ppo-ice-${C##*:}-s${SEED}"
+export RUN_NAME="ppo-ice-placed-${C##*:}-s${SEED}"
 export MAX_ITER=${MAX_ITER:-6000} NUM_ENVS=${NUM_ENVS:-4096}
 export OVERRIDE_FILE="$WORKSPACE/overrides/ice-${IDX}.txt"
 : > "$OVERRIDE_FILE"

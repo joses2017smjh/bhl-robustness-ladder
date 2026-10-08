@@ -1,0 +1,354 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1790936922.097500  651455 descriptor_database.cc:633] File already exists in database: grpc/health/v1/health.proto
+W0000 00:00:1790936922.099785  651455 message.cc:301] Protobuf GeneratedMessageFactory: File is already registered: grpc/health/v1/health.proto
+Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaacsim/kit/data/Kit/IsaacLab/3.0/user.config.json'
+2026-10-02T10:28:37Z [Info] [carb] Logging to file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaacsim/kit/logs/Kit/IsaacLab/3.0/kit_20261002_032837.log
+2026-10-02T10:28:37Z [20ms] [Warning] [omni.ext.plugin] [ext: isaaclab_visualizers] Extensions config 'extension.toml' doesn't exist '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers' or '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv-isaac60/lib/python3.12/site-packages/isaaclab/source/isaaclab_visualizers/config'
+2026-10-02T10:28:43Z [5,587ms] [Warning] [omni.perfmonitor.plugin]  PerfMonitorManager::onStart - error calling pthread_setaffinity_np
+2026-10-02T10:28:43Z [5,663ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2026-10-02T10:28:43Z [5,676ms] [Warning] [omni.rtx] CUDA_VISIBLE_DEVICES environment variable is set.
+2026-10-02T10:28:43Z [5,676ms] [Warning] [omni.rtx] Note CUDA device enumeration and Omniverse device enumeration are different.
+2026-10-02T10:28:43Z [5,676ms] [Warning] [omni.rtx] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 610.57.04     | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | NVIDIA H200                      | Yes: 0 |     | 143771  MB | 10de      | 0          |
+|     |                                  |        |     |            | 2335      | 0ce2690e.. |
+|     |                                  |        |     |            | 43        |            |
+|=============================================================================================|
+| OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel: 5.14.0-687.53.1.el9_8.x86_64
+| Processor: Intel(R) Xeon(R) Platinum 8480C
+| Cores: 112 | Logical Cores: 224
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 2063420 | Free Memory: 2028026
+| Total Page/Swap (MB): 0 | Free Page/Swap: 0
+|---------------------------------------------------------------------------------------------|
+2026-10-02T10:28:44Z [7,290ms] [Warning] [omni.rtx] ECC is enabled on physical device 0
+2026-10-02T10:28:50Z [12,705ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-10-02T10:28:50Z [12,705ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-10-02T10:28:50Z [13,000ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-10-02T10:28:50Z [13,000ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-10-02T10:28:50Z [13,003ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2026-10-02T10:28:50Z [13,003ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2026-10-02T10:28:51Z [13,992ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
+2026-10-02T10:28:51Z [13,992ms] [Warning] [isaacsim.core.simulation_manager.plugin] USD stage is not available; stage-opened subscription is deferred
+2026-10-02T10:28:52Z [14,793ms] [Warning] [omni.log] Source: omni.hydra was already registered.
+2026-10-02T10:29:04Z [26,788ms] [Warning] [pxr.Semantics] pxr.Semantics is deprecated - please use Semantics instead
+2026-10-02T10:29:07Z [29,569ms] [Warning] [omni.replicator.core.scripts.extension] No material configuration file, adding configuration to material settings directly.
+2026-10-02T10:29:11Z [33,752ms] [Warning] [omni.rtx] Trying to initialize NGX without vkGetInstanceProcAddr and vkGetDeviceProcAddr pointer-to-functions.
+2026-10-02T10:29:11Z [33,753ms] [Error] [omni.rtx] Could not get NGX parameters block because NGX isn't enabled.
+2026-10-02T10:29:11Z [33,753ms] [Error] [omni.rtx] Failed to create NGX context.
+[ISAACLAB] AppLauncher initialization complete
+[INFO]: Base environment:
+	Environment device    : cuda:0
+	Environment seed      : 100
+	Physics step-size     : 0.005
+	Rendering step-size   : 0.04
+	Environment step-size : 0.04
+[INFO]: Registered backend 'physx' for factory Articulation.
+[INFO]: Registered backend 'physx' for factory RigidObject.
+[INFO]: Registered backend 'physx' for factory FrameView.
+[INFO]: Registered backend 'physx' for factory ContactSensor.
+[INFO]: Physics scene prim path: /physicsScene
+[INFO]: Time taken for scene creation Last: 0.770644 s, Mean: 0.770644 s, Std: 0.000000 s, N: 1
+[INFO]: Scene manager:  <class InteractiveScene>
+	Number of environments: 16
+	Environment spacing   : 4.0
+	Source prim name      : /World/envs/env_0
+	Global prim paths     : ['/World/ground']
+	Replicate physics     : True
+[INFO]: Simulation parameters for joints in /World/envs/env_.*/robot_a:
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                         Simulation Joint Information (Prim path: /World/envs/env_.*/robot_a)                                                         |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+| Index | Name                           | Stiffness | Damping | Armature | Static Friction | Dynamic Friction | Viscous Friction | Position Limits  | Velocity Limits | Effort Limits |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+|   0   | arm_left_shoulder_pitch_joint  |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.571, 0.785]  |      15.000     |     4.000     |
+|   1   | arm_right_shoulder_pitch_joint |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 1.571]  |      15.000     |     4.000     |
+|   2   | leg_left_hip_roll_joint        |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.175, 1.571]  |      15.000     |     6.000     |
+|   3   | leg_right_hip_roll_joint       |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.571, 0.175]  |      15.000     |     6.000     |
+|   4   | arm_left_shoulder_roll_joint   |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 1.309]  |      15.000     |     4.000     |
+|   5   | arm_right_shoulder_roll_joint  |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.309, 0.262]  |      15.000     |     4.000     |
+|   6   | leg_left_hip_yaw_joint         |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.982, 0.589]  |      15.000     |     6.000     |
+|   7   | leg_right_hip_yaw_joint        |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.589, 0.982]  |      15.000     |     6.000     |
+|   8   | arm_left_shoulder_yaw_joint    |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   9   | arm_right_shoulder_yaw_joint   |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   10  | leg_left_hip_pitch_joint       |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.898, 0.982]  |      15.000     |     6.000     |
+|   11  | leg_right_hip_pitch_joint      |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.898, 0.982]  |      15.000     |     6.000     |
+|   12  | arm_left_elbow_pitch_joint     |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.000, 1.571]  |      15.000     |     4.000     |
+|   13  | arm_right_elbow_pitch_joint    |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.571, -0.000] |      15.000     |     4.000     |
+|   14  | leg_left_knee_pitch_joint      |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.000, 2.443]  |      15.000     |     6.000     |
+|   15  | leg_right_knee_pitch_joint     |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.000, 2.443]  |      15.000     |     6.000     |
+|   16  | arm_left_elbow_roll_joint      |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   17  | arm_right_elbow_roll_joint     |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   18  | leg_left_ankle_pitch_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     6.000     |
+|   19  | leg_right_ankle_pitch_joint    |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     6.000     |
+|   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
+|   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+2026-10-02T10:29:11Z [33,753ms] [Warning] [carb.scenerenderer-rtx.plugin] Failed to create NGX context.
+2026-10-02T10:29:12Z [34,680ms] [Warning] [rtx.hydra] RenderDelegate : Warning /rtx/hydra/readTransformsFromFabricInRenderDelegate and geometry streaming are enabled together but this can cause issues with dynamic objects not streaming correctly due to problems in the transform update.
+2026-10-02T10:29:17Z [39,622ms] [Warning] [isaaclab_physx.physics.physx_manager] TGS solver with enable_external_forces_every_iteration=False may cause noisy velocities.
+2026-10-02T10:29:18Z [41,431ms] [Warning] [omni.usd] Encountered USD Warnings but USD Diagnostics are currently muted. To view USD Warnings, please set the '/persistent/app/usd/muteUsdDiagnostics' setting to false in Preferences page.
+2026-10-02T10:29:21Z [43,632ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-10-02T10:29:21Z [43,632ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-10-02T10:29:21Z [43,721ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-10-02T10:29:21Z [43,722ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-10-02T10:29:21Z [43,728ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-10-02T10:29:21Z [43,728ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-10-02T10:29:22Z [44,473ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-10-02T10:29:22Z [44,473ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-10-02T10:29:22Z [44,481ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-10-02T10:29:22Z [44,481ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+[INFO]: Simulation parameters for joints in /World/envs/env_.*/robot_b:
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                         Simulation Joint Information (Prim path: /World/envs/env_.*/robot_b)                                                         |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+| Index | Name                           | Stiffness | Damping | Armature | Static Friction | Dynamic Friction | Viscous Friction | Position Limits  | Velocity Limits | Effort Limits |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+|   0   | arm_left_shoulder_pitch_joint  |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.571, 0.785]  |      15.000     |     4.000     |
+|   1   | arm_right_shoulder_pitch_joint |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 1.571]  |      15.000     |     4.000     |
+|   2   | leg_left_hip_roll_joint        |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.175, 1.571]  |      15.000     |     6.000     |
+|   3   | leg_right_hip_roll_joint       |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.571, 0.175]  |      15.000     |     6.000     |
+|   4   | arm_left_shoulder_roll_joint   |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 1.309]  |      15.000     |     4.000     |
+|   5   | arm_right_shoulder_roll_joint  |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.309, 0.262]  |      15.000     |     4.000     |
+|   6   | leg_left_hip_yaw_joint         |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.982, 0.589]  |      15.000     |     6.000     |
+|   7   | leg_right_hip_yaw_joint        |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.589, 0.982]  |      15.000     |     6.000     |
+|   8   | arm_left_shoulder_yaw_joint    |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   9   | arm_right_shoulder_yaw_joint   |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   10  | leg_left_hip_pitch_joint       |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.898, 0.982]  |      15.000     |     6.000     |
+|   11  | leg_right_hip_pitch_joint      |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-1.898, 0.982]  |      15.000     |     6.000     |
+|   12  | arm_left_elbow_pitch_joint     |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.000, 1.571]  |      15.000     |     4.000     |
+|   13  | arm_right_elbow_pitch_joint    |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-1.571, -0.000] |      15.000     |     4.000     |
+|   14  | leg_left_knee_pitch_joint      |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.000, 2.443]  |      15.000     |     6.000     |
+|   15  | leg_right_knee_pitch_joint     |   20.000  |  2.000  |  0.007   |      0.000      |      0.000       |      0.000       | [-0.000, 2.443]  |      15.000     |     6.000     |
+|   16  | arm_left_elbow_roll_joint      |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   17  | arm_right_elbow_roll_joint     |   10.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     4.000     |
+|   18  | leg_left_ankle_pitch_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     6.000     |
+|   19  | leg_right_ankle_pitch_joint    |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.785, 0.785]  |      15.000     |     6.000     |
+|   20  | leg_left_ankle_roll_joint      |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
+|   21  | leg_right_ankle_roll_joint     |   20.000  |  2.000  |  0.002   |      0.000      |      0.000       |      0.000       | [-0.262, 0.262]  |      15.000     |     6.000     |
++-------+--------------------------------+-----------+---------+----------+-----------------+------------------+------------------+------------------+-----------------+---------------+
+2026-10-02T10:29:22Z [44,488ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.
+2026-10-02T10:29:22Z [44,488ms] [Warning] [isaaclab.actuators.actuator_pd] The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_4/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_5/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_6/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_7/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_8/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_9/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,504ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_10/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,505ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_11/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,505ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_12/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,505ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_13/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,505ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_14/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,505ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_15/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_4/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_5/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_6/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_7/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_8/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_9/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_10/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_11/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_12/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_13/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_14/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,506ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_15/robot_a/joints/imu'
+2026-10-02T10:29:22Z [44,509ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_0/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,509ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_1/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,509ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_2/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_3/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_4/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_5/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_6/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_7/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_8/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_9/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_10/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_11/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_12/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_13/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_14/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,510ms] [Warning] [omni.physx.tensors.plugin] Failed to find rigid body at '/World/envs/env_15/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,511ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_0/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,511ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_1/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,511ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_2/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,511ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_3/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,511ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_4/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,511ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_5/robot_b/joints/imu'
+[INFO]: Time taken for simulation start Last: 5.892216 s, Mean: 5.892216 s, Std: 0.000000 s, N: 1
+[INFO] Command Manager:  <CommandManager> contains 0 active terms.
++------------------------+
+|  Active Command Terms  |
++--------+-------+-------+
+| Index  | Name  |  Type |
++--------+-------+-------+
++--------+-------+-------+
+
+[INFO] Event Manager:  <EventManager> contains 1 active terms.
++-----------------------------------+
+| Active Event Terms in Mode: 'reset' |
++----------+------------------------+
+|  Index   | Name                   |
++----------+------------------------+
+|    0     | reset_joints_a         |
+|    1     | reset_joints_b         |
+|    2     | reset_root_a           |
+|    3     | reset_root_b           |
+|    4     | reset_object           |
++----------+------------------------+
+
+[INFO] Recorder Manager:  <RecorderManager> contains 0 active terms.
++---------------------+
+| Active Recorder Terms |
++-----------+---------+
+|   Index   | Name    |
++-----------+---------+
++-----------+---------+
+
+[INFO]: Resolved joint names for the action term JointPositionAction: ['arm_left_shoulder_pitch_joint', 'arm_left_shoulder_roll_joint', 'arm_left_shoulder_yaw_joint', 'arm_left_elbow_pitch_joint', 'arm_left_elbow_roll_joint', 'arm_right_shoulder_pitch_joint', 'arm_right_shoulder_roll_joint', 'arm_right_shoulder_yaw_joint', 'arm_right_elbow_pitch_joint', 'arm_right_elbow_roll_joint', 'leg_left_hip_roll_joint', 'leg_left_hip_yaw_joint', 'leg_left_hip_pitch_joint', 'leg_left_knee_pitch_joint', 'leg_left_ankle_pitch_joint', 'leg_left_ankle_roll_joint', 'leg_right_hip_roll_joint', 'leg_right_hip_yaw_joint', 'leg_right_hip_pitch_joint', 'leg_right_knee_pitch_joint', 'leg_right_ankle_pitch_joint', 'leg_right_ankle_roll_joint'] [[0, 4, 8, 12, 16, 1, 5, 9, 13, 17, 2, 6, 10, 14, 18, 20, 3, 7, 11, 15, 19, 21]]
+[INFO]: Resolved joint names for the action term JointPositionAction: ['arm_left_shoulder_pitch_joint', 'arm_left_shoulder_roll_joint', 'arm_left_shoulder_yaw_joint', 'arm_left_elbow_pitch_joint', 'arm_left_elbow_roll_joint', 'arm_right_shoulder_pitch_joint', 'arm_right_shoulder_roll_joint', 'arm_right_shoulder_yaw_joint', 'arm_right_elbow_pitch_joint', 'arm_right_elbow_roll_joint', 'leg_left_hip_roll_joint', 'leg_left_hip_yaw_joint', 'leg_left_hip_pitch_joint', 'leg_left_knee_pitch_joint', 'leg_left_ankle_pitch_joint', 'leg_left_ankle_roll_joint', 'leg_right_hip_roll_joint', 'leg_right_hip_yaw_joint', 'leg_right_hip_pitch_joint', 'leg_right_knee_pitch_joint', 'leg_right_ankle_pitch_joint', 'leg_right_ankle_roll_joint'] [[0, 4, 8, 12, 16, 1, 5, 9, 13, 17, 2, 6, 10, 14, 18, 20, 3, 7, 11, 15, 19, 21]]
+[INFO] Action Manager:  <ActionManager> contains 2 active terms.
++------------------------------------+
+|  Active Action Terms (shape: 44)   |
++--------+--------------+------------+
+| Index  | Name         |  Dimension |
++--------+--------------+------------+
+|   0    | joint_pos_a  |         22 |
+|   1    | joint_pos_b  |         22 |
++--------+--------------+------------+
+
+[INFO] Observation Manager: <ObservationManager> contains 2 groups.
++-----------------------------------------------------------+
+| Active Observation Terms in Group: 'policy' (shape: (194,)) |
++-----------+-----------------------------------+-----------+
+|   Index   | Name                              |   Shape   |
++-----------+-----------------------------------+-----------+
+|     0     | projected_gravity_a               |    (3,)   |
+|     1     | projected_gravity_b               |    (3,)   |
+|     2     | base_ang_vel_a                    |    (3,)   |
+|     3     | base_ang_vel_b                    |    (3,)   |
+|     4     | joint_pos_a                       |   (22,)   |
+|     5     | joint_pos_b                       |   (22,)   |
+|     6     | joint_vel_a                       |   (22,)   |
+|     7     | joint_vel_b                       |   (22,)   |
+|     8     | object_pos_a                      |    (3,)   |
+|     9     | object_pos_b                      |    (3,)   |
+|     10    | track_err_a                       |   (22,)   |
+|     11    | track_err_b                       |   (22,)   |
+|     12    | actions                           |   (44,)   |
++-----------+-----------------------------------+-----------+
++-----------------------------------------------------------+
+| Active Observation Terms in Group: 'critic' (shape: (206,)) |
++-----------+-----------------------------------+-----------+
+|   Index   | Name                              |   Shape   |
++-----------+-----------------------------------+-----------+
+|     0     | projected_gravity_a               |    (3,)   |
+|     1     | projected_gravity_b               |    (3,)   |
+|     2     | base_ang_vel_a                    |    (3,)   |
+|     3     | base_ang_vel_b                    |    (3,)   |
+|     4     | joint_pos_a                       |   (22,)   |
+|     5     | joint_pos_b                       |   (22,)   |
+|     6     | joint_vel_a                       |   (22,)   |
+|     7     | joint_vel_b                       |   (22,)   |
+|     8     | object_pos_a                      |    (3,)   |
+|     9     | object_pos_b                      |    (3,)   |
+|     10    | track_err_a                       |   (22,)   |
+|     11    | track_err_b                       |   (22,)   |
+|     12    | actions                           |   (44,)   |
+|     13    | base_lin_vel_a                    |    (3,)   |
+|     14    | base_lin_vel_b                    |    (3,)   |
+|     15    | object_lin_vel                    |    (3,)   |
+|     16    | object_ang_vel                    |    (3,)   |
++-----------+-----------------------------------+-----------+
+
+[INFO] Termination Manager:  <TerminationManager> contains 3 active terms.
++-----------------------------+
+|   Active Termination Terms  |
++-------+----------+----------+
+| Index | Name     | Time Out |
++-------+----------+----------+
+|   0   | time_out |   True   |
+|   1   | fallen   |  False   |
+|   2   | success  |  False   |
++-------+----------+----------+
+
+[INFO] Reward Manager:  <RewardManager> contains 18 active terms.
++--------------------------------------+
+|         Active Reward Terms          |
++-------+---------------------+--------+
+| Index | Name                | Weight |
++-------+---------------------+--------+
+|   0   | reaching_coarse     |    1.0 |
+|   1   | reaching_fine       |    1.0 |
+|   2   | opposing_clamp      |    1.5 |
+|   3   | lift_progress       |    2.0 |
+|   4   | lifting_object      |   15.0 |
+|   5   | object_vel          |  -0.05 |
+|   6   | object_tilt         |   -1.5 |
+|   7   | still_alive         |    1.0 |
+|   8   | flat_a              |   -1.0 |
+|   9   | flat_b              |   -1.0 |
+|   10  | torques_a           | -2e-05 |
+|   11  | torques_b           | -2e-05 |
+|   12  | base_contact_a      |   -1.0 |
+|   13  | base_contact_b      |   -1.0 |
+|   14  | placed              | 5000.0 |
+|   15  | fall_penalty        | -500.0 |
+|   16  | deck_progress       |    3.0 |
+|   17  | action_rate_clipped |  -0.01 |
++-------+---------------------+--------+
+
+[INFO] Curriculum Manager:  <CurriculumManager> contains 17 active terms.
++--------------------------+
+| Active Curriculum Terms  |
++-------+------------------+
+| Index | Name             |
++-------+------------------+
+|   0   | lift_height      |
+|   1   | stage_lift       |
+|   2   | base_height      |
+|   3   | upright_gate     |
+|   4   | fell_a           |
+|   5   | fell_b           |
+|   6   | over_deck        |
+|   7   | cube_abs_x       |
+|   8   | cube_tilted      |
+|   9   | tipped_over_deck |
+|   10  | pinch_dist       |
+|   11  | cube_tilt_deg    |
+|   12  | corner_clear     |
+|   13  | roll_ok          |
+|   14  | lift_paid        |
+|   15  | released         |
+|   16  | robot_force_max  |
++-------+------------------+
+
+[INFO]: Completed setting up the environment...
+STAND4-PROBE status=ok stage=done order=xyzw cfg_diff={'ok': True, 'unexpected': [], 'missing': []} sensor=[16, 1, 26, 3] filters=26 colliders=[True, True, True, True] cache_missing=[] free={'n_valid': 16, 'max_force_valid': 0.0, 'all_released_valid': True} overlap_hand=16/16 seat={'ok': True, 'shapes_ok': True, 'n_steps': 16, 'n_flat': 10, 'n_flat_fired': 6, 'n_fire_events': 7, 'n_fire_bad': 0, 'n_inconsistent': 0, 'n_control_fired': 0, 'control_blocked_by_tilt_steps': 44} -> /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/repo-gpu-20260923/stand4_2026-10-01-smoke/probe_21506757.json
+[INFO]: SimulationContext cleared
+2026-10-02T10:29:22Z [44,511ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_6/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,511ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_7/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,511ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_8/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,511ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_9/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,512ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_10/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,512ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_11/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,512ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_12/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,512ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_13/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,512ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_14/robot_b/joints/imu'
+2026-10-02T10:29:22Z [44,512ms] [Warning] [omni.physx.tensors.plugin] Failed to find contact report API at '/World/envs/env_15/robot_b/joints/imu'
+2026-10-02T10:29:32Z [54,602ms] [Warning] [omni.kit.material.library.material_extensions] Could not initialize context menu integration: No module named 'omni.kit.context_menu'

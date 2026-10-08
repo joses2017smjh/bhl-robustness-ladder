@@ -1,0 +1,145 @@
+{
+  "protocol": "run_eval, 0.5 m/s shoves every 3 s, 12 s episodes, seeds 0-4 x harness command set, terrain 0; biped policies --variant biped, 22-DoF policies --variant humanoid; seed = policy training seed",
+  "predeclared": "push_pair caption SUPPORTED iff pooled push-adaptive (3 seeds, n=90) < dr-default (3 seeds, n=90) at one-sided Fisher p < 0.05; INCOMPLETE if any new CSV missing or short",
+  "biped": {
+    "dr-default": {
+      "per_seed": {
+        "dr-default-s0": {
+          "falls": 10,
+          "n": 30,
+          "rate": 0.3333
+        },
+        "dr-default-s1": {
+          "falls": 4,
+          "n": 30,
+          "rate": 0.1333
+        },
+        "dr-default-s2": {
+          "falls": 5,
+          "n": 30,
+          "rate": 0.1667
+        }
+      },
+      "falls": 19,
+      "n": 90,
+      "rate": 0.2111,
+      "missing_or_short": []
+    },
+    "push-adaptive": {
+      "per_seed": {
+        "push-adaptive-s0": {
+          "falls": 4,
+          "n": 30,
+          "rate": 0.1333
+        },
+        "push-adaptive-s1": {
+          "falls": 2,
+          "n": 30,
+          "rate": 0.0667
+        },
+        "push-adaptive-s2": {
+          "falls": 5,
+          "n": 30,
+          "rate": 0.1667
+        }
+      },
+      "falls": 11,
+      "n": 90,
+      "rate": 0.1222,
+      "missing_or_short": []
+    },
+    "fisher_one_sided_adaptive_less": 0.08038187495905066
+  },
+  "arms": {
+    "arms-dr1.0": {
+      "per_seed": {
+        "arms-dr1.0-s0": {
+          "falls": 3,
+          "n": 30,
+          "rate": 0.1
+        },
+        "arms-dr1.0-s1": {
+          "falls": 4,
+          "n": 30,
+          "rate": 0.1333
+        }
+      },
+      "falls": 7,
+      "n": 60,
+      "rate": 0.1167,
+      "missing_or_short": []
+    },
+    "arms-push": {
+      "per_seed": {
+        "arms-push-s0": {
+          "falls": 7,
+          "n": 30,
+          "rate": 0.2333
+        },
+        "arms-push-s1": {
+          "falls": 2,
+          "n": 30,
+          "rate": 0.0667
+        },
+        "arms-push-s2": {
+          "falls": 7,
+          "n": 30,
+          "rate": 0.2333
+        },
+        "arms-push-s3": {
+          "falls": 4,
+          "n": 30,
+          "rate": 0.1333
+        }
+      },
+      "falls": 20,
+      "n": 120,
+      "rate": 0.1667,
+      "missing_or_short": []
+    },
+    "fisher_one_sided_push_less": 0.866902648945034,
+    "fisher_one_sided_push_more": 0.256835145276119,
+    "reading": "arms-push and arms-dr1.0 not distinguishable at p < 0.05 [20/120 vs 7/60]"
+  },
+  "prior_unmatched_10s": {
+    "note": "results/arms CSVs, 10 s episodes, NOT matched; for reference only",
+    "arms-dr1.0": {
+      "per_seed": {
+        "arms-dr1.0-s0": {
+          "falls": 3,
+          "n": 30,
+          "rate": 0.1
+        },
+        "arms-dr1.0-s1": {
+          "falls": 3,
+          "n": 30,
+          "rate": 0.1
+        }
+      },
+      "falls": 6,
+      "n": 60,
+      "rate": 0.1,
+      "missing_or_short": []
+    },
+    "arms-push": {
+      "per_seed": {
+        "arms-push-s0": {
+          "falls": 7,
+          "n": 30,
+          "rate": 0.2333
+        },
+        "arms-push-s1": {
+          "falls": 2,
+          "n": 30,
+          "rate": 0.0667
+        }
+      },
+      "falls": 9,
+      "n": 60,
+      "rate": 0.15,
+      "missing_or_short": []
+    }
+  },
+  "verdict": "NOT SUPPORTED",
+  "detail": "push-adaptive 11/90 (0.1222) vs dr-default 19/90 (0.2111), one-sided Fisher p = 0.0804 (needs < 0.05)"
+}

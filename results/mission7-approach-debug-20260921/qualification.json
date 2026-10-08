@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "qualified_modes": [
+    "gait",
+    "gait_extra",
+    "c4",
+    "approach",
+    "rewards",
+    "fullroute",
+    "approach_recovery",
+    "train",
+    "fullroute_recovery",
+    "train_exploration",
+    "gait_endurance",
+    "fall_replay"
+  ],
+  "tests": "169 full tests before targeted controller revisions; latest 11 diagnostic tests passed including both recovery controllers and telemetry equivalence",
+  "smokes": [
+    "gait_extra",
+    "approach",
+    "rewards",
+    "fullroute",
+    "long-hold dense PPO telemetry",
+    "fullroute_recovery",
+    "P6 long-hold dense PPO at std 0.8, finite telemetry and verified action std",
+    "gait_endurance driver; eight bounded commands and exact 40 ms multiples; phase label distinguishes initial 0.4 s from sustained walking",
+    "three replay variants, exact first-five-tick baseline matching; full replay matching is a runtime scientific gate"
+  ],
+  "source_sha256": {
+    "src/bhl_robust/mission/approach_debug.py": "cbe30a82c21fe2ec653dcedd28f031cb32916ae0411c2bda75ece343074cead6",
+    "scripts/mission7_debug.py": "f69d89fbca126da671167d05328ec432863f67548a24353e7a7013150cb93ee5",
+    "scripts/mission7_debug_train.py": "0c2fdc5893e0c561d4019fcaf53bd64919bcaea42e41c540c39e54e49273e7a1",
+    "scripts/submit_mission7_debug.py": "d94af97c68a96d501bd5d88c2f517e83be89086ad7a22235ffb06467086e8c54",
+    "slurm/mission7_debug.sbatch": "c812d11d8c70b7e3fce5dce69f023899274eacb7ec93a4bd27140d0226dbbd40",
+    "scripts/mission7_debug_replay.py": "c0b22bbf43204ba1fdbeecd6a6de8a1708f9a2debf62c594e9767e312588bb81"
+  },
+  "created_utc": "2026-09-21T21:27:59.417836+00:00",
+  "train_release_evidence": "feasibility-gate.json; completed reward audit; full suite and telemetry/long-hold PPO smoke passed",
+  "retry_rationale": "Exact original node cn-c22 (Haswell/AVX2) replaces failed Ivy Bridge/AVX replay; strict full-trajectory identity gate preserved and fails early before counterfactuals."
+}

@@ -1,0 +1,275 @@
+{
+  "complete": true,
+  "arms": {
+    "blind": {
+      "actor_shape": [
+        1,
+        1564
+      ],
+      "frame": {
+        "shape": [
+          2,
+          391
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 1.0,
+        "invalid_fraction": 0.0,
+        "mean": 0.014348496771604873,
+        "std": 0.29435747787877903,
+        "min": -1.0,
+        "max": 7.532660007476807,
+        "mean_absolute_temporal_change": 0.03211388527879508,
+        "near_constant_feature_fraction": 0.8644501278772379
+      },
+      "lidar_valid_values": {
+        "shape": [
+          2,
+          36
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 0.0,
+        "invalid_fraction": 1.0,
+        "mean": null,
+        "std": null,
+        "min": null,
+        "max": null,
+        "mean_absolute_temporal_change": 0.0,
+        "near_constant_feature_fraction": 1.0
+      },
+      "depth_valid_values": {
+        "shape": [
+          2,
+          128
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 0.0,
+        "invalid_fraction": 1.0,
+        "mean": null,
+        "std": null,
+        "min": null,
+        "max": null,
+        "mean_absolute_temporal_change": 0.0,
+        "near_constant_feature_fraction": 1.0
+      },
+      "temporal_change_within_episodes": 0.03211388527879508,
+      "validity_flags_binary": true,
+      "invalid_values_zero": true
+    },
+    "lidar": {
+      "actor_shape": [
+        1,
+        1564
+      ],
+      "frame": {
+        "shape": [
+          2,
+          391
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 1.0,
+        "invalid_fraction": 0.0,
+        "mean": 0.11406144769463002,
+        "std": 0.4058606421952866,
+        "min": -1.0,
+        "max": 7.532660007476807,
+        "mean_absolute_temporal_change": 0.032250575974215025,
+        "near_constant_feature_fraction": 0.7723785166240409
+      },
+      "lidar_valid_values": {
+        "shape": [
+          2,
+          36
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 1.0,
+        "invalid_fraction": 0.0,
+        "mean": 0.11077121696952316,
+        "std": 0.05072057181966061,
+        "min": 0.06537257134914398,
+        "max": 0.2772837281227112,
+        "mean_absolute_temporal_change": 0.0014846128308110768,
+        "near_constant_feature_fraction": 0.0
+      },
+      "depth_valid_values": {
+        "shape": [
+          2,
+          128
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 0.0,
+        "invalid_fraction": 1.0,
+        "mean": null,
+        "std": null,
+        "min": null,
+        "max": null,
+        "mean_absolute_temporal_change": 0.0,
+        "near_constant_feature_fraction": 1.0
+      },
+      "temporal_change_within_episodes": 0.032250575974215025,
+      "validity_flags_binary": true,
+      "invalid_values_zero": true
+    },
+    "stereo": {
+      "actor_shape": [
+        1,
+        1564
+      ],
+      "frame": {
+        "shape": [
+          2,
+          391
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 1.0,
+        "invalid_fraction": 0.0,
+        "mean": 0.40350424149662856,
+        "std": 0.511798907967422,
+        "min": -1.0,
+        "max": 7.532660007476807,
+        "mean_absolute_temporal_change": 0.0349339201641406,
+        "near_constant_feature_fraction": 0.5396419437340153
+      },
+      "lidar_valid_values": {
+        "shape": [
+          2,
+          36
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 0.0,
+        "invalid_fraction": 1.0,
+        "mean": null,
+        "std": null,
+        "min": null,
+        "max": null,
+        "mean_absolute_temporal_change": 0.0,
+        "near_constant_feature_fraction": 1.0
+      },
+      "depth_valid_values": {
+        "shape": [
+          2,
+          128
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 1.0,
+        "invalid_fraction": 0.0,
+        "mean": 0.19656168896472082,
+        "std": 0.03687503987667702,
+        "min": 0.12860025465488434,
+        "max": 0.28460782766342163,
+        "mean_absolute_temporal_change": 0.008614325313828886,
+        "near_constant_feature_fraction": 0.0078125
+      },
+      "temporal_change_within_episodes": 0.0349339201641406,
+      "validity_flags_binary": true,
+      "invalid_values_zero": true
+    },
+    "both": {
+      "actor_shape": [
+        1,
+        1564
+      ],
+      "frame": {
+        "shape": [
+          2,
+          391
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 1.0,
+        "invalid_fraction": 0.0,
+        "mean": 0.5032171924196537,
+        "std": 0.5122566963411032,
+        "min": -1.0,
+        "max": 7.532660007476807,
+        "mean_absolute_temporal_change": 0.03507061085956054,
+        "near_constant_feature_fraction": 0.4475703324808184
+      },
+      "lidar_valid_values": {
+        "shape": [
+          2,
+          36
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 1.0,
+        "invalid_fraction": 0.0,
+        "mean": 0.11077121696952316,
+        "std": 0.05072057181966061,
+        "min": 0.06537257134914398,
+        "max": 0.2772837281227112,
+        "mean_absolute_temporal_change": 0.0014846128308110768,
+        "near_constant_feature_fraction": 0.0
+      },
+      "depth_valid_values": {
+        "shape": [
+          2,
+          128
+        ],
+        "finite_fraction": 1.0,
+        "valid_fraction": 1.0,
+        "invalid_fraction": 0.0,
+        "mean": 0.19656168896472082,
+        "std": 0.03687503987667702,
+        "min": 0.12860025465488434,
+        "max": 0.28460782766342163,
+        "mean_absolute_temporal_change": 0.008614325313828886,
+        "near_constant_feature_fraction": 0.0078125
+      },
+      "temporal_change_within_episodes": 0.03507061085956054,
+      "validity_flags_binary": true,
+      "invalid_values_zero": true,
+      "paired_eye_correlation": 0.8937410340636657
+    }
+  },
+  "geometry_comparisons": [
+    {
+      "layout_index": 0,
+      "lidar": {
+        "joint_valid_fraction": 1.0,
+        "mean_absolute_geometry_change_m": 0.6227844677809927
+      },
+      "depth": {
+        "joint_valid_fraction": 1.0,
+        "mean_absolute_geometry_change_m": 0.9015529805252951
+      }
+    }
+  ],
+  "separate_encoder_outputs": {
+    "lidar": {
+      "shape": [
+        1,
+        32
+      ],
+      "finite_fraction": 1.0,
+      "valid_fraction": 1.0,
+      "invalid_fraction": 0.0,
+      "mean": -0.004529095254838467,
+      "std": 0.17101751267910004,
+      "min": -0.43865078687667847,
+      "max": 0.250673770904541,
+      "mean_absolute_temporal_change": 0.0,
+      "near_constant_feature_fraction": 1.0
+    },
+    "paired_depth": {
+      "shape": [
+        1,
+        32
+      ],
+      "finite_fraction": 1.0,
+      "valid_fraction": 1.0,
+      "invalid_fraction": 0.0,
+      "mean": 0.12598392367362976,
+      "std": 0.2916611433029175,
+      "min": -0.4209771156311035,
+      "max": 0.5531328916549683,
+      "mean_absolute_temporal_change": 0.0,
+      "near_constant_feature_fraction": 1.0
+    },
+    "mean_fusion_weights": [
+      0.3931112289428711,
+      0.6068887710571289
+    ],
+    "checkpoint_update": 400,
+    "sampling": "static repeated-frame probes drawn from physical trajectories; no learning claim"
+  },
+  "sampling": "same physical oracle trajectories replayed with modality masks; geometry probes deliberately reposition robot",
+  "provenance": "actual MuJoCo rays; paired idealized depth, not RGB stereo"
+}

@@ -13,6 +13,10 @@
 
 # B5: corridor navigation with an RPLIDAR C1 and a global-shutter stereo pair.
 #
+# Navigation block uses RUN_PREFIX=mazenav so it does not overwrite the old
+# `maze-*` terrain-perception checkpoints. The command is MazeWaypointCommand
+# along the button route; old maze-* rows stay terrain-sensing results.
+#
 # Four arms, one variable moving: blind, lidar, stereo, both. The blind arm is
 # the control, and without it a lidar number is a fact about this maze rather
 # than about lidar -- which is the mistake G-B2 made when it measured its own

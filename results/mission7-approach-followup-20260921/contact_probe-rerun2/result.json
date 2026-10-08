@@ -1,0 +1,365 @@
+{
+  "complete": true,
+  "status": "COMPLETED_DIAGNOSTIC",
+  "episodes": 10,
+  "falls_replayed": 6,
+  "selected_layouts": [
+    0,
+    1,
+    4,
+    5,
+    7,
+    9,
+    12,
+    13,
+    14,
+    15
+  ],
+  "aggregate": {
+    "contact_events": 317130,
+    "plate_contact_events": 219192,
+    "peak_plate_normal_force_N": 980.6314782843389,
+    "peak_plate_tangent_force_N": 367.8252157642402,
+    "minimum_plate_distance_m": -0.034388331419375875,
+    "plate_geom_counts": {
+      "plate_0_-1": 186034,
+      "plate_1_1": 6837,
+      "plate_1_-1": 3746,
+      "plate_0_1": 22575
+    }
+  },
+  "episodes_detail": [
+    {
+      "layout_index": 0,
+      "layout_seed": 10000,
+      "original_elapsed_s": 55.04000000008078,
+      "replay_elapsed_s": 55.04000000008078,
+      "original_failure": "fall",
+      "fall_time_s": 55.04000000008078,
+      "fall_command": [
+        0.038415887684540816,
+        -0.3465,
+        0.10157217110800908
+      ],
+      "fall_phase": "advance",
+      "fall_xy": [
+        4.805165311624828,
+        2.341144816411485
+      ],
+      "fall_tilt": 0.837399562917046,
+      "contact_summary": {
+        "contact_events": 5095,
+        "plate_contact_events": 5095,
+        "other_obstacle_contact_events": 0,
+        "plate_geoms": [
+          "plate_0_-1",
+          "plate_1_1"
+        ],
+        "other_obstacle_geoms": [],
+        "peak_plate_normal_force_N": 285.78397394169906,
+        "peak_plate_tangent_force_N": 135.13645868762512,
+        "minimum_plate_distance_m": -0.024925310165125645,
+        "first_plate_contact_s": 24.18799999998898,
+        "last_plate_contact_s": 55.04000000008078,
+        "peak_other_normal_force_N": 0.0
+      }
+    },
+    {
+      "layout_index": 1,
+      "layout_seed": 10001,
+      "original_elapsed_s": 43.68000000002654,
+      "replay_elapsed_s": 43.68000000002654,
+      "original_failure": "fall",
+      "fall_time_s": 43.68000000002654,
+      "fall_command": [
+        0.384159966994867,
+        0.11145007742708282,
+        0.01291944443432283
+      ],
+      "fall_phase": "advance",
+      "fall_xy": [
+        6.927006743556336,
+        4.392466198488664
+      ],
+      "fall_tilt": 0.7923183155929497,
+      "contact_summary": {
+        "contact_events": 8525,
+        "plate_contact_events": 8525,
+        "other_obstacle_contact_events": 0,
+        "plate_geoms": [
+          "plate_0_-1",
+          "plate_1_-1"
+        ],
+        "other_obstacle_geoms": [],
+        "peak_plate_normal_force_N": 602.525591337627,
+        "peak_plate_tangent_force_N": 261.3839174726073,
+        "minimum_plate_distance_m": -0.034388331419375875,
+        "first_plate_contact_s": 18.171500000003,
+        "last_plate_contact_s": 43.482500000025595,
+        "peak_other_normal_force_N": 0.0
+      }
+    },
+    {
+      "layout_index": 4,
+      "layout_seed": 10004,
+      "original_elapsed_s": 45.08000000003322,
+      "replay_elapsed_s": 45.08000000003322,
+      "original_failure": "fall",
+      "fall_time_s": 18.0000000000034,
+      "fall_command": [
+        -0.008787956699260881,
+        0.3465,
+        0.07155206691028593
+      ],
+      "fall_phase": "advance",
+      "fall_xy": [
+        2.308774913939858,
+        2.768773423817541
+      ],
+      "fall_tilt": 0.7836628439219362,
+      "contact_summary": {
+        "contact_events": 163018,
+        "plate_contact_events": 158117,
+        "other_obstacle_contact_events": 4901,
+        "plate_geoms": [
+          "plate_0_-1"
+        ],
+        "other_obstacle_geoms": [
+          "wall_m7_15"
+        ],
+        "peak_plate_normal_force_N": 352.10716093159783,
+        "peak_plate_tangent_force_N": 256.59765301889576,
+        "minimum_plate_distance_m": -0.0069390901418689265,
+        "first_plate_contact_s": 15.535500000007495,
+        "last_plate_contact_s": 45.08000000003322,
+        "peak_other_normal_force_N": 405.6388888472875
+      }
+    },
+    {
+      "layout_index": 5,
+      "layout_seed": 10005,
+      "original_elapsed_s": 42.60000000002138,
+      "replay_elapsed_s": 42.60000000002138,
+      "original_failure": "fall",
+      "fall_time_s": null,
+      "fall_command": null,
+      "fall_phase": null,
+      "fall_xy": null,
+      "fall_tilt": null,
+      "contact_summary": {
+        "contact_events": 61432,
+        "plate_contact_events": 17598,
+        "other_obstacle_contact_events": 43834,
+        "plate_geoms": [
+          "plate_0_-1",
+          "plate_0_1"
+        ],
+        "other_obstacle_geoms": [
+          "wall_m7_21",
+          "wall_m7_26",
+          "wall_m7_28"
+        ],
+        "peak_plate_normal_force_N": 443.1209545555869,
+        "peak_plate_tangent_force_N": 166.67045766340374,
+        "minimum_plate_distance_m": -0.03100033574917914,
+        "first_plate_contact_s": 16.044500000007957,
+        "last_plate_contact_s": 20.087999999998534,
+        "peak_other_normal_force_N": 231.4657281185762
+      }
+    },
+    {
+      "layout_index": 7,
+      "layout_seed": 10007,
+      "original_elapsed_s": 44.48000000003036,
+      "replay_elapsed_s": 44.48000000003036,
+      "original_failure": "fall",
+      "fall_time_s": 42.680000000021764,
+      "fall_command": [
+        0.3365889391703176,
+        -0.21612007317276258,
+        0.029859444896368038
+      ],
+      "fall_phase": "switch",
+      "fall_xy": [
+        3.9760303712404057,
+        3.8914022827358394
+      ],
+      "fall_tilt": 0.8426170092851285,
+      "contact_summary": {
+        "contact_events": 10003,
+        "plate_contact_events": 10003,
+        "other_obstacle_contact_events": 0,
+        "plate_geoms": [
+          "plate_0_-1",
+          "plate_0_1",
+          "plate_1_1"
+        ],
+        "other_obstacle_geoms": [],
+        "peak_plate_normal_force_N": 748.933578113165,
+        "peak_plate_tangent_force_N": 265.4600651022771,
+        "minimum_plate_distance_m": -0.02174335580458644,
+        "first_plate_contact_s": 16.079000000007877,
+        "last_plate_contact_s": 44.48000000003036,
+        "peak_other_normal_force_N": 0.0
+      }
+    },
+    {
+      "layout_index": 9,
+      "layout_seed": 10009,
+      "original_elapsed_s": 20.879999999996688,
+      "replay_elapsed_s": 20.879999999996688,
+      "original_failure": "fall",
+      "fall_time_s": 19.400000000000137,
+      "fall_command": [
+        0.04145627829321453,
+        0.3465,
+        -0.0029264742361271388
+      ],
+      "fall_phase": "advance",
+      "fall_xy": [
+        4.019790069804452,
+        2.4548900509689355
+      ],
+      "fall_tilt": 0.8445705761456467,
+      "contact_summary": {
+        "contact_events": 2930,
+        "plate_contact_events": 2930,
+        "other_obstacle_contact_events": 0,
+        "plate_geoms": [
+          "plate_0_-1"
+        ],
+        "other_obstacle_geoms": [],
+        "peak_plate_normal_force_N": 980.6314782843389,
+        "peak_plate_tangent_force_N": 367.8252157642402,
+        "minimum_plate_distance_m": -0.014647973401289434,
+        "first_plate_contact_s": 18.332500000002625,
+        "last_plate_contact_s": 20.879999999996688,
+        "peak_other_normal_force_N": 0.0
+      }
+    },
+    {
+      "layout_index": 12,
+      "layout_seed": 10012,
+      "original_elapsed_s": 13.60000000000513,
+      "replay_elapsed_s": 13.60000000000513,
+      "original_failure": "fall",
+      "fall_time_s": null,
+      "fall_command": null,
+      "fall_phase": null,
+      "fall_xy": null,
+      "fall_tilt": null,
+      "contact_summary": {
+        "contact_events": 3444,
+        "plate_contact_events": 3444,
+        "other_obstacle_contact_events": 0,
+        "plate_geoms": [
+          "plate_0_-1"
+        ],
+        "other_obstacle_geoms": [],
+        "peak_plate_normal_force_N": 386.54107902708944,
+        "peak_plate_tangent_force_N": 145.15637073951618,
+        "minimum_plate_distance_m": -0.02576671844387704,
+        "first_plate_contact_s": 12.411000000003677,
+        "last_plate_contact_s": 13.60000000000513,
+        "peak_other_normal_force_N": 0.0
+      }
+    },
+    {
+      "layout_index": 13,
+      "layout_seed": 10013,
+      "original_elapsed_s": 15.240000000007134,
+      "replay_elapsed_s": 15.240000000007134,
+      "original_failure": "fall",
+      "fall_time_s": 14.28000000000596,
+      "fall_command": [
+        0.0337214864457585,
+        0.3465,
+        0.021577308715176
+      ],
+      "fall_phase": "advance",
+      "fall_xy": [
+        1.6475901803400705,
+        2.610991629299925
+      ],
+      "fall_tilt": 0.9873895449276378,
+      "contact_summary": {
+        "contact_events": 5516,
+        "plate_contact_events": 5516,
+        "other_obstacle_contact_events": 0,
+        "plate_geoms": [
+          "plate_0_-1"
+        ],
+        "other_obstacle_geoms": [],
+        "peak_plate_normal_force_N": 313.2150316372554,
+        "peak_plate_tangent_force_N": 84.29338516714245,
+        "minimum_plate_distance_m": -0.006752437801479939,
+        "first_plate_contact_s": 12.769500000004115,
+        "last_plate_contact_s": 14.05050000000568,
+        "peak_other_normal_force_N": 0.0
+      }
+    },
+    {
+      "layout_index": 14,
+      "layout_seed": 10014,
+      "original_elapsed_s": 37.15999999999541,
+      "replay_elapsed_s": 37.15999999999541,
+      "original_failure": "fall",
+      "fall_time_s": null,
+      "fall_command": null,
+      "fall_phase": null,
+      "fall_xy": null,
+      "fall_tilt": null,
+      "contact_summary": {
+        "contact_events": 10721,
+        "plate_contact_events": 0,
+        "other_obstacle_contact_events": 10721,
+        "plate_geoms": [],
+        "other_obstacle_geoms": [
+          "door_0",
+          "wall_m7_21",
+          "wall_m7_27",
+          "wall_m7_28"
+        ],
+        "peak_plate_normal_force_N": 0.0,
+        "peak_plate_tangent_force_N": 0.0,
+        "minimum_plate_distance_m": null,
+        "first_plate_contact_s": null,
+        "last_plate_contact_s": null,
+        "peak_other_normal_force_N": 205.6840640119463
+      }
+    },
+    {
+      "layout_index": 15,
+      "layout_seed": 10015,
+      "original_elapsed_s": 40.680000000012214,
+      "replay_elapsed_s": 40.680000000012214,
+      "original_failure": "fall",
+      "fall_time_s": null,
+      "fall_command": null,
+      "fall_phase": null,
+      "fall_xy": null,
+      "fall_tilt": null,
+      "contact_summary": {
+        "contact_events": 46446,
+        "plate_contact_events": 7964,
+        "other_obstacle_contact_events": 38482,
+        "plate_geoms": [
+          "plate_0_1"
+        ],
+        "other_obstacle_geoms": [
+          "wall_m7_15",
+          "wall_m7_24",
+          "wall_m7_6",
+          "wall_m7_7"
+        ],
+        "peak_plate_normal_force_N": 291.25763561925294,
+        "peak_plate_tangent_force_N": 87.32718007492876,
+        "minimum_plate_distance_m": -0.007207515486405826,
+        "first_plate_contact_s": 14.636500000006397,
+        "last_plate_contact_s": 17.367000000004875,
+        "peak_other_normal_force_N": 283.24577288526064
+      }
+    }
+  ],
+  "interpretation": "Open-loop commands and recorded gate-opening times replayed on unchanged geometry. Contact forces and distances are descriptive evidence; the subsequent controller mitigation must pass fresh route episodes before any causal claim is made."
+}

@@ -1,0 +1,38 @@
+[2026-09-23T09:36:59.269] error: Unable to create TMPDIR [/scratch/sanchej7/tmp]: No such file or directory
+[2026-09-23T09:36:59.269] error: Setting TMPDIR to /tmp
+preflight OK 3.3.5
+  scored 02-01-51_coop-occluded-blind-s0 crew=2  obs=194  vision=off  8 seeds x 200 steps
+  scored 02-01-51_coop-occluded-blind-s0 crew=3  obs=194  vision=off  8 seeds x 200 steps
+  scored 23-55-08_coop-occluded-blind-s0 crew=2  obs=188  vision=off  8 seeds x 200 steps
+  scored 23-55-08_coop-occluded-blind-s0 crew=3  obs=188  vision=off  8 seeds x 200 steps
+  scored 23-37-38_coop-occluded-blind-s1 crew=2  obs=188  vision=off  8 seeds x 200 steps
+  scored 23-37-38_coop-occluded-blind-s1 crew=3  obs=188  vision=off  8 seeds x 200 steps
+  scored 00-31-40_coop-occluded-blind-s2 crew=2  obs=188  vision=off  8 seeds x 200 steps
+  scored 00-31-40_coop-occluded-blind-s2 crew=3  obs=188  vision=off  8 seeds x 200 steps
+/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/glfw/__init__.py:917: GLFWError: (65550) b'X11: Failed to open display :4'
+  warnings.warn(message, GLFWError)
+/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/glfw/__init__.py:917: GLFWError: (65537) b'The GLFW library is not initialized'
+  warnings.warn(message, GLFWError)
+Traceback (most recent call last):
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/scripts/bench/coop_sim2sim.py", line 186, in <module>
+    main()
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/scripts/bench/coop_sim2sim.py", line 137, in main
+    runner = CrewRunner(model, slots, crates, actor)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/src/bhl_robust/eval/coop_replay.py", line 512, in __init__
+    self._setup_depth()
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/src/bhl_robust/eval/coop_replay.py", line 525, in _setup_depth
+    self._dep = mujoco.Renderer(self.m, height=DEPTH_RES, width=DEPTH_RES)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/mujoco/renderer.py", line 89, in __init__
+    self._mjr_context = _render.MjrContext(model, font_scale.value)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+mujoco.FatalError: an OpenGL platform library has not been loaded into this process, this most likely means that a valid OpenGL context has not been created before mjr_makeContext was called
+Exception ignored in: <function Renderer.__del__ at 0x15554f3eea20>
+Traceback (most recent call last):
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/mujoco/renderer.py", line 337, in __del__
+    self.close()
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/mujoco/renderer.py", line 325, in close
+    if self._mjr_context:
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'Renderer' object has no attribute '_mjr_context'

@@ -1,0 +1,223 @@
+{
+  "ok": true,
+  "problems": [],
+  "wall_s": 181.7059347629547,
+  "checks": {
+    "replay_turnboth_complete": {
+      "ok": true,
+      "detail": "COMPLETED_SMOKE"
+    },
+    "replay_turnboth_gait_events": {
+      "ok": true,
+      "detail": {
+        "phases": [
+          "approach",
+          "settle",
+          "turn",
+          "cross",
+          "turn_back",
+          "recorded"
+        ],
+        "gait_events": [
+          {
+            "time_s": 22.7199999999924,
+            "door": 0,
+            "event": "swap_to_turnboth",
+            "prev_actions_before_norm": 76.19078826904297,
+            "prev_actions_after_norm": 0.0,
+            "takeover_yaw_rad": 0.03349801362629484
+          },
+          {
+            "time_s": 47.920000000046784,
+            "door": 0,
+            "event": "swap_to_shipped",
+            "prev_actions_before_norm": 85.52434539794922,
+            "prev_actions_after_norm": 0.0
+          }
+        ]
+      }
+    },
+    "replay_turnboth_real_clears_readable": {
+      "ok": true,
+      "detail": {
+        "crossings": 1,
+        "real_clears": 0
+      }
+    },
+    "replay_turnboth_status_reported": {
+      "ok": true,
+      "detail": {
+        "fall": false,
+        "first_fall_s": null
+      }
+    },
+    "bench_smoke_verdict_never_pass": {
+      "ok": true,
+      "detail": "SMOKE_INCOMPLETE"
+    },
+    "bench_two_crossings_written": {
+      "ok": true,
+      "detail": [
+        "L250-d0.json.gz",
+        "L251-d1.json.gz"
+      ]
+    },
+    "L250-d0_complete": {
+      "ok": true,
+      "detail": "complete"
+    },
+    "L250-d0_gait_events": {
+      "ok": true,
+      "detail": [
+        {
+          "time_s": 8.19999999999853,
+          "door": 0,
+          "event": "swap_to_turnboth",
+          "prev_actions_before_norm": 74.12255859375,
+          "prev_actions_after_norm": 0.0,
+          "takeover_yaw_rad": -1.5473444159352814
+        },
+        {
+          "time_s": 18.200000000002934,
+          "door": 0,
+          "event": "swap_to_shipped",
+          "prev_actions_before_norm": 84.97422790527344,
+          "prev_actions_after_norm": 0.0
+        }
+      ]
+    },
+    "L250-d0_outcome_reported": {
+      "ok": true,
+      "detail": {
+        "heading_deg": -90,
+        "plate": "round",
+        "entry": "walking",
+        "end_reason": "complete",
+        "takeover_s": 8.19999999999853,
+        "handback_s": 18.200000000002934,
+        "clear": false,
+        "real_clear": false,
+        "clear_after_takeover_s": null,
+        "fell": false,
+        "fall_phase": null,
+        "maximum_tilt": 0.13943723257785284,
+        "takeover": {
+          "time_s": 8.19999999999853,
+          "event": "takeover",
+          "speed_mps": 0.3215073281894063,
+          "distance_to_pre_point_m": 0.08532003817452112,
+          "yaw_rad": -1.5473444159352814
+        },
+        "phases": [
+          "approach",
+          "settle",
+          "turn",
+          "cross",
+          "turn_back",
+          "recorded"
+        ],
+        "wall_contacts": {
+          "samples": 0,
+          "stage_samples": 0,
+          "first_s": null,
+          "geoms": []
+        },
+        "plate_activation": {
+          "target_plate": {
+            "door": 0,
+            "side": 1,
+            "shape": "round"
+          },
+          "target_pressed_during_stage": true,
+          "first_target_press_s": 8.279999999998628,
+          "correct_plate_pressed_during_stage": true,
+          "wrong_plate_pressed_during_stage": false,
+          "presses_before_takeover": []
+        },
+        "samples": 505
+      }
+    },
+    "L251-d1_complete": {
+      "ok": true,
+      "detail": "complete"
+    },
+    "L251-d1_gait_events": {
+      "ok": true,
+      "detail": [
+        {
+          "time_s": 9.399999999999997,
+          "door": 1,
+          "event": "swap_to_turnboth",
+          "prev_actions_before_norm": 77.07481384277344,
+          "prev_actions_after_norm": 0.0,
+          "takeover_yaw_rad": 0.008989936237828573
+        },
+        {
+          "time_s": 36.99999999999464,
+          "door": 1,
+          "event": "swap_to_shipped",
+          "prev_actions_before_norm": 86.62239074707031,
+          "prev_actions_after_norm": 0.0
+        }
+      ]
+    },
+    "L251-d1_outcome_reported": {
+      "ok": true,
+      "detail": {
+        "heading_deg": 180,
+        "plate": "round",
+        "entry": "standstill",
+        "end_reason": "complete",
+        "takeover_s": 9.399999999999997,
+        "handback_s": 36.99999999999464,
+        "clear": false,
+        "real_clear": true,
+        "clear_after_takeover_s": 20.71999999997516,
+        "fell": false,
+        "fall_phase": null,
+        "maximum_tilt": 0.19265500168036181,
+        "takeover": {
+          "time_s": 9.399999999999997,
+          "event": "takeover",
+          "speed_mps": 0.0003051638449950132,
+          "distance_to_pre_point_m": 0.07266336815214446,
+          "yaw_rad": 0.008989936237828573
+        },
+        "phases": [
+          "approach",
+          "settle",
+          "turn",
+          "cross",
+          "turn_back",
+          "recorded"
+        ],
+        "wall_contacts": {
+          "samples": 0,
+          "stage_samples": 0,
+          "first_s": null,
+          "geoms": []
+        },
+        "plate_activation": {
+          "target_plate": {
+            "door": 1,
+            "side": 1,
+            "shape": "round"
+          },
+          "target_pressed_during_stage": true,
+          "first_target_press_s": 10.760000000001659,
+          "correct_plate_pressed_during_stage": true,
+          "wrong_plate_pressed_during_stage": false,
+          "presses_before_takeover": []
+        },
+        "samples": 975
+      }
+    },
+    "bench_one_standstill_one_walking": {
+      "ok": true,
+      "detail": [
+        "standstill",
+        "walking"
+      ]
+    }
+  }
+}

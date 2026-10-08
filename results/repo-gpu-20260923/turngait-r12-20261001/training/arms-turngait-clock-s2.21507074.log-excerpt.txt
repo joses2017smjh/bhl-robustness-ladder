@@ -1,0 +1,461 @@
+task=Velocity-BHL-Arms-TurnGaitClock-v0 run=arms-turngait-clock-s2 seed=2 envs=cfg iters=6000
+entrypoint=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/scripts/train.py
+overrides: env.events.physics_material.params.static_friction_range=[0.4000,1.2000] env.events.physics_material.params.dynamic_friction_range=[0.4000,1.2000] env.events.add_base_mass.params.mass_distribution_params=[-1.0000,2.0000] env.events.add_all_joint_default_pos.params.pos_distribution_params=[-0.0500,0.0500] env.events.scale_all_actuator_torque_constant.params.stiffness_distribution_params=[0.8000,1.2000] env.events.scale_all_actuator_torque_constant.params.damping_distribution_params=[0.8000,1.2000] env.events.base_external_force_torque.params.force_range=[-2.0000,2.0000] env.events.base_external_force_torque.params.torque_range=[-2.0000,2.0000] 
+Loading user config located at: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/user.config.json'
+[Info] [carb] Logging to file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/logs/Kit/Isaac-Sim/5.1/kit_20261002_035735.log
+2026-10-02T10:57:35Z [6ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/63613e7b-8759-4371-bf5346a7-b13b68d1.dmp'
+2026-10-02T10:57:35Z [8ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/d978d7b9-20c7-40fe-688afcbc-45f2ecc9.dmp'
+2026-10-02T10:57:35Z [10ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/44ceda51-020d-418f-ad61b8ae-9f1889a1.dmp'
+2026-10-02T10:57:35Z [11ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/16b0e915-468a-41e6-967782b5-166e54a1.dmp'
+2026-10-02T10:57:35Z [14ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/803da406-5dc1-4faa-7ccdbd93-2d63002f.dmp'
+2026-10-02T10:57:35Z [16ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/fa36c916-5227-4679-c5cdd0b2-9c0e2924.dmp'
+2026-10-02T10:57:35Z [20ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/5d094fad-4085-4685-35f927bf-d40c26bb.dmp'
+2026-10-02T10:57:35Z [22ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/b6ddc6c8-c45e-41f1-66f10b81-fb56cd6b.dmp'
+2026-10-02T10:57:35Z [23ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/95e36d9c-d997-4a94-37e071a6-e76340bd.dmp'
+2026-10-02T10:57:35Z [24ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/6ae9510b-191b-4e41-2464af8b-ea1710c5.dmp'
+2026-10-02T10:57:35Z [25ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/d32f8e76-8ec4-42a6-f779e38a-1fc195e3.dmp'
+2026-10-02T10:57:35Z [26ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/5920b44d-27f4-4601-9516af85-3caae0d2.dmp'
+2026-10-02T10:57:35Z [28ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/0af54216-434e-4644-2265ed95-d221c0c0.dmp'
+2026-10-02T10:57:35Z [29ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/5933a686-58e4-4f89-bbce209c-084bcef8.dmp'
+2026-10-02T10:57:35Z [30ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/b39b435c-a21c-4f5e-d6f002ab-3afe0484.dmp'
+2026-10-02T10:57:35Z [32ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/46ef5fa7-9c0a-4092-be442aa9-59521f1f.dmp'
+2026-10-02T10:57:35Z [35ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/8f50649c-59c1-4132-d445fd83-d772859a.dmp'
+2026-10-02T10:57:35Z [38ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/c5ef1610-ef44-45e3-ff9c68bc-164e7944.dmp'
+2026-10-02T10:57:35Z [40ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/62a3bd3c-dc11-491b-81c2429b-f14cc2e2.dmp'
+2026-10-02T10:57:35Z [43ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/92807cd9-eedb-4309-78bfe58c-182d510a.dmp'
+2026-10-02T10:57:35Z [45ms] [Warning] [carb.crashreporter-breakpad.plugin] [previous crash] preventing upload of minidump due to user opt-out: '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/kit/data/Kit/Isaac-Sim/5.1/49dd57b6-8469-4851-dfd814a6-cc4a7c5a.dmp'
+2026-10-02T10:57:37Z [1,762ms] [Warning] [omni.datastore] DerivedDataCache : Perform disk garbage collection
+2026-10-02T10:57:37Z [2,154ms] [Warning] [omni.usd_config.extension] Enable omni.materialx.libs extension to use MaterialX
+2026-10-02T10:57:39Z [4,416ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2026-10-02T10:57:40Z [5,479ms] [Warning] [carb] Acquiring non optional plugin interface which is not listed as dependency: [omni::physx::IPhysxBenchmarks v1.0] (plugin: <default plugin>), by client: omni.physics.physx.plugin. Add it to CARB_PLUGIN_IMPL_DEPS() macro of a client.
+2026-10-02T10:57:40Z [5,528ms] [Warning] [omni.isaac.dynamic_control] omni.isaac.dynamic_control is deprecated as of Isaac Sim 4.5. No action is needed from end-users.
+2026-10-02T10:57:55Z [20,611ms] [Warning] [carb.cudainterop.plugin] CUDA_VISIBLE_DEVICES environment variable is set.
+2026-10-02T10:57:55Z [20,611ms] [Warning] [carb.cudainterop.plugin] Note CUDA device enumeration and Omniverse device enumeration are different.
+2026-10-02T10:57:55Z [20,611ms] [Warning] [carb.cudainterop.plugin] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 615.71.09     | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |    [bhl_robust.tasks] SF-04 distillation id NOT registered: ImportError("cannot import name 'RslRlMLPModelCfg' from 'isaaclab_rl.rsl_rl' (/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/source/isaaclab_rl/isaaclab_rl/rsl_rl/__init__.py)")
+[INFO][AppLauncher]: Using device: cuda:0
+[INFO][AppLauncher]: Loading experience file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/apps/isaaclab.python.headless.kit
+[INFO]: Parsing configuration from: <class 'bhl_robust.tasks.arms_env_cfg.HumanoidTurnGaitClockCfg'>
+[INFO]: Parsing configuration from: <class 'berkeley_humanoid_lite.tasks.locomotion.velocity.config.humanoid.agents.rsl_rl_ppo_cfg.BerkeleyHumanoidLitePPORunnerCfg'>
+[INFO] Logging experiment in directory: /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid
+
+[36m=============================================================================================================================================================================================[0m
+[36m[1m[INFO][IsaacLab]: Logging to file: /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/isaaclab/isaaclab_2026-10-02_03-58-04.log[0m
+[36m=============================================================================================================================================================================================[0m
+
+[33m03:58:04 [simulation_context.py] WARNING: The `disable_contact_processing` attribute is deprecated and always set to True to avoid unnecessary overhead. Contact processing is automatically enabled when a contact sensor is created, so manual configuration is no longer required.[0m
+[33m03:58:04 [simulation_context.py] WARNING: The `enable_external_forces_every_iteration` parameter in the PhysxCfg is set to False. If you are experiencing noisy velocities, consider enabling this flag. You may need to slightly increase the number of velocity iterations (setting it to 1 or 2 rather than 0), together with this flag, to improve the accuracy of velocity updates.[0m
+[INFO]: Base environment:
+	Environment device    : cuda:0
+	Environment seed      : 2
+	Physics step-size     : 0.005
+	Rendering step-size   : 0.02
+	Environment step-size : 0.04
+[33m03:58:04 [manager_based_env.py] WARNING: The render interval (4) is smaller than the decimation (8). Multiple render calls will happen for each environment step. If this is not intended, set the render interval to be equal to the decimation.[0m
+[33m03:58:04 [terrain_importer.py] WARNING: Visual material specified for ground plane but no diffuse color found. Using default color: (0.0, 0.0, 0.0)[0m
+[INFO]: Time taken for scene creation : 8.196092 seconds
+[INFO]: Scene manager:  <class InteractiveScene>
+	Number of environments: 4096
+	Environment spacing   : 2.5
+	Source prim name      : /World/envs/env_0
+	Global prim paths     : ['/World/ground']
+	Replicate physics     : True
+[INFO]: Starting the simulation. This may take a few seconds. Please wait...
+[33m03:58:15 [actuator_pd.py] WARNING: The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.[0m
+[33m03:58:15 [actuator_pd.py] WARNING: The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.[0m
+/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/rsl_rl/utils/utils.py:244: UserWarning: The observation configuration dictionary 'obs_groups' must contain the 'policy' key. As an observation group with the name 'policy' was found, this is assumed to be the observation set. Consider adding the 'policy' key to the 'obs_groups' dictionary for clarity. This behavior will be removed in a future version.
+  warnings.warn(
+/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/rsl_rl/utils/utils.py:282: UserWarning: The observation configuration dictionary 'obs_groups' must contain the 'critic' key. As an observation group with the name 'critic' was found, this is assumed to be the observation set. Consider adding the 'critic' key to the 'obs_groups' dictionary for clarity. This behavior will be removed in a future version.
+  warnings.warn(
+[INFO]: Time taken for simulation start : 8.377979 seconds
+[INFO] Command Manager:  <CommandManager> contains 1 active terms.
++------------------------------------------------+
+|              Active Command Terms              |
++-------+---------------+------------------------+
+| Index | Name          |          Type          |
++-------+---------------+------------------------+
+|   0   | base_velocity | UniformVelocityCommand |
++-------+---------------+------------------------+
+
+[INFO] Event Manager:  <EventManager> contains 3 active terms.
++--------------------------------------------+
+|   Active Event Terms in Mode: 'startup'    |
++-------+------------------------------------+
+| Index | Name                               |
++-------+------------------------------------+
+|   0   | physics_material                   |
+|   1   | add_base_mass                      |
+|   2   | add_all_joint_default_pos          |
+|   3   | scale_all_actuator_torque_constant |
++-------+------------------------------------+
++---------------------------------------+
+|  Active Event Terms in Mode: 'reset'  |
++--------+------------------------------+
+| Index  | Name                         |
++--------+------------------------------+
+|   0    | reset_base                   |
+|   1    | reset_robot_joints           |
+|   2    | base_external_force_torque   |
++--------+------------------------------+
++----------------------------------------------+
+|    Active Event Terms in Mode: 'interval'    |
++-------+------------+-------------------------+
+| Index | Name       | Interval time range (s) |
++-------+------------+-------------------------+
+|   0   | push_robot |        (5.0, 9.0)       |
++-------+------------+-------------------------+
+
+[INFO] Recorder Manager:  <RecorderManager> contains 0 active terms.
++---------------------+
+| Active Recorder Terms |
++-----------+---------+
+|   Index   | Name    |
++-----------+---------+
++-----------+---------+
+
+[INFO] Action Manager:  <ActionManager> contains 1 active terms.
++------------------------------------+
+|  Active Action Terms (shape: 22)   |
++--------+-------------+-------------+
+| Index  | Name        |   Dimension |
++--------+-------------+-------------+
+|   0    | joint_pos   |          22 |
++--------+-------------+-------------+
+
+[INFO] Observation Manager: <ObservationManager> contains 2 groups.
++---------------------------------------------------------+
+| Active Observation Terms in Group: 'policy' (shape: (77,)) |
++-----------+---------------------------------+-----------+
+|   Index   | Name                            |   Shape   |
++-----------+---------------------------------+-----------+
+|     0     | velocity_commands               |    (3,)   |
+|     1     | base_ang_vel                    |    (3,)   |
+|     2     | projected_gravity               |    (3,)   |
+|     3     | joint_pos                       |   (22,)   |
+|     4     | joint_vel                       |   (22,)   |
+|     5     | actions                         |   (22,)   |
+|     6     | gait_clock                      |    (2,)   |
++-----------+---------------------------------+-----------+
++---------------------------------------------------------+
+| Active Observation Terms in Group: 'critic' (shape: (80,)) |
++-----------+---------------------------------+-----------+
+|   Index   | Name                            |   Shape   |
++-----------+---------------------------------+-----------+
+|     0     | velocity_commands               |    (3,)   |
+|     1     | base_ang_vel                    |    (3,)   |
+|     2     | projected_gravity               |    (3,)   |
+|     3     | joint_pos                       |   (22,)   |
+|     4     | joint_vel                       |   (22,)   |
+|     5     | actions                         |   (22,)   |
+|     6     | base_lin_vel                    |    (3,)   |
+|     7     | gait_clock                      |    (2,)   |
++-----------+---------------------------------+-----------+
+
+[INFO] Termination Manager:  <TerminationManager> contains 2 active terms.
++-------------------------------------+
+|       Active Termination Terms      |
++-------+------------------+----------+
+| Index | Name             | Time Out |
++-------+------------------+----------+
+|   0   | time_out         |   True   |
+|   1   | base_orientation |  False   |
++-------+------------------+----------+
+
+[INFO] Reward Manager:  <RewardManager> contains 19 active terms.
++---------------------------------------------+
+|             Active Reward Terms             |
++-------+----------------------------+--------+
+| Index | Name                       | Weight |
++-------+----------------------------+--------+
+|   0   | track_lin_vel_xy_exp       |    2.0 |
+|   1   | track_ang_vel_z_exp        |    2.0 |
+|   2   | termination_penalty        |  -10.0 |
+|   3   | lin_vel_z_l2               |   -0.1 |
+|   4   | ang_vel_xy_l2              |  -0.05 |
+|   5   | flat_orientation_l2        |   -1.0 |
+|   6   | action_rate_l2             | -0.001 |
+|   7   | dof_torques_l2             | -2e-05 |
+|   8   | dof_acc_l2                 | -1e-07 |
+|   9   | dof_pos_limits             |   -1.0 |
+|   10  | feet_air_time              |    0.0 |
+|   11  | feet_slide                 |   -0.1 |
+|   12  | undesired_contacts         |   -1.0 |
+|   13  | joint_deviation_hip        |   -0.2 |
+|   14  | joint_deviation_ankle_roll |   -0.2 |
+|   15  | joint_deviation_shoulder   |   -1.0 |
+|   16  | joint_deviation_elbow      |   -1.0 |
+|   17  | feet_gait                  |    0.5 |
+|   18  | feet_swing_height          |  -20.0 |
++-------+----------------------------+--------+
+
+[INFO] Curriculum Manager:  <CurriculumManager> contains 0 active terms.
++----------------------+
+| Active Curriculum Terms |
++-----------+----------+
+|   Index   | Name     |
++-----------+----------+
++-----------+----------+
+
+[INFO]: Completed setting up the environment...
+--------------------------------------------------------------------------------
+Resolved observation sets: 
+	 policy :  ['policy']
+	 critic :  ['critic']
+--------------------------------------------------------------------------------
+ActorCritic.__init__ got unexpected arguments, which will be ignored: ['state_dependent_std']
+Actor MLP: MLP(
+  (0): Linear(in_features=77, out_features=256, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Linear(in_features=256, out_features=128, bias=True)
+  (3): ELU(alpha=1.0)
+  (4): Linear(in_features=128, out_features=128, bias=True)
+  (5): ELU(alpha=1.0)
+  (6): Linear(in_features=128, out_features=22, bias=True)
+)
+Critic MLP: MLP(
+  (0): Linear(in_features=80, out_features=256, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Linear(in_features=256, out_features=128, bias=True)
+  (3): ELU(alpha=1.0)
+  (4): Linear(in_features=128, out_features=128, bias=True)
+  (5): ELU(alpha=1.0)
+  (6): Linear(in_features=128, out_features=1, bias=True)
+)
+[33m03:58:25 [math.py] WARNING: The function 'quat_rotate_inverse' will be deprecated in favor of the faster method 'quat_apply_inverse'. Please use 'quat_apply_inverse' instead....[0m
+[gait_clock_mdp] feet_gait bodies ['leg_left_ankle_roll', 'leg_right_ankle_roll'] offsets [0.0, 0.5] period 0.8 threshold 0.55 step_dt 0.04
+[gait_clock_mdp] feet_swing_height bodies ['leg_left_ankle_roll', 'leg_right_ankle_roll']: link-origin z of feet in contact median 0.0909 m (n=4); foot_height_offset 0.06 m, target 0.05 m
+################################################################################
+                      [1m Learning iteration 0/6000 [0m                       
+
+                       Computation: 19500 steps/s (collection: 4.581s, learning 0.460s)
+             Mean action noise std: 1.00
+          Mean value_function loss: 0.0686
+               Mean surrogate loss: -0.0061
+                 Mean entropy loss: 31.2231
+                       Mean reward: -0.38
+               Mean episode length: 18.95
+Episode_Reward/track_lin_vel_xy_exp: 0.0108
+Episode_Reward/track_ang_vel_z_exp: 0.0064
+Episode_Reward/termination_penalty: -0.0139
+       Episode_Reward/lin_vel_z_l2: -0.0002
+      Episode_Reward/ang_vel_xy_l2: -0.0045
+Episode_Reward/flat_orientation_l2: -0.0032
+     Episode_Reward/action_rate_l2: -0.0010
+     Episode_Reward/dof_torques_l2: -0.0001
+         Episode_Reward/dof_acc_l2: -0.0007
+     Episode_Reward/dof_pos_limits: -0.0025
+      Episode_Reward/feet_air_time: 0.0000
+         Episode_Reward/feet_slide: -0.0004
+ Episode_Reward/undesired_contacts: -0.0002
+Episode_Reward/joint_deviation_hip: -0.0016
+Episode_Reward/joint_deviation_ankle_roll: -0.0009
+Episode_Reward/joint_deviation_shoulder: -0.0086
+Episode_Reward/joint_deviation_elbow: -0.0058
+          Episode_Reward/feet_gait: 0.0127
+  Episode_Reward/feet_swing_height: -0.0002
+Metrics/base_velocity/error_vel_xy: 0.0369
+Metrics/base_velocity/error_vel_yaw: 0.0438
+      Episode_Termination/time_out: 0.0194
+Episode_Termination/base_orientation: 0.3288
+--------------------------------------------------------------------------------
+                   Total timesteps: 98304
+                    Iteration time: 5.04s
+                      Time elapsed: 00:00:05
+                               ETA: 08:24:06
+
+Could not find git repository in /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/rsl_rl/__init__.py. Skipping.
+Storing git diff for 'bhl-robustness-ladder' in: /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/git/bhl-robustness-ladder.diff
+[33m03:58:30 [math.py] WARNING: The function 'quat_rotate_inverse' will be deprecated in favor of the faster method 'quat_apply_inverse'. Please use 'quat_apply_inverse' instead....[0m
+################################################################################
+                      [1m Learning iteration 1/6000 [0m                       
+
+                       Computation: 39031 steps/s (collection: 2.378s, learning 0.140s)
+             Mean action noise std: 1.00
+          Mean value_function loss: 0.0431
+               Mean surrogate loss: -0.0071
+                 Mean entropy loss: 31.2054
+                       Mean reward: -0.42
+               Mean episode length: 16.62
+Episode_Reward/track_lin_vel_xy_exp: 0.0146
+Episode_Reward/track_ang_vel_z_exp: 0.0092
+Episode_Reward/termination_penalty: -0.0200
+       Episode_Reward/lin_vel_z_l2: -0.0002
+      Episode_Reward/ang_vel_xy_l2: -0.0059
+Episode_Reward/flat_orientation_l2: -0.0047
+     Episode_Reward/action_rate_l2: -0.0015
+     Episode_Reward/dof_torques_l2: -0.0001
+         Episode_Reward/dof_acc_l2: -0.0008
+     Episode_Reward/dof_pos_limits: -0.0036
+      Episode_Reward/feet_air_time: 0.0000
+         Episode_Reward/feet_slide: -0.0006
+ Episode_Reward/undesired_contacts: -0.0003
+Episode_Reward/joint_deviation_hip: -0.0023
+Episode_Reward/joint_deviation_ankle_roll: -0.0014
+Episode_Reward/joint_deviation_shoulder: -0.0128
+Episode_Reward/joint_deviation_elbow: -0.0085
+          Episode_Reward/feet_gait: 0.0183
+  Episode_Reward/feet_swing_height: -0.0002
+Metrics/base_velocity/error_vel_xy: 0.0575
+Metrics/base_velocity/error_vel_yaw: 0.0677
+      Episode_Termination/time_out: 0.0057
+Episode_Termination/base_orientation: 0.9825
+--------------------------------------------------------------------------------
+                   Total timesteps: 196608
+                    Iteration time: 2.52s
+                      Time elapsed: 00:00:07
+                               ETA: 06:17:54
+
+################################################################################
+                      [1m Learning iteration 2/6000 [0m                       
+
+                       Computation: 37851 steps/s (collection: 2.456s, learning 0.141s)
+             Mean action noise std: 1.00
+          Mean value_function loss: 0.0289
+               Mean surrogate loss: -0.0067
+                 Mean entropy loss: 31.1847
+                       Mean reward: -0.43
+               Mean episode length: 16.95
+Episode_Reward/track_lin_vel_xy_exp: 0.0147
+Episode_Reward/track_ang_vel_z_exp: 0.0092
+Episode_Reward/termination_penalty: -0.0200
+       Episode_Reward/lin_vel_z_l2: -0.0002
+      Episode_Reward/ang_vel_xy_l2: -0.0059
+Episode_Reward/flat_orientation_l2: -0.0048
+     Episode_Reward/action_rate_l2: -0.0015
+     Episode_Reward/dof_torques_l2: -0.0001
+         Episode_Reward/dof_acc_l2: -0.0008
+     Episode_Reward/dof_pos_limits: -0.0037
+      Episode_Reward/feet_air_time: 0.0000
+         Episode_Reward/feet_slide: -0.0006
+ Episode_Reward/undesired_contacts: -0.0003
+Episode_Reward/joint_deviation_hip: -0.0024
+Episode_Reward/joint_deviation_ankle_roll: -0.0014
+Episode_Reward/joint_deviation_shoulder: -0.0129
+Episode_Reward/joint_deviation_elbow: -0.0086
+          Episode_Reward/feet_gait: 0.0185
+  Episode_Reward/feet_swing_height: -0.0002
+Metrics/base_velocity/error_vel_xy: 0.0592
+Metrics/base_velocity/error_vel_yaw: 0.0696
+      Episode_Termination/time_out: 0.0002
+Episode_Termination/base_orientation: 0.9997
+--------------------------------------------------------------------------------
+                   Total timesteps: 294912
+                    Iteration time: 2.60s
+                      Time elapsed: 00:00:10
+                               ETA: 05:38:26
+
+[33m03:58:35 [math.py] WARNING: The function 'quat_rotate_inverse' will be deprecated in favor of the faster method 'quat_apply_inverse'. Please use 'quat_apply_inverse' instead....[0m
+################################################################################
+                      [1m Learning iteration 3/6000 [0m                       
+
+                       Computation: 39281 steps/s (collection: 2.362s, learning 0.141s)
+             Mean action noise std: 1.00
+          Mean value_function loss: 0.0260
+               Mean surrogate loss: -0.0055
+                 Mean entropy loss: 31.1617
+                       Mean reward: -0.39
+               Mean episode length: 16.99
+Episode_Reward/track_lin_vel_xy_exp: 0.0152
+Episode_Reward/track_ang_vel_z_exp: 0.0094
+Episode_Reward/termination_penalty: -0.0200
+       Episode_Reward/lin_vel_z_l2: -0.0002
+      Episode_Reward/ang_vel_xy_l2: -0.0058
+Episode_Reward/flat_orientation_l2: -0.0048
+     Episode_Reward/action_rate_l2: -0.0015
+     Episode_Reward/dof_torques_l2: -0.0001
+         Episode_Reward/dof_acc_l2: -0.0008
+     Episode_Reward/dof_pos_limits: -0.0037
+      Episode_Reward/feet_air_time: 0.0000
+         Episode_Reward/feet_slide: -0.0006
+ Episode_Reward/undesired_contacts: -0.0004
+Episode_Reward/joint_deviation_hip: -0.0024
+Episode_Reward/joint_deviation_ankle_roll: -0.0014
+Episode_Reward/joint_deviation_shoulder: -0.0129
+Episode_Reward/joint_deviation_elbow: -0.0086
+          Episode_Reward/feet_gait: 0.0187
+  Episode_Reward/feet_swing_height: -0.0002
+Metrics/base_velocity/error_vel_xy: 0.0590
+Metrics/base_velocity/error_vel_yaw: 0.0699
+      Episode_Termination/time_out: 0.0000
+Episode_Termination/base_orientation: 1.0000
+--------------------------------------------------------------------------------
+                   Total timesteps: 393216
+                    Iteration time: 2.50s
+                      Time elapsed: 00:00:12
+                               ETA: 05:16:19
+
+################################################################################
+                      [1m Learning iteration 4/6000 [0m                       
+
+                       Computation: 39562 steps/s (collection: 2.344s, learning 0.141s)
+             Mean action noise std: 1.00
+          Mean value_function loss: 0.0270
+               Mean surrogate loss: -0.0084
+                 Mean entropy loss: 31.1502
+[... cut ...]
+          Episode_Reward/feet_gait: 0.4388
+  Episode_Reward/feet_swing_height: -0.0047
+Metrics/base_velocity/error_vel_xy: 0.3787
+Metrics/base_velocity/error_vel_yaw: 1.0132
+      Episode_Termination/time_out: 0.3718
+Episode_Termination/base_orientation: 0.6284
+--------------------------------------------------------------------------------
+                   Total timesteps: 589725696
+                    Iteration time: 2.46s
+                      Time elapsed: 04:10:19
+                               ETA: 00:00:05
+
+[33m08:10:36 [math.py] WARNING: The function 'quat_rotate_inverse' will be deprecated in favor of the faster method 'quat_apply_inverse'. Please use 'quat_apply_inverse' instead....[0m
+################################################################################
+                     [1m Learning iteration 5999/6000 [0m                     
+
+                       Computation: 39672 steps/s (collection: 2.339s, learning 0.138s)
+             Mean action noise std: 2.33
+          Mean value_function loss: 0.1305
+               Mean surrogate loss: -0.0118
+                 Mean entropy loss: 47.5560
+                       Mean reward: 8.05
+               Mean episode length: 286.97
+Episode_Reward/track_lin_vel_xy_exp: 0.8651
+Episode_Reward/track_ang_vel_z_exp: 0.2138
+Episode_Reward/termination_penalty: -0.0123
+       Episode_Reward/lin_vel_z_l2: -0.0021
+      Episode_Reward/ang_vel_xy_l2: -0.0601
+Episode_Reward/flat_orientation_l2: -0.0119
+     Episode_Reward/action_rate_l2: -0.2560
+     Episode_Reward/dof_torques_l2: -0.0042
+         Episode_Reward/dof_acc_l2: -0.0421
+     Episode_Reward/dof_pos_limits: -0.1639
+      Episode_Reward/feet_air_time: 0.0000
+         Episode_Reward/feet_slide: -0.0172
+ Episode_Reward/undesired_contacts: -0.0001
+Episode_Reward/joint_deviation_hip: -0.0788
+Episode_Reward/joint_deviation_ankle_roll: -0.0458
+Episode_Reward/joint_deviation_shoulder: -0.2531
+Episode_Reward/joint_deviation_elbow: -0.1220
+          Episode_Reward/feet_gait: 0.4301
+  Episode_Reward/feet_swing_height: -0.0048
+Metrics/base_velocity/error_vel_xy: 0.3591
+Metrics/base_velocity/error_vel_yaw: 0.9853
+      Episode_Termination/time_out: 0.3743
+Episode_Termination/base_orientation: 0.6260
+--------------------------------------------------------------------------------
+                   Total timesteps: 589824000
+                    Iteration time: 2.48s
+                      Time elapsed: 04:10:21
+                               ETA: 00:00:02
+
+2026-10-02T15:08:09Z [15,034,030ms] [Warning] [omni.datastore] DerivedDataCache : Perform disk garbage collection
+2026-10-02T15:08:39Z [15,064,035ms] [Warning] [omni.datastore] DerivedDataCache : Perform disk garbage collection
+2026-10-02T15:09:09Z [15,094,044ms] [Warning] [omni.datastore] DerivedDataCache : Perform disk garbage collection
+2026-10-02T15:09:39Z [15,124,049ms] [Warning] [omni.datastore] DerivedDataCache : Perform disk garbage collection
+2026-10-02T15:10:09Z [15,154,058ms] [Warning] [omni.datastore] DerivedDataCache : Perform disk garbage collection
+2026-10-02T15:10:39Z [15,184,067ms] [Warning] [omni.datastore] DerivedDataCache : Perform disk garbage collection
+train.sh: mean episode length 286.97
+train.sh: reached 6000 logged iterations

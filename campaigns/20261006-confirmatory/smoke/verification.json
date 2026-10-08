@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "unscored_seeds": [
+    70999,
+    73999
+  ],
+  "backend_max_abs_differences": {
+    "dr-off-s0": 0.0,
+    "dr-off-s1": 0.0,
+    "dr-off-s2": 0.0,
+    "dr-s0.5-s0": 0.0,
+    "dr-s0.5-s1": 0.0,
+    "dr-s0.5-s2": 0.0,
+    "dr-default-s0": 0.0,
+    "dr-default-s1": 0.0,
+    "dr-default-s2": 0.0,
+    "dr-s1.5-s0": 0.0,
+    "dr-s1.5-s1": 0.0,
+    "dr-s1.5-s2": 0.0,
+    "dr-aggressive-s0": 0.0,
+    "dr-aggressive-s1": 0.0,
+    "dr-aggressive-s2": 0.0
+  },
+  "physical_rollout_backend_equivalence": {
+    "dr-off-s0": {
+      "result": {
+        "command_vx": 0.3,
+        "command_vy": 0,
+        "command_wz": 0,
+        "seed": 70999,
+        "fell": false,
+        "survival_s": 10.0,
+        "lin_vel_err": 0.20839698043134477,
+        "yaw_rate_err": 0.09322204461056066,
+        "distance_m": 2.182121992111206,
+        "mean_height_m": -0.04901379306683719,
+        "mean_tilt_rad": 0.053984570769876394,
+        "pushes_applied": 0,
+        "pushes_survived": 0,
+        "terrain_difficulty": 0.0
+      },
+      "upstream_wall_s": 2.942835677997209,
+      "single_thread_wall_s": 3.399807572015561,
+      "bit_identical_episode_metrics": true
+    },
+    "dr-default-s0": {
+      "result": {
+        "command_vx": 0.3,
+        "command_vy": 0,
+        "command_wz": 0,
+        "seed": 70999,
+        "fell": false,
+        "survival_s": 10.0,
+        "lin_vel_err": 0.26555241586433515,
+        "yaw_rate_err": 0.18180019809967943,
+        "distance_m": 3.0539066791534424,
+        "mean_height_m": -0.04950236866669632,
+        "mean_tilt_rad": 0.07582906486807771,
+        "pushes_applied": 0,
+        "pushes_survived": 0,
+        "terrain_difficulty": 0.0
+      },
+      "upstream_wall_s": 5.848015867057256,
+      "single_thread_wall_s": 6.202528698020615,
+      "bit_identical_episode_metrics": true
+    }
+  },
+  "navigation_exit_code": 0,
+  "navigation_outcome_not_gated": "time_out",
+  "navigation_sensor_stats": {
+    "received_extero_packets": 208,
+    "dropped_extero_packets": 92,
+    "braked_robot_steps": 285,
+    "stale_stop_robot_steps": 130,
+    "range_limited_robot_steps": 157,
+    "imu_limited_robot_steps": 1,
+    "sampled_robot_steps": 750
+  }
+}

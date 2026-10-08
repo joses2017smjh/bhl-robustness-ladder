@@ -1,9 +1,11 @@
 # Sorting garments into baskets
 
-> **Status, 2026-09-15: the free-standing robot sorts 22 of 24 rigid proxies with no falls.
+> **Status, 2026-09-18: the free-standing robot sorts 22 of 24 rigid proxies with no falls.
 > Pinned-base Newton cloth: shirt 4/4 (`21329265`) and sock 4/4 (`21338290`), all finite;
-> jacket 0/4 finite (`21338291`). Free-base Newton is not finite with the arm still
-> (`21338288`).** The first scene was never reachable — the garment sat
+> jacket 0/4 finite (`21338291`) and still 4/4 nonfinite on a softer/thicker sheet
+> (`21353201`). Free-base Newton is not finite with the arm still at 60 Hz
+> (`21338288`) or dt=0.005 (`21353200`) — no next physics probe. Isaac C5 pose-fix
+> four-episode is 2/4 sorted (`21353130`, moved 4/4, travel 0.19 m).** The first scene was never reachable — the garment sat
 > 0.74 m away, the fingertips reach 0.28 m forward, and in Isaac the robot faced the other
 > way. The layout is rebuilt in the robot's own frame, inside a measured fingertip table.
 > In Isaac the shipped hands turned out to collide with nothing, and once they did, the
@@ -391,6 +393,19 @@ cloth-to-arm coupling. **With one-way coupling and nothing else changed, the clo
 settles in the shirts basket. That is C2 on a pinned base, under a stated approximation: the
 rigid solver does not feel the cloth, so a 16 g cloth cannot push back on the arm. Under
 Newton the arm tracked at 38 mm mean, against PhysX's 1.4.
+
+**dt=0.005 and a softer jacket sheet do not close it** (`21353200`, `21353201`).
+Free-base hold at 200 Hz is still 2/2 nonfinite, garment travel ~0
+(`isaac_c2_hold_dt005.json`). Jacket on the pinned base with a thicker/softer
+VBD sheet is 4/4 nonfinite; `success_rate_finite` 0. The headline `success_rate`
+1.0 on that JSON is a blown-up episode, not a sort. Those two cells stay
+unqueued until there is a new physics idea.
+
+**Isaac C5 Mode B, pose-fix, four episodes** (`21353130`): 2/4 sorted, garment
+moved 4/4, mean travel 0.19 m, fall 0, nonfinite 0
+(`isaac_c5_posefix_full.json`). The parked rigid proxies no longer sit in a 180°
+pitch from a `native_quat` double-conversion; `_STAND_UP=(0,0,0,1)`. Half of
+the live garments still miss the basket.
 
 **Quaternion order.** Isaac Lab 3.0 stores quaternions `(x, y, z, w)`; 2.x stored
 `(w, x, y, z)`, and every literal and hand-written unpack in this repo assumed the

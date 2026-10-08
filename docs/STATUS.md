@@ -1,6 +1,6 @@
 # Repository status — one page
 
-**Updated:** 2026-09-28. **Branch:** `mission7-approach-followup` (all campaign
+**Updated:** 2026-10-06. **Branch:** `mission7-approach-followup` (all campaign
 work; merged to `main` through PR #9). Master backlog: [`REPO_TASKS.md`](REPO_TASKS.md). Pending work and stretch goals: [`ROADMAP.md`](ROADMAP.md).
 
 | Workstream | State | Latest measured result | Next executable action |
@@ -29,3 +29,40 @@ ledger) and unresolved until the user reconciles it (ledger, 2026-10-01).
 > **Quota, 2026-10-01.** Project 30762 holds 1.529 TB against its 1.5 TB soft quota (2 TB hard), with 3 weeks 5 days of grace (`lfs quota -p 30762 /nfs/hpc/share`). The `fold-adapt-s{0,1}` reclaim estimate above is stale: those folders now hold 4.3 GB each. What to prune is the user's decision.
 
 > **Quota, 2026-10-02.** The user approved deleting the intermediate training checkpoints: 49.5 GB in 360 finished runs (finals and every cited or parent checkpoint kept; manifest `solutions-20260930/ckpt_deleted_20261002.tsv`). The project went from 1.549 TB to 1.514 TB, still about 14 GB over the 1.5 TB soft quota.
+
+
+### 2026-10-06 confirmatory campaign
+
+Queued CPU-only confirmation, maximum two new evaluations simultaneously: **21601701** (15 cells, 3,600 locomotion episodes), **21601709** (8 cells, 384 navigation/A* episodes, after the complete locomotion array), **21601710** (final verdict after both arrays, including failed tasks). No training checkpoint or favorable episode is selected after scoring. All five randomization rungs retain their three final training seeds; the exact upstream observation/controller, 6 Nm PD saturation and fall definitions are preserved. Fresh reset seeds 71000–71019, six fixed commands and both flat/no-push and 0.4 m/s matched velocity kicks. Tracking and displacement accompany falls so standing still cannot imply successful locomotion. Deployment smoke: all 15 models have exact ONNX parity under one inference thread; two complete physical rollouts have identical episode metrics; 80 relevant regression tests pass. Frozen executable archive: [campaigns](../campaigns/20261006-confirmatory/). Evidence is **pending**, with an estimated 5–8 hours of CPU execution plus scheduling.
+
+
+<!-- bhl-confirmation-results-2026-10-06 source_sha256=d74574dbc07e93b48655168268d22b84feb481122b232bf220c31b7e227b7b5e -->
+### Recorded confirmation outcomes — campaign 2026-10-06
+Append-only evidence update at `2026-10-06T12:56:38.990567+00:00`. This dated record supersedes the earlier queued-status paragraph for this campaign; historical experiment results above remain their original records.
+**Locomotion: PASS. Navigation: NEGATIVE.** Recorded episode files: locomotion **3600/3,600 planned**; navigation **384/384 planned**. File counts alone do not certify valid episodes.
+| Randomization rung (3 training seeds) | Flat falls / reported episodes | Push04 falls / reported episodes | Flat mean displacement |
+|---|---|---|---|
+| dr-off | 77/360 | 341/360 | 1.408 m |
+| dr-s0.5 | 4/360 | 268/360 | 1.849 m |
+| dr-default | 0/360 | 13/360 | 1.984 m |
+| dr-s1.5 | 0/360 | 0/360 | 1.767 m |
+| dr-aggressive | 60/360 | 60/360 | 0.129 m |
+
+Flat denominators are 360 per rung when complete (3 policies × 6 commands × 20 shared reset seeds), with another 360 disturbed episodes per rung. The flat replication rule requires zero falls for each default policy and fewer falls than its matched unrandomized policy. Push04 is descriptive. Full per-training-seed/command tracking, displacement and paired outcomes remain in `dr_verdict.json`; surviving-step errors alone cannot rank failed policies. When the verdict is INCOMPLETE, reported partial counts do not establish a validated complete experiment.
+
+| Navigation actor | Condition | Goals / reported episodes | Clean | Falls | Complete evidence |
+|---|---|---|---|---|---|
+| armV5-s8 | nominal | 44/48 | 44/48 | 1/48 | True |
+| armV5-s8 | drop35 | 43/48 | 43/48 | 0/48 | True |
+| armV5-s9 | nominal | 46/48 | 44/48 | 1/48 | True |
+| armV5-s9 | drop35 | 44/48 | 44/48 | 2/48 | True |
+| armV5-s10 | nominal | 44/48 | 44/48 | 2/48 | True |
+| armV5-s10 | drop35 | 46/48 | 45/48 | 0/48 | True |
+| astar | nominal | 44/48 | 39/48 | 0/48 | True |
+| astar | drop35 | 45/48 | 42/48 | 0/48 | True |
+
+Each complete navigation cell contains 48 shared held-out 6×6 layouts. Each final learned actor must meet both ≥40/48 nominal and ≥36/48 drop35 goals with zero falls; all actors and the matched A* control are reported. Clean means no wall contact at any physics step. An incomplete cell cannot establish validated success, regardless of its reported partial goal count.
+
+Scope: simulation only. Isaac-trained frozen 12-DoF PPO gait; navigation uses a learned PPO actor with oracle pose/goal and a scripted reactive speed brake; A* is the reference. Shared layouts, commands and reset seeds are clustered observations, not independent trained policies. Neither PASS nor a zero observed fall count certifies hardware deployment.
+
+Immutable JSON sources: `/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_confirmatory/dr_verdict.json` and `/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_confirmatory/verdict.json`. Locomotion JSON SHA256: `7bd2629ae71b8bddd61e1b4c9d88c85d1abd5116f145d00f3783755bd82fcc04`; navigation JSON SHA256: `7b9a1901f1febd48e6ff4849ecbd26a2ca6c15f36326da5be378d2020b9b8393`. Combined source SHA256: `d74574dbc07e93b48655168268d22b84feb481122b232bf220c31b7e227b7b5e`. Executable protocol and publisher are archived in `campaigns/20261006-confirmatory`.
