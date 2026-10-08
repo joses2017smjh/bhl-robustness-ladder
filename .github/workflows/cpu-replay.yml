@@ -7,6 +7,8 @@ on:
       - 'src/**'
       - 'tests/**'
       - 'scripts/**'
+      - 'external/**'
+      - '.gitmodules'
       - 'requirements-test.txt'
       - 'results/resume-revamp-20261007/portable-bundle.zip'
       - '.github/workflows/cpu-replay.yml'
@@ -15,6 +17,8 @@ on:
       - 'src/**'
       - 'tests/**'
       - 'scripts/**'
+      - 'external/**'
+      - '.gitmodules'
       - 'requirements-test.txt'
       - 'results/resume-revamp-20261007/portable-bundle.zip'
       - '.github/workflows/cpu-replay.yml'
@@ -40,6 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          fetch-depth: 0
           submodules: recursive
       - uses: actions/setup-python@v7
         with:
