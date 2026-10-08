@@ -1,0 +1,38 @@
+Manual GitHub Actions template
+==============================
+replay-workflow.yml.example is a workflow template, not an executed CI result.
+Copy it to .github/workflows/replay.yml when ready to enable manual dispatch.
+There is no scheduled/push trigger, secret, repository write or artifact upload.
+
+Supply a trusted HTTPS URL for a ZIP with the portable replay files at its root,
+and a SHA-256 obtained independently from your local ZIP. The workflow verifies
+the ZIP hash and mandatory asset hashes before installing or running the bundle.
+Use a URL without credentials; the workflow never publishes the model or data.
+No hosting or upload was performed in the local 2026-10-07 implementation.
+
+Build a local archive from the directory produced by sim_regression.py:
+  python -m zipfile -c portable-bundle.zip replay.py verify.py manifest.json \
+    deploy.yaml policy.onnx requirements.txt USAGE.txt src scene LICENSE-*.txt
+  sha256sum portable-bundle.zip
+Run this in the bundle directory so manifest.json is at the ZIP root. Each
+manifest input must be included. On a platform without wildcard expansion,
+include each existing license file by its explicit name.
+
+Python 3.11 and pinned numpy/MuJoCo/ONNX/OmegaConf/Torch releases are installed.
+Torch uses a CPU wheel; its exact local wheel build is recorded in run receipts,
+while verification compares the same Torch release across CPU/CUDA wheel tags.
+
+The replay command returns nonzero for nominal-repeat failure, undetected
+injected regression or inconsistent guard decisions. The integration command
+requires actual assets and tests corruption/missing-input refusal through the
+CLI. The benchmark excludes physics, networking and hard-real-time scheduling.
+
+Template YAML and embedded Python can be checked locally. Local tests on one
+host do not establish a successful fresh dependency install, a GitHub run,
+cross-host determinism or a long-term CI flake rate. Use each GitHub run's own
+hardware receipt and timing measurements; do not import local latency numbers.
+
+Workflow syntax source:
+https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+Python setup action source:
+https://github.com/actions/setup-python

@@ -573,7 +573,8 @@ def test_the_m3_launcher_and_the_v1_bench_are_unchanged():
 
 # gait_clock.py as R1's qualification and the clocks2 smoke (21516422) used it; other workstreams may append to the
 # file (turning-hold did on 2026-10-02 and then restored it), so the controller code this override builds is compared
-# function by function.
+# function by function. Factory dispatch may gain unrelated workstreams; its
+# plain and mission7 clock paths are compared by controller inputs/outputs.
 GAIT_CLOCK_COMMIT = ("563bb9a", "eedd6279fd74e9706e8015e4c048900f08570d26f54f9905af3346e54d8f6b98")
 
 
@@ -589,11 +590,32 @@ def test_the_clock_controller_the_override_builds_is_the_committed_one(tmp_path)
     assert hashlib.sha256(text).hexdigest() == GAIT_CLOCK_COMMIT[1]
     (tmp_path / "gait_clock_ref.py").write_bytes(text)
     ref = _load(tmp_path / "gait_clock_ref.py", "gait_clock_ref")
-    for name in ("clock_phase", "clock_features", "base_obs_width", "has_clock", "make_controller",
+    for name in ("clock_phase", "clock_features", "base_obs_width", "has_clock",
                  "_clock_controller_class"):
         assert inspect.getsource(getattr(gc, name)) == inspect.getsource(getattr(ref, name)), name
     assert (gc.CLOCK_KEY, gc.EXPECTED_PERIOD_S, gc.EXPECTED_PHASE_OFFSET, gc.N_BASE_TERMS_FIXED) == (
         ref.CLOCK_KEY, ref.EXPECTED_PERIOD_S, ref.EXPECTED_PHASE_OFFSET, ref.N_BASE_TERMS_FIXED)
+    # A waiter_wbc branch is allowed to coexist, but must not redirect the
+    # frozen plain or mission7 clock configurations or alter their behavior.
+    from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController
+    for clock, width in ((False, 75), (True, 77)):
+        actual = gc.make_controller(_cfg(width, clock))
+        expected = ref.make_controller(_cfg(width, clock))
+        if clock:
+            assert type(actual) is gc._clock_controller_class()
+        else:
+            assert type(actual) is RlController
+        assert type(actual).__name__ == type(expected).__name__
+        actual.policy, expected.policy = _Policy(width, 17), _Policy(width, 17)
+        for obs in _robot_obs(24, seed=29):
+            np.testing.assert_array_equal(actual.update(obs), expected.update(obs))
+            np.testing.assert_array_equal(actual.policy_observations, expected.policy_observations)
+            np.testing.assert_array_equal(actual.prev_actions, expected.prev_actions)
+        actual.policy_observations[:] = expected.policy_observations[:] = 0
+        obs = _robot_obs(1, seed=30)[0]
+        np.testing.assert_array_equal(actual.update(obs), expected.update(obs))
+        if clock:
+            assert actual.clock_step == expected.clock_step == 1
 
 
 def test_the_pinned_default_call_lines_stay():

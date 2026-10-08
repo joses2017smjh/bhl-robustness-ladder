@@ -1,0 +1,99 @@
+# Manual template; NOT executed on GitHub during the 2026-10-07 local work.
+# Copy to .github/workflows/replay.yml only when ready to enable it.
+# Input ZIP must have manifest.json/replay.py/verify.py at its root, and must
+# contain the portable trained bundle. Supply its SHA-256 from a trusted copy.
+# Documentation: https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+name: Trained biped CPU replay
+'on':
+  workflow_dispatch:
+    inputs:
+      bundle_url:
+        description: HTTPS URL of a trusted portable bundle ZIP; no credentials
+        required: true
+        type: string
+      bundle_sha256:
+        description: SHA-256 of that entire ZIP, 64 hexadecimal characters
+        required: true
+        type: string
+permissions: {}
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Download, verify and extract supplied artifact
+        env:
+          REPLAY_BUNDLE_URL: ${{ inputs.bundle_url }}
+          REPLAY_BUNDLE_SHA256: ${{ inputs.bundle_sha256 }}
+        run: |
+          python - <<'PY'
+          import hashlib, io, json, os, re, stat, urllib.parse, urllib.request, zipfile
+          from pathlib import Path, PurePosixPath
+          url = os.environ['REPLAY_BUNDLE_URL']
+          expected = os.environ['REPLAY_BUNDLE_SHA256'].lower()
+          parsed = urllib.parse.urlparse(url)
+          if parsed.scheme != 'https' or not parsed.netloc or parsed.username or parsed.password:
+              raise SystemExit('bundle_url must be HTTPS, without credentials')
+          if not re.fullmatch('[0-9a-f]{64}', expected):
+              raise SystemExit('invalid SHA-256')
+          with urllib.request.urlopen(url, timeout=60) as response:
+              if urllib.parse.urlparse(response.url).scheme != 'https':
+                  raise SystemExit('redirect must remain HTTPS')
+              data = response.read(64 * 1024 * 1024 + 1)
+          if len(data) > 64 * 1024 * 1024 or hashlib.sha256(data).hexdigest() != expected:
+              raise SystemExit('ZIP too large or hash mismatch')
+          root = Path('bundle')
+          root.mkdir()
+          with zipfile.ZipFile(io.BytesIO(data)) as archive:
+              if sum(e.file_size for e in archive.infolist()) > 128 * 1024 * 1024:
+                  raise SystemExit('expanded ZIP too large')
+              seen = set()
+              for entry in archive.infolist():
+                  p = PurePosixPath(entry.filename)
+                  if p.is_absolute() or '..' in p.parts or '\\' in entry.filename or entry.filename in seen:
+                      raise SystemExit('invalid or duplicate ZIP path')
+                  seen.add(entry.filename)
+                  if stat.S_ISLNK(entry.external_attr >> 16):
+                      raise SystemExit('symlinks not permitted')
+                  archive.extract(entry, root)
+          manifest = json.loads((root / 'manifest.json').read_text())
+          if manifest.get('schema') != 'bhl-replay-v1' or not manifest.get('files_sha256'):
+              raise SystemExit('invalid manifest')
+          for name, value in manifest['files_sha256'].items():
+              f = root / name
+              if not f.resolve().is_relative_to(root.resolve()) or not f.is_file():
+                  raise SystemExit('manifest asset absent or invalid')
+              if hashlib.sha256(f.read_bytes()).hexdigest() != value:
+                  raise SystemExit('manifest asset hash mismatch')
+          print('Archive and mandatory asset hashes verified')
+          PY
+      - name: Install pinned CPU runtime
+        run: |
+          python -m pip install torch==2.7.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r bundle/requirements.txt
+      - name: Actual-asset integration and CLI negative controls
+        run: python bundle/verify.py --bundle bundle --out integration-tests.json
+      - name: Seeded physics replay, fault gates and timing report
+        run: python bundle/replay.py --bundle bundle --out replay-results --calls 10000 --warmup 500
+      - name: Print outcome
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for name in ('integration-tests.json', 'replay-results/report.json'):
+              if Path(name).is_file():
+                  report = json.loads(Path(name).read_text())
+                  print(name, json.dumps({k: v for k, v in report.items() if k in
+                      ('status', 'tests_run', 'failures', 'errors', 'nominal_repeats_passed', 'nominal_cases', 'faults_detected', 'fault_cases')}))
+          PY
+# There is no checkout, upload-artifact, deployment, secret or repository write.
+# Local replay evidence does not establish that this template ran on GitHub.

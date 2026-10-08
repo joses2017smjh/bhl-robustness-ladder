@@ -118,7 +118,26 @@ def test_env_cfg_declares_the_v2_generator_and_task():
     assert cls and [b.id for b in cls[0].bases] == ["HumanoidPlateCrossCfg"]
     assert 'TASK_ID_V2 = "Velocity-BHL-Arms-PlateCross2-v0"' in src
     init = (REPO / "src/bhl_robust/tasks/__init__.py").read_text()
-    assert "_platecross2.HumanoidPlateCross2Cfg" in init and init.rstrip().endswith("# --- end m7-platecross2 ---")
+    # Later task registrations may follow this block. Verify the PlateCross2
+    # registration itself, including its exact task id/config and guarded path.
+    start, end = "# --- m7-platecross2 ---", "# --- end m7-platecross2 ---"
+    assert init.count(start) == init.count(end) == 1
+    block = init.split(start, 1)[1].split(end, 1)[0]
+    registration = ast.parse(block)
+    calls = [n for n in ast.walk(registration) if isinstance(n, ast.Call)
+             and isinstance(n.func, ast.Attribute) and isinstance(n.func.value, ast.Name)
+             and n.func.value.id == "gym" and n.func.attr == "register"]
+    assert len(calls) == 1
+    keywords = {k.arg: ast.unparse(k.value) for k in calls[0].keywords}
+    assert keywords["id"] == "_platecross2.TASK_ID_V2"
+    assert ast.literal_eval(keywords["entry_point"]) == "isaaclab.envs:ManagerBasedRLEnv"
+    assert ast.literal_eval(keywords["disable_env_checker"]) is True
+    kwargs = next(k.value for k in calls[0].keywords if k.arg == "kwargs")
+    config = {ast.literal_eval(k): ast.unparse(v) for k, v in zip(kwargs.keys, kwargs.values)}
+    assert config == {"env_cfg_entry_point": "_platecross2.HumanoidPlateCross2Cfg",
+                      "rsl_rl_cfg_entry_point": "_ARM_PPO_CFG"}
+    assert any(isinstance(n, ast.Try) and n.handlers for n in registration.body)
+    assert "m7-platecross2 id NOT registered" in block
 
 
 def test_v2_launcher_differs_from_v1_only_where_declared():

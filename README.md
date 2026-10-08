@@ -14,6 +14,25 @@ I built evaluation infrastructure around [Berkeley Humanoid Lite](https://github
 
 Training reward can improve while transfer or task completion gets worse. I train locomotion policies in Isaac Lab, export ONNX, and score selected checkpoints in headless MuJoCo using upstream's deployment controller. Versioned tasks, sensor validity checks, physics-step contact scoring, and predeclared gates separate a successful experiment from a job that merely completed.
 
+## October 7: reproducible evaluation results
+
+[Resume project sections](docs/resume-results-20261007/resume-projects.pdf) ·
+[Methods, evidence and limits](docs/resume-results-20261007/revamp-report.pdf)
+
+The saved October 6 confirmation contains **3,600 locomotion episodes** across
+five randomization settings and three training seeds. Default randomization
+records **0/360 flat falls** versus **77/360** without randomization, and
+**13/360 disturbed falls** versus **341/360**. The flat replication gate passed;
+push results are descriptive. [Locomotion verdict](campaigns/20261006-confirmatory/results/dr_verdict.json).
+
+The separate **384-episode** navigation confirmation retained its **NEGATIVE**
+zero-fall verdict: learned navigators meet the goal-count thresholds, but record
+six falls across 288 learned-actor episodes. The matched A* control records zero
+falls in 96 episodes. [Navigation verdict](campaigns/20261006-confirmatory/results/verdict.json).
+These saved artifacts were verified for the revamp rather than rerun. Shared
+layouts and reset seeds are clustered observations; navigation uses oracle pose
+and goal. Earlier cohorts below remain their historical records.
+
 ## Measured results
 
 - **Randomization versus transfer:** the 12-DoF biped without randomization falls in 21/90 MuJoCo episodes; the default setting falls in 0/90. Each setting covers three trained policies, six commands, and five evaluation seeds. Training reward ranks them differently. [Protocol](docs/REPORT.md#1--domain-randomization-the-fidelity-ladder) · [Aggregate CSV](results/flat_summary.csv)
@@ -45,6 +64,74 @@ flowchart LR
 - `results/` and `SLURM_JOBS.md`: committed score artifacts and experiment provenance.
 
 Ray-cast depth provides a cheap geometric baseline; it is not calibrated physical stereo. Separate Isaac 5.1 and 6.0 stacks preserve older results while testing newer rendering. Frozen checkpoint qualification avoids promoting a training run on reward alone. Oracle state simplifies diagnosis but limits claims about autonomous navigation.
+
+## Portable simulation regression replay
+
+[Measured replay results](results/resume-revamp-20261007/replay_report.json) ·
+[Raw timing samples](results/resume-revamp-20261007/policy_timing.csv) ·
+[Navigation pilot](results/resume-revamp-20261007/navigation_development.json)
+
+The October 7 revamp packages an actual trained **12-DoF biped** checkpoint,
+upstream controller, deployment configuration, MJCF and referenced meshes with
+30 file hashes and pinned runtime versions. A relocated bundle ran from `/tmp`
+with `PYTHONPATH` unset; it uses no Isaac installation or GPU inference.
+
+Five seeded nominal trajectories reproduced exactly on the same host, and
+**40/40 injected sensor, action and contact-scoring regressions** were detected.
+A changed trajectory is a regression relative to the reference; these gates do
+not establish safe behavior under faults or cross-host determinism.
+
+The speedup below compares cached versus uncached added validators; it does not measure faster ONNX inference or the original unguarded controller.
+
+Caching immutable validation limits preserves **208/208** tested decisions and
+reduces median observation/inference/validation time **49–69%** in two
+counterbalanced 5,000-call comparisons. A separate 10,000-call warm measurement
+reports **p99 1.09 ms**, max 16.28 ms and **0 observed misses** against the
+configured **40 ms policy period** on an Intel Xeon Platinum 8480CL host. Physics,
+networking, startup and real-time scheduling are excluded; the lower-level
+4 ms control deadline is outside this measurement.
+
+```bash
+# Supply an actual 12-DoF, no-history deployment and its upstream assets.
+PYTHONPATH=src python scripts/bench/sim_regression.py \
+  --deploy path/to/deploy.yaml --checkpoint path/to/policy.onnx \
+  --upstream path/to/Berkeley-Humanoid-Lite --out /tmp/bhl-replay-bundle
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  python /tmp/bhl-replay-bundle/replay.py --bundle /tmp/bhl-replay-bundle \
+  --out /tmp/bhl-replay-results --calls 10000
+```
+
+The builder refuses missing models; replay verifies source, asset and runtime
+hashes before physics. Output directories cannot be reused. This integration
+suite complements the existing unit tests. A manual CI template is available at
+[`ci/replay-workflow.yml.example`](ci/replay-workflow.yml.example); its artifact
+intake passed local checks, and the workflow has not been executed on GitHub. Bundle generation and relocation
+were tested with the existing environment; a fresh dependency installation and
+GitHub-hosted execution remain unverified.
+
+The separate fresh navigation pilot evaluated the existing yaw filter on one
+actor, two layouts and two sensing conditions (**8 episodes**). Both baseline and
+candidate reached **2/4** goals with no falls; command flip rates fell about
+**53%**. This establishes reduced chatter in the pilot, without establishing a
+goal-success or fall-rate improvement. The consumed layouts are development data.
+
+The measured frozen bundle is included at
+[`results/resume-revamp-20261007/portable-bundle.zip`](results/resume-revamp-20261007/portable-bundle.zip).
+Its SHA256 is `10c37e8749792330dcc52293bc2a14c2f766688326619c7ad0eef60250f51b08`.
+It contains the trained checkpoint, relative asset paths, source hashes and
+upstream license. Follow the archive's `USAGE.txt` in a compatible Python 3.11
+environment. Its frozen source is the measured artifact; a newly built bundle
+from this publication checkout has its own source fingerprints.
+
+Local measurement-checkout testing returned **2,105 passed, two stale assertion
+failures, three skipped**. The two assertions were corrected and their affected
+tests passed; the full suite was not rerun. These are historical measurement
+receipts, rather than a full-suite certification of this publication checkout.
+[Receipt](results/resume-revamp-20261007/final_validation.json).
+
+This publication checkout separately passed both changed tests and all nine
+actual-asset integration checks using a freshly built bundle.
+[Publication validation](results/resume-revamp-20261007/publication_validation.json).
 
 ## Setup and testing
 
