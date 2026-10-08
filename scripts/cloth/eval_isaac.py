@@ -151,6 +151,11 @@ def main() -> None:
     )
     sweep = env.unwrapped.action_manager.get_term("sweep")
     trace_path = None
+    # BHL_SWEEP_TRACE_EPISODES=N traces env 0 for the first N episodes, one file
+    # each. One traced episode could not explain the two free-base shirts that
+    # failed in 21330402: episode 0 was the one that sorted.
+    trace_episodes = int(os.environ.get("BHL_SWEEP_TRACE_EPISODES", "1"))
+    episode_rows: list[dict] = []
     t0 = time.perf_counter()
     env_steps = 0
     fars: list[float] = []
@@ -213,19 +218,28 @@ def main() -> None:
         em.final_distance = float(np.linalg.norm(prev - basket_center(spec.target_basket)[:2])) if measured else float('nan')
         fars.append(far if measured else None)
         metrics.episodes.append(em)
-        if ep == 0 and sweep.trace_on:
-            # BHL_SWEEP_TRACE=1: the first episode's plans and substep samples.
+        episode_rows.append({
+            "episode": ep, "success": bool(em.success), "fell": bool(em.fell), "sweeps": int(step),
+            "refused": int(em.invalid_trajectory), "nonfinite_steps": int(ep_nonfinite),
+            "final_distance": None if em.final_distance != em.final_distance else float(em.final_distance),
+        })
+        if ep < trace_episodes and sweep.trace_on:
+            # BHL_SWEEP_TRACE=1: this episode's plans and substep samples, for env 0.
             from bhl_robust.tasks.cloth_sort_mdp import QUAT_ORDER
-            trace_path = str(Path(args_cli.out or "isaac_eval.json").with_suffix("")) + "_trace.json"
-            Path(trace_path).parent.mkdir(parents=True, exist_ok=True)
-            Path(trace_path).write_text(json.dumps({
+            stem = str(Path(args_cli.out or "isaac_eval.json").with_suffix(""))
+            path = stem + ("_trace.json" if ep == 0 else f"_trace_ep{ep}.json")
+            Path(path).parent.mkdir(parents=True, exist_ok=True)
+            Path(path).write_text(json.dumps({
                 "task": tid, "rung": args_cli.rung, "garment": spec.name, "quat_order": QUAT_ORDER,
-                "sim_dt": float(cfg.sim.dt), "decimation": int(cfg.decimation),
+                "sim_dt": float(cfg.sim.dt), "decimation": int(cfg.decimation), "episode": ep,
                 "arm_joints": list(sweep._table.joints), "p_hand": [float(v) for v in sweep._table.p_hand],
                 "success": bool(em.success), "fell": bool(em.fell), "sweeps": int(step),
                 "plans": sweep.trace_plans, "samples": sweep.trace_samples,
             }))
-            sweep.trace_on = False
+            trace_path = trace_path or path
+            sweep.trace_plans, sweep.trace_samples = [], []
+            if ep + 1 >= trace_episodes:
+                sweep.trace_on = False
     elapsed = time.perf_counter() - t0
     metrics.env_steps_per_s = env_steps / max(elapsed, 1e-9)
     payload = metrics.as_dict()
@@ -240,6 +254,8 @@ def main() -> None:
         payload["clip_dir"] = clip_dir
     if trace_path:
         payload["trace_file"] = trace_path
+        payload["traced_episodes"] = min(trace_episodes, args_cli.episodes)
+    payload["episodes"] = episode_rows
     # A "success" in an episode whose robot state went non-finite is not a sort.
     payload["nonfinite_episodes"] = int(sum(nonfinite_eps))
     payload["success_rate_finite"] = float(np.mean(finite_success)) if finite_success else None
