@@ -521,6 +521,253 @@ def flushpad_verdict_cli(argv) -> int:
     return 0
 
 
+# --- coop-wristhold --- (W, opt-in; 2026-10-03) ----------------------------------------------------------------------
+#
+# The W variant's own entry point, `wristhold_main(argv)`, which slurm/repo20260923/cpu_coop_wristhold.sbatch calls as
+#   python -c '...; import coop_scripted_carry as m; sys.exit(m.wristhold_main(sys.argv[1:]))' --wristhold-stage ...
+# so `main()` and its flags stay byte-identical (no flag is added there). The flush-pad variant UNCHANGED (MODIFIED
+# END-EFFECTOR + HARNESS CHANGE, reverse-keyframe lowering) PLUS the kinematic wrist-orientation hold
+# (`scripted_carry.WristHoldParams`, `WristHold`). Labels: LEARNED gait (frozen arms-dr1.0-s0) + SCRIPTED arms (with a
+# kinematic wrist-orientation hold) + ORACLE cube pose (scoring only). Stages: probe (crew 2, lift_hold, seeds
+# 125-129), hold (crews 2/4, lift_hold, seeds 20-29), place (crews 2/4, lift_place, seeds 30-39), smoke (throw-away
+# seeds 140-144; crew 2 or 4; lift_hold or lift_place) and smoke_nohold (the smoke's no-hold baseline: the flush-pad
+# variant unchanged, crew 2, lift_hold, seeds 140-144, the hand's twist measured only). Full-length episodes only.
+# Score JSONs are never overwritten; the stage verdict JSONs are written from them by `wristhold_verdict_cli`.
+
+TASKS_WRISTHOLD = {"probe": "coop_wristhold_probe_v1", "hold": "coop_wristhold_lift_hold_v1",
+                   "place": "coop_wristhold_lift_place_v1", "smoke": "coop_wristhold_smoke_v1",
+                   "smoke_nohold": "coop_wristhold_smoke_nohold_v1"}
+
+
+def wristhold_guard(args) -> tuple:
+    """(rule, protocol, seeds) of a --wristhold-stage run; SystemExit before anything is loaded or written."""
+    stage = args.wristhold_stage
+    if stage not in sc.WRISTHOLD_STAGES:
+        raise SystemExit(f"COOP-WRISTHOLD: REFUSED (unknown stage {stage!r})")
+    if args.out is None:
+        raise SystemExit("COOP-WRISTHOLD: REFUSED (--wristhold-stage needs --out)")
+    if args.out.exists():
+        raise SystemExit(f"COOP-WRISTHOLD: REFUSED ({args.out} exists; score JSONs are never overwritten)")
+    seeds = parse_seeds(args.seeds)
+    if stage in ("smoke", "smoke_nohold"):
+        if not seeds or any(s not in sc.WRISTHOLD_SMOKE_SEEDS for s in seeds):
+            raise SystemExit("COOP-WRISTHOLD: REFUSED (smoke runs only on the throw-away seeds 140-144; 125-129 are "
+                             "the probe's and 20-39 the scored stage's)")
+        if stage == "smoke_nohold":
+            if args.protocol != "lift_hold" or args.crew != 2:
+                raise SystemExit("COOP-WRISTHOLD: REFUSED (the no-hold baseline is crew 2, lift_hold)")
+        else:
+            if args.protocol not in ("lift_hold", "lift_place"):
+                raise SystemExit("COOP-WRISTHOLD: REFUSED (smoke needs --protocol lift_hold or lift_place)")
+            if args.crew not in (2, 4):
+                raise SystemExit("COOP-WRISTHOLD: REFUSED (crew 2 or 4)")
+        return sc.wristhold_stage_rule(stage, args.protocol, seeds), args.protocol, seeds
+    rule = sc.wristhold_stage_rule(stage)
+    if args.protocol != rule["protocol"]:
+        raise SystemExit(f"COOP-WRISTHOLD: REFUSED (stage {stage} is protocol {rule['protocol']})")
+    if seeds != list(rule["seeds"]):
+        raise SystemExit(f"COOP-WRISTHOLD: REFUSED (stage {stage} runs exactly seeds {rule['seeds'][0]}-"
+                         f"{rule['seeds'][-1]})")
+    if args.crew not in rule["crews"]:
+        raise SystemExit(f"COOP-WRISTHOLD: REFUSED (stage {stage} runs crew {rule['crews']})")
+    return rule, rule["protocol"], seeds
+
+
+def load_wristhold(args, nohold: bool):
+    """`load` with `WristHoldParams` (or `FlushPadParams` for the no-hold baseline); the stock `load` is unchanged."""
+    from omegaconf import OmegaConf
+    from team_airlock import CpuPolicy
+
+    cfg = OmegaConf.load(args.deploy)
+    if cfg.num_actions != 22 or cfg.num_joints != 22 or cfg.num_observations != 75:
+        raise SystemExit("requires the full 22-DoF, 75-observation humanoid locomotion policy")
+    policy = CpuPolicy(cfg.policy_checkpoint_path)
+    p = sc.FlushPadParams() if nohold else sc.WristHoldParams()
+    model, slots, pairs = sc.build_carry(args.upstream, args.cache_dir, args.crew // 2, p)
+    return cfg, policy, p, model, slots, pairs
+
+
+def provenance_wristhold(args, cfg, p, model, stage: str, rule: dict, protocol: str) -> dict:
+    out = provenance(args, cfg, p)
+    place = protocol == "lift_place"
+    nohold = stage == "smoke_nohold"
+    q = sc.FlushPadPlaceParams()
+    hold_line = ("NO HOLD (baseline): the flush-pad variant unchanged; each grasping hand's rotation about the pinch "
+                 "axis is measured only" if nohold else sc.WRISTHOLD_HOLD_NOTE)
+    design = sc.wristhold_design(args.upstream, args.cache_dir, sc.WristHoldParams())
+    out.update({
+        "task": TASKS_WRISTHOLD[stage], "variant": sc.WRISTHOLD_VARIANT, "stage": stage, "protocol": protocol,
+        "note": sc.LIFT_PLACE_NOTE if place else sc.LIFT_HOLD_NOTE,
+        "label": sc.WRISTHOLD_NOHOLD_LABEL if nohold else sc.WRISTHOLD_LABEL,
+        "label_detail": sc.FLUSHPAD_LABEL_DETAIL if nohold else sc.WRISTHOLD_LABEL_DETAIL,
+        "end_effector": sc.FLUSHPAD_NOTE, "harness_change": sc.FLUSHPAD_HARNESS_NOTE, "wrist_hold": hold_line,
+        "learned": "22-DoF locomotion gait arms-dr1.0-s0 (legs + each robot's outer arm), frozen",
+        "scripted": ("each robot's grasping arm: joint keyframes reach/squeeze/lift (unchanged), "
+                     + ("hold, lower (reverse keyframe: lift -> squeeze), open, rest" if place else "then held")
+                     + ("" if nohold else "; its wrist (elbow roll) servoed by the kinematic hold from the grasp "
+                        "state on (lift_place: through the release, then withdrawn over the retract segment)")),
+        "oracle": "cube pose from the simulator, used only to score; every velocity command is zero",
+        "modelling_choices": [
+            "MODIFIED END-EFFECTOR: one box collision pad per hand = the hand-mesh AABB (stock size and centre), "
+            "re-oriented in the hand-link frame so its faces are parallel to the cube faces at the squeeze pose "
+            "(squeeze keyframe, shoulder roll stopped where the pad meets the cube face plane); see flush_pad_design",
+            f"pad contact condim {p.pad_condim}, friction [{p.pad_friction}, {p.pad_torsional_friction}, 0.0001] "
+            "(torsional 0.04 m)",
+            f"HARNESS CHANGE: cone {p.solver_cone}, impratio {p.solver_impratio} (global MuJoCo options; they also "
+            "change the foot-floor contact; robot-fall clauses unchanged)",
+            f"grasping-arm PD kp {p.grasp_kp} (deploy.yaml 10); kd and the 4 Nm arm effort cap unchanged",
+            "grasping arm spawned in the script's rest pose; arm keyframes and timeline unchanged",
+            "cube tilt (scoring only) = angle of the cube's z axis from world z at every policy-step state",
+            "numerical blow-ups: MuJoCo's automatic reset (qpos0, time 0, on a NaN or |x| > 1e10 in qpos/qvel/qacc) "
+            "is detected after every policy step (episode field sim_reset) and fails the episode (no_sim_reset); "
+            "a non-finite stop's NaNs are written as null (nonfinite_values_nulled) and it is scored as a failure",
+        ] + ([] if nohold else [
+            "WRIST-ORIENTATION HOLD: from the grasp state (first policy-step state at or after the end of the squeeze, "
+            "4.52 s) each grasping arm's elbow roll target is the clamped solution of a small IK (damped Gauss-Newton "
+            "with the exact twist derivative from the MuJoCo rotational Jacobian, steps accepted only if |twist| "
+            "decreases) that brings the hand's twist about the pinch axis (world x) back to its grasp-time value, or as "
+            "close as the range allows, from the robot's own measured state (never the cube); every control step "
+            "(0.04 s); lift_hold to the end, lift_place through the release then withdrawn over the retract",
+            "KINEMATIC PREDICTION (wrist_hold_design, computed before any episode): " + design["prediction"],
+        ]) + ([f"lowering target: {sc.describe_lower_target(sc.PlaceScript(p, q).lower_target)} (FROZEN "
+               "2026-10-02 before any probe or scored episode of the flush-pad variant)"] if place else []),
+        "rule": rule, "rule_text": (sc.WRISTHOLD_PROBE_RULE_TEXT if stage in ("probe", "smoke_nohold")
+                                    or (stage == "smoke" and not place) else sc.WRISTHOLD_SCORED_RULE_TEXT),
+        "clauses_as_applied": list(sc.WRISTHOLD_CLAUSES_AS_APPLIED),
+        "seed_evidence": list(sc.WRISTHOLD_SEED_EVIDENCE),
+        "base_rule": sc.LIFT_PLACE_RULE if place else sc.LIFT_HOLD_RULE,
+        "flush_pad_design": sc.flushpad_design(args.upstream, args.cache_dir, p),
+        "wrist_hold_design": design,
+        "model_check": sc.flushpad_model_check(model),
+    })
+    if place:
+        out["place_params"] = sc.place_params_dict(q)
+    return out
+
+
+def score_wristhold(args) -> int:
+    """Score mode of the W variant. Never overwrites --out; refuses any seed outside its stage."""
+    rule, protocol, seeds = wristhold_guard(args)
+    nohold = args.wristhold_stage == "smoke_nohold"
+    cfg, policy, p, model, slots, pairs = load_wristhold(args, nohold)
+    payload = provenance_wristhold(args, cfg, p, model, args.wristhold_stage, rule, protocol)
+    if not sc.flushpad_model_ok(payload["model_check"], len(slots)):
+        raise SystemExit(f"COOP-WRISTHOLD: model check failed: {payload['model_check']}")
+    payload["scored_run"] = args.wristhold_stage in ("probe", "hold", "place")
+    payload["episodes"] = []
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    dt = float(cfg.policy_dt)
+    for seed in seeds:
+        t0 = time.time()
+        ep = sc.run_wristhold_episode(model, slots, pairs, cfg, policy, seed, p, rule=rule)
+        ep["wall_s"] = round(time.time() - t0, 1)
+        payload["episodes"].append(ep)
+        for k, r in enumerate(ep["pairs"]):
+            fc = sc.flushpad_clauses(rule, ep, k, dt)
+            print(json.dumps({"variant": sc.WRISTHOLD_VARIANT, "stage": args.wristhold_stage, "protocol": protocol,
+                              "crew": args.crew, "seed": seed, "pair": r["pair"],
+                              "wristhold_success": fc["success"], "wristhold_first_failed": fc["first_failed_check"],
+                              "base_rule_success": r["success"], "base_first_failed": r["first_failed_check"],
+                              "cube_tilt_max_rad": max([v for v in r["cube_tilt_series_rad"] if v is not None],
+                                                       default=None),
+                              "lift_peak_m": r["lift_peak_m"], "lift_hold_s": r["lift_hold_s"],
+                              "max_robot_tilt_rad": r["max_tilt_rad"], "floor": r["cube_floor_contact"],
+                              "hands": [{x: h.get(x) for x in ("side", "twist_at_lift_end_rad", "twist_max_abs_rad",
+                                                               "swing_max_rad", "target_clamped_steps",
+                                                               "pd_demand_above_cap_steps")}
+                                        for h in sc.wristhold_pair_summary(ep, k)],
+                              "wall_s": ep["wall_s"]}), flush=True)
+        payload["summary"] = sc.wristhold_file_summary(payload)
+        args.out.write_text(json.dumps(payload, indent=1, allow_nan=False) + "\n")
+    # the line is computed from the JSON as written
+    print(sc.wristhold_verdict_line(sc.wristhold_file_summary(json.loads(args.out.read_text())))
+          + f" | json={args.out}", flush=True)
+    return 0
+
+
+def wristhold_verdict_cli(argv) -> int:
+    """Stage verdict of the W launcher, from score JSONs only (`python -c` entry of cpu_coop_wristhold.sbatch):
+    argv = [STAGE, VERDICT_JSON, KEY=PATH, ...] with STAGE
+      probe          KEY probe (the probe score JSON)                    -> PROCEED|NEGATIVE|INCOMPLETE|INVALID
+      scored         KEYS hold_crew2 hold_crew4 place_crew2 place_crew4  -> PASS|NEGATIVE|INCOMPLETE|INVALID
+      scored_not_run KEY probe_verdict (the probe verdict JSON)          -> NOT_RUN
+      smoke          KEY step_status (the launcher's step exit statuses, unit tests included), hold_crew2,
+                     place_crew4 and nohold_crew2 (smoke score JSONs)     -> SMOKE_PASS|SMOKE_FAIL (+ measurement)
+    A missing or unreadable input reads as missing. Refuses to overwrite VERDICT_JSON. Returns 0 whatever the
+    verdict: the launcher reads the verdict from the JSON, never from this exit status."""
+    if len(argv) < 3:
+        raise SystemExit("usage: STAGE VERDICT_JSON KEY=PATH ...")
+    stage, out = argv[0], Path(argv[1])
+    if out.exists():
+        raise SystemExit(f"COOP-WRISTHOLD-VERDICT: REFUSED ({out} exists; verdicts are never overwritten)")
+    paths = {}
+    for kv in argv[2:]:
+        k, _, v = kv.partition("=")
+        if not k or not v:
+            raise SystemExit(f"COOP-WRISTHOLD-VERDICT: bad input {kv!r} (KEY=PATH)")
+        paths[k] = Path(v)
+
+    def read(path):
+        try:
+            return json.loads(Path(path).read_text())
+        except (OSError, ValueError):
+            return None
+
+    if stage == "probe":
+        v = sc.wristhold_probe_verdict(read(paths["probe"]) if "probe" in paths else None)
+    elif stage == "scored":
+        v = sc.wristhold_scored_verdict({k: read(paths[k]) if k in paths else None
+                                         for k in sc.WRISTHOLD_SCORED_KEYS})
+    elif stage == "scored_not_run":
+        v = sc.wristhold_not_run_verdict(read(paths["probe_verdict"]) if "probe_verdict" in paths else None)
+    elif stage == "smoke":
+        status = read(paths["step_status"]) if "step_status" in paths else None
+        step_problems = sc.wristhold_smoke_step_problems(status)
+        unit_ok = isinstance(status, dict) and type(status.get("pytest")) is int and status["pytest"] == 0
+        loaded = {k: read(path) for k, path in paths.items() if k != "step_status"}
+        checks = {k: sc.wristhold_smoke_check(pl) for k, pl in loaded.items()}
+        missing = [k for k in ("hold_crew2", "place_crew4", "nohold_crew2") if k not in checks]
+        ok = (bool(checks) and not missing and all(c["verdict"] == "SMOKE_PASS" for c in checks.values())
+              and not step_problems)
+        v = {**sc._wristhold_head("smoke"), "verdict": "SMOKE_PASS" if ok else "SMOKE_FAIL",
+             "step_status": status, "unit_tests_passed": bool(unit_ok),
+             "episodes": [r for c in checks.values() for r in c["episodes"]],
+             "problems": [f"step_status: {p}" for p in step_problems] + [f"{k}: no input" for k in missing]
+             + [f"{k}: {p}" for k, c in checks.items() for p in c["problems"]], "checks": checks,
+             "measurement": sc.wristhold_smoke_measurement(loaded.get("hold_crew2"), loaded.get("nohold_crew2"),
+                                                           loaded.get("place_crew4")),
+             "note": "pipeline check on a throw-away seed; outcomes are diagnostics, never a verdict"}
+    else:
+        raise SystemExit(f"COOP-WRISTHOLD-VERDICT: unknown stage {stage!r}")
+    v["inputs"] = {k: {"path": str(path), "sha256": sha256(path)} for k, path in paths.items()}
+    v["code_sha256"] = {"scripted_carry.py": sha256(REPO / "src/bhl_robust/eval/scripted_carry.py"),
+                        "coop_scripted_carry.py": sha256(Path(__file__))}
+    v["git_head"] = git_head()
+    v["written_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(v, indent=1, allow_nan=False) + "\n")
+    print(sc.wristhold_verdict_line(v) + f" | verdict_json={out}", flush=True)
+    return 0
+
+
+def wristhold_main(argv=None) -> int:
+    """Command line of the W variant (score mode only; no render)."""
+    ap = argparse.ArgumentParser(description="OPT-IN W variant: the flush-pad variant + a kinematic wrist-orientation "
+                                             "hold (scripted_carry.WristHoldParams); see the coop-wristhold section")
+    ap.add_argument("--deploy", type=Path, required=True)
+    ap.add_argument("--upstream", type=Path, required=True)
+    ap.add_argument("--cache-dir", type=Path, required=True)
+    ap.add_argument("--crew", type=int, choices=(2, 4), default=2)
+    ap.add_argument("--protocol", choices=("lift_hold", "lift_place"), required=True)
+    ap.add_argument("--seeds", required=True)
+    ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--wristhold-stage", choices=sc.WRISTHOLD_STAGES, required=True,
+                    help="probe (125-129), hold (20-29), place (30-39), smoke or smoke_nohold (throw-away 140-144)")
+    return score_wristhold(ap.parse_args(argv))
+
+# --- end coop-wristhold ---
+
+
 # ------------------------------------------------------------------ render
 
 class Recorder:
