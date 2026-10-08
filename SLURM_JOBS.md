@@ -3994,3 +3994,65 @@ it exists.
 - Gates and selection exactly as phase 1: Q1 turn_test v2 PASS + cpu_turn_qualify QUALIFIED; Q2 0 falls in 12 and drift <= 15 deg on >= 10/12; the lowest push-fall rate among qualified seeds; none -> NEGATIVE. Gates launcher `cpu_waiter_gates.sbatch` with `WAITER_GATES_PREFIX=waiter-wbc1b WAITER_GATES_SEED0=3`.
 - Labels as phase 1.
 - **Waiter phase 1b smoke `21594898` PASS** (overlay line present, noise std 1.00 every iteration, export 83 -> 12, stamped). **Submitted (2026-10-05 22:19):** training array `21594991` (seeds 3-5) -> gates `21594992` (aftercorr). Selection: `results/waiter-20261005/wbc1b/selection.json`.
+
+
+## 2026-10-06 confirmatory campaign
+
+| Job | Purpose | Fixed scope | Dependency |
+|---|---|---|---|
+| 21601701 | Fresh locomotion confirmation | 15 final policies × 6 commands × 20 reset seeds × 2 conditions = 3,600 episodes; array 0–14%2; CPU 1, 8 GB, 4 h per cell | none |
+| 21601709 | Frozen learned navigator vs A* | 3 final actors + A* × nominal/drop35 × 48 6×6 layouts = 384 episodes; array 0–7%2; CPU 1, 8 GB, 4 h per cell | afterany:21601701 |
+| 21601710 | Final evidence validation | JSON episode contracts, complete file sets, source/model hashes, paired counts, project-local rules | afterany:21601701:21601709 |
+
+Source commit and 263 source/asset/model SHA256 values, exact package versions, all command and seed declarations, and immutable submission receipt are in [the executable archive](campaigns/20261006-confirmatory/). Only code, YAML/ONNX inputs, JSON receipts and XML test evidence are added; no new `.md` or `.txt` file. The active campaign is `/nfs/stak/users/sanchej7/hpc-share/Computer_Vision/project_results_upgrade/humanoid_confirmatory`; launchers and deploy paths are site-specific as in the existing reproducibility guide. Archive scripts can inspect/run that frozen campaign with `--campaign` set to the active path. A new independent campaign requires a new seed declaration before execution, not a rerun selected for a favorable result.
+
+Flat replication rule: each of the three default-randomization policies must have zero falls and fewer falls than its matched unrandomized policy. Other rungs and push04 are reported without promising favorable outcomes; displacement and surviving-step tracking errors accompany rates. Navigation rule: each final actor ≥40/48 nominal and ≥36/48 drop35 goals, zero falls; clean contacts reported separately. Shared layouts/reset seeds are not treated as independent trained policies. Incomplete evidence cannot pass, and final verdict files cannot overwrite a prior verdict.
+
+Unscored smoke seeds 70999/73999 were kept separate. All 15 exported models produced exact outputs under single-thread inference; unrandomized/default complete 10 s rollout metrics matched the upstream backend exactly. Measured smoke wall times were 3.40 s and 6.20 s per episode on the development host. Relevant regression suite: **80 passed**, one upstream ONNX deprecation warning, 38.77 s, no cache/prose generation. Navigation capture-pose/v5 observation/dropout contract was exercised on a 30 s pilot, whose timeout is unscored. Final status is **QUEUED / pending evidence**.
+
+
+<!-- bhl-confirmation-results-2026-10-06 source_sha256=d74574dbc07e93b48655168268d22b84feb481122b232bf220c31b7e227b7b5e -->
+### Recorded confirmation outcomes — campaign 2026-10-06
+Append-only evidence update at `2026-10-06T12:56:38.990567+00:00`. This dated record supersedes the earlier queued-status paragraph for this campaign; historical experiment results above remain their original records.
+**Locomotion: PASS. Navigation: NEGATIVE.** Recorded episode files: locomotion **3600/3,600 planned**; navigation **384/384 planned**. File counts alone do not certify valid episodes.
+| Randomization rung (3 training seeds) | Flat falls / reported episodes | Push04 falls / reported episodes | Flat mean displacement |
+|---|---|---|---|
+| dr-off | 77/360 | 341/360 | 1.408 m |
+| dr-s0.5 | 4/360 | 268/360 | 1.849 m |
+| dr-default | 0/360 | 13/360 | 1.984 m |
+| dr-s1.5 | 0/360 | 0/360 | 1.767 m |
+| dr-aggressive | 60/360 | 60/360 | 0.129 m |
+
+Flat denominators are 360 per rung when complete (3 policies × 6 commands × 20 shared reset seeds), with another 360 disturbed episodes per rung. The flat replication rule requires zero falls for each default policy and fewer falls than its matched unrandomized policy. Push04 is descriptive. Full per-training-seed/command tracking, displacement and paired outcomes remain in `dr_verdict.json`; surviving-step errors alone cannot rank failed policies. When the verdict is INCOMPLETE, reported partial counts do not establish a validated complete experiment.
+
+| Navigation actor | Condition | Goals / reported episodes | Clean | Falls | Complete evidence |
+|---|---|---|---|---|---|
+| armV5-s8 | nominal | 44/48 | 44/48 | 1/48 | True |
+| armV5-s8 | drop35 | 43/48 | 43/48 | 0/48 | True |
+| armV5-s9 | nominal | 46/48 | 44/48 | 1/48 | True |
+| armV5-s9 | drop35 | 44/48 | 44/48 | 2/48 | True |
+| armV5-s10 | nominal | 44/48 | 44/48 | 2/48 | True |
+| armV5-s10 | drop35 | 46/48 | 45/48 | 0/48 | True |
+| astar | nominal | 44/48 | 39/48 | 0/48 | True |
+| astar | drop35 | 45/48 | 42/48 | 0/48 | True |
+
+Each complete navigation cell contains 48 shared held-out 6×6 layouts. Each final learned actor must meet both ≥40/48 nominal and ≥36/48 drop35 goals with zero falls; all actors and the matched A* control are reported. Clean means no wall contact at any physics step. An incomplete cell cannot establish validated success, regardless of its reported partial goal count.
+
+Scope: simulation only. Isaac-trained frozen 12-DoF PPO gait; navigation uses a learned PPO actor with oracle pose/goal and a scripted reactive speed brake; A* is the reference. Shared layouts, commands and reset seeds are clustered observations, not independent trained policies. Neither PASS nor a zero observed fall count certifies hardware deployment.
+
+Immutable JSON sources: `/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_confirmatory/dr_verdict.json` and `/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_confirmatory/verdict.json`. Locomotion JSON SHA256: `7bd2629ae71b8bddd61e1b4c9d88c85d1abd5116f145d00f3783755bd82fcc04`; navigation JSON SHA256: `7b9a1901f1febd48e6ff4849ecbd26a2ca6c15f36326da5be378d2020b9b8393`. Combined source SHA256: `d74574dbc07e93b48655168268d22b84feb481122b232bf220c31b7e227b7b5e`. Executable protocol and publisher are archived in `campaigns/20261006-confirmatory`.
+
+## 2026-10-07: the two 2026-10-06 shortfalls (Waiter phase 1b, navigation falls)
+
+**Waiter phase 1b training `21594991` -> gates `21594992` (finished 2026-10-06 03:12; recorded 2026-10-07 17:31): NEGATIVE by the predeclared selection rule** (`results/waiter-20261005/wbc1b/selection.json`): no seed qualified. s3: v2 PASS, QUALIFIED, Q2 FAIL (4 falls; drift ok 8/12; push 9/60). s4: v2 FAIL (walk drift -25 deg), QUALIFIED, Q2 PASS (push 9/60). s5: v2 PASS, NOT QUALIFIED (walk 1/3), Q2 PASS (push 4/60). By the frozen design (`docs/WAITER_PROGRAM.md`) phase 1 is NEGATIVE, and phase 2 may fall back to clock-s2 with scripted arm targets (labelled so).
+
+**Finding (2026-10-07 17:31, read from the committed gate JSONs; no new run): none of the six Waiter checkpoints (phase 1 s1/s2, phase 1b s3-s5; s0 diverged) walks.** Commanded (0.35, 0, 0) for 6 s, every Waiter walk trial covers 0.07-0.41 m: the turn_test v2 walks 0.13-0.33 m and all 15 cpu_turn_qualify walks 0.07-0.41 m, against 1.87-2.02 m for clock-s2 and 1.89 m for TurnBoth-s0 on the same tests. The walk clauses score heading drift only and Q2 records no displacement, so the s3/s5 walk passes were robots marching in place: a gate gap, not a near miss. Training says the same: `track_lin_vel_xy_exp` plateaus at 0.59-0.67 from about iteration 3000 (clock-s2: 0.87 at 5999 and still rising), while episodes run longer (falls 0.42 of terminations vs clock-s2's 0.63). With payloads, hand forces and moving arms on from iteration 0, the WBC learned to survive them instead of tracking speed. Checked, no port bug: the MuJoCo controller's actor terms, joint order, gait clock (0.8 s), leg action scale and default offsets match the Isaac config (`waiter_env_cfg.py` vs `eval/waiter_wbc.py`).
+
+**2026-10-06 navigation confirmation (`21601709` -> `21601710`), mechanism (2026-10-07 17:31, from its per-seed traces; no new run).** Every one of the 6 falls (288 learned episodes; A* 0 in 96) came while the commanded wz flipped between -1 and +1 rad/s at least every 0.2 s at vx 0.17-0.35 m/s, with the heading nearly still; the brake's IMU limit (tilt > 0.35 rad or |gyro| > 2.5 rad/s halves vx) fires during the wobble, which is where the 0.17 m/s values come from. A* turns at a steady 0.6 rad/s. The gym hides the chatter: it models the gait as a first-order lag with tau 0.15-0.45 s (nominal 0.25 s), while the physical gait's yaw response fits tau 0.06 s, w_gain 1.03, latency 0 (`solutions-20260930/sysid`, PRBS). The open-field square-wave tests there never fell, so chatter alone is not sufficient; in the maze it coincides with braking near walls.
+
+**Predeclared now (2026-10-07 17:31), before any filtered episode exists: NavGym v5 command filter.** Code: `src/bhl_robust/eval/cmd_filter.py` (the gym's own lag, x += alpha (u - x), alpha = dt / max(tau, dt); tau 0.2 s = the gym's nominal 0.25 s minus the gait's measured 0.06 s, chosen from those numbers, not tuned on maze outcomes), `scripts/bench/maze_explore.py --policy-cmd-filter {none, wz-lpf, lpf-post-brake}` (opt-in; omitted = every existing run unchanged, no new keys), verdicts `scripts/bench/navgym_cmd_filter.py`, launcher `slurm/repo20260923/cpu_navgym_cmd_filter.sbatch` (rules verbatim in its header; a test checks them).
+- DEV (maze seeds 72000-72047, scored on 2026-10-06, so development data with no claim): arms wz-lpf and lpf-post-brake (tau 0.2 s) x actors armV5-s8/s9/s10 x {nominal, drop35}, 48 episodes per cell. An arm QUALIFIES iff its 6 cells are complete (48 valid episodes each, layouts paired with 2026-10-06), it has 0 falls over all 288 episodes, and every actor reaches >= 40/48 nominal and >= 36/48 drop35 goals. Selected: the qualifying arm with the most goals over its 288 episodes; tie -> wz-lpf. No arm qualifies -> DEV NEGATIVE and no confirmation runs. The 6 fall episodes of 2026-10-06 are rerun unfiltered (reported, not gated).
+- CONFIRM (never-used maze seeds 78000-78047): the dev-selected arm only, actors armV5-s8/s9/s10 x {nominal, drop35}, plus the SCRIPTED A* reference (unfiltered) x {nominal, drop35}, not gated. PASS iff EACH actor reaches >= 40/48 nominal and >= 36/48 drop35 goals with 0 falls (the 2026-10-06 rule); otherwise NEGATIVE; INCOMPLETE if any cell is missing, short or mislabelled.
+- Maze seeds 78000-78047 checked 2026-10-07: no seed file under `results/`, `solutions-20260930/` or the 2026-10-06 campaign, and no `--seed-start` or `"seed":` reference in `slurm/`, `scripts/`, `docs/` or this ledger.
+- Labels: LEARNED gait (dr-default-s0) + LEARNED NavGym v5 final actors; SCRIPTED command low-pass + speed brake; ORACLE pose and goal; A* reference SCRIPTED. Simulation only. A pass would make the navigation claim "learned navigator + scripted command smoothing", never "learned navigator" alone.
+- Tests: 157 passed (srun `21657071`: `tests/test_navgym_cmd_filter.py` + the capture-pose, v5, maze SF, maze humanoid and NavGym suites). Smoke (training-range maze seed 9000, 20 s): wz-lpf and none both run end to end and record the filter and command statistics.

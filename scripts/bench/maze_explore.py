@@ -89,6 +89,7 @@ from bhl_robust.eval import panels                                 # noqa: E402
 from bhl_robust.eval import random_maze as rm                      # noqa: E402
 from bhl_robust.eval.multi_robot import _WORLDS, build_multi       # noqa: E402
 from bhl_robust.eval.team_sensors import (DEPTH_RANGE, LIDAR_RANGE, TeamSensors)  # noqa: E402
+from bhl_robust.eval.cmd_filter import CMD_FILTER_MODES, DEFAULT_TAU_S  # noqa: E402
 
 # The biped's rig: the Isaac maze policies' mounts (sensors_rig.py), body frame.
 LIDAR_MOUNT_BIPED = (0.0, 0.0, 0.34)
@@ -749,6 +750,13 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
             learned["visit"] = VisitMap(maze.bounds(), dt=float(cfg.policy_dt))
     goal = maze.centre(maze.goal)
     dt = float(cfg.policy_dt)
+    cmd_filter, cmd_stats = None, None
+    if learned is not None and getattr(args, "policy_cmd_filter", None) is not None:
+        # opt-in only (2026-10-07): SCRIPTED smoothing of the learned command + its statistics; omitted = unchanged run
+        from bhl_robust.eval.cmd_filter import CommandStats, make_filter
+        cmd_filter = make_filter(args.policy_cmd_filter, dt, args.policy_cmd_tau)
+        cmd_stats = {"actor": CommandStats(dt, learned["scale"][1]), "gait": CommandStats(dt, learned["scale"][1]),
+                     "max_tilt_rad": 0.0}
     rec = recorder_factory(model, slot, maze, dt) if recorder_factory else None
     # SF-02: error on the estimated pose (map + planner + controller); the judge below keeps the true pose
     pose = PoseError(seed, args.pose_bias_m, args.pose_noise_m, args.pose_yaw_deg)
@@ -848,6 +856,9 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
             raw, state, err = np.array([0.0, 0.0, ctrl.turn_rate]), "search", 0.0
         if now < args.settle_s:
             raw, state = np.zeros(3), "settle"
+        actor_cmd = raw
+        if cmd_filter is not None and args.policy_cmd_filter == "wz-lpf":
+            raw = cmd_filter(raw)               # wz smoothed before the speed brake; vx untouched
         # goal-check honesty: the controller's own "arrived" (estimated pose), recorded beside the judge's verdict
         arrived_last = learned is None and state == "arrived" and is_goal
         if arrived_last:
@@ -857,6 +868,11 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
                 arrived_true_d = math.hypot(xy[0] - goal[0], xy[1] - goal[1])
                 arrived_est_d = math.hypot(xy_e[0] - goal[0], xy_e[1] - goal[1])
         command = sensors.filter_commands(runner.d, [raw], now)[0]
+        if cmd_filter is not None and args.policy_cmd_filter == "lpf-post-brake":
+            command = cmd_filter(command)       # vx and wz smoothed after the brake (the gym's order: brake, then lag)
+        if cmd_stats is not None and now >= args.settle_s:
+            cmd_stats["actor"].update(actor_cmd[2])
+            cmd_stats["gait"].update(command[2])
         if (learned is not None and args.policy_capture_pose and sensors.packets[0] is not None
                 and (learned["cap"] is None or sensors.packets[0]["stamp_s"] != learned["cap"][3])):
             # a new packet was captured at this step's loop-top state (runner.d is unchanged since the loop top)
@@ -890,6 +906,8 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
             if pose.active:
                 trace[-1]["xy_est"] = [round(float(xy_e[0]), 3), round(float(xy_e[1]), 3)]
                 trace[-1]["yaw_est"] = round(float(yaw_e), 3)
+            if cmd_stats is not None:
+                trace[-1]["cmd_actor"] = [round(float(c), 3) for c in actor_cmd]
         if rec is not None:
             rec(step=step, now=now, runner=runner, sensors=sensors, xy=after, yaw=yaw, state=state, err=err, plan=plan[wp_index:] if plan else None,
                 grid=grid, blocked=planner.last_blocked, known=known, replans=planner.replans)
@@ -898,7 +916,10 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
             hum["max_tilt"], hum["max_sink"] = max(hum["max_tilt"], tilt_now), max(hum["max_sink"], sink_now)
             fell_now = humanoid_fell(tilt_now, sink_now)
         else:
-            fell_now = runner.tilt(0) >= 0.78
+            tilt_b = runner.tilt(0)
+            fell_now = tilt_b >= 0.78
+            if cmd_stats is not None:
+                cmd_stats["max_tilt_rad"] = max(cmd_stats["max_tilt_rad"], float(tilt_b))
         if fell_now:
             outcome = "fall"
             t_done = now
@@ -949,6 +970,16 @@ def run_seed(args, cfg, policy, seed: int, recorder_factory=None) -> dict:
         # opt-in only, so a default --policy run writes exactly the keys it wrote before
         result["policy_map_integration"] = {"mode": "capture_pose", "updates_at_capture_pose": learned["cap_used"],
                                             "updates_at_loop_top_pose": learned["cap_missing"]}
+    if cmd_stats is not None:
+        # opt-in only (--policy-cmd-filter), so every other --policy run writes exactly the keys it wrote before
+        result["cmd_filter"] = {"mode": args.policy_cmd_filter,
+                                "label": ("none: unfiltered control arm, statistics only" if cmd_filter is None else
+                                          "SCRIPTED deployment filter on the LEARNED actor's command (bhl_robust/eval/cmd_filter.py)"),
+                                **(cmd_filter.describe() if cmd_filter is not None else {"tau_s": None}),
+                                "actor_wz": cmd_stats["actor"].summary(), "gait_wz": cmd_stats["gait"].summary(),
+                                "max_tilt_rad": round(cmd_stats["max_tilt_rad"], 4)}
+        if cmd_filter is not None:
+            result["control"] += f"; SCRIPTED command filter {args.policy_cmd_filter} (tau {args.policy_cmd_tau} s)"
     if learned is not None and "visit" in learned:
         # v5 actors only, so v1/v2/v4 --policy runs write exactly the keys they wrote before
         vm = learned["visit"]
@@ -1045,6 +1076,14 @@ def main() -> int:
                     help="with --policy (opt-in, 2026-10-01): integrate each lidar packet into the learned ego map at the "
                          "estimated pose it was captured at, as the humanoid branch does for its grid; the default integrates "
                          "it at the next step's loop-top pose, as scored in 21484212")
+    ap.add_argument("--policy-cmd-filter", choices=CMD_FILTER_MODES, default=None,
+                    help="with --policy (opt-in, 2026-10-07): SCRIPTED smoothing of the learned actor's command "
+                         "(bhl_robust/eval/cmd_filter.py, the NavGym lag): 'wz-lpf' low-passes wz before the speed brake, "
+                         "'lpf-post-brake' low-passes vx and wz after it, 'none' runs unfiltered but records the command "
+                         "statistics; omitted = every existing run unchanged (no new keys)")
+    ap.add_argument("--policy-cmd-tau", type=float, default=DEFAULT_TAU_S,
+                    help=f"time constant (s) of --policy-cmd-filter (default {DEFAULT_TAU_S}: the gym's nominal 0.25 s "
+                         "lag minus the gait's measured 0.06 s)")
     ap.add_argument("--no-overwrite", action="store_true",
                     help="refuse to run if any per-seed JSON or the summary this run would write already exists")
     hm = ap.add_argument_group("22-DoF humanoid (opt-in; the default is the biped path, unchanged)")
@@ -1088,6 +1127,10 @@ def main() -> int:
 
     if args.policy_capture_pose and args.policy is None:
         ap.error("--policy-capture-pose changes only the learned --policy path's ego map; it needs --policy")
+    if args.policy_cmd_filter is not None and args.policy is None:
+        ap.error("--policy-cmd-filter acts on the learned --policy path's command; it needs --policy")
+    if not args.policy_cmd_tau > 0.0:
+        ap.error("--policy-cmd-tau must be > 0")
     if is_humanoid(args):
         if args.policy is not None:
             ap.error("--policy (the NavGym actor, scaled for the biped) is not supported with --variant humanoid")
@@ -1147,6 +1190,11 @@ def main() -> int:
                "gait": results[0]["gait"] if results else None}
     if args.policy_capture_pose:
         summary["settings"]["policy_capture_pose"] = True      # opt-in only: default summaries keep their keys
+    if args.policy_cmd_filter is not None:
+        summary["settings"]["policy_cmd_filter"] = {"mode": args.policy_cmd_filter,
+                                                    "tau_s": None if args.policy_cmd_filter == "none" else args.policy_cmd_tau}
+        summary["falls_seeds"] = [r["seed"] for r in results if r["outcome"] == "fall"]
+        summary["max_tilt_rad"] = [r["cmd_filter"]["max_tilt_rad"] for r in results]
     classes = [r["outcome_class"] for r in results]
     summary["outcome_classes"] = {c: classes.count(c) for c in sorted(set(classes))}
     summary["reached_no_fall"] = len(succ)      # a fall ends the episode, so reached == reached with no fall
