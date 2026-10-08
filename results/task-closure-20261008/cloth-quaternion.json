@@ -1,0 +1,25 @@
+{
+  "schema": "bhl-cloth-spawn-fix/v1",
+  "date": "2026-10-08",
+  "status": "PASS",
+  "fix_commit": "0004152f7dbbbd6dc0112c2ca1903e879f1d3520",
+  "source_sha256": "b51143ef0689bdc35b144e599de2e4762af42cbdc03955350fb83bfeb97da768",
+  "test_sha256": "3e394174677e5b883a7f8ccece7419689f001734e232b17558340e398edd02b9",
+  "targeted_validation": {
+    "passed": 13,
+    "subtests_passed": 6,
+    "junit_sha256": "af1f394b90d20a729ba73112ef9ec944784cb863baea77fdfa0fd0153bb9bbb0"
+  },
+  "negative_control": {
+    "change": "Replaced native_quat call with original bare literal only in memory while executing the actual factory test.",
+    "detected_xyzw_failures": 3,
+    "wxyz_failures": 0,
+    "cases": [
+      "test_spawn_is_physical_identity_on_both_stacks (quat_checks.ClothProxySpawnTests.test_spawn_is_physical_identity_on_both_stacks) (order='xyzw', prim='garment_0')",
+      "test_spawn_is_physical_identity_on_both_stacks (quat_checks.ClothProxySpawnTests.test_spawn_is_physical_identity_on_both_stacks) (order='xyzw', prim='garment_3')",
+      "test_spawn_is_physical_identity_on_both_stacks (quat_checks.ClothProxySpawnTests.test_spawn_is_physical_identity_on_both_stacks) (order='xyzw', prim='custom_proxy')"
+    ],
+    "source_file_changed": false
+  },
+  "scope": "CPU config/factory and physical basis-axis checks for WXYZ and XYZW storage, including original bug regression. No Isaac runtime, training or cloth success result."
+}

@@ -9,9 +9,25 @@ from bhl_robust.eval import scripted_carry as sc
 
 REPO = Path(__file__).resolve().parents[1]
 UPSTREAM = REPO / "external/Berkeley-Humanoid-Lite"
-DEPLOY = UPSTREAM / "logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/deploy.yaml"
+DEPLOY = REPO / "tests/fixtures/arms-dr1.0-s0/deploy.yaml"
 DT = 0.04
 N = int(sc.SUCCESS_RULE["episode_s"] / DT)
+
+
+def test_frozen_gait_fixture_matches_its_export_receipt():
+    import hashlib
+    import json
+    from omegaconf import OmegaConf
+
+    receipt = json.loads(DEPLOY.with_name("provenance.json").read_text())
+    for name, expected in receipt["files_sha256"].items():
+        assert hashlib.sha256(DEPLOY.with_name(name).read_bytes()).hexdigest() == expected, name
+    original = DEPLOY.with_name("deploy.original.yaml").read_bytes().splitlines(keepends=True)
+    portable = DEPLOY.read_bytes().splitlines(keepends=True)
+    assert portable[0] == b"policy_checkpoint_path: policy.onnx\n"
+    assert original[1:] == portable[1:]
+    cfg = OmegaConf.load(DEPLOY)
+    assert (cfg.num_joints, cfg.num_actions, cfg.num_observations, cfg.policy_dt) == (22, 22, 75, DT)
 
 
 def _good_series():

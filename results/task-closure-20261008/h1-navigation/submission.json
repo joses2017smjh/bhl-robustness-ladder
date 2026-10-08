@@ -1,0 +1,33 @@
+{
+  "submitted_utc": "2026-10-08T17:03:25.707105+00:00",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--output=/nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation/slurm-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation/slurm-%j.out",
+    "/nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation/h1_navigation.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation/frozen-campaign.tar.gz",
+    "676dba4ebd4199654db2e2c178a0d4a3304f772c84e4988c3e73c68a2aed0ef9",
+    "/nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation"
+  ],
+  "returncode": 0,
+  "stdout": "21689706\n",
+  "stderr": "",
+  "job_id": "21689706",
+  "protocol_sha256": "7b0b404ccac476340550166158b652b3d0eebb4a560aa0b397bf58eb75cd9112",
+  "archive_sha256": "676dba4ebd4199654db2e2c178a0d4a3304f772c84e4988c3e73c68a2aed0ef9",
+  "launcher_sha256": "049b8120cd479a07372cb5ffac8e28e61054525bfc71e1b37fbdce2a2b6ee9e5",
+  "submitter_sha256": "61587b07bf37c2658c50daf112a2cef663785595a942254764697e756cc666df",
+  "resources": {
+    "partition": "share",
+    "constraint": "el9",
+    "cpus": 2,
+    "memory_gb": 8,
+    "wall_time_h": 12,
+    "gpus": 0,
+    "episodes": 576,
+    "max_evaluators": 2
+  },
+  "status": "SUBMITTED",
+  "scope": "Queued/running is not a completed experiment. Fresh matched CPU NavGym confirmation; no training/Mission 7/hardware."
+}

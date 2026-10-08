@@ -1,5 +1,16 @@
-Manual GitHub Actions template
-==============================
+Active CPU workflow and historical manual template
+=================================================
+The active push/PR/manual workflow is .github/workflows/cpu-replay.yml. It
+verifies the committed frozen ZIP, installs compatible CPU Torch/torchvision
+and pinned CPU test dependencies, runs tests/, runs actual trained-asset
+integration and replay, and retains validation evidence for 14 days. Full
+history and recursive submodules preserve the historical comparison controls.
+Current closeout and final validation status:
+  docs/TASK_CLOSURE_2026-10-08.md
+  results/task-closure-20261008/h2-replay/
+
+Historical template (October 7)
+------------------------------
 replay-workflow.yml.example is a workflow template, not an executed CI result.
 Copy it to .github/workflows/replay.yml when ready to enable manual dispatch.
 There is no scheduled/push trigger, secret, repository write or artifact upload.

@@ -2,6 +2,10 @@
 # Install torch and torchvision from the CPU wheel index first (README/CI).
 # Versions match the tested research environment; this is not an Isaac lockfile.
 numpy==1.26.0
+scipy==1.15.3
+trimesh==4.5.1
+requests==2.32.3
+certifi==2025.8.3
 torch==2.7.0
 torchvision==0.22.0
 mujoco==3.3.5

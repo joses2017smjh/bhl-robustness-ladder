@@ -74,6 +74,10 @@ agreement with the un-randomized rung.
   <sub>Identical strafe command in MuJoCo. Left <code>s=1.0</code>, right <code>s=0</code>. Neither policy ever saw MuJoCo during training.</sub>
 </p>
 
+[Source clip hashes and matching strafe evaluation rows](gifs/dr_pair.json)
+identify this illustrative seed-0 pair; they are separate from the three-policy
+aggregate below.
+
 <p align="center">
   <img src="../docs/gifs/arms_dr_pair.gif" width="880" alt="Same strafe comparison on the 22-DoF model."><br>
   <sub>Same command, 22-DoF. The biped at <code>s=0</code> falls 23% in MuJoCo; the 22-DoF counterpart falls <b>0%</b> (n=60). Arms are not decoration on this ladder.</sub>
@@ -98,6 +102,14 @@ not "robust". 22-DoF, same protocol, 2 seeds (n=60): <code>s=0</code> fall **0.0
 (distance 2.11 m), <code>s=1</code> fall **0.000** (1.88 m). Training reward is
 not comparable across morphologies — the humanoid reward set adds arm-deviation
 penalties — so the number that transfers is the MuJoCo fall rate.</sub>
+
+**Training-length qualifier:** the `dr-default-s1` job (`20935266_4`) failed
+after **5,495 logged iterations of the scheduled 6,000** (last zero-based
+iteration index 5,494). It remains one of the
+three evaluated policies in the historical default-randomization row, so that
+row is not three completed 6,000-iteration training runs. The shown `dr_pair`
+clip uses seed 0. The [media sidecar](gifs/dr_pair.json) records the surviving
+training-log hash; no aggregate evaluation rows were removed.
 
 **Finding.** The training column and the transfer column disagree, and that
 disagreement is the whole point. `s = 0` wins training by 49% and *loses*
@@ -313,8 +325,9 @@ model, same protocol, same fixed terrain seed:
 
 <sub>Fall rate, n = 60 per cell (6 commands × 5 seeds × 2 seeds of policy).</sub>
 
-At $d = 1.0$ the 22-DoF randomization-only policy falls **11.7%** against the
-biped's **37.8%**, and the 22-DoF terrain policy does not fall at all where the
+At $d = 1.0$ the 22-DoF randomization-only policies fall **7/60 (11.7%, two
+trained policies)** against the biped's **34/90 (37.8%, three trained
+policies)**, and the 22-DoF terrain policy does not fall at all where the
 biped falls 3.3%. Randomization alone carries the humanoid to $d \approx 0.6$
 rather than the biped's $\approx 0.4$. Arms are not decoration on this ladder:
 a humanoid sheds angular momentum by swinging them, which a 12-DoF biped cannot

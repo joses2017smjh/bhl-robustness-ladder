@@ -1,0 +1,85 @@
+{
+  "schema": "bhl-cross-host-replay/v1",
+  "manifest_sha256": "2d23c3fbe5ac218a0690ad70a63478397b2c2e7dab42961e3a66aeb71b1aa2e5",
+  "gate_sha256": "f8dc1975bc4a41e673fe39290fdb9836f2f1b8f9792706e91f2f5787639fdc8a",
+  "receipts": {
+    "reference": {
+      "host": "dgxh-2.hpc.engr.oregonstate.edu",
+      "receipt_sha256": "2ce0a3f25bea7c7e2669c7a3109f566c3147c1f085c7a3913b1edc346f99903d",
+      "installed_packages": {
+        "numpy": "1.26.0",
+        "mujoco": "3.3.5",
+        "onnxruntime": "1.22.1",
+        "omegaconf": "2.3.0",
+        "torch": "2.7.0+cu128"
+      }
+    },
+    "candidate": {
+      "host": "dgx2-2.hpc.engr.oregonstate.edu",
+      "receipt_sha256": "31bce1c307990ca1c989a51eb15fb123349defdd560e3905ea90c1d3d060ccac",
+      "installed_packages": {
+        "numpy": "1.26.0",
+        "mujoco": "3.3.5",
+        "onnxruntime": "1.22.1",
+        "omegaconf": "2.3.0",
+        "torch": "2.7.0+cpu"
+      }
+    }
+  },
+  "cases": [
+    {
+      "file": "seed94000-nominal.json",
+      "reference_sha256": "5f85e40a0692a59037f80bbea51cfd79849e6ab24e86e4464c36e4d6a31bf7e6",
+      "candidate_sha256": "92bc8efa1f0d091852a4634d156af479da7790539e97548177172934956919d6",
+      "passed": true,
+      "reasons": [],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "file": "seed94001-nominal.json",
+      "reference_sha256": "e54061f704799a58cc87fe5a22f3ddd32081610f24a76b555b40d2abeb975932",
+      "candidate_sha256": "5afc59057073b08b5830f1d340d56c87f573e551e968ec4bcad9d10275d342c5",
+      "passed": true,
+      "reasons": [],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "file": "seed94002-nominal.json",
+      "reference_sha256": "b27b848d7263a40cc1c06a6a5918f2bf9012eae4dd735c8d19ef9f5a17bdb1c6",
+      "candidate_sha256": "92b46383f827acd8d55b5468fe5130009c2ffd0fc34fe3c9c38a977f2c88751c",
+      "passed": true,
+      "reasons": [],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "file": "seed94003-nominal.json",
+      "reference_sha256": "9710c0fbdd37dd858f4ad7c70508f8d8899df61bdeecee807926d6a19371d86f",
+      "candidate_sha256": "600f80e9bb28c939474d7dad83a17962857404c166a331de6c8c0be363d4f2a0",
+      "passed": true,
+      "reasons": [],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "file": "seed94004-nominal.json",
+      "reference_sha256": "d03c3d1aaaddd10d0a812a6e3150910932d53705bed6de3cc2f72af8a7c1f57b",
+      "candidate_sha256": "07742f4069c653ef8a145844c1a80eee63d31d6b43ad3baa42716ea983da1e47",
+      "passed": true,
+      "reasons": [],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    }
+  ],
+  "passed": 5,
+  "total": 5,
+  "status": "PASS",
+  "scope": "Same frozen trained checkpoint, controller, assets and numerical releases. Original 1e-9 atol/rtol gate compares qpos, qvel, joint targets and physical contacts. Exact agreement is limited to these five two-second seeded trajectories; wall time, startup, long-term CI stability and hardware behavior are excluded."
+}

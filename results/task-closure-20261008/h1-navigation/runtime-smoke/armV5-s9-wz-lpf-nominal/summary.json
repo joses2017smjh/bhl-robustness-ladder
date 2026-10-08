@@ -1,0 +1,61 @@
+{
+  "seeds": [
+    119999
+  ],
+  "n": 1,
+  "success": 0,
+  "clean_success": 0,
+  "falls": 0,
+  "time_outs": 1,
+  "median_completion_s": null,
+  "completion_s": [],
+  "wall_contact_steps": [
+    0
+  ],
+  "median_seed_by_time": null,
+  "median_clean_seed_by_time": null,
+  "settings": {
+    "n": 6,
+    "m": 6,
+    "extra_openings": 1,
+    "time_limit": 30.0,
+    "cruise": 0.3,
+    "turn_rate": 0.6,
+    "inflate": 0.3,
+    "replan_s": 0.4,
+    "map_res": 0.1,
+    "sensor_mode": "reactive",
+    "random_heading": false,
+    "policy_capture_pose": true,
+    "policy_cmd_filter": {
+      "mode": "wz-lpf",
+      "tau_s": 0.2
+    }
+  },
+  "gait": {
+    "deploy": "/tmp/bhl-h1-confirmation-20261008/models/deploy.yaml",
+    "checkpoint": "models/gait.onnx",
+    "checkpoint_sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1"
+  },
+  "falls_seeds": [],
+  "max_tilt_rad": [
+    0.1151
+  ],
+  "outcome_classes": {
+    "time_out": 1
+  },
+  "reached_no_fall": 0,
+  "arrived_not_judged": 0,
+  "stuck": 0,
+  "controller_arrived_ever": 0,
+  "stress": {
+    "pose_error": {
+      "pose_yaw_deg": 0.0,
+      "pose_bias_m": 0.0,
+      "pose_noise_m": 0.0
+    },
+    "imu": {
+      "imu_source": "truth"
+    }
+  }
+}

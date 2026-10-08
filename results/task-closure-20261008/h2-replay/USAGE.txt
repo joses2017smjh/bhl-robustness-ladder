@@ -1,0 +1,43 @@
+H2 fresh-install and cross-host evidence, October 8, 2026
+======================================================
+Current status is maintained in docs/TASK_CLOSURE_2026-10-08.md.
+This directory supplements, rather than replaces, the October 7 measurements.
+
+integration.json: 9/9 actual trained-checkpoint, physics, CLI integrity and
+negative-control checks from a new isolated Python 3.11 CPU environment.
+fresh-cpu/report.json: 5/5 exact nominal repeats, 40/40 injected regression
+detections and 208/208 unchanged guard decisions. The 10,000-call and paired
+5,000-call timings retain this run's own host and scope. Do not substitute
+them for the historical host's timing or a real-time/hardware guarantee.
+fresh-cpu-raw.tar.gz: all raw fault/repeat/nominal traces, timing CSVs and
+receipts from that fresh CPU replay. No model or source input was altered.
+fresh-install.json and fresh-cpu-requirements.txt: installation commands,
+CPU-wheel smoke, pip check and the full installed-package receipt.
+
+Cross-host evidence
+-------------------
+reference/: October 7 recorded nominal traces and receipt from dgxh-2.
+fresh-cpu/: October 8 recorded nominal traces and receipt from dgx2-2.
+frozen-manifest.json: identical manifest, model, controller and physics hashes.
+cross-host.json: the original unchanged 1e-9 atol/rtol gate passed 5/5 cases
+with maximum state/velocity/joint-target difference zero and matching physical
+contacts. This is five two-second seeded simulation trajectories on these
+two hosts. It does not establish general cross-platform determinism or a
+long-term CI flake rate. Raw JSON byte hashes differ because wall times differ.
+comparison-negative-controls.json: the comparator rejects same-host/wrong-
+manifest inputs and detects a joint-target change in a copy of an actual trace.
+
+To independently reproduce the comparison, extract the committed frozen ZIP
+into a fresh directory and install its pinned runtime (README CPU instructions).
+Run from the repository root with PYTHONPATH unset:
+  python scripts/bench/compare_replay_hosts.py --bundle /tmp/FROZEN_BUNDLE \
+    --reference results/task-closure-20261008/h2-replay/reference \
+    --candidate results/task-closure-20261008/h2-replay/fresh-cpu \
+    --out /tmp/NEW_COMPARISON.json
+The tool verifies every bundle input and the receipts before comparing traces.
+The frozen ZIP SHA256 is:
+  10c37e8749792330dcc52293bc2a14c2f766688326619c7ad0eef60250f51b08
+
+Full-suite and hosted CI evidence have separate dated receipts. Optional Isaac
+runtime and unpublished historical export checks retain their existing
+prerequisites; neither is represented as having passed by a CPU skip.

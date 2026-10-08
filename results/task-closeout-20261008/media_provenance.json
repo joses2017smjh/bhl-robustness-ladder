@@ -1,0 +1,67 @@
+{
+  "schema": "bhl-media-task-closeout/v1",
+  "date": "2026-10-08",
+  "published_base": "f5fdc84510810b680939182fe9e23c60c01e5889",
+  "no_new_simulation_episodes": true,
+  "NAV-02": {
+    "sidecar": "docs/gifs/isaac/maze_stereo_fixed.json",
+    "sidecar_sha256": "67007a35c6e3dbe91dcff6d0c438b7069a3f04e184e5504246b72d7d343ad764"
+  },
+  "LOC-01": {
+    "sidecar": "docs/gifs/dr_pair.json",
+    "sidecar_sha256": "dae007323b0a26362deb8cc15d691f388eb246e8e69c8feed5535a29e65828e4"
+  },
+  "LOC-06": {
+    "terrain_difficulty": 1.0,
+    "recounted": {
+      "22DoF": {
+        "training_policies": 2,
+        "episodes": 60,
+        "falls": 7,
+        "inputs": [
+          {
+            "path": "results/arms/arms-dr1.0-s0__p0_d1.00.csv",
+            "bytes": 4557,
+            "sha256": "0faeb3c4779badcefa84a23e027b97c710b9c69a80980fee489d49d25f4561e9"
+          },
+          {
+            "path": "results/arms/arms-dr1.0-s1__p0_d1.00.csv",
+            "bytes": 4575,
+            "sha256": "6cbe5f9e57339fa054507380c7d4f129e57b0644cf9b49aecf469c9fb3f6411f"
+          }
+        ]
+      },
+      "12DoF": {
+        "training_policies": 3,
+        "episodes": 90,
+        "falls": 34,
+        "inputs": [
+          {
+            "path": "results/terrain/dr-default-s0__d1.00.csv",
+            "bytes": 4547,
+            "sha256": "d09ed6ae1e2786193cf748fb317fcd33b2d71f52f5eda7a66af9caf9987e7de1"
+          },
+          {
+            "path": "results/terrain/dr-default-s1__d1.00.csv",
+            "bytes": 4487,
+            "sha256": "a1a29444939ad76bdfe52f05c70a0a91475ead9641ce1432292b911655b8c1ce"
+          },
+          {
+            "path": "results/terrain/dr-default-s2__d1.00.csv",
+            "bytes": 4563,
+            "sha256": "cac39fac8a8d3884324d311db2f034ee1518fd289a657ce7753fe3e4dd79dc16"
+          }
+        ]
+      }
+    }
+  },
+  "generator_sha256": "2660a6c8bffd2149b5b25bfabbc75574dd9210aeea1159c42b41f8e927ee925d",
+  "runtime": {
+    "python": "3.11.16",
+    "numpy": "1.26.0",
+    "Pillow": "11.3.0",
+    "tensorboard": "2.20.0"
+  },
+  "visual_check": "Corrected stereo first frame inspected: the complete seed-0 title is visible within the 560-pixel image.",
+  "limits": "Media provenance and reporting corrections; no new trained policy, performance improvement, real-time guarantee or hardware result."
+}

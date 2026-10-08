@@ -1,0 +1,31 @@
+{
+  "schema": "bhl-fresh-cpu-install/v1",
+  "recorded_utc": "2026-10-08T17:35:32.544142+00:00",
+  "host": "dgx2-2.hpc.engr.oregonstate.edu",
+  "python": "3.11.15 (main, Aug 11 2026, 16:31:42) [GCC 12.5.0]",
+  "environment": "/tmp/bhl-h2-cpu-venv",
+  "existing_site_packages_enabled": false,
+  "gpu_inference": false,
+  "torch_cuda_build": null,
+  "package_versions": {
+    "torch": "2.7.0+cpu",
+    "torchvision": "0.22.0+cpu",
+    "numpy": "1.26.0",
+    "mujoco": "3.3.5",
+    "onnxruntime": "1.22.1",
+    "omegaconf": "2.3.0",
+    "pytest": "9.0.2",
+    "rsl-rl-lib": "3.0.1"
+  },
+  "pip_check": "No broken requirements found.",
+  "cpu_wheel_operation": "torchvision.ops.nms CPU smoke passed, retained indices [0].",
+  "commands": [
+    "python3.11 -m venv /tmp/bhl-h2-cpu-venv",
+    "python -m pip install torch==2.7.0 torchvision==0.22.0 --index-url https://download.pytorch.org/whl/cpu",
+    "python -m pip install -r <frozen-bundle>/requirements.txt -r requirements-test.txt",
+    "python -m pip check",
+    "PYTHONPATH unset: verify.py --bundle <frozen-bundle> --out <new-integration-output>",
+    "PYTHONPATH unset; OMP/OPENBLAS/MKL=1: replay.py --bundle <frozen-bundle> --out <new-replay-output> --calls 10000 --warmup 500"
+  ],
+  "scope": "Fresh isolated dependency install and actual trained-asset CPU replay. Full unit suite and GitHub execution have separate receipts."
+}

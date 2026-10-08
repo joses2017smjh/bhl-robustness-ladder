@@ -1,29 +1,54 @@
 # Roadmap: pending work and stretch goals
 
-Updated 2026-10-01. Done since the last update: README hero is now the 22-DoF humanoid with sensor panels; NavGym v4 passed its gate; the solutions plan for the five open problems is [`SOLUTIONS_2026-10-01.md`](SOLUTIONS_2026-10-01.md). One line per item; evidence and rules live in
-[`STATUS.md`](STATUS.md), [`REPO_TASKS.md`](REPO_TASKS.md) and the
-[job ledger](../SLURM_JOBS.md). Every run gets a pass rule written down before it starts.
+Updated 2026-10-08. The current [task closure ledger](TASK_CLOSURE_2026-10-08.md)
+reconciles completed deliverables with open robotics objectives. Historical
+plans remain in [SOLUTIONS_2026-10-01.md](SOLUTIONS_2026-10-01.md); evidence is
+linked from [STATUS.md](STATUS.md), [REPO_TASKS.md](REPO_TASKS.md) and the
+[job ledger](../SLURM_JOBS.md). Acceptance rules remain unchanged.
 
 ## In flight
 
 | Item | State | Done when |
 |---|---|---|
-| **Turning follow-up R1H** (R1 + explicit straight-walk commands + heading-hold reward, from scratch, 3 seeds × 6000 iterations; [ledger](../SLURM_JOBS.md) 2026-10-02 16:22) | smoke `21517587`, then `21517588` (array 0–2, afterok) | `results/repo-gpu-20260923/turngait-hold-20261002/verdict/R1H.json` (v5 joint rule: ≥ 2/3 seeds pass v2 AND qualify) |
+| **H1: fresh matched yaw-filter confirmation** | ACTIVE, CPU-only job `21689706`, 576 planned episodes, two evaluators; [frozen protocol](../results/task-closure-20261008/h1-navigation/protocol.json) | Every episode validates and the final paired report is written. A passing candidate requires each of three actors to reach ≥40/48 nominal and ≥36/48 dropout goals, with zero falls in both conditions. A negative result still closes the experiment, not the improvement objective. |
+| **H2: portable replay validation** | Pending final fresh-environment/full-suite and hosted CI receipts | Fresh dependency installation, full CPU checks, hosted execution and second-host replay are documented, including any divergence; original same-host timing scope stays intact. |
 
-## Next (small, unblocked)
+## Closed since the previous roadmap
 
-| Item | Why | Done when |
+| Item | Final result | Scope |
 |---|---|---|
-| **SF-05: record the real IM10A** over ROS 2 (≥ 2 h still at 200 Hz, then slow rotations per axis and a tap test; procedure [`IMU_RECORDING.md`](IMU_RECORDING.md), analysis `scripts/sensors/imu_allan.py`) | replace the datasheet noise in the sim IMU with measured noise, bias and rate; a 30 min record reads B about 10 % low (min method) and usually loses K | Allan-variance sigmas (N, B and K, with K measured rather than an upper bound, as `imu_measured.json`) committed; sim IMU and panel read "measured on your IM10A" |
-| Fix the cloth task's spawn quaternion | same bug as the fixed cube tasks; guard test allowlists it | cloth driver removes the allowlist entry |
+| R1 / R2 / R1H turning experiments | DONE NEGATIVE: respectively 1/3, 0/3 and 0/3 seeds meet the unchanged joint rule; R1H seed 2 is complete | H4's repeatable 22-DoF recipe remains open; [verdicts](TASK_CLOSURE_2026-10-08.md#completed-negative-experiments). |
+| Original NavGym v5 gym/physics transfer | DONE: three actors pass; physics 11/12, 12/12 and 12/12, zero falls | [Original transfer gate](../results/navgym-v5-transfer-20261002/verdict.json). The later 384-episode confirmation remains NEGATIVE because of six learned-actor falls. |
+| NAV-01/02/03 and LOC-01/04/06/07/10 reporting/provenance tasks | DONE within their stated scopes | [Closure evidence](TASK_CLOSURE_2026-10-08.md#deliverables-closed-in-this-audit); media reassembly and caption correction add no simulation episodes. |
+| Cloth spawn quaternion | DONE as a code defect; 13 targeted CPU checks and original-literal negative control | [Receipt](../results/task-closure-20261008/cloth-quaternion.json); no new Isaac runtime or task-performance result. |
+| PlateCross / PlateCross2 | DONE NEGATIVE: no qualified gait, so no bench released | Mission 7 remains blocked; [selection receipts](TASK_CLOSURE_2026-10-08.md#completed-negative-experiments). |
 
-## Stretch goals
+## Next executable work
 
-| Goal | Current evidence | First step | Success looks like |
+| Item | Prerequisite | Acceptance boundary |
+|---|---|---|
+| **H3: history/latency policy training** | Predeclare matched history-versus-feedforward training and held-out latency evaluation | No training result exists for H3. Sensor-tolerance studies cannot substitute for the proposed matched policy campaign. |
+| **H4: reliable turning recipe** | A new observability/control hypothesis after R1H's failed qualification; freeze three seeds and unchanged gates before training | ≥2/3 seeds both pass turn-test v2 and qualify: ≥9/10 turns, ≤15° walk drift on ≥2/3 seeds, push falls ≤9/60. |
+| **NAV-04: corrected terrain-sensor media** | Original stereo panels still show pre-fix policies | Rerender the corrected checkpoints and retain source/frame/output hashes. |
+| **LOC-03: flatfill terrain retention** | Checkpoint export plus matched difficulty sweep | Complete the existing protocol, preserving all episodes and denominators. |
+| **LOC-09: depth departure probe** | Diagnose the repeated rough-terrain timeout | Validated probe output; the unreplicated 2.9% error claim stays withdrawn. |
+| **INS-03: larger airlock/stress extension** | Existing extension has ten fresh seeds, not the proposed twenty; delay/interruption requires script options | Report the achieved ten-seed scope separately; predeclare any additional cohort or stress gate. |
+| **SF-05: physical IM10A** | User-accessible device and ROS 2 recordings: ≥2 h still at 200 Hz, rotations and tap test | Measured N/B/K, with K measured rather than an upper bound, plus calibration/extrinsics; [recording procedure](IMU_RECORDING.md). |
+
+## Open robotics objectives
+
+| Objective | Current evidence | Next meaningful step | Success rule |
 |---|---|---|---|
-| **Drop the oracle pose**: visual-inertial odometry (optical flow / stereo + IMU) drives the randomized maze | maze works 24/24 with oracle pose; pose error > 0.05 m already breaks goal judging | offline VO from the rig renders + sim IMU on recorded episodes; compare to truth | ≥ 10/12 hard mazes with estimated pose, 0 falls |
-| **A turning humanoid recipe**, not one lucky checkpoint | 1/12 seeds qualifies (TurnBoth-s0, via v2x; noise-free v2 0/12); in MuJoCo four non-turners turn in 16/16 runs with their own training action noise, which points to PPO learning to step only in the noisy loop while the noise-free gates see the standing mean; fine-tunes trade turning for push robustness (v5) | R1/R2 done (`21506543`): with the clock in the actor every seed turns (18/18) but R1 FAILS 1/3 on walk drift (`arms-turngait-clock-s2` qualified); with the clock in the critic only (R2) no seed turns (0/3). Next: keep the actor clock and fix straight-walk heading drift (e.g. a heading-hold reward at zero yaw command), 3 seeds, gate unchanged | ≥ 2/3 seeds pass the turn test and push falls ≤ 0.15 |
-| **Learned navigation that passes its own gate**, then runs the physics robot | gym gate **PASSED** (v4, 2/3 seeds); physics transfer **8/12 and 9/12** (need ≥ 10), 0 falls, misses are time-outs; on the same layouts in the gym s6 fails the same 3 mazes (its misses are its own) and s5 loses 2–3 more in physics; maze 50009's dead-end pocket traps both actors in the gym and s6 in physics, while s5 in physics turns up the x = 2 column and dithers (longest stall 87 s) | integrating each lidar packet at its capture pose was screened NEGATIVE in physics (`21501509`: s5 net +2/24, needed +4; s6 23 → 23; 0 falls), so next: route-level navigation (an A* sub-goal hybrid, labelled learned + scripted, or a visitation channel / recurrent policy), judged on fresh maze seeds | ≥ 10/12 never-seen mazes on the physics biped, each passing actor (a hybrid does not satisfy this row; it is reported separately as learned + scripted) |
-| **Cube placement** | Stand3 stands but never places; replay `21470828`: both checkpoints earn the lift reward by re-orienting a cube that rests on its support (`object_is_lifted` tests centre height only); scripted lift-place fails because the cube rolls in the hands | scripted: the flush-pad probe (`21507881`) is NEGATIVE (the pads fix the grip, 5/5 lift-holds, but the cube still rolls 0.70–0.74 rad with the hands during the lift), so next a lift motion that holds wrist orientation; learned: a roll-proof lift reward and a hand-collider check, then a Stand4 with its rule written first | success ≥ 0.10 on ≥ 1 of 2 seeds, with cube tilt and release checked |
-| **Sim-to-real** on the Berkeley Humanoid Lite with lidar, stereo and IM10A | sim only; IMU latency budget ≈ 30 ms; the hardware runtime writes the deploy limits (6 Nm legs, 4 Nm arms) into motor firmware, so fixes needing more torque are sim-only | SF-05 recordings with the kit ([`IMU_RECORDING.md`](IMU_RECORDING.md)), then a sensor-only bench check | a hardware claim backed by recorded data |
-| Mission 7 route controller | blocked at 9/10 in replay (gate 10/10), the best of the cross-clear variants, which keep crossing until the plate is cleared; four fixed-1.2 s-crossing variants pass 10/10, but in G-ref `21397732` and wait-open `21400863` (identical crossing for crossing) the staged crossing never cleared a plate and door 0 was already open, and the two lateral-0.35 passes are unverified, so the replay cannot certify a crossing; the route gate's code counts episodes, not successes; the episode budget is inconsistent (101 left vs ≈ 53 over) | route-gate success criterion and real crossing clears now coded (M1, 2026-10-01); reconcile the budget (0 episodes); the M2 plate bench with TurnBoth-s0 as the stage gait FAILED (`21507962`: 8/64; 26/64 lost in the bench's own run-up, turns stall at 0.4 rad/s, crossings stall at the plate edge), and on the run-up-free bench v2 M3 (shipped gait turning while stepping) also FAILED (`21514946`: 16/41, 5 falls, wall contact in 30/41, 180° 0/8); with the user's approval, clock-s2 as the stage gait on bench v2 also FAILED (`21517668`: 18/41, 1 fall, 180° 0/8 on timing), and a learned crossing (PlateCross fine-tune of clock-s2) is training (`21517543`) | bench PASS, then 10/10 in replay, then Doors and Transport 16/16 on fresh layouts |
+| **Estimated-pose navigation** | Current navigation uses oracle pose and goal; bounded-error and drift tests describe estimator requirements | Offline visual/stereo-inertial estimator on recorded episodes, compared with truth | ≥10/12 fresh hard mazes with estimated pose and zero falls. |
+| **Reliable learned navigation under dropout** | Original v5 transfer passes, larger confirmation fails its zero-fall rule; H1 is now evaluating the locked yaw filter | Finish H1 before another candidate or cohort is chosen | H1's unchanged per-actor goal and zero-fall clauses; report baseline pairing. |
+| **Cube placement / cooperative carry** | Stand4 NEGATIVE, last-200 success 0.006/0.001 versus 0.10; flush-pad probe fixes grip but not wrist-induced rolling | Wrist-orientation/retention/release mechanism and an independently checked success predicate | Placement ≥0.10 on ≥1 of two seeds, with cube tilt and release checked; carry retains its own unchanged rule. |
+| **Mission 7 routes** | Scripted benches and learned PlateCross variants are negative; old 10/10 upright replay did not establish genuine staged crossing | Reconcile inconsistent historical episode accounting; establish a new crossing mechanism before any new Mission 7 episodes | Genuine-crossing bench PASS, exact replay 10/10, then Doors and Transport each 16/16 on fresh layouts. Sensor-only/four-sensor studies stay gated. |
+| **Sim-to-real** | Simulated sensors and policies only; latency budget approximately 30 ms in tested conditions | SF-05 recordings and a sensor-only hardware bench | A hardware claim backed by recorded device/runtime evidence. |
+
+The separate Waiter work uses a modified 24-DoF gripper robot and different
+arm limits. The immutable WBC/WBC1b backup selections are negative. Later
+unpublished local WBC1c receipts select seed 7; seeds 7 and 8 pass v2,
+qualification and Q2, with 0/12 Q2 falls and four walks each ≥1.5 m. This audit
+inspected saved evidence without reproducing that simulation. An immutable
+source/evidence publication remains a follow-up; neither branch closes H4 or
+the later VLA phases. See the [separate evidence review](TASK_CLOSURE_2026-10-08.md#separate-waiter-backup-branch).

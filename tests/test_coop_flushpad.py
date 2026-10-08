@@ -20,7 +20,7 @@ from bhl_robust.eval import scripted_carry as sc
 
 REPO = Path(__file__).resolve().parents[1]
 UPSTREAM = REPO / "external/Berkeley-Humanoid-Lite"
-DEPLOY = UPSTREAM / "logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/deploy.yaml"
+DEPLOY = REPO / "tests/fixtures/arms-dr1.0-s0/deploy.yaml"
 LAUNCHER = REPO / "slurm/repo20260923/cpu_coop_flushpad.sbatch"
 BASE_COMMIT = "094797e"          # the commit the C1 workstream started from (stock harness unchanged since fcd0c30)
 DT = 0.04
@@ -990,6 +990,7 @@ def _policy():
     sys.path.insert(0, str(REPO / "scripts" / "bench"))
     from team_airlock import CpuPolicy
     cfg = OmegaConf.load(DEPLOY)
+    cfg.policy_checkpoint_path = str(DEPLOY.parent / cfg.policy_checkpoint_path)
     return cfg, CpuPolicy(cfg.policy_checkpoint_path)
 
 

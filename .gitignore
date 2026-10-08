@@ -1,5 +1,6 @@
 # Environment artifacts live outside the tree, but guard against strays.
 .venv/
+.venv-cpu/
 venv/
 .uv-cache/
 .uv-python/
@@ -21,6 +22,7 @@ outputs/
 checkpoints/
 *.pt
 *.onnx
+!tests/fixtures/arms-dr1.0-s0/policy.onnx
 
 # Results: keep aggregated CSV + plots, drop raw per-step dumps
 results/raw/

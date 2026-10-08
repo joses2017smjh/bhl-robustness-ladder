@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "case": "same-host cannot claim cross-host verification",
+      "returncode": 1,
+      "output_created": false
+    },
+    {
+      "case": "changed joint target in copy of actual physics trace",
+      "returncode": 1,
+      "status": "NEGATIVE",
+      "passed": 4,
+      "total": 5,
+      "detected_reason": [
+        "target_differs_from_nominal_replay"
+      ]
+    },
+    {
+      "case": "wrong manifest receipt",
+      "returncode": 1,
+      "output_created": false
+    }
+  ],
+  "scope": "Copies of saved actual traces and receipts; no new physics or training episodes."
+}

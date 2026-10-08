@@ -6,6 +6,9 @@ I built evaluation infrastructure around [Berkeley Humanoid Lite](https://github
 
 [Portfolio](https://jose-sanchez-portfolio-com.vercel.app/projects/bhl-robustness-ladder/) · [Technical report](docs/REPORT.md) · [Findings](docs/FINDINGS.md) · [All demos](docs/GALLERY.md)
 
+[Current open tasks and October 8 closures](docs/TASK_CLOSURE_2026-10-08.md)
+tracks completed deliverables, negative experiments and active confirmations.
+
 [![A 22-DoF humanoid explores an unseen maze with lidar mapping and a scripted planner](docs/gifs/random-maze-humanoid-sensors.gif)](docs/RANDOM_MAZE.md)
 
 *Learned gait, scripted A* on a lidar-built map, oracle pose and goal. Stereo, optical-flow, and IMU overlays in this clip are display only. Playback is accelerated; aggregate results are linked below.*
@@ -42,9 +45,14 @@ and goal. Earlier cohorts below remain their historical records.
 
 These are simulation results. They do not establish hardware locomotion or learned-policy transfer to a physical robot. My [Quest arm teleoperation](https://github.com/joses2017smjh/quest-vr-teleop) is a separate hardware project.
 
-## Latest study: turning gait, October 2
+## Turning gait: completed negative experiments
 
 Putting a gait clock in the policy input enables turning across three training seeds. Only one seed also passes the unchanged straight-walk and push qualification; the recipe requires two of three, so it **fails**. The critic-only clock control qualifies zero of three. [Actor-clock verdict](results/repo-gpu-20260923/turngait-r12-20261001/verdict/R1.json) · [Critic-only verdict](results/repo-gpu-20260923/turngait-r12-20261001/verdict/R2.json)
+
+The heading-hold follow-up is also complete: **0/3** seeds pass the joint rule.
+Seed 2 passes turn-test v2 but scores **8/10** qualification turns against the
+unchanged **9/10** requirement. A repeatable 22-DoF recipe remains open.
+[Heading-hold verdict](results/repo-gpu-20260923/turngait-hold-20261002/verdict/R1H.json).
 
 Plate crossing, cooperative carry, and standing placement remain incomplete or negative. The [status ledger](docs/STATUS.md) records their mechanisms and next tests. Earlier invalid findings remain identified in the [findings ledger](docs/FINDINGS.md).
 
@@ -79,7 +87,11 @@ with `PYTHONPATH` unset; it uses no Isaac installation or GPU inference.
 Five seeded nominal trajectories reproduced exactly on the same host, and
 **40/40 injected sensor, action and contact-scoring regressions** were detected.
 A changed trajectory is a regression relative to the reference; these gates do
-not establish safe behavior under faults or cross-host determinism.
+not establish safe behavior under faults. On October 8, a fresh pinned CPU
+installation reproduced **5/5** two-second seeded trajectories on a second HPC
+host with exact state, velocity, joint-target and contact agreement. This is
+limited to the frozen bundle and those five cases, rather than general
+cross-platform determinism. [Cross-host comparison](results/task-closure-20261008/h2-replay/cross-host.json).
 
 The speedup below compares cached versus uncached added validators; it does not measure faster ONNX inference or the original unguarded controller.
 
@@ -102,18 +114,23 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
 ```
 
 The builder refuses missing models; replay verifies source, asset and runtime
-hashes before physics. Output directories cannot be reused. This integration
-suite complements the existing unit tests. A manual CI template is available at
-[`ci/replay-workflow.yml.example`](ci/replay-workflow.yml.example); its artifact
-intake passed local checks, and the workflow has not been executed on GitHub. Bundle generation and relocation
-were tested with the existing environment; a fresh dependency installation and
-GitHub-hosted execution remain unverified.
+hashes before physics. Output directories cannot be reused. The active
+[CPU workflow](.github/workflows/cpu-replay.yml) installs a pinned CPU runtime,
+runs the full CPU suite, then checks actual trained assets, injected regressions
+and timings. Its final hosted validation is tracked in the current task ledger.
+The earlier [manual template](ci/replay-workflow.yml.example) remains a historical
+reference. Each run retains its own hardware and timing receipt.
 
 The separate fresh navigation pilot evaluated the existing yaw filter on one
 actor, two layouts and two sensing conditions (**8 episodes**). Both baseline and
 candidate reached **2/4** goals with no falls; command flip rates fell about
 **53%**. This establishes reduced chatter in the pilot, without establishing a
 goal-success or fall-rate improvement. The consumed layouts are development data.
+
+H1's fresh matched confirmation is **ACTIVE** as CPU job `21689706`: **576
+episodes** across three actors, baseline/filter, nominal/35% dropout and 48
+fresh layouts. No improvement conclusion is available before the complete
+frozen comparison validates. [Protocol and run status](results/task-closure-20261008/h1-navigation/USAGE.txt).
 
 The measured frozen bundle is included at
 [`results/resume-revamp-20261007/portable-bundle.zip`](results/resume-revamp-20261007/portable-bundle.zip).
@@ -148,13 +165,26 @@ sbatch slurm/02_smoke_train.sbatch
 
 Those launchers describe the original Isaac Sim 5.1 / Isaac Lab 2.3.2 stack. The parallel 6.0 / 3.0 campaign needs its own environment. The smoke gate checks that training advances and episodes last beyond the first step.
 
-In a compatible CPU environment with required upstream assets and dependencies:
+For the CPU suite in a fresh Python 3.11 environment:
 
 ```bash
-PYTHONPATH=src python -m pytest -q tests
+git submodule update --init --recursive
+python3.11 -m venv .venv-cpu
+source .venv-cpu/bin/activate
+python -m pip install torch==2.7.0 torchvision==0.22.0 \
+  --index-url https://download.pytorch.org/whl/cpu
+python -m pip install -r requirements-test.txt
+python -m pip check
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+  PYTHONPATH=src:external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel \
+  python -m pytest -q tests
 ```
 
 CPU tests check logic and artifact contracts. GPU integration gates and saved physics evaluations establish task performance; neither substitutes for the other.
+Isaac runtime and unpublished historical training-artifact checks retain their
+existing optional prerequisites. The CPU suite includes a hashed, original
+22-DoF gait fixture for its cooperative physics checks; it does not train a new
+policy.
 
 **Stack:** Python, PyTorch, Isaac Lab/Sim, MuJoCo, ONNX Runtime, Warp, rsl-rl, Slurm, Apptainer, uv.
 

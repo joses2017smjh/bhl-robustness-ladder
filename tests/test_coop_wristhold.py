@@ -24,7 +24,7 @@ from bhl_robust.eval import scripted_carry as sc
 
 REPO = Path(__file__).resolve().parents[1]
 UPSTREAM = REPO / "external/Berkeley-Humanoid-Lite"
-DEPLOY = UPSTREAM / "logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/deploy.yaml"
+DEPLOY = REPO / "tests/fixtures/arms-dr1.0-s0/deploy.yaml"
 LAUNCHER = REPO / "slurm/repo20260923/cpu_coop_wristhold.sbatch"
 BASE_COMMIT = "3a67bc2"          # HEAD when the W workstream started (stock harness + flush-pad variant)
 DT = 0.04
@@ -935,8 +935,10 @@ def _fake_tree(tmp_path):
     text = LAUNCHER.read_text()
     real_repo = "REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder\n"
     real_logs = "LOGS=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs\n"
-    assert text.count(real_repo) == 1 and text.count(real_logs) == 1
-    text = text.replace(real_repo, f"REPO={root}\n").replace(real_logs, f"LOGS={logs}\n")
+    real_python = "PY=/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python\n"
+    assert text.count(real_repo) == 1 and text.count(real_logs) == 1 and text.count(real_python) == 1
+    text = (text.replace(real_repo, f"REPO={root}\n").replace(real_logs, f"LOGS={logs}\n")
+            .replace(real_python, f"PY={sys.executable}\n"))
     launcher = root / "slurm/repo20260923/cpu_coop_wristhold.sbatch"
     launcher.parent.mkdir(parents=True)
     launcher.write_text(text)
@@ -1123,6 +1125,7 @@ def _policy():
     sys.path.insert(0, str(REPO / "scripts" / "bench"))
     from team_airlock import CpuPolicy
     cfg = OmegaConf.load(DEPLOY)
+    cfg.policy_checkpoint_path = str(DEPLOY.parent / cfg.policy_checkpoint_path)
     return cfg, CpuPolicy(cfg.policy_checkpoint_path)
 
 

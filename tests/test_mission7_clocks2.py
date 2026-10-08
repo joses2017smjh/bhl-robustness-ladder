@@ -734,7 +734,8 @@ def test_compact_result_reports_the_controller_swaps():
 def test_clis_accept_clocks2_and_export_in_preflight(tmp_path, script):
     m = _stage_module()
     _need_exports(m)
-    env = {**os.environ, "PYTHONPATH": f"{_REPO / 'src'}:{_REPO / 'scripts'}"}
+    upstream_python = _REPO / "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel"
+    env = {**os.environ, "PYTHONPATH": os.pathsep.join(map(str, (_REPO / "src", _REPO / "scripts", upstream_python)))}
     if script == "stage":
         args = [str(STAGE), "--repo", str(_REPO), "--campaign", REPLAY_SOURCE, "--baseline", REPLAY_BASELINE,
                 "--out", str(tmp_path / "never"), "--preflight"]

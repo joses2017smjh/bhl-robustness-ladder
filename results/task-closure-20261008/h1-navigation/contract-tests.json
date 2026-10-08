@@ -1,0 +1,22 @@
+{
+  "created_utc": "2026-10-08T17:34:22.529853+00:00",
+  "status": "PASS",
+  "tests": 37,
+  "elapsed_s": 88.65,
+  "command": [
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_navigation_confirmation.py"
+  ],
+  "test_source_sha256": "6cc3a002a10c6c8ad9f3e82efdba6248d7e580ee541c4f38c0d59f0b8ca70d06",
+  "summarizer_source_sha256": "b4f447a67ed8dce74c5a4ea3e16f14e57b24e79b0225fa5c73c29a4d1b41b961",
+  "independent_verifier_sha256": "ee5f9f4cfa178ef064c78927c5084771eda276af723e7ef61b16ebaaaa0e3f63",
+  "summarizer_matches_frozen_job_source": true,
+  "synthetic_gate_receipt_controls": 37,
+  "actual_unscored_runtime_episode_contracts": 2,
+  "scope": "Synthetic evidence-gate/receipt/telemetry negative controls and two real runtime-only contracts; no confirmation result or robot performance gain inferred."
+}

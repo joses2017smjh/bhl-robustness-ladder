@@ -1,0 +1,949 @@
+{
+  "status": "PASS",
+  "nominal_replays": [
+    {
+      "seed": 94000,
+      "valid_nominal": true,
+      "passed": true,
+      "reasons": [],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94001,
+      "valid_nominal": true,
+      "passed": true,
+      "reasons": [],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94002,
+      "valid_nominal": true,
+      "passed": true,
+      "reasons": [],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94003,
+      "valid_nominal": true,
+      "passed": true,
+      "reasons": [],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94004,
+      "valid_nominal": true,
+      "passed": true,
+      "reasons": [],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    }
+  ],
+  "fault_results": [
+    {
+      "seed": 94000,
+      "fault": "observation_nan",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "runtime_validation_rejected",
+        "trace_length_mismatch"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94000,
+      "fault": "observation_shape",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "runtime_validation_rejected",
+        "trace_length_mismatch"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94000,
+      "fault": "quaternion_xyzw",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 9.458777928787292,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94000,
+      "fault": "sensor_hold",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 6.678443362841472,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94000,
+      "fault": "sensor_delay",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 12.008439958769339,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94000,
+      "fault": "action_hold",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 5.97495653614624,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94000,
+      "fault": "action_delay",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 12.818271600266277,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94000,
+      "fault": "contact_score_omitted",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "contact_score_inconsistent_with_physics_samples"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94001,
+      "fault": "observation_nan",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "runtime_validation_rejected",
+        "trace_length_mismatch"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94001,
+      "fault": "observation_shape",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "runtime_validation_rejected",
+        "trace_length_mismatch"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94001,
+      "fault": "quaternion_xyzw",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 12.289164096188067,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94001,
+      "fault": "sensor_hold",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 9.848893361304473,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94001,
+      "fault": "sensor_delay",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 6.5792161079107405,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94001,
+      "fault": "action_hold",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 6.234695970705736,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94001,
+      "fault": "action_delay",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 12.015144598907145,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94001,
+      "fault": "contact_score_omitted",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "contact_score_inconsistent_with_physics_samples"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94002,
+      "fault": "observation_nan",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "runtime_validation_rejected",
+        "trace_length_mismatch"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94002,
+      "fault": "observation_shape",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "runtime_validation_rejected",
+        "trace_length_mismatch"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94002,
+      "fault": "quaternion_xyzw",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 7.733542176832103,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94002,
+      "fault": "sensor_hold",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 5.176048008226562,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94002,
+      "fault": "sensor_delay",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 16.582194584925034,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94002,
+      "fault": "action_hold",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 3.557826375640592,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94002,
+      "fault": "action_delay",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 13.230388635545575,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94002,
+      "fault": "contact_score_omitted",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "contact_score_inconsistent_with_physics_samples"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94003,
+      "fault": "observation_nan",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "runtime_validation_rejected",
+        "trace_length_mismatch"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94003,
+      "fault": "observation_shape",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "runtime_validation_rejected",
+        "trace_length_mismatch"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94003,
+      "fault": "quaternion_xyzw",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 0.26967771710553734,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94003,
+      "fault": "sensor_hold",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 0.34113209629500857,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94003,
+      "fault": "sensor_delay",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 10.120854421267994,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94003,
+      "fault": "action_hold",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 0.1533302737400184,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94003,
+      "fault": "action_delay",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 3.363741482868364,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94003,
+      "fault": "contact_score_omitted",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "contact_score_inconsistent_with_physics_samples"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94004,
+      "fault": "observation_nan",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "runtime_validation_rejected",
+        "trace_length_mismatch"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94004,
+      "fault": "observation_shape",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "runtime_validation_rejected",
+        "trace_length_mismatch"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94004,
+      "fault": "quaternion_xyzw",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 3.4730412950071394,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94004,
+      "fault": "sensor_hold",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 3.997066716992797,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94004,
+      "fault": "sensor_delay",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 13.6633307456203,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94004,
+      "fault": "action_hold",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 1.2511527661381494,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94004,
+      "fault": "action_delay",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "physics_contact_stream_differs",
+        "qpos_differs_from_nominal_replay",
+        "qvel_differs_from_nominal_replay",
+        "target_differs_from_nominal_replay"
+      ],
+      "max_state_or_target_abs_delta": 6.419779063967053,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    {
+      "seed": 94004,
+      "fault": "contact_score_omitted",
+      "detected": true,
+      "passed": false,
+      "reasons": [
+        "contact_score_inconsistent_with_physics_samples"
+      ],
+      "max_state_or_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    }
+  ],
+  "nominal_repeats_passed": 5,
+  "nominal_cases": 5,
+  "faults_detected": 40,
+  "fault_cases": 40,
+  "timing": {
+    "calls": 10000,
+    "warmup_calls": 500,
+    "guard_mode": "cached",
+    "policy_period_ms": 40.0,
+    "lower_level_period_ms": 4.0,
+    "stages": {
+      "observation_ms": {
+        "n": 10000,
+        "p50_ms": 0.0324565,
+        "p95_ms": 0.045604149999999996,
+        "p99_ms": 0.05138595000000002,
+        "max_ms": 3.647594
+      },
+      "input_guard_ms": {
+        "n": 10000,
+        "p50_ms": 0.0202515,
+        "p95_ms": 0.0263601,
+        "p99_ms": 0.03270069000000002,
+        "max_ms": 5.815578
+      },
+      "controller_ms": {
+        "n": 10000,
+        "p50_ms": 0.4593575,
+        "p95_ms": 0.6947538999999999,
+        "p99_ms": 2.4327427800000065,
+        "max_ms": 22.287367
+      },
+      "onnx_ms": {
+        "n": 10000,
+        "p50_ms": 0.058101,
+        "p95_ms": 0.06880349999999999,
+        "p99_ms": 0.08091477000000001,
+        "max_ms": 13.332428
+      },
+      "output_guard_ms": {
+        "n": 10000,
+        "p50_ms": 0.0475065,
+        "p95_ms": 0.0626444,
+        "p99_ms": 0.07206237000000001,
+        "max_ms": 18.169644
+      },
+      "total_ms": {
+        "n": 10000,
+        "p50_ms": 0.5618875,
+        "p95_ms": 0.8320315999999999,
+        "p99_ms": 2.9311608500000044,
+        "max_ms": 22.444304
+      }
+    },
+    "policy_deadline_misses": 0,
+    "half_policy_period_target_met": true,
+    "scope": "Warm serial CPU observation assembly + guards + upstream controller/ONNX; ONNX is nested within controller. Captured MuJoCo input ring; excludes physics, sensor transport, OS real-time scheduling and model load. Against policy_dt, not control_dt; no hard-real-time guarantee."
+  },
+  "guard_decisions": {
+    "cases": 208,
+    "decisions_match": true,
+    "accepted": 202,
+    "rejected": 6
+  },
+  "paired_guard_timing": {
+    "same_host": true,
+    "phases": [
+      {
+        "calls": 5000,
+        "warmup_calls": 500,
+        "guard_mode": "uncached",
+        "policy_period_ms": 40.0,
+        "lower_level_period_ms": 4.0,
+        "stages": {
+          "observation_ms": {
+            "n": 5000,
+            "p50_ms": 0.035251,
+            "p95_ms": 0.049991100000000004,
+            "p99_ms": 0.0547221,
+            "max_ms": 0.154181
+          },
+          "input_guard_ms": {
+            "n": 5000,
+            "p50_ms": 0.0608235,
+            "p95_ms": 0.08419035,
+            "p99_ms": 0.08948984000000001,
+            "max_ms": 1.16759
+          },
+          "controller_ms": {
+            "n": 5000,
+            "p50_ms": 0.4621195,
+            "p95_ms": 0.72575575,
+            "p99_ms": 0.73569748,
+            "max_ms": 8.236712
+          },
+          "onnx_ms": {
+            "n": 5000,
+            "p50_ms": 0.0616505,
+            "p95_ms": 0.0725459,
+            "p99_ms": 0.07793035000000002,
+            "max_ms": 0.280663
+          },
+          "output_guard_ms": {
+            "n": 5000,
+            "p50_ms": 1.25497,
+            "p95_ms": 2.08141255,
+            "p99_ms": 2.10942714,
+            "max_ms": 5.189347
+          },
+          "total_ms": {
+            "n": 5000,
+            "p50_ms": 1.808143,
+            "p95_ms": 2.93134685,
+            "p99_ms": 2.97278146,
+            "max_ms": 10.515497
+          }
+        },
+        "policy_deadline_misses": 0,
+        "half_policy_period_target_met": true,
+        "scope": "Warm serial CPU observation assembly + guards + upstream controller/ONNX; ONNX is nested within controller. Captured MuJoCo input ring; excludes physics, sensor transport, OS real-time scheduling and model load. Against policy_dt, not control_dt; no hard-real-time guarantee."
+      },
+      {
+        "calls": 5000,
+        "warmup_calls": 500,
+        "guard_mode": "cached",
+        "policy_period_ms": 40.0,
+        "lower_level_period_ms": 4.0,
+        "stages": {
+          "observation_ms": {
+            "n": 5000,
+            "p50_ms": 0.0338585,
+            "p95_ms": 0.047765100000000005,
+            "p99_ms": 0.05408090000000002,
+            "max_ms": 0.063609
+          },
+          "input_guard_ms": {
+            "n": 5000,
+            "p50_ms": 0.021171000000000002,
+            "p95_ms": 0.027702,
+            "p99_ms": 0.03268531,
+            "max_ms": 0.052075
+          },
+          "controller_ms": {
+            "n": 5000,
+            "p50_ms": 0.47096499999999997,
+            "p95_ms": 0.7100575,
+            "p99_ms": 0.72720255,
+            "max_ms": 1.270341
+          },
+          "onnx_ms": {
+            "n": 5000,
+            "p50_ms": 0.0591795,
+            "p95_ms": 0.08435935000000001,
+            "p99_ms": 0.10466215000000001,
+            "max_ms": 0.131981
+          },
+          "output_guard_ms": {
+            "n": 5000,
+            "p50_ms": 0.049856,
+            "p95_ms": 0.06635339999999999,
+            "p99_ms": 0.07365048,
+            "max_ms": 0.182618
+          },
+          "total_ms": {
+            "n": 5000,
+            "p50_ms": 0.5741769999999999,
+            "p95_ms": 0.84459715,
+            "p99_ms": 0.86461428,
+            "max_ms": 1.378392
+          }
+        },
+        "policy_deadline_misses": 0,
+        "half_policy_period_target_met": true,
+        "scope": "Warm serial CPU observation assembly + guards + upstream controller/ONNX; ONNX is nested within controller. Captured MuJoCo input ring; excludes physics, sensor transport, OS real-time scheduling and model load. Against policy_dt, not control_dt; no hard-real-time guarantee."
+      },
+      {
+        "calls": 5000,
+        "warmup_calls": 500,
+        "guard_mode": "cached",
+        "policy_period_ms": 40.0,
+        "lower_level_period_ms": 4.0,
+        "stages": {
+          "observation_ms": {
+            "n": 5000,
+            "p50_ms": 0.032046,
+            "p95_ms": 0.04041700000000001,
+            "p99_ms": 0.04543348000000001,
+            "max_ms": 0.067751
+          },
+          "input_guard_ms": {
+            "n": 5000,
+            "p50_ms": 0.019844,
+            "p95_ms": 0.02400925,
+            "p99_ms": 0.03137115000000001,
+            "max_ms": 0.294103
+          },
+          "controller_ms": {
+            "n": 5000,
+            "p50_ms": 0.44027150000000004,
+            "p95_ms": 0.5013441,
+            "p99_ms": 0.57958346,
+            "max_ms": 1.34933
+          },
+          "onnx_ms": {
+            "n": 5000,
+            "p50_ms": 0.056086,
+            "p95_ms": 0.06683515000000001,
+            "p99_ms": 0.07663616,
+            "max_ms": 0.470833
+          },
+          "output_guard_ms": {
+            "n": 5000,
+            "p50_ms": 0.0468865,
+            "p95_ms": 0.05712575000000001,
+            "p99_ms": 0.06296152000000002,
+            "max_ms": 0.127201
+          },
+          "total_ms": {
+            "n": 5000,
+            "p50_ms": 0.540558,
+            "p95_ms": 0.6103061000000001,
+            "p99_ms": 0.6921905600000003,
+            "max_ms": 1.446742
+          }
+        },
+        "policy_deadline_misses": 0,
+        "half_policy_period_target_met": true,
+        "scope": "Warm serial CPU observation assembly + guards + upstream controller/ONNX; ONNX is nested within controller. Captured MuJoCo input ring; excludes physics, sensor transport, OS real-time scheduling and model load. Against policy_dt, not control_dt; no hard-real-time guarantee."
+      },
+      {
+        "calls": 5000,
+        "warmup_calls": 500,
+        "guard_mode": "uncached",
+        "policy_period_ms": 40.0,
+        "lower_level_period_ms": 4.0,
+        "stages": {
+          "observation_ms": {
+            "n": 5000,
+            "p50_ms": 0.033161,
+            "p95_ms": 0.044824750000000003,
+            "p99_ms": 0.05764613000000026,
+            "max_ms": 20.083317
+          },
+          "input_guard_ms": {
+            "n": 5000,
+            "p50_ms": 0.0546525,
+            "p95_ms": 0.07946630000000003,
+            "p99_ms": 0.17242396000000174,
+            "max_ms": 9.958434
+          },
+          "controller_ms": {
+            "n": 5000,
+            "p50_ms": 0.440973,
+            "p95_ms": 0.67102565,
+            "p99_ms": 1.9923026200000058,
+            "max_ms": 20.649938
+          },
+          "onnx_ms": {
+            "n": 5000,
+            "p50_ms": 0.0586705,
+            "p95_ms": 0.07628735000000002,
+            "p99_ms": 0.1826767100000009,
+            "max_ms": 6.259655
+          },
+          "output_guard_ms": {
+            "n": 5000,
+            "p50_ms": 1.19299,
+            "p95_ms": 2.1060361000000007,
+            "p99_ms": 6.943693080000015,
+            "max_ms": 35.63627
+          },
+          "total_ms": {
+            "n": 5000,
+            "p50_ms": 1.728134,
+            "p95_ms": 3.0653706,
+            "p99_ms": 9.47510217000004,
+            "max_ms": 36.262122
+          }
+        },
+        "policy_deadline_misses": 0,
+        "half_policy_period_target_met": true,
+        "scope": "Warm serial CPU observation assembly + guards + upstream controller/ONNX; ONNX is nested within controller. Captured MuJoCo input ring; excludes physics, sensor transport, OS real-time scheduling and model load. Against policy_dt, not control_dt; no hard-real-time guarantee."
+      }
+    ],
+    "paired_rounds": [
+      {
+        "uncached_total": {
+          "n": 5000,
+          "p50_ms": 1.808143,
+          "p95_ms": 2.93134685,
+          "p99_ms": 2.97278146,
+          "max_ms": 10.515497
+        },
+        "cached_total": {
+          "n": 5000,
+          "p50_ms": 0.5741769999999999,
+          "p95_ms": 0.84459715,
+          "p99_ms": 0.86461428,
+          "max_ms": 1.378392
+        },
+        "p50_reduction_percent": 68.24493416726443,
+        "p99_reduction_percent": 70.91564611681883
+      },
+      {
+        "uncached_total": {
+          "n": 5000,
+          "p50_ms": 1.728134,
+          "p95_ms": 3.0653706,
+          "p99_ms": 9.47510217000004,
+          "max_ms": 36.262122
+        },
+        "cached_total": {
+          "n": 5000,
+          "p50_ms": 0.540558,
+          "p95_ms": 0.6103061000000001,
+          "p99_ms": 0.6921905600000003,
+          "max_ms": 1.446742
+        },
+        "p50_reduction_percent": 68.72013397109252,
+        "p99_reduction_percent": 92.69463750806185
+      }
+    ],
+    "scope": "Caching deployment limits in the guards only; local serial warmed microbenchmark, not robot throughput."
+  },
+  "manifest_sha256": "2d23c3fbe5ac218a0690ad70a63478397b2c2e7dab42961e3a66aeb71b1aa2e5",
+  "limitations": [
+    "Five deterministic development/reset seeds are not a held-out robustness campaign.",
+    "A changed trajectory is a replay regression, not necessarily unsafe or a fall.",
+    "Repeated seeded traces do not measure long-term CI flake rates or cross-host determinism.",
+    "Contact scorer omission is tested against raw per-substep MuJoCo contact counts, including normal floor contacts.",
+    "No new training, physical deployment or navigation improvement is established by this suite."
+  ]
+}

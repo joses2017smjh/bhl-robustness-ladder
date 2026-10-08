@@ -46,7 +46,7 @@ frames = []
 for i in range(0, n, a.every):
     canvas = Image.new("RGB", (W, H), (252, 252, 251))
     draw = ImageDraw.Draw(canvas)
-    draw.text((8, 8), "Maze stereo, 16×16 an eye, cameras fixed: terrain level 0.88 (was 0.02)",
+    draw.text((8, 8), "Corrected stereo seed 0: 0.877 (before: 0.001)",
               font=f_title, fill=(11, 11, 11))
     shot = Image.open(d / f"frame_{i:04d}.png").convert("RGB")
     side = min(shot.size)
