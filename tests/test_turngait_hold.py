@@ -20,9 +20,11 @@ import importlib.util
 import io
 import json
 import math
+import os
 import re
 import subprocess
 import sys
+import sysconfig
 import types
 from contextlib import redirect_stdout
 from dataclasses import MISSING
@@ -47,9 +49,8 @@ BASE = "46c0e0e"            # the branch commit this workstream started from (ev
 MARK, END = "# --- turning-hold ---", "# --- end turning-hold ---"
 TASK = "Velocity-BHL-Arms-TurnGaitClockHold-v0"
 
-ISAACLAB = Path(sys.prefix) / "lib/python3.11/site-packages/isaaclab/source/isaaclab/isaaclab"
-if not ISAACLAB.exists():
-    ISAACLAB = Path("/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/source/isaaclab/isaaclab")
+ISAACLAB = Path(os.environ.get("BHL_TEST_ISAACLAB_SOURCE",
+    str(Path(sysconfig.get_paths()["purelib"]) / "isaaclab/source/isaaclab/isaaclab")))
 HAVE_ISAACLAB_SRC = (ISAACLAB / "envs/mdp/commands/velocity_command.py").exists()
 
 # The frozen texts, word for word as the task states them.

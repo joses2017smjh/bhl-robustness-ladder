@@ -1,0 +1,92 @@
+name: Humanoid CPU replay
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'requirements-test.txt'
+      - 'results/resume-revamp-20261007/portable-bundle.zip'
+      - '.github/workflows/cpu-replay.yml'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'requirements-test.txt'
+      - 'results/resume-revamp-20261007/portable-bundle.zip'
+      - '.github/workflows/cpu-replay.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: humanoid-cpu-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+      BHL_REPLAY_DIR: ${{ runner.temp }}/bhl-replay-bundle
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Verify and extract the committed trained bundle
+        run: |
+          python - <<'PY'
+          import hashlib, os, stat, zipfile
+          from pathlib import Path, PurePosixPath
+          archive = Path('results/resume-revamp-20261007/portable-bundle.zip')
+          expected = '10c37e8749792330dcc52293bc2a14c2f766688326619c7ad0eef60250f51b08'
+          if hashlib.sha256(archive.read_bytes()).hexdigest() != expected:
+              raise SystemExit('Frozen replay archive hash mismatch')
+          root = Path(os.environ['BHL_REPLAY_DIR'])
+          root.mkdir()
+          with zipfile.ZipFile(archive) as bundle:
+              seen = set()
+              for entry in bundle.infolist():
+                  path = PurePosixPath(entry.filename)
+                  if path.is_absolute() or '..' in path.parts or '\\' in entry.filename:
+                      raise SystemExit('Invalid replay archive path')
+                  if entry.filename in seen or stat.S_ISLNK(entry.external_attr >> 16):
+                      raise SystemExit('Duplicate or symlink archive entry')
+                  seen.add(entry.filename)
+              if bundle.testzip() is not None:
+                  raise SystemExit('Replay archive CRC failure')
+              bundle.extractall(root)
+          print('Frozen archive SHA256 and all entry paths verified')
+          PY
+      - name: Install a fresh pinned CPU runtime
+        run: |
+          python -m pip install torch==2.7.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r "$BHL_REPLAY_DIR/requirements.txt" -r requirements-test.txt
+          python -m pip check
+      - name: Full CPU regression suite
+        env:
+          PYTHONPATH: src:external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel
+        run: python -m pytest -q tests --junitxml=validation/pytest.xml
+      - name: Actual trained-asset integration and negative controls
+        run: python "$BHL_REPLAY_DIR/verify.py" --bundle "$BHL_REPLAY_DIR" --out validation/integration.json
+      - name: Seeded physics replay, injected faults and timing
+        run: python "$BHL_REPLAY_DIR/replay.py" --bundle "$BHL_REPLAY_DIR" --out validation/replay --calls 10000 --warmup 500
+      - name: Retain per-run evidence and hardware receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: humanoid-cpu-validation
+          path: validation/
+          retention-days: 14
+          if-no-files-found: error

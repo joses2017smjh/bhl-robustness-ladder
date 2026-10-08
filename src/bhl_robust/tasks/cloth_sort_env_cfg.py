@@ -32,6 +32,7 @@ import isaaclab.envs.mdp as mdp
 from bhl_robust.cloth.garments import BASKET_IDS, GARMENTS, GARMENT_BY_NAME, sibling_index
 from bhl_robust.cloth.layout import ROBOT_ROOT_Z, ROBOT_XY, TABLE_TOP_Z, default_spawn_xy, parking_xy
 from bhl_robust.cloth.randomization import DomainRandomization
+from bhl_robust.quat_order import native_quat
 from bhl_robust.tasks import cloth_sort_mdp as cs
 from bhl_robust.tasks import furniture
 from bhl_robust.tasks.coop_lift_env_cfg import _PINCH_ROOT_Z, _RIGID, _COLLISION, _robot
@@ -60,7 +61,7 @@ def _proxy(spec_name: str, prim: str,
     return RigidObjectCfg(
         prim_path=f"{{ENV_REGEX_NS}}/{prim}",
         init_state=RigidObjectCfg.InitialStateCfg(
-            pos=(xy[0], xy[1], z), rot=(1.0, 0.0, 0.0, 0.0),
+            pos=(xy[0], xy[1], z), rot=native_quat((1.0, 0.0, 0.0, 0.0)),
         ),
         spawn=sim_utils.CuboidCfg(
             size=spec.proxy_size,

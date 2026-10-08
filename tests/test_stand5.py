@@ -7,8 +7,8 @@ loads `stand4_mdp` / `stand_mdp` the same way. Synthetic quaternions are written
 with `quat_order.unpack_wxyz` (the 2976f36 helpers): (x, y, z, w) as on v60 unless
 a test says otherwise.
 
-The fake-tree tests run the REAL training launcher (only its `source _env.sh`
-line is pointed at a stub) in its real, non-smoke mode on a throw-away copy of the
+The fake-tree tests run the REAL training launcher (its `source _env.sh`
+line points at a stub and cache paths stay inside the fixture) in its real, non-smoke mode on a throw-away copy of the
 files it reads; they take ~3.5 min and are skipped when STAND5_SKIP_SLOW=1.
 """
 
@@ -52,7 +52,7 @@ TRAIN5 = REPO / "slurm/repo20260923/gpu_v2_stand5_train.sbatch"
 SMOKE4 = REPO / "slurm/repo20260923/gpu_v2_stand4_smoke.sbatch"
 SMOKE5 = REPO / "slurm/repo20260923/gpu_v2_stand5_smoke.sbatch"
 INNER5 = REPO / "slurm/inner/inner_v2_stand5_smoke.sh"
-HOSTPY = Path("/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python")
+HOSTPY = Path(sys.executable)
 
 #: HEAD 3a67bc2 (the branch commit this workstream started from): byte length and
 #: sha256 of the files Stand5 must leave as they are.
@@ -83,10 +83,10 @@ sm = s5.sm
 H = s4.CUBE_HALF
 S2 = math.sqrt(2.0)
 
-REF_RUN = REPO / s5.STAND4_REF_RUN
 REF_DIR = REPO / s5.STAND4_REF_DIR
-REF_ENV = REF_RUN / "params/env.yaml"
-REF_AGENT = REF_RUN / "params/agent.yaml"
+REF_PARAMS = REF_DIR / f"params_{s5.STAND4_REF_SMOKE_JOB}"
+REF_ENV = REF_PARAMS / "env.yaml"
+REF_AGENT = REF_PARAMS / "agent.yaml"
 REF_LOG = REF_DIR / f"train_{s5.STAND4_REF_SMOKE_JOB}.log"
 REF_SHA = REF_DIR / f"sha256_{s5.STAND4_REF_SMOKE_JOB}.txt"
 OTHER_STAND4_SMOKE = (REPO / "external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/"
@@ -1425,7 +1425,6 @@ class SmokeLauncherTests(unittest.TestCase):
 # -------------------------------------------- the train launcher on a fake tree
 
 SLOW_SKIP = os.environ.get("STAND5_SKIP_SLOW") == "1"
-SCRATCH = Path("/scratch") / os.environ.get("USER", "nobody")
 FAKE_FILES = ("src/bhl_robust/__init__.py", "src/bhl_robust/quat_order.py",
               "src/bhl_robust/tasks/stand5_mdp.py", "src/bhl_robust/tasks/stand4_mdp.py",
               "src/bhl_robust/tasks/stand_mdp.py", "src/bhl_robust/tasks/task_v2_env_cfg.py",
@@ -1486,9 +1485,17 @@ def _fake_tree(root: Path, smoke_job: str, smoke_verdict="PASS") -> Path:
         'setup_node_cache() { export TMPDIR=$WORKSPACE/tmp; mkdir -p "$TMPDIR"; }\n'
         'bhl_exec() { FAKE_W="$WORKSPACE" UPSTREAM="$UPSTREAM" REPO="$REPO" bash "$WORKSPACE/fake_train.sh" "$@"; }\n')
     text = TRAIN5.read_text()
-    assert text.count(ENV_SOURCE) == 1
-    (R / "slurm/repo20260923/gpu_v2_stand5_train.sbatch").write_text(
-        text.replace(ENV_SOURCE, f"source {R}/slurm/_env.sh"))
+    replacements = {
+        ENV_SOURCE: f"source {R}/slurm/_env.sh",
+        "export OV_CACHE=/scratch/$USER/ov-cache-${JOBTAG}":
+            'export OV_CACHE="$WORKSPACE/cache/ov-cache-${JOBTAG}"',
+        "export CUDA_CACHE_PATH=/scratch/$USER/nv-computecache-${JOBTAG}":
+            'export CUDA_CACHE_PATH="$WORKSPACE/cache/nv-computecache-${JOBTAG}"',
+    }
+    for original, replacement in replacements.items():
+        assert text.count(original) == 1
+        text = text.replace(original, replacement)
+    (R / "slurm/repo20260923/gpu_v2_stand5_train.sbatch").write_text(text)
     (W / "venv").symlink_to(HOSTPY.parent.parent)
     (W / "fake_train.sh").write_text(FAKE_TRAIN)
     (W / "write_events.py").write_text(WRITE_EVENTS)
@@ -1516,38 +1523,21 @@ def _launch(W: Path, array_job: str, task: str, smoke_job: str | None, **extra):
     return p, W / f"launcher_{array_job}_{task}.log"
 
 
-def _scratch_ok() -> bool:
-    """Can `mkdir -p /scratch/$USER/...` succeed here, as the launcher needs?"""
-    try:
-        SCRATCH.mkdir(parents=True, exist_ok=True)
-        d = Path(tempfile.mkdtemp(prefix="stand5-test-", dir=SCRATCH))
-        d.rmdir()
-        return True
-    except OSError:
-        return False
-
-
-@unittest.skipUnless(HAVE_REF and HOSTPY.is_file(), "Stand4 reference dump or host venv missing")
-@unittest.skipUnless(_scratch_ok(), "/scratch/$USER not writable here (the launcher makes its caches there)")
+@unittest.skipUnless(HAVE_REF and HOSTPY.is_file(), "Stand4 reference dump or test interpreter missing")
 class FakeTreeLauncherTests(unittest.TestCase):
     """The real launcher, real mode (no MAX_ITER / NUM_ENVS / SEED overrides), on a fake tree."""
 
     def setUp(self):
         self.td = tempfile.TemporaryDirectory(prefix="stand5-fake-")
         self.root = Path(self.td.name)
-        self.tags = []
 
     def tearDown(self):
-        for t in self.tags:
-            for d in (SCRATCH / f"ov-cache-{t}", SCRATCH / f"nv-computecache-{t}"):
-                shutil.rmtree(d, ignore_errors=True)
         self.td.cleanup()
 
     def out_dir(self, W):
         return W / "bhl-robustness-ladder/results/repo-gpu-20260923/stand5_2026-10-03"
 
     def run_fast(self, W, task, smoke, aj):
-        self.tags.append(f"{aj}_{task}")
         p, log = _launch(W, aj, task, smoke)
         rc = p.wait(timeout=120)
         return rc, log.read_text()
@@ -1604,7 +1594,6 @@ class FakeTreeLauncherTests(unittest.TestCase):
         B = (s0 killed at model_1000, s1 negative) -> NEGATIVE, 1 killed."""
         WA = _fake_tree(self.root / "A", "777")
         WB = _fake_tree(self.root / "B", "777")
-        self.tags += ["9201_0", "9201_1", "9202_0", "9202_1"]
         procs = [_launch(WA, "9201", "0", "777", FAKE_MODE_S0="pass", FAKE_SLEEP_S0="125"),
                  _launch(WA, "9201", "1", "777", FAKE_MODE_S1="neg", FAKE_SLEEP_S1="140"),
                  _launch(WB, "9202", "0", "777", FAKE_MODE_S0="kill"),

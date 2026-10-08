@@ -35,8 +35,8 @@ SMOKE4 = REPO / "slurm/repo20260923/gpu_v2_stand4_smoke.sbatch"
 INNER4 = REPO / "slurm/repo20260923/inner_v2_stand4_smoke.sh"
 STAND3_DUMP = (REPO / "external/Berkeley-Humanoid-Lite/logs/rsl_rl/task_v2/"
                "2026-09-28_23-39-39_quatfix-smoke-stand3-blind-s100-j21463685/params")
-STEP0_COLLIDERS = Path("/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/"
-                       "campaign-stand4/step0/usd_colliders.json")
+# Exact historical step-0 inventory, retained with its retrieval provenance.
+STEP0_COLLIDERS = REPO / "tests/fixtures/stand4_usd_colliders.json"
 
 #: task_v2_env_cfg.py before Stand4 was appended (HEAD 094797e): byte length and sha256.
 TASK_V2_PRE_STAND4 = (35686, "0dc6e7fbe7647b38ffdf104d05a8321720d14419fcdc6854255deb4f2de74fc5")
@@ -362,6 +362,8 @@ class ReleaseTests(unittest.TestCase):
     @unittest.skipUnless(STEP0_COLLIDERS.is_file(), "step-0 collider inventory not available")
     def test_filters_are_exactly_the_collider_bearing_links(self):
         import json
+        provenance = json.loads(STEP0_COLLIDERS.with_name("stand4_usd_colliders.provenance.json").read_text())
+        self.assertEqual(hashlib.sha256(STEP0_COLLIDERS.read_bytes()).hexdigest(), provenance["fixture_sha256"])
         inv = json.loads(STEP0_COLLIDERS.read_text())["base_usd"]["bodies_with_colliders"]
         base = {k.rsplit("/", 1)[-1] for k in inv}
         self.assertEqual(set(s4.RELEASE_LINKS), base | {"arm_left_hand_link", "arm_right_hand_link"})

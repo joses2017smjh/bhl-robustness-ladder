@@ -12,7 +12,9 @@ from __future__ import annotations
 
 import importlib.util
 import math
+import os
 import sys
+import sysconfig
 import types
 import unittest
 from dataclasses import MISSING
@@ -21,14 +23,9 @@ from types import SimpleNamespace
 
 import torch
 
-REPO = Path("/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder")
-for _p in (Path(__file__).resolve().parents[1], REPO):
-    if (_p / "src/bhl_robust/tasks/turn_command.py").exists():
-        REPO = _p
-        break
-ISAACLAB = Path(sys.prefix) / "lib/python3.11/site-packages/isaaclab/source/isaaclab/isaaclab"
-if not ISAACLAB.exists():
-    ISAACLAB = Path("/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/source/isaaclab/isaaclab")
+REPO = Path(__file__).resolve().parents[1]
+ISAACLAB = Path(os.environ.get("BHL_TEST_ISAACLAB_SOURCE",
+    str(Path(sysconfig.get_paths()["purelib"]) / "isaaclab/source/isaaclab/isaaclab")))
 
 
 def _module(name, **attrs):

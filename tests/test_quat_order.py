@@ -7,6 +7,8 @@ import math
 import sys
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 _REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(_REPO / "src"))
@@ -56,6 +58,75 @@ class PitchTests(unittest.TestCase):
         self.assertAlmostEqual(self.pitch_deg(raw), +20.0, delta=0.1)
         ux, uy, uz = rotate_xyzw(raw, (0.0, 0.0, 1.0))
         self.assertLess(uz, -0.9, "camera up-axis should point down: image upside down")
+
+
+class ClothProxySpawnTests(unittest.TestCase):
+    """Execute the real proxy factory with Isaac config containers on CPU.
+
+    Only the factory and its quaternion import are compiled: importing the
+    complete task module registers simulator scenes. The conversion is the
+    real native_quat; both storage orders are selected at its probe boundary.
+    """
+
+    @staticmethod
+    def proxy_factory():
+        path = _REPO / "src/bhl_robust/tasks/cloth_sort_env_cfg.py"
+        tree = ast.parse(path.read_text(), filename=str(path))
+        factory = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "_proxy")
+        quat_import = next(n for n in tree.body if isinstance(n, ast.ImportFrom)
+                           and n.module == "bhl_robust.quat_order")
+        body = ast.Module(body=[ast.ImportFrom(module="__future__", names=[ast.alias(name="annotations")],
+                                              level=0), quat_import, factory], type_ignores=[])
+        ast.fix_missing_locations(body)
+        rigid_cfg = type("RigidObjectCfg", (SimpleNamespace,), {"InitialStateCfg": SimpleNamespace})
+        spec = SimpleNamespace(proxy_size=(0.10, 0.08, 0.015), mass=0.016,
+                               rgb=(0.75, 0.22, 0.18), friction=0.55)
+        namespace = {
+            "RigidObjectCfg": rigid_cfg,
+            "GARMENT_BY_NAME": {"shirt_a": spec},
+            "TABLE_TOP_Z": 0.70,
+            "default_spawn_xy": lambda garment: (-0.28, 0.29),
+            "parking_xy": lambda index: (1.0 + index, -0.5),
+            "_RIGID": object(),
+            "_COLLISION": object(),
+            "sim_utils": SimpleNamespace(**{name: SimpleNamespace for name in (
+                "CuboidCfg", "MassPropertiesCfg", "PreviewSurfaceCfg", "RigidBodyMaterialCfg")}),
+        }
+        exec(compile(body, str(path), "exec"), namespace)
+        return namespace["_proxy"], namespace, spec
+
+    def test_spawn_is_physical_identity_on_both_stacks(self):
+        proxy, namespace, spec = self.proxy_factory()
+        for order in (WXYZ, XYZW):
+            for prim, xy, expected_xy in (
+                ("garment_0", None, (-0.28, 0.29)),
+                ("garment_3", None, (4.0, -0.5)),
+                ("custom_proxy", (0.12, 0.24), (0.12, 0.24)),
+            ):
+                with self.subTest(order=order, prim=prim):
+                    with patch("bhl_robust.quat_order.quat_order", return_value=order):
+                        cfg = proxy("shirt_a", prim, xy)
+                    # Read it the way the selected stack will: every local basis
+                    # vector must retain its direction, especially the cloth normal.
+                    q = cfg.init_state.rot
+                    q_xyzw = (q[1], q[2], q[3], q[0]) if order == WXYZ else q
+                    for axis in ((1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0)):
+                        self.assertEqual(rotate_xyzw(q_xyzw, axis), axis)
+                    self.assertEqual(cfg.prim_path, f"{{ENV_REGEX_NS}}/{prim}")
+                    self.assertEqual(cfg.init_state.pos[:2], expected_xy)
+                    self.assertAlmostEqual(cfg.init_state.pos[2], 0.7075)
+                    self.assertEqual(cfg.spawn.size, spec.proxy_size)
+                    self.assertIs(cfg.spawn.rigid_props, namespace["_RIGID"])
+                    self.assertIs(cfg.spawn.collision_props, namespace["_COLLISION"])
+                    self.assertEqual(cfg.spawn.mass_props.mass, spec.mass)
+                    self.assertEqual(cfg.spawn.visual_material.diffuse_color, spec.rgb)
+                    self.assertEqual(cfg.spawn.physics_material.static_friction, spec.friction)
+                    self.assertEqual(cfg.spawn.physics_material.dynamic_friction, 0.85 * spec.friction)
+                    self.assertEqual(cfg.spawn.physics_material.restitution, 0.0)
+
+    def test_original_literal_inverts_the_normal_on_xyzw(self):
+        self.assertEqual(rotate_xyzw((1.0, 0.0, 0.0, 0.0), (0.0, 0.0, 1.0)),
+                         (0.0, 0.0, -1.0))
 
 
 class CameraOffsetGuard(unittest.TestCase):
@@ -108,14 +179,6 @@ def _is_native_quat_call(value) -> bool:
 #: never by line number, so an edit elsewhere in the file cannot move a hit onto
 #: or off an entry. Each entry must match exactly one call (a stale entry fails).
 INITIAL_STATE_ALLOWLIST = {
-    # Cloth-sort garment proxy. Same raw (1, 0, 0, 0) as the coop object had,
-    # i.e. 180 deg about x on v60 -- but cloth_sort_env_cfg.py is the cloth
-    # driver's file (separate workstream, 2026-09-28 quaternion fix was scoped
-    # to coop-lift / TaskV2 / crew), so it is recorded here, not changed.
-    # Unverified whether any cloth-sort quantity reads the garment orientation
-    # (cloth_sort_mdp garment_yaw_proxy reads garment_0 root_quat_w).
-    ("src/bhl_robust/tasks/cloth_sort_env_cfg.py", "_proxy", "(1.0, 0.0, 0.0, 0.0)"):
-        "cloth driver's file; flagged in the 2026-09-28 quaternion-fix report",
     # `_robot` converts by default: q = native_quat(rot) unless BHL_LEGACY_YAW=1,
     # which deliberately writes the raw 4-tuples every FINDINGS Isaac number
     # trained on (they bury the robot on v60; see the comment above `_robot`).

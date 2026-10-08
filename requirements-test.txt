@@ -1,7 +1,16 @@
-# CPU unit-test dependencies; Python 3.11.
+# Full CPU unit-test dependencies; Python 3.11.
 # Install torch==2.7.0 separately from the CPU wheel index (README).
 # Versions match the tested research environment; this is not an Isaac lockfile.
 numpy==1.26.0
 mujoco==3.3.5
 opencv-python-headless==4.11.0.86
 pytest==9.0.2
+onnxruntime==1.22.1
+omegaconf==2.3.0
+gymnasium==1.2.0
+tensordict==0.11.0
+Pillow==11.3.0
+stable-baselines3==2.7.0
+matplotlib==3.10.3
+pandas==2.3.1
+tensorboard==2.20.0

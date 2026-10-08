@@ -732,44 +732,62 @@ def test_launcher_runs_only_the_declared_seeds_and_reads_verdicts_from_json():
             "tests/test_coop_flushpad.py)") in text
 
 
-def _launch(args, extra, unset=()):
+def _launch(launcher, args, extra, unset=()):
     import os
     env = {k: v for k, v in os.environ.items() if not k.startswith("SLURM_") and k not in unset}
     env.update(extra)
-    return subprocess.run(["bash", str(LAUNCHER), *args], capture_output=True, text=True, env=env, cwd=REPO,
+    return subprocess.run(["bash", str(launcher), *args], capture_output=True, text=True, env=env, cwd=REPO,
                           timeout=300)
 
 
-@needs_assets
-def test_launcher_refuses_without_a_mode_a_smoke_name_or_a_passing_smoke():
+def test_launcher_refuses_without_a_mode_a_smoke_name_or_a_passing_smoke(tmp_path):
+    # Exercise the unchanged launcher body against isolated paths. Refusal
+    # checks must neither import another checkout nor write cluster log dirs.
+    logs = tmp_path / "logs"
+    logs.mkdir()
+    deploy = tmp_path / "deploy.yaml"
+    deploy.write_text("# present for launcher preflight; scoring must never run\n")
+    launcher = tmp_path / LAUNCHER.name
+    text = LAUNCHER.read_text()
+    replacements = {
+        "REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder\n": f"REPO={REPO}\n",
+        "LOGS=/nfs/hpc/share/sanchej7/Humanoid_Lite/logs\n": f"LOGS={logs}\n",
+        "PY=/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python\n": f"PY={sys.executable}\n",
+        "DEPLOY=$U/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported/deploy.yaml\n":
+            f"DEPLOY={deploy}\n",
+    }
+    for original, replacement in replacements.items():
+        assert text.count(original) == 1
+        text = text.replace(original, replacement)
+    launcher.write_text(text)
     run = LAUNCHER.read_text().split("\nfi\n", 1)[1]
     # first the order that makes the dynamic checks below safe: the smoke and bytes checks come before the run
     # directory is created and before anything is scored
     assert (run.index('if [ -z "$SMOKE_JOB" ]') < run.index('if [ "$SV" != SMOKE_PASS ]')
             < run.index('if [ "$PT" != 0 ]') < run.index("sha256sum -c") < run.index('if [ -e "$RUN" ]')
             < run.index("mkdir -p") < run.index("score --flushpad-stage"))
-    r = _launch([], {})
+    r = _launch(launcher, [], {})
     assert r.returncode == 1 and "REFUSED (usage" in r.stdout
-    r = _launch(["smoke"], {"SLURM_JOB_NAME": "coop-flushpad", "SLURM_JOB_ID": "pytest-refusal"})
+    r = _launch(launcher, ["smoke"], {"SLURM_JOB_NAME": "coop-flushpad", "SLURM_JOB_ID": "pytest-refusal"})
     assert r.returncode == 1 and "job name must contain 'smoke'" in r.stdout
-    r = _launch(["run"], {"SLURM_JOB_ID": "pytest-refusal"}, unset=("FLUSHPAD_SMOKE_JOB",))
+    r = _launch(launcher, ["run"], {"SLURM_JOB_ID": "pytest-refusal"}, unset=("FLUSHPAD_SMOKE_JOB",))
     assert r.returncode == 1 and "needs --export=ALL,FLUSHPAD_SMOKE_JOB" in r.stdout
-    r = _launch(["run"], {"SLURM_JOB_ID": "pytest-refusal", "FLUSHPAD_SMOKE_JOB": "pytest-no-such-smoke"})
+    r = _launch(launcher, ["run"], {"SLURM_JOB_ID": "pytest-refusal", "FLUSHPAD_SMOKE_JOB": "pytest-no-such-smoke"})
     assert r.returncode == 1 and "reads MISSING, not SMOKE_PASS" in r.stdout
-    assert not Path("/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/coop-flushpad-pytest-refusal-smoke").exists()
+    assert not (logs / "coop-flushpad-pytest-refusal-smoke").exists()
     # a smoke verdict JSON that reads SMOKE_PASS but records failed (or no) unit tests is refused before anything
     # else; the fake smoke directory has no code_sha256.txt, so even a broken check could not reach the probe
     import os
     import shutil
     fake_id = f"pytest-fake-{os.getpid()}"
-    fake = Path(f"/nfs/hpc/share/sanchej7/Humanoid_Lite/logs/coop-flushpad-{fake_id}-smoke")
+    fake = logs / f"coop-flushpad-{fake_id}-smoke"
     assert not fake.exists()
     try:
         fake.mkdir(parents=True)
         for status, shown in (({"pytest": 1, "smoke_hold_crew2": 0, "smoke_place_crew4": 0}, "exit 1"),
                               (None, "exit MISSING")):
             (fake / "smoke_verdict.json").write_text(json.dumps({"verdict": "SMOKE_PASS", "step_status": status}))
-            r = _launch(["run"], {"SLURM_JOB_ID": "pytest-refusal", "FLUSHPAD_SMOKE_JOB": fake_id})
+            r = _launch(launcher, ["run"], {"SLURM_JOB_ID": "pytest-refusal", "FLUSHPAD_SMOKE_JOB": fake_id})
             assert r.returncode == 1 and f"records its unit tests as {shown}, not 0" in r.stdout, r.stdout
             assert "BYTES-CHECK" not in r.stdout and "STAGE 1" not in r.stdout
     finally:
