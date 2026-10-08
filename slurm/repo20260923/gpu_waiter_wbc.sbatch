@@ -119,12 +119,14 @@ from bhl_robust.eval.gait_clock import load_env_yaml
 tlog, run, smoke = sys.argv[1], Path(sys.argv[2]), sys.argv[3] == "1"
 v = [float(x) for x in re.findall(r"Curriculum/disturbance:\s*([0-9.]+)", open(tlog, errors="ignore").read())]
 agent = (run / "params" / "agent.yaml").read_text()
-ok = bool(v) and v[0] == 0.0 and re.search(r"^num_steps_per_env: 24$", agent, re.M) is not None
+ok = bool(v) and v == sorted(v) and re.search(r"^num_steps_per_env: 24$", agent, re.M) is not None
 if smoke:
-    ok = ok and max(v) > 0.0
+    # the compressed ramp (iterations 0-2) starts inside the first iteration's average (its last step is iteration 1),
+    # so the smoke shows the term rising from near 0 to 1 (smoke 21657423 logged 0.0208, 0.5208, 1.0)
+    ok = ok and v[0] < 0.5 and max(v) >= 0.999
 else:
     p = load_env_yaml(run / "params" / "env.yaml")["curriculum"]["disturbance"]["params"]
-    ok = ok and v[-1] >= 0.999 and (p["start_iter"], p["end_iter"], p["steps_per_iter"]) == (4000, 7000, 24) \
+    ok = ok and v[0] == 0.0 and v[-1] >= 0.999 and (p["start_iter"], p["end_iter"], p["steps_per_iter"]) == (4000, 7000, 24) \
         and list(p["force_range"]) == [-6.0, 6.0] and list(p["payload_range"]) == [0.0, 0.8]
 print(f"curriculum check: {'OK' if ok else 'FAIL'} (logged {len(v)} values, first {v[0] if v else None}, "
       f"last {v[-1] if v else None}, max {max(v) if v else None})")
