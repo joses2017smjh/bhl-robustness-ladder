@@ -40,7 +40,7 @@ and `STATUS.md` are consumed read-only and cross-referenced here.
 | ID | State | Evidence / next step |
 |---|---|---|
 | H1 | ACTIVE (`21689706`) | Frozen 576-episode matched yaw-filter confirmation; [protocol](../results/task-closure-20261008/h1-navigation/protocol.json). Await complete validated result. |
-| H2 | PENDING final validation | Original replay is measured; final fresh/full-suite and hosted CI receipts still pending. |
+| H2 | DONE | [Closure receipt](../results/task-closure-20261008/h2-replay/closure.json): fresh pinned CPU installation; local full suite 1,998 passed, 123 existing optional checks skipped, six subtests passed; [hosted CI](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052) succeeds with five exact repeats and 40/40 injected regressions detected. Second HPC host: 5/5 frozen two-second cases agree exactly, maximum numeric difference 0.0; no general cross-platform or flake-rate conclusion. |
 | H3 | TODO | Matched history/latency policy training has not run. |
 | H4 | TODO | Repeatable 22-DoF recipe remains unsolved; R1/R2/R1H are completed negative experiments. |
 | CLO-SPAWN | DONE (`0004152`) | Cloth quaternion code fix, 13 targeted CPU checks and original-literal negative control; [receipt](../results/task-closure-20261008/cloth-quaternion.json). No Isaac runtime result. |
@@ -158,4 +158,3 @@ drafts and are preserved as-is; the tracked `CLOTH_FOLDING_WEEKEND.md` and
 - Ice no-ice control was subsequently user-funded and completed (`21408515`); it is no longer an unfunded prerequisite. The original 2026-09-23 decision is historical.
 - Third seeds for `arms_*_pair` (~10–12 GPU-h each): the gap is a caption qualifier, fixed in text.
 - Folding 12-cell matrix (~30 GPU-h): the linked repository owns its compute. Historical v2/v3 records remain linked; current driver state was not re-audited in this closeout.
-

@@ -1,0 +1,107 @@
+{
+  "schema": "bhl-h2-task-closure/v1",
+  "task": "H2",
+  "status": "DONE",
+  "closed_utc": "2026-10-08T17:49:57.332164+00:00",
+  "tested_publication_code_commit": "b02b56250dffc62e8f49aedba9754f792e162035",
+  "frozen_bundle_sha256": "10c37e8749792330dcc52293bc2a14c2f766688326619c7ad0eef60250f51b08",
+  "manifest_sha256": "2d23c3fbe5ac218a0690ad70a63478397b2c2e7dab42961e3a66aeb71b1aa2e5",
+  "criteria": {
+    "fresh_isolated_cpu_install": "PASS",
+    "local_full_cpu_suite": {
+      "passed": 1998,
+      "skipped": 123,
+      "subtests_passed": 6,
+      "failures": 0,
+      "errors": 0
+    },
+    "hosted_ci": {
+      "run_id": 37817975052,
+      "conclusion": "success",
+      "run_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052",
+      "passed": 1997,
+      "skipped": 124,
+      "subtests_passed": 6,
+      "failures": 0,
+      "errors": 0
+    },
+    "actual_asset_integration": {
+      "passed": 9,
+      "total": 9,
+      "skipped": 0
+    },
+    "injected_replay_regressions": {
+      "detected": 40,
+      "total": 40
+    },
+    "same_host_nominal_repeats": {
+      "passed": 5,
+      "total": 5
+    },
+    "second_hpc_host_nominal_comparison": {
+      "passed": 5,
+      "total": 5,
+      "max_state_velocity_target_abs_delta": 0.0,
+      "atol": 1e-09,
+      "rtol": 1e-09
+    },
+    "unchanged_guard_decisions": {
+      "matched": 208,
+      "total": 208
+    }
+  },
+  "previous_attempts": [
+    {
+      "run_id": 37814378006,
+      "result": "workflow validation failure; corrected unsupported context"
+    },
+    {
+      "run_id": 37815288181,
+      "result": "full suite failed on shallow history, missing dependencies and unpublished test assets; no assertions or gates weakened"
+    },
+    {
+      "run_id": 37815426852,
+      "result": "full suite still failed on missing dependencies/test assets; corrected with exact preserved model and test portability"
+    }
+  ],
+  "evidence_sha256": {
+    "USAGE.txt": "c6ffbac6b76f63d13fa325c119af1146fdd04ec63a5341414a21bde4b916437c",
+    "comparison-negative-controls.json": "165f8c0562e964ce7aaf4759a1ae01b8255d9e3e3660ae58180b3123e2e2c8cb",
+    "cross-host.json": "818a21d5322466b4f3c42393043febcdebb7421fc3bf0933fae51007c4cfd605",
+    "documentation-validation.json": "f8c799399c073d046f1068e52ee54f56c978fd52e2cc6499a6689eeaf30029ca",
+    "fresh-cpu/receipt.json": "31bce1c307990ca1c989a51eb15fb123349defdd560e3905ea90c1d3d060ccac",
+    "fresh-cpu/report.json": "57072fc5b51e034f98704632807c6b0e54f3fb07994d196ef2aab17ffb86a50f",
+    "fresh-cpu/seed94000-nominal.json": "92bc8efa1f0d091852a4634d156af479da7790539e97548177172934956919d6",
+    "fresh-cpu/seed94001-nominal.json": "5afc59057073b08b5830f1d340d56c87f573e551e968ec4bcad9d10275d342c5",
+    "fresh-cpu/seed94002-nominal.json": "92b46383f827acd8d55b5468fe5130009c2ffd0fc34fe3c9c38a977f2c88751c",
+    "fresh-cpu/seed94003-nominal.json": "600f80e9bb28c939474d7dad83a17962857404c166a331de6c8c0be363d4f2a0",
+    "fresh-cpu/seed94004-nominal.json": "07742f4069c653ef8a145844c1a80eee63d31d6b43ad3baa42716ea983da1e47",
+    "fresh-cpu-raw.tar.gz": "f863e38abab1925d38accdb823c8622bdd5e19aebf55cb2ab1c5cf6aee25d2a4",
+    "fresh-cpu-requirements.txt": "80a881d68142aec7eb575877580e4c9fe8086503192902365595a742cc5a6d11",
+    "fresh-install.json": "da8728488fa3f272cbbf66d4e4ea7049ee344db5ad8914130081ab90f3590131",
+    "frozen-manifest.json": "2d23c3fbe5ac218a0690ad70a63478397b2c2e7dab42961e3a66aeb71b1aa2e5",
+    "github-ci/integration.json": "9bf16ff96aa7fdfb11e79ea22e122af7f4c4f2e0820cc556a34a197fce673762",
+    "github-ci/pytest.xml": "32a874773ad4850c67c28f7147e943e0ec85e4a43a5e7cbb57dc09fc96bb68a3",
+    "github-ci/raw-replay.tar.gz": "86616e387b736cb4c4c958f8e34b06f91181d97d9ee9985780d9a193d5b385ea",
+    "github-ci/receipt.json": "89ff4aaa335f48068587d438a95fb78563e2ba91cfd4fc12cf8d0cd8765290dc",
+    "github-ci/report.json": "3ffa2cf9c0deb2dc89345345abe62d1e53d8a4c2987d5d86935e4d7782da6afe",
+    "github-ci/validation.json": "e1e729e7d3907719bf36a8811e6df9e8e39a9fa3c438d10bd8be89a7a7a5d66e",
+    "integration.json": "b17f9725a58bc8be553a73405a8ad5c60b59525da32c7c6efa66c0ab932387a6",
+    "local-pytest.xml": "01b674432d88fd4e646025ae6749993b9c22d1d624316cab6631281a3580864f",
+    "local-validation.json": "a940713c4f2c8d660e31f2f370d0a2782d2b4485b924ab12a4b750aa41ee762c",
+    "reference/receipt.json": "2ce0a3f25bea7c7e2669c7a3109f566c3147c1f085c7a3913b1edc346f99903d",
+    "reference/report.json": "2a43d90724140c45fb66d6b9adb78e5b33374161e6401867949dd768f4b35d0a",
+    "reference/seed94000-nominal.json": "5f85e40a0692a59037f80bbea51cfd79849e6ab24e86e4464c36e4d6a31bf7e6",
+    "reference/seed94001-nominal.json": "e54061f704799a58cc87fe5a22f3ddd32081610f24a76b555b40d2abeb975932",
+    "reference/seed94002-nominal.json": "b27b848d7263a40cc1c06a6a5918f2bf9012eae4dd735c8d19ef9f5a17bdb1c6",
+    "reference/seed94003-nominal.json": "9710c0fbdd37dd858f4ad7c70508f8d8899df61bdeecee807926d6a19371d86f",
+    "reference/seed94004-nominal.json": "d03c3d1aaaddd10d0a812a6e3150910932d53705bed6de3cc2f72af8a7c1f57b"
+  },
+  "limits": [
+    "Frozen actual trained 12-DoF biped replay; the separate cooperative tests use the original 22-DoF gait fixture.",
+    "Five two-second seeded comparisons across two named HPC hosts establish only this measured agreement, not universal determinism. Hosted CI separately performs independent same-host repeats.",
+    "Fault detection identifies a replay regression, not safe behavior, robust locomotion or a physical-robot result.",
+    "Existing Isaac runtime, ROS/video and unpublished historical-export prerequisites may skip; exact reasons are retained in JUnit/hosted validation.",
+    "Warm CPU timing is specific to each host/run and excludes physics, startup, sensor transport and hard-real-time scheduling. No long-term CI flake-rate claim."
+  ]
+}

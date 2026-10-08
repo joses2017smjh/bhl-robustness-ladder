@@ -117,7 +117,10 @@ The builder refuses missing models; replay verifies source, asset and runtime
 hashes before physics. Output directories cannot be reused. The active
 [CPU workflow](.github/workflows/cpu-replay.yml) installs a pinned CPU runtime,
 runs the full CPU suite, then checks actual trained assets, injected regressions
-and timings. Its final hosted validation is tracked in the current task ledger.
+and timings. [GitHub run 37817975052](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052)
+passed the full suite, **9/9** trained-asset checks, **5/5** nominal repeats and
+**40/40** injected regressions. H2 is closed with
+[durable validation receipts](results/task-closure-20261008/h2-replay/closure.json).
 The earlier [manual template](ci/replay-workflow.yml.example) remains a historical
 reference. Each run retains its own hardware and timing receipt.
 
@@ -150,12 +153,21 @@ This publication checkout separately passed both changed tests and all nine
 actual-asset integration checks using a freshly built bundle.
 [Publication validation](results/resume-revamp-20261007/publication_validation.json).
 
+On October 8, the corrected publication code passed **1,998 tests plus six
+subtests** in a fresh local CPU environment and **1,997 tests plus six subtests**
+on GitHub. The respective **123 and 124 existing optional skips** retain their
+Isaac runtime, historical export, ROS/video and other prerequisite limits.
+These full-suite results supplement the historical receipts above.
+[Local receipt](results/task-closure-20261008/h2-replay/local-validation.json) ·
+[Hosted receipt](results/task-closure-20261008/h2-replay/github-ci/validation.json).
+
 ## Setup and testing
 
 This is an HPC research workspace. Policies and shared environments referenced by absolute paths in result JSON are not public downloads. A clean clone is not a ready-to-run robot package. See [reproducibility requirements](docs/REPRODUCIBILITY.md).
 
 ```bash
-git clone --recurse-submodules https://github.com/joses2017smjh/bhl-robustness-ladder.git
+git -c url.https://github.com/.insteadOf=git@github.com: clone \
+  --recurse-submodules https://github.com/joses2017smjh/bhl-robustness-ladder.git
 cd bhl-robustness-ladder
 # Adapt account, partition, and paths in slurm/_env.sh before submission.
 sbatch slurm/00_build_container.sbatch
@@ -168,7 +180,7 @@ Those launchers describe the original Isaac Sim 5.1 / Isaac Lab 2.3.2 stack. The
 For the CPU suite in a fresh Python 3.11 environment:
 
 ```bash
-git submodule update --init --recursive
+git -c url.https://github.com/.insteadOf=git@github.com: submodule update --init --recursive
 python3.11 -m venv .venv-cpu
 source .venv-cpu/bin/activate
 python -m pip install torch==2.7.0 torchvision==0.22.0 \

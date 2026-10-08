@@ -11,12 +11,12 @@ linked from [STATUS.md](STATUS.md), [REPO_TASKS.md](REPO_TASKS.md) and the
 | Item | State | Done when |
 |---|---|---|
 | **H1: fresh matched yaw-filter confirmation** | ACTIVE, CPU-only job `21689706`, 576 planned episodes, two evaluators; [frozen protocol](../results/task-closure-20261008/h1-navigation/protocol.json) | Every episode validates and the final paired report is written. A passing candidate requires each of three actors to reach ≥40/48 nominal and ≥36/48 dropout goals, with zero falls in both conditions. A negative result still closes the experiment, not the improvement objective. |
-| **H2: portable replay validation** | Pending final fresh-environment/full-suite and hosted CI receipts | Fresh dependency installation, full CPU checks, hosted execution and second-host replay are documented, including any divergence; original same-host timing scope stays intact. |
 
 ## Closed since the previous roadmap
 
 | Item | Final result | Scope |
 |---|---|---|
+| H2 portable replay validation | DONE: fresh pinned CPU installation; local full suite 1,998 passed, 123 existing optional checks skipped, six subtests passed; [hosted CI](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052) succeeds | [Closure receipt](../results/task-closure-20261008/h2-replay/closure.json). Replay retains five exact repeats and 40/40 injected regressions detected; second HPC host agrees on 5/5 frozen two-second cases with maximum numeric difference 0.0. These cases do not establish general cross-platform determinism or a flake rate; original timing scope stays intact. |
 | R1 / R2 / R1H turning experiments | DONE NEGATIVE: respectively 1/3, 0/3 and 0/3 seeds meet the unchanged joint rule; R1H seed 2 is complete | H4's repeatable 22-DoF recipe remains open; [verdicts](TASK_CLOSURE_2026-10-08.md#completed-negative-experiments). |
 | Original NavGym v5 gym/physics transfer | DONE: three actors pass; physics 11/12, 12/12 and 12/12, zero falls | [Original transfer gate](../results/navgym-v5-transfer-20261002/verdict.json). The later 384-episode confirmation remains NEGATIVE because of six learned-actor falls. |
 | NAV-01/02/03 and LOC-01/04/06/07/10 reporting/provenance tasks | DONE within their stated scopes | [Closure evidence](TASK_CLOSURE_2026-10-08.md#deliverables-closed-in-this-audit); media reassembly and caption correction add no simulation episodes. |

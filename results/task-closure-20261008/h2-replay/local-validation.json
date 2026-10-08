@@ -1,0 +1,30 @@
+{
+  "recorded_utc": "2026-10-08T17:46:40.039222+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "publication_code_commit": "b02b56250dffc62e8f49aedba9754f792e162035",
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONPATH=src:external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel python -m pytest -q tests --junitxml=<new-output>",
+  "environment": "/tmp/bhl-h2-cpu-venv",
+  "pytest_summary": {
+    "passed": 1998,
+    "skipped": 123,
+    "subtests_passed": 6,
+    "duration_s": 578.83,
+    "failures": 0,
+    "errors": 0
+  },
+  "junit_suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "123",
+      "tests": "2127",
+      "time": "578.797",
+      "timestamp": "2026-10-08T10:34:28.181782-07:00",
+      "hostname": "dgx2-2.hpc.engr.oregonstate.edu"
+    }
+  ],
+  "junit_sha256": "01b674432d88fd4e646025ae6749993b9c22d1d624316cab6631281a3580864f",
+  "scope": "Fresh CPU full tests/ suite. Existing optional Isaac or unpublished-export prerequisites remain skipped; no GPU runtime or new training result. Host-specific suite coverage may differ from GitHub."
+}

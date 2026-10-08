@@ -38,6 +38,12 @@ The tool verifies every bundle input and the receipts before comparing traces.
 The frozen ZIP SHA256 is:
   10c37e8749792330dcc52293bc2a14c2f766688326619c7ad0eef60250f51b08
 
-Full-suite and hosted CI evidence have separate dated receipts. Optional Isaac
-runtime and unpublished historical export checks retain their existing
-prerequisites; neither is represented as having passed by a CPU skip.
+H2 is DONE: closure.json binds the final criteria to durable evidence hashes.
+local-validation.json/local-pytest.xml: 1,998 passed,123 optional skips,6 subtests.
+github-ci/: successful run37817975052,1,997 passed,124 optional skips,6 subtests,
+9/9 actual-asset integration and40/40 injected regressions. The original hosted
+JUnit, hardware receipt, report and compressed raw replay are preserved here,
+so verification does not depend on the temporary Actions artifact's expiry.
+Run: https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052
+Optional Isaac runtime, ROS/video and unpublished historical export checks retain
+their existing prerequisites; neither is represented as passing by a CPU skip.
