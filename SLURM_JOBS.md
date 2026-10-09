@@ -4104,3 +4104,29 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
 - **Waiter 1d smoke `21715999` (2026-10-08 21:39): FAIL at the stamp, not in training.** The 3 iterations ran; curriculum check OK (0.0208, 1.0), stance check OK; the stamp's shared clock check (`gait_clock.check_env`) accepted only `gait_clock_mdp:gait_clock` and refused the stance task's `gait_clock_stance`. Fixed additively: `check_env(..., clock_funcs=("gait_clock",))` (default unchanged), the stamp passes `("gait_clock", "gait_clock_stance")` for the stance task only; a test covers both. Tests: 176 passed (`test_waiter_phase1d`, `test_waiter_phase1c`, `test_gait_clock`, `test_mission7_clocks2` incl. its pinned-source checks, `test_waiter_env`). Training `21716000` and gates `21716001` (DependencyNeverSatisfied) cancelled before any task started.
 - **Resubmitted (2026-10-08 21:39) from 6399f7d:** smoke `21716234` -> training `21716235` (afterok, 16 h) -> gates `21716236` (aftercorr; WAITER_GATES_MIN_WALK_M=1.5, WAITER_GATES_STANCE=1).
 - **Waiter 1d smoke `21716234` (2026-10-08 22:07): PASS** (curriculum check OK: 0.0208, 1.0; stance check OK; export 83 -> 12; stamped `task: Velocity-BHL-Waiter-WBC-Stance-v0`). Training `21716235` released (afterok): seeds 9-11 running.
+
+## 2026-10-09: Waiter phase 1d verdict; NavGym unfiltered diagnostic
+
+**Waiter phase 1d training `21716235` -> gates `21716236` (finished 2026-10-09 08:59; recorded 2026-10-09 13:50): NEGATIVE by the predeclared rule** (`results/waiter-20261005/wbc1d/selection.json`, sha256 56e74e9a...): no seed passes Q1 + Q2 + walk progress + Q3.
+
+| seed | turn_test v2 | cpu_turn_qualify | Q2 | walk (m) | push /60 | Q3 stance (still /12; drift; yaw) |
+|---|---|---|---|---|---|---|
+| s9 | PASS | QUALIFIED | FAIL (drift ok 9/12) | 1.12-1.73 | 6 | FAIL 3/12; 0.9-8.7 cm; -9.3..+8.1 deg |
+| s10 | FAIL | QUALIFIED | PASS | 1.39-1.45 | 0 | FAIL 4/12; 1.2-14.5 cm; -14.1..+5.0 deg |
+| s11 | FAIL | NOT QUALIFIED | PASS | 0.17-1.97 | 13 | FAIL 4/12; 1.7-11.3 cm; -13.9..+12.5 deg |
+
+- Reading: training the held phase made standing still WORSE, not better: the 1d checkpoints stand 3-4/12 on Q3 against 9/12 for s7 with the untrained deploy-time hold (s7: drift 1.3-3.0 cm). Likely cause (not tested): the standing envs keep the fixed +-0.5 m/s pushes and the hand forces, so the policy learned to shuffle to recover while "standing". Walking also slowed (s10 under the 1.5 m bar). Phase 2 keeps s7 with the deploy-time stance hold, as predeclared, labelled so.
+- Committed with this entry: the 1d gate JSONs/CSVs, selection, deploy.yaml files, training JSONs and byte-identical gzip copies of the training logs.
+
+**NavGym unfiltered diagnostic `21711229` (finished 2026-10-08 21:26; reported, never gated, cannot change either verdict):** the 6 learned cells on the never-used confirmation mazes 78000-78047 with `--policy-cmd-filter none` (`results/navgym-v5-cmdfilter-20261007/diag-unfiltered/none/`, untracked; committed summary `diag_unfiltered_summary.json`), against the filtered confirmation:
+
+| cell | unfiltered goals / falls / time-outs | filtered (confirm) |
+|---|---|---|
+| armV5-s8 nominal | 37 / 1 / 10 | 38 / 0 / 10 |
+| armV5-s8 drop35 | 35 / 2 / 11 | 37 / 0 / 11 |
+| armV5-s9 nominal | 39 / 4 / 5 | 41 / 0 / 7 |
+| armV5-s9 drop35 | 38 / 1 / 9 | 42 / 0 / 6 |
+| armV5-s10 nominal | 42 / 3 / 3 | 47 / 0 / 1 |
+| armV5-s10 drop35 | 42 / 0 / 6 | 45 / 0 / 3 |
+
+- Totals: unfiltered 233 goals and **11 falls** in 288; filtered 250 goals and 0 falls. On fresh mazes the filter removed every fall and added goals in all 6 cells; it did not cost s8 its goals (37 -> 38 nominal), so the confirmation's NEGATIVE (s8 38/48 < 40) is s8's own navigation.

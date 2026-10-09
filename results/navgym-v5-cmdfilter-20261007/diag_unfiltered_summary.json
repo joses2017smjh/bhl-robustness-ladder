@@ -1,0 +1,131 @@
+{
+ "what": "diagnostic only (predeclared 2026-10-07 20:20; reported, never gated): the 6 learned confirmation cells re-run with --policy-cmd-filter none on maze seeds 78000-78047 (job 21711229); per-episode files stay on disk, untracked",
+ "cells": {
+  "armV5-s10-drop35": {
+   "unfiltered": {
+    "n": 48,
+    "success": 42,
+    "clean_success": 42,
+    "falls": 0,
+    "time_outs": 6,
+    "median_completion_s": 86.76
+   },
+   "filtered_confirm": {
+    "n": 48,
+    "success": 45,
+    "clean_success": 45,
+    "falls": 0,
+    "time_outs": 3,
+    "median_completion_s": 78.32
+   },
+   "unfiltered_summary_sha256": "0afb5eeef5d419f257b7d2d6928345ee5accdb4726658e04603de2bacc3cdb05"
+  },
+  "armV5-s10-nominal": {
+   "unfiltered": {
+    "n": 48,
+    "success": 42,
+    "clean_success": 41,
+    "falls": 3,
+    "time_outs": 3,
+    "median_completion_s": 68.48
+   },
+   "filtered_confirm": {
+    "n": 48,
+    "success": 47,
+    "clean_success": 47,
+    "falls": 0,
+    "time_outs": 1,
+    "median_completion_s": 59.6
+   },
+   "unfiltered_summary_sha256": "a35ded9b2fca28156f5c6dff3480ed53ea4e4206ae328aeb32de475686c89cae"
+  },
+  "armV5-s8-drop35": {
+   "unfiltered": {
+    "n": 48,
+    "success": 35,
+    "clean_success": 35,
+    "falls": 2,
+    "time_outs": 11,
+    "median_completion_s": 83.8
+   },
+   "filtered_confirm": {
+    "n": 48,
+    "success": 37,
+    "clean_success": 37,
+    "falls": 0,
+    "time_outs": 11,
+    "median_completion_s": 79.72
+   },
+   "unfiltered_summary_sha256": "a4c3f881a04f67b1383ef9f08daffb6c47236a3178d46e9378bec7fb06524239"
+  },
+  "armV5-s8-nominal": {
+   "unfiltered": {
+    "n": 48,
+    "success": 37,
+    "clean_success": 36,
+    "falls": 1,
+    "time_outs": 10,
+    "median_completion_s": 66.28
+   },
+   "filtered_confirm": {
+    "n": 48,
+    "success": 38,
+    "clean_success": 38,
+    "falls": 0,
+    "time_outs": 10,
+    "median_completion_s": 63.96
+   },
+   "unfiltered_summary_sha256": "2d156cf5bc3b2b36a47f3ba92825699014a03f898fa92eb53bbe87a6f85c3fbc"
+  },
+  "armV5-s9-drop35": {
+   "unfiltered": {
+    "n": 48,
+    "success": 38,
+    "clean_success": 38,
+    "falls": 1,
+    "time_outs": 9,
+    "median_completion_s": 75.04
+   },
+   "filtered_confirm": {
+    "n": 48,
+    "success": 42,
+    "clean_success": 42,
+    "falls": 0,
+    "time_outs": 6,
+    "median_completion_s": 66.36
+   },
+   "unfiltered_summary_sha256": "0b1566546848be675833470478a48383494472781e3e01afcdd0648c24901a9d"
+  },
+  "armV5-s9-nominal": {
+   "unfiltered": {
+    "n": 48,
+    "success": 39,
+    "clean_success": 37,
+    "falls": 4,
+    "time_outs": 5,
+    "median_completion_s": 56.96
+   },
+   "filtered_confirm": {
+    "n": 48,
+    "success": 41,
+    "clean_success": 41,
+    "falls": 0,
+    "time_outs": 7,
+    "median_completion_s": 61.56
+   },
+   "unfiltered_summary_sha256": "88d1202b87fc8a252f03fef0b2524400a5f62ccaae5d1d133f9baa92ec59bcf0"
+  }
+ },
+ "totals": {
+  "unfiltered": {
+   "goals": 233,
+   "falls": 11,
+   "n": 288
+  },
+  "filtered_confirm": {
+   "goals": 250,
+   "falls": 0,
+   "n": 288
+  }
+ }
+}
