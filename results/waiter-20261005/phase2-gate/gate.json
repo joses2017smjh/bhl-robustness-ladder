@@ -1,0 +1,45 @@
+{
+ "gate": "Waiter phase 2 scripted expert",
+ "verdict": "PASS",
+ "rule": "PASS iff >= 80 successes over seeds 2000-2099 (n = 100)",
+ "successes": 86,
+ "n": 100,
+ "rate": 0.86,
+ "wilson95": [
+  0.7786,
+  0.9147
+ ],
+ "falls": 0,
+ "final_stage_counts": {
+  "success": 86,
+  "tray_lifted": 10,
+  "start": 2,
+  "tumbler_on_tray": 2
+ },
+ "stance_lock": [
+  true
+ ],
+ "time_limit_s": [
+  90.0
+ ],
+ "success_time_s": {
+  "median": 50.88,
+  "max": 54.64
+ },
+ "failed_seeds": [
+  2003,
+  2005,
+  2009,
+  2018,
+  2019,
+  2021,
+  2036,
+  2038,
+  2040,
+  2057,
+  2061,
+  2074,
+  2086,
+  2087
+ ]
+}
