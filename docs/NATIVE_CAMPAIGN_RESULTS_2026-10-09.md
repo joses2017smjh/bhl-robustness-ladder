@@ -3,16 +3,17 @@
 Actual FAST-LIO2 replay passes the three declared scene gates. Its native pose
 also supports nine clean development navigation goals with a frozen learned
 gait. The separate terrain qualification screen finishes negative. Native
-ORB-SLAM3 has passed its executable build checks. Fresh stereo smoke exposed
-a native startup crash before inference; scored stereo replay and navigation
-have no outcome in this revision.
+ORB-SLAM3 completes all three replay scenes with an overall negative verdict:
+two never initialize, while the held-out ramp/step scene passes. Stereo
+navigation is in progress and has no scored outcome in this revision.
 
 | Experiment | Scored result | Scope |
 |---|---|---|
 | Native LiDAR–IMU replay | **PASS, 3/3 scenes**, 441/450 tracked outputs; 100% tracking after the first five seconds | Three 30-second ideal simulated recordings; fixed-scale evaluator alignment; zero navigation episodes |
 | Native LiDAR–IMU navigation | **PASS development, 9/9 clean goals, 0 falls, 0 contacts** | One frozen 12-DoF gait, three scripted routes × three development seed groups, 40 seconds per episode; no independent confirmation |
 | Terrain controller qualification | **NEGATIVE, 3/18 clean goals, 15 side-wall contacts, 0 falls** | Blind baseline, three frozen actors × three terrains × two screen seed groups; zero qualified actors and zero confirmation episodes |
-| Native stereo SLAM / navigation | Actual executable build **PASS**; scored results pending | Original rendered stereo inputs and unchanged native algorithms; startup integration repair and fresh smoke required before scoring |
+| Native stereo SLAM replay | **NEGATIVE overall, 1/3 scene gates**, 122/450 tracked outputs | Two scenes never initialize; held-out ramp/step passes with 0.44 cm aligned ATE and 48.60 ms native compute p95 |
+| Native stereo navigation | Fresh smoke / scored development in progress | Same learned gait and waypoint routes, stereo native pose plus raw LiDAR obstacle brake |
 
 Smoke episodes never enter these scored counts. All outcomes are simulation
 measurements. The 12-DoF navigation experiment is separate from H4's 22-DoF
@@ -51,6 +52,39 @@ bracket is excluded from associated-pose error. Native compute is estimator
 work; it excludes capture, export, process startup and imposed replay pacing.
 These are short, ideal simulated sensor recordings, not physical calibration,
 long-distance drift, loop-closure or generalization benchmarks.
+
+## Native stereo replay
+
+[Verified result collection](../results/native-campaign-20261009/orb-replay-v2/collection/report.md) ·
+[Upstream integration and build provenance](ORB_NATIVE_2026-10-09.md)
+
+Actual allocation step `21739893.8` follows same-source smoke step
+`21739893.7`. All 450 original image pairs are processed at their original
+timestamps, with replay pacing for native background mapping. Native
+tracking, local mapping and loop-closure algorithms remain unchanged.
+
+| Scene | Tracked / outputs | Post-init tracking | ATE RMSE | Native compute p95 | Readiness |
+|---|---:|---:|---:|---:|---|
+| Textured boxes, development | 0/150 | 0% | Unavailable | 45.11 ms | NEGATIVE |
+| Thin posts, validation | 0/150 | 0% | Unavailable | 27.02 ms | NEGATIVE |
+| Ramp/step, test | 122/150 | 97.6% | 0.439 cm | 48.60 ms | PASS |
+
+The two failed scenes retain actual `NOT_INITIALIZED` native states and null
+poses for every frame. The ramp/step scene has 28 uninitialized frames followed
+by 122 actual `OK` states; rotation error p95 is 0.640°. There are no map resets.
+The whole three-scene readiness rule fails; the held-out scene is not promoted
+to an overall success. Error uses evaluator-only SE(3) alignment with scale
+fixed at one. Tracking coverage differs between methods, so their ATE values
+do not establish a matched accuracy improvement. No loop-closure event or
+long-distance drift result is inferred from executing the native algorithm.
+
+![Actual stereo replay: unavailable errors remain explicit where initialization failed](../results/native-campaign-20261009/orb-replay-v2/collection/actual-native-replay.png)
+
+Earlier smoke exposed an upstream settings-printer null dereference before
+inference. The replacement uses the upstream-supported legacy calibration
+parser with the same intrinsics, 0.12 m baseline and feature settings, preserving
+the actual compiled native binary. A real constructor check and fresh smoke
+passed before scoring. No parameters were tuned after viewing these outcomes.
 
 ## Estimated-pose navigation
 

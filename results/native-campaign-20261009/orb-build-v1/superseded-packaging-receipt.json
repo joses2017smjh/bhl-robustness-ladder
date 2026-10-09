@@ -1,0 +1,20 @@
+{
+  "archive_bytes": 38840165,
+  "archive_sha256": "8294d15c5f09e88a7617655560b714af002f35f0aa23641fc998bf84cdddafb6",
+  "inventory_file": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v1/retained-payload-inventory.json",
+  "inventory_sha256": "141d6058ef5d3d8a5335a44565e6eff53bb5c54473ef6f6a370b5370af2b6815",
+  "manifest_entries_reused_in_retained_live_packs": 829,
+  "operation": "Remove only superseded frozen SOURCE packaging; preserve all original source/input payload bytes, receipts and scientific/failure outputs",
+  "original_manifest_sha256": "430234141d94ffa507a4383ae0655f57901373d6b9b76c9148ee3e1a566dab6a",
+  "original_member_count": 832,
+  "outputs_tar_gz_untouched": [],
+  "scope": "Original tar compression/header metadata is not retained. All payload bytes and intake/manifest/protocol/source lineage remain reconstructible through the complete per-member preservation map. No outputs.tar.gz or active source package was deleted.",
+  "unique_payload_preserved": [
+    {
+      "bytes": 11095,
+      "path": "retained-unique-payload/source/scripts/native/orb_build.py",
+      "sha256": "afe8a47e39471e4d00be57900ae34045614e1d1e1051c5852ae72d2551853cf7"
+    }
+  ],
+  "utc": "2026-10-09T21:57:38.686122+00:00"
+}

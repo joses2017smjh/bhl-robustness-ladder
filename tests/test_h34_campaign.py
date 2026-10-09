@@ -184,6 +184,18 @@ def test_training_requires_same_archive_smoke_dependency(tmp_path):
         campaign.submit(target, "smoke", "afterok:123")
 
 
+def test_failed_dependency_is_cancelled_by_scheduler(tmp_path, monkeypatch):
+    _, target, _ = frozen(tmp_path)
+    captured = {}
+    def fake_run(command, **kwargs):
+        captured["command"] = command
+        return subprocess.CompletedProcess(command, 0, "12345\n", "")
+    monkeypatch.setattr(campaign.subprocess, "run", fake_run)
+    campaign.submit(target, "smoke", "afterok:123")
+    assert "--dependency=afterok:123" in captured["command"]
+    assert "--kill-on-invalid-dep=yes" in captured["command"]
+
+
 @pytest.mark.parametrize("requeue", [None, True, False])
 def test_submission_does_not_inherit_interactive_context(tmp_path, monkeypatch, requeue):
     _, target, _ = frozen(tmp_path)

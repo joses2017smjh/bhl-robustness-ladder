@@ -1,0 +1,22 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=native-orb-smoke-20261009-v1",
+    "--partition=preempt",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--time=00:20:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v1/native-orb-smoke-20261009-v1-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v1/native-orb-smoke-20261009-v1-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v1/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v1",
+    "native-orb-smoke-20261009-v1",
+    "21178ac280bc6408976a4ab2666131d7796403f7945286c1284c184d41ab5b26"
+  ],
+  "created_utc": "2026-10-09T22:27:44.971310+00:00"
+}

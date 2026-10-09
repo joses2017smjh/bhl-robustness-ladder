@@ -1,0 +1,82 @@
+{
+  "schema": "bhl-successful-packaging-reclamation-v1",
+  "status": "DUPLICATE_PACKAGING_REMOVED_ALL_PAYLOADS_PRESERVED",
+  "utc": "2026-10-09T22:36:44.254692+00:00",
+  "authorization": "Root delegated navigation-lio-v1/v2 duplicate source packaging retirement, preserving all scientific outputs, original receipts, collector sources and exact frozen payloads; publisher fallback coordinated before deletion.",
+  "removed_path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v1/frozen-campaign.tar.gz",
+  "removed_archive_sha256": "1723704ddbddb48ba8b315c40153c18b3c975d150d0122c2688b8b6f81e1daf0",
+  "removed_archive_bytes": 74764824,
+  "retained_source_archive": "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v4/retained-frozen-source.tar.gz",
+  "retained_source_archive_sha256": "a9d2ee40f78a413c66abd6bb5a411193003537b5f20b7bb9d0c69d137d9369a6",
+  "retained_source_archive_bytes": 39875120,
+  "all_tar_members_verified": 848,
+  "shared_source_archive_members_verified": 840,
+  "direct_surviving_regular_files_verified": 8,
+  "inventory_sha256": "9dfe2815982b214bf3f8c9fc8a45e62474c1e3be6609f4ea950deeb64b3eb2e4",
+  "protected_scientific_and_receipt_files": {
+    "nav-lio-smoke-20261009-v1-submission.json": {
+      "bytes": 1146,
+      "sha256": "fdceede12c9d2affefbd4f84fed30aed8ca101827bcb654bae5e8ac59616a2a9"
+    },
+    "intake.json": {
+      "bytes": 1861,
+      "sha256": "011f91c0f916b9c6954e564de92a1d139a0a43284e898bc5046d7a506bb8328f"
+    },
+    "nav-lio-development-20261009-v1-submission.json": {
+      "bytes": 1207,
+      "sha256": "9066315e9b8e085a661aa1fa08d769772b43881ca727f996742a44ac4482d615"
+    },
+    "nav-lio-smoke-20261009-v1-21740837.out": {
+      "bytes": 274,
+      "sha256": "a99e504205638bae5c75135c83f5349532061ceb8400b4644b5febd7b8c13ca5"
+    },
+    "nav-lio-development-20261009-v1-submission-start.json": {
+      "bytes": 875,
+      "sha256": "1d67ed364cd27e7c6b65eebc4ce20a27fe8fb54ef59baef76ff204b973f5c699"
+    },
+    "protocol.json": {
+      "bytes": 4214,
+      "sha256": "a823c04ba201691c55617f229c7749e739b7ac15ba4fcd88bd80d5b1453ba83b"
+    },
+    "h34_campaign.sbatch": {
+      "bytes": 1286,
+      "sha256": "d1ed87d378c599a22ddc2fee86dd3cc5354e76973870d81485603a833159a85b"
+    },
+    "development-cancellation.json": {
+      "bytes": 341,
+      "sha256": "522b54212dcb41b0835eebbd6de0f26acb294839765ebd1f13893632647611d6"
+    },
+    "manifest.json": {
+      "bytes": 142957,
+      "sha256": "f4b45becf4590658d4c1e8ba34a6bdfcad14c84966a22b514c8423da76c47a8d"
+    },
+    "nav-lio-smoke-20261009-v1-submission-start.json": {
+      "bytes": 814,
+      "sha256": "efbcdabe839e1c7be36e33b33f3b606b5b25f693a7ce78d77bb4fd79d2613712"
+    },
+    "nav-lio-smoke-20261009-v1-21740837/launch.json": {
+      "bytes": 3013,
+      "sha256": "fed6afb268d1b7d18e2a6c7e60f0ad1914c3d5d85e74d41fc77df71f47de93f1"
+    },
+    "nav-lio-smoke-20261009-v1-21740837/outputs.tar.gz": {
+      "bytes": 3014613,
+      "sha256": "a8befe1d7b4b8a55726102ab43acc89eaee053a854875e03a8a5b54b2060c63d"
+    },
+    "nav-lio-smoke-20261009-v1-21740837/completion.json": {
+      "bytes": 1000,
+      "sha256": "463d4ba1dd267eb75a3505aea00a6a5374db4522c3470cc8468d4ce1e54a0da3"
+    },
+    "nav-lio-smoke-20261009-v1-21740837/runtime.log": {
+      "bytes": 1424,
+      "sha256": "c0f1999d2760416704fb5c06e63323e0b850bced36070624287ff81e300a69cf"
+    },
+    "nav-lio-smoke-20261009-v1-21740837/campaign_result.json": {
+      "bytes": 1252,
+      "sha256": "06f43467f66da390fcfcf6dea1a2a628b28129f2c4893cec6ef7567e62918f31"
+    }
+  },
+  "scientific_outputs_removed": 0,
+  "scope": "Every original frozen payload survives and is hash verified. Original tar/gzip identity is not retained after duplicate packaging retirement; future reruns require a new freeze/version. Scientific outputs and collector files remain unchanged.",
+  "publisher_fallback_scope": "Original v1 intake lacks a separate immutable manifest hash. Own exact archive and every-member pre-retirement verification preserved; generic future publisher refuses v1 fallback absent extra independently pinned equivalence. Scored navigation publisher targets source-anchored v2.",
+  "finished_utc": "2026-10-09T22:41:11.308266+00:00"
+}

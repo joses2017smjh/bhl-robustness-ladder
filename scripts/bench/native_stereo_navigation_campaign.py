@@ -112,23 +112,11 @@ def textured_world(case, seed, directory):
 
 
 def write_settings(path):
+    from bhl_robust.research.native_orb import write_rectified_stereo_settings
     focal = HEIGHT/2/math.tan(math.radians(VFOV_DEG/2))
-    rows = ["%YAML:1.0", 'File.version: "1.0"', 'Camera.type: "Rectified"']
-    for index in (1, 2):
-        rows += [f"Camera{index}.fx: {focal}", f"Camera{index}.fy: {focal}",
-                 f"Camera{index}.cx: {(WIDTH-1)/2}", f"Camera{index}.cy: {(HEIGHT-1)/2}"]
-        rows += [f"Camera{index}.{key}: 0.0" for key in ("k1", "k2", "p1", "p2")]
-    rows += [f"Camera.width: {WIDTH}", f"Camera.height: {HEIGHT}", f"Camera.fps: {CAMERA_HZ}",
-             "Camera.RGB: 1", "Stereo.ThDepth: 40.0", f"Stereo.b: {BASELINE}",
-             "Stereo.T_c1_c2: !!opencv-matrix", "  rows: 4", "  cols: 4", "  dt: f",
-             f"  data: [1,0,0,{BASELINE},0,1,0,0,0,0,1,0,0,0,0,1]",
-             "ORBextractor.nFeatures: 1200", "ORBextractor.scaleFactor: 1.2", "ORBextractor.nLevels: 8",
-             "ORBextractor.iniThFAST: 20", "ORBextractor.minThFAST: 7",
-             "Viewer.KeyFrameSize: 0.05", "Viewer.KeyFrameLineWidth: 1.0", "Viewer.GraphLineWidth: 0.9",
-             "Viewer.PointSize: 2.0", "Viewer.CameraSize: 0.08", "Viewer.CameraLineWidth: 3.0",
-             "Viewer.ViewpointX: 0.0", "Viewer.ViewpointY: -0.7", "Viewer.ViewpointZ: -1.8",
-             "Viewer.ViewpointF: 500.0", "Viewer.imageViewScale: 1.0"]
-    path.write_text("\n".join(rows)+"\n")
+    write_rectified_stereo_settings(path, fx=focal, fy=focal, cx=(WIDTH-1)/2,
+        cy=(HEIGHT-1)/2, width=WIDTH, height=HEIGHT, fps=CAMERA_HZ,
+        baseline_m=BASELINE)
 
 
 class StereoSensors(NAV.CausalSensors):

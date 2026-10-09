@@ -64,7 +64,8 @@ def verify_build(plan):
     root = freeze / plan["build_result_directory"]
     protocol = json.loads((freeze / "protocol.json").read_text())
     jobs = protocol.get("jobs", [])
-    if len(jobs) != 1 or jobs[0].get("entrypoint") != "scripts/bench/native_build_campaign.py":
+    if len(jobs) != 1 or jobs[0].get("entrypoint") not in {
+            "scripts/bench/native_build_campaign.py", "scripts/bench/native_orb_relink_campaign.py"}:
         raise ValueError("expected one frozen native build job")
     if root.name != jobs[0]["name"] + "-" + str(plan["build_job_id"]):
         raise ValueError("unexpected actual build attempt")

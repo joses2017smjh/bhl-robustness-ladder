@@ -1,0 +1,25 @@
+{
+  "schema": "bhl-orb-template-source-audit-v1",
+  "audited_utc": "2026-10-09T22:07:34.614631+00:00",
+  "status": "PASS",
+  "pinned_controller_archive_sha256": "a738149ab26361f18c5f2cd09b93eee5105c1d6283f513ed6cceb64d77bfc300",
+  "templates": [
+    {
+      "status": "PASS",
+      "template": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-template",
+      "archive_sha256": "cb68ac9d226ed98948ec49c2488c73698e54a6cb1b0f4c8c930a8bf5d826b82b",
+      "verified_inventory_files": 841,
+      "uncompressed_bytes": 468972153,
+      "scientific_configuration_unchanged": true
+    },
+    {
+      "status": "PASS",
+      "template": "/nfs/stak/users/sanchej7/humanoid-native-20261009/stereo-nav-template-v1",
+      "archive_sha256": "d3442e2c65be3febf7851a8012f6e497800f015a86083f04a0ada2b126f17302",
+      "verified_inventory_files": 848,
+      "uncompressed_bytes": 149682986,
+      "scientific_configuration_unchanged": true
+    }
+  ],
+  "scope": "Read-only full source/input verification before runtime promotion; no estimator inference or scientific outcomes"
+}

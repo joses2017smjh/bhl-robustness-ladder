@@ -1,0 +1,40 @@
+{
+  "additional_source": [
+    "scripts/bench/native_orb_after_build.py",
+    "scripts/bench/promote_native_runtime_campaign.py"
+  ],
+  "campaign_id": "orb-step-promotion-20261009-v3",
+  "input_files": {
+    "controller-plan.json": {
+      "path": "/tmp/bhl-native-campaign-20261009/results/native-campaign-20261009/orb-step-promotion-v3/plan.json",
+      "sha256": "1ede577988cbc0c37fe16e89aa7f1db5e0ffa8781ee1184677e99bf5b3fec9c8"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--plan",
+        "{campaign}/inputs/controller-plan.json"
+      ],
+      "entrypoint": "scripts/bench/native_orb_after_build.py",
+      "kind": "evaluate",
+      "max_output_mb": 8,
+      "name": "orb-step-promotion-20261009-v3",
+      "resources": {
+        "cpus": 1,
+        "gpus": 0,
+        "memory_gb": 4,
+        "partition": "preempt",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Promote actual verified inventoried native ORB v7 relink step; both previously independently verified scientific templates unchanged; no algorithm, threshold, calibration, actor, seed, or case modification"
+}

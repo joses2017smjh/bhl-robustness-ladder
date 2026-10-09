@@ -1,0 +1,25 @@
+{
+  "archive_bytes": 38855393,
+  "archive_sha256": "52320d6cd9168680819bb4da0b18035e78029102bb6e36be44d1f9cdc25b5571",
+  "inventory_file": "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-build-v2/retained-payload-inventory.json",
+  "inventory_sha256": "f58ef79cfa4879fd1a93e76e88901cac86386663c579da62f678f2974603039e",
+  "manifest_entries_reused_in_retained_live_packs": 833,
+  "operation": "Remove only superseded frozen SOURCE packaging; preserve all original source/input payload bytes, receipts and scientific/failure outputs",
+  "original_manifest_sha256": "158f2c442e6fd7b09219a09d9cfad7f5dfd15f97b5b70531b0c44e329c2dc7a5",
+  "original_member_count": 836,
+  "outputs_tar_gz_untouched": [
+    {
+      "bytes": 1340,
+      "path": "lio-native-build-20261009-v2-21740322/outputs.tar.gz"
+    }
+  ],
+  "scope": "Original tar compression/header metadata is not retained. All payload bytes and intake/manifest/protocol/source lineage remain reconstructible through the complete per-member preservation map. No outputs.tar.gz or active source package was deleted.",
+  "unique_payload_preserved": [
+    {
+      "bytes": 10834,
+      "path": "retained-unique-payload/source/scripts/native/lio_build.py",
+      "sha256": "9158ddc2827e15de7934701297260eefe53539661ad250e1e80e4f487516ae4f"
+    }
+  ],
+  "utc": "2026-10-09T21:57:51.580596+00:00"
+}

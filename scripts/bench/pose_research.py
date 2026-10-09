@@ -178,22 +178,13 @@ def export_orb(manifest_path, sequence_id, out):
     fps = int(round(measured_fps))
     if fps < 1:
         raise ValueError("ORB-SLAM3 requires a positive integer nominal Camera.fps")
-    settings = ["%YAML:1.0", 'File.version: "1.0"', 'Camera.type: "Rectified"']
-    for i in (1, 2):
-        settings += [f"Camera{i}.fx: {float(c['fx_px'])}", f"Camera{i}.fy: {float(c['fy_px'])}",
-                     f"Camera{i}.cx: {float(c['cx_left_px'])}", f"Camera{i}.cy: {float(c['cy_px'])}"]
-        settings += [f"Camera{i}.{k}: 0.0" for k in ("k1", "k2", "p1", "p2")]
-    settings += [f"Camera.width: {c['image_width']}", f"Camera.height: {c['image_height']}",
-                 f"Camera.fps: {fps}", "Camera.RGB: 1", "Stereo.ThDepth: 40.0", f"Stereo.b: {float(c['baseline_m'])}",
-                 "Stereo.T_c1_c2: !!opencv-matrix", "  rows: 4", "  cols: 4", "  dt: f",
-                 f"  data: [1,0,0,{c['baseline_m']},0,1,0,0,0,0,1,0,0,0,0,1]",
-                 "ORBextractor.nFeatures: 1200", "ORBextractor.scaleFactor: 1.2",
-                 "ORBextractor.nLevels: 8", "ORBextractor.iniThFAST: 20", "ORBextractor.minThFAST: 7",
-                 "Viewer.KeyFrameSize: 0.05", "Viewer.KeyFrameLineWidth: 1.0", "Viewer.GraphLineWidth: 0.9",
-                 "Viewer.PointSize: 2.0", "Viewer.CameraSize: 0.08", "Viewer.CameraLineWidth: 3.0",
-                 "Viewer.ViewpointX: 0.0", "Viewer.ViewpointY: -0.7", "Viewer.ViewpointZ: -1.8",
-                 "Viewer.ViewpointF: 500.0", "Viewer.imageViewScale: 1.0"]
-    (out / "stereo.yaml").write_text("\n".join(settings) + "\n")
+    # Shared calibration-only workaround for pinned Settings v1 Rectified's
+    # uninitialized camera2 diagnostic pointer; native estimator stays unchanged.
+    from bhl_robust.research.native_orb import write_rectified_stereo_settings
+    write_rectified_stereo_settings(out / "stereo.yaml", fx=float(c["fx_px"]), fy=float(c["fy_px"]),
+                                    cx=float(c["cx_left_px"]), cy=float(c["cy_px"]),
+                                    width=int(c["image_width"]), height=int(c["image_height"]),
+                                    fps=fps, baseline_m=float(c["baseline_m"]))
     receipt = {"schema": "bhl-pose-replay-adapter-v1", "method": "orb_slam3_stereo",
                "status": "READY_INPUTS_WAITING_RUNTIME", "scientific_status": "BLOCKED_RUNTIME",
                "upstream": UPSTREAM["orb_slam3_stereo"], "manifest_sha256": sha256(manifest_path),

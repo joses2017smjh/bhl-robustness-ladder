@@ -102,71 +102,115 @@ def library_closure(executable, environment):
     return output, libraries
 
 
+def resume_compiled(args, adapter):
+    """Verify a predeclared actual failed-link tree before reusing its objects."""
+    receipt = json.loads(args.resume_compiled.read_text())
+    if receipt.get("schema") != "bhl-orb-compiled-work-v1" or receipt.get("upstream_commit") != PIN:
+        raise ValueError("Pinned genuine compiled-work receipt required")
+    if Path(receipt["root"]).resolve() != args.work.resolve() or receipt["host"] != os.uname().nodename:
+        raise ValueError("Compiled work belongs to another host/path")
+    for name, row in receipt["files"].items():
+        relative = Path(name)
+        if relative.is_absolute() or ".." in relative.parts:
+            raise ValueError("Unsafe compiled-work member")
+        path = args.work / relative
+        if not path.is_file() or path.is_symlink() or path.stat().st_size != row["bytes"] or sha(path) != row["sha256"]:
+            raise ValueError("Compiled input changed: " + name)
+    for name, checksum in receipt["adapters_sha256"].items():
+        if sha(adapter / name) != checksum:
+            raise ValueError("Compiled adapter differs from current frozen source")
+    original = Path(receipt["original_partial_runtime"])
+    for name, row in receipt["original_partial_files"].items():
+        if sha(original / name) != row["sha256"] or (original / name).stat().st_size != row["bytes"]:
+            raise ValueError("Original source/dependency evidence changed")
+        shutil.copy2(original / name, args.output / name)
+    shutil.copy2(args.resume_compiled, args.output / "compiled-work-provenance.json")
+    print(json.dumps({"resumed_compiled_files_verified": len(receipt["files"]),
+                      "source_build": receipt["source_build"], "scope": "Dependency search repair only; no native source/object modification"}), flush=True)
+    dependencies = []
+    for row in receipt["ubuntu_packages"]:
+        item = dict(row)
+        item["dpkg_fields"] = subprocess.check_output(
+            ["dpkg-deb", "-f", str(args.work / "apt/cache/archives" / row["file"]),
+             "Package", "Version", "Architecture"], text=True)
+        dependencies.append(item)
+    return (args.work / "ORB_SLAM3", args.work / "sysroot", receipt["patches"],
+            dependencies, args.work / "project")
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument("--work", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--jobs", type=int, default=4)
     parser.add_argument("--upstream", type=Path, help="Optional pristine already-cloned exact pinned source")
+    parser.add_argument("--resume-compiled", type=Path,
+                        help="Predeclared hashed genuine compiled-work receipt; final link/dependency repair only")
     args = parser.parse_args(argv)
-    if args.work.exists() or args.output.exists():
+    if args.output.exists() or (args.work.exists() and not args.resume_compiled):
         raise ValueError("Build work and output paths must be new")
     if not 1 <= args.jobs <= 8:
         raise ValueError("Bounded build requires 1..8 parallel compiler processes")
     start = time.time()
-    args.work.mkdir(parents=True)
+    if not args.resume_compiled:
+        args.work.mkdir(parents=True)
     args.output.mkdir(parents=True)
     adapter = Path(__file__).resolve().parent
-    source = args.work / "ORB_SLAM3"
-    if args.upstream:
-        run(["git", "clone", "--no-hardlinks", str(args.upstream), str(source)])
+    if args.resume_compiled:
+        source, sysroot, patches, dependency_receipts, project = resume_compiled(args, adapter)
+        env = dict(os.environ)
+        env["LD_LIBRARY_PATH"] = str(sysroot / "usr/lib/x86_64-linux-gnu") + ":" + str(sysroot / "usr/lib") + ":" + env.get("LD_LIBRARY_PATH", "")
     else:
-        run(["git", "clone", "--filter=blob:none", "--no-checkout",
-             "https://github.com/UZ-SLAMLab/ORB_SLAM3.git", str(source)])
-    run(["git", "checkout", PIN], cwd=source)
-    actual_pin = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=source, text=True).strip()
-    if actual_pin != PIN:
-        raise RuntimeError("Upstream pin differs")
-    apt = args.work / "apt"
-    (apt / "lists" / "partial").mkdir(parents=True)
-    (apt / "cache" / "archives" / "partial").mkdir(parents=True)
-    options = ["-o", f"Dir::State::Lists={apt}/lists", "-o", f"Dir::Cache={apt}/cache",
-               "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root"]
-    run(["apt-get", *options, "update"])
-    # Exact archive checksums and dpkg versions are recorded for reconstruction.
-    uri_plan = subprocess.check_output(["apt-get", *options, "--print-uris", "--yes", "--no-install-recommends",
-                                        "--download-only", "install", *PACKAGES], text=True)
-    (args.output / "ubuntu-package-uris.txt").write_text(uri_plan)
-    run(["apt-get", *options, "--yes", "--no-install-recommends", "--download-only", "install", *PACKAGES])
-    sysroot = args.work / "sysroot"
-    sysroot.mkdir()
-    dependency_receipts = []
-    for package in sorted((apt / "cache" / "archives").glob("*.deb")):
-        info = subprocess.check_output(["dpkg-deb", "-f", str(package), "Package", "Version", "Architecture"], text=True)
-        dependency_receipts.append({"file": package.name, "bytes": package.stat().st_size,
-                                    "sha256": sha(package), "dpkg_fields": info})
-        run(["dpkg-deb", "-x", package, sysroot])
-    patches = patch_headless(source)
-    # Save the precise source used, including visualization-only/portable patches.
-    with tarfile.open(args.output / "upstream-source.tar.gz", "w:gz") as archive:
-        for path in sorted(source.rglob("*")):
-            relative = path.relative_to(source)
-            # Examples contain >1 GB of unrelated timestamp/IMU recordings.
-            # Retain all actual library source plus build/license metadata.
-            included = (relative.parts[0] in {"src", "include", "Thirdparty", "cmake_modules"}
-                        or str(relative) in {"CMakeLists.txt", "LICENSE", "Dependencies.md", "build.sh"})
-            if not included or ".git" in relative.parts or not path.is_file():
-                continue
-            archive.add(path, arcname=str(relative), recursive=False)
-    project = args.work / "project"
-    project.mkdir()
-    (project / "CMakeLists.txt").write_text(cmake_text(source, adapter, sysroot))
-    env = dict(os.environ)
-    env["LD_LIBRARY_PATH"] = str(sysroot / "usr/lib/x86_64-linux-gnu") + ":" + env.get("LD_LIBRARY_PATH", "")
-    cmake_args = ["cmake", "-S", project, "-B", args.work / "build",
-                  f"-DCMAKE_PREFIX_PATH={sysroot}/usr", f"-DOpenCV_DIR={sysroot}/usr/lib/x86_64-linux-gnu/cmake/opencv4",
-                  f"-DEIGEN3_INCLUDE_DIR={sysroot}/usr/include/eigen3"]
-    run(cmake_args, env=env)
+        source = args.work / "ORB_SLAM3"
+        if args.upstream:
+            run(["git", "clone", "--no-hardlinks", str(args.upstream), str(source)])
+        else:
+            run(["git", "clone", "--filter=blob:none", "--no-checkout",
+                 "https://github.com/UZ-SLAMLab/ORB_SLAM3.git", str(source)])
+        run(["git", "checkout", PIN], cwd=source)
+        actual_pin = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=source, text=True).strip()
+        if actual_pin != PIN:
+            raise RuntimeError("Upstream pin differs")
+        apt = args.work / "apt"
+        (apt / "lists" / "partial").mkdir(parents=True)
+        (apt / "cache" / "archives" / "partial").mkdir(parents=True)
+        options = ["-o", f"Dir::State::Lists={apt}/lists", "-o", f"Dir::Cache={apt}/cache",
+                   "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root"]
+        run(["apt-get", *options, "update"])
+        # Exact archive checksums and dpkg versions are recorded for reconstruction.
+        uri_plan = subprocess.check_output(["apt-get", *options, "--print-uris", "--yes", "--no-install-recommends",
+                                            "--download-only", "install", *PACKAGES], text=True)
+        (args.output / "ubuntu-package-uris.txt").write_text(uri_plan)
+        run(["apt-get", *options, "--yes", "--no-install-recommends", "--download-only", "install", *PACKAGES])
+        sysroot = args.work / "sysroot"
+        sysroot.mkdir()
+        dependency_receipts = []
+        for package in sorted((apt / "cache" / "archives").glob("*.deb")):
+            info = subprocess.check_output(["dpkg-deb", "-f", str(package), "Package", "Version", "Architecture"], text=True)
+            dependency_receipts.append({"file": package.name, "bytes": package.stat().st_size,
+                                        "sha256": sha(package), "dpkg_fields": info})
+            run(["dpkg-deb", "-x", package, sysroot])
+        patches = patch_headless(source)
+        # Save the precise source used, including visualization-only/portable patches.
+        with tarfile.open(args.output / "upstream-source.tar.gz", "w:gz") as archive:
+            for path in sorted(source.rglob("*")):
+                relative = path.relative_to(source)
+                # Examples contain >1 GB of unrelated timestamp/IMU recordings.
+                # Retain all actual library source plus build/license metadata.
+                included = (relative.parts[0] in {"src", "include", "Thirdparty", "cmake_modules"}
+                            or str(relative) in {"CMakeLists.txt", "LICENSE", "Dependencies.md", "build.sh"})
+                if not included or ".git" in relative.parts or not path.is_file():
+                    continue
+                archive.add(path, arcname=str(relative), recursive=False)
+        project = args.work / "project"
+        project.mkdir()
+        (project / "CMakeLists.txt").write_text(cmake_text(source, adapter, sysroot))
+        env = dict(os.environ)
+        env["LD_LIBRARY_PATH"] = str(sysroot / "usr/lib/x86_64-linux-gnu") + ":" + str(sysroot / "usr/lib") + ":" + env.get("LD_LIBRARY_PATH", "")
+        cmake_args = ["cmake", "-S", project, "-B", args.work / "build",
+                      f"-DCMAKE_PREFIX_PATH={sysroot}/usr", f"-DOpenCV_DIR={sysroot}/usr/lib/x86_64-linux-gnu/cmake/opencv4",
+                      f"-DEIGEN3_INCLUDE_DIR={sysroot}/usr/include/eigen3"]
+        run(cmake_args, env=env)
     run(["cmake", "--build", args.work / "build", "--target", "orb_native", "--parallel", args.jobs], env=env)
     binary = args.work / "build" / "orb_native"
     ldd_output, libraries = library_closure(binary, env)

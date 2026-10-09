@@ -1,0 +1,32 @@
+{
+  "archive_sha256": "44defaee940dd272834843314f66517d0f7faa5fd80b6fcf5e300c30069a70f1",
+  "command": [
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-orb-native-relink-v7-20261009-21739893-979csw5q/source/scripts/bench/native_orb_relink_campaign.py",
+    "--compiled-receipt",
+    "/tmp/bhl-h34-orb-native-relink-v7-20261009-21739893-979csw5q/inputs/compiled-work-receipt.json"
+  ],
+  "host": "dgx2-5.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--compiled-receipt",
+      "{campaign}/inputs/compiled-work-receipt.json"
+    ],
+    "entrypoint": "scripts/bench/native_orb_relink_campaign.py",
+    "kind": "evaluate",
+    "max_output_mb": 512,
+    "name": "orb-native-relink-v7-20261009",
+    "resources": {
+      "cpus": 2,
+      "gpus": 0,
+      "memory_gb": 16,
+      "partition": "share,eecs",
+      "requeue": false,
+      "time_limit": "00:20:00"
+    }
+  },
+  "job_id": "21739893",
+  "scratch": "/tmp/bhl-h34-orb-native-relink-v7-20261009-21739893-979csw5q",
+  "source_files_verified": 852,
+  "started_utc": "2026-10-09T22:23:51.732823+00:00"
+}

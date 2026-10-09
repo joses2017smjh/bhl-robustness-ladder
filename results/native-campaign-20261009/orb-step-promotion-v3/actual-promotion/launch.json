@@ -1,0 +1,32 @@
+{
+  "archive_sha256": "5296d6d2ceef98cb8e5602c6fd20880d71fc091e0e7e9d7a30b557d23a5325f1",
+  "command": [
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-orb-step-promotion-20261009-v3-21739893-gbu_jh20/source/scripts/bench/native_orb_after_build.py",
+    "--plan",
+    "/tmp/bhl-h34-orb-step-promotion-20261009-v3-21739893-gbu_jh20/inputs/controller-plan.json"
+  ],
+  "host": "dgx2-5.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--plan",
+      "{campaign}/inputs/controller-plan.json"
+    ],
+    "entrypoint": "scripts/bench/native_orb_after_build.py",
+    "kind": "evaluate",
+    "max_output_mb": 8,
+    "name": "orb-step-promotion-20261009-v3",
+    "resources": {
+      "cpus": 1,
+      "gpus": 0,
+      "memory_gb": 4,
+      "partition": "preempt",
+      "requeue": false,
+      "time_limit": "00:20:00"
+    }
+  },
+  "job_id": "21739893",
+  "scratch": "/tmp/bhl-h34-orb-step-promotion-20261009-v3-21739893-gbu_jh20",
+  "source_files_verified": 851,
+  "started_utc": "2026-10-09T22:25:38.438793+00:00"
+}

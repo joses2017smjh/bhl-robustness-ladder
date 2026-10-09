@@ -1,0 +1,37 @@
+{
+  "archive_sha256": "21178ac280bc6408976a4ab2666131d7796403f7945286c1284c184d41ab5b26",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=native-orb-replay-20261009-v1",
+    "--partition=preempt",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--time=01:00:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v1/native-orb-replay-20261009-v1-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v1/native-orb-replay-20261009-v1-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--dependency=afterok:21743958",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v1/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v1",
+    "native-orb-replay-20261009-v1",
+    "21178ac280bc6408976a4ab2666131d7796403f7945286c1284c184d41ab5b26"
+  ],
+  "job_id": "21743959",
+  "resources": {
+    "cpus": 2,
+    "gpus": 0,
+    "memory_gb": 16,
+    "partition": "preempt",
+    "requeue": false,
+    "time_limit": "01:00:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21743959\n",
+  "submitted_utc": "2026-10-09T22:27:46.308703+00:00"
+}

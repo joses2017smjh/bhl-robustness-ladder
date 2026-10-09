@@ -1,0 +1,93 @@
+{
+  "additional_source": [
+    "scripts/bench/native_slam_campaign.py",
+    "src/bhl_robust/research/native_orb.py",
+    "src/bhl_robust/research/native_lio.py",
+    "scripts/native/lio_replay.py"
+  ],
+  "campaign_id": "native-orb-replay-20261009-v2",
+  "capture_archive": "capture.tar.gz",
+  "input_files": {
+    "capture.tar.gz": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/capture-v2/native-capture-capture-20261009-v2-21740516/outputs.tar.gz",
+      "sha256": "ec15004ac7be4b58d33f78d6a4b5924d1d4a72b00c9332473d5617818ba08ca1"
+    },
+    "runtime/orb-runtime.tar.gz": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-runtime-v7/runtime.tar.gz",
+      "sha256": "0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke"
+      ],
+      "entrypoint": "scripts/bench/native_slam_campaign.py",
+      "kind": "smoke",
+      "max_output_mb": 128,
+      "name": "native-orb-smoke-20261009-v2",
+      "resources": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 16,
+        "partition": "preempt",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "replay"
+      ],
+      "entrypoint": "scripts/bench/native_slam_campaign.py",
+      "kind": "run",
+      "max_output_mb": 128,
+      "name": "native-orb-replay-20261009-v2",
+      "resources": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 16,
+        "partition": "preempt",
+        "requeue": false,
+        "time_limit": "01:00:00"
+      }
+    }
+  ],
+  "methods": [
+    "orb"
+  ],
+  "orb_runtime_archive": "runtime/orb-runtime.tar.gz",
+  "orb_runtime_archive_sha256": "0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704",
+  "replay_gate": {
+    "initialization_exclusion_s": 5.0,
+    "maximum_ate_rmse_m": 0.1,
+    "maximum_native_compute_p95_s": 0.1,
+    "maximum_rotation_p95_deg": 5.0,
+    "minimum_tracking_fraction": 0.9
+  },
+  "revision": {
+    "native_binary_changed": false,
+    "parent_protocol_sha256": "6c1e9f396e8fa9ed3c453c52e326eaa16896c861b14eaaf697806b1dd0fecf8f",
+    "parent_run_job_id": "21743959",
+    "parent_smoke_job_id": "21743958",
+    "reason": "Pinned Settings v1 Rectified settings printer dereferences uninitialized originalCalib2_; use supported legacy PinHole parser with identical camera geometry/metric baseline/features",
+    "scientific_settings_changed": false,
+    "startup_settings_sha256": "77835baafb725b84a710ffffc5d37269eeafbf9cdac1c044f0c503c3f16a99fd",
+    "startup_verification_step": "21739893.6"
+  },
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Actual native estimator simulation replay; no closed-loop navigation claim",
+  "template_status": "ACTUAL_RUNTIME_VERIFIED; calibration-schema-only startup repair, scientific settings unchanged"
+}

@@ -1,0 +1,55 @@
+{
+  "archive_sha256": "499ede4237b94cba3008da2cb028243c35ac8019cb5fd284ba69c01c21cbf93a",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt:/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt",
+    "--bind",
+    "/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt/source:/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt/protocol.json:/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt/work",
+    "--bind",
+    "/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt/inputs:/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt/inputs:ro",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt/source/scripts/bench/native_slam_campaign.py",
+    "--protocol",
+    "/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt/protocol.json",
+    "--phase",
+    "smoke"
+  ],
+  "host": "dgx2-5.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "smoke"
+    ],
+    "entrypoint": "scripts/bench/native_slam_campaign.py",
+    "kind": "smoke",
+    "max_output_mb": 128,
+    "name": "native-orb-smoke-20261009-v2",
+    "resources": {
+      "cpus": 2,
+      "gpus": 0,
+      "memory_gb": 16,
+      "partition": "preempt",
+      "requeue": false,
+      "time_limit": "00:20:00"
+    }
+  },
+  "job_id": "21739893",
+  "scratch": "/tmp/bhl-h34-native-orb-smoke-20261009-v2-21739893-d1iy_1tt",
+  "source_files_verified": 854,
+  "started_utc": "2026-10-09T22:41:06.405342+00:00"
+}

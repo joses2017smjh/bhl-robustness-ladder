@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/tmp/bhl-h34-native-orb-smoke-20261009-v1-21743958-dh7aonfk/source/scripts/bench/native_slam_campaign.py", line 264, in main
+    result = run(json.loads(args.protocol.read_text()), phase=args.phase, output=output, work=work, inputs=inputs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-native-orb-smoke-20261009-v1-21743958-dh7aonfk/source/scripts/bench/native_slam_campaign.py", line 229, in run
+    rows, receipt = orb_replay(manifest_path, seq["id"], work / "orb/runtime", target,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-native-orb-smoke-20261009-v1-21743958-dh7aonfk/source/scripts/bench/native_slam_campaign.py", line 165, in orb_replay
+    with NativeOrbClient(runtime / "bin/orb_native", runtime / "ORBvoc.txt", settings,
+  File "/tmp/bhl-h34-native-orb-smoke-20261009-v1-21743958-dh7aonfk/source/src/bhl_robust/research/native_orb.py", line 132, in __enter__
+    ready = self._read_json(self.startup_timeout_s)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-native-orb-smoke-20261009-v1-21743958-dh7aonfk/source/src/bhl_robust/research/native_orb.py", line 161, in _read_json
+    raise RuntimeError(f"Native ORB exited {self.process.returncode}; consult native-orb.log")
+RuntimeError: Native ORB exited -11; consult native-orb.log

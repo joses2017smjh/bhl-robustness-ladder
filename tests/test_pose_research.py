@@ -160,7 +160,14 @@ def test_orb_export_preserves_capture_ns_and_has_no_truth(dataset, tmp_path):
     assert (tmp_path / "orb/mav0/cam0/data/100000000.png").read_bytes() == (root / "inference/left1.png").read_bytes()
     cv2 = pytest.importorskip("cv2")
     settings = cv2.FileStorage(str(tmp_path / "orb/stereo.yaml"), cv2.FILE_STORAGE_READ)
-    assert settings.getNode("Camera.type").string() == "Rectified"
+    assert settings.getNode("Camera.type").string() == "PinHole"
+    assert settings.getNode("File.version").empty()
+    assert settings.getNode("Camera.fx").real() == manifest["calibration"]["fx_px"]
+    assert settings.getNode("Camera.fy").real() == manifest["calibration"]["fy_px"]
+    assert settings.getNode("Camera.cx").real() == manifest["calibration"]["cx_left_px"]
+    assert settings.getNode("Camera.cy").real() == manifest["calibration"]["cy_px"]
+    assert settings.getNode("Camera.bf").real()/settings.getNode("Camera.fx").real() == .1
+    assert settings.getNode("ThDepth").real() == 40.
     assert settings.getNode("Camera.fps").isInt()
     assert settings.getNode("Stereo.b").isReal()
     assert settings.getNode("Stereo.b").real() == .1

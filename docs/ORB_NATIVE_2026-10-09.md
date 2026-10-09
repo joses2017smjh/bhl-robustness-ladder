@@ -6,6 +6,13 @@ loop closure, feature extraction, DBoW2 and g2o implementation pinned at
 The earlier October 8 work prepared replay inputs; it did not run this estimator.
 Build completion and scientific replay outcomes are separate receipts.
 
+The research basis is [Campos et al., ORB-SLAM3](https://arxiv.org/abs/2007.11898),
+which describes stereo tracking and recovery across multiple maps. Our campaign
+therefore retains native tracking states/map identifiers and scores continuous
+maps separately: this is our evaluation design for exposing loss/recovery,
+rather than silently aligning across a reset. All reported accuracy and latency
+must come from our retained replay outputs and fixed simulation protocol.
+
 ## Private, headless build
 
 `scripts/native/orb_build.py` runs in the existing Ubuntu 22.04 SIF on an
@@ -139,13 +146,13 @@ physical stereo SLAM performance or LiDAR–IMU performance.
 failure handling. Its explicitly labeled fixture processes validate the IPC
 contract; they are not estimators and are never counted as campaign outputs.
 
-The latest build attempt is **v5, job 21741510**: two CPUs, 16 GiB RAM,
+The v5 backup attempt, **job 21741510**, requested two CPUs, 16 GiB RAM,
 90 minutes, the accessible CPU `preempt` partition, and `--no-requeue`.
 V4 was cancelled only while pending. The source-equivalence receipt preserves
 identical ORB build, adapter, tracking source, and invocation; this revision
 changes scheduling resources. A preemption is an incomplete attempt.
 
-An authorized alternate execution uses the identical frozen v5 build as
+An authorized alternate execution used the identical frozen v5 build as
 **Slurm step 21739893.1** on the existing dgx2-5 compute allocation, with
 two CPUs and a 16 GiB step memory reservation. Its separately retained step
 environment and actual output directory identify this execution; it is not
@@ -153,6 +160,18 @@ attributed to queued batch job 21741510. This C++ build performs no GPU compute,
 physics, or rendering. Step 21739893.0 failed before build bootstrap because
 the sbatch launcher requires an explicit bash interpreter; that failed launch
 and the corrected step's provenance remain available for audit.
+
+V5 step 21739893.1 then completed **INCOMPLETE**, with a genuine compiler
+error for `openssl/opensslconf.h`: Ubuntu places this development header in the
+private multiarch include directory. V6 adds only
+`sysroot/usr/include/x86_64-linux-gnu` to generated CMake; its exact equivalence
+proof preserves identical native adapters, algorithms and invocation. The clean
+v6 build ran as **step 21739893.2**. It compiled the native source but failed
+final executable linkage because a private non-multiarch GDAL library search
+path was absent. Known-faulty backup **21743261** was cancelled while running
+with its original partial compiler log preserved; continuation **21743355** was
+cancelled while pending. Known-faulty v5 backup/continuation were cancelled
+only while pending; original compiler diagnostics and completion are preserved.
 
 `scripts/bench/native_orb_after_build.py` provides the durable continuation.
 Its frozen plan pins this build and the separately frozen offline-replay and
@@ -164,5 +183,57 @@ to add that exact runtime to each template and submit fresh smoke jobs with thei
 dependent runs. It reads no estimator outcomes and changes no scientific gates.
 Six provenance tests cover missing/tampered files, modified source/wrong pins,
 negative build rejection, retained executable permissions, and verification of
-both templates before any submission. Until real build and sensor replay finish,
-neither this automation nor unit fixtures establish native SLAM performance.
+both templates before any submission. Automation and unit fixtures do not establish native SLAM performance.
+
+
+## Actual build and startup verification
+
+The actual v7 relink, **Slurm step 21739893.3**, completed **PASS** on
+2026-10-09. It adds the missing private `sysroot/usr/lib` runtime search path
+and reuses the fully compiled native objects. An independent post-link audit
+verified all **17,248** inventoried source/object/header/library/package files
+were byte-identical. The genuine executable passes version and `ldd` checks
+inside the pinned SIF. The compact source/license/vocabulary/runtime pack is
+SHA256 `0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704`;
+large native outputs remain in the durable store, with compact original receipts
+in `results/native-campaign-20261009/orb-relink-v7/`.
+
+Actual promotion **step 21739893.4** verified both complete source templates
+and this runtime before submitting smoke jobs **21743958** (offline) and
+**21743971** (stereo navigation). Both failed with signal 11 before READY,
+with no scored images/navigation episodes. Their impossible afterok dependents
+**21743959** and **21743972** were cancelled with state receipts.
+
+The pinned upstream `Settings` v1 `Rectified` parser does not initialize
+`originalCalib2_`, while its settings printer unconditionally dereferences that
+pointer for stereo. Both actual logs stop at that exact diagnostic point.
+The shared `write_rectified_stereo_settings` helper therefore uses upstream's
+supported legacy `PinHole` parser, omitting `File.version` and providing the
+same camera intrinsics, zero distortion, `Camera.bf = fx * baseline`, and
+`ThDepth = 40`. The original baseline, images, 1200-feature recipe, FAST 20/7,
+native binary and scientific gates remain unchanged. `Stereo.*` values are
+retained as audit annotations; the legacy tracker consumes `Camera.bf`.
+
+**Step 21739893.6** verified this calibration-schema repair with the actual
+native constructor: it loaded the vocabulary and atlas, printed the declared
+camera/feature parameters, emitted genuine READY, and shut down on EOF with
+exit 0. This startup check uses no images or scientific scores. Fresh v2
+campaigns use new source freezes and smoke dependencies; original failed
+attempts and their raw logs remain auditable. The launcher now asks Slurm to
+terminate jobs whose afterok dependency cannot succeed.
+
+
+## Completed native replay measurements
+
+The actual full campaign, **step 21739893.8**, completed all **450/450**
+original stereo pairs. The independent collection audit is PASS; scientific
+qualification is **NEGATIVE overall (1/3 scene groups passed)**. Textured boxes
+(development) and thin posts (validation) each returned 150 NOT_INITIALIZED
+states with null poses. The heldout ramp/step scene returned 28 uninitialized
+frames followed by 122 OK frames, with no map reset; tracking after the declared
+first 5 seconds was 97.6%, metric ATE RMSE 4.39 mm, rotation ATE p95 0.640 degrees,
+and native compute p95 48.60 ms. ATE is unavailable in the other scenes because
+no estimated trajectory exists. These are bounded simulated replay results;
+there is no hardware or closed-loop navigation claim and no post-output tuning.
+The full [verified collection](../results/native-campaign-20261009/orb-replay-v2/collection/report.md)
+retains original states, null poses, timestamps and native process logs.

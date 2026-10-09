@@ -56,8 +56,9 @@ software/data deliverable. The subsequent [October 9 native campaign](NATIVE_CAM
 now measures native FAST-LIO2 replay (3/3 scene gates), development navigation
 (9/9 clean goals, zero falls/contacts), and the negative 18-episode blind terrain
 screen (zero qualified actors, zero confirmation episodes). Actual ORB-SLAM3
-has built successfully; its smoke exposed a startup fault before inference,
-so scored stereo results remain pending. Physical recordings,
+replay is **DONE NEGATIVE overall (1/3 scene gates)** after its startup
+calibration integration was repaired: two scenes never initialize; the held-out
+ramp/step scene passes. Stereo navigation is now in progress. Physical recordings,
 independent navigation confirmation and robust terrain traversal remain **OPEN**.
 [Follow-up task dependencies](SENSOR_CAMPAIGN_2026-10-08.md#follow-up-task-queue)
 identify the next work rather than submitting jobs that cannot yet execute.

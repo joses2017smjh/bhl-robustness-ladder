@@ -1,0 +1,40 @@
+{
+  "additional_source": [
+    "scripts/bench/native_orb_after_build.py",
+    "scripts/bench/promote_native_runtime_campaign.py"
+  ],
+  "campaign_id": "orb-step-promotion-20261009-v2",
+  "input_files": {
+    "controller-plan.json": {
+      "path": "/tmp/bhl-native-campaign-20261009/results/native-campaign-20261009/orb-step-promotion-v2/plan.json",
+      "sha256": "f07f1b56f3e9682953500b7ed8cec79281b899a6309a15098185aedd09d1b7ff"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--plan",
+        "{campaign}/inputs/controller-plan.json"
+      ],
+      "entrypoint": "scripts/bench/native_orb_after_build.py",
+      "kind": "evaluate",
+      "max_output_mb": 8,
+      "name": "orb-step-promotion-20261009-v2",
+      "resources": {
+        "cpus": 1,
+        "gpus": 0,
+        "memory_gb": 4,
+        "partition": "preempt",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Manual promotion of genuine allocated v6 step21739893.2 after actual successful completion; same frozen controller and scientific templates as backup chain; not a scientific result"
+}

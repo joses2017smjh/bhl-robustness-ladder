@@ -70,6 +70,9 @@ def plot(raw_archive, capture_archive, collection, output):
                 top.plot(aligned[:, 0, 3], aligned[:, 1, 3], "--", label="native, rigid alignment")
                 lower.plot(times, 100 * errors)
                 matched += len(indices)
+            if not matched:
+                lower.text(.5, .5, "No tracked poses; error unavailable",
+                           transform=lower.transAxes, ha="center", va="center", fontsize=8)
             top.set(title=f"{run['sequence']} ({run['split']})", xlabel="world x (m)", ylabel="world y (m)")
             top.set_aspect("equal", adjustable="datalim")
             top.legend(fontsize=7)

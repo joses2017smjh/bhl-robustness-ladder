@@ -1,0 +1,97 @@
+[
+  {
+    "label": "lio-navigation",
+    "kind": "lio_navigation",
+    "job_id": "21741509",
+    "source_archive_sha256": "df3d91ae4ad8c4c8688d7ed3ff8639baff7a5860043f39414871c559301cfa26",
+    "scientific_status": "PASS",
+    "audit_status": "PASS",
+    "measured_episodes": 9,
+    "scope": "simulation only; smoke excluded from qualification",
+    "problems": [],
+    "source_verification": {
+      "original_archive_rehashed": false,
+      "original_compressed_stream": "retired; exact original digest retained as lineage",
+      "logical_frozen_payloads_verified": 848,
+      "original_archive_sha256": "df3d91ae4ad8c4c8688d7ed3ff8639baff7a5860043f39414871c559301cfa26",
+      "original_manifest_sha256": "f4b45becf4590658d4c1e8ba34a6bdfcad14c84966a22b514c8423da76c47a8d",
+      "retained_inventory_sha256": "b0ffea51645a0ce1961e3721933f7ca367de8fed943a99c474f580eae03b0e1e",
+      "retained_source_archive_sha256": "a9d2ee40f78a413c66abd6bb5a411193003537b5f20b7bb9d0c69d137d9369a6"
+    },
+    "raw": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2/nav-lio-development-20261009-v2-21741509/outputs.tar.gz",
+      "sha256": "98c8e35a146fa98046a9b1973ae388a4939431db2a2ae7fb45b5815a3c279633",
+      "bytes": 91609334
+    }
+  },
+  {
+    "label": "terrain-traversal",
+    "kind": "terrain",
+    "job_id": "21742786",
+    "source_archive_sha256": "1f04b186e62a31bfa27547375124b85f7bc8a46b688fc92577ea108d7d6293ed",
+    "scientific_status": "NEGATIVE",
+    "audit_status": "PASS",
+    "measured_episodes": 18,
+    "scope": "simulation only; smoke excluded from qualification",
+    "problems": [],
+    "source_verification": {
+      "original_archive_rehashed": true,
+      "archive_sha256": "1f04b186e62a31bfa27547375124b85f7bc8a46b688fc92577ea108d7d6293ed"
+    },
+    "raw": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/terrain-v3/terrain-run-20261009-21742786/outputs.tar.gz",
+      "sha256": "56f89af26505e2015185cfd9d635e618ad4616b982867929943b9f7465f87a99",
+      "bytes": 19583862
+    }
+  },
+  {
+    "label": "lio-replay",
+    "kind": "native_replay",
+    "job_id": "21743631",
+    "source_archive_sha256": "5fd9f5b43004144561b6922b9357ad4abe13174fdafc6f15a588c738db66acb5",
+    "scientific_status": "PASS",
+    "audit_status": "PASS",
+    "measured_episodes": 0,
+    "scope": "simulation only; smoke excluded from qualification",
+    "problems": [],
+    "source_verification": {
+      "original_archive_rehashed": false,
+      "original_compressed_stream": "retired; exact original digest retained as lineage",
+      "logical_frozen_payloads_verified": 844,
+      "original_archive_sha256": "5fd9f5b43004144561b6922b9357ad4abe13174fdafc6f15a588c738db66acb5",
+      "original_manifest_sha256": "295a02d14cb0c859cdcf41026af3116b62f84a939fd55a733b48aaf650a46a16",
+      "retained_inventory_sha256": "788e58a178578f93e6c415d544b50e17a1b5c9574d1f57902387ab230acd5c3e",
+      "retained_source_archive_sha256": "a9d2ee40f78a413c66abd6bb5a411193003537b5f20b7bb9d0c69d137d9369a6"
+    },
+    "raw": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v4/native-lio-replay-20261009-v4-21743631/outputs.tar.gz",
+      "sha256": "ba1c6d497f54989a798082f9eb9b3f9e2c4d31e415c98f53f8c7c3ddc1c888b2",
+      "bytes": 218600
+    }
+  },
+  {
+    "label": "orb-replay",
+    "kind": "native_replay",
+    "job_id": "21739893",
+    "source_archive_sha256": "499ede4237b94cba3008da2cb028243c35ac8019cb5fd284ba69c01c21cbf93a",
+    "scientific_status": "NEGATIVE",
+    "audit_status": "PASS",
+    "measured_episodes": 0,
+    "scope": "simulation only; smoke excluded from qualification",
+    "problems": [],
+    "source_verification": {
+      "original_archive_rehashed": false,
+      "original_compressed_stream": "retired; exact original digest retained as lineage",
+      "logical_frozen_payloads_verified": 856,
+      "original_archive_sha256": "499ede4237b94cba3008da2cb028243c35ac8019cb5fd284ba69c01c21cbf93a",
+      "original_manifest_sha256": "350473de087370f18bf54494b843c4112d35c2d40175b3e673da8383832db5c5",
+      "retained_inventory_sha256": "5264c7645643a6ae9a5eaa4ba9c1de49341968a9b2f5f53e18c3d5399d250a1c",
+      "retained_source_archive_sha256": "1894ca394ee2f5ce406a4c6f51d1613b6aaa9007c71f813d703338c1b1ec15ad"
+    },
+    "raw": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v2/native-orb-replay-20261009-v2-21739893/outputs.tar.gz",
+      "sha256": "f7e5659742e737445c949b255a5abb1a45bbe4b4fac5538fbe8d7c25e15b01e4",
+      "bytes": 170720
+    }
+  }
+]

@@ -5,12 +5,14 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 
 import numpy as np
 
 from bhl_robust.research.native_orb import (
     NativeOrbClient, UPSTREAM_COMMIT, tracking_summary, validate_response,
+    write_rectified_stereo_settings,
 )
 
 
@@ -29,6 +31,26 @@ def frame(timestamp=1.0, state=2, map_id=7):
 
 
 class NativeProtocolTests(unittest.TestCase):
+    def test_legacy_parser_preserves_metric_stereo_and_feature_recipe(self):
+        import cv2
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)/'stereo.yaml'
+            write_rectified_stereo_settings(path, fx=415.69219381653056, fy=415.69219381653056,
+                                            cx=319.5, cy=239.5, width=640, height=480, fps=5, baseline_m=.12)
+            reader = cv2.FileStorage(str(path), cv2.FILE_STORAGE_READ)
+            try:
+                self.assertTrue(reader.getNode('File.version').empty())
+                self.assertEqual(reader.getNode('Camera.type').string(), 'PinHole')
+                self.assertAlmostEqual(reader.getNode('Camera.bf').real()/reader.getNode('Camera.fx').real(), .12)
+                self.assertEqual(reader.getNode('Camera.cx').real(), 319.5)
+                self.assertEqual(reader.getNode('Camera.cy').real(), 239.5)
+                self.assertEqual(reader.getNode('ThDepth').real(), 40.)
+                self.assertEqual(reader.getNode('ORBextractor.nFeatures').real(), 1200)
+                self.assertEqual(reader.getNode('ORBextractor.iniThFAST').real(), 20)
+                self.assertEqual(reader.getNode('ORBextractor.minThFAST').real(), 7)
+            finally:
+                reader.release()
+
     def test_accepts_metric_pose_and_keeps_lost_pose_null(self):
         self.assertTrue(validate_response(frame(), 1.)["tracked"])
         self.assertIsNone(validate_response(frame(state=3), 1.)["T_W_C"])
@@ -151,6 +173,36 @@ with open(sys.argv[3], 'w') as out:
 
 
 class NativeBuildBoundaryTests(unittest.TestCase):
+    def test_resume_refuses_changed_actual_object_or_other_host_before_link(self):
+        module = build_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); output=root/'output'; output.mkdir()
+            obj=root/'fixture.o'; obj.write_bytes(b'UNIT PROVENANCE FIXTURE; NOT NATIVE CODE')
+            receipt={'schema':'bhl-orb-compiled-work-v1','upstream_commit':module.PIN,
+                     'root':str(root),'host':os.uname().nodename,
+                     'files':{'fixture.o':{'sha256':module.sha(obj),'bytes':obj.stat().st_size}}}
+            path=root/'receipt.json'; path.write_text(json.dumps(receipt))
+            args=SimpleNamespace(work=root,output=output,resume_compiled=path)
+            obj.write_bytes(b'tampered object')
+            with self.assertRaisesRegex(ValueError,'Compiled input changed'):
+                module.resume_compiled(args,root)
+            receipt['host']='another-node';path.write_text(json.dumps(receipt))
+            with self.assertRaisesRegex(ValueError,'another host/path'):
+                module.resume_compiled(args,root)
+
+    def test_resume_refuses_adapter_source_different_from_compiled_objects(self):
+        module=build_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);output=root/'output';output.mkdir()
+            adapter=root/'orb_runner.cc';adapter.write_text('UNIT SOURCE FIXTURE')
+            receipt={'schema':'bhl-orb-compiled-work-v1','upstream_commit':module.PIN,
+                     'root':str(root),'host':os.uname().nodename,'files':{},
+                     'adapters_sha256':{'orb_runner.cc':'0'*64}}
+            path=root/'receipt.json';path.write_text(json.dumps(receipt))
+            args=SimpleNamespace(work=root,output=output,resume_compiled=path)
+            with self.assertRaisesRegex(ValueError,'Compiled adapter differs'):
+                module.resume_compiled(args,root)
+
     def test_headless_patch_preserves_viewer_thumbnail_byte_type(self):
         module = build_module()
         with tempfile.TemporaryDirectory() as directory:

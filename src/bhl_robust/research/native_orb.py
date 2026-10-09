@@ -31,6 +31,39 @@ def sha256(path):
     return h.hexdigest()
 
 
+def write_rectified_stereo_settings(path, *, fx, fy, cx, cy, width, height,
+                                    fps, baseline_m):
+    """Use pinned upstream's legacy parser for already rectified pinhole images.
+
+    The 4452a3c Settings v1 Rectified printer dereferences an uninitialized
+    originalCalib2_. The supported legacy parser avoids that diagnostic fault;
+    Camera.bf carries the same metric calibration as Stereo.b times fx.
+    Native tracking code, image geometry and feature parameters are unchanged.
+    """
+    values = (fx, fy, cx, cy, baseline_m)
+    if any(isinstance(x, bool) or not math.isfinite(x) for x in values):
+        raise ValueError("Stereo calibration values must be finite")
+    if min(fx, fy, baseline_m) <= 0 or any(type(x) is not int or x <= 0 for x in (width, height, fps)):
+        raise ValueError("Stereo focal lengths, baseline and integer image timing must be positive")
+    rows = ["%YAML:1.0", 'Camera.type: "PinHole"',
+            f"Camera.fx: {float(fx)}", f"Camera.fy: {float(fy)}",
+            f"Camera.cx: {float(cx)}", f"Camera.cy: {float(cy)}"]
+    rows += [f"Camera.{key}: 0.0" for key in ("k1", "k2", "p1", "p2")]
+    rows += [f"Camera.width: {width}", f"Camera.height: {height}", f"Camera.fps: {fps}",
+             "Camera.RGB: 1", f"Camera.bf: {float(fx * baseline_m)}", "ThDepth: 40.0",
+             # Audit-only annotations; legacy tracking consumes Camera.bf.
+             f"Stereo.b: {float(baseline_m)}", "Stereo.ThDepth: 40.0",
+             "Stereo.T_c1_c2: !!opencv-matrix", "  rows: 4", "  cols: 4", "  dt: f",
+             f"  data: [1,0,0,{float(baseline_m)},0,1,0,0,0,0,1,0,0,0,0,1]",
+             "ORBextractor.nFeatures: 1200", "ORBextractor.scaleFactor: 1.2",
+             "ORBextractor.nLevels: 8", "ORBextractor.iniThFAST: 20", "ORBextractor.minThFAST: 7",
+             "Viewer.KeyFrameSize: 0.05", "Viewer.KeyFrameLineWidth: 1.0", "Viewer.GraphLineWidth: 0.9",
+             "Viewer.PointSize: 2.0", "Viewer.CameraSize: 0.08", "Viewer.CameraLineWidth: 3.0",
+             "Viewer.ViewpointX: 0.0", "Viewer.ViewpointY: -0.7", "Viewer.ViewpointZ: -1.8",
+             "Viewer.ViewpointF: 500.0", "Viewer.imageViewScale: 1.0"]
+    Path(path).write_text("\n".join(rows) + "\n")
+
+
 def validate_response(value, timestamp_s):
     if not isinstance(value, dict) or value.get("schema") != "bhl-orb-native-frame-v1":
         raise ValueError("Invalid native ORB frame schema")

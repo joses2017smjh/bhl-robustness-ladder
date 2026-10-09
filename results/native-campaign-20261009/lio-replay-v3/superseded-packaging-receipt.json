@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-09T22:11:05.682313+00:00",
+  "operation": "Remove failed never-executed duplicate frozen packaging; preserve the actual mismatched source bytes separately",
+  "removed_archive_sha256": "1704e2781ab99ab1eca64523f4d5bc97ceeb5de25eed5a8fc8b49e4660a59a18",
+  "removed_archive_bytes": 394226032,
+  "replacement_archive": "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v4/frozen-campaign.tar.gz",
+  "replacement_archive_sha256": "5fd9f5b43004144561b6922b9357ad4abe13174fdafc6f15a588c738db66acb5",
+  "all_original_manifest_entries_identical": true,
+  "preserved_actual_mismatched_payload": {
+    "path": "retained-actual-mismatched-payload/source/scripts/bench/native_build_campaign.py",
+    "bytes": 3340,
+    "sha256": "443cb498171db6e88205964253e4f1d750afc5e2758c141e3773f29a03490b27"
+  },
+  "scientific_outputs_removed": 0,
+  "scope": "Strict source verification refused before inference; all unaffected source/input bytes remain in v4; original tar compression metadata not retained."
+}
