@@ -6,6 +6,8 @@ The replay contains **72 stereo pairs, 144 RGB images, 73,695 timed 3D LiDAR ret
 
 The independent review verified all **364 recorded replay file hashes**, all **144 stereo method/frame records** and their split aggregates, all **2,160 held-out fusion records**, and **72 unique held-out terrain maps**. Stereo and terrain reconstruction matched exactly; the largest fusion metric difference was 8.3e-17. Machine-readable evidence, hashes, counts, and timing samples are in [pilot-review.json](../results/sensor-campaign-20261008/v2/pilot-review.json). See the [campaign record](SENSOR_CAMPAIGN_2026-10-08.md) for frozen inputs and execution history, and the [demo](../results/sensor-campaign-20261008/demo/) for visual examples.
 
+The implementation publication also passed [GitHub CPU CI](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37880743436): **2,286 tests plus eight subtests**, 124 existing optional skips, zero failures/errors; nine trained-asset integration checks, five exact nominal repeats and 40/40 detected injected faults. [Retained validation receipt](../results/sensor-campaign-20261008/v2/github-ci/validation.json). This supplements the actual GPU pilot and does not certify unrun native SLAM or hardware experiments.
+
 ## Stereo depth: useful accuracy, coverage, and latency tradeoff
 
 These measurements use the **single held-out ramp/step scene**. The model is the pinned official pretrained **C-Fast-FoundationStereo ONNX** member of the Fast-FoundationStereo family.

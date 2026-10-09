@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "tested_commit": "cb9f74faa9ee6f26a918d16b2ea63c987f4cc953",
+  "run_id": 37880743436,
+  "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37880743436",
+  "conclusion": "success",
+  "pytest_suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "124",
+      "tests": "2418",
+      "time": "446.787",
+      "timestamp": "2026-10-09T03:47:05.773958+00:00",
+      "hostname": "runnervmmprz5"
+    }
+  ],
+  "retained_files": {
+    "pytest.xml": {
+      "bytes": 347281,
+      "sha256": "dd383a8b78a203957a5919159ecb4ebb04268f1d5756d1dbcb31946f53f0c888"
+    },
+    "integration.json": {
+      "bytes": 1785,
+      "sha256": "dcef6b934662870bcb7cdeb8191033504cd291ae1d0b65b7e6ac29f9a23ad581"
+    },
+    "replay/report.json": {
+      "bytes": 26788,
+      "sha256": "61f77a79edabdf97f5ec945a7c9bb2b0e460febbffbb979f2d98874332bb92a4"
+    },
+    "replay/receipt.json": {
+      "bytes": 1988,
+      "sha256": "7c3a80ea4b5b97b98e9745ccf762681b84658c66281d9e1e3ecd1ed9f2aabc7d"
+    },
+    "replay/guard-decisions.json": {
+      "bytes": 22146,
+      "sha256": "a01db7c804a3f192301418dc34d6f59bc5f8a822bffe3504b1756407faf0cf63"
+    },
+    "replay/paired-guard-timing.json": {
+      "bytes": 7950,
+      "sha256": "8f244aa1b2014d9d73d619103e8d0473b28444cd7e144ed9eddb0e81c5c8977d"
+    }
+  },
+  "scope": "Full CPU suite and existing trained-policy replay on this sensor implementation publication commit; GPU perception evidence comes from separate Slurm runs, not this CPU workflow.",
+  "pytest_summary": {
+    "passed": 2286,
+    "subtests_passed": 8,
+    "skipped_optional": 124,
+    "failures": 0,
+    "errors": 0,
+    "elapsed_seconds": 446.82
+  },
+  "integration_summary": {
+    "checks_passed": 9,
+    "checks_planned": 9,
+    "nominal_repeats_passed": 5,
+    "nominal_cases": 5,
+    "faults_detected": 40,
+    "fault_cases": 40
+  }
+}

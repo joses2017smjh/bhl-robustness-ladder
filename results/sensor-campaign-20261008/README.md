@@ -57,6 +57,13 @@ scans, with file digests verified before plotting. They are not robot motion dem
 - [125-test validation](v2/validation.json), [targeted JUnit receipt](v2/targeted-tests.xml),
   [seven demo checks](v2/demo-tests.xml). These CPU checks supplement actual GPU
   execution and independent metric reconstruction.
+- [Hosted CI run 37880743436](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37880743436)
+  PASS for implementation commit `cb9f74f`: **2,286 tests and eight subtests passed**,
+  124 optional checks skipped, zero failures/errors; trained-asset integration
+  **9/9**, nominal replay repeats **5/5**, injected faults detected **40/40**.
+  [Durable CI receipt](v2/github-ci/validation.json),
+  [full JUnit record](v2/github-ci/pytest.xml),
+  [replay outcomes](v2/github-ci/replay/report.json).
 
 The inherited H3/H4 launcher completion receipt uses a generic training-campaign
 scope string. The sensor-specific `campaign_result.json` and independent report
