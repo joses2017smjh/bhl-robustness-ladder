@@ -29,6 +29,18 @@ def digest(path):
     return h.hexdigest()
 
 
+class CheckedArchiveReader:
+    """Hash the exact bytes handed to tar, including concurrent-edit checks."""
+    def __init__(self, stream):
+        self.stream, self.hasher, self.bytes = stream, hashlib.sha256(), 0
+
+    def read(self, size=-1):
+        block = self.stream.read(size)
+        self.hasher.update(block)
+        self.bytes += len(block)
+        return block
+
+
 def now():
     return datetime.now(timezone.utc).isoformat()
 
@@ -179,9 +191,12 @@ def freeze(repo, protocol_path, persistent):
         for name, path in sorted(staged.items()):
             info = tar.gettarinfo(str(path), arcname=name)
             # Store dereferenced links as regular files.
-            info.type, info.linkname, info.size = tarfile.REGTYPE, "", path.stat().st_size
+            info.type, info.linkname, info.size = tarfile.REGTYPE, "", manifest[name]["bytes"]
             with path.open("rb") as stream:
-                tar.addfile(info, stream)
+                checked = CheckedArchiveReader(stream)
+                tar.addfile(info, checked)
+                if checked.bytes != manifest[name]["bytes"] or checked.hasher.hexdigest() != manifest[name]["sha256"]:
+                    raise ValueError(f"source/input changed while freezing: {name}; no executable intake created")
     launcher = repo / "slurm/repo20261008/h34_campaign.sbatch"
     shutil.copyfile(launcher, persistent / "h34_campaign.sbatch")
     runtime = protocol["runtime"]

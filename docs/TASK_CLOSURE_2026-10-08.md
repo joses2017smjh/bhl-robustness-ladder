@@ -1,6 +1,7 @@
 # Humanoid task closure ledger — October 8, 2026
 
-Updated October 9 with the complete independently recomputed H3/H4 reports.
+Updated October 9 with the independently recomputed H3/H4 reports and measured
+native LiDAR–IMU replay, development navigation and negative terrain screen.
 This is the current open/closed ledger for the Humanoid project. It reconciles
 the resume-revamp tasks with the older [master backlog](REPO_TASKS.md),
 [roadmap](ROADMAP.md), and [status page](STATUS.md). Historical reports and
@@ -51,8 +52,13 @@ fresh same-source GPU smoke `21714137`. It retains 72 rendered stereo pairs,
 GPU inference, depth/coverage/latency tradeoffs, matched fusion stress tests,
 terrain height/hazard metrics and native-estimator input exports. Confidence
 gating does not meet the proposed advancement target. This closes the pilot
-software/data deliverable; all four full research objectives remain **OPEN**.
-Native SLAM and closed-loop/traversal outcomes are unmeasured.
+software/data deliverable. The subsequent [October 9 native campaign](NATIVE_CAMPAIGN_RESULTS_2026-10-09.md)
+now measures native FAST-LIO2 replay (3/3 scene gates), development navigation
+(9/9 clean goals, zero falls/contacts), and the negative 18-episode blind terrain
+screen (zero qualified actors, zero confirmation episodes). Actual ORB-SLAM3
+has built successfully; its smoke exposed a startup fault before inference,
+so scored stereo results remain pending. Physical recordings,
+independent navigation confirmation and robust terrain traversal remain **OPEN**.
 [Follow-up task dependencies](SENSOR_CAMPAIGN_2026-10-08.md#follow-up-task-queue)
 identify the next work rather than submitting jobs that cannot yet execute.
 

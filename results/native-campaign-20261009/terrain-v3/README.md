@@ -1,11 +1,19 @@
-# Terrain traversal v3: exact-source preempt revision
+# Terrain traversal: completed negative qualification screen
 
-Fresh smoke **21742782** and scored run **21742786** were submitted with explicit no-requeue on `preempt`, CPU2/8GB. Scored execution is held `afterok:21742782`. Submission is not a scientific result.
+The actual frozen-gait screen completed **18/18 episodes**: **3 clean goals,0 falls,15 side-wall contacts,0 numerical failures**. No actor achieved the predeclared6/6 clean goals. Confirmation stopped with **zero episodes**; no LiDAR-versus-baseline effect was measured. The scored screen uses the blind baseline only.
 
-The archive is `1f04b186e62a31bfa27547375124b85f7bc8a46b688fc92577ea108d7d6293ed`. All **834** source/model input files were independently extracted and verified; the manifest is byte-identical to v1/v2. Only partition and explicit no-requeue change from v2. The scientific protocol, actor cohort, sensor settings, map/controller thresholds and independent outcome criteria remain fixed.
+|Actor|Clean goals / six|Side-wall contacts|Falls|Qualified|
+|---|---:|---:|---:|---|
+|DR-default-s0|3/6|3|0|No|
+|DR-default-s1|0/6|6|0|No|
+|DR-default-s2|0/6|6|0|No|
 
-The combined scored job first runs18 blind qualification episodes. Only actors achieving6/6 clean full-horizon goals qualify. All qualified actors enter72 confirmation episodes each (maximum216); if none qualifies, the scientific result is negative and confirmation stops. Stopping short of the5m goal is a failure even without falls.
+Fresh smoke21742782 completed as SMOKE_ONLY: flat blind reference reached5.02m and survived40s; LiDAR ramp stopped at1.58m and timed out, with0falls/contacts. Smoke did not qualify actors, and no threshold was tuned after the negative ramp outcome.
 
-The earlier two-episode v1 smoke execution passed, but its LiDAR-ramp episode stopped at1.58m and timed out; this negative outcome is preserved in [v1](../terrain-v1/README.md). Its nested smoke-only `qualified_actors` field is not screen eligibility; the top-level smoke field is correctly empty. No threshold was adjusted after that smoke.
+The independently audited scored raw archive is19,583,862bytes, SHA256 `56f89af26505e2015185cfd9d635e618ad4616b982867929943b9f7465f87a99`. [All episode outcomes and raw-map audit](terrain-run-20261009-21742786/audit/report.md), [original raw data](terrain-run-20261009-21742786/outputs.tar.gz), [cohort summary](actual-results-summary.json), and [terrain map aggregates](screen-terrain-aggregates.json) are retained.
 
-V2 jobs21740943/21740946 remained PENDING and were cancelled with a PENDING-state guard before this revision; see [cancellation receipt](../terrain-v2/pending-cancellation.json). Preemption will leave incomplete evidence rather than restarting into exclusive receipt directories.
+The raw3D returns, masks,IMU attitudes,inferred maps,and independent dense scene-height truth were checked against every episode/map frame. Height metrics include wall-top/side aliasing and repeated observations across time; they are not ground-only accuracy or independent sample counts.
+
+V3 used exact original834source/model input hashes, CPU2/8GB/preempt/no-requeue, with fresh smoke21742782 gating scored21742786. Source SHA256 `1f04b186e62a31bfa27547375124b85f7bc8a46b688fc92577ea108d7d6293ed`. V1/v2 pending scored jobs were cancelled before any scored episodes began; their receipts and complete source-payload reconstruction maps are retained. Every scientific/failure outputs.tar.gz remains preserved.
+
+All physics/sensors are simulated and the actors are12-DoF bipeds. The result identifies insufficient frozen-gait course qualification. It does not establish a fusion benefit, hardware safety, or terrain generalization.

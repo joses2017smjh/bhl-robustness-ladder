@@ -209,3 +209,16 @@ def test_submission_does_not_inherit_interactive_context(tmp_path, monkeypatch, 
     assert ("--no-requeue" in captured["command"]) == (requeue is False)
     with pytest.raises(FileExistsError):
         campaign.submit(target, "smoke")
+
+
+def test_concurrent_edit_during_freeze_cannot_create_executable_intake(tmp_path, monkeypatch):
+    original_digest = campaign.digest
+    def editing_digest(path):
+        value = original_digest(path)
+        if Path(path).name == "runner.py":
+            Path(path).write_text("raise SystemExit('concurrent changed source')\n" * 10)
+        return value
+    monkeypatch.setattr(campaign, "digest", editing_digest)
+    with pytest.raises(ValueError, match="changed while freezing"):
+        frozen(tmp_path)
+    assert not (tmp_path / "persistent/intake.json").exists()

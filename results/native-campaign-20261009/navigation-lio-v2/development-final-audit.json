@@ -1,0 +1,59 @@
+{
+  "schema": "bhl-native-navigation-final-audit-v1",
+  "status": "PASS",
+  "scientific_scope": "DEVELOPMENT_ONLY_NO_CONFIRMATION",
+  "job_id": "21741509",
+  "host": "cn-b09.hpc.engr.oregonstate.edu",
+  "checked_utc": "2026-10-09T22:26:57.904105+00:00",
+  "checks": {
+    "frozen_source_and_input_payloads_verified": 846,
+    "collector_source_files_verified": 10,
+    "collection_receipt_files_verified": 7,
+    "public_observer_files_exact": true,
+    "raw_archive_sha256_verified": true,
+    "independent_policy_tick_outcome_reconstruction": "PASS"
+  },
+  "pins": {
+    "frozen_archive_sha256": "df3d91ae4ad8c4c8688d7ed3ff8639baff7a5860043f39414871c559301cfa26",
+    "frozen_manifest_sha256": "f4b45becf4590658d4c1e8ba34a6bdfcad14c84966a22b514c8423da76c47a8d",
+    "protocol_sha256": "3354ae1c6116fa8adef9da145d9256f700d7e4f6c64dff6e78096853ddc45324",
+    "collector_manifest_sha256": "e6de048b232283b151f9ff68538cf77fdb2a925042d1827432c1ed92c5da2ddb",
+    "collection_receipt_sha256": "9c605c380562cf698ab85b88efc394faf8379a951d1d5189db082e1e6d060141",
+    "raw_archive_sha256": "98c8e35a146fa98046a9b1973ae388a4939431db2a2ae7fb45b5815a3c279633",
+    "actor_sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1",
+    "runtime_pack_sha256": "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+    "native_binary_sha256": "e2c7791007548b316546aa1ef91a34b6fa611e16f8fb8dfd8195f47f544bd2d3",
+    "outcome_audit_sha256": "9b313310162daf786738086ac3ad997c2af614f28186c03f33a1c3a205cf0d3c",
+    "outcome_audit_source_sha256": "2aa4ed070e3fa45439155bb6e4e87066656f836fa6f53ec958e02727fdcd2a3c"
+  },
+  "metrics": {
+    "episodes": 9,
+    "clean_goals": 9,
+    "falls": 0,
+    "contacts": 0,
+    "nonfinite": 0,
+    "simulation_seconds_per_episode": 40,
+    "native_frames": 1701,
+    "tracked_frames": 1674,
+    "post_init_tracking_fraction_min": 1.0,
+    "ate_alignment": "evaluator-only gravity-preserving yaw/translation; fixed metric scale 1; never enters controller",
+    "ate_rmse_m_range": [
+      0.014556918841842138,
+      0.028916433229609885
+    ],
+    "equal_frame_aggregate_ate_rmse_m": 0.020440929216356096,
+    "aggregate_weighting": "Each episode has 186 associated tracked poses, so equal episode squared-error weights equal frame weights",
+    "client_wall_p95_ms_range": [
+      13.553215423598886,
+      14.161360776051879
+    ],
+    "latency_scope": "NativeLioClient.track end-to-end wall; serialization/IPC/validation included; ideal simulation ray generation excluded; not a real-time hardware benchmark",
+    "final_true_goal_distance_m_range": [
+      0.1279409457557107,
+      0.2688270319774464
+    ],
+    "maximum_policy_tick_tilt_rad": 0.10408204739967293,
+    "full_horizon_all": true
+  },
+  "limits": "One frozen learned gait, three prescribed simulation fixtures and three reset groups. No holdout confirmation, hardware experiment, learned navigation planner or population safety claim. Contacts crosschecked against recorded physics contact flags, not reconstructed from substep dynamics."
+}

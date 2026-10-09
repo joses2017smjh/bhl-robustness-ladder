@@ -1,0 +1,25 @@
+{
+  "acceptance_meaning": "Negative controller qualification stops confirmation; no fall or goal is inferred from process completion",
+  "arm_results": {},
+  "confirmation_episodes": 0,
+  "phase": "run",
+  "problems": [],
+  "protocol_sha256": "9b8deed958049ebf25ea7c269a160c9eeb2815f8f9475dda1a55f70ab637b3d4",
+  "qualified_actors": [],
+  "route": "sensor_informed_terrain_traversal",
+  "scientific_status": "NEGATIVE_CONTROLLER_SCREEN",
+  "scope": "Actual learned biped physics and current-scan 3D lidar/IMU terrain inference; simulated sensors, no SLAM or physical trials",
+  "screen_episodes": 18,
+  "stages": [
+    {
+      "name": "screen",
+      "result": "screen/campaign_result.json"
+    },
+    {
+      "name": "confirmation",
+      "result": "confirmation/campaign_result.json"
+    }
+  ],
+  "status": "NEGATIVE",
+  "wall_seconds": 368.907296607038
+}

@@ -99,15 +99,36 @@ records. Ideal simulated sensors and one fixed actor cannot establish
 hardware reliability or population safety.
 
 
-## First actual closed-loop execution
+## Actual development result — PASS, not confirmation
 
-Fresh smoke job `21740837` completed both declared 8-second episodes using the
-actual native FAST-LIO2 binary and learned gait: 52 tracked frames of 58 total,
-zero falls and contacts, no dropped scans. Each episode included three explicit
-native initialization states; client wall p95 was 15.85/15.90 ms. Smoke goal
-counts are excluded from qualification. Development job `21740945` uses the
-same immutable source/runtime/model pack and the declared nine 40-second
-episodes, after the successful fresh smoke. Its scientific verdict is pending.
+Development job **21741509** completed the frozen nine-episode cohort on
+`cn-b09.hpc.engr.oregonstate.edu`: **9/9 clean goals**, zero falls, fixture
+contacts or nonfinite states. Every episode completed all 40 simulation seconds
+and 1,000 policy updates, including time after reaching the goal. This is a
+**DEVELOPMENT_ONLY_NO_CONFIRMATION** result for one frozen gait, three prescribed
+simulation fixtures and three reset groups. The predeclared development gate
+passes; no holdout confirmation or hardware experiment has been run.
+
+| Measurement | Actual development result |
+|---|---:|
+| Clean goals, full horizon, no fall/contact/nonfinite | 9/9 |
+| Native tracked frames / all native frames | 1,674 / 1,701 |
+| Tracking after the declared 5-second initialization | 100% in every episode |
+| Per-episode aligned IMU ATE RMSE | 1.46–2.89 cm |
+| Aggregate aligned IMU ATE RMSE, all 1,674 associated poses | 2.04 cm |
+| Per-episode native client wall p95 | 13.55–14.16 ms |
+| Final true goal distance | 0.128–0.269 m |
+| Runner wall time / total simulated time | 272.70 s / 360 s |
+
+ATE uses an **evaluator-only gravity-preserving yaw/translation alignment with
+metric scale fixed at 1**. It is not unaligned global position error and the
+alignment never enters the controller. Goal distances are measured in the
+declared simulator world and satisfy the unchanged 0.30 m criterion. Client
+latency includes serialization, native processing, IPC and output validation;
+ideal simulation ray generation is excluded. The controller charges this wall
+time to physics, rounded upward to the 40 ms policy period, before making the
+response visible. These timings do not establish physical sensor throughput or
+hardware real-time performance. The binary was compiled with GCC 12.5 at `-O1`.
 
 The compiled model keeps the IMU site under a fixed child body. Calibration
 therefore composes all static parent-body transforms plus the site transform,
@@ -123,17 +144,49 @@ The optional additional sensor capture/encoding cost hook is charged together
 with client wall latency; it is zero for this LIO-only route.
 
 
-The queued development v1 job 21740945 was cancelled before execution because
+The queued v1 development job `21740945` was cancelled before execution because
 of the CPU queue. Resource-only v2 retains all 846 original source/input
-manifest records byte-for-byte, changes only job identifiers and scheduling
-to preempt with requeue disabled, and requires a new fresh smoke 21741213
-before development 21741509. The scientific cohort and gate are unchanged.
+manifest records byte-for-byte and changes only job identifiers and scheduling
+to `preempt` with requeue disabled. Fresh v2 smoke **21741213 PASS** preceded
+development via `afterok`: both 8-second episodes completed, with 52 tracked
+frames of 58 total and no falls, contacts or nonfinite states. All smoke
+outcomes remain **SMOKE_ONLY** and are excluded from the 9/9 development count.
+The original v1 smoke `21740837` and cancelled pending submission are retained.
 
 A tiny durable collector bundle verifies its own ten source files, job/source
 identity, complete raw archive and per-stream/evaluator hashes. After a
 completed campaign, the command in
 `results/native-campaign-20261009/navigation-lio-collector-v1/COLLECT_COMMAND.txt`
 produces a Markdown report, JSON metrics, actual/native path figure and
-collection receipt. It has been tested on the completed original smoke,
-which remains explicitly SMOKE_ONLY. No inference is rerun and no push is
-performed by this collector.
+collection receipt. Its actual development collection verifies the complete
+raw archive, original native input/output streams and separate evaluator
+arrays without rerunning inference or the controller. A second audit
+reconstructs all nine goal distances, body tilt/height and complete horizons
+from the saved evaluator transforms at policy ticks. Contact flags are checked
+against retained physics traces; this does not independently reconstruct
+between-tick contacts or joint state.
+
+Final independent provenance validation rehashed **all 846 frozen source/input
+payloads**, all ten collector source files and all seven collection-receipt
+files, and compared the public observer files byte-for-byte with their durable
+copies. Artifacts:
+
+- [Development report](../results/native-campaign-20261009/navigation-lio-v2/development-observer/report.md)
+  and [actual path figure](../results/native-campaign-20261009/navigation-lio-v2/development-observer/actual-navigation-paths.png).
+- [Final provenance and metric audit](../results/native-campaign-20261009/navigation-lio-v2/development-final-audit.json).
+- [Independent outcome reconstruction](../results/native-campaign-20261009/navigation-lio-v2/development-outcome-audit.json),
+  produced by `scripts/bench/native_navigation_outcome_audit.py`.
+- Frozen navigation archive SHA256:
+  `df3d91ae4ad8c4c8688d7ed3ff8639baff7a5860043f39414871c559301cfa26`.
+- Actual raw output archive: 91,609,334 bytes, SHA256
+  `98c8e35a146fa98046a9b1973ae388a4939431db2a2ae7fb45b5815a3c279633`.
+  The full original remains durable; the public raw-artifact receipt records
+  release publication separately from compact files in Git.
+
+An appropriate project claim is: **Integrated pinned native FAST-LIO2 with a
+frozen learned 12-DoF humanoid gait; achieved 9/9 full-horizon navigation goals
+across three simulated corridor fixtures and three reset groups, with no
+falls or fixture contacts, 2.04 cm aligned IMU ATE RMSE and 13.55–14.16 ms
+per-episode client p95.** Include the simulation/development scope wherever
+these numbers are presented. This campaign does not establish generalization,
+a learned navigation planner or physical-robot reliability.

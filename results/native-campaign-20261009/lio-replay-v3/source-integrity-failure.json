@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-09T22:07:23.339585+00:00",
+  "status": "INCOMPLETE_BEFORE_INFERENCE",
+  "source_package_mismatches": [
+    {
+      "name": "source/scripts/bench/native_build_campaign.py",
+      "recorded": {
+        "bytes": 3169,
+        "sha256": "d1ae89984c34666f867b8b8952838e0299dc75473220e7449cc6b714cfa66374"
+      },
+      "actual": {
+        "bytes": 3340,
+        "sha256": "443cb498171db6e88205964253e4f1d750afc5e2758c141e3773f29a03490b27"
+      }
+    }
+  ],
+  "failed_smoke": "21742453",
+  "cancelled_dependent_while_pending": "21742454",
+  "dependent_state_before_cancellation": "JobId=21742454 JobName=native-lio-replay-20261009-v3 UserId=sanchej7(19646) GroupId=upg19646(30762) MCS_label=N/A Priority=9337546 Nice=0 Account=eecs QOS=normal JobState=PENDING Reason=DependencyNeverSatisfied Dependency=afterok:21742453(failed) Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=01:00:00 TimeMin=N/A SubmitTime=2026-10-09T14:42:30 EligibleTime=Unknown AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-10-09T14:42:30 Scheduler=Main Partition=preempt AllocNode:Sid=dgx2-5:4130537 ReqNodeList=(null) ExcNodeList=(null) NodeList= NumNodes=1 NumCPUs=2 NumTasks=1 CPUs/Task=2 ReqB:S:C:T=0:0:*:* ReqTRES=cpu=2,mem=16G,node=1,billing=3 AllocTRES=(null) Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=2 MinMemoryNode=16G MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=OK Contiguous=0 Licenses=(null) LicensesAlloc=(null) Network=(null) Command=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3/h34_campaign.sbatch SubmitLine=/apps/slurm/current/bin/sbatch --mail-user=sanchej7 --parsable --ntasks=1 --account=eecs --job-name=native-lio-replay-20261009-v3 --partition=preempt --cpus-per-task=2 --mem=16G --time=01:00:00 --output=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3/native-lio-replay-20261009-v3-%j.out --error=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3/native-lio-replay-20261009-v3-%j.out --export=NONE --no-requeue --dependency=afterok:21742453 /nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3/h34_campaign.sbatch /nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3 native-lio-replay-20261009-v3 1704e2781ab99ab1eca64523f4d5bc97ceeb5de25eed5a8fc8b49e4660a59a18 WorkDir=/tmp/bhl-native-campaign-20261009 StdErr=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3/native-lio-replay-20261009-v3-21742454.out StdIn=/dev/null StdOut=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3/native-lio-replay-20261009-v3-21742454.out TresPerTask=cpu=2\n",
+  "native_estimator_frames": 0,
+  "reason": "Concurrent mutable source edit during v2 freeze; resource-only v3 inherited packaging mismatch. Strict execute source verification correctly refused before estimator launch."
+}

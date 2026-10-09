@@ -148,10 +148,14 @@ negative traversal outcome. It did not trigger threshold tuning. The raw
 scans, dense map evaluation and all outcomes were independently audited in
 [the v1 evidence](../results/native-campaign-20261009/terrain-v1/README.md).
 
-The current exact-source [v3 submission](../results/native-campaign-20261009/terrain-v3/README.md)
+The completed exact-source [v3 campaign](../results/native-campaign-20261009/terrain-v3/README.md)
 uses `preempt` with explicit no-requeue: fresh smoke 21742782, followed by scored
-job 21742786 only if that smoke passes. Earlier v1/v2 scored jobs remained
+job 21742786 after that smoke passed. Earlier v1/v2 scored jobs remained
 pending and were cancelled with receipts before any scored episodes began.
 The resource revisions preserve all 834 source/model input hashes and the
-same qualification and conditional confirmation criteria. Queue submission
-does not establish a qualification or confirmation result.
+same qualification and conditional confirmation criteria. The independently
+audited blind qualification screen completed all 18 episodes with three clean
+goals, no falls, 15 side-wall contacts and no numerical failures. No actor
+achieved six clean goals, so confirmation stopped at zero episodes. The
+LiDAR and dropout confirmation arms were not run; these screen outcomes
+cannot establish a sensor-comparison effect.
