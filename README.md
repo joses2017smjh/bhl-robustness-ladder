@@ -62,6 +62,8 @@ Seed 2 passes turn-test v2 but scores **8/10** qualification turns against the
 unchanged **9/10** requirement. A repeatable 22-DoF recipe remains open.
 [Heading-hold verdict](results/repo-gpu-20260923/turngait-hold-20261002/verdict/R1H.json).
 
+The new [H3/H4 campaigns](docs/H3_H4_CAMPAIGN_2026-10-08.md) are active: matched IMU-history/latency fine-tuning and a command-latched-heading follow-up for the 22-DoF robot. Their final scientific verdicts remain pending.
+
 Plate crossing, cooperative carry, and standing placement remain incomplete or negative. The [status ledger](docs/STATUS.md) records their mechanisms and next tests. Earlier invalid findings remain identified in the [findings ledger](docs/FINDINGS.md).
 
 ## Architecture and decisions

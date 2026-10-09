@@ -1,0 +1,171 @@
+{
+  "additional_source": [
+    "scripts/bench/h34_campaign.py",
+    "slurm/repo20261008/h34_campaign.sbatch",
+    "src/bhl_robust/latency_history.py",
+    "src/bhl_robust/tasks/history_latency_env_cfg.py",
+    "src/bhl_robust/eval/history_latency.py",
+    "scripts/bench/h3_train.py",
+    "scripts/bench/history_latency_eval.py",
+    "src/bhl_robust/tasks/heading_observable_env_cfg.py",
+    "src/bhl_robust/eval/heading_observable.py",
+    "scripts/bench/h4_train.py",
+    "scripts/bench/h4_qualification.py"
+  ],
+  "campaign_id": "h4-20261008",
+  "cells": [
+    {
+      "arm": "R1HO",
+      "final_iteration": 999,
+      "iterations": 1000,
+      "run_name": "h4-r1ho-s0",
+      "seed": 0,
+      "task": "Velocity-BHL-Arms-TurnGaitHeadingObservable-v0",
+      "teacher_agent": "inputs/h4_agent.yaml",
+      "teacher_checkpoint": "inputs/h4_teacher.pt",
+      "teacher_checkpoint_sha256": "4f1b0c353421dd9ab3f4eb3d6dc755142e036ab4cabfbc0a85a77ae8087bc014",
+      "teacher_deploy": "inputs/h4_deploy.yaml",
+      "teacher_env": "inputs/h4_env.yaml"
+    },
+    {
+      "arm": "R1HO",
+      "final_iteration": 999,
+      "iterations": 1000,
+      "run_name": "h4-r1ho-s1",
+      "seed": 1,
+      "task": "Velocity-BHL-Arms-TurnGaitHeadingObservable-v0",
+      "teacher_agent": "inputs/h4_agent.yaml",
+      "teacher_checkpoint": "inputs/h4_teacher.pt",
+      "teacher_checkpoint_sha256": "4f1b0c353421dd9ab3f4eb3d6dc755142e036ab4cabfbc0a85a77ae8087bc014",
+      "teacher_deploy": "inputs/h4_deploy.yaml",
+      "teacher_env": "inputs/h4_env.yaml"
+    },
+    {
+      "arm": "R1HO",
+      "final_iteration": 999,
+      "iterations": 1000,
+      "run_name": "h4-r1ho-s2",
+      "seed": 2,
+      "task": "Velocity-BHL-Arms-TurnGaitHeadingObservable-v0",
+      "teacher_agent": "inputs/h4_agent.yaml",
+      "teacher_checkpoint": "inputs/h4_teacher.pt",
+      "teacher_checkpoint_sha256": "4f1b0c353421dd9ab3f4eb3d6dc755142e036ab4cabfbc0a85a77ae8087bc014",
+      "teacher_deploy": "inputs/h4_deploy.yaml",
+      "teacher_env": "inputs/h4_env.yaml"
+    }
+  ],
+  "designed_utc": "2026-10-09T02:03:05.587010+00:00",
+  "h4": {
+    "actor_observations": 79,
+    "critic_observations": 82,
+    "feature": "[sin(yaw-yaw_ref),cos(yaw-yaw_ref)-1], zeroed unless abs(command_wz)<.05; reference latches at reset and any float32 command-vector change.",
+    "feature_dimensions": 2,
+    "gate": {
+      "push_max_falls": 9,
+      "push_trials": 60,
+      "qualification_turn_min": 9,
+      "qualification_turn_trials": 10,
+      "required_seeds": 2,
+      "seed_count": 3,
+      "turn_v2_unchanged": true,
+      "walk_max_abs_yaw_deg": 15,
+      "walk_min_pass": 2,
+      "walk_trials": 3
+    },
+    "gates": "Unchanged scripts/bench/turn_test.py v2 plus original v2x/walk/push qualification; source hash-pinned, no pooling seeds from other recipes.",
+    "heading_wz_threshold": 0.05,
+    "joints": 22,
+    "num_envs": 4096,
+    "oracle_yaw": true,
+    "parent_recipe": "R1H-s2",
+    "policy_dt_s": 0.04,
+    "reference": "reset_and_observable_command_change",
+    "reference_command_tolerance": 0.0,
+    "reward_reference_disclosure": "Original heading_hold reward keeps hidden explicit/resample reference; added observation is command-latched heading and differs on repeated standing draws. This does not make the entire original reward state observable.",
+    "smoke_evaluation_seed": 100,
+    "smoke_iterations": 3,
+    "smoke_num_envs": 64,
+    "training_physics_dt_s": 0.005
+  },
+  "input_files": {
+    "h4_agent.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_22-29-38_arms-turngait-hold-s2/params/agent.yaml",
+      "sha256": "b83dc5b095b84f3b2b99b2f7d34a8c1da8ebaf71b3b10ef5c9ed18421bee1e64"
+    },
+    "h4_deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_22-29-38_arms-turngait-hold-s2/exported/deploy.yaml",
+      "sha256": "9be5500a668ea7df899e817ac3569db83bfecb953f7921811e39ed4db85b9bde"
+    },
+    "h4_env.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_22-29-38_arms-turngait-hold-s2/params/env.yaml",
+      "sha256": "b84397a35a2c48167305ce40a1209e9b2549674ac17148cb78f76e28e66cc68d"
+    },
+    "h4_teacher.pt": {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_22-29-38_arms-turngait-hold-s2/model_5999.pt",
+      "sha256": "4f1b0c353421dd9ab3f4eb3d6dc755142e036ab4cabfbc0a85a77ae8087bc014"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke",
+        "--cell",
+        "{cell}"
+      ],
+      "entrypoint": "scripts/bench/h4_train.py",
+      "env": {},
+      "kind": "smoke",
+      "max_output_mb": 512,
+      "name": "h4-smoke-20261008",
+      "resources": {
+        "array": "0%1",
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 8,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 64,
+        "partition": "gpu,dgxh,ampere",
+        "time_limit": "00:45:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "{cell}"
+      ],
+      "entrypoint": "scripts/bench/h4_train.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 512,
+      "name": "h4-run-20261008",
+      "resources": {
+        "array": "0-2%1",
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 8,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 64,
+        "partition": "gpu,dgxh,ampere",
+        "time_limit": "03:00:00"
+      }
+    }
+  ],
+  "max_global_gpu_concurrency": 2,
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "v51"
+  },
+  "schema_version": 1,
+  "scientific_scope": "New bounded fine-tuning campaign; shared declared parent initialization, not three from-scratch replications. No hardware result. Gates and final checkpoints fixed before scored evaluation.",
+  "task": "H4",
+  "training_checkpoint_selection": "Fixed final added iteration; no post-score checkpoint selection"
+}

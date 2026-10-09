@@ -1,0 +1,43 @@
+[bhl_robust.tasks] SF-04 distillation id NOT registered: ImportError("cannot import name 'RslRlMLPModelCfg' from 'isaaclab_rl.rsl_rl' (/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/source/isaaclab_rl/isaaclab_rl/rsl_rl/__init__.py)")
+Traceback (most recent call last):
+  File "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/source/scripts/bench/h4_train.py", line 312, in main
+    result = run(args, output, work)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/source/scripts/bench/h4_train.py", line 208, in run
+    recipe = check_env_recipe(log_dir / "params/env.yaml", inputs["teacher_env"], upstream)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/source/scripts/bench/h4_train.py", line 97, in check_env_recipe
+    raise ValueError(f"undeclared R1H recipe differences: {differences[:25]}")
+ValueError: undeclared R1H recipe differences: ['/scene/contact_forces/prim_path', '/scene/robot/prim_path', '/scene/terrain/env_spacing']
+[INFO][AppLauncher]: Using device: cuda:0
+[INFO][AppLauncher]: Loading experience file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/apps/isaaclab.python.headless.kit
+[INFO]: Parsing configuration from: <class 'bhl_robust.tasks.heading_observable_env_cfg.HumanoidTurnGaitHeadingObservableCfg'>
+H4-CELL: INCOMPLETE
+[Info] [carb] Logging to file: /tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/kit/logs/Kit/Isaac-Sim/5.1/kit_20261008_191818.log
+2026-10-09T02:18:20Z [2,364ms] [Warning] [omni.usd_config.extension] Enable omni.materialx.libs extension to use MaterialX
+2026-10-09T02:18:23Z [4,717ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2026-10-09T02:18:24Z [5,960ms] [Warning] [carb] Acquiring non optional plugin interface which is not listed as dependency: [omni::physx::IPhysxBenchmarks v1.0] (plugin: <default plugin>), by client: omni.physics.physx.plugin. Add it to CARB_PLUGIN_IMPL_DEPS() macro of a client.
+2026-10-09T02:18:24Z [6,020ms] [Warning] [omni.isaac.dynamic_control] omni.isaac.dynamic_control is deprecated as of Isaac Sim 4.5. No action is needed from end-users.
+2026-10-09T02:18:31Z [13,199ms] [Warning] [carb.cudainterop.plugin] CUDA_VISIBLE_DEVICES environment variable is set.
+2026-10-09T02:18:31Z [13,199ms] [Warning] [carb.cudainterop.plugin] Note CUDA device enumeration and Omniverse device enumeration are different.
+2026-10-09T02:18:31Z [13,199ms] [Warning] [carb.cudainterop.plugin] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 615.71.09     | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | Quadro RTX 8000                  | Yes: 0 |     | 78838   MB | 10de      | 0          |
+|     |                                  |        |     |            | 1e78      | 251d9ada.. |
+|     |                                  |        |     |            | c2        |            |
+|=============================================================================================|
+| OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel: 5.14.0-687.52.1.el9_8.x86_64
+| Processor: Intel(R) Xeon(R) Gold 6248R CPU @ 3.00GHz
+| Cores: 48 | Logical Cores: 48
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 772477 | Free Memory: 661921
+| Total Page/Swap (MB): 0 | Free Page/Swap: 0
+|---------------------------------------------------------------------------------------------|
+2026-10-09T02:18:32Z [14,145ms] [Warning] [gpu.foundation.plugin] ECC is enabled on physical device 0

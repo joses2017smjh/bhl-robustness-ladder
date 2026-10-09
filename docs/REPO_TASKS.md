@@ -41,8 +41,8 @@ and `STATUS.md` are consumed read-only and cross-referenced here.
 |---|---|---|
 | H1 | DONE, PASS (`21689706`) | [576-episode report](H1_NAVIGATION_CONFIRMATION_2026-10-08.md) independently verified; all three actors pass unchanged gates. Candidate 259/288 goals, 0/288 falls versus baseline 247/288, 9/288; mean yaw-command sign-flip rate 51.5% lower. Simulation with oracle pose/goal; 48 shared layouts. |
 | H2 | DONE | [Closure receipt](../results/task-closure-20261008/h2-replay/closure.json): fresh pinned CPU installation; local full suite 1,998 passed, 123 existing optional checks skipped, six subtests passed; [hosted CI](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052) succeeds with five exact repeats and 40/40 injected regressions detected. Second HPC host: 5/5 frozen two-second cases agree exactly, maximum numeric difference 0.0; no general cross-platform or flake-rate conclusion. |
-| H3 | TODO | Matched history/latency policy training has not run. |
-| H4 | TODO | Repeatable 22-DoF recipe remains unsolved; R1/R2/R1H are completed negative experiments. |
+| H3 | ACTIVE; objective OPEN | Six-cell matched training array `21711075`, both-arm GPU smoke passed; complete paired scientific result pending. [Protocol](H3_H4_CAMPAIGN_2026-10-08.md). |
+| H4 | ACTIVE; objective OPEN | R1HO three-seed array `21711208` depends on fresh smoke; original gates unchanged. R1/R2/R1H remain completed negative experiments. [Protocol](H3_H4_CAMPAIGN_2026-10-08.md). |
 | CLO-SPAWN | DONE (`0004152`) | Cloth quaternion code fix, 13 targeted CPU checks and original-literal negative control; [receipt](../results/task-closure-20261008/cloth-quaternion.json). No Isaac runtime result. |
 
 ## Backlog by workstream

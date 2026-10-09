@@ -1,0 +1,65 @@
+{
+  "arm": "R1HO",
+  "cell": 0,
+  "deploy_sha256": "a99544f7982f0bd6b6f409cf61ee81d7ae348afa34d1b9f7c0deff0a85ea22b6",
+  "feature_contract": {
+    "command_change_atol": 0.0,
+    "features": "sin_error_cos_error_minus_one",
+    "mask": "abs_command_wz_lt_threshold",
+    "reference": "reset_or_exact_float32_command_change",
+    "reward_reference": "unchanged_R1H_explicit_mode_last_resample",
+    "wz_threshold": 0.05,
+    "yaw_source": "simulated_orientation"
+  },
+  "final_checkpoint_sha256": "a490520f4b0e381620c5ae3a299549c53741b17cdd493a5dcbceb6835b61c24a",
+  "final_iteration": 2,
+  "gates": {
+    "non_scored_reset_seed": 100,
+    "note": "plumbing smoke only; episode outcomes are not qualification evidence",
+    "records": [
+      {
+        "cmd": [
+          0.0,
+          0.0,
+          0.6
+        ],
+        "displacement_m": 0.088,
+        "fell_at_s": null,
+        "seconds": 0.8,
+        "yaw_deg": 16.6
+      },
+      {
+        "cmd": [
+          0.0,
+          0.0,
+          -0.6
+        ],
+        "displacement_m": 0.137,
+        "fell_at_s": null,
+        "seconds": 0.8,
+        "yaw_deg": -10.1
+      },
+      {
+        "cmd": [
+          0.35,
+          0.0,
+          0.0
+        ],
+        "displacement_m": 0.066,
+        "fell_at_s": null,
+        "seconds": 0.8,
+        "yaw_deg": 4.7
+      }
+    ],
+    "status": "PASS"
+  },
+  "iterations_completed": 3,
+  "label": "22-DoF learned policy; simulated yaw feature; MuJoCo evaluation",
+  "parent_sha256": "4f1b0c353421dd9ab3f4eb3d6dc755142e036ab4cabfbc0a85a77ae8087bc014",
+  "phase": "smoke",
+  "policy_sha256": "9d9e5998b374bef4136230f8cd1133028a8a1019e1e027a0e8cf7a5e19545a22",
+  "protocol_sha256": "1538a528924c6651628e088510c1c1597509858a2730e58e2e3a3c15d48b06e5",
+  "seed": 0,
+  "status": "PASS",
+  "task": "Velocity-BHL-Arms-TurnGaitHeadingObservable-v0"
+}

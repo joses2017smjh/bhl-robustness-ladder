@@ -1,0 +1,20 @@
+{
+  "plumbing_status": "PASS",
+  "expected_scientific_status": "INCOMPLETE",
+  "actual_scientific_status": "INCOMPLETE",
+  "outer_error": null,
+  "observer_sha256": "71a7f5690bd8e52543a4e67f25bba0f7f48c6e6a16632e8e172d879bd731fc5a",
+  "exit_status": 1,
+  "expected_cells": 3,
+  "complete_cells": 0,
+  "isolation": {
+    "campaign_readonly": true,
+    "source_readonly": true,
+    "shared_runtime_readonly": true,
+    "cuda_visible_devices": "",
+    "requested_gpus": 0
+  },
+  "scientific_problems": [
+    "missing complete scored cells: [0, 1, 2]"
+  ]
+}

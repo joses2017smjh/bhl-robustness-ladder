@@ -28,8 +28,8 @@ starts with a dataset/calibration audit before new perception or navigation runs
 
 | Item | Prerequisite | Acceptance boundary |
 |---|---|---|
-| **H3: history/latency policy training** | Predeclare matched history-versus-feedforward training and held-out latency evaluation | No training result exists for H3. Sensor-tolerance studies cannot substitute for the proposed matched policy campaign. |
-| **H4: reliable turning recipe** | A new observability/control hypothesis after R1H's failed qualification; freeze three seeds and unchanged gates before training | ≥2/3 seeds both pass turn-test v2 and qualify: ≥9/10 turns, ≤15° walk drift on ≥2/3 seeds, push falls ≤9/60. |
+| **H3: history/latency policy training** | ACTIVE: equal-capacity history versus repeated-current control, six fine-tunes, fixed final checkpoints; array `21711075` | [Frozen design](H3_H4_CAMPAIGN_2026-10-08.md); scientific result remains pending all six cells and 720 valid episodes. |
+| **H4: reliable turning recipe** | ACTIVE: 22-DoF R1HO command-latched heading, three fine-tuning seeds, fixed final checkpoints; array `21711208` depends on fresh smoke | [Frozen design](H3_H4_CAMPAIGN_2026-10-08.md); ≥2/3 seeds must both pass turn-test v2 and qualify: ≥9/10 turns, ≤15° walk drift on ≥2/3 reset seeds, push falls ≤9/60. Scientific result pending. |
 | **NAV-04: corrected terrain-sensor media** | Original stereo panels still show pre-fix policies | Rerender the corrected checkpoints and retain source/frame/output hashes. |
 | **LOC-03: flatfill terrain retention** | Checkpoint export plus matched difficulty sweep | Complete the existing protocol, preserving all episodes and denominators. |
 | **LOC-09: depth departure probe** | Diagnose the repeated rough-terrain timeout | Validated probe output; the unreplicated 2.9% error claim stays withdrawn. |

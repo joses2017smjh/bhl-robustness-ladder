@@ -1,0 +1,44 @@
+{
+  "recorded_utc": "2026-10-09T02:39:58.181835+00:00",
+  "status": "ACTIVE",
+  "scientific_status": "PENDING_COMPLETE_CAMPAIGNS",
+  "tasks": {
+    "h3": {
+      "full_array_id": "21711075",
+      "durable_root": "/nfs/stak/users/sanchej7/humanoid-h34-20261008/h3-v1",
+      "science_status": "PENDING",
+      "runtime_progress": [
+        {
+          "durable_launch": "h3-run-20261008-21711158",
+          "latest_iteration_logged": [
+            499,
+            500
+          ],
+          "cell_complete": true
+        },
+        {
+          "durable_launch": "h3-run-20261008-21711249",
+          "latest_iteration_logged": null,
+          "cell_complete": false
+        }
+      ],
+      "dependent_report_job_id": "21711668"
+    },
+    "h4": {
+      "full_array_id": "21711208",
+      "durable_root": "/nfs/stak/users/sanchej7/humanoid-h34-20261008/h4-v2",
+      "science_status": "PENDING",
+      "runtime_progress": [
+        {
+          "durable_launch": "h4-run-20261008-21711246",
+          "latest_iteration_logged": [
+            351,
+            1000
+          ],
+          "cell_complete": false
+        }
+      ],
+      "dependent_report_job_id": "21711669"
+    }
+  }
+}

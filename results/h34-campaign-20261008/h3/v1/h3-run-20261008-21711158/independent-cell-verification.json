@@ -1,0 +1,36 @@
+{
+  "recorded_utc": "2026-10-09T02:41:25.951881+00:00",
+  "status": "PASS_COMPLETE_CELL_ONLY",
+  "scientific_task_status": "UNPAIRED_PENDING_SUMMARY",
+  "cell": 0,
+  "arm": "history",
+  "seed": 0,
+  "episodes": 120,
+  "training_iterations": 500,
+  "checkpoint_iteration": 499,
+  "complete_file_hash_checks": true,
+  "raw_causal_packet_progress_rmse_fall_recomputation": true,
+  "partial_paired_summary": {
+    "schema": "h3-paired-scientific-verdict-v1",
+    "status": "INCOMPLETE",
+    "problems": [
+      "all six frozen cells are required"
+    ],
+    "num_cells": 1,
+    "num_episodes": 120,
+    "paired_seed_passes": 0,
+    "required_paired_seed_passes": 2,
+    "seed_gates": [],
+    "counts": {},
+    "protocol_sha256": "3af1d9050797430e910375e1d51ac2ca024dfd908591e7b7f2b1f1181a609ea4",
+    "interpretation": "12-DoF simulation; delayed actor IMU packets only; current joints and commands; no hardware claim"
+  },
+  "parent_sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df",
+  "archive_sha256": "f8575bfb1684bf3ea636c4b188c285f6c32ddd53f428eedacda5a03c63b67ab6",
+  "files": {
+    "outputs.tar.gz": "70d3a6124c94b4cfc874a4caac48240aea0a2dded72b396f7e0e678f17061061",
+    "campaign_result.json": "62a9aa7796319b4d2c42d19027507e52d6c8f3121f7ddf1e65b353b33c1db628",
+    "latency-evaluation.json": "2394659ea18e544f5fe7782f8acfe85c692a64a872da58d1822bbc33c9a5fc94"
+  },
+  "scope": "One complete history seed; no matched improvement or H3 scientific PASS inferred."
+}

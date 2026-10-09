@@ -1,0 +1,58 @@
+{
+  "created_utc": "2026-10-09T02:01:56.088147+00:00",
+  "host": "dgx2-1.hpc.engr.oregonstate.edu",
+  "interactive_allocation": "21710087",
+  "source_commit": "ba73008",
+  "status": "PASS_ISOLATION_ONLY",
+  "scope": "Bounded stdlib CPU probe through actual SIF; no Isaac simulation, training, scored evaluation, or GPU-kernel success is claimed. This allocation exposes an unsupported V100; actual jobs require compatible GPUs through Slurm.",
+  "isolation_probe": {
+    "share_readonly": true,
+    "source_readonly": true,
+    "cwd": "/tmp/h34-container-intake-p6aalflg/work",
+    "home": "/tmp/h34-container-intake-p6aalflg/home",
+    "kit_args": "--portable-root /tmp/h34-container-intake-p6aalflg/kit"
+  },
+  "probe_returncode": 0,
+  "probe_stdout": "",
+  "probe_stderr": "",
+  "probe_sha256": "f1606dd62c0ebcdcf08defe6a2f76d06e39cc637a151b3d662d5a2b389aaad70",
+  "substrate_sha256": "0bba98b7beb7c4f3f8c825834da70c623e679712e65eb9ce6dd22f516fc2cb3b",
+  "sif": {
+    "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "bytes": 306388992,
+    "base": "Ubuntu22.04",
+    "packages": "External shared venv; same base SIF can launch either stack"
+  },
+  "stacks": {
+    "v51": {
+      "python": "3.11.16",
+      "isaacsim": "5.1.0.0",
+      "isaaclab": "2.3.2.post1",
+      "rsl_rl": "3.0.1",
+      "torch": "2.7.0+cu128"
+    },
+    "v60": {
+      "python": "3.12.14",
+      "isaacsim": "6.0.0.1",
+      "isaaclab": "3.0.0b2",
+      "rsl_rl": "5.0.1",
+      "torch": "2.11.0"
+    }
+  },
+  "current_gpu": {
+    "name": "Tesla V100-SXM3-32GB",
+    "compute_capability": "7.0",
+    "minimum_for_v51_torch": "7.5",
+    "supported": false
+  },
+  "tracked_source_inventory": {
+    "files": 800,
+    "bytes": 148875899,
+    "includes_pinned_upstream": true
+  },
+  "storage": {
+    "full_shared_volume_writable_bytes": 0,
+    "node_local_available_gb_approx": 582,
+    "durable_home_available_gb_approx": 6.6
+  }
+}

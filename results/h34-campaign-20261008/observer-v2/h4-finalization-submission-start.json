@@ -1,0 +1,25 @@
+{
+  "created_utc": "2026-10-09T02:38:05.067273+00:00",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--account=eecs",
+    "--partition=share",
+    "--constraint=el9",
+    "--ntasks=1",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=00:15:00",
+    "--export=NONE",
+    "--chdir=/tmp",
+    "--job-name=h4-finalize-20261008",
+    "--dependency=afterany:21711208",
+    "--output=/nfs/stak/users/sanchej7/humanoid-h34-20261008/h4-finalize-20261008-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-h34-20261008/h4-finalize-20261008-%j.out",
+    "/nfs/stak/users/sanchej7/humanoid-h34-20261008/observer-v2/h34_finalize.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-h34-20261008/h4-v2",
+    "/nfs/stak/users/sanchej7/humanoid-h34-20261008/observer-v2/observer.tar.gz",
+    "bb35116a68681b5c40cc6052e6a3879c025ded7be9bfff784cf00aebd65f0440",
+    "/nfs/stak/users/sanchej7/humanoid-h34-20261008/h4-finalization"
+  ]
+}
