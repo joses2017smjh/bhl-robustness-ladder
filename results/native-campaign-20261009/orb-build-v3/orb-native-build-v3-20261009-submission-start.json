@@ -1,0 +1,21 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=orb-native-build-v3-20261009",
+    "--partition=share,eecs",
+    "--cpus-per-task=4",
+    "--mem=32G",
+    "--time=01:30:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v3/orb-native-build-v3-20261009-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v3/orb-native-build-v3-20261009-%j.out",
+    "--export=NONE",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v3/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v3",
+    "orb-native-build-v3-20261009",
+    "5c548dda6ecdf9604e3e3c8e820227040bd479f4d432755876445e53f733a5f9"
+  ],
+  "created_utc": "2026-10-09T21:20:41.600439+00:00"
+}

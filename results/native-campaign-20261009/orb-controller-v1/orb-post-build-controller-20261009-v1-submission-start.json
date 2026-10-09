@@ -1,0 +1,23 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=orb-post-build-controller-20261009-v1",
+    "--partition=preempt",
+    "--cpus-per-task=1",
+    "--mem=4G",
+    "--time=00:20:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-controller-v1/orb-post-build-controller-20261009-v1-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-controller-v1/orb-post-build-controller-20261009-v1-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--dependency=afterok:21741510",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-controller-v1/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-controller-v1",
+    "orb-post-build-controller-20261009-v1",
+    "1562c43b5aa5ba6cc01c22cf25a249a96f3da88f182f5061029ea268f255504f"
+  ],
+  "created_utc": "2026-10-09T21:45:09.878123+00:00"
+}

@@ -98,3 +98,28 @@ bounded Slurm allocations and durable completion receipts. Submission,
 executable completion, scientific qualification and publication are separate
 states. See `results/native-campaign-20261009/` and `SLURM_JOBS.md` for the exact
 protocols, hashes, failures and job receipts.
+
+## Execution and public evidence
+
+The [raw capture release](https://github.com/joses2017smjh/bhl-robustness-ladder/releases/tag/native-sensor-replay-20261009)
+contains the actual319,616,699-byte dataset archive, SHA256
+`ec15004ac7be4b58d33f78d6a4b5924d1d4a72b00c9332473d5617818ba08ca1`.
+It is a sensor dataset; release publication is not an estimator or navigation verdict.
+
+The [LIO navigation smoke audit](../results/native-campaign-20261009/navigation-lio-v1/smoke-observer/report.md)
+and path figure come from two actual8-second episodes, excluded from qualification.
+Scored jobs remain pending until their runner completion and raw measurements exist.
+The failed allocation-step build21739893.1 is retained. A clean v6 native build runs as step21739893.2 with the same upstream algorithm and a corrected private OpenSSL multiarch header path; its queued backup is21743261 with dependent controller21743355. Actual allocation steps are distinct from backup batch submissions.
+Resource revisions preserve source/input inventories and scientific thresholds;
+cancelled pending submissions and failed build attempts remain visible.
+
+The hosted [CPU regression run37992736230](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37992736230)
+passed, with zero JUnit errors/failures and124 optional skips. This verifies software
+regression and trained-asset replay, not native campaign scientific acceptance.
+
+Native per-frame compute, process/client wall time and sensor capture cost are
+separate measurements. LIO navigation charges measured client/IPC time while
+ideal ray generation represents the simulated sensor. Stereo navigation also
+charges rendering and PNG encoding. This conservative stereo capture treatment
+must be disclosed in method comparisons; it is not equivalent to a physical
+camera's independently clocked acquisition pipeline.

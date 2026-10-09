@@ -1,0 +1,36 @@
+{
+  "additional_source": [
+    "scripts/bench/native_build_campaign.py",
+    "scripts/native/orb_headless.cc",
+    "scripts/native/orb_runner.cc",
+    "scripts/native/orb_build.py"
+  ],
+  "campaign_id": "orb-native-build-v3-20261009",
+  "jobs": [
+    {
+      "args": [
+        "--method",
+        "orb"
+      ],
+      "entrypoint": "scripts/bench/native_build_campaign.py",
+      "kind": "evaluate",
+      "max_output_mb": 512,
+      "name": "orb-native-build-v3-20261009",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 32,
+        "partition": "share,eecs",
+        "time_limit": "01:30:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Build only; v3 restores unsigned-char visualization thumbnail type after Pangolin include removal; native algorithm unchanged; no trajectories"
+}

@@ -14,12 +14,14 @@ import time
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--method", choices=["orb", "lio"], required=True)
+    p.add_argument("--jobs", type=int, choices=(1, 2, 3, 4), default=4,
+                   help="Bounded ORB compiler parallelism; match declared CPU allocation")
     a = p.parse_args()
     source = Path(__file__).resolve().parents[2]
     work, output = Path(os.environ["H34_WORK_DIR"]), Path(os.environ["H34_OUTPUT_DIR"])
     runtime = work / "native-runtime"
     command = [sys.executable, str(source / "scripts/native" / (a.method + "_build.py")), "--output", str(runtime)]
-    if a.method == "orb": command += ["--work", str(work / "build"), "--jobs", "4"]
+    if a.method == "orb": command += ["--work", str(work / "build"), "--jobs", str(a.jobs)]
     started = time.monotonic()
     with (output / "build.log").open("x") as log:
         process = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
@@ -36,7 +38,7 @@ def main():
                 if f.is_dir(): shutil.copytree(f, target / f.name)
                 elif f.is_file(): shutil.copy2(f, target / f.name)
         else:
-            for name in ["fastlio_headless", "lib", "runtime.json", "fastlio_headless.cpp", "IMU_Processing.hpp", "shim"]:
+            for name in ["fastlio_headless", "lib", "runtime.json", "fastlio_headless.cpp", "IMU_Processing.hpp", "shim", "licenses"]:
                 f = runtime / name
                 if f.is_dir(): shutil.copytree(f, target / name)
                 else: shutil.copy2(f, target / name)

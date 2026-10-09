@@ -14,6 +14,14 @@ from bhl_robust.research.native_orb import (
 )
 
 
+def build_module():
+    path = Path(__file__).resolve().parents[1] / "scripts/native/orb_build.py"
+    spec = importlib.util.spec_from_file_location("native_orb_build_test", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def frame(timestamp=1.0, state=2, map_id=7):
     return {"schema": "bhl-orb-native-frame-v1", "timestamp_s": timestamp,
             "tracking_state": state, "tracked": state == 2, "map_id": map_id,
@@ -140,6 +148,45 @@ with open(sys.argv[3], 'w') as out:
         executable = self.executable("import time\ntime.sleep(2)\n")
         with self.assertRaises(TimeoutError):
             with self.client(executable, startup_timeout_s=.05): pass
+
+
+class NativeBuildBoundaryTests(unittest.TestCase):
+    def test_headless_patch_preserves_viewer_thumbnail_byte_type(self):
+        module = build_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            inputs = {
+                "include/Map.h": "#include <pangolin/pangolin.h>\nGLubyte* mThumbnail;\n",
+                "include/MapDrawer.h": "#include<pangolin/pangolin.h>\n",
+                "src/System.cc": "#include <pangolin/pangolin.h>\n",
+                "src/Tracking.cc": "actual-algorithm-source-remains-byte-identical\n",
+                "Thirdparty/DBoW2/CMakeLists.txt": "flags -O3 -march=native\n",
+                "Thirdparty/g2o/CMakeLists.txt": "flags -O3 -march=native\n",
+            }
+            for name, value in inputs.items():
+                path = root / name; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(value)
+            changes = module.patch_headless(root)
+            self.assertIn("using GLubyte = unsigned char", (root / "include/Map.h").read_text())
+            self.assertEqual((root / "src/Tracking.cc").read_text(), inputs["src/Tracking.cc"])
+            self.assertEqual(len(changes), 5)
+            self.assertNotIn("-march=native", (root / "Thirdparty/g2o/CMakeLists.txt").read_text())
+            with self.assertRaisesRegex(ValueError, "Expected one pinned"):
+                module.patch_headless(root)
+
+    def test_cmake_keeps_cpp_algorithm_sources_and_excludes_gui_units(self):
+        module = build_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); (root / "src/CameraModels").mkdir(parents=True)
+            for name in ("Tracking.cc", "System.cc", "MapDrawer.cc", "Viewer.cc", "MLPnPsolver.cpp", "OptimizableTypes.cpp"):
+                (root / "src" / name).touch()
+            (root / "src/CameraModels/Pinhole.cpp").touch()
+            cmake = module.cmake_text(root, root / "adapter", root / "sysroot")
+            for name in ("Tracking.cc", "MLPnPsolver.cpp", "OptimizableTypes.cpp", "Pinhole.cpp", "orb_headless.cc"):
+                self.assertIn(name, cmake)
+            self.assertNotIn("MapDrawer.cc", cmake)
+            self.assertNotIn("Viewer.cc", cmake)
+            self.assertNotIn("-march=native", cmake)
+            self.assertIn(str(root / "sysroot/usr/include/x86_64-linux-gnu"), cmake)
 
 
 if __name__ == "__main__":

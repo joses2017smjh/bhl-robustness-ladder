@@ -48,7 +48,7 @@ set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
 include_directories("{upstream}" "{upstream}/include" "{upstream}/include/CameraModels"
  "{upstream}/Thirdparty/Sophus" "{sysroot}/usr/include/eigen3" "{sysroot}/usr/include/opencv4"
- "{sysroot}/usr/include")
+ "{sysroot}/usr/include" "{sysroot}/usr/include/x86_64-linux-gnu")
 link_directories("{sysroot}/usr/lib/x86_64-linux-gnu")
 add_subdirectory("{upstream}/Thirdparty/DBoW2" dbow)
 add_subdirectory("{upstream}/Thirdparty/g2o" g2o)
@@ -66,7 +66,8 @@ target_link_libraries(orb_native ORB_SLAM3)
 def patch_headless(upstream):
     replacements = {
         "include/MapDrawer.h": ('#include<pangolin/pangolin.h>', 'namespace pangolin { class OpenGlMatrix; }'),
-        "include/Map.h": ('#include <pangolin/pangolin.h>', '// Headless: visualization header is unnecessary.'),
+        "include/Map.h": ('#include <pangolin/pangolin.h>',
+                          'using GLubyte = unsigned char; // Original OpenGL viewer-thumbnail byte type, no GUI dependency.'),
         "src/System.cc": ('#include <pangolin/pangolin.h>', '// Headless: visualization translation units are replaced.'),
     }
     patches = []

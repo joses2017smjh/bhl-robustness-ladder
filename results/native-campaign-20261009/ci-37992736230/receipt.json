@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "run_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37992736230",
+  "head_sha": "ef3b40356017cf9da267afe12005cd04e6dcbdd1",
+  "tests": 2477,
+  "skipped": 124,
+  "failures": 0,
+  "errors": 0,
+  "scope": "Hosted CPU regression, trained-asset integration and fault injection; not native SLAM/navigation/terrain acceptance. Subtests included in JUnit test count.",
+  "files": {
+    "pytest.xml": {
+      "bytes": 355444,
+      "sha256": "b57ea3dd95fc3165f64a922f9423943fc667f44cc475b4407a9a08eb778c9cc4"
+    },
+    "integration.json": {
+      "bytes": 1785,
+      "sha256": "7a774cb9e0596096ddeebfefa960019e9bb1c10d30b9b5fd9be404cdb43fd0cf"
+    },
+    "replay/receipt.json": {
+      "bytes": 1989,
+      "sha256": "10e6ea49072398fb581864a8960779039906e53bc846539a67f3f84e8d5ee4ae"
+    },
+    "replay/report.json": {
+      "bytes": 26770,
+      "sha256": "0e958a9fe98991dbb8c8882096990ada3d97540f92986bd76f56893d4a4ed65d"
+    },
+    "replay/paired-guard-timing.json": {
+      "bytes": 7952,
+      "sha256": "73b5e122f39d1fb4aa7699d43d983b29434a758bcf90583d12aaf02f6062bae6"
+    },
+    "replay/guard-decisions.json": {
+      "bytes": 22146,
+      "sha256": "a01db7c804a3f192301418dc34d6f59bc5f8a822bffe3504b1756407faf0cf63"
+    }
+  }
+}

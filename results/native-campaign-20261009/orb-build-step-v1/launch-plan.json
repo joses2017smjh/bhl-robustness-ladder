@@ -1,0 +1,23 @@
+{
+  "schema": "bhl-native-orb-build-step-v1",
+  "declared_utc": "2026-10-09T21:44:39.247818+00:00",
+  "allocation_id": "21739893",
+  "allocation_resources": "2 CPU, 31800 MiB, dgx2-5, existing allocation ends 16:45:23 PDT; no additional GPU allocation and no GPU compute",
+  "step_resources": "2 CPU, 16 GiB, overlap",
+  "frozen_build_archive_sha256": "405c48c4d957f985f08c24fd67eca24869c1b5a62877301a7aa293964cf7bdf7",
+  "command": [
+    "srun",
+    "--jobid=21739893",
+    "--overlap",
+    "--ntasks=1",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v5/step-21739893.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v5/step-21739893.out",
+    "/bin/bash",
+    "-c",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python -c 'import os,json,pathlib,datetime; pathlib.Path('\"'\"'/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v5/step-environment-21739893.json'\"'\"').write_text(json.dumps({'\"'\"'recorded_utc'\"'\"':datetime.datetime.now(datetime.timezone.utc).isoformat(),'\"'\"'environment'\"'\"':{k:v for k,v in os.environ.items() if k in ['\"'\"'SLURM_JOB_ID'\"'\"','\"'\"'SLURM_STEP_ID'\"'\"','\"'\"'SLURM_STEP_NUM_TASKS'\"'\"','\"'\"'SLURM_CPUS_PER_TASK'\"'\"','\"'\"'SLURM_MEM_PER_NODE'\"'\"','\"'\"'SLURM_JOB_NODELIST'\"'\"']},'\"'\"'host'\"'\"':os.uname().nodename,'\"'\"'scope'\"'\"':'\"'\"'Actual separate Slurm step in existing allocation; batch v5 21741510 has not run'\"'\"'},indent=2)+'\"'\"'\\n'\"'\"')'\nexec /nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v5/h34_campaign.sbatch /nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v5 orb-native-build-v5-20261009 405c48c4d957f985f08c24fd67eca24869c1b5a62877301a7aa293964cf7bdf7"
+  ],
+  "expected_output": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v5/orb-native-build-v5-20261009-21739893",
+  "scope": "Unchanged actual native C++ build from v5 frozen archive; distinct execution provenance, never attributed to queued batch 21741510"
+}

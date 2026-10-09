@@ -30,9 +30,14 @@ error therefore measures all sampled map surfaces; it is not a ground-only
 accuracy claim or a successful ramp-traversal claim. No thresholds were tuned
 after inspecting the smoke.
 
-The scored job **21740636** was submitted after the successful smoke using
-the same frozen archive. It will run the 18-episode controller qualification
-screen first, then at most 216 untouched paired trials if actors qualify.
+The scored job **21740636** was cancelled while still pending, before any scored
+episode started. Its [cancellation receipt](pending-run-cancellation.json) is
+retained. The [resource-only v2 replacement](../terrain-v2/README.md) inherits the
+exact same scientific settings, actor inputs and source members, reducing the
+two jobs' CPU requests from four to two. Its fresh smoke is **21740943** and its
+scored job **21740946** depends on successful completion of that smoke. The
+scored replacement will run the 18-episode controller qualification screen
+first, then at most 216 untouched paired trials if actors qualify.
 If no actor qualifies, the result must be negative with zero confirmation
 episodes. Running or scheduled work supplies no measured confirmation result.
 

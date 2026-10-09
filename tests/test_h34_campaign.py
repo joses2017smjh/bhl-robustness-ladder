@@ -45,7 +45,7 @@ def test_runtime_isolation_and_array_forwarding(tmp_path, monkeypatch):
     assert "APPTAINERENV_HOME" not in env
 
 
-@pytest.mark.parametrize("override", [{"gpus": 2}, {"cpus": 0}, {"memory_gb": 129}, {"time_limit": "49:00:00"}, {"array": "0-5%3"}])
+@pytest.mark.parametrize("override", [{"gpus": 2}, {"cpus": 0}, {"memory_gb": 129}, {"time_limit": "49:00:00"}, {"array": "0-5%3"}, {"requeue": "false"}, {"requeue": 0}])
 def test_unbounded_resources_refused(override):
     p = protocol()
     p["jobs"][0]["resources"].update(override)
@@ -184,8 +184,16 @@ def test_training_requires_same_archive_smoke_dependency(tmp_path):
         campaign.submit(target, "smoke", "afterok:123")
 
 
-def test_submission_does_not_inherit_interactive_context(tmp_path, monkeypatch):
+@pytest.mark.parametrize("requeue", [None, True, False])
+def test_submission_does_not_inherit_interactive_context(tmp_path, monkeypatch, requeue):
     _, target, _ = frozen(tmp_path)
+    if requeue is not None:
+        p = json.loads((target / "protocol.json").read_text())
+        p["jobs"][0]["resources"]["requeue"] = requeue
+        (target / "protocol.json").write_text(json.dumps(p))
+        intake = json.loads((target / "intake.json").read_text())
+        intake["protocol_sha256"] = campaign.digest(target / "protocol.json")
+        (target / "intake.json").write_text(json.dumps(intake))
     monkeypatch.setenv("SLURM_JOB_ID", "desktop")
     monkeypatch.setenv("TMPDIR", "/scratch/desktop-only")
     captured = {}
@@ -198,5 +206,6 @@ def test_submission_does_not_inherit_interactive_context(tmp_path, monkeypatch):
     assert "SLURM_JOB_ID" not in captured["env"]
     assert captured["env"]["TMPDIR"] == "/tmp"
     assert "--export=NONE" in captured["command"]
+    assert ("--no-requeue" in captured["command"]) == (requeue is False)
     with pytest.raises(FileExistsError):
         campaign.submit(target, "smoke")

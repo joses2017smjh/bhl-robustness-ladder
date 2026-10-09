@@ -1,0 +1,38 @@
+{
+  "actual_execution_provenance": "Actual distinct Slurm v6 step on allocation21739893, not backup batch21743261",
+  "archive_sha256": "af21c73636082252084a84af909c447ee34b7e0004615dd517a64718e3514cb2",
+  "build_freeze": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6",
+  "build_job_id": "21739893",
+  "build_result_directory": "orb-native-build-v6-20261009-21739893",
+  "campaigns": [
+    {
+      "persistent": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v1",
+      "pins": {
+        "frozen-campaign.tar.gz": "cb68ac9d226ed98948ec49c2488c73698e54a6cb1b0f4c8c930a8bf5d826b82b",
+        "h34_campaign.sbatch": "d1ed87d378c599a22ddc2fee86dd3cc5354e76973870d81485603a833159a85b",
+        "intake.json": "6e0fd6965e1f37fdde867b3c764471b46ec6ece4aaeb3fcb012354a49c7fc9a2",
+        "manifest.json": "a82240c55c68a77d80508fcb008bac4229f51bd5578f00da68a991aec145ec28",
+        "protocol.json": "97443c66226e3fd881b02ec23eb470ab050587ce05f8ed4353618164f848c55a"
+      },
+      "template": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-template"
+    },
+    {
+      "persistent": "/nfs/stak/users/sanchej7/humanoid-native-20261009/stereo-nav-v1",
+      "pins": {
+        "frozen-campaign.tar.gz": "d3442e2c65be3febf7851a8012f6e497800f015a86083f04a0ada2b126f17302",
+        "h34_campaign.sbatch": "d1ed87d378c599a22ddc2fee86dd3cc5354e76973870d81485603a833159a85b",
+        "intake.json": "7dc6ed38485333c8c64686c52fb3cb561bbcfc4e1bd84d8bef9e709d3120d0e1",
+        "manifest.json": "cdd137d7143d1dc7cb4c8feb525941ae6a6a4016f8f1a86f6ebd25e2ddb063bb",
+        "protocol.json": "67e1401391e57a3d3fc7881445ac3389034670e9147f12bb410852e735638fe8"
+      },
+      "template": "/nfs/stak/users/sanchej7/humanoid-native-20261009/stereo-nav-template-v1"
+    }
+  ],
+  "protocol_sha256": "7f87c701b80106346098d80fe81238454f1934884e6504ad4d04698bc419c40f",
+  "runtime_archive": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-runtime-step-v2/runtime.tar.gz",
+  "schema": "bhl-orb-post-build-plan-v1",
+  "scope": "Actual build PASS and manifest verification only; no estimator outcome reading, algorithm modifications, or post-result threshold tuning",
+  "share_root": "/nfs/hpc/share/sanchej7",
+  "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+  "sif_sha256": "d427d9c32d23134493be3fe9721a790d71f3134f6cad847725537009f9bcac29"
+}

@@ -1,0 +1,31 @@
+{
+  "archive_sha256": "5922b606187bec9463b409a29a63c3b28ff387153608c8ff0ebcf2a322604664",
+  "command": [
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-lio-native-build-20261009-v4-21740637-rh7v6ypz/source/scripts/bench/native_build_campaign.py",
+    "--method",
+    "lio"
+  ],
+  "host": "cn-gpu4.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--method",
+      "lio"
+    ],
+    "entrypoint": "scripts/bench/native_build_campaign.py",
+    "kind": "evaluate",
+    "max_output_mb": 512,
+    "name": "lio-native-build-20261009-v4",
+    "resources": {
+      "cpus": 2,
+      "gpus": 0,
+      "memory_gb": 24,
+      "partition": "share,eecs",
+      "time_limit": "01:30:00"
+    }
+  },
+  "job_id": "21740637",
+  "scratch": "/tmp/bhl-h34-lio-native-build-20261009-v4-21740637-rh7v6ypz",
+  "source_files_verified": 834,
+  "started_utc": "2026-10-09T21:16:43.219632+00:00"
+}

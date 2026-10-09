@@ -152,6 +152,15 @@ def build(output, compiler, *, upstream_source=None):
             if destination.stat().st_size != package["size_bytes"] or sha256(destination) != package["sha256"]:
                 raise ValueError(f"dependency checksum mismatch: {package['package']}")
             extract_dependency(destination, sysroot)
+        # Notice collection is additive provenance; it never changes compiled
+        # estimator source, build flags, sensor inputs or algorithm parameters.
+        from lio_notices import download, retain_notices
+        license_lock = json.loads(Path(__file__).with_name("lio_license_sources.json").read_text())
+        common_package = license_lock["common_licenses_package"]
+        common_archive = dependencies / Path(common_package["url"]).name
+        download(common_package, common_archive)
+        extract_dependency(common_archive, sysroot)
+        notices = retain_notices(sysroot, output / "licenses")
         generated, sections = generated_core(upstream)
         shims = output / "shim"
         write_shims(shims)
@@ -188,6 +197,7 @@ def build(output, compiler, *, upstream_source=None):
                    "transport_main_sha256": sha256(main_path), "dependency_lock_sha256": sha256(lock_path),
                    "compiler": compiler, "compiler_version": subprocess.check_output([compiler, "--version"], text=True).splitlines()[0],
                    "compile_command": command, "binary_sha256": sha256(native), "ldd": ldd,
+                   "notices_receipt_sha256": sha256(output / "licenses/notices-receipt.json"),
                    "algorithm_scope": "Upstream FAST-LIO2 ImuProcess, IKFoM, ikd-Tree, map/measurement callbacks; headless ROS transport replacement only",
                    "differences": ["ROS subscriptions/publication/viewer/debug logs omitted", "feature-disabled, given-offset Velodyne conversion in transport entry point", "one explicit tracking state for every original scan, including initialization", "tracking requires >=1 final effective map match; no upstream covariance-based tracking classifier", "C++ optimization O1 instead of upstream O3; timing must disclose this"]}
         (output / "runtime.json").write_text(json.dumps(receipt, indent=2, allow_nan=False) + "\n")

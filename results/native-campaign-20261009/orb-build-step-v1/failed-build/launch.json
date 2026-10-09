@@ -1,0 +1,53 @@
+{
+  "archive_sha256": "405c48c4d957f985f08c24fd67eca24869c1b5a62877301a7aa293964cf7bdf7",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-orb-native-build-v5-20261009-21739893-1z5ww3qy/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-orb-native-build-v5-20261009-21739893-1z5ww3qy:/tmp/bhl-h34-orb-native-build-v5-20261009-21739893-1z5ww3qy",
+    "--bind",
+    "/tmp/bhl-h34-orb-native-build-v5-20261009-21739893-1z5ww3qy/source:/tmp/bhl-h34-orb-native-build-v5-20261009-21739893-1z5ww3qy/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-orb-native-build-v5-20261009-21739893-1z5ww3qy/protocol.json:/tmp/bhl-h34-orb-native-build-v5-20261009-21739893-1z5ww3qy/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-orb-native-build-v5-20261009-21739893-1z5ww3qy/work",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-orb-native-build-v5-20261009-21739893-1z5ww3qy/source/scripts/bench/native_build_campaign.py",
+    "--method",
+    "orb",
+    "--jobs",
+    "2"
+  ],
+  "host": "dgx2-5.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--method",
+      "orb",
+      "--jobs",
+      "2"
+    ],
+    "entrypoint": "scripts/bench/native_build_campaign.py",
+    "kind": "evaluate",
+    "max_output_mb": 512,
+    "name": "orb-native-build-v5-20261009",
+    "resources": {
+      "cpus": 2,
+      "gpus": 0,
+      "memory_gb": 16,
+      "partition": "preempt",
+      "requeue": false,
+      "time_limit": "01:30:00"
+    }
+  },
+  "job_id": "21739893",
+  "scratch": "/tmp/bhl-h34-orb-native-build-v5-20261009-21739893-1z5ww3qy",
+  "source_files_verified": 840,
+  "started_utc": "2026-10-09T21:44:56.912058+00:00"
+}

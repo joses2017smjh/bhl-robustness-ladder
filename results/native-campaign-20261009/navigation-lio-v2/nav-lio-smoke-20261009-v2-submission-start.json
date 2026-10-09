@@ -1,0 +1,22 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=nav-lio-smoke-20261009-v2",
+    "--partition=preempt",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=00:20:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2/nav-lio-smoke-20261009-v2-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2/nav-lio-smoke-20261009-v2-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2",
+    "nav-lio-smoke-20261009-v2",
+    "df3d91ae4ad8c4c8688d7ed3ff8639baff7a5860043f39414871c559301cfa26"
+  ],
+  "created_utc": "2026-10-09T21:39:25.271387+00:00"
+}

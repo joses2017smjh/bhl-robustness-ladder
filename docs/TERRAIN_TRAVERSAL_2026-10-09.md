@@ -109,7 +109,8 @@ python scripts/bench/terrain_traversal_campaign.py run \
 The two-episode smoke exercises the flat blind reference and ramp lidar governor.
 It has `SMOKE_ONLY` scientific status and cannot qualify an actor. Scored runs
 must be predeclared in `SLURM_JOBS.md` and executed on compute nodes. No GPU or
-renderer is required. Plan one CPU task with four allocated CPUs and 8 GB RAM:
+renderer is required. The current submission uses one CPU task with two
+allocated CPUs and 8 GB RAM:
 up to 20 minutes for smoke, one hour for the 18-episode screen, and four hours
 for the conditional maximum 216 confirmation trials. These are resource caps,
 not claimed measured runtimes.
@@ -139,3 +140,18 @@ Unit checks exercise unknown-space stops, degenerate plane support, gravity
 alignment, crossing-versus-survival scoring, stopped-robot timeouts, duplicate
 screen groups and an inconsistent saved success flag. The real compute smoke
 is still required before the scored screen.
+
+The first real two-episode smoke completed. The blind flat episode reached
+5.02 m and survived the full 40 seconds; the LiDAR ramp episode stopped at
+1.58 m and timed out, without a fall or side-wall contact. That stop is a
+negative traversal outcome. It did not trigger threshold tuning. The raw
+scans, dense map evaluation and all outcomes were independently audited in
+[the v1 evidence](../results/native-campaign-20261009/terrain-v1/README.md).
+
+The current exact-source [v3 submission](../results/native-campaign-20261009/terrain-v3/README.md)
+uses `preempt` with explicit no-requeue: fresh smoke 21742782, followed by scored
+job 21742786 only if that smoke passes. Earlier v1/v2 scored jobs remained
+pending and were cancelled with receipts before any scored episodes began.
+The resource revisions preserve all 834 source/model input hashes and the
+same qualification and conditional confirmation criteria. Queue submission
+does not establish a qualification or confirmation result.

@@ -133,3 +133,22 @@ the replay is odometry/local mapping rather than loop closure; native
 per-scan timing excludes acquisition, export and process startup. Actual
 results, scheduler receipts and independent audit belong to the root
 campaign result directory.
+
+
+## Runtime notices retained after build
+
+Build v4 job `21740637` compiled the native executable successfully, SHA256
+`e2c7791007548b316546aa1ef91a34b6fa611e16f8fb8dfd8195f47f544bd2d3`.
+Its immutable build archive remains unchanged. A separate notice artifact
+retains copyright files from the exact 13 checksum-pinned Ubuntu dependency
+payloads, full common-license text from pinned Ubuntu base-files 12ubuntu4,
+and GPL/RuntimeException plus library copyright sources from GCC 12.5 source
+commit `c17d40bb3778bca5e81595f033df9222b66658eb`. Receipt checks every retained
+file size and SHA256. Artifact SHA256:
+`17e1f6dd04ffa65dea5f5d0f4fcdd9873a38d4e52467bfa3949bffac865f1dbf`
+(470,754 bytes); public location `results/native-campaign-20261009/lio-build-v4/licensing/`.
+
+`lio_notices.py` reproduces this notice collection without compiling or
+changing a runtime binary. Future `lio_build.py` builds retain notices before
+removing their private dependency sysroot. The pinned original FAST_LIO
+GPL2 license and corresponding source accompany public estimator distribution.

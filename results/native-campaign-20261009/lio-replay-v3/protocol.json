@@ -1,0 +1,83 @@
+{
+  "additional_source": [
+    "scripts/bench/native_slam_campaign.py",
+    "src/bhl_robust/research/native_orb.py",
+    "src/bhl_robust/research/native_lio.py",
+    "scripts/native/lio_replay.py"
+  ],
+  "campaign_id": "native-lio-replay-20261009-v3",
+  "capture_archive": "capture.tar.gz",
+  "capture_release": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/tag/native-sensor-replay-20261009",
+  "input_files": {
+    "capture.tar.gz": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/capture-v2/native-capture-capture-20261009-v2-21740516/outputs.tar.gz",
+      "sha256": "ec15004ac7be4b58d33f78d6a4b5924d1d4a72b00c9332473d5617818ba08ca1"
+    },
+    "lio-runtime.tar.gz": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/artifacts/lio-runtime-inference.tar.gz",
+      "sha256": "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke"
+      ],
+      "entrypoint": "scripts/bench/native_slam_campaign.py",
+      "kind": "smoke",
+      "max_output_mb": 128,
+      "name": "native-lio-smoke-20261009-v3",
+      "resources": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 16,
+        "partition": "preempt",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "replay"
+      ],
+      "entrypoint": "scripts/bench/native_slam_campaign.py",
+      "kind": "run",
+      "max_output_mb": 128,
+      "name": "native-lio-replay-20261009-v3",
+      "resources": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 16,
+        "partition": "preempt",
+        "requeue": false,
+        "time_limit": "01:00:00"
+      }
+    }
+  ],
+  "lio_runtime_archive": "lio-runtime.tar.gz",
+  "methods": [
+    "lio"
+  ],
+  "replay_gate": {
+    "initialization_exclusion_s": 5.0,
+    "maximum_ate_rmse_m": 0.1,
+    "maximum_native_compute_p95_s": 0.1,
+    "maximum_rotation_p95_deg": 5.0,
+    "minimum_tracking_fraction": 0.9
+  },
+  "resource_revision": "v2 pending never executed; resource-only v3 moves to preempt and disables requeue. All frozen source/input manifest entries and scientific gates identical to v2.",
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Actual native estimator simulation replay; no closed-loop navigation claim"
+}

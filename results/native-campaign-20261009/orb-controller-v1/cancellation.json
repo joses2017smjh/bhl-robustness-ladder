@@ -1,0 +1,14 @@
+{
+  "cancelled_utc": "2026-10-09T21:54:26.243602+00:00",
+  "job_id": "21742797",
+  "observed_state_before": "PENDING",
+  "command": [
+    "scancel",
+    "--state=PENDING",
+    "21742797"
+  ],
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "",
+  "reason": "Actual allocated v5 source compilation exposed missing private multiarch OpenSSL include; replace known-faulty pending backup with v6 include-path-only fix"
+}
