@@ -2,6 +2,8 @@
 
 Research plan prepared October 8, 2026. **The experiments and numerical targets below are proposed; they are not measured results.** Current run outcomes belong in the [task closeout](TASK_CLOSURE_2026-10-08.md) and [status ledger](STATUS.md).
 
+**Implementation update, October 8:** the separately frozen [sensor pilot](SENSOR_PILOT_RESULTS_2026-10-08.md) completed on 72 rendered stereo pairs with timed 3D scans and IMU. SGBM/C-Fast-FoundationStereo, five fusion arms, geometric terrain evaluation and estimator-input exports now have executable code and retained outputs. Confidence gating did not meet the proposed improvement target. Native SLAM, estimated-pose closed-loop navigation and terrain traversal remain follow-up work. [Actual implementation and dependency queue](SENSOR_CAMPAIGN_2026-10-08.md).
+
 ## Research question and current foundation
 
 Can **motion-aware, confidence-gated stereo–LiDAR fusion** preserve obstacle detection and navigation during gait, sensor delays, and, where supported, head movement better than either sensor alone or naïve fusion? A useful contribution would connect perception failures to robot behavior through controlled, reproducible experiments. Novelty has not been established; integrating published components does not itself establish a new algorithm.

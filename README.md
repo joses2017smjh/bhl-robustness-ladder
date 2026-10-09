@@ -13,9 +13,9 @@ tracks completed deliverables, negative experiments and remaining objectives.
 all three actors' frozen gates across **576 episodes**: **259/288** candidate
 goals versus **247/288** baseline, **0 versus 9** observed falls, and **51.5%**
 lower mean yaw-command sign-flip rate. This is a matched 12-DoF biped simulation
-study with oracle pose/goal. The new
-[stereo–lidar research plan](docs/STEREO_LIDAR_RESEARCH_2026-10-08.md) connects
-calibrated recordings, motion-aware fusion and estimated-pose navigation.
+study with oracle pose/goal.
+
+**Stereo–lidar pilot completed:** [72 simulated stereo pairs across three scenes](docs/SENSOR_PILOT_RESULTS_2026-10-08.md), with actual pretrained C-Fast-FoundationStereo GPU inference, five fusion arms, 3D terrain maps, and estimator-input exports. On the single held-out scene, common-mask depth RMSE is **0.310 m SGBM versus 0.147 m C-FFS**; warm decode-plus-inference p95 is **29.0 versus 92.6 ms**. Confidence gating does not meet the proposed fusion improvement target. Native SLAM, estimated-pose navigation and terrain traversal remain open. [Measured demo](results/sensor-campaign-20261008/demo/stereo-lidar-demo.png) · [Implementation and follow-up queue](docs/SENSOR_CAMPAIGN_2026-10-08.md).
 
 [![A 22-DoF humanoid explores an unseen maze with lidar mapping and a scripted planner](docs/gifs/random-maze-humanoid-sensors.gif)](docs/RANDOM_MAZE.md)
 

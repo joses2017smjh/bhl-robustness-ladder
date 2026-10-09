@@ -1,0 +1,35 @@
+{
+  "artifacts": {
+    "stereo-lidar-demo.png": {
+      "bytes": 421077,
+      "sha256": "5af2d27d4f3421d1a12f0014ab856f47f04b54b81280d1f1eca807bfd19764be"
+    },
+    "stereo-lidar-demo.svg": {
+      "bytes": 386355,
+      "sha256": "4c911c9093e90a6f876623d48ecba4d9379e4aaef393680e64baae47708ff73e"
+    },
+    "terrain-demo.png": {
+      "bytes": 200278,
+      "sha256": "6263b24eaa4cd554e37d266a3f56bc540b65c200487a6ec9109ff23854792ad9"
+    },
+    "terrain-demo.svg": {
+      "bytes": 102965,
+      "sha256": "6067bcf2069984988a739adfa958a9392ca14f255db5723d1d16a55b8810e7b6"
+    }
+  },
+  "dataset_manifest_sha256": "2343115d9b639cb7e9c4d1da9ad819503aaf2cbcc33dce9458316c91a08a270d",
+  "device": "Quadro RTX 8000",
+  "frame_id": "0000",
+  "navigation_outcomes": null,
+  "p95_ms": {
+    "c_fast_foundationstereo": 92.5651775,
+    "sgbm": 28.98854465
+  },
+  "prediction_manifest_sha256": "3d03ae499a894f8dc303d2f84fdfee435ce08e57aa844978b23693ddf9f06511",
+  "scope": "SIMULATION | Kinematic sensor rig | No humanoid gait or navigation outcome",
+  "selection": "first frame of first predeclared held-out scene",
+  "sequence_id": "ramp_step_pilot",
+  "status": "PASS",
+  "traversal_outcomes": null,
+  "verified_provider": "CUDAExecutionProvider"
+}

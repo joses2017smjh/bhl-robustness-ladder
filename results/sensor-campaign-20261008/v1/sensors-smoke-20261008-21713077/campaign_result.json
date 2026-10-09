@@ -1,0 +1,90 @@
+{
+  "elapsed_s": 18.084138813079335,
+  "finished_utc": "2026-10-09T03:22:45.818397+00:00",
+  "phase": "smoke",
+  "problems": [
+    "RuntimeError: stereo stage failed (exit 1); see stereo.log"
+  ],
+  "protocol_sha256": "0b47093f5edc8e751535217d3040642b0d07e6173a3b11c4e2f123f83e799cee",
+  "replay_audit": {
+    "counts": {
+      "frames": 6,
+      "imu_samples": 81,
+      "lidar_points": 6132,
+      "rgb_images": 12,
+      "sequences": 3
+    },
+    "manifest_sha256": "ccbeb52ba630962bcc0aac251c89d33643be09152a003235b8b0e48ad8ebbe71",
+    "observed_frame_rate_hz_median": 15.0,
+    "origin": "simulation",
+    "scene_groups": 3,
+    "schema": "bhl-sensor-replay-audit-v1",
+    "scope": "file integrity, timing and geometry declarations; not sensor accuracy or estimator success",
+    "splits": {
+      "dev": 1,
+      "test": 1,
+      "validation": 1
+    },
+    "status": "PASS",
+    "verified_files": 30
+  },
+  "routes": {
+    "capture": {
+      "execution": "COMPLETED",
+      "scientific_scope": "pilot only"
+    }
+  },
+  "runtime": {
+    "bytes": 283204403,
+    "expanded_bytes": 453222240,
+    "package": "onnxruntime-gpu==1.22.0",
+    "private_path": "/tmp/bhl-h34-sensors-smoke-20261008-21713077-61zo7wmk/work/onnx-gpu-site",
+    "sha256": "d30c1512f22b1f01bacb4f177d49cbefd23e0f4bef56066f1282992d133e6ff8"
+  },
+  "schema": "bhl-sensor-campaign-v1",
+  "scope": "Simulated kinematic sensor replay pilot; no physical accuracy, SLAM drift, goals, collisions, falls, or traversal result.",
+  "stages": [
+    {
+      "command": [
+        "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21713077-61zo7wmk/source/scripts/bench/sensor_capture.py",
+        "--output",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21713077-61zo7wmk/output/replay",
+        "--frames-per-scene",
+        "2",
+        "--protocol",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21713077-61zo7wmk/protocol.json"
+      ],
+      "elapsed_s": 3.36812821298372,
+      "name": "capture",
+      "reported_status": "PASS",
+      "returncode": 0,
+      "scientific_status": "SIMULATION_PILOT_CAPTURED"
+    },
+    {
+      "command": [
+        "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21713077-61zo7wmk/source/scripts/bench/stereo_research.py",
+        "--dataset",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21713077-61zo7wmk/output/replay",
+        "--output",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21713077-61zo7wmk/output/stereo",
+        "--model",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21713077-61zo7wmk/inputs/stereo_model.onnx",
+        "--provider",
+        "CUDAExecutionProvider",
+        "--warmup",
+        "2",
+        "--timed",
+        "3",
+        "--protocol",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21713077-61zo7wmk/protocol.json"
+      ],
+      "elapsed_s": 10.926964465994388,
+      "name": "stereo",
+      "returncode": 1
+    }
+  ],
+  "started_utc": "2026-10-09T03:22:27.734232+00:00",
+  "status": "INCOMPLETE"
+}

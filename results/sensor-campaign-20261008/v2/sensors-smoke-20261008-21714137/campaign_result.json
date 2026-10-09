@@ -1,0 +1,183 @@
+{
+  "acceptance_meaning": "Every implemented pilot stage completed on exact frozen inputs; superiority and the four full research objectives remain unqualified.",
+  "elapsed_s": 35.24110558396205,
+  "finished_utc": "2026-10-09T03:28:13.525594+00:00",
+  "phase": "smoke",
+  "problems": [],
+  "protocol_sha256": "0b47093f5edc8e751535217d3040642b0d07e6173a3b11c4e2f123f83e799cee",
+  "replay_audit": {
+    "counts": {
+      "frames": 6,
+      "imu_samples": 81,
+      "lidar_points": 6132,
+      "rgb_images": 12,
+      "sequences": 3
+    },
+    "manifest_sha256": "4d706fb005b1a846707ff43925cb834f9dcf170b300b416d3729be43a3c7279f",
+    "observed_frame_rate_hz_median": 15.0,
+    "origin": "simulation",
+    "scene_groups": 3,
+    "schema": "bhl-sensor-replay-audit-v1",
+    "scope": "file integrity, timing and geometry declarations; not sensor accuracy or estimator success",
+    "splits": {
+      "dev": 1,
+      "test": 1,
+      "validation": 1
+    },
+    "status": "PASS",
+    "verified_files": 30
+  },
+  "routes": {
+    "capture": {
+      "execution": "COMPLETED",
+      "scientific_scope": "pilot only"
+    },
+    "estimated_pose_navigation": {
+      "closed_loop_episodes_completed": 0,
+      "execution": "READINESS_AND_EXPORT_COMPLETED",
+      "requirements": [
+        "compiled ORB-SLAM3 stereo",
+        "ROS FAST-LIO2 runtime",
+        "longer estimator-validation sequences",
+        "estimated-pose closed-loop integration and fresh confirmation cohort"
+      ],
+      "scientific_status": "BLOCKED_RUNTIME"
+    },
+    "geometry": {
+      "execution": "COMPLETED",
+      "scientific_scope": "pilot only"
+    },
+    "geometry_ffs": {
+      "execution": "COMPLETED",
+      "scientific_scope": "pilot only"
+    },
+    "pose_readiness": {
+      "execution": "COMPLETED",
+      "scientific_scope": "pilot only"
+    },
+    "stereo": {
+      "execution": "COMPLETED",
+      "scientific_scope": "pilot only"
+    },
+    "terrain_traversal": {
+      "execution": "MAP_PILOT_COMPLETED",
+      "scientific_status": "WAITING_LOCOMOTION_VALIDATION",
+      "traversal_episodes_completed": 0
+    }
+  },
+  "runtime": {
+    "bytes": 283204403,
+    "expanded_bytes": 453222240,
+    "package": "onnxruntime-gpu==1.22.0",
+    "private_path": "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/work/onnx-gpu-site",
+    "sha256": "d30c1512f22b1f01bacb4f177d49cbefd23e0f4bef56066f1282992d133e6ff8"
+  },
+  "schema": "bhl-sensor-campaign-v1",
+  "scope": "Simulated kinematic sensor replay pilot; no physical accuracy, SLAM drift, goals, collisions, falls, or traversal result.",
+  "stages": [
+    {
+      "command": [
+        "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/source/scripts/bench/sensor_capture.py",
+        "--output",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/replay",
+        "--frames-per-scene",
+        "2",
+        "--protocol",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/protocol.json"
+      ],
+      "elapsed_s": 3.017807823023759,
+      "name": "capture",
+      "reported_status": "PASS",
+      "returncode": 0,
+      "scientific_status": "SIMULATION_PILOT_CAPTURED"
+    },
+    {
+      "command": [
+        "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/source/scripts/bench/stereo_research.py",
+        "--dataset",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/replay",
+        "--output",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/stereo",
+        "--model",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/inputs/stereo_model.onnx",
+        "--provider",
+        "CUDAExecutionProvider",
+        "--warmup",
+        "2",
+        "--timed",
+        "3",
+        "--protocol",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/protocol.json"
+      ],
+      "elapsed_s": 17.134696420980617,
+      "name": "stereo",
+      "reported_status": "PASS",
+      "returncode": 0,
+      "scientific_status": "SIMULATION_PILOT_ONLY_NO_CONFIRMED_SUPERIORITY"
+    },
+    {
+      "command": [
+        "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/source/scripts/bench/sensor_geometry_research.py",
+        "--dataset",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/replay",
+        "--stereo-predictions",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/stereo/predictions.json",
+        "--stereo-method",
+        "sgbm",
+        "--output",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/geometry",
+        "--protocol",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/protocol.json"
+      ],
+      "elapsed_s": 5.420345874968916,
+      "name": "geometry",
+      "reported_status": "PASS",
+      "returncode": 0,
+      "scientific_status": "PILOT_MEASUREMENT"
+    },
+    {
+      "command": [
+        "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/source/scripts/bench/sensor_geometry_research.py",
+        "--dataset",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/replay",
+        "--stereo-predictions",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/stereo/predictions.json",
+        "--stereo-method",
+        "c_fast_foundationstereo",
+        "--output",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/geometry-ffs",
+        "--protocol",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/protocol.json"
+      ],
+      "elapsed_s": 5.5204762750072405,
+      "name": "geometry_ffs",
+      "reported_status": "PASS",
+      "returncode": 0,
+      "scientific_status": "PILOT_MEASUREMENT"
+    },
+    {
+      "command": [
+        "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/source/scripts/bench/pose_research.py",
+        "intake",
+        "--dataset",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/replay",
+        "--output",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/output/pose",
+        "--protocol",
+        "/tmp/bhl-h34-sensors-smoke-20261008-21714137-pd3reto4/protocol.json"
+      ],
+      "elapsed_s": 0.31430229905527085,
+      "name": "pose_readiness",
+      "reported_status": "PASS",
+      "returncode": 0,
+      "scientific_status": "BLOCKED_RUNTIME"
+    }
+  ],
+  "started_utc": "2026-10-09T03:27:38.284458+00:00",
+  "status": "PASS"
+}

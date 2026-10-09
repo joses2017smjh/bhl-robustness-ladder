@@ -43,6 +43,18 @@ lidar traces support simulator sensor studies. They do not measure RGB stereo
 matching or physical-camera/lidar accuracy. New sensor studies use separately
 declared datasets and cohorts; H1's archive, gates and scores stay frozen.
 
+The separately declared **S0–S4 sensor pilot completed**, job `21714203`, after
+fresh same-source GPU smoke `21714137`. It retains 72 rendered stereo pairs,
+73,695 timed 3D returns and 960 ideal IMU samples across three scene groups.
+[Independent results](SENSOR_PILOT_RESULTS_2026-10-08.md) verify actual pretrained
+GPU inference, depth/coverage/latency tradeoffs, matched fusion stress tests,
+terrain height/hazard metrics and native-estimator input exports. Confidence
+gating does not meet the proposed advancement target. This closes the pilot
+software/data deliverable; all four full research objectives remain **OPEN**.
+Native SLAM and closed-loop/traversal outcomes are unmeasured.
+[Follow-up task dependencies](SENSOR_CAMPAIGN_2026-10-08.md#follow-up-task-queue)
+identify the next work rather than submitting jobs that cannot yet execute.
+
 ## Deliverables closed in this audit
 
 | ID | Closure | Verified evidence and scope |
