@@ -68,7 +68,7 @@ def test_task_constants_match_the_frozen_design_and_the_launcher_check():
     assert "TASK_ID=Velocity-BHL-Waiter-WBC-Curriculum-v0; FULL_ITERS=10000" in body
     assert "env.curriculum.disturbance.params.start_iter=0 env.curriculum.disturbance.params.end_iter=2" in body
     assert '[ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ]; } && [ "$SMOKE" = 1 ]' in body   # compressed ramp: smoke only
-                                                                     # (1d, 2026-10-09, shares 1c's curriculum)
+                                                                     # (1d, 2026-10-08, shares 1c's curriculum)
     assert '--task "$TASK_ID"' in body
     init = TASKS_INIT.read_text()
     assert "_waiter_c.CURRICULUM_TASK_ID" in init and "_waiter_c.HumanoidWaiterWbcCurriculumCfg" in init
