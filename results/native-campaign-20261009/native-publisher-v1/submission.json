@@ -1,0 +1,29 @@
+{
+  "status": "SUBMITTED",
+  "job_id": "21744380",
+  "submitted_utc": "2026-10-09T22:47:33.806528+00:00",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--partition=preempt",
+    "--cpus-per-task=1",
+    "--mem=4G",
+    "--time=00:20:00",
+    "--no-requeue",
+    "--chdir=/tmp",
+    "--export=NONE",
+    "--job-name=native-evidence-publish-20261009-v1",
+    "--dependency=afterany:21744334",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/native-publisher-v1/publish-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/native-publisher-v1/publish-%j.out",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/native-publisher-v1/publish.sbatch"
+  ],
+  "returncode": 0,
+  "stdout": "21744380\n",
+  "stderr": "",
+  "publisher_manifest_sha256": "41df52f6cf83567d0a5b457e4cbaedc2a7c47d54d6bb46915b4386d4ced10b6a",
+  "launcher_sha256": "86acee8b08da78b47f967edde802b4798820304e213d8017c69ba6f8a7c5f233",
+  "dependency": "afterany:21744334"
+}

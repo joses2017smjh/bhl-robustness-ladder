@@ -183,10 +183,12 @@ def collect_one(source,work):
             collector=load("pinned_lio_collector",bundle/"source/scripts/bench/native_navigation_collect.py")
             collector.collect(bundle,Path(source["campaign_dir"]),source["job_name"],output)
             observed=json.loads((output/"observer.json").read_text());record.update(audit_status="PASS",scientific_status=observed["scientific_status"],measured_episodes=len(observed["episodes"]))
+            record.update(scope=observed["scope"],qualification_scope="development only; no independent confirmation or hardware validation",campaign_phase=observed["campaign_phase"])
         elif source["kind"]=="native_replay":
             collector=load("pinned_replay_collector",ROOT/"scripts/bench/native_slam_collect.py")
             observed=collector.collect(Path(source["campaign_dir"]),source["job_name"],output,source.get("allocation_step"))
             record.update(audit_status="PASS",scientific_status=observed["scientific_status"],measured_episodes=0)
+            record["scope"]="native offline simulated sensor replay; no closed-loop episode or hardware validation"
         else:
             audit=load("pinned_native_raw_audit",ROOT/"scripts/bench/native_run_audit.py")
             if source["kind"]=="terrain":observed=audit.terrain(job,output)
@@ -195,6 +197,8 @@ def collect_one(source,work):
                 if promotion["archive_sha256"]!=source["source_archive_sha256"]:raise ValueError("stereo runtime promotion source pin differs")
                 observed=audit.stereo(job,output,expected_binary_sha256=promotion["runtime_verification"]["binary_sha256"])
             record.update(audit_status="PASS",scientific_status=observed["scientific_status"],measured_episodes=len(observed["episodes"]))
+            record["scope"]=observed["scope"]
+            if source["kind"]=="stereo_navigation":record["qualification_scope"]="smoke excluded; development only, no independent confirmation or hardware validation"
         evidence=output/"verified-evidence";evidence.mkdir(exist_ok=True)
         for name in ("completion.json","launch.json","campaign_result.json"):shutil.copyfile(job/name,evidence/name)
         shutil.copyfile(submission_path,evidence/"submission.json")

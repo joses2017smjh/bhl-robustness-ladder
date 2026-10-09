@@ -1,0 +1,416 @@
+{
+  "schema": "bhl-stereo-navigation-final-statistics-v1",
+  "scientific_status": "NEGATIVE",
+  "phase": "development",
+  "scope": "DEVELOPMENT_ONLY_NO_CONFIRMATION. Actual simulation images/genuine unchanged native ORB; prescribed routes/known start/one frozen gait plus independent LiDAR brake; no hardware claim",
+  "raw_archive_sha256": "67e9be06140d443aa87bd38996b1c2947df753de84b5f992e41e548d604dbaca",
+  "generator_source_sha256": "b419c21d03fa89758d43b370c2afcd306d5c747f22e839efc0db56d1d2d110e2",
+  "combined_latency_vector": {
+    "path": "development-final-statistics-combined-latency-vector.json",
+    "sha256": "33b0aec0bab86ef5c748ddb71d9150584c32c8cead720b1658209bb61ef02c4a",
+    "rows_canonical_sha256": "17328eb11ce9db896540e4f79249d548359358a11e591b55a2aace30758d669b"
+  },
+  "episodes": [
+    {
+      "case": "dogleg",
+      "group": 380000,
+      "success": false,
+      "full_horizon_s": 40.00000000000897,
+      "frames_submitted_to_native": 189,
+      "post5_native_frames": 174,
+      "post5_raw_native_OK_frames": 47,
+      "post5_controller_accepted_frames": 47,
+      "post5_controller_accepted_fraction": 0.27011494252873564,
+      "raw_native_OK_frames": 62,
+      "controller_accepted_tracked_frames": 62,
+      "native_state_histogram": {
+        "2": 62,
+        "3": 31,
+        "4": 3,
+        "1": 93
+      },
+      "map_changed": false,
+      "native_map_ids": [
+        0
+      ],
+      "original_stereo_pairs": 189,
+      "dropped_scans": 0,
+      "capture_total_s": 12.009171369718388,
+      "capture_p95_ms": 90.93354078941047,
+      "native_cpp_compute_p95_ms": 37.770113,
+      "client_wall_p95_ms": 38.74736719299108,
+      "combined_charged_delivered_request_p95_ms": 125.65823716577142,
+      "delivered_requests": 189,
+      "pending_requests_excluded_from_combined_percentile": 0,
+      "capture_cost_charged_s": 12.009171369718388,
+      "capture_cost_unconsumed_at_horizon_s": 0.0,
+      "final_goal_distance_m": 2.7165997560936868,
+      "command_reason_steps": {
+        "declared_stationary_initialization": 119,
+        "native_stale_stop": 30,
+        "measured_native_latency_hold": 431,
+        "estimated_route": 76,
+        "native_untracked_stop": 344
+      }
+    },
+    {
+      "case": "dogleg",
+      "group": 380001,
+      "success": false,
+      "full_horizon_s": 40.00000000000897,
+      "frames_submitted_to_native": 189,
+      "post5_native_frames": 174,
+      "post5_raw_native_OK_frames": 157,
+      "post5_controller_accepted_frames": 32,
+      "post5_controller_accepted_fraction": 0.1839080459770115,
+      "raw_native_OK_frames": 172,
+      "controller_accepted_tracked_frames": 47,
+      "native_state_histogram": {
+        "2": 172,
+        "3": 16,
+        "0": 1
+      },
+      "map_changed": true,
+      "native_map_ids": [
+        0,
+        1
+      ],
+      "original_stereo_pairs": 189,
+      "dropped_scans": 0,
+      "capture_total_s": 15.623685381026007,
+      "capture_p95_ms": 89.67891114298254,
+      "native_cpp_compute_p95_ms": 35.944863,
+      "client_wall_p95_ms": 36.908187600784004,
+      "combined_charged_delivered_request_p95_ms": 121.65013644844294,
+      "delivered_requests": 189,
+      "pending_requests_excluded_from_combined_percentile": 0,
+      "capture_cost_charged_s": 15.623685381026007,
+      "capture_cost_unconsumed_at_horizon_s": 0.0,
+      "final_goal_distance_m": 2.826790686962053,
+      "command_reason_steps": {
+        "declared_stationary_initialization": 125,
+        "native_stale_stop": 17,
+        "measured_native_latency_hold": 525,
+        "estimated_route": 51,
+        "native_untracked_stop": 282
+      }
+    },
+    {
+      "case": "dogleg",
+      "group": 380002,
+      "success": false,
+      "full_horizon_s": 40.00000000000897,
+      "frames_submitted_to_native": 189,
+      "post5_native_frames": 174,
+      "post5_raw_native_OK_frames": 158,
+      "post5_controller_accepted_frames": 38,
+      "post5_controller_accepted_fraction": 0.21839080459770116,
+      "raw_native_OK_frames": 173,
+      "controller_accepted_tracked_frames": 53,
+      "native_state_histogram": {
+        "2": 173,
+        "3": 15,
+        "0": 1
+      },
+      "map_changed": true,
+      "native_map_ids": [
+        0,
+        1
+      ],
+      "original_stereo_pairs": 189,
+      "dropped_scans": 0,
+      "capture_total_s": 14.99837977963034,
+      "capture_p95_ms": 93.86005438864231,
+      "native_cpp_compute_p95_ms": 34.331761399999984,
+      "client_wall_p95_ms": 35.33136479090898,
+      "combined_charged_delivered_request_p95_ms": 125.67405337467791,
+      "delivered_requests": 189,
+      "pending_requests_excluded_from_combined_percentile": 0,
+      "capture_cost_charged_s": 14.99837977963034,
+      "capture_cost_unconsumed_at_horizon_s": 0.0,
+      "final_goal_distance_m": 2.954591363666491,
+      "command_reason_steps": {
+        "declared_stationary_initialization": 125,
+        "native_stale_stop": 23,
+        "measured_native_latency_hold": 525,
+        "estimated_route": 56,
+        "native_untracked_stop": 271
+      }
+    },
+    {
+      "case": "occluders",
+      "group": 380000,
+      "success": false,
+      "full_horizon_s": 40.00000000000897,
+      "frames_submitted_to_native": 189,
+      "post5_native_frames": 174,
+      "post5_raw_native_OK_frames": 157,
+      "post5_controller_accepted_frames": 42,
+      "post5_controller_accepted_fraction": 0.2413793103448276,
+      "raw_native_OK_frames": 172,
+      "controller_accepted_tracked_frames": 57,
+      "native_state_histogram": {
+        "2": 172,
+        "3": 16,
+        "0": 1
+      },
+      "map_changed": true,
+      "native_map_ids": [
+        0,
+        1
+      ],
+      "original_stereo_pairs": 189,
+      "dropped_scans": 0,
+      "capture_total_s": 16.750744590885006,
+      "capture_p95_ms": 99.72553139086813,
+      "native_cpp_compute_p95_ms": 36.03968819999999,
+      "client_wall_p95_ms": 36.961432383395724,
+      "combined_charged_delivered_request_p95_ms": 131.78935735486448,
+      "delivered_requests": 189,
+      "pending_requests_excluded_from_combined_percentile": 0,
+      "capture_cost_charged_s": 16.750744590885006,
+      "capture_cost_unconsumed_at_horizon_s": 0.0,
+      "final_goal_distance_m": 3.042797671776068,
+      "command_reason_steps": {
+        "declared_stationary_initialization": 113,
+        "native_stale_stop": 59,
+        "measured_native_latency_hold": 525,
+        "estimated_route": 49,
+        "native_untracked_stop": 254
+      }
+    },
+    {
+      "case": "occluders",
+      "group": 380001,
+      "success": false,
+      "full_horizon_s": 40.00000000000897,
+      "frames_submitted_to_native": 189,
+      "post5_native_frames": 174,
+      "post5_raw_native_OK_frames": 173,
+      "post5_controller_accepted_frames": 173,
+      "post5_controller_accepted_fraction": 0.9942528735632183,
+      "raw_native_OK_frames": 188,
+      "controller_accepted_tracked_frames": 188,
+      "native_state_histogram": {
+        "2": 188,
+        "3": 1
+      },
+      "map_changed": false,
+      "native_map_ids": [
+        0
+      ],
+      "original_stereo_pairs": 189,
+      "dropped_scans": 0,
+      "capture_total_s": 15.270202634390444,
+      "capture_p95_ms": 94.25948858261108,
+      "native_cpp_compute_p95_ms": 34.2049204,
+      "client_wall_p95_ms": 35.161169385537505,
+      "combined_charged_delivered_request_p95_ms": 124.79453135747463,
+      "delivered_requests": 189,
+      "pending_requests_excluded_from_combined_percentile": 0,
+      "capture_cost_charged_s": 15.270202634390444,
+      "capture_cost_unconsumed_at_horizon_s": 0.0,
+      "final_goal_distance_m": 3.001864314224819,
+      "command_reason_steps": {
+        "declared_stationary_initialization": 125,
+        "native_stale_stop": 28,
+        "measured_native_latency_hold": 525,
+        "estimated_route": 60,
+        "native_untracked_stop": 1,
+        "raw_obstacle_stop": 261
+      }
+    },
+    {
+      "case": "occluders",
+      "group": 380002,
+      "success": false,
+      "full_horizon_s": 40.00000000000897,
+      "frames_submitted_to_native": 189,
+      "post5_native_frames": 174,
+      "post5_raw_native_OK_frames": 157,
+      "post5_controller_accepted_frames": 48,
+      "post5_controller_accepted_fraction": 0.27586206896551724,
+      "raw_native_OK_frames": 172,
+      "controller_accepted_tracked_frames": 63,
+      "native_state_histogram": {
+        "2": 172,
+        "3": 16,
+        "0": 1
+      },
+      "map_changed": true,
+      "native_map_ids": [
+        0,
+        1
+      ],
+      "original_stereo_pairs": 189,
+      "dropped_scans": 0,
+      "capture_total_s": 16.277247259626165,
+      "capture_p95_ms": 96.39809522777796,
+      "native_cpp_compute_p95_ms": 34.95213819999999,
+      "client_wall_p95_ms": 35.82554536405951,
+      "combined_charged_delivered_request_p95_ms": 129.31255062576383,
+      "delivered_requests": 189,
+      "pending_requests_excluded_from_combined_percentile": 0,
+      "capture_cost_charged_s": 16.277247259626165,
+      "capture_cost_unconsumed_at_horizon_s": 0.0,
+      "final_goal_distance_m": 2.67592551055992,
+      "command_reason_steps": {
+        "declared_stationary_initialization": 125,
+        "native_stale_stop": 45,
+        "measured_native_latency_hold": 525,
+        "estimated_route": 56,
+        "native_untracked_stop": 249
+      }
+    },
+    {
+      "case": "straight",
+      "group": 380000,
+      "success": false,
+      "full_horizon_s": 40.00000000000897,
+      "frames_submitted_to_native": 189,
+      "post5_native_frames": 174,
+      "post5_raw_native_OK_frames": 157,
+      "post5_controller_accepted_frames": 92,
+      "post5_controller_accepted_fraction": 0.5287356321839081,
+      "raw_native_OK_frames": 172,
+      "controller_accepted_tracked_frames": 107,
+      "native_state_histogram": {
+        "2": 172,
+        "3": 16,
+        "0": 1
+      },
+      "map_changed": true,
+      "native_map_ids": [
+        0,
+        1
+      ],
+      "original_stereo_pairs": 189,
+      "dropped_scans": 0,
+      "capture_total_s": 14.466546909767203,
+      "capture_p95_ms": 104.9733770545572,
+      "native_cpp_compute_p95_ms": 32.3739534,
+      "client_wall_p95_ms": 33.30782144330441,
+      "combined_charged_delivered_request_p95_ms": 135.69080356974155,
+      "delivered_requests": 189,
+      "pending_requests_excluded_from_combined_percentile": 0,
+      "capture_cost_charged_s": 14.466546909767203,
+      "capture_cost_unconsumed_at_horizon_s": 0.0,
+      "final_goal_distance_m": 0.42925423978189725,
+      "command_reason_steps": {
+        "declared_stationary_initialization": 113,
+        "native_stale_stop": 88,
+        "measured_native_latency_hold": 497,
+        "estimated_route": 111,
+        "native_untracked_stop": 191
+      }
+    },
+    {
+      "case": "straight",
+      "group": 380001,
+      "success": true,
+      "full_horizon_s": 40.00000000000897,
+      "frames_submitted_to_native": 189,
+      "post5_native_frames": 174,
+      "post5_raw_native_OK_frames": 93,
+      "post5_controller_accepted_frames": 93,
+      "post5_controller_accepted_fraction": 0.5344827586206896,
+      "raw_native_OK_frames": 108,
+      "controller_accepted_tracked_frames": 108,
+      "native_state_histogram": {
+        "2": 108,
+        "3": 16,
+        "0": 1,
+        "1": 64
+      },
+      "map_changed": false,
+      "native_map_ids": [
+        0
+      ],
+      "original_stereo_pairs": 189,
+      "dropped_scans": 0,
+      "capture_total_s": 13.828320235945284,
+      "capture_p95_ms": 98.72830524109304,
+      "native_cpp_compute_p95_ms": 35.112099799999996,
+      "client_wall_p95_ms": 36.06776718515903,
+      "combined_charged_delivered_request_p95_ms": 129.87667536363006,
+      "delivered_requests": 189,
+      "pending_requests_excluded_from_combined_percentile": 0,
+      "capture_cost_charged_s": 13.828320235945284,
+      "capture_cost_unconsumed_at_horizon_s": 0.0,
+      "final_goal_distance_m": 0.28127937613809817,
+      "command_reason_steps": {
+        "declared_stationary_initialization": 125,
+        "native_stale_stop": 70,
+        "measured_native_latency_hold": 443,
+        "estimated_route": 120,
+        "native_untracked_stop": 242
+      }
+    },
+    {
+      "case": "straight",
+      "group": 380002,
+      "success": false,
+      "full_horizon_s": 40.00000000000897,
+      "frames_submitted_to_native": 189,
+      "post5_native_frames": 174,
+      "post5_raw_native_OK_frames": 157,
+      "post5_controller_accepted_frames": 83,
+      "post5_controller_accepted_fraction": 0.47701149425287354,
+      "raw_native_OK_frames": 172,
+      "controller_accepted_tracked_frames": 98,
+      "native_state_histogram": {
+        "2": 172,
+        "3": 16,
+        "0": 1
+      },
+      "map_changed": true,
+      "native_map_ids": [
+        0,
+        1
+      ],
+      "original_stereo_pairs": 189,
+      "dropped_scans": 0,
+      "capture_total_s": 16.59300549258478,
+      "capture_p95_ms": 101.15592896472663,
+      "native_cpp_compute_p95_ms": 36.310877,
+      "client_wall_p95_ms": 37.29464400094002,
+      "combined_charged_delivered_request_p95_ms": 132.93563779443502,
+      "delivered_requests": 189,
+      "pending_requests_excluded_from_combined_percentile": 0,
+      "capture_cost_charged_s": 16.59300549258478,
+      "capture_cost_unconsumed_at_horizon_s": 0.0,
+      "final_goal_distance_m": 0.9922062375005403,
+      "command_reason_steps": {
+        "declared_stationary_initialization": 118,
+        "native_stale_stop": 86,
+        "measured_native_latency_hold": 525,
+        "estimated_route": 92,
+        "native_untracked_stop": 179
+      }
+    }
+  ],
+  "totals": {
+    "episodes": 9,
+    "goals": 1,
+    "native_frames": 1701,
+    "post5_native_frames": 1566,
+    "post5_raw_native_OK_frames": 1256,
+    "post5_controller_accepted_frames": 648,
+    "post5_controller_accepted_fraction": 0.41379310344827586,
+    "raw_native_OK_frames": 1391,
+    "controller_accepted_tracked_frames": 783,
+    "map_changed_episodes": 6,
+    "original_stereo_pairs": 1701,
+    "capture_total_s": 135.81730365357362,
+    "capture_pair_p95_ms": 99.28164898883551,
+    "native_cpp_frame_p95_ms": 35.810413,
+    "episode_client_wall_p95_range_ms": [
+      33.30782144330441,
+      38.74736719299108
+    ],
+    "combined_charged_delivered_request_p95_ms": 131.29551999736577,
+    "quantized_physics_delivery_delay_p95_ms": 160.00000000000014,
+    "combined_charged_delivered_requests": 1701,
+    "pending_requests_excluded_from_combined_percentile": 0
+  }
+}

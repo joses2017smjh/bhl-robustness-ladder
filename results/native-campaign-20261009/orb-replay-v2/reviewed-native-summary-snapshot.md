@@ -5,8 +5,7 @@ also supports nine clean development navigation goals with a frozen learned
 gait. The separate terrain qualification screen finishes negative. Native
 ORB-SLAM3 completes all three replay scenes with an overall negative verdict:
 two never initialize, while the held-out ramp/step scene passes. Stereo
-navigation also finishes negative: one of nine clean development goals,
-with zero falls or contacts.
+navigation is in progress and has no scored outcome in this revision.
 
 | Experiment | Scored result | Scope |
 |---|---|---|
@@ -14,7 +13,7 @@ with zero falls or contacts.
 | Native LiDAR–IMU navigation | **PASS development, 9/9 clean goals, 0 falls, 0 contacts** | One frozen 12-DoF gait, three scripted routes × three development seed groups, 40 seconds per episode; no independent confirmation |
 | Terrain controller qualification | **NEGATIVE, 3/18 clean goals, 15 side-wall contacts, 0 falls** | Blind baseline, three frozen actors × three terrains × two screen seed groups; zero qualified actors and zero confirmation episodes |
 | Native stereo SLAM replay | **NEGATIVE overall, 1/3 scene gates**, 122/450 tracked outputs | Two scenes never initialize; held-out ramp/step passes with 0.44 cm aligned ATE and 48.60 ms native compute p95 |
-| Native stereo navigation | **NEGATIVE development, 1/9 clean goals, 0 falls, 0 contacts** | Same learned gait and route/seed schedule; six native map-ID changes trigger the declared permanent stop |
+| Native stereo navigation | Fresh smoke / scored development in progress | Same learned gait and waypoint routes, stereo native pose plus raw LiDAR obstacle brake |
 
 Smoke episodes never enter these scored counts. All outcomes are simulation
 measurements. The 12-DoF navigation experiment is separate from H4's 22-DoF
@@ -117,50 +116,6 @@ Stereo navigation additionally charges rendered image capture and uses the
 same raw LiDAR brake, so its overall system is not stereo-only navigation and
 the two latency scopes must not be compared as identical pipelines.
 
-## Stereo-pose navigation
-
-[Detailed original-input/native audit](../results/native-campaign-20261009/stereo-nav-v3/development-observer/report.md) ·
-[Independent evaluator-matrix outcome audit](../results/native-campaign-20261009/stereo-nav-v3/development-outcome-audit.json) ·
-[State and timing statistics](../results/native-campaign-20261009/stereo-nav-v3/development-final-statistics.json) ·
-[Method](NATIVE_STEREO_NAVIGATION_2026-10-09.md)
-
-Full job `21744334` follows fresh same-source smoke `21744333`. All nine
-40-second development episodes finish, with **1/9 clean goals, zero falls and
-zero contacts**. Only straight-route group380001 reaches a clean goal. The
-predeclared nine-goal development gate fails; no confirmation cohort runs.
-
-All **1,701 original stereo pairs** are retained with their hashes. Raw native
-ORB reports `OK` on **1,391/1,701** frames, while the controller accepts only
-**783/1,701** poses. **Six of nine episodes change native map IDs** and trigger
-the declared permanent stop: a new native map does not preserve the original
-controller world frame automatically. Loss and braking also affect the loop.
-Thus raw tracking state, accepted continuous-frame pose and navigation success
-are separate measured outcomes.
-
-Per-episode client wall p95 is **33.31–38.75 ms**. Measured rendered capture,
-PNG encoding and hashing p95 is **99.28 ms per pair**, with **135.82 s total**
-charged capture work and zero unconsumed capture cost at episode horizons.
-Capture cost and native client wall cost enter the declared causal delivery
-rule. Directly measured same-request capture-plus-client wall p95 is
-**131.30 ms** across all 1,701 requests, with none pending or excluded; the
-40 ms physics delivery tick yields **160.0 ms delivery-delay p95**. The
-[retained request vector](../results/native-campaign-20261009/stereo-nav-v3/development-final-statistics-combined-latency-vector.json)
-binds this calculation to the original raw archive.
-The LIO and stereo runs also use different hosts and capture/timing scopes;
-their latency numbers establish no matched speedup.
-
-![Actual stereo navigation paths; native output uses the declared start registration](../results/native-campaign-20261009/stereo-nav-v3/development-demo/actual-stereo-navigation-paths.png)
-
-[Original left/right input montage](../results/native-campaign-20261009/stereo-nav-v3/development-demo/original-stereo-input-demo.png)
-shows the actual body-attached images at retained timestamps. The path figure
-uses the controller's known-start registration, without evaluator alignment.
-Its generation receipt binds the raw archive, source generator and PNG hashes.
-
-This completed negative experiment motivates testing world-frame continuity
-and calibrated sensor recovery on a new cohort. The successful LIO development
-result and failed stereo result retain their original sensor, map-change and
-latency contracts.
-
 ## Terrain screen and the next hypothesis
 
 [Terrain methods](TERRAIN_TRAVERSAL_2026-10-09.md) ·
@@ -189,40 +144,6 @@ false free space, missed hazards, tracking failures and closed-loop outcomes.
 Physical recordings, independent navigation confirmation and robust terrain
 traversal remain open objectives; no completed gate is relabeled or retuned.
 
-## Research tasks opened by these results
-
-These are proposed follow-ups, **not queued campaigns or achieved results**.
-The [research protocol and primary references](STEREO_LIDAR_RESEARCH_2026-10-08.md)
-and [native methods](NATIVE_CAMPAIGNS_2026-10-09.md) ground the algorithm choices.
-
-[ORB-SLAM3](https://arxiv.org/abs/2007.11898) supports stereo–inertial estimation
-with visual-first inertial initialization; retain visual initialization diagnostics
-in that experiment. [FAST-LIO2](https://arxiv.org/abs/2107.06829) registers raw
-3D returns with IMU-based motion compensation. [Fankhauser et al.](https://www.research-collection.ethz.ch/items/563227f2-bb05-434b-8aef-1b001a9fdebc)
-model localization and range uncertainty in elevation maps. [Yao et al.](https://arxiv.org/abs/2504.05148)
-study SGM-based dense-depth fusion with LiDAR semidensification and three-view
-consistency; confidence-gated native pose recovery remains a separate project
-hypothesis.
-
-| Task | Experiment and control | Results to measure |
-|---|---|---|
-| Explain stereo initialization failures | Add read-only native keypoint/stereo-match diagnostics to the consumed recordings. Check calibration, epipolar residuals, texture and motion before selecting a new acquisition condition. Keep the original 450-frame verdict unchanged. | Initialization time, feature/match counts, disparity validity, failure-state duration; diagnostic data do not become new test data |
-| Test stereo–inertial navigation | Compare native stereo, stereo–IMU and LiDAR–IMU pose on a new matched cohort with declared camera rate, exposure/motion blur and IMU perturbations. Freeze gates before execution. | Tracking loss, map resets, fixed-scale drift/error, clean goals, contacts/falls and measured delivery latency |
-| Stress the successful LiDAR–IMU pipeline | Compare nominal input against matched timestamp offsets, extrinsic errors, IMU bias and return dropout on fresh data. Preserve per-point time and causal estimated-motion deskew. Calibrate health gates against observed failures. | Drift, initialization/tracking failures, goals, collisions, recovery delay and confidence calibration; one effective match is not a calibrated confidence score |
-| Qualify heading control before terrain fusion | Run a separately declared estimated-heading controller screen on fresh seeds with the three frozen gaits and physical flat/step/ramp courses. Retain the failed blind screen; advance to independent terrain confirmation only after the new screen qualifies. | Cross-track/heading error, clean crossings, side-wall contacts, falls, height/roughness/hazard error and traversal time |
-| Measure dense stereo–LiDAR fusion | Compare stereo SGM, sparse LiDAR, simple projected fusion and a disclosed SGM-cost/consistency method on new calibrated recordings under sparsity, occlusion and calibration perturbations. | Depth error/coverage, thin-obstacle recall, false free space and full pipeline latency |
-| Test confidence-gated sensor recovery | Compare each native estimator alone, the declared permanent-stop baseline and confidence-gated recovery under matched visual degradation and LiDAR/IMU faults. Test world-frame continuity across map changes using estimated sensor overlap/motion, with no truth feedback. | False free space, missed obstacles, recovery time, failure tolerance, goals/collisions and complete pipeline latency |
-
-These tasks connect the recorded stereo, timed 3D returns and IMU data to
-robotics work in perception, estimation, controls and evaluation infrastructure.
-For physical collection, retain synchronized original stereo, per-point LiDAR
-timestamps and SI-unit IMU data, with camera intrinsics, sensor extrinsics and
-time-offset calibration. Separate calibration/development/test recordings
-before tuning and vary texture, lighting, body motion, slopes and thin obstacles.
-
-Any future resume improvement percentage needs a fresh matched comparison;
-this report supports only the measurements already completed above.
-
 ## Evidence integrity and resume wording
 
 Full source/input manifests, raw traces, evaluator truth, native responses,
@@ -240,12 +161,6 @@ Suggested supported project bullet:
 > groups with zero falls or contacts while accounting for estimator latency.
 
 The project description should retain the simulation and development scope.
-An alternative infrastructure bullet is:
-
-> Built a synchronized stereo/LiDAR–IMU evaluation pipeline for 450 image pairs,
-> 920,787 timed returns and 18,000 IMU samples, comparing native ORB-SLAM3 and
-> FAST-LIO2 with frozen tracking, pose-error and latency gates.
-
 The native replay numbers can be a separate technical measurement with its
 short-recording, CPU compilation and fixed-scale alignment conditions. The
 terrain result supports a transparent experiment report, not a success claim.

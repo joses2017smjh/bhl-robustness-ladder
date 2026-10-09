@@ -1,5 +1,7 @@
 # Native estimation, navigation and terrain traversal campaigns
 
+**Execution complete:** [measured results, demos, raw evidence and remaining research tasks](NATIVE_CAMPAIGN_RESULTS_2026-10-09.md). The protocol below retains its original criteria; completed negative experiments remain negative.
+
 The October 8 stereo–LiDAR pilot and 276-cell terrain/navigation development
 sweep did not run native SLAM or estimated-pose navigation, and did not establish
 terrain traversal. This campaign implements and measures those missing stages.

@@ -1,0 +1,72 @@
+{
+  "campaigns": [
+    {
+      "campaign_dir": "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2",
+      "collector_bundle": "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-collector-v1",
+      "collector_manifest_sha256": "e6de048b232283b151f9ff68538cf77fdb2a925042d1827432c1ed92c5da2ddb",
+      "job_id": "21741509",
+      "job_name": "nav-lio-development-20261009-v2",
+      "kind": "lio_navigation",
+      "label": "lio-navigation",
+      "raw_asset_name": "native-lio-navigation-development-21741509.tar.gz",
+      "source_archive_sha256": "df3d91ae4ad8c4c8688d7ed3ff8639baff7a5860043f39414871c559301cfa26",
+      "source_manifest_sha256": "f4b45becf4590658d4c1e8ba34a6bdfcad14c84966a22b514c8423da76c47a8d"
+    },
+    {
+      "campaign_dir": "/nfs/stak/users/sanchej7/humanoid-native-20261009/terrain-v3",
+      "job_id": "21742786",
+      "job_name": "terrain-run-20261009",
+      "kind": "terrain",
+      "label": "terrain-traversal",
+      "source_archive_sha256": "1f04b186e62a31bfa27547375124b85f7bc8a46b688fc92577ea108d7d6293ed",
+      "source_manifest_sha256": "91ff3878be45bc64d1775115ad0abf73d1d8fc92b7532c46a7d5d8f3ec0a7040"
+    },
+    {
+      "campaign_dir": "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v4",
+      "job_id": "21743631",
+      "job_name": "native-lio-replay-20261009-v4",
+      "kind": "native_replay",
+      "label": "lio-replay",
+      "source_archive_sha256": "5fd9f5b43004144561b6922b9357ad4abe13174fdafc6f15a588c738db66acb5",
+      "source_manifest_sha256": "295a02d14cb0c859cdcf41026af3116b62f84a939fd55a733b48aaf650a46a16"
+    },
+    {
+      "actual_step_id": "21739893.8",
+      "allocation_step": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v2/native-orb-replay-20261009-v2-allocation-step-21739893.json",
+      "campaign_dir": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-replay-v2",
+      "job_id": "21739893",
+      "job_name": "native-orb-replay-20261009-v2",
+      "kind": "native_replay",
+      "label": "orb-replay",
+      "source_archive_sha256": "499ede4237b94cba3008da2cb028243c35ac8019cb5fd284ba69c01c21cbf93a",
+      "source_manifest_sha256": "350473de087370f18bf54494b843c4112d35c2d40175b3e673da8383832db5c5"
+    },
+    {
+      "campaign_dir": "/nfs/stak/users/sanchej7/humanoid-native-20261009/stereo-nav-v3",
+      "job_id": "21744334",
+      "job_name": "nav-stereo-development-20261009-v3",
+      "kind": "stereo_navigation",
+      "label": "stereo-navigation",
+      "source_archive_sha256": "0c165e6a16b94649639605aa10747e367663ae51ca3ef28583e94f94bd8ddb7f",
+      "source_manifest_sha256": "b6c6cdbe1b4cc1ae07f9c3757f1f1b7bc97e5fa8be42fbc5c58ca35b51b03848"
+    },
+    {
+      "campaign_dir": "/nfs/stak/users/sanchej7/humanoid-native-20261009/stereo-nav-v3",
+      "job_id": "21744333",
+      "job_name": "nav-stereo-smoke-20261009-v3",
+      "kind": "stereo_navigation",
+      "label": "stereo-navigation-smoke",
+      "source_archive_sha256": "0c165e6a16b94649639605aa10747e367663ae51ca3ef28583e94f94bd8ddb7f",
+      "source_manifest_sha256": "b6c6cdbe1b4cc1ae07f9c3757f1f1b7bc97e5fa8be42fbc5c58ca35b51b03848"
+    }
+  ],
+  "collection_id": "native-final-20261009-v1",
+  "commit_email": "sanchej7@oregonstate.edu",
+  "commit_name": "Jose Sanchez",
+  "draft_status": "READY_TO_FREEZE: exact actual IDs/source hashes; afterany ONLY21744334, original smoke retained separately; static campaigns already terminal",
+  "gh": "/nfs/stak/users/sanchej7/.local/bin/gh",
+  "git": "/bin/git",
+  "release_tag": "native-campaign-evidence-20261009",
+  "repository": "joses2017smjh/bhl-robustness-ladder",
+  "schema": "bhl-native-publish-plan-v1"
+}

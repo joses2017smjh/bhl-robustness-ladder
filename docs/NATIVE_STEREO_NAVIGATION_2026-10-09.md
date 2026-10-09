@@ -57,6 +57,54 @@ is frozen at 1200 features, eight pyramid levels, 1.2 scale factor, and FAST
 thresholds 20/7; failed initialization is reported instead of lowering thresholds
 after inspecting results.
 
+The native runtime is pinned to ORB-SLAM3 commit
+`4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4`. Its newer `Rectified`
+settings printer dereferences a missing second-camera object before the native
+process becomes ready. The supported legacy `PinHole` calibration schema avoids
+that startup fault while preserving the same rectified pixels, focal lengths,
+principal point and 12-cm baseline (`Camera.bf = fx * .12`). The extractor recipe
+and depth threshold40 remain unchanged. The actual unchanged binary passed
+constructor, vocabulary/camera loading, READY and clean shutdown on compute
+step21739893.6 before the repaired scientific source was frozen. Original failed
+smokes remain evidence; this mechanical parser repair supplies no SLAM result.
+
+The complete source/input inventory rejected an unsubmitted v2 packaging attempt
+with two missing regression-test entries. Repaired v3 verified all851 frozen
+source/input entries before submission. Its fresh smoke21744333 completed two
+physical episodes with57 actual tracked frames, zero falls or contacts. This is
+**SMOKE_ONLY**. Same-archive development21744334 completed all nine40-second
+episodes: **1/9 clean goals, zero falls, zero contacts**, and finite complete
+policy traces. Its scientific result is **NEGATIVE**; no independent confirmation
+cohort is authorized by that gate. The independently reconstructed evaluator
+matrices agree with every goal, tilt, base-height, contact-trace and full-horizon
+outcome. Smoke goals are never included in the development gate.
+
+There are1701 original stereo pairs/native requests. The native estimator
+reported `OK` for1391 frames, while the controller accepted783: six of nine
+episodes changed native map IDs and triggered the declared permanent stop.
+After the five-second initialization interval, the controller accepted648 of1566
+responses (41.38%); these accepted-pose counts include the integration's map-frame
+policy and are distinct from the native estimator's raw tracking states. Client
+wall p95 was33.31–38.75ms across episodes. Capture/render/PNG/hash p95 was99.28ms
+per pair;135.82s of that measured cost was charged across the complete cohort.
+These capture costs describe this simulated evidence-recording pipeline, not
+physical-camera latency. Timing components are retained separately. Directly
+recorded combined capture-plus-client charged wall p95 is131.30ms across1701
+delivered requests, with zero horizon-pending requests excluded. It is computed
+from the same-request measured sums rather than adding separate percentiles;
+the [complete latency vector and derivation](../results/native-campaign-20261009/stereo-nav-v3/development-final-statistics-combined-latency-vector.json)
+are hashed in the statistics receipt. Physical-loop response delivery is also
+quantized to the declared40ms policy period.
+
+The [detailed raw/input audit](../results/native-campaign-20261009/stereo-nav-v3/development-observer/report.md),
+[independent outcome reconstruction](../results/native-campaign-20261009/stereo-nav-v3/development-outcome-audit.json),
+[native-state and timing statistics](../results/native-campaign-20261009/stereo-nav-v3/development-final-statistics.json),
+and [actual trajectories](../results/native-campaign-20261009/stereo-nav-v3/development-demo/actual-stereo-navigation-paths.png)
+retain negative outcomes. The [original stereo demo](../results/native-campaign-20261009/stereo-nav-v3/development-demo/original-stereo-input-demo.png)
+uses hashed original inputs. The separately frozen publisher21744380 audits
+source/completion/payload hashes and publishes the terminal evidence; no native
+binaries or private model/runtime packs are distributed.
+
 Each episode retains original stereo PNGs and their manifest, actual timed raw
 LiDAR/IMU arrays, every native response, calibration/configuration/runtime
 receipts, commands, charged response-arrival times and separate evaluator truth.
