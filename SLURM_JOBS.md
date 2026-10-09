@@ -4130,3 +4130,22 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
 | armV5-s10 drop35 | 42 / 0 / 6 | 45 / 0 / 3 |
 
 - Totals: unfiltered 233 goals and **11 falls** in 288; filtered 250 goals and 0 falls. On fresh mazes the filter removed every fall and added goals in all 6 cells; it did not cost s8 its goals (37 -> 38 nominal), so the confirmation's NEGATIVE (s8 38/48 < 40) is s8's own navigation.
+
+## 2026-10-09: Waiter phase 2 — free-base baseline, stance lock (contract amendment), phase 2 gate predeclared
+
+**Free-base development (2026-10-09, dev seeds 1000-1047 only; reported baseline, never gated).** The scripted expert on s7 with the deploy-time stance hold and a free base completed **10 of 232** development episodes over 29 settings (best settings 2/8; successes took 53-78 s). Measured causes (traces in `solutions-20260930/campaign-waiter/phase2/dev2/`): (1) standing with the clock held, s7 leans back as its arms reach forward (base pitch +3 deg arms down, -8..-12 deg both hands at the tray handles; its base origin is at the floor, so the shoulders move ~15 cm back), which put the handles out of reach unless the robot stood at x >= 0.10-0.12, where its hips touch table A with the arms down (one fall); (2) the "drift" is posture creep, not arm speed: raising any arm turns the robot 6-12 deg clockwise within ~4 s (feet twist/slide), partly reversed when the arm comes down; joint-speed caps of 1.0 and 0.6 rad/s did not change it; IK regularisation halved the wasted joint travel (9 -> 4 rad per hand raise) but not the yaw; turn commands under the stance threshold had no effect; (3) s7's short steps are imprecise (asked 10 cm: 4-9 cm, +3..+7 deg); (4) the hooked tray swung 23-35 deg while walking and the tumbler tipped in about half the walks. Raised tumbler placements (3/8 welded before) were fixed by a contact-checked release.
+
+**Decision (user, 2026-10-09):** "I'd pick B to unblock demos for phases 3 and 4, then C to remove the lock, with these free-base numbers reported as the baseline" (B = stance lock; C = a WBC retrained to stand still under arm loads, phase 1e).
+
+**Contract amendment (2026-10-09 15:46, 05cff8c; before any phase 2 gate seed or demonstration seed has run; `docs/WAITER_INTERFACES.md` "Amendment 2026-10-09").**
+- Stance lock, a declared SIMULATION FIXTURE, on by default (`WaiterEnv(..., stance_lock=True)`): episodes start with the robot held upright at the station; a non-zero base command softens the weld over 0.8 s (clock still held) and frees the base; standing still re-holds it where it stands 0.4 s after the clock hold. All walking and turning stays the learned WBC's. Labels for every result that uses it: LEARNED legs (walking/turning) + STANCE LOCK fixture (standing).
+- Time limit 60 -> 90 s. `info`/`oracle()` gain `base_locked` (additive).
+- Scene: tray handles = open-bottom loops with a 4 cm flat top bar; tumbler with a 0.10 kg weighted base.
+- Development with the lock (dev seeds only): 31/32 (1000-1031) and 14/16 (1032-1047, through `expert_gate.py --range dev`), 45/48 together; successes 48-55 s (median ~51 s); failures: one tumbler nudged at the arm's reach limit, two trays slipping off a hook while walking.
+
+**Predeclared now (2026-10-09 15:46), before any seed 2000-2099 has been run: Waiter phase 2 scored expert gate.**
+- Expert: `scripts/waiter/expert.py` at 05cff8c with `ExpertParams()` defaults (SCRIPTED, ORACLE poses). Environment: `WaiterEnv` defaults at 05cff8c (stance lock on, 90 s limit), deploy `results/waiter-20261005/wbc1c/training/waiter-wbc1c-s7.deploy.yaml` (phase 1c SELECTED s7).
+- Seeds 2000-2099 (100 held-out layouts), one episode each, scored with the frozen success definition by `scripts/waiter/expert_gate.py` (launcher `slurm/repo20260923/waiter_expert_gate.sbatch`) into `results/waiter-20261005/phase2-gate/` (`gate.json`, never overwritten).
+- **PASS iff >= 80 successes in 100.** Reported with it: Wilson 95% interval, falls, final-stage counts, success times, failed seeds.
+- Reported, not gated: the same expert and seeds with `stance_lock=False` (`GATE_FREE=1`) into `results/waiter-20261005/phase2-gate-freebase/` (the free-base baseline on held-out layouts).
+- Next if PASS: record demonstrations on seeds 3000-3299 with `scripts/waiter/record_demos.py` (contract npz, compressed; successes are phase 3's training data, failures kept and flagged), size checked on the first episodes before the rest. If FAIL: no demonstrations; the failure modes go to the user.
