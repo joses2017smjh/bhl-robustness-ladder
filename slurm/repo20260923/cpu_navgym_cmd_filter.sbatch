@@ -37,6 +37,9 @@
 #   confirm          array 0-7: 0-5 the dev-selected arm per actor/condition (as dev), 6-7 A* nominal / drop35;
 #                    runs nothing unless the dev verdict is a final SELECTED (task 0 records not_run.json)
 #   confirm-verdict  one job (afterany on confirm): navgym_cmd_filter.py confirm-verdict --final
+#   confirm-unfiltered  array 0-5 (2026-10-08; the diagnostic predeclared 2026-10-07 20:20, reported, never gated):
+#                    the 6 learned cells of confirm on maze seeds 78000-78047 with --policy-cmd-filter none
+#                    (statistics only), into diag-unfiltered/none/<actor>-<cond>
 # A cell directory that already holds episodes is never run again (maze_explore --no-overwrite refuses).
 set -euo pipefail
 REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
@@ -110,6 +113,10 @@ confirm)
 confirm-verdict)
     [ -e "$ROOT/confirm/not_run.json" ] && { echo "confirmation not run by the predeclared rule"; cat "$ROOT/confirm/not_run.json"; exit 0; }
     "$PY" scripts/bench/navgym_cmd_filter.py confirm-verdict "$ROOT/confirm" --dev-verdict "$ROOT/dev/verdict.json" --final ;;
+confirm-unfiltered)
+    i=${SLURM_ARRAY_TASK_ID:?confirm-unfiltered needs an array index 0-5}
+    [ "$i" -ge 0 ] && [ "$i" -le 5 ] || { echo "confirm-unfiltered array index $i outside 0-5"; exit 2; }
+    learned_cell none "${ACTORS[$((i / 2))]}" "${CONDS[$((i % 2))]}" 78000 "$ROOT/diag-unfiltered" ;;
 *)
     echo "unknown NAVGYM_CF_MODE $MODE"; exit 2 ;;
 esac
