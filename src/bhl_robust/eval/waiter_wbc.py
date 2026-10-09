@@ -19,7 +19,9 @@ from bhl_robust.eval import gait_clock as G
 KEY = "waiter_wbc"
 TASK_ID = "Velocity-BHL-Waiter-WBC-v0"
 CURRICULUM_TASK_ID = "Velocity-BHL-Waiter-WBC-Curriculum-v0"     # phase 1c (2026-10-07)
-TASK_IDS = (TASK_ID, CURRICULUM_TASK_ID)
+STANCE_TASK_ID = "Velocity-BHL-Waiter-WBC-Stance-v0"             # phase 1d (2026-10-09)
+TASK_IDS = (TASK_ID, CURRICULUM_TASK_ID, STANCE_TASK_ID)
+STANCE_REL_STANDING_ENVS = 0.25
 POLICY_TERMS = ["velocity_commands", "base_ang_vel", "projected_gravity", "joint_pos", "joint_vel", "actions",
                 "upper_body", "gait_clock"]
 CRITIC_TERMS = POLICY_TERMS[:6] + ["base_lin_vel", "upper_body", "gait_clock"]
@@ -66,6 +68,22 @@ def check_curriculum(env: dict) -> list[str]:
     return p
 
 
+def check_stance(env: dict) -> list[str]:
+    """Phase 1d only: standing envs at 0.25 and the stance-held clock in the actor, critic and feet_gait ([] = ok)."""
+    p = []
+    rel = ((env.get("commands") or {}).get("base_velocity") or {}).get("rel_standing_envs")
+    if rel is None or abs(float(rel) - STANCE_REL_STANDING_ENVS) > 1e-9:
+        p.append(f"rel_standing_envs {rel}")
+    for group in ("policy", "critic"):
+        f = str(((env["observations"].get(group) or {}).get("gait_clock") or {}).get("func", ""))
+        if "gait_clock_stance" not in f:
+            p.append(f"{group} gait_clock func {f}")
+    f = str(((env.get("rewards") or {}).get("feet_gait") or {}).get("func", ""))
+    if "feet_gait_stance" not in f:
+        p.append(f"feet_gait func {f}")
+    return p
+
+
 def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
     from omegaconf import OmegaConf
     if task not in TASK_IDS:
@@ -75,8 +93,10 @@ def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
     info = G.check_env(env, "R1")                     # gait_clock last in actor and critic, period 0.8, offset 0
     cfg = OmegaConf.load(deploy)
     problems = check_layout(cfg, env)
-    if task == CURRICULUM_TASK_ID:
+    if task in (CURRICULUM_TASK_ID, STANCE_TASK_ID):
         problems += check_curriculum(env)
+    if task == STANCE_TASK_ID:
+        problems += check_stance(env)
     if abs(float(cfg.policy_dt) - info["step_dt"]) > 1e-9:
         problems.append(f"policy_dt {cfg.policy_dt} != env step_dt {info['step_dt']}")
     if problems:

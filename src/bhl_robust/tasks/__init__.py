@@ -623,3 +623,19 @@ except Exception as _exc:  # noqa: BLE001
     import sys as _sys
     print(f"[bhl_robust.tasks] waiter-wbc-curriculum id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
 # --- end waiter-wbc-curriculum ---
+# --- waiter-wbc-stance (2026-10-09; phase 1d, SLURM_JOBS.md "Predeclared now ... Waiter phase 1d") ---
+# Velocity-BHL-Waiter-WBC-Stance-v0: phase 1c + the trained stance (waiter_env_cfg.HumanoidWaiterWbcStanceCfg).
+# Guarded: a failure is printed and only this id is absent.
+try:
+    from bhl_robust.tasks import waiter_env_cfg as _waiter_d  # noqa: E402
+
+    gym.register(
+        id=_waiter_d.STANCE_TASK_ID,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _waiter_d.HumanoidWaiterWbcStanceCfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] waiter-wbc-stance id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end waiter-wbc-stance ---

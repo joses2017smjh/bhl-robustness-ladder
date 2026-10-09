@@ -187,3 +187,45 @@ def heading_hold(env, command_name: str, std: float, wz_threshold: float) -> tor
               f"(explicit {int(explicit.sum())})", flush=True)
     return reward
 # --- end turning-hold ---
+
+
+# --- waiter phase 1d stance (2026-10-09; SLURM_JOBS.md "Predeclared now ... Waiter phase 1d"; additive) ---
+# A standing env (its base command is zero: the velocity command's `is_standing_env`) sees its gait clock HELD at
+# STANCE_PHASE, and feet_gait schedules it there: phase 0.5 puts both feet in stance (left 0.5 < 0.55, right 0.0).
+# This trains, for zero commands, what WaiterEnv's stance hold does at deploy (clock step 10 of 20 = phase 0.5).
+STANCE_PHASE = 0.5
+
+
+def held_phase(phase, standing, stance_phase: float = STANCE_PHASE):
+    """The phase, held at `stance_phase` where `standing` (bool); torch tensors or numpy arrays."""
+    return phase * (~standing) + stance_phase * standing
+
+
+def _stance_phase(env, period: float, command_name: str):
+    phase = global_phase(_episode_steps(env), env.step_dt, period)
+    standing = env.command_manager.get_term(command_name).is_standing_env
+    return held_phase(phase, standing.bool())
+
+
+def gait_clock_stance(env, period: float, command_name: str = "base_velocity") -> torch.Tensor:
+    """Observation term (phase 1d): gait_clock with standing envs' phase held at STANCE_PHASE."""
+    phase = _stance_phase(env, period, command_name)
+    out = torch.zeros(phase.shape[0], 2, device=phase.device)
+    out[:, 0] = torch.sin(phase * math.pi * 2.0)
+    out[:, 1] = torch.cos(phase * math.pi * 2.0)
+    return out
+
+
+def feet_gait_stance(env, period: float, offset, threshold: float, sensor_cfg,
+                     command_name: str = "base_velocity") -> torch.Tensor:
+    """Reward term (phase 1d): feet_gait on the stance-held phase (standing envs: both feet in contact)."""
+    sensor = env.scene.sensors[sensor_cfg.name]
+    in_contact = sensor.data.current_contact_time[:, sensor_cfg.body_ids] > 0.0
+    if in_contact.shape[1] != len(offset):
+        raise ValueError(f"feet_gait_stance: {in_contact.shape[1]} feet resolved but {len(offset)} phase offsets")
+    if "feet_gait_stance" not in _LOGGED:
+        _LOGGED.add("feet_gait_stance")
+        print(f"[gait_clock_mdp] feet_gait_stance offsets {list(offset)} period {period} threshold {threshold} "
+              f"stance phase {STANCE_PHASE} command {command_name}", flush=True)
+    phases = leg_phases(_stance_phase(env, period, command_name), offset)
+    return schedule_reward(phases, in_contact, threshold)

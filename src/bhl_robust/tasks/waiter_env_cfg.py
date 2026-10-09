@@ -164,3 +164,29 @@ class HumanoidWaiterWbcCurriculumCfg(HumanoidWaiterWbcCfg):
 
     events: WaiterCurriculumEventsCfg = WaiterCurriculumEventsCfg()
     curriculum: WaiterCurriculumCfg = WaiterCurriculumCfg()
+
+
+# ---- phase 1d (2026-10-09; SLURM_JOBS.md "Predeclared now ... Waiter phase 1d") ------------------------------------
+# = phase 1c (HumanoidWaiterWbcCurriculumCfg, the std bound set by the launcher) with ONLY:
+#   * a trained stance: standing envs (zero base command) see the gait clock HELD at gait_clock_mdp.STANCE_PHASE (0.5,
+#     both feet in stance) in the actor and critic observations, and feet_gait schedules them there
+#     (gait_clock_mdp.gait_clock_stance / feet_gait_stance); the arms, payloads and forces keep moving while they stand;
+#   * rel_standing_envs 0.25 (upstream 0.02), so a quarter of the envs practise standing still under arm disturbances.
+# Why: the 1c WBC (s7) was never trained to stand; held at a stance phase only at deploy time it stays within 1-2 cm
+# with still arms but slides 5-35 cm and turns up to 20 deg while the arms move (phase 2 dev2, 2026-10-08).
+STANCE_TASK_ID = "Velocity-BHL-Waiter-WBC-Stance-v0"
+STANCE_REL_STANDING_ENVS = 0.25
+
+
+@configclass
+class HumanoidWaiterWbcStanceCfg(HumanoidWaiterWbcCurriculumCfg):
+    """Phase 1d: phase 1c + the trained stance (notes above)."""
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.commands.base_velocity.rel_standing_envs = STANCE_REL_STANDING_ENVS
+        for group in (self.observations.policy, self.observations.critic):
+            group.gait_clock.func = gait_clock_mdp.gait_clock_stance
+            group.gait_clock.params = {"period": gait_clock_mdp.GAIT_PERIOD_S, "command_name": "base_velocity"}
+        self.rewards.feet_gait.func = gait_clock_mdp.feet_gait_stance
+        self.rewards.feet_gait.params["command_name"] = "base_velocity"

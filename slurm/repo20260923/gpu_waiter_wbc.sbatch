@@ -23,6 +23,10 @@
 # scaled 0 before iteration 4000, linear to 1 at 7000, then 1), seeds 6-8, 10000 iterations, std <= 1.0; submit with
 # --time=16:00:00. Its smoke compresses the ramp to iterations 0-2 (Hydra override) so the log shows the term move;
 # its full run must log Curriculum/disturbance 0 first and 1.0 last, with the frozen ramp values in params/env.yaml.
+# WAITER_VARIANT=1d (2026-10-09; SLURM_JOBS.md 'Predeclared now ... Waiter phase 1d'): task
+# Velocity-BHL-Waiter-WBC-Stance-v0 (= 1c + the trained stance: standing envs' gait clock held at phase 0.5 in the
+# observations and feet_gait, rel_standing_envs 0.25), seeds 9-11, otherwise as 1c (the same curriculum checks) plus
+# the stance check in params/env.yaml (also done by the stamp); submit with --time=16:00:00.
 set -euo pipefail
 export BHL_STACK=v51
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
@@ -38,6 +42,8 @@ case "$VARIANT" in
     1b) PREFIX=waiter-wbc1b; SEED0=3; RES_NAME=wbc1b; export BHL_STD_MAX=1.0 ;;
     1c) PREFIX=waiter-wbc1c; SEED0=6; RES_NAME=wbc1c; export BHL_STD_MAX=1.0
         TASK_ID=Velocity-BHL-Waiter-WBC-Curriculum-v0; FULL_ITERS=10000 ;;
+    1d) PREFIX=waiter-wbc1d; SEED0=9; RES_NAME=wbc1d; export BHL_STD_MAX=1.0
+        TASK_ID=Velocity-BHL-Waiter-WBC-Stance-v0; FULL_ITERS=10000 ;;
     *)  echo "WAITER-WBC RESULT: FAIL (unknown WAITER_VARIANT $VARIANT)"; exit 2 ;;
 esac
 OBS_POLICY=83
@@ -80,7 +86,7 @@ if [ "$SMOKE" = 1 ]; then OVR_DIR="$RES/overrides"; else OVR_DIR="$WORKSPACE/ove
 mkdir -p "$OVR_DIR"
 export OVERRIDE_FILE="$OVR_DIR/${RUN_NAME}.txt"
 dr_overrides_scale 1.0 > "$OVERRIDE_FILE"
-if [ "$VARIANT" = 1c ] && [ "$SMOKE" = 1 ]; then
+if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ]; } && [ "$SMOKE" = 1 ]; then
     # smoke only: compress the ramp into the smoke's 3 iterations, so its log shows the term move
     printf ' env.curriculum.disturbance.params.start_iter=0 env.curriculum.disturbance.params.end_iter=2' >> "$OVERRIDE_FILE"
 fi
@@ -101,7 +107,7 @@ run=$(find_run || true)
 why=""
 [ -n "$run" ] && [ -f "$run/$FINAL_CKPT" ] || why="$why no-$FINAL_CKPT"
 grep -q "waiter-wbc id NOT registered" "$TLOG" && why="$why task-not-registered"
-if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
+if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
     grep -q "\[overlay\] action-noise std bounded to \[0.001, 1.0\]" "$TLOG" || why="$why std-bound-overlay-missing"
     "$PYH" - "$TLOG" <<'PY' || why="$why noise-std-above-1.0"
 import re, sys
@@ -109,7 +115,7 @@ v = [float(x) for x in re.findall(r"Mean action noise std:\s*([0-9.]+)", open(sy
 sys.exit(0 if v and max(v) <= 1.0 + 1e-6 else 1)
 PY
 fi
-if [ "$VARIANT" = 1c ] && [ -n "$run" ] && [ -s "$TLOG" ]; then
+if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ]; } && [ -n "$run" ] && [ -s "$TLOG" ]; then
     # phase 1c: the curriculum ran (logged 0 first, and 1.0 last in a full run), the PPO rollout is the 24 steps the
     # iteration count assumes, and a full run carries the frozen ramp values
     (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" - "$TLOG" "$run" "$SMOKE" <<'PY') || why="$why curriculum-check"
@@ -132,6 +138,17 @@ print(f"curriculum check: {'OK' if ok else 'FAIL'} (logged {len(v)} values, firs
       f"last {v[-1] if v else None}, max {max(v) if v else None})")
 sys.exit(0 if ok else 1)
 PY
+fi
+if [ "$VARIANT" = 1d ] && [ -n "$run" ] && [ -f "$run/params/env.yaml" ]; then
+    # phase 1d: the stance terms and the standing-env share are in the run's own env.yaml
+    s=$( (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" -c "
+import sys
+from bhl_robust.eval.gait_clock import load_env_yaml
+from bhl_robust.eval.waiter_wbc import check_stance
+p = check_stance(load_env_yaml(sys.argv[1]))
+print('stance check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/params/env.yaml") 2>&1 | tail -1)
+    echo "$s"
+    case "$s" in "stance check: OK") ;; *) why="$why stance-check";; esac
 fi
 if [ -z "$why" ]; then
     "$PYH" - "$RES/training/$RUN_NAME.json" "$RUN_NAME" "$TASK_ID" "$SEED" "$FINAL_CKPT" "$run" "$JOBTAG" "$TLOG" <<'PY'
