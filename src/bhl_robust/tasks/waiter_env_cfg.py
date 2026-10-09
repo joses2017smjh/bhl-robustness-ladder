@@ -166,7 +166,7 @@ class HumanoidWaiterWbcCurriculumCfg(HumanoidWaiterWbcCfg):
     curriculum: WaiterCurriculumCfg = WaiterCurriculumCfg()
 
 
-# ---- phase 1d (2026-10-09; SLURM_JOBS.md "Predeclared now ... Waiter phase 1d") ------------------------------------
+# ---- phase 1d (2026-10-08; SLURM_JOBS.md "Predeclared now ... Waiter phase 1d") ------------------------------------
 # = phase 1c (HumanoidWaiterWbcCurriculumCfg, the std bound set by the launcher) with ONLY:
 #   * a trained stance: standing envs (zero base command) see the gait clock HELD at gait_clock_mdp.STANCE_PHASE (0.5,
 #     both feet in stance) in the actor and critic observations, and feet_gait schedules them there

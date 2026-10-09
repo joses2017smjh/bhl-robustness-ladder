@@ -19,7 +19,7 @@ from bhl_robust.eval import gait_clock as G
 KEY = "waiter_wbc"
 TASK_ID = "Velocity-BHL-Waiter-WBC-v0"
 CURRICULUM_TASK_ID = "Velocity-BHL-Waiter-WBC-Curriculum-v0"     # phase 1c (2026-10-07)
-STANCE_TASK_ID = "Velocity-BHL-Waiter-WBC-Stance-v0"             # phase 1d (2026-10-09)
+STANCE_TASK_ID = "Velocity-BHL-Waiter-WBC-Stance-v0"             # phase 1d (2026-10-08)
 TASK_IDS = (TASK_ID, CURRICULUM_TASK_ID, STANCE_TASK_ID)
 STANCE_REL_STANDING_ENVS = 0.25
 POLICY_TERMS = ["velocity_commands", "base_ang_vel", "projected_gravity", "joint_pos", "joint_vel", "actions",

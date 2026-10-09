@@ -23,7 +23,7 @@
 # scaled 0 before iteration 4000, linear to 1 at 7000, then 1), seeds 6-8, 10000 iterations, std <= 1.0; submit with
 # --time=16:00:00. Its smoke compresses the ramp to iterations 0-2 (Hydra override) so the log shows the term move;
 # its full run must log Curriculum/disturbance 0 first and 1.0 last, with the frozen ramp values in params/env.yaml.
-# WAITER_VARIANT=1d (2026-10-09; SLURM_JOBS.md 'Predeclared now ... Waiter phase 1d'): task
+# WAITER_VARIANT=1d (2026-10-08; SLURM_JOBS.md 'Predeclared now ... Waiter phase 1d'): task
 # Velocity-BHL-Waiter-WBC-Stance-v0 (= 1c + the trained stance: standing envs' gait clock held at phase 0.5 in the
 # observations and feet_gait, rel_standing_envs 0.25), seeds 9-11, otherwise as 1c (the same curriculum checks) plus
 # the stance check in params/env.yaml (also done by the stamp); submit with --time=16:00:00.

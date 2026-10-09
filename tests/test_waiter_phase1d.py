@@ -1,4 +1,4 @@
-"""Waiter phase 1d (2026-10-09): the trained stance. The held phase, the constants shared by the task, the deploy
+"""Waiter phase 1d (2026-10-08): the trained stance. The held phase, the constants shared by the task, the deploy
 stamp, the env's stance hold and the Q3 gate, the launcher variant, and the Q3 clause of wbc_select.py (on the
 committed phase 1c gate JSONs plus synthetic Q3 records). No simulator is started."""
 import ast

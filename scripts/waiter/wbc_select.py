@@ -42,7 +42,7 @@ def main(argv=None) -> int:
     ap.add_argument("--prefix", default="waiter-wbc")
     ap.add_argument("--min-walk-m", type=float, default=None)
     ap.add_argument("--stance", action="store_true",
-                    help="phase 1d (predeclared 2026-10-09): a seed also needs Q3 stance PASS (scripts/waiter/stance_gate.py)")
+                    help="phase 1d (predeclared 2026-10-08): a seed also needs Q3 stance PASS (scripts/waiter/stance_gate.py)")
     a = ap.parse_args(argv)
     out = a.res / "selection.json"
     if out.exists():

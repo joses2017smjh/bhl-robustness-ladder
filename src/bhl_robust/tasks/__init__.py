@@ -623,7 +623,7 @@ except Exception as _exc:  # noqa: BLE001
     import sys as _sys
     print(f"[bhl_robust.tasks] waiter-wbc-curriculum id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
 # --- end waiter-wbc-curriculum ---
-# --- waiter-wbc-stance (2026-10-09; phase 1d, SLURM_JOBS.md "Predeclared now ... Waiter phase 1d") ---
+# --- waiter-wbc-stance (2026-10-08; phase 1d, SLURM_JOBS.md "Predeclared now ... Waiter phase 1d") ---
 # Velocity-BHL-Waiter-WBC-Stance-v0: phase 1c + the trained stance (waiter_env_cfg.HumanoidWaiterWbcStanceCfg).
 # Guarded: a failure is printed and only this id is absent.
 try:

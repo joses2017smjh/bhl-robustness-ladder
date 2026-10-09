@@ -17,7 +17,7 @@
 # then scripts/waiter/wbc_select.py writes results/waiter-20261005/wbc/selection.json once all three seeds are in.
 # Phase 1c (2026-10-07): WAITER_GATES_RES=.../wbc1c WAITER_GATES_PREFIX=waiter-wbc1c WAITER_GATES_SEED0=6
 # WAITER_GATES_MIN_WALK_M=1.5 adds the predeclared walk-progress clause (wbc_select.py --min-walk-m).
-# Phase 1d (2026-10-09): WAITER_GATES_STANCE=1 also runs Q3 (scripts/waiter/stance_gate.py) and requires it to PASS
+# Phase 1d (2026-10-08): WAITER_GATES_STANCE=1 also runs Q3 (scripts/waiter/stance_gate.py) and requires it to PASS
 # (wbc_select.py --stance).
 # usage: sbatch --dependency=aftercorr:<training array> slurm/repo20260923/cpu_waiter_gates.sbatch
 set -uo pipefail

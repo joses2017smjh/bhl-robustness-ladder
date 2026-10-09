@@ -90,7 +90,7 @@ def test_stamp_checks_the_curriculum_and_the_task_id(tmp_path):
     assert ww.check_curriculum({"events": {"hand_payload": {"mode": "startup"}}}) == [
         "curriculum term disturbance missing (None)", "hand_payload is not a reset event"]
     assert ww.TASK_IDS[:2] == ("Velocity-BHL-Waiter-WBC-v0", "Velocity-BHL-Waiter-WBC-Curriculum-v0")
-    assert ww.TASK_IDS[2:] == ("Velocity-BHL-Waiter-WBC-Stance-v0",)           # phase 1d (2026-10-09), additive
+    assert ww.TASK_IDS[2:] == ("Velocity-BHL-Waiter-WBC-Stance-v0",)           # phase 1d (2026-10-08), additive
     with pytest.raises(ValueError):
         ww.stamp(tmp_path / "deploy.yaml", tmp_path / "env.yaml", task="Velocity-BHL-Waiter-WBC-v9")
 

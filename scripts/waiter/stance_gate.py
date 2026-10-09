@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Waiter phase 1d gate Q3, standing still while the arms work (SLURM_JOBS.md "Predeclared now ... Waiter phase 1d";
-frozen 2026-10-09, before any 1d checkpoint exists).
+frozen 2026-10-08, before any 1d checkpoint exists).
 
 12 episodes = the 4 Q2 arm trajectories (q2_trajectories.TRAJECTORIES) x reset seeds 0-2, on the MuJoCo Waiter model
 with 0.5 kg added to each hand link, base command 0 for 8 s, the gait-clock input HELD at clock step 10 (phase 0.5)

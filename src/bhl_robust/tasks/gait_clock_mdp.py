@@ -189,7 +189,7 @@ def heading_hold(env, command_name: str, std: float, wz_threshold: float) -> tor
 # --- end turning-hold ---
 
 
-# --- waiter phase 1d stance (2026-10-09; SLURM_JOBS.md "Predeclared now ... Waiter phase 1d"; additive) ---
+# --- waiter phase 1d stance (2026-10-08; SLURM_JOBS.md "Predeclared now ... Waiter phase 1d"; additive) ---
 # A standing env (its base command is zero: the velocity command's `is_standing_env`) sees its gait clock HELD at
 # STANCE_PHASE, and feet_gait schedules it there: phase 0.5 puts both feet in stance (left 0.5 < 0.55, right 0.0).
 # This trains, for zero commands, what WaiterEnv's stance hold does at deploy (clock step 10 of 20 = phase 0.5).
