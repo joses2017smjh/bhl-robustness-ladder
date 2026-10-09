@@ -182,9 +182,11 @@ def _terms(group: dict) -> list[str]:
     return [k for k, v in group.items() if isinstance(v, dict) and "func" in v]
 
 
-def check_env(env: dict, arm: str) -> dict:
+def check_env(env: dict, arm: str, clock_funcs=("gait_clock",)) -> dict:
     """Clock layout of a trained run's env.yaml. arm R1: gait_clock last in actor and critic;
-    R2: last in the critic, absent from the actor. Returns {period_s, phase_offset, step_dt}; raises otherwise."""
+    R2: last in the critic, absent from the actor. Returns {period_s, phase_offset, step_dt}; raises otherwise.
+    `clock_funcs`: the accepted gait_clock_mdp observation functions (Waiter phase 1d adds "gait_clock_stance", the
+    same clock with standing envs held at phase 0.5; default unchanged)."""
     obs = env["observations"]
     pol, cri = _terms(obs["policy"]), _terms(obs["critic"])
     if arm == "R1":
@@ -198,7 +200,7 @@ def check_env(env: dict, arm: str) -> dict:
     if not cri or cri[-1] != "gait_clock":
         raise ValueError(f"{arm} env.yaml: critic terms {cri} do not end with gait_clock")
     clock = (obs["policy"] if arm == "R1" else obs["critic"])["gait_clock"]
-    if not str(clock["func"]).endswith("gait_clock_mdp:gait_clock"):
+    if not any(str(clock["func"]).endswith(f"gait_clock_mdp:{f}") for f in clock_funcs):
         raise ValueError(f"gait_clock func is {clock['func']!r}")
     period = float(clock["params"]["period"])
     gait = env["rewards"]["feet_gait"]

@@ -90,7 +90,8 @@ def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
         raise ValueError(f"unknown Waiter WBC task {task!r}; expected one of {TASK_IDS}")
     deploy, env_yaml = Path(deploy), Path(env_yaml)
     env = G.load_env_yaml(env_yaml)
-    info = G.check_env(env, "R1")                     # gait_clock last in actor and critic, period 0.8, offset 0
+    funcs = ("gait_clock", "gait_clock_stance") if task == STANCE_TASK_ID else ("gait_clock",)
+    info = G.check_env(env, "R1", clock_funcs=funcs)  # gait_clock last in actor and critic, period 0.8, offset 0
     cfg = OmegaConf.load(deploy)
     problems = check_layout(cfg, env)
     if task in (CURRICULUM_TASK_ID, STANCE_TASK_ID):

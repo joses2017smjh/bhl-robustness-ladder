@@ -103,3 +103,16 @@ def test_selection_needs_q3_when_asked(tmp_path):
     sel = json.loads((res / "selection.json").read_text())
     # 1c: s7 and s8 qualified on Q1+Q2+walk; with Q3 only s8 passes
     assert sel["selected"] == "s8" and "Q3 stance PASS" in sel["rule"]
+
+
+def test_stamp_accepts_the_stance_clock_only_for_the_stance_task():
+    from bhl_robust.eval import gait_clock as G
+    env = {"observations": {"policy": {"a": {}, "gait_clock": {"func": "bhl_robust.tasks.gait_clock_mdp:gait_clock_stance",
+                                                               "params": {"period": 0.8}}},
+                            "critic": {"a": {}, "gait_clock": {"func": "bhl_robust.tasks.gait_clock_mdp:gait_clock_stance",
+                                                               "params": {"period": 0.8}}}},
+           "rewards": {"feet_gait": {"params": {"period": 0.8, "offset": [0.0, 0.5]}}},
+           "sim": {"dt": 0.005}, "decimation": 8}
+    with pytest.raises(ValueError):
+        G.check_env(env, "R1")                                           # the frozen default refuses it
+    assert G.check_env(env, "R1", clock_funcs=("gait_clock", "gait_clock_stance"))["period_s"] == 0.8
