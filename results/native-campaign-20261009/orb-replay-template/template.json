@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "campaign_id": "native-orb-replay-20261009-v1",
+  "methods": [
+    "orb"
+  ],
+  "scope": "Actual native estimator simulation replay; no closed-loop navigation claim",
+  "capture_archive": "capture.tar.gz",
+  "orb_runtime_archive": "orb-runtime.tar.gz",
+  "input_files": {},
+  "additional_source": [
+    "scripts/bench/native_slam_campaign.py",
+    "src/bhl_robust/research/native_orb.py",
+    "src/bhl_robust/research/native_lio.py",
+    "scripts/native/lio_replay.py"
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "replay_gate": {
+    "initialization_exclusion_s": 5.0,
+    "minimum_tracking_fraction": 0.9,
+    "maximum_ate_rmse_m": 0.1,
+    "maximum_rotation_p95_deg": 5.0,
+    "maximum_native_compute_p95_s": 0.1
+  },
+  "jobs": [
+    {
+      "name": "native-orb-smoke-20261009-v1",
+      "kind": "smoke",
+      "entrypoint": "scripts/bench/native_slam_campaign.py",
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke"
+      ],
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 16,
+        "partition": "share,eecs",
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 128
+    },
+    {
+      "name": "native-orb-replay-20261009-v1",
+      "kind": "run",
+      "entrypoint": "scripts/bench/native_slam_campaign.py",
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "replay"
+      ],
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 16,
+        "partition": "share,eecs",
+        "time_limit": "01:00:00"
+      },
+      "max_output_mb": 128
+    }
+  ]
+}

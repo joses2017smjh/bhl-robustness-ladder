@@ -1,0 +1,25 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=native-capture-capture-20261009-v2",
+    "--partition=gpu,dgxh,ampere",
+    "--cpus-per-task=4",
+    "--mem=24G",
+    "--time=00:30:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/capture-v2/native-capture-capture-20261009-v2-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/capture-v2/native-capture-capture-20261009-v2-%j.out",
+    "--export=NONE",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--exclude=dgxh-1",
+    "--gres=gpu:1",
+    "--dependency=afterok:21740369",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/capture-v2/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/capture-v2",
+    "native-capture-capture-20261009-v2",
+    "5d4788b9568801079aa5b5857c0e86f07abfba7fbcae8e48e0e4b156edfa6e94"
+  ],
+  "created_utc": "2026-10-09T21:12:45.642832+00:00"
+}

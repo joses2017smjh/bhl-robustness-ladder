@@ -1,0 +1,58 @@
+{
+  "archive_sha256": "a71d5d66917d6501fde5c113b6d79fc969bf6c2f69cbcf7d163d63c7a2e49332",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz:/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz",
+    "--bind",
+    "/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz/source:/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz/protocol.json:/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz/work",
+    "--nv",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz/source/scripts/bench/slam_capture_campaign.py",
+    "--protocol",
+    "/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz/protocol.json",
+    "--phase",
+    "smoke"
+  ],
+  "host": "cn-gpu7.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "smoke"
+    ],
+    "entrypoint": "scripts/bench/slam_capture_campaign.py",
+    "env": {
+      "MUJOCO_GL": "egl"
+    },
+    "kind": "smoke",
+    "max_output_mb": 512,
+    "name": "native-capture-smoke-20261009",
+    "resources": {
+      "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+      "cpus": 4,
+      "exclude": "dgxh-1",
+      "gpus": 1,
+      "memory_gb": 24,
+      "partition": "gpu,dgxh,ampere",
+      "time_limit": "00:10:00"
+    }
+  },
+  "job_id": "21740184",
+  "scratch": "/tmp/bhl-h34-native-capture-smoke-20261009-21740184-w9xv1riz",
+  "source_files_verified": 827,
+  "started_utc": "2026-10-09T21:06:31.091519+00:00"
+}

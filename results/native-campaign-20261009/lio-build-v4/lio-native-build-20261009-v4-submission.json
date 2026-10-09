@@ -1,0 +1,34 @@
+{
+  "archive_sha256": "5922b606187bec9463b409a29a63c3b28ff387153608c8ff0ebcf2a322604664",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=lio-native-build-20261009-v4",
+    "--partition=share,eecs",
+    "--cpus-per-task=2",
+    "--mem=24G",
+    "--time=01:30:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-build-v4/lio-native-build-20261009-v4-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-build-v4/lio-native-build-20261009-v4-%j.out",
+    "--export=NONE",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-build-v4/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-build-v4",
+    "lio-native-build-20261009-v4",
+    "5922b606187bec9463b409a29a63c3b28ff387153608c8ff0ebcf2a322604664"
+  ],
+  "job_id": "21740637",
+  "resources": {
+    "cpus": 2,
+    "gpus": 0,
+    "memory_gb": 24,
+    "partition": "share,eecs",
+    "time_limit": "01:30:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21740637\n",
+  "submitted_utc": "2026-10-09T21:16:32.925020+00:00"
+}

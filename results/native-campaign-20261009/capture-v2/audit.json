@@ -1,0 +1,22 @@
+{
+  "schema": "bhl-sensor-replay-audit-v1",
+  "status": "PASS",
+  "origin": "simulation",
+  "scope": "file integrity, timing and geometry declarations; not sensor accuracy or estimator success",
+  "counts": {
+    "sequences": 3,
+    "frames": 450,
+    "rgb_images": 900,
+    "lidar_points": 920787,
+    "imu_samples": 18000
+  },
+  "scene_groups": 3,
+  "splits": {
+    "dev": 1,
+    "validation": 1,
+    "test": 1
+  },
+  "manifest_sha256": "0d8250f888ddaf4f1c5049cf9a5af0eaf2346593ce7f774c534b603cddfe791c",
+  "verified_files": 2250,
+  "observed_frame_rate_hz_median": 5.000000000000018
+}

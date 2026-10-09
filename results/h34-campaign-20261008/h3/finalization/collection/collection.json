@@ -1,0 +1,551 @@
+{
+  "schema": "h34-durable-collection-v1",
+  "status": "NEGATIVE",
+  "task": "H3",
+  "campaign_id": "h3-20261008",
+  "collected_utc": "2026-10-09T04:21:10.111390+00:00",
+  "persistent_dir": "/nfs/stak/users/sanchej7/humanoid-h34-20261008/h3-v1",
+  "archive_sha256": "f8575bfb1684bf3ea636c4b188c285f6c32ddd53f428eedacda5a03c63b67ab6",
+  "protocol_sha256": "3af1d9050797430e910375e1d51ac2ca024dfd908591e7b7f2b1f1181a609ea4",
+  "run_job_id": "21711075",
+  "expected_cells": [
+    {
+      "cell": 0,
+      "arm": "history",
+      "seed": 0
+    },
+    {
+      "cell": 1,
+      "arm": "history",
+      "seed": 1
+    },
+    {
+      "cell": 2,
+      "arm": "history",
+      "seed": 2
+    },
+    {
+      "cell": 3,
+      "arm": "repeated_current",
+      "seed": 0
+    },
+    {
+      "cell": 4,
+      "arm": "repeated_current",
+      "seed": 1
+    },
+    {
+      "cell": 5,
+      "arm": "repeated_current",
+      "seed": 2
+    }
+  ],
+  "complete_cells": 6,
+  "cells": [
+    {
+      "cell": 5,
+      "arm": "repeated_current",
+      "seed": 2,
+      "directory": "cells/cell-5-repeated_current-s2",
+      "launch": "h3-run-20261008-21711075",
+      "output_bytes": 17095261,
+      "files": {
+        "campaign_result.json": {
+          "sha256": "0ac3dd00da0a0698a37ef33333b3a57f392c7a31e4bb7dc27d6433b1144325b7",
+          "bytes": 2301
+        },
+        "deploy.yaml": {
+          "sha256": "7b5453fd204000f68ebe2245ec02aace5a888ebe9c11a7c1805c0e5016d5a3e1",
+          "bytes": 1516
+        },
+        "events.out.tfevents.1791518474.cn-gpu5.hpc.engr.oregonstate.edu.18.0": {
+          "sha256": "99fe545b5a38f2d7ffb97acc4421db3df95d0b40bd81fba4a396f4aad2cc1b32",
+          "bytes": 1014696
+        },
+        "final-checkpoint.pt": {
+          "sha256": "46bd425570dfba0bb7059badd1333ae48fb49c9dea6efb6670937d32a7b19d57",
+          "bytes": 1573739
+        },
+        "latency-evaluation.json": {
+          "sha256": "c6fd8852e9f05930c37e2b7bd40fd1bf2cee9b2567b9cb72e3f2b08cdc419d88",
+          "bytes": 116072
+        },
+        "latency-traces.jsonl.gz": {
+          "sha256": "d1aec0144afaf89c74c7da10f6f4ed52026b9dc9bc850c20b355482c77a2257f",
+          "bytes": 14056449
+        },
+        "mjcf-cache/mjcf_biped/berkeley_humanoid_lite_biped.xml": {
+          "sha256": "52b633449dc6d6c86cfa029c6aa193995272800fa7d24eed02c90082471a2677",
+          "bytes": 19784
+        },
+        "mjcf-cache/mjcf_biped/bhl_biped_scene.xml": {
+          "sha256": "664842bc940e6b4e8d1ad7c6d2515543fe3cddd9adec007763a810ec26f4a037",
+          "bytes": 987
+        },
+        "params/agent.yaml": {
+          "sha256": "fee74ed39d7bd0affbf9821b55b7f7861a988c4b026f138778c1c30711c024a7",
+          "bytes": 1035
+        },
+        "params/env.yaml": {
+          "sha256": "2039b15516658d164e16a75e7486a68cdb59773dde1b8172642736c57b2dc264",
+          "bytes": 38399
+        },
+        "policy.onnx": {
+          "sha256": "c1f5151162bca2880e3678e6a9fd6785c2869df010ff0a312df4e7231af388e3",
+          "bytes": 270283
+        }
+      }
+    },
+    {
+      "cell": 0,
+      "arm": "history",
+      "seed": 0,
+      "directory": "cells/cell-0-history-s0",
+      "launch": "h3-run-20261008-21711158",
+      "output_bytes": 17138472,
+      "files": {
+        "campaign_result.json": {
+          "sha256": "48688b038bc128bcefa81cfc0f9407b4b8cc248c2362ec6e60eb85269f29a36b",
+          "bytes": 2290
+        },
+        "deploy.yaml": {
+          "sha256": "819c948ddd0401ca1b2398852998bf30ea8432604ec846ece4a07ac549e3d974",
+          "bytes": 1507
+        },
+        "events.out.tfevents.1791512414.cn-gpu5.hpc.engr.oregonstate.edu.17.0": {
+          "sha256": "5781289a25f9c7e5249c0c0be30897bf18df9cbf15b23531a75c656048eba5d3",
+          "bytes": 1014698
+        },
+        "final-checkpoint.pt": {
+          "sha256": "a8124643453146504d3a28b52b73be202a73a35e63f94b3122b4cf9f8c88dfb9",
+          "bytes": 1573739
+        },
+        "latency-evaluation.json": {
+          "sha256": "2394659ea18e544f5fe7782f8acfe85c692a64a872da58d1822bbc33c9a5fc94",
+          "bytes": 113945
+        },
+        "latency-traces.jsonl.gz": {
+          "sha256": "d7cf8a72e82c124452827333829e1426aa6560ddfbf56c03eca13e3e419ae4bb",
+          "bytes": 14101818
+        },
+        "mjcf-cache/mjcf_biped/berkeley_humanoid_lite_biped.xml": {
+          "sha256": "52f85d7a6a33f4287bc7daae6da019c1bca69c325555ca522abeb21ffd021aaf",
+          "bytes": 19784
+        },
+        "mjcf-cache/mjcf_biped/bhl_biped_scene.xml": {
+          "sha256": "664842bc940e6b4e8d1ad7c6d2515543fe3cddd9adec007763a810ec26f4a037",
+          "bytes": 987
+        },
+        "params/agent.yaml": {
+          "sha256": "15bb2dae19c45a386a83ae50739b887e5dc0334441813f8258627f26de753d37",
+          "bytes": 1026
+        },
+        "params/env.yaml": {
+          "sha256": "e3ff5f8ccdfd374643df7e0e45d88ee3da967c8c51d96e0b9c8e96ea26dcdf88",
+          "bytes": 38395
+        },
+        "policy.onnx": {
+          "sha256": "e3a057d8a1c400f9e926ca6caaf7124359205b524f3edbfbb0c8276aae40c1e1",
+          "bytes": 270283
+        }
+      }
+    },
+    {
+      "cell": 1,
+      "arm": "history",
+      "seed": 1,
+      "directory": "cells/cell-1-history-s1",
+      "launch": "h3-run-20261008-21711249",
+      "output_bytes": 16634115,
+      "files": {
+        "campaign_result.json": {
+          "sha256": "853b3f6a75bcd2f6460096d3e821ce474e2df21116b4a5d08038014d3e364e9f",
+          "bytes": 2292
+        },
+        "deploy.yaml": {
+          "sha256": "fa8878f5804557406bdbe9f511455ce7aa425a5444aa35d9b8d1bd1611d3bc2f",
+          "bytes": 1507
+        },
+        "events.out.tfevents.1791513635.cn-gpu5.hpc.engr.oregonstate.edu.18.0": {
+          "sha256": "3f34e31cc72d156274ade10e0c10ef95e0537da905229a44e493480ebdc6370f",
+          "bytes": 1014696
+        },
+        "final-checkpoint.pt": {
+          "sha256": "8e4c6e9cbec3a14d4ab118cbfaccba92f9e0ee5160da4656ab51b8ca03bf7fdb",
+          "bytes": 1573739
+        },
+        "latency-evaluation.json": {
+          "sha256": "d5e9132a4c02e7b907fe956e73f5b70f2983c4718fb7f4ac5426c85ae1839d34",
+          "bytes": 113968
+        },
+        "latency-traces.jsonl.gz": {
+          "sha256": "c250a823e4e54cfeaf9e57207e576edd02c6dd79395e13454d5c87ed4b844dea",
+          "bytes": 13597438
+        },
+        "mjcf-cache/mjcf_biped/berkeley_humanoid_lite_biped.xml": {
+          "sha256": "51513d607bea46ba99e1746474a24bdcdda3126155da51f66efa34869e0ed90e",
+          "bytes": 19784
+        },
+        "mjcf-cache/mjcf_biped/bhl_biped_scene.xml": {
+          "sha256": "664842bc940e6b4e8d1ad7c6d2515543fe3cddd9adec007763a810ec26f4a037",
+          "bytes": 987
+        },
+        "params/agent.yaml": {
+          "sha256": "d607a1a8a135e7c254e9ed0bca2bd2cddc3a89efde0ef51e22d0fbcb28d9712b",
+          "bytes": 1026
+        },
+        "params/env.yaml": {
+          "sha256": "ca60f0444f3b940537adc12a3adbb0be8f7ac2ab0fb5032652c742926a77a104",
+          "bytes": 38395
+        },
+        "policy.onnx": {
+          "sha256": "e658f2d67c4cea5d9a0c8d1fca0cf46ce9bfa10d33e64b5d7affa39e6cf6b0b8",
+          "bytes": 270283
+        }
+      }
+    },
+    {
+      "cell": 2,
+      "arm": "history",
+      "seed": 2,
+      "directory": "cells/cell-2-history-s2",
+      "launch": "h3-run-20261008-21712271",
+      "output_bytes": 16790827,
+      "files": {
+        "campaign_result.json": {
+          "sha256": "80ea6f4a5d545c7ff64a15cba1e02230a1cfaafa3aa6a577a865bd78b39bfee3",
+          "bytes": 2291
+        },
+        "deploy.yaml": {
+          "sha256": "be6318ec2aa0a8bdccac2629c67aeedbda588b09f53ed44fd97df79762be478c",
+          "bytes": 1507
+        },
+        "events.out.tfevents.1791514823.cn-gpu5.hpc.engr.oregonstate.edu.18.0": {
+          "sha256": "5ed6186fb21f80d15f6163a9da2d129fd75ce6faece74f7305c4dc324c1145ce",
+          "bytes": 1014696
+        },
+        "final-checkpoint.pt": {
+          "sha256": "804467ceaa3fd6532b79a9ffc20d5a71ad7d04a5b5d950d268ce4fc48b57a57d",
+          "bytes": 1573739
+        },
+        "latency-evaluation.json": {
+          "sha256": "ca502b5601aae4830a1db9901f9d88e8be89efc3ecf9c23c2d841a44cfac7fdb",
+          "bytes": 113968
+        },
+        "latency-traces.jsonl.gz": {
+          "sha256": "29e6fcd39ef8f804c0583fc0c37280623beb73202566d2fb932a6bb01ee17e54",
+          "bytes": 13754151
+        },
+        "mjcf-cache/mjcf_biped/berkeley_humanoid_lite_biped.xml": {
+          "sha256": "4d04dd171d49ef361f222017a77c0aa7d7f7bd902d10e060cba18dadffe18e12",
+          "bytes": 19784
+        },
+        "mjcf-cache/mjcf_biped/bhl_biped_scene.xml": {
+          "sha256": "664842bc940e6b4e8d1ad7c6d2515543fe3cddd9adec007763a810ec26f4a037",
+          "bytes": 987
+        },
+        "params/agent.yaml": {
+          "sha256": "df5812f3853a6d00ccb119beff717385b5f661922982c69bd29c853a84f7c227",
+          "bytes": 1026
+        },
+        "params/env.yaml": {
+          "sha256": "f8bba1c15500b057124aa146ee554b2620680e760f403d7053fe4098b6e55416",
+          "bytes": 38395
+        },
+        "policy.onnx": {
+          "sha256": "567ef50ce087ed80f76639e7f6c48f904fa2601b5a9ab45855af667a7120aab8",
+          "bytes": 270283
+        }
+      }
+    },
+    {
+      "cell": 3,
+      "arm": "repeated_current",
+      "seed": 0,
+      "directory": "cells/cell-3-repeated_current-s0",
+      "launch": "h3-run-20261008-21712820",
+      "output_bytes": 17038033,
+      "files": {
+        "campaign_result.json": {
+          "sha256": "9a4efa1893a9b058fe4533e17f5252a5660f25aa981101759e245418a4eb0425",
+          "bytes": 2299
+        },
+        "deploy.yaml": {
+          "sha256": "fa0c96b695197629033be8830b02f1c4772fcee05b0ee1c0247b437bec2a2a91",
+          "bytes": 1516
+        },
+        "events.out.tfevents.1791516014.cn-gpu5.hpc.engr.oregonstate.edu.18.0": {
+          "sha256": "cfe3c58f86ddc63ae034d439e19d36546b1dd16cf8df267c5568c09eaf51fb23",
+          "bytes": 1014700
+        },
+        "final-checkpoint.pt": {
+          "sha256": "46352ac6e71135fc74e61aaad2aff167787049cecc9737583342817fd2aa9127",
+          "bytes": 1573739
+        },
+        "latency-evaluation.json": {
+          "sha256": "fded2f009399a4d2215137c52ccefa40f3aa9b2e5cd7011c92043c5cf2cc0d22",
+          "bytes": 116124
+        },
+        "latency-traces.jsonl.gz": {
+          "sha256": "543594e8905f2d9c050517e6eee40a3b40b6c273f5dace8419a122957803fc28",
+          "bytes": 13999167
+        },
+        "mjcf-cache/mjcf_biped/berkeley_humanoid_lite_biped.xml": {
+          "sha256": "789c77b5f908dc6cc978647090ddfc740253f6326565ce29256013df785b7185",
+          "bytes": 19784
+        },
+        "mjcf-cache/mjcf_biped/bhl_biped_scene.xml": {
+          "sha256": "664842bc940e6b4e8d1ad7c6d2515543fe3cddd9adec007763a810ec26f4a037",
+          "bytes": 987
+        },
+        "params/agent.yaml": {
+          "sha256": "84a2bcc4ce07760f1f6f9ddffe3a957dbec3b642846f949900f98270510fddad",
+          "bytes": 1035
+        },
+        "params/env.yaml": {
+          "sha256": "dabfe12665d2714ae3d5944a6b330bb260f1e4f760d137eee44658b096b8f2a3",
+          "bytes": 38399
+        },
+        "policy.onnx": {
+          "sha256": "fb0102a7ae2acfd634f2f609af90eec6c0d4098f71199e5c49baf298f654f4cc",
+          "bytes": 270283
+        }
+      }
+    },
+    {
+      "cell": 4,
+      "arm": "repeated_current",
+      "seed": 1,
+      "directory": "cells/cell-4-repeated_current-s1",
+      "launch": "h3-run-20261008-21714496",
+      "output_bytes": 16869295,
+      "files": {
+        "campaign_result.json": {
+          "sha256": "183e1b2660b0de72d8e7cf3e75f02d71e5661862b8686dab5e50a73a7499d11b",
+          "bytes": 2299
+        },
+        "deploy.yaml": {
+          "sha256": "9bcd3c90dca47afb72b67872c02b00dd6975f53b8dc843aaf28e058b5b644a9e",
+          "bytes": 1516
+        },
+        "events.out.tfevents.1791517246.cn-gpu5.hpc.engr.oregonstate.edu.18.0": {
+          "sha256": "9f3969034f03c3a2df13ece3507e171a82dcb4f209752bf0301bdee3d5d69a3a",
+          "bytes": 1014700
+        },
+        "final-checkpoint.pt": {
+          "sha256": "fd32abf50d5dd57f417b2d36a39ea8d349f6466ec03ae2b5b34e179d15b42fa8",
+          "bytes": 1573739
+        },
+        "latency-evaluation.json": {
+          "sha256": "c5d0e00c9f0265e23d754faf7eedf589c1774551d476875febc1b628dd3f82bc",
+          "bytes": 116181
+        },
+        "latency-traces.jsonl.gz": {
+          "sha256": "9bdbf4e56636078b288de14f438c15b63154f8b45013d32d83944b2821016492",
+          "bytes": 13830372
+        },
+        "mjcf-cache/mjcf_biped/berkeley_humanoid_lite_biped.xml": {
+          "sha256": "79e95a27949c351f0aac882c23db31a69408d7037078705ce033d991db9f9170",
+          "bytes": 19784
+        },
+        "mjcf-cache/mjcf_biped/bhl_biped_scene.xml": {
+          "sha256": "664842bc940e6b4e8d1ad7c6d2515543fe3cddd9adec007763a810ec26f4a037",
+          "bytes": 987
+        },
+        "params/agent.yaml": {
+          "sha256": "b9bdc1febd331efad9564b811976a7c8dae41237c85da1ded3fa93160aebb80f",
+          "bytes": 1035
+        },
+        "params/env.yaml": {
+          "sha256": "c9e791681ebe234877d9dd4a707e672d19014c99efc75b93d2f1804e1a405f35",
+          "bytes": 38399
+        },
+        "policy.onnx": {
+          "sha256": "59266cb64dec23ee478c20e085c47c2c89256e1f33b1f5fa2830ff161c0560af",
+          "bytes": 270283
+        }
+      }
+    }
+  ],
+  "scientific_summary": {
+    "schema": "h3-paired-scientific-verdict-v1",
+    "status": "NEGATIVE",
+    "problems": [],
+    "num_cells": 6,
+    "num_episodes": 720,
+    "paired_seed_passes": 0,
+    "required_paired_seed_passes": 2,
+    "seed_gates": [
+      {
+        "seed": 0,
+        "checks": {
+          "nominal_survival": true,
+          "nominal_qualified_retention": true,
+          "primary_80ms_gain": false
+        },
+        "pass_gate": false,
+        "primary_qualified_delta": 0
+      },
+      {
+        "seed": 1,
+        "checks": {
+          "nominal_survival": true,
+          "nominal_qualified_retention": true,
+          "primary_80ms_gain": false
+        },
+        "pass_gate": false,
+        "primary_qualified_delta": 0
+      },
+      {
+        "seed": 2,
+        "checks": {
+          "nominal_survival": true,
+          "nominal_qualified_retention": true,
+          "primary_80ms_gain": false
+        },
+        "pass_gate": false,
+        "primary_qualified_delta": 0
+      }
+    ],
+    "counts": {
+      "history-s0": {
+        "0": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "40": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "80": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "120": {
+          "n": 30,
+          "qualified": 16,
+          "survived": 21
+        }
+      },
+      "history-s1": {
+        "0": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "40": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "80": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "120": {
+          "n": 30,
+          "qualified": 8,
+          "survived": 13
+        }
+      },
+      "history-s2": {
+        "0": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "40": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "80": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "120": {
+          "n": 30,
+          "qualified": 12,
+          "survived": 17
+        }
+      },
+      "repeated_current-s0": {
+        "0": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "40": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "80": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "120": {
+          "n": 30,
+          "qualified": 17,
+          "survived": 22
+        }
+      },
+      "repeated_current-s1": {
+        "0": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "40": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "80": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "120": {
+          "n": 30,
+          "qualified": 16,
+          "survived": 21
+        }
+      },
+      "repeated_current-s2": {
+        "0": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "40": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "80": {
+          "n": 30,
+          "qualified": 25,
+          "survived": 30
+        },
+        "120": {
+          "n": 30,
+          "qualified": 18,
+          "survived": 23
+        }
+      }
+    },
+    "protocol_sha256": "3af1d9050797430e910375e1d51ac2ca024dfd908591e7b7f2b1f1181a609ea4",
+    "interpretation": "12-DoF simulation; delayed actor IMU packets only; current joints and commands; no hardware claim"
+  },
+  "problems": [],
+  "collector_sha256": "c7e9dccfc694b69020a0a9efea7a73e9014a42ca6df78b543ec8693fb50ecb4d",
+  "preservation": "Original archive/receipt/deploy bytes retained. Absolute deployment pointers are provenance, not relocated runnable exports.",
+  "scope": "Whole-array independently recomputed scientific verdict; no scheduler-exit, smoke, Git or publication claim."
+}

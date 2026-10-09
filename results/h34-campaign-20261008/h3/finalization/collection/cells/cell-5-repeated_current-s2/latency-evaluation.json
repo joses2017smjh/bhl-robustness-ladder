@@ -1,0 +1,5538 @@
+{
+  "schema": "h3-latency-evaluation-v1",
+  "arm": "repeated_current",
+  "training_seed": 2,
+  "phase": "run",
+  "policy_dt": 0.04,
+  "physics_dt": 0.002,
+  "episode_s": 10.0,
+  "warmup_s": 1.0,
+  "num_episodes": 120,
+  "episodes": [
+    {
+      "episode_id": "repeated_current-s2-d0-c0-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6430987603962444,
+        0.06482029315986439,
+        0.38666290440596646
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.18130703976234527,
+        0.1923163947244364,
+        0.26996258021116526
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6430987603962444,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c0-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6457359984517104,
+        0.05723718704422935,
+        0.3346384534612298
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1806167123531133,
+        0.19339238835736583,
+        0.27573101626668717
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6457359984517104,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c0-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6035891504585744,
+        0.08438299091649241,
+        0.2746361649897881
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1823887389319856,
+        0.1938173095979304,
+        0.2704539200919689
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6035891504585744,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c0-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.606874437928198,
+        0.10641283397097138,
+        0.29578141726087775
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.18543972190864713,
+        0.19312364596374582,
+        0.26631644195914894
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.606874437928198,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c0-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6028271965682523,
+        0.0987161085486878,
+        0.31197735660709436
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.18446304718235149,
+        0.1944008079871909,
+        0.26527528078832796
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6028271965682523,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c1-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.073590914011002,
+        0.02407842044718564,
+        0.9194269915763288
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.19604581846223895,
+        0.19776352448176598,
+        0.3656983550099718
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.073590914011002,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c1-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.061153615713119,
+        0.05472687172703447,
+        0.8944712400226853
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.19861419153257015,
+        0.19752786278770587,
+        0.3688327847635311
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.061153615713119,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c1-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.068801099061969,
+        0.03145399782340973,
+        0.8660813196026723
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1975128993699175,
+        0.19647404184612097,
+        0.3587314409266323
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.068801099061969,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c1-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.071656120419501,
+        -0.008038788260892042,
+        0.914829882904887
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.19453611243871952,
+        0.19556066838614133,
+        0.3704682116566968
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.071656120419501,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c1-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.090832827091219,
+        0.043036411928478645,
+        0.9896536054369066
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.194172444828834,
+        0.19798740948444546,
+        0.36541973515403037
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.090832827091219,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c2-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.1296924699097866,
+        0.01827069119492081,
+        -0.28395484821870903
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.15800621635285378,
+        0.1274854334890528,
+        0.1619824765023425
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.1296924699097866,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c2-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.120774266049268,
+        0.019909790195524687,
+        -0.2580106784589589
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1572938506111249,
+        0.12733033629349688,
+        0.1627086303108327
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.120774266049268,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c2-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.111117057311348,
+        0.0012551869195886033,
+        -0.2069604152708779
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.15700928374198586,
+        0.12814589101708646,
+        0.16443664626096238
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.111117057311348,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c2-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.126843489077873,
+        0.0002404584363102976,
+        -0.22011418456211693
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.15660136654007467,
+        0.12915783386225424,
+        0.16664367886546844
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.126843489077873,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c2-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.1257571595534683,
+        0.014169364199042318,
+        -0.24353823740035288
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1593522097548559,
+        0.12670412177957655,
+        0.16452256925059106
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.1257571595534683,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c3-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.06941568750364244,
+        1.5374919842416428,
+        -0.1496434705355203
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.07243701090178584,
+        0.2686050035034018,
+        0.10705351586068863
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.5374919842416428,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c3-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.06037151773634835,
+        1.5250042108702468,
+        -0.21366789204534162
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.07346721952153787,
+        0.2650865064951822,
+        0.11171606367743413
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.5250042108702468,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c3-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.06487428898457438,
+        1.493204599153251,
+        -0.2283842744180582
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.07613705789790895,
+        0.2615359448016291,
+        0.10760094427923525
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.493204599153251,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c3-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.047557658245787005,
+        1.4557644217764025,
+        -0.20218861483503128
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.07483091487320206,
+        0.25834820467621666,
+        0.10526659365166449
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4557644217764025,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c3-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.08224205109989263,
+        1.5947313259914515,
+        -0.11882990948986842
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.07253878015739765,
+        0.273758430180817,
+        0.11013544939953199
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.5947313259914515,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c4-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0020901353322551586,
+        0.013345433205831793,
+        0.022766720978543157
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0003677515233145111,
+        0.0019518752527120712,
+        0.49747221423135174
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.022766720978543157
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c4-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0015836991491960364,
+        0.016235787658952183,
+        0.028368077445775283
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0002690383582820888,
+        0.0026527660358052147,
+        0.49685027983455643
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.028368077445775283
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c4-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0028386234164645436,
+        0.01665496340021492,
+        0.023503841385245333
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0005442626498671726,
+        0.002497265501447086,
+        0.4973910677178384
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.023503841385245333
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c4-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0013511406713223552,
+        0.015497843567281965,
+        0.023663048665039235
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0002466755995380744,
+        0.0023224552653321752,
+        0.4973737836400281
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.023663048665039235
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c4-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.00044300865188720453,
+        0.01248525031842291,
+        0.015339112109504636
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0001866189813259159,
+        0.0019367178344855392,
+        0.4982972462859363
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.015339112109504636
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c5-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.647515256702898,
+        0.28210432858206325,
+        6.047949374914171
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.17684559106068456,
+        0.21174434913481305,
+        0.33456071371459073
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.647515256702898,
+        0.0,
+        6.047949374914171
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c5-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.651482478678228,
+        0.266556497811107,
+        6.078602830469606
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.17981690914751167,
+        0.21180255411222917,
+        0.32743919080201866
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.651482478678228,
+        0.0,
+        6.078602830469606
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c5-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6508852851390845,
+        0.28116979581303886,
+        6.051094892919066
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.17693612599310127,
+        0.21206538520645468,
+        0.3324354440713364
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.6508852851390845,
+        0.0,
+        6.051094892919066
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c5-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.653322625160218,
+        0.2725042859697716,
+        6.054335581362249
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1770967263902282,
+        0.2108026289528128,
+        0.3305801759355397
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.653322625160218,
+        0.0,
+        6.054335581362249
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d0-c5-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6573659202456477,
+        0.28484431777615093,
+        6.05720360040665
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.178046523694245,
+        0.2122608886676603,
+        0.33014056112621404
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.6573659202456477,
+        0.0,
+        6.05720360040665
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c0-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6134170110523693,
+        0.08441509412601586,
+        0.328049347307533
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.22196992796917034,
+        0.21528318263894902,
+        0.3765989836503594
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6134170110523693,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c0-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.618329659104346,
+        0.06742392117157583,
+        0.3093148947576994
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21145558428117947,
+        0.2137596058651382,
+        0.3829302181554562
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.618329659104346,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c0-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.635229555666446,
+        0.1053441681712866,
+        0.36063638926949354
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.20986458757146595,
+        0.21911544740098787,
+        0.3779241320760242
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.635229555666446,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c0-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6031797285750526,
+        0.06526850397698584,
+        0.4739659442659466
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.23498498496389403,
+        0.2259777245953142,
+        0.38846696451789287
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6031797285750526,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c0-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6360580086335554,
+        0.11152759511023752,
+        0.2602789752994429
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2011906048495744,
+        0.21084654965881994,
+        0.39165877157853907
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6360580086335554,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c1-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.205346137285233,
+        0.0649200534424745,
+        0.9130790352931948
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2867059539441554,
+        0.2347338790394836,
+        0.494474135443297
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.205346137285233,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c1-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.218177565932274,
+        -0.014807320679537973,
+        0.9636878973618153
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2850058963334007,
+        0.24289462455625976,
+        0.5215735168071682
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.218177565932274,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c1-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.210257980525496,
+        0.009276662804186351,
+        0.9180511516379188
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2872497840044229,
+        0.2319522721659457,
+        0.48840480649253226
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.210257980525496,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c1-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.192177041172982,
+        0.012829928589053454,
+        0.8601021932531144
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2856498516558747,
+        0.22895738928749343,
+        0.494064682511032
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.192177041172982,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c1-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.210448662042618,
+        0.0018662828532978945,
+        0.9113640692108307
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.29424362501130497,
+        0.23586007488384553,
+        0.5233274202005881
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.210448662042618,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c2-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.1218770035472705,
+        0.16922784208785732,
+        -0.16717121049296105
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.215022687339561,
+        0.1635092729613607,
+        0.2175586064168637
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.1218770035472705,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c2-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.1078979127691118,
+        0.1766458964580668,
+        -0.141965752740507
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21431112633168026,
+        0.16445413068635786,
+        0.21899675941748742
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.1078979127691118,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c2-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.090750284441746,
+        0.1461209607985802,
+        -0.13031239840900524
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.218643300137337,
+        0.16323282553310545,
+        0.2195267635811384
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.090750284441746,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c2-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.1038965929718696,
+        0.177070305267116,
+        -0.13676151346415288
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21535801631547652,
+        0.1642640401792645,
+        0.22076330715857245
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.1038965929718696,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c2-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.0298089495208114,
+        0.12737274967017584,
+        -0.07739786267280578
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21637602293431815,
+        0.1611246009510948,
+        0.22952924122257598
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.0298089495208114,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c3-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.04477385614445664,
+        1.2648754793033001,
+        -0.23709779832512126
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.08718132672855457,
+        0.2897661185000562,
+        0.14871177508625041
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.2648754793033001,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c3-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.05466424613958222,
+        1.282062321160921,
+        -0.25246617571916424
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.09102223821698421,
+        0.29116147928612374,
+        0.1466697596361325
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.282062321160921,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c3-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.03762058819876987,
+        1.2776577106676998,
+        -0.3373701833747326
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.08946338910602193,
+        0.2872713245685337,
+        0.14767185656272339
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.2776577106676998,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c3-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.061273448026331605,
+        1.208330202754587,
+        -0.39724941834632754
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.09278541709440996,
+        0.2850481194451557,
+        0.1626090706703812
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.208330202754587,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c3-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.05204105013312075,
+        1.3613615958689473,
+        -0.29458996799179654
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.09198858671344985,
+        0.2836928368556659,
+        0.16490468194111507
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.3613615958689473,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c4-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.001986319911084139,
+        0.014535570745356375,
+        0.0245429893163964
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0003233908408685241,
+        0.0022516369627832706,
+        0.4972752907713612
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.0245429893163964
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c4-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0014063288317993294,
+        0.017235422923695298,
+        0.02958585308399049
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0002299471872566507,
+        0.0030372534082759354,
+        0.496716306329806
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.02958585308399049
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c4-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0028952117935114076,
+        0.017075781465973702,
+        0.024704206753522157
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0005066937081929022,
+        0.0026824337662406657,
+        0.4972584879867108
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.024704206753522157
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c4-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0015769986207305924,
+        0.015412365156225852,
+        0.023856851253658547
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.00029310821012347216,
+        0.002437938320839369,
+        0.49735269248896846
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.023856851253658547
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c4-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -6.841384204903992e-05,
+        0.013513457231456413,
+        0.015707403619308013
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.00018600427518187097,
+        0.002189859817121286,
+        0.4982564708740258
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.015707403619308013
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c5-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5039125164078007,
+        0.06016906228382139,
+        6.359947923757134
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21646089148232525,
+        0.18743532592956066,
+        0.461208556693745
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.5039125164078007,
+        0.0,
+        6.359947923757134
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c5-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.503073294861242,
+        0.06582170784007757,
+        6.3403368273377385
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2184129357180709,
+        0.19046522037496452,
+        0.45661678435458697
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.503073294861242,
+        0.0,
+        6.3403368273377385
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c5-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.495733677456156,
+        0.06769984850630868,
+        6.3908921525627385
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21613419673555112,
+        0.18607821104048342,
+        0.4582719084452081
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.495733677456156,
+        0.0,
+        6.3908921525627385
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c5-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5135680688580067,
+        0.07114599451422696,
+        6.338610462788492
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.22241970597843647,
+        0.19071657288309316,
+        0.4551253240346458
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.5135680688580067,
+        0.0,
+        6.338610462788492
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d1-c5-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.487967917001805,
+        0.048338256813585764,
+        6.32016655932646
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2218756583715755,
+        0.1894925681369286,
+        0.45169993196337394
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.487967917001805,
+        0.0,
+        6.32016655932646
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c0-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6528851315251094,
+        -0.025113276331685468,
+        -0.10715937948785731
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1986530537736799,
+        0.18452033939164772,
+        0.37437627884361235
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6528851315251094,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c0-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.674275967665016,
+        -0.008754109041765318,
+        0.051533474931493406
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.19630298117413608,
+        0.17581540279167335,
+        0.3643313121887329
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.674275967665016,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c0-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6213839563215147,
+        -0.003998603606596568,
+        -0.09236783345229922
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2061253767172786,
+        0.18236879858464577,
+        0.386208177641376
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6213839563215147,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c0-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.663369945138692,
+        -0.005802735104225598,
+        -0.08904519808711492
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.18767840248304615,
+        0.18785246976947662,
+        0.3873771905539294
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.663369945138692,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c0-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6524193870814643,
+        0.004002717742696382,
+        -0.15663329222239564
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.20082526298315503,
+        0.1855191767339195,
+        0.42305044616768983
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6524193870814643,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c1-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.0800559249520285,
+        -0.047728684572502976,
+        0.4740116936527193
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2665917023945279,
+        0.2459093032247786,
+        0.5523242813624243
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.0800559249520285,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c1-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.095081911236047,
+        -0.03291750804288315,
+        0.4343406059686096
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.27104893482770953,
+        0.24878180084762744,
+        0.5349122690795344
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.095081911236047,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c1-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.061025148965419,
+        -0.07384053121320909,
+        0.39049071046058087
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.27464329859193976,
+        0.25228809228601295,
+        0.5259720329843613
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.061025148965419,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c1-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.120581721290947,
+        -0.050405834333505484,
+        0.40263121592579426
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.27332558238658294,
+        0.2375100916045219,
+        0.4854003396659647
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.120581721290947,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c1-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.143656348250806,
+        -0.003978781190235164,
+        0.5449106214754279
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.27288168419011155,
+        0.2357745314484218,
+        0.48712237611988546
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.143656348250806,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c2-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.0275407449249165,
+        0.12197477883659301,
+        -0.7339309605490418
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.27732181298072434,
+        0.15798661442576864,
+        0.32903996283648324
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.0275407449249165,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c2-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -1.9919000281067556,
+        0.07180388837121424,
+        -0.4309248936828225
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.27351445501031707,
+        0.1562154454607414,
+        0.31611875932478817
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.9919000281067556,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c2-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -1.993137911991507,
+        0.11086729648988694,
+        -0.5375415234779938
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2885009824737496,
+        0.1609513538638843,
+        0.3280666819139764
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.993137911991507,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c2-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.0247936716489496,
+        0.11491057052277032,
+        -0.5109729480370875
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.28557200782097836,
+        0.15995455135325942,
+        0.33244203043993925
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.0247936716489496,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c2-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.0625512367486967,
+        0.13029971517462402,
+        -0.6353726249514148
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2841254929642614,
+        0.16207870112498649,
+        0.3286056433184447
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.0625512367486967,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c3-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.004996809095609932,
+        1.3531426539365208,
+        -0.6820526230440004
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0936382016158001,
+        0.28789099349306646,
+        0.17593620726184594
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.3531426539365208,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c3-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.01249587199650704,
+        1.3793455742765222,
+        -0.6526455664052627
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.09076977087109263,
+        0.2842428449308338,
+        0.16321608663198728
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.3793455742765222,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c3-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0030992341600358632,
+        1.3209772489871818,
+        -0.5730946056125688
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.09225989392217772,
+        0.2873490039666794,
+        0.16467673509822994
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.3209772489871818,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c3-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0070933518889069016,
+        1.334521173105459,
+        -0.7441898576595123
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.09428045284622177,
+        0.2919034011860601,
+        0.18475310598623956
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.334521173105459,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c3-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0070916453399695505,
+        1.30934192195571,
+        -0.7229493383632506
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.09299752085364757,
+        0.2835455301065715,
+        0.17136109051525183
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.30934192195571,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c4-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0012836816425260615,
+        0.014200235708849505,
+        0.02306269832421095
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0005918267821302665,
+        0.002255487872945034,
+        0.497439320005102
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.02306269832421095
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c4-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0010524585976963861,
+        0.016239704038016483,
+        0.027218100698664784
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0005349201112080099,
+        0.0027926450357765903,
+        0.49697795712481657
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.027218100698664784
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c4-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.00209145695058396,
+        0.01676728097489104,
+        0.022830078233964733
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0004980638066327675,
+        0.002665707493278709,
+        0.49746504885359305
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.022830078233964733
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c4-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.001863559200137388,
+        0.015713111478835345,
+        0.023815090754069398
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.000577333422218267,
+        0.0024764603236953698,
+        0.4973563083343051
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.023815090754069398
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c4-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        7.274143117911096e-05,
+        0.013001032969914388,
+        0.014898151766974496
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0005733608420058055,
+        0.0021840803256187582,
+        0.49834603320713045
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.014898151766974496
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c5-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.55619093552232,
+        -0.024863965223776197,
+        6.229278028309344
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.19273981165394272,
+        0.18245600936997494,
+        0.4590576776634913
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.55619093552232,
+        0.0,
+        6.229278028309344
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c5-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5891296821599843,
+        0.021074166879989205,
+        6.093615485653281
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.19240054673424126,
+        0.18406856232416427,
+        0.4489862746373752
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.5891296821599843,
+        0.0,
+        6.093615485653281
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c5-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5907303241919766,
+        -0.02847061763779493,
+        5.921026590298863
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21869105011412696,
+        0.1994237885015343,
+        0.45292080041757116
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.5907303241919766,
+        0.0,
+        5.921026590298863
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c5-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5205875730773566,
+        -0.07475315562449397,
+        6.1649576333910225
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.20147023349199547,
+        0.1759471262967714,
+        0.44914198620473245
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.5205875730773566,
+        0.0,
+        6.1649576333910225
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d2-c5-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5655967601609864,
+        -0.013314054769580249,
+        6.148419989794495
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.18894699841515755,
+        0.18060726698756388,
+        0.4573840526320427
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.5655967601609864,
+        0.0,
+        6.148419989794495
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c0-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6060934488195904,
+        0.07806645213626329,
+        -0.035967401517555106
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.19165241792435259,
+        0.2241104883604881,
+        0.39966695629078874
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6060934488195904,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c0-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5805146707408126,
+        0.09062202851288025,
+        -0.07291355403140196
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21416241955437107,
+        0.2214764859429552,
+        0.40139531632049663
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.5805146707408126,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c0-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6294008333724928,
+        0.09132392932777295,
+        0.27145633165724575
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.28135253631221674,
+        0.23183140077165304,
+        0.44528226900058565
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6294008333724928,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c0-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.583990119686351,
+        0.1193984156264924,
+        0.002393003157339996
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21440148012480437,
+        0.22933786494301583,
+        0.4062284044128828
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.583990119686351,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c0-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5861086873400208,
+        0.06219404702773323,
+        -0.0837658918602392
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.20626681300087185,
+        0.21874134856601227,
+        0.4063048257881527
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.5861086873400208,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c1-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        3.6831747154227896,
+        0.44255260835285287,
+        1.0177610322460529
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.6339930151683779,
+        0.4488134581985819,
+        1.0904455911538482
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        3.6831747154227896,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c1-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": true,
+      "completed_steps": 64,
+      "expected_steps": 250,
+      "survival_s": 2.56,
+      "progress": [
+        0.5253390254080296,
+        0.1490051422640681,
+        -0.6662901081517338
+      ],
+      "active_samples": 39,
+      "tracking_rmse": [
+        0.7744287931484652,
+        0.5587641103201305,
+        1.5296038235506795
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        false,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        0.5253390254080296,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c1-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.087067192047837,
+        0.14092865301296123,
+        2.148195217559114
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.3876190411894557,
+        0.38084056806624367,
+        0.9343856311372704
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.087067192047837,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c1-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": true,
+      "completed_steps": 89,
+      "expected_steps": 250,
+      "survival_s": 3.56,
+      "progress": [
+        1.3150456500798464,
+        0.23051036213990303,
+        -0.7148318397998811
+      ],
+      "active_samples": 64,
+      "tracking_rmse": [
+        0.5760220192658273,
+        0.4988884184631523,
+        1.3922116386993293
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        false,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.3150456500798464,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c1-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": true,
+      "completed_steps": 176,
+      "expected_steps": 250,
+      "survival_s": 7.04,
+      "progress": [
+        2.7928710986673826,
+        -0.4281630938826128,
+        0.09060400225222132
+      ],
+      "active_samples": 151,
+      "tracking_rmse": [
+        0.48419624491489743,
+        0.4929114232489777,
+        0.8680106855097844
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.7928710986673826,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c2-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": true,
+      "completed_steps": 48,
+      "expected_steps": 250,
+      "survival_s": 1.92,
+      "progress": [
+        0.02051919713616372,
+        0.11099071560427547,
+        -0.7632961520366371
+      ],
+      "active_samples": 23,
+      "tracking_rmse": [
+        0.7264923693662443,
+        0.3282798236214182,
+        1.434368094992606
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        false,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        -0.02051919713616372,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c2-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": true,
+      "completed_steps": 112,
+      "expected_steps": 250,
+      "survival_s": 4.48,
+      "progress": [
+        -0.37946570612490177,
+        0.1213686355855316,
+        -0.6929931575246152
+      ],
+      "active_samples": 87,
+      "tracking_rmse": [
+        0.714164933487629,
+        0.3265440809972882,
+        0.9040334899709009
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        false,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        0.37946570612490177,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c2-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.417997864526697,
+        0.08306243606784858,
+        -1.0568430210545918
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.5489355933815276,
+        0.2543601886982604,
+        0.7396233907796472
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.417997864526697,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c2-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": true,
+      "completed_steps": 195,
+      "expected_steps": 250,
+      "survival_s": 7.8,
+      "progress": [
+        -0.9554522098973397,
+        -0.8532492497656494,
+        0.18792716858442884
+      ],
+      "active_samples": 170,
+      "tracking_rmse": [
+        0.7436879639092193,
+        0.4902837368447606,
+        1.2263750678005034
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        0.9554522098973397,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c2-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.3310954219102857,
+        -0.1312118105217815,
+        -0.20746918294578792
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.5409393675707542,
+        0.2969195793715837,
+        0.7352452240818605
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.3310954219102857,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c3-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.16626713143661614,
+        1.2114906667917968,
+        0.650832574882661
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.46300192627732767,
+        0.34613353403174457,
+        0.5266254070820098
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.2114906667917968,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c3-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.06784355539828532,
+        1.2360059866972735,
+        -0.07043920582858844
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2237734947318876,
+        0.30322385779284505,
+        0.33743937257197887
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.2360059866972735,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c3-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": true,
+      "completed_steps": 143,
+      "expected_steps": 250,
+      "survival_s": 5.72,
+      "progress": [
+        -0.5146883566677573,
+        1.086143924575299,
+        -0.537304377136752
+      ],
+      "active_samples": 118,
+      "tracking_rmse": [
+        0.6533724312571166,
+        0.5601071016055604,
+        1.093148158150158
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.086143924575299,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c3-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.11510081861051735,
+        1.1773860131733827,
+        -0.45362812447827333
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2356764019786756,
+        0.3201586675430142,
+        0.345004158847018
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.1773860131733827,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c3-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0324036008771509,
+        1.3020696586905978,
+        -0.21569468370289552
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.19164646010042194,
+        0.27629801482498806,
+        0.297253745996515
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.3020696586905978,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c4-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0012475525906484118,
+        0.015479529316071425,
+        0.02431530967180152
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.011436426970721413,
+        0.00413841711177754,
+        0.49736944307964603
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.02431530967180152
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c4-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0006778168716846282,
+        0.015376190171227795,
+        0.027258266434073437
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.007423654728113989,
+        0.003932684993319583,
+        0.49700661722043316
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.027258266434073437
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c4-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0024875572980090476,
+        0.01651815950113814,
+        0.025040604285895822
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.009425657556202803,
+        0.0036371667778293273,
+        0.4972704574613697
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.025040604285895822
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c4-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0011348513514531087,
+        0.016913735062116755,
+        0.02381041457294486
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.009820504842955945,
+        0.004307288252903184,
+        0.4974179995176317
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.02381041457294486
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c4-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.004340031876442936,
+        0.012605416242731742,
+        0.014247852634871374
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.008022624118966317,
+        0.0027286579874289353,
+        0.498439258621693
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.014247852634871374
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c5-r201000",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4773831535549826,
+        -0.07596504274231845,
+        5.619745159894229
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.39284425718272487,
+        0.3122715207334778,
+        0.6610538736737622
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.4773831535549826,
+        0.0,
+        5.619745159894229
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c5-r201001",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.3393973423913113,
+        -0.06350690216757356,
+        4.956562130833042
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.4065033554935459,
+        0.3094549459640167,
+        0.6738975583451248
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.3393973423913113,
+        0.0,
+        4.956562130833042
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c5-r201002",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5878803054551818,
+        -0.015121112447231978,
+        5.9967541439645045
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.23680311845553773,
+        0.2326986693370355,
+        0.4291789762614566
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.5878803054551818,
+        0.0,
+        5.9967541439645045
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c5-r201003",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.632816088869587,
+        0.0710841873753816,
+        6.227729908153415
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.23612035073543988,
+        0.24730542245423145,
+        0.47275103828495546
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.632816088869587,
+        0.0,
+        6.227729908153415
+      ]
+    },
+    {
+      "episode_id": "repeated_current-s2-d3-c5-r201004",
+      "arm": "repeated_current",
+      "training_seed": 2,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6294040771143075,
+        -0.06997421120060604,
+        6.112312221359464
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.22145385482691982,
+        0.22967013458607458,
+        0.4528722375002234
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.6294040771143075,
+        0.0,
+        6.112312221359464
+      ]
+    }
+  ],
+  "deploy_sha256": "7b5453fd204000f68ebe2245ec02aace5a888ebe9c11a7c1805c0e5016d5a3e1",
+  "policy_sha256": "c1f5151162bca2880e3678e6a9fd6785c2869df010ff0a312df4e7231af388e3",
+  "trace_sha256": "d1aec0144afaf89c74c7da10f6f4ed52026b9dc9bc850c20b355482c77a2257f",
+  "trace_path": "latency-traces.jsonl.gz",
+  "mjcf_sha256": "664842bc940e6b4e8d1ad7c6d2515543fe3cddd9adec007763a810ec26f4a037"
+}

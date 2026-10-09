@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "task": "Velocity-BHL-Arms-TurnGaitHeadingObservable-v0",
+  "arm": "R1HO",
+  "seed": 0,
+  "phase": "run",
+  "iterations_completed": 1000,
+  "final_iteration": 999,
+  "protocol_sha256": "1538a528924c6651628e088510c1c1597509858a2730e58e2e3a3c15d48b06e5",
+  "cell": 0,
+  "parent_sha256": "4f1b0c353421dd9ab3f4eb3d6dc755142e036ab4cabfbc0a85a77ae8087bc014",
+  "final_checkpoint_sha256": "1f036e147fe8e4d5b4b7a6075ba85a83fab09705f05d14934262930191260f33",
+  "policy_sha256": "d9d48bc4f308d12994476d34cab4b9a83a816839126f3fac1e3026b819bac959",
+  "deploy_sha256": "8e7408b4feb73f4d08d0fe5d501414800fc2c64090329403d81cc3093a0029ec",
+  "gates": {
+    "v2": "PASS",
+    "qualification": "QUALIFIED",
+    "turn_ok": 10,
+    "turn_n": 10,
+    "walk_ok": 3,
+    "walk_n": 3,
+    "push_falls": 8,
+    "push_n": 60,
+    "joint_pass": true,
+    "instrument_sha256": {
+      "scripts/bench/turn_test.py": "dfad2a3bfcb4881f17042e419afd84c3afa8450176e50078416d0ef13c4e9a2d",
+      "src/bhl_robust/eval/run_eval.py": "bb39acc77acbbfec8ec4e21dcaebdb7009c5b3d037bb4a6762566fb138f9f608",
+      "src/bhl_robust/eval/harness.py": "aad56f17c1e3b1a8351e557bd36738593801f97c6463d7b27bb83671d33e098d"
+    }
+  },
+  "label": "22-DoF learned policy; simulated yaw feature; MuJoCo evaluation",
+  "feature_contract": {
+    "features": "sin_error_cos_error_minus_one",
+    "reference": "reset_or_exact_float32_command_change",
+    "command_change_atol": 0.0,
+    "mask": "abs_command_wz_lt_threshold",
+    "wz_threshold": 0.05,
+    "yaw_source": "simulated_orientation",
+    "reward_reference": "unchanged_R1H_explicit_mode_last_resample"
+  }
+}

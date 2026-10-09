@@ -15,7 +15,11 @@ goals versus **247/288** baseline, **0 versus 9** observed falls, and **51.5%**
 lower mean yaw-command sign-flip rate. This is a matched 12-DoF biped simulation
 study with oracle pose/goal.
 
+**H3/H4 final reports:** the [22-DoF H4 R1HO recipe passes all three seeds](docs/H3_H4_CAMPAIGN_2026-10-08.md): **30/30 qualification turns**, **9/9 straight walks**, with push falls **8/60, 9/60 and 8/60**. These are independently seeded fine-tunes of one parent, evaluated with simulator yaw. The matched IMU-history ablation completed **720 episodes** and is **NEGATIVE**: **0/3** seed pairs show the required gain at 80 ms delay. [Final evidence](results/h34-campaign-20261008/README.md).
+
 **Stereo–lidar pilot completed:** [72 simulated stereo pairs across three scenes](docs/SENSOR_PILOT_RESULTS_2026-10-08.md), with actual pretrained C-Fast-FoundationStereo GPU inference, five fusion arms, 3D terrain maps, and estimator-input exports. On the single held-out scene, common-mask depth RMSE is **0.310 m SGBM versus 0.147 m C-FFS**; warm decode-plus-inference p95 is **29.0 versus 92.6 ms**. Confidence gating does not meet the proposed fusion improvement target. Native SLAM, estimated-pose navigation and terrain traversal remain open. [Measured demo](results/sensor-campaign-20261008/demo/stereo-lidar-demo.png) · [Implementation and follow-up queue](docs/SENSOR_CAMPAIGN_2026-10-08.md).
+
+**October 9 follow-up started:** [native estimation and physical traversal campaigns](docs/NATIVE_CAMPAIGNS_2026-10-09.md) now have frozen implementations and Slurm receipts. The new capture completed **450 stereo pairs, 920,787 timed LiDAR returns and 18,000 IMU samples** across three 30-second simulated scenes. Native estimator builds are running; terrain smoke passed and its scored screen is submitted. Native replay and estimated-pose navigation results are still pending. [Exact capture evidence](results/native-campaign-20261009/capture-v2/native-capture-capture-20261009-v2-21740516/campaign_result.json).
 
 [![A 22-DoF humanoid explores an unseen maze with lidar mapping and a scripted planner](docs/gifs/random-maze-humanoid-sensors.gif)](docs/RANDOM_MAZE.md)
 
@@ -53,16 +57,26 @@ and goal. Earlier cohorts below remain their historical records.
 
 These are simulation results. They do not establish hardware locomotion or learned-policy transfer to a physical robot. My [Quest arm teleoperation](https://github.com/joses2017smjh/quest-vr-teleop) is a separate hardware project.
 
-## Turning gait: completed negative experiments
+## Turning gait: repeated-seed confirmation passes
+
+The command-latched-heading **R1HO** follow-up passes the unchanged joint
+qualification in **3/3** seeds, exceeding the predeclared **2/3** requirement.
+Every seed qualifies **10/10 turns** and **3/3 straight walks**; push falls are
+**8/60, 9/60, 8/60**, within the unchanged **≤9/60** limit. This result uses
+22 actuated joints, simulator yaw and three fine-tunes of one selected parent;
+estimated heading and physical-robot transfer remain separate work.
+[Scientific summary and raw gates](results/h34-campaign-20261008/h4/finalization/collection/scientific-summary.json).
+
+The earlier negative recipe results remain retained:
 
 Putting a gait clock in the policy input enables turning across three training seeds. Only one seed also passes the unchanged straight-walk and push qualification; the recipe requires two of three, so it **fails**. The critic-only clock control qualifies zero of three. [Actor-clock verdict](results/repo-gpu-20260923/turngait-r12-20261001/verdict/R1.json) · [Critic-only verdict](results/repo-gpu-20260923/turngait-r12-20261001/verdict/R2.json)
 
 The heading-hold follow-up is also complete: **0/3** seeds pass the joint rule.
 Seed 2 passes turn-test v2 but scores **8/10** qualification turns against the
-unchanged **9/10** requirement. A repeatable 22-DoF recipe remains open.
+unchanged **9/10** requirement. R1H itself remains NEGATIVE.
 [Heading-hold verdict](results/repo-gpu-20260923/turngait-hold-20261002/verdict/R1H.json).
 
-The new [H3/H4 campaigns](docs/H3_H4_CAMPAIGN_2026-10-08.md) are active: matched IMU-history/latency fine-tuning and a command-latched-heading follow-up for the 22-DoF robot. Their final scientific verdicts remain pending.
+The [H3/H4 campaigns](docs/H3_H4_CAMPAIGN_2026-10-08.md) are complete: H3 retains its negative matched history/latency result, and H4 passes the declared repeated-seed simulation criterion.
 
 Plate crossing, cooperative carry, and standing placement remain incomplete or negative. The [status ledger](docs/STATUS.md) records their mechanisms and next tests. Earlier invalid findings remain identified in the [findings ledger](docs/FINDINGS.md).
 

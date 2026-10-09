@@ -1,0 +1,339 @@
+{
+  "schema": "h34-durable-collection-v1",
+  "status": "PASS",
+  "task": "H4",
+  "campaign_id": "h4-20261008",
+  "collected_utc": "2026-10-09T05:10:09.844828+00:00",
+  "persistent_dir": "/nfs/stak/users/sanchej7/humanoid-h34-20261008/h4-v2",
+  "archive_sha256": "d017f07e2a860c76df00982557bcdab6bb897aca49d496f8c9d7c5d8aaec53c7",
+  "protocol_sha256": "1538a528924c6651628e088510c1c1597509858a2730e58e2e3a3c15d48b06e5",
+  "run_job_id": "21711208",
+  "expected_cells": [
+    {
+      "cell": 0,
+      "arm": "R1HO",
+      "seed": 0
+    },
+    {
+      "cell": 1,
+      "arm": "R1HO",
+      "seed": 1
+    },
+    {
+      "cell": 2,
+      "arm": "R1HO",
+      "seed": 2
+    }
+  ],
+  "complete_cells": 3,
+  "cells": [
+    {
+      "cell": 2,
+      "arm": "R1HO",
+      "seed": 2,
+      "directory": "cells/cell-2-R1HO-s2",
+      "launch": "h4-run-20261008-21711208",
+      "output_bytes": 5013139,
+      "files": {
+        "campaign_result.json": {
+          "sha256": "747b111ff0b5d2b3f9e11a1843560e509acd4e4e7ee36705e7bf7e30520836a7",
+          "bytes": 1633
+        },
+        "cuda_guard.json": {
+          "sha256": "7d18aebe5875a68fd85680de264d187c426c15848908f34ea6fb785dc4565bbf",
+          "bytes": 161
+        },
+        "events.out.tfevents.1791518700.cn-gpu7.hpc.engr.oregonstate.edu.18.0": {
+          "sha256": "06a9d35d6212df93f4149d911ba02b4b7beac78fd7c54348e315500b18eeb09c",
+          "bytes": 2605184
+        },
+        "export_check.json": {
+          "sha256": "b70ffabab49195a27e23680642c12ba6001a48b6c0daaf8f065557be9d9f400c",
+          "bytes": 198
+        },
+        "exported/deploy.yaml": {
+          "sha256": "b2937ae9376d2bee3bd0889711412dd370120dfcd3d95679f399644f64dd4110",
+          "bytes": 2334
+        },
+        "exported/policy.onnx": {
+          "sha256": "da2d29d09f464b8b150c97e55c9eaf86e85cdd419e59436108bc499058dce9a6",
+          "bytes": 291839
+        },
+        "exported/policy.pt": {
+          "sha256": "f9565d8ca37a3d1e62353299c4cc530551e27f35bf25f01066a94e1de43ea777",
+          "bytes": 303156
+        },
+        "gates/push-60.csv": {
+          "sha256": "4d3aa25723d8688f852d570988cf8dff6422672735e0968d4a7d6eca0659de01",
+          "bytes": 8815
+        },
+        "gates/qualification.json": {
+          "sha256": "dd75b6eda9253cdc1424ff7bc8ea15478277afdbb3b7259a54080447dd3c077b",
+          "bytes": 516
+        },
+        "gates/turn-v2.json": {
+          "sha256": "06b79bb649bc3fcec8fc268f85f72cd0b59b1f1693a6c0fa58454d80e8e7c10b",
+          "bytes": 2325
+        },
+        "gates/turn-v2x.json": {
+          "sha256": "2c8911367e68a01d1725640a3b08302127140b0a0b6f3f342160ec7d11322383",
+          "bytes": 4090
+        },
+        "model_999.pt": {
+          "sha256": "ed21dc09dd863a842e4b13066a9327b0e4a3ea22267b58402abcb48110bd9ffa",
+          "bytes": 1743083
+        },
+        "params/agent.yaml": {
+          "sha256": "28a17f563ec5305dfdb3f49b968f124b4c993bd60473a61a219ed27f50fedc73",
+          "bytes": 1030
+        },
+        "params/env.yaml": {
+          "sha256": "a94c8f86d718884dd5114894aa29ed24e23889e29d78df4b3c6456f5cb80baa8",
+          "bytes": 47636
+        },
+        "training_guard.json": {
+          "sha256": "aade65fc8e1c2df5ad3b70f2754facc417d39ddddc0aba5c995c435587f2f6fc",
+          "bytes": 1139
+        }
+      }
+    },
+    {
+      "cell": 0,
+      "arm": "R1HO",
+      "seed": 0,
+      "directory": "cells/cell-0-R1HO-s0",
+      "launch": "h4-run-20261008-21711246",
+      "output_bytes": 5013139,
+      "files": {
+        "campaign_result.json": {
+          "sha256": "836383034835694a70e8f81856a25b3f140c5c262b6f0dd5d09a40cbb98fcbd9",
+          "bytes": 1633
+        },
+        "cuda_guard.json": {
+          "sha256": "7d18aebe5875a68fd85680de264d187c426c15848908f34ea6fb785dc4565bbf",
+          "bytes": 161
+        },
+        "events.out.tfevents.1791512617.cn-gpu7.hpc.engr.oregonstate.edu.17.0": {
+          "sha256": "b13583432e7f076ce69aaf258a4ab7445b47b48d7cc028648a9792ccee7390c1",
+          "bytes": 2605186
+        },
+        "export_check.json": {
+          "sha256": "b70ffabab49195a27e23680642c12ba6001a48b6c0daaf8f065557be9d9f400c",
+          "bytes": 198
+        },
+        "exported/deploy.yaml": {
+          "sha256": "8e7408b4feb73f4d08d0fe5d501414800fc2c64090329403d81cc3093a0029ec",
+          "bytes": 2334
+        },
+        "exported/policy.onnx": {
+          "sha256": "d9d48bc4f308d12994476d34cab4b9a83a816839126f3fac1e3026b819bac959",
+          "bytes": 291839
+        },
+        "exported/policy.pt": {
+          "sha256": "2dab58572f37fbfde785ed489fcc2c2e451dffdd1217aa1a5b99016e59408b26",
+          "bytes": 303156
+        },
+        "gates/push-60.csv": {
+          "sha256": "94efab9ddf065e01f95b608a570caa6549c16c7b5033af15925be5401eb88489",
+          "bytes": 8813
+        },
+        "gates/qualification.json": {
+          "sha256": "dd75b6eda9253cdc1424ff7bc8ea15478277afdbb3b7259a54080447dd3c077b",
+          "bytes": 516
+        },
+        "gates/turn-v2.json": {
+          "sha256": "c8a7110ec380b94ebb0fb94c9263e7c2812bb78900febac4ead849b67e30c6b3",
+          "bytes": 2324
+        },
+        "gates/turn-v2x.json": {
+          "sha256": "055f6a77092c9fa1f32117eb3aaabb24fcf20fadbc3e34794280696e7e6d3db9",
+          "bytes": 4091
+        },
+        "model_999.pt": {
+          "sha256": "1f036e147fe8e4d5b4b7a6075ba85a83fab09705f05d14934262930191260f33",
+          "bytes": 1743083
+        },
+        "params/agent.yaml": {
+          "sha256": "cbdf2e800ad8d8263b487b4c94f279d7869e93aec70e500dcdcb35ea57e60ff5",
+          "bytes": 1030
+        },
+        "params/env.yaml": {
+          "sha256": "34ade992b3ce084273b761b427246f5770a35cfae8742507ccfb40d4d837b998",
+          "bytes": 47636
+        },
+        "training_guard.json": {
+          "sha256": "aade65fc8e1c2df5ad3b70f2754facc417d39ddddc0aba5c995c435587f2f6fc",
+          "bytes": 1139
+        }
+      }
+    },
+    {
+      "cell": 1,
+      "arm": "R1HO",
+      "seed": 1,
+      "directory": "cells/cell-1-R1HO-s1",
+      "launch": "h4-run-20261008-21711714",
+      "output_bytes": 5013110,
+      "files": {
+        "campaign_result.json": {
+          "sha256": "082e90d04bfc8a417c1925fb599f3df4fccb116d0b5e594d62444fd90f392c3e",
+          "bytes": 1633
+        },
+        "cuda_guard.json": {
+          "sha256": "7d18aebe5875a68fd85680de264d187c426c15848908f34ea6fb785dc4565bbf",
+          "bytes": 161
+        },
+        "events.out.tfevents.1791515639.cn-gpu7.hpc.engr.oregonstate.edu.18.0": {
+          "sha256": "4c9f2334c47a0d0daa10b6c3b4e4e6d2da91aa1728fa392259e54eb654a14564",
+          "bytes": 2605186
+        },
+        "export_check.json": {
+          "sha256": "b70ffabab49195a27e23680642c12ba6001a48b6c0daaf8f065557be9d9f400c",
+          "bytes": 198
+        },
+        "exported/deploy.yaml": {
+          "sha256": "27d9980eedb650b66fc0d832c24008d748e03289909649de12e3a157ab6c9619",
+          "bytes": 2334
+        },
+        "exported/policy.onnx": {
+          "sha256": "483ad3534944f34028d8355b9b83efc084f7093c6c6b21514e7e4170b476da3e",
+          "bytes": 291839
+        },
+        "exported/policy.pt": {
+          "sha256": "c027a67f53adb3d4887758e5cb77006ac3807fcd7c95a4f5d030caf6b44166a5",
+          "bytes": 303156
+        },
+        "gates/push-60.csv": {
+          "sha256": "c7744295312fbd427da556fd34765722ecdfc5d428363c8c0d907c25bfe7d713",
+          "bytes": 8782
+        },
+        "gates/qualification.json": {
+          "sha256": "662708dc508356a3f1d18c835c093f4ded4abe8f6b49a3c4043ae98cb92a57ef",
+          "bytes": 516
+        },
+        "gates/turn-v2.json": {
+          "sha256": "1c248ed2bcc213b5dd1af569130f9f7fda0a62dd26597d0b821a9fa828a03e11",
+          "bytes": 2325
+        },
+        "gates/turn-v2x.json": {
+          "sha256": "3be1cae8524b26d826bc078030854e8945e6e73832bb86881f19bc9aced98175",
+          "bytes": 4092
+        },
+        "model_999.pt": {
+          "sha256": "ac727609ad9cc44b7ad6793e93890a687ec49a0240c8954eb4af5b559b11cdde",
+          "bytes": 1743083
+        },
+        "params/agent.yaml": {
+          "sha256": "8d0a53ccad45ebcb686dd454dd2251379ecb4566db12779e88480aa6fc83bd64",
+          "bytes": 1030
+        },
+        "params/env.yaml": {
+          "sha256": "ce8b3d58975d80b5fd931646dc0f8f67a66a23b835de0821caee7995df6ea990",
+          "bytes": 47636
+        },
+        "training_guard.json": {
+          "sha256": "aade65fc8e1c2df5ad3b70f2754facc417d39ddddc0aba5c995c435587f2f6fc",
+          "bytes": 1139
+        }
+      }
+    }
+  ],
+  "scientific_summary": {
+    "schema": "h4-three-seed-independent-summary-v1",
+    "task": "H4",
+    "recipe": "R1HO",
+    "status": "PASS",
+    "protocol_sha256": "1538a528924c6651628e088510c1c1597509858a2730e58e2e3a3c15d48b06e5",
+    "parent_sha256": "4f1b0c353421dd9ab3f4eb3d6dc755142e036ab4cabfbc0a85a77ae8087bc014",
+    "complete_seeds": 3,
+    "joint_pass_seeds": 3,
+    "required_joint_pass_seeds": 2,
+    "seed_count": 3,
+    "seeds": [
+      {
+        "seed": 0,
+        "cell": 0,
+        "run_name": "h4-r1ho-s0",
+        "status": "PASS",
+        "reported_status": "PASS",
+        "status_disagreement": false,
+        "v2": "PASS",
+        "qualification": "QUALIFIED",
+        "turn_ok": 10,
+        "turn_n": 10,
+        "walk_ok": 3,
+        "walk_n": 3,
+        "push_falls": 8,
+        "push_n": 60,
+        "joint_pass": true,
+        "files": {
+          "model_999.pt": "1f036e147fe8e4d5b4b7a6075ba85a83fab09705f05d14934262930191260f33",
+          "exported/policy.onnx": "d9d48bc4f308d12994476d34cab4b9a83a816839126f3fac1e3026b819bac959",
+          "exported/deploy.yaml": "8e7408b4feb73f4d08d0fe5d501414800fc2c64090329403d81cc3093a0029ec",
+          "gates/turn-v2.json": "c8a7110ec380b94ebb0fb94c9263e7c2812bb78900febac4ead849b67e30c6b3",
+          "gates/turn-v2x.json": "055f6a77092c9fa1f32117eb3aaabb24fcf20fadbc3e34794280696e7e6d3db9",
+          "gates/push-60.csv": "94efab9ddf065e01f95b608a570caa6549c16c7b5033af15925be5401eb88489"
+        },
+        "bundle": "/nfs/stak/users/sanchej7/humanoid-h34-20261008/h4-finalization/collection/cells/cell-0-R1HO-s0"
+      },
+      {
+        "seed": 1,
+        "cell": 1,
+        "run_name": "h4-r1ho-s1",
+        "status": "PASS",
+        "reported_status": "PASS",
+        "status_disagreement": false,
+        "v2": "PASS",
+        "qualification": "QUALIFIED",
+        "turn_ok": 10,
+        "turn_n": 10,
+        "walk_ok": 3,
+        "walk_n": 3,
+        "push_falls": 9,
+        "push_n": 60,
+        "joint_pass": true,
+        "files": {
+          "model_999.pt": "ac727609ad9cc44b7ad6793e93890a687ec49a0240c8954eb4af5b559b11cdde",
+          "exported/policy.onnx": "483ad3534944f34028d8355b9b83efc084f7093c6c6b21514e7e4170b476da3e",
+          "exported/deploy.yaml": "27d9980eedb650b66fc0d832c24008d748e03289909649de12e3a157ab6c9619",
+          "gates/turn-v2.json": "1c248ed2bcc213b5dd1af569130f9f7fda0a62dd26597d0b821a9fa828a03e11",
+          "gates/turn-v2x.json": "3be1cae8524b26d826bc078030854e8945e6e73832bb86881f19bc9aced98175",
+          "gates/push-60.csv": "c7744295312fbd427da556fd34765722ecdfc5d428363c8c0d907c25bfe7d713"
+        },
+        "bundle": "/nfs/stak/users/sanchej7/humanoid-h34-20261008/h4-finalization/collection/cells/cell-1-R1HO-s1"
+      },
+      {
+        "seed": 2,
+        "cell": 2,
+        "run_name": "h4-r1ho-s2",
+        "status": "PASS",
+        "reported_status": "PASS",
+        "status_disagreement": false,
+        "v2": "PASS",
+        "qualification": "QUALIFIED",
+        "turn_ok": 10,
+        "turn_n": 10,
+        "walk_ok": 3,
+        "walk_n": 3,
+        "push_falls": 8,
+        "push_n": 60,
+        "joint_pass": true,
+        "files": {
+          "model_999.pt": "ed21dc09dd863a842e4b13066a9327b0e4a3ea22267b58402abcb48110bd9ffa",
+          "exported/policy.onnx": "da2d29d09f464b8b150c97e55c9eaf86e85cdd419e59436108bc499058dce9a6",
+          "exported/deploy.yaml": "b2937ae9376d2bee3bd0889711412dd370120dfcd3d95679f399644f64dd4110",
+          "gates/turn-v2.json": "06b79bb649bc3fcec8fc268f85f72cd0b59b1f1693a6c0fa58454d80e8e7c10b",
+          "gates/turn-v2x.json": "2c8911367e68a01d1725640a3b08302127140b0a0b6f3f342160ec7d11322383",
+          "gates/push-60.csv": "4d3aa25723d8688f852d570988cf8dff6422672735e0968d4a7d6eca0659de01"
+        },
+        "bundle": "/nfs/stak/users/sanchej7/humanoid-h34-20261008/h4-finalization/collection/cells/cell-2-R1HO-s2"
+      }
+    ],
+    "problems": [],
+    "scope": "22-DoF learned policies with simulated yaw; three independently seeded fine-tunes of the same selected R1H-s2 parent. All three final checkpoint bundles and original raw gates required; no smoke, hardware, or from-scratch claim."
+  },
+  "problems": [],
+  "collector_sha256": "c7e9dccfc694b69020a0a9efea7a73e9014a42ca6df78b543ec8693fb50ecb4d",
+  "preservation": "Original archive/receipt/deploy bytes retained. Absolute deployment pointers are provenance, not relocated runnable exports.",
+  "scope": "Whole-array independently recomputed scientific verdict; no scheduler-exit, smoke, Git or publication claim."
+}
