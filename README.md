@@ -7,7 +7,15 @@ I built evaluation infrastructure around [Berkeley Humanoid Lite](https://github
 [Portfolio](https://jose-sanchez-portfolio-com.vercel.app/projects/bhl-robustness-ladder/) · [Technical report](docs/REPORT.md) · [Findings](docs/FINDINGS.md) · [All demos](docs/GALLERY.md)
 
 [Current open tasks and October 8 closures](docs/TASK_CLOSURE_2026-10-08.md)
-tracks completed deliverables, negative experiments and active confirmations.
+tracks completed deliverables, negative experiments and remaining objectives.
+
+**October 8:** [H1 navigation confirmation passes](docs/H1_NAVIGATION_CONFIRMATION_2026-10-08.md)
+all three actors' frozen gates across **576 episodes**: **259/288** candidate
+goals versus **247/288** baseline, **0 versus 9** observed falls, and **51.5%**
+lower mean yaw-command sign-flip rate. This is a matched 12-DoF biped simulation
+study with oracle pose/goal. The new
+[stereo–lidar research plan](docs/STEREO_LIDAR_RESEARCH_2026-10-08.md) connects
+calibrated recordings, motion-aware fusion and estimated-pose navigation.
 
 [![A 22-DoF humanoid explores an unseen maze with lidar mapping and a scripted planner](docs/gifs/random-maze-humanoid-sensors.gif)](docs/RANDOM_MAZE.md)
 
@@ -130,10 +138,14 @@ candidate reached **2/4** goals with no falls; command flip rates fell about
 **53%**. This establishes reduced chatter in the pilot, without establishing a
 goal-success or fall-rate improvement. The consumed layouts are development data.
 
-H1's fresh matched confirmation is **ACTIVE** as CPU job `21689706`: **576
-episodes** across three actors, baseline/filter, nominal/35% dropout and 48
-fresh layouts. No improvement conclusion is available before the complete
-frozen comparison validates. [Protocol and run status](results/task-closure-20261008/h1-navigation/USAGE.txt).
+H1's fresh matched confirmation is **DONE, PASS**: **576 validated episodes**
+across three actors, baseline/filter, nominal/35% lidar dropout and 48 shared
+fresh layouts. Each actor clears its original goal and zero-fall clauses.
+Candidate goals are **259/288 (89.9%)**, baseline **247/288 (85.8%)**; observed
+falls are **0/288 versus 9/288**. Mean gait yaw-command sign flips fall
+**51.5%**. Wall contacts remain: clean goals are **258/288 versus 246/288**.
+[Results, plot and limits](docs/H1_NAVIGATION_CONFIRMATION_2026-10-08.md) ·
+[Frozen protocol and verification](results/task-closure-20261008/h1-navigation/USAGE.txt).
 
 The measured frozen bundle is included at
 [`results/resume-revamp-20261007/portable-bundle.zip`](results/resume-revamp-20261007/portable-bundle.zip).

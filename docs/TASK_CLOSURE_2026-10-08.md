@@ -12,7 +12,7 @@ objective has been achieved.
 
 | ID | Current state | Evidence and acceptance rule | Remaining work |
 |---|---|---|---|
-| H1 — matched navigation confirmation | **ACTIVE**, CPU job `21689706` | [Frozen protocol](../results/task-closure-20261008/h1-navigation/protocol.json), [submission](../results/task-closure-20261008/h1-navigation/submission.json), [status](../results/task-closure-20261008/h1-navigation/status.json). Planned 576 episodes: three frozen navigation actors × baseline/candidate × nominal/35% dropout × 48 fresh layouts. Candidate is the existing 0.2 s yaw filter. Each actor must reach ≥40/48 nominal and ≥36/48 dropout goals, with zero falls in both conditions. | Await complete episode contracts, paired results and final report. A submitted or completed scheduler job is not a passing experiment. No success or fall-reduction conclusion yet. |
+| H1 — matched navigation confirmation | **DONE, PASS**, job `21689706` completed October 8 at 13:27 PDT | [Frozen report](../results/task-closure-20261008/h1-navigation/confirmation_report.json) and [independent verification](../results/task-closure-20261008/h1-navigation/independent-verification.json): all 576 episode contracts validate. Candidate reaches 259/288 goals versus 247/288 baseline; observed falls 0/288 versus 9/288; mean gait yaw-command sign-flip rate is 51.5% lower. All three actors satisfy the unchanged ≥40/48 nominal, ≥36/48 dropout and zero-fall clauses. [Paired metrics](../results/task-closure-20261008/h1-navigation/paired-metrics.json). | No remaining H1 acceptance criteria. Scope is the existing scripted 0.2 s filter over frozen navigation/gait policies, 48 shared layouts, simulated lidar/dropout and oracle pose/goal on the 12-DoF biped. Hardware, estimated-pose navigation and the 22-DoF H4 recipe remain separate objectives. |
 | H2 — portable regression replay | **DONE** | [Closure receipt](../results/task-closure-20261008/h2-replay/closure.json): fresh pinned CPU installation; local full suite 1,998 passed, 123 existing optional checks skipped, six subtests passed. [Hosted CI](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052) succeeded for code `b02b562`, including nine replay integration checks, five exact repeats and 40/40 detected injected regressions. [Second HPC host](../results/task-closure-20261008/h2-replay/cross-host.json): 5/5 frozen two-second trajectories agree exactly, maximum numeric difference 0.0. | The stated reproducibility deliverable is complete. The second-host result covers this frozen bundle and five cases; it establishes no general cross-platform guarantee or flake rate. Original timing numbers retain their original host and measurement scope. |
 | H3 — history/latency policy training | **OPEN** | [Resume task record](resume-results-20261007/task-status.csv) identifies proposed training work; no new training result exists for this task. | Freeze a matched history-versus-feedforward training protocol and held-out latency evaluation before training. Existing sensor-tolerance measurements do not establish this result. |
 | H4 — repeatable 22-DoF turning | **OPEN** | R1, R2 and R1H experiments are complete but negative. The unchanged joint rule requires ≥2/3 seeds to pass turn-test v2 and qualify; qualification requires ≥9/10 turns, straight-walk drift ≤15° on ≥2/3 seeds, and push falls ≤9/60. | A new justified recipe and repeated-seed training/evaluation. Qualified checkpoints from different recipes cannot be combined to satisfy one recipe's two-of-three rule. |
@@ -24,6 +24,24 @@ navigation confirmation compares actors with A* and has no yaw-filter arm; it
 cannot substitute for H1's fresh matched confirmation. Its **NEGATIVE** zero-fall
 verdict is retained: six falls in 288 learned-actor episodes, versus zero in 96
 A* episodes. [Older confirmation](../campaigns/20261006-confirmatory/results/verdict.json).
+
+The new H1 result is a separate matched comparison, not a replacement for that
+older negative cohort. Candidate nominal/dropout goal counts are **41/36**,
+**44/46**, and **47/45**, each out of 48 per condition, for actors s8/s9/s10.
+All six candidate cells have zero falls. Clean goals are **258/288**, not
+259/288; recorded wall-contact steps are **18** versus the baseline's **122**.
+The 288 matched pairs reuse 48 layouts across actors/conditions and are not
+288 independent environments. No formal significance or hardware guarantee is
+claimed. [Full result and current resume wording](H1_NAVIGATION_CONFIRMATION_2026-10-08.md).
+
+## Stereo and lidar research follow-up
+
+The [new research protocol](STEREO_LIDAR_RESEARCH_2026-10-08.md) prioritizes
+synchronized, calibrated capture; real stereo reconstruction and motion-aware
+fusion; then estimated-pose navigation. Existing ray-cast depth and pooled
+lidar traces support simulator sensor studies. They do not measure RGB stereo
+matching or physical-camera/lidar accuracy. New sensor studies use separately
+declared datasets and cohorts; H1's archive, gates and scores stay frozen.
 
 ## Deliverables closed in this audit
 

@@ -1,61 +1,77 @@
 H1 fresh matched navigation confirmation — October 8, 2026
 ========================================================
-Status at submission: ACTIVE (Slurm 21689706), not a completed result.
+DONE: Slurm 21689706 completed at 13:27 PDT, exit 0:0, elapsed 3:24:04.
+The frozen report and independent contract verifier both establish PASS,
+with all 576 planned simulation records valid and no exclusions.
 
-Frozen design: none versus existing pre-brake wz-lpf (tau 0.2 s), all three
-final actors armV5-s8/s9/s10, nominal and 35% lidar-dropout sensing, 48 fresh
-shared layouts 120000-120047. Total cap 576 episodes, two CPU evaluators,
-zero GPU/training/Mission 7 episodes. Candidate rule remains each actor at
-least 40/48 nominal and 36/48 dropout goals, with zero falls in both.
+The existing 0.2 s pre-brake yaw LPF passed its original gates for every
+actor: at least 40/48 nominal and 36/48 dropout goals, zero falls in both.
+                  baseline goals       candidate goals
+  armV5-s8        36/48 and 36/48       41/48 and 36/48
+  armV5-s9        42/48 and 43/48       44/48 and 46/48
+  armV5-s10       46/48 and 44/48       47/48 and 45/48
+The columns list nominal then 35% simulated lidar packet dropout.
 
-protocol.json records 235 source/model/controller/MJCF/mesh hashes and exact
-runtime versions. The independent runtime smoke used separate seed 119999,
-one actor, both arms, a 30-second horizon. It is excluded from every scored
-statistic and cannot select or tune the candidate.
+Across the 288 matched pairs, candidate goals were 259/288 versus 247/288
+baseline; falls were 0/288 versus 9/288. Mean gait yaw-command sign flips
+fell from 3.2738 to 1.5883 per second (51.49% lower). Wall contact steps were
+18 versus 122. These are descriptive observations of this complete cohort.
+For 233 pairs where both arms reached the goal, candidate-minus-baseline
+completion times had mean -5.875 s and median -6.20 s. This conditional
+subset does not support an all-episode speed improvement claim.
 
-The durable campaign archive and append-only scheduler receipt are at:
-  /nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation
+Command metric: raw cmd_filter.gait_wz.flips_per_s counts consecutive
+opposite-sign nonzero commands, divided by command steps times 0.04 s.
+Transitions involving zero do not count. Statistics start after the 1 s
+settling period and refer to the final command sent to the gait after the
+LPF and speed brake. They do not measure the robot's physical yaw motion.
+Each episode's rate was rounded to three decimals in the frozen producer.
+The reduction compares arithmetic means of all 288 episode rates per arm.
 
-The job verifies its archive and inputs, extracts into node-local /tmp,
-runs the fixed cells with at most two workers, validates all episode labels
-and paired layout hashes, and preserves confirmation_report.json,
-completion.json and a compressed archive of all per-episode JSONs/receipts.
-No episode or actor is excluded after scoring. Partial execution cannot pass.
-The submission date does not certify that the campaign completed.
+Design: 48 shared layouts/reset seeds 120000-120047, three frozen NavGym
+actors, nominal/drop35, two fixed arms. Two CPU evaluators, no new training,
+GPU work, hardware or Mission 7 episodes. Simulated lidar was used, with
+oracle pose/goal and the existing scripted speed brake. Stereo camera data
+was not used. The two separate smoke episodes on seed 119999 remain unscored.
+The 48 layout blocks repeat across actors and conditions; 288 pairs are not
+288 independent layouts or trained policies. No hardware claim follows.
 
-A separate verifier added after submission audits receipt science arguments,
-boolean/numeric/finite telemetry, geometric goal consistency and layout pairing
-across every actor, arm and condition. It supplements the frozen summarizer
-without changing its declared success gates. It has not been run against the
-completed confirmation because that evidence is still being generated.
+Evidence files
+--------------
+protocol.json: original submitted science and 235 source/model/asset hashes.
+completion.json: original job result and SHA256/size of frozen output files.
+confirmation_report.json: original frozen summarizer output.
+independent-verification.json: stricter post-run contract check, zero problems,
+  all 576 raw episode hashes, actor/gait/asset hash and pairing validation.
+paired-metrics.json / paired-records.csv: all pairs, all six actor/condition
+  cells, and all 48 layout blocks, recomputed without changing any gate.
+paired_analysis.py: reproducible descriptive analysis; no inference or tuning.
+published-evidence.json: hashes and sizes of this compact publication set.
+frozen-campaign.tar.gz / episodes-21689706.tar.gz: original immutable frozen
+  source/model snapshot and all raw runs/receipts, copied without modification.
+status.json: current result; job-ledger.jsonl retains the original ACTIVE
+  submission/progress records and appends the completion/verification event.
 
-Check scheduler/current results:
-  squeue -j 21689706
-  sacct -j 21689706 -X -o JobID,State,ExitCode,Elapsed
-  Read the persistent directory's slurm-21689706.out and completion.json.
+Independent verification
+------------------------
+First verify published file hashes and sizes against published-evidence.json.
+Both archives were independently checked for absolute paths, parent traversal,
+links and non-file members before extraction. Extract verified archives into
+a fresh directory, preserving their top-level snapshot/models/runs folders;
+copy protocol.json into that directory. Then run from this repository:
+  python scripts/bench/verify_navigation_confirmation.py --campaign /tmp/EXTRACTED
+    --expected-protocol-sha256 7b0b404ccac476340550166158b652b3d0eebb4a560aa0b397bf58eb75cd9112
+    --out /tmp/EXTRACTED/independent-verification.json
+The displayed command's wrapped lines are one shell command. The external
+MJCF/mesh paths recorded in protocol.json remain mandatory and hash-checked.
+Thus this is a site-specific executable campaign, not a fully portable
+standalone sensor dataset. The verifier is in the current repository, not
+the previously frozen snapshot; its own SHA256 is recorded in its receipt.
 
-To reproduce the already declared campaign from its frozen archive:
-  Verify frozen-campaign.tar.gz against intake.json before extraction.
-  Extract into a fresh writable directory; use its pinned Python runtime.
-  python snapshot/scripts/bench/navigation_confirmation.py run --campaign .
-  python snapshot/scripts/bench/navigation_confirmation.py summary --campaign .
-Shared external MJCF/mesh inputs are mandatory and hash-checked; this is a
-site-specific executable campaign, not a standalone downloadable asset set.
-An independent new scientific replication requires a new seed declaration
-before execution. The two-arm baseline comparison must be reported together.
+Recompute comparisons with fresh output paths (one wrapped shell command):
+  python results/task-closure-20261008/h1-navigation/paired_analysis.py
+    --campaign /tmp/EXTRACTED --out /tmp/h1-paired-new.json
+    --pairs-csv /tmp/h1-pairs-new.csv
 
-After combining the frozen input archive and the archived raw runs in a fresh
-directory, independently verify using the submission receipt's protocol SHA:
-  python scripts/bench/verify_navigation_confirmation.py --campaign /tmp/EXTRACTED \
-    --expected-protocol-sha256 7b0b404ccac476340550166158b652b3d0eebb4a560aa0b397bf58eb75cd9112 \
-    --out /tmp/h1-independent-verification-new.json
-Use this current repository's verifier; it is not in the already frozen archive.
-Do not mark H1 closed until both the completed frozen report and the independent
-verification establish complete evidence, including NEGATIVE experiments.
-
-Report success rates, falls, clean goals, contact counts, command flips and
-matched successful completion-time deltas. Fewer observed candidate falls
-requires more baseline falls in the complete paired run; zero candidate
-falls alone is not evidence of a reduction. Shared layouts are clustered
-observations across actors/conditions; simulation does not establish hardware
-performance. No resume result is approved while this task remains ACTIVE.
+Scientific replication requires a new seed declaration before execution.
+Report both baseline and candidate, all actors and both conditions together.

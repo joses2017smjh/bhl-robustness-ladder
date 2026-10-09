@@ -39,7 +39,7 @@ and `STATUS.md` are consumed read-only and cross-referenced here.
 
 | ID | State | Evidence / next step |
 |---|---|---|
-| H1 | ACTIVE (`21689706`) | Frozen 576-episode matched yaw-filter confirmation; [protocol](../results/task-closure-20261008/h1-navigation/protocol.json). Await complete validated result. |
+| H1 | DONE, PASS (`21689706`) | [576-episode report](H1_NAVIGATION_CONFIRMATION_2026-10-08.md) independently verified; all three actors pass unchanged gates. Candidate 259/288 goals, 0/288 falls versus baseline 247/288, 9/288; mean yaw-command sign-flip rate 51.5% lower. Simulation with oracle pose/goal; 48 shared layouts. |
 | H2 | DONE | [Closure receipt](../results/task-closure-20261008/h2-replay/closure.json): fresh pinned CPU installation; local full suite 1,998 passed, 123 existing optional checks skipped, six subtests passed; [hosted CI](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052) succeeds with five exact repeats and 40/40 injected regressions detected. Second HPC host: 5/5 frozen two-second cases agree exactly, maximum numeric difference 0.0; no general cross-platform or flake-rate conclusion. |
 | H3 | TODO | Matched history/latency policy training has not run. |
 | H4 | TODO | Repeatable 22-DoF recipe remains unsolved; R1/R2/R1H are completed negative experiments. |
@@ -143,6 +143,20 @@ Columns: task · entry · classification · verified evidence (from the inventor
 | SF-03 | Does the frozen 22-DoF gait tolerate an estimated attitude? | **DONE — latency, not noise, is the limit** | `21402531`, `results/sensor-fusion-20260923/sf03_summary.json`: L1 noise tolerated with Mahony (3/3, RMSE 0.041) and Madgwick (3/3, 0.034); accel noise 1.0 m/s² alone 3/3; gyro noise+bias 0.05 alone 3/3; **one 40 ms IMU delay alone 0/3**; every arm with ≥ 40 ms delay 0/3 (L2, L3, kp 0.3). First run `21402118` invalid at L2/L3 (alignment gate never passed; kept under `run1-invalid-gate/`). **SF-03b `21402725` (200 Hz filter): 0–30 ms 3/3, 40 ms 1/3, 60 ms 0/3 — budget ≈ 30 ms.** | — | 69 CPU episodes spent | DONE |
 | SF-04 | Recurrent `both` policy with modality dropout and measured delays | DONE — series complete | all-ingredients FT 32/32/29/32/32/30; delay-only 31/32/30/24/0/0; dropout-only 30/22/1/30/32/31; student 30/30/27/31/30/30; control 30/27/0/18/0/0 (baseline, delay1, delay2, lidar off, stereo off, both off); from-scratch recurrent NEGATIVE; bias-only 31/27/0/32/0/0 (its rule unsatisfiable; bias tolerance unmeasured) | add a bias setting to the probe if bias tolerance matters; otherwise closed | ≈2 GPU-h spent | DONE |
 | SF-05 | What the hardware actually is (IMU identity, Allan variance, stereo calibration, LiDAR–IMU extrinsics) | bench work, no HPC | `docs/IMU_INPUT.md` checklist | record stationary/rotation captures; publish sigmas as the sim noise parameters | none | TODO (user's bench) |
+
+### October 8 stereo–lidar research expansion
+
+The [research protocol](STEREO_LIDAR_RESEARCH_2026-10-08.md) defines proposed
+experiments and targets separately from achieved results. Start with the first
+three rows; no new perception training or confirmation campaign has launched.
+
+| ID | Current evidence | Next executable action | State |
+|---|---|---|---|
+| SL-00 — synchronized sensor dataset | [Read-only audit](../results/task-closure-20261008/sensor-data-audit/audit.json): 9/9 artifacts pass integrity; seven retain sparse simulated ray-depth/sector snapshots; zero support raw stereo/odometry replay | Capture original RGB pairs and raw scans with calibration, masks, clock/capture times and motion data; keep evaluator truth separate | PARTIAL — legacy inventory complete; acquisition/calibration open |
+| SL-01 — metric stereo and motion benchmark | Calibrated SGBM adapter and synthetic geometry tests exist; no physical accuracy result | Freeze scene/sequence split, capture motion sequences, compare SGBM with pretrained stereo on depth error, obstacle recall, coverage and latency | OPEN |
+| SL-02 — confidence-gated stereo–lidar fusion | Primary academic methods identified; no BHL fusion improvement measured | Compare sensor-only, simple fusion, motion-aware gating and published SGM–lidar baseline with paired faults | OPEN |
+| SL-03 — estimated-pose navigation | H1 passes with oracle pose; no claim of estimated-pose success | Offline estimator replay, input-leakage checks, then separately declared matched navigation cohort | OPEN — depends on synchronized data/estimator inputs |
+| SL-04 — terrain / self-supervised cost | Research extension only; existing single-plane lidar does not supply full elevation coverage | Establish 3D sensing and geometric map/control baseline before learned traversability | OPEN — depends on 3D coverage and capable controller |
 
 ### Stale statements in untracked user drafts (left untouched, 2026-09-23)
 

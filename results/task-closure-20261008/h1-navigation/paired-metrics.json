@@ -1,0 +1,2755 @@
+{
+  "schema": "bhl-h1-paired-descriptive-v1",
+  "status": "PASS",
+  "planned_episodes": 576,
+  "verified_episodes": 576,
+  "protocol_sha256": "7b0b404ccac476340550166158b652b3d0eebb4a560aa0b397bf58eb75cd9112",
+  "analysis_source_sha256": "0d60a8167eb26fa577c8b93fdf8326bcaa88d7454501b03dbb60126cadce4e9a",
+  "paired_csv_sha256": "b7f5f2131d72ce5c1f1481b8672f3d8755b5b7b2b669ec7277af2063652d0888",
+  "independent_verification_sha256": "b18e68a9fcac4a19f9970561dfde02155bd3f5f9127d3c66ece5afc968d59998",
+  "command_metric_definition": {
+    "raw_key": "cmd_filter.gait_wz.flips_per_s",
+    "numerator": "Consecutive nonzero opposite-sign final gait yaw commands; transitions involving zero do not count.",
+    "denominator": "Command sample steps times policy_dt=0.04 s, after the 1 s settling period.",
+    "aggregation": "Arithmetic mean of all 288 rounded per-episode rates per arm; each episode rate was rounded to three decimal places in the frozen producer.",
+    "interpretation": "Final commanded yaw after the LPF and speed brake, not measured physical yaw oscillation."
+  },
+  "candidate_rule": "EACH actor >=40/48 nominal goals and >=36/48 drop35 goals, with zero falls in both conditions. Missing/invalid/mispaired episodes -> INCOMPLETE; failed clause -> NEGATIVE.",
+  "per_actor_pass": {
+    "armV5-s8": true,
+    "armV5-s9": true,
+    "armV5-s10": true
+  },
+  "all_pairs": {
+    "matched_pairs": 288,
+    "baseline": {
+      "episodes": 288,
+      "goals": 247,
+      "clean_goals": 246,
+      "falls": 9,
+      "wall_contact_steps": 122,
+      "gait_yaw_flips_per_s": {
+        "n": 288,
+        "mean": 3.273815972222222,
+        "median": 3.443
+      }
+    },
+    "candidate": {
+      "episodes": 288,
+      "goals": 259,
+      "clean_goals": 258,
+      "falls": 0,
+      "wall_contact_steps": 18,
+      "gait_yaw_flips_per_s": {
+        "n": 288,
+        "mean": 1.588267361111111,
+        "median": 1.6585
+      }
+    },
+    "goal_rate_difference_percentage_points": 4.166666666666667,
+    "mean_yaw_flips_reduction_percent": 51.485747073528486,
+    "paired_yaw_flips_delta_per_s": {
+      "n": 288,
+      "mean": -1.685548611111111,
+      "median": -1.756
+    },
+    "paired_goal_outcomes": {
+      "both_goal": 233,
+      "baseline_only_goal": 14,
+      "candidate_only_goal": 26,
+      "neither_goal": 15
+    },
+    "paired_success_completion_delta_s": {
+      "n": 233,
+      "mean": -5.87519313304721,
+      "median": -6.199999999999996
+    },
+    "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+  },
+  "by_condition": {
+    "nominal": {
+      "matched_pairs": 144,
+      "baseline": {
+        "episodes": 144,
+        "goals": 124,
+        "clean_goals": 123,
+        "falls": 6,
+        "wall_contact_steps": 62,
+        "gait_yaw_flips_per_s": {
+          "n": 144,
+          "mean": 3.1370069444444444,
+          "median": 3.346
+        }
+      },
+      "candidate": {
+        "episodes": 144,
+        "goals": 132,
+        "clean_goals": 132,
+        "falls": 0,
+        "wall_contact_steps": 1,
+        "gait_yaw_flips_per_s": {
+          "n": 144,
+          "mean": 1.562513888888889,
+          "median": 1.6440000000000001
+        }
+      },
+      "goal_rate_difference_percentage_points": 5.555555555555555,
+      "mean_yaw_flips_reduction_percent": 50.19093305942279,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 144,
+        "mean": -1.5744930555555556,
+        "median": -1.6760000000000002
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 118,
+        "baseline_only_goal": 6,
+        "candidate_only_goal": 14,
+        "neither_goal": 6
+      },
+      "paired_success_completion_delta_s": {
+        "n": 118,
+        "mean": -4.189491525423729,
+        "median": -4.579999999999998
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    "drop35": {
+      "matched_pairs": 144,
+      "baseline": {
+        "episodes": 144,
+        "goals": 123,
+        "clean_goals": 123,
+        "falls": 3,
+        "wall_contact_steps": 60,
+        "gait_yaw_flips_per_s": {
+          "n": 144,
+          "mean": 3.410625,
+          "median": 3.623
+        }
+      },
+      "candidate": {
+        "episodes": 144,
+        "goals": 127,
+        "clean_goals": 126,
+        "falls": 0,
+        "wall_contact_steps": 17,
+        "gait_yaw_flips_per_s": {
+          "n": 144,
+          "mean": 1.6140208333333332,
+          "median": 1.6925
+        }
+      },
+      "goal_rate_difference_percentage_points": 2.7777777777777777,
+      "mean_yaw_flips_reduction_percent": 52.67668438091748,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 144,
+        "mean": -1.7966041666666668,
+        "median": -1.8695
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 115,
+        "baseline_only_goal": 8,
+        "candidate_only_goal": 12,
+        "neither_goal": 9
+      },
+      "paired_success_completion_delta_s": {
+        "n": 115,
+        "mean": -7.604869565217392,
+        "median": -7.239999999999995
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    }
+  },
+  "by_actor_condition": {
+    "armV5-s8-nominal": {
+      "matched_pairs": 48,
+      "baseline": {
+        "episodes": 48,
+        "goals": 36,
+        "clean_goals": 35,
+        "falls": 1,
+        "wall_contact_steps": 11,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 2.3849583333333335,
+          "median": 2.6029999999999998
+        }
+      },
+      "candidate": {
+        "episodes": 48,
+        "goals": 41,
+        "clean_goals": 41,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 1.2887291666666667,
+          "median": 1.3559999999999999
+        }
+      },
+      "goal_rate_difference_percentage_points": 10.416666666666666,
+      "mean_yaw_flips_reduction_percent": 45.96429008193714,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 48,
+        "mean": -1.0962291666666666,
+        "median": -1.2425000000000002
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 34,
+        "baseline_only_goal": 2,
+        "candidate_only_goal": 7,
+        "neither_goal": 5
+      },
+      "paired_success_completion_delta_s": {
+        "n": 34,
+        "mean": -0.28823529411764676,
+        "median": -3.6400000000000006
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    "armV5-s8-drop35": {
+      "matched_pairs": 48,
+      "baseline": {
+        "episodes": 48,
+        "goals": 36,
+        "clean_goals": 36,
+        "falls": 2,
+        "wall_contact_steps": 56,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 2.7562291666666665,
+          "median": 2.8025
+        }
+      },
+      "candidate": {
+        "episodes": 48,
+        "goals": 36,
+        "clean_goals": 36,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 1.3561041666666667,
+          "median": 1.4125
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 50.79856990604614,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 48,
+        "mean": -1.400125,
+        "median": -1.4885000000000002
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 31,
+        "baseline_only_goal": 5,
+        "candidate_only_goal": 5,
+        "neither_goal": 7
+      },
+      "paired_success_completion_delta_s": {
+        "n": 31,
+        "mean": -3.9083870967741934,
+        "median": -5.119999999999997
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    "armV5-s9-nominal": {
+      "matched_pairs": 48,
+      "baseline": {
+        "episodes": 48,
+        "goals": 42,
+        "clean_goals": 42,
+        "falls": 4,
+        "wall_contact_steps": 34,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 3.544729166666667,
+          "median": 3.649
+        }
+      },
+      "candidate": {
+        "episodes": 48,
+        "goals": 44,
+        "clean_goals": 44,
+        "falls": 0,
+        "wall_contact_steps": 1,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 1.6994791666666667,
+          "median": 1.7445
+        }
+      },
+      "goal_rate_difference_percentage_points": 4.166666666666667,
+      "mean_yaw_flips_reduction_percent": 52.056163200056425,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 48,
+        "mean": -1.84525,
+        "median": -1.883
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 39,
+        "baseline_only_goal": 3,
+        "candidate_only_goal": 5,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 39,
+        "mean": -8.023589743589744,
+        "median": -6.320000000000007
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    "armV5-s9-drop35": {
+      "matched_pairs": 48,
+      "baseline": {
+        "episodes": 48,
+        "goals": 43,
+        "clean_goals": 43,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 3.6964166666666665,
+          "median": 3.7119999999999997
+        }
+      },
+      "candidate": {
+        "episodes": 48,
+        "goals": 46,
+        "clean_goals": 45,
+        "falls": 0,
+        "wall_contact_steps": 17,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 1.7604166666666667,
+          "median": 1.789
+        }
+      },
+      "goal_rate_difference_percentage_points": 6.25,
+      "mean_yaw_flips_reduction_percent": 52.375047906756535,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 48,
+        "mean": -1.936,
+        "median": -1.9055
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 42,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 4,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 42,
+        "mean": -8.953333333333335,
+        "median": -8.860000000000007
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    "armV5-s10-nominal": {
+      "matched_pairs": 48,
+      "baseline": {
+        "episodes": 48,
+        "goals": 46,
+        "clean_goals": 46,
+        "falls": 1,
+        "wall_contact_steps": 17,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 3.481333333333333,
+          "median": 3.442
+        }
+      },
+      "candidate": {
+        "episodes": 48,
+        "goals": 47,
+        "clean_goals": 47,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 1.6993333333333334,
+          "median": 1.673
+        }
+      },
+      "goal_rate_difference_percentage_points": 2.0833333333333335,
+      "mean_yaw_flips_reduction_percent": 51.18728456530065,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 48,
+        "mean": -1.782,
+        "median": -1.7345
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 45,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 2,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 45,
+        "mean": -3.8142222222222233,
+        "median": -4.0
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    "armV5-s10-drop35": {
+      "matched_pairs": 48,
+      "baseline": {
+        "episodes": 48,
+        "goals": 44,
+        "clean_goals": 44,
+        "falls": 1,
+        "wall_contact_steps": 4,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 3.7792291666666666,
+          "median": 3.748
+        }
+      },
+      "candidate": {
+        "episodes": 48,
+        "goals": 45,
+        "clean_goals": 45,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 48,
+          "mean": 1.7255416666666668,
+          "median": 1.744
+        }
+      },
+      "goal_rate_difference_percentage_points": 2.0833333333333335,
+      "mean_yaw_flips_reduction_percent": 54.341438675214846,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 48,
+        "mean": -2.0536875,
+        "median": -2.08
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 42,
+        "baseline_only_goal": 2,
+        "candidate_only_goal": 3,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 42,
+        "mean": -8.984761904761905,
+        "median": -7.159999999999997
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    }
+  },
+  "layout_blocks": [
+    {
+      "seed": 120000,
+      "layout_sha256": "891931851c593123",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.733,
+          "median": 4.2684999999999995
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6988333333333334,
+          "median": 1.8295
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 54.49147245289758,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -2.0341666666666667,
+        "median": -2.2545
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 5,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 5,
+        "mean": -5.719999999999997,
+        "median": -5.880000000000003
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120001,
+      "layout_sha256": "b7771a6a1f2b2ca1",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.1755,
+          "median": 3.2855
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.5406666666666666,
+          "median": 1.634
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 51.48270613551671,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.6348333333333334,
+        "median": -1.6515
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -3.7866666666666675,
+        "median": -4.02
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120002,
+      "layout_sha256": "750f7dd80e413146",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.474833333333333,
+          "median": 3.533
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6600000000000001,
+          "median": 1.624
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 52.22792460070027,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8148333333333333,
+        "median": -1.855
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -12.453333333333331,
+        "median": -9.82
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120003,
+      "layout_sha256": "d3726573523cb544",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.142333333333333,
+          "median": 3.0125
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.531,
+          "median": 1.5575
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 51.27824334358757,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.6113333333333333,
+        "median": -1.3319999999999999
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 5,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 5,
+        "mean": 0.6560000000000002,
+        "median": 32.08000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120004,
+      "layout_sha256": "536d4696bb2ba187",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 3,
+        "clean_goals": 3,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 2.711333333333333,
+          "median": 2.8745000000000003
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.4108333333333334,
+          "median": 1.4169999999999998
+        }
+      },
+      "goal_rate_difference_percentage_points": 50.0,
+      "mean_yaw_flips_reduction_percent": 47.965330710597485,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.3005,
+        "median": -1.4575
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 3,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 3,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 3,
+        "mean": -1.7199999999999989,
+        "median": -14.88000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120005,
+      "layout_sha256": "bca20dac0650f0bd",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 1,
+        "clean_goals": 1,
+        "falls": 1,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 2.7965,
+          "median": 3.325
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 3,
+        "clean_goals": 3,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.4766666666666666,
+          "median": 1.6585
+        }
+      },
+      "goal_rate_difference_percentage_points": 33.333333333333336,
+      "mean_yaw_flips_reduction_percent": 47.19589963645032,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.3198333333333334,
+        "median": -1.592
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 1,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 2,
+        "neither_goal": 3
+      },
+      "paired_success_completion_delta_s": {
+        "n": 1,
+        "mean": -6.600000000000001,
+        "median": -6.600000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120006,
+      "layout_sha256": "a2d6778190affaad",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 1,
+        "wall_contact_steps": 16,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.154333333333333,
+          "median": 3.3615
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.705,
+          "median": 1.8155000000000001
+        }
+      },
+      "goal_rate_difference_percentage_points": 16.666666666666668,
+      "mean_yaw_flips_reduction_percent": 45.94737398288069,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.4493333333333334,
+        "median": -1.6864999999999999
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 5,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 1,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 5,
+        "mean": -6.456000000000005,
+        "median": -4.200000000000003
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120007,
+      "layout_sha256": "0f7a1c80ef550b06",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.315166666666667,
+          "median": 3.681
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.7449999999999999,
+          "median": 1.8479999999999999
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 47.363129053340714,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.5701666666666667,
+        "median": -1.6190000000000002
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -4.599999999999999,
+        "median": 2.680000000000007
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120008,
+      "layout_sha256": "0330f6329871cd4e",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.2986666666666666,
+          "median": 3.527
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.5783333333333334,
+          "median": 1.7255
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 52.15238480194018,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.7203333333333335,
+        "median": -1.7425000000000002
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -3.1733333333333342,
+        "median": -5.880000000000003
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120009,
+      "layout_sha256": "34fbe944a60eeccc",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.3381666666666665,
+          "median": 3.4945
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6133333333333333,
+          "median": 1.659
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 51.67007838633981,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.7248333333333332,
+        "median": -1.8355000000000001
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -11.413333333333334,
+        "median": -11.519999999999996
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120010,
+      "layout_sha256": "63fa2f69516be1af",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.2156666666666665,
+          "median": 3.4074999999999998
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.5698333333333334,
+          "median": 1.607
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 51.18171452264952,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.6458333333333333,
+        "median": -1.696
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -10.36,
+        "median": -10.54
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120011,
+      "layout_sha256": "6727b2596a45548a",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 2.6548333333333334,
+          "median": 2.924
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6843333333333335,
+          "median": 1.8045
+        }
+      },
+      "goal_rate_difference_percentage_points": 33.333333333333336,
+      "mean_yaw_flips_reduction_percent": 36.5559671040241,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -0.9704999999999999,
+        "median": -1.298
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 4,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 2,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 4,
+        "mean": -15.02,
+        "median": -9.760000000000005
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120012,
+      "layout_sha256": "46ce1da80803ab74",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.037333333333333,
+          "median": 3.3445
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.4635,
+          "median": 1.6865
+        }
+      },
+      "goal_rate_difference_percentage_points": -16.666666666666668,
+      "mean_yaw_flips_reduction_percent": 51.81628621597893,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.5738333333333332,
+        "median": -1.6375000000000002
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 5,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 5,
+        "mean": -9.624,
+        "median": -11.120000000000005
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120013,
+      "layout_sha256": "2b292a0cc9fb6b2e",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 1,
+        "wall_contact_steps": 17,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.0141666666666667,
+          "median": 3.4655
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.5011666666666668,
+          "median": 1.7774999999999999
+        }
+      },
+      "goal_rate_difference_percentage_points": 16.666666666666668,
+      "mean_yaw_flips_reduction_percent": 50.196295272325116,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.5130000000000001,
+        "median": -1.848
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 3,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 2,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 3,
+        "mean": -9.12,
+        "median": -9.280000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120014,
+      "layout_sha256": "f06db7ebb18553f9",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.1025,
+          "median": 3.194
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.5151666666666668,
+          "median": 1.5615
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 51.16304055868923,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.5873333333333333,
+        "median": -1.66
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": 6.100000000000001,
+        "median": -2.5799999999999983
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120015,
+      "layout_sha256": "10616dc1955dbef2",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.3653333333333335,
+          "median": 3.2165
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6656666666666666,
+          "median": 1.62
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 50.505150554675126,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.6996666666666667,
+        "median": -1.5965
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -3.7333333333333343,
+        "median": -5.040000000000003
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120016,
+      "layout_sha256": "c319e4b4194d049c",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.490666666666667,
+          "median": 3.541
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.678,
+          "median": 1.7425000000000002
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 51.92895339954164,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8126666666666666,
+        "median": -1.778
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -5.239999999999999,
+        "median": -5.639999999999997
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120017,
+      "layout_sha256": "7bb351580ae90674",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.0861666666666667,
+          "median": 3.263
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6205,
+          "median": 1.601
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 47.491494302532814,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.4656666666666667,
+        "median": -1.746
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": 2.0066666666666655,
+        "median": 1.6199999999999974
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120018,
+      "layout_sha256": "d878df703b4304bb",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.8361666666666667,
+          "median": 3.9114999999999998
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.8461666666666665,
+          "median": 1.8464999999999998
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 51.874701307729076,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.99,
+        "median": -2.1340000000000003
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -24.07333333333333,
+        "median": -6.360000000000003
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120019,
+      "layout_sha256": "1179ad4e5f885622",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.3623333333333334,
+          "median": 3.3810000000000002
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.3866666666666667,
+          "median": 1.3544999999999998
+        }
+      },
+      "goal_rate_difference_percentage_points": -16.666666666666668,
+      "mean_yaw_flips_reduction_percent": 58.75879845345494,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.9756666666666667,
+        "median": -1.8605
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 4,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 0,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 4,
+        "mean": 0.4499999999999975,
+        "median": 2.8199999999999967
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120020,
+      "layout_sha256": "cd84dbd57df498f8",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.345666666666667,
+          "median": 3.56
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6486666666666667,
+          "median": 1.6965
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 50.72232738866196,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.697,
+        "median": -1.8175000000000001
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -5.4066666666666725,
+        "median": -5.600000000000005
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120021,
+      "layout_sha256": "3086b8b06af55f60",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.9913333333333334,
+          "median": 3.9145000000000003
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.7405,
+          "median": 1.6885
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 56.39301820611324,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -2.2508333333333335,
+        "median": -2.226
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -5.6599999999999975,
+        "median": -6.879999999999999
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120022,
+      "layout_sha256": "683b8820e0def0ea",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 4,
+        "falls": 1,
+        "wall_contact_steps": 17,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.231,
+          "median": 3.4530000000000003
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.556,
+          "median": 1.625
+        }
+      },
+      "goal_rate_difference_percentage_points": 16.666666666666668,
+      "mean_yaw_flips_reduction_percent": 51.841535128443205,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.675,
+        "median": -1.7730000000000001
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 5,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 1,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 5,
+        "mean": -8.768,
+        "median": -8.0
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120023,
+      "layout_sha256": "4430e66474e54b08",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.602,
+          "median": 3.623
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.7686666666666666,
+          "median": 1.7265000000000001
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 50.89764945400703,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8333333333333335,
+        "median": -1.7565000000000002
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -8.106666666666666,
+        "median": -6.780000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120024,
+      "layout_sha256": "1a14ec91a6535a8e",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.4685,
+          "median": 3.6775
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.647,
+          "median": 1.755
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 52.51549661236846,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8215,
+        "median": -1.841
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -8.446666666666667,
+        "median": -8.560000000000002
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120025,
+      "layout_sha256": "9a3a8dd160f24e3e",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 3,
+        "clean_goals": 3,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 2.4471666666666665,
+          "median": 2.7065
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.2993333333333332,
+          "median": 1.2485
+        }
+      },
+      "goal_rate_difference_percentage_points": 33.333333333333336,
+      "mean_yaw_flips_reduction_percent": 46.90458353197575,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.1478333333333333,
+        "median": -1.2850000000000001
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 2,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 3,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 2,
+        "mean": 73.05999999999999,
+        "median": 73.05999999999999
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120026,
+      "layout_sha256": "1d44f7af88078957",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.8038333333333334,
+          "median": 3.926
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.7173333333333334,
+          "median": 1.7015
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 54.85256101301319,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -2.0865,
+        "median": -2.1235
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -5.086666666666669,
+        "median": -4.520000000000003
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120027,
+      "layout_sha256": "7495f7f8690434d5",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.402,
+          "median": 3.5715000000000003
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6764999999999999,
+          "median": 1.7625
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 50.72016460905351,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.7255000000000003,
+        "median": -1.8090000000000002
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -14.393333333333333,
+        "median": -5.819999999999997
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120028,
+      "layout_sha256": "6e901615efebdfe0",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 2.706,
+          "median": 2.9685
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.3136666666666668,
+          "median": 1.6135000000000002
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 51.45355999014536,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.3923333333333334,
+        "median": -1.6595
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 4,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 2
+      },
+      "paired_success_completion_delta_s": {
+        "n": 4,
+        "mean": -15.139999999999997,
+        "median": -12.29999999999999
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120029,
+      "layout_sha256": "ed5284fa9c71da4f",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.2565,
+          "median": 3.571
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.5981666666666667,
+          "median": 1.7275
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 50.9237934387635,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.6583333333333334,
+        "median": -1.9855
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 4,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 1,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 4,
+        "mean": 8.81,
+        "median": -1.620000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120030,
+      "layout_sha256": "82277d47decb1ccb",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.583833333333333,
+          "median": 3.3445
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 1,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6841666666666666,
+          "median": 1.693
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 53.006557224573314,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8996666666666666,
+        "median": -1.6694999999999998
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 4,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 1,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 4,
+        "mean": -6.51,
+        "median": -6.18
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120031,
+      "layout_sha256": "00189acf2be40701",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 1,
+        "wall_contact_steps": 4,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.0048333333333335,
+          "median": 3.379
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.5203333333333333,
+          "median": 1.5510000000000002
+        }
+      },
+      "goal_rate_difference_percentage_points": 16.666666666666668,
+      "mean_yaw_flips_reduction_percent": 49.403738421432145,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.4845000000000002,
+        "median": -1.7595
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 3,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 2,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 3,
+        "mean": -9.706666666666669,
+        "median": -11.599999999999994
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120032,
+      "layout_sha256": "774fe2e241778ee7",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 2,
+        "wall_contact_steps": 4,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.3101666666666665,
+          "median": 3.443
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6778333333333333,
+          "median": 1.768
+        }
+      },
+      "goal_rate_difference_percentage_points": 33.333333333333336,
+      "mean_yaw_flips_reduction_percent": 49.31272342782337,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.6323333333333334,
+        "median": -1.6560000000000001
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 4,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 2,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 4,
+        "mean": -6.599999999999998,
+        "median": -6.68
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120033,
+      "layout_sha256": "94297f9c7e04e2e7",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 3,
+        "clean_goals": 3,
+        "falls": 1,
+        "wall_contact_steps": 8,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.027,
+          "median": 3.343
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 4,
+        "falls": 0,
+        "wall_contact_steps": 17,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.405,
+          "median": 1.4885000000000002
+        }
+      },
+      "goal_rate_difference_percentage_points": 33.333333333333336,
+      "mean_yaw_flips_reduction_percent": 53.58440700363396,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.6219999999999999,
+        "median": -1.825
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 2,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 3,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 2,
+        "mean": -23.859999999999992,
+        "median": -23.859999999999992
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120034,
+      "layout_sha256": "158a914971e37ff5",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.3795,
+          "median": 3.3434999999999997
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.557,
+          "median": 1.6065
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 53.928095872170445,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8225,
+        "median": -1.863
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 4,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 1,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 4,
+        "mean": -4.509999999999998,
+        "median": -4.440000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120035,
+      "layout_sha256": "ba331fc0729a2ae3",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.4691666666666667,
+          "median": 3.523
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.603,
+          "median": 1.597
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 53.79293778525103,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8661666666666665,
+        "median": -1.9015
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -5.953333333333333,
+        "median": -5.979999999999997
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120036,
+      "layout_sha256": "235ab5cbd69d66e2",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 1,
+        "wall_contact_steps": 56,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.211,
+          "median": 3.4815
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6918333333333333,
+          "median": 1.7305
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 47.31132565140662,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.5191666666666668,
+        "median": -1.6680000000000001
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 4,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 2
+      },
+      "paired_success_completion_delta_s": {
+        "n": 4,
+        "mean": -7.020000000000003,
+        "median": -6.800000000000004
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120037,
+      "layout_sha256": "19e9a2fb8e10913b",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 2.7408333333333332,
+          "median": 2.8405
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 3,
+        "clean_goals": 3,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.4226666666666665,
+          "median": 1.571
+        }
+      },
+      "goal_rate_difference_percentage_points": -33.333333333333336,
+      "mean_yaw_flips_reduction_percent": 48.09364548494983,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.3181666666666667,
+        "median": -1.3570000000000002
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 3,
+        "baseline_only_goal": 2,
+        "candidate_only_goal": 0,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 3,
+        "mean": -10.453333333333328,
+        "median": -8.04
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120038,
+      "layout_sha256": "143c8eebbb97071f",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.908,
+          "median": 3.778
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.7443333333333333,
+          "median": 1.732
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 55.36506311838962,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -2.1636666666666664,
+        "median": -2.1315
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -3.8000000000000007,
+        "median": -5.440000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120039,
+      "layout_sha256": "d25bdfbca0ca0ebc",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 2.962,
+          "median": 3.2785
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.17,
+          "median": 1.3679999999999999
+        }
+      },
+      "goal_rate_difference_percentage_points": -16.666666666666668,
+      "mean_yaw_flips_reduction_percent": 60.49966239027684,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.792,
+        "median": -1.6545
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 4,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 0,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 4,
+        "mean": -14.89,
+        "median": -3.780000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120040,
+      "layout_sha256": "2688b82587d1220d",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 2.9151666666666665,
+          "median": 3.434
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.426,
+          "median": 1.6640000000000001
+        }
+      },
+      "goal_rate_difference_percentage_points": -16.666666666666668,
+      "mean_yaw_flips_reduction_percent": 51.08341432736836,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.4891666666666667,
+        "median": -1.758
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 4,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 0,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 4,
+        "mean": 3.469999999999999,
+        "median": 2.479999999999997
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120041,
+      "layout_sha256": "b4466557c0ebfc61",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.3741666666666665,
+          "median": 3.4850000000000003
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6143333333333334,
+          "median": 1.6804999999999999
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 52.156087922943925,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.7598333333333334,
+        "median": -1.75
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": 0.8266666666666657,
+        "median": -5.780000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120042,
+      "layout_sha256": "580e9667538fb204",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.5745,
+          "median": 3.6494999999999997
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6853333333333333,
+          "median": 1.7195
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 52.85121462209167,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8891666666666667,
+        "median": -1.932
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -5.893333333333332,
+        "median": -5.760000000000002
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120043,
+      "layout_sha256": "99856f3218ee8e52",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.579833333333333,
+          "median": 3.6630000000000003
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6508333333333334,
+          "median": 1.7245
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 53.88519018576283,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.929,
+        "median": -2.036
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 5,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 5,
+        "mean": -3.7120000000000006,
+        "median": -4.200000000000003
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120044,
+      "layout_sha256": "5c31a7355e794032",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.592833333333333,
+          "median": 3.7560000000000002
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.7491666666666668,
+          "median": 1.752
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 51.31511805909913,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8436666666666666,
+        "median": -1.943
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -8.826666666666666,
+        "median": -7.900000000000006
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120045,
+      "layout_sha256": "f019b1682f41481c",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 2.7231666666666667,
+          "median": 3.077
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 4,
+        "clean_goals": 4,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.2605,
+          "median": 1.1635
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 53.71197747720179,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.4626666666666666,
+        "median": -1.7294999999999998
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 3,
+        "baseline_only_goal": 1,
+        "candidate_only_goal": 1,
+        "neither_goal": 1
+      },
+      "paired_success_completion_delta_s": {
+        "n": 3,
+        "mean": 4.599999999999997,
+        "median": -6.399999999999999
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120046,
+      "layout_sha256": "1305e10d06dc159d",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.5505,
+          "median": 3.536
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.6751666666666667,
+          "median": 1.6680000000000001
+        }
+      },
+      "goal_rate_difference_percentage_points": 0.0,
+      "mean_yaw_flips_reduction_percent": 52.8188518049101,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8753333333333333,
+        "median": -1.8675
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 6,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 0,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 6,
+        "mean": -11.713333333333333,
+        "median": -4.34
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    },
+    {
+      "seed": 120047,
+      "layout_sha256": "a5931be8c2a5317f",
+      "matched_pairs": 6,
+      "baseline": {
+        "episodes": 6,
+        "goals": 5,
+        "clean_goals": 5,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 3.6776666666666666,
+          "median": 4.079000000000001
+        }
+      },
+      "candidate": {
+        "episodes": 6,
+        "goals": 6,
+        "clean_goals": 6,
+        "falls": 0,
+        "wall_contact_steps": 0,
+        "gait_yaw_flips_per_s": {
+          "n": 6,
+          "mean": 1.8428333333333333,
+          "median": 1.892
+        }
+      },
+      "goal_rate_difference_percentage_points": 16.666666666666668,
+      "mean_yaw_flips_reduction_percent": 49.89123538475483,
+      "paired_yaw_flips_delta_per_s": {
+        "n": 6,
+        "mean": -1.8348333333333333,
+        "median": -2.0105
+      },
+      "paired_goal_outcomes": {
+        "both_goal": 5,
+        "baseline_only_goal": 0,
+        "candidate_only_goal": 1,
+        "neither_goal": 0
+      },
+      "paired_success_completion_delta_s": {
+        "n": 5,
+        "mean": -13.288,
+        "median": -7.280000000000001
+      },
+      "time_scope": "Candidate minus baseline; only pairs where both succeed. Conditional subset, not all-episode speed."
+    }
+  ],
+  "statistical_scope": {
+    "shared_layout_blocks": 48,
+    "trained_navigation_actors": 3,
+    "sensing_conditions": 2,
+    "pairs_per_layout": 6,
+    "interpretation": "Descriptive matched simulation comparison. Repeated layouts across actors and conditions are clustered; 288 pairs are not 288 independent layouts or trained policies. No formal significance or hardware performance claim."
+  },
+  "scope": "Existing scripted 0.2 s yaw filter; frozen learned gait/navigation actors; oracle pose/goal; simulated lidar and 35% packet dropout. No stereo, physical lidar, new training, or hardware evaluation."
+}

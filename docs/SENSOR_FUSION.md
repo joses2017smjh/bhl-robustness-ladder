@@ -1,5 +1,14 @@
 # Sensor fusion for the maze and the other sensor-dependent tasks
 
+## October 8 research follow-up
+
+The [stereo–lidar research protocol](STEREO_LIDAR_RESEARCH_2026-10-08.md)
+adds calibrated capture, motion/timing ablations, confidence-gated fusion and
+estimated-pose navigation. The [retained-data audit](../results/task-closure-20261008/sensor-data-audit/README.md)
+distinguishes existing simulated ray-depth/sector traces from raw image stereo
+and lidar streams. The dated architecture and study records below remain their
+original scopes; new numerical research targets are not achieved results.
+
 LiDAR + stereo camera + ROS 2 ten-axis IMU, for the Berkeley Humanoid Lite.
 Written 2026-09-23 as a **methodology and plan**. Nothing in this document is a
 hardware result: every sensor in this repository is still simulated, no state

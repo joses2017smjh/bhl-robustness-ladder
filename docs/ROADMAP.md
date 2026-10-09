@@ -8,14 +8,15 @@ linked from [STATUS.md](STATUS.md), [REPO_TASKS.md](REPO_TASKS.md) and the
 
 ## In flight
 
-| Item | State | Done when |
-|---|---|---|
-| **H1: fresh matched yaw-filter confirmation** | ACTIVE, CPU-only job `21689706`, 576 planned episodes, two evaluators; [frozen protocol](../results/task-closure-20261008/h1-navigation/protocol.json) | Every episode validates and the final paired report is written. A passing candidate requires each of three actors to reach ≥40/48 nominal and ≥36/48 dropout goals, with zero falls in both conditions. A negative result still closes the experiment, not the improvement objective. |
+H1 completed and passed its unchanged gate; no closeout campaign remains in
+flight. The new [stereo–lidar research ladder](STEREO_LIDAR_RESEARCH_2026-10-08.md)
+starts with a dataset/calibration audit before new perception or navigation runs.
 
 ## Closed since the previous roadmap
 
 | Item | Final result | Scope |
 |---|---|---|
+| H1 fresh matched yaw-filter confirmation | DONE, PASS: 576 independently validated episodes; all three actors clear the frozen goal/zero-fall gates | Candidate 259/288 goals and 0/288 falls versus baseline 247/288 and 9/288; mean yaw-command sign-flip rate 51.5% lower. Existing scripted filter, 12-DoF biped, oracle pose/goal, 48 shared layouts; [full evidence](H1_NAVIGATION_CONFIRMATION_2026-10-08.md). |
 | H2 portable replay validation | DONE: fresh pinned CPU installation; local full suite 1,998 passed, 123 existing optional checks skipped, six subtests passed; [hosted CI](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052) succeeds | [Closure receipt](../results/task-closure-20261008/h2-replay/closure.json). Replay retains five exact repeats and 40/40 injected regressions detected; second HPC host agrees on 5/5 frozen two-second cases with maximum numeric difference 0.0. These cases do not establish general cross-platform determinism or a flake rate; original timing scope stays intact. |
 | R1 / R2 / R1H turning experiments | DONE NEGATIVE: respectively 1/3, 0/3 and 0/3 seeds meet the unchanged joint rule; R1H seed 2 is complete | H4's repeatable 22-DoF recipe remains open; [verdicts](TASK_CLOSURE_2026-10-08.md#completed-negative-experiments). |
 | Original NavGym v5 gym/physics transfer | DONE: three actors pass; physics 11/12, 12/12 and 12/12, zero falls | [Original transfer gate](../results/navgym-v5-transfer-20261002/verdict.json). The later 384-episode confirmation remains NEGATIVE because of six learned-actor falls. |
@@ -40,7 +41,7 @@ linked from [STATUS.md](STATUS.md), [REPO_TASKS.md](REPO_TASKS.md) and the
 | Objective | Current evidence | Next meaningful step | Success rule |
 |---|---|---|---|
 | **Estimated-pose navigation** | Current navigation uses oracle pose and goal; bounded-error and drift tests describe estimator requirements | Offline visual/stereo-inertial estimator on recorded episodes, compared with truth | ≥10/12 fresh hard mazes with estimated pose and zero falls. |
-| **Reliable learned navigation under dropout** | Original v5 transfer passes, larger confirmation fails its zero-fall rule; H1 is now evaluating the locked yaw filter | Finish H1 before another candidate or cohort is chosen | H1's unchanged per-actor goal and zero-fall clauses; report baseline pairing. |
+| **Reliable learned navigation under dropout** | Fresh H1 passes all three actors' gates with the frozen scripted yaw filter; older unfiltered confirmation remains negative | Test calibrated sensor inputs and estimated pose on a separately declared cohort | Preserve H1's complete paired result; new sensors/estimators require their own unchanged goal/fall gates and all failures. |
 | **Cube placement / cooperative carry** | Stand4 NEGATIVE, last-200 success 0.006/0.001 versus 0.10; flush-pad probe fixes grip but not wrist-induced rolling | Wrist-orientation/retention/release mechanism and an independently checked success predicate | Placement ≥0.10 on ≥1 of two seeds, with cube tilt and release checked; carry retains its own unchanged rule. |
 | **Mission 7 routes** | Scripted benches and learned PlateCross variants are negative; old 10/10 upright replay did not establish genuine staged crossing | Reconcile inconsistent historical episode accounting; establish a new crossing mechanism before any new Mission 7 episodes | Genuine-crossing bench PASS, exact replay 10/10, then Doors and Transport each 16/16 on fresh layouts. Sensor-only/four-sensor studies stay gated. |
 | **Sim-to-real** | Simulated sensors and policies only; latency budget approximately 30 ms in tested conditions | SF-05 recordings and a sensor-only hardware bench | A hardware claim backed by recorded device/runtime evidence. |

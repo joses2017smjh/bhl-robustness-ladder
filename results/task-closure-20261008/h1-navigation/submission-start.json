@@ -1,0 +1,13 @@
+{
+  "created_utc": "2026-10-08T17:03:25.644353+00:00",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--output=/nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation/slurm-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation/slurm-%j.out",
+    "/nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation/h1_navigation.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation/frozen-campaign.tar.gz",
+    "676dba4ebd4199654db2e2c178a0d4a3304f772c84e4988c3e73c68a2aed0ef9",
+    "/nfs/stak/users/sanchej7/humanoid-task-closure-20261008/h1-navigation"
+  ]
+}
