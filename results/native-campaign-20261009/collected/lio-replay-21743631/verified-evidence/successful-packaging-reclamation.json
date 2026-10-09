@@ -1,0 +1,99 @@
+{
+  "schema": "bhl-successful-packaging-reclamation-v1",
+  "status": "DUPLICATE_PACKAGING_REMOVED_ALL_PAYLOADS_PRESERVED",
+  "utc": "2026-10-09T22:30:58.971240+00:00",
+  "authorization": "Root delegated successful lio-replay-v4 duplicate packaging reclamation after both actual jobs completed; scientific outputs and all unique source bytes must survive.",
+  "removed_path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v4/frozen-campaign.tar.gz",
+  "removed_archive_sha256": "5fd9f5b43004144561b6922b9357ad4abe13174fdafc6f15a588c738db66acb5",
+  "removed_archive_bytes": 394226084,
+  "retained_source_archive": "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v4/retained-frozen-source.tar.gz",
+  "retained_source_archive_sha256": "a9d2ee40f78a413c66abd6bb5a411193003537b5f20b7bb9d0c69d137d9369a6",
+  "retained_source_archive_bytes": 39875120,
+  "all_tar_members_verified": 844,
+  "retained_source_and_metadata_members_verified": 842,
+  "input_members_verified_against_surviving_exact_files": 2,
+  "capture_public_asset_digest_verified": "sha256:ec15004ac7be4b58d33f78d6a4b5924d1d4a72b00c9332473d5617818ba08ca1",
+  "inventory_sha256": "788e58a178578f93e6c415d544b50e17a1b5c9574d1f57902387ab230acd5c3e",
+  "protected_scientific_files": {
+    "native-lio-smoke-20261009-v4-21743630/launch.json": {
+      "bytes": 2067,
+      "sha256": "e1d463e312e3c889a539e2eabec0691e6f745a3653abbea2815e50e03d064687"
+    },
+    "native-lio-smoke-20261009-v4-21743630/outputs.tar.gz": {
+      "bytes": 73874,
+      "sha256": "7352ba20ff5e3c810123269d3283c8c822963b53f94b9077b9f0d7ef67415836"
+    },
+    "native-lio-smoke-20261009-v4-21743630/completion.json": {
+      "bytes": 996,
+      "sha256": "84c46abf60a07d6cf380637db318dc4a5014d5edba1ff0fcbdb6d238e7c1809f"
+    },
+    "native-lio-smoke-20261009-v4-21743630/runtime.log": {
+      "bytes": 91,
+      "sha256": "8276ab88db6c8503f0161d7ff163aa82d3fa850f01e58de6a9ebae1310a0e9e4"
+    },
+    "native-lio-smoke-20261009-v4-21743630/campaign_result.json": {
+      "bytes": 33716,
+      "sha256": "5dd4734d8b2961c917329b587424adc3a2b68736d297133da732278d089c8c48"
+    },
+    "native-lio-replay-20261009-v4-21743631/launch.json": {
+      "bytes": 2081,
+      "sha256": "e4d4c875e16cd052a1e6739ab586350601ed3f450d258f7d8f647bb6e84a4235"
+    },
+    "native-lio-replay-20261009-v4-21743631/outputs.tar.gz": {
+      "bytes": 218600,
+      "sha256": "ba1c6d497f54989a798082f9eb9b3f9e2c4d31e415c98f53f8c7c3ddc1c888b2"
+    },
+    "native-lio-replay-20261009-v4-21743631/completion.json": {
+      "bytes": 998,
+      "sha256": "0ef6406b5fd3d62bf2c19e93e66bfc7e86fe6db9a95b67ace1f3c93617ff07bc"
+    },
+    "native-lio-replay-20261009-v4-21743631/runtime.log": {
+      "bytes": 264,
+      "sha256": "9c722f042997c0ebbc51be18aa291a19da930ff77c2d47d2dc540a311d0794bf"
+    },
+    "native-lio-replay-20261009-v4-21743631/campaign_result.json": {
+      "bytes": 98810,
+      "sha256": "77c453e778b30101bc0df187641a50395c3855d60639b174fb813fcd7ff48d0b"
+    },
+    "replay-observer/actual-native-replay.png": {
+      "bytes": 220885,
+      "sha256": "7b96d903eb9b99d174cd837dbf4b895c31dcccab259dc884b89c242ff1cf03b6"
+    },
+    "replay-observer/actual-native-replay.receipt.json": {
+      "bytes": 1127,
+      "sha256": "aebe2fcdb2d970c79db38b693d73e6bca7c1fda22677d9cb52939549db30903a"
+    },
+    "replay-observer/report.json": {
+      "bytes": 98510,
+      "sha256": "50a7a8b1fcad9712d4a79346553e6d5ce70cf804241cb306ace4468bd6f0ee43"
+    },
+    "replay-observer/report.md": {
+      "bytes": 795,
+      "sha256": "9a7322da1a40b8526e3b84c70fc29bb0478f93d4593f0655e0cce6a72c178918"
+    },
+    "replay-observer/collection-receipt.json": {
+      "bytes": 1262,
+      "sha256": "4f2776018bc33e80c3916645db8d6158d64a02976bc43291c27d4003be9ea27b"
+    },
+    "replay-observer/evidence/launch.json": {
+      "bytes": 2081,
+      "sha256": "e4d4c875e16cd052a1e6739ab586350601ed3f450d258f7d8f647bb6e84a4235"
+    },
+    "replay-observer/evidence/completion.json": {
+      "bytes": 998,
+      "sha256": "0ef6406b5fd3d62bf2c19e93e66bfc7e86fe6db9a95b67ace1f3c93617ff07bc"
+    },
+    "replay-observer/evidence/campaign_result.json": {
+      "bytes": 98810,
+      "sha256": "77c453e778b30101bc0df187641a50395c3855d60639b174fb813fcd7ff48d0b"
+    },
+    "replay-observer/evidence/submission.json": {
+      "bytes": 1221,
+      "sha256": "15f95f6ee6cef853d0721e27e7efd7117eaea3065a9b2e3a34990ff8a232c9af"
+    }
+  },
+  "scientific_outputs_removed": 0,
+  "net_reclaimed_bytes_before_small_receipts": 354350964,
+  "scope": "Every original payload byte survives and is hash verified. Original tar/gzip byte stream is removed; reconstruction preserves payloads, not original archive compression identity. Any rerun must create a new frozen archive/version rather than reuse original intake SHA.",
+  "finished_utc": "2026-10-09T22:31:00.131071+00:00"
+}
