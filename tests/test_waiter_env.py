@@ -53,7 +53,7 @@ def test_tumblers_clear_the_tray_pegs():
     for s in range(1000, 1500):
         lay = W.sample_layout(s)
         tx, ty, tyaw = lay.tray
-        pegs = [(np.array([tx + W.EAR_DX, ty + yy]), np.array(W.CAP_HALF[:2]) + pad)
+        pegs = [(np.array([tx + W.EAR_DX + W.CAP_DX, ty + yy]), np.array(W.CAP_HALF[:2]) + pad)
                 for yy in (W.ear_center_y(), -W.ear_center_y())]
         for x, y, yaw in lay.tumblers.values():
             parts = [(np.array([x, y]), np.array([W.CUP_R, W.CUP_R]))] + [
@@ -68,7 +68,7 @@ def test_carry_path_clears_the_pegs():
     """The tumbler is carried sideways at its pick x onto the tray: the carry band stays >= 1 cm behind the pegs."""
     for s in range(1000, 1500):
         lay = W.sample_layout(s)
-        back = lay.tray[0] + W.EAR_DX - W.CAP_HALF[0] - W.ear_center_y() * abs(math.sin(lay.tray[2]))
+        back = lay.tray[0] + W.EAR_DX + W.CAP_DX - W.CAP_HALF[0] - W.ear_center_y() * abs(math.sin(lay.tray[2]))
         for x, y, yaw in lay.tumblers.values():
             assert x + W.CUP_R + 0.01 < back, (s, x, lay.tray)
 
@@ -151,3 +151,44 @@ def test_env_settles_near_the_station(env):
         assert o["clock_held"]
         tp, _ = o["tray"]
         assert abs(tp[0] - env.layout.tray[0]) < 1e-6
+
+
+def test_stance_lock_holds_releases_and_reengages(env):
+    """Stance lock (2026-10-09, a declared simulation fixture): the episode starts with the base held at the station;
+    a non-zero base command frees it at once (the WBC walks); standing still again re-engages it where it stands."""
+    from bhl_robust.eval.waiter_env import LOCK_DELAY_S, STEP_DT
+    env.reset(1004)
+    o = env.oracle()
+    assert o["base_locked"] and o["clock_held"]
+    assert abs(o["base_pos"][0]) < 1e-3 and abs(o["base_pos"][1]) < 1e-3 and abs(o["base_yaw"]) < 1e-3
+    a = np.zeros(15, np.float32)
+    for _ in range(10):
+        _, _, _, info = env.step(a)
+    assert info["base_locked"] and np.allclose(env.oracle()["base_pos"][:2], o["base_pos"][:2], atol=2e-3)
+    a[0] = 0.3
+    _, _, _, info = env.step(a)
+    assert info["base_locked"] and env.oracle()["clock_held"]          # releasing: the weld softens first
+    from bhl_robust.eval.waiter_env import RELEASE_S
+    for _ in range(int(round(RELEASE_S / STEP_DT))):
+        _, _, _, info = env.step(a)
+    assert not info["base_locked"]
+    for _ in range(25):
+        env.step(a)
+    moved = env.oracle()["base_pos"][:2]
+    assert np.linalg.norm(moved - o["base_pos"][:2]) > 0.05
+    a[0] = 0.0
+    for _ in range(int(round((0.8 + LOCK_DELAY_S + 1.0) / STEP_DT))):
+        _, _, _, info = env.step(a)
+    assert info["base_locked"]
+    p_locked = env.oracle()["base_pos"][:2].copy()
+    for _ in range(10):
+        env.step(a)
+    assert np.allclose(env.oracle()["base_pos"][:2], p_locked, atol=2e-3)
+
+
+def test_free_base_option_has_no_lock():
+    e = _env(stance_lock=False)
+    e.reset(1000)
+    o = e.oracle()
+    assert not o["base_locked"] and abs(o["base_pos"][0]) < 0.05
+    e.close()

@@ -85,7 +85,8 @@ ZONE_HALF = (0.11, 0.15)
 CUP_R = 0.038
 CUP_H = 0.10
 CUP_MASS = 0.17
-CUP_BASE_MASS = 0.0                   # optional weighted base disc (0.12 kg made the lift too slow: dev2 env8)
+CUP_BASE_MASS = 0.10                  # weighted base disc (2026-10-09: lowers the CoM so the tumbler rides out the
+                                      # carried tray's rocking; 0.12 kg made the old lift too slow: dev2 env8)
 CUP_BASE_T = 0.01
 HANDLE_T = 0.012                      # bar thickness (square section)
 HANDLE_GAP = 0.050                    # clear radial opening
@@ -100,21 +101,25 @@ TRAY_FLOOR_T = 0.01
 TRAY_RIM_H = 0.012                    # coordinator: lowered from 0.02 (the lifted tumbler clears it by ~2 cm)
 #
 TRAY_RIM_T = 0.008
-# Tray handles = two MUSHROOM PEGS (2026-10-08, after loops and tunnels, dev2 env7-env15): at each end of the tray a
-# vertical stem with a cap, on a short bracket outside the rim, 2 cm ahead of the tray's mid-depth (clear of the
-# tumbler's carry path). The open finger comes in on the INNER side of the stem below the cap, closes outward (the
-# modelled finger swings toward the palm side, which is lateral) so it wraps behind the stem, and lifts the cap: a hook
-# against pull-out, the tray held in tension between the two fingers, about +-2 cm lateral and depth tolerance.
-EAR_DX = 0.02                         # peg x offset from the tray centre (tray frame)
-EAR_OUT = 0.07                        # peg centre this far outside the floor's end (|y| 0.20): the arm reaching it
-                                      # passes ~4 cm outside the placed tumbler's tall lid handle (at 0.175 the
-                                      # forearm rested on that handle and the hand could not descend: dev2 tray1)
-STEM_HALF = 0.01                      # stem half width (square; 2 cm so a finger whose tip just passes it still hooks)
-EAR_TOP = 0.155                       # cap underside above the tray bottom (hook point ~0.58 m: in reach)
-CAP_HALF = (0.015, 0.016, 0.006)      # cap half sizes (narrow in y: the finger descends 2 cm inside its edge)
-EAR_T = 0.008                         # bracket thickness
-EAR_GAP = 0.0                         # (unused since the pegs; kept for older tests)
-EAR_DEPTH = 2 * CAP_HALF[0]
+TRAY_FRONT_MASS = 0.13                # front rim ballast (kg; see _add_tray)
+# Tray handles = two HANDLE LOOPS (2026-10-08, after loops, tunnels and pegs: dev2 env7-close2): at each end of the tray,
+# 2 cm ahead of its mid-depth, two posts EAR_GAP apart joined by a top bar along y, EAR_TOP above the tray bottom,
+# open below, on a base bar outside the floor's end. The OPEN finger slides in from behind under the bar, between the
+# posts, and lifts: the mechanism of the tumbler's lid handle. (A closing finger on a peg shoved the light tray 5 cm
+# and tilted it 13 deg instead of wrapping the stem: dev2 close2.)
+EAR_DX = 0.02                         # loop plane x offset from the tray centre (tray frame)
+EAR_OUT = 0.07                        # loop centre this far outside the floor's end (|y| 0.20)
+EAR_GAP = 0.09                        # clear width between the posts (y)
+EAR_TOP = 0.20                        # top bar's underside above the tray bottom (hook point ~0.625 m: in reach)
+EAR_T = 0.012                         # post / bar thickness
+EAR_DEPTH = EAR_T
+STEM_HALF = EAR_T / 2.0               # (kept for older tools)
+# The loop's top bar is a FLAT bar, 4 cm deep (along x), set 0.8 cm ahead of the loop plane (2026-10-09): on a 1.2 cm
+# square bar the hooked tray pivoted freely on the two fingers and swung like a ~1.1 Hz pendulum, near the gait's
+# 1.25 Hz stride (23-32 deg while walking; the tumbler tipped over in 2/15 walks, dev2 P2); the finger's 7 cm top
+# face now carries the bar over 4 cm, which resists pitching. Its back face stays >= 1 cm ahead of the carry path.
+CAP_DX = 0.008                        # top bar centre ahead of the loop plane (tray x)
+CAP_HALF = (0.02, EAR_GAP / 2.0 + EAR_T, EAR_T / 2.0)   # the top bar's half sizes (older tools read CAP_HALF)
 
 COLOURS = {"red": (0.85, 0.12, 0.10, 1.0), "blue": (0.12, 0.30, 0.85, 1.0)}
 SIDES = ("left", "right")
@@ -125,7 +130,7 @@ OBJ_CONDIM = 3
 
 
 def ear_center_y() -> float:
-    """|y| of the tray handle peg's centre, tray frame (its x is EAR_DX)."""
+    """|y| of the tray handle loop's centre, tray frame (its x is EAR_DX)."""
     return TRAY_HALF[1] + EAR_OUT
 
 
@@ -302,17 +307,23 @@ def _add_tray(spec):
     _box(b, "tray_floor", (0.0, 0.0, TRAY_FLOOR_T / 2.0), (hx, hy, TRAY_FLOOR_T / 2.0), col, mass=0.13)
     zr = TRAY_FLOOR_T + TRAY_RIM_H / 2.0
     rt = TRAY_RIM_T / 2.0
-    _box(b, "tray_rim_front", (hx - rt, 0.0, zr), (rt, hy, TRAY_RIM_H / 2.0), rim_col, mass=0.015)
+    # the front rim is a ballast (TRAY_FRONT_MASS): the tray hangs from its handle bars 2 cm ahead of its centre and the
+    # tumbler sits ~7 cm behind them; with a light rim the lifted tray pitched 14-19 deg (dev2 fixT3/fix2)
+    _box(b, "tray_rim_front", (hx - rt, 0.0, zr), (rt, hy, TRAY_RIM_H / 2.0), rim_col, mass=TRAY_FRONT_MASS)
     _box(b, "tray_rim_back", (-hx + rt, 0.0, zr), (rt, hy, TRAY_RIM_H / 2.0), rim_col, mass=0.015)
     _box(b, "tray_rim_left", (0.0, hy - rt, zr), (hx, rt, TRAY_RIM_H / 2.0), rim_col, mass=0.01)
     _box(b, "tray_rim_right", (0.0, -hy + rt, zr), (hx, rt, TRAY_RIM_H / 2.0), rim_col, mass=0.01)
+    t = EAR_T
     for side, s in (("left", 1.0), ("right", -1.0)):
         yc = s * (hy + EAR_OUT)
-        _box(b, f"tray_ear_{side}_bracket", (EAR_DX, s * (hy + EAR_OUT / 2.0), TRAY_FLOOR_T / 2.0),
-             (STEM_HALF, EAR_OUT / 2.0 + STEM_HALF, TRAY_FLOOR_T / 2.0), rim_col, mass=0.006)
-        _box(b, f"tray_ear_{side}_stem", (EAR_DX, yc, EAR_TOP / 2.0), (STEM_HALF, STEM_HALF, EAR_TOP / 2.0), rim_col,
-             mass=0.008)
-        _box(b, f"tray_ear_{side}_cap", (EAR_DX, yc, EAR_TOP + CAP_HALF[2]), CAP_HALF, rim_col, mass=0.006)
+        y_in, y_out = yc - s * (EAR_GAP / 2.0 + t / 2.0), yc + s * (EAR_GAP / 2.0 + t / 2.0)
+        span = abs(y_out - (s * hy)) / 2.0
+        _box(b, f"tray_ear_{side}_base", (EAR_DX, s * hy + s * span, TRAY_FLOOR_T / 2.0),
+             (t / 2.0, span + t / 2.0, TRAY_FLOOR_T / 2.0), rim_col, mass=0.008)
+        for k, yp in enumerate((y_in, y_out)):
+            _box(b, f"tray_ear_{side}_post{k}", (EAR_DX, yp, (EAR_TOP + t) / 2.0), (t / 2.0, t / 2.0, (EAR_TOP + t) / 2.0),
+                 rim_col, mass=0.008)
+        _box(b, f"tray_ear_{side}_bar", (EAR_DX + CAP_DX, yc, EAR_TOP + t / 2.0), CAP_HALF, rim_col, mass=0.008)
     return b
 
 

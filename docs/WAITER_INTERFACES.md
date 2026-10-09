@@ -35,12 +35,14 @@ Program and phase 1: `docs/WAITER_PROGRAM.md`.
 
 ## Environment API (built by phase 2, consumed by 3 and 4)
 
-`bhl_robust.eval.waiter_env.WaiterEnv(deploy, upstream, cache_dir, render=True, fixed_base=False)`:
+`bhl_robust.eval.waiter_env.WaiterEnv(deploy, upstream, cache_dir, render=True, fixed_base=False, stance_lock=True)`
+(`stance_lock`: amendment 2026-10-09 below):
 - `reset(seed, instruction_id=None) -> obs` with `obs = {"image": (224,224,3) uint8, "state": (30,) f32,
   "instruction": str}`; the layout (object poses, colours, target table) is a pure function of `seed`.
 - `step(a) -> (obs, reward, done, info)`: advances 0.08 s; `reward` = 1.0 on the step success is reached, else 0.0;
-  `done` on success, robot fall (tilt >= 0.78 rad), or the 60 s time limit; `info` = {"success", "fell", "stage",
-  "tumbler_on_tray", "tray_on_target", "t"}.
+  `done` on success, robot fall (tilt >= 0.78 rad), or the 90 s time limit (60 s until 2026-10-09); `info` =
+  {"success", "fell", "stage", "tumbler_on_tray", "tray_on_target", "t"} plus (additive) "applied_action",
+  "base_locked".
 - `oracle() -> dict` of object and robot poses (the scripted expert only; never an input to a VLA).
 - Success (frozen definition, the gate of every phase): the tumbler upright (tilt < 20 deg) resting on the tray,
   the tray resting on the target table inside its target zone, both grippers open, the robot upright; held 1.0 s.
@@ -61,3 +63,23 @@ listing episodes with their seeds, success and sha256.
 | 4000-4099 | phase 3 scored evaluation (held-out layouts; plus held-out instruction templates) |
 | 5000-5999 | phase 4 RL training layouts |
 | 6000-6099 | phase 4 scored evaluation (never used before it) |
+
+## Amendment 2026-10-09 (before any phase 2 gate run or demonstration; recorded in SLURM_JOBS.md)
+
+Not additive, so recorded here and in the ledger; the user chose this path ("pick B to unblock demos for phases 3 and
+4, then C to remove the lock, with these free-base numbers reported as the baseline").
+- **Stance lock (SIMULATION FIXTURE, declared in every result that uses it), on by default.** An episode starts with
+  the robot standing at the station (base origin at (0, 0), upright, facing +x) with its base held there by a weld to
+  a mocap anchor. A non-zero base command releases it: the weld softens over 0.8 s with the gait clock still held,
+  then the base is free and the WBC walks. When the command returns to ~0, the clock is held at double support and,
+  0.4 s later, the base is held again where it stands. All walking and turning stays the learned WBC's; the lock
+  only replaces standing still. Why: standing with the clock held, the s7 WBC leans back 8-12 deg as its arms reach
+  forward (the shoulders move ~15 cm back) and turns 6-12 deg clockwise whenever an arm is raised, which kept the
+  tray handles out of reach; the free-base scripted expert completed 10 of 232 development episodes (29 settings).
+  `stance_lock=False` keeps the free-base behaviour; its numbers are reported as the baseline. Removing the lock
+  needs a WBC that stands still under arm loads (phase 1e).
+- **Time limit 60 -> 90 s**: the scripted expert needs ~50-55 s; a learned policy needs slack.
+- Scene (not part of the API, listed for completeness): the tray handles are open-bottom loops whose top bar is a
+  4 cm deep flat bar; the tumbler has a 0.10 kg weighted base.
+- `info` and `oracle()` gain `base_locked` (additive).
+
