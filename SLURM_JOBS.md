@@ -4169,3 +4169,20 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
 - Tests: `tests/test_waiter_phase1e.py` (9: the penalty helpers on arrays and tensors, constants shared by the task and the stamp, check_stand, launcher variant, Q4's frozen trajectories inside the joint limits, the Q4 clause of wbc_select on the 1c JSONs) + `tests/test_waiter_phase1c.py` (2 assertions extended additively for the fourth task id and the 1c/1d/1e smoke ramp) + `test_waiter_phase1d`, `test_waiter_env`, `test_gait_clock`: 85 passed.
 - **Submitted (2026-10-10 12:03) from e1c7896:** Waiter phase 1e smoke `21756462` -> training `21756463` (seeds 12-14, --time 16 h, afterok) -> gates `21756464` (aftercorr; WAITER_GATES_MIN_WALK_M=1.5, WAITER_GATES_STANCE=1, WAITER_GATES_STANDMANIP=1, results/waiter-20261005/wbc1e).
 - **Waiter 1e smoke `21756462` (2026-10-10 12:05): PASS** (3 iterations; stand_anchor -1.0 and stand_tilt -0.5 in the reward table and logged; curriculum check OK: 0.0208, 1.0; stand check OK; export 83 -> 12; stamped). Training `21756463` released (afterok), waiting on the group GPU quota (QOSGrpGRES).
+
+**Phase 3 closed-loop development rollouts (2026-10-10, dev seeds 1100-1131, each with a seen template T0 and the held-out T5; not scored):**
+
+| checkpoint | all | seen template (T0) | held-out template (T5) | falls | failures by furthest stage |
+|---|---|---|---|---|---|
+| step 17,000 (best validation loss), `21756445` | 29/64 | 21/32 | 8/32 | 1 | tumbler lifted 24, start 6, tray at table 3, tray lifted 2 |
+| step 20,000 (final), `21756446` | 27/64 | 17/32 | 10/32 | 0 | tumbler lifted 24, start 5, tray lifted 5, tray at table 3 |
+
+- The policy sees only the head image, the 30-D state and the instruction; it runs in `WaiterEnv` with its defaults (stance lock, 90 s). Successful episodes take ~52 s (median 654 steps at step 20,000). Inference 217 ms per chunk (A40), 10 executed steps per chunk. Checkpoint chosen for the scored run: **step 17,000** (best validation loss and the most dev successes; the two are within noise of each other).
+- DSRL noise-wrapper check on that checkpoint (`21756482`): PASS (same noise -> identical chunk; different noise -> mean |diff| 0.08; equals lerobot's own sampling with the same noise).
+
+**Predeclared now (2026-10-10 12:31), before any seed 4000-4099 has been run: Waiter phase 3 gate.**
+- Policy: SmolVLA fine-tuned on the phase 2 demonstrations, `solutions-20260930/campaign-waiter/phase3/runs/sft1/step_017000` (model sha256 11614018..., data hash f63fb02e...), code at 2709935. Environment: `WaiterEnv` defaults (STANCE LOCK fixture, 90 s), deploy s7; 10 executed steps per 50-step chunk.
+- Two settings on seeds 4000-4099, one episode per seed each (`scripts/waiter/vla/rollout_vla.py --purpose scored`): (a) each layout's own instruction (the natural mix: about 5/6 seen templates T0-T4, 1/6 the held-out T5); (b) the held-out template T5 on every seed (instruction id 5; T5 was never trained on).
+- **PASS iff (a) >= 40/100 AND (b) >= 20/100**, scored by `scripts/waiter/vla/phase3_gate.py` from the frozen rule file `results/waiter-20261005/phase3-gate/rule.json` (sha256 dc945058eec1...), written once to `results/waiter-20261005/phase3-gate/verdict.json`. Why these bars: 40% = the full four-stage task on at least two of five unseen layouts; 20% on the unseen phrasing is above the ~15% a policy of this skill would reach if it ignored the instruction (right tumbler and right table by chance, 1 in 4). They sit below the dev estimates (about 54% and 27%) by roughly the dev sample's uncertainty.
+- Reported with it, not gated: Wilson intervals, falls, seen-template successes within (a), and a language control on DEV seeds 1100-1131 (the instruction's side swapped: successes at the original table should drop toward 0).
+- Labels: LEARNED VLA (image + state + instruction -> actions), LEARNED legs (s7, walking/turning), STANCE LOCK fixture (standing), SIMULATED head camera; demonstrations from the SCRIPTED expert with ORACLE poses.
