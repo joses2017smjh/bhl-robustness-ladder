@@ -49,7 +49,7 @@ def run_episodes(a, seeds) -> None:
     from bhl_robust.eval.waiter_env import STAGES, WaiterEnv
     from expert import ExpertParams, WaiterExpert
     env = WaiterEnv(a.deploy, a.upstream, a.cache_dir, render=False, stance_lock=not a.free_base,
-                    time_limit_s=a.time_limit)
+                    time_limit_s=a.time_limit, lock_start_only=a.lock_start_only)
     for s in seeds:
         path = a.out / f"ep_{s}.json"
         if path.exists():
@@ -67,9 +67,10 @@ def run_episodes(a, seeds) -> None:
         ev = env.evaluate()
         r = {"seed": s, "success": bool(info["success"]), "fell": bool(info["fell"]), "stage": int(info["stage"]),
              "stage_name": STAGES[int(info["stage"])], "t": round(float(info["t"]), 2),
-             "target_colour": env.layout.target_colour, "target_side": env.layout.target_side,
+             "deploy": str(a.deploy), "target_colour": env.layout.target_colour, "target_side": env.layout.target_side,
              "template_id": env.template_id, "cup_tilt_deg": round(float(ev["cup_tilt_deg"]), 1),
              "tray_on_target": bool(ev["tray_on_target"]), "stance_lock": bool(env.stance_lock),
+             "lock_start_only": bool(env.lock_start_only),
              "locked_fraction": round(locked_steps / max(1, steps), 3), "time_limit_s": env.time_limit_s,
              "expert_notes": {k: (round(v, 4) if isinstance(v, float) else v) for k, v in ex.notes.items()},
              "wall_s": round(time.time() - t0, 1)}
@@ -104,6 +105,8 @@ def summarize(a, seeds) -> int:
            "rule": f"PASS iff >= {a.min_success} successes over seeds {seeds[0]}-{seeds[-1]} (n = {n})",
            "successes": k, "n": n, "rate": round(k / n, 4), "wilson95": wilson(k, n), "falls": sum(e["fell"] for e in eps),
            "final_stage_counts": stages, "stance_lock": sorted({e["stance_lock"] for e in eps}),
+           "lock_start_only": sorted({bool(e.get("lock_start_only", False)) for e in eps}),
+           "deploy": sorted({e.get("deploy", "") for e in eps}),
            "time_limit_s": sorted({e["time_limit_s"] for e in eps}),
            "success_time_s": {"median": times[len(times) // 2] if times else None, "max": times[-1] if times else None},
            "failed_seeds": [e["seed"] for e in eps if not e["success"]]}
@@ -123,6 +126,8 @@ def main(argv=None) -> int:
     ap.add_argument("--seeds", required=True)
     ap.add_argument("--range", choices=sorted(RANGES), default="gate")
     ap.add_argument("--free-base", action="store_true", help="stance_lock=False (the reported free-base baseline)")
+    ap.add_argument("--lock-start-only", action="store_true",
+                    help="base held only through the reset settle, free from t = 0 (the lock-removal test)")
     ap.add_argument("--time-limit", type=float, default=None, help="default: the env's TIME_LIMIT_S")
     ap.add_argument("--summarize", action="store_true")
     ap.add_argument("--min-success", type=int, default=80)

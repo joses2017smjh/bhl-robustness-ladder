@@ -20,6 +20,8 @@ DEPLOY=${GATE_DEPLOY:-$REPO/results/waiter-20261005/wbc1c/training/waiter-wbc1c-
 OUT=${GATE_OUT:?set GATE_OUT}
 SEED0=${GATE_SEED0:-2000}; SEED1=${GATE_SEED1:-2099}; PROCS=${GATE_PROCS:-8}; MIN=${GATE_MIN_SUCCESS:-80}
 FREE=(); [ "${GATE_FREE:-0}" = 1 ] && FREE=(--free-base)
+[ "${GATE_START_ONLY:-0}" = 1 ] && FREE=(--lock-start-only)       # the lock-removal test (base held for the settle only)
+RANGE=(); [ -n "${GATE_RANGE:-}" ] && RANGE=(--range "$GATE_RANGE")
 export TMPDIR=/tmp PYTHONPATH="$REPO/src:$REPO/scripts/bench:$REPO/scripts/waiter" OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
   OPENBLAS_NUM_THREADS=1 PYTHONUNBUFFERED=1
 cd "$REPO"
@@ -31,8 +33,8 @@ mkdir -p "$OUT"
 for i in $(seq 0 $((PROCS - 1))); do
   S=$(seq "$SEED0" "$SEED1" | awk -v i="$i" -v n="$PROCS" '(NR - 1) % n == i' | paste -sd, -)
   "$PY" scripts/waiter/expert_gate.py --deploy "$DEPLOY" --upstream "$U" --cache-dir "/tmp/waiter-gate-${SLURM_JOB_ID:-$$}-$i" \
-    --out "$OUT" --seeds "$S" "${FREE[@]}" > "$OUT/worker_$i.log" 2>&1 &
+    --out "$OUT" --seeds "$S" "${FREE[@]}" "${RANGE[@]}" > "$OUT/worker_$i.log" 2>&1 &
 done
 wait
 grep -h "^GATE: seed" "$OUT"/worker_*.log | wc -l | xargs echo "episodes this job:"
-"$PY" scripts/waiter/expert_gate.py --out "$OUT" --seeds "$SEED0-$SEED1" --summarize --min-success "$MIN"
+"$PY" scripts/waiter/expert_gate.py --out "$OUT" --seeds "$SEED0-$SEED1" --summarize --min-success "$MIN" "${RANGE[@]}"

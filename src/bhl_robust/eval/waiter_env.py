@@ -55,6 +55,7 @@ SUCCESS_HOLD_STEPS = int(math.ceil(1.0 / STEP_DT))   # 13 steps = 1.04 s
 REST_TOL_M = 0.012                     # "resting": bottom within this of the supporting surface
 SETTLE_S = 2.0                         # reset: WBC runs this long (command 0, default arms) before t = 0
 LOCK_DELAY_S = 0.4                     # stance lock: engages this long (WBC time) after the stance hold
+FREE_SETTLE_S = 1.0                    # lock_start_only: free standing time between the release and t = 0
 RELEASE_S = 0.8                        # stance lock release: on a non-zero command the weld softens over this long,
 RELEASE_TC = 0.3                       # to this time constant (s; 0.002 when held), with the clock still held, then the
                                        # base is freed and the clock resumes (an instant release snapped the held-upright
@@ -111,7 +112,8 @@ class WaiterEnv:
     toy = False
 
     def __init__(self, deploy, upstream, cache_dir, render=True, fixed_base=False, stance_hold=True,
-                 time_limit_s: float = TIME_LIMIT_S, stance_mode: str = "clock", stance_lock: bool = True):
+                 time_limit_s: float = TIME_LIMIT_S, stance_mode: str = "clock", stance_lock: bool = True,
+                 lock_start_only: bool = False):
         from omegaconf import OmegaConf
         from bhl_robust.eval.gait_clock import make_controller
         from bhl_robust.eval.multi_robot import MultiRunner
@@ -133,6 +135,10 @@ class WaiterEnv:
             raise ValueError(stance_mode)
         self.stance_mode = stance_mode             # dev: "pd" = while held, the legs keep their last targets
         self.stance_lock = bool(stance_lock) and self.stance_hold and not self.fixed_base
+        # lock_start_only (the predeclared lock-removal test, SLURM_JOBS.md 2026-10-10): the base is held only through
+        # the reset settle, released before t = 0 and never held again; the episode itself runs on a free base
+        self.lock_start_only = bool(lock_start_only) and self.stance_lock
+        self._relock = True
         self._locked = False
         self._held_since = None
         self._release_t = None
@@ -193,6 +199,18 @@ class WaiterEnv:
             self._wbc_step()
             if self.runner.tilt(0) >= TILT_FALL:
                 break
+        self._relock = True
+        if self.lock_start_only and self._locked and not self._fell_in_settle():
+            n = int(round(RELEASE_S / float(self.cfg.policy_dt)))
+            for k in range(n):                      # soften the weld (clock held, command 0), then free the base
+                self.model.eq_solref[self.ids.weld, 0] = self._weld_tc0 * (RELEASE_TC / self._weld_tc0) ** ((k + 1) / n)
+                self._wbc_step()
+            self._set_lock(False)
+            self._relock = False
+            for _ in range(int(round(FREE_SETTLE_S / float(self.cfg.policy_dt)))):
+                self._wbc_step()
+                if self.runner.tilt(0) >= TILT_FALL:
+                    break
         if park:                                    # then everything goes to its layout pose (pure function of the seed)
             W.apply_layout(self.model, self.d, self.ids, self.layout)
             mujoco.mj_forward(self.model, self.d)
@@ -300,6 +318,9 @@ class WaiterEnv:
             d.qpos[q] += dx
         mujoco.mj_forward(m, d)
 
+    def _fell_in_settle(self) -> bool:
+        return bool(self.runner.tilt(0) >= TILT_FALL)
+
     def _stand_requested(self) -> bool:
         return bool(np.all(np.abs(self._cmd) < np.asarray(STANCE_EPS)))
 
@@ -336,7 +357,7 @@ class WaiterEnv:
                     and self.t_wbc >= self.stance_min_t):
                 self._held_clock = int(c.clock_step)
                 self._held_since = self.t_wbc
-            if (stand and self.stance_lock and self._held_clock is not None and not self._locked
+            if (stand and self.stance_lock and self._relock and self._held_clock is not None and not self._locked
                     and self.t_wbc - self._held_since >= LOCK_DELAY_S - 1e-9):
                 self._set_lock(True)
             if self._held_clock is not None:

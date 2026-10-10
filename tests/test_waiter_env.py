@@ -192,3 +192,17 @@ def test_free_base_option_has_no_lock():
     o = e.oracle()
     assert not o["base_locked"] and abs(o["base_pos"][0]) < 0.05
     e.close()
+
+
+def test_lock_start_only_frees_the_base_before_t0_and_never_holds_again():
+    """The predeclared lock-removal test's start: held through the reset settle, free from t = 0 on."""
+    e = _env(lock_start_only=True)
+    e.reset(1000)
+    o = e.oracle()
+    assert e.stance_lock and e.lock_start_only and not o["base_locked"] and o["clock_held"]
+    assert abs(o["base_pos"][0]) < 0.10 and abs(o["base_pos"][1]) < 0.10 and o["tilt"] < 0.4
+    a = np.zeros(15, np.float32)
+    for _ in range(30):                                      # standing still does not re-engage the lock
+        _, _, _, info = e.step(a)
+    assert not info["base_locked"]
+    e.close()
