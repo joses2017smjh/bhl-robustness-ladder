@@ -67,3 +67,9 @@ Controller V2 **21757620** independently rechecks the completed same-source smok
 ## Second completed development shard
 
 Job **21757630** completed all 30 episodes on 1 cm steps with actor `dr-default-s0`: baseline 0/10 clean goals and 9 contact episodes; heading 10/10 and regulated 10/10, each with zero contacts. All three arms had zero falls. Its raw archive was published and independently downloaded for SHA verification before duplicate packaging retirement. Controller `21757620` then submitted the unchanged third shard as **21757875** (s0, ramp). The complete 270-episode matched cohort and independent collection are still outstanding; these first 60 episodes do not establish campaign qualification or physical-robot performance.
+
+## Third completed development shard
+
+Job **21757875** completed all 30 episodes on the 3° ramp with actor `dr-default-s0`: baseline 0/10 clean goals and 9 contact episodes, heading 10/10 and regulated 10/10 with zero contacts, and zero falls in every arm. Together, the first three shards cover 90/270 declared episodes and one of three gaits. Each new controller achieved 30/30 clean goals across these three terrain families, compared with baseline 8/30. These conditional development counts do not establish complete-campaign qualification or independent confirmation.
+
+The third shard's 208,538,954-byte raw archive was published and independently downloaded for SHA256 verification (`b744d318d5ef271f71b9ebd87d27432528d41b777dc01ccb02acf8e85e05439e`) before duplicate packaging retirement. The unchanged fourth shard, actor `dr-default-s1` on flat ground, is submitted as **21759470** and still queued at the final update.

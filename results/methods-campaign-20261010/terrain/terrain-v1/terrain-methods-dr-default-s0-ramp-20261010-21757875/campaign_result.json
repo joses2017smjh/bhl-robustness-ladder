@@ -1,0 +1,86 @@
+{
+  "actor_filter": "dr-default-s0",
+  "arms": {
+    "baseline": {
+      "contacts": 9,
+      "episodes": 10,
+      "falls": 0,
+      "goals": 0,
+      "lateral_path_rmse_m_mean": 0.25676155813940843,
+      "nonfinite": 0
+    },
+    "heading": {
+      "contacts": 0,
+      "episodes": 10,
+      "falls": 0,
+      "goals": 10,
+      "lateral_path_rmse_m_mean": 0.046477586780192856,
+      "nonfinite": 0
+    },
+    "regulated": {
+      "contacts": 0,
+      "episodes": 10,
+      "falls": 0,
+      "goals": 10,
+      "lateral_path_rmse_m_mean": 0.04748577164551752,
+      "nonfinite": 0
+    }
+  },
+  "confirmation_executed": false,
+  "episode_files": [
+    "dr-default-s0--ramp--s410000--regulated/episode.json",
+    "dr-default-s0--ramp--s410000--heading/episode.json",
+    "dr-default-s0--ramp--s410000--baseline/episode.json",
+    "dr-default-s0--ramp--s410001--baseline/episode.json",
+    "dr-default-s0--ramp--s410001--heading/episode.json",
+    "dr-default-s0--ramp--s410001--regulated/episode.json",
+    "dr-default-s0--ramp--s410002--heading/episode.json",
+    "dr-default-s0--ramp--s410002--regulated/episode.json",
+    "dr-default-s0--ramp--s410002--baseline/episode.json",
+    "dr-default-s0--ramp--s410003--heading/episode.json",
+    "dr-default-s0--ramp--s410003--baseline/episode.json",
+    "dr-default-s0--ramp--s410003--regulated/episode.json",
+    "dr-default-s0--ramp--s410004--heading/episode.json",
+    "dr-default-s0--ramp--s410004--baseline/episode.json",
+    "dr-default-s0--ramp--s410004--regulated/episode.json",
+    "dr-default-s0--ramp--s410005--regulated/episode.json",
+    "dr-default-s0--ramp--s410005--baseline/episode.json",
+    "dr-default-s0--ramp--s410005--heading/episode.json",
+    "dr-default-s0--ramp--s410006--heading/episode.json",
+    "dr-default-s0--ramp--s410006--regulated/episode.json",
+    "dr-default-s0--ramp--s410006--baseline/episode.json",
+    "dr-default-s0--ramp--s410007--regulated/episode.json",
+    "dr-default-s0--ramp--s410007--baseline/episode.json",
+    "dr-default-s0--ramp--s410007--heading/episode.json",
+    "dr-default-s0--ramp--s410008--baseline/episode.json",
+    "dr-default-s0--ramp--s410008--heading/episode.json",
+    "dr-default-s0--ramp--s410008--regulated/episode.json",
+    "dr-default-s0--ramp--s410009--baseline/episode.json",
+    "dr-default-s0--ramp--s410009--regulated/episode.json",
+    "dr-default-s0--ramp--s410009--heading/episode.json"
+  ],
+  "episodes": 30,
+  "expected_episodes": 30,
+  "ground_truth_inputs_to_controller": [],
+  "paired_vs_baseline": {
+    "heading": {
+      "contact_reduction_count": 9,
+      "goal_gain_count": 10,
+      "matched_pairs": 10,
+      "uncertainty_scope": "descriptive paired development counts; train-seed and course clustering prevents independent episode safety interpretation"
+    },
+    "regulated": {
+      "contact_reduction_count": 9,
+      "goal_gain_count": 10,
+      "matched_pairs": 10,
+      "uncertainty_scope": "descriptive paired development counts; train-seed and course clustering prevents independent episode safety interpretation"
+    }
+  },
+  "phase": "development",
+  "protocol_sha256": "8060a32ceea75ca29a4eb08444385f71d755e6c7055760790d418b509d858e31",
+  "scientific_status": "MEASURED_DEVELOPMENT_NO_CONFIRMATION",
+  "scope": "MuJoCo simulation development; three frozen12DoF actors; matched nativeFAST-LIO2 startup/loss/estimated-goal stops; new course/seed cohort; no physical validation, terrain-trained gait or independent confirmation claim",
+  "status": "PASS",
+  "terrain_filter": "ramp",
+  "wall_seconds": 637.4942344229203
+}

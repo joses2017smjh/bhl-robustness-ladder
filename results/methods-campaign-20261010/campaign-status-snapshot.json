@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-10-10T21:55:43.988424+00:00",
+  "snapshot_utc": "2026-10-10T22:05:26.962635+00:00",
   "scope": "Point-in-time orchestration snapshot, not a final scientific verdict. Follow retained receipts and independently verified collector publications.",
   "controllers": {
     "terrain-dispatch-v2": {
@@ -31,15 +31,27 @@
           "raw_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/terrain-v1--terrain-methods-dr-default-s0-small_steps-20261010-21757630.tar.gz",
           "raw_sha256": "e8afc6bf75c8f37df9bb10f98610a947190ac67ad071e80067e3b38fa4010ab2",
           "finished_utc": "2026-10-10T21:48:10.673147+00:00"
+        },
+        {
+          "name": "terrain-methods-dr-default-s0-ramp-20261010",
+          "job_id": "21757875",
+          "scientific_status": "MEASURED_DEVELOPMENT_NO_CONFIRMATION",
+          "status": "PASS",
+          "episodes": 30,
+          "result_sha256": "150dad41dbc129e4bd48fb797f7a4c37d11f99fa3a7320661bc5d6ae8f8e0dd8",
+          "publication": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/terrain-methods-dr-default-s0-ramp-20261010-21757875/publication.json",
+          "raw_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/terrain-v1--terrain-methods-dr-default-s0-ramp-20261010-21757875.tar.gz",
+          "raw_sha256": "b744d318d5ef271f71b9ebd87d27432528d41b777dc01ccb02acf8e85e05439e",
+          "finished_utc": "2026-10-10T22:01:10.575654+00:00"
         }
       ],
       "scientific_archive_sha256": "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77",
       "status": "WAITING",
-      "updated_utc": "2026-10-10T21:48:59.402274+00:00",
-      "current_index": 2,
-      "current_job": "terrain-methods-dr-default-s0-ramp-20261010",
-      "current_job_id": "21757875",
-      "completed_jobs": 2,
+      "updated_utc": "2026-10-10T22:01:58.611953+00:00",
+      "current_index": 3,
+      "current_job": "terrain-methods-dr-default-s1-flat-20261010",
+      "current_job_id": "21759470",
+      "completed_jobs": 3,
       "expected_jobs": 9,
       "storage": {
         "actual_free_bytes": 520093696,
@@ -47,7 +59,7 @@
         "requested_unwritten_bytes": 268435456,
         "minimum_free_bytes": 134217728
       },
-      "local_campaign_bytes": 75531325
+      "local_campaign_bytes": 75550611
     },
     "stereo-dispatch-v2": {
       "schema": "bhl-methods-dispatch-state-v1",
@@ -57,12 +69,12 @@
       "jobs": [],
       "scientific_archive_sha256": "9d8ed3780f31cb1a78c1b9ac6006aa57b663011120381e499b08f85167c09cf7",
       "status": "WAITING_FOR_RESERVED_SPACE",
-      "updated_utc": "2026-10-10T21:55:28.958099+00:00",
+      "updated_utc": "2026-10-10T22:04:59.454443+00:00",
       "current_index": 0,
       "current_job": "stereo-methods-straight-s480000-20261010-v2",
       "storage": {
-        "actual_free_bytes": 536346624,
-        "other_outstanding_promises_bytes": 268430563,
+        "actual_free_bytes": 534773760,
+        "other_outstanding_promises_bytes": 268435456,
         "requested_unwritten_bytes": 201326592,
         "minimum_free_bytes": 134217728
       }
@@ -75,12 +87,12 @@
       "jobs": [],
       "scientific_archive_sha256": "207a5129cd3df243f48f6fddccd5f74030ba6a163c9aeb151a119b9d014bf5fe",
       "status": "WAITING_FOR_RESERVED_SPACE",
-      "updated_utc": "2026-10-10T21:55:40.287587+00:00",
+      "updated_utc": "2026-10-10T22:05:10.747828+00:00",
       "current_index": 0,
       "current_job": "sensor-methods-run-00-20261010",
       "storage": {
-        "actual_free_bytes": 535822336,
-        "other_outstanding_promises_bytes": 268430399,
+        "actual_free_bytes": 534773760,
+        "other_outstanding_promises_bytes": 268435456,
         "requested_unwritten_bytes": 369098752,
         "minimum_free_bytes": 134217728
       }
