@@ -247,6 +247,38 @@ def test_vec_env_subprocess_matches_inprocess(tmp_path):
         b.close()
 
 
+def test_chunk_runner_renders_once_per_chunk_and_returns_the_same_observation():
+    from env_worker import ChunkRunner
+    a, b = ChunkRunner(StubWaiterEnv(time_limit_s=2.0)), ChunkRunner(StubWaiterEnv(time_limit_s=2.0))
+    assert a.lazy and b.lazy
+    b.lazy = False                                   # b renders on every step, as before
+    frames = {"a": 0, "b": 0}
+    for name, r in (("a", a), ("b", b)):
+        def counted(orig=r.env._image, env=r.env, name=name):
+            frames[name] += int(env.render_enabled)
+            return orig()
+        r.env._image = counted
+    oa, ob = a.reset(1010), b.reset(1010)
+    assert np.array_equal(oa["image"], ob["image"]) and frames == {"a": 1, "b": 1}
+    rng = np.random.default_rng(0)
+    chunks = steps = 0
+    while True:                                      # runs into the time limit: the last chunk stops early on done
+        ch = rng.uniform(-0.3, 0.3, (10, 15)).astype(np.float32)
+        ra, rb = a.chunk(ch), b.chunk(ch)
+        chunks, steps = chunks + 1, steps + ra["n"]
+        assert np.array_equal(ra["obs"]["image"], rb["obs"]["image"]) and ra["obs"]["image"].any()
+        assert np.array_equal(ra["obs"]["state"], rb["obs"]["state"])
+        assert {k: ra[k] for k in ("n", "done", "reward", "success", "fell", "truncated", "stage_max", "t")} == \
+               {k: rb[k] for k in ("n", "done", "reward", "success", "fell", "truncated", "stage_max", "t")}
+        assert a.env.render_enabled is True
+        if ra["done"]:
+            break
+    assert ra["truncated"] and ra["n"] < 10 and chunks > 1
+    assert frames == {"a": 1 + chunks, "b": 1 + steps}
+    plain = ChunkRunner(StubWaiterEnv(time_limit_s=2.0, render=False))
+    assert not plain.lazy                            # a run without rendering is left alone
+
+
 # ------------------------------------------------------------------------------------------ seeds / stats
 def test_seed_parsing_and_guards():
     assert parse_seeds("1000-1003,1010") == [1000, 1001, 1002, 1003, 1010]

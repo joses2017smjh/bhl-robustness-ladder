@@ -76,10 +76,15 @@ def make_env(spec: dict):
 
 
 class ChunkRunner:
-    """Executes an (H, 15) chunk on one env, stopping at ``done``."""
+    """Executes an (H, 15) chunk on one env, stopping at ``done``.
+
+    Only the observation after the last executed step goes back to the learner. Envs that expose ``render_enabled``
+    and ``_obs()`` (WaiterEnv, the stub) therefore render the camera once per chunk instead of once per step: in the
+    smoke run 21757215 the env time was 16 processes rendering through one GPU."""
 
     def __init__(self, env):
         self.env = env
+        self.lazy = getattr(env, "render_enabled", None) is True and callable(getattr(env, "_obs", None))
 
     def reset(self, seed, instruction_id=None):
         if instruction_id is None:
@@ -91,15 +96,23 @@ class ChunkRunner:
         total, n, done = 0.0, 0, False
         success = fell = False
         stage_max, info, obs = 0, {}, None
-        for a in actions:
-            obs, r, done, info = self.env.step(a)
-            total += float(r)
-            n += 1
-            success |= bool(info.get("success", False))
-            fell |= bool(info.get("fell", False))
-            stage_max = max(stage_max, int(info.get("stage", 0)))
-            if done:
-                break
+        if self.lazy:
+            self.env.render_enabled = False
+        try:
+            for a in actions:
+                obs, r, done, info = self.env.step(a)
+                total += float(r)
+                n += 1
+                success |= bool(info.get("success", False))
+                fell |= bool(info.get("fell", False))
+                stage_max = max(stage_max, int(info.get("stage", 0)))
+                if done:
+                    break
+        finally:
+            if self.lazy:
+                self.env.render_enabled = True
+        if self.lazy and obs is not None:
+            obs = self.env._obs()                     # the state the last step left, now with its frame
         return {"obs": obs, "reward": total, "done": bool(done), "success": success, "fell": fell,
                 "truncated": bool(done and not success and not fell), "n": n, "stage_max": stage_max,
                 "stage_last": int(info.get("stage", 0)), "t": float(info.get("t", 0.0)), "info": info}
