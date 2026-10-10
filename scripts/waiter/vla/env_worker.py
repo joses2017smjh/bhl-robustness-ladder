@@ -77,6 +77,9 @@ def make_env(kind: str, kwargs: dict):
     if kind == "waiter":
         from bhl_robust.eval.waiter_env import WaiterEnv  # phase 2 (contract API)
 
+        kwargs = dict(kwargs)
+        if kwargs.get("cache_dir"):       # one MJCF cache per worker process (workers building into one directory
+            kwargs["cache_dir"] = f"{kwargs['cache_dir']}-{os.getpid()}"   # can race: DSRL smoke 21756753)
         return WaiterEnv(**kwargs)
     raise ValueError(f"unknown env kind {kind}")
 

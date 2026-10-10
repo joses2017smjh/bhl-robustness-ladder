@@ -65,8 +65,10 @@ def make_env(spec: dict):
         from stub_env import StubWaiterEnv
         return StubWaiterEnv(**kwargs)
     if kind == "waiter":
-        from bhl_robust.eval.waiter_env import WaiterEnv   # phase 2 (contract); not built yet on 2026-10-05
-        return WaiterEnv(**kwargs)
+        from bhl_robust.eval.waiter_env import WaiterEnv   # phase 2 (contract)
+        if kwargs.get("cache_dir"):                        # one MJCF cache per worker process: 16 workers building the
+            kwargs["cache_dir"] = f"{kwargs['cache_dir']}-{os.getpid()}"    # scene into one directory raced (smoke
+        return WaiterEnv(**kwargs)                         # 21756753: ParseXML on a half-written file)
     if kind == "import":
         mod, cls = spec["target"].split(":")
         return getattr(importlib.import_module(mod), cls)(**kwargs)
