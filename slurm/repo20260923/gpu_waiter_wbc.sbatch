@@ -27,6 +27,10 @@
 # Velocity-BHL-Waiter-WBC-Stance-v0 (= 1c + the trained stance: standing envs' gait clock held at phase 0.5 in the
 # observations and feet_gait, rel_standing_envs 0.25), seeds 9-11, otherwise as 1c (the same curriculum checks) plus
 # the stance check in params/env.yaml (also done by the stamp); submit with --time=16:00:00.
+# WAITER_VARIANT=1e (2026-10-10; SLURM_JOBS.md 'Predeclared now ... Waiter phase 1e'): task
+# Velocity-BHL-Waiter-WBC-Stand-v0 (= 1d + no pushes / hand forces on standing envs + the standing penalties
+# stand_anchor and stand_tilt), seeds 12-14, otherwise as 1d (the same curriculum checks) plus the stand check in
+# params/env.yaml (also done by the stamp); submit with --time=16:00:00.
 set -euo pipefail
 export BHL_STACK=v51
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
@@ -44,6 +48,8 @@ case "$VARIANT" in
         TASK_ID=Velocity-BHL-Waiter-WBC-Curriculum-v0; FULL_ITERS=10000 ;;
     1d) PREFIX=waiter-wbc1d; SEED0=9; RES_NAME=wbc1d; export BHL_STD_MAX=1.0
         TASK_ID=Velocity-BHL-Waiter-WBC-Stance-v0; FULL_ITERS=10000 ;;
+    1e) PREFIX=waiter-wbc1e; SEED0=12; RES_NAME=wbc1e; export BHL_STD_MAX=1.0
+        TASK_ID=Velocity-BHL-Waiter-WBC-Stand-v0; FULL_ITERS=10000 ;;
     *)  echo "WAITER-WBC RESULT: FAIL (unknown WAITER_VARIANT $VARIANT)"; exit 2 ;;
 esac
 OBS_POLICY=83
@@ -86,7 +92,7 @@ if [ "$SMOKE" = 1 ]; then OVR_DIR="$RES/overrides"; else OVR_DIR="$WORKSPACE/ove
 mkdir -p "$OVR_DIR"
 export OVERRIDE_FILE="$OVR_DIR/${RUN_NAME}.txt"
 dr_overrides_scale 1.0 > "$OVERRIDE_FILE"
-if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ]; } && [ "$SMOKE" = 1 ]; then
+if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ]; } && [ "$SMOKE" = 1 ]; then
     # smoke only: compress the ramp into the smoke's 3 iterations, so its log shows the term move
     printf ' env.curriculum.disturbance.params.start_iter=0 env.curriculum.disturbance.params.end_iter=2' >> "$OVERRIDE_FILE"
 fi
@@ -94,7 +100,8 @@ export BHL_FORWARD_VARS="$BHL_FORWARD_VARS RUN_DIR BHL_STD_MAX"
 find_run() { ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | sort | tail -1; }
 echo "=== node: $(hostname) | $RUN_NAME | task=$TASK | smoke=$SMOKE | from scratch, $MAX_ITER iters -> $FINAL_CKPT | RES $RES | HEAD $(git -C "$REPO" rev-parse --short HEAD) | $(date) ==="
 git -C "$REPO" status --porcelain -- src/bhl_robust/waiter_asset.py src/bhl_robust/tasks/waiter_env_cfg.py \
-    src/bhl_robust/tasks/waiter_wbc_mdp.py src/bhl_robust/eval/waiter_wbc.py src/bhl_robust/tasks/__init__.py "$0" || true
+    src/bhl_robust/tasks/waiter_wbc_mdp.py src/bhl_robust/tasks/waiter_stand_mdp.py src/bhl_robust/eval/waiter_wbc.py \
+    src/bhl_robust/tasks/__init__.py "$0" || true
 TLOG="${TMPDIR:-/tmp}/waiter-wbc-$JOBTAG.log"; : > "$TLOG"
 existing=$(find_run || true)
 if [ "$SMOKE" != 1 ] && [ -n "$existing" ] && [ -f "$existing/$FINAL_CKPT" ]; then
@@ -107,7 +114,8 @@ run=$(find_run || true)
 why=""
 [ -n "$run" ] && [ -f "$run/$FINAL_CKPT" ] || why="$why no-$FINAL_CKPT"
 grep -q "waiter-wbc id NOT registered" "$TLOG" && why="$why task-not-registered"
-if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
+[ "$VARIANT" = 1e ] && grep -q "waiter-wbc-stand id NOT registered" "$TLOG" && why="$why stand-task-not-registered"
+if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
     grep -q "\[overlay\] action-noise std bounded to \[0.001, 1.0\]" "$TLOG" || why="$why std-bound-overlay-missing"
     "$PYH" - "$TLOG" <<'PY' || why="$why noise-std-above-1.0"
 import re, sys
@@ -115,7 +123,7 @@ v = [float(x) for x in re.findall(r"Mean action noise std:\s*([0-9.]+)", open(sy
 sys.exit(0 if v and max(v) <= 1.0 + 1e-6 else 1)
 PY
 fi
-if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ]; } && [ -n "$run" ] && [ -s "$TLOG" ]; then
+if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ]; } && [ -n "$run" ] && [ -s "$TLOG" ]; then
     # phase 1c: the curriculum ran (logged 0 first, and 1.0 last in a full run), the PPO rollout is the 24 steps the
     # iteration count assumes, and a full run carries the frozen ramp values
     (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" - "$TLOG" "$run" "$SMOKE" <<'PY') || why="$why curriculum-check"
@@ -149,6 +157,17 @@ p = check_stance(load_env_yaml(sys.argv[1]))
 print('stance check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/params/env.yaml") 2>&1 | tail -1)
     echo "$s"
     case "$s" in "stance check: OK") ;; *) why="$why stance-check";; esac
+fi
+if [ "$VARIANT" = 1e ] && [ -n "$run" ] && [ -f "$run/params/env.yaml" ]; then
+    # phase 1e: 1d's stance terms + no disturbances on standing envs + the standing penalties, in the run's env.yaml
+    s=$( (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" -c "
+import sys
+from bhl_robust.eval.gait_clock import load_env_yaml
+from bhl_robust.eval.waiter_wbc import check_stand
+p = check_stand(load_env_yaml(sys.argv[1]))
+print('stand check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/params/env.yaml") 2>&1 | tail -1)
+    echo "$s"
+    case "$s" in "stand check: OK") ;; *) why="$why stand-check";; esac
 fi
 if [ -z "$why" ]; then
     "$PYH" - "$RES/training/$RUN_NAME.json" "$RUN_NAME" "$TASK_ID" "$SEED" "$FINAL_CKPT" "$run" "$JOBTAG" "$TLOG" <<'PY'

@@ -19,6 +19,8 @@
 # WAITER_GATES_MIN_WALK_M=1.5 adds the predeclared walk-progress clause (wbc_select.py --min-walk-m).
 # Phase 1d (2026-10-08): WAITER_GATES_STANCE=1 also runs Q3 (scripts/waiter/stance_gate.py) and requires it to PASS
 # (wbc_select.py --stance).
+# Phase 1e (2026-10-10): WAITER_GATES_STANDMANIP=1 also runs Q4 (scripts/waiter/stand_manip_gate.py: the phase 2
+# expert's arm poses on a free standing base) and requires it to PASS (wbc_select.py --stand-manip).
 # usage: sbatch --dependency=aftercorr:<training array> slurm/repo20260923/cpu_waiter_gates.sbatch
 set -uo pipefail
 REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
@@ -30,7 +32,7 @@ SEED=$(( ${WAITER_GATES_SEED0:-0} + ${SLURM_ARRAY_TASK_ID:-0} ))
 RUN=${WAITER_GATES_RUN:-$PREFIX-s$SEED}
 JOBTAG=${SLURM_JOB_ID:-local$$}
 export TMPDIR=/tmp PYTHONPATH="$REPO/src:$REPO/scripts" OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 PYTHONUNBUFFERED=1
-CACHE=/tmp/waiter-gates-$JOBTAG; mkdir -p "$CACHE" "$RES"/{turn-test-v2,qualify,q2,q3}
+CACHE=/tmp/waiter-gates-$JOBTAG; mkdir -p "$CACHE" "$RES"/{turn-test-v2,qualify,q2,q3,q4}
 cd "$REPO"
 echo "=== waiter gates $RUN | $(hostname) | HEAD $(git rev-parse --short HEAD) | $(date)"
 mapfile -t dirs < <(ls -d "$U"/logs/rsl_rl/humanoid/*_"$RUN" 2>/dev/null | sort)
@@ -53,10 +55,16 @@ if [ "${WAITER_GATES_STANCE:-0}" = 1 ]; then
     [ -f "$Q3" ] || "$PY" scripts/waiter/stance_gate.py --deploy "$DEPLOY" --upstream "$U" --cache-dir "$CACHE" --out "$Q3" 2>&1 | tail -3
     STANCE=(--stance)
 fi
-for f in "$V2" "$RES/qualify/${RUN}__qualify.json" "$Q2" ${Q3:+"$Q3"}; do
+STANDMANIP=()
+if [ "${WAITER_GATES_STANDMANIP:-0}" = 1 ]; then
+    Q4=$RES/q4/$RUN.json
+    [ -f "$Q4" ] || "$PY" scripts/waiter/stand_manip_gate.py --deploy "$DEPLOY" --upstream "$U" --cache-dir "$CACHE" --out "$Q4" 2>&1 | tail -3
+    STANDMANIP=(--stand-manip)
+fi
+for f in "$V2" "$RES/qualify/${RUN}__qualify.json" "$Q2" ${Q3:+"$Q3"} ${Q4:+"$Q4"}; do
     [ -f "$f" ] && echo "$(basename "$f"): $("$PY" -c "import json,sys; print(json.load(open(sys.argv[1]))['verdict'])" "$f")"
 done
 PROGRESS=()
 [ -n "${WAITER_GATES_MIN_WALK_M:-}" ] && PROGRESS=(--min-walk-m "$WAITER_GATES_MIN_WALK_M")   # phase 1c onward (1.5 m)
-"$PY" scripts/waiter/wbc_select.py --res "$RES" --prefix "$PREFIX" --seeds $(( ${WAITER_GATES_SEED0:-0} )) $(( ${WAITER_GATES_SEED0:-0} + 1 )) $(( ${WAITER_GATES_SEED0:-0} + 2 )) "${PROGRESS[@]}" "${STANCE[@]}" || true
+"$PY" scripts/waiter/wbc_select.py --res "$RES" --prefix "$PREFIX" --seeds $(( ${WAITER_GATES_SEED0:-0} )) $(( ${WAITER_GATES_SEED0:-0} + 1 )) $(( ${WAITER_GATES_SEED0:-0} + 2 )) "${PROGRESS[@]}" "${STANCE[@]}" "${STANDMANIP[@]}" || true
 echo "=== done $(date)"

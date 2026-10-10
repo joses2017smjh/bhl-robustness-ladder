@@ -190,3 +190,47 @@ class HumanoidWaiterWbcStanceCfg(HumanoidWaiterWbcCurriculumCfg):
             group.gait_clock.params = {"period": gait_clock_mdp.GAIT_PERIOD_S, "command_name": "base_velocity"}
         self.rewards.feet_gait.func = gait_clock_mdp.feet_gait_stance
         self.rewards.feet_gait.params["command_name"] = "base_velocity"
+
+
+# ---- phase 1e (2026-10-10; SLURM_JOBS.md "Predeclared now ... Waiter phase 1e") ------------------------------------
+# = phase 1d (HumanoidWaiterWbcStanceCfg, the std bound set by the launcher) with ONLY:
+#   * standing envs get no pushes and no hand forces (payloads and arm goals keep moving):
+#     waiter_stand_mdp.push_moving_only / hand_forces_moving_only;
+#   * two standing-only penalties: stand_anchor (base displacement / yaw change since the env started standing,
+#     normalised by 5 cm / 5 deg, squared, each clamped at 9; weight STAND_ANCHOR_WEIGHT) and stand_tilt (base tilt
+#     normalised by 5 deg, squared, clamped at 9; weight STAND_TILT_WEIGHT).
+# Why: waiter_stand_mdp module notes (s7 leans back 8-12 deg and turns 6-12 deg while its arms work; 1d shuffled).
+from isaaclab.managers import RewardTermCfg as RewTerm  # noqa: E402
+
+from bhl_robust.tasks import waiter_stand_mdp  # noqa: E402
+from bhl_robust.tasks.arms_env_cfg import TurnGaitRewardsCfg  # noqa: E402
+
+STAND_TASK_ID = "Velocity-BHL-Waiter-WBC-Stand-v0"
+STAND_ANCHOR_WEIGHT = -1.0
+STAND_TILT_WEIGHT = -0.5
+
+
+@configclass
+class WaiterStandRewardsCfg(TurnGaitRewardsCfg):
+    """R1's rewards (as the waiter tasks edit them in __post_init__) + the two standing-only penalties, last."""
+
+    stand_anchor = RewTerm(func=waiter_stand_mdp.StandAnchor, weight=STAND_ANCHOR_WEIGHT,
+                           params={"command_name": "base_velocity", "pos_m": waiter_stand_mdp.ANCHOR_POS_M,
+                                   "yaw_deg": waiter_stand_mdp.ANCHOR_YAW_DEG, "clamp": waiter_stand_mdp.ANCHOR_CLAMP})
+    stand_tilt = RewTerm(func=waiter_stand_mdp.stand_tilt, weight=STAND_TILT_WEIGHT,
+                         params={"command_name": "base_velocity", "deg": waiter_stand_mdp.TILT_DEG,
+                                 "clamp": waiter_stand_mdp.TILT_CLAMP})
+
+
+@configclass
+class HumanoidWaiterWbcStandCfg(HumanoidWaiterWbcStanceCfg):
+    """Phase 1e: phase 1d + no disturbances while standing + the standing penalties (notes above)."""
+
+    rewards: WaiterStandRewardsCfg = WaiterStandRewardsCfg()
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.events.push_robot.func = waiter_stand_mdp.push_moving_only
+        self.events.push_robot.params["command_name"] = "base_velocity"
+        self.events.hand_forces.func = waiter_stand_mdp.hand_forces_moving_only
+        self.events.hand_forces.params["command_name"] = "base_velocity"

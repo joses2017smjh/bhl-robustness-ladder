@@ -43,6 +43,8 @@ def main(argv=None) -> int:
     ap.add_argument("--min-walk-m", type=float, default=None)
     ap.add_argument("--stance", action="store_true",
                     help="phase 1d (predeclared 2026-10-08): a seed also needs Q3 stance PASS (scripts/waiter/stance_gate.py)")
+    ap.add_argument("--stand-manip", action="store_true",
+                    help="phase 1e (predeclared 2026-10-10): a seed also needs Q4 PASS (scripts/waiter/stand_manip_gate.py)")
     a = ap.parse_args(argv)
     out = a.res / "selection.json"
     if out.exists():
@@ -63,6 +65,8 @@ def main(argv=None) -> int:
             paths["v2x"] = a.res / "qualify" / f"{run}__v2x.json"
         if a.stance:
             paths["q3"] = a.res / "q3" / f"{run}.json"
+        if a.stand_manip:
+            paths["q4"] = a.res / "q4" / f"{run}.json"
         if not all(p.is_file() for p in paths.values()):
             missing.append(f"s{s}: " + ", ".join(k for k, p in paths.items() if not p.is_file()))
             continue
@@ -82,6 +86,10 @@ def main(argv=None) -> int:
             q3 = json.loads(paths["q3"].read_text())
             per[f"s{s}"].update(q3=q3["verdict"], q3_falls=q3["falls"], q3_still=q3["n_ok"])
             per[f"s{s}"]["qualified"] = per[f"s{s}"]["qualified"] and q3["verdict"] == "PASS"
+        if a.stand_manip:
+            q4 = json.loads(paths["q4"].read_text())
+            per[f"s{s}"].update(q4=q4["verdict"], q4_falls=q4["falls"], q4_ok=q4["n_ok"])
+            per[f"s{s}"]["qualified"] = per[f"s{s}"]["qualified"] and q4["verdict"] == "PASS"
     if missing:
         print("WAITER-WBC SELECTION: INCOMPLETE (" + "; ".join(missing) + "); nothing written")
         return 3
@@ -101,6 +109,9 @@ def main(argv=None) -> int:
     rule = RULE if a.min_walk_m is None else RULE + "; " + PROGRESS_RULE.format(m=a.min_walk_m)
     if a.stance:
         rule += "; and Q3 stance PASS (scripts/waiter/stance_gate.py: 0 falls, drift <= 0.05 m and yaw <= 5 deg on >= 10/12)"
+    if a.stand_manip:
+        rule += ("; and Q4 standing manipulation PASS (scripts/waiter/stand_manip_gate.py: 0 falls, displacement <= "
+                 "0.03 m, yaw <= 3 deg and pitch <= 3 deg on >= 10/12)")
     rec = {"verdict": verdict, "selected": sel, "line": line, "rule": rule, "per_seed": per}
     fd = os.open(out, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
     with os.fdopen(fd, "w") as f:
