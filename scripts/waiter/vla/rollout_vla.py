@@ -261,6 +261,7 @@ def main(argv=None):
         "seeds": seeds, "instruction_ids": parse_instruction_ids(args.instruction_ids),
         "batch_envs": n_slots, "workers": args.workers, "env_python": args.env_python,
         "counterfactual_slot": args.counterfactual_slot,
+        "stance_lock": env_kwargs.get("stance_lock"), "fixed_base": bool(args.fixed_base),
         "host": socket.gethostname(), "slurm_job": os.environ.get("SLURM_JOB_ID"),
         "gpu": torch.cuda.get_device_name() if args.device == "cuda" else "cpu", "amp": args.amp,
         "success_source": "env info['success'] (frozen contract definition implemented by the env)",
