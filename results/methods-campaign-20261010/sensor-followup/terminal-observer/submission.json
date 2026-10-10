@@ -1,0 +1,23 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--account=eecs",
+    "--partition=share,eecs",
+    "--ntasks=1",
+    "--cpus-per-task=1",
+    "--mem=1G",
+    "--time=01:00:00",
+    "--no-requeue",
+    "--dependency=afterany:21757767",
+    "--job-name=sensor-followup-observer-v1",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/sensor-followup-observer-v1/observer-%j.log",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/sensor-followup-observer-v1/observer.sbatch"
+  ],
+  "returncode": 0,
+  "stdout": "21759391\n",
+  "stderr": "",
+  "plan_sha256": "c7687fdd60ec915e8c938bfba81562f57700d5be4c1342e43835a034090019f7",
+  "status": "SUBMITTED",
+  "job_id": "21759391"
+}

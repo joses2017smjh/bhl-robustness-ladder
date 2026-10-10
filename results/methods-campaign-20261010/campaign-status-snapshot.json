@@ -1,5 +1,5 @@
 {
-  "snapshot_utc": "2026-10-10T21:43:38.972553+00:00",
+  "snapshot_utc": "2026-10-10T21:55:43.988424+00:00",
   "scope": "Point-in-time orchestration snapshot, not a final scientific verdict. Follow retained receipts and independently verified collector publications.",
   "controllers": {
     "terrain-dispatch-v2": {
@@ -19,15 +19,27 @@
           "raw_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/terrain-v1--terrain-methods-dr-default-s0-flat-20261010-21757070.tar.gz",
           "raw_sha256": "0c39ef9a74c1fafc4c0359bc8b2c74d4bbb0ca106c2645313ba42cd384ab5af2",
           "finished_utc": "2026-10-10T20:42:13.138250+00:00"
+        },
+        {
+          "name": "terrain-methods-dr-default-s0-small_steps-20261010",
+          "job_id": "21757630",
+          "scientific_status": "MEASURED_DEVELOPMENT_NO_CONFIRMATION",
+          "status": "PASS",
+          "episodes": 30,
+          "result_sha256": "73c22ab217af572428bdc056ee8d79250c02a29e92fc08d33b845788d41a230c",
+          "publication": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/terrain-methods-dr-default-s0-small_steps-20261010-21757630/publication.json",
+          "raw_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/terrain-v1--terrain-methods-dr-default-s0-small_steps-20261010-21757630.tar.gz",
+          "raw_sha256": "e8afc6bf75c8f37df9bb10f98610a947190ac67ad071e80067e3b38fa4010ab2",
+          "finished_utc": "2026-10-10T21:48:10.673147+00:00"
         }
       ],
       "scientific_archive_sha256": "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77",
       "status": "WAITING",
-      "updated_utc": "2026-10-10T21:20:58.726958+00:00",
-      "current_index": 1,
-      "current_job": "terrain-methods-dr-default-s0-small_steps-20261010",
-      "current_job_id": "21757630",
-      "completed_jobs": 1,
+      "updated_utc": "2026-10-10T21:48:59.402274+00:00",
+      "current_index": 2,
+      "current_job": "terrain-methods-dr-default-s0-ramp-20261010",
+      "current_job_id": "21757875",
+      "completed_jobs": 2,
       "expected_jobs": 9,
       "storage": {
         "actual_free_bytes": 520093696,
@@ -35,7 +47,7 @@
         "requested_unwritten_bytes": 268435456,
         "minimum_free_bytes": 134217728
       },
-      "local_campaign_bytes": 75511041
+      "local_campaign_bytes": 75531325
     },
     "stereo-dispatch-v2": {
       "schema": "bhl-methods-dispatch-state-v1",
@@ -45,12 +57,12 @@
       "jobs": [],
       "scientific_archive_sha256": "9d8ed3780f31cb1a78c1b9ac6006aa57b663011120381e499b08f85167c09cf7",
       "status": "WAITING_FOR_RESERVED_SPACE",
-      "updated_utc": "2026-10-10T21:43:27.755405+00:00",
+      "updated_utc": "2026-10-10T21:55:28.958099+00:00",
       "current_index": 0,
       "current_job": "stereo-methods-straight-s480000-20261010-v2",
       "storage": {
-        "actual_free_bytes": 500170752,
-        "other_outstanding_promises_bytes": 335496189,
+        "actual_free_bytes": 536346624,
+        "other_outstanding_promises_bytes": 268430563,
         "requested_unwritten_bytes": 201326592,
         "minimum_free_bytes": 134217728
       }
@@ -63,12 +75,12 @@
       "jobs": [],
       "scientific_archive_sha256": "207a5129cd3df243f48f6fddccd5f74030ba6a163c9aeb151a119b9d014bf5fe",
       "status": "WAITING_FOR_RESERVED_SPACE",
-      "updated_utc": "2026-10-10T21:43:09.613020+00:00",
+      "updated_utc": "2026-10-10T21:55:40.287587+00:00",
       "current_index": 0,
       "current_job": "sensor-methods-run-00-20261010",
       "storage": {
-        "actual_free_bytes": 500170752,
-        "other_outstanding_promises_bytes": 335498820,
+        "actual_free_bytes": 535822336,
+        "other_outstanding_promises_bytes": 268430399,
         "requested_unwritten_bytes": 369098752,
         "minimum_free_bytes": 134217728
       }
@@ -102,17 +114,31 @@
           "raw_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/perceptive-v4--perceptive-run-s1-v4-20261010-21757710.tar.gz",
           "raw_sha256": "03f2a47e5181deb1a0e67c2650c749ab41934db331e113d06b108016994fb9bd",
           "finished_utc": "2026-10-10T21:38:07.642946+00:00"
+        },
+        {
+          "name": "perceptive-run-s2-v4-20261010",
+          "job_id": "21757754",
+          "scientific_status": "TEACHER_QUALIFICATION_FAILED",
+          "status": "NEGATIVE",
+          "episodes": null,
+          "result_sha256": "02c663b36d9efd7db290899fc963c6dd625aee17eb6f5946f1979d4ae65c8759",
+          "publication": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/perceptive-run-s2-v4-20261010-21757754/publication.json",
+          "raw_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/perceptive-v4--perceptive-run-s2-v4-20261010-21757754.tar.gz",
+          "raw_sha256": "0c3c31ae1f0072b4e39ba7c76de32631a000865c5138fd116639d5ef46953d15",
+          "finished_utc": "2026-10-10T21:46:20.826564+00:00"
         }
       ],
       "scientific_archive_sha256": "aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f",
-      "status": "WAITING",
-      "updated_utc": "2026-10-10T21:38:36.229094+00:00",
+      "status": "COMPLETE",
+      "updated_utc": "2026-10-10T21:46:39.158290+00:00",
       "current_index": 2,
       "current_job": "perceptive-run-s2-v4-20261010",
       "local_campaign_bytes": 40663822,
       "current_job_id": "21757754",
-      "completed_jobs": 2,
-      "expected_jobs": 3
+      "completed_jobs": 3,
+      "expected_jobs": 3,
+      "total_episodes": 0,
+      "scientific_scope": "execution and publication complete; matched-cohort independent collection required before an improvement claim"
     }
   }
 }

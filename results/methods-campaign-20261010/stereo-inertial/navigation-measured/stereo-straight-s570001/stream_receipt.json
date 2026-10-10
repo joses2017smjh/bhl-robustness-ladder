@@ -1,0 +1,88 @@
+{
+  "schema": "bhl-native-orb-navigation-stream-v1",
+  "native_runtime_sha256": "02e47a247de5909f0f5b8d272854a4c7ac3e13c3d8635470402c6b2805a975c4",
+  "binary_sha256": "15773c35f39c9dd6ae5df91c522ca19bdc94b5215d1f8794c09cf54c60b7b50b",
+  "vocabulary_sha256": "f8dd027f7a6cb88129821341194d7f2c75b77b3394257ddd0d2229863d1a3570",
+  "settings_sha256": "77835baafb725b84a710ffffc5d37269eeafbf9cdac1c044f0c503c3f16a99fd",
+  "frames": 88,
+  "tracking": {
+    "frames": 88,
+    "tracked_frames": 88,
+    "tracking_states": {
+      "SYSTEM_NOT_READY": 0,
+      "NO_IMAGES_YET": 0,
+      "NOT_INITIALIZED": 0,
+      "OK": 88,
+      "RECENTLY_LOST": 0,
+      "LOST": 0,
+      "OK_KLT": 0
+    },
+    "observed_map_ids": [
+      0
+    ],
+    "observed_map_changes": 0,
+    "all_frames_tracked": true,
+    "metric_scoring_ready": true,
+    "native_compute_seconds_total": 4.055818135,
+    "pose_source": "native_ORB_SLAM3_TrackStereo_returned_SE3_inverse",
+    "no_truth_inputs": true
+  },
+  "first_map_id": 0,
+  "map_changed": false,
+  "T_I_L": [
+    [
+      1.0,
+      -1.206156e-15,
+      -1.110224e-14,
+      0.03827800000000334
+    ],
+    [
+      1.206156e-15,
+      1.0,
+      -6.69551669472e-30,
+      1.0655795536800202e-16
+    ],
+    [
+      1.110224e-14,
+      -6.69551669472e-30,
+      1.0,
+      -0.3049999999999996
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_B_C_left": [
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.1
+    ],
+    [
+      -1.0,
+      0.0,
+      0.0,
+      0.06
+    ],
+    [
+      0.0,
+      -1.0,
+      0.0,
+      0.38
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "estimator_inputs": "original stereo PNG paths and original camera timestamps only",
+  "ground_truth_inputs": [],
+  "no_lidar_or_imu_to_stereo_estimator": true,
+  "planner_sensor_scope": "ORB-SLAM3 stereo pose plus independent raw LiDAR obstacle brake"
+}

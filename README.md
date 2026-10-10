@@ -9,7 +9,7 @@ I built evaluation infrastructure around [Berkeley Humanoid Lite](https://github
 [Current open tasks and October 8 closures](docs/TASK_CLOSURE_2026-10-08.md)
 tracks completed deliverables, negative experiments and remaining objectives.
 
-**October 10 research implementation:** [native map recovery, stereo–IMU, terrain control, sensor-fault/fusion comparisons and perceptive PPO](docs/RESEARCH_METHODS_2026-10-10.md) now have executable experiments and retained smoke evidence. Full development campaigns are queued or running; their planned counts are not completed results. Native stereo–IMU initialization and the first full terrain teacher already have measured negative outcomes. The report maps each implementation to the original six follow-ups.
+**October 10 research implementation:** [native map recovery, stereo–IMU, terrain control, sensor-fault/fusion comparisons and perceptive PPO](docs/RESEARCH_METHODS_2026-10-10.md) now have first-stage executable experiments and retained smoke evidence. Remaining development campaigns are queued or running; their planned counts are not completed results. Native stereo–IMU initialization and all three full terrain teachers have measured negative outcomes. The report maps each implementation to the original six follow-ups and lists the broader study conditions and controls that remain unfinished.
 
 **October 8:** [H1 navigation confirmation passes](docs/H1_NAVIGATION_CONFIRMATION_2026-10-08.md)
 all three actors' frozen gates across **576 episodes**: **259/288** candidate

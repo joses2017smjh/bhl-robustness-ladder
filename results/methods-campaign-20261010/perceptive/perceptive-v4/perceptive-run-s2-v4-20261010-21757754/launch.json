@@ -1,0 +1,62 @@
+{
+  "archive_sha256": "aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm:/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm",
+    "--bind",
+    "/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm/source:/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm/protocol.json:/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm/work",
+    "--bind",
+    "/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm/inputs:/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm/inputs:ro",
+    "--nv",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm/source/scripts/bench/perceptive_train.py",
+    "--protocol",
+    "/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm/protocol.json",
+    "--phase",
+    "run",
+    "--cell",
+    "2"
+  ],
+  "host": "cn-gpu5.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "run",
+      "--cell",
+      "2"
+    ],
+    "entrypoint": "scripts/bench/perceptive_train.py",
+    "env": {},
+    "kind": "run",
+    "max_output_mb": 256,
+    "name": "perceptive-run-s2-v4-20261010",
+    "resources": {
+      "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+      "cpus": 8,
+      "gpus": 1,
+      "memory_gb": 64,
+      "partition": "gpu,dgxh,ampere",
+      "requeue": false,
+      "time_limit": "08:00:00"
+    }
+  },
+  "job_id": "21757754",
+  "scratch": "/tmp/bhl-h34-perceptive-run-s2-v4-20261010-21757754-t_3czamm",
+  "source_files_verified": 861,
+  "started_utc": "2026-10-10T21:39:00.319216+00:00"
+}

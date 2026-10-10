@@ -86,6 +86,42 @@ were uploaded and independently downloaded for SHA-256 verification. Compact
 [build, test, smoke, and publication receipts](../results/methods-campaign-20261010/stereo-inertial/)
 remain in the repository.
 
+## Completed native navigation smoke — job 21757768
+
+All four fresh-seed simulation episodes completed their 20-second horizons with
+runtime exit code **0**. The scientific readiness result is **NEGATIVE**:
+neither stereo–IMU episode initialized. `gate_to_development` is false, and all
+**18 planned development episodes remain unrun**. No parameters were tuned and no
+replacement experiments were launched after that result.
+
+| Native navigation arm | Completed episodes | Accepted native pose responses | IMU-initialized frames | Goals in smoke | Falls / contacts |
+|---|---:|---:|---:|---:|---:|
+| Stereo | 2/2 | 177/177 | Not applicable | 0/2 | 0 / 0 |
+| Stereo–IMU | 2/2 | 0/178 | 0/178 | 0/2 | 0 / 0 |
+
+The two inertial episodes retained `IMU_INITIALIZING_STOP` for all 89 native
+responses each; their commanded velocity remained zero. All four episodes had
+finite state and no map-frame changes. The baseline retained 89 and 88 native
+responses, respectively, under the measured-latency delivery rule. These are
+initialization smokes; the goal count within 20 seconds is not a success rate
+for the unrun 40-second development campaign.
+
+Execution completion and scientific qualification are separate here. The native
+runtime completed cleanly, while the orchestration wrapper returned 1 with
+`FAILED_SCIENTIFIC_READINESS_GATE` to prevent follow-on development after the
+negative result. It did not report a native runtime exception.
+
+The [reviewed episode summary](../results/methods-campaign-20261010/stereo-inertial/navigation-summary.json)
+links the frozen source, native stream receipts, and raw output hashes. The
+[raw navigation archive](https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/stereo-inertial-nav-remote-v1--stereo-inertial-nav-smoke-20261010-21757768.tar.gz)
+contains the camera images, IMU/ray measurements, traces, evaluator data, and native
+logs. Its 147,993,306 bytes were published and independently downloaded for
+verification; this review downloaded it again and confirmed SHA-256
+`b4e4f47be2826412d48063bd254c0425767522d64a7489a299aab6cae134887c`.
+The campaign, launch, runtime-log, and native-stream hashes were also checked
+against their parent receipts. The [track ledger](../results/methods-campaign-20261010/stereo-inertial/LEDGER.md)
+records the completed runs and the gated, unrun development stage.
+
 ## Complete native replay result
 
 The exact same three previously consumed 150-frame sequences were replayed through
@@ -111,9 +147,8 @@ The current ideal, smooth replay therefore does **not** demonstrate that adding
 IMU resolves stereo initialization. A justified next data-collection experiment
 would predeclare visible texture and safe acceleration excitation, then measure
 initialization latency, success rate, drift, and closed-loop outcomes on fresh
-seeds. The independently implemented body-sensor navigation smoke is a separate
-experiment; it must demonstrate its own actual initialization before development
-can proceed. These measurements are simulation development evidence, unsuitable
+seeds. The independently implemented body-sensor navigation smoke also failed actual
+inertial initialization, so its 18 planned development episodes remain unrun. These measurements are simulation development evidence, unsuitable
 for a resume claim of improved stereo–IMU accuracy or hardware robustness.
 
 The [full initialization analysis](../results/methods-campaign-20261010/stereo-inertial/initialization-analysis.json),

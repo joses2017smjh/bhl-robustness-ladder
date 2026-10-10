@@ -1,0 +1,25 @@
+{
+  "schema": "bhl-methods-remote-result-v1",
+  "plan_sha256": "0325b46e92f11ec17f5c533354ddfb8efdc59a70234525809d773503555ffa61",
+  "job_id": "21757768",
+  "source_archive_sha256": "081465fd41a0863f980f8833038d10266761a139d142f2ec3b3b170403366b2c",
+  "scientific_identity_sha256": "f1f8d201359352534b1401bcaab05a2fb5723d7297ae7f92791f12eb4e4b5e3d",
+  "status": "NEGATIVE",
+  "runner_returncode": 1,
+  "runtime_exit_status": 0,
+  "outcome": "FAILED_SCIENTIFIC_READINESS_GATE",
+  "follow_on": "UNRUN_AFTER_NEGATIVE_SMOKE",
+  "publication": {
+    "asset_name": "stereo-inertial-nav-remote-v1--stereo-inertial-nav-smoke-20261010-21757768.tar.gz",
+    "bytes": 147993306,
+    "sha256": "b4e4f47be2826412d48063bd254c0425767522d64a7489a299aab6cae134887c",
+    "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/stereo-inertial-nav-remote-v1--stereo-inertial-nav-smoke-20261010-21757768.tar.gz",
+    "verified_utc": "2026-10-10T21:43:43.935567+00:00",
+    "verification": "pinned bytes + release identity + fresh independent download SHA256",
+    "schema": "bhl-methods-archive-v1",
+    "source_archive_sha256": "081465fd41a0863f980f8833038d10266761a139d142f2ec3b3b170403366b2c",
+    "job_id": "21757768",
+    "scientific_status": "NEGATIVE",
+    "local_packaging_retired": true
+  }
+}

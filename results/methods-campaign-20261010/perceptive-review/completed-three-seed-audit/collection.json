@@ -1,0 +1,101 @@
+{
+  "schema": "bhl-perceptive-methods-collection-v1",
+  "status": "NEGATIVE",
+  "scientific_status": "COMPLETE_DEVELOPMENT_NO_CONFIRMATION",
+  "observed_seeds": 3,
+  "expected_seeds": 3,
+  "missing_seeds": [],
+  "qualified_teachers": 0,
+  "evaluated_teachers": 3,
+  "completed_student_arms": 0,
+  "expected_student_arms_if_teachers_qualify": 12,
+  "unrun_student_arms_after_negative_teacher": 12,
+  "paired_student_comparison": "UNAVAILABLE_REQUIRES_THREE_QUALIFIED_TEACHERS_AND_ALL_STUDENTS",
+  "paired_differences": {},
+  "rows": [
+    {
+      "seed": 0,
+      "status": "NEGATIVE",
+      "teacher_qualified": false,
+      "teacher": {
+        "dropout": 0.0,
+        "delay_steps": 0,
+        "episodes": 256,
+        "survivors": 236,
+        "qualified": 113,
+        "qualification_fraction": 0.44140625,
+        "survival_fraction": 0.921875,
+        "inference_p95_ms": 0.44037986663170153,
+        "reconstruction_mae_m": null
+      },
+      "teacher_checkpoint_sha256": "02f7292b0ce183b124f3f3d21ee9232daf4a835cf9316b7afe31f201f1414bf1",
+      "students": {},
+      "student_training": "UNRUN_AFTER_FAILED_TEACHER_GATE",
+      "evidence": {
+        "job": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/perceptive-run-s0-v4-20261010-21757635",
+        "archive": "/tmp/perceptive-final-audit-20261010/raw/perceptive-v4--perceptive-run-s0-v4-20261010-21757635.tar.gz",
+        "archive_sha256": "ba1c3de57c6544ff56fac78efd5354e1c05817b878b8ba3a9d108c035fbcc9d5",
+        "completion_sha256": "3b1cff5541a6ee8f1540456158b35de4547bfe96de91909447ff5d6eca1c2e9a"
+      }
+    },
+    {
+      "seed": 1,
+      "status": "NEGATIVE",
+      "teacher_qualified": false,
+      "teacher": {
+        "dropout": 0.0,
+        "delay_steps": 0,
+        "episodes": 256,
+        "survivors": 224,
+        "qualified": 102,
+        "qualification_fraction": 0.3984375,
+        "survival_fraction": 0.875,
+        "inference_p95_ms": 0.43341072159819305,
+        "reconstruction_mae_m": null
+      },
+      "teacher_checkpoint_sha256": "8db4612e100c25b7dd28098788ba9d9a68e29b2ed4086cb059a18c21e4951b9c",
+      "students": {},
+      "student_training": "UNRUN_AFTER_FAILED_TEACHER_GATE",
+      "evidence": {
+        "job": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/perceptive-run-s1-v4-20261010-21757710",
+        "archive": "/tmp/perceptive-final-audit-20261010/raw/perceptive-v4--perceptive-run-s1-v4-20261010-21757710.tar.gz",
+        "archive_sha256": "03f2a47e5181deb1a0e67c2650c749ab41934db331e113d06b108016994fb9bd",
+        "completion_sha256": "5b6eaf9da789313a5c03eeb18fa1dc65204df443398ec8ec7dfd4982b6bd5b4b"
+      }
+    },
+    {
+      "seed": 2,
+      "status": "NEGATIVE",
+      "teacher_qualified": false,
+      "teacher": {
+        "dropout": 0.0,
+        "delay_steps": 0,
+        "episodes": 256,
+        "survivors": 216,
+        "qualified": 107,
+        "qualification_fraction": 0.41796875,
+        "survival_fraction": 0.84375,
+        "inference_p95_ms": 0.4161920980550349,
+        "reconstruction_mae_m": null
+      },
+      "teacher_checkpoint_sha256": "093f9af6c790eacefb586a6d4159b21b3d6d7bf9d15d53811d3f5f636876f5dd",
+      "students": {},
+      "student_training": "UNRUN_AFTER_FAILED_TEACHER_GATE",
+      "evidence": {
+        "job": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/perceptive-run-s2-v4-20261010-21757754",
+        "archive": "/tmp/perceptive-final-audit-20261010/raw/perceptive-v4--perceptive-run-s2-v4-20261010-21757754.tar.gz",
+        "archive_sha256": "0c3c31ae1f0072b4e39ba7c76de32631a000865c5138fd116639d5ef46953d15",
+        "completion_sha256": "56dbc1b4a80260fc06a74d79b500d6bb0ff51c8f41fc593758dfe00e95ba2a61"
+      }
+    }
+  ],
+  "problems": [],
+  "analysis_unit": "three independent training seeds; fixed matched environment identities and four conditions within seed; no episode-level significance claim",
+  "scope": "development Isaac velocity tracking; negative teacher gate is a measured outcome, unrun students are not zero-valued observations; no navigation or hardware claim",
+  "source_archive_sha256": "aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f",
+  "protocol_sha256": "682e659289232a7b39b9fc1e6a6bd3ece8746157b62a63fa9da9b5387f8b4931",
+  "input_sha256": {
+    "perceptive_warmstart.pt": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df"
+  },
+  "collector_sha256": "1e54858a87d6305ef97b02ab45579d0b397281f2f5c254e3569eeeb3411a5ffa"
+}
