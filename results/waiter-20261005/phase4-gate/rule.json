@@ -1,0 +1,29 @@
+{
+ "gate": "Waiter phase 4 (DSRL: SAC over the frozen VLA's initial noise), frozen 2026-10-10 14:54 before any seed 5000-5999 or 6000-6099 was run",
+ "rule": "PASS iff the DSRL arm (the training run's final SAC checkpoint, deterministic latent) has more successes than the base arm (the same frozen VLA with i.i.d. N(0, I) noise, noise seed 0) AND the exact one-sided McNemar p <= 0.05; seeds 6000-6099, one episode per seed per arm, paired by seed; each layout's own instruction; 20 executed steps per 50-step chunk; WaiterEnv defaults (stance lock on, 90 s limit)",
+ "seed0": 6000,
+ "seed1": 6099,
+ "alpha": 0.05,
+ "exec_horizon": 20,
+ "noise_seed": 0,
+ "arms": [
+  "base",
+  "zero",
+  "dsrl"
+ ],
+ "base_checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase3/runs/sft1/step_017000",
+ "base_model_sha256": "1161401826d2e313d938b9e687925c590325c31d4ed921b30df6d2b3d42b5179",
+ "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase4/runs/dsrl1",
+ "train": {
+  "seeds": "5000-5999",
+  "n_envs": 16,
+  "seed": 0,
+  "max_decisions": 400000,
+  "max_wall_min": 540,
+  "warmup_transitions": 5000,
+  "reward": "sparse",
+  "shaping": "none"
+ },
+ "deploy": "results/waiter-20261005/wbc1c/training/waiter-wbc1c-s7.deploy.yaml",
+ "scorer": "scripts/waiter/dsrl/phase4_gate.py"
+}

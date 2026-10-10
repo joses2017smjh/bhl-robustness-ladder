@@ -12,11 +12,15 @@ Paired statistics: success both / only-A / only-B / neither, exact one-sided McN
 
 Seeds: dev range 1000-1999 only, unless --scored-phase4-eval, which allows ONLY the never-used phase 4
 evaluation range 6000-6099 (to be run once, after the phase 4 gate is frozen). TOY envs/policies are labelled.
+The scored run needs --gate (the frozen rule file; its hash is recorded) and --run-dir, records the hashes of the
+base model and of the SAC checkpoint it evaluated, and never overwrites its output (phase4_gate.py reads it).
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -33,6 +37,16 @@ from smolvla_noise import NoiseMap  # noqa: E402
 from train_dsrl import add_common_args, atomic_json, build_policy, env_spec  # noqa: E402
 
 
+def sha256_file(path, chunk: int = 1 << 22) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        while True:
+            block = f.read(chunk)
+            if not block:
+                return h.hexdigest()
+            h.update(block)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_common_args(ap)
@@ -45,11 +59,19 @@ def main():
     ap.add_argument("--obs-encoder", choices=("vlm", "cnn"), default="vlm")
     ap.add_argument("--scored-phase4-eval", action="store_true",
                     help="allow ONLY seeds 6000-6099 (the single scored phase 4 evaluation)")
+    ap.add_argument("--gate", type=Path, help="frozen phase 4 rule file (required with --scored-phase4-eval)")
     ap.add_argument("--out", required=True, type=Path)
     args = ap.parse_args()
 
     seeds = parse_seeds(args.seeds)
     check_seeds(seeds, {"p4_eval"} if args.scored_phase4_eval else {"dev"}, "evaluation")
+    gate = None
+    if args.scored_phase4_eval:
+        if not args.gate or not args.run_dir:
+            raise SystemExit("--scored-phase4-eval needs --gate <frozen rule file> and --run-dir")
+        if args.out.exists():
+            raise SystemExit(f"{args.out} exists; the scored phase 4 evaluation is never overwritten")
+        gate = {"path": str(args.gate.resolve()), "sha256": sha256_file(args.gate)}
     arms = [a.strip() for a in args.arms.split(",") if a.strip()]
     unknown = [a for a in arms if a not in ARMS]
     if unknown:
@@ -76,8 +98,10 @@ def main():
     noise_map = NoiseMap(T, D, args.noise_mode, args.noise_k, args.active_dims)
     b = float(args.action_magnitude)
     sac, obs_builder = None, ObsBuilder(args.obs_encoder, policy.feature_dim)
+    ck = ck_sha = None
     if any(a.startswith("dsrl") for a in arms):
         ck = args.sac_ckpt or (args.run_dir / "ckpt" / "sac.pt")
+        ck_sha = sha256_file(ck)                     # hashed before loading: the file the result is about
         sac = NoiseSAC.load(ck, device=args.device)
         if sac.cfg.act_dim != noise_map.latent_dim or sac.cfg.vec_dim != obs_builder.vec_dim:
             raise SystemExit(f"checkpoint dims ({sac.cfg.act_dim}, {sac.cfg.vec_dim}) != "
@@ -86,10 +110,15 @@ def main():
     labels = ["TOY"] if toy else []
     if run_cfg and "SHAPED" in run_cfg.get("labels", []):
         labels.append("TRAINED_WITH_SHAPING")
+    model = Path(args.policy_path) / "model.safetensors" if args.policy_path else None
     venv = ChunkVecEnv(env_spec(args), args.n_envs, python=args.env_python)
     out = {"labels": labels, "argv": sys.argv, "seeds": seeds, "exec_horizon": H, "policy": policy.describe(),
            "noise_map": noise_map.describe(), "action_magnitude": b, "noise_seed": args.noise_seed,
            "run_dir": str(args.run_dir) if args.run_dir else None, "scored_phase4_eval": args.scored_phase4_eval,
+           "gate": gate, "env": args.env, "env_kwargs": json.loads(args.env_kwargs), "policy_path": args.policy_path,
+           "policy_model_sha256": sha256_file(model) if (gate and model and model.exists()) else None,
+           "sac_ckpt": str(ck) if ck else None, "sac_ckpt_sha256": ck_sha,
+           "slurm_job": os.environ.get("SLURM_JOB_ID"), "host": os.uname().nodename,
            "arms": {}, "paired": {}, "episodes": {}}
     for arm in arms:
         t0 = time.time()
@@ -104,7 +133,11 @@ def main():
         if t_arm in succ and c_arm in succ:
             out["paired"][f"{t_arm}_vs_{c_arm}"] = paired_summary(succ[t_arm], succ[c_arm])
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    atomic_json(args.out, out)
+    if gate:                                         # write-once: fails rather than replace an existing result
+        with os.fdopen(os.open(args.out, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644), "w") as f:
+            f.write(json.dumps(out, indent=2) + "\n")
+    else:
+        atomic_json(args.out, out)
     print(json.dumps({"arms": out["arms"], "paired": out["paired"]}, indent=2), flush=True)
     venv.close()
     return 0

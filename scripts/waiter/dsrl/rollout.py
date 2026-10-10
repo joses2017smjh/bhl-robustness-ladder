@@ -120,6 +120,7 @@ def run_episodes(venv, policy, seeds, arm, H, noise_map, b, obs_builder=None, sa
     results, queue = {}, list(enumerate(seeds))
     slot_seed, slot_k, slot_dec, slot_ep = {}, {}, {}, {}
     obs = {}
+    rng = np.random.default_rng(noise_seed)          # latent_random: one stream for the run, a new latent per decision
 
     def start(slots):
         todo = {}
@@ -140,7 +141,7 @@ def run_episodes(venv, policy, seeds, arm, H, noise_map, b, obs_builder=None, sa
         ctx = policy.encode(ol)
         sac_obs = obs_builder(ol, ctx.features) if (sac is not None and obs_builder is not None) else None
         noise, _ = choose_noise(arm, list(range(len(active))), [slot_seed[i] for i in active],
-                                [slot_dec[i] for i in active], sac_obs, policy, noise_map, b, sac, noise_seed)
+                                [slot_dec[i] for i in active], sac_obs, policy, noise_map, b, sac, noise_seed, rng)
         chunks = policy.denoise(ctx, noise.to(device))[:, :H].numpy()
         venv.step_async({i: chunks[j] for j, i in enumerate(active)})
         res = venv.step_wait()

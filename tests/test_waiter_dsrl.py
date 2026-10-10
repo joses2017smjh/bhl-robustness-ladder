@@ -308,6 +308,23 @@ def test_run_episodes_one_per_seed_in_order():
 
 
 # ------------------------------------------------------------------------------------------ train smoke
+def test_latent_random_arm_draws_a_new_latent_every_decision():
+    pol = StubFlowPolicy()
+    venv = ChunkVecEnv({"kind": "stub", "kwargs": {"time_limit_s": 2.0}}, 1)
+    nm = NoiseMap(50, 32, "repeat")
+    seen, denoise = [], pol.denoise
+
+    def spy(ctx, noise):
+        seen.append(noise[0, 0].clone())             # "repeat": row 0 is the latent times the magnitude
+        return denoise(ctx, noise)
+
+    pol.denoise = spy
+    eps = run_episodes(venv, pol, [1100], "latent_random", 10, nm, 1.5)
+    assert eps[0]["decisions"] == len(seen) >= 3     # the run of smoke 21757215 reused one latent all episode
+    assert all(not torch.equal(seen[0], x) for x in seen[1:])
+    assert max(float(x.abs().max()) for x in seen) <= 1.5 + 1e-6
+
+
 def test_train_and_eval_smoke(tmp_path):
     out = tmp_path / "run"
     cmd = [sys.executable, str(_DSRL / "train_dsrl.py"), "--out", str(out), "--device", "cpu",
