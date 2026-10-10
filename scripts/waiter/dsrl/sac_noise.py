@@ -261,7 +261,9 @@ class NoiseSAC:
         self.updates += 1
         if self.updates % cfg.actor_delay == 0:
             u, logp = self.actor(obs)
+            self.critic.requires_grad_(False)        # the actor loss needs dQ/du only: no gradients into the critics
             q = self._reduce(self.critic(obs, u, detach_encoder=True))
+            self.critic.requires_grad_(True)
             actor_loss = (self.alpha * logp - q).mean()
             self.opt_actor.zero_grad(set_to_none=True)
             actor_loss.backward()

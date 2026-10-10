@@ -218,6 +218,31 @@ def test_sac_learns_contextual_bandit_and_checkpoint_roundtrip(tmp_path):
 
 
 # ------------------------------------------------------------------------------------------ vec env / wire
+def test_actor_step_puts_no_gradient_on_the_critics():
+    import copy
+    cfg = SACConfig(vec_dim=6, act_dim=3, hidden=32, layers=2, n_critics=3, batch_size=16, backup_entropy=False)
+    sac = NoiseSAC(cfg, seed=0)
+    g = torch.Generator().manual_seed(1)
+    batch = ({"vec": torch.randn(16, 6, generator=g)}, torch.rand(16, 3, generator=g) * 2 - 1, torch.rand(16, generator=g),
+             torch.full((16,), 0.98), torch.zeros(16), {"vec": torch.randn(16, 6, generator=g)})
+
+    class Fixed:
+        def sample(self, n, device):
+            return batch
+
+    ref = copy.deepcopy(sac)                         # the critic loss alone, on the same batch and the same draws
+    torch.manual_seed(5)
+    with torch.no_grad():
+        nu, _ = ref.actor(batch[5])
+        target = batch[2] + batch[3] * (1.0 - batch[4]) * ref.critic_targ(batch[5], nu).min(0).values
+    ((ref.critic(batch[0], batch[1]) - target[None]) ** 2).mean(1).sum().backward()
+    torch.manual_seed(5)
+    sac.update(Fixed())
+    for p, q in zip(sac.critic.parameters(), ref.critic.parameters()):
+        assert p.requires_grad and torch.allclose(p.grad, q.grad, atol=1e-7)     # the actor loss added nothing
+    assert all(p.grad is not None and p.grad.abs().sum() > 0 for p in sac.actor.net.parameters())
+
+
 def test_wire_roundtrip():
     x = {"image": np.arange(12, dtype=np.uint8).reshape(2, 2, 3), "state": np.ones(3, np.float32),
          "b": np.bool_(True), "f": np.float32(1.5), "l": [np.int64(3)], "s": "hi"}

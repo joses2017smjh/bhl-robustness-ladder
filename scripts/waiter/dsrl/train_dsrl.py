@@ -118,6 +118,7 @@ def main():
     ap.add_argument("--critic-lr", type=float, default=3e-4)
     ap.add_argument("--target-entropy", default="0.0", help="float, or 'auto' (= -latent_dim)")
     ap.add_argument("--init-alpha", type=float, default=1.0, help="initial SAC temperature")
+    ap.add_argument("--actor-delay", type=int, default=1, help="critic updates per actor (and temperature) update")
     ap.add_argument("--no-backup-entropy", action="store_true",
                     help="leave the entropy bonus out of the critic target (with a 0/1 sparse reward and a long "
                          "horizon the bonus otherwise sets the Q scale: toy run A had Q ~ 40-230 for rewards <= 1)")
@@ -166,7 +167,8 @@ def main():
                     action_magnitude=b, hidden=args.hidden, layers=args.layers, n_critics=args.n_critics,
                     critic_reduction=args.critic_reduction, actor_lr=args.actor_lr, critic_lr=args.critic_lr,
                     target_entropy=te, batch_size=args.batch_size, activation=args.activation,
-                    init_alpha=args.init_alpha, backup_entropy=not args.no_backup_entropy)
+                    init_alpha=args.init_alpha, backup_entropy=not args.no_backup_entropy,
+                    actor_delay=args.actor_delay)
     sac = NoiseSAC(cfg, device=device, seed=args.seed)
     buf = ReplayBuffer(args.buffer_size, cfg.vec_dim, cfg.act_dim, cfg.img_hw, seed=args.seed)
     gamma_chunk = args.gamma ** H
@@ -256,6 +258,7 @@ def main():
     pending = {}
     recent = deque(maxlen=50)
     stats_acc, timers = [], {"encode": 0.0, "denoise": 0.0, "env_wait": 0.0, "update": 0.0}
+    u_acc = []                                       # |latent| of the acted decisions since the last log line
     ep_log = open(out / "episodes.jsonl", "a")
     tr_log = open(out / "train_log.jsonl", "a")
     last_ckpt, last_eval = st["decisions"], st["decisions"]
@@ -281,6 +284,7 @@ def main():
             u = (np.clip(np_rng.standard_normal((len(active), noise_map.latent_dim)), -b, b) / b).astype(np.float32)
         else:
             u = sac.act(so)
+        u_acc.append(np.abs(u))
         t0 = time.time()
         chunks = policy.denoise(ctx, noise_map(torch.as_tensor(u * b)).to(device))[:, :H].numpy()
         timers["denoise"] += time.time() - t0
@@ -354,6 +358,9 @@ def main():
                 if vals:
                     agg[k] = float(np.mean(vals))
             stats_acc.clear()
+            ua = np.concatenate(u_acc)               # 1.0 = the latent sits on the box boundary (tanh saturated)
+            agg.update(u_abs_mean=float(ua.mean()), u_sat_frac=float((ua > 0.98).mean()))
+            u_acc.clear()
             line = {**{k: st[k] for k in ("decisions", "env_steps", "episodes", "updates")},
                     "warm": warm, "success_last50": float(np.mean(recent)) if recent else None,
                     "buffer": buf.size, "wall_s": wall(), "env_steps_per_s": st["env_steps"] / max(1e-9, wall()),
