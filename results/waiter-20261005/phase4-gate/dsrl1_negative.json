@@ -1,0 +1,34 @@
+{
+ "gate": "Waiter phase 4 (DSRL), run dsrl1",
+ "verdict": "NEGATIVE",
+ "scored_run": false,
+ "recorded": "2026-10-10 16:43",
+ "slurm_job": "21759404",
+ "reason": "stopped by the stop rule recorded in SLURM_JOBS.md at 2026-10-10 16:02 (before the decision point): at 25,000 decisions the last 100 training episodes held fewer than 18 successes; the run ended without a final checkpoint, which the predeclaration counts as NEGATIVE. Seeds 6000-6099 were not run.",
+ "rule_file": "results/waiter-20261005/phase4-gate/rule.json",
+ "rule_sha256": "c9ac111ab929967de90ba8502c24584e040955978ab304e9adb91dbbb0216fa7",
+ "decisions": 25120,
+ "env_steps": 495835,
+ "episodes": 457,
+ "wall_min": 106.2,
+ "last_100_successes_at_25000_decisions": 9,
+ "warmup_random_latents": {
+  "successes": 17,
+  "episodes": 94
+ },
+ "after_warmup_per_100_episodes": [
+  "17/100",
+  "6/100",
+  "12/100",
+  "8/63"
+ ],
+ "final_temperature": 4.312624579938529e-05,
+ "final_entropy": -32.16282675266266,
+ "target_entropy": -32,
+ "dev_start_evaluation_seeds_1900_1931": {
+  "base": "12/32",
+  "zero": "14/32",
+  "dsrl": "11/32"
+ },
+ "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase4/runs/dsrl1"
+}
