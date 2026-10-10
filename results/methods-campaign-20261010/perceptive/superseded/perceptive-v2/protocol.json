@@ -1,0 +1,116 @@
+{
+  "additional_source": [
+    "scripts/bench/perceptive_train.py",
+    "src/bhl_robust/research/perceptive_policy.py",
+    "src/bhl_robust/tasks/perceptive_env_cfg.py"
+  ],
+  "campaign_id": "perceptive-methods-20261010",
+  "input_files": {
+    "perceptive_warmstart.pt": {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-08-17_09-54-10_dr-default-s0/model_5999.pt",
+      "sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke",
+        "--cell",
+        "{cell}"
+      ],
+      "entrypoint": "scripts/bench/perceptive_train.py",
+      "env": {},
+      "kind": "smoke",
+      "max_output_mb": 256,
+      "name": "perceptive-smoke-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 8,
+        "gpus": 1,
+        "memory_gb": 64,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:45:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "{cell}"
+      ],
+      "entrypoint": "scripts/bench/perceptive_train.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 256,
+      "name": "perceptive-run-20261010",
+      "resources": {
+        "array": "0-2%1",
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 8,
+        "gpus": 1,
+        "memory_gb": 64,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "08:00:00"
+      }
+    }
+  ],
+  "perceptive": {
+    "arms": [
+      "dense",
+      "query",
+      "query_memory",
+      "query_memory_trajectory"
+    ],
+    "heldout_confirmation": "not in this protocol; gate failure prevents student training",
+    "num_envs": 256,
+    "science_scope": "development only on fixed generated terrain; query/reconstruction/memory/trajectory project ablations inspired by literature, not paper reproduction; no physical validation",
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "smoke_iterations": 1,
+    "smoke_num_envs": 16,
+    "student_evaluation_conditions": [
+      {
+        "delay_policy_steps": 0,
+        "dropout": 0
+      },
+      {
+        "delay_policy_steps": 0,
+        "dropout": 0.5
+      },
+      {
+        "delay_policy_steps": 2,
+        "dropout": 0
+      },
+      {
+        "delay_policy_steps": 2,
+        "dropout": 0.5
+      }
+    ],
+    "student_iterations": 100,
+    "teacher_iterations": 200,
+    "teacher_qualification_fraction": 0.8,
+    "training_sensor": {
+      "delay_policy_steps": 1,
+      "dropout": 0.1,
+      "xyz_noise_m": 0.01
+    }
+  },
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "v51"
+  },
+  "schema_version": 1
+}

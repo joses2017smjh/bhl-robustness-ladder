@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "scientific_status": "SMOKE_ONLY",
+  "results": [
+    {
+      "kind": "native",
+      "fault": "nominal",
+      "status": "PASS",
+      "native": [
+        {
+          "method": "fast_lio2",
+          "tracked": 55,
+          "frames": 58
+        },
+        {
+          "method": "fast_livo2",
+          "tracked": 57,
+          "frames": 58
+        },
+        {
+          "method": "fast_livo2_no_visual",
+          "tracked": 57,
+          "frames": 58
+        }
+      ]
+    },
+    {
+      "kind": "native",
+      "fault": "imu_clock_plus80ms",
+      "status": "PASS",
+      "native": [
+        {
+          "method": "fast_lio2",
+          "tracked": 55,
+          "frames": 58
+        },
+        {
+          "method": "fast_livo2",
+          "tracked": 57,
+          "frames": 58
+        },
+        {
+          "method": "fast_livo2_no_visual",
+          "tracked": 57,
+          "frames": 58
+        }
+      ]
+    },
+    {
+      "kind": "consistency",
+      "status": "PASS",
+      "frames": 58,
+      "p95_ms": 170.0666297285352
+    }
+  ]
+}

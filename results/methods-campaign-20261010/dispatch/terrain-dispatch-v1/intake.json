@@ -1,0 +1,21 @@
+{
+  "schema": "bhl-methods-dispatch-intake-v1",
+  "plan_sha256": "ca1551302b518f7b352a94560b3e4ba5623a65efaaf51885ed330c01584479a4",
+  "source_sha256": {
+    "methods_dispatch.py": "b8279d0106566cf0fbe452a55e0cbdab3a87ebaa28ae7a3cccf43577e702a636",
+    "methods_archive.py": "2037a4da6418dec0c3c1e5e0fc7427ff6f736cff15eab6d262a17aa0c092ebe0",
+    "h34_campaign.py": "8264618c648992e6c40f97b36cd73837cf867bffc195ab9c0f065c9c412170a1"
+  },
+  "sbatch_sha256": "eb908f79d96a38118515f88f1d30aa5b6679c93a5d053e4328c1641a2acad81f",
+  "resources": {
+    "cpus": 1,
+    "memory_gb": 1,
+    "gpus": 0,
+    "partition": "share,eecs",
+    "time_limit": "24:00:00",
+    "requeue": false
+  },
+  "expected_development_episodes": 270,
+  "existing_first_job_id": "21757070",
+  "status": "FROZEN_NOT_SUBMITTED"
+}

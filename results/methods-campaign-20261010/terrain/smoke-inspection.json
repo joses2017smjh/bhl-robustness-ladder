@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "job_id": "21757058",
+  "source_archive_sha256": "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77",
+  "rows": [
+    {
+      "arm": "baseline",
+      "full_horizon": true,
+      "native_frames": 29,
+      "native_tracked_frames": 26,
+      "native_client_wall_p95_ms": 11.944963340647519,
+      "map_frames": 26,
+      "ground_coverage": 0.31322751322751324,
+      "ground_height_rmse_m": 0.01940266683935083
+    },
+    {
+      "arm": "regulated",
+      "full_horizon": true,
+      "native_frames": 29,
+      "native_tracked_frames": 26,
+      "native_client_wall_p95_ms": 13.557778811082244,
+      "map_frames": 26,
+      "ground_coverage": 0.3047619047619048,
+      "ground_height_rmse_m": 0.023884177008953473
+    },
+    {
+      "arm": "heading",
+      "full_horizon": true,
+      "native_frames": 29,
+      "native_tracked_frames": 26,
+      "native_client_wall_p95_ms": 12.18166840262711,
+      "map_frames": 26,
+      "ground_coverage": 0.31851851851851853,
+      "ground_height_rmse_m": 0.021953752594026047
+    }
+  ],
+  "actual_raw_archive_bytes": 4270699,
+  "development_shard_estimate_bytes": 213534950,
+  "development_concurrency": 1,
+  "decision": "Native smoke passed; authorize first30episode development shard only while publication/offload pipeline is prepared"
+}

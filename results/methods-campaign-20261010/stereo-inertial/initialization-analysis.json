@@ -1,0 +1,41 @@
+{
+  "status": "NEGATIVE",
+  "scientific_scope": "Complete original 30-second replay; previously consumed simulation data",
+  "results": [
+    {
+      "sequence": "textured_boxes_native",
+      "frames": 150,
+      "native_imu_samples_consumed": 5961,
+      "native_tracked_frames": 0,
+      "native_imu_initialized_frames": 0,
+      "maximum_features": 463,
+      "frames_with_features_above500": 0,
+      "native_insufficient_acceleration_log_messages": 0,
+      "native_missing_imu_log_messages": 0
+    },
+    {
+      "sequence": "thin_posts_native",
+      "frames": 150,
+      "native_imu_samples_consumed": 5961,
+      "native_tracked_frames": 0,
+      "native_imu_initialized_frames": 0,
+      "maximum_features": 427,
+      "frames_with_features_above500": 0,
+      "native_insufficient_acceleration_log_messages": 0,
+      "native_missing_imu_log_messages": 0
+    },
+    {
+      "sequence": "ramp_step_native",
+      "frames": 150,
+      "native_imu_samples_consumed": 5961,
+      "native_tracked_frames": 0,
+      "native_imu_initialized_frames": 0,
+      "maximum_features": 541,
+      "frames_with_features_above500": 11,
+      "native_insufficient_acceleration_log_messages": 11,
+      "native_missing_imu_log_messages": 0
+    }
+  ],
+  "interpretation": "First two scenes never exceed the native 500-feature initializer threshold. Ramp has 11 eligible feature frames and 11 native insufficient-acceleration messages; no inertial initialization in any scene. Noise, feature, and acceleration thresholds remain unchanged.",
+  "native_gate_source": "pinned upstream Tracking.cc StereoInitialization(): N>500 plus sufficient IMU samples and, absent fast-init, successive preintegration mean-acceleration change >=0.5m/s^2"
+}

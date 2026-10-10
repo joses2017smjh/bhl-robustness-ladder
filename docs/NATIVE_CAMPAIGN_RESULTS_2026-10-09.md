@@ -191,7 +191,7 @@ traversal remain open objectives; no completed gate is relabeled or retuned.
 
 ## Research tasks opened by these results
 
-These are proposed follow-ups, **not queued campaigns or achieved results**.
+At publication on October 9, these were proposed follow-ups, **not queued campaigns or achieved results**. The [October 10 implementation and execution ledger](RESEARCH_METHODS_2026-10-10.md) records subsequent work without changing this report's original measurements.
 The [research protocol and primary references](STEREO_LIDAR_RESEARCH_2026-10-08.md)
 and [native methods](NATIVE_CAMPAIGNS_2026-10-09.md) ground the algorithm choices.
 

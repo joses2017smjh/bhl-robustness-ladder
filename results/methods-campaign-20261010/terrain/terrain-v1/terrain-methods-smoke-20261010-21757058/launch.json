@@ -1,0 +1,56 @@
+{
+  "archive_sha256": "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm:/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm",
+    "--bind",
+    "/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm/source:/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm/protocol.json:/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm/work",
+    "--bind",
+    "/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm/inputs:/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm/inputs:ro",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm/source/scripts/bench/terrain_methods_campaign.py",
+    "--protocol",
+    "/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm/protocol.json",
+    "--phase",
+    "smoke"
+  ],
+  "host": "cn-b12.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "smoke"
+    ],
+    "entrypoint": "scripts/bench/terrain_methods_campaign.py",
+    "env": {},
+    "kind": "smoke",
+    "max_output_mb": 128,
+    "name": "terrain-methods-smoke-20261010",
+    "resources": {
+      "cpus": 4,
+      "gpus": 0,
+      "memory_gb": 8,
+      "partition": "share,eecs",
+      "requeue": false,
+      "time_limit": "00:30:00"
+    }
+  },
+  "job_id": "21757058",
+  "scratch": "/tmp/bhl-h34-terrain-methods-smoke-20261010-21757058-isdeeasm",
+  "source_files_verified": 866,
+  "started_utc": "2026-10-10T20:22:21.579696+00:00"
+}

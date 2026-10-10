@@ -1,0 +1,331 @@
+........................................................................ [  2%]
+........................................................................ [  5%]
+........................................................................ [  8%]
+...................................FF...FF.............................. [ 10%]
+........................................................................ [ 13%]
+............................................FFFF........................ [ 16%]
+........................................................................ [ 18%]
+..................................sss................................... [ 21%]
+........................................................................ [ 24%]
+........................................................................ [ 26%]
+...s......s...............s............................................. [ 29%]
+........................................................................ [ 32%]
+..........s............................................................. [ 35%]
+..........................ss............................................ [ 37%]
+...........................sssssssssssssssssssssssssssssssssssssssssssss [ 40%]
+sssss.s..ss..sss.s..............................s................sssssss [ 43%]
+sssssssssssssssssssssssssssssssssssssssssssss..s.ss..s.....ssss..ss..... [ 45%]
+...........................................sssssssssss.................. [ 48%]
+......................ssss......................s....................... [ 51%]
+.sssssssssssssssssssssssssssssss.s.........ss...s....................... [ 53%]
+...............................s.........sssssssssssssssssssssssssssssss [ 56%]
+sssssssss..s............................................................ [ 59%]
+...................................................................... [ 61%]
+..............................s......................................... [ 64%]
+........................................................................ [ 67%]
+....................................................ssssssssssss........ [ 69%]
+....................s................................................... [ 72%]
+........................................................................ [ 75%]
+.................................................................. [ 77%]
+........................................................................ [ 80%]
+..........................................................s............. [ 83%]
+.........................................ssssssssss..................... [ 85%]
+.......................s................................................ [ 88%]
+.............ss...................................................s..... [ 91%]
+........................................................................ [ 94%]
+...................................................................... [ 96%]
+...................................................sss.................. [ 99%]
+...s..............                                                       [100%]
+=================================== FAILURES ===================================
+_ test_source_diff_to_base_commit_is_opt_in_insertions_only[src/bhl_robust/eval/scripted_carry.py-None-7] _
+
+path = 'src/bhl_robust/eval/scripted_carry.py', end_marker = None, n_branch = 7
+
+    @pytest.mark.parametrize("path,end_marker,n_branch", [
+        ("src/bhl_robust/eval/scripted_carry.py", None, 7),
+        ("scripts/bench/coop_scripted_carry.py", "# ------------------------------------------------------------------ render", 3),
+    ])
+    def test_source_diff_to_base_commit_is_opt_in_insertions_only(path, end_marker, n_branch):
+>       old = _git_show(path).splitlines()
+              ^^^^^^^^^^^^^^^
+
+tests/test_coop_flushpad.py:817: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'src/bhl_robust/eval/scripted_carry.py'
+
+    def _git_show(path):
+        r = subprocess.run(["git", "-C", str(REPO), "show", f"{BASE_COMMIT}:{path}"], capture_output=True, text=True)
+>       assert r.returncode == 0, r.stderr                                        # fail loudly, never skip
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: fatal: invalid object name '094797e'.
+E         
+E       assert 128 == 0
+E        +  where 128 = CompletedProcess(args=['git', '-C', '/tmp/bhl-methods-20261010', 'show', '094797e:src/bhl_robust/eval/scripted_carry.py'], returncode=128, stdout='', stderr="fatal: invalid object name '094797e'.\n").returncode
+
+tests/test_coop_flushpad.py:801: AssertionError
+_ test_source_diff_to_base_commit_is_opt_in_insertions_only[scripts/bench/coop_scripted_carry.py-# ------------------------------------------------------------------ render-3] _
+
+path = 'scripts/bench/coop_scripted_carry.py'
+end_marker = '# ------------------------------------------------------------------ render'
+n_branch = 3
+
+    @pytest.mark.parametrize("path,end_marker,n_branch", [
+        ("src/bhl_robust/eval/scripted_carry.py", None, 7),
+        ("scripts/bench/coop_scripted_carry.py", "# ------------------------------------------------------------------ render", 3),
+    ])
+    def test_source_diff_to_base_commit_is_opt_in_insertions_only(path, end_marker, n_branch):
+>       old = _git_show(path).splitlines()
+              ^^^^^^^^^^^^^^^
+
+tests/test_coop_flushpad.py:817: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'scripts/bench/coop_scripted_carry.py'
+
+    def _git_show(path):
+        r = subprocess.run(["git", "-C", str(REPO), "show", f"{BASE_COMMIT}:{path}"], capture_output=True, text=True)
+>       assert r.returncode == 0, r.stderr                                        # fail loudly, never skip
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: fatal: invalid object name '094797e'.
+E         
+E       assert 128 == 0
+E        +  where 128 = CompletedProcess(args=['git', '-C', '/tmp/bhl-methods-20261010', 'show', '094797e:scripts/bench/coop_scripted_carry.py'], returncode=128, stdout='', stderr="fatal: invalid object name '094797e'.\n").returncode
+
+tests/test_coop_flushpad.py:801: AssertionError
+____________ test_stock_model_is_byte_identical_to_the_base_commit _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-sanchej7/pytest-9/test_stock_model_is_byte_ident0')
+
+    @needs_assets
+    def test_stock_model_is_byte_identical_to_the_base_commit(tmp_path):
+>       base = _base_module(tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_coop_flushpad.py:979: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_coop_flushpad.py:961: in _base_module
+    path.write_text(_git_show("src/bhl_robust/eval/scripted_carry.py"))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'src/bhl_robust/eval/scripted_carry.py'
+
+    def _git_show(path):
+        r = subprocess.run(["git", "-C", str(REPO), "show", f"{BASE_COMMIT}:{path}"], capture_output=True, text=True)
+>       assert r.returncode == 0, r.stderr                                        # fail loudly, never skip
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: fatal: invalid object name '094797e'.
+E         
+E       assert 128 == 0
+E        +  where 128 = CompletedProcess(args=['git', '-C', '/tmp/bhl-methods-20261010', 'show', '094797e:src/bhl_robust/eval/scripted_carry.py'], returncode=128, stdout='', stderr="fatal: invalid object name '094797e'.\n").returncode
+
+tests/test_coop_flushpad.py:801: AssertionError
+______________ test_stock_episode_is_identical_to_the_base_commit ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-sanchej7/pytest-9/test_stock_episode_is_identica0')
+
+    @needs_assets
+    def test_stock_episode_is_identical_to_the_base_commit(tmp_path):
+>       base = _base_module(tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_coop_flushpad.py:999: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_coop_flushpad.py:961: in _base_module
+    path.write_text(_git_show("src/bhl_robust/eval/scripted_carry.py"))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'src/bhl_robust/eval/scripted_carry.py'
+
+    def _git_show(path):
+        r = subprocess.run(["git", "-C", str(REPO), "show", f"{BASE_COMMIT}:{path}"], capture_output=True, text=True)
+>       assert r.returncode == 0, r.stderr                                        # fail loudly, never skip
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: fatal: invalid object name '094797e'.
+E         
+E       assert 128 == 0
+E        +  where 128 = CompletedProcess(args=['git', '-C', '/tmp/bhl-methods-20261010', 'show', '094797e:src/bhl_robust/eval/scripted_carry.py'], returncode=128, stdout='', stderr="fatal: invalid object name '094797e'.\n").returncode
+
+tests/test_coop_flushpad.py:801: AssertionError
+_ test_source_diff_to_base_commit_is_one_marked_insertion[src/bhl_robust/eval/scripted_carry.py] _
+
+path = 'src/bhl_robust/eval/scripted_carry.py'
+
+    @pytest.mark.parametrize("path", ["src/bhl_robust/eval/scripted_carry.py", "scripts/bench/coop_scripted_carry.py"])
+    def test_source_diff_to_base_commit_is_one_marked_insertion(path):
+>       old = _git_show(path).splitlines()
+              ^^^^^^^^^^^^^^^
+
+tests/test_coop_wristhold.py:1074: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'src/bhl_robust/eval/scripted_carry.py'
+
+    def _git_show(path):
+        r = subprocess.run(["git", "-C", str(REPO), "show", f"{BASE_COMMIT}:{path}"], capture_output=True, text=True)
+>       assert r.returncode == 0, r.stderr                                          # fail loudly, never skip
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: fatal: invalid object name '3a67bc2'.
+E         
+E       assert 128 == 0
+E        +  where 128 = CompletedProcess(args=['git', '-C', '/tmp/bhl-methods-20261010', 'show', '3a67bc2:src/bhl_robust/eval/scripted_carry.py'], returncode=128, stdout='', stderr="fatal: invalid object name '3a67bc2'.\n").returncode
+
+tests/test_coop_wristhold.py:1064: AssertionError
+_ test_source_diff_to_base_commit_is_one_marked_insertion[scripts/bench/coop_scripted_carry.py] _
+
+path = 'scripts/bench/coop_scripted_carry.py'
+
+    @pytest.mark.parametrize("path", ["src/bhl_robust/eval/scripted_carry.py", "scripts/bench/coop_scripted_carry.py"])
+    def test_source_diff_to_base_commit_is_one_marked_insertion(path):
+>       old = _git_show(path).splitlines()
+              ^^^^^^^^^^^^^^^
+
+tests/test_coop_wristhold.py:1074: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'scripts/bench/coop_scripted_carry.py'
+
+    def _git_show(path):
+        r = subprocess.run(["git", "-C", str(REPO), "show", f"{BASE_COMMIT}:{path}"], capture_output=True, text=True)
+>       assert r.returncode == 0, r.stderr                                          # fail loudly, never skip
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: fatal: invalid object name '3a67bc2'.
+E         
+E       assert 128 == 0
+E        +  where 128 = CompletedProcess(args=['git', '-C', '/tmp/bhl-methods-20261010', 'show', '3a67bc2:scripts/bench/coop_scripted_carry.py'], returncode=128, stdout='', stderr="fatal: invalid object name '3a67bc2'.\n").returncode
+
+tests/test_coop_wristhold.py:1064: AssertionError
+_ test_stock_and_flushpad_models_are_byte_identical_to_the_base_commit_and_w_uses_the_flushpad_model _
+
+tmp_path = PosixPath('/tmp/pytest-of-sanchej7/pytest-9/test_stock_and_flushpad_models0')
+
+    @needs_assets
+    def test_stock_and_flushpad_models_are_byte_identical_to_the_base_commit_and_w_uses_the_flushpad_model(tmp_path):
+>       base = _base_module(tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_coop_wristhold.py:1112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_coop_wristhold.py:1095: in _base_module
+    path.write_text(_git_show("src/bhl_robust/eval/scripted_carry.py"))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'src/bhl_robust/eval/scripted_carry.py'
+
+    def _git_show(path):
+        r = subprocess.run(["git", "-C", str(REPO), "show", f"{BASE_COMMIT}:{path}"], capture_output=True, text=True)
+>       assert r.returncode == 0, r.stderr                                          # fail loudly, never skip
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: fatal: invalid object name '3a67bc2'.
+E         
+E       assert 128 == 0
+E        +  where 128 = CompletedProcess(args=['git', '-C', '/tmp/bhl-methods-20261010', 'show', '3a67bc2:src/bhl_robust/eval/scripted_carry.py'], returncode=128, stdout='', stderr="fatal: invalid object name '3a67bc2'.\n").returncode
+
+tests/test_coop_wristhold.py:1064: AssertionError
+______ test_stock_and_flushpad_episodes_are_identical_to_the_base_commit _______
+
+tmp_path = PosixPath('/tmp/pytest-of-sanchej7/pytest-9/test_stock_and_flushpad_episod0')
+
+    @needs_assets
+    def test_stock_and_flushpad_episodes_are_identical_to_the_base_commit(tmp_path):
+>       base = _base_module(tmp_path)
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_coop_wristhold.py:1140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_coop_wristhold.py:1095: in _base_module
+    path.write_text(_git_show("src/bhl_robust/eval/scripted_carry.py"))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = 'src/bhl_robust/eval/scripted_carry.py'
+
+    def _git_show(path):
+        r = subprocess.run(["git", "-C", str(REPO), "show", f"{BASE_COMMIT}:{path}"], capture_output=True, text=True)
+>       assert r.returncode == 0, r.stderr                                          # fail loudly, never skip
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: fatal: invalid object name '3a67bc2'.
+E         
+E       assert 128 == 0
+E        +  where 128 = CompletedProcess(args=['git', '-C', '/tmp/bhl-methods-20261010', 'show', '3a67bc2:src/bhl_robust/eval/scripted_carry.py'], returncode=128, stdout='', stderr="fatal: invalid object name '3a67bc2'.\n").returncode
+
+tests/test_coop_wristhold.py:1064: AssertionError
+=============================== warnings summary ===============================
+tests/test_native_lio.py:86
+  /tmp/bhl-methods-20261010/tests/test_native_lio.py:86: DeprecationWarning: invalid escape sequence '\('
+    with self.assertRaisesRegex(ValueError, "SO\(3\)"):
+
+tests/test_native_lio.py:130
+  /tmp/bhl-methods-20261010/tests/test_native_lio.py:130: DeprecationWarning: invalid escape sequence '\('
+    with self.assertRaisesRegex(ValueError, "SO\(3\)"): self.validate()
+
+tests/test_history_latency.py::test_dynamic_batch_onnx_uses_declared_input_name
+tests/test_navgym_v5.py::test_v5_onnx_inputs_and_build_obs_keyed_by_them
+tests/test_platecross.py::test_check_export_matches_only_the_final_checkpoint
+  /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/torch/onnx/utils.py:185: DeprecationWarning: The feature will be removed. Please remove usage of this function
+    setup_onnx_logging(verbose) as log_ctx,
+
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[dense]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query_memory]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query_memory_trajectory]
+  /tmp/bhl-methods-20261010/src/bhl_robust/research/perceptive_policy.py:199: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+    if points.shape[1:] != (HISTORY, RAYS, 5):
+
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query_memory]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query_memory_trajectory]
+  /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/torch/nn/functional.py:6203: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+    embed_dim == embed_dim_to_check
+
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query_memory]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query_memory_trajectory]
+  /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/torch/nn/functional.py:6211: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+    head_dim * num_heads == embed_dim
+
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query_memory]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query_memory_trajectory]
+  /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/torch/nn/functional.py:6220: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+    key.shape == value.shape
+
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query_memory]
+tests/test_perceptive_policy.py::test_export_has_measured_inputs_only_and_variable_batch_parity[query_memory_trajectory]
+  /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/torch/nn/functional.py:6401: TracerWarning: Converting a tensor to a Python boolean might cause the trace to be incorrect. We can't record the data flow of Python values, so this value will be treated as a constant in the future. This means that the trace might not generalize to other inputs!
+    if attn_mask.size(0) == 1 and attn_mask.dim() == 3:
+
+tests/test_quat_order_unpack.py::test_misreading_xyzw_as_wxyz_is_the_spawn_bug
+  /tmp/bhl-methods-20261010/tests/test_quat_order_unpack.py:29: DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+    assert abs(float(np.arccos(np.clip(up_z, -1, 1))) - math.pi/2) < 1e-6
+
+tests/test_sensor_campaign.py::test_runtime_rejects_path_and_package_changes[names3]
+  /nfs/hpc/share/sanchej7/Humanoid_Lite/.uv-python/cpython-3.11.16-linux-x86_64-gnu/lib/python3.11/zipfile.py:1581: UserWarning: Duplicate name: 'onnxruntime/x'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_coop_flushpad.py::test_source_diff_to_base_commit_is_opt_in_insertions_only[src/bhl_robust/eval/scripted_carry.py-None-7]
+FAILED tests/test_coop_flushpad.py::test_source_diff_to_base_commit_is_opt_in_insertions_only[scripts/bench/coop_scripted_carry.py-# ------------------------------------------------------------------ render-3]
+FAILED tests/test_coop_flushpad.py::test_stock_model_is_byte_identical_to_the_base_commit
+FAILED tests/test_coop_flushpad.py::test_stock_episode_is_identical_to_the_base_commit
+FAILED tests/test_coop_wristhold.py::test_source_diff_to_base_commit_is_one_marked_insertion[src/bhl_robust/eval/scripted_carry.py]
+FAILED tests/test_coop_wristhold.py::test_source_diff_to_base_commit_is_one_marked_insertion[scripts/bench/coop_scripted_carry.py]
+FAILED tests/test_coop_wristhold.py::test_stock_and_flushpad_models_are_byte_identical_to_the_base_commit_and_w_uses_the_flushpad_model
+FAILED tests/test_coop_wristhold.py::test_stock_and_flushpad_episodes_are_identical_to_the_base_commit
+8 failed, 2409 passed, 255 skipped, 23 warnings, 10 subtests passed in 540.43s (0:09:00)
+WARNING: Nan, Inf or huge value in QVEL at DOF 2. The simulation is unstable. Time = 0.2000.
+
+WARNING: Nan, Inf or huge value in QVEL at DOF 2. The simulation is unstable. Time = 0.2000.
+
+WARNING: Nan, Inf or huge value in QPOS at DOF 2. The simulation is unstable. Time = 0.2000.
+
+WARNING: Nan, Inf or huge value in QVEL at DOF 2. The simulation is unstable. Time = 0.2000.
+
+WARNING: Nan, Inf or huge value in QVEL at DOF 56. The simulation is unstable. Time = 0.4400.
+
+srun: error: dgx2-4: task 0: Exited with exit code 1

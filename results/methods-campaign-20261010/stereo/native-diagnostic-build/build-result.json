@@ -1,0 +1,197 @@
+{
+  "status": "PASS",
+  "runtime_archive": "/tmp/bhl-orb-diag-runtime-v3-20261010/runtime.tar.gz",
+  "runtime_archive_sha256": "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+  "binary_sha256": "77805e442c9c451559205450d48908bd90b12e75dfab4ceae9be8c204d798dc5",
+  "provenance": {
+    "schema": "bhl-read-only-orb-diagnostics-build-v1",
+    "status": "PASS",
+    "original_runtime_archive_sha256": "0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704",
+    "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4",
+    "original_system_header_sha256": "1e353f2c511ffa85ee26ec48c7a6e733754bf5ecef47c9f7f83f70be3db7f310",
+    "wrapper_system_header_sha256": "b033343368fc679f55c39f95e550b271b81bc2d4bbbc98b97ecf143cb153f5c3",
+    "compile_command": [
+      "g++",
+      "-std=c++11",
+      "-O2",
+      "-DNDEBUG",
+      "-DBHL_ORB_DIAGNOSTICS",
+      "-DCOMPILEDWITHC11",
+      "-I",
+      "/tmp/bhl-orb-diag-build-v3-20261010/source",
+      "-I",
+      "/tmp/bhl-orb-diag-build-v3-20261010/source/include",
+      "-I",
+      "/tmp/bhl-orb-diag-build-v3-20261010/source/include/CameraModels",
+      "-I",
+      "/tmp/bhl-orb-diag-build-v3-20261010/source/Thirdparty/Sophus",
+      "-I",
+      "/tmp/bhl-orb-diag-build-v3-20261010/sysroot/usr/include",
+      "-I",
+      "/tmp/bhl-orb-diag-build-v3-20261010/sysroot/usr/include/eigen3",
+      "-I",
+      "/tmp/bhl-orb-diag-build-v3-20261010/sysroot/usr/include/opencv4",
+      "/tmp/bhl-orb-diag-source-v3-20261010/scripts/native/orb_runner.cc",
+      "-o",
+      "/tmp/bhl-orb-diag-build-v3-20261010/orb_native",
+      "-L",
+      "/tmp/bhl-orb-diag-build-v3-20261010/runtime/lib",
+      "-Wl,-rpath,$ORIGIN/../lib",
+      "-Wl,-rpath-link,/tmp/bhl-orb-diag-build-v3-20261010/runtime/lib",
+      "-lORB_SLAM3",
+      "-l:libopencv_core.so.4.5d",
+      "-l:libopencv_imgproc.so.4.5d",
+      "-l:libopencv_imgcodecs.so.4.5d",
+      "-lpthread"
+    ],
+    "header_packages": [
+      {
+        "bytes": 375414,
+        "dpkg_fields": "Package: libboost-serialization1.74-dev\nVersion: 1.74.0-14ubuntu3\nArchitecture: amd64\n",
+        "file": "libboost-serialization1.74-dev_1.74.0-14ubuntu3_amd64.deb",
+        "sha256": "6bf29f6ec3cb487ebd17dbc266d9d68db3c22586f56805fa1f60a0cdc09e8371"
+      },
+      {
+        "bytes": 9608510,
+        "dpkg_fields": "Package: libboost1.74-dev\nVersion: 1.74.0-14ubuntu3\nArchitecture: amd64\n",
+        "file": "libboost1.74-dev_1.74.0-14ubuntu3_amd64.deb",
+        "sha256": "4d9c90e43f0d25db6280d1ee326771cbb76462f73b9430f06bac1de8d05b7a78"
+      },
+      {
+        "bytes": 1055832,
+        "dpkg_fields": "Package: libeigen3-dev\nVersion: 3.4.0-2ubuntu2\nArchitecture: all\n",
+        "file": "libeigen3-dev_3.4.0-2ubuntu2_all.deb",
+        "sha256": "04ee3759712a0f003fb186edf83724947826d7a43f3ef8d858cd359ca38a25ef"
+      },
+      {
+        "bytes": 1046282,
+        "dpkg_fields": "Package: libopencv-calib3d-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-calib3d-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "76e06a796d06c4ad5d4853dba35cf215a971bd7dc4ba37afc19032eeb9388243"
+      },
+      {
+        "bytes": 5008256,
+        "dpkg_fields": "Package: libopencv-contrib-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-contrib-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "797b7fe63c92fd94b59e78f6cc56e3a99eba7050293854a35a5c5285d55de2b2"
+      },
+      {
+        "bytes": 1977662,
+        "dpkg_fields": "Package: libopencv-core-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-core-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "e1b628e1e6235dab998cdd2c8282f1188c24363a17964f01b9538a1a8d4e1d69"
+      },
+      {
+        "bytes": 91816,
+        "dpkg_fields": "Package: libopencv-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "673f2b2be6527508e442f97da3910bd28a9530851862ec0e8be799d187505ee6"
+      },
+      {
+        "bytes": 1705990,
+        "dpkg_fields": "Package: libopencv-dnn-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-dnn-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "bf0b06a73af8cdb73c529ecd9e0ecedb07986b2dc611fde8e40262f45261af8f"
+      },
+      {
+        "bytes": 371654,
+        "dpkg_fields": "Package: libopencv-features2d-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-features2d-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "7eda70b4b352f5494e2095f41633062c97e63a882ac83f192f4c237069207ffd"
+      },
+      {
+        "bytes": 209546,
+        "dpkg_fields": "Package: libopencv-flann-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-flann-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "ea12dc2b678dc7ec7a85d312d407d3bf2310b8755b6819b6d7365c62b8e4f259"
+      },
+      {
+        "bytes": 131546,
+        "dpkg_fields": "Package: libopencv-highgui-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-highgui-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "0230d4db5fa5cd0450ad768119e551247af67430eccdd48ddb22bdd19b1ef7d8"
+      },
+      {
+        "bytes": 200276,
+        "dpkg_fields": "Package: libopencv-imgcodecs-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-imgcodecs-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "51eabab507cf7733d8b9447730574e508a09dd265a4312be28659d5dd48bec70"
+      },
+      {
+        "bytes": 1854150,
+        "dpkg_fields": "Package: libopencv-imgproc-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-imgproc-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "8b18618f30002dc29d9b04f4153b76c788600c6b227876154eca7aa4a321b8de"
+      },
+      {
+        "bytes": 297580,
+        "dpkg_fields": "Package: libopencv-ml-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-ml-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "b2746a85cd0dcfb10c1e46deb142a5c76c5460e8df54e2cc302c1ef6b005d7d8"
+      },
+      {
+        "bytes": 254336,
+        "dpkg_fields": "Package: libopencv-objdetect-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-objdetect-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "c7652d5995bd6503beb8cdd3e8ca8c36f6fb613731e483baa43eaf3dcfcf5b5a"
+      },
+      {
+        "bytes": 222048,
+        "dpkg_fields": "Package: libopencv-photo-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-photo-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "96c11ecdee404c270b80038783785ed4770fa25e4d98cf7b2e1a3e8b2919faf2"
+      },
+      {
+        "bytes": 72294,
+        "dpkg_fields": "Package: libopencv-shape-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-shape-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "cac0538335de14a7325654e9fd13547531c121a9737087d8e306de8fd17b3c0e"
+      },
+      {
+        "bytes": 269122,
+        "dpkg_fields": "Package: libopencv-stitching-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-stitching-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "e6d6394a7292d95a502df0b927260bae8e245e2e51a609714c2c078deafeac0e"
+      },
+      {
+        "bytes": 62250,
+        "dpkg_fields": "Package: libopencv-superres-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-superres-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "c646a33341ab61004da07735d3e7077752fb06e88f5dd73798cb603d41be697f"
+      },
+      {
+        "bytes": 251402,
+        "dpkg_fields": "Package: libopencv-video-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-video-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "53c5fb61a03ac0a4b0c06cfc6eb36c71cc4bf9f835b3de1aa7a8c397849a7a0d"
+      },
+      {
+        "bytes": 314996,
+        "dpkg_fields": "Package: libopencv-videoio-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-videoio-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "092f6be050a0e33435e83c7648643427c375f13276c671b404188228492ba2ab"
+      },
+      {
+        "bytes": 110970,
+        "dpkg_fields": "Package: libopencv-videostab-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-videostab-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "fbbf049b52919c6c0832d789cd082e793a42207514ed4c5ee1f8491dbcd8f5b6"
+      },
+      {
+        "bytes": 187866,
+        "dpkg_fields": "Package: libopencv-viz-dev\nVersion: 4.5.4+dfsg-9ubuntu4\nArchitecture: amd64\n",
+        "file": "libopencv-viz-dev_4.5.4+dfsg-9ubuntu4_amd64.deb",
+        "sha256": "2269e851b3ba8e799323c42a6ca29e03fd7060796f7e43ea20c232c0b81516b2"
+      }
+    ],
+    "wrapper_sha256": "b9eb2d1ef60ac394fab7a67013ba83ec6fcdfd18a693999b270641febcd06a99",
+    "restored_generated_g2o_config": {
+      "bytes": 380,
+      "sha256": "9b4f95e2b99a669cba9e51cb6e2537441934ca2731862c914123d2dd869b6f28"
+    },
+    "native_library_unchanged_sha256": "c4f09d2dc42571310f4324b8d5cc460158d6bc34d9fe63affbc009cdabc80ffa",
+    "native_algorithm_sources_modified": false,
+    "feature_threshold_modified": false,
+    "telemetry_scope": "const current Frame fields after synchronous TrackStereo; linked native algorithms unchanged"
+  }
+}

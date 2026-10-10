@@ -1,0 +1,561 @@
+{
+  "schema_version": 1,
+  "campaign_id": "stereo-methods-20261010-v1",
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "input_files": {
+    "actors/dr-default-s0/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/deploy.yaml",
+      "sha256": "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71"
+    },
+    "actors/dr-default-s0/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/policy.onnx",
+      "sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1"
+    },
+    "runtime/orb-runtime.tar.gz": {
+      "path": "/tmp/bhl-orb-diag-runtime-v3-20261010/runtime.tar.gz",
+      "sha256": "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08"
+    },
+    "runtime/lio-runtime.tar.gz": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/artifacts/lio-runtime-inference.tar.gz",
+      "sha256": "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4"
+    }
+  },
+  "jobs": [
+    {
+      "name": "stereo-methods-smoke-20261010-v1",
+      "kind": "smoke",
+      "entrypoint": "scripts/bench/stereo_methods_campaign.py",
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--output",
+        "{output}",
+        "--phase",
+        "smoke"
+      ],
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 128
+    },
+    {
+      "name": "stereo-methods-straight-s480000-20261010-v1",
+      "kind": "run",
+      "entrypoint": "scripts/bench/stereo_methods_campaign.py",
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--case",
+        "straight",
+        "--seed",
+        "480000"
+      ],
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 256
+    },
+    {
+      "name": "stereo-methods-straight-s480001-20261010-v1",
+      "kind": "run",
+      "entrypoint": "scripts/bench/stereo_methods_campaign.py",
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--case",
+        "straight",
+        "--seed",
+        "480001"
+      ],
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 256
+    },
+    {
+      "name": "stereo-methods-straight-s480002-20261010-v1",
+      "kind": "run",
+      "entrypoint": "scripts/bench/stereo_methods_campaign.py",
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--case",
+        "straight",
+        "--seed",
+        "480002"
+      ],
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 256
+    },
+    {
+      "name": "stereo-methods-dogleg-s480000-20261010-v1",
+      "kind": "run",
+      "entrypoint": "scripts/bench/stereo_methods_campaign.py",
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--case",
+        "dogleg",
+        "--seed",
+        "480000"
+      ],
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 256
+    },
+    {
+      "name": "stereo-methods-dogleg-s480001-20261010-v1",
+      "kind": "run",
+      "entrypoint": "scripts/bench/stereo_methods_campaign.py",
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--case",
+        "dogleg",
+        "--seed",
+        "480001"
+      ],
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 256
+    },
+    {
+      "name": "stereo-methods-dogleg-s480002-20261010-v1",
+      "kind": "run",
+      "entrypoint": "scripts/bench/stereo_methods_campaign.py",
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--case",
+        "dogleg",
+        "--seed",
+        "480002"
+      ],
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 256
+    },
+    {
+      "name": "stereo-methods-occluders-s480000-20261010-v1",
+      "kind": "run",
+      "entrypoint": "scripts/bench/stereo_methods_campaign.py",
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--case",
+        "occluders",
+        "--seed",
+        "480000"
+      ],
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 256
+    },
+    {
+      "name": "stereo-methods-occluders-s480001-20261010-v1",
+      "kind": "run",
+      "entrypoint": "scripts/bench/stereo_methods_campaign.py",
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--case",
+        "occluders",
+        "--seed",
+        "480001"
+      ],
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 256
+    },
+    {
+      "name": "stereo-methods-occluders-s480002-20261010-v1",
+      "kind": "run",
+      "entrypoint": "scripts/bench/stereo_methods_campaign.py",
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "31f2d5b1ce9f5ae81f9ea18e4dc9769a82995950b1530a5a3cabdcc0080e5d08",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--case",
+        "occluders",
+        "--seed",
+        "480002"
+      ],
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "max_output_mb": 256
+    }
+  ],
+  "additional_source": [
+    "src/bhl_robust/research/stereo_recovery.py",
+    "src/bhl_robust/research/stereo_recovery_metrics.py",
+    "scripts/bench/stereo_methods_campaign.py",
+    "scripts/bench/stereo_methods_collect.py",
+    "scripts/bench/stereo_diagnostics.py",
+    "scripts/native/orb_diagnostics_build.py",
+    "scripts/native/orb_runner.cc",
+    "src/bhl_robust/research/native_orb.py",
+    "src/bhl_robust/research/native_lio.py",
+    "scripts/bench/native_navigation_campaign.py",
+    "scripts/bench/native_stereo_navigation_campaign.py",
+    "tests/test_stereo_recovery.py",
+    "tests/test_stereo_recovery_metrics.py",
+    "tests/test_stereo_methods_campaign.py",
+    "docs/STEREO_METHODS_2026-10-10.md"
+  ],
+  "scope": "Simulation development comparison: native stereo permanent map-stop with LIO shadow computation versus native LIO-verified stereo map recovery; no truth feedback or pose fallback; read-only actual native feature telemetry",
+  "scheduling": {
+    "maximum_active_jobs": 1,
+    "run_requires_same_frozen_smoke_pass": true,
+    "paired_shards": 9,
+    "episodes_per_shard": 2,
+    "retention": "Complete Original PNG and inference/evaluator/native evidence retained per pair; authorized root publication verifies remote SHA and fresh download before retiring the home duplicate archive; next pair submitted only after previous shard offload"
+  },
+  "design": {
+    "arms": [
+      "permanent_stop",
+      "verified_lio_recovery"
+    ],
+    "cases": [
+      "straight",
+      "dogleg",
+      "occluders"
+    ],
+    "development_seeds": [
+      480000,
+      480001,
+      480002
+    ],
+    "smoke_seeds": [
+      470000,
+      470001
+    ],
+    "horizons_s": {
+      "smoke": 8,
+      "development": 40
+    },
+    "actor_count": 1,
+    "cohort_episodes": 18,
+    "same_actor_and_runtime_per_pair": true,
+    "camera": {
+      "baseline_m": 0.12,
+      "body_positions_m": [
+        [
+          0.1,
+          0.06,
+          0.38
+        ],
+        [
+          0.1,
+          -0.06,
+          0.38
+        ]
+      ],
+      "preserve_full_roll_pitch_yaw": true,
+      "rate_hz": 5,
+      "resolution": [
+        640,
+        480
+      ],
+      "texture_seed_offset": 910000,
+      "vertical_fov_deg": 60
+    },
+    "initialization_feature_threshold_exclusive": 500,
+    "calibration_observations": 3,
+    "later_validation_observations": 3,
+    "minimum_observation_spacing_s": 0.15,
+    "maximum_reference_age_s": 0.01,
+    "reject_future_reference": true,
+    "minimum_effective_lidar_points": 30,
+    "translation_residual_m": 0.06,
+    "rotation_residual_rad": 0.1,
+    "watchdog_translation_m": 0.15,
+    "watchdog_rotation_rad": 0.2,
+    "lio_reset_latches_stop": true,
+    "native_library_unchanged": true,
+    "matched_latency_scope": "capture/render/PNG/hash plus BOTH sequential actual native clients and method controller computation, charged before delivery"
+  },
+  "acceptance": {
+    "smoke": "All four actual physical episodes produce accepted native poses with finite physics; no scientific claim",
+    "development": "All 18 complete outcomes required; hybrid clean goals exceed baseline and falls/contacts are no higher; confirmation required",
+    "shard": "PASS denotes pair complete only, no aggregate verdict",
+    "uncertainty": "Exact 27 bootstrap resamples of three whole seed groups with routes grouped; descriptive only, one policy"
+  }
+}

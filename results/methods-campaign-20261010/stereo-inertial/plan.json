@@ -1,0 +1,39 @@
+{
+  "schema": "bhl-stereo-inertial-development-diagnostic-v1",
+  "scope": "Matched native stereo and stereo-inertial replay on previously consumed original simulation capture; diagnostic only, not new held-out/generalization result",
+  "source_manifest_sha256": "aed98910e42007217f3660ff76eb81f8bc74dad60a3a693f09aab56757be07e8",
+  "upstream": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4",
+  "original_runtime_archive": "/tmp/bhl-orb-diagnostic-runtime-v4-20261010.tar.gz",
+  "original_runtime_archive_sha256": "8ef2f4a0813ff97f457a97b9971e41555241b83f66c68b10c34a4a3986a28c3f",
+  "original_capture_archive_sha256": "ec15004ac7be4b58d33f78d6a4b5924d1d4a72b00c9332473d5617818ba08ca1",
+  "sequences": [
+    "textured_boxes_native",
+    "thin_posts_native",
+    "ramp_step_native"
+  ],
+  "arms": [
+    "stereo",
+    "stereo_inertial"
+  ],
+  "smoke_frames": 35,
+  "full_frames": 150,
+  "configuration": {
+    "noise_gyro": 0.001,
+    "noise_acc": 0.01,
+    "gyro_walk": 1e-05,
+    "acc_walk": 0.0001,
+    "frequency_hz": 200,
+    "features": 1200,
+    "iniThFAST": 20,
+    "minThFAST": 7
+  },
+  "technical_smoke_gate": "Both native modes return one timestamp-matched record for every input pair; IMU counts/timestamps acknowledged natively; null lost poses retained; no requirement that scientific initialization succeeds",
+  "scientific_metrics": [
+    "visual tracked frames",
+    "native IMU-initialized frames",
+    "map changes",
+    "first inertial initialization time",
+    "native compute p95"
+  ],
+  "original_inputs_only": true
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "bhl-sensor-methods-collection-v1",
+  "status": "INCOMPLETE",
+  "scientific_status": "PARTIAL_EVIDENCE_NO_GLOBAL_VERDICT",
+  "observed_cells": 0,
+  "expected_cells": 18,
+  "observed_camera_frames": 0,
+  "expected_camera_frames": 2700,
+  "observed_native_cells": 0,
+  "expected_native_cells": 54,
+  "complete_geometry_groups": 0,
+  "expected_geometry_groups": 6,
+  "missing_cells": [
+    "ramp_step-g610000-lidar_half",
+    "ramp_step-g610000-low_texture",
+    "ramp_step-g610000-nominal",
+    "ramp_step-g610001-lidar_half",
+    "ramp_step-g610001-low_texture",
+    "ramp_step-g610001-nominal",
+    "textured_boxes-g610000-lidar_half",
+    "textured_boxes-g610000-low_texture",
+    "textured_boxes-g610000-nominal",
+    "textured_boxes-g610001-lidar_half",
+    "textured_boxes-g610001-low_texture",
+    "textured_boxes-g610001-nominal",
+    "thin_posts-g610000-lidar_half",
+    "thin_posts-g610000-low_texture",
+    "thin_posts-g610000-nominal",
+    "thin_posts-g610001-lidar_half",
+    "thin_posts-g610001-low_texture",
+    "thin_posts-g610001-nominal"
+  ],
+  "problems": [],
+  "cells": [],
+  "observed_native_qualification": {
+    "fast_lio2": {
+      "qualified": 0,
+      "evaluated": 0
+    },
+    "fast_livo2": {
+      "qualified": 0,
+      "evaluated": 0
+    },
+    "fast_livo2_no_visual": {
+      "qualified": 0,
+      "evaluated": 0
+    }
+  },
+  "group_means": {},
+  "paired_comparisons": {},
+  "analysis_unit": "geometry variant; equal mean of all three conditions within each group; group bootstrap only, never frame bootstrap",
+  "metric_summary": "equal frame means within each cell; missing metric denominators retained; latency is mean cell p95, not pooled p95",
+  "caveats": [
+    "six development geometry variants from previously used families; descriptive uncertainty, no unseen-family confirmation",
+    "conditional pose/depth error must be read with tracking/coverage",
+    "unknown hazards remain unresolved; pixel recall is not obstacle instance detection",
+    "no closed-loop navigation, falls, contacts or physical-hardware outcomes are measured"
+  ],
+  "source_archive_sha256": "97ac5c4b41e5d2e6691642c6799037f23cb6d3c1b7feb9845f2cf2da15aa6876",
+  "protocol_sha256": "2d648f2ebd1632accfca7438347562dead448d0c759b073d1fa6a80ef62be9ac",
+  "input_sha256": {
+    "lio.tar.gz": "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+    "livo.tar.gz": "61b3a96e16478b83bacd1c86aa6a3966395379a5d57d2cd4446a855ed2064f5a",
+    "model.onnx": "2c79bbb274dc0aef687a8732b987077e9e3aa26ff9dd653141cda48c57dad5d3",
+    "ort.whl": "d30c1512f22b1f01bacb4f177d49cbefd23e0f4bef56066f1282992d133e6ff8"
+  },
+  "collector_sha256": "c95f576ed64b59728b684fcfb04a110d366302c20f98a778210f6a352cb40cc8"
+}

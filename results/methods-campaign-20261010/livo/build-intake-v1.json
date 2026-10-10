@@ -1,0 +1,45 @@
+{
+  "schema": "bhl-native-livo-build-intake-v1",
+  "purpose": "Native runtime build only; no scored accuracy or navigation outcomes",
+  "allocation": "21756762",
+  "cpus": 2,
+  "memory_gb": 31,
+  "native_jobs": 2,
+  "source_snapshot": "/tmp/bhl-livo-source-v1-20261010",
+  "source_files": {
+    "scripts/native/livo_build.py": {
+      "sha256": "6b92c1e3d4e9c87ddaf154480805570f7162314e1e209e56c8e4cd2f9e45c36c",
+      "bytes": 13426
+    },
+    "scripts/native/livo_headless_main.cpp": {
+      "sha256": "6b08d0c88100e2a5703e8a26789c0a354faa0b8ca6630e7f463028d136e511ba",
+      "bytes": 10513
+    },
+    "scripts/native/livo_replay.py": {
+      "sha256": "f5181d47c76dd1d14db8c086206a3f02872efbe2b268347e87441531b0dadd6b",
+      "bytes": 8128
+    },
+    "scripts/bench/native_livo_methods_campaign.py": {
+      "sha256": "d03a078b4adc2942154b58a93534fb3d263e8c46ca9c42a0f7680dd529673090",
+      "bytes": 5733
+    },
+    "src/bhl_robust/research/native_livo.py": {
+      "sha256": "a496261a14bf2e364d078abe87e3fc10fa0554a6ec399e7c968bd981bf69b953",
+      "bytes": 9582
+    },
+    "tests/test_native_livo.py": {
+      "sha256": "03ed22b6fbf4d5fd48284d82628b8a60e96ebaed3e786e4c0acf9cd7f5ef3542",
+      "bytes": 6102
+    },
+    "docs/NATIVE_LIVO_2026-10-10.md": {
+      "sha256": "dea5a618cfc311529fedccd1c0dac27a3666c67439d40ac27bca09316944ab5a",
+      "bytes": 6558
+    }
+  },
+  "dependency_preparation_sha256": "b5aed7a6e02b2aab2409d654ddc6f28b962f7e35e17559b01369da14f14b463c",
+  "dependency_preparation_bytes": 5059385,
+  "dependency_work": "/tmp/bhl-livo-build-20261010",
+  "runtime_output": "/tmp/bhl-livo-runtime-20261010",
+  "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+  "model_change": "none"
+}

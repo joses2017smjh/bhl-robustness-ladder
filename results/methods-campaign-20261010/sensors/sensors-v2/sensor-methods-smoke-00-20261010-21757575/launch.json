@@ -1,0 +1,64 @@
+{
+  "archive_sha256": "207a5129cd3df243f48f6fddccd5f74030ba6a163c9aeb151a119b9d014bf5fe",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6:/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6",
+    "--bind",
+    "/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6/source:/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6/protocol.json:/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6/work",
+    "--bind",
+    "/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6/inputs:/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6/inputs:ro",
+    "--nv",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6/source/scripts/bench/sensor_methods_campaign.py",
+    "--protocol",
+    "/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6/protocol.json",
+    "--phase",
+    "smoke",
+    "--cell",
+    "0"
+  ],
+  "host": "cn-gpu5.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "smoke",
+      "--cell",
+      "0"
+    ],
+    "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+    "env": {
+      "MUJOCO_GL": "egl"
+    },
+    "kind": "smoke",
+    "max_output_mb": 1536,
+    "name": "sensor-methods-smoke-00-20261010",
+    "resources": {
+      "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+      "cpus": 4,
+      "gpus": 1,
+      "memory_gb": 32,
+      "partition": "gpu,dgxh,ampere",
+      "requeue": false,
+      "time_limit": "01:00:00"
+    }
+  },
+  "job_id": "21757575",
+  "scratch": "/tmp/bhl-h34-sensor-methods-smoke-00-20261010-21757575-qr8zdno6",
+  "source_files_verified": 868,
+  "started_utc": "2026-10-10T21:14:29.519211+00:00"
+}

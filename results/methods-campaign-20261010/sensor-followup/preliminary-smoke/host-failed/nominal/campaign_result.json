@@ -1,0 +1,55 @@
+{
+  "schema": "bhl-sensor-fault-result-v1",
+  "status": "INCOMPLETE",
+  "group": "textured_boxes-g610000",
+  "fault": "nominal",
+  "phase": "smoke",
+  "protocol_sha256": "69ac4e12f2f099f8a488fcc585ae16de34ea360a3f60562b2a579deddaaa3425",
+  "original_manifest_sha256": "5427c803deede6d7070e1f7aab1041bf3837938c673784d37af2e2a16338c92b",
+  "rows": [
+    {
+      "method": "fast_lio2",
+      "native": {
+        "schema": "bhl-native-lio-result-v1",
+        "status": "PASS",
+        "scientific_status": "NATIVE_REPLAY_MEASURED_NOT_COMPARISON",
+        "method": "fast_lio2_lidar_imu",
+        "sequence": "textured_boxes-g610000-nominal",
+        "origin": "simulation",
+        "split": "dev",
+        "frames": 58,
+        "tracked_frames": 55,
+        "estimated_pose_outputs": 55,
+        "states": {
+          "IMU_INITIALIZING": 1,
+          "MAP_INITIALIZING": 1,
+          "TRACKED": 55,
+          "UPSTREAM_FIRST_SCAN": 1
+        },
+        "native_compute_p95_ms": 9.776603803038597,
+        "elapsed_seconds": 0.7600196549901739,
+        "ground_truth_inputs": [],
+        "closed_loop_episodes": 0,
+        "trajectory_sha256": "791a128f2b742c2f98ff82c374af868419f18a874b32c5e9c89a820aedef31df",
+        "estimator_receipt_sha256": "004c243af97a8a8ceb294cba954d3a5b06fb4acfee91df67510f972bc920eccd"
+      }
+    }
+  ],
+  "ground_truth_inputs": [],
+  "closed_loop_episodes": 0,
+  "error": "RuntimeError: native FAST-LIVO2 process failed",
+  "files_sha256": {
+    "fast_lio2/campaign_result.json": "9717a52a202274770533bde7328ea4c0145f49a098c5dc9e468160974f7a4b92",
+    "fast_lio2/estimator_receipt.json": "004c243af97a8a8ceb294cba954d3a5b06fb4acfee91df67510f972bc920eccd",
+    "fast_lio2/input.bin": "49dc384322dd448dbc66a3ad86de280c054ad213665e9710c62f4063777112c1",
+    "fast_lio2/native.log": "f6f2c820ed48081d34a89ed7e002b3c3dc1338ead47c31a28def1cb0d5382830",
+    "fast_lio2/native_frames.jsonl": "1c2e5767b2dcc2e4b96f14b8d627073a74521c1cc418813011530927136e8ce3",
+    "fast_lio2/trajectory.json": "791a128f2b742c2f98ff82c374af868419f18a874b32c5e9c89a820aedef31df",
+    "fast_lio2/transport.json": "e0d174c9cb7e4bb16096503e7eaaf4966b7a99c31e21d7b4a457ed2b0aeefa39",
+    "fast_livo2/campaign_result.json": "052cfd2f751556cab453719ef99bbe00ae80cd9e56885b709609f41d43b6d18f",
+    "fast_livo2/input.bin": "928f77514e3ce7c714a6a164d0b6ee0304bb196aca33bf4e1218c0fbad34475a",
+    "fast_livo2/native.log": "fef8318be150936653632d2fb7212fd2b3aff6fbe3ccac00094bb4a407bf38d7",
+    "fast_livo2/transport.json": "8341c92b73f9a154a3a6dc9bcc4307f6b35b6ec7e0ef629ac1860092177e16e4",
+    "fault_manifest.json": "4cc283adaee6d5474125aee758225c164c47a2b59cef638d7ee8c8aa2dd18563"
+  }
+}

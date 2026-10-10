@@ -1,0 +1,29 @@
+{
+  "schema": "bhl-methods-bootstrap-review-v1",
+  "checks": [
+    {
+      "name": "finalization bootstrap",
+      "step": "21756762.38",
+      "passed": 10,
+      "pytest_seconds": 0.06,
+      "evidence": "tool stdout reported by stereo_inertial_followup; no raw log or JUnit retained",
+      "coverage": "traversal and link rejection, tampered source, exact distinct four-track cohort, child plan identity, incomplete continuation"
+    },
+    {
+      "name": "remote scientific bootstrap",
+      "passed": 10,
+      "pytest_seconds": 0.08,
+      "log": "remote-methods-bootstrap-qa-20261010.log",
+      "junit": "remote-methods-bootstrap-qa-20261010.xml",
+      "coverage": "pinned source/plan/runtime, explicit scientific readiness, unallocated execution rejection, negative outcome publication, rerun rejection, local evidence preservation on publication failure",
+      "step": "21756762.40"
+    }
+  ],
+  "source_sha256": {
+    "scripts/bench/methods_remote_campaign.py": "1d0edea449c15f76d85ca2dd939532aa7072226faa6e70ddb897e76fc012890e",
+    "tests/test_methods_remote_campaign.py": "fc2651e24af7797a1f597aaf87594b4d7a85487e18ce56fd5361aa00de50f2fb",
+    "scripts/bench/methods_finalize_bootstrap.py": "2e20ec1e1baa4717dc823d8a83ccb40bb1b44162ad531faab452014bf548a3d6",
+    "tests/test_methods_finalize_bootstrap.py": "702dcdc58bfc8dbc33ca34c772da237365b5f558bc6e6f29be676a9d0e5fb32d"
+  },
+  "scope": "Bootstrap transport and validation tests only; real native scientific smoke is a separate experiment."
+}

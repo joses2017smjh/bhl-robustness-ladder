@@ -1,0 +1,27 @@
+{
+  "schema": "bhl-sensor-collector-verification-v1",
+  "steps": {
+    "collector_tests": {
+      "id": "21756762.21",
+      "status": "PASS",
+      "tests": 16
+    },
+    "real_empty_cohort": {
+      "id": "21756762.22",
+      "status": "EXPECTED_INCOMPLETE",
+      "exit_code": 1,
+      "verified_source_and_runtime": true,
+      "observed_cells": 0,
+      "expected_cells": 18
+    },
+    "combined_tests": {
+      "id": "21756762.23",
+      "status": "PASS",
+      "tests": 36
+    }
+  },
+  "source_sha256": {
+    "scripts/bench/sensor_methods_collect.py": "c95f576ed64b59728b684fcfb04a110d366302c20f98a778210f6a352cb40cc8",
+    "tests/test_sensor_methods_collect.py": "95080c887d43d0406019b8ff5422315323049122b37e81088d1d460effebb24f"
+  }
+}

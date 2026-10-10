@@ -1,0 +1,36 @@
+{
+  "archive_sha256": "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=terrain-methods-smoke-20261010",
+    "--partition=share,eecs",
+    "--cpus-per-task=4",
+    "--mem=8G",
+    "--time=00:30:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/terrain-methods-smoke-20261010-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/terrain-methods-smoke-20261010-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1",
+    "terrain-methods-smoke-20261010",
+    "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77"
+  ],
+  "job_id": "21757058",
+  "resources": {
+    "cpus": 4,
+    "gpus": 0,
+    "memory_gb": 8,
+    "partition": "share,eecs",
+    "requeue": false,
+    "time_limit": "00:30:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21757058\n",
+  "submitted_utc": "2026-10-10T20:22:06.538501+00:00"
+}

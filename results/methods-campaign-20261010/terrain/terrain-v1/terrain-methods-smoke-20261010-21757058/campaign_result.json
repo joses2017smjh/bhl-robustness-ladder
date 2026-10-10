@@ -1,0 +1,59 @@
+{
+  "actor_filter": null,
+  "arms": {
+    "baseline": {
+      "contacts": 0,
+      "episodes": 1,
+      "falls": 0,
+      "goals": 0,
+      "lateral_path_rmse_m_mean": 0.025068208263047287,
+      "nonfinite": 0
+    },
+    "heading": {
+      "contacts": 0,
+      "episodes": 1,
+      "falls": 0,
+      "goals": 0,
+      "lateral_path_rmse_m_mean": 0.021483871295653944,
+      "nonfinite": 0
+    },
+    "regulated": {
+      "contacts": 0,
+      "episodes": 1,
+      "falls": 0,
+      "goals": 0,
+      "lateral_path_rmse_m_mean": 0.02164382713861204,
+      "nonfinite": 0
+    }
+  },
+  "confirmation_executed": false,
+  "episode_files": [
+    "dr-default-s0--flat--s400000--baseline/episode.json",
+    "dr-default-s0--flat--s400000--regulated/episode.json",
+    "dr-default-s0--flat--s400000--heading/episode.json"
+  ],
+  "episodes": 3,
+  "expected_episodes": 3,
+  "ground_truth_inputs_to_controller": [],
+  "paired_vs_baseline": {
+    "heading": {
+      "contact_reduction_count": 0,
+      "goal_gain_count": 0,
+      "matched_pairs": 1,
+      "uncertainty_scope": "descriptive paired development counts; train-seed and course clustering prevents independent episode safety interpretation"
+    },
+    "regulated": {
+      "contact_reduction_count": 0,
+      "goal_gain_count": 0,
+      "matched_pairs": 1,
+      "uncertainty_scope": "descriptive paired development counts; train-seed and course clustering prevents independent episode safety interpretation"
+    }
+  },
+  "phase": "smoke",
+  "protocol_sha256": "8060a32ceea75ca29a4eb08444385f71d755e6c7055760790d418b509d858e31",
+  "scientific_status": "SMOKE_ONLY",
+  "scope": "MuJoCo simulation development; three frozen12DoF actors; matched nativeFAST-LIO2 startup/loss/estimated-goal stops; new course/seed cohort; no physical validation, terrain-trained gait or independent confirmation claim",
+  "status": "PASS",
+  "terrain_filter": null,
+  "wall_seconds": 36.13066899997648
+}

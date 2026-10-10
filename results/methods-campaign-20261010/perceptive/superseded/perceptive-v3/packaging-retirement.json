@@ -1,0 +1,20 @@
+{
+  "reason": "Unsubmitted older source freeze superseded before any GPU work; every payload preserved byte-identically in v4 except explicitly retained unique source files",
+  "archive_sha256": "f02a1f5103c0ea7ef229489003f55ef1345a550341709d92369b4d54b0a553f0",
+  "compressed_bytes": 40346968,
+  "replacement_archive": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/frozen-campaign.tar.gz",
+  "replacement_archive_sha256": "aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f",
+  "unique_payloads": {
+    "source/scripts/bench/perceptive_train.py": {
+      "bytes": 16775,
+      "sha256": "60d0277d1876fd87b3022657aca1b3f09be52462f96f56bffe392d4b1de3b8c6"
+    },
+    "source/src/bhl_robust/research/perceptive_policy.py": {
+      "bytes": 12734,
+      "sha256": "21e9316bd0438a4f719991f4f84b8f2bcb426d7d4948ffaa1d6314c002ba1f50"
+    }
+  },
+  "temporary_exact_compressed_mirror": "/tmp/bhl-methods-unrun-freezes-20261010/perceptive-v3.tar.gz",
+  "exact_compressed_stream_durable": false,
+  "all_payload_bytes_durable": true
+}

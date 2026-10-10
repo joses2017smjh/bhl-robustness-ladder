@@ -1,0 +1,118 @@
+{
+  "snapshot_utc": "2026-10-10T21:43:38.972553+00:00",
+  "scope": "Point-in-time orchestration snapshot, not a final scientific verdict. Follow retained receipts and independently verified collector publications.",
+  "controllers": {
+    "terrain-dispatch-v2": {
+      "schema": "bhl-methods-dispatch-state-v1",
+      "plan_sha256": "5f121dc88fa942535060c61f4c5caccb264fb6c2cdc39e8e473fcd35ddc7bfdc",
+      "started_utc": "2026-10-10T21:20:27.929408+00:00",
+      "dispatcher_job_id": "21757620",
+      "jobs": [
+        {
+          "name": "terrain-methods-dr-default-s0-flat-20261010",
+          "job_id": "21757070",
+          "scientific_status": "MEASURED_DEVELOPMENT_NO_CONFIRMATION",
+          "status": "PASS",
+          "episodes": 30,
+          "result_sha256": "d6653c8afbad816ccc709e5615fece3698c87e62408c11f8c4f332a695f4bbb0",
+          "publication": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/terrain-methods-dr-default-s0-flat-20261010-21757070/publication.json",
+          "raw_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/terrain-v1--terrain-methods-dr-default-s0-flat-20261010-21757070.tar.gz",
+          "raw_sha256": "0c39ef9a74c1fafc4c0359bc8b2c74d4bbb0ca106c2645313ba42cd384ab5af2",
+          "finished_utc": "2026-10-10T20:42:13.138250+00:00"
+        }
+      ],
+      "scientific_archive_sha256": "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77",
+      "status": "WAITING",
+      "updated_utc": "2026-10-10T21:20:58.726958+00:00",
+      "current_index": 1,
+      "current_job": "terrain-methods-dr-default-s0-small_steps-20261010",
+      "current_job_id": "21757630",
+      "completed_jobs": 1,
+      "expected_jobs": 9,
+      "storage": {
+        "actual_free_bytes": 520093696,
+        "other_outstanding_promises_bytes": 301989888,
+        "requested_unwritten_bytes": 268435456,
+        "minimum_free_bytes": 134217728
+      },
+      "local_campaign_bytes": 75511041
+    },
+    "stereo-dispatch-v2": {
+      "schema": "bhl-methods-dispatch-state-v1",
+      "plan_sha256": "0fcd2da08968de2dde27b09d54fc900b164e146737056876691c46efc77b18e0",
+      "started_utc": "2026-10-10T21:21:26.541576+00:00",
+      "dispatcher_job_id": "21757621",
+      "jobs": [],
+      "scientific_archive_sha256": "9d8ed3780f31cb1a78c1b9ac6006aa57b663011120381e499b08f85167c09cf7",
+      "status": "WAITING_FOR_RESERVED_SPACE",
+      "updated_utc": "2026-10-10T21:43:27.755405+00:00",
+      "current_index": 0,
+      "current_job": "stereo-methods-straight-s480000-20261010-v2",
+      "storage": {
+        "actual_free_bytes": 500170752,
+        "other_outstanding_promises_bytes": 335496189,
+        "requested_unwritten_bytes": 201326592,
+        "minimum_free_bytes": 134217728
+      }
+    },
+    "sensors-dispatch-v1": {
+      "schema": "bhl-methods-dispatch-state-v1",
+      "plan_sha256": "7035bb51fc41d72fa15c484093a4626e9e279838367f3c974f1777823cc202ef",
+      "started_utc": "2026-10-10T21:26:38.634568+00:00",
+      "dispatcher_job_id": "21757623",
+      "jobs": [],
+      "scientific_archive_sha256": "207a5129cd3df243f48f6fddccd5f74030ba6a163c9aeb151a119b9d014bf5fe",
+      "status": "WAITING_FOR_RESERVED_SPACE",
+      "updated_utc": "2026-10-10T21:43:09.613020+00:00",
+      "current_index": 0,
+      "current_job": "sensor-methods-run-00-20261010",
+      "storage": {
+        "actual_free_bytes": 500170752,
+        "other_outstanding_promises_bytes": 335498820,
+        "requested_unwritten_bytes": 369098752,
+        "minimum_free_bytes": 134217728
+      }
+    },
+    "perceptive-dispatch-v1": {
+      "schema": "bhl-methods-dispatch-state-v1",
+      "plan_sha256": "b77bf9a80a9964f001686cfee1b1afd444ca2cf2f932f37e3c07fe1365c6cc60",
+      "started_utc": "2026-10-10T21:22:24.478666+00:00",
+      "dispatcher_job_id": "21757622",
+      "jobs": [
+        {
+          "name": "perceptive-run-s0-v4-20261010",
+          "job_id": "21757635",
+          "scientific_status": "TEACHER_QUALIFICATION_FAILED",
+          "status": "NEGATIVE",
+          "episodes": null,
+          "result_sha256": "ee82e9e3f2bbcff1b9f77bf26d350daeab2711087b4269476358a182278d4d31",
+          "publication": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/perceptive-run-s0-v4-20261010-21757635/publication.json",
+          "raw_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/perceptive-v4--perceptive-run-s0-v4-20261010-21757635.tar.gz",
+          "raw_sha256": "ba1c3de57c6544ff56fac78efd5354e1c05817b878b8ba3a9d108c035fbcc9d5",
+          "finished_utc": "2026-10-10T21:29:55.624627+00:00"
+        },
+        {
+          "name": "perceptive-run-s1-v4-20261010",
+          "job_id": "21757710",
+          "scientific_status": "TEACHER_QUALIFICATION_FAILED",
+          "status": "NEGATIVE",
+          "episodes": null,
+          "result_sha256": "34ab4ad838d075701e07b4b9e3840939db8e2597bb2ef7dae0dafa71d73448c6",
+          "publication": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/perceptive-run-s1-v4-20261010-21757710/publication.json",
+          "raw_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/perceptive-v4--perceptive-run-s1-v4-20261010-21757710.tar.gz",
+          "raw_sha256": "03f2a47e5181deb1a0e67c2650c749ab41934db331e113d06b108016994fb9bd",
+          "finished_utc": "2026-10-10T21:38:07.642946+00:00"
+        }
+      ],
+      "scientific_archive_sha256": "aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f",
+      "status": "WAITING",
+      "updated_utc": "2026-10-10T21:38:36.229094+00:00",
+      "current_index": 2,
+      "current_job": "perceptive-run-s2-v4-20261010",
+      "local_campaign_bytes": 40663822,
+      "current_job_id": "21757754",
+      "completed_jobs": 2,
+      "expected_jobs": 3
+    }
+  }
+}

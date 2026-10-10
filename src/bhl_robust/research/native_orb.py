@@ -91,6 +91,22 @@ def validate_response(value, timestamp_s):
     map_id = value.get("map_id")
     if map_id is not None and (type(map_id) is not int or map_id < 0):
         raise ValueError("Native map_id must be a nonnegative integer or null")
+    diagnostic = value.get("diagnostics")
+    if diagnostic is not None:
+        if not isinstance(diagnostic, dict) or diagnostic.get("schema") != "bhl-orb-frame-diagnostics-v1":
+            raise ValueError("Invalid native ORB diagnostics schema")
+        for name in ("features_total", "features_left", "features_right", "positive_stereo_depth_matches"):
+            if type(diagnostic.get(name)) is not int or diagnostic[name] < 0:
+                raise ValueError("Native diagnostic counts must be nonnegative integers")
+        if diagnostic["positive_stereo_depth_matches"] > diagnostic["features_total"]:
+            raise ValueError("Native positive stereo matches exceed extracted features")
+        if diagnostic.get("initialization_feature_threshold_exclusive") != 500 or diagnostic.get("read_only_native_frame") is not True:
+            raise ValueError("Read-only pinned N>500 initialization diagnostic required")
+        expected_reason = ("NOT_IN_INITIALIZATION" if state != 1 else
+                           "FEATURE_COUNT_NOT_ABOVE_500" if diagnostic["features_total"] <= 500 else
+                           "OTHER_NATIVE_INITIALIZATION_CONDITION")
+        if diagnostic.get("initialization_reason") != expected_reason:
+            raise ValueError("Native initialization reason contradicts state or feature count")
     return dict(value)
 
 
@@ -125,7 +141,12 @@ class NativeOrbClient:
     """
 
     def __init__(self, executable, vocabulary, settings, working_directory,
-                 *, startup_timeout_s=120.0, frame_timeout_s=30.0, environment=None):
+                 *, startup_timeout_s=120.0, frame_timeout_s=30.0, environment=None,
+                 sensor_mode="stereo"):
+        if sensor_mode not in ("stereo", "stereo_inertial"):
+            raise ValueError("Native ORB sensor_mode must be stereo or stereo_inertial")
+        self.sensor_mode = sensor_mode
+        self._previous_imu = -math.inf
         self.executable = Path(executable).resolve()
         self.vocabulary = Path(vocabulary).resolve()
         self.settings = Path(settings).resolve()
@@ -158,13 +179,16 @@ class NativeOrbClient:
         self._log = self.log_path.open("wb")
         try:
             self.process = subprocess.Popen(
-                [str(self.executable), str(self.vocabulary), str(self.settings), str(self.fifo)],
+                [str(self.executable), str(self.vocabulary), str(self.settings), str(self.fifo)]
+                + (["--stereo-inertial"] if self.sensor_mode == "stereo_inertial" else []),
                 stdin=subprocess.PIPE, stdout=self._log, stderr=subprocess.STDOUT,
                 cwd=self.directory, env=self.environment, start_new_session=True,
             )
             ready = self._read_json(self.startup_timeout_s)
             if ready.get("schema") != "bhl-orb-native-ready-v1" or ready.get("upstream_commit") != UPSTREAM_COMMIT:
                 raise ValueError("Unexpected native runtime readiness/pin")
+            if self.sensor_mode == "stereo_inertial" and ready.get("sensor_mode") != self.sensor_mode:
+                raise ValueError("Native runtime did not enable stereo-inertial mode")
             self.ready = ready
             return self
         except BaseException:
@@ -193,16 +217,32 @@ class NativeOrbClient:
                 elif self.process.poll() is not None:
                     raise RuntimeError(f"Native ORB exited {self.process.returncode}; consult native-orb.log")
 
-    def track(self, timestamp_s, left, right):
+    def track(self, timestamp_s, left, right, *, imu_samples=None):
         if isinstance(timestamp_s, bool) or not isinstance(timestamp_s, (int, float)) or not math.isfinite(timestamp_s) or timestamp_s <= self._previous:
             raise ValueError("Original sensor timestamps must be finite and strictly increasing")
         if self.process is None or self.process.poll() is not None:
             raise RuntimeError("Native ORB process is not running")
         left_path, right_path = _image_path(left), _image_path(right)
-        request = f"{timestamp_s:.17g}\t{left_path}\t{right_path}\n".encode()
+        request = f"{timestamp_s:.17g}\t{left_path}\t{right_path}"
+        batch = None
+        if self.sensor_mode == "stereo_inertial":
+            from .native_orb_inertial import validate_imu_batch
+            batch = validate_imu_batch(imu_samples, timestamp_s, previous_imu_s=self._previous_imu,
+                                       previous_frame_s=self._previous)
+            imu_path = self.directory / f"imu-{len(self.responses):06d}.tsv"
+            with imu_path.open("x") as stream:
+                stream.write("".join("\t".join(format(x, ".17g") for x in row) + "\n" for row in batch))
+            request += f"\t{imu_path}"
+        elif imu_samples is not None:
+            raise ValueError("Stereo-only mode must not silently discard supplied IMU")
+        request = (request + "\n").encode()
         self.process.stdin.write(request)
         self.process.stdin.flush()
         value = validate_response(self._read_json(self.frame_timeout_s), float(timestamp_s))
+        if batch is not None:
+            from .native_orb_inertial import validate_inertial_response
+            validate_inertial_response(value, batch)
+            self._previous_imu = batch[-1][0]
         self._previous = float(timestamp_s)
         self.responses.append(value)
         return value

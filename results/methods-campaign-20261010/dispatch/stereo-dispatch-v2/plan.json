@@ -1,0 +1,100 @@
+{
+  "schema": "bhl-methods-dispatch-v1",
+  "campaign_dir": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2",
+  "archive_sha256": "9d8ed3780f31cb1a78c1b9ac6006aa57b663011120381e499b08f85167c09cf7",
+  "protocol_sha256": "024e4130aa89c719fdb68995223edb3707117308d4237be66984252d17ef55c6",
+  "source_sha256": {
+    "methods_dispatch.py": "87727d6f5bd59c5500519a8c0faab3139ce288f9c9bfc0cd2268b41208442526",
+    "methods_archive.py": "2037a4da6418dec0c3c1e5e0fc7427ff6f736cff15eab6d262a17aa0c092ebe0",
+    "h34_campaign.py": "8264618c648992e6c40f97b36cd73837cf867bffc195ab9c0f065c9c412170a1"
+  },
+  "smoke": {
+    "name": "stereo-methods-smoke-20261010-v2",
+    "existing_job_id": "21757496",
+    "expected_fields": {
+      "episodes": 4,
+      "phase": "smoke",
+      "scientific_status": "SMOKE_ONLY"
+    }
+  },
+  "jobs": [
+    {
+      "name": "stereo-methods-straight-s480000-20261010-v2",
+      "expected_fields": {
+        "episodes": 2,
+        "phase": "development",
+        "scientific_status": "DEVELOPMENT_PAIR_NO_GLOBAL_VERDICT"
+      }
+    },
+    {
+      "name": "stereo-methods-straight-s480001-20261010-v2",
+      "expected_fields": {
+        "episodes": 2,
+        "phase": "development",
+        "scientific_status": "DEVELOPMENT_PAIR_NO_GLOBAL_VERDICT"
+      }
+    },
+    {
+      "name": "stereo-methods-straight-s480002-20261010-v2",
+      "expected_fields": {
+        "episodes": 2,
+        "phase": "development",
+        "scientific_status": "DEVELOPMENT_PAIR_NO_GLOBAL_VERDICT"
+      }
+    },
+    {
+      "name": "stereo-methods-dogleg-s480000-20261010-v2",
+      "expected_fields": {
+        "episodes": 2,
+        "phase": "development",
+        "scientific_status": "DEVELOPMENT_PAIR_NO_GLOBAL_VERDICT"
+      }
+    },
+    {
+      "name": "stereo-methods-dogleg-s480001-20261010-v2",
+      "expected_fields": {
+        "episodes": 2,
+        "phase": "development",
+        "scientific_status": "DEVELOPMENT_PAIR_NO_GLOBAL_VERDICT"
+      }
+    },
+    {
+      "name": "stereo-methods-dogleg-s480002-20261010-v2",
+      "expected_fields": {
+        "episodes": 2,
+        "phase": "development",
+        "scientific_status": "DEVELOPMENT_PAIR_NO_GLOBAL_VERDICT"
+      }
+    },
+    {
+      "name": "stereo-methods-occluders-s480000-20261010-v2",
+      "expected_fields": {
+        "episodes": 2,
+        "phase": "development",
+        "scientific_status": "DEVELOPMENT_PAIR_NO_GLOBAL_VERDICT"
+      }
+    },
+    {
+      "name": "stereo-methods-occluders-s480001-20261010-v2",
+      "expected_fields": {
+        "episodes": 2,
+        "phase": "development",
+        "scientific_status": "DEVELOPMENT_PAIR_NO_GLOBAL_VERDICT"
+      }
+    },
+    {
+      "name": "stereo-methods-occluders-s480002-20261010-v2",
+      "expected_fields": {
+        "episodes": 2,
+        "phase": "development",
+        "scientific_status": "DEVELOPMENT_PAIR_NO_GLOBAL_VERDICT"
+      }
+    }
+  ],
+  "max_concurrency": 1,
+  "poll_seconds": 30,
+  "max_local_campaign_bytes": 471859200,
+  "reserved_output_bytes": 201326592,
+  "minimum_free_bytes": 134217728,
+  "scope": "All nine predeclared stereo paired shards from the same smoke-qualified source. Full original PNG/native/physics evidence archived remotely with SHA and fresh-download verification before each next pair; no Git branch changes, implicit reruns or global improvement verdict from a partial cohort."
+}

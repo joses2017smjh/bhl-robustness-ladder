@@ -1,0 +1,797 @@
+scale: 1
+IMU Initializing: 3.3 %Reset ImuProcessIMU Initials: Gravity: -0.0000 -0.0000 -9.8100 9.8100; acc covarience: 0.50000000 0.50000000 0.50000000; gry covarience: 0.30000000 0.30000000 0.30000000 
+IMU Initials: ba covarience: 0.00010000 0.00010000 0.00010000; bg covarience: 0.00010000 0.00010000 0.00010000intrinsic: 415.692194, 415.692194, 319.500000, 239.500000
+width: 640, height: 480, scale: 1.000000
+[ LIO ] Raw feature num: 2042, downsampled feature num:927 effective feature num: 507 average residual: 0.00426463
+[ LIO ] Raw feature num: 2042, downsampled feature num:927 effective feature num: 505 average residual: 0.00482219
+[ LIO ] Raw feature num: 2042, downsampled feature num:927 effective feature num: 505 average residual: 0.00482124
+[ VIO ] Append 35 new visual map points
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000000                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.000000                    |[0m
+[1;32m| -> computeJacobian            | 0.000000                    |[0m
+[1;32m| -> updateEKF                  | 0.000000                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000063                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000000                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.000064                    |[0m
+[1;32m| Average Total Time            | 0.000064                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:938 effective feature num: 842 average residual: 0.00660644
+[ LIO ] Raw feature num: 2042, downsampled feature num:938 effective feature num: 842 average residual: 0.0067232
+[ LIO ] Raw feature num: 2042, downsampled feature num:938 effective feature num: 842 average residual: 0.00672348
+[ VIO ] Retrieve 12 points from visual sparse map
+[ VIO ] Append 104 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000984                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.001247                    |[0m
+[1;32m| -> computeJacobian            | 0.000761                    |[0m
+[1;32m| -> updateEKF                  | 0.000467                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000143                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000006                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.002380                    |[0m
+[1;32m| Average Total Time            | 0.001222                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:941 effective feature num: 900 average residual: 0.00410433
+[ LIO ] Raw feature num: 2042, downsampled feature num:941 effective feature num: 901 average residual: 0.00362958
+[ LIO ] Raw feature num: 2042, downsampled feature num:941 effective feature num: 901 average residual: 0.00362997
+[ VIO ] Retrieve 66 points from visual sparse map
+[ VIO ] Append 68 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000831                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.007141                    |[0m
+[1;32m| -> computeJacobian            | 0.004934                    |[0m
+[1;32m| -> updateEKF                  | 0.002146                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000134                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000033                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.008140                    |[0m
+[1;32m| Average Total Time            | 0.003528                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 925 average residual: 0.0030462
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 926 average residual: 0.00257401
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 926 average residual: 0.00257399
+[ VIO ] Retrieve 72 points from visual sparse map
+[ VIO ] Append 62 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001241                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.006970                    |[0m
+[1;32m| -> computeJacobian            | 0.004849                    |[0m
+[1;32m| -> updateEKF                  | 0.002056                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000127                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000037                    |[0m
+[1;32m| updateReferencePatch          | 0.000001                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.008377                    |[0m
+[1;32m| Average Total Time            | 0.004740                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 925 average residual: 0.00314141
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 926 average residual: 0.00273795
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 926 average residual: 0.00274452
+[ VIO ] Retrieve 72 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000999                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.007001                    |[0m
+[1;32m| -> computeJacobian            | 0.004882                    |[0m
+[1;32m| -> updateEKF                  | 0.002056                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000123                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000038                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.008161                    |[0m
+[1;32m| Average Total Time            | 0.005424                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:938 effective feature num: 937 average residual: 0.00303238
+[ LIO ] Raw feature num: 2042, downsampled feature num:938 effective feature num: 938 average residual: 0.00254134
+[ LIO ] Raw feature num: 2042, downsampled feature num:938 effective feature num: 938 average residual: 0.00254346
+[ VIO ] Retrieve 73 points from visual sparse map
+[ VIO ] Append 66 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001327                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.007409                    |[0m
+[1;32m| -> computeJacobian            | 0.005126                    |[0m
+[1;32m| -> updateEKF                  | 0.002193                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000137                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000041                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.008915                    |[0m
+[1;32m| Average Total Time            | 0.006006                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:938 effective feature num: 937 average residual: 0.00297125
+[ LIO ] Raw feature num: 2042, downsampled feature num:938 effective feature num: 938 average residual: 0.00248798
+[ LIO ] Raw feature num: 2042, downsampled feature num:938 effective feature num: 938 average residual: 0.00248987
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000785                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008212                    |[0m
+[1;32m| -> computeJacobian            | 0.005715                    |[0m
+[1;32m| -> updateEKF                  | 0.002430                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000125                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000041                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009164                    |[0m
+[1;32m| Average Total Time            | 0.006457                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 936 average residual: 0.00284007
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.0023956
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00239596
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000960                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008211                    |[0m
+[1;32m| -> computeJacobian            | 0.005726                    |[0m
+[1;32m| -> updateEKF                  | 0.002419                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000130                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000040                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009341                    |[0m
+[1;32m| Average Total Time            | 0.006818                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 936 average residual: 0.00284034
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00238316
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00238817
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001290                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008188                    |[0m
+[1;32m| -> computeJacobian            | 0.005691                    |[0m
+[1;32m| -> updateEKF                  | 0.002429                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000121                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000042                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009642                    |[0m
+[1;32m| Average Total Time            | 0.007131                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 936 average residual: 0.00283653
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00234858
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00235344
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000950                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008667                    |[0m
+[1;32m| -> computeJacobian            | 0.005988                    |[0m
+[1;32m| -> updateEKF                  | 0.002596                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000141                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000037                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009795                    |[0m
+[1;32m| Average Total Time            | 0.007398                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 936 average residual: 0.00283562
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.0023379
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00234165
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000975                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008232                    |[0m
+[1;32m| -> computeJacobian            | 0.005716                    |[0m
+[1;32m| -> updateEKF                  | 0.002445                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000123                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000038                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009370                    |[0m
+[1;32m| Average Total Time            | 0.007577                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 936 average residual: 0.00284321
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00230857
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00231269
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000929                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008221                    |[0m
+[1;32m| -> computeJacobian            | 0.005710                    |[0m
+[1;32m| -> updateEKF                  | 0.002442                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000122                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000045                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009318                    |[0m
+[1;32m| Average Total Time            | 0.007722                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 936 average residual: 0.00283783
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00229794
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00230063
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000963                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008196                    |[0m
+[1;32m| -> computeJacobian            | 0.005704                    |[0m
+[1;32m| -> updateEKF                  | 0.002425                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000120                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000038                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009316                    |[0m
+[1;32m| Average Total Time            | 0.007845                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 936 average residual: 0.00284171
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.0022897
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00229216
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000957                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008199                    |[0m
+[1;32m| -> computeJacobian            | 0.005701                    |[0m
+[1;32m| -> updateEKF                  | 0.002425                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000126                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000038                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009321                    |[0m
+[1;32m| Average Total Time            | 0.007950                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 936 average residual: 0.0028411
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00228573
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00228823
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000929                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008238                    |[0m
+[1;32m| -> computeJacobian            | 0.005719                    |[0m
+[1;32m| -> updateEKF                  | 0.002445                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000121                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000037                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009324                    |[0m
+[1;32m| Average Total Time            | 0.008042                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 936 average residual: 0.00284548
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00228013
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00228243
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000916                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008196                    |[0m
+[1;32m| -> computeJacobian            | 0.005679                    |[0m
+[1;32m| -> updateEKF                  | 0.002448                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000118                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000037                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009267                    |[0m
+[1;32m| Average Total Time            | 0.008118                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 936 average residual: 0.00284504
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00228018
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00228247
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000922                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008201                    |[0m
+[1;32m| -> computeJacobian            | 0.005685                    |[0m
+[1;32m| -> updateEKF                  | 0.002432                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000125                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000038                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009286                    |[0m
+[1;32m| Average Total Time            | 0.008187                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 934 average residual: 0.00284894
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.0022779
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00228022
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000877                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008408                    |[0m
+[1;32m| -> computeJacobian            | 0.005865                    |[0m
+[1;32m| -> updateEKF                  | 0.002460                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000119                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000036                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009441                    |[0m
+[1;32m| Average Total Time            | 0.008257                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 934 average residual: 0.00284869
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00227781
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00228012
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001242                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008241                    |[0m
+[1;32m| -> computeJacobian            | 0.005754                    |[0m
+[1;32m| -> updateEKF                  | 0.002400                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000125                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000036                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009644                    |[0m
+[1;32m| Average Total Time            | 0.008330                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 934 average residual: 0.00284886
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00227781
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00228007
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000983                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008205                    |[0m
+[1;32m| -> computeJacobian            | 0.005704                    |[0m
+[1;32m| -> updateEKF                  | 0.002420                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000111                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000035                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009335                    |[0m
+[1;32m| Average Total Time            | 0.008380                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 934 average residual: 0.00284892
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00227631
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00227864
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000963                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008543                    |[0m
+[1;32m| -> computeJacobian            | 0.005841                    |[0m
+[1;32m| -> updateEKF                  | 0.002612                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000196                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000054                    |[0m
+[1;32m| updateReferencePatch          | 0.000001                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009757                    |[0m
+[1;32m| Average Total Time            | 0.008446                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 934 average residual: 0.00284869
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00227625
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00227858
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001291                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.011177                    |[0m
+[1;32m| -> computeJacobian            | 0.007496                    |[0m
+[1;32m| -> updateEKF                  | 0.003557                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000179                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000059                    |[0m
+[1;32m| updateReferencePatch          | 0.000001                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.012707                    |[0m
+[1;32m| Average Total Time            | 0.008639                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 934 average residual: 0.00284869
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00227624
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00227857
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001016                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008223                    |[0m
+[1;32m| -> computeJacobian            | 0.005719                    |[0m
+[1;32m| -> updateEKF                  | 0.002426                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000117                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000036                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009392                    |[0m
+[1;32m| Average Total Time            | 0.008672                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 934 average residual: 0.0028487
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.00227519
+[ LIO ] Raw feature num: 2042, downsampled feature num:937 effective feature num: 937 average residual: 0.0022775
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 63 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000743                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008165                    |[0m
+[1;32m| -> computeJacobian            | 0.005667                    |[0m
+[1;32m| -> updateEKF                  | 0.002426                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000121                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000036                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009065                    |[0m
+[1;32m| Average Total Time            | 0.008688                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:930 effective feature num: 927 average residual: 0.00278615
+[ LIO ] Raw feature num: 2042, downsampled feature num:930 effective feature num: 930 average residual: 0.00224004
+[ LIO ] Raw feature num: 2042, downsampled feature num:930 effective feature num: 930 average residual: 0.00223953
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 67 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001348                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.007564                    |[0m
+[1;32m| -> computeJacobian            | 0.005379                    |[0m
+[1;32m| -> updateEKF                  | 0.002109                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000118                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000036                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009067                    |[0m
+[1;32m| Average Total Time            | 0.008704                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2042, downsampled feature num:929 effective feature num: 925 average residual: 0.00279395
+[ LIO ] Raw feature num: 2042, downsampled feature num:929 effective feature num: 928 average residual: 0.00225536
+[ LIO ] Raw feature num: 2042, downsampled feature num:929 effective feature num: 928 average residual: 0.00224298
+[ VIO ] Retrieve 79 points from visual sparse map
+[ VIO ] Append 62 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 194                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000768                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.006492                    |[0m
+[1;32m| -> computeJacobian            | 0.004652                    |[0m
+[1;32m| -> updateEKF                  | 0.001772                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000114                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000038                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.007413                    |[0m
+[1;32m| Average Total Time            | 0.008654                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2043, downsampled feature num:936 effective feature num: 910 average residual: 0.00326389
+[ LIO ] Raw feature num: 2043, downsampled feature num:936 effective feature num: 915 average residual: 0.00268972
+[ LIO ] Raw feature num: 2043, downsampled feature num:936 effective feature num: 915 average residual: 0.00273692
+[ LIO ] Raw feature num: 2043, downsampled feature num:936 effective feature num: 915 average residual: 0.00273691
+[ VIO ] Retrieve 82 points from visual sparse map
+[ VIO ] Append 62 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 196                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001314                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008032                    |[0m
+[1;32m| -> computeJacobian            | 0.005814                    |[0m
+[1;32m| -> updateEKF                  | 0.002135                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000114                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000041                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009502                    |[0m
+[1;32m| Average Total Time            | 0.008685                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2044, downsampled feature num:934 effective feature num: 906 average residual: 0.00367869
+[ LIO ] Raw feature num: 2044, downsampled feature num:934 effective feature num: 909 average residual: 0.00334294
+[ LIO ] Raw feature num: 2044, downsampled feature num:934 effective feature num: 909 average residual: 0.0033423
+[ VIO ] Retrieve 83 points from visual sparse map
+[ VIO ] Append 62 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 197                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000820                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.006834                    |[0m
+[1;32m| -> computeJacobian            | 0.004904                    |[0m
+[1;32m| -> updateEKF                  | 0.001856                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000118                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000041                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.007813                    |[0m
+[1;32m| Average Total Time            | 0.008654                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2044, downsampled feature num:933 effective feature num: 911 average residual: 0.00446405
+[ LIO ] Raw feature num: 2044, downsampled feature num:933 effective feature num: 911 average residual: 0.0042328
+[ LIO ] Raw feature num: 2044, downsampled feature num:933 effective feature num: 911 average residual: 0.00420946
+[ LIO ] Raw feature num: 2044, downsampled feature num:933 effective feature num: 911 average residual: 0.00420943
+[ VIO ] Retrieve 81 points from visual sparse map
+[ VIO ] Append 67 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 198                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001108                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.009095                    |[0m
+[1;32m| -> computeJacobian            | 0.006634                    |[0m
+[1;32m| -> updateEKF                  | 0.002369                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000151                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000048                    |[0m
+[1;32m| updateReferencePatch          | 0.000001                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.010402                    |[0m
+[1;32m| Average Total Time            | 0.008714                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2044, downsampled feature num:945 effective feature num: 932 average residual: 0.00499582
+[ LIO ] Raw feature num: 2044, downsampled feature num:945 effective feature num: 932 average residual: 0.00496428
+[ LIO ] Raw feature num: 2044, downsampled feature num:945 effective feature num: 932 average residual: 0.0049736
+[ VIO ] Retrieve 77 points from visual sparse map
+[ VIO ] Append 73 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 198                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.000983                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008043                    |[0m
+[1;32m| -> computeJacobian            | 0.005750                    |[0m
+[1;32m| -> updateEKF                  | 0.002183                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000174                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000041                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009242                    |[0m
+[1;32m| Average Total Time            | 0.008732                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2043, downsampled feature num:922 effective feature num: 907 average residual: 0.00447917
+[ LIO ] Raw feature num: 2043, downsampled feature num:922 effective feature num: 909 average residual: 0.00451797
+[ LIO ] Raw feature num: 2043, downsampled feature num:922 effective feature num: 907 average residual: 0.00452279
+[ LIO ] Raw feature num: 2043, downsampled feature num:922 effective feature num: 907 average residual: 0.00451921
+[ VIO ] Retrieve 79 points from visual sparse map
+[ VIO ] Append 66 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 199                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001363                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.007763                    |[0m
+[1;32m| -> computeJacobian            | 0.005472                    |[0m
+[1;32m| -> updateEKF                  | 0.002211                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000138                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000049                    |[0m
+[1;32m| updateReferencePatch          | 0.000001                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009313                    |[0m
+[1;32m| Average Total Time            | 0.008751                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2044, downsampled feature num:938 effective feature num: 921 average residual: 0.00617329
+[ LIO ] Raw feature num: 2044, downsampled feature num:938 effective feature num: 921 average residual: 0.00618589
+[ LIO ] Raw feature num: 2044, downsampled feature num:938 effective feature num: 921 average residual: 0.00618471
+[ VIO ] Retrieve 76 points from visual sparse map
+[ VIO ] Append 71 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 199                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001417                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008067                    |[0m
+[1;32m| -> computeJacobian            | 0.005721                    |[0m
+[1;32m| -> updateEKF                  | 0.002268                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000159                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000046                    |[0m
+[1;32m| updateReferencePatch          | 0.000000                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009689                    |[0m
+[1;32m| Average Total Time            | 0.008780                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[ LIO ] Raw feature num: 2043, downsampled feature num:945 effective feature num: 931 average residual: 0.00568058
+[ LIO ] Raw feature num: 2043, downsampled feature num:945 effective feature num: 931 average residual: 0.00615327
+[ LIO ] Raw feature num: 2043, downsampled feature num:945 effective feature num: 931 average residual: 0.00618482
+[ VIO ] Retrieve 83 points from visual sparse map
+[ VIO ] Append 71 new visual map points
+[ VIO ] Update 0 points in visual submap
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m|                         VIO Time                            |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Sparse Map Size               | 200                         |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;34m| Algorithm Stage               | Time (secs)                 |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| retrieveFromVisualSparseMap   | 0.001013                    |[0m
+[1;32m| computeJacobianAndUpdateEKF   | 0.008103                    |[0m
+[1;32m| -> computeJacobian            | 0.005903                    |[0m
+[1;32m| -> updateEKF                  | 0.002083                    |[0m
+[1;32m| generateVisualMapPoints       | 0.000219                    |[0m
+[1;32m| updateVisualMapPoints         | 0.000087                    |[0m
+[1;32m| updateReferencePatch          | 0.000001                    |[0m
+[1;34m+-------------------------------------------------------------+[0m
+[1;32m| Current Total Time            | 0.009424                    |[0m
+[1;32m| Average Total Time            | 0.008800                    |[0m
+[1;34m+-------------------------------------------------------------+[0m

@@ -1,0 +1,681 @@
+{
+  "additional_source": [
+    "scripts/bench/methods_sensor_capture.py",
+    "scripts/bench/sensor_methods_campaign.py",
+    "src/bhl_robust/research/sensor_map_methods.py",
+    "src/bhl_robust/research/terrain_methods.py",
+    "scripts/native/livo_replay.py",
+    "src/bhl_robust/research/native_livo.py",
+    "scripts/bench/native_livo_methods_campaign.py"
+  ],
+  "campaign_id": "sensor-methods-20261010",
+  "input_files": {
+    "lio.tar.gz": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/artifacts/lio-runtime-inference.tar.gz",
+      "sha256": "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4"
+    },
+    "livo.tar.gz": {
+      "path": "/tmp/bhl-livo-runtime-v2-20261010.tar.gz",
+      "sha256": "61b3a96e16478b83bacd1c86aa6a3966395379a5d57d2cd4446a855ed2064f5a"
+    },
+    "model.onnx": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-sensors-20261008/inputs/c_fast_foundationstereo_bp2_dynbatch_dynhw.onnx",
+      "sha256": "2c79bbb274dc0aef687a8732b987077e9e3aa26ff9dd653141cda48c57dad5d3"
+    },
+    "ort.whl": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-sensors-20261008/inputs/onnxruntime_gpu-1.22.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "sha256": "d30c1512f22b1f01bacb4f177d49cbefd23e0f4bef56066f1282992d133e6ff8"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke",
+        "--cell",
+        "0"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "smoke",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-smoke-00-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "01:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "0"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-00-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "1"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-01-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "2"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-02-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "3"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-03-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "4"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-04-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "5"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-05-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "6"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-06-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "7"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-07-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "8"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-08-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "9"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-09-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "10"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-10-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "11"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-11-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "12"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-12-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "13"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-13-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "14"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-14-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "15"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-15-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "16"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-16-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "17"
+      ],
+      "entrypoint": "scripts/bench/sensor_methods_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 1536,
+      "name": "sensor-methods-run-17-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "v51"
+  },
+  "schema_version": 1,
+  "sensor_methods": {
+    "analysis_unit": "six geometry variants, all conditions grouped, never frame-level significance",
+    "cells": [
+      {
+        "condition": "nominal",
+        "family": "textured_boxes",
+        "geometry_group": "textured_boxes-g610000",
+        "geometry_seed": 610000,
+        "id": "textured_boxes-g610000-nominal"
+      },
+      {
+        "condition": "low_texture",
+        "family": "textured_boxes",
+        "geometry_group": "textured_boxes-g610000",
+        "geometry_seed": 610000,
+        "id": "textured_boxes-g610000-low_texture"
+      },
+      {
+        "condition": "lidar_half",
+        "family": "textured_boxes",
+        "geometry_group": "textured_boxes-g610000",
+        "geometry_seed": 610000,
+        "id": "textured_boxes-g610000-lidar_half"
+      },
+      {
+        "condition": "nominal",
+        "family": "textured_boxes",
+        "geometry_group": "textured_boxes-g610001",
+        "geometry_seed": 610001,
+        "id": "textured_boxes-g610001-nominal"
+      },
+      {
+        "condition": "low_texture",
+        "family": "textured_boxes",
+        "geometry_group": "textured_boxes-g610001",
+        "geometry_seed": 610001,
+        "id": "textured_boxes-g610001-low_texture"
+      },
+      {
+        "condition": "lidar_half",
+        "family": "textured_boxes",
+        "geometry_group": "textured_boxes-g610001",
+        "geometry_seed": 610001,
+        "id": "textured_boxes-g610001-lidar_half"
+      },
+      {
+        "condition": "nominal",
+        "family": "thin_posts",
+        "geometry_group": "thin_posts-g610000",
+        "geometry_seed": 610000,
+        "id": "thin_posts-g610000-nominal"
+      },
+      {
+        "condition": "low_texture",
+        "family": "thin_posts",
+        "geometry_group": "thin_posts-g610000",
+        "geometry_seed": 610000,
+        "id": "thin_posts-g610000-low_texture"
+      },
+      {
+        "condition": "lidar_half",
+        "family": "thin_posts",
+        "geometry_group": "thin_posts-g610000",
+        "geometry_seed": 610000,
+        "id": "thin_posts-g610000-lidar_half"
+      },
+      {
+        "condition": "nominal",
+        "family": "thin_posts",
+        "geometry_group": "thin_posts-g610001",
+        "geometry_seed": 610001,
+        "id": "thin_posts-g610001-nominal"
+      },
+      {
+        "condition": "low_texture",
+        "family": "thin_posts",
+        "geometry_group": "thin_posts-g610001",
+        "geometry_seed": 610001,
+        "id": "thin_posts-g610001-low_texture"
+      },
+      {
+        "condition": "lidar_half",
+        "family": "thin_posts",
+        "geometry_group": "thin_posts-g610001",
+        "geometry_seed": 610001,
+        "id": "thin_posts-g610001-lidar_half"
+      },
+      {
+        "condition": "nominal",
+        "family": "ramp_step",
+        "geometry_group": "ramp_step-g610000",
+        "geometry_seed": 610000,
+        "id": "ramp_step-g610000-nominal"
+      },
+      {
+        "condition": "low_texture",
+        "family": "ramp_step",
+        "geometry_group": "ramp_step-g610000",
+        "geometry_seed": 610000,
+        "id": "ramp_step-g610000-low_texture"
+      },
+      {
+        "condition": "lidar_half",
+        "family": "ramp_step",
+        "geometry_group": "ramp_step-g610000",
+        "geometry_seed": 610000,
+        "id": "ramp_step-g610000-lidar_half"
+      },
+      {
+        "condition": "nominal",
+        "family": "ramp_step",
+        "geometry_group": "ramp_step-g610001",
+        "geometry_seed": 610001,
+        "id": "ramp_step-g610001-nominal"
+      },
+      {
+        "condition": "low_texture",
+        "family": "ramp_step",
+        "geometry_group": "ramp_step-g610001",
+        "geometry_seed": 610001,
+        "id": "ramp_step-g610001-low_texture"
+      },
+      {
+        "condition": "lidar_half",
+        "family": "ramp_step",
+        "geometry_group": "ramp_step-g610001",
+        "geometry_seed": 610001,
+        "id": "ramp_step-g610001-lidar_half"
+      }
+    ],
+    "estimated_native_cells": 54,
+    "estimated_total_full_frames": 2700,
+    "frames": 150,
+    "lio_input": "lio.tar.gz",
+    "livo_input": "livo.tar.gz",
+    "mapping": "instantaneouslocal measuredmaps, no truepose registration; uncertainty is engineering assumption with measured interval coverage",
+    "model_input": "model.onnx",
+    "ort_input": "ort.whl",
+    "replay_gate": {
+      "initialization_exclusion_s": 5.0,
+      "maximum_ate_rmse_m": 0.1,
+      "maximum_native_compute_p95_s": 0.1,
+      "maximum_rotation_p95_deg": 5.0,
+      "minimum_tracking_fraction": 0.9
+    },
+    "scope": "new development geometry variants in existing families, paired corruptions, not physical or unseen-family confirmation",
+    "smoke_frames": 60
+  }
+}

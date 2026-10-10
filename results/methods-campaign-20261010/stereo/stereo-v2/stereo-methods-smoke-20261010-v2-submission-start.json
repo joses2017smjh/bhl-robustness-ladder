@@ -1,0 +1,25 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=stereo-methods-smoke-20261010-v2",
+    "--partition=gpu,dgxh,ampere",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--time=00:20:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-smoke-20261010-v2-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-smoke-20261010-v2-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--exclude=dgxh-1",
+    "--gres=gpu:1",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2",
+    "stereo-methods-smoke-20261010-v2",
+    "9d8ed3780f31cb1a78c1b9ac6006aa57b663011120381e499b08f85167c09cf7"
+  ],
+  "created_utc": "2026-10-10T21:03:40.649354+00:00"
+}

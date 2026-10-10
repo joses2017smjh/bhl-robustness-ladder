@@ -1,0 +1,66 @@
+RUN cmake -S /tmp/bhl-livo-build-20261010 -B /tmp/bhl-livo-build-20261010/build -DCMAKE_BUILD_TYPE=Release
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/bhl-livo-build-20261010/build
+RUN cmake --build /tmp/bhl-livo-build-20261010/build --parallel 2
+[  8%] Building CXX object CMakeFiles/fastlivo_headless.dir/FAST-LIVO2/src/voxel_map.cpp.o
+[ 16%] Building CXX object CMakeFiles/fastlivo_headless.dir/FAST-LIVO2/src/vio.cpp.o
+[ 25%] Building CXX object CMakeFiles/fastlivo_headless.dir/FAST-LIVO2/src/frame.cpp.o
+In file included from /tmp/bhl-livo-build-20261010/sysroot/usr/include/boost/bind.hpp:30,
+                 from /tmp/bhl-livo-build-20261010/FAST-LIVO2/src/frame.cpp:13:
+/tmp/bhl-livo-build-20261010/sysroot/usr/include/boost/config/pragma_message.hpp:24:34: note: ‘#pragma message: The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+   24 | # define BOOST_PRAGMA_MESSAGE(x) _Pragma(BOOST_STRINGIZE(message(x)))
+      |                                  ^~~~~~~
+/tmp/bhl-livo-build-20261010/sysroot/usr/include/boost/bind.hpp:36:1: note: in expansion of macro ‘BOOST_PRAGMA_MESSAGE’
+   36 | BOOST_PRAGMA_MESSAGE(
+      | ^~~~~~~~~~~~~~~~~~~~
+[ 33%] Building CXX object CMakeFiles/fastlivo_headless.dir/FAST-LIVO2/src/visual_point.cpp.o
+[ 41%] Building CXX object CMakeFiles/fastlivo_headless.dir/Sophus/sophus/so3.cpp.o
+[ 50%] Building CXX object CMakeFiles/fastlivo_headless.dir/Sophus/sophus/se3.cpp.o
+[ 58%] Building CXX object CMakeFiles/fastlivo_headless.dir/rpg_vikit/vikit_common/src/pinhole_camera.cpp.o
+[ 66%] Building CXX object CMakeFiles/fastlivo_headless.dir/rpg_vikit/vikit_common/src/math_utils.cpp.o
+[ 75%] Building CXX object CMakeFiles/fastlivo_headless.dir/rpg_vikit/vikit_common/src/robust_cost.cpp.o
+[ 83%] Building CXX object CMakeFiles/fastlivo_headless.dir/rpg_vikit/vikit_common/src/vision.cpp.o
+[ 91%] Building CXX object CMakeFiles/fastlivo_headless.dir/imu_and_transport.cpp.o
+[100%] Linking CXX executable fastlivo_headless
+/usr/bin/ld: warning: libgdal.so.30, needed by /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so, not found (try using -rpath or -rpath-link)
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALGetDataTypeName'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALDataset::GetRasterCount()'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALRasterBand::GetYSize()'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALDataset::GetRasterBand(int)'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALRasterBand::GetRasterDataType()'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALDataset::GetRasterYSize()'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALRasterBand::GetXSize()'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALOpen'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALRasterBand::RasterIO(GDALRWFlag, int, int, int, int, void*, int, int, GDALDataType, long long, long long, GDALRasterIOExtraArg*)'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALColorTable::GetColorEntry(int) const'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALClose'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALColorTable::GetPaletteInterpretation() const'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALAllRegister'
+/usr/bin/ld: /tmp/bhl-livo-build-20261010/sysroot/usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so: undefined reference to `GDALDataset::GetRasterXSize()'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/fastlivo_headless.dir/build.make:257: fastlivo_headless] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:83: CMakeFiles/fastlivo_headless.dir/all] Error 2
+gmake: *** [Makefile:91: all] Error 2
+Traceback (most recent call last):
+  File "/tmp/bhl-livo-source-v1-20261010/scripts/native/livo_build.py", line 232, in <module>
+    if __name__ == '__main__': main()
+                               ^^^^^^
+  File "/tmp/bhl-livo-source-v1-20261010/scripts/native/livo_build.py", line 229, in main
+    print(json.dumps(build(args.work.resolve(), args.output.resolve(), args.jobs), indent=2))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-livo-source-v1-20261010/scripts/native/livo_build.py", line 192, in build
+    run(['cmake', '--build', work / 'build', '--parallel', str(jobs)], env=env)
+  File "/tmp/bhl-livo-source-v1-20261010/scripts/native/livo_build.py", line 30, in run
+    return subprocess.run(list(map(str, args)), check=True, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/.uv-python/cpython-3.11.16-linux-x86_64-gnu/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['cmake', '--build', '/tmp/bhl-livo-build-20261010/build', '--parallel', '2']' returned non-zero exit status 2.
+srun: error: dgx2-4: task 0: Exited with exit code 1

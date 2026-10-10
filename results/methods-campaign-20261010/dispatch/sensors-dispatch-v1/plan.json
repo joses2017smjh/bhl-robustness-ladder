@@ -1,0 +1,135 @@
+{
+  "schema": "bhl-methods-dispatch-v1",
+  "campaign_dir": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/sensors-v2",
+  "archive_sha256": "207a5129cd3df243f48f6fddccd5f74030ba6a163c9aeb151a119b9d014bf5fe",
+  "protocol_sha256": "2d648f2ebd1632accfca7438347562dead448d0c759b073d1fa6a80ef62be9ac",
+  "smoke": {
+    "name": "sensor-methods-smoke-00-20261010",
+    "existing_job_id": "21757575",
+    "expected_fields": {
+      "phase": "smoke",
+      "scientific_status": "SMOKE_ONLY"
+    }
+  },
+  "jobs": [
+    {
+      "name": "sensor-methods-run-00-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-01-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-02-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-03-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-04-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-05-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-06-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-07-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-08-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-09-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-10-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-11-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-12-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-13-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-14-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-15-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-16-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    },
+    {
+      "name": "sensor-methods-run-17-20261010",
+      "expected_fields": {
+        "phase": "run"
+      }
+    }
+  ],
+  "max_concurrency": 1,
+  "poll_seconds": 30,
+  "scope": "Run every frozen predeclared development job once after same-source GPU smoke. Stop on execution failure. Publish and freshly download raw evidence before retiring duplicate local packaging. Negative scientific outcomes remain negative; no performance claim from partial results.",
+  "source_sha256": {
+    "methods_dispatch.py": "87727d6f5bd59c5500519a8c0faab3139ce288f9c9bfc0cd2268b41208442526",
+    "methods_archive.py": "2037a4da6418dec0c3c1e5e0fc7427ff6f736cff15eab6d262a17aa0c092ebe0",
+    "h34_campaign.py": "8264618c648992e6c40f97b36cd73837cf867bffc195ab9c0f065c9c412170a1"
+  },
+  "minimum_free_bytes": 134217728,
+  "reserved_output_bytes": 369098752,
+  "max_local_campaign_bytes": 1073741824
+}

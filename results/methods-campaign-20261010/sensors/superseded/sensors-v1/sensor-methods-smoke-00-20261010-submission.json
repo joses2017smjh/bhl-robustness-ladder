@@ -1,0 +1,39 @@
+{
+  "archive_sha256": "97ac5c4b41e5d2e6691642c6799037f23cb6d3c1b7feb9845f2cf2da15aa6876",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=sensor-methods-smoke-00-20261010",
+    "--partition=gpu,dgxh,ampere",
+    "--cpus-per-task=4",
+    "--mem=32G",
+    "--time=01:00:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/sensors-v1/sensor-methods-smoke-00-20261010-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-methods-20261010/sensors-v1/sensor-methods-smoke-00-20261010-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--gres=gpu:1",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/sensors-v1/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/sensors-v1",
+    "sensor-methods-smoke-00-20261010",
+    "97ac5c4b41e5d2e6691642c6799037f23cb6d3c1b7feb9845f2cf2da15aa6876"
+  ],
+  "job_id": "21757535",
+  "resources": {
+    "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+    "cpus": 4,
+    "gpus": 1,
+    "memory_gb": 32,
+    "partition": "gpu,dgxh,ampere",
+    "requeue": false,
+    "time_limit": "01:00:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21757535\n",
+  "submitted_utc": "2026-10-10T21:08:09.968828+00:00"
+}

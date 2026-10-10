@@ -1,0 +1,94 @@
+{
+  "schema": "bhl-native-livo-build-intake-v1",
+  "purpose": "Native runtime build only; no scored accuracy or navigation outcomes",
+  "allocation": "21756762",
+  "cpus": 2,
+  "memory_gb": 31,
+  "native_jobs": 2,
+  "source_snapshot": "/tmp/bhl-livo-source-v2-20261010",
+  "source_files": {
+    "scripts/native/livo_build.py": {
+      "sha256": "8519d4308c63588c1bacac19b7622dd9c9d33ddbdb65d8f8dee130dd66032bbb",
+      "bytes": 13497
+    },
+    "scripts/native/livo_headless_main.cpp": {
+      "sha256": "6b08d0c88100e2a5703e8a26789c0a354faa0b8ca6630e7f463028d136e511ba",
+      "bytes": 10513
+    },
+    "scripts/native/livo_replay.py": {
+      "sha256": "f5181d47c76dd1d14db8c086206a3f02872efbe2b268347e87441531b0dadd6b",
+      "bytes": 8128
+    },
+    "scripts/bench/native_livo_methods_campaign.py": {
+      "sha256": "d03a078b4adc2942154b58a93534fb3d263e8c46ca9c42a0f7680dd529673090",
+      "bytes": 5733
+    },
+    "src/bhl_robust/research/native_livo.py": {
+      "sha256": "a496261a14bf2e364d078abe87e3fc10fa0554a6ec399e7c968bd981bf69b953",
+      "bytes": 9582
+    },
+    "tests/test_native_livo.py": {
+      "sha256": "03ed22b6fbf4d5fd48284d82628b8a60e96ebaed3e786e4c0acf9cd7f5ef3542",
+      "bytes": 6102
+    },
+    "docs/NATIVE_LIVO_2026-10-10.md": {
+      "sha256": "dea5a618cfc311529fedccd1c0dac27a3666c67439d40ac27bca09316944ab5a",
+      "bytes": 6558
+    }
+  },
+  "dependency_preparation_sha256": "b5aed7a6e02b2aab2409d654ddc6f28b962f7e35e17559b01369da14f14b463c",
+  "dependency_preparation_bytes": 5059385,
+  "dependency_work": "/tmp/bhl-livo-build-20261010",
+  "runtime_output": "/tmp/bhl-livo-runtime-20261010",
+  "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+  "model_change": "none",
+  "previous_step": "21756762.6",
+  "previous_status": "LINK_DEPENDENCY_SEARCH_PATH_FAILURE",
+  "change": "Add private sysroot usr/lib to link/runtime paths for existing GDAL dependency; estimator source and algorithm parameters unchanged",
+  "retained_compiled_objects": {
+    "build/CMakeFiles/fastlivo_headless.dir/imu_and_transport.cpp.o": {
+      "sha256": "2c7182bc462bdf3323047dcdcc0a2bf6ab8e2c1c702967807501caab26b26936",
+      "bytes": 186792
+    },
+    "build/CMakeFiles/fastlivo_headless.dir/rpg_vikit/vikit_common/src/pinhole_camera.cpp.o": {
+      "sha256": "52e12cdb9058e0df1b2ba795b15cb7ba343fc942746493506bca83bab7818d02",
+      "bytes": 23080
+    },
+    "build/CMakeFiles/fastlivo_headless.dir/rpg_vikit/vikit_common/src/math_utils.cpp.o": {
+      "sha256": "edc050ca65f06f4e222546db7feb7c5d0e17a7afaebaeb34fba9874b225f993c",
+      "bytes": 15432
+    },
+    "build/CMakeFiles/fastlivo_headless.dir/rpg_vikit/vikit_common/src/robust_cost.cpp.o": {
+      "sha256": "13142b011d38027aeb8e6daa2243e32bf2a3fa0c9fb0ae2103fbf423d9abbf17",
+      "bytes": 21944
+    },
+    "build/CMakeFiles/fastlivo_headless.dir/rpg_vikit/vikit_common/src/vision.cpp.o": {
+      "sha256": "3c8a8ae9d7f2d2a9b6d53806dd2f32b39125dabddeb1b61f176d7fa04a931d8f",
+      "bytes": 7224
+    },
+    "build/CMakeFiles/fastlivo_headless.dir/Sophus/sophus/so3.cpp.o": {
+      "sha256": "95bb103fd6e13276401082270d6aaccfe9d551d81c45cf63fd5d1f756a57d81f",
+      "bytes": 11848
+    },
+    "build/CMakeFiles/fastlivo_headless.dir/Sophus/sophus/se3.cpp.o": {
+      "sha256": "e6ca603c864f1b7d1321be4606f058e5e74ec4850b4cb5c43f75abff3928ffb6",
+      "bytes": 20544
+    },
+    "build/CMakeFiles/fastlivo_headless.dir/FAST-LIVO2/src/vio.cpp.o": {
+      "sha256": "4c2656af230c0f242a14c3a2ee10ea39fce49641adaf14dfe4a083488af3c149",
+      "bytes": 297880
+    },
+    "build/CMakeFiles/fastlivo_headless.dir/FAST-LIVO2/src/frame.cpp.o": {
+      "sha256": "96aade2c5e30f2e07cf131a66790e265453a68ae1ff353c5b112f08b5c250a92",
+      "bytes": 9104
+    },
+    "build/CMakeFiles/fastlivo_headless.dir/FAST-LIVO2/src/voxel_map.cpp.o": {
+      "sha256": "1fd218c6de9cc2f027dd7284a9437288c311ed3a9aca31f99c8f7adb5138f51d",
+      "bytes": 322624
+    },
+    "build/CMakeFiles/fastlivo_headless.dir/FAST-LIVO2/src/visual_point.cpp.o": {
+      "sha256": "11c6f44d12b23bf13b3079986ac4c662af72dad68708413d106dfb483c5be3bb",
+      "bytes": 6520
+    }
+  }
+}

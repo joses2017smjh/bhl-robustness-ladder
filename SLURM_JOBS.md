@@ -4148,3 +4148,17 @@ Actual native ORB v2 full completed step21739893.8, same-archive fresh smoke2173
 One frozen host-side publisher uses12 Python sources plus the exact six-campaign plan (176549 bytes, manifestSHA41df52f6cf83567d0a5b457e4cbaedc2a7c47d54d6bb46915b4386d4ced10b6a). CPU1/4GiB/20min/preempt/no-requeue, no physics or native inference. It depends afterany ONLY on current stereo development21744334; completed LIO replay21743631, navigation21741509, terrain21742786, genuine ORB full step21739893.8 (receipt base21739893), and fresh stereo smoke21744333 remain statically bound to their exact archive/manifest/receipt hashes. Each source/completion/raw archive and derived outcome is independently checked. Original retired gzip identity is distinguished from verified retained logical payloads; all original manifest and input hashes remain anchored in immutable intake or the separately frozen publisher plan. Missing/incomplete evidence remains INCOMPLETE with unknown episode count. Negative scientific results are published unchanged. Smoke is excluded from development and confirmation.
 
 The explicitly user-authorized GitHub push uses a fresh isolated main clone, normal fastforward push, and clean-clone retry on concurrent remote changes. Compact reports/receipts and raw archives<=50MiB go to Git; larger raw sensor evidence goes to prerelease native-campaign-evidence-20261009 only after server digest/full-download verification. Existing exact navigation asset native-lio-navigation-development-21741509.tar.gz is reused. Native binaries/private frozen packs are excluded. The original dirty repository is never modified. A dated collection report/index links actual terminal outcomes.
+
+## Native methodology implementation — October 10, 2026
+
+Authorized follow-up to the October 9 native campaign. Original results remain frozen.
+
+- ORB read-only telemetry build: allocated CPU utility step in job 21756762, frozen source `/tmp/bhl-orb-diag-source-20261010/manifest.json`, original runtime SHA256 `0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704`. This is compilation, not a scored experiment. Native SLAM library and initialization threshold remain unchanged.
+- Terrain development proposal: 3 frozen actors × 3 terrains × 10 fresh groups × 3 controller arms = 270 episodes, conditional on a fresh native smoke. Detailed per-track freezes/submissions will be appended before launch.
+- ORB telemetry build v2: same original runtime/wrapper; complete SHA-pinned OpenCV development header set repairs missing dnn.hpp dependency. New frozen source `/tmp/bhl-orb-diag-source-v2-20261010/manifest.json`; allocated CPU utility step21756762. Prior failed build retained.
+
+Per-track live preregistration and submission ledgers: [terrain](results/methods-campaign-20261010/terrain/SLURM_JOBS.md), [stereo](results/methods-campaign-20261010/stereo/SLURM_JOBS.md), [native LIVO](results/methods-campaign-20261010/livo/SLURM_JOBS.md). These record source freezes and actual job IDs before scored execution. Method implementation does not establish improvement.
+
+Perceptive teacher/student methodology jobs: see [predeclared ledger](results/methods-campaign-20261010/perceptive/SLURM_JOBS.md).
+
+Sensor mapping/native fusion method jobs: see [predeclared ledger](results/methods-campaign-20261010/sensors/SLURM_JOBS.md).

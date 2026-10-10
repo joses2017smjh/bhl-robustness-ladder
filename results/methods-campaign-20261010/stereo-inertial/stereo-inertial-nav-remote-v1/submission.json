@@ -1,0 +1,23 @@
+{
+  "plan_sha256": "0325b46e92f11ec17f5c533354ddfb8efdc59a70234525809d773503555ffa61",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--account=eecs",
+    "--ntasks=1",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--time=01:00:00",
+    "--partition=gpu,dgxh,ampere",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--exclude=dgxh-1",
+    "--gres=gpu:1",
+    "--no-requeue",
+    "--job-name=stereo-inertial-navigation-smoke",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-inertial-nav-remote-v1/remote-%j.log",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-inertial-nav-remote-v1/run.sbatch"
+  ],
+  "returncode": 0,
+  "job_id": "21757768",
+  "stderr": ""
+}

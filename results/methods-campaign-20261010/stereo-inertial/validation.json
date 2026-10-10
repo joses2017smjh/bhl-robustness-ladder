@@ -1,0 +1,26 @@
+{
+  "schema": "bhl-stereo-inertial-validation-v1",
+  "status": "PASS",
+  "tests": {
+    "passed": 36,
+    "failed": 0,
+    "scope": "existing stereo protocol/backward compatibility plus 19 inertial-specific cases",
+    "command": "srun --jobid=21756762 --exact -n1 -c2 --mem=8G env OMP_NUM_THREADS=1 TMPDIR=/tmp TMP=/tmp TEMP=/tmp PYTHONPATH=source/src /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python -m pytest -q -o addopts= source/tests/test_native_orb.py source/tests/test_native_orb_inertial.py",
+    "initial_environment_failure": "Two existing tests rejected inherited /scratch symlink-backed temporary paths. Unchanged source passed after explicitTMPDIR=/tmp."
+  },
+  "native_build_step": "21756762.31",
+  "native_smoke_step": "21756762.32",
+  "initial_build_launch_failure": "python3 not in SIF PATH; no compilation or simulation started. Relaunched with existing shared venv interpreter.",
+  "runtime_archive_sha256": "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+  "source_manifest_sha256": "aed98910e42007217f3660ff76eb81f8bc74dad60a3a693f09aab56757be07e8",
+  "scope": "Actual unchanged native ORB-SLAM3 IMU_STEREO backend plus strict transport; technical execution is not scientific qualification",
+  "navigation_tests": {
+    "passed": 4,
+    "failed": 0,
+    "scope": "pre-inertial visual pose rejection, fixed mounting conversion and map-frame change stop",
+    "command": "srun --jobid=21756762 --exact -n1 -c2 --mem=8G env TMPDIR=/tmp TMP=/tmp TEMP=/tmp PYTHONPATH=src python -m pytest -q -o addopts= tests/test_stereo_inertial_navigation.py"
+  },
+  "native_full_replay_step": "21756762.39",
+  "native_full_replay_frames": 900,
+  "observed_inertial_initialization_frames": 0
+}

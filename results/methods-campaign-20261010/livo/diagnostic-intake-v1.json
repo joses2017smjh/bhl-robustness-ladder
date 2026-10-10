@@ -1,0 +1,27 @@
+{
+  "schema": "bhl-native-livo-diagnostic-intake-v1",
+  "files": {
+    "driver.py": "e137fd80534a4bcc709bb95b47ec19d6d3b3b3677508180ea6aeb1f61d3343a8",
+    "diagnostic-protocol.json": "c05cd924b06b535c8fafe050b122e39bb8bf4866c159dbcea2cb042e0315720f",
+    "src/bhl_robust/__init__.py": "290f5d6a451d1a1554e2f87b5bf93588fd2c744ee9cef5f0a26a316311bedc8f",
+    "src/bhl_robust/research/__init__.py": "b33d1943114ca09bfc67925ea077cc112566014b2b4bbf9bc46d4c9baf259fa0",
+    "src/bhl_robust/research/native_livo.py": "a496261a14bf2e364d078abe87e3fc10fa0554a6ec399e7c968bd981bf69b953",
+    "src/bhl_robust/research/native_lio.py": "adaedb54dd15e99d0a4d9a999e73e0f2da92af9897a250d9f2b7d90943037d57",
+    "src/bhl_robust/research/native_orb.py": "36761f5b03f9a6bef62cc32571df51ae767abae5bce03e6405a75d3e75ddd517",
+    "src/bhl_robust/research/pose_metrics.py": "de28970a53cda9defac9238f99e2df6648c8d3af76b289042a698a839743b582",
+    "scripts/native/livo_replay.py": "f5181d47c76dd1d14db8c086206a3f02872efbe2b268347e87441531b0dadd6b",
+    "scripts/native/lio_replay.py": "80f7681850d64ec36788c0481a182249a9de3aab6b89db790dff69bd8dbb6c43",
+    "scripts/bench/native_livo_methods_campaign.py": "d03a078b4adc2942154b58a93534fb3d263e8c46ca9c42a0f7680dd529673090",
+    "scripts/bench/native_slam_campaign.py": "e0bc5459b106d52d65760211e0063404045953bda4066d121f9d656318c5d6dd",
+    "scripts/bench/pose_research.py": "2cb4ef0571326fd39c3eb98f24690ddc40ee589c44558662263e7ca2b5e7c54c",
+    "scripts/bench/h34_campaign.py": "8264618c648992e6c40f97b36cd73837cf867bffc195ab9c0f065c9c412170a1"
+  },
+  "capture_sha256": "ec15004ac7be4b58d33f78d6a4b5924d1d4a72b00c9332473d5617818ba08ca1",
+  "lio_runtime_sha256": "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+  "livo_runtime_sha256": "d0116636b7d04a975baf3e7ecf81269a7993b69df04bbc9a9264ee6d54094106",
+  "smoke": "First35originalimages from textured_boxes_native; actual nativevisual and visual-disabled arms; require35outputs and>=1tracked; visual arm also>=1visual-measurement frame",
+  "diagnostic": "3previouslyconsumedscene groups x3nativearms;9cells,1350nativeframes; same-source smoke must pass first",
+  "allocation": "21756762",
+  "cpus": 2,
+  "memory_gb": 16
+}

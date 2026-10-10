@@ -1,0 +1,87 @@
+{
+  "additional_source": [
+    "scripts/bench/stereo_inertial_navigation_campaign.py",
+    "src/bhl_robust/research/native_orb_inertial.py"
+  ],
+  "campaign_id": "stereo-inertial-navigation-20261010",
+  "input_files": {
+    "actors/dr-default-s0/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/deploy.yaml",
+      "sha256": "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71"
+    },
+    "actors/dr-default-s0/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/policy.onnx",
+      "sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--runtime-archive",
+        "{work}/orb-stereo-inertial-runtime.tar.gz",
+        "--runtime-archive-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--runtime-archive-url",
+        "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/orb-stereo-inertial-runtime-v1-20261010.tar.gz",
+        "--output",
+        "{output}",
+        "--phase",
+        "smoke"
+      ],
+      "entrypoint": "scripts/bench/stereo_inertial_navigation_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "smoke",
+      "max_output_mb": 512,
+      "name": "stereo-inertial-nav-smoke-20261010",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "01:00:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "stereo_inertial_navigation": {
+    "arms": [
+      "stereo",
+      "stereo_inertial"
+    ],
+    "development_episodes_if_smoke_qualifies": 18,
+    "development_seconds": 40,
+    "development_seeds": [
+      580000,
+      580001,
+      580002
+    ],
+    "initialization_gate": "both native inertial smoke episodes must initialize, accept native poses and finish with no falls/contacts/nonfinite",
+    "native_runtime_sha256": "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+    "negative_gate": "18 development episodes remain unrun; no automatic parameter tuning",
+    "scope": "New simulation development; 5Hz body-attached stereo, 200Hz original specific-force/gyro. Native inertial pose is unavailable to navigation until actual initialization. Shared raw LiDAR brake; no physical/confirmation claim.",
+    "smoke_episodes": 4,
+    "smoke_seconds": 20,
+    "smoke_seeds": [
+      570000,
+      570001
+    ]
+  }
+}
