@@ -3,7 +3,9 @@
 the robot are, so that failed episodes can be sorted by what went wrong (failure_modes.py reads the JSON).
 
 The poses come from the env's oracle() and are used for this log only; the policy sees the head image, the state and
-the instruction as always. Arms: base (i.i.d. N(0, I) noise, the deployed policy) or zero (noise = 0).
+the instruction as always. Arms: base (i.i.d. N(0, I) noise, the deployed policy), zero (noise = 0), or latent_const
+(one random DSRL latent per episode, held for the whole episode and logged: does the latent decide which tumbler is
+taken?). --max-decisions ends every episode early (the pick-up happens in the first seconds).
 Seeds: dev range 1000-1999 only. Not a scored run.
 
 usage (through dsrl_gpu.sbatch, which adds --env-python):
@@ -53,7 +55,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_common_args(ap)
     ap.add_argument("--seeds", required=True)
-    ap.add_argument("--arm", choices=("base", "zero"), default="base")
+    ap.add_argument("--arm", choices=("base", "zero", "latent_const"), default="base")
+    ap.add_argument("--max-decisions", type=int, default=0, help="end each episode after this many decisions (0 = off)")
     ap.add_argument("--n-envs", type=int, default=8)
     ap.add_argument("--noise-seed", type=int, default=0)
     ap.add_argument("--out", required=True, type=Path)
@@ -65,6 +68,7 @@ def main():
     H = int(args.exec_horizon or policy.n_action_steps)
     T, D = policy.noise_shape
     noise_map = NoiseMap(T, D, args.noise_mode, args.noise_k, args.active_dims)
+    b = float(args.action_magnitude)
     venv = ChunkVecEnv(env_spec(args), args.n_envs, python=args.env_python)
     queue, done_eps = list(seeds), {}
     slot, obs = {}, {}
@@ -81,6 +85,9 @@ def main():
             slot[i] = {"seed": int(s), "instruction": obs[i]["instruction"], "target_colour": o["target_colour"],
                        "target_side": o["target_side"], "success": False, "fell": False, "steps": 0,
                        "stage_max": 0, "trace": [dict(snapshot(o), stage=0)]}
+            if args.arm == "latent_const":           # one latent per layout, reproducible from the two seeds
+                g = np.random.default_rng([args.noise_seed, int(s)])
+                slot[i]["latent"] = (np.clip(g.standard_normal(noise_map.latent_dim), -b, b) / b).round(4).tolist()
         return list(todo)
 
     t0 = time.time()
@@ -88,9 +95,12 @@ def main():
     while active:
         ol = [obs[i] for i in active]
         ctx = policy.encode(ol)
-        noise, _ = choose_noise(args.arm, list(range(len(active))), [slot[i]["seed"] for i in active],
-                                [len(slot[i]["trace"]) - 1 for i in active], None, policy, noise_map,
-                                float(args.action_magnitude), None, args.noise_seed)
+        if args.arm == "latent_const":
+            noise = noise_map(torch.as_tensor(np.asarray([slot[i]["latent"] for i in active], np.float32) * b))
+        else:
+            noise, _ = choose_noise(args.arm, list(range(len(active))), [slot[i]["seed"] for i in active],
+                                    [len(slot[i]["trace"]) - 1 for i in active], None, policy, noise_map, b, None,
+                                    args.noise_seed)
         chunks = policy.denoise(ctx, noise.to(args.device))[:, :H].numpy()
         venv.step_async({i: chunks[j] for j, i in enumerate(active)})
         res = venv.step_wait()
@@ -103,7 +113,8 @@ def main():
             ep["fell"] |= r["fell"]
             ep["trace"].append(dict(snapshot(venv.oracle(i)), stage=int(r["stage_last"])))
             obs[i] = r["obs"]
-            if r["done"]:
+            if r["done"] or (args.max_decisions and len(ep["trace"]) - 1 >= args.max_decisions):
+                ep["cut_short"] = not r["done"]
                 done_eps[ep["seed"]] = ep
                 finished.append(i)
                 print(f"[trace] {len(done_eps)}/{len(seeds)} seed={ep['seed']} success={ep['success']} "
@@ -111,6 +122,7 @@ def main():
         active = [i for i in active if i not in finished] + start(finished)
     venv.close()
     out = {"purpose": "dev", "arm": args.arm, "exec_horizon": H, "noise_seed": args.noise_seed, "seeds": seeds,
+           "action_magnitude": b, "noise_map": noise_map.describe(), "max_decisions": args.max_decisions,
            "policy_path": args.policy_path, "env_kwargs": json.loads(args.env_kwargs),
            "slurm_job": os.environ.get("SLURM_JOB_ID"), "host": os.uname().nodename, "wall_s": time.time() - t0,
            "successes": sum(e["success"] for e in done_eps.values()),

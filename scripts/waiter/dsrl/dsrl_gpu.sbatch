@@ -14,6 +14,7 @@
 #   sbatch dsrl_gpu.sbatch eval  <eval_dsrl.py args...>
 #   sbatch dsrl_gpu.sbatch check <smolvla_noise.py args...>
 #   sbatch dsrl_gpu.sbatch trace <trace_base.py args...>      (dev diagnostic: per-decision object poses)
+#   sbatch dsrl_gpu.sbatch probe <probe_features.py args...>  (dev diagnostic: what the SAC observation encodes)
 # Give --n-envs <= cpus-per-task - 2. --env-python is added automatically for train/eval.
 # For runs longer than the time limit pass --max-wall-min (a few minutes under --time) and resubmit with --resume.
 #
@@ -25,7 +26,7 @@ WS=/nfs/hpc/share/sanchej7/Humanoid_Lite
 REPO=${DSRL_REPO:-$WS/bhl-robustness-ladder}
 LEARNER_PY=${DSRL_LEARNER_PY:-$WS/venv-lehome-train/bin/python}
 ENV_PY=${DSRL_ENV_PY:-$WS/venv/bin/python}
-MODE=${1:?usage: dsrl_gpu.sbatch train|eval|check|trace args...}
+MODE=${1:?usage: dsrl_gpu.sbatch train|eval|check|trace|probe args...}
 shift
 
 export TMPDIR=/tmp
@@ -50,5 +51,6 @@ case "$MODE" in
   eval)  exec "$LEARNER_PY" "$D/eval_dsrl.py" --env-python "$ENV_PY" "$@" ;;
   check) exec "$LEARNER_PY" "$D/smolvla_noise.py" "$@" ;;
   trace) exec "$LEARNER_PY" "$D/trace_base.py" --env-python "$ENV_PY" "$@" ;;
+  probe) exec "$LEARNER_PY" "$D/probe_features.py" --env-python "$ENV_PY" "$@" ;;
   *) echo "unknown mode $MODE" >&2; exit 2 ;;
 esac
