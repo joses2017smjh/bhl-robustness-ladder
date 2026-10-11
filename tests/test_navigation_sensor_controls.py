@@ -2,13 +2,14 @@
 import importlib.util
 import json
 from pathlib import Path
+import sys
 from types import SimpleNamespace
 
 import numpy as np
 import pytest
 
 from bhl_robust.research.navigation_sensor_controls import (
-    ARMS, AvailableImu, condition_spec, exposure_image, measured_brake_comparison, tracking_events,
+    ARMS, AvailableImu, NativeCoordinateEpochTracker, condition_spec, exposure_image, measured_brake_comparison, tracking_events,
 )
 
 
@@ -16,7 +17,11 @@ def module():
     path = Path(__file__).resolve().parents[1] / "scripts/bench/native_sensor_controls_campaign.py"
     spec = importlib.util.spec_from_file_location("test_native_sensor_controls_campaign", path)
     mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    previous = sys.path.copy()
+    try:
+        spec.loader.exec_module(mod)
+    finally:
+        sys.path[:] = previous
     return mod
 
 
@@ -96,6 +101,111 @@ def test_tracking_duration_keeps_unrecovered_loss_censored():
     assert result["completed_recovery_durations_s"] == [2.]
     assert result["right_censored_loss_duration_s"] == 4.
     assert result["native_map_changes"] == 1
+
+
+def native_frame(stamp, *, map_id=0, state=2, initialized=None):
+    frame = {"timestamp_s": stamp, "map_id": map_id, "tracking_state": state,
+             "tracked": state == 2, "T_W_C": np.eye(4).tolist() if state == 2 else None,
+             "compute_seconds": .001}
+    if initialized is not None:
+        frame["inertial"] = {"map_imu_initialized": initialized}
+    return frame
+
+
+def test_epoch_split_preserves_native_id_and_collapses_simultaneous_reset_evidence():
+    tracker = NativeCoordinateEpochTracker()
+    assert tracker.observe(native_frame(1., initialized=True))["epoch_id"] == 0
+    reset = tracker.observe(native_frame(1.2, map_id=None, state=1, initialized=False))
+    assert reset["continuity_invalidated"] and reset["coordinate_invalidations"] == 1
+    assert set(reset["invalidation_reasons"]) == {"native_map_identity_unavailable", "native_imu_initialization_unconfirmed", "native_returned_to_not_initialized"}
+    assert tracker.observe(native_frame(1.4, map_id=None, state=1, initialized=False))["coordinate_invalidations"] == 1
+    next_map = tracker.observe(native_frame(1.6, initialized=False))
+    assert next_map["native_map_id"] == 0 and next_map["epoch_id"] == 1
+    assert tracker.observe(native_frame(1.8, initialized=True))["coordinate_invalidations"] == 1
+
+
+@pytest.mark.parametrize("state", [3, 4])
+def test_retained_map_transient_loss_does_not_create_coordinate_epoch(state):
+    tracker = NativeCoordinateEpochTracker()
+    tracker.observe(native_frame(1., initialized=True))
+    lost = tracker.observe(native_frame(1.2, state=state, initialized=True))
+    restored = tracker.observe(native_frame(1.4, initialized=True))
+    assert not lost["continuity_invalidated"] and restored["epoch_id"] == 0
+    assert tracker.receipt()["coordinate_invalidations"] == 0
+
+
+@pytest.mark.parametrize("reset", ["id", "reinitialize", "imu"])
+def test_each_native_coordinate_reset_signal_invalidates_same_or_different_id(reset):
+    tracker = NativeCoordinateEpochTracker()
+    tracker.observe(native_frame(1., initialized=True))
+    frame = native_frame(1.2, map_id=1 if reset == "id" else 0,
+                         state=1 if reset == "reinitialize" else 2,
+                         initialized=reset != "imu")
+    observation = tracker.observe(frame)
+    assert observation["epoch_id"] == 1 and observation["coordinate_invalidations"] == 1
+    with pytest.raises(ValueError, match="unique ordered"):
+        tracker.observe(frame)
+
+
+def mock_client(arm, frames, monkeypatch):
+    mod = module()
+    monkeypatch.setattr(mod.STEREO, "native_camera_to_imu", lambda pose, _: np.asarray(pose))
+    client = mod.MatchedNativeClient({"arm": arm, "condition": "nominal", "true_t_imu_lidar": np.eye(4)},
+                                    np.eye(4), Path("unused"))
+    remaining = iter(frames)
+    client.orb = SimpleNamespace(track=lambda *args, **kwargs: next(remaining))
+    if arm in ("permanent_stop", "verified_lio_recovery"):
+        client.lio = SimpleNamespace(track=lambda scan, imu: {
+            "timestamp_s": scan["frame_timestamp_s"], "tracked": True, "T_W_I": np.eye(4).tolist(),
+            "state": "TRACKING", "map_reset_id": 0, "effective_points": 100, "compute_seconds": .001})
+    return client
+
+
+def client_frame(client, stamp, *, camera_stamp=None):
+    scan = {"frame_timestamp_s": stamp, "event_timestamp_s": stamp,
+            "stereo": {"timestamp_s": stamp if camera_stamp is None else camera_stamp,
+                       "left": "not-used.png", "right": "not-used.png"},
+            "additional_sensor_compute_seconds": .002}
+    imu = {"timestamp_s": np.array([stamp]), "gyro_rad_s": np.zeros((1, 3)),
+           "specific_force_m_s2": np.zeros((1, 3))}
+    return client.track(scan, imu)
+
+
+@pytest.mark.parametrize("arm", ["stereo", "stereo_inertial", "permanent_stop"])
+def test_permanent_stop_rejects_reused_id_after_reset_and_deduplicates_held_packets(arm, monkeypatch):
+    inertial = arm == "stereo_inertial"
+    frames = [native_frame(1., initialized=True if inertial else None),
+              native_frame(1.2, state=1, map_id=None, initialized=False if inertial else None),
+              native_frame(1.4, initialized=True if inertial else None)]
+    client = mock_client(arm, frames, monkeypatch)
+    assert client_frame(client, 1.)["tracked"]
+    stopped = client_frame(client, 1.2)
+    assert not stopped["tracked"] and stopped["native_coordinate_invalidations"] == 1
+    held = client_frame(client, 1.3, camera_stamp=1.2)
+    assert not held["new_native_camera_frame"]
+    resumed_native = client_frame(client, 1.4)
+    assert resumed_native["native_ORB_map_id"] == 0
+    assert resumed_native["native_coordinate_epoch_id"] == 1
+    assert not resumed_native["tracked"] and resumed_native["map_reset_id"] == 1
+    assert tracking_events(client.records, 2.)["native_coordinate_invalidations"] == 1
+
+
+def test_recovery_same_id_reset_requires_six_new_disjoint_samples_even_zero_pose_jump(monkeypatch):
+    frames = [native_frame(1.), native_frame(1.2, map_id=None, state=1)]
+    frames += [native_frame(1.4 + i*.2) for i in range(6)]
+    client = mock_client("verified_lio_recovery", frames, monkeypatch)
+    assert client_frame(client, 1.)["tracked"]
+    assert not client_frame(client, 1.2)["tracked"]
+    following = [client_frame(client, 1.4 + i*.2) for i in range(6)]
+    assert not any(packet["tracked"] for packet in following[:-1])
+    assert following[-1]["state"] == "VERIFIED_MAP_RECOVERY_RESUME"
+    assert following[-1]["tracked"]
+    assert following[-1]["native_ORB_map_id"] == 0
+    assert following[-1]["native_coordinate_epoch_id"] == 1
+    evidence = following[-1]["recovery_evidence"]
+    assert len(evidence["calibration_timestamps_s"]) == len(evidence["validation_timestamps_s"]) == 3
+    assert max(evidence["calibration_timestamps_s"]) < min(evidence["validation_timestamps_s"])
+    assert client.recovery.receipt()["lio_pose_fallback"] is False
 
 
 def test_protocol_is_bounded_and_smoke_development_seeds_disjoint():

@@ -1,0 +1,18 @@
+{
+  "schema": "bhl.ci-validation-receipt.v1",
+  "commit": "f881a0b338be4f2c1b2682ccd49eb9755629f30e",
+  "run_id": 38132690483,
+  "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/38132690483",
+  "conclusion": "success",
+  "cpu_regression": {
+    "passed": 2897,
+    "skipped": 132,
+    "subtests_passed": 10,
+    "duration_seconds": 426.86
+  },
+  "trained_asset_and_negative_controls": "success",
+  "seeded_physics_fault_and_timing_replay": "success",
+  "full_downloaded_log_sha256": "56b646fb5de9fde7cb8742a694d6c1b7804ae47bd29893b96b1832fbb149f2a8",
+  "artifact_zip_sha256": "6ecc3b10e85781774fe13bed3b19af85e08764c48b06ae0d6f149f668ae86c10",
+  "scope": "TUM VI adapter and evaluator implementation commit; subsequent causal epoch fix requires its own validation."
+}

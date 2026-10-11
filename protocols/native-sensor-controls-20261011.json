@@ -1,5 +1,5 @@
 {
-  "schema": "bhl-native-sensor-controls-v1-protocol",
+  "schema": "bhl-native-sensor-controls-v2-protocol",
   "conditions": {
     "nominal": {
       "camera_hz": 5.0
@@ -1355,6 +1355,10 @@
   "arm_development_gate": "nominal smoke has a native accepted pose, full horizon and no fall/contact/nonfinite; inertial arm additionally actually initializes",
   "fault_negative_policy": "do not require tracking/goals under smoke faults; scientific degradation never masquerades as runtime failure",
   "planner_inputs": "native accepted pose, prescribed route, nominal known start, shared measured raw LiDAR brake",
+  "coordinate_epoch_policy": "causal observed map identity unavailability/ID change, previously observed IMU initialization becoming unconfirmed, or return to NOT_INITIALIZED conservatively invalidates registration even if ID is reused; retained-identity transient tracking loss alone is not an invalidation",
+  "epoch_metric_scope": "wrapper observes map identity through usable tracked map points, not direct Atlas state; count logical registration invalidations separately from observed native ID changes, never as confirmed native resets",
+  "permanent_stop_policy": "after first accepted epoch, any observed coordinate-continuity invalidation permanently rejects later poses",
+  "recovery_epoch_policy": "native map ID recorded separately; logical monotone coordinate epoch is registration token; every new epoch requires unchanged three calibration plus three later validation observations, never LIO pose fallback",
   "false_free_metric": "evaluator-only false-clear raw-brake packets against original same-time ray surfaces; no complete occupancy claim",
   "sensor_noise": "ideal simulated cameras and IMU; three past-render exposure approximation, no hardware noise/shutter claim",
   "scope": "bounded matched development, no hardware or independent confirmation",

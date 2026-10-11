@@ -32,6 +32,73 @@ def condition_spec(name):
     return copy.deepcopy(CONDITIONS[name])
 
 
+class NativeCoordinateEpochTracker:
+    """Conservative causal registration epochs, including reused map IDs.
+
+    A retained map in RECENTLY_LOST/LOST does not itself mean coordinates reset.
+    The pinned shim observes a map through usable tracked map points, not the
+    Atlas directly. Missing identity/initialization can therefore mean missing
+    evidence rather than an actual native reset. We conservatively invalidate
+    continuity and require a new epoch for such uncertainty, an ID change, or
+    return to NOT_INITIALIZED. These events are not counted as confirmed resets.
+    No poses, truth or future frames enter this detector. Observe each unique
+    native camera response exactly once.
+    """
+    def __init__(self):
+        self.previous_stamp = -math.inf
+        self.previous_map = None
+        self.previous_initialized = None
+        self.previous_state = None
+        self.ever_had_map = False
+        self.pending_epoch = True
+        self.epoch = -1
+        self.events = []
+
+    def observe(self, frame):
+        stamp, native_map, state = frame["timestamp_s"], frame["map_id"], frame["tracking_state"]
+        initialized = frame.get("inertial", {}).get("map_imu_initialized")
+        if (isinstance(stamp, bool) or not isinstance(stamp, (float, int))
+                or not math.isfinite(stamp) or stamp <= self.previous_stamp
+                or (native_map is not None and (type(native_map) is not int or native_map < 0))
+                or type(state) is not int or state not in (-1, 0, 1, 2, 3, 4, 5)
+                or (initialized is not None and type(initialized) is not bool)):
+            raise ValueError("unique ordered native response and explicit native diagnostics required")
+        reasons = []
+        if self.previous_map is not None and native_map is None:
+            reasons.append("native_map_identity_unavailable")
+        if self.previous_map is not None and native_map is not None and native_map != self.previous_map:
+            reasons.append("native_map_id_changed")
+        if self.previous_initialized is True and initialized is False:
+            reasons.append("native_imu_initialization_unconfirmed")
+        if self.ever_had_map and not self.pending_epoch and state == 1 and self.previous_state != 1:
+            reasons.append("native_returned_to_not_initialized")
+        if reasons:
+            self.events.append({"timestamp_s": stamp, "previous_native_map_id": self.previous_map,
+                                "native_map_id": native_map, "previous_epoch": self.epoch,
+                                "next_epoch": self.epoch + 1, "reasons": reasons})
+            self.pending_epoch = True
+        if native_map is not None:
+            if self.pending_epoch:
+                self.epoch += 1
+                self.pending_epoch = False
+            self.ever_had_map = True
+        elif self.ever_had_map:
+            self.pending_epoch = True
+        self.previous_stamp, self.previous_map = stamp, native_map
+        self.previous_initialized, self.previous_state = initialized, state
+        return {"epoch_id": self.epoch if native_map is not None else None,
+                "native_map_id": native_map, "continuity_invalidated": bool(reasons),
+                "invalidation_reasons": reasons, "coordinate_invalidations": len(self.events)}
+
+    def receipt(self):
+        return {"schema": "bhl-native-coordinate-epochs-v1", "epochs_observed": self.epoch + 1,
+                "coordinate_invalidations": len(self.events), "events": self.events,
+                "uses_native_diagnostics_only": True,
+                "confirmed_native_reset_count": None,
+                "observation_scope": "pinned wrapper observes map identity/IMU initialization through usable tracked map points; missing evidence conservatively invalidates registration, not proof of a native reset",
+                "transient_tracking_loss_with_retained_map_is_not_reset": True}
+
+
 def exposure_image(samples, timestamps, *, acquisition_s, exposure_s=0., gain=1., blackout=False):
     """Average actual past renders; never synthesize a future exposure sample."""
     values = [np.asarray(x) for x in samples]
@@ -133,4 +200,7 @@ def tracking_events(records, horizon_s):
             "recovery_duration_mean_s": float(np.mean(durations)) if durations else None,
             "right_censored_loss_duration_s": horizon_s - lost if lost is not None else None,
             "native_map_changes": map_changes,
+            "native_coordinate_invalidations": max((r.get("native_coordinate_invalidations", 0) for r in records), default=0),
+            "native_coordinate_epochs": max((r.get("native_coordinate_epoch_id") for r in records
+                                                if r.get("native_coordinate_epoch_id") is not None), default=-1) + 1,
             "recovery_time_scope": "accepted-output tracking at acquisition timestamps; delivery delay reported separately"}

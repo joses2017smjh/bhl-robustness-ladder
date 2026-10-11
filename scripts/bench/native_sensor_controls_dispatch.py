@@ -22,7 +22,7 @@ import tempfile
 import time
 
 SHARED_ROOT = Path("/nfs/hpc/share/sanchej7/humanoid-research-20261011")
-CAMPAIGN = SHARED_ROOT / "native-sensor-controls-v1"
+CAMPAIGN = SHARED_ROOT / "native-sensor-controls-v2"
 HELPERS = ("methods_dispatch.py", "methods_archive.py", "h34_campaign.py", "methods_remote_campaign.py")
 
 

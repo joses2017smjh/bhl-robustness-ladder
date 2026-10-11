@@ -136,7 +136,15 @@ class NativeOrbClient:
     ``frame['T_W_C']`` maps left optical camera coordinates into native map
     coordinates, and is null until/whenever tracking is unavailable. The native
     map origin is arbitrary; a navigation caller must register it without truth
-    and reject coordinate changes when map_id changes. Call sites should record
+    and reject coordinate changes using causal epoch continuity. Native map IDs
+    can be reused after an active-map reset; ID inequality alone is insufficient.
+    The pinned wrapper reads map identity/IMU initialization through usable
+    tracked map points; unavailable identity is not proof the Atlas map reset.
+    Conservatively invalidate registration on such continuity uncertainty,
+    return to NOT_INITIALIZED, or unconfirmed prior IMU initialization, even if
+    the later ID matches. Ordinary
+    transient tracking loss with a retained map need not imply new coordinates.
+    Call sites should record
     all responses, including tracking failures, rather than filtering them out.
     """
 

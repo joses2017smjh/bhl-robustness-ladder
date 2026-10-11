@@ -1,0 +1,25 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=native-controls-smoke-v2-20261011",
+    "--partition=gpu,dgxh,ampere",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--time=02:00:00",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2/native-controls-smoke-v2-20261011-%j.out",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2/native-controls-smoke-v2-20261011-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--exclude=dgxh-1",
+    "--gres=gpu:1",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2/h34_campaign.sbatch",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2",
+    "native-controls-smoke-v2-20261011",
+    "3628b95ced285660e27c0b3b0ca92a097415beaeedfa912da751832acc3b8282"
+  ],
+  "created_utc": "2026-10-11T10:49:57.917426+00:00"
+}

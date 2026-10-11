@@ -1,0 +1,27 @@
+{
+  "created_utc": "2026-10-11T10:53:48.275252+00:00",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=native-controls-dispatch-v2-20261011",
+    "--partition=share,eecs",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=24:00:00",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v2/dispatch-%j.log",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v2/dispatch-%j.log",
+    "--no-requeue",
+    "--chdir=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v2",
+    "--export=NONE",
+    "--dependency=afterok:21769132",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v2/dispatch.sbatch"
+  ],
+  "returncode": 0,
+  "stdout": "21769146\n",
+  "stderr": "",
+  "plan_sha256": "49812ecb6d0d27d472017f8a60f0b5a519b0f1d6c323b0a4833f70b2cd8893a4",
+  "script_sha256": "e2dbcffd711a45a5aa42ed9c6abcfbbc89cc0f0f0df7014c6c153349edeae2eb",
+  "job_id": "21769146"
+}

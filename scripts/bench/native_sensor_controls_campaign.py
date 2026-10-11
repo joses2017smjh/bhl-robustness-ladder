@@ -30,14 +30,14 @@ from bhl_robust.research.native_lio import NativeLioClient
 from bhl_robust.research.native_orb import NativeOrbClient, TRACKING_STATES, sha256, write_rectified_stereo_settings
 from bhl_robust.research.native_orb_inertial import write_stereo_inertial_settings
 from bhl_robust.research.navigation_sensor_controls import (
-    ARMS, CONDITIONS, AvailableImu, condition_spec, exposure_image,
+    ARMS, CONDITIONS, AvailableImu, NativeCoordinateEpochTracker, condition_spec, exposure_image,
     measured_brake_comparison, tracking_events,
 )
 from bhl_robust.research.pose_metrics import transform
 from bhl_robust.research.sensor_faults import fault_spec, perturb_cloud
 from bhl_robust.research.stereo_recovery import VerifiedMapRecovery
 
-SCHEMA = "bhl-native-sensor-controls-v1"
+SCHEMA = "bhl-native-sensor-controls-v2"
 SMOKE_SEED, DEVELOPMENT_SEEDS = 720000, (730000, 730001)
 CASES = ("straight", "occluders")
 
@@ -235,7 +235,9 @@ class MatchedNativeClient:
         self.last_camera = self.last_cloud = -math.inf
         self.latest_orb = self.latest_lio = None
         self.original_map = None
+        self.original_epoch = None
         self.map_changed = False
+        self.coordinate_epochs = NativeCoordinateEpochTracker()
         self.recovery = VerifiedMapRecovery()
 
     def __enter__(self):
@@ -298,11 +300,15 @@ class MatchedNativeClient:
             packet = dict(self.records[-1]) if self.records else empty_packet(stamp, "CAMERA_INITIALIZING")
         else:
             raw = self.latest_orb
+            epoch = self.coordinate_epochs.observe(raw)
             initialized = self.arm != "stereo_inertial" or raw["inertial"]["map_imu_initialized"]
+            if self.original_epoch is not None and epoch["continuity_invalidated"]:
+                self.map_changed = True
             if raw["tracked"] and initialized and raw["map_id"] is not None:
-                if self.original_map is None:
+                if self.original_epoch is None:
                     self.original_map = raw["map_id"]
-                elif raw["map_id"] != self.original_map:
+                    self.original_epoch = epoch["epoch_id"]
+                elif epoch["epoch_id"] != self.original_epoch:
                     self.map_changed = True
             accepted = bool(raw["tracked"] and initialized and raw["map_id"] is not None and not self.map_changed)
             pose = STEREO.native_camera_to_imu(raw["T_W_C"], self.runtime["true_t_imu_lidar"]) if raw["tracked"] else None
@@ -310,11 +316,17 @@ class MatchedNativeClient:
                 "state": "IMU_INITIALIZING_STOP" if not initialized else "MAP_CHANGED_STOP" if self.map_changed else TRACKING_STATES[raw["tracking_state"]],
                 "map_reset_id": int(self.map_changed), "compute_seconds": raw["compute_seconds"],
                 "native_ORB_map_id": raw["map_id"], "native_ORB_tracking_state": raw["tracking_state"],
+                "native_coordinate_epoch_id": epoch["epoch_id"],
+                "native_coordinate_invalidation_event": epoch["continuity_invalidated"],
+                "native_coordinate_invalidation_reasons": epoch["invalidation_reasons"],
+                "native_coordinate_invalidations": epoch["coordinate_invalidations"],
                 "native_ORB_diagnostics": raw.get("diagnostics"),
                 "native_imu_initialized": bool(initialized) if self.arm == "stereo_inertial" else None}
             if self.arm == "verified_lio_recovery":
                 packet.update(self.recovery.update({"timestamp_s": stamp, "tracked": raw["tracked"],
-                    "map_id": raw["map_id"], "T_W_I": pose.tolist() if pose is not None else None},
+                    # Registration identity is the causal coordinate epoch;
+                    # actual upstream map IDs remain separately recorded above.
+                    "map_id": epoch["epoch_id"], "T_W_I": pose.tolist() if pose is not None else None},
                     self.latest_lio or empty_packet(stamp, "LIO_INITIALIZING")))
         packet["additional_sensor_compute_seconds"] = float(scan["additional_sensor_compute_seconds"])
         packet["event_timestamp_s"] = scan["event_timestamp_s"]
@@ -336,6 +348,7 @@ class MatchedNativeClient:
                 "native_camera_frames": len(self.orb.responses) if hasattr(self, "orb") else 0,
                 "native_lio_frames": self.lio.index if hasattr(self, "lio") else 0,
                 "recovery": self.recovery.receipt(), "ground_truth_inputs": [], "lio_pose_fallback": False,
+                "coordinate_epochs": self.coordinate_epochs.receipt(),
                 "camera_settings_sha256": sha256(self.directory / "stereo.yaml") if hasattr(self, "orb") else None,
                 "native_orb_runtime_sha256": sha256(self.runtime["orb"] / "runtime.json"),
                 "native_lio_runtime_sha256": sha256(self.runtime["lio"] / "runtime.json"),
@@ -482,6 +495,10 @@ def declared_protocol():
         "arm_development_gate": "nominal smoke has a native accepted pose, full horizon and no fall/contact/nonfinite; inertial arm additionally actually initializes",
         "fault_negative_policy": "do not require tracking/goals under smoke faults; scientific degradation never masquerades as runtime failure",
         "planner_inputs": "native accepted pose, prescribed route, nominal known start, shared measured raw LiDAR brake",
+        "coordinate_epoch_policy": "causal observed map identity unavailability/ID change, previously observed IMU initialization becoming unconfirmed, or return to NOT_INITIALIZED conservatively invalidates registration even if ID is reused; retained-identity transient tracking loss alone is not an invalidation",
+        "epoch_metric_scope": "wrapper observes map identity through usable tracked map points, not direct Atlas state; count logical registration invalidations separately from observed native ID changes, never as confirmed native resets",
+        "permanent_stop_policy": "after first accepted epoch, any observed coordinate-continuity invalidation permanently rejects later poses",
+        "recovery_epoch_policy": "native map ID recorded separately; logical monotone coordinate epoch is registration token; every new epoch requires unchanged three calibration plus three later validation observations, never LIO pose fallback",
         "false_free_metric": "evaluator-only false-clear raw-brake packets against original same-time ray surfaces; no complete occupancy claim",
         "sensor_noise": "ideal simulated cameras and IMU; three past-render exposure approximation, no hardware noise/shutter claim",
         "scope": "bounded matched development, no hardware or independent confirmation",

@@ -1,0 +1,49 @@
+{
+  "schema": "bhl-native-epochs-real-trace-replay-v1",
+  "evaluated_utc": "2026-10-11T10:50:00.583734+00:00",
+  "tracker_source_sha256": "160f15f02121ff70ff73edc2b1719d6f772c9370e7c9c727d104a5a9f360e35d",
+  "external_recording": "TUM VI room1 predeclared first60s/max1200pairs",
+  "native_rerun": false,
+  "ground_truth_inputs": false,
+  "arms": [
+    {
+      "schema": "bhl-native-coordinate-epochs-v1",
+      "epochs_observed": 1,
+      "coordinate_invalidations": 0,
+      "events": [],
+      "uses_native_diagnostics_only": true,
+      "confirmed_native_reset_count": null,
+      "observation_scope": "pinned wrapper observes map identity/IMU initialization through usable tracked map points; missing evidence conservatively invalidates registration, not proof of a native reset",
+      "transient_tracking_loss_with_retained_map_is_not_reset": true,
+      "mode": "stereo",
+      "native_frames": 1200,
+      "actual_native_trace_sha256": "521db8c7290c8b81f730ba9d005797364bb6f5775806ab19285dc966a044167d"
+    },
+    {
+      "schema": "bhl-native-coordinate-epochs-v1",
+      "epochs_observed": 2,
+      "coordinate_invalidations": 1,
+      "events": [
+        {
+          "timestamp_s": 2.700206316,
+          "previous_native_map_id": 0,
+          "native_map_id": null,
+          "previous_epoch": 0,
+          "next_epoch": 1,
+          "reasons": [
+            "native_map_identity_unavailable",
+            "native_imu_initialization_unconfirmed"
+          ]
+        }
+      ],
+      "uses_native_diagnostics_only": true,
+      "confirmed_native_reset_count": null,
+      "observation_scope": "pinned wrapper observes map identity/IMU initialization through usable tracked map points; missing evidence conservatively invalidates registration, not proof of a native reset",
+      "transient_tracking_loss_with_retained_map_is_not_reset": true,
+      "mode": "stereo_inertial",
+      "native_frames": 1200,
+      "actual_native_trace_sha256": "d0242afc02e12fb83c3d87d867593f1bb3d9c4864ca1c5d623e9cbc7c5c45d99"
+    }
+  ],
+  "scope": "Read-only application of new causal registration-epoch detector to preserved real native diagnostics; a continuity invalidation is not independently a confirmed physical/native reset."
+}
