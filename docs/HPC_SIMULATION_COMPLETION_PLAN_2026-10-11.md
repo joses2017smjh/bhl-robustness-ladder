@@ -108,3 +108,23 @@ GitHub implementation validation completed successfully: **2,969 tests passed**,
 132 skipped and 10 subtests passed, followed by the trained-asset integration and
 seeded physics/fault replay checks. [Retained CI receipt](../results/simulation-completion-20261011/github-ci.json).
 Later progress commits change documentation/evidence only; the checked implementation remains unchanged.
+
+## Shared-storage quota clarification
+
+The user explicitly authorized use of the shared-storage 2 T allowance. A direct
+Lustre check confirms that inherited project **30762** has a **2 TiB hard quota**
+and a **1.5 TiB soft quota**, with a **30-day block grace period** after crossing
+the soft threshold. The project remained below the soft threshold at inspection,
+with about **524 GiB remaining to the hard quota**.
+
+The earlier `df` free-space observations were headroom below the soft threshold;
+they did not represent all space available under the hard quota. Future storage
+decisions should use project usage, hard headroom, remaining grace and physical
+filesystem capacity. The home **25 GiB** limit is separate. HPC share is authorized
+for bulk simulation data; installed runtimes and retained experiment evidence
+should not be removed merely because `df` approaches the soft threshold.
+
+[User authorization and exact quota-command evidence](../results/simulation-completion-20261011/shared-storage-authorization.json)
+are retained locally and here. This clarification does not modify the already
+frozen scientific cohorts or restart the healthy running controllers. Their
+current conservative admission checks and node-local output publication continue.

@@ -1,0 +1,54 @@
+{
+  "schema": "bhl-shared-storage-authorization-v1",
+  "recorded_utc": "2026-10-11T21:45:36.786169+00:00",
+  "user_instruction": "shared storage has 2 T limit and it is okay to tap into it",
+  "shared_root": "/nfs/hpc/share/sanchej7",
+  "lustre_project_id": 30762,
+  "project_usage_bytes": 1636201086976,
+  "project_soft_limit_bytes": 1649267441664,
+  "project_hard_limit_bytes": 2199023255552,
+  "project_hard_headroom_bytes": 562822168576,
+  "soft_block_grace_period": "4w2d",
+  "current_block_grace": "-",
+  "home_limit_bytes": 26843545600,
+  "policy": {
+    "bulk_data_destination": "HPC share and node-local scratch, preserving durable evidence",
+    "shared_budget_is_separate_from_home": true,
+    "use_above_soft_limit_authorized": true,
+    "respect_hard_quota_and_remaining_grace": true,
+    "check_physical_capacity_separately": true,
+    "do_not_treat_df_soft_quota_as_hard_quota": true
+  },
+  "current_campaign_change": "No frozen scientific source, protocol, active controller or quota was changed. Existing campaigns already use HPC share and node-local scratch and remain active. This records user authorization and the effective project quota for future storage/admission decisions.",
+  "evidence": [
+    {
+      "command": [
+        "/bin/lfs",
+        "quota",
+        "-p",
+        "30762",
+        "/nfs/hpc/share"
+      ],
+      "stdout": "Disk quotas for prj 30762 (pid 30762):\n      Filesystem  kbytes   bquota  blimit  bgrace   files   iquota  ilimit  igrace\n  /nfs/hpc/share 1597852624  1610612736 2147483648       - 2473267        0       0       -\n"
+    },
+    {
+      "command": [
+        "/bin/lfs",
+        "quota",
+        "-t",
+        "-p",
+        "/nfs/hpc/share"
+      ],
+      "stdout": "Block grace time: 4w2d; Inode grace time: 1w\n"
+    },
+    {
+      "command": [
+        "/bin/lfs",
+        "project",
+        "-d",
+        "/nfs/hpc/share/sanchej7"
+      ],
+      "stdout": "30762 P /nfs/hpc/share/sanchej7\n"
+    }
+  ]
+}
