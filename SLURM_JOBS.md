@@ -4325,3 +4325,19 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
 - Dev evaluations inside the run (seeds 1900-1931, 20 executed steps; reported, not gated): DSRL deterministic 10/32 untrained, 16/32 at 40,000 decisions, 20/32 at 80,000, 23/32 at 120,000. End of run: base 9/32, zero noise 12/32, random latent 5/32, **DSRL deterministic 24/32**, DSRL sampled 21/32 (start of run: base 12/32, zero noise 12/32).
 - **Scored evaluation `21767237` submitted 2026-10-11 00:35 from f4e5de2** (`eval_dsrl.py --scored-phase4-eval --gate rule_dsrl2.json --run-dir dsrl2 --seeds 6000-6099 --arms base,zero,dsrl,dsrl_stoch --n-envs 16 --noise-seed 0`): the one run on seeds 6000-6099, into `results/waiter-20261005/phase4-gate/scored_dsrl2.json` (write-once).
 - **What dsrl2's final policy changes, on dev seeds 1300-1347 (`21767238`, recorded 2026-10-11 00:44, before the scored result; not scored):** 28/48 successes with the deterministic latent (the base policy on these layouts, at 10 executed steps: 20/48; the pilot policy: 36/48). First tumbler picked up: **the target in 48 of 48 episodes** (base: 23 target, 17 the other, 8 none). The 20 failures come after the pick: 15 lost the tumbler from the tray while lifting or carrying it, 3 reached the table without setting the tray down, 1 tipped the tumbler before the tray, 1 ran out of time. After picking the target: 28/48 (base 20/23, pilot 36/47). The noise policy solved the choice of tumbler and made the carry less reliable; a policy that steered only the pick would do better than this one.
+
+**Waiter phase 4 gate, run dsrl2 (scored run `21767237`, finished 2026-10-11 01:20 on cn-gpu6, render check PASS; verdict written 2026-10-11 01:20): PASS by the predeclared rule** (`results/waiter-20261005/phase4-gate/verdict_dsrl2.json`, sha256 d40b8e71...; rule sha256 f50ce58d...; scored file sha256 fc99f911...). Seeds 6000-6099, run once, one episode per seed per arm, 20 executed steps, the run's final SAC checkpoint (sha256 c0cc0a37...):
+
+| arm | successes | Wilson 95% | falls | gated |
+|---|---|---|---|---|
+| base (frozen VLA, i.i.d. noise) | **23/100** | 0.16-0.32 | 0 | yes |
+| DSRL, deterministic latent | **63/100** | 0.53-0.72 | 0 | yes |
+| zero noise | 25/100 | | 0 | no |
+| DSRL, sampled latent | 68/100 | | 0 | no |
+
+- Paired by layout, DSRL deterministic against base: both 16, only DSRL 47, only base 7, neither 30; exact one-sided McNemar p = 1.1e-8 (need DSRL > base and p <= 0.05). Difference 40 points (bootstrap 95% 28-52).
+- Where the DSRL arm still fails (37 episodes, furthest stage): tray lifted 14, tray at the table 14, tumbler on the tray 3, tumbler lifted 3, start 3. The base arm's 77 failures: tumbler lifted 54, start 12, later stages 11. The noise policy removed the wrong-tumbler failures (dev traces above) and its remaining failures are in the carry and the set-down.
+- Zero noise does not explain it (25/100, the same as the base within noise).
+- Scope of this PASS: one checkpoint from one training run (dsrl2), chosen settings after one failed design (dsrl1, NEGATIVE, not scored) and two dev pilots; 20 executed steps; STANCE LOCK fixture; simulated camera; the frozen base is the phase 3 policy, whose own gate FAILED (28/100 at 10 executed steps) and stays failed. The scored seeds were run once.
+- Labels: LEARNED VLA (frozen) + LEARNED noise policy (RL in simulation, sparse task reward), LEARNED legs (s7, walking/turning), STANCE LOCK fixture (standing), SIMULATED head camera.
+- Committed with this entry: `scored_dsrl2.json`, `verdict_dsrl2.json`, the scored job's log.
