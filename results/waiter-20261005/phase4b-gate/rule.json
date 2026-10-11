@@ -1,0 +1,50 @@
+{
+ "gate": "Waiter phase 4b (DSRL on the phase 3b policy), run dsrl3, frozen 2026-10-11 14:51 before any seed 8000-8099 was run and before dsrl3 started",
+ "rule": "PASS iff the DSRL arm (the training run's final SAC checkpoint, deterministic latent) has more successes than the base arm (the same frozen VLA with i.i.d. N(0, I) noise, noise seed 0) AND the exact one-sided McNemar p <= 0.05; seeds 8000-8099, one episode per seed per arm, paired by seed; each layout's own instruction; 20 executed steps per 50-step chunk; WaiterEnv defaults (stance lock on, 90 s limit)",
+ "seed0": 8000,
+ "seed1": 8099,
+ "alpha": 0.05,
+ "exec_horizon": 20,
+ "noise_seed": 0,
+ "arms": [
+  "base",
+  "zero",
+  "dsrl",
+  "dsrl_stoch"
+ ],
+ "base_checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase3/runs/sft2_early/step_040000",
+ "base_model_sha256": "c85386ac8bc670921eda04442337ce1669931f703316fc670f37b8067f0a14da",
+ "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase4/runs/dsrl3",
+ "train": {
+  "seeds": "5000-5999",
+  "n_envs": 16,
+  "seed": 0,
+  "max_decisions": 120000,
+  "max_wall_min": 420,
+  "args": {
+   "reward": "sparse",
+   "shaping": "none",
+   "fall_penalty": "0.0",
+   "gamma": "0.999",
+   "noise_mode": "repeat",
+   "active_dims": "15",
+   "action_magnitude": "1.0",
+   "obs_encoder": "vlm",
+   "feature_mode": "pooled",
+   "target_entropy": "0.0",
+   "init_alpha": "0.1",
+   "no_backup_entropy": "True",
+   "utd": "2.0",
+   "n_critics": "10",
+   "critic_reduction": "min",
+   "batch_size": "256",
+   "hidden": "1024",
+   "layers": "3",
+   "warmup_transitions": "3000",
+   "actor_delay": "1"
+  }
+ },
+ "deploy": "results/waiter-20261005/wbc1c/training/waiter-wbc1c-s7.deploy.yaml",
+ "scorer": "scripts/waiter/dsrl/phase4_gate.py",
+ "same_as": "phase4-gate/rule_dsrl2.json in everything except the base policy (the phase 3b policy instead of the phase 3 policy), the run directory and the scored seeds (8000-8099, a range added for this gate)"
+}
