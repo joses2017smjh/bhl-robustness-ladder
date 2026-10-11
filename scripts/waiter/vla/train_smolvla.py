@@ -61,7 +61,9 @@ def parse_args(argv=None):
     g.add_argument("--limit-episodes", type=int)
     g.add_argument("--cache", type=Path, help="memmap cache dir (default $TMPDIR/waiter-vla-cache)")
     g.add_argument("--std-floor", type=float, default=1e-2)
-    g.add_argument("--sampling", choices=("frame", "episode"), default="frame")
+    g.add_argument("--sampling", default="frame",
+                   help="frame | episode | early:<K>:<P> (a fraction P of each batch from the first K frames of "
+                        "random episodes; see waiter_vla_data.batch_indices)")
     g = p.add_argument_group("model")
     g.add_argument("--base", default="lerobot/smolvla_base", help="HF repo id (offline cache) or local dir")
     g.add_argument("--chunk-size", type=int, default=50, help="actions predicted per call (50 = 4.0 s at 12.5 Hz)")
@@ -100,6 +102,8 @@ def parse_args(argv=None):
         p.error("steps, batch size, intervals, val-per-episode and chunk size must be positive")
     if not 1 <= args.n_action_steps <= args.chunk_size:
         p.error("need 1 <= n-action-steps <= chunk-size")
+    if args.sampling not in ("frame", "episode"):
+        wd.parse_early_mode(args.sampling)          # raises on a malformed mode
     if args.keep_last < 1:
         p.error("--keep-last must be >= 1")
     return args

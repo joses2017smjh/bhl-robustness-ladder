@@ -55,6 +55,25 @@ def test_action_chunk_pads_with_last_action_and_flags_padding():
         wd.action_chunk(actions, 5, 3)
 
 
+def test_early_sampling_mode():
+    lengths = [600, 30, 640, 500]
+    assert wd.parse_early_mode("early:40:0.4") == (40, 0.4)
+    for bad in ("early", "early:0:0.5", "early:40:1.0", "early:40:0", "late:40:0.4", "early:x:0.4"):
+        with pytest.raises(ValueError):
+            wd.parse_early_mode(bad)
+    a = wd.batch_indices(7, 0, 64, lengths, "early:40:0.4")
+    assert a == wd.batch_indices(7, 0, 64, lengths, "early:40:0.4") != wd.batch_indices(8, 0, 64, lengths, "early:40:0.4")
+    assert all(0 <= e < 4 and 0 <= f < lengths[e] for e, f in a)
+    many = [s for step in range(400) for s in wd.batch_indices(step, 0, 64, lengths, "early:40:0.4")]
+    early = sum(f < 40 for _, f in many) / len(many)
+    uniform = sum(min(40, n) for n in lengths) / sum(lengths)       # share of first-40 frames under 'frame'
+    assert abs(early - (0.4 + 0.6 * uniform)) < 0.02 and uniform < 0.09
+    short = [f for e, f in many if e == 1]                           # the 30-frame episode never yields frame >= 30
+    assert short and max(short) < 30
+    with pytest.raises(ValueError):
+        wd.batch_indices(0, 0, 4, lengths, "nonsense")
+
+
 def test_batch_indices_are_a_pure_function_of_seed_and_step():
     lengths = [7, 3, 40, 1]
     a = wd.batch_indices(12, 0, 64, lengths)
