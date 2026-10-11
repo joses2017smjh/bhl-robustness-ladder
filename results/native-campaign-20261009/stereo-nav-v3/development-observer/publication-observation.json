@@ -1,0 +1,21 @@
+{
+  "audit_status": "PASS",
+  "job_id": "21744334",
+  "kind": "stereo_navigation",
+  "label": "development-observer",
+  "measured_episodes": 9,
+  "problems": [],
+  "qualification_scope": "smoke excluded; development only, no independent confirmation or hardware validation",
+  "raw": {
+    "bytes": 597093723,
+    "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/stereo-nav-v3/nav-stereo-development-20261009-v3-21744334/outputs.tar.gz",
+    "sha256": "67e9be06140d443aa87bd38996b1c2947df753de84b5f992e41e548d604dbaca"
+  },
+  "scientific_status": "NEGATIVE",
+  "scope": "actual native ORB stereo pose plus raw LiDAR obstacle brake and frozen 12-DoF learned gait; simulated body-attached images, known start/external routes; no hardware claim",
+  "source_archive_sha256": "0c165e6a16b94649639605aa10747e367663ae51ca3ef28583e94f94bd8ddb7f",
+  "source_verification": {
+    "archive_sha256": "0c165e6a16b94649639605aa10747e367663ae51ca3ef28583e94f94bd8ddb7f",
+    "original_archive_rehashed": true
+  }
+}

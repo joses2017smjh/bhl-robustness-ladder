@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "changed_runtime_files": [
+    "source/src/bhl_robust/research/stereo_benchmark.py"
+  ],
+  "scientific_protocol_bytes_identical": true,
+  "change": "Import existing Torch before ONNX Runtime session creation to preload CUDA/cuDNN. No capture, calibration, metric, threshold, split or budget changes."
+}

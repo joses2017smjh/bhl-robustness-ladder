@@ -1,0 +1,57 @@
+{
+  "schema": "bhl-native-lio-license-sources-v1",
+  "gcc_release": "12.5.0",
+  "gcc_tag": "releases/gcc-12.5.0",
+  "gcc_commit": "c17d40bb3778bca5e81595f033df9222b66658eb",
+  "gcc_files": [
+    {
+      "path": "COPYING",
+      "url": "https://raw.githubusercontent.com/gcc-mirror/gcc/c17d40bb3778bca5e81595f033df9222b66658eb/COPYING",
+      "sha256": "231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c",
+      "size_bytes": 18002,
+      "retain": "full"
+    },
+    {
+      "path": "COPYING3",
+      "url": "https://raw.githubusercontent.com/gcc-mirror/gcc/c17d40bb3778bca5e81595f033df9222b66658eb/COPYING3",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "size_bytes": 35147,
+      "retain": "full"
+    },
+    {
+      "path": "COPYING.RUNTIME",
+      "url": "https://raw.githubusercontent.com/gcc-mirror/gcc/c17d40bb3778bca5e81595f033df9222b66658eb/COPYING.RUNTIME",
+      "sha256": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74",
+      "size_bytes": 3324,
+      "retain": "full"
+    },
+    {
+      "path": "libgcc/libgcc2.c",
+      "url": "https://raw.githubusercontent.com/gcc-mirror/gcc/c17d40bb3778bca5e81595f033df9222b66658eb/libgcc/libgcc2.c",
+      "sha256": "4051e1950496354f87c35cc92840c5b7141f5cc8cbf1723aed40ff73af765959",
+      "size_bytes": 55387,
+      "retain": "full"
+    },
+    {
+      "path": "libgomp/libgomp.h",
+      "url": "https://raw.githubusercontent.com/gcc-mirror/gcc/c17d40bb3778bca5e81595f033df9222b66658eb/libgomp/libgomp.h",
+      "sha256": "59188d8a0a1393307077c1b614d0973bc34f3522e584fa972ad8b949a20ccaa7",
+      "size_bytes": 48876,
+      "retain": "full"
+    },
+    {
+      "path": "libstdc++-v3/include/bits/c++config",
+      "url": "https://raw.githubusercontent.com/gcc-mirror/gcc/c17d40bb3778bca5e81595f033df9222b66658eb/libstdc++-v3/include/bits/c++config",
+      "sha256": "c7e8f035e20c23dd41820759fb0410842f2f1f08873b5d0c2e13508150a0ef43",
+      "size_bytes": 26180,
+      "retain": "full"
+    }
+  ],
+  "common_licenses_package": {
+    "package": "base-files",
+    "version": "12ubuntu4",
+    "size_bytes": 62940,
+    "sha256": "e692a0bf2e709b8a46c582a37aed657a03549539e015944987201fc0eeed14e0",
+    "url": "https://archive.ubuntu.com/ubuntu/pool/main/b/base-files/base-files_12ubuntu4_amd64.deb"
+  }
+}

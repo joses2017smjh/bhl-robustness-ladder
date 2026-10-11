@@ -1,0 +1,113 @@
+{
+  "base_commit": "ba73008a08c3d67c8870575ac9095ae2cec21354",
+  "compact_bundle_bytes": 1699095,
+  "compact_bundle_sha256": "f3c82c0ec9acdbb083e90618b8ad6bf48b663fe95ee6705deb8fd66d2e067e53",
+  "compact_tar_members": 20,
+  "disclosure": "Source and exact parent inputs only. External v51 Python dependencies and SIF are not included. Reconstructed file bytes match the full manifest; original tar/gzip bytes are not recreated.",
+  "exact_teacher_inputs": [
+    "inputs/h4_agent.yaml",
+    "inputs/h4_deploy.yaml",
+    "inputs/h4_env.yaml",
+    "inputs/h4_teacher.pt"
+  ],
+  "full_manifest_entries": 815,
+  "full_reconstructed_files_verified": 815,
+  "local_verification_stage": "/tmp/h34-exact-reconstruction-h4-v2",
+  "original_archive_bytes": 40385178,
+  "original_full_archive_sha256": "d017f07e2a860c76df00982557bcdab6bb897aca49d496f8c9d7c5d8aaec53c7",
+  "original_manifest_sha256": "bec166f52ca9920bbc9aa07c558012ceb3dfc80660d5cecfea5d612695850f11",
+  "original_protocol_sha256": "1538a528924c6651628e088510c1c1597509858a2730e58e2e3a3c15d48b06e5",
+  "recursively_pinned_submodules": {
+    "external/Berkeley-Humanoid-Lite": "984741a3623c93b0583ccfdc479f1f8b1c4d900e",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets": "fc90fedd008b1e56a22e3c5221548d6b24f49707",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel": "652777cc7c49884e7cd7ddfada758dc1979bf627"
+  },
+  "schema": "h34-exact-input-reconstruction-v1",
+  "selected_files": {
+    "inputs/h4_agent.yaml": {
+      "bytes": 1002,
+      "sha256": "b83dc5b095b84f3b2b99b2f7d34a8c1da8ebaf71b3b10ef5c9ed18421bee1e64"
+    },
+    "inputs/h4_deploy.yaml": {
+      "bytes": 2282,
+      "sha256": "9be5500a668ea7df899e817ac3569db83bfecb953f7921811e39ed4db85b9bde"
+    },
+    "inputs/h4_env.yaml": {
+      "bytes": 47189,
+      "sha256": "b84397a35a2c48167305ce40a1209e9b2549674ac17148cb78f76e28e66cc68d"
+    },
+    "inputs/h4_teacher.pt": {
+      "bytes": 1730869,
+      "sha256": "4f1b0c353421dd9ab3f4eb3d6dc755142e036ab4cabfbc0a85a77ae8087bc014"
+    },
+    "source/scripts/bench/h34_campaign.py": {
+      "bytes": 22782,
+      "sha256": "0bba98b7beb7c4f3f8c825834da70c623e679712e65eb9ce6dd22f516fc2cb3b"
+    },
+    "source/scripts/bench/h3_train.py": {
+      "bytes": 15527,
+      "sha256": "17d8a7903c31f4b97c554fadc252f70cf0c434ffbad3997b45a45ea8c956bc0f"
+    },
+    "source/scripts/bench/h4_qualification.py": {
+      "bytes": 6586,
+      "sha256": "2a838111a67bab1343239f44798caad2c58e33bdd9add461f0ef70f426772b6a"
+    },
+    "source/scripts/bench/h4_train.py": {
+      "bytes": 17973,
+      "sha256": "bb9202959fd4b7b044f62499e48f3107f83c33388dff33dd8d0ce4775a6b92c4"
+    },
+    "source/scripts/bench/history_latency_eval.py": {
+      "bytes": 18444,
+      "sha256": "4d14b30e9645bee2d663e553c6e31dd3ca41923615f2c3f965f5e903cd3bf35a"
+    },
+    "source/slurm/repo20261008/h34_campaign.sbatch": {
+      "bytes": 1286,
+      "sha256": "d1ed87d378c599a22ddc2fee86dd3cc5354e76973870d81485603a833159a85b"
+    },
+    "source/src/bhl_robust/eval/heading_observable.py": {
+      "bytes": 7709,
+      "sha256": "7d2bd6f594581e14af6168e32c2ca4d07763f6eeebf0c13007a83185bc62b4bf"
+    },
+    "source/src/bhl_robust/eval/history_latency.py": {
+      "bytes": 4388,
+      "sha256": "6a7cb0ee4703d0298f8a38237027760a0f02c9e713ab59fa565e9eead964909f"
+    },
+    "source/src/bhl_robust/latency_history.py": {
+      "bytes": 7921,
+      "sha256": "fe49ec6e733021d2ba9b252c1550a5041420d4d31d8168112a3f0643931fe922"
+    },
+    "source/src/bhl_robust/tasks/__init__.py": {
+      "bytes": 26740,
+      "sha256": "4bd447001c53c6ad8f5e1849a5491a4e9ea6b4527e1c9a7a4f149fcd67acba2c"
+    },
+    "source/src/bhl_robust/tasks/heading_observable_env_cfg.py": {
+      "bytes": 2232,
+      "sha256": "5e4b1ac4943d91a4f477729a1012c38b90d02f3801921f7f76d97cb308da5920"
+    },
+    "source/src/bhl_robust/tasks/history_latency_env_cfg.py": {
+      "bytes": 2691,
+      "sha256": "87596a332eb9505524c323892716f82377abdf29cfe800415abdffd4b10977f1"
+    }
+  },
+  "selected_source_paths": [
+    "source/scripts/bench/h34_campaign.py",
+    "source/scripts/bench/h3_train.py",
+    "source/scripts/bench/h4_qualification.py",
+    "source/scripts/bench/h4_train.py",
+    "source/scripts/bench/history_latency_eval.py",
+    "source/slurm/repo20261008/h34_campaign.sbatch",
+    "source/src/bhl_robust/eval/heading_observable.py",
+    "source/src/bhl_robust/eval/history_latency.py",
+    "source/src/bhl_robust/latency_history.py",
+    "source/src/bhl_robust/tasks/__init__.py",
+    "source/src/bhl_robust/tasks/heading_observable_env_cfg.py",
+    "source/src/bhl_robust/tasks/history_latency_env_cfg.py"
+  ],
+  "source_entries_in_overlay": 12,
+  "source_entries_reused_from_public_base": 799,
+  "status": "PASS",
+  "task": "H4",
+  "verification_method": "Every unchanged source byte materialized from immutable base/submodule Git blobs, followed by compact-tar readback overlay; all 815 file sizes and SHA256 values independently rechecked on disk.",
+  "verified_utc": "2026-10-09T02:37:45.335698+00:00",
+  "version": "v2"
+}

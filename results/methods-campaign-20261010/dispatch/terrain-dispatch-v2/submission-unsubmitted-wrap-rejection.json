@@ -1,0 +1,26 @@
+{
+  "plan_sha256": "5f121dc88fa942535060c61f4c5caccb264fb6c2cdc39e8e473fcd35ddc7bfdc",
+  "source_sha256": {
+    "methods_dispatch.py": "87727d6f5bd59c5500519a8c0faab3139ce288f9c9bfc0cd2268b41208442526",
+    "methods_archive.py": "2037a4da6418dec0c3c1e5e0fc7427ff6f736cff15eab6d262a17aa0c092ebe0",
+    "h34_campaign.py": "8264618c648992e6c40f97b36cd73837cf867bffc195ab9c0f065c9c412170a1"
+  },
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--account=eecs",
+    "--partition=share,eecs",
+    "--ntasks=1",
+    "--cpus-per-task=1",
+    "--mem=1G",
+    "--time=24:00:00",
+    "--no-requeue",
+    "--job-name=terrain-methods-dispatch-v2",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-dispatch-v2/utility-%j.log",
+    "--wrap",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python /nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-dispatch-v2/methods_dispatch.py --plan /nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-dispatch-v2/plan.json --plan-sha256 5f121dc88fa942535060c61f4c5caccb264fb6c2cdc39e8e473fcd35ddc7bfdc"
+  ],
+  "returncode": 1,
+  "job_id": "",
+  "stderr": "sbatch: error: Script arguments not permitted with --wrap option\n"
+}

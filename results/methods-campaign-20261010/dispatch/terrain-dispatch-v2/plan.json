@@ -1,0 +1,92 @@
+{
+  "schema": "bhl-methods-dispatch-v1",
+  "campaign_dir": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1",
+  "archive_sha256": "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77",
+  "protocol_sha256": "8060a32ceea75ca29a4eb08444385f71d755e6c7055760790d418b509d858e31",
+  "source_sha256": {
+    "methods_dispatch.py": "87727d6f5bd59c5500519a8c0faab3139ce288f9c9bfc0cd2268b41208442526",
+    "methods_archive.py": "2037a4da6418dec0c3c1e5e0fc7427ff6f736cff15eab6d262a17aa0c092ebe0",
+    "h34_campaign.py": "8264618c648992e6c40f97b36cd73837cf867bffc195ab9c0f065c9c412170a1"
+  },
+  "smoke": {
+    "name": "terrain-methods-smoke-20261010",
+    "existing_job_id": "21757058",
+    "expected_fields": {
+      "episodes": 3,
+      "phase": "smoke"
+    }
+  },
+  "jobs": [
+    {
+      "name": "terrain-methods-dr-default-s0-flat-20261010",
+      "expected_fields": {
+        "episodes": 30,
+        "phase": "development"
+      },
+      "existing_job_id": "21757070"
+    },
+    {
+      "name": "terrain-methods-dr-default-s0-small_steps-20261010",
+      "expected_fields": {
+        "episodes": 30,
+        "phase": "development"
+      },
+      "retry_unsubmitted_receipt_sha256": "95afebdd04980441e0324d138eaa0506578e87e6d5771a453f3c8031972220be"
+    },
+    {
+      "name": "terrain-methods-dr-default-s0-ramp-20261010",
+      "expected_fields": {
+        "episodes": 30,
+        "phase": "development"
+      }
+    },
+    {
+      "name": "terrain-methods-dr-default-s1-flat-20261010",
+      "expected_fields": {
+        "episodes": 30,
+        "phase": "development"
+      }
+    },
+    {
+      "name": "terrain-methods-dr-default-s1-small_steps-20261010",
+      "expected_fields": {
+        "episodes": 30,
+        "phase": "development"
+      }
+    },
+    {
+      "name": "terrain-methods-dr-default-s1-ramp-20261010",
+      "expected_fields": {
+        "episodes": 30,
+        "phase": "development"
+      }
+    },
+    {
+      "name": "terrain-methods-dr-default-s2-flat-20261010",
+      "expected_fields": {
+        "episodes": 30,
+        "phase": "development"
+      }
+    },
+    {
+      "name": "terrain-methods-dr-default-s2-small_steps-20261010",
+      "expected_fields": {
+        "episodes": 30,
+        "phase": "development"
+      }
+    },
+    {
+      "name": "terrain-methods-dr-default-s2-ramp-20261010",
+      "expected_fields": {
+        "episodes": 30,
+        "phase": "development"
+      }
+    }
+  ],
+  "max_concurrency": 1,
+  "poll_seconds": 30,
+  "max_local_campaign_bytes": 471859200,
+  "reserved_output_bytes": 268435456,
+  "minimum_free_bytes": 134217728,
+  "scope": "Serial execution of all nine predeclared30episode terrain shards, same frozen native-smoke source, SHA-verified raw release offload before next submission. No Git pushes, no implicit reruns, no scientific improvement claim before complete independent270cell collection."
+}

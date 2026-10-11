@@ -1,0 +1,31 @@
+{
+  "schema": "bhl-methods-dispatch-state-v1",
+  "plan_sha256": "ca1551302b518f7b352a94560b3e4ba5623a65efaaf51885ed330c01584479a4",
+  "started_utc": "2026-10-10T20:59:23.415866+00:00",
+  "dispatcher_job_id": "21757434",
+  "jobs": [
+    {
+      "name": "terrain-methods-dr-default-s0-flat-20261010",
+      "job_id": "21757070",
+      "scientific_status": "MEASURED_DEVELOPMENT_NO_CONFIRMATION",
+      "status": "PASS",
+      "episodes": 30,
+      "result_sha256": "d6653c8afbad816ccc709e5615fece3698c87e62408c11f8c4f332a695f4bbb0",
+      "publication": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/terrain-methods-dr-default-s0-flat-20261010-21757070/publication.json",
+      "raw_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/terrain-v1--terrain-methods-dr-default-s0-flat-20261010-21757070.tar.gz",
+      "raw_sha256": "0c39ef9a74c1fafc4c0359bc8b2c74d4bbb0ca106c2645313ba42cd384ab5af2",
+      "finished_utc": "2026-10-10T20:42:13.138250+00:00"
+    }
+  ],
+  "scientific_archive_sha256": "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77",
+  "status": "STOPPED",
+  "updated_utc": "2026-10-10T20:59:23.870660+00:00",
+  "current_index": 1,
+  "current_job": "terrain-methods-dr-default-s0-small_steps-20261010",
+  "current_job_id": "21757070",
+  "completed_jobs": 1,
+  "expected_jobs": 9,
+  "local_campaign_bytes": 75508667,
+  "error_type": "RuntimeError",
+  "reason": "bounded scientific job submission failed"
+}

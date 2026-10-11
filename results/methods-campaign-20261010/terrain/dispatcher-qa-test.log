@@ -1,0 +1,10 @@
+srun: job 21757387 queued and waiting for resources
+srun: job 21757387 has been allocated resources
+..................                                                       [100%]
+=============================== warnings summary ===============================
+Humanoid_Lite/venv/lib/python3.11/site-packages/_pytest/cacheprovider.py:475
+  /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/_pytest/cacheprovider.py:475: PytestCacheWarning: could not create cache path /nfs/.pytest_cache/v/cache/nodeids: [Errno 13] Permission denied: '/nfs/pytest-cache-files-2yq19rxk'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+18 passed, 1 warning in 39.04s

@@ -13,6 +13,12 @@ still consumes ray-cast depths. Physical-camera accuracy remains unmeasured.
 The [physical IMU contract](IMU_INPUT.md) documents the probable sensor model,
 SI units, body/world frames and the remaining hardware acceptance checks.
 
+The [October 8 research protocol](STEREO_LIDAR_RESEARCH_2026-10-08.md) uses
+this adapter as the classical baseline for held-out depth, obstacle and
+motion/timing comparisons. A [nine-artifact audit](../results/task-closure-20261008/sensor-data-audit/README.md)
+found sparse ray-depth/sector traces but no raw stereo/scan replay dataset;
+original calibrated image pairs and raw timed scans must be captured first.
+
 Both input images must already be horizontally rectified at the calibrated
 resolution with a common focal length. Calibration JSON is mandatory and has
 schema `bhl-rectified-stereo-v1`, plus all of these fields:

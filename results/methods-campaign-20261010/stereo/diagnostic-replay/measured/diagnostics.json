@@ -1,0 +1,128 @@
+{
+  "schema": "bhl-native-stereo-diagnostics-v1",
+  "status": "MEASURED_DIAGNOSTICS",
+  "streams": [
+    {
+      "source": "/tmp/orb-method-diagnostics-20261010-v2/replay/ramp_step_native/orb/native_frames.jsonl",
+      "source_sha256": "b9a76bf476474f13c801e16c225d7e44883fcdd690db56c7bed0b516de409680",
+      "frames": 150,
+      "native_tracked_frames": 122,
+      "initialization_reasons": {
+        "FEATURE_COUNT_NOT_ABOVE_500": 28,
+        "NOT_IN_INITIALIZATION": 122
+      },
+      "feature_threshold_exclusive": 500,
+      "first_tracked_timestamp_s": 5.6,
+      "features_total": {
+        "min": 293,
+        "median": 411.5,
+        "max": 541,
+        "p05": 324.6,
+        "p95": 510.54999999999995
+      },
+      "features_left": {
+        "min": 293,
+        "median": 411.5,
+        "max": 541,
+        "p05": 324.6,
+        "p95": 510.54999999999995
+      },
+      "features_right": {
+        "min": 302,
+        "median": 396.0,
+        "max": 558,
+        "p05": 321.0,
+        "p95": 518.0
+      },
+      "positive_stereo_depth_matches": {
+        "min": 228,
+        "median": 311.0,
+        "max": 399,
+        "p05": 249.45,
+        "p95": 374.54999999999995
+      },
+      "frames_above_native_initialization_feature_threshold": 11
+    },
+    {
+      "source": "/tmp/orb-method-diagnostics-20261010-v2/replay/textured_boxes_native/orb/native_frames.jsonl",
+      "source_sha256": "57116795e11be058a7f4e9d5475bdb112427433b23ca5c19c43fe6fce2324c87",
+      "frames": 150,
+      "native_tracked_frames": 0,
+      "initialization_reasons": {
+        "FEATURE_COUNT_NOT_ABOVE_500": 150
+      },
+      "feature_threshold_exclusive": 500,
+      "first_tracked_timestamp_s": null,
+      "features_total": {
+        "min": 178,
+        "median": 279.0,
+        "max": 463,
+        "p05": 193.35,
+        "p95": 421.65
+      },
+      "features_left": {
+        "min": 178,
+        "median": 279.0,
+        "max": 463,
+        "p05": 193.35,
+        "p95": 421.65
+      },
+      "features_right": {
+        "min": 178,
+        "median": 280.0,
+        "max": 450,
+        "p05": 198.0,
+        "p95": 432.7499999999999
+      },
+      "positive_stereo_depth_matches": {
+        "min": 82,
+        "median": 175.0,
+        "max": 275,
+        "p05": 98.45,
+        "p95": 240.54999999999998
+      },
+      "frames_above_native_initialization_feature_threshold": 0
+    },
+    {
+      "source": "/tmp/orb-method-diagnostics-20261010-v2/replay/thin_posts_native/orb/native_frames.jsonl",
+      "source_sha256": "0bd88904b2b81996fb91fb772956a4113ff97881aa9f692dcafe4c98eb77e734",
+      "frames": 150,
+      "native_tracked_frames": 0,
+      "initialization_reasons": {
+        "FEATURE_COUNT_NOT_ABOVE_500": 150
+      },
+      "feature_threshold_exclusive": 500,
+      "first_tracked_timestamp_s": null,
+      "features_total": {
+        "min": 216,
+        "median": 285.5,
+        "max": 427,
+        "p05": 227.45,
+        "p95": 407.0
+      },
+      "features_left": {
+        "min": 216,
+        "median": 285.5,
+        "max": 427,
+        "p05": 227.45,
+        "p95": 407.0
+      },
+      "features_right": {
+        "min": 194,
+        "median": 292.5,
+        "max": 414,
+        "p05": 223.35,
+        "p95": 396.54999999999995
+      },
+      "positive_stereo_depth_matches": {
+        "min": 98,
+        "median": 168.0,
+        "max": 245,
+        "p05": 111.45,
+        "p95": 233.0
+      },
+      "frames_above_native_initialization_feature_threshold": 0
+    }
+  ],
+  "scope": "Read-only native frame counts; no feature threshold or estimator changes; diagnostics alone are not an improvement experiment"
+}

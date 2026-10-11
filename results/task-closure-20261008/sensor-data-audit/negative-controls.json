@@ -1,0 +1,71 @@
+{
+  "schema": "bhl-sensor-audit-negative-controls-v1",
+  "source": "results/inspection_maze_probe.json",
+  "source_sha256": "a4911dfc7dec69bb5947140f41b04f4f3fc416ac1e547729b4c69d302a93b945",
+  "scope": "six in-memory corruptions of one retained real MuJoCo snapshot; verification of audit refusal only, not new sensor captures or perception results",
+  "controls": [
+    {
+      "control": "future_extero_timestamp",
+      "data_quality_verdict": "FAIL",
+      "replay_readiness": "NOT_READY",
+      "detected_issues": [
+        "freshness_flag_disagrees_with_logged_age",
+        "future_extero_timestamp"
+      ]
+    },
+    {
+      "control": "stale_capture_hidden_by_receive_time",
+      "data_quality_verdict": "FAIL",
+      "replay_readiness": "NOT_READY",
+      "detected_issues": [
+        "freshness_flag_disagrees_with_logged_age"
+      ]
+    },
+    {
+      "control": "missing_packet_marked_fresh",
+      "data_quality_verdict": "FAIL",
+      "replay_readiness": "NOT_READY",
+      "detected_issues": [
+        "missing_packet_marked_fresh"
+      ]
+    },
+    {
+      "control": "wrong_paired_depth_dimensions",
+      "data_quality_verdict": "FAIL",
+      "replay_readiness": "NOT_READY",
+      "detected_issues": [
+        "invalid_paired_idealized_depth_m_shape_or_values"
+      ]
+    },
+    {
+      "control": "nonfinite_lidar_range",
+      "data_quality_verdict": "FAIL",
+      "replay_readiness": "NOT_READY",
+      "detected_issues": [
+        "invalid_lidar_sector_m_shape_or_values"
+      ]
+    },
+    {
+      "control": "ray_depth_relabelled_as_physical_stereo",
+      "data_quality_verdict": "FAIL",
+      "replay_readiness": "NOT_READY",
+      "detected_issues": [
+        "ray_depth_source_not_explicitly_declared"
+      ]
+    }
+  ],
+  "rejected": 6,
+  "total": 6,
+  "targeted_tests": {
+    "command": "python -m pytest -q tests/test_sensor_dataset_audit.py",
+    "passed": 11,
+    "failed": 0
+  },
+  "auditor_sha256": "ba4ab94165b9321564cc265eb1fd667744d847cd75b6c83a8f65e46d3cd78461",
+  "cli_negative_control": {
+    "control": "future_extero_timestamp_in_real_snapshot",
+    "exit_code": 1,
+    "diagnostic_report_written": true,
+    "data_quality_verdict": "FAIL"
+  }
+}

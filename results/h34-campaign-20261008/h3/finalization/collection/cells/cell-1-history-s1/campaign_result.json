@@ -1,0 +1,89 @@
+{
+  "schema": "h3-training-cell-v1",
+  "task": "H3",
+  "arm": "history",
+  "seed": 1,
+  "phase": "run",
+  "cell": 1,
+  "status": "PASS",
+  "execution_status": "COMPLETE",
+  "science_status": "UNPAIRED_PENDING_SUMMARY",
+  "protocol_sha256": "3af1d9050797430e910375e1d51ac2ca024dfd908591e7b7f2b1f1181a609ea4",
+  "teacher_sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df",
+  "teacher_deploy_sha256": "79dd22c77687e5359fe99efff00407b65d44284cbf80aca70af188a744c11d1d",
+  "started_utc": "2026-10-09T02:39:57Z",
+  "num_envs": 4096,
+  "requested_iterations": 500,
+  "policy_dt": 0.04,
+  "training_physics_dt": 0.005,
+  "evaluation_physics_dt": 0.002,
+  "actor_width": 63,
+  "critic_width": 48,
+  "training_delay_steps": [
+    0,
+    1
+  ],
+  "training_delay_ms": [
+    0,
+    40
+  ],
+  "warmstart": "same teacher actor/critic/std; new18 actorweights zero; fresh optimizer",
+  "job_id": null,
+  "host": "cn-gpu5.hpc.engr.oregonstate.edu",
+  "cuda_guard": {
+    "gpu_name": "Quadro RTX 8000",
+    "capability": [
+      7,
+      5
+    ],
+    "kernel_value": 32.0,
+    "minimum_capability": [
+      7,
+      5
+    ]
+  },
+  "actor_terms": [
+    "velocity_commands",
+    "base_ang_vel",
+    "projected_gravity",
+    "joint_pos",
+    "joint_vel",
+    "actions",
+    "h3_past_imu"
+  ],
+  "critic_terms": [
+    "velocity_commands",
+    "base_ang_vel",
+    "projected_gravity",
+    "joint_pos",
+    "joint_vel",
+    "actions",
+    "base_lin_vel"
+  ],
+  "initial_action_parity_max_abs": 0.0,
+  "fresh_optimizer": true,
+  "actual_policy_shape": [
+    4096,
+    63
+  ],
+  "actual_critic_shape": [
+    4096,
+    48
+  ],
+  "training_wall_s": 1034.7958544529974,
+  "checkpoint_sha256": "8e4c6e9cbec3a14d4ab118cbfaccba92f9e0ee5160da4656ab51b8ca03bf7fdb",
+  "checkpoint_iteration": 499,
+  "completed_iterations": 500,
+  "export": {
+    "policy_sha256": "e658f2d67c4cea5d9a0c8d1fca0cf46ce9bfa10d33e64b5d7affa39e6cf6b0b8",
+    "input_width": 63,
+    "output_width": 12,
+    "numeric_parity_samples": 256,
+    "numeric_parity_max_abs": 4.76837158203125e-06,
+    "numeric_parity_atol": 1e-05,
+    "numeric_parity_rtol": 1e-05
+  },
+  "evaluation_episodes": 120,
+  "evaluation_sha256": "d5e9132a4c02e7b907fe956e73f5b70f2983c4718fb7f4ac5426c85ae1839d34",
+  "finished_utc": "2026-10-09T02:59:18Z"
+}

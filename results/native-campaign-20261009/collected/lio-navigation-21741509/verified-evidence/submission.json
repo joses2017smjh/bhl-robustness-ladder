@@ -1,0 +1,37 @@
+{
+  "archive_sha256": "df3d91ae4ad8c4c8688d7ed3ff8639baff7a5860043f39414871c559301cfa26",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=nav-lio-development-20261009-v2",
+    "--partition=preempt",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=01:30:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2/nav-lio-development-20261009-v2-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2/nav-lio-development-20261009-v2-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--dependency=afterok:21741213",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2",
+    "nav-lio-development-20261009-v2",
+    "df3d91ae4ad8c4c8688d7ed3ff8639baff7a5860043f39414871c559301cfa26"
+  ],
+  "job_id": "21741509",
+  "resources": {
+    "cpus": 2,
+    "gpus": 0,
+    "memory_gb": 8,
+    "partition": "preempt",
+    "requeue": false,
+    "time_limit": "01:30:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21741509\n",
+  "submitted_utc": "2026-10-09T21:40:08.932173+00:00"
+}

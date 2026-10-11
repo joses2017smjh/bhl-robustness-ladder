@@ -1,0 +1,468 @@
+{
+  "schema": "bhl-native-livo-publication-v1",
+  "original_capture_sha256": "ec15004ac7be4b58d33f78d6a4b5924d1d4a72b00c9332473d5617818ba08ca1",
+  "scope": "Reused development capture, no fresh confirmation or navigation claim",
+  "files": [
+    {
+      "path": "diagnostic/campaign_result.json",
+      "bytes": 305128,
+      "sha256": "a72051745f9e87ff739cd453f6df7cc2d2d0903202236163eb781f8774d7486d"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_lio2/campaign_result.json",
+      "bytes": 773,
+      "sha256": "b5e14f69475b75cf1d087f01c6194ace6d6224876d161c03a8a3452fc9909f45"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_lio2/estimator_receipt.json",
+      "bytes": 38042,
+      "sha256": "6e430e453f49e0bae715c2e2d42f5b0612198fb898d46a343aaf0ad98a387b55"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_lio2/evaluation.json",
+      "bytes": 30434,
+      "sha256": "f6db1026bd31852ee40b12d6fbdc95f1d09794e6f5347e24e605f556180008ca"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_lio2/input.bin",
+      "bytes": 7090550,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/ramp_step_native/fast_lio2/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_lio2/native.log",
+      "bytes": 73,
+      "sha256": "f6f2c820ed48081d34a89ed7e002b3c3dc1338ead47c31a28def1cb0d5382830"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_lio2/native_frames.jsonl",
+      "bytes": 70145,
+      "sha256": "1896ed02cce12e482419be5104f8563c03ec6a0f964725b7860659e40694aadc"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_lio2/trajectory.json",
+      "bytes": 101925,
+      "sha256": "b151a438273e7beda3a9cd18527f2298140772e67a3fda0803f7ffedc3d670bc"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_lio2/transport.json",
+      "bytes": 3127,
+      "sha256": "bcfb725923693c822b64202491edf3cc226daf2469b1f2ccbdb1b05b14b10c3e"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2/campaign_result.json",
+      "bytes": 917,
+      "sha256": "e25391a55f0a024fd4f1a2c113bf9a23a847462d051ded7854a60b59dd4ded4a"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2/estimator_receipt.json",
+      "bytes": 80449,
+      "sha256": "c46890587cf968fc72cce51ecf61bc2b2ff096c9dfe3aa04be4128b05ae1ebc9"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2/evaluation.json",
+      "bytes": 30692,
+      "sha256": "f629b4fe68534d5181ccea6d90427e18b8a92b59e0ed40c3f6a84eacf384e2d1"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2/input.bin",
+      "bytes": 62619598,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/ramp_step_native/fast_livo2/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2/native.log",
+      "bytes": 293758,
+      "sha256": "c206d24eae49c06da3cd870df2fc7925e3140d6fc392a3b428d748db09c27ae2"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2/native_frames.jsonl",
+      "bytes": 84496,
+      "sha256": "781815d9aa0a698072935c5d6e70d5d8c8affe67f11b817c6e9d1071d30f785b"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2/trajectory.json",
+      "bytes": 101362,
+      "sha256": "f9ff4944b5618774e5c7a9110d93c860cfe3a8f6b5f44df863846b9204572aaf"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2/transport.json",
+      "bytes": 24664,
+      "sha256": "d20e3f302382cf7cbb161ba46f45b1669caa682ce917ea54974d21411bd9b161"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2_no_visual/campaign_result.json",
+      "bytes": 914,
+      "sha256": "a311654a0867d85f2c0fcdd1efb47beaf857de3924f4bbdd6e829a96d4c1043b"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2_no_visual/estimator_receipt.json",
+      "bytes": 80473,
+      "sha256": "3edea4d7c91c1d4bbb9f5ef3ca87b951c0b7579d4df1ca359ac052bf91d3fbfd"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2_no_visual/evaluation.json",
+      "bytes": 30705,
+      "sha256": "bb4d79abeee256d7dc1f9b50960ee26e65922ab7170e18399066a6ced1c38674"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2_no_visual/input.bin",
+      "bytes": 62619598,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/ramp_step_native/fast_livo2_no_visual/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2_no_visual/native.log",
+      "bytes": 69269,
+      "sha256": "90189f4d1d9d56621bfb17ddf252c72ac99b987879bf081c4e145ade5b9bcc8e"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2_no_visual/native_frames.jsonl",
+      "bytes": 84385,
+      "sha256": "e2444bc5260654b552fd426ecab5fa2eca03045d625f96a21c3e158c6bfe6680"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2_no_visual/trajectory.json",
+      "bytes": 101241,
+      "sha256": "7f11a8fdd9d6ccd6a03d4113f28a960192ec3e898cf573f7a0cd05875ae8e508"
+    },
+    {
+      "path": "diagnostic/ramp_step_native/fast_livo2_no_visual/transport.json",
+      "bytes": 24665,
+      "sha256": "d14ef046fb67d6fe3f6f21257cde94ba662de2fd56e1719f612db5f275a65346"
+    },
+    {
+      "path": "diagnostic/report.md",
+      "bytes": 1480,
+      "sha256": "4a9e76a506eadb68c55130a41f4ff8d7bd7e1daaa37b33c0419e46177cdde374"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_lio2/campaign_result.json",
+      "bytes": 775,
+      "sha256": "76ceb1befe856afdd18158c948039c2a19150b19c8e2580162f6a1a519242ce6"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_lio2/estimator_receipt.json",
+      "bytes": 39557,
+      "sha256": "6625c298f6f857c9f9746c5cbf0705553265efb2a5680a9d448ad1a8b4051ab8"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_lio2/evaluation.json",
+      "bytes": 31203,
+      "sha256": "ffd32e0c7ee0090c8b488d4aff72921bfcdfa9e364da38355e2e32c5e5599dcd"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_lio2/input.bin",
+      "bytes": 7090550,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/textured_boxes_native/fast_lio2/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_lio2/native.log",
+      "bytes": 73,
+      "sha256": "f6f2c820ed48081d34a89ed7e002b3c3dc1338ead47c31a28def1cb0d5382830"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_lio2/native_frames.jsonl",
+      "bytes": 70240,
+      "sha256": "5e807fb09759991f78be6de5d405ab76f004c1a75db4e6f43c1fa0cea67ccae7"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_lio2/trajectory.json",
+      "bytes": 102072,
+      "sha256": "64fc11ff42a75e7b0cc53bbd44cedd48ffaee814b1bf95c8250d6344e42e64d6"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_lio2/transport.json",
+      "bytes": 3127,
+      "sha256": "5c0d1cb020c94c3cb4230f55993a70d09c476ac55065cd4b0a7fd015e23a456d"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2/campaign_result.json",
+      "bytes": 920,
+      "sha256": "e6344632c352fb27500ed118c49fe54fa042e9d38886a943ad8d970a7dcb9f75"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2/estimator_receipt.json",
+      "bytes": 82713,
+      "sha256": "344cfc90b766b74181b420e301b04ae7ae88533283672f369e43e16062a175da"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2/evaluation.json",
+      "bytes": 31449,
+      "sha256": "b03cdfe626f4bc06314cd8951c866a774fbbf97e4c22a6b6fe4f6d503646e22a"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2/input.bin",
+      "bytes": 73167305,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/textured_boxes_native/fast_livo2/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2/native.log",
+      "bytes": 290074,
+      "sha256": "a25a4f9fa140edcb4c988972fb52958964225d2dd71f41a74e50e38f3fc900e6"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2/native_frames.jsonl",
+      "bytes": 84403,
+      "sha256": "2fbd2a8ef18592ed31cad022f55101a25851fbe4b244d0e83a6dbcef87f24a07"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2/trajectory.json",
+      "bytes": 101438,
+      "sha256": "a10e73819de4876fe93f7ea7e6be86b9753cadcbf060f74a39c20a829b7d0440"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2/transport.json",
+      "bytes": 24664,
+      "sha256": "064669c8ec8524fa8626d6c02439c086de3e1795d8ffb72fee11783520a4a88e"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2_no_visual/campaign_result.json",
+      "bytes": 919,
+      "sha256": "02ff66ab5ea5c59ca5c3cf398e03a3ed9f5bddfd9affd555628f4adb56c8020d"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2_no_visual/estimator_receipt.json",
+      "bytes": 82738,
+      "sha256": "c68f7c3e136d9aa62ac69963db5aa96df90c80e9bf02e2d23e30b6c046410e1a"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2_no_visual/evaluation.json",
+      "bytes": 31475,
+      "sha256": "d9d4ff984e79c7a7ba9e11cc8868ce6a77e37e5698a6460b380ece9dcfef1f61"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2_no_visual/input.bin",
+      "bytes": 73167305,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/textured_boxes_native/fast_livo2_no_visual/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2_no_visual/native.log",
+      "bytes": 69245,
+      "sha256": "0a4185b58fd21f1b2c1ace421aea9664af33b52df07104af885489ef8df1d006"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2_no_visual/native_frames.jsonl",
+      "bytes": 84509,
+      "sha256": "777084f99082309b14ca78214418cb5fe82ebcb41b8a4917820a16708ffb415e"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2_no_visual/trajectory.json",
+      "bytes": 101372,
+      "sha256": "67284dc3b0cd4ae92ac4d0ae5419c8911ca95215e0c5759803349515911abcdb"
+    },
+    {
+      "path": "diagnostic/textured_boxes_native/fast_livo2_no_visual/transport.json",
+      "bytes": 24665,
+      "sha256": "d34adc12181c61862d9674bca36ae99a36ff214c5e69b902996305075b2c5566"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_lio2/campaign_result.json",
+      "bytes": 780,
+      "sha256": "737bed7744faceb4a8c800b28ab54a2e641734a4363b1e83c0c482071df519e1"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_lio2/estimator_receipt.json",
+      "bytes": 38345,
+      "sha256": "f4aa031cf67eb955b258817c2396095adaaedd45a8b7e33ea1e4c6ec54a9efdb"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_lio2/evaluation.json",
+      "bytes": 30596,
+      "sha256": "a68deb2f177789390bede109e522b47179c06d0e21846d353b66eb7577de1b6d"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_lio2/input.bin",
+      "bytes": 7090550,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/thin_posts_native/fast_lio2/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_lio2/native.log",
+      "bytes": 73,
+      "sha256": "f6f2c820ed48081d34a89ed7e002b3c3dc1338ead47c31a28def1cb0d5382830"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_lio2/native_frames.jsonl",
+      "bytes": 70152,
+      "sha256": "4572657cad40f3a752760ce1f86f5dfb36dac17d2939a669e321eaf0ea2baf89"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_lio2/trajectory.json",
+      "bytes": 101917,
+      "sha256": "dac066879cd86bcf5b0a0cf5978ced93399cd39bb82e18545daead7c986ba731"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_lio2/transport.json",
+      "bytes": 3127,
+      "sha256": "207ee230bd420092eb9e3e999aa4fb8f52f5ed4cc01dbb8bef81c720213bb540"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2/campaign_result.json",
+      "bytes": 923,
+      "sha256": "4e3bcb5ad13740a53319ec20daa9df76e99be14df87393719e9bb48f218b0011"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2/estimator_receipt.json",
+      "bytes": 80901,
+      "sha256": "7a4f810dfc168428c53062b5c03dd59a10b70f657f7547f002f9ffd37406a8d3"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2/evaluation.json",
+      "bytes": 30844,
+      "sha256": "f367d2ba21a6377113c047138386eb719a4d67998990f8de4b6ecb31de71d75e"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2/input.bin",
+      "bytes": 59421706,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/thin_posts_native/fast_livo2/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2/native.log",
+      "bytes": 295322,
+      "sha256": "0e730a5455d680325a04a943ce38524ed36ccf95e7ab775d42d195c3f86218b0"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2/native_frames.jsonl",
+      "bytes": 84301,
+      "sha256": "ece7b5feb0ad50c11d4ea2f27bd7dfcd1eaa6330789453b6afac01690610c538"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2/trajectory.json",
+      "bytes": 101237,
+      "sha256": "f024affa944e703471f56209a15985573eb66e3643ebfb63bbf093fbdd3605b5"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2/transport.json",
+      "bytes": 24664,
+      "sha256": "2a8d413ae4570921ec9c7c5825475780ddb925eaaf24704fa913e3e1c7d448e1"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2_no_visual/campaign_result.json",
+      "bytes": 921,
+      "sha256": "fffd5cf897a2c3cfd3199fcd8e547fe7deced50a5e44e16947e253b695590d04"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2_no_visual/estimator_receipt.json",
+      "bytes": 80926,
+      "sha256": "81673a8a50fa7a912ca8dbc71e3a4e42636528662fc0cc103087b917d02a9f70"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2_no_visual/evaluation.json",
+      "bytes": 30861,
+      "sha256": "7960e83096c60f6ebf19e3b2a510997452b5944fb7563cfdae0e44acd30240d1"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2_no_visual/input.bin",
+      "bytes": 59421706,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/thin_posts_native/fast_livo2_no_visual/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2_no_visual/native.log",
+      "bytes": 68003,
+      "sha256": "50687601efc35193614a07aef610bd1e2e06135d5feedee92ced917491f3a0f3"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2_no_visual/native_frames.jsonl",
+      "bytes": 84698,
+      "sha256": "8a5b723f04ff86f2369f196482b91dfd450c6730474b1c1b2b1ee244214534ea"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2_no_visual/trajectory.json",
+      "bytes": 101602,
+      "sha256": "2cb36ada60a332a95877f3423da65c946a22cc12c5aba7a59d77f76387dcb7ed"
+    },
+    {
+      "path": "diagnostic/thin_posts_native/fast_livo2_no_visual/transport.json",
+      "bytes": 24665,
+      "sha256": "6e115e1350644dddd52f59d35de03eb4de219b444a40d6a2f1cef18010b6b7bd"
+    },
+    {
+      "path": "diagnostic.json",
+      "bytes": 204,
+      "sha256": "5b07a935ac64c185dc918dc594bf8c1da91399d71124be323bf7a7323a3d6468"
+    },
+    {
+      "path": "smoke-no-visual/campaign_result.json",
+      "bytes": 915,
+      "sha256": "a5211da1f3fc4881116361105a68cd02fe0f59cb958c754d7e985bd7d38a9452"
+    },
+    {
+      "path": "smoke-no-visual/estimator_receipt.json",
+      "bytes": 23694,
+      "sha256": "4d831ee61b1d31323c3b6b6a59f44899b5d48cd0c29026a4e51223eeaee0f22f"
+    },
+    {
+      "path": "smoke-no-visual/input.bin",
+      "bytes": 14482460,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/smoke-no-visual/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "smoke-no-visual/native.log",
+      "bytes": 13511,
+      "sha256": "a70df9c2e8c2b4ee7d25283fe7c1f237bf7550f1b64235e8ffacd503838c5de2"
+    },
+    {
+      "path": "smoke-no-visual/native_frames.jsonl",
+      "bytes": 19672,
+      "sha256": "94d4f9e9050d68ae22485021b9d614324d07aae7ea1c21faf424f699891bb8ec"
+    },
+    {
+      "path": "smoke-no-visual/trajectory.json",
+      "bytes": 24008,
+      "sha256": "fb59dc4b620b19f774c0eec36d6f8dcda9f3d2d0c5f1b5285c686c0bdc5728c7"
+    },
+    {
+      "path": "smoke-no-visual/transport.json",
+      "bytes": 6752,
+      "sha256": "9e59cbf737e333fb39595912b90d61bbe1ee0f76e97e2d39174092c9f5ff622a"
+    },
+    {
+      "path": "smoke-visual/campaign_result.json",
+      "bytes": 916,
+      "sha256": "266753348e82e01122796fb80c4018e1421af96b13f9785b86ef46ab437f2e92"
+    },
+    {
+      "path": "smoke-visual/estimator_receipt.json",
+      "bytes": 23684,
+      "sha256": "f18c6b049ba1b28717dc3b3ccac7495fb8ced035ef68c59940286308c2280564"
+    },
+    {
+      "path": "smoke-visual/input.bin",
+      "bytes": 14482460,
+      "retained_local": "/tmp/bhl-livo-diagnostic-results-20261010/smoke-visual/input.bin",
+      "publication": "omitted derived transport; regenerable from frozen original input archive and source"
+    },
+    {
+      "path": "smoke-visual/native.log",
+      "bytes": 60913,
+      "sha256": "1e176fe046f701dded0914f0edd2d404572bbe898171b2ec34ef74dd1196906d"
+    },
+    {
+      "path": "smoke-visual/native_frames.jsonl",
+      "bytes": 19618,
+      "sha256": "43bc79ec54bdd9a217bd82cbd68f908f8e7fcd5d1ccfc40a6f339fb5f3b9f254"
+    },
+    {
+      "path": "smoke-visual/trajectory.json",
+      "bytes": 24017,
+      "sha256": "725287c4a276cb53d82b107f9ad1e8e1acbd3652c232604db9ee1343227d2e8e"
+    },
+    {
+      "path": "smoke-visual/transport.json",
+      "bytes": 6751,
+      "sha256": "9c3a5092163070dc2319b8cd5eae6e7f8dbf9e29226da1e66ce0907c58dbab1b"
+    },
+    {
+      "path": "smoke.json",
+      "bytes": 2192,
+      "sha256": "94554ffbb9c8e366ab2430d13d827356f5ce35a11be98e7c6a457e2f91672a69"
+    }
+  ]
+}

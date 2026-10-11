@@ -1,0 +1,63 @@
+{
+  "archive_sha256": "f8575bfb1684bf3ea636c4b188c285f6c32ddd53f428eedacda5a03c63b67ab6",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno:/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno",
+    "--bind",
+    "/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno/source:/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno/protocol.json:/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno/work",
+    "--bind",
+    "/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno/inputs:/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno/inputs:ro",
+    "--nv",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno/source/scripts/bench/h3_train.py",
+    "--protocol",
+    "/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno/protocol.json",
+    "--phase",
+    "smoke",
+    "--cell",
+    "3"
+  ],
+  "host": "cn-gpu5.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "smoke",
+      "--cell",
+      "{cell}"
+    ],
+    "entrypoint": "scripts/bench/h3_train.py",
+    "env": {},
+    "kind": "smoke",
+    "max_output_mb": 512,
+    "name": "h3-smoke-20261008",
+    "resources": {
+      "array": "0,3%1",
+      "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+      "cpus": 8,
+      "exclude": "dgxh-1",
+      "gpus": 1,
+      "memory_gb": 64,
+      "partition": "gpu,dgxh,ampere",
+      "time_limit": "00:45:00"
+    }
+  },
+  "job_id": "21711074",
+  "scratch": "/tmp/bhl-h34-h3-smoke-20261008-21711074-ibfg3jno",
+  "source_files_verified": 815,
+  "started_utc": "2026-10-09T02:19:07.014197+00:00"
+}

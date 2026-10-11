@@ -1,0 +1,108 @@
+{
+  "schema": "bhl-replay-v1",
+  "created_utc": "2026-10-08T01:12:34.055027+00:00",
+  "packages": {
+    "numpy": "1.26.0",
+    "mujoco": "3.3.5",
+    "onnxruntime": "1.22.1",
+    "omegaconf": "2.3.0",
+    "torch": "2.7.0"
+  },
+  "builder_installed_packages": {
+    "numpy": "1.26.0",
+    "mujoco": "3.3.5",
+    "onnxruntime": "1.22.1",
+    "omegaconf": "2.3.0",
+    "torch": "2.7.0+cu128"
+  },
+  "seconds": 2.0,
+  "policy_dt": 0.04,
+  "scenarios": [
+    {
+      "seed": 94000,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "seed": 94001,
+      "command": [
+        0.3,
+        0.0,
+        0.2
+      ]
+    },
+    {
+      "seed": 94002,
+      "command": [
+        0.2,
+        0.0,
+        -0.2
+      ]
+    },
+    {
+      "seed": 94003,
+      "command": [
+        0.1,
+        0.1,
+        0.0
+      ]
+    },
+    {
+      "seed": 94004,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ]
+    }
+  ],
+  "source": {
+    "overlay_commit": "33a5eca4567a0bb0d4af162e9ff0d961feaeb9c2",
+    "source_sha256": {
+      "src/bhl_robust/__init__.py": "290f5d6a451d1a1554e2f87b5bf93588fd2c744ee9cef5f0a26a316311bedc8f",
+      "src/bhl_robust/eval/harness.py": "9aa954fa1a0a84ff996b04e97be9a255e3c511e2d8c42305caf28b21d0e40f9a",
+      "src/bhl_robust/eval/terrain_field.py": "27e46389e67ca69966ecde13b8a1508dc6ef6779b582527901dd68e943cee71a",
+      "src/bhl_robust/eval/replay_gate.py": "f8dc1975bc4a41e673fe39290fdb9836f2f1b8f9792706e91f2f5787639fdc8a",
+      "upstream_rl_controller.py": "ab7b8c282e0888ec6cfb74451c60772ade5abcda17362521fb31bc04b8b5203c"
+    },
+    "builder_sha256": "34b63e8b1aeb878a423ac7c7c43134789ce1c038a805435bda023b028b03e88b",
+    "source_deploy_sha256": "dad919ad85cf9677295f5973f2ab6e0671ba809f6c3369136cb999e5de496b9e",
+    "source_checkpoint_sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1",
+    "upstream_credit": "Berkeley Humanoid Lite Project Developers; see LICENSE-upstream.txt"
+  },
+  "files_sha256": {
+    "USAGE.txt": "08e43740126d04aecbc0bc318d4f5cc9d5b78def38871c710e8eea282045817d",
+    "deploy.yaml": "a3dc04fdedcb636894ea8ada64c99586f35fa615ea2f4303d51bb56c6f09e4b8",
+    "policy.onnx": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1",
+    "replay.py": "56483802b6b52e43707457d48afb0bcb4421ff942259e40fea63937aedb38f62",
+    "requirements.txt": "25550b61a37b08f7ff98e24c1745b58d87df7b9976b488cec058b6a3df8da6d0",
+    "scene/berkeley_humanoid_lite_biped.xml": "e3239e44a98a3850ef288d9d65b333e74206b4422e2e0e5bc78772d2a351d24d",
+    "scene/bhl_biped_scene.xml": "664842bc940e6b4e8d1ad7c6d2515543fe3cddd9adec007763a810ec26f4a037",
+    "scene/meshes/base_visual.stl": "d9af91bf06e64d633fbe74f9700c9819952e7bb9d21b22101ef7c25e5e0a601c",
+    "scene/meshes/imu_2_visual.stl": "e06a07bf09851ec0748ba0b77fc1d47c3a17a2f8f6a0b09803514eadac046745",
+    "scene/meshes/leg_left_ankle_pitch_visual.stl": "eb7216eba3c7af0c64379003d55112556db5e48a603bf99f200caa7f4735e48c",
+    "scene/meshes/leg_left_ankle_roll_visual.stl": "96ff643402492843119787aa00f8d26412154bfd10e10df3651655853b81775c",
+    "scene/meshes/leg_left_hip_pitch_visual.stl": "40940519f285ff6f5c1f927c60f0dc30fcedc8d46d0a62f8ce1865169424779f",
+    "scene/meshes/leg_left_hip_roll_visual.stl": "66ce0cf0153d8710c1c3cac947270e1855cdb62ef3a3e43ba2de20ad5d711356",
+    "scene/meshes/leg_left_hip_yaw_visual.stl": "ed54b34914b5adf4a963dc266685f0b0d82cae98a0409490432c0199ce4abdaf",
+    "scene/meshes/leg_left_knee_pitch_visual.stl": "956d76bc1a994c11d8a31ba58c4e510180ef03124d6f24c896449701fd04644e",
+    "scene/meshes/leg_right_ankle_pitch_visual.stl": "bec4d629b07813d9954c7219d02f51500413d19da10e743b17b966a703e183b1",
+    "scene/meshes/leg_right_ankle_roll_visual.stl": "6f44c6e5d27b7e7ca78040be74d12134785fbeb20bde66810b5e56188c7df9b5",
+    "scene/meshes/leg_right_hip_pitch_visual.stl": "8ad842e726a2396de47eca5ebb7feb1b060a440de537211080df3298a22c7d21",
+    "scene/meshes/leg_right_hip_roll_visual.stl": "cb776ee7a9a016b0c09f5d8bbb2f81c7aa7abed8ad97c5e84ea0c7c4ee4ed3bd",
+    "scene/meshes/leg_right_hip_yaw_visual.stl": "8502e46e5e22229c7d5e8f54ff37ae8ef2b2f77270cc55df7c9a29fcc1ab3adf",
+    "scene/meshes/leg_right_knee_pitch_visual.stl": "de9bb40ea6e610c013758037b5b8311d544586d769b59306c29bbe59fd0f13bc",
+    "src/berkeley_humanoid_lite_lowlevel/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/berkeley_humanoid_lite_lowlevel/policy/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/berkeley_humanoid_lite_lowlevel/policy/rl_controller.py": "ab7b8c282e0888ec6cfb74451c60772ade5abcda17362521fb31bc04b8b5203c",
+    "src/bhl_robust/__init__.py": "290f5d6a451d1a1554e2f87b5bf93588fd2c744ee9cef5f0a26a316311bedc8f",
+    "src/bhl_robust/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/bhl_robust/eval/harness.py": "9aa954fa1a0a84ff996b04e97be9a255e3c511e2d8c42305caf28b21d0e40f9a",
+    "src/bhl_robust/eval/replay_gate.py": "f8dc1975bc4a41e673fe39290fdb9836f2f1b8f9792706e91f2f5787639fdc8a",
+    "src/bhl_robust/eval/terrain_field.py": "27e46389e67ca69966ecde13b8a1508dc6ef6779b582527901dd68e943cee71a",
+    "verify.py": "ab41800ea8fbe2e4b3c679489a5e163b79d4d00a25b61a8791a9376d9acedb6b"
+  }
+}

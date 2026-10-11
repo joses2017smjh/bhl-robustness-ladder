@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=terrain-methods-dr-default-s1-flat-20261010",
+    "--partition=share,eecs",
+    "--cpus-per-task=4",
+    "--mem=8G",
+    "--time=04:00:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/terrain-methods-dr-default-s1-flat-20261010-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/terrain-methods-dr-default-s1-flat-20261010-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1",
+    "terrain-methods-dr-default-s1-flat-20261010",
+    "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77"
+  ],
+  "created_utc": "2026-10-10T22:01:58.551009+00:00",
+  "qualification_gate": {
+    "policy": "completed same-source native smoke checked from durable scientific evidence and Slurm accounting; no dependency on expired controller record",
+    "scheduler_exit_code": "0:0",
+    "scheduler_state": "COMPLETED",
+    "smoke_completion_sha256": "2b86ccf8197e6b3e442cbe69ddfb69357d4f76dea00ada91fce0da547099c3e7",
+    "smoke_job_id": "21757058",
+    "smoke_result_sha256": "6266ef98acc5267d5e5b5e89483784e496573c1276629613a52e078bc201e3e2",
+    "verified_utc": "2026-10-10T22:01:58.550970+00:00"
+  }
+}

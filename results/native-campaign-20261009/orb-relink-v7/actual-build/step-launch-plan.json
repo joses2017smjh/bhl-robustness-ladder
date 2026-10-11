@@ -1,0 +1,23 @@
+{
+  "schema": "bhl-native-orb-build-step-v1",
+  "declared_utc": "2026-10-09T22:23:48.325277+00:00",
+  "allocation_id": "21739893",
+  "allocation_resources": "2 CPU, 31800 MiB, dgx2-5, existing allocation ends 16:45:23 PDT; no additional GPU allocation and no GPU compute",
+  "step_resources": "2 CPU, 16 GiB, overlap",
+  "frozen_build_archive_sha256": "44defaee940dd272834843314f66517d0f7faa5fd80b6fcf5e300c30069a70f1",
+  "command": [
+    "srun",
+    "--jobid=21739893",
+    "--overlap",
+    "--ntasks=1",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-relink-v7/step-21739893-v7.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-relink-v7/step-21739893-v7.out",
+    "/bin/bash",
+    "-c",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python -c 'import os,json,pathlib,datetime; pathlib.Path('\"'\"'/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-relink-v7/step-environment-21739893-v7.json'\"'\"').write_text(json.dumps({'\"'\"'recorded_utc'\"'\"':datetime.datetime.now(datetime.timezone.utc).isoformat(),'\"'\"'environment'\"'\"':{k:v for k,v in os.environ.items() if k in ['\"'\"'SLURM_JOB_ID'\"'\"','\"'\"'SLURM_STEP_ID'\"'\"','\"'\"'SLURM_STEP_NUM_TASKS'\"'\"','\"'\"'SLURM_CPUS_PER_TASK'\"'\"','\"'\"'SLURM_MEM_PER_NODE'\"'\"','\"'\"'SLURM_JOB_NODELIST'\"'\"']},'\"'\"'host'\"'\"':os.uname().nodename,'\"'\"'scope'\"'\"':'\"'\"'Actual inventoried ORB v7 relink step; original fully compiled sources came from step21739893.2'\"'\"'},indent=2)+'\"'\"'\\n'\"'\"')'\nexec /bin/bash /nfs/stak/users/sanchej7/humanoid-native-20261009/orb-relink-v7/h34_campaign.sbatch /nfs/stak/users/sanchej7/humanoid-native-20261009/orb-relink-v7 orb-native-relink-v7-20261009 44defaee940dd272834843314f66517d0f7faa5fd80b6fcf5e300c30069a70f1"
+  ],
+  "expected_output": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-relink-v7/orb-native-relink-v7-20261009-21739893",
+  "scope": "Inventoried actual native compiled objects, dependency-search repair only; source/sysroot read-only; genuine new final executable and version/ldd smoke"
+}

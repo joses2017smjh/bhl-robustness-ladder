@@ -1,0 +1,49 @@
+{
+  "schema": "bhl-perceptive-measured-teacher-summary-v1",
+  "status": "NEGATIVE",
+  "required_teacher_qualification_fraction": 0.8,
+  "seeds": [
+    {
+      "job": "perceptive-run-s0-v4-20261010-21757635",
+      "episodes": 256,
+      "survivors": 236,
+      "qualified": 113,
+      "qualification_fraction": 0.44140625,
+      "inference_p95_ms": 0.44037986663170153,
+      "mean_commanded_distance_m": 2.6249935469104457,
+      "mean_integrated_tracking_error_m": 1.3557680108351633,
+      "training_iterations": 200
+    },
+    {
+      "job": "perceptive-run-s1-v4-20261010-21757710",
+      "episodes": 256,
+      "survivors": 224,
+      "qualified": 102,
+      "qualification_fraction": 0.3984375,
+      "inference_p95_ms": 0.43341072159819305,
+      "mean_commanded_distance_m": 2.6125575184946683,
+      "mean_integrated_tracking_error_m": 1.357339641544968,
+      "training_iterations": 200
+    },
+    {
+      "job": "perceptive-run-s2-v4-20261010-21757754",
+      "episodes": 256,
+      "survivors": 216,
+      "qualified": 107,
+      "qualification_fraction": 0.41796875,
+      "inference_p95_ms": 0.4161920980550349,
+      "mean_commanded_distance_m": 2.531149727346019,
+      "mean_integrated_tracking_error_m": 1.332043051137589,
+      "training_iterations": 200
+    }
+  ],
+  "pooled_descriptive_counts": {
+    "episodes": 768,
+    "qualified": 322,
+    "survivors": 676
+  },
+  "completed_student_arms": 0,
+  "unrun_student_arms_after_failed_teacher_gate": 12,
+  "analysis": "The three training seeds are independent experimental units. Pooled episode counts are descriptive only, not confidence intervals or independent confirmation.",
+  "scope": "Isaac simulation development; no student improvement or hardware claim."
+}

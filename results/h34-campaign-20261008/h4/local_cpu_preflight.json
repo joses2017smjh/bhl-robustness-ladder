@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "scope": "Local CPU export and 22-DoF plumbing; no additional learning, no scored H4 gate evidence",
+  "parent_sha256": "4f1b0c353421dd9ab3f4eb3d6dc755142e036ab4cabfbc0a85a77ae8087bc014",
+  "export_sha256": "25cc9fd91853760879b64850edb0c1ad1e0eb28278f8a8c1b319097dea37afda",
+  "export_check": {
+    "status": "PASS",
+    "input_shape": [
+      256,
+      79
+    ],
+    "output_shape": [
+      256,
+      22
+    ],
+    "max_abs_error": 1.52587890625e-05,
+    "atol": 2e-05,
+    "rtol": 1e-05,
+    "test_seed": 100
+  },
+  "plumbing": {
+    "status": "PASS",
+    "non_scored_reset_seed": 100,
+    "note": "plumbing smoke only; episode outcomes are not qualification evidence",
+    "records": [
+      {
+        "cmd": [
+          0.0,
+          0.0,
+          0.6
+        ],
+        "fell_at_s": null,
+        "yaw_deg": 33.0,
+        "displacement_m": 0.099,
+        "seconds": 0.8
+      },
+      {
+        "cmd": [
+          0.0,
+          0.0,
+          -0.6
+        ],
+        "fell_at_s": null,
+        "yaw_deg": -32.9,
+        "displacement_m": 0.089,
+        "seconds": 0.8
+      },
+      {
+        "cmd": [
+          0.35,
+          0.0,
+          0.0
+        ],
+        "fell_at_s": null,
+        "yaw_deg": 2.7,
+        "displacement_m": 0.045,
+        "seconds": 0.8
+      }
+    ]
+  },
+  "rsl3_constructor_check": {
+    "status": "PASS",
+    "resolved_obs_groups": {
+      "policy": [
+        "policy"
+      ],
+      "critic": [
+        "critic"
+      ]
+    },
+    "actor_first_layer": [
+      256,
+      79
+    ],
+    "critic_first_layer": [
+      256,
+      82
+    ],
+    "fresh_optimizer_state_entries": 0,
+    "scope": "Actual installed RSL3 constructor with TensorDict vector-environment stand-in and frozen teacher agent YAML"
+  },
+  "recipe_guard_check": {
+    "status": "PASS",
+    "scope": "Actual frozen teacher env YAML plus staged declared observation/path/seed/smoke-count changes; live Isaac guard still pending smoke",
+    "negative_control": "Changing sim.dt from0.005to0.004 rejected at /sim/dt"
+  },
+  "dynamic_batch_original_push_smoke": {
+    "status": "PASS",
+    "reset_seed": 100,
+    "episode_s": 3.2,
+    "command": [
+      0.3,
+      0,
+      0
+    ],
+    "push_speed_mps": 0.5,
+    "pushes_applied": 1,
+    "pushes_survived": 1,
+    "fell": false,
+    "scope": "Untrained expanded parent only; loader/controller/original harness plumbing, excluded from qualification"
+  }
+}

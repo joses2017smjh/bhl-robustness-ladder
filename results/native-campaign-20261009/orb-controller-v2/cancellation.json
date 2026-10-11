@@ -1,0 +1,14 @@
+{
+  "cancelled_utc": "2026-10-09T22:10:50.801290+00:00",
+  "job_id": "21743355",
+  "observed_state_before": "PENDING",
+  "command": [
+    "scancel",
+    "--state=PENDING",
+    "21743355"
+  ],
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "",
+  "reason": "Root explicitly authorized stopping known-faulty v6 source after actual allocated final-link failure: GDAL runtime located in private sysroot/usr/lib missing from dependency search. Snapshot preserved before stopping; no estimator inference."
+}

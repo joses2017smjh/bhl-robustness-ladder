@@ -1,0 +1,55 @@
+{
+  "archive_sha256": "5fd9f5b43004144561b6922b9357ad4abe13174fdafc6f15a588c738db66acb5",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg:/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg",
+    "--bind",
+    "/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg/source:/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg/protocol.json:/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg/work",
+    "--bind",
+    "/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg/inputs:/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg/inputs:ro",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg/source/scripts/bench/native_slam_campaign.py",
+    "--protocol",
+    "/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg/protocol.json",
+    "--phase",
+    "smoke"
+  ],
+  "host": "cn-b09.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "smoke"
+    ],
+    "entrypoint": "scripts/bench/native_slam_campaign.py",
+    "kind": "smoke",
+    "max_output_mb": 128,
+    "name": "native-lio-smoke-20261009-v4",
+    "resources": {
+      "cpus": 2,
+      "gpus": 0,
+      "memory_gb": 16,
+      "partition": "preempt",
+      "requeue": false,
+      "time_limit": "00:20:00"
+    }
+  },
+  "job_id": "21743630",
+  "scratch": "/tmp/bhl-h34-native-lio-smoke-20261009-v4-21743630-9pzs94gg",
+  "source_files_verified": 842,
+  "started_utc": "2026-10-09T22:10:21.182920+00:00"
+}

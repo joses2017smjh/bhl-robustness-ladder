@@ -1,0 +1,1629 @@
+{
+  "schema": "bhl-pose-estimator-run-v1",
+  "method": "fast_livo2_camera_lidar_imu",
+  "upstream_commit": "0d2c0346107b75b59934975adec9a6eeeb913c64",
+  "runtime_sha256": "f6c43ad3f5372a5965c8241101330b7f93e91f3e7398a48022e67b925fc1c52e",
+  "runtime_receipt_sha256": "3a32015a85e4685b07576391caa115c3497c9ae26b761cf853395504e8a2bcea",
+  "input_manifest_sha256": "0d8250f888ddaf4f1c5049cf9a5af0eaf2346593ce7f774c534b603cddfe791c",
+  "sequence": "thin_posts_native",
+  "native_command": [
+    "/tmp/bhl-livo-runtime-20261010/fastlivo_headless",
+    "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/thin_posts_native/fast_livo2/input.bin",
+    "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/thin_posts_native/fast_livo2/native_frames.jsonl"
+  ],
+  "transport": {
+    "schema": "bhl-native-livo-transport-v1",
+    "expected_timestamps_s": [
+      0.0,
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1.0,
+      1.2,
+      1.4,
+      1.6,
+      1.8,
+      2.0,
+      2.2,
+      2.4,
+      2.6,
+      2.8,
+      3.0,
+      3.2,
+      3.4,
+      3.6,
+      3.8,
+      4.0,
+      4.2,
+      4.4,
+      4.6,
+      4.8,
+      5.0,
+      5.2,
+      5.4,
+      5.6,
+      5.8,
+      6.0,
+      6.2,
+      6.4,
+      6.6,
+      6.8,
+      7.0,
+      7.2,
+      7.4,
+      7.6,
+      7.8,
+      8.0,
+      8.2,
+      8.4,
+      8.6,
+      8.8,
+      9.0,
+      9.2,
+      9.4,
+      9.6,
+      9.8,
+      10.0,
+      10.2,
+      10.4,
+      10.6,
+      10.8,
+      11.0,
+      11.2,
+      11.4,
+      11.6,
+      11.8,
+      12.0,
+      12.2,
+      12.4,
+      12.6,
+      12.8,
+      13.0,
+      13.2,
+      13.4,
+      13.6,
+      13.8,
+      14.0,
+      14.2,
+      14.4,
+      14.6,
+      14.8,
+      15.0,
+      15.2,
+      15.4,
+      15.6,
+      15.8,
+      16.0,
+      16.2,
+      16.4,
+      16.6,
+      16.8,
+      17.0,
+      17.2,
+      17.4,
+      17.6,
+      17.8,
+      18.0,
+      18.2,
+      18.4,
+      18.6,
+      18.8,
+      19.0,
+      19.2,
+      19.4,
+      19.6,
+      19.8,
+      20.0,
+      20.2,
+      20.4,
+      20.6,
+      20.8,
+      21.0,
+      21.2,
+      21.4,
+      21.6,
+      21.8,
+      22.0,
+      22.2,
+      22.4,
+      22.6,
+      22.8,
+      23.0,
+      23.2,
+      23.4,
+      23.6,
+      23.8,
+      24.0,
+      24.2,
+      24.4,
+      24.6,
+      24.8,
+      25.0,
+      25.2,
+      25.4,
+      25.6,
+      25.8,
+      26.0,
+      26.2,
+      26.4,
+      26.6,
+      26.8,
+      27.0,
+      27.2,
+      27.4,
+      27.6,
+      27.8,
+      28.0,
+      28.2,
+      28.4,
+      28.6,
+      28.8,
+      29.0,
+      29.2,
+      29.4,
+      29.6,
+      29.8
+    ],
+    "image_count": 150,
+    "raw_point_count": 306929,
+    "consumed_point_count": 304887,
+    "unconsumed_lidar_tail_points": 2042,
+    "imu_count": 5961,
+    "T_imu_lidar": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        -1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_camera_lidar": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.06
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "images": [
+      {
+        "timestamp_s": 0.0,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 0.2,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 0.4,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 0.6,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 0.8,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 1.0,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 1.2,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 1.4,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 1.6,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 1.8,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 2.0,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 2.2,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 2.4,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 2.6,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 2.8,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 3.0,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 3.2,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 3.4,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 3.6,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 3.8,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 4.0,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 4.2,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 4.4,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 4.6,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 4.8,
+        "sha256": "6ae9063dba8ee7f3d82dafad84cc7d95c36f5e3a9638ea052edefb598a2856d1",
+        "bytes": 318278
+      },
+      {
+        "timestamp_s": 5.0,
+        "sha256": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+        "bytes": 318277
+      },
+      {
+        "timestamp_s": 5.2,
+        "sha256": "fcd8413e7e41708a8840f04f39bb0406772e00e7d9d822db78b754920a5f6f12",
+        "bytes": 319856
+      },
+      {
+        "timestamp_s": 5.4,
+        "sha256": "d434e901f18d7508803e5b2d95084f22064809039082b5c8d98d373210cba3f5",
+        "bytes": 319137
+      },
+      {
+        "timestamp_s": 5.6,
+        "sha256": "50fe79479387b7c78c225dc147907ae154f7d7addcf43df35d467ce9c02a593e",
+        "bytes": 320137
+      },
+      {
+        "timestamp_s": 5.8,
+        "sha256": "66e6f7950b3b94b78bcb5bae8a31cc5f5cea0d426416b08805a59e144a10824a",
+        "bytes": 324182
+      },
+      {
+        "timestamp_s": 6.0,
+        "sha256": "d7016b8b61317c19c9b64c9689645d1e8c2b86b052b279859cf65b8dbbdb4cfa",
+        "bytes": 320130
+      },
+      {
+        "timestamp_s": 6.2,
+        "sha256": "8caf22c1479b0735fed797b4df7c3b4cd0577b26c58d4197fdf5d38e9987e1b3",
+        "bytes": 317243
+      },
+      {
+        "timestamp_s": 6.4,
+        "sha256": "2ce05de31afe2312e8fe4c9e6f2f529bb3cd91ac04591e0f2711a64ac8f8577a",
+        "bytes": 322751
+      },
+      {
+        "timestamp_s": 6.6,
+        "sha256": "8fb71e0bc306e5470ab76a18aafdb5b34ed470e8d30f4088d877702ac0cb9079",
+        "bytes": 319643
+      },
+      {
+        "timestamp_s": 6.8,
+        "sha256": "af8092547d8e30c3d7aa687aafe45ee997d2774eb9a2ddfe6821fa1825a145a1",
+        "bytes": 327790
+      },
+      {
+        "timestamp_s": 7.0,
+        "sha256": "e2fa5b471d59b7e8ce633b7ed8586a4e19b40c8654522315e3f04dab2d50e57a",
+        "bytes": 327649
+      },
+      {
+        "timestamp_s": 7.2,
+        "sha256": "387a6b28771103e91efbfa0839f0188c4d4fbbb7dff8c3ce03838e6ffd68c354",
+        "bytes": 330788
+      },
+      {
+        "timestamp_s": 7.4,
+        "sha256": "6fed2ffe5aae7f43d98e62059da3a21073f91acd6988bc7207f0a7966f948474",
+        "bytes": 336041
+      },
+      {
+        "timestamp_s": 7.6,
+        "sha256": "0d6e35a0a140ac3275c14f18352e99cf96eaeed29e02d30861b9ae55bcf84e0e",
+        "bytes": 337278
+      },
+      {
+        "timestamp_s": 7.8,
+        "sha256": "1b55e84664e5dd3d2f803f44f972f6b3a9c334dc306f6327ed8c7075f7304e3a",
+        "bytes": 341875
+      },
+      {
+        "timestamp_s": 8.0,
+        "sha256": "aa02dcf4e43f7ae1cea1c308bd8dfa5830f5b89ce3b575f365f081c34ec90854",
+        "bytes": 344234
+      },
+      {
+        "timestamp_s": 8.2,
+        "sha256": "1003f13bcf75b05af2fe5cdc04d8e359d4b705f9978b053674513947379038f0",
+        "bytes": 349759
+      },
+      {
+        "timestamp_s": 8.4,
+        "sha256": "9a4cc850483f6b144bf9568a954d485fc9ba2f070404d89ce6aed035f1087d19",
+        "bytes": 351417
+      },
+      {
+        "timestamp_s": 8.6,
+        "sha256": "10c97bcf7fabde3d75598d3aaa3d42a3473bac98da87de3e2dc52058ba6db0f3",
+        "bytes": 351858
+      },
+      {
+        "timestamp_s": 8.8,
+        "sha256": "00653dc0c79ef9d6913847ba5232e501c1fb101f3f1ce64599c520a5b34f024c",
+        "bytes": 357256
+      },
+      {
+        "timestamp_s": 9.0,
+        "sha256": "9c80e1e7b688141c7e48085c30bb5a96eaf3fa5a3752a4cada1bc7bc588ab769",
+        "bytes": 354271
+      },
+      {
+        "timestamp_s": 9.2,
+        "sha256": "90e8aa93d74aba8bc48addc24993d06a8d7c53173f1d2ef37e6343ba75501f20",
+        "bytes": 359596
+      },
+      {
+        "timestamp_s": 9.4,
+        "sha256": "f65243a67af5dff5bcb96d4d089bafc6ddbca10fa381cec4aaea193e4bf147a9",
+        "bytes": 359048
+      },
+      {
+        "timestamp_s": 9.6,
+        "sha256": "8aac2df3552cd4c7ca00987857515dd244b010a6fce7a097b84b5ac74716c153",
+        "bytes": 358790
+      },
+      {
+        "timestamp_s": 9.8,
+        "sha256": "c779d0e6e6ff70b943c5a3d7d2cacdbe870a08fdd624b77aba6ae7dbe7c2afb7",
+        "bytes": 361128
+      },
+      {
+        "timestamp_s": 10.0,
+        "sha256": "4f56b284a576da60832dba5e3f19c66a79a69ef27f619952e94e804288c2e869",
+        "bytes": 362299
+      },
+      {
+        "timestamp_s": 10.2,
+        "sha256": "ccd357cf8ad911428fd58d5d4f094368ca4914a8d4a0f9bda0e59efc5a8707e1",
+        "bytes": 362813
+      },
+      {
+        "timestamp_s": 10.4,
+        "sha256": "accf107c4f5d29b907aeba70ad183410c905fae4077bd5a8e5599450cfd24637",
+        "bytes": 359993
+      },
+      {
+        "timestamp_s": 10.6,
+        "sha256": "13349ea16db63b3f3fd5d99294a50712ccbdd7b2251f5d71e3ad6a3bcdf897cc",
+        "bytes": 359855
+      },
+      {
+        "timestamp_s": 10.8,
+        "sha256": "680bb0747fef3e4a0c1d4098606972fa2115f7d03fce7a881a3fe6c8f4bab9fd",
+        "bytes": 361100
+      },
+      {
+        "timestamp_s": 11.0,
+        "sha256": "3ec570d7310bbbb4761b1e294174cdcc660302a06ec54cb41b8bee0589064104",
+        "bytes": 362185
+      },
+      {
+        "timestamp_s": 11.2,
+        "sha256": "7139ee071078aeefed89eb637582212b88a87022dc5f8e76bf1859854c4f8277",
+        "bytes": 359999
+      },
+      {
+        "timestamp_s": 11.4,
+        "sha256": "c24e0b0857ec684d76be3b9a19d0dd10542f66ad695f152bbf8f6689a2c74ed5",
+        "bytes": 365660
+      },
+      {
+        "timestamp_s": 11.6,
+        "sha256": "1469c95a2110746ed3a658485d3c704390e86972f0da2ce2e2307fc6090711be",
+        "bytes": 366287
+      },
+      {
+        "timestamp_s": 11.8,
+        "sha256": "d21f554cda867b16f6ed0b491f45c6b122ab21cc1fe61a617d0c9bcd6e6ddbd6",
+        "bytes": 370664
+      },
+      {
+        "timestamp_s": 12.0,
+        "sha256": "4b698e0c5ce83ba3df0807cf896280db2b82b2b358b4114b4e01b002cdb5f44e",
+        "bytes": 369547
+      },
+      {
+        "timestamp_s": 12.2,
+        "sha256": "30cb21a3c326577decd8a1c70a7d7b98696f09e3e64609c6cc7241edfc73541c",
+        "bytes": 369076
+      },
+      {
+        "timestamp_s": 12.4,
+        "sha256": "14c75661039dbfabf90d886e12cfd4bf1248e61acf377a0d91c6598fa5b11e1f",
+        "bytes": 373210
+      },
+      {
+        "timestamp_s": 12.6,
+        "sha256": "681b7802e354fdfb48e96ad95de7987e5e845269e5114efe0bbc3626a665be5c",
+        "bytes": 371380
+      },
+      {
+        "timestamp_s": 12.8,
+        "sha256": "4e1170143c35845156a74a1b7fb3695dcf41f430b5a701d884fa4c0ceb1deb7a",
+        "bytes": 372101
+      },
+      {
+        "timestamp_s": 13.0,
+        "sha256": "7fea006125de37afbb8459b9864c0de1193ab87a3301951f2e6735426f9d848a",
+        "bytes": 375150
+      },
+      {
+        "timestamp_s": 13.2,
+        "sha256": "bb86bd689d179fdce89b6b95715606a0e93669f0eacfd47e98d9e9c410f86846",
+        "bytes": 374769
+      },
+      {
+        "timestamp_s": 13.4,
+        "sha256": "0c55dd865422c47cbd67e8032537b99f01ff1e6f93532f2424f884fd67a933d1",
+        "bytes": 374438
+      },
+      {
+        "timestamp_s": 13.6,
+        "sha256": "50eaecb58553c6ca8c086187bf044d5a458e70db3f07eb3791c83b955557571e",
+        "bytes": 367668
+      },
+      {
+        "timestamp_s": 13.8,
+        "sha256": "279bb5ef88947fa76b3c3e8d6789f2069f28757224f904abdcc06fa5b2fed44f",
+        "bytes": 373709
+      },
+      {
+        "timestamp_s": 14.0,
+        "sha256": "c0deef16cb1dd8e5931d0da36ac250d61e6505e2466dabbbde48e2f83b2bb334",
+        "bytes": 372837
+      },
+      {
+        "timestamp_s": 14.2,
+        "sha256": "2d1ca1aecf2792c82788ea37bf1a8f5ed5d684d86ed70aea09c33a2d7d993d56",
+        "bytes": 370933
+      },
+      {
+        "timestamp_s": 14.4,
+        "sha256": "42c2a4dbd5b2b0cd4c01aa3bc31ee5c90f17f46ec83f0bbcc66f133d03c557f8",
+        "bytes": 371844
+      },
+      {
+        "timestamp_s": 14.6,
+        "sha256": "fa901f28c629047181d219434d179e10a6ad55b39537b762faefdf665bfdea9e",
+        "bytes": 371139
+      },
+      {
+        "timestamp_s": 14.8,
+        "sha256": "2aa2324ecff807a6faf15f5694197acac7c81f17cbfd480339f4893410d53a59",
+        "bytes": 372274
+      },
+      {
+        "timestamp_s": 15.0,
+        "sha256": "58df93168d5a0eb3754b121638cf2c9cf311cd6e55028642bd66fea0a252f483",
+        "bytes": 372576
+      },
+      {
+        "timestamp_s": 15.2,
+        "sha256": "e174ac773e039e9f5b2f3371d713be132dcd221f0331d3c0453a7e851206f4ac",
+        "bytes": 373465
+      },
+      {
+        "timestamp_s": 15.4,
+        "sha256": "200402b7e555a92377b12d18cacd0bfc7144853115d68b4f38059e4e8a97a02c",
+        "bytes": 372201
+      },
+      {
+        "timestamp_s": 15.6,
+        "sha256": "7cdb9dca23069a4133507d0d380262874d380897ab62b777b42a477cc0c7f3d1",
+        "bytes": 372165
+      },
+      {
+        "timestamp_s": 15.8,
+        "sha256": "44e264c7024ab20697ebfe8af2e50d7d7d16916b528c3e08df5de0be69feb31c",
+        "bytes": 371788
+      },
+      {
+        "timestamp_s": 16.0,
+        "sha256": "26266a2e79c61a52616cd34d20ad98e9527bbc46e62edfa7254615919052dfd2",
+        "bytes": 369851
+      },
+      {
+        "timestamp_s": 16.2,
+        "sha256": "1e62da9c717b5298d8b2554f57cc68e40ae230794c6c3c93628efd34828d57eb",
+        "bytes": 370250
+      },
+      {
+        "timestamp_s": 16.4,
+        "sha256": "d25657c4d4244fad17dd518a8f322dea28f0ad8d649cbc12964294c269f6e618",
+        "bytes": 370202
+      },
+      {
+        "timestamp_s": 16.6,
+        "sha256": "d55b18e78b6e16e3bd971c5ec1e2cb3669c57e7819f4c1be9647489fcb4a4419",
+        "bytes": 370264
+      },
+      {
+        "timestamp_s": 16.8,
+        "sha256": "2275578d7ca34dd47bfacf320fc52331e30f68fb418a2f08395db77f1fc9d7d1",
+        "bytes": 367818
+      },
+      {
+        "timestamp_s": 17.0,
+        "sha256": "1591718eca78e61c286d44373f6383fe88504552b551e8cd92732f737b69be51",
+        "bytes": 370038
+      },
+      {
+        "timestamp_s": 17.2,
+        "sha256": "c04e2baa4cc4a3a9a80078a86609805b0523fc3e633905fcfa4f8fef9f136ed5",
+        "bytes": 368690
+      },
+      {
+        "timestamp_s": 17.4,
+        "sha256": "bd1d265fe747dcc6c3119a99a432441e4f027c361c8b14f3f0fc7ad82ca75e39",
+        "bytes": 368512
+      },
+      {
+        "timestamp_s": 17.6,
+        "sha256": "c05dbc6b8c6fb0ba932fbfe011999dc3b99b303d91bc76096c0e63e6b124919a",
+        "bytes": 365521
+      },
+      {
+        "timestamp_s": 17.8,
+        "sha256": "008e3c18c8e10beecd7843c7eae6b37887ec173eda222dd36287883e60d572f7",
+        "bytes": 370459
+      },
+      {
+        "timestamp_s": 18.0,
+        "sha256": "5c75affd6da8c1727b5d5528704469323755fcaa486cb1b762f417cadd8d8e03",
+        "bytes": 361750
+      },
+      {
+        "timestamp_s": 18.2,
+        "sha256": "1f5523a6537f6acec3423c1e9020dd9fd0891e8dc7a34f94028a09ab77a8075c",
+        "bytes": 366191
+      },
+      {
+        "timestamp_s": 18.4,
+        "sha256": "7cb7ec3e17db91224a58dcee24d8024927a0ab4ae5b2b7f5409fa53ab7392332",
+        "bytes": 366415
+      },
+      {
+        "timestamp_s": 18.6,
+        "sha256": "fd3efce219de959560cfc3d2ace79045bef299c8bf25d10b5a8ecea3c7cce9b9",
+        "bytes": 364270
+      },
+      {
+        "timestamp_s": 18.8,
+        "sha256": "76a23fb09c4ffc48cbf0e6b39f4244acd3e0d7856d304dbb47cae87b8f66f005",
+        "bytes": 363940
+      },
+      {
+        "timestamp_s": 19.0,
+        "sha256": "aa08be4ef6c49f24cd3d16e7e3e12e2d0932e90e27e3c39599741cc59fb8021c",
+        "bytes": 369402
+      },
+      {
+        "timestamp_s": 19.2,
+        "sha256": "dc4baee2582c83f6595cd8bfe9009bacd5b7e7be070efe6fc9f3177604e5e77c",
+        "bytes": 368242
+      },
+      {
+        "timestamp_s": 19.4,
+        "sha256": "8075d73321471fc7c6c82da56dd897423b096d96a121090382c58e53552708e1",
+        "bytes": 370412
+      },
+      {
+        "timestamp_s": 19.6,
+        "sha256": "097a3b273f91d113a3d2856820f574264532547667ae7f39caa4cc2907c81daa",
+        "bytes": 370621
+      },
+      {
+        "timestamp_s": 19.8,
+        "sha256": "c280e036633a53596c7f867e5ce76940b333aad1c2117df3c5f0532d96b54878",
+        "bytes": 365561
+      },
+      {
+        "timestamp_s": 20.0,
+        "sha256": "6c82dcf889c9cd4884288e091c125c695be9db7a5ac8e04b5e47be8f8f6e54c4",
+        "bytes": 368623
+      },
+      {
+        "timestamp_s": 20.2,
+        "sha256": "353d73e122294311e80c2e8cba1fed833345a6a4936e77a45fa9d87ff2b26d04",
+        "bytes": 368282
+      },
+      {
+        "timestamp_s": 20.4,
+        "sha256": "373fc80e65695a43137c5d4cde4bda29a9139f82b0fdb7eef6ef347b463bf910",
+        "bytes": 367565
+      },
+      {
+        "timestamp_s": 20.6,
+        "sha256": "d17463f35d6b80bb572a401abf47fbe1a145da0ce1280ecaf869d2fdecfe5b02",
+        "bytes": 365849
+      },
+      {
+        "timestamp_s": 20.8,
+        "sha256": "4d632b411d7721c625920abfde2203c4d24d0a2415e7832d376bf36dea110572",
+        "bytes": 367136
+      },
+      {
+        "timestamp_s": 21.0,
+        "sha256": "000257d5f12c6876886e9fa9cc88b7af20036d98dfbec05700de4393d4529585",
+        "bytes": 368157
+      },
+      {
+        "timestamp_s": 21.2,
+        "sha256": "b7e2f27cced9c6b518b6da49d9070244acb4bdcf13838d9b9ea79c95c6534420",
+        "bytes": 367863
+      },
+      {
+        "timestamp_s": 21.4,
+        "sha256": "71a0472e94ebf0373f7ac6f67e1f146d1a5b07a8b5e07d73c0f18b0176572ba8",
+        "bytes": 369412
+      },
+      {
+        "timestamp_s": 21.6,
+        "sha256": "eff59201a07e7e98f2b61e1d16ea63dc2a29c524efd4e6777d811ee1c8109f16",
+        "bytes": 372548
+      },
+      {
+        "timestamp_s": 21.8,
+        "sha256": "a74c028f8f26c94c631c66a04226b09a8223b40d0622f20b0f520f8d610e1e7f",
+        "bytes": 373285
+      },
+      {
+        "timestamp_s": 22.0,
+        "sha256": "12714ebf883ddbb690dcbd90090d63ceb57093a56599e08fc0a645c3e1bbc859",
+        "bytes": 371269
+      },
+      {
+        "timestamp_s": 22.2,
+        "sha256": "c465ddf5e4bd337b4fbaba03cdae55a6a0df5b6ac7f773094fd15cbe8ddbffce",
+        "bytes": 365654
+      },
+      {
+        "timestamp_s": 22.4,
+        "sha256": "1017285f1c578cde36e7e5658f8c70c64302e0c9d8579043661081d0428101c6",
+        "bytes": 370574
+      },
+      {
+        "timestamp_s": 22.6,
+        "sha256": "55a7f837c4cd749c7c18f653495584b467355b627158d27043833e7e940a9e3d",
+        "bytes": 368114
+      },
+      {
+        "timestamp_s": 22.8,
+        "sha256": "2a72c785c5ac48f176aba7b85c2409f72c06143b1c0ae8d13d964029d89f72a5",
+        "bytes": 367018
+      },
+      {
+        "timestamp_s": 23.0,
+        "sha256": "9f0b122c881c10ce8733ff9607029eb02815e8eadbaf47a37bb596c517ab01ef",
+        "bytes": 364426
+      },
+      {
+        "timestamp_s": 23.2,
+        "sha256": "e0ec5ea7dfaa814fdce85f5897a474557227bc09abd6d7c9db1127110ee9a433",
+        "bytes": 362835
+      },
+      {
+        "timestamp_s": 23.4,
+        "sha256": "213493319cbefd10cfd8f30a63bc253321482acae47fb324b87614236e5e2c76",
+        "bytes": 362993
+      },
+      {
+        "timestamp_s": 23.6,
+        "sha256": "b462b0d6afba13571a110445817d9d4d497d47e4d8fb70fad71e8f485aa04887",
+        "bytes": 361048
+      },
+      {
+        "timestamp_s": 23.8,
+        "sha256": "029b3f1abdfd9c6e445bb90d337870f1ec6106b979074e22fa43d8bb307a45dc",
+        "bytes": 358079
+      },
+      {
+        "timestamp_s": 24.0,
+        "sha256": "43e26d1c83be8b5853688e6dcc427ccb79290cc04c8398fe6e31159bd887dfc2",
+        "bytes": 355509
+      },
+      {
+        "timestamp_s": 24.2,
+        "sha256": "c77474cd5fa57c1ff24650e136a65ff0236040e9d8db6182bea0a612b56a6d70",
+        "bytes": 357464
+      },
+      {
+        "timestamp_s": 24.4,
+        "sha256": "9e4d32e9f625411d6af40541c3a5f2b89d3a9237c8f27580fc813749c1b7acb7",
+        "bytes": 352544
+      },
+      {
+        "timestamp_s": 24.6,
+        "sha256": "294b7fbb323976f15ea9f59124caccad14b5d3beb1f29438dafdbd58802ce376",
+        "bytes": 359187
+      },
+      {
+        "timestamp_s": 24.8,
+        "sha256": "7923cab80587b95bb437cab5d08793928f33add578fa8e8bd28420ffd9813a0d",
+        "bytes": 359658
+      },
+      {
+        "timestamp_s": 25.0,
+        "sha256": "4db17d650ef554f87ffb2c1bbb0e3bcbc80ab7e7a83296a4a322486bffb8ab6c",
+        "bytes": 359766
+      },
+      {
+        "timestamp_s": 25.2,
+        "sha256": "f5c46e44519c6dda8ef702d4d7edc91769420f398e911e857f50761a0b481f3a",
+        "bytes": 359515
+      },
+      {
+        "timestamp_s": 25.4,
+        "sha256": "2104e49f8bc0b6dcd3dc0a15f874627d498b54ea5b6c8b229e96db3a2b5c0386",
+        "bytes": 356981
+      },
+      {
+        "timestamp_s": 25.6,
+        "sha256": "cb3de87ceb7c9075c26ebb0d1f846f551f08bc88da2cda1e2b04400fe8851327",
+        "bytes": 355520
+      },
+      {
+        "timestamp_s": 25.8,
+        "sha256": "4faf877dff7dc98e70f97e641901c6f0f5d4c3ea81a67ae937ca0dcdca2b5353",
+        "bytes": 354567
+      },
+      {
+        "timestamp_s": 26.0,
+        "sha256": "025de8ec2c01fdbbab3dd5a8f11c841818fd9b3aa45f7e39f0f005555adb475a",
+        "bytes": 352702
+      },
+      {
+        "timestamp_s": 26.2,
+        "sha256": "4130e62644a70f691ef4b5294724e6b43c74c5ea5d88b080ca3d7df4a9d76eb8",
+        "bytes": 353203
+      },
+      {
+        "timestamp_s": 26.4,
+        "sha256": "0c1d5b55a5e2d12d2572cdd85722bd3d0e63196d38936061d4e4f0f913717b0d",
+        "bytes": 349980
+      },
+      {
+        "timestamp_s": 26.6,
+        "sha256": "9fd60494714939197d76ad8a2deb925f6bcb9187b9d7a2913a295b58d48db691",
+        "bytes": 346551
+      },
+      {
+        "timestamp_s": 26.8,
+        "sha256": "32b989aebd8a288dd4164376a99fe816d0279b5c66c7e295b5c8c320f60c3f4c",
+        "bytes": 346595
+      },
+      {
+        "timestamp_s": 27.0,
+        "sha256": "976d3a10efa4cce5746d72e00840140ae17a1087c40cc18366ee8ae16111430a",
+        "bytes": 340435
+      },
+      {
+        "timestamp_s": 27.2,
+        "sha256": "c9067f4c0c8f900f05b50b4c0a131a080eb534fa21fe6096de139a64305e2f11",
+        "bytes": 340092
+      },
+      {
+        "timestamp_s": 27.4,
+        "sha256": "d1122dbd735f2a50db028d50a7fc551e7271bc7f35f750a91cda884ff8dac409",
+        "bytes": 332985
+      },
+      {
+        "timestamp_s": 27.6,
+        "sha256": "541ba82eb018453fb7035829676b9f5d11fa6dfbf99e32ceeafa9d6053fa0314",
+        "bytes": 333246
+      },
+      {
+        "timestamp_s": 27.8,
+        "sha256": "d162dca549a6cb0b461ce4fea99377040955e4ba043c66dc32cc21145febab2e",
+        "bytes": 330974
+      },
+      {
+        "timestamp_s": 28.0,
+        "sha256": "4b5b95ff891a65a76d57de7bd7b090a0fd65df0193d03c301c4174d14f32e177",
+        "bytes": 320864
+      },
+      {
+        "timestamp_s": 28.2,
+        "sha256": "dd5670fc5c6d7a8a50cdd2489b6bc6ada5b31e390bade01a85149a3071dd167c",
+        "bytes": 325910
+      },
+      {
+        "timestamp_s": 28.4,
+        "sha256": "fa478d278bfbd3449eecc81a256028089df1a342d17a73b060957ad16cbf54df",
+        "bytes": 321057
+      },
+      {
+        "timestamp_s": 28.6,
+        "sha256": "a3c77dc46637a2ff425a6d47d553055636fdfdc06eb008df59a51020d35835d4",
+        "bytes": 324635
+      },
+      {
+        "timestamp_s": 28.8,
+        "sha256": "8177a048ce013fe1eb786f9ce1e2fcf75822123dae8c4f72433ebca4fc3dee7c",
+        "bytes": 315364
+      },
+      {
+        "timestamp_s": 29.0,
+        "sha256": "d265a642e3ac6084f8baf1972fc31396f055972218e2f015dfa09f8d995c3894",
+        "bytes": 326559
+      },
+      {
+        "timestamp_s": 29.2,
+        "sha256": "6982c32ba85e2a0cdce41aab9740fead91e15b9dde7607b9c3957ec7802d740b",
+        "bytes": 328759
+      },
+      {
+        "timestamp_s": 29.4,
+        "sha256": "12b390ee1e9ae423f8a673986b8ec9426e28e1c1be92ffd88ea7893363f8dfba",
+        "bytes": 321481
+      },
+      {
+        "timestamp_s": 29.6,
+        "sha256": "378ebaa733f0d1b7ba543de0742b93544b5cfc32c5d6777c096ae508347d8909",
+        "bytes": 316493
+      },
+      {
+        "timestamp_s": 29.8,
+        "sha256": "f2030c6c1d7e6c985277c115dc90b0cbfaa7f1f6f5255785ee76dff50226dcdc",
+        "bytes": 317992
+      }
+    ],
+    "config": {
+      "surface_voxel_m": 0.15,
+      "blind_m": 0.1,
+      "visual_enabled": true,
+      "voxel_size_m": 0.5,
+      "max_layer": 2,
+      "max_iterations": 5,
+      "depth_error_m": 0.02,
+      "beam_error_deg": 0.05,
+      "plane_eigenvalue_threshold": 0.0025,
+      "imu_init_samples": 30,
+      "gyro_covariance": 0.3,
+      "acceleration_covariance": 0.5,
+      "patch_size_px": 8,
+      "pyramid_levels": 4,
+      "exposure_estimation": true
+    },
+    "ground_truth_inputs": [],
+    "right_camera_consumed": false,
+    "transport_sha256": "f008f9b3268fb813f82d35ba4c67445fe0f4cbdf2b4d6a7422209936d06a4819",
+    "transport_bytes": 59421706
+  },
+  "sensor_frame": "imu_body",
+  "ground_truth_inputs": [],
+  "calibration": {
+    "T_B_C": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        -1.0,
+        0.0,
+        0.0,
+        0.06
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_B_I": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_B_L": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        -1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_C_L": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.06
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_M_L": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        -1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0,
+        0.75
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "baseline_m": 0.12,
+    "body_frame": "B_x_forward_y_left_z_up",
+    "camera_frame": "C_optical_x_right_y_down_z_forward",
+    "cx_left_px": 319.5,
+    "cx_right_px": 319.5,
+    "cy_px": 239.5,
+    "distortion": "none_simulated_pinhole",
+    "fx_px": 415.69219381653056,
+    "fy_px": 415.69219381653056,
+    "image_height": 480,
+    "image_width": 640,
+    "lidar_frame": "L_optical_aligned_rig_center",
+    "map_frame": "M_local_z_up",
+    "map_frame_description": "instantaneous_rig_local_x_forward_y_left_z_up_ground_origin",
+    "rectified": true,
+    "schema": "bhl-rectified-stereo-v1",
+    "stereo_exposure_offset_s": 0.0,
+    "transform_convention": "T_A_B_maps_B_coordinates_into_A"
+  },
+  "config": {
+    "surface_voxel_m": 0.15,
+    "blind_m": 0.1,
+    "visual_enabled": true,
+    "voxel_size_m": 0.5,
+    "max_layer": 2,
+    "max_iterations": 5,
+    "depth_error_m": 0.02,
+    "beam_error_deg": 0.05,
+    "plane_eigenvalue_threshold": 0.0025,
+    "imu_init_samples": 30,
+    "gyro_covariance": 0.3,
+    "acceleration_covariance": 0.5,
+    "patch_size_px": 8,
+    "pyramid_levels": 4,
+    "exposure_estimation": true
+  },
+  "input_files_sha256": {
+    "inference/thin_posts/00000_imu.npz": "c177581d50f35bb02bcbbe42181d31a4755606174acb32d6a358594597bddb8f",
+    "inference/thin_posts/00000_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00000_lidar.npz": "12d6207fad1f99dbf0153b0e3fc96cdd5874d1545e76576c3f205f741659d1e4",
+    "inference/thin_posts/00001_imu.npz": "77a06b4cad65511273e203277de231bd0ffca62bcde8a8083ad76fe569bb1b9f",
+    "inference/thin_posts/00001_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00001_lidar.npz": "37b0e67d92c5747a5e3d2c3cc26c26871960d73d5f2f2f6aac5eedafc1787589",
+    "inference/thin_posts/00002_imu.npz": "ba21541062ea49c391abd981c59fd5fb5ff090d9bec92ebab88e6855b9b4d6e2",
+    "inference/thin_posts/00002_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00002_lidar.npz": "7dcad9d2bab299be6e58a81b5d140844bebeb9a83e130c87f5a58f94d7850b29",
+    "inference/thin_posts/00003_imu.npz": "08fb2f1ad6edd7b0cb80aff171d3937f71a57bfda0601648536d2bdaf5efe1c0",
+    "inference/thin_posts/00003_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00003_lidar.npz": "e87293aebca8724eb5e973184d414ed29ed3c1d58428f4b227a6f62380efb229",
+    "inference/thin_posts/00004_imu.npz": "e9cc2f8d1417462aac52d59af7e83e0af378b1bdd5505262c3ff253ae162be51",
+    "inference/thin_posts/00004_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00004_lidar.npz": "8aaf5ec2fea22b631874d35cfe9e9d36cbd184a247993c3ee42532c2af9ff7d6",
+    "inference/thin_posts/00005_imu.npz": "e783bc1a9ff79abfd2cf05b4a69a28f75932e1875d123bb49d51293ea7b609b2",
+    "inference/thin_posts/00005_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00005_lidar.npz": "7bdd36f0cfe881864cc993e8af3127ad7c962e93d4a1c7d2da0138752c68ce50",
+    "inference/thin_posts/00006_imu.npz": "0fc0bfb13a4811f6f16aa603adeeec1337c3f18b7593223653843f983063a0fc",
+    "inference/thin_posts/00006_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00006_lidar.npz": "60fa424f9e56bc9d58ed2a0040e97038855ca63a1df48aa91edb8fd52ef82120",
+    "inference/thin_posts/00007_imu.npz": "23fd25a87a9850135e79ed36a4d7f83c543e065a1af22f1595b6d29502be734f",
+    "inference/thin_posts/00007_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00007_lidar.npz": "fc2dfebc920d7b66cfe3951a1f9de5f60f7b039b2b8e50b6ce2d9681bb31c4c0",
+    "inference/thin_posts/00008_imu.npz": "730655e6abfcf48084bbbf2b48a2876b4fa8d13dace15428ecb14d004c3cfa37",
+    "inference/thin_posts/00008_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00008_lidar.npz": "21d538e7616e01f0a8787756ef4f4e8173f132a7ddc0a4b536623a3227690fe6",
+    "inference/thin_posts/00009_imu.npz": "33dd081fe33360457a7d1156760d38a49d276b561928a4c63b9ad68420cd3ce3",
+    "inference/thin_posts/00009_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00009_lidar.npz": "a5d7e13a2936c344cdba199100f10e351ed0b4107e2a79f67b89dab1f66d1359",
+    "inference/thin_posts/00010_imu.npz": "fb9dbb4bfa22e73fb76b14226ed1957b16b3371278cf473ac0d5f0298a1f6981",
+    "inference/thin_posts/00010_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00010_lidar.npz": "ee08ae6dcaf644a3ae13854a4703b46755f71c433097ad7013489979f9ab56a4",
+    "inference/thin_posts/00011_imu.npz": "70c5f2d3f74db909d92820a8f1d68a5b9674d2a6502e475d021f99760068b8cb",
+    "inference/thin_posts/00011_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00011_lidar.npz": "752a083c303a4d2f337c6531d2a6100467d89ae8e473a71a5cf77da364225c58",
+    "inference/thin_posts/00012_imu.npz": "cbf54f9a0dc219099c9f09e7fe6c422ebefa774ec07f8d1c07fd9a78a950f897",
+    "inference/thin_posts/00012_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00012_lidar.npz": "a0cd1d5c87ac2e6516e6b1831e170d9e1e034964143ca8a39e6f8c97ab9d5a8e",
+    "inference/thin_posts/00013_imu.npz": "b484a7ad47fc7fe3ebf844a0dce02a7cd9ac01db24e11f98abc924333959ca1a",
+    "inference/thin_posts/00013_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00013_lidar.npz": "ad954cf38b5d2e3b44b86805623812354ff803924d35e7b2f8cf4c32fd89e6b1",
+    "inference/thin_posts/00014_imu.npz": "3904b53e089e80497668fbf45f3da07e9b8a82d5ebd31769d51fe239bc39ca8d",
+    "inference/thin_posts/00014_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00014_lidar.npz": "d108e31212c29b41364cf6f259b1fc51e0f0cd2294c6eee44da7bcd98019083f",
+    "inference/thin_posts/00015_imu.npz": "a0af87086f2b53a42854acae202f3ba5c6741135a35e2dfc7b080f99cf1ea048",
+    "inference/thin_posts/00015_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00015_lidar.npz": "2b3ffe1181e825080ca4c71804cd0efa5305d36d45f0a77f1d91936efc6cc9c0",
+    "inference/thin_posts/00016_imu.npz": "72e5b65ff5c44d75e78dd69d10bae03cff09c382a52b60fa6c694e53f4cb0588",
+    "inference/thin_posts/00016_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00016_lidar.npz": "2181da6972aecb19e3d3d10832d851d5225513b2f8246ff9f069e88399b46100",
+    "inference/thin_posts/00017_imu.npz": "5ecfaec597b759b7be31c9fcd3039bde3c339ea77c448f864594a27183c412a0",
+    "inference/thin_posts/00017_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00017_lidar.npz": "fedbe6852d6e2cfe0869c43c5c3847e422948873a447a993a9cd20b41569c9e9",
+    "inference/thin_posts/00018_imu.npz": "06ae6113972b1e391fa56a1dd1a46f7c52cfc8322900fc61e58c4df188ce891f",
+    "inference/thin_posts/00018_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00018_lidar.npz": "289fc8d412c018cc70f91255c5e54d0bd2f68fb1173e161e9b533b4a267713ac",
+    "inference/thin_posts/00019_imu.npz": "7c820daaf91c751d05380612786050764c020c160ae348d2eb73f937bbbd6132",
+    "inference/thin_posts/00019_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00019_lidar.npz": "c268916c665552897f5a311310421597a624f8d7c52383b27bd2f94f617161b4",
+    "inference/thin_posts/00020_imu.npz": "af865e638666e5edbbc40e5ab48f2b2c8212073574e6c68ce905ab147e96ec36",
+    "inference/thin_posts/00020_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00020_lidar.npz": "37024747a60e3198a8d713668aade44bd1df8c2f8afb98546f0481990e028206",
+    "inference/thin_posts/00021_imu.npz": "3f64b04719c30850298e638590601ee31afb4372890159e12e49b65e63bdb21f",
+    "inference/thin_posts/00021_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00021_lidar.npz": "0dc8082789d9d3e426269b6c0e5598288c32098e222047cd277c978084f42e6e",
+    "inference/thin_posts/00022_imu.npz": "a15c54d75688c3484155f42bd3dad4943c13b4ac3684cbcc36b1b27bedcc7496",
+    "inference/thin_posts/00022_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00022_lidar.npz": "84f2590df8f5962b5bc94c01f6b40c9ae12e11ee6b69a5424f74354c66c7ee9c",
+    "inference/thin_posts/00023_imu.npz": "925bf1b4ddfc7e73f8c0a9da87183c9f42f7c00aaaf7a8ec161f22b1b49b40b5",
+    "inference/thin_posts/00023_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00023_lidar.npz": "0067f95bab9f0ba08a2d90ebb8c3b4c844cf7a9dca2dbb876ecba0a2d0923dc0",
+    "inference/thin_posts/00024_imu.npz": "a3cd78a5166685ccc14d4e831c9c225202f3ac978e7e5b42c9a7e98e6f0afaa9",
+    "inference/thin_posts/00024_left.png": "6ae9063dba8ee7f3d82dafad84cc7d95c36f5e3a9638ea052edefb598a2856d1",
+    "inference/thin_posts/00024_lidar.npz": "c519b80849ef48c6e889e73202135d316ad0b6481f9a0b23a46237e57aa00a97",
+    "inference/thin_posts/00025_imu.npz": "4b4d0c317470898fa42bbb27f2786e5c72254daa86e3250b6e3bc86faf46db17",
+    "inference/thin_posts/00025_left.png": "c452276c3dd822fe4550bbf17f23dd06f6e013dc21f2465bef11c2ba35c87aa6",
+    "inference/thin_posts/00025_lidar.npz": "f9755ccfecf3769efa19751f81e2ddf4e1fed063302aaf27560c1dc6ba1e8050",
+    "inference/thin_posts/00026_imu.npz": "c9055ea4014c22c06c2105c9a477ebeea7e36008be5e6d1b3617935d0cb4e9c6",
+    "inference/thin_posts/00026_left.png": "fcd8413e7e41708a8840f04f39bb0406772e00e7d9d822db78b754920a5f6f12",
+    "inference/thin_posts/00026_lidar.npz": "01a6677939dc868e2b1a27faa899ea423dfc23d7a13b8941abcf6698614ae9d8",
+    "inference/thin_posts/00027_imu.npz": "4b043dbb6791767eb349434648f3aea2b83e7d30a2c74b0c56c4f998d12d6d72",
+    "inference/thin_posts/00027_left.png": "d434e901f18d7508803e5b2d95084f22064809039082b5c8d98d373210cba3f5",
+    "inference/thin_posts/00027_lidar.npz": "2bb16129a5052b983a2f8413293ea36ab71d7012ede3ae0653c56b44c8c42ea0",
+    "inference/thin_posts/00028_imu.npz": "41b8961bbeef8320128c24f923058e68b103cb90ac199bbc00a8f2bf85db3595",
+    "inference/thin_posts/00028_left.png": "50fe79479387b7c78c225dc147907ae154f7d7addcf43df35d467ce9c02a593e",
+    "inference/thin_posts/00028_lidar.npz": "0427904952bf5dc2cb05d02d46622a230ad6b48f3bfcf851c32e36bd089b50f9",
+    "inference/thin_posts/00029_imu.npz": "217ca3a8ae74c86be46e4392309afbee4f4c241f1fc9dfe4651903ba49f62960",
+    "inference/thin_posts/00029_left.png": "66e6f7950b3b94b78bcb5bae8a31cc5f5cea0d426416b08805a59e144a10824a",
+    "inference/thin_posts/00029_lidar.npz": "9da95cea5a54ab74fbfb9f09b57c78a9ac6254dfa4c7bb8ec8eef02ba3243b00",
+    "inference/thin_posts/00030_imu.npz": "275793ead0152a05b33c03b4c5ec75772ced6b1ea06ef678d517333240600a87",
+    "inference/thin_posts/00030_left.png": "d7016b8b61317c19c9b64c9689645d1e8c2b86b052b279859cf65b8dbbdb4cfa",
+    "inference/thin_posts/00030_lidar.npz": "91d014b7154dd47c72623e4c6a2b203dd0e40ca5d76c73ad09bc44f43ce425af",
+    "inference/thin_posts/00031_imu.npz": "58f0f561ad4fcb1a30d2f53ef45277d9daef8dbd3329362a19d78894d2f14cec",
+    "inference/thin_posts/00031_left.png": "8caf22c1479b0735fed797b4df7c3b4cd0577b26c58d4197fdf5d38e9987e1b3",
+    "inference/thin_posts/00031_lidar.npz": "6197f5fe3c316c6594859c44968e9b591fd001c75fda66b3addd22d937879582",
+    "inference/thin_posts/00032_imu.npz": "1e7686ad2a472b8f3d724de5976091174c0f8da048ec127024423191ea4cf6d4",
+    "inference/thin_posts/00032_left.png": "2ce05de31afe2312e8fe4c9e6f2f529bb3cd91ac04591e0f2711a64ac8f8577a",
+    "inference/thin_posts/00032_lidar.npz": "0e5b56d68baf7241bbca5ebae127cf171f7a6996a20867dcbe53da459b3b2735",
+    "inference/thin_posts/00033_imu.npz": "6505151fd246b495dc9d44d8f7d8f3a3d12d7a1a96ac4a55d95199de8169081c",
+    "inference/thin_posts/00033_left.png": "8fb71e0bc306e5470ab76a18aafdb5b34ed470e8d30f4088d877702ac0cb9079",
+    "inference/thin_posts/00033_lidar.npz": "12097123acb0163e6c4d589fe3cae90063781963a4c3f3148424d85d6168b43d",
+    "inference/thin_posts/00034_imu.npz": "ffda3332019dca4274492bfaf8569793aa9cc9f2ce407ebc6bf245165d979d85",
+    "inference/thin_posts/00034_left.png": "af8092547d8e30c3d7aa687aafe45ee997d2774eb9a2ddfe6821fa1825a145a1",
+    "inference/thin_posts/00034_lidar.npz": "d014a0f5b16fddaf207b83d6ec836a10d50df544a21c2f49ae04b3163710b6ca",
+    "inference/thin_posts/00035_imu.npz": "a2f3c28cbd9300fe70ff847fc65a6f9dd5120bb407b2eb4bf5d15357a30393ca",
+    "inference/thin_posts/00035_left.png": "e2fa5b471d59b7e8ce633b7ed8586a4e19b40c8654522315e3f04dab2d50e57a",
+    "inference/thin_posts/00035_lidar.npz": "a656c4d5fc02d6e67ce17ec1bf17f6693d65bcb3dc2a985c7aaa7ea0203b6cbb",
+    "inference/thin_posts/00036_imu.npz": "a7e32cd22290ca3a1de0899d4e19ca1f17d66c43d31ca56b6cff85334788b7fa",
+    "inference/thin_posts/00036_left.png": "387a6b28771103e91efbfa0839f0188c4d4fbbb7dff8c3ce03838e6ffd68c354",
+    "inference/thin_posts/00036_lidar.npz": "e3c3187698192fb8d5daeeeeea2e466b15014ac0ccd542aeda3e3c62fd16e651",
+    "inference/thin_posts/00037_imu.npz": "d3e9f4cf7c819f5ddeef71bb2fa857250adab59519767be2e2f590e268483919",
+    "inference/thin_posts/00037_left.png": "6fed2ffe5aae7f43d98e62059da3a21073f91acd6988bc7207f0a7966f948474",
+    "inference/thin_posts/00037_lidar.npz": "5addbb6bb2f93e8b69886d43c1ea39bbd758ed50a68d73a7409b265d9d2e4b27",
+    "inference/thin_posts/00038_imu.npz": "ee68e27dd2dd5b20e2cebe4697bfa1282c519342225f91c23b01f2d9f1016890",
+    "inference/thin_posts/00038_left.png": "0d6e35a0a140ac3275c14f18352e99cf96eaeed29e02d30861b9ae55bcf84e0e",
+    "inference/thin_posts/00038_lidar.npz": "059016433a954d99ba359594438ee07ef736bcdadb3016a46c3e92a949e83967",
+    "inference/thin_posts/00039_imu.npz": "8d3617202bf7008fc0c1f2748b74a94187175c1c053db97baa575628044e459c",
+    "inference/thin_posts/00039_left.png": "1b55e84664e5dd3d2f803f44f972f6b3a9c334dc306f6327ed8c7075f7304e3a",
+    "inference/thin_posts/00039_lidar.npz": "b95eef927860eef2876db00f763bb7451110f4ca289e990307f0c03e0812da23",
+    "inference/thin_posts/00040_imu.npz": "07511a75c0bd22f35233a46d7bc3075679f1eddbd92c6483b205c0160a0854f9",
+    "inference/thin_posts/00040_left.png": "aa02dcf4e43f7ae1cea1c308bd8dfa5830f5b89ce3b575f365f081c34ec90854",
+    "inference/thin_posts/00040_lidar.npz": "b16cf3121d64a4dc56e5dd482f232f9248b2e6dd995cac5d797ac13d08143e08",
+    "inference/thin_posts/00041_imu.npz": "4eab91ba7ad2ce11b9aaf9db949165cc5599e75e09c5fc4e62088cf958073601",
+    "inference/thin_posts/00041_left.png": "1003f13bcf75b05af2fe5cdc04d8e359d4b705f9978b053674513947379038f0",
+    "inference/thin_posts/00041_lidar.npz": "2414da2910bd31514d38315357b5e00f9e84510e01b7b4ca1305df1ce8412c83",
+    "inference/thin_posts/00042_imu.npz": "c79e1bd80d8663bc988ff5c897ccb77e590eab03a31397509395e02dc95d4404",
+    "inference/thin_posts/00042_left.png": "9a4cc850483f6b144bf9568a954d485fc9ba2f070404d89ce6aed035f1087d19",
+    "inference/thin_posts/00042_lidar.npz": "af0b3f1e25e845dd1edbd7de9ef623d95c2ef103daa09b9208689c97781715b4",
+    "inference/thin_posts/00043_imu.npz": "459d5f8fcce10a0ff4a9f6afb6a907f642e0fb940ea3ddbc1542c62cbb842865",
+    "inference/thin_posts/00043_left.png": "10c97bcf7fabde3d75598d3aaa3d42a3473bac98da87de3e2dc52058ba6db0f3",
+    "inference/thin_posts/00043_lidar.npz": "9ea59e46399e950780ccc8e44a0cea9252158564dbab923024fdb59370192b2d",
+    "inference/thin_posts/00044_imu.npz": "c67dd68dadf592c64b17c337e014131ad58057f5d4f2e38e3693a7b6270a61c5",
+    "inference/thin_posts/00044_left.png": "00653dc0c79ef9d6913847ba5232e501c1fb101f3f1ce64599c520a5b34f024c",
+    "inference/thin_posts/00044_lidar.npz": "c0a4b8110f7a858a8f93ed2a2eac3f983151d146435e0371959e7b6549760de2",
+    "inference/thin_posts/00045_imu.npz": "5916f89372e08980bc6d116ab7306d349be4de2a6e5c6475e4129798f23bc2fb",
+    "inference/thin_posts/00045_left.png": "9c80e1e7b688141c7e48085c30bb5a96eaf3fa5a3752a4cada1bc7bc588ab769",
+    "inference/thin_posts/00045_lidar.npz": "411546011579664f72654fffb8397a7009210466b3ca2f4eb4581c3a907a7b10",
+    "inference/thin_posts/00046_imu.npz": "2accefe5bafc0e0dee0141aeaf5454b1f86ac3a204b62e060db256c7ad55abec",
+    "inference/thin_posts/00046_left.png": "90e8aa93d74aba8bc48addc24993d06a8d7c53173f1d2ef37e6343ba75501f20",
+    "inference/thin_posts/00046_lidar.npz": "d3d0a7d0913de85f77586451a31d026fa073373444365a5741ea98e714e4c365",
+    "inference/thin_posts/00047_imu.npz": "182ceef2ae59e27ba620c9768c481e884239378e19a799afb8915b0a5f136d98",
+    "inference/thin_posts/00047_left.png": "f65243a67af5dff5bcb96d4d089bafc6ddbca10fa381cec4aaea193e4bf147a9",
+    "inference/thin_posts/00047_lidar.npz": "a12f6fbe53b8a00e6352bd718495a11a77af82bae05e8b41ff3d267b8db79031",
+    "inference/thin_posts/00048_imu.npz": "146f02b3d2261876dbd63124fffa5298d12b445df21f163b173ba5f8c803fe35",
+    "inference/thin_posts/00048_left.png": "8aac2df3552cd4c7ca00987857515dd244b010a6fce7a097b84b5ac74716c153",
+    "inference/thin_posts/00048_lidar.npz": "0eb9296d3382ae268d96e7f3d57d1665c723d6fe1a890ad43d585f574387c46f",
+    "inference/thin_posts/00049_imu.npz": "3e4e271dd81422b2205b37342e58ae3375f0b97aaaac6f4f74c7b848ddb086ee",
+    "inference/thin_posts/00049_left.png": "c779d0e6e6ff70b943c5a3d7d2cacdbe870a08fdd624b77aba6ae7dbe7c2afb7",
+    "inference/thin_posts/00049_lidar.npz": "1d0154f0450a611453180376e148c6885d4ed74e05a33fd287f92ca3c7a2ef99",
+    "inference/thin_posts/00050_imu.npz": "7aa19c8ea6b223d73a13e0ab82f1695ca3d7ec260e212fbc3d443f2176379e66",
+    "inference/thin_posts/00050_left.png": "4f56b284a576da60832dba5e3f19c66a79a69ef27f619952e94e804288c2e869",
+    "inference/thin_posts/00050_lidar.npz": "4f86087886f2c495145d09a9b0e1791e48c56e1a8e9476808b99b4d220488ce5",
+    "inference/thin_posts/00051_imu.npz": "36cb21427a5cb2e146e07f4ff08c995f4e4c2a7b4110bfef12d0de47e9fb7ce0",
+    "inference/thin_posts/00051_left.png": "ccd357cf8ad911428fd58d5d4f094368ca4914a8d4a0f9bda0e59efc5a8707e1",
+    "inference/thin_posts/00051_lidar.npz": "2be160a8703ff49bb7cb62535a220d4313736c86ce2e44c5cf7a0101a2809306",
+    "inference/thin_posts/00052_imu.npz": "b813a6279741d468ffdcc38051a93f1adfbe39ec01e6b2c5091e72ea4fae696e",
+    "inference/thin_posts/00052_left.png": "accf107c4f5d29b907aeba70ad183410c905fae4077bd5a8e5599450cfd24637",
+    "inference/thin_posts/00052_lidar.npz": "2df90cc860ed9c00806eaa4bd7f4dd57765bb0acc2d9d24866942991ff0cfc54",
+    "inference/thin_posts/00053_imu.npz": "24a339501c26812deee1653567433e414ed1d6021f5f458dfe69cc067afb1a27",
+    "inference/thin_posts/00053_left.png": "13349ea16db63b3f3fd5d99294a50712ccbdd7b2251f5d71e3ad6a3bcdf897cc",
+    "inference/thin_posts/00053_lidar.npz": "e0a7fbb0782ecf982c91bcd85ed9e8680bc31824070a10488719f70fd97ca4e4",
+    "inference/thin_posts/00054_imu.npz": "5835b4bb9b51ec3a0ffb6631b1486c697da71c0cdc51cc0e8448e19a4a336911",
+    "inference/thin_posts/00054_left.png": "680bb0747fef3e4a0c1d4098606972fa2115f7d03fce7a881a3fe6c8f4bab9fd",
+    "inference/thin_posts/00054_lidar.npz": "654b5a67af9ec1998f0514560d6a92489a7dacad9fda8cef0c3269b6bc3f0444",
+    "inference/thin_posts/00055_imu.npz": "624eb20eb73193df1a749ad00b1dfdbda421b7791e0997583e75e764c5bac21f",
+    "inference/thin_posts/00055_left.png": "3ec570d7310bbbb4761b1e294174cdcc660302a06ec54cb41b8bee0589064104",
+    "inference/thin_posts/00055_lidar.npz": "fed67d97d7dd5e36827bc9ed2bd8d34c8421f937f2252ee6a44189b28c864f36",
+    "inference/thin_posts/00056_imu.npz": "5dd51d2268db7e1790fc2b7378c20aaeb40b3eab520d09463354de27f89fecc2",
+    "inference/thin_posts/00056_left.png": "7139ee071078aeefed89eb637582212b88a87022dc5f8e76bf1859854c4f8277",
+    "inference/thin_posts/00056_lidar.npz": "84f17f1bea4a972fdb552e78e2262620b3c4fe4ec400abcfadf0e730d315bd85",
+    "inference/thin_posts/00057_imu.npz": "ce1c40a7f5fae144586494e32d3c6f12086fe91de7e22e736c79b7e20208d9cc",
+    "inference/thin_posts/00057_left.png": "c24e0b0857ec684d76be3b9a19d0dd10542f66ad695f152bbf8f6689a2c74ed5",
+    "inference/thin_posts/00057_lidar.npz": "1c6465a3c4adeaa1c21777f975e5a1616a13d8d7ff2bf3c8db95dbdac1ca4946",
+    "inference/thin_posts/00058_imu.npz": "25de482c71985e111cc4c378f67f890eb1e921f4f24463dba508afcba08e19c3",
+    "inference/thin_posts/00058_left.png": "1469c95a2110746ed3a658485d3c704390e86972f0da2ce2e2307fc6090711be",
+    "inference/thin_posts/00058_lidar.npz": "05940330b1e59eaf1d18db1f75bd0adcf29a158eb0d5e90bc4996a76b532bba3",
+    "inference/thin_posts/00059_imu.npz": "5a0cc10e3f8ac025dd8d2b80da98ce36d24b148e467de4a3d9cd59a651a9aaab",
+    "inference/thin_posts/00059_left.png": "d21f554cda867b16f6ed0b491f45c6b122ab21cc1fe61a617d0c9bcd6e6ddbd6",
+    "inference/thin_posts/00059_lidar.npz": "5d20a8bda0f10fb50e496ac7142c92b259f08fdc42785b45632a6771708184bc",
+    "inference/thin_posts/00060_imu.npz": "dc9ee65f69673159a4a4039b31524ed4aeb57aea3e85c948824b1ad1c6cff736",
+    "inference/thin_posts/00060_left.png": "4b698e0c5ce83ba3df0807cf896280db2b82b2b358b4114b4e01b002cdb5f44e",
+    "inference/thin_posts/00060_lidar.npz": "96017e279b548794c3e366a4adcb1a5bd4d6eac397a904ca98b9a880180f8ae1",
+    "inference/thin_posts/00061_imu.npz": "444177188479d458a2f0212586c1cf1d429251f8bb28decfda35d0edbd120f87",
+    "inference/thin_posts/00061_left.png": "30cb21a3c326577decd8a1c70a7d7b98696f09e3e64609c6cc7241edfc73541c",
+    "inference/thin_posts/00061_lidar.npz": "bda44b54098dcdac185663bef209a9bb740ad107bf7b602282cb168d2d99cf26",
+    "inference/thin_posts/00062_imu.npz": "0fb88bca246ea79dc469d7532f4e840d52b13236bff70bc0dd768d23ddff5479",
+    "inference/thin_posts/00062_left.png": "14c75661039dbfabf90d886e12cfd4bf1248e61acf377a0d91c6598fa5b11e1f",
+    "inference/thin_posts/00062_lidar.npz": "9f0f5204fa1cb17ca7f761e834ff048be047e173dcb32bc63e6756f5f1e304a7",
+    "inference/thin_posts/00063_imu.npz": "c9d77c7809afcf1dd9b4149522160ab204ca35d242c04bc6e24f083081834c22",
+    "inference/thin_posts/00063_left.png": "681b7802e354fdfb48e96ad95de7987e5e845269e5114efe0bbc3626a665be5c",
+    "inference/thin_posts/00063_lidar.npz": "6d60c514595fc70a036ec3309efa5857fc626449822765de5f2e732b40f39a02",
+    "inference/thin_posts/00064_imu.npz": "44367d4fb5424ff797c1094903f7eaf96f794e26fe03e3205b50864c24db8325",
+    "inference/thin_posts/00064_left.png": "4e1170143c35845156a74a1b7fb3695dcf41f430b5a701d884fa4c0ceb1deb7a",
+    "inference/thin_posts/00064_lidar.npz": "41066952c67e704b44e22808698c9cbde8ec92a178e8afdd33a3215dd1329e08",
+    "inference/thin_posts/00065_imu.npz": "984f674b7d5614f70437f8504fd338d34e4c54f8f084ca6272ea9825179e4524",
+    "inference/thin_posts/00065_left.png": "7fea006125de37afbb8459b9864c0de1193ab87a3301951f2e6735426f9d848a",
+    "inference/thin_posts/00065_lidar.npz": "69270d6d2952f1961bb1b67b8218807c75859819a61a167e57bab9914fc491b3",
+    "inference/thin_posts/00066_imu.npz": "b1c08fd32a1e2c1d1d746d66a1811e8c1d2f9541d5e8c4513d40d89a3162d241",
+    "inference/thin_posts/00066_left.png": "bb86bd689d179fdce89b6b95715606a0e93669f0eacfd47e98d9e9c410f86846",
+    "inference/thin_posts/00066_lidar.npz": "8168137833fedde729b3a1972fd8ec8c8aa74b4f8cc832c2f272a30e8ed54d57",
+    "inference/thin_posts/00067_imu.npz": "f5be6b4f72300c8ac659a0eb6271111712267feadbd153d8f01bda57529a195b",
+    "inference/thin_posts/00067_left.png": "0c55dd865422c47cbd67e8032537b99f01ff1e6f93532f2424f884fd67a933d1",
+    "inference/thin_posts/00067_lidar.npz": "ebf6c90bfb7afc5b06c6057264380d1b5e7cee4682288c44e3e57c27fe001073",
+    "inference/thin_posts/00068_imu.npz": "e17d23c4d2e8f73ff30bdd819bd8cc983ff7549e03d0210eb2c3f71127c4d0f3",
+    "inference/thin_posts/00068_left.png": "50eaecb58553c6ca8c086187bf044d5a458e70db3f07eb3791c83b955557571e",
+    "inference/thin_posts/00068_lidar.npz": "1c84f1295d65d532039f16f2745743fb6358e85729b54092a6a0a868b0bcdfd4",
+    "inference/thin_posts/00069_imu.npz": "dd8ac3540b892530c063221fbf6f33fdc5ffba0c271860ad61968f5c5e407384",
+    "inference/thin_posts/00069_left.png": "279bb5ef88947fa76b3c3e8d6789f2069f28757224f904abdcc06fa5b2fed44f",
+    "inference/thin_posts/00069_lidar.npz": "3946e766fdb9eb3221d3aadb3c5c3a64759f0efb091166ec51573117164bff35",
+    "inference/thin_posts/00070_imu.npz": "f70bf19ec993a4971361ea291311acf7d8d41aeace328552cd31221ba3e5ad8a",
+    "inference/thin_posts/00070_left.png": "c0deef16cb1dd8e5931d0da36ac250d61e6505e2466dabbbde48e2f83b2bb334",
+    "inference/thin_posts/00070_lidar.npz": "27bf10ba962f143475a21b886908ed27462b142c5ce0deabcf3fce370800813d",
+    "inference/thin_posts/00071_imu.npz": "0a564b72072da00a3f4ab3c8c2e73730b99c9bdfb21b9de175f535779759c388",
+    "inference/thin_posts/00071_left.png": "2d1ca1aecf2792c82788ea37bf1a8f5ed5d684d86ed70aea09c33a2d7d993d56",
+    "inference/thin_posts/00071_lidar.npz": "8a85c78b6ca2c0c0a2a251b5ae759eca0d47bd41759202c1c2223cae2fd75315",
+    "inference/thin_posts/00072_imu.npz": "60658db3e10556731168c86a29d225f897058367c8e604fab2a2ec4b19df8ab1",
+    "inference/thin_posts/00072_left.png": "42c2a4dbd5b2b0cd4c01aa3bc31ee5c90f17f46ec83f0bbcc66f133d03c557f8",
+    "inference/thin_posts/00072_lidar.npz": "5616fdd0f4a64c129d245036782bfcd5e5d4b5a1eb2dcff0961d7dd86f0ac356",
+    "inference/thin_posts/00073_imu.npz": "a3efea8a7626470184648c35f088659aef84dc3393aef408009f875db057c45f",
+    "inference/thin_posts/00073_left.png": "fa901f28c629047181d219434d179e10a6ad55b39537b762faefdf665bfdea9e",
+    "inference/thin_posts/00073_lidar.npz": "c9c34cdece677d48a06e508aa029e7f0b4fcb75544361e855e8d3afe906d1a13",
+    "inference/thin_posts/00074_imu.npz": "45053ed25c4e38aba84db161be287bc3287bd49a4807aaf4e7df5de83b95cc00",
+    "inference/thin_posts/00074_left.png": "2aa2324ecff807a6faf15f5694197acac7c81f17cbfd480339f4893410d53a59",
+    "inference/thin_posts/00074_lidar.npz": "32d084fc3839a3fb1b93039dfbce037cd2f06e11476cdb6a3986a59a0ba0cfd8",
+    "inference/thin_posts/00075_imu.npz": "7c8f4923e3507a843dda2a4f125a90038857b0e82d49fb81f3086a5b4783cd1e",
+    "inference/thin_posts/00075_left.png": "58df93168d5a0eb3754b121638cf2c9cf311cd6e55028642bd66fea0a252f483",
+    "inference/thin_posts/00075_lidar.npz": "18f53612f9ef4c4f87133e647c2ed8e13c8666a471fcc273f53eac5fd9fe2bd9",
+    "inference/thin_posts/00076_imu.npz": "52857f2816d1bae596d0399a299aba13ecc2932e586b502781a24507a34754c2",
+    "inference/thin_posts/00076_left.png": "e174ac773e039e9f5b2f3371d713be132dcd221f0331d3c0453a7e851206f4ac",
+    "inference/thin_posts/00076_lidar.npz": "6eb17b11dd9ba0a539b1bfb5bf2f5c84552303aa20c3e87ff1913471b5ab265f",
+    "inference/thin_posts/00077_imu.npz": "fe1741794a86793b4f419d0da148486e328e2a6089a08c0398a918a813a444ec",
+    "inference/thin_posts/00077_left.png": "200402b7e555a92377b12d18cacd0bfc7144853115d68b4f38059e4e8a97a02c",
+    "inference/thin_posts/00077_lidar.npz": "ec6945420f6f9a028e76aa15f33cab1e2f7dbd51a7e97f0a250a5f37280b24ef",
+    "inference/thin_posts/00078_imu.npz": "09c6ddf906d01a91488061dda7aa39f78c8a5b8d136fd252799015a72916b20a",
+    "inference/thin_posts/00078_left.png": "7cdb9dca23069a4133507d0d380262874d380897ab62b777b42a477cc0c7f3d1",
+    "inference/thin_posts/00078_lidar.npz": "2263e2be2033a64cf0cdce88a2b8b87a95134ed50b29385571b7d1bff2817ead",
+    "inference/thin_posts/00079_imu.npz": "8e66a90ca06792c59bf6b2b3bf790fe45f570ca911db455903c2aada196a9780",
+    "inference/thin_posts/00079_left.png": "44e264c7024ab20697ebfe8af2e50d7d7d16916b528c3e08df5de0be69feb31c",
+    "inference/thin_posts/00079_lidar.npz": "80753ff1ae6db3a6a285aba947e47463670c00c70a8466a079d377ba499cb4fb",
+    "inference/thin_posts/00080_imu.npz": "57cea8d098443beaed323f551029a1b7a281ddd5beaec73d8166aad18687950b",
+    "inference/thin_posts/00080_left.png": "26266a2e79c61a52616cd34d20ad98e9527bbc46e62edfa7254615919052dfd2",
+    "inference/thin_posts/00080_lidar.npz": "fda8877d2f2c3095c2a99f152dce52ed8ca2d7e9347cb2c0a9d63542e52cbf46",
+    "inference/thin_posts/00081_imu.npz": "699e1fcf038d964ee566c25e49eb6e4d67a4be5a7475d7d6303d16c883cce968",
+    "inference/thin_posts/00081_left.png": "1e62da9c717b5298d8b2554f57cc68e40ae230794c6c3c93628efd34828d57eb",
+    "inference/thin_posts/00081_lidar.npz": "d4003d332d71589680e28053eb37e43d1eca1a3870d55ea7a8efc16b122a932b",
+    "inference/thin_posts/00082_imu.npz": "2b1b2449de8058dca8042ea7259c02540bdecabc3300ca5f08cc3b1f599083d7",
+    "inference/thin_posts/00082_left.png": "d25657c4d4244fad17dd518a8f322dea28f0ad8d649cbc12964294c269f6e618",
+    "inference/thin_posts/00082_lidar.npz": "df35967d3e622d509aafdd3dcda2146837a43cc1a6fb3b25f353c690a7a7f2f6",
+    "inference/thin_posts/00083_imu.npz": "069d501add675ada0c09a9cefed7a135cd206275ac450d7140d8009805e30b2f",
+    "inference/thin_posts/00083_left.png": "d55b18e78b6e16e3bd971c5ec1e2cb3669c57e7819f4c1be9647489fcb4a4419",
+    "inference/thin_posts/00083_lidar.npz": "fa186136fd8de402b52ab0b8fddce2bb9f5f6b263a3fbfbe0db59d9932ae383a",
+    "inference/thin_posts/00084_imu.npz": "7617b0f0afef2c783025cfaa3726354f6b7a12ee859242023b138b49a36c9fb3",
+    "inference/thin_posts/00084_left.png": "2275578d7ca34dd47bfacf320fc52331e30f68fb418a2f08395db77f1fc9d7d1",
+    "inference/thin_posts/00084_lidar.npz": "4448b0ecc29493804a3170c6471e8c66ce72416cf5a596b774b4b721a74e174c",
+    "inference/thin_posts/00085_imu.npz": "a684cd36b9b7de15afaa87e559b2c79159599adb41675f9b9e79b3e37fc312d7",
+    "inference/thin_posts/00085_left.png": "1591718eca78e61c286d44373f6383fe88504552b551e8cd92732f737b69be51",
+    "inference/thin_posts/00085_lidar.npz": "dc353b23defedc829621c2c364943f85868a4ae29dcf08ba321a364dc25840e0",
+    "inference/thin_posts/00086_imu.npz": "abfcab04dfbd7a2cda4f73bfd017aebd4fd1b55121bc49ac63a7302f82865151",
+    "inference/thin_posts/00086_left.png": "c04e2baa4cc4a3a9a80078a86609805b0523fc3e633905fcfa4f8fef9f136ed5",
+    "inference/thin_posts/00086_lidar.npz": "98753c723669dba348bff775cf542da08d5708ec05580b92efcc5d1b9d3de2f9",
+    "inference/thin_posts/00087_imu.npz": "5516a774cfc71118e7a9118570d2967deac65e43fff5270fca3dd709e5317677",
+    "inference/thin_posts/00087_left.png": "bd1d265fe747dcc6c3119a99a432441e4f027c361c8b14f3f0fc7ad82ca75e39",
+    "inference/thin_posts/00087_lidar.npz": "b67ba9936dba665d3626ee4a64acc41825a4ba7e30a5aac3eec54deb13638250",
+    "inference/thin_posts/00088_imu.npz": "56597cc71857a5966fa0ca9517017024dd799554de1a3faec4be8d76b794cfb6",
+    "inference/thin_posts/00088_left.png": "c05dbc6b8c6fb0ba932fbfe011999dc3b99b303d91bc76096c0e63e6b124919a",
+    "inference/thin_posts/00088_lidar.npz": "e0d77891a16b87775b6e2831fdd14aa3a08a6d28be7ee0dcdf6042d06b707b27",
+    "inference/thin_posts/00089_imu.npz": "66f2f36dfb7b72e8bd7f64915d8c2dc6133efd5b7b6653f5b5e4fd6870b1bc84",
+    "inference/thin_posts/00089_left.png": "008e3c18c8e10beecd7843c7eae6b37887ec173eda222dd36287883e60d572f7",
+    "inference/thin_posts/00089_lidar.npz": "0244f10d4346051507e8882685a47e44a2f4b86ffa9efc99be9b884792bbebab",
+    "inference/thin_posts/00090_imu.npz": "119bb26cc8293b7d4f9293a7c452b13f9148b636a069c942c3dec56206b3bb04",
+    "inference/thin_posts/00090_left.png": "5c75affd6da8c1727b5d5528704469323755fcaa486cb1b762f417cadd8d8e03",
+    "inference/thin_posts/00090_lidar.npz": "dae3480b2f77ec8e09c551b52cf56fb0a4662a589d98010c0c3f98109e759b7b",
+    "inference/thin_posts/00091_imu.npz": "4cc9da1ca76aad1d13643d496e397c4669fb5783e5bebe6b456d0de777dee220",
+    "inference/thin_posts/00091_left.png": "1f5523a6537f6acec3423c1e9020dd9fd0891e8dc7a34f94028a09ab77a8075c",
+    "inference/thin_posts/00091_lidar.npz": "aa660dc79c99e29cf908db7de67b0bb586f0841d64ff19fc20f09ca364da9112",
+    "inference/thin_posts/00092_imu.npz": "c9173f6849823ba2c0acc8a53ee2803fb2bec553b0c038e9e3d2a681aada718b",
+    "inference/thin_posts/00092_left.png": "7cb7ec3e17db91224a58dcee24d8024927a0ab4ae5b2b7f5409fa53ab7392332",
+    "inference/thin_posts/00092_lidar.npz": "a12635535caeafcde3cdca9cc7d70575841972af3c068efee7974a92047977a0",
+    "inference/thin_posts/00093_imu.npz": "2373bbebb135f78feeab39536f09a736d0d001af4c4184975d977cc43f950ce2",
+    "inference/thin_posts/00093_left.png": "fd3efce219de959560cfc3d2ace79045bef299c8bf25d10b5a8ecea3c7cce9b9",
+    "inference/thin_posts/00093_lidar.npz": "070da6113eebd9371efdb003c32d65b4573536b9548661bfb886ca205c24aed9",
+    "inference/thin_posts/00094_imu.npz": "da3b6746b4e81337d9c7ccf71ce690c8f05a58b8152ef2bf945e94be3f17e29f",
+    "inference/thin_posts/00094_left.png": "76a23fb09c4ffc48cbf0e6b39f4244acd3e0d7856d304dbb47cae87b8f66f005",
+    "inference/thin_posts/00094_lidar.npz": "194df3dd45841ea60f75a2690c0a0decf935b7a82f0f61fedfa139e942af9f4f",
+    "inference/thin_posts/00095_imu.npz": "778d1afbdf2d7cbaed6e407bca4eeeb014339a02bf38115a9697894832bc0fb2",
+    "inference/thin_posts/00095_left.png": "aa08be4ef6c49f24cd3d16e7e3e12e2d0932e90e27e3c39599741cc59fb8021c",
+    "inference/thin_posts/00095_lidar.npz": "754466e12d60eaee2c30a66779e07e9cc5c1df7697b5d4bdf2d6a77cbc91ee43",
+    "inference/thin_posts/00096_imu.npz": "480a96a13f81034d1b2fec573c543f73bdc4ad5f32c1e577b6d42efd8e78ef12",
+    "inference/thin_posts/00096_left.png": "dc4baee2582c83f6595cd8bfe9009bacd5b7e7be070efe6fc9f3177604e5e77c",
+    "inference/thin_posts/00096_lidar.npz": "ba3a9ea2ac5a68d47e7650d9097d57a2c43af2070c5d96ec79899fe3ae03e903",
+    "inference/thin_posts/00097_imu.npz": "e0b5f60b7e20a771cdba91ddc08d2e5ec825254dc52592695c7d73362ab6c1bd",
+    "inference/thin_posts/00097_left.png": "8075d73321471fc7c6c82da56dd897423b096d96a121090382c58e53552708e1",
+    "inference/thin_posts/00097_lidar.npz": "ba4b37805ab12fb563c91fe2cd3793b27bbe01f6c5633d8e3d4b1cf4540ef2f1",
+    "inference/thin_posts/00098_imu.npz": "9348e4caeb56df35d0ee237009c18747f54318e9cccfe153431a687ce31141e4",
+    "inference/thin_posts/00098_left.png": "097a3b273f91d113a3d2856820f574264532547667ae7f39caa4cc2907c81daa",
+    "inference/thin_posts/00098_lidar.npz": "70c885113d93bd0c834fd257674546c8a3654c9f09a4c3fbe6cb5682c1a9990a",
+    "inference/thin_posts/00099_imu.npz": "62698543a16dfbe16984dc48613e8051d860c5133490088f6bb6a444d93ad0af",
+    "inference/thin_posts/00099_left.png": "c280e036633a53596c7f867e5ce76940b333aad1c2117df3c5f0532d96b54878",
+    "inference/thin_posts/00099_lidar.npz": "f0a62c399084646ba98fb4b50568b2c7258dcb93612445af8b5cbe3ba237c37c",
+    "inference/thin_posts/00100_imu.npz": "377c88f92843b432555639aef734f7ad9447a51f0bc516bef89b08f1d3c4ad94",
+    "inference/thin_posts/00100_left.png": "6c82dcf889c9cd4884288e091c125c695be9db7a5ac8e04b5e47be8f8f6e54c4",
+    "inference/thin_posts/00100_lidar.npz": "bd09ae470e170c65d5d2ae07a4a41b35dba98bfbcd10d26135513ebd4c40323b",
+    "inference/thin_posts/00101_imu.npz": "71e4717be7709328e681666988aa22ec83827548bf1d5170c021bd6f5cb24db1",
+    "inference/thin_posts/00101_left.png": "353d73e122294311e80c2e8cba1fed833345a6a4936e77a45fa9d87ff2b26d04",
+    "inference/thin_posts/00101_lidar.npz": "1d6c2256f145a909757cff37ba67463980a857e7bbc4a2dc31b26392684d0d43",
+    "inference/thin_posts/00102_imu.npz": "2426b253895c6f62971b0b2e1952e315d13662f623e701d26f5f7295db9095ba",
+    "inference/thin_posts/00102_left.png": "373fc80e65695a43137c5d4cde4bda29a9139f82b0fdb7eef6ef347b463bf910",
+    "inference/thin_posts/00102_lidar.npz": "6ffe1f3fda985257716ab9aee4b960130bf156aadcd5a0c5d8130009c92ea0b2",
+    "inference/thin_posts/00103_imu.npz": "9b41109bb8748359131ed7fa9fb2a8a0f98eceece88f30947b290f9f0a56b180",
+    "inference/thin_posts/00103_left.png": "d17463f35d6b80bb572a401abf47fbe1a145da0ce1280ecaf869d2fdecfe5b02",
+    "inference/thin_posts/00103_lidar.npz": "791fd4b1bd20e6aa28d524230bbdc737817933689ad9055e9dde8195b9a21dbb",
+    "inference/thin_posts/00104_imu.npz": "7f02f26e1d4ee34b6a0cbe3515301e803d564c8e907e93d7df20652dfb885ebc",
+    "inference/thin_posts/00104_left.png": "4d632b411d7721c625920abfde2203c4d24d0a2415e7832d376bf36dea110572",
+    "inference/thin_posts/00104_lidar.npz": "6345e31724dbf916a2b37f593eadb5508364c0058efecf4a07b0eb2463ec3f39",
+    "inference/thin_posts/00105_imu.npz": "ccc27a940ed2392e760998a80024f8bdbe1d08aa187ec032ad6d2b53750a6837",
+    "inference/thin_posts/00105_left.png": "000257d5f12c6876886e9fa9cc88b7af20036d98dfbec05700de4393d4529585",
+    "inference/thin_posts/00105_lidar.npz": "c9037ce0496735b248f24ae2736f0eb344d278ddfa99c07e9e127c5afcdfedb4",
+    "inference/thin_posts/00106_imu.npz": "d72b24b7183c69a8a1b40f142c28f606545c430cf76c6ce9fe67f469b3c8df10",
+    "inference/thin_posts/00106_left.png": "b7e2f27cced9c6b518b6da49d9070244acb4bdcf13838d9b9ea79c95c6534420",
+    "inference/thin_posts/00106_lidar.npz": "e70222bbbecbdc18cc819779a93ed7ef5a667caf98f3ad9b07c8c92f7fd848ce",
+    "inference/thin_posts/00107_imu.npz": "d2d6fb35e580c1348ced5f70d233283fad167ac33940071169e0773a3a7f2f21",
+    "inference/thin_posts/00107_left.png": "71a0472e94ebf0373f7ac6f67e1f146d1a5b07a8b5e07d73c0f18b0176572ba8",
+    "inference/thin_posts/00107_lidar.npz": "9a0c9cc5c7c21f8f722cbac3f90216135a65bf32cc0358545578aaa71c23a56d",
+    "inference/thin_posts/00108_imu.npz": "528f99c5be3b6fb410127a1e37b4869a096794bd9022e746fca9d2f30aeda672",
+    "inference/thin_posts/00108_left.png": "eff59201a07e7e98f2b61e1d16ea63dc2a29c524efd4e6777d811ee1c8109f16",
+    "inference/thin_posts/00108_lidar.npz": "df5cbcc45f3ca9bf5876607330daf87e64638cf548df46c0abc54346be1ca83e",
+    "inference/thin_posts/00109_imu.npz": "8665780eb315f8ef76d0ec2fb2707e35eb0609b86b75e245313f8368a26e5fb6",
+    "inference/thin_posts/00109_left.png": "a74c028f8f26c94c631c66a04226b09a8223b40d0622f20b0f520f8d610e1e7f",
+    "inference/thin_posts/00109_lidar.npz": "12f8521dd60fbc8e3d99b39a2a37e22df45a14db23987f5c2ea40b423c75def6",
+    "inference/thin_posts/00110_imu.npz": "7b5cd2823ddc68d5cd0961525281457c610e9c9268cfb2f5515783387b3a8556",
+    "inference/thin_posts/00110_left.png": "12714ebf883ddbb690dcbd90090d63ceb57093a56599e08fc0a645c3e1bbc859",
+    "inference/thin_posts/00110_lidar.npz": "8b9dec8a0cf6e42fd58ba1d999a9bdfc32ec7453407d32a11a1f295b3857d602",
+    "inference/thin_posts/00111_imu.npz": "79ed21f725534e9306ca828e166e30399e93d0893316607722a0f83ae99a76b5",
+    "inference/thin_posts/00111_left.png": "c465ddf5e4bd337b4fbaba03cdae55a6a0df5b6ac7f773094fd15cbe8ddbffce",
+    "inference/thin_posts/00111_lidar.npz": "032c0b3ca5754550629b538ace977f40e65ee8873d7e447f72b7191f93ec2b88",
+    "inference/thin_posts/00112_imu.npz": "a05adb32dccbb8a6350208f41815d6cf5d56de5b54d070902aee36878f104bf6",
+    "inference/thin_posts/00112_left.png": "1017285f1c578cde36e7e5658f8c70c64302e0c9d8579043661081d0428101c6",
+    "inference/thin_posts/00112_lidar.npz": "187d29c727ba757c118c3c0b60cf7b55eb16e4c928e8ea0c97a2703612b4874e",
+    "inference/thin_posts/00113_imu.npz": "d255ed6496454ff799e8eb132ce2eb254a11cd44d369cd0d753b259a8189f8e1",
+    "inference/thin_posts/00113_left.png": "55a7f837c4cd749c7c18f653495584b467355b627158d27043833e7e940a9e3d",
+    "inference/thin_posts/00113_lidar.npz": "30f5f869bb2351102960d1664415cae931b2cb65ebbf55c573a188e9cf56e20f",
+    "inference/thin_posts/00114_imu.npz": "720ccb276132c06b178c065782cc1bc9543b1547b377963af674c7d855aee793",
+    "inference/thin_posts/00114_left.png": "2a72c785c5ac48f176aba7b85c2409f72c06143b1c0ae8d13d964029d89f72a5",
+    "inference/thin_posts/00114_lidar.npz": "809307843881e5d4b305bd1f64b0ab6541c8a0dbab8ce0b6d92eeda31d18082d",
+    "inference/thin_posts/00115_imu.npz": "6c47652a881bdc86e850b9df431df52f90ef2e6b92138bbe1f0283c0f4165dd1",
+    "inference/thin_posts/00115_left.png": "9f0b122c881c10ce8733ff9607029eb02815e8eadbaf47a37bb596c517ab01ef",
+    "inference/thin_posts/00115_lidar.npz": "d8144ab77fad9c75f978ae1a205f14df2251a3acb7560e449f0c06607f8eb4c7",
+    "inference/thin_posts/00116_imu.npz": "489bb7eceba11c78d8a001f1a259915a06522e6dcc761701df08b82a34280be9",
+    "inference/thin_posts/00116_left.png": "e0ec5ea7dfaa814fdce85f5897a474557227bc09abd6d7c9db1127110ee9a433",
+    "inference/thin_posts/00116_lidar.npz": "abb273ac145e419a94f7ffc0fdcb0ff4213717cedfaa67a60852a2bb477a40db",
+    "inference/thin_posts/00117_imu.npz": "5ff0dcf006a81f38458b2c524d32206fbba9613494f92fbe24fae4474ea96ce1",
+    "inference/thin_posts/00117_left.png": "213493319cbefd10cfd8f30a63bc253321482acae47fb324b87614236e5e2c76",
+    "inference/thin_posts/00117_lidar.npz": "57899b9a15a8200f29298e4c90f300fe55ebafaeb73f271af44cab05c5201383",
+    "inference/thin_posts/00118_imu.npz": "acfcfd089e434ecbcd4c5383c59d997d56aabca35771ebe122ce8f48298174c0",
+    "inference/thin_posts/00118_left.png": "b462b0d6afba13571a110445817d9d4d497d47e4d8fb70fad71e8f485aa04887",
+    "inference/thin_posts/00118_lidar.npz": "e652bba972a329c58927b33fab81ae525b27798ffd81eeeba5c74c276e6dd661",
+    "inference/thin_posts/00119_imu.npz": "5c7eb6087422bcff2715e2613849a5c364e6893961cac5dad54cd338079d50a6",
+    "inference/thin_posts/00119_left.png": "029b3f1abdfd9c6e445bb90d337870f1ec6106b979074e22fa43d8bb307a45dc",
+    "inference/thin_posts/00119_lidar.npz": "8a702f822fe3cacddaccc2982df03e63aa1a1d06f34f1db97b6479007d7685bf",
+    "inference/thin_posts/00120_imu.npz": "a111c2a0c0efb25d123c14abe5879f27267f6a76a0945bbdc0df3a13d81e3966",
+    "inference/thin_posts/00120_left.png": "43e26d1c83be8b5853688e6dcc427ccb79290cc04c8398fe6e31159bd887dfc2",
+    "inference/thin_posts/00120_lidar.npz": "04003d7a617fc2a805c62166374254ee3c8c7335953439f313267e895a3b7d10",
+    "inference/thin_posts/00121_imu.npz": "a493344a568711bde931543e81bdce133aeada97aae1f475c70519e7b521860b",
+    "inference/thin_posts/00121_left.png": "c77474cd5fa57c1ff24650e136a65ff0236040e9d8db6182bea0a612b56a6d70",
+    "inference/thin_posts/00121_lidar.npz": "e531c19d8caa6945d878bf5c2d96d2f931bfac0032d0e2cb5346a74d1762cd84",
+    "inference/thin_posts/00122_imu.npz": "86adf74c32d8b44f0757c97ddeb6735f4bf9d8986cc3a070d737ac8a72fc2bc6",
+    "inference/thin_posts/00122_left.png": "9e4d32e9f625411d6af40541c3a5f2b89d3a9237c8f27580fc813749c1b7acb7",
+    "inference/thin_posts/00122_lidar.npz": "fa1358bb01c43c30d2bac676468616c1787a818e5b34d53d3a9ae1d41be538f1",
+    "inference/thin_posts/00123_imu.npz": "adcefbe29624ed95efcea8cbb25952677a192a994ba4c8875c001e80356fd9f1",
+    "inference/thin_posts/00123_left.png": "294b7fbb323976f15ea9f59124caccad14b5d3beb1f29438dafdbd58802ce376",
+    "inference/thin_posts/00123_lidar.npz": "bdd3ffe549da0c90980ea0f5ca60d430da0b929ec636bb633f1eb43b89f88501",
+    "inference/thin_posts/00124_imu.npz": "6cfbdc91733578ffcdc3178b117272f2391b1dbd4e0aa9505cc04fadd3359741",
+    "inference/thin_posts/00124_left.png": "7923cab80587b95bb437cab5d08793928f33add578fa8e8bd28420ffd9813a0d",
+    "inference/thin_posts/00124_lidar.npz": "7fdf14fc50313158c24035df2def89222a528c974523b98210a6935258db945e",
+    "inference/thin_posts/00125_imu.npz": "bc8299d3afcb2aee1a2d77639f4803890142f5002615e7ea54a3cfe18f3b2b40",
+    "inference/thin_posts/00125_left.png": "4db17d650ef554f87ffb2c1bbb0e3bcbc80ab7e7a83296a4a322486bffb8ab6c",
+    "inference/thin_posts/00125_lidar.npz": "435378b2f200ad6b34b3fdf57bfca5f532e6b62dc9c40bf245ea7fc079508451",
+    "inference/thin_posts/00126_imu.npz": "04471e61996baf92d993e6aa2ea840e2067aa3d3f644b60e1afbbccaad9e9687",
+    "inference/thin_posts/00126_left.png": "f5c46e44519c6dda8ef702d4d7edc91769420f398e911e857f50761a0b481f3a",
+    "inference/thin_posts/00126_lidar.npz": "87f5315b60ecb9828c2433567e460457e3a26850b1d685c95cb8a6ee0d70b505",
+    "inference/thin_posts/00127_imu.npz": "c99a615a2e521ffc02adc11e3505315fbfd4921eb8314ad90a3ddf1440039a73",
+    "inference/thin_posts/00127_left.png": "2104e49f8bc0b6dcd3dc0a15f874627d498b54ea5b6c8b229e96db3a2b5c0386",
+    "inference/thin_posts/00127_lidar.npz": "62f39d7982955565a07c87db2b507907433fd3451c25b2b8d7f26ab4c5f79a72",
+    "inference/thin_posts/00128_imu.npz": "e19c811a3f36107be07cecf8d8d6f9b6c6948ddbe81cef8e4ab6c98a722442eb",
+    "inference/thin_posts/00128_left.png": "cb3de87ceb7c9075c26ebb0d1f846f551f08bc88da2cda1e2b04400fe8851327",
+    "inference/thin_posts/00128_lidar.npz": "c6105406c5187d99c8b1445b8d3167022dd124482a2734ef25cb4b522182a321",
+    "inference/thin_posts/00129_imu.npz": "a45fcd43ae9c6fd8ba90e15fa33252944e504b8f2cf5cb66e481dd60933e9e08",
+    "inference/thin_posts/00129_left.png": "4faf877dff7dc98e70f97e641901c6f0f5d4c3ea81a67ae937ca0dcdca2b5353",
+    "inference/thin_posts/00129_lidar.npz": "72ef3bcd41f8d53ef6378f5145e3cba3349c31609907b223bd29f7f327eacceb",
+    "inference/thin_posts/00130_imu.npz": "a2236fea8973dd667c8399b46d28c2c99d898a7fda713e461debcd36a09fc13d",
+    "inference/thin_posts/00130_left.png": "025de8ec2c01fdbbab3dd5a8f11c841818fd9b3aa45f7e39f0f005555adb475a",
+    "inference/thin_posts/00130_lidar.npz": "c2594403d08f5f744bf7c28cfa6af1ef92f47fdd6fd2e55c7f8c10e9d4deccbe",
+    "inference/thin_posts/00131_imu.npz": "b05aaeb300b037aa64958810114730016fbecf4a71931b964c04b80262a7f28f",
+    "inference/thin_posts/00131_left.png": "4130e62644a70f691ef4b5294724e6b43c74c5ea5d88b080ca3d7df4a9d76eb8",
+    "inference/thin_posts/00131_lidar.npz": "6ead4b9ca2a309571e4b9b9182e8ac61d8f32872bcabc9c7ca3169414e8e8f3d",
+    "inference/thin_posts/00132_imu.npz": "842d4046fbc839575a553a2315d342ac195ddc06cb637d74eb7dc907077779b4",
+    "inference/thin_posts/00132_left.png": "0c1d5b55a5e2d12d2572cdd85722bd3d0e63196d38936061d4e4f0f913717b0d",
+    "inference/thin_posts/00132_lidar.npz": "e124259633071b7034cf3cbc5e1a930b60f99fb0d86937fcb6e24ffb7e554bc6",
+    "inference/thin_posts/00133_imu.npz": "5fa4cc049fccd645e9c059b692e334c35d0344885d2a22cf56163fb65721d4cf",
+    "inference/thin_posts/00133_left.png": "9fd60494714939197d76ad8a2deb925f6bcb9187b9d7a2913a295b58d48db691",
+    "inference/thin_posts/00133_lidar.npz": "5fc577a7a96217fe61b07824c0a735b328b048002ef07e4a5ce52d15becdfaa3",
+    "inference/thin_posts/00134_imu.npz": "3780a0b45e065b297ed6e2f3834bf53ed4ece50529cd0355268eff9f9db3607f",
+    "inference/thin_posts/00134_left.png": "32b989aebd8a288dd4164376a99fe816d0279b5c66c7e295b5c8c320f60c3f4c",
+    "inference/thin_posts/00134_lidar.npz": "2a1d8b60351c108cca1cc2427df10a24bd1b7d4f377edab2ad7948943ac94208",
+    "inference/thin_posts/00135_imu.npz": "d9156bc74c1208c671091e77a83366b83d7a72605b37b3946c84d30351e48daf",
+    "inference/thin_posts/00135_left.png": "976d3a10efa4cce5746d72e00840140ae17a1087c40cc18366ee8ae16111430a",
+    "inference/thin_posts/00135_lidar.npz": "0917116b18d50360f0668e9541ef71c5cac905d2aa44f5e5d0540276c46e2c32",
+    "inference/thin_posts/00136_imu.npz": "29a2aad76be5f50a3c74ac957bd04cee58bb291633126c08bddcd3fce1ae1d12",
+    "inference/thin_posts/00136_left.png": "c9067f4c0c8f900f05b50b4c0a131a080eb534fa21fe6096de139a64305e2f11",
+    "inference/thin_posts/00136_lidar.npz": "ac276a484d2875ef73e65ea8dcf604c724a594132faa6abcacd2c4022581cb58",
+    "inference/thin_posts/00137_imu.npz": "f5331528315439917b3fcaccd4fba13a38cf8fa68e94c2c57c92112c3add1f13",
+    "inference/thin_posts/00137_left.png": "d1122dbd735f2a50db028d50a7fc551e7271bc7f35f750a91cda884ff8dac409",
+    "inference/thin_posts/00137_lidar.npz": "ceb49d14f6e57d321999e8994b49756d76de57929e55daa0a0876043d5ec1d02",
+    "inference/thin_posts/00138_imu.npz": "c457d82937b4211b899380041ff0202b55c0395f7ff2938dedf3f9369d88cd06",
+    "inference/thin_posts/00138_left.png": "541ba82eb018453fb7035829676b9f5d11fa6dfbf99e32ceeafa9d6053fa0314",
+    "inference/thin_posts/00138_lidar.npz": "36e5118c5991b51e9d23b72547149103074a2ca33e6212421845a677bc2279c9",
+    "inference/thin_posts/00139_imu.npz": "09b5cf05fb39fe082fe70ca0de2acc2fa010cf5327f190a368dd3f681d572c89",
+    "inference/thin_posts/00139_left.png": "d162dca549a6cb0b461ce4fea99377040955e4ba043c66dc32cc21145febab2e",
+    "inference/thin_posts/00139_lidar.npz": "54e8048677da5d48beac200d4b36105c1e37e1719afad9af764c0abce2e4df13",
+    "inference/thin_posts/00140_imu.npz": "e6ea6f02b2fdbf31a66d97796f83f7aa6b9f59bf9036ee867c31027c6ecaa3bd",
+    "inference/thin_posts/00140_left.png": "4b5b95ff891a65a76d57de7bd7b090a0fd65df0193d03c301c4174d14f32e177",
+    "inference/thin_posts/00140_lidar.npz": "0dbf447e4ecd7173469e86014a2d789c3e29a917ecd46baa5fbec29eac287274",
+    "inference/thin_posts/00141_imu.npz": "659c297f830f5013394c07c3ecf06c243abc5e92e221c93e79a88251b8e08809",
+    "inference/thin_posts/00141_left.png": "dd5670fc5c6d7a8a50cdd2489b6bc6ada5b31e390bade01a85149a3071dd167c",
+    "inference/thin_posts/00141_lidar.npz": "2aa14e45a235ce4870bbf2de4744ea57c068b1c8095b897e79bf76a0929ada9f",
+    "inference/thin_posts/00142_imu.npz": "f3a2e26d66b7b797a7c0f25023114bfd435c914a6683ccb93d9e934fb00e1df1",
+    "inference/thin_posts/00142_left.png": "fa478d278bfbd3449eecc81a256028089df1a342d17a73b060957ad16cbf54df",
+    "inference/thin_posts/00142_lidar.npz": "623323e37f2d74c981ef73552f688b6beb00ee51f3e2438b5d08fed06556750f",
+    "inference/thin_posts/00143_imu.npz": "ed01157c8b2975c2b70f743b037f8ad81a8908c7e258e736a9a25e160f7ad700",
+    "inference/thin_posts/00143_left.png": "a3c77dc46637a2ff425a6d47d553055636fdfdc06eb008df59a51020d35835d4",
+    "inference/thin_posts/00143_lidar.npz": "6a43d898c380f35e08a3ad9aacd08e755cb8d467b5cc1f3fdbed731500032453",
+    "inference/thin_posts/00144_imu.npz": "cf584a56681d9ff42a7cf960d0cd6c9f4abe5402137ad208b89f1cc1f183eeb1",
+    "inference/thin_posts/00144_left.png": "8177a048ce013fe1eb786f9ce1e2fcf75822123dae8c4f72433ebca4fc3dee7c",
+    "inference/thin_posts/00144_lidar.npz": "1a2de2455420f71fe02b6c55849030232c8875d98e7b3b14bcd372402a66bd5a",
+    "inference/thin_posts/00145_imu.npz": "a0d14b9df5edb9a625b90c48fcf6c87a738705d6a39a6cd78dfae0d3988196d9",
+    "inference/thin_posts/00145_left.png": "d265a642e3ac6084f8baf1972fc31396f055972218e2f015dfa09f8d995c3894",
+    "inference/thin_posts/00145_lidar.npz": "77c668c6a894e1f469dc4397fb79fa4cb4b15257b771d137c03b9ff3b6373e2c",
+    "inference/thin_posts/00146_imu.npz": "4d1c4e068b9f8be512b8a565845b837fdd9d0e1c31b9a9ba3ec5ae05bf9e61ea",
+    "inference/thin_posts/00146_left.png": "6982c32ba85e2a0cdce41aab9740fead91e15b9dde7607b9c3957ec7802d740b",
+    "inference/thin_posts/00146_lidar.npz": "857932b3c76d1c0024c72a35111310b7ed6e78c46fa15dd86ab0ac6f2cdf662e",
+    "inference/thin_posts/00147_imu.npz": "445d4ead5f6ab8b638327b15b65819aa033699a813ab12caf20cad2a7cfd704c",
+    "inference/thin_posts/00147_left.png": "12b390ee1e9ae423f8a673986b8ec9426e28e1c1be92ffd88ea7893363f8dfba",
+    "inference/thin_posts/00147_lidar.npz": "1149d562dd3b294f66e675bc36bd59e64102141028575f9e8817df7f74d7729b",
+    "inference/thin_posts/00148_imu.npz": "3f40785a0f07b3cc95ea2393e744c03e87003fc6cc63720c4235ff1656fa8fc4",
+    "inference/thin_posts/00148_left.png": "378ebaa733f0d1b7ba543de0742b93544b5cfc32c5d6777c096ae508347d8909",
+    "inference/thin_posts/00148_lidar.npz": "cc2903518d85123c248f856143387620080118ff4f8220596b74180f1a3df15b",
+    "inference/thin_posts/00149_imu.npz": "c76587a994bb325ea7fa68bb462bfc1f0a463350f1cc084a31d03c3472c4d187",
+    "inference/thin_posts/00149_left.png": "f2030c6c1d7e6c985277c115dc90b0cbfaa7f1f6f5255785ee76dff50226dcdc",
+    "inference/thin_posts/00149_lidar.npz": "d51dca839d1c12bf3a94d8cbf87375a8cf486a82a9103aa65ddb4afc62939de7"
+  },
+  "trajectory_sha256": "f024affa944e703471f56209a15985573eb66e3643ebfb63bbf093fbdd3605b5",
+  "native_frames_sha256": "ece7b5feb0ad50c11d4ea2f27bd7dfcd1eaa6330789453b6afac01690610c538",
+  "right_camera_consumed": false,
+  "max_imu_gap_s": 0.005000000000002558,
+  "timing_scope": "Native per-camera IMU deskew, voxel LIO, map update and direct photometric VIO. PNG decoding separately retained. Full native process wall includes startup and IO; capture is excluded.",
+  "native_process_wall_seconds": 3.143698310945183,
+  "tracking_semantics": "At least one native lidar residual or visual patch and finite state; this is not calibrated confidence.",
+  "calibration_sha256": "7b421d03968b4292c1036640848651bd1438ce2e99e16eca11883c83ef24bd4d",
+  "config_sha256": "875502c1cad44238ea458cde706a18d397dfb6f281cc2ef55dd3cd08aff7f521"
+}

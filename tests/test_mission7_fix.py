@@ -578,8 +578,8 @@ def test_probe_encoding_under_the_cap_delivers_060_turns_and_the_routes_own_comm
     np.testing.assert_array_equal(probe.route_action_under_cap(np.zeros(5), scales), np.zeros(5))
 
 
-def _decision_env(module, tmp_path, name, **kwargs):
-    env = module.MissionEnv(_REPO, tmp_path / name, stage="doors", split="train", seed=4112, **kwargs)
+def _decision_env(module, tmp_path, name, *, repo, **kwargs):
+    env = module.MissionEnv(repo, tmp_path / name, stage="doors", split="train", seed=4112, **kwargs)
     env.reset(112)
     seen = []
     update = env.controller.update
@@ -591,15 +591,15 @@ def _decision_env(module, tmp_path, name, **kwargs):
     return env, seen
 
 
-def test_missionenv_default_path_matches_the_committed_env_and_the_yaw_scale_decodes_060(tmp_path):
+def test_missionenv_default_path_matches_the_committed_env_and_the_yaw_scale_decodes_060(tmp_path, frozen_humanoid_repo):
     _stage_module()
     from bhl_robust.mission import env as new_env
     reference = _git_module(tmp_path, "src/bhl_robust/mission/env.py", "m7_env_ref_3a67bc2")
     rng = np.random.default_rng(11)
     actions = [rng.normal(0, .8, 5) for _ in range(3)] + [np.array([0., 0., 20., 0., 0.])]
-    ref_env, ref_seen = _decision_env(reference, tmp_path, "ref")
-    new, new_seen = _decision_env(new_env, tmp_path, "new")
-    capped, cap_seen = _decision_env(new_env, tmp_path, "cap", yaw_scale=.6)
+    ref_env, ref_seen = _decision_env(reference, tmp_path, "ref", repo=frozen_humanoid_repo)
+    new, new_seen = _decision_env(new_env, tmp_path, "new", repo=frozen_humanoid_repo)
+    capped, cap_seen = _decision_env(new_env, tmp_path, "cap", repo=frozen_humanoid_repo, yaw_scale=.6)
     assert new.yaw_scale is None and capped.yaw_scale == .6
     for action in actions:
         a = ref_env.step(action.copy())
@@ -969,7 +969,9 @@ def test_bench_v2_cli_accepts_the_options_with_the_export_gaits_only(tmp_path, c
 # ---- plumbing: the stage and probe CLIs, both submitters, the follow-up, the release script --------------------------
 
 def _cli(script, *extra, tmp_path):
-    env = {**os.environ, "PYTHONPATH": f"{_REPO / 'src'}:{_REPO / 'scripts'}"}
+    env = {**os.environ, "PYTHONPATH": os.pathsep.join(map(str, (
+        _REPO / "src", _REPO / "scripts",
+        _REPO / "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel")))}
     if script == "stage":
         args = [str(STAGE), "--repo", str(_REPO), "--campaign", REPLAY_SOURCE, "--baseline", REPLAY_BASELINE,
                 "--out", str(tmp_path / "never"), "--preflight"]

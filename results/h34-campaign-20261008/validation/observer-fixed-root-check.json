@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "recorded_utc": "2026-10-09T02:38:55.782394+00:00",
+  "tests_passed": 50,
+  "failures": 0,
+  "elapsed_s": 2.98,
+  "command": "env -u PYTHONDONTWRITEBYTECODE PYTHONPATH=src OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python -m pytest -q tests/test_h34_collect.py tests/test_h34_finalize.py",
+  "source_sha256": {
+    "scripts/bench/h34_collect.py": "c7e9dccfc694b69020a0a9efea7a73e9014a42ca6df78b543ec8693fb50ecb4d",
+    "scripts/bench/h34_finalize.py": "77e4f6dab1003e943861d658d3e52013ea360d8e2394c15166fc408a4991392b",
+    "tests/test_h34_collect.py": "9d56e7222d296e68e448ad76bbf9a8cc17b5b96061eb5567eb1f5c304aabc438",
+    "tests/test_h34_finalize.py": "8a535fe367fd3717d3c011022ae4b56064ce99e06b03d4a5209a322291def5e9"
+  }
+}

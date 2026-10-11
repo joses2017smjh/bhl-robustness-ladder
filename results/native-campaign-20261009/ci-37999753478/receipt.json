@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "run_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37999753478",
+  "head_sha": "286b0bd9aaf19e8a9597a2b2611095f67697c0d8",
+  "junit": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "124",
+    "tests": "2536",
+    "time": "339.045",
+    "timestamp": "2026-10-09T22:33:14.183377+00:00",
+    "hostname": "runnervmmprz5"
+  },
+  "scope": "Hosted CPU regression and trained-asset integration/fault replay; distinct from native campaign acceptance",
+  "files": {
+    "pytest.xml": {
+      "bytes": 364324,
+      "sha256": "c88b9b9d45483e6e7d747b804defa1b084d5e04396a5e15dd06c000ea0fa6f71"
+    },
+    "integration.json": {
+      "bytes": 1785,
+      "sha256": "29a1727381d83d23ca6a566f020df3304f71bd40962b4742d5a2f395344d589d"
+    },
+    "replay/receipt.json": {
+      "bytes": 1989,
+      "sha256": "68bf7b9ab4a291c2c85a0be2990b99984584a46d83c20664f2727cf31682fd84"
+    },
+    "replay/report.json": {
+      "bytes": 26766,
+      "sha256": "95b2cf940c9263040514de1ab594805f2fa7a3a12a21f0ee76b6ba38e5bcd3d8"
+    },
+    "replay/paired-guard-timing.json": {
+      "bytes": 7935,
+      "sha256": "1a72f90c0cc629f666934cbe9331b329351c390ffd33e7ed7023e2e695b5096b"
+    },
+    "replay/guard-decisions.json": {
+      "bytes": 22146,
+      "sha256": "a01db7c804a3f192301418dc34d6f59bc5f8a822bffe3504b1756407faf0cf63"
+    }
+  }
+}

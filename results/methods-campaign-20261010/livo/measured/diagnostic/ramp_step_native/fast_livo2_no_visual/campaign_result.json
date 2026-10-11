@@ -1,0 +1,26 @@
+{
+  "schema": "bhl-native-livo-result-v1",
+  "status": "PASS",
+  "scientific_status": "NATIVE_REPLAY_MEASURED_NOT_COMPARISON",
+  "method": "fast_livo2_lidar_imu_ablation",
+  "sequence": "ramp_step_native",
+  "origin": "simulation",
+  "split": "test",
+  "frames": 150,
+  "tracked_frames": 148,
+  "estimated_pose_outputs": 148,
+  "visual_update_attempted_frames": 0,
+  "frames_with_visual_measurements": 0,
+  "states": {
+    "NO_CAUSAL_LIDAR": 2,
+    "TRACKED": 148
+  },
+  "native_compute_p95_ms": 3.6904843931552023,
+  "native_decode_and_compute_p95_ms": 9.311852435348555,
+  "native_process_wall_seconds": 1.4379236180102453,
+  "elapsed_seconds": 3.815223127952777,
+  "ground_truth_inputs": [],
+  "closed_loop_episodes": 0,
+  "trajectory_sha256": "7f11a8fdd9d6ccd6a03d4113f28a960192ec3e898cf573f7a0cd05875ae8e508",
+  "estimator_receipt_sha256": "3edea4d7c91c1d4bbb9f5ef3ca87b951c0b7579d4df1ca359ac052bf91d3fbfd"
+}

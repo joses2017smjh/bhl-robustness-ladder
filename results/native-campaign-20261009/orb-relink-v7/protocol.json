@@ -1,0 +1,42 @@
+{
+  "additional_source": [
+    "scripts/native/orb_build.py",
+    "scripts/native/orb_runner.cc",
+    "scripts/native/orb_headless.cc",
+    "scripts/bench/native_orb_relink_campaign.py"
+  ],
+  "campaign_id": "orb-native-relink-v7-20261009",
+  "input_files": {
+    "compiled-work-receipt.json": {
+      "path": "/tmp/bhl-native-campaign-20261009/results/native-campaign-20261009/orb-relink-v7/compiled-work-receipt.json",
+      "sha256": "52b544a8dbb4a2e41117a9484ebd051f9c2aaadf6054c23b5ddc38fb731e6906"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--compiled-receipt",
+        "{campaign}/inputs/compiled-work-receipt.json"
+      ],
+      "entrypoint": "scripts/bench/native_orb_relink_campaign.py",
+      "kind": "evaluate",
+      "max_output_mb": 512,
+      "name": "orb-native-relink-v7-20261009",
+      "resources": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 16,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Genuine final link and complete runtime packaging from predeclared inventoried actual v6 object files; private non-multiarch GDAL search correction only; run as resource-limited actual Slurm step on same original host"
+}

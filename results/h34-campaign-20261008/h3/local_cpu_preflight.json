@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "scope": "Actual dr-default-s0 teacher CPU expansion/export and non-scored one-second seed100 physics replay. No PPO training, scientific H3 qualification, or hardware result.",
+  "export": {
+    "policy_sha256": "5ffc507b0bd9f9d70f3f7220294d6c7ffba1aae1d72816ec6781687159dd79ba",
+    "input_width": 63,
+    "output_width": 12,
+    "numeric_parity_samples": 256,
+    "numeric_parity_max_abs": 3.814697265625e-06,
+    "numeric_parity_atol": 1e-05,
+    "numeric_parity_rtol": 1e-05
+  },
+  "evaluation": {
+    "schema": "h3-latency-evaluation-v1",
+    "arm": "history",
+    "training_seed": 0,
+    "phase": "smoke",
+    "policy_dt": 0.04,
+    "physics_dt": 0.002,
+    "episode_s": 1.0,
+    "warmup_s": 0.2,
+    "num_episodes": 1,
+    "episodes": [
+      {
+        "episode_id": "history-s0-d1-c0-r100",
+        "arm": "history",
+        "training_seed": 0,
+        "delay_steps": 1,
+        "delay_ms": 40,
+        "command_index": 0,
+        "command": [
+          0.3,
+          0.0,
+          0.0
+        ],
+        "reset_seed": 100,
+        "fell": false,
+        "completed_steps": 25,
+        "expected_steps": 25,
+        "survival_s": 1.0,
+        "progress": [
+          0.23332978236489,
+          0.011231055073440075,
+          0.12660055816173554
+        ],
+        "active_samples": 20,
+        "tracking_rmse": [
+          0.4585224656991598,
+          0.3165927602740555,
+          0.5062669362854647
+        ],
+        "scored": false,
+        "qualified": null
+      }
+    ],
+    "deploy_sha256": "e4809e48d032232ba9646d43ee3597649bc21c346f0fed96b2c2bc4fa3ea8eee",
+    "policy_sha256": "5ffc507b0bd9f9d70f3f7220294d6c7ffba1aae1d72816ec6781687159dd79ba",
+    "trace_sha256": "5520f93da7401571519b353e0bc41cb7dc0899f37b61e4f8f5821c84f3e5cfce",
+    "trace_path": "local-cpu-preflight-trace.jsonl.gz",
+    "mjcf_sha256": "664842bc940e6b4e8d1ad7c6d2515543fe3cddd9adec007763a810ec26f4a037",
+    "scope": "NON_SCORED_SMOKE"
+  },
+  "teacher_sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df"
+}

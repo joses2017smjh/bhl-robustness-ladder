@@ -1,0 +1,528 @@
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-stereo-inertial-v1-20261010/build/apt/lists", "-o", "Dir::Cache=/tmp/bhl-stereo-inertial-v1-20261010/build/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "update"]
+Get:1 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy InRelease [270 kB]
+Get:3 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [4429 kB]
+Get:4 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:5 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1323 kB]
+Get:6 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [96.8 kB]
+Get:7 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [7955 kB]
+Get:8 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [17.5 MB]
+Get:10 http://archive.ubuntu.com/ubuntu jammy/main amd64 Packages [1792 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy/restricted amd64 Packages [164 kB]
+Get:12 http://archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [266 kB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [8243 kB]
+Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [4757 kB]
+Get:15 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [104 kB]
+Get:16 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1624 kB]
+Get:17 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [82.9 kB]
+Get:18 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [35.6 kB]
+Fetched 49.0 MB in 5s (9783 kB/s)
+Reading package lists...
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libboost-serialization1.74-dev_1.74.0-14ubuntu3_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libboost1.74-dev_1.74.0-14ubuntu3_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libeigen3-dev_3.4.0-2ubuntu2_all.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-calib3d-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-contrib-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-core-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-dnn-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-features2d-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-flann-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-highgui-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-imgcodecs-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-imgproc-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-ml-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-objdetect-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-photo-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-shape-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-stitching-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-superres-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-video-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-videoio-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-videostab-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-stereo-inertial-v1-20261010/build/packages/libopencv-viz-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot"]
+RUN ["g++", "-std=c++11", "-O2", "-DNDEBUG", "-DBHL_ORB_DIAGNOSTICS", "-DCOMPILEDWITHC11", "-I", "/tmp/bhl-stereo-inertial-v1-20261010/build/source", "-I", "/tmp/bhl-stereo-inertial-v1-20261010/build/source/include", "-I", "/tmp/bhl-stereo-inertial-v1-20261010/build/source/include/CameraModels", "-I", "/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus", "-I", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include", "-I", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3", "-I", "/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/opencv4", "/tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc", "-o", "/tmp/bhl-stereo-inertial-v1-20261010/build/orb_native", "-L", "/tmp/bhl-stereo-inertial-v1-20261010/build/runtime/lib", "-Wl,-rpath,$ORIGIN/../lib", "-Wl,-rpath-link,/tmp/bhl-stereo-inertial-v1-20261010/build/runtime/lib", "-lORB_SLAM3", "-l:libopencv_core.so.4.5d", "-l:libopencv_imgproc.so.4.5d", "-l:libopencv_imgcodecs.so.4.5d", "-lpthread"]
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:74: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                          ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:82: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                                  ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<3, Eigen::Matrix<double, 3, 1> >’:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_sba.h:40:35:   required from here
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<6, g2o::SE3Quat>’:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:59:33:   required from here
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<6, g2o::SE3Quat, g2o::VertexSE3Expmap, g2o::VertexSE3Expmap>’:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:83:24:   required from here
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:114:35:   required from here
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<3, Eigen::Matrix<double, 3, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>’:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:146:41:   required from here
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_vertex.h: In instantiation of ‘class g2o::BaseVertex<7, g2o::Sim3>’:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:48:35:   required from here
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_vertex.h:62:72: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   62 |     typedef Eigen::Map<Matrix<double, D, D>, Matrix<double,D,D>::Flags & AlignedBit ? Aligned : Unaligned >  HessianBlockType;
+      |                                                                  ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<7, g2o::Sim3, g2o::VertexSim3Expmap, g2o::VertexSim3Expmap>’:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:99:27:   required from here
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h: In instantiation of ‘class g2o::BaseBinaryEdge<2, Eigen::Matrix<double, 2, 1>, g2o::VertexSBAPointXYZ, g2o::VertexSim3Expmap>’:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_seven_dof_expmap.h:130:36:   required from here
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:59:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   59 |       typedef Eigen::Map<Matrix<double, Di, Dj>, Matrix<double, Di, Dj>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:38,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Converter.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:33,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/g2o/g2o/types/../core/base_binary_edge.h:60:80: warning: ‘Eigen::AlignedBit’ is deprecated [-Wdeprecated-declarations]
+   60 |       typedef Eigen::Map<Matrix<double, Dj, Di>, Matrix<double, Dj, Di>::Flags & AlignedBit ? Aligned : Unaligned > HessianBlockTransposedType;
+      |                                                                          ~~~~~~^~~~~~~~~~~~
+In file included from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/Core:161,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/LU:11,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/so2.hpp:12,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/se2.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/Thirdparty/Sophus/sophus/geometry.hpp:7,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Frame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/MapPoint.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Viewer.h:23,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/Tracking.h:26,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/build/source/include/System.h:31,
+                 from /tmp/bhl-stereo-inertial-v1-20261010/source/scripts/native/orb_runner.cc:3:
+/tmp/bhl-stereo-inertial-v1-20261010/build/sysroot/usr/include/eigen3/Eigen/src/Core/util/Constants.h:167:37: note: declared here
+  167 | EIGEN_DEPRECATED const unsigned int AlignedBit = 0x80;
+      |                                     ^~~~~~~~~~
+RUN ["/tmp/bhl-stereo-inertial-v1-20261010/build/orb_native", "--version"]
+bhl-orb-native-v1 ORB_SLAM3 4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4 headless stereo stereo-inertial-v1
+{"status": "PASS", "runtime_archive": "/tmp/bhl-stereo-inertial-v1-20261010/native/runtime.tar.gz", "runtime_archive_sha256": "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516", "binary_sha256": "15773c35f39c9dd6ae5df91c522ca19bdc94b5215d1f8794c09cf54c60b7b50b"}

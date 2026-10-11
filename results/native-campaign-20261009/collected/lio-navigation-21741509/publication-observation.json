@@ -1,0 +1,33 @@
+{
+  "audit_status": "PASS",
+  "campaign_phase": "development",
+  "job_id": "21741509",
+  "kind": "lio_navigation",
+  "label": "lio-navigation",
+  "measured_episodes": 9,
+  "problems": [],
+  "qualification_scope": "development only; no independent confirmation or hardware validation",
+  "raw": {
+    "bytes": 91609334,
+    "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v2/nav-lio-development-20261009-v2-21741509/outputs.tar.gz",
+    "sha256": "98c8e35a146fa98046a9b1973ae388a4939431db2a2ae7fb45b5815a3c279633"
+  },
+  "raw_publication": {
+    "asset_id": 626352921,
+    "sha256": "98c8e35a146fa98046a9b1973ae388a4939431db2a2ae7fb45b5815a3c279633",
+    "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/native-campaign-evidence-20261009/native-lio-navigation-development-21741509.tar.gz",
+    "verification": "github_server_sha256"
+  },
+  "scientific_status": "PASS",
+  "scope": "Actual LIO learned-gait simulation; fixed prescribed routes, ideal simulated sensors, one frozen actor; smoke excluded from qualification",
+  "source_archive_sha256": "df3d91ae4ad8c4c8688d7ed3ff8639baff7a5860043f39414871c559301cfa26",
+  "source_verification": {
+    "logical_frozen_payloads_verified": 848,
+    "original_archive_rehashed": false,
+    "original_archive_sha256": "df3d91ae4ad8c4c8688d7ed3ff8639baff7a5860043f39414871c559301cfa26",
+    "original_compressed_stream": "retired; exact original digest retained as lineage",
+    "original_manifest_sha256": "f4b45becf4590658d4c1e8ba34a6bdfcad14c84966a22b514c8423da76c47a8d",
+    "retained_inventory_sha256": "b0ffea51645a0ce1961e3721933f7ca367de8fed943a99c474f580eae03b0e1e",
+    "retained_source_archive_sha256": "a9d2ee40f78a413c66abd6bb5a411193003537b5f20b7bb9d0c69d137d9369a6"
+  }
+}

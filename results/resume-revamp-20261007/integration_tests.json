@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "tests_run": 9,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "manifest_sha256": "2d23c3fbe5ac218a0690ad70a63478397b2c2e7dab42961e3a66aeb71b1aa2e5",
+  "log": "test_cached_decisions_include_actual_data_and_invalid_inputs (__main__.main.<locals>.ActualBundleChecks.test_cached_decisions_include_actual_data_and_invalid_inputs) ... ok\ntest_cli_rejects_changed_checkpoint_before_creating_outputs (__main__.main.<locals>.ActualBundleChecks.test_cli_rejects_changed_checkpoint_before_creating_outputs) ... ok\ntest_cli_rejects_missing_scene_before_creating_outputs (__main__.main.<locals>.ActualBundleChecks.test_cli_rejects_missing_scene_before_creating_outputs) ... ok\ntest_contact_audit_uses_raw_physics_evidence (__main__.main.<locals>.ActualBundleChecks.test_contact_audit_uses_raw_physics_evidence) ... ok\ntest_different_reset_seed_changes_actual_state (__main__.main.<locals>.ActualBundleChecks.test_different_reset_seed_changes_actual_state) ... ok\ntest_fault_label_alone_cannot_trigger_gate (__main__.main.<locals>.ActualBundleChecks.test_fault_label_alone_cannot_trigger_gate) ... ok\ntest_independent_nominal_reset_repeats (__main__.main.<locals>.ActualBundleChecks.test_independent_nominal_reset_repeats) ... ok\ntest_real_checkpoint_and_physics_load (__main__.main.<locals>.ActualBundleChecks.test_real_checkpoint_and_physics_load) ... ok\ntest_real_quaternion_order_fault_changes_trajectory (__main__.main.<locals>.ActualBundleChecks.test_real_quaternion_order_fault_changes_trajectory) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 15.483s\n\nOK\n",
+  "scope": "Actual trained checkpoint and MuJoCo; fault-label blindness, contact audit, guard decisions and CLI integrity negative controls."
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "bhl-ci-receipt-v1",
+  "commit": "c1d9df1df808582f9943fa4801af6209fa0a81d2",
+  "run": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/38088753138",
+  "conclusion": "success",
+  "pytest_summary": [
+    "replay\tFull CPU regression suite\t2026-10-10T21:53:13.7214219Z 2648 passed, 124 skipped, 235 warnings, 10 subtests passed in 458.80s (0:07:38)"
+  ],
+  "artifact_source": "humanoid-cpu-validation downloaded using gh run download",
+  "files": {
+    "run.json": {
+      "bytes": 2597,
+      "sha256": "3a9a0bc796c99bf3c16d7e8a832ebff6e6f787f5cd40c6a59969b9e49392713b"
+    },
+    "pytest.xml": {
+      "bytes": 397902,
+      "sha256": "b50a0b26942b55af42ed18dbdc6a3914899870d97e87fed5bc649a914e35d132"
+    },
+    "integration.json": {
+      "bytes": 1785,
+      "sha256": "aaadbb9f466e02a3387ef4da093f6cd7230c2c42d34ca30a6eb7a5442d9e1d6e"
+    },
+    "replay/report.json": {
+      "bytes": 26725,
+      "sha256": "07df618a86b85295a5d83efa0cd75ecd3e500ec1694b2d392bc7413ec124c933"
+    },
+    "replay/receipt.json": {
+      "bytes": 1989,
+      "sha256": "3d6af4459059c79b8f3871185f45e341fb9148dc279efbdb030f5017ccd59058"
+    }
+  }
+}

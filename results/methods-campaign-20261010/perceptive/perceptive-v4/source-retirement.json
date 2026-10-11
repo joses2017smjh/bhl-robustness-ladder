@@ -1,0 +1,18 @@
+{
+  "schema": "bhl-completed-source-retirement-v1",
+  "utc": "2026-10-10T21:48:10.651997+00:00",
+  "reason": "Completed three-seed scientific campaign; preserve verified release archive and node-local mirror while freeing 40 MB home quota for pending campaigns. Finalizer v2 restores and verifies exact source if absent.",
+  "source": {
+    "asset_name": "methods-source-aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f.tar.gz",
+    "bytes": 40347498,
+    "sha256": "aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f",
+    "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/methods-campaign-evidence-20261010/methods-source-aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f.tar.gz",
+    "verified_utc": "2026-10-10T21:48:10.648061+00:00",
+    "verification": "pinned bytes + release identity + fresh independent download SHA256"
+  },
+  "local_mirror": "/tmp/bhl-methods-evidence-20261010/methods-source-aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f.tar.gz",
+  "controller_state_sha256": "bb67e7636cc85c711164ee63b6048db94c9179b32e737e6ce74c303f886db791",
+  "scheduler": "JobID|State|ExitCode\n21757622|COMPLETED|0:0\n21757635|COMPLETED|0:0\n21757710|COMPLETED|0:0\n21757754|COMPLETED|0:0\n",
+  "finalizer_job_id": "21757776",
+  "retired_only": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/frozen-campaign.tar.gz"
+}

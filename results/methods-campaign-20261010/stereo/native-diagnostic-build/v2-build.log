@@ -1,0 +1,116 @@
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "update"]
+Get:1 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+Get:2 http://archive.ubuntu.com/ubuntu jammy InRelease [270 kB]
+Get:3 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+Get:4 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [96.8 kB]
+Get:5 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+Get:6 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1323 kB]
+Get:7 http://archive.ubuntu.com/ubuntu jammy/main amd64 Packages [1792 kB]
+Get:8 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [7955 kB]
+Get:9 http://archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [17.5 MB]
+Get:10 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [4429 kB]
+Get:11 http://archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [266 kB]
+Get:12 http://archive.ubuntu.com/ubuntu jammy/restricted amd64 Packages [164 kB]
+Get:13 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [8243 kB]
+Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [104 kB]
+Get:15 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [4757 kB]
+Get:16 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1624 kB]
+Get:17 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [35.6 kB]
+Get:18 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [82.9 kB]
+Fetched 49.0 MB in 6s (7885 kB/s)
+Reading package lists...
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libboost-serialization1.74-dev_1.74.0-14ubuntu3_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libboost1.74-dev_1.74.0-14ubuntu3_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libeigen3-dev_3.4.0-2ubuntu2_all.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-calib3d-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-contrib-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-contrib-dev amd64 4.5.4+dfsg-9ubuntu4 [5008 kB]
+Fetched 5008 kB in 2s (3012 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-contrib-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-core-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-dev amd64 4.5.4+dfsg-9ubuntu4 [91.8 kB]
+Fetched 91.8 kB in 1s (99.4 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-dnn-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-dnn-dev amd64 4.5.4+dfsg-9ubuntu4 [1706 kB]
+Fetched 1706 kB in 2s (1097 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-dnn-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-features2d-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-flann-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-highgui-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-highgui-dev amd64 4.5.4+dfsg-9ubuntu4 [132 kB]
+Fetched 132 kB in 0s (286 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-highgui-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-imgcodecs-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-imgproc-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-ml-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-ml-dev amd64 4.5.4+dfsg-9ubuntu4 [298 kB]
+Fetched 298 kB in 1s (286 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-ml-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-objdetect-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-objdetect-dev amd64 4.5.4+dfsg-9ubuntu4 [254 kB]
+Fetched 254 kB in 1s (468 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-objdetect-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-photo-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-photo-dev amd64 4.5.4+dfsg-9ubuntu4 [222 kB]
+Fetched 222 kB in 1s (203 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-photo-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-shape-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-shape-dev amd64 4.5.4+dfsg-9ubuntu4 [72.3 kB]
+Fetched 72.3 kB in 1s (93.8 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-shape-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-stitching-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-stitching-dev amd64 4.5.4+dfsg-9ubuntu4 [269 kB]
+Fetched 269 kB in 1s (243 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-stitching-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-superres-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-superres-dev amd64 4.5.4+dfsg-9ubuntu4 [62.2 kB]
+Fetched 62.2 kB in 0s (161 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-superres-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-video-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-video-dev amd64 4.5.4+dfsg-9ubuntu4 [251 kB]
+Fetched 251 kB in 1s (245 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-video-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-videoio-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-videoio-dev amd64 4.5.4+dfsg-9ubuntu4 [315 kB]
+Fetched 315 kB in 1s (320 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-videoio-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-videostab-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-videostab-dev amd64 4.5.4+dfsg-9ubuntu4 [111 kB]
+Fetched 111 kB in 1s (114 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-videostab-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["apt-get", "-o", "Dir::State::Lists=/tmp/bhl-orb-diag-build-v2-20261010/apt/lists", "-o", "Dir::Cache=/tmp/bhl-orb-diag-build-v2-20261010/apt/cache", "-o", "Debug::NoLocking=true", "-o", "APT::Sandbox::User=root", "download", "libopencv-viz-dev=4.5.4+dfsg-9ubuntu4"]
+Get:1 http://archive.ubuntu.com/ubuntu jammy/universe amd64 libopencv-viz-dev amd64 4.5.4+dfsg-9ubuntu4 [188 kB]
+Fetched 188 kB in 1s (156 kB/s)
+RUN ["dpkg-deb", "-x", "/tmp/bhl-orb-diag-build-v2-20261010/packages/libopencv-viz-dev_4.5.4+dfsg-9ubuntu4_amd64.deb", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot"]
+RUN ["g++", "-std=c++11", "-O2", "-DNDEBUG", "-DBHL_ORB_DIAGNOSTICS", "-DCOMPILEDWITHC11", "-I", "/tmp/bhl-orb-diag-build-v2-20261010/source", "-I", "/tmp/bhl-orb-diag-build-v2-20261010/source/include", "-I", "/tmp/bhl-orb-diag-build-v2-20261010/source/include/CameraModels", "-I", "/tmp/bhl-orb-diag-build-v2-20261010/source/Thirdparty/Sophus", "-I", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot/usr/include", "-I", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot/usr/include/eigen3", "-I", "/tmp/bhl-orb-diag-build-v2-20261010/sysroot/usr/include/opencv4", "/tmp/bhl-orb-diag-source-v2-20261010/scripts/native/orb_runner.cc", "-o", "/tmp/bhl-orb-diag-build-v2-20261010/orb_native", "-L", "/tmp/bhl-orb-diag-build-v2-20261010/runtime/lib", "-Wl,-rpath,$ORIGIN/../lib", "-Wl,-rpath-link,/tmp/bhl-orb-diag-build-v2-20261010/runtime/lib", "-lORB_SLAM3", "-l:libopencv_core.so.4.5d", "-l:libopencv_imgproc.so.4.5d", "-l:libopencv_imgcodecs.so.4.5d", "-lpthread"]
+In file included from /tmp/bhl-orb-diag-build-v2-20261010/source/Thirdparty/g2o/g2o/types/../core/optimizable_graph.h:37,
+                 from /tmp/bhl-orb-diag-build-v2-20261010/source/Thirdparty/g2o/g2o/types/../core/base_vertex.h:30,
+                 from /tmp/bhl-orb-diag-build-v2-20261010/source/Thirdparty/g2o/g2o/types/types_six_dof_expmap.h:37,
+                 from /tmp/bhl-orb-diag-build-v2-20261010/source/include/Converter.h:26,
+                 from /tmp/bhl-orb-diag-build-v2-20261010/source/include/Frame.h:33,
+                 from /tmp/bhl-orb-diag-build-v2-20261010/source/include/KeyFrame.h:28,
+                 from /tmp/bhl-orb-diag-build-v2-20261010/source/include/MapPoint.h:23,
+                 from /tmp/bhl-orb-diag-build-v2-20261010/source/include/FrameDrawer.h:24,
+                 from /tmp/bhl-orb-diag-build-v2-20261010/source/include/Viewer.h:23,
+                 from /tmp/bhl-orb-diag-build-v2-20261010/source/include/Tracking.h:26,
+                 from /tmp/bhl-orb-diag-build-v2-20261010/source/include/System.h:31,
+                 from /tmp/bhl-orb-diag-source-v2-20261010/scripts/native/orb_runner.cc:3:
+/tmp/bhl-orb-diag-build-v2-20261010/source/Thirdparty/g2o/g2o/types/../core/openmp_mutex.h:30:10: fatal error: ../../config.h: No such file or directory
+   30 | #include "../../config.h"
+      |          ^~~~~~~~~~~~~~~~
+compilation terminated.
+Traceback (most recent call last):
+  File "/tmp/bhl-orb-diag-source-v2-20261010/scripts/native/orb_diagnostics_build.py", line 149, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/bhl-orb-diag-source-v2-20261010/scripts/native/orb_diagnostics_build.py", line 119, in main
+    execute(compiler, env=env)
+  File "/tmp/bhl-orb-diag-source-v2-20261010/scripts/native/orb_diagnostics_build.py", line 34, in execute
+    return subprocess.run([str(x) for x in argv], check=True, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/.uv-python/cpython-3.11.16-linux-x86_64-gnu/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['g++', '-std=c++11', '-O2', '-DNDEBUG', '-DBHL_ORB_DIAGNOSTICS', '-DCOMPILEDWITHC11', '-I', '/tmp/bhl-orb-diag-build-v2-20261010/source', '-I', '/tmp/bhl-orb-diag-build-v2-20261010/source/include', '-I', '/tmp/bhl-orb-diag-build-v2-20261010/source/include/CameraModels', '-I', '/tmp/bhl-orb-diag-build-v2-20261010/source/Thirdparty/Sophus', '-I', '/tmp/bhl-orb-diag-build-v2-20261010/sysroot/usr/include', '-I', '/tmp/bhl-orb-diag-build-v2-20261010/sysroot/usr/include/eigen3', '-I', '/tmp/bhl-orb-diag-build-v2-20261010/sysroot/usr/include/opencv4', '/tmp/bhl-orb-diag-source-v2-20261010/scripts/native/orb_runner.cc', '-o', '/tmp/bhl-orb-diag-build-v2-20261010/orb_native', '-L', '/tmp/bhl-orb-diag-build-v2-20261010/runtime/lib', '-Wl,-rpath,$ORIGIN/../lib', '-Wl,-rpath-link,/tmp/bhl-orb-diag-build-v2-20261010/runtime/lib', '-lORB_SLAM3', '-l:libopencv_core.so.4.5d', '-l:libopencv_imgproc.so.4.5d', '-l:libopencv_imgcodecs.so.4.5d', '-lpthread']' returned non-zero exit status 1.
+srun: error: dgx2-4: task 0: Exited with exit code 1

@@ -1,0 +1,23 @@
+{
+  "archive_sha256": "a71d5d66917d6501fde5c113b6d79fc969bf6c2f69cbcf7d163d63c7a2e49332",
+  "error": "output exceeds predeclared archive cap (802143571 bytes)",
+  "exit_status": 1,
+  "files": {
+    "campaign_result.json": {
+      "bytes": 113,
+      "sha256": "030aa9ea136c391bb3182a09e345da8081f099ef2c13057170a1d75e8790f2bc"
+    },
+    "launch.json": {
+      "bytes": 2077,
+      "sha256": "9d180bfab2b023020f3b27941c8992f29980cef822903cd0f1a4ef20a35afb65"
+    },
+    "runtime.log": {
+      "bytes": 102,
+      "sha256": "488a3cb75a8d15b9f818d96bb0633fd1231abfe35653f0e39809afcc20952f09"
+    }
+  },
+  "finished_utc": "2026-10-09T21:08:34.244605+00:00",
+  "output_bytes": 802143571,
+  "scope": "Runner completion or phase verdict only, never inferred from scheduler completion. Paired H3 acceptance requires all six cells; H4 recipe acceptance requires the predeclared repeated-seed summary.",
+  "status": "INCOMPLETE"
+}

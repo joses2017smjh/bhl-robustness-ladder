@@ -1,0 +1,18 @@
+RUN ["/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python", "/tmp/orb-method-diagnostics-20261010-v1/frozen/source/scripts/bench/native_slam_campaign.py", "--protocol", "/tmp/orb-method-diagnostics-20261010-v1/protocol.json", "--phase", "smoke"]
+Traceback (most recent call last):
+  File "/tmp/orb-method-diagnostics-20261010-v1/frozen/source/scripts/bench/native_slam_campaign.py", line 264, in main
+    result = run(json.loads(args.protocol.read_text()), phase=args.phase, output=output, work=work, inputs=inputs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/orb-method-diagnostics-20261010-v1/frozen/source/scripts/bench/native_slam_campaign.py", line 213, in run
+    LAUNCH.safe_extract(archive, target)
+  File "/tmp/orb-method-diagnostics-20261010-v1/frozen/source/scripts/bench/h34_campaign.py", line 285, in safe_extract
+    raise ValueError("archive contains duplicate, non-file, or oversized member")
+ValueError: archive contains duplicate, non-file, or oversized member
+Traceback (most recent call last):
+  File "/tmp/run_orb_method_diagnostics_20261010.py", line 49, in <module>
+    result=subprocess.run(cmd,env=env,check=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/.uv-python/cpython-3.11.16-linux-x86_64-gnu/lib/python3.11/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python', '/tmp/orb-method-diagnostics-20261010-v1/frozen/source/scripts/bench/native_slam_campaign.py', '--protocol', '/tmp/orb-method-diagnostics-20261010-v1/protocol.json', '--phase', 'smoke']' returned non-zero exit status 1.
+srun: error: dgx2-4: task 0: Exited with exit code 1

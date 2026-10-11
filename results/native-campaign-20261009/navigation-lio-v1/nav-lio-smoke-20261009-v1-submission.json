@@ -1,0 +1,34 @@
+{
+  "archive_sha256": "1723704ddbddb48ba8b315c40153c18b3c975d150d0122c2688b8b6f81e1daf0",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=nav-lio-smoke-20261009-v1",
+    "--partition=share,eecs",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=00:20:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v1/nav-lio-smoke-20261009-v1-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v1/nav-lio-smoke-20261009-v1-%j.out",
+    "--export=NONE",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v1/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/navigation-lio-v1",
+    "nav-lio-smoke-20261009-v1",
+    "1723704ddbddb48ba8b315c40153c18b3c975d150d0122c2688b8b6f81e1daf0"
+  ],
+  "job_id": "21740837",
+  "resources": {
+    "cpus": 2,
+    "gpus": 0,
+    "memory_gb": 8,
+    "partition": "share,eecs",
+    "time_limit": "00:20:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21740837\n",
+  "submitted_utc": "2026-10-09T21:24:59.832562+00:00"
+}

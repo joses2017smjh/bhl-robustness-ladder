@@ -717,7 +717,8 @@ def test_m3_gate_refuses_changed_missing_or_unrecorded_sources(tmp_path):
 @pytest.mark.parametrize("script", ["stage", "probe"])
 def test_clis_accept_m3_in_preflight(tmp_path, script):
     _stage_module()
-    env = {**os.environ, "PYTHONPATH": f"{_REPO / 'src'}:{_REPO / 'scripts'}"}
+    upstream_python = _REPO / "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel"
+    env = {**os.environ, "PYTHONPATH": os.pathsep.join(map(str, (_REPO / "src", _REPO / "scripts", upstream_python)))}
     if script == "stage":
         args = [str(STAGE), "--repo", str(_REPO), "--campaign", REPLAY_SOURCE, "--baseline", REPLAY_BASELINE,
                 "--out", str(tmp_path / "never"), "--stage-gait", "m3", "--preflight"]

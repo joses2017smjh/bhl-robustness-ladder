@@ -1,0 +1,1243 @@
+{
+  "schema": "bhl-sensor-dataset-audit-v1",
+  "created_at_utc": "2026-10-09T00:10:44.029064+00:00",
+  "auditor_sha256": "ba4ab94165b9321564cc265eb1fd667744d847cd75b6c83a8f65e46d3cd78461",
+  "repo_commit": "d4634f1144175e00eba12968d4b4811b04e3a386",
+  "scope": "read-only audit of existing published JSON; no new sensor capture, simulation or training",
+  "freshness_rule_s": 0.15,
+  "freshness_rule_source": "src/bhl_robust/sensor_io.py SensorTiming default",
+  "statistical_warning": "Files include reused probes/video episodes. Do not pool them as independent episodes. Cadence is sparse logging cadence, not measured publication Hz.",
+  "summary": {
+    "artifacts": 9,
+    "artifacts_with_sensor_snapshots": 7,
+    "integrity_pass": 9,
+    "replay_ready": 0
+  },
+  "artifacts": [
+    {
+      "input": "results/inspection-airlock-20260923/inspection-dropout035-s3-14.json",
+      "input_sha256": "065e5d08a3adfd5e498fbe1b4e5204b2b106bdf46d3d5e7afc9ab6ee1c8a3c25",
+      "artifact_kind": "inspection_episode_traces",
+      "episodes": 12,
+      "episodes_by_sensor_mode": {
+        "reactive_dropout": 12
+      },
+      "observed": {
+        "trace_rows": 265,
+        "sensor_snapshots": 265,
+        "missing_extero_snapshots": 2,
+        "stale_extero_snapshots": 26,
+        "fresh_extero_snapshots": 237,
+        "raw_lidar_snapshots": 0,
+        "lidar_sector_snapshots": 263,
+        "paired_ray_depth_snapshots": 263,
+        "imu_snapshots": 265,
+        "distinct_logged_extero_stamps": 263
+      },
+      "logged_snapshot_spacing_s": {
+        "n": 253,
+        "min": 1.0,
+        "median": 1.0,
+        "max": 1.0
+      },
+      "logged_extero_age_at_consumption_s": {
+        "n": 263,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.40000000000000036
+      },
+      "logged_imu_age_at_consumption_s": {
+        "n": 265,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "declared_sensor_metadata": {
+        "lidar": {
+          "rays": 108,
+          "sectors": 36,
+          "max_range_m": 12.0,
+          "body_mount_m": [
+            0.12,
+            0.0,
+            0.72
+          ],
+          "nominal_hz": 10.0
+        },
+        "stereo": {
+          "kind": "paired_idealized_ray_depth_not_rgb_matching",
+          "side": 8,
+          "baseline_m": 0.06,
+          "body_center_m": [
+            0.12,
+            0.0,
+            0.7
+          ],
+          "pitch_down_deg": 20,
+          "vfov_deg": 60.5,
+          "max_range_m": 6.0
+        },
+        "imu": {
+          "kind": "mujoco_site_quaternion_gyro_accelerometer",
+          "frame": "body_to_ENU_xyzw",
+          "gravity_unitless": true,
+          "gyro_units": "rad/s",
+          "specific_force_units": "m/s^2",
+          "hardware_calibrated": false
+        },
+        "localization": "oracle_simulator_pose_and_map",
+        "ssd": "not_configured_no_rgb_or_weights"
+      },
+      "source_classification": {
+        "depth": "simulated_paired_ray_depth",
+        "lidar": "sector_minima_only",
+        "oracle_localization_declared": true,
+        "localization": "oracle_simulator_pose_and_map"
+      },
+      "data_quality": {
+        "verdict": "PASS",
+        "issues": [],
+        "scope": "integrity and logged timestamp checks only; not sensor accuracy or independence"
+      },
+      "replay_readiness": {
+        "verdict": "NOT_READY",
+        "missing_evidence": [
+          "raw lidar ranges and angles; sector minima cannot reconstruct a scan",
+          "per-ray acquisition timestamps for scan deskew",
+          "original left/right RGB images and per-eye capture timestamps",
+          "measured stereo intrinsics, distortion and rectification with artifact hashes",
+          "camera/lidar/IMU extrinsics and calibration uncertainty",
+          "declared clock domain, capture-to-receive delay and synchronization method",
+          "full sensor stream rather than sparse control trace snapshots",
+          "explicit hit/invalid masks; maximum-range clipping is not an observed obstacle",
+          "reference trajectory independent of the deployed estimator"
+        ],
+        "usable_now": "audit sparse simulated policy/brake inputs",
+        "unsupported_claims": [
+          "physical stereo depth accuracy",
+          "stereo correspondence benchmark",
+          "lidar scan matching or scan deskew benchmark",
+          "sensor-to-host latency measurement",
+          "estimated-pose navigation without oracle inputs"
+        ]
+      },
+      "episode_details": [
+        {
+          "episode_index": 0,
+          "seed": 3,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 22,
+          "sensor_snapshots": 22
+        },
+        {
+          "episode_index": 1,
+          "seed": 4,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 22,
+          "sensor_snapshots": 22
+        },
+        {
+          "episode_index": 2,
+          "seed": 5,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 22,
+          "sensor_snapshots": 22
+        },
+        {
+          "episode_index": 3,
+          "seed": 6,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 21,
+          "sensor_snapshots": 21
+        },
+        {
+          "episode_index": 4,
+          "seed": 7,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 23,
+          "sensor_snapshots": 23
+        },
+        {
+          "episode_index": 5,
+          "seed": 8,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 23,
+          "sensor_snapshots": 23
+        },
+        {
+          "episode_index": 6,
+          "seed": 9,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 23,
+          "sensor_snapshots": 23
+        },
+        {
+          "episode_index": 7,
+          "seed": 10,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 23,
+          "sensor_snapshots": 23
+        },
+        {
+          "episode_index": 8,
+          "seed": 11,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 21,
+          "sensor_snapshots": 21
+        },
+        {
+          "episode_index": 9,
+          "seed": 12,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 21,
+          "sensor_snapshots": 21
+        },
+        {
+          "episode_index": 10,
+          "seed": 13,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 21,
+          "sensor_snapshots": 21
+        },
+        {
+          "episode_index": 11,
+          "seed": 14,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 23,
+          "sensor_snapshots": 23
+        }
+      ]
+    },
+    {
+      "input": "results/inspection-airlock-20260923/inspection-wrongbranch-s3-14.json",
+      "input_sha256": "4f9c584aaeb5b49cc5641788b60fc7297af64228c0628cf7494419b0024e6471",
+      "artifact_kind": "inspection_episode_traces",
+      "episodes": 12,
+      "episodes_by_sensor_mode": {
+        "reactive": 12
+      },
+      "observed": {
+        "trace_rows": 89,
+        "sensor_snapshots": 89,
+        "missing_extero_snapshots": 0,
+        "stale_extero_snapshots": 0,
+        "fresh_extero_snapshots": 89,
+        "raw_lidar_snapshots": 0,
+        "lidar_sector_snapshots": 89,
+        "paired_ray_depth_snapshots": 89,
+        "imu_snapshots": 89,
+        "distinct_logged_extero_stamps": 89
+      },
+      "logged_snapshot_spacing_s": {
+        "n": 77,
+        "min": 1.0,
+        "median": 1.0,
+        "max": 1.0
+      },
+      "logged_extero_age_at_consumption_s": {
+        "n": 89,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "logged_imu_age_at_consumption_s": {
+        "n": 89,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "declared_sensor_metadata": {
+        "lidar": {
+          "rays": 108,
+          "sectors": 36,
+          "max_range_m": 12.0,
+          "body_mount_m": [
+            0.12,
+            0.0,
+            0.72
+          ],
+          "nominal_hz": 10.0
+        },
+        "stereo": {
+          "kind": "paired_idealized_ray_depth_not_rgb_matching",
+          "side": 8,
+          "baseline_m": 0.06,
+          "body_center_m": [
+            0.12,
+            0.0,
+            0.7
+          ],
+          "pitch_down_deg": 20,
+          "vfov_deg": 60.5,
+          "max_range_m": 6.0
+        },
+        "imu": {
+          "kind": "mujoco_site_quaternion_gyro_accelerometer",
+          "frame": "body_to_ENU_xyzw",
+          "gravity_unitless": true,
+          "gyro_units": "rad/s",
+          "specific_force_units": "m/s^2",
+          "hardware_calibrated": false
+        },
+        "localization": "oracle_simulator_pose_and_map",
+        "ssd": "not_configured_no_rgb_or_weights"
+      },
+      "source_classification": {
+        "depth": "simulated_paired_ray_depth",
+        "lidar": "sector_minima_only",
+        "oracle_localization_declared": true,
+        "localization": "oracle_simulator_pose_and_map"
+      },
+      "data_quality": {
+        "verdict": "PASS",
+        "issues": [],
+        "scope": "integrity and logged timestamp checks only; not sensor accuracy or independence"
+      },
+      "replay_readiness": {
+        "verdict": "NOT_READY",
+        "missing_evidence": [
+          "raw lidar ranges and angles; sector minima cannot reconstruct a scan",
+          "per-ray acquisition timestamps for scan deskew",
+          "original left/right RGB images and per-eye capture timestamps",
+          "measured stereo intrinsics, distortion and rectification with artifact hashes",
+          "camera/lidar/IMU extrinsics and calibration uncertainty",
+          "declared clock domain, capture-to-receive delay and synchronization method",
+          "full sensor stream rather than sparse control trace snapshots",
+          "explicit hit/invalid masks; maximum-range clipping is not an observed obstacle",
+          "reference trajectory independent of the deployed estimator"
+        ],
+        "usable_now": "audit sparse simulated policy/brake inputs",
+        "unsupported_claims": [
+          "physical stereo depth accuracy",
+          "stereo correspondence benchmark",
+          "lidar scan matching or scan deskew benchmark",
+          "sensor-to-host latency measurement",
+          "estimated-pose navigation without oracle inputs"
+        ]
+      },
+      "episode_details": [
+        {
+          "episode_index": 0,
+          "seed": 3,
+          "sensor_mode": "reactive",
+          "trace_rows": 7,
+          "sensor_snapshots": 7
+        },
+        {
+          "episode_index": 1,
+          "seed": 4,
+          "sensor_mode": "reactive",
+          "trace_rows": 7,
+          "sensor_snapshots": 7
+        },
+        {
+          "episode_index": 2,
+          "seed": 5,
+          "sensor_mode": "reactive",
+          "trace_rows": 8,
+          "sensor_snapshots": 8
+        },
+        {
+          "episode_index": 3,
+          "seed": 6,
+          "sensor_mode": "reactive",
+          "trace_rows": 7,
+          "sensor_snapshots": 7
+        },
+        {
+          "episode_index": 4,
+          "seed": 7,
+          "sensor_mode": "reactive",
+          "trace_rows": 7,
+          "sensor_snapshots": 7
+        },
+        {
+          "episode_index": 5,
+          "seed": 8,
+          "sensor_mode": "reactive",
+          "trace_rows": 8,
+          "sensor_snapshots": 8
+        },
+        {
+          "episode_index": 6,
+          "seed": 9,
+          "sensor_mode": "reactive",
+          "trace_rows": 8,
+          "sensor_snapshots": 8
+        },
+        {
+          "episode_index": 7,
+          "seed": 10,
+          "sensor_mode": "reactive",
+          "trace_rows": 8,
+          "sensor_snapshots": 8
+        },
+        {
+          "episode_index": 8,
+          "seed": 11,
+          "sensor_mode": "reactive",
+          "trace_rows": 7,
+          "sensor_snapshots": 7
+        },
+        {
+          "episode_index": 9,
+          "seed": 12,
+          "sensor_mode": "reactive",
+          "trace_rows": 8,
+          "sensor_snapshots": 8
+        },
+        {
+          "episode_index": 10,
+          "seed": 13,
+          "sensor_mode": "reactive",
+          "trace_rows": 7,
+          "sensor_snapshots": 7
+        },
+        {
+          "episode_index": 11,
+          "seed": 14,
+          "sensor_mode": "reactive",
+          "trace_rows": 7,
+          "sensor_snapshots": 7
+        }
+      ]
+    },
+    {
+      "input": "results/inspection_maze_deadend_probe.json",
+      "input_sha256": "ddf0423fac821cf973d53262589af77d3fa5fd407636e17fb90899461a942693",
+      "artifact_kind": "inspection_episode_traces",
+      "episodes": 1,
+      "episodes_by_sensor_mode": {
+        "reactive": 1
+      },
+      "observed": {
+        "trace_rows": 7,
+        "sensor_snapshots": 7,
+        "missing_extero_snapshots": 0,
+        "stale_extero_snapshots": 0,
+        "fresh_extero_snapshots": 7,
+        "raw_lidar_snapshots": 0,
+        "lidar_sector_snapshots": 7,
+        "paired_ray_depth_snapshots": 7,
+        "imu_snapshots": 7,
+        "distinct_logged_extero_stamps": 7
+      },
+      "logged_snapshot_spacing_s": {
+        "n": 6,
+        "min": 1.0,
+        "median": 1.0,
+        "max": 1.0
+      },
+      "logged_extero_age_at_consumption_s": {
+        "n": 7,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "logged_imu_age_at_consumption_s": {
+        "n": 7,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "declared_sensor_metadata": {
+        "lidar": {
+          "rays": 108,
+          "sectors": 36,
+          "max_range_m": 12.0,
+          "body_mount_m": [
+            0.12,
+            0.0,
+            0.72
+          ],
+          "nominal_hz": 10.0
+        },
+        "stereo": {
+          "kind": "paired_idealized_ray_depth_not_rgb_matching",
+          "side": 8,
+          "baseline_m": 0.06,
+          "body_center_m": [
+            0.12,
+            0.0,
+            0.7
+          ],
+          "pitch_down_deg": 20,
+          "vfov_deg": 60.5,
+          "max_range_m": 6.0
+        },
+        "imu": {
+          "kind": "mujoco_site_quaternion_gyro_accelerometer",
+          "frame": "body_to_ENU_xyzw",
+          "gravity_unitless": true,
+          "gyro_units": "rad/s",
+          "specific_force_units": "m/s^2",
+          "hardware_calibrated": false
+        },
+        "localization": "oracle_simulator_pose_and_map",
+        "ssd": "not_configured_no_rgb_or_weights"
+      },
+      "source_classification": {
+        "depth": "simulated_paired_ray_depth",
+        "lidar": "sector_minima_only",
+        "oracle_localization_declared": true,
+        "localization": "oracle_simulator_pose_and_map"
+      },
+      "data_quality": {
+        "verdict": "PASS",
+        "issues": [],
+        "scope": "integrity and logged timestamp checks only; not sensor accuracy or independence"
+      },
+      "replay_readiness": {
+        "verdict": "NOT_READY",
+        "missing_evidence": [
+          "raw lidar ranges and angles; sector minima cannot reconstruct a scan",
+          "per-ray acquisition timestamps for scan deskew",
+          "original left/right RGB images and per-eye capture timestamps",
+          "measured stereo intrinsics, distortion and rectification with artifact hashes",
+          "camera/lidar/IMU extrinsics and calibration uncertainty",
+          "declared clock domain, capture-to-receive delay and synchronization method",
+          "full sensor stream rather than sparse control trace snapshots",
+          "explicit hit/invalid masks; maximum-range clipping is not an observed obstacle",
+          "reference trajectory independent of the deployed estimator"
+        ],
+        "usable_now": "audit sparse simulated policy/brake inputs",
+        "unsupported_claims": [
+          "physical stereo depth accuracy",
+          "stereo correspondence benchmark",
+          "lidar scan matching or scan deskew benchmark",
+          "sensor-to-host latency measurement",
+          "estimated-pose navigation without oracle inputs"
+        ]
+      },
+      "episode_details": [
+        {
+          "episode_index": 0,
+          "seed": 0,
+          "sensor_mode": "reactive",
+          "trace_rows": 7,
+          "sensor_snapshots": 7
+        }
+      ]
+    },
+    {
+      "input": "results/inspection_maze_probe.json",
+      "input_sha256": "a4911dfc7dec69bb5947140f41b04f4f3fc416ac1e547729b4c69d302a93b945",
+      "artifact_kind": "inspection_episode_traces",
+      "episodes": 2,
+      "episodes_by_sensor_mode": {
+        "reactive": 1,
+        "reactive_dropout": 1
+      },
+      "observed": {
+        "trace_rows": 78,
+        "sensor_snapshots": 78,
+        "missing_extero_snapshots": 60,
+        "stale_extero_snapshots": 0,
+        "fresh_extero_snapshots": 18,
+        "raw_lidar_snapshots": 0,
+        "lidar_sector_snapshots": 18,
+        "paired_ray_depth_snapshots": 18,
+        "imu_snapshots": 78,
+        "distinct_logged_extero_stamps": 18
+      },
+      "logged_snapshot_spacing_s": {
+        "n": 76,
+        "min": 1.0,
+        "median": 1.0,
+        "max": 1.0
+      },
+      "logged_extero_age_at_consumption_s": {
+        "n": 18,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "logged_imu_age_at_consumption_s": {
+        "n": 78,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "declared_sensor_metadata": {
+        "lidar": {
+          "rays": 108,
+          "sectors": 36,
+          "max_range_m": 12.0,
+          "body_mount_m": [
+            0.12,
+            0.0,
+            0.72
+          ],
+          "nominal_hz": 10.0
+        },
+        "stereo": {
+          "kind": "paired_idealized_ray_depth_not_rgb_matching",
+          "side": 8,
+          "baseline_m": 0.06,
+          "body_center_m": [
+            0.12,
+            0.0,
+            0.7
+          ],
+          "pitch_down_deg": 20,
+          "vfov_deg": 60.5,
+          "max_range_m": 6.0
+        },
+        "imu": {
+          "kind": "mujoco_site_quaternion_gyro_accelerometer",
+          "frame": "body_to_ENU_xyzw",
+          "gravity_unitless": true,
+          "gyro_units": "rad/s",
+          "specific_force_units": "m/s^2",
+          "hardware_calibrated": false
+        },
+        "localization": "oracle_simulator_pose_and_map",
+        "ssd": "not_configured_no_rgb_or_weights"
+      },
+      "source_classification": {
+        "depth": "simulated_paired_ray_depth",
+        "lidar": "sector_minima_only",
+        "oracle_localization_declared": true,
+        "localization": "oracle_simulator_pose_and_map"
+      },
+      "data_quality": {
+        "verdict": "PASS",
+        "issues": [],
+        "scope": "integrity and logged timestamp checks only; not sensor accuracy or independence"
+      },
+      "replay_readiness": {
+        "verdict": "NOT_READY",
+        "missing_evidence": [
+          "raw lidar ranges and angles; sector minima cannot reconstruct a scan",
+          "per-ray acquisition timestamps for scan deskew",
+          "original left/right RGB images and per-eye capture timestamps",
+          "measured stereo intrinsics, distortion and rectification with artifact hashes",
+          "camera/lidar/IMU extrinsics and calibration uncertainty",
+          "declared clock domain, capture-to-receive delay and synchronization method",
+          "full sensor stream rather than sparse control trace snapshots",
+          "explicit hit/invalid masks; maximum-range clipping is not an observed obstacle",
+          "reference trajectory independent of the deployed estimator"
+        ],
+        "usable_now": "audit sparse simulated policy/brake inputs",
+        "unsupported_claims": [
+          "physical stereo depth accuracy",
+          "stereo correspondence benchmark",
+          "lidar scan matching or scan deskew benchmark",
+          "sensor-to-host latency measurement",
+          "estimated-pose navigation without oracle inputs"
+        ]
+      },
+      "episode_details": [
+        {
+          "episode_index": 0,
+          "seed": 0,
+          "sensor_mode": "reactive",
+          "trace_rows": 18,
+          "sensor_snapshots": 18
+        },
+        {
+          "episode_index": 1,
+          "seed": 0,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 60,
+          "sensor_snapshots": 60
+        }
+      ]
+    },
+    {
+      "input": "results/weekend-20260919/inspection-maze-failure-video.json",
+      "input_sha256": "ddf0423fac821cf973d53262589af77d3fa5fd407636e17fb90899461a942693",
+      "artifact_kind": "inspection_episode_traces",
+      "episodes": 1,
+      "episodes_by_sensor_mode": {
+        "reactive": 1
+      },
+      "observed": {
+        "trace_rows": 7,
+        "sensor_snapshots": 7,
+        "missing_extero_snapshots": 0,
+        "stale_extero_snapshots": 0,
+        "fresh_extero_snapshots": 7,
+        "raw_lidar_snapshots": 0,
+        "lidar_sector_snapshots": 7,
+        "paired_ray_depth_snapshots": 7,
+        "imu_snapshots": 7,
+        "distinct_logged_extero_stamps": 7
+      },
+      "logged_snapshot_spacing_s": {
+        "n": 6,
+        "min": 1.0,
+        "median": 1.0,
+        "max": 1.0
+      },
+      "logged_extero_age_at_consumption_s": {
+        "n": 7,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "logged_imu_age_at_consumption_s": {
+        "n": 7,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "declared_sensor_metadata": {
+        "lidar": {
+          "rays": 108,
+          "sectors": 36,
+          "max_range_m": 12.0,
+          "body_mount_m": [
+            0.12,
+            0.0,
+            0.72
+          ],
+          "nominal_hz": 10.0
+        },
+        "stereo": {
+          "kind": "paired_idealized_ray_depth_not_rgb_matching",
+          "side": 8,
+          "baseline_m": 0.06,
+          "body_center_m": [
+            0.12,
+            0.0,
+            0.7
+          ],
+          "pitch_down_deg": 20,
+          "vfov_deg": 60.5,
+          "max_range_m": 6.0
+        },
+        "imu": {
+          "kind": "mujoco_site_quaternion_gyro_accelerometer",
+          "frame": "body_to_ENU_xyzw",
+          "gravity_unitless": true,
+          "gyro_units": "rad/s",
+          "specific_force_units": "m/s^2",
+          "hardware_calibrated": false
+        },
+        "localization": "oracle_simulator_pose_and_map",
+        "ssd": "not_configured_no_rgb_or_weights"
+      },
+      "source_classification": {
+        "depth": "simulated_paired_ray_depth",
+        "lidar": "sector_minima_only",
+        "oracle_localization_declared": true,
+        "localization": "oracle_simulator_pose_and_map"
+      },
+      "data_quality": {
+        "verdict": "PASS",
+        "issues": [],
+        "scope": "integrity and logged timestamp checks only; not sensor accuracy or independence"
+      },
+      "replay_readiness": {
+        "verdict": "NOT_READY",
+        "missing_evidence": [
+          "raw lidar ranges and angles; sector minima cannot reconstruct a scan",
+          "per-ray acquisition timestamps for scan deskew",
+          "original left/right RGB images and per-eye capture timestamps",
+          "measured stereo intrinsics, distortion and rectification with artifact hashes",
+          "camera/lidar/IMU extrinsics and calibration uncertainty",
+          "declared clock domain, capture-to-receive delay and synchronization method",
+          "full sensor stream rather than sparse control trace snapshots",
+          "explicit hit/invalid masks; maximum-range clipping is not an observed obstacle",
+          "reference trajectory independent of the deployed estimator"
+        ],
+        "usable_now": "audit sparse simulated policy/brake inputs",
+        "unsupported_claims": [
+          "physical stereo depth accuracy",
+          "stereo correspondence benchmark",
+          "lidar scan matching or scan deskew benchmark",
+          "sensor-to-host latency measurement",
+          "estimated-pose navigation without oracle inputs"
+        ]
+      },
+      "episode_details": [
+        {
+          "episode_index": 0,
+          "seed": 0,
+          "sensor_mode": "reactive",
+          "trace_rows": 7,
+          "sensor_snapshots": 7
+        }
+      ]
+    },
+    {
+      "input": "results/weekend-20260919/inspection-maze-gate.json",
+      "input_sha256": "9e9b3a0a6b84b62ff7a6e1256f11c742f69f929c8947147968eb552bcffee9db",
+      "artifact_kind": "inspection_episode_traces",
+      "episodes": 12,
+      "episodes_by_sensor_mode": {
+        "reactive": 6,
+        "reactive_dropout": 6
+      },
+      "observed": {
+        "trace_rows": 437,
+        "sensor_snapshots": 437,
+        "missing_extero_snapshots": 360,
+        "stale_extero_snapshots": 0,
+        "fresh_extero_snapshots": 77,
+        "raw_lidar_snapshots": 0,
+        "lidar_sector_snapshots": 77,
+        "paired_ray_depth_snapshots": 77,
+        "imu_snapshots": 437,
+        "distinct_logged_extero_stamps": 77
+      },
+      "logged_snapshot_spacing_s": {
+        "n": 425,
+        "min": 1.0,
+        "median": 1.0,
+        "max": 1.0
+      },
+      "logged_extero_age_at_consumption_s": {
+        "n": 77,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "logged_imu_age_at_consumption_s": {
+        "n": 437,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "declared_sensor_metadata": {
+        "lidar": {
+          "rays": 108,
+          "sectors": 36,
+          "max_range_m": 12.0,
+          "body_mount_m": [
+            0.12,
+            0.0,
+            0.72
+          ],
+          "nominal_hz": 10.0
+        },
+        "stereo": {
+          "kind": "paired_idealized_ray_depth_not_rgb_matching",
+          "side": 8,
+          "baseline_m": 0.06,
+          "body_center_m": [
+            0.12,
+            0.0,
+            0.7
+          ],
+          "pitch_down_deg": 20,
+          "vfov_deg": 60.5,
+          "max_range_m": 6.0
+        },
+        "imu": {
+          "kind": "mujoco_site_quaternion_gyro_accelerometer",
+          "frame": "body_to_ENU_xyzw",
+          "gravity_unitless": true,
+          "gyro_units": "rad/s",
+          "specific_force_units": "m/s^2",
+          "hardware_calibrated": false
+        },
+        "localization": "oracle_simulator_pose_and_map",
+        "ssd": "not_configured_no_rgb_or_weights"
+      },
+      "source_classification": {
+        "depth": "simulated_paired_ray_depth",
+        "lidar": "sector_minima_only",
+        "oracle_localization_declared": true,
+        "localization": "oracle_simulator_pose_and_map"
+      },
+      "data_quality": {
+        "verdict": "PASS",
+        "issues": [],
+        "scope": "integrity and logged timestamp checks only; not sensor accuracy or independence"
+      },
+      "replay_readiness": {
+        "verdict": "NOT_READY",
+        "missing_evidence": [
+          "raw lidar ranges and angles; sector minima cannot reconstruct a scan",
+          "per-ray acquisition timestamps for scan deskew",
+          "original left/right RGB images and per-eye capture timestamps",
+          "measured stereo intrinsics, distortion and rectification with artifact hashes",
+          "camera/lidar/IMU extrinsics and calibration uncertainty",
+          "declared clock domain, capture-to-receive delay and synchronization method",
+          "full sensor stream rather than sparse control trace snapshots",
+          "explicit hit/invalid masks; maximum-range clipping is not an observed obstacle",
+          "reference trajectory independent of the deployed estimator"
+        ],
+        "usable_now": "audit sparse simulated policy/brake inputs",
+        "unsupported_claims": [
+          "physical stereo depth accuracy",
+          "stereo correspondence benchmark",
+          "lidar scan matching or scan deskew benchmark",
+          "sensor-to-host latency measurement",
+          "estimated-pose navigation without oracle inputs"
+        ]
+      },
+      "episode_details": [
+        {
+          "episode_index": 0,
+          "seed": 0,
+          "sensor_mode": "reactive",
+          "trace_rows": 18,
+          "sensor_snapshots": 18
+        },
+        {
+          "episode_index": 1,
+          "seed": 1,
+          "sensor_mode": "reactive",
+          "trace_rows": 18,
+          "sensor_snapshots": 18
+        },
+        {
+          "episode_index": 2,
+          "seed": 2,
+          "sensor_mode": "reactive",
+          "trace_rows": 18,
+          "sensor_snapshots": 18
+        },
+        {
+          "episode_index": 3,
+          "seed": 0,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 60,
+          "sensor_snapshots": 60
+        },
+        {
+          "episode_index": 4,
+          "seed": 1,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 60,
+          "sensor_snapshots": 60
+        },
+        {
+          "episode_index": 5,
+          "seed": 2,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 60,
+          "sensor_snapshots": 60
+        },
+        {
+          "episode_index": 6,
+          "seed": 0,
+          "sensor_mode": "reactive",
+          "trace_rows": 8,
+          "sensor_snapshots": 8
+        },
+        {
+          "episode_index": 7,
+          "seed": 1,
+          "sensor_mode": "reactive",
+          "trace_rows": 8,
+          "sensor_snapshots": 8
+        },
+        {
+          "episode_index": 8,
+          "seed": 2,
+          "sensor_mode": "reactive",
+          "trace_rows": 7,
+          "sensor_snapshots": 7
+        },
+        {
+          "episode_index": 9,
+          "seed": 0,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 60,
+          "sensor_snapshots": 60
+        },
+        {
+          "episode_index": 10,
+          "seed": 1,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 60,
+          "sensor_snapshots": 60
+        },
+        {
+          "episode_index": 11,
+          "seed": 2,
+          "sensor_mode": "reactive_dropout",
+          "trace_rows": 60,
+          "sensor_snapshots": 60
+        }
+      ]
+    },
+    {
+      "input": "results/weekend-20260919/inspection-maze-video.json",
+      "input_sha256": "6380d955869cdd7df5487a78a9e9434a2ecedd66811202ed64a178a4e2fb68d3",
+      "artifact_kind": "inspection_episode_traces",
+      "episodes": 1,
+      "episodes_by_sensor_mode": {
+        "reactive": 1
+      },
+      "observed": {
+        "trace_rows": 18,
+        "sensor_snapshots": 18,
+        "missing_extero_snapshots": 0,
+        "stale_extero_snapshots": 0,
+        "fresh_extero_snapshots": 18,
+        "raw_lidar_snapshots": 0,
+        "lidar_sector_snapshots": 18,
+        "paired_ray_depth_snapshots": 18,
+        "imu_snapshots": 18,
+        "distinct_logged_extero_stamps": 18
+      },
+      "logged_snapshot_spacing_s": {
+        "n": 17,
+        "min": 1.0,
+        "median": 1.0,
+        "max": 1.0
+      },
+      "logged_extero_age_at_consumption_s": {
+        "n": 18,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "logged_imu_age_at_consumption_s": {
+        "n": 18,
+        "min": 0.0,
+        "median": 0.0,
+        "max": 0.0
+      },
+      "declared_sensor_metadata": {
+        "lidar": {
+          "rays": 108,
+          "sectors": 36,
+          "max_range_m": 12.0,
+          "body_mount_m": [
+            0.12,
+            0.0,
+            0.72
+          ],
+          "nominal_hz": 10.0
+        },
+        "stereo": {
+          "kind": "paired_idealized_ray_depth_not_rgb_matching",
+          "side": 8,
+          "baseline_m": 0.06,
+          "body_center_m": [
+            0.12,
+            0.0,
+            0.7
+          ],
+          "pitch_down_deg": 20,
+          "vfov_deg": 60.5,
+          "max_range_m": 6.0
+        },
+        "imu": {
+          "kind": "mujoco_site_quaternion_gyro_accelerometer",
+          "frame": "body_to_ENU_xyzw",
+          "gravity_unitless": true,
+          "gyro_units": "rad/s",
+          "specific_force_units": "m/s^2",
+          "hardware_calibrated": false
+        },
+        "localization": "oracle_simulator_pose_and_map",
+        "ssd": "not_configured_no_rgb_or_weights"
+      },
+      "source_classification": {
+        "depth": "simulated_paired_ray_depth",
+        "lidar": "sector_minima_only",
+        "oracle_localization_declared": true,
+        "localization": "oracle_simulator_pose_and_map"
+      },
+      "data_quality": {
+        "verdict": "PASS",
+        "issues": [],
+        "scope": "integrity and logged timestamp checks only; not sensor accuracy or independence"
+      },
+      "replay_readiness": {
+        "verdict": "NOT_READY",
+        "missing_evidence": [
+          "raw lidar ranges and angles; sector minima cannot reconstruct a scan",
+          "per-ray acquisition timestamps for scan deskew",
+          "original left/right RGB images and per-eye capture timestamps",
+          "measured stereo intrinsics, distortion and rectification with artifact hashes",
+          "camera/lidar/IMU extrinsics and calibration uncertainty",
+          "declared clock domain, capture-to-receive delay and synchronization method",
+          "full sensor stream rather than sparse control trace snapshots",
+          "explicit hit/invalid masks; maximum-range clipping is not an observed obstacle",
+          "reference trajectory independent of the deployed estimator"
+        ],
+        "usable_now": "audit sparse simulated policy/brake inputs",
+        "unsupported_claims": [
+          "physical stereo depth accuracy",
+          "stereo correspondence benchmark",
+          "lidar scan matching or scan deskew benchmark",
+          "sensor-to-host latency measurement",
+          "estimated-pose navigation without oracle inputs"
+        ]
+      },
+      "episode_details": [
+        {
+          "episode_index": 0,
+          "seed": 0,
+          "sensor_mode": "reactive",
+          "trace_rows": 18,
+          "sensor_snapshots": 18
+        }
+      ]
+    },
+    {
+      "input": "results/maze-explore-20260924/hard-6x6/seed1_sensors.json",
+      "input_sha256": "72de8dfdd7afa7d964408edd050fea0863589db3ffab6278626ba704ceb7c09f",
+      "artifact_kind": "maze_episode_summary",
+      "episodes": 1,
+      "episodes_by_sensor_mode": {
+        "reactive": 1
+      },
+      "observed": {
+        "trace_rows": 366,
+        "sensor_snapshots": 0,
+        "missing_extero_snapshots": 0,
+        "stale_extero_snapshots": 0,
+        "fresh_extero_snapshots": 0,
+        "raw_lidar_snapshots": 0,
+        "lidar_sector_snapshots": 0,
+        "paired_ray_depth_snapshots": 0,
+        "imu_snapshots": 0,
+        "distinct_logged_extero_stamps": 0
+      },
+      "logged_snapshot_spacing_s": {
+        "n": 365,
+        "min": 0.19999999999998863,
+        "median": 0.20000000000000018,
+        "max": 0.20000000000000284
+      },
+      "logged_extero_age_at_consumption_s": {
+        "n": 0,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "logged_imu_age_at_consumption_s": {
+        "n": 0,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "declared_sensor_metadata": {},
+      "source_classification": {
+        "depth": "no_retained_depth_frames",
+        "lidar": "no_retained_lidar_frames",
+        "oracle_localization_declared": true,
+        "localization": null
+      },
+      "data_quality": {
+        "verdict": "PASS",
+        "issues": [],
+        "scope": "integrity and logged timestamp checks only; not sensor accuracy or independence"
+      },
+      "replay_readiness": {
+        "verdict": "NOT_READY",
+        "missing_evidence": [
+          "framewise sensor measurements (this file only retains summary/pose traces)",
+          "raw lidar ranges and angles; sector minima cannot reconstruct a scan",
+          "per-ray acquisition timestamps for scan deskew",
+          "original left/right RGB images and per-eye capture timestamps",
+          "measured stereo intrinsics, distortion and rectification with artifact hashes",
+          "camera/lidar/IMU extrinsics and calibration uncertainty",
+          "declared clock domain, capture-to-receive delay and synchronization method",
+          "full sensor stream rather than sparse control trace snapshots",
+          "explicit hit/invalid masks; maximum-range clipping is not an observed obstacle",
+          "reference trajectory independent of the deployed estimator"
+        ],
+        "usable_now": "episode outcome and controller trace analysis",
+        "unsupported_claims": [
+          "physical stereo depth accuracy",
+          "stereo correspondence benchmark",
+          "lidar scan matching or scan deskew benchmark",
+          "sensor-to-host latency measurement",
+          "estimated-pose navigation without oracle inputs"
+        ]
+      },
+      "episode_details": [
+        {
+          "episode_index": 0,
+          "seed": 1,
+          "sensor_mode": "reactive",
+          "trace_rows": 366,
+          "sensor_snapshots": 0
+        }
+      ]
+    },
+    {
+      "input": "results/maze-humanoid-20260928/humanoid-hard-6x6/seed12_sensors.json",
+      "input_sha256": "c54cb4bda76960273a0e778b1a276687fd0f6e415b2ada61554015da2056559f",
+      "artifact_kind": "maze_episode_summary",
+      "episodes": 1,
+      "episodes_by_sensor_mode": {
+        "reactive": 1
+      },
+      "observed": {
+        "trace_rows": 353,
+        "sensor_snapshots": 0,
+        "missing_extero_snapshots": 0,
+        "stale_extero_snapshots": 0,
+        "fresh_extero_snapshots": 0,
+        "raw_lidar_snapshots": 0,
+        "lidar_sector_snapshots": 0,
+        "paired_ray_depth_snapshots": 0,
+        "imu_snapshots": 0,
+        "distinct_logged_extero_stamps": 0
+      },
+      "logged_snapshot_spacing_s": {
+        "n": 352,
+        "min": 0.19999999999998863,
+        "median": 0.20000000000000018,
+        "max": 0.20000000000000284
+      },
+      "logged_extero_age_at_consumption_s": {
+        "n": 0,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "logged_imu_age_at_consumption_s": {
+        "n": 0,
+        "min": null,
+        "median": null,
+        "max": null
+      },
+      "declared_sensor_metadata": {},
+      "source_classification": {
+        "depth": "no_retained_depth_frames",
+        "lidar": "no_retained_lidar_frames",
+        "oracle_localization_declared": true,
+        "localization": null
+      },
+      "data_quality": {
+        "verdict": "PASS",
+        "issues": [],
+        "scope": "integrity and logged timestamp checks only; not sensor accuracy or independence"
+      },
+      "replay_readiness": {
+        "verdict": "NOT_READY",
+        "missing_evidence": [
+          "framewise sensor measurements (this file only retains summary/pose traces)",
+          "raw lidar ranges and angles; sector minima cannot reconstruct a scan",
+          "per-ray acquisition timestamps for scan deskew",
+          "original left/right RGB images and per-eye capture timestamps",
+          "measured stereo intrinsics, distortion and rectification with artifact hashes",
+          "camera/lidar/IMU extrinsics and calibration uncertainty",
+          "declared clock domain, capture-to-receive delay and synchronization method",
+          "full sensor stream rather than sparse control trace snapshots",
+          "explicit hit/invalid masks; maximum-range clipping is not an observed obstacle",
+          "reference trajectory independent of the deployed estimator"
+        ],
+        "usable_now": "episode outcome and controller trace analysis",
+        "unsupported_claims": [
+          "physical stereo depth accuracy",
+          "stereo correspondence benchmark",
+          "lidar scan matching or scan deskew benchmark",
+          "sensor-to-host latency measurement",
+          "estimated-pose navigation without oracle inputs"
+        ]
+      },
+      "episode_details": [
+        {
+          "episode_index": 0,
+          "seed": 12,
+          "sensor_mode": "reactive",
+          "trace_rows": 353,
+          "sensor_snapshots": 0
+        }
+      ]
+    }
+  ]
+}

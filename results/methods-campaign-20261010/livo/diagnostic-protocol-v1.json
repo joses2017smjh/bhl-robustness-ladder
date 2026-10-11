@@ -1,0 +1,21 @@
+{
+  "schema": "bhl-native-livo-methods-v1",
+  "methods": [
+    "fast_lio2",
+    "fast_livo2",
+    "fast_livo2_no_visual"
+  ],
+  "sequences": [
+    "textured_boxes_native",
+    "thin_posts_native",
+    "ramp_step_native"
+  ],
+  "gate": {
+    "initialization_exclusion_s": 5.0,
+    "maximum_ate_rmse_m": 0.1,
+    "maximum_native_compute_p95_s": 0.1,
+    "maximum_rotation_p95_deg": 5.0,
+    "minimum_tracking_fraction": 0.9
+  },
+  "scope": "REUSED_DEVELOPMENT_CAPTURE_DIAGNOSTIC; original three-scene sensor capture already used on October9; not independent confirmation or new performance-generalization evidence"
+}

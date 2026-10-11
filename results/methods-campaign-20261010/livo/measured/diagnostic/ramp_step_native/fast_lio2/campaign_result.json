@@ -1,0 +1,24 @@
+{
+  "schema": "bhl-native-lio-result-v1",
+  "status": "PASS",
+  "scientific_status": "NATIVE_REPLAY_MEASURED_NOT_COMPARISON",
+  "method": "fast_lio2_lidar_imu",
+  "sequence": "ramp_step_native",
+  "origin": "simulation",
+  "split": "test",
+  "frames": 150,
+  "tracked_frames": 147,
+  "estimated_pose_outputs": 147,
+  "states": {
+    "IMU_INITIALIZING": 1,
+    "MAP_INITIALIZING": 1,
+    "TRACKED": 147,
+    "UPSTREAM_FIRST_SCAN": 1
+  },
+  "native_compute_p95_ms": 10.110012901714072,
+  "elapsed_seconds": 2.1247118971077725,
+  "ground_truth_inputs": [],
+  "closed_loop_episodes": 0,
+  "trajectory_sha256": "b151a438273e7beda3a9cd18527f2298140772e67a3fda0803f7ffedc3d670bc",
+  "estimator_receipt_sha256": "6e430e453f49e0bae715c2e2d42f5b0612198fb898d46a343aaf0ad98a387b55"
+}

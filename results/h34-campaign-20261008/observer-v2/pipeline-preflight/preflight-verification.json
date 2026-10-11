@@ -1,0 +1,21 @@
+{
+  "plumbing_status": "PASS",
+  "expected_scientific_status": "INCOMPLETE",
+  "actual_scientific_status": "INCOMPLETE",
+  "outer_error": null,
+  "observer_sha256": "bb35116a68681b5c40cc6052e6a3879c025ded7be9bfff784cf00aebd65f0440",
+  "exit_status": 1,
+  "expected_cells": 3,
+  "complete_cells": 0,
+  "isolation": {
+    "campaign_readonly": true,
+    "source_readonly": true,
+    "shared_runtime_readonly": true,
+    "cuda_visible_devices": "",
+    "requested_gpus": 0
+  },
+  "scientific_problems": [
+    "missing complete scored cells: [0, 1, 2]"
+  ],
+  "host_bytecode_guard": "PYTHONDONTWRITEBYTECODE explicitly unset; frozen helper imports must not write __pycache__"
+}

@@ -1,0 +1,17 @@
+[2026-10-09T15:00:03.080] error: couldn't chdir to `/tmp/bhl-native-campaign-20261009': No such file or directory: going to /tmp instead
+[2026-10-09T15:00:03.081] error: couldn't chdir to `/tmp/bhl-native-campaign-20261009': No such file or directory: going to /tmp instead
+[2026-10-09T15:00:03.095] error: Unable to create TMPDIR [/scratch/sanchej7/tmp]: No such file or directory
+[2026-10-09T15:00:03.095] error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/tmp/bhl-h34-bootstrap-21742453-NgvA0J/h34_campaign.py", line 431, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/bhl-h34-bootstrap-21742453-NgvA0J/h34_campaign.py", line 426, in main
+    return execute(a.persistent_dir, a.job, a.archive_sha)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-bootstrap-21742453-NgvA0J/h34_campaign.py", line 343, in execute
+    verified = verify_source(scratch)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-bootstrap-21742453-NgvA0J/h34_campaign.py", line 283, in verify_source
+    raise ValueError(f"frozen source hash mismatch: {name}")
+ValueError: frozen source hash mismatch: source/scripts/bench/native_build_campaign.py

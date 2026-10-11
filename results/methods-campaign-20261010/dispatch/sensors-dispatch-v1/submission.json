@@ -1,0 +1,25 @@
+{
+  "plan_sha256": "7035bb51fc41d72fa15c484093a4626e9e279838367f3c974f1777823cc202ef",
+  "source_sha256": {
+    "methods_dispatch.py": "87727d6f5bd59c5500519a8c0faab3139ce288f9c9bfc0cd2268b41208442526",
+    "methods_archive.py": "2037a4da6418dec0c3c1e5e0fc7427ff6f736cff15eab6d262a17aa0c092ebe0",
+    "h34_campaign.py": "8264618c648992e6c40f97b36cd73837cf867bffc195ab9c0f065c9c412170a1"
+  },
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--account=eecs",
+    "--partition=share,eecs",
+    "--ntasks=1",
+    "--cpus-per-task=1",
+    "--mem=1G",
+    "--time=24:00:00",
+    "--no-requeue",
+    "--job-name=sensors-dispatch-v1",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/sensors-dispatch-v1/utility-%j.log",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/sensors-dispatch-v1/dispatch.sbatch"
+  ],
+  "returncode": 0,
+  "job_id": "21757623",
+  "stderr": ""
+}

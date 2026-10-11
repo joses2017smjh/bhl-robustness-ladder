@@ -1,0 +1,23 @@
+{
+  "schema": "bhl-native-orb-promotion-step-v1",
+  "declared_utc": "2026-10-09T22:24:57.617661+00:00",
+  "allocation_id": "21739893",
+  "allocation_resources": "2 CPU, 31800 MiB, dgx2-5, existing allocation ends 16:45:23 PDT; no additional GPU allocation and no GPU compute",
+  "step_resources": "1 CPU, 4 GiB, overlap; launch only after genuine build PASS",
+  "command": [
+    "srun",
+    "--jobid=21739893",
+    "--overlap",
+    "--ntasks=1",
+    "--cpus-per-task=1",
+    "--mem=4G",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-step-promotion-v3/step-21739893-promotion.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-step-promotion-v3/step-21739893-promotion.out",
+    "/bin/bash",
+    "-c",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python -c 'import os,json,pathlib,datetime; pathlib.Path('\"'\"'/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-step-promotion-v3/step-environment-21739893-promotion.json'\"'\"').write_text(json.dumps({'\"'\"'recorded_utc'\"'\"':datetime.datetime.now(datetime.timezone.utc).isoformat(),'\"'\"'environment'\"'\"':{k:v for k,v in os.environ.items() if k in ['\"'\"'SLURM_JOB_ID'\"'\"','\"'\"'SLURM_STEP_ID'\"'\"','\"'\"'SLURM_STEP_NUM_TASKS'\"'\"','\"'\"'SLURM_CPUS_PER_TASK'\"'\"','\"'\"'SLURM_MEM_PER_NODE'\"'\"','\"'\"'SLURM_JOB_NODELIST'\"'\"']},'\"'\"'host'\"'\"':os.uname().nodename,'\"'\"'scope'\"'\"':'\"'\"'Actual separate ORB orchestration step in existing allocation; genuine build step21739893.3 provenance is in frozen plan'\"'\"'},indent=2)+'\"'\"'\\n'\"'\"')'\nexec /bin/bash /nfs/stak/users/sanchej7/humanoid-native-20261009/orb-step-promotion-v3/h34_campaign.sbatch /nfs/stak/users/sanchej7/humanoid-native-20261009/orb-step-promotion-v3 orb-step-promotion-20261009-v3 5296d6d2ceef98cb8e5602c6fd20880d71fc091e0e7e9d7a30b557d23a5325f1"
+  ],
+  "expected_output": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-step-promotion-v3/orb-step-promotion-20261009-v3-21739893",
+  "scope": "Actual distinct allocated CPU orchestration step, using frozen controller/helper/plan; no scientific outcome or parameter tuning",
+  "frozen_controller_archive_sha256": "5296d6d2ceef98cb8e5602c6fd20880d71fc091e0e7e9d7a30b557d23a5325f1"
+}

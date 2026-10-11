@@ -1,0 +1,74 @@
+[
+  {
+    "audit_status": "PASS",
+    "cohorts": {
+      "smoke": {
+        "by_actor": {
+          "dr-default-s0": {
+            "collisions": 0,
+            "episodes": 2,
+            "falls": 0,
+            "goals": 1
+          }
+        },
+        "collisions": 0,
+        "episodes": 2,
+        "failures": {
+          "clean_goal": 1,
+          "timeout": 1
+        },
+        "falls": 0,
+        "goals": 1,
+        "nonfinite": 0
+      }
+    },
+    "job_id": "21742782",
+    "qualified_actors": [],
+    "raw_archive_bytes": 4975890,
+    "raw_archive_sha256": "b2bb6108964eee4d6fcebdbb04777809b103ff1bfc7eb5ce860e7ffb2f442a7a",
+    "scientific_status": "SMOKE_ONLY",
+    "source_archive_sha256": "1f04b186e62a31bfa27547375124b85f7bc8a46b688fc92577ea108d7d6293ed"
+  },
+  {
+    "audit_status": "PASS",
+    "cohorts": {
+      "screen": {
+        "by_actor": {
+          "dr-default-s0": {
+            "collisions": 3,
+            "episodes": 6,
+            "falls": 0,
+            "goals": 3
+          },
+          "dr-default-s1": {
+            "collisions": 6,
+            "episodes": 6,
+            "falls": 0,
+            "goals": 0
+          },
+          "dr-default-s2": {
+            "collisions": 6,
+            "episodes": 6,
+            "falls": 0,
+            "goals": 0
+          }
+        },
+        "collisions": 15,
+        "episodes": 18,
+        "failures": {
+          "clean_goal": 3,
+          "collision": 15
+        },
+        "falls": 0,
+        "goals": 3,
+        "nonfinite": 0
+      }
+    },
+    "job_id": "21742786",
+    "qualified_actors": [],
+    "raw_archive_bytes": 19583862,
+    "raw_archive_sha256": "56f89af26505e2015185cfd9d635e618ad4616b982867929943b9f7465f87a99",
+    "scientific_status": "NEGATIVE",
+    "source_archive_sha256": "1f04b186e62a31bfa27547375124b85f7bc8a46b688fc92577ea108d7d6293ed"
+  }
+]

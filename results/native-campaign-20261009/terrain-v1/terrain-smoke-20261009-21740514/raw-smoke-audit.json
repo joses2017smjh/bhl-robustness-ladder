@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "job_id": "21740514",
+  "frozen_archive_sha256": "22aebdda537610f72b51d50cd7aee510cd9ed5ee80ea55b3dad9079e7cf6d3f7",
+  "episode_audits": [
+    {
+      "episode": "dr-default-s0--flat--g250000--baseline.json",
+      "arm": "baseline",
+      "terrain": "flat",
+      "success_recomputed": true,
+      "fell_recomputed": false,
+      "wall_collision_recomputed": false,
+      "full_horizon_recomputed": true,
+      "forward_progress_m": 5.016873359680176,
+      "scans": 200,
+      "raw_points": 190906,
+      "height_cells": 16046,
+      "height_rmse_m_recomputed": 0.002464935373597941,
+      "unknown_stop_steps": 0,
+      "observed_hazard_stop_steps": 0,
+      "raw_scan_sha256": "38a2634e8cfbdb829b34c4dd4b0e4f59f817b0e9e9ad60c08195f90288ab2499"
+    },
+    {
+      "episode": "dr-default-s0--ramp--g250000--lidar.json",
+      "arm": "lidar",
+      "terrain": "ramp",
+      "success_recomputed": false,
+      "fell_recomputed": false,
+      "wall_collision_recomputed": false,
+      "full_horizon_recomputed": true,
+      "forward_progress_m": 1.5824395418167114,
+      "scans": 200,
+      "raw_points": 204800,
+      "height_cells": 17548,
+      "height_rmse_m_recomputed": 0.11021397646820916,
+      "unknown_stop_steps": 0,
+      "observed_hazard_stop_steps": 715,
+      "raw_scan_sha256": "ed2df1cf258fe5e020920e1a7e18c7822bd3a835d36531f1ae65af7e476af3cc"
+    }
+  ],
+  "scope": "Independent raw trace/array scoring audit of two smoke episodes only; no qualification claim"
+}

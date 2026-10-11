@@ -1,0 +1,22 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=native-lio-smoke-20261009-v4",
+    "--partition=preempt",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--time=00:20:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v4/native-lio-smoke-20261009-v4-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v4/native-lio-smoke-20261009-v4-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v4/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v4",
+    "native-lio-smoke-20261009-v4",
+    "5fd9f5b43004144561b6922b9357ad4abe13174fdafc6f15a588c738db66acb5"
+  ],
+  "created_utc": "2026-10-09T22:08:39.085432+00:00"
+}

@@ -1,0 +1,63 @@
+{
+  "archive_sha256": "2992604f74e69c6fdad2e267f4fb5e4eb56d0f4618639aedc78d86023cb21001",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv:/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv",
+    "--bind",
+    "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/source:/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/protocol.json:/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/work",
+    "--bind",
+    "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/inputs:/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/inputs:ro",
+    "--nv",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/source/scripts/bench/h4_train.py",
+    "--protocol",
+    "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv/protocol.json",
+    "--phase",
+    "smoke",
+    "--cell",
+    "0"
+  ],
+  "host": "cn-gpu7.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "smoke",
+      "--cell",
+      "{cell}"
+    ],
+    "entrypoint": "scripts/bench/h4_train.py",
+    "env": {},
+    "kind": "smoke",
+    "max_output_mb": 512,
+    "name": "h4-smoke-20261008",
+    "resources": {
+      "array": "0%1",
+      "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+      "cpus": 8,
+      "exclude": "dgxh-1",
+      "gpus": 1,
+      "memory_gb": 64,
+      "partition": "gpu,dgxh,ampere",
+      "time_limit": "00:45:00"
+    }
+  },
+  "job_id": "21711085",
+  "scratch": "/tmp/bhl-h34-h4-smoke-20261008-21711085-_a7ewbqv",
+  "source_files_verified": 815,
+  "started_utc": "2026-10-09T02:18:08.571726+00:00"
+}

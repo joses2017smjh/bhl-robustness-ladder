@@ -1,0 +1,26 @@
+{
+  "collisions": 0,
+  "episode_files": [
+    "straight-s370000/episode.json",
+    "straight-s370001/episode.json"
+  ],
+  "episodes": 2,
+  "falls": 0,
+  "gate_to_confirmation": false,
+  "goals": 0,
+  "ground_truth_inputs_to_estimator_or_planner": [],
+  "input_sha256": {
+    "/tmp/bhl-h34-nav-lio-smoke-20261009-v1-21740837-ehaoso9m/inputs/actors/dr-default-s0/deploy.yaml": "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71",
+    "/tmp/bhl-h34-nav-lio-smoke-20261009-v1-21740837-ehaoso9m/inputs/actors/dr-default-s0/policy.onnx": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1",
+    "/tmp/bhl-h34-nav-lio-smoke-20261009-v1-21740837-ehaoso9m/work/lio-runtime/runtime/fastlio_headless": "e2c7791007548b316546aa1ef91a34b6fa611e16f8fb8dfd8195f47f544bd2d3",
+    "/tmp/bhl-h34-nav-lio-smoke-20261009-v1-21740837-ehaoso9m/work/lio-runtime/runtime/runtime.json": "9d0e1486a6454ad424dcbdefd1407463ca74963b40a49cc5c78ad81023e351ba"
+  },
+  "method": "fast_lio2_lidar_imu",
+  "native_tracked_frames": 52,
+  "orb_slam3_navigation": "NOT_RUN_IN_THIS_LIO_ONLY_ROUTE",
+  "phase": "smoke",
+  "route": "native_estimated_pose_navigation",
+  "scientific_status": "SMOKE_ONLY",
+  "status": "PASS",
+  "wall_seconds": 28.060448234085925
+}

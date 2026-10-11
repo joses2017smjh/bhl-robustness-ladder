@@ -588,6 +588,24 @@ except Exception as _exc:  # noqa: BLE001
     print(f"[bhl_robust.tasks] m7-platecross2 id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
 # --- end m7-platecross2 ---
 
+# H3/H4 October 8 matched fine-tuning campaigns. These ids add observations;
+# their training and final-checkpoint rules live in the frozen protocols.
+from . import history_latency_env_cfg as _h3_history
+from . import heading_observable_env_cfg as _h4_heading
+
+for _id, _cfg, _runner in (
+    ("Velocity-BHL-Biped-H3-History-v0", _h3_history.HistoryLatencyEnvCfg, _PPO_CFG),
+    ("Velocity-BHL-Biped-H3-Feedforward-v0", _h3_history.FeedforwardLatencyEnvCfg, _PPO_CFG),
+    ("Velocity-BHL-Arms-TurnGaitHeadingObservable-v0",
+     _h4_heading.HumanoidTurnGaitHeadingObservableCfg, _ARM_PPO_CFG),
+):
+    gym.register(
+        id=_id,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _runner},
+    )
+
 # --- waiter-wbc ---
 # Waiter program phase 1 (2026-10-05; docs/WAITER_PROGRAM.md, SLURM_JOBS.md 'Predeclared now ... the Waiter
 # program'): the 24-DoF gripper whole-body controller, R1's recipe with the legs as the policy and the arms and
