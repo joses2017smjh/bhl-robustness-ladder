@@ -1,7 +1,6 @@
 # Physical rig plan: RPLIDAR C1, stereo pan/tilt and Yahboom IMU
 
-The user identified this hardware on October 11, 2026. Device access, recordings,
-exact camera/IMU revisions, robot platform and mounting layout are still unknown.
+The user identified this hardware on October 11, 2026 and confirmed that only the camera moves; the IMU and C1 are fixed at the front/top/middle of the body. The [Quest repository audit](QUEST_RIG_INTEGRATION_AUDIT_2026-10-11.md) identifies an N150 Linux computer, stereo USB layout and command-only servo firmware. Current remote access, raw recordings, exact device revisions and measured mounting geometry remain unknown.
 This is an implementation plan and experiment backlog, not measured hardware
 performance or a frozen scoring protocol. [Machine-readable intake plan](../protocols/hardware-c1-stereo-yahboom-20261011.json).
 
@@ -26,10 +25,9 @@ Start a separate planar track; retain the existing 3D intake and original
 simulation labels. Space above and below the C1 scan plane remains unobserved:
 a free planar ray must not clear an entire body-height column in a 3D obstacle map. [FAST-LIO input requirements](https://github.com/hku-mars/FAST_LIO).
 
-## Mounting decision before inertial replay
+## Confirmed mounting and moving-head path
 
-Start with both servos locked at a documented pose. Calibrate there and record
-whether the IMU and LiDAR sit on the robot body or move with the camera.
+**Selected layout: camera moves; IMU and LiDAR stay on the body.** Start with both servos locked at a documented pose for calibration and the fixed-head baseline. Active camera pointing remains the intended follow-up. The alternative layouts below explain estimator constraints; they are not claims about this robot. See the [source-backed integration design and stationary-body control](QUEST_RIG_INTEGRATION_AUDIT_2026-10-11.md#selected-moving-head-architecture).
 
 | Physical layout | Consequence |
 |---|---|
@@ -38,7 +36,8 @@ whether the IMU and LiDAR sit on the robot body or move with the camera.
 | Camera, IMU and C1 all move together | Relative sensor mounting can stay fixed, but a tilted C1 changes the scan plane. A horizontal 2D mapper's assumptions need separate validation. |
 
 This follows from [ORB-SLAM3's fixed camera–IMU calibration](https://github.com/UZ-SLAMLab/ORB_SLAM3/blob/master/Examples/Stereo-Inertial/EuRoC.yaml).
-Servo command values are not measured joint angles. Record feedback when
+The inspected Arduino firmware exposes **commanded pulses, not measured angles**. `CameraAim`
+history is an approximate command estimate, not measured kinematics. Record feedback when
 available; otherwise characterize repeatability, backlash and settling at each
 fixed pose and retain that uncertainty. Do not silently equate command time with
 physical exposure-time angle. Moving only the camera does not turn the C1 into a
@@ -49,6 +48,8 @@ For body-frame navigation, define transforms explicitly: if `T_W_C` maps camera
 to world and `T_B_C(q)` maps camera to body, then
 `T_W_B = T_W_C @ inverse(T_B_C(q))`. Use the joint state at the camera acquisition
 time and include mounting translations, not just pan/yaw rotation.
+
+Body-mounted sensors still tilt with a walking humanoid. Fixed mounting does not make the C1 scan plane permanently horizontal; test body roll/pitch and gait motion separately from the level planar baseline. Exact body-to-IMU/LiDAR offsets remain to be measured.
 
 ## Acquisition and calibration work
 

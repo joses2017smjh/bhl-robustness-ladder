@@ -24,7 +24,7 @@ PYTHONPATH=src python scripts/bench/sensor_validation.py \
 
 ## Physical sensor validation
 
-The user has now identified a **RPLIDAR C1 2D LiDAR, MMlove USB stereo camera on two pan/tilt servos, and Yahboom 10-axis IMU**. [The hardware-specific plan](HARDWARE_RIG_C1_STEREO_YAHBOOM_2026-10-11.md) records their constraints and seven experiments. Connected machine, recording directory, exact device revisions and which sensors move together are still unknown. Physical validation remains **blocked on access and calibration**. The earlier [local access inventory](../results/sensor-validation-20261011/hardware-access.json) describes the inspected HPC node only.
+The user has now identified a **RPLIDAR C1 2D LiDAR, MMlove USB stereo camera on two pan/tilt servos, and Yahboom 10-axis IMU**. [The hardware-specific plan](HARDWARE_RIG_C1_STEREO_YAHBOOM_2026-10-11.md) records their constraints and seven experiments. The user confirmed that only the camera moves; IMU and C1 are fixed to the body. The [Quest source audit](QUEST_RIG_INTEGRATION_AUDIT_2026-10-11.md) identifies an N150 Linux PC and command-only pan/tilt control. A reachable machine address, qualified raw recording directory, exact device revisions and measured mounting transforms remain unknown. Physical validation remains **blocked on access and calibration**. The earlier [local access inventory](../results/sensor-validation-20261011/hardware-access.json) describes the inspected HPC node only.
 
 The existing executable intake below targets **timed 3D LiDAR**. It does not accept the C1 planar rig as equivalent hardware; a separate planar adapter remains to be implemented after device inspection:
 
