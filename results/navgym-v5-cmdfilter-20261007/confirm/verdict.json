@@ -1,0 +1,182 @@
+{
+ "rule": "CONFIRM (never-used maze seeds 78000-78047): the dev-selected arm only, actors armV5-s8/s9/s10 x {nominal, drop35}, plus the SCRIPTED A* reference (unfiltered) x {nominal, drop35}, not gated. PASS iff EACH actor reaches >= 40/48 nominal and >= 36/48 drop35 goals with 0 falls (the 2026-10-06 rule); otherwise NEGATIVE; INCOMPLETE if any cell is missing, short or mislabelled.",
+ "labels": {
+  "learned": "frozen biped gait (PPO, dr-default-s0) + NavGym v5 final actor (vx, wz)",
+  "scripted": "first-order command low-pass (cmd_filter.py) + team_sensors speed brake; A* reference only",
+  "oracle": "pose and goal coordinate",
+  "scope": "simulation (MuJoCo 3.3.5), no hardware"
+ },
+ "seeds": [
+  78000,
+  78047
+ ],
+ "dev_verdict": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/navgym-v5-cmdfilter-20261007/dev/verdict.json",
+ "arm": "wz-lpf",
+ "tau_s": 0.2,
+ "cells": {
+  "armV5-s8-nominal": {
+   "n": 48,
+   "goals": 38,
+   "clean": 38,
+   "falls": 0,
+   "time_outs": 10,
+   "other": 0,
+   "fall_seeds": [],
+   "median_completion_s": 63.68,
+   "gait_wz_flips_per_s_median": 1.355,
+   "actor_wz_flips_per_s_median": 1.3665,
+   "gait_wz_saturated_share_median": 0.1332,
+   "max_tilt_rad_max": 0.161
+  },
+  "armV5-s8-drop35": {
+   "n": 48,
+   "goals": 37,
+   "clean": 37,
+   "falls": 0,
+   "time_outs": 11,
+   "other": 0,
+   "fall_seeds": [],
+   "median_completion_s": 79.72,
+   "gait_wz_flips_per_s_median": 1.432,
+   "actor_wz_flips_per_s_median": 1.432,
+   "gait_wz_saturated_share_median": 0.113,
+   "max_tilt_rad_max": 0.1459
+  },
+  "armV5-s9-nominal": {
+   "n": 48,
+   "goals": 41,
+   "clean": 41,
+   "falls": 0,
+   "time_outs": 7,
+   "other": 0,
+   "fall_seeds": [],
+   "median_completion_s": 61.56,
+   "gait_wz_flips_per_s_median": 1.6465,
+   "actor_wz_flips_per_s_median": 1.648,
+   "gait_wz_saturated_share_median": 0.0801,
+   "max_tilt_rad_max": 0.1292
+  },
+  "armV5-s9-drop35": {
+   "n": 48,
+   "goals": 42,
+   "clean": 42,
+   "falls": 0,
+   "time_outs": 6,
+   "other": 0,
+   "fall_seeds": [],
+   "median_completion_s": 66.12,
+   "gait_wz_flips_per_s_median": 1.768,
+   "actor_wz_flips_per_s_median": 1.7685,
+   "gait_wz_saturated_share_median": 0.05,
+   "max_tilt_rad_max": 0.1546
+  },
+  "armV5-s10-nominal": {
+   "n": 48,
+   "goals": 47,
+   "clean": 47,
+   "falls": 0,
+   "time_outs": 1,
+   "other": 0,
+   "fall_seeds": [],
+   "median_completion_s": 59.6,
+   "gait_wz_flips_per_s_median": 1.671,
+   "actor_wz_flips_per_s_median": 1.737,
+   "gait_wz_saturated_share_median": 0.0677,
+   "max_tilt_rad_max": 0.1274
+  },
+  "armV5-s10-drop35": {
+   "n": 48,
+   "goals": 45,
+   "clean": 45,
+   "falls": 0,
+   "time_outs": 3,
+   "other": 0,
+   "fall_seeds": [],
+   "median_completion_s": 78.32,
+   "gait_wz_flips_per_s_median": 1.7735,
+   "actor_wz_flips_per_s_median": 1.8135,
+   "gait_wz_saturated_share_median": 0.0467,
+   "max_tilt_rad_max": 0.1579
+  }
+ },
+ "problems": [],
+ "astar_reference": {
+  "astar-nominal": {
+   "n": 48,
+   "goals": 44,
+   "clean": 41,
+   "falls": 0,
+   "time_outs": 4,
+   "other": 0,
+   "fall_seeds": [],
+   "median_completion_s": 67.28,
+   "gait_wz_flips_per_s_median": null,
+   "actor_wz_flips_per_s_median": null,
+   "gait_wz_saturated_share_median": null,
+   "max_tilt_rad_max": null
+  },
+  "astar-drop35": {
+   "n": 48,
+   "goals": 47,
+   "clean": 44,
+   "falls": 0,
+   "time_outs": 1,
+   "other": 0,
+   "fall_seeds": [],
+   "median_completion_s": 82.6,
+   "gait_wz_flips_per_s_median": null,
+   "actor_wz_flips_per_s_median": null,
+   "gait_wz_saturated_share_median": null,
+   "max_tilt_rad_max": null
+  }
+ },
+ "per_actor": {
+  "armV5-s8": {
+   "meets": false,
+   "nominal": {
+    "goals": 38,
+    "clean": 38,
+    "falls": 0,
+    "time_outs": 10
+   },
+   "drop35": {
+    "goals": 37,
+    "clean": 37,
+    "falls": 0,
+    "time_outs": 11
+   }
+  },
+  "armV5-s9": {
+   "meets": true,
+   "nominal": {
+    "goals": 41,
+    "clean": 41,
+    "falls": 0,
+    "time_outs": 7
+   },
+   "drop35": {
+    "goals": 42,
+    "clean": 42,
+    "falls": 0,
+    "time_outs": 6
+   }
+  },
+  "armV5-s10": {
+   "meets": true,
+   "nominal": {
+    "goals": 47,
+    "clean": 47,
+    "falls": 0,
+    "time_outs": 1
+   },
+   "drop35": {
+    "goals": 45,
+    "clean": 45,
+    "falls": 0,
+    "time_outs": 3
+   }
+  }
+ },
+ "verdict": "NEGATIVE",
+ "final": true
+}

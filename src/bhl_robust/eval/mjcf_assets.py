@@ -26,6 +26,9 @@ _ROBOT_SUBDIR = Path("data/robots/berkeley_humanoid/berkeley_humanoid_lite")
 _VARIANTS = {
     "biped": ("bhl_biped_scene.xml", "berkeley_humanoid_lite_biped.xml"),
     "humanoid": ("bhl_scene.xml", "berkeley_humanoid_lite.xml"),
+    # Waiter program phase 1 (docs/WAITER_PROGRAM.md): the humanoid files + grippers + palm colliders + gripper
+    # sensors, so the 24-DoF layout runs through the same harnesses (sensors grouped as upstream's: pos, vel, torque).
+    "waiter": ("bhl_scene.xml", "berkeley_humanoid_lite.xml"),
 }
 
 
@@ -77,6 +80,30 @@ def _gripper_body(side: str, sign: float) -> str:
     )
 
 
+def _waiter_patch(xml: str, robot_name: str) -> str:
+    """Waiter variant: a palm collider per hand (the hand's visual mesh, MuJoCo collides with its convex hull, as
+    the Isaac asset's URDF collision), and the gripper sensors inserted after the last arm/leg sensor of each group
+    (jointpos, jointvel, jointactuatorfrc) so the layout stays [pos x nu, vel x nu, torque x nu, imu ...]."""
+    for side in ("left", "right"):
+        m = re.search(rf'(<geom type="mesh" class="visual" (pos="[^"]*" quat="[^"]*") '
+                      rf'mesh="arm_{side}_hand_link_visual"[^/]*/>)', xml)
+        if m is None:
+            raise RuntimeError(f"no arm_{side}_hand_link visual geom in {robot_name}")
+        col = (f'<geom name="arm_{side}_palm_collision" type="mesh" class="collision" {m.group(2)} '
+               f'mesh="arm_{side}_hand_link_visual"/>')
+        xml = xml[:m.end()] + col + xml[m.end():]
+    for kind, suffix in (("jointpos", "pos"), ("jointvel", "vel"), ("jointactuatorfrc", "torque")):
+        last = None
+        for m in re.finditer(rf'<{kind} name="leg_right_ankle_roll_{suffix}"[^/]*/>', xml):
+            last = m
+        if last is None:
+            raise RuntimeError(f"no leg_right_ankle_roll {kind} sensor in {robot_name}")
+        add = "".join(f'<{kind} name="arm_{s}_gripper_{suffix}" joint="arm_{s}_gripper_joint"/>'
+                      for s in ("left", "right"))
+        xml = xml[:last.end()] + add + xml[last.end():]
+    return xml
+
+
 def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
                  terrain: bool = False, ego_camera: bool = False,
                  gripper: bool = False) -> Path:
@@ -113,10 +140,13 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
     if not mesh_dir.is_dir():
         raise FileNotFoundError(f"mesh directory missing: {mesh_dir}")
 
+    waiter = variant == "waiter"
+    if waiter:
+        gripper = True
     out_dir = cache_dir / (f"mjcf_{variant}_hfield" if terrain else f"mjcf_{variant}")
     if ego_camera:
         out_dir = out_dir.with_name(out_dir.name + "_ego")
-    if gripper:
+    if gripper and not waiter:
         out_dir = out_dir.with_name(out_dir.name + "_grip")
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -215,6 +245,8 @@ def prepare_mjcf(upstream: Path, cache_dir: Path, variant: str = "biped",
         xml, n_act = re.subn(r"(</actuator>)", motors + r"\1", xml, count=1)
         if n_act == 0:
             raise RuntimeError(f"no </actuator> in {robot_name}; cannot add gripper motors")
+    if waiter:
+        xml = _waiter_patch(xml, robot_name)
 
     if n_dir == 0:
         raise RuntimeError(f"no meshdir attribute found in {robot_name}; upstream layout changed")

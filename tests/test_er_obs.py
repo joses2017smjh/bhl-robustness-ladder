@@ -413,11 +413,13 @@ def test_verdicts_are_written_once(tmp_path):
 # =================================================================== response classification
 
 def _env(text=None, **extra):
-    """A response in the documented interactions shape (the answer in output_text), as client._interaction builds it."""
+    """A response in the live Interaction shape (the answer in a model_output step), as client._interaction builds it;
+    with text None there is no steps list (so a top-level output_text passed in `extra` is what gets read)."""
     resp = {"id": "i-1", "model": C.MODEL, "status": "completed",
             "usage": {"total_input_tokens": 1290, "total_output_tokens": 61, "total_thought_tokens": 37}}
     if text is not None:
-        resp["output_text"] = text
+        resp["steps"] = [{"type": "thought", "summary": []},
+                         {"type": "model_output", "content": [{"type": "text", "text": text}]}]
     resp.update(extra)
     return json.dumps(resp).encode()
 
@@ -434,8 +436,16 @@ def test_classify_ok_and_every_failure_kind():
     assert C.classify(200, _env('{"cube_point": [1, 2], "lifted_clear": tru'))["kind"] == "non_json"
     assert C.classify(200, _env("Sure! Here it is: " + GOOD))["kind"] == "non_json"
     assert C.classify(200, _env("I'm sorry, I can't help with that."))["kind"] == "non_json"   # a refusal in prose
-    assert C.classify(200, _env(None))["kind"] == "no_answer"                                # no output_text
+    assert C.classify(200, _env(None))["kind"] == "no_answer"                                # no answer at all
     assert C.classify(200, _env(None, output_text=["x"]))["kind"] == "bad_envelope"         # not a string
+    assert C.classify(200, _env(None, output_text=GOOD))["kind"] == "ok"      # no steps: output_text (the OW wrapper)
+    assert C.classify(200, _env(None, steps=[{"type": "thought"}]))["kind"] == "no_answer"   # thoughts, no output
+    assert C.classify(200, _env(None, steps={"x": 1}))["kind"] == "bad_envelope"
+    two = [{"type": "model_output", "content": [{"type": "text", "text": GOOD[:20]}, {"type": "image", "data": "x"},
+                                                 {"type": "text", "text": GOOD[20:]}]}]
+    assert C.classify(200, _env(None, steps=two))["kind"] == "ok"                          # text items joined in order
+    bad = [{"type": "model_output", "content": [{"type": "text", "text": 5}]}]
+    assert C.classify(200, _env(None, steps=bad))["kind"] == "bad_envelope"
     assert C.classify(200, json.dumps([1, 2]).encode())["kind"] == "bad_envelope"
     assert C.classify(200, b"<html>")["kind"] == "bad_envelope"
     assert C.classify(500, b'{"error": {"message": "x"}}')["kind"] == "http_error"
@@ -585,11 +595,12 @@ def test_request_carries_only_the_frame_and_the_fixed_prompt():
     png = b"\x89PNG-fake-bytes"
     req = C.build_request(png)
     assert set(req) == {"model", "input", "generation_config"} and req["model"] == "gemini-robotics-er-2-preview"
-    parts = req["input"]["parts"]
-    assert set(req["input"]) == {"parts"} and len(parts) == 2
-    assert base64.b64decode(parts[0]["inlineData"]["data"]) == png and parts[0]["inlineData"]["mimeType"] == "image/png"
-    assert parts[1] == {"text": C.TEXT} and C.TEXT.startswith(C.PROMPT) and C.SCHEMA_LINE in C.TEXT
-    assert req["generation_config"] == C.GENERATION_CONFIG == {"thinking_config": {"thinking_level": "low"}}
+    items = req["input"]                                   # request amendment 2026-10-05: the live typed input list
+    assert isinstance(items, list) and len(items) == 2
+    assert set(items[0]) == {"type", "data", "mime_type"} and items[0]["type"] == "image"
+    assert base64.b64decode(items[0]["data"]) == png and items[0]["mime_type"] == "image/png"
+    assert items[1] == {"type": "text", "text": C.TEXT} and C.TEXT.startswith(C.PROMPT) and C.SCHEMA_LINE in C.TEXT
+    assert req["generation_config"] == C.GENERATION_CONFIG == {"thinking_level": "low"}      # request amendment 2026-10-05
     assert C.ENDPOINT == "https://generativelanguage.googleapis.com/v1beta/interactions"
     assert C.PROMPT_SCHEMA_SHA256 == C.sha256_hex(C.canonical({"prompt_text": C.TEXT, "json_schema": C.SCHEMA}))
     assert C.REQUEST_SHA256 == C.sha256_hex(C.canonical(C.request_template()))
@@ -870,11 +881,11 @@ def test_run_mode_sends_only_frame_and_prompt_and_never_stores_the_key(tmp_path,
     for body in t.bodies:
         req = json.loads(body)
         assert set(req) == {"model", "input", "generation_config"} and req["generation_config"] == C.GENERATION_CONFIG
-        parts = req["input"]["parts"]
-        assert set(req["input"]) == {"parts"} and len(parts) == 2 and parts[1] == {"text": C.TEXT}
-        assert set(parts[0]) == {"inlineData"} and set(parts[0]["inlineData"]) == {"mimeType", "data"}
+        items = req["input"]
+        assert len(items) == 2 and items[1] == {"type": "text", "text": C.TEXT}
+        assert set(items[0]) == {"type", "data", "mime_type"} and items[0]["type"] == "image"
         assert FAKE_KEY.encode() not in body
-        parts[0]["inlineData"]["data"] = "<image>"
+        items[0]["data"] = "<image>"
         rest = json.dumps(req)
         for word in ("/nfs", "s30", "900", "sanchej7", "seed"):
             assert word not in rest, word
@@ -1238,6 +1249,12 @@ def test_calls_launcher_real_modes_on_a_fake_tree_and_key_refusals(tmp_path):
     for mode in ("run", "latency"):
         r = _launch(launcher, [mode], {**base, C.KEY_ENV: str(good_early)}, cwd=tree)
         assert r.returncode == 1 and "ER_OBS_PAID_TIER_CONFIRMED=1" in r.stdout and "nothing was sent" in r.stdout
+    # tier amendment (2026-10-05): a contradiction refuses; latency refuses on the free tier
+    r = _launch(launcher, ["run"], {**base, C.PAID_TIER_ENV: "1", C.TIER_ENV: "free", C.KEY_ENV: str(good_early)},
+                cwd=tree)
+    assert r.returncode == 1 and "never both" in r.stdout and "nothing was sent" in r.stdout
+    r = _launch(launcher, ["latency"], {**base, C.TIER_ENV: "free", C.KEY_ENV: str(good_early)}, cwd=tree)
+    assert r.returncode == 1 and "rate limit" in r.stdout and "nothing was sent" in r.stdout
     base[C.PAID_TIER_ENV] = "1"
     # key file missing / mode 644 / inside the code root: refused, nothing logged as a call
     r = _launch(launcher, ["run"], {**base, C.KEY_ENV: str(keydir / "missing")}, cwd=tree)
@@ -1272,3 +1289,37 @@ def test_calls_launcher_real_modes_on_a_fake_tree_and_key_refusals(tmp_path):
     assert r.returncode == 1 and "never overwritten" in r.stdout
     r = _launch(launcher, ["latency"], {**base, C.KEY_ENV: str(good)}, cwd=tree)
     assert r.returncode == 1 and "never overwritten" in r.stdout
+
+
+def test_tier_declaration():
+    """Tier amendment (2026-10-05): paid via either variable, free only via ER_OBS_TIER, never both, nothing else."""
+    assert C.declared_tier({}) is None
+    assert C.declared_tier({C.PAID_TIER_ENV: "1"}) == "paid"
+    assert C.declared_tier({C.TIER_ENV: "paid"}) == "paid"
+    assert C.declared_tier({C.TIER_ENV: "paid", C.PAID_TIER_ENV: "1"}) == "paid"
+    assert C.declared_tier({C.TIER_ENV: "free"}) == "free"
+    assert C.declared_tier({C.TIER_ENV: "free", C.PAID_TIER_ENV: "1"}) is None      # a contradiction
+    assert C.declared_tier({C.TIER_ENV: "FREE"}) is None and C.declared_tier({C.PAID_TIER_ENV: "yes"}) is None
+    assert len(E.TIER_AMENDMENT) == 5 and any("latency" in t for t in E.TIER_AMENDMENT)
+
+
+def test_free_tier_runs_the_calls_records_the_tier_and_refuses_latency(tmp_path, monkeypatch, capsys):
+    cli, run, pre = _run_setup(tmp_path, monkeypatch)
+    monkeypatch.delenv(C.PAID_TIER_ENV)
+    monkeypatch.setenv(C.TIER_ENV, "free")
+    hashes = ["--expect-prompt-sha256", C.PROMPT_SCHEMA_SHA256, "--expect-request-sha256", C.REQUEST_SHA256]
+    out = tmp_path / "calls-run"
+    rc = cli.main(["calls", "--mode", "run", "--frames", str(run), "--preflight-frames", str(pre), "--out", str(out),
+                   *hashes])
+    assert rc == 0, capsys.readouterr().out
+    calls = json.loads((out / "calls.json").read_text())
+    assert calls["tier"] == "free" and calls["tier_amendment"] == list(E.TIER_AMENDMENT)
+    assert calls["prompt_schema_sha256"] == C.PROMPT_SCHEMA_SHA256 and calls["request_sha256"] == C.REQUEST_SHA256
+    pre_files = list(out.glob("preflight-*.json"))
+    assert pre_files and all(json.loads(f.read_text())["tier"] == "free" for f in pre_files)
+    n = len(FakeHttp.instances)
+    with pytest.raises(SystemExit, match="ER_OBS_TIER=free"):
+        cli.main(["latency", "--mode", "run", "--frames", str(run), "--preflight-frames", str(pre),
+                  "--out", str(tmp_path / "lat"), *hashes])
+    assert len(FakeHttp.instances) == n and not (tmp_path / "lat").exists()          # nothing was sent
+

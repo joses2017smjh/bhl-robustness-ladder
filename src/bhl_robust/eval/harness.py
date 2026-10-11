@@ -122,6 +122,10 @@ class HeadlessMujocoEnv:
         self.effort_limits = np.asarray(cfg.effort_limits, dtype=np.float32)
         self.action_indices = np.asarray(cfg.action_indices, dtype=int)
         self.default_joint_positions = np.asarray(cfg.default_joint_positions, dtype=np.float32)
+        # Waiter WBC deploys (a `waiter_wbc` block): the controller observes all joints and returns targets for all
+        # of them (legs from the policy, arms and grippers commanded). Every other deploy is unchanged.
+        self.full_joints = "waiter_wbc" in cfg
+        self.obs_indices = np.arange(self.num_joints) if self.full_joints else self.action_indices
 
     # -- state accessors, mirroring upstream's sensor layout ----------------
 
@@ -216,7 +220,10 @@ class HeadlessMujocoEnv:
 
     def step(self, target_joint_pos: np.ndarray) -> None:
         targets = np.zeros(self.num_joints, dtype=np.float32)
-        targets[self.action_indices] = target_joint_pos
+        if self.full_joints:
+            targets[:] = target_joint_pos
+        else:
+            targets[self.action_indices] = target_joint_pos
         for _ in range(self.substeps):
             torque = self.joint_kp * (targets - self._joint_pos()) + self.joint_kd * (-self._joint_vel())
             self.mj_data.ctrl[:] = np.clip(torque, -self.effort_limits, self.effort_limits)
@@ -231,8 +238,8 @@ class HeadlessMujocoEnv:
         return np.concatenate([
             self._base_quat(),
             self._base_ang_vel(),
-            self._joint_pos()[self.action_indices],
-            self._joint_vel()[self.action_indices],
+            self._joint_pos()[self.obs_indices],
+            self._joint_vel()[self.obs_indices],
             np.array([3.0], dtype=np.float32),   # RL control mode
             np.asarray(command, dtype=np.float32),
         ]).astype(np.float32)

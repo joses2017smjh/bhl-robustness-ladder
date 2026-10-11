@@ -1,0 +1,137 @@
+{
+ "verdict": "NEGATIVE",
+ "selected": null,
+ "line": "NEGATIVE: no seed qualified (s12 v2 PASS / QUALIFIED / Q2 PASS (push 6/60, Q2 falls 0, walk 1.879-1.934 m); s13 v2 FAIL / NOT QUALIFIED / Q2 FAIL (push 16/60, Q2 falls 0, walk 1.763-2.008 m); s14 v2 FAIL / NOT QUALIFIED / Q2 FAIL (push 22/60, Q2 falls 4, walk 0.135-1.88 m))",
+ "rule": "qualified = turn_test v2 PASS and cpu_turn_qualify QUALIFIED (variant waiter) and Q2 PASS; the qualified seed with the lowest push-fall count (tie: lowest seed) is selected; none -> NEGATIVE; and walk progress: the turn_test v2 walk and each of the 3 cpu_turn_qualify walks cover >= 1.5 m in their 6 s at 0.35 m/s; and Q3 stance PASS (scripts/waiter/stance_gate.py: 0 falls, drift <= 0.05 m and yaw <= 5 deg on >= 10/12); and Q4 standing manipulation PASS (scripts/waiter/stand_manip_gate.py: 0 falls, displacement <= 0.03 m, yaw <= 3 deg and pitch <= 3 deg on >= 10/12)",
+ "per_seed": {
+  "s12": {
+   "run": "waiter-wbc1e-s12",
+   "v2": "PASS",
+   "qualify": "QUALIFIED",
+   "q2": "PASS",
+   "q2_falls": 0,
+   "q2_drift_ok": 11,
+   "push_falls": 6,
+   "push_n": 60,
+   "qualify_detail": "turn 10/10 (need 9), walk 3/3 (need 2), push 6/60 = 0.1 (need <= 0.15); waiter-wbc1e-s12 is a single checkpoint, not a reliable recipe",
+   "push_with_load": {
+    "falls": 0,
+    "n": 20,
+    "protocol": "T1 carry held, 0.5 kg per hand, standing 12 s, 0.5 m/s shoves every 3 s, reset seeds 20-39 (reported, not gated)"
+   },
+   "qualified": false,
+   "inputs": {
+    "v2": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/turn-test-v2/waiter-wbc1e-s12.json",
+    "qualify": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/qualify/waiter-wbc1e-s12__qualify.json",
+    "q2": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/q2/waiter-wbc1e-s12.json",
+    "v2x": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/qualify/waiter-wbc1e-s12__v2x.json",
+    "q3": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/q3/waiter-wbc1e-s12.json",
+    "q4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/q4/waiter-wbc1e-s12.json"
+   },
+   "walk_progress": {
+    "min_m": 1.5,
+    "displacement_m": [
+     1.879,
+     1.909,
+     1.923,
+     1.934
+    ],
+    "n_walks": 4,
+    "protocol_ok": true,
+    "pass": true
+   },
+   "q3": "FAIL",
+   "q3_falls": 12,
+   "q3_still": 0,
+   "q4": "FAIL",
+   "q4_falls": 12,
+   "q4_ok": 0
+  },
+  "s13": {
+   "run": "waiter-wbc1e-s13",
+   "v2": "FAIL",
+   "qualify": "NOT QUALIFIED",
+   "q2": "FAIL",
+   "q2_falls": 0,
+   "q2_drift_ok": 7,
+   "push_falls": 16,
+   "push_n": 60,
+   "qualify_detail": "turn 10/10 (need 9), walk 0/3 (need 2), push 16/60 = 0.2667 (need <= 0.15); waiter-wbc1e-s13 is a single checkpoint, not a reliable recipe",
+   "push_with_load": {
+    "falls": 0,
+    "n": 20,
+    "protocol": "T1 carry held, 0.5 kg per hand, standing 12 s, 0.5 m/s shoves every 3 s, reset seeds 20-39 (reported, not gated)"
+   },
+   "qualified": false,
+   "inputs": {
+    "v2": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/turn-test-v2/waiter-wbc1e-s13.json",
+    "qualify": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/qualify/waiter-wbc1e-s13__qualify.json",
+    "q2": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/q2/waiter-wbc1e-s13.json",
+    "v2x": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/qualify/waiter-wbc1e-s13__v2x.json",
+    "q3": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/q3/waiter-wbc1e-s13.json",
+    "q4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/q4/waiter-wbc1e-s13.json"
+   },
+   "walk_progress": {
+    "min_m": 1.5,
+    "displacement_m": [
+     1.999,
+     1.763,
+     1.824,
+     2.008
+    ],
+    "n_walks": 4,
+    "protocol_ok": true,
+    "pass": true
+   },
+   "q3": "FAIL",
+   "q3_falls": 11,
+   "q3_still": 0,
+   "q4": "FAIL",
+   "q4_falls": 11,
+   "q4_ok": 0
+  },
+  "s14": {
+   "run": "waiter-wbc1e-s14",
+   "v2": "FAIL",
+   "qualify": "NOT QUALIFIED",
+   "q2": "FAIL",
+   "q2_falls": 4,
+   "q2_drift_ok": 7,
+   "push_falls": 22,
+   "push_n": 60,
+   "qualify_detail": "turn 10/10 (need 9), walk 2/3 (need 2), push 22/60 = 0.3667 (need <= 0.15); waiter-wbc1e-s14 is a single checkpoint, not a reliable recipe",
+   "push_with_load": {
+    "falls": 1,
+    "n": 20,
+    "protocol": "T1 carry held, 0.5 kg per hand, standing 12 s, 0.5 m/s shoves every 3 s, reset seeds 20-39 (reported, not gated)"
+   },
+   "qualified": false,
+   "inputs": {
+    "v2": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/turn-test-v2/waiter-wbc1e-s14.json",
+    "qualify": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/qualify/waiter-wbc1e-s14__qualify.json",
+    "q2": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/q2/waiter-wbc1e-s14.json",
+    "v2x": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/qualify/waiter-wbc1e-s14__v2x.json",
+    "q3": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/q3/waiter-wbc1e-s14.json",
+    "q4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1e/q4/waiter-wbc1e-s14.json"
+   },
+   "walk_progress": {
+    "min_m": 1.5,
+    "displacement_m": [
+     0.135,
+     1.523,
+     1.88,
+     1.773
+    ],
+    "n_walks": 4,
+    "protocol_ok": true,
+    "pass": false
+   },
+   "q3": "FAIL",
+   "q3_falls": 12,
+   "q3_still": 0,
+   "q4": "FAIL",
+   "q4_falls": 12,
+   "q4_ok": 0
+  }
+ }
+}

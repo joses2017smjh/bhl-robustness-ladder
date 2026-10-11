@@ -1,0 +1,109 @@
+{
+ "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-08_21-41-07_waiter-wbc1d-s9/exported/deploy.yaml",
+ "gate": "Q3 stance",
+ "rule": "PASS iff 0 falls in 12 (4 Q2 arm trajectories x seeds 0-2, 0.5 kg per hand, command 0, clock held at phase 0.5) and base drift <= 0.05 m and |yaw drift| <= 5 deg (t 1-8 s) on >= 10 of the 12",
+ "verdict": "FAIL",
+ "falls": 0,
+ "n": 12,
+ "n_ok": 3,
+ "episodes": [
+  {
+   "seed": 0,
+   "fell_at_s": null,
+   "drift_m": 0.0087,
+   "yaw_drift_deg": -7.15,
+   "ok": false,
+   "trajectory": "T1_carry"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": null,
+   "drift_m": 0.0479,
+   "yaw_drift_deg": 8.13,
+   "ok": false,
+   "trajectory": "T1_carry"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": null,
+   "drift_m": 0.0862,
+   "yaw_drift_deg": 3.26,
+   "ok": false,
+   "trajectory": "T1_carry"
+  },
+  {
+   "seed": 0,
+   "fell_at_s": null,
+   "drift_m": 0.0097,
+   "yaw_drift_deg": -6.51,
+   "ok": false,
+   "trajectory": "T2_reach"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": null,
+   "drift_m": 0.0482,
+   "yaw_drift_deg": 3.18,
+   "ok": true,
+   "trajectory": "T2_reach"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": null,
+   "drift_m": 0.0543,
+   "yaw_drift_deg": 2.61,
+   "ok": false,
+   "trajectory": "T2_reach"
+  },
+  {
+   "seed": 0,
+   "fell_at_s": null,
+   "drift_m": 0.0163,
+   "yaw_drift_deg": -9.28,
+   "ok": false,
+   "trajectory": "T3_raise"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": null,
+   "drift_m": 0.0488,
+   "yaw_drift_deg": 5.54,
+   "ok": false,
+   "trajectory": "T3_raise"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": null,
+   "drift_m": 0.0326,
+   "yaw_drift_deg": -0.46,
+   "ok": true,
+   "trajectory": "T3_raise"
+  },
+  {
+   "seed": 0,
+   "fell_at_s": null,
+   "drift_m": 0.0833,
+   "yaw_drift_deg": -2.14,
+   "ok": false,
+   "trajectory": "T4_random"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": null,
+   "drift_m": 0.0343,
+   "yaw_drift_deg": -3.34,
+   "ok": true,
+   "trajectory": "T4_random"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": null,
+   "drift_m": 0.0872,
+   "yaw_drift_deg": -5.82,
+   "ok": false,
+   "trajectory": "T4_random"
+  }
+ ],
+ "payload_kg_per_hand": 0.5,
+ "hold_step": 10
+}

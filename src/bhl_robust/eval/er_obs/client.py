@@ -8,17 +8,20 @@ solutions-20260930/campaign-m7-180-gemini/aidev_robotics-overview.txt:211-235 an
     POST https://generativelanguage.googleapis.com/v1beta/interactions
     headers: x-goog-api-key: <key>, Content-Type: application/json
     {"model": "gemini-robotics-er-2-preview",
-     "input": {"parts": [{"inlineData": {"mimeType": "image/png", "data": "<base64 PNG>"}}, {"text": TEXT}]},
-     "generation_config": {"thinking_config": {"thinking_level": "low"}}}
+     "input": [{"type": "image", "data": "<base64 PNG>", "mime_type": "image/png"}, {"type": "text", "text": TEXT}],
+     "generation_config": {"thinking_level": "low"}}
 
-Nothing else: no repo data, no paths, no seeds, no user data. Where the docs differ (the SDK examples use a flat
-`generation_config={"thinking_level": ...}` and a typed input list) the documented REST form is used. No response-
+Nothing else: no repo data, no paths, no seeds, no user data. REQUEST AMENDMENT (2026-10-05, before any scored call):
+the saved robotics REST example's shape was refused by the live service at two preflights on a throw-away smoke
+frame (job 21564188: HTTP 400 "Unknown parameter 'thinking_config' at 'generation_config'"; job 21564286: HTTP 400
+"The 'type' parameter is required at 'input'"). The body now follows the live Interactions API reference and its
+image-understanding REST example: a typed input list and the flat `generation_config.thinking_level` (the form all
+four SDK examples use); the answer is read from the model_output step's text (ANSWER_FIELD), since the REST JSON has
+no top-level output_text. No response-
 schema field is documented for this endpoint: the docs request a JSON format in the prompt ("adjust the requested JSON
 schema in the prompt", aidev_robotics-agentic.txt:806-809), so the schema travels in the text part, and
-PROMPT_SCHEMA_SHA256 covers that exact text and the schema. The answer is the response's `output_text` (the field all
-four documented SDKs expose: Python/JS `.output_text`, Java `outputText()`, Go `OutputText`). The request format is
-UNTESTED against the live service (no key exists yet): a preflight call on a smoke frame must pass before any scored
-call, and it records the raw response and the token usage.
+PROMPT_SCHEMA_SHA256 covers that exact text and the schema. The answer is read as ANSWER_FIELD says. A preflight
+call on a smoke frame must pass before any scored call, and it records the raw response and the token usage.
 
 The key travels only in the `x-goog-api-key` header; it is read from the file named by $GEMINI_API_KEY_FILE (default
 ~/.config/bhl/gemini_api_key) after `check_key_file` passes (regular file, owned by this user, mode 600, outside the
@@ -68,6 +71,8 @@ RAW_CAP_PREFLIGHT = 65536         # ... and for the preflight (the one place the
 KEY_ENV = "GEMINI_API_KEY_FILE"
 DEFAULT_KEY_FILE = "~/.config/bhl/gemini_api_key"
 PAID_TIER_ENV = "ER_OBS_PAID_TIER_CONFIRMED"
+TIER_ENV = "ER_OBS_TIER"          # tier amendment (2026-10-05): "paid" or "free", the operator's declaration
+TIERS = ("paid", "free")
 
 #: Clock and sleep of the real caller, resolved at call time (tests monkeypatch these module attributes; nothing in
 #: the CLI or the launchers can change them, so a real run is always paced in real time).
@@ -111,10 +116,10 @@ SCHEMA = {
 SCHEMA_LINE = "JSON schema of the answer: "
 TEXT = PROMPT + "\n" + SCHEMA_LINE + json.dumps(SCHEMA, sort_keys=True, ensure_ascii=True)
 THINKING_LEVEL = "low"
-GENERATION_CONFIG = {"thinking_config": {"thinking_level": THINKING_LEVEL}}
+GENERATION_CONFIG = {"thinking_level": THINKING_LEVEL}     # flat, as the SDKs (request amendment 2026-10-05)
 #: Left at the API's defaults (recorded): everything the documented REST example does not set.
-API_DEFAULTS_NOTE = ("only generation_config.thinking_config.thinking_level is set (the documented REST example's "
-                     "one config field); temperature, top_p, the output-token cap (documented output limit 65,536), "
+API_DEFAULTS_NOTE = ("only generation_config.thinking_level is set (the documented examples' one config field, in the "
+                     "SDKs' flat form: the live service refused the REST example's nested thinking_config); temperature, top_p, the output-token cap (documented output limit 65,536), "
                      "media resolution, safety settings, system instruction and interaction storage are not set (API "
                      "defaults); single-turn request; no tools")
 
@@ -146,6 +151,12 @@ def sha256_hex(b: bytes) -> str:
     return hashlib.sha256(b).hexdigest()
 
 
+#: Where the answer is read (request amendment 2026-10-05, the live Interactions API reference): the text items of
+#: every "model_output" step, joined in order; a top-level output_text (the SDKs' convenience property, not in the
+#: REST JSON) is read only when the response has no steps list.
+ANSWER_FIELD = ("steps[type=model_output].content[type=text].text, joined in order; top-level output_text only when "
+                "the response has no steps list")
+
 #: sha256 of the exact text part the model reads (prompt + schema line) and the schema the answer is checked against.
 PROMPT_SCHEMA_SHA256 = sha256_hex(canonical({"prompt_text": TEXT, "json_schema": SCHEMA}))
 
@@ -154,20 +165,19 @@ def build_request(png: bytes) -> dict:
     """The request body (documented REST shape): the PNG frame inline and the fixed text, with the fixed generation
     config. Nothing else."""
     return {"model": MODEL,
-            "input": {"parts": [
-                {"inlineData": {"mimeType": "image/png", "data": base64.b64encode(png).decode("ascii")}},
-                {"text": TEXT}]},
-            "generation_config": {"thinking_config": {"thinking_level": THINKING_LEVEL}}}
+            "input": [{"type": "image", "data": base64.b64encode(png).decode("ascii"), "mime_type": "image/png"},
+                      {"type": "text", "text": TEXT}],
+            "generation_config": dict(GENERATION_CONFIG)}
 
 
 def request_template() -> dict:
     """`build_request` with the image replaced by a placeholder, plus the endpoint, the answer field and the call
     policy (no key, no image)."""
     body = build_request(b"")
-    body["input"]["parts"][0]["inlineData"]["data"] = "<base64 PNG frame>"
+    body["input"][0]["data"] = "<base64 PNG frame>"
     return {"method": "POST", "endpoint": ENDPOINT, "headers": {"Content-Type": "application/json",
                                                                 "x-goog-api-key": "<from the key file; never stored>"},
-            "body": body, "answer_field": "output_text",
+            "body": body, "answer_field": ANSWER_FIELD,
             "answer_json": "one JSON object, bare or in exactly one ``` / ```json code block",
             "connect_timeout_s": CONNECT_TIMEOUT_S, "wall_timeout_s": TIMEOUT_S, "call_policy": CALL_POLICY,
             "api_defaults": API_DEFAULTS_NOTE}
@@ -192,6 +202,19 @@ def paid_tier_confirmed(environ=None) -> bool:
     """The operator's confirmation that the key is a PAID-tier, API-restricted key (ER_OBS_PAID_TIER_CONFIRMED=1)."""
     env = os.environ if environ is None else environ
     return env.get(PAID_TIER_ENV) == "1"
+
+
+def declared_tier(environ=None) -> str | None:
+    """The operator's tier declaration (tier amendment, 2026-10-05): "paid" iff ER_OBS_PAID_TIER_CONFIRMED=1 or
+    ER_OBS_TIER=paid, "free" iff ER_OBS_TIER=free; None (refuse) when neither is given, ER_OBS_TIER holds anything
+    else, or the two contradict each other (ER_OBS_PAID_TIER_CONFIRMED=1 with ER_OBS_TIER=free)."""
+    env = os.environ if environ is None else environ
+    raw = env.get(TIER_ENV)
+    if raw is not None and raw not in TIERS:
+        return None
+    if paid_tier_confirmed(env):
+        return None if raw == "free" else "paid"
+    return raw
 
 
 def _inside(path: Path, root: Path) -> bool:
@@ -340,11 +363,12 @@ class VirtualClock:
 # ------------------------------------------------------------------ mock service
 
 def _interaction(text: str | None = None, *, usage: bool = True, thought_tokens: int = 37) -> bytes:
-    """An interaction-shaped response body (mock): the documented answer field `output_text` plus a usage block (the
-    usage field name is not in the saved docs; the parser accepts any top-level key containing 'usage')."""
-    resp = {"id": "mock-interaction", "model": MODEL, "status": "completed", "object": "interaction"}
+    """An Interaction resource as the live REST API returns it (mock): a thought step, then the answer as one text
+    item of a model_output step, plus the usage block (total_thought_tokens etc.)."""
+    resp = {"id": "mock-interaction", "model": MODEL, "status": "completed", "object": "interaction",
+            "steps": [{"type": "thought", "summary": []}]}
     if text is not None:
-        resp["output_text"] = text
+        resp["steps"].append({"type": "model_output", "content": [{"type": "text", "text": text}]})
     if usage:
         resp["usage"] = {"total_input_tokens": 1290, "total_output_tokens": 61,
                          "total_thought_tokens": thought_tokens, "total_tokens": 1290 + 61 + thought_tokens}
@@ -416,11 +440,14 @@ class MockTransport:
 
     def __call__(self, body: bytes):
         req = json.loads(body)
-        parts = req.get("input", {}).get("parts", [])
+        items = req.get("input")
         if (set(req) != {"model", "input", "generation_config"} or req["model"] != MODEL
-                or req["generation_config"] != GENERATION_CONFIG or len(parts) != 2 or parts[1] != {"text": TEXT}):
+                or req["generation_config"] != GENERATION_CONFIG or not isinstance(items, list) or len(items) != 2
+                or items[1] != {"type": "text", "text": TEXT}
+                or set(items[0]) != {"type", "data", "mime_type"} or items[0]["type"] != "image"
+                or items[0]["mime_type"] != "image/png"):
             raise TransportError("mock: request differs from the fixed model/text/config")
-        png = base64.b64decode(parts[0]["inlineData"]["data"])
+        png = base64.b64decode(items[0]["data"])
         frame, variant = self.by_sha[sha256_hex(png)]
         key = (frame["id"], variant)
         n = self.attempts[key] = self.attempts.get(key, 0) + 1
@@ -538,6 +565,34 @@ def _body_text(body) -> str:
     return str(body)
 
 
+def answer_text(resp: dict) -> tuple:
+    """(text, None), (None, None) when there is no answer, or (None, error) for a malformed envelope: see
+    ANSWER_FIELD."""
+    steps = resp.get("steps")
+    if steps is None:
+        text = resp.get("output_text")
+        if text is not None and not isinstance(text, str):
+            return None, "output_text is not a string"
+        return text, None
+    if not isinstance(steps, list):
+        return None, "steps is not a list"
+    texts = []
+    for s in steps:
+        if not isinstance(s, dict):
+            return None, "a step is not an object"
+        if s.get("type") != "model_output":
+            continue
+        content = s.get("content")
+        if not isinstance(content, list):
+            return None, "a model_output step has no content list"
+        for c in content:
+            if isinstance(c, dict) and c.get("type") == "text":
+                if not isinstance(c.get("text"), str):
+                    return None, "a model_output text item is not a string"
+                texts.append(c["text"])
+    return ("".join(texts) if texts else None), None
+
+
 def classify(status: int | None, body: bytes | None, *, secret: str | None = None,
              raw_cap: int = RAW_CAP_CALL) -> dict:
     """Outcome of one response from its HTTP status and body: kind 'ok' (with 'answer') or a failure kind. Every
@@ -567,13 +622,13 @@ def classify(status: int | None, body: bytes | None, *, secret: str | None = Non
     for k in ("id", "model", "status"):
         if isinstance(resp.get(k), str):
             rec[f"response_{k}"] = resp[k][:200]
-    text = resp.get("output_text")
-    if text is None:
-        rec.update(kind="no_answer", error="no output_text in the response (no answer, a block, or a response shape "
-                                           "the saved docs do not describe)")
+    text, err = answer_text(resp)
+    if err:
+        rec.update(kind="bad_envelope", error=err)
         return rec
-    if not isinstance(text, str):
-        rec.update(kind="bad_envelope", error="output_text is not a string")
+    if text is None:
+        rec.update(kind="no_answer", error="no model_output text in the response (no answer, a block, or a response "
+                                           "shape the API reference does not describe)")
         return rec
     rec["text"] = redact(text, secret)[:2000]
     try:

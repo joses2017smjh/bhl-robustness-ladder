@@ -1,0 +1,47 @@
+{
+ "gate": "Waiter phase 4 (DSRL: SAC over the frozen VLA's initial noise)",
+ "verdict": "PASS",
+ "rule": "PASS iff the DSRL arm (the training run's final SAC checkpoint, deterministic latent) has more successes than the base arm (the same frozen VLA with i.i.d. N(0, I) noise, noise seed 0) AND the exact one-sided McNemar p <= 0.05; seeds 6000-6099, one episode per seed per arm, paired by seed; each layout's own instruction; 20 executed steps per 50-step chunk; WaiterEnv defaults (stance lock on, 90 s limit)",
+ "rule_file": "results/waiter-20261005/phase4-gate/rule_dsrl2.json",
+ "rule_sha256": "f50ce58d6cc4d0a90fce2b796eb3819ac92a02d16bdf9306b6d6ac348ab5fe2c",
+ "base": {
+  "successes": 23,
+  "n": 100,
+  "wilson95": [
+   0.1584,
+   0.3215
+  ],
+  "falls": 0
+ },
+ "dsrl": {
+  "successes": 63,
+  "n": 100,
+  "wilson95": [
+   0.5322,
+   0.7182
+  ],
+  "falls": 0
+ },
+ "paired": {
+  "both": 16,
+  "dsrl_only": 47,
+  "base_only": 7,
+  "neither": 30,
+  "mcnemar_p_one_sided": 1.1459321047624371e-08,
+  "alpha": 0.05
+ },
+ "reported_not_gated": {
+  "zero": {
+   "successes": 25,
+   "n": 100
+  },
+  "dsrl_stoch": {
+   "successes": 68,
+   "n": 100
+  }
+ },
+ "sac_ckpt_sha256": "c0cc0a375517eff182beadbbe64309934d49e263ae1ca24e04b54c9c50e3d796",
+ "inputs": {
+  "eval": "results/waiter-20261005/phase4-gate/scored_dsrl2.json"
+ }
+}

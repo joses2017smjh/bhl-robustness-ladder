@@ -199,7 +199,7 @@ def main() -> int:
     ap.add_argument("--deploy", type=Path, required=True)
     ap.add_argument("--upstream", type=Path, required=True)
     ap.add_argument("--cache-dir", type=Path, required=True)
-    ap.add_argument("--variant", choices=("biped", "humanoid"), required=True)
+    ap.add_argument("--variant", choices=("biped", "humanoid", "waiter"), required=True)
     ap.add_argument("--seconds", type=float, default=6.0)
     ap.add_argument("--warm", type=float, default=1.0)
     ap.add_argument("--seed", type=int, default=0)

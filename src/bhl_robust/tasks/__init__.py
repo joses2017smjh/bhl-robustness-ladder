@@ -605,3 +605,71 @@ for _id, _cfg, _runner in (
         disable_env_checker=True,
         kwargs={"env_cfg_entry_point": _cfg, "rsl_rl_cfg_entry_point": _runner},
     )
+
+# --- waiter-wbc ---
+# Waiter program phase 1 (2026-10-05; docs/WAITER_PROGRAM.md, SLURM_JOBS.md 'Predeclared now ... the Waiter
+# program'): the 24-DoF gripper whole-body controller, R1's recipe with the legs as the policy and the arms and
+# grippers following an upper-body command (waiter_env_cfg.HumanoidWaiterWbcCfg); trained from scratch by
+# slurm/repo20260923/gpu_waiter_wbc.sbatch. Guarded: a failure is printed and only this id is absent.
+try:
+    from bhl_robust.tasks import waiter_env_cfg as _waiter  # noqa: E402
+
+    gym.register(
+        id=_waiter.TASK_ID,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _waiter.HumanoidWaiterWbcCfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] waiter-wbc id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end waiter-wbc ---
+
+# --- waiter-wbc-curriculum ---
+# Waiter phase 1c (2026-10-07; SLURM_JOBS.md 'Predeclared now ... Waiter phase 1c'): phase 1's task + the disturbance
+# curriculum (waiter_env_cfg.HumanoidWaiterWbcCurriculumCfg). Guarded: a failure is printed and only this id is absent.
+try:
+    from bhl_robust.tasks import waiter_env_cfg as _waiter_c  # noqa: E402
+
+    gym.register(
+        id=_waiter_c.CURRICULUM_TASK_ID,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _waiter_c.HumanoidWaiterWbcCurriculumCfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] waiter-wbc-curriculum id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end waiter-wbc-curriculum ---
+# --- waiter-wbc-stance (2026-10-08; phase 1d, SLURM_JOBS.md "Predeclared now ... Waiter phase 1d") ---
+# Velocity-BHL-Waiter-WBC-Stance-v0: phase 1c + the trained stance (waiter_env_cfg.HumanoidWaiterWbcStanceCfg).
+# Guarded: a failure is printed and only this id is absent.
+try:
+    from bhl_robust.tasks import waiter_env_cfg as _waiter_d  # noqa: E402
+
+    gym.register(
+        id=_waiter_d.STANCE_TASK_ID,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _waiter_d.HumanoidWaiterWbcStanceCfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] waiter-wbc-stance id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end waiter-wbc-stance ---
+# --- waiter-wbc-stand (2026-10-10; phase 1e, SLURM_JOBS.md "Predeclared now ... Waiter phase 1e") ---
+# Velocity-BHL-Waiter-WBC-Stand-v0: phase 1d + no disturbances while standing + standing penalties
+# (waiter_env_cfg.HumanoidWaiterWbcStandCfg). Guarded: a failure is printed and only this id is absent.
+try:
+    from bhl_robust.tasks import waiter_env_cfg as _waiter_e  # noqa: E402
+
+    gym.register(
+        id=_waiter_e.STAND_TASK_ID,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _waiter_e.HumanoidWaiterWbcStandCfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] waiter-wbc-stand id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end waiter-wbc-stand ---

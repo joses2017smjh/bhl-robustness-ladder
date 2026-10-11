@@ -1,0 +1,50 @@
+{
+ "gate": "Waiter phase 4 (DSRL), run dsrl2, frozen 2026-10-10 17:43 before any seed 6000-6099 was run and before dsrl2 started",
+ "rule": "PASS iff the DSRL arm (the training run's final SAC checkpoint, deterministic latent) has more successes than the base arm (the same frozen VLA with i.i.d. N(0, I) noise, noise seed 0) AND the exact one-sided McNemar p <= 0.05; seeds 6000-6099, one episode per seed per arm, paired by seed; each layout's own instruction; 20 executed steps per 50-step chunk; WaiterEnv defaults (stance lock on, 90 s limit)",
+ "seed0": 6000,
+ "seed1": 6099,
+ "alpha": 0.05,
+ "exec_horizon": 20,
+ "noise_seed": 0,
+ "arms": [
+  "base",
+  "zero",
+  "dsrl",
+  "dsrl_stoch"
+ ],
+ "base_checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase3/runs/sft1/step_017000",
+ "base_model_sha256": "1161401826d2e313d938b9e687925c590325c31d4ed921b30df6d2b3d42b5179",
+ "run_dir": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase4/runs/dsrl2",
+ "train": {
+  "seeds": "5000-5999",
+  "n_envs": 16,
+  "seed": 0,
+  "max_decisions": 120000,
+  "max_wall_min": 420,
+  "args": {
+   "reward": "sparse",
+   "shaping": "none",
+   "fall_penalty": "0.0",
+   "gamma": "0.999",
+   "noise_mode": "repeat",
+   "active_dims": "15",
+   "action_magnitude": "1.0",
+   "obs_encoder": "vlm",
+   "feature_mode": "pooled",
+   "target_entropy": "0.0",
+   "init_alpha": "0.1",
+   "no_backup_entropy": "True",
+   "utd": "2.0",
+   "n_critics": "10",
+   "critic_reduction": "min",
+   "batch_size": "256",
+   "hidden": "1024",
+   "layers": "3",
+   "warmup_transitions": "3000",
+   "actor_delay": "1"
+  }
+ },
+ "deploy": "results/waiter-20261005/wbc1c/training/waiter-wbc1c-s7.deploy.yaml",
+ "scorer": "scripts/waiter/dsrl/phase4_gate.py",
+ "replaces": "rule.json (run dsrl1: NEGATIVE, not scored; see dsrl1_negative.json). The test, its seeds and its threshold are unchanged."
+}
