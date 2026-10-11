@@ -4303,3 +4303,17 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
 - For these two seeds the validity question does not change the outcome: invalid by the check as written, and not qualified by the gates under the provisional reading. Seed 12 finishes training about 23:15 and is evaluated the same way.
 
 **What the pilot's noise policy changes (2026-10-10 20:56; dev seeds 1300-1347, the same 48 layouts as the base trace above; not scored).** `trace_base.py --arm dsrl --run-dir pilot_e0` (`21763456`, cn-gpu; deterministic latent, 20 executed steps; file `phase4/runs/pilot_e0/trace_dev1300_dsrl.json`): **36/48** successes (the base policy on these layouts, at 10 executed steps: 20/48). First tumbler picked up: **the target 47 times, the other tumbler 0 times**, none once (base: 23, 17, 8). The 12 failures are later in the task: 7 lost the tumbler from the tray on the way, 3 reached the table without setting the tray down, 1 ran out of time, 1 picked nothing. After picking the target the pilot policy succeeded 36/47 (the base policy 20/23). So the noise policy fixed the choice of tumbler; it did not improve the carrying, which at these settings went worse than the base policy's.
+
+**Waiter phase 1e verdict (recorded 2026-10-10 23:36): NEGATIVE on both readings; phase 2 keeps s7 and the stance lock; the lock-removal test is not run.**
+- As predeclared: training `21756463` is invalid for all three seeds (the std log line read 1.01 in the first ten iterations; seed 12 finished 23:25, iterations 6 and 8), so no seed is gated.
+- Provisional evaluation (std line accepted up to 1.01; export `21766662`, gates `21766663` for seed 12; `results/waiter-20261005/wbc1e/selection.json`, sha256 d4f078f5...): **NEGATIVE, no seed qualified.**
+
+| seed | turn test v2 | qualify (turn / walk / push falls) | Q2 | walk progress (m) | Q3 stance | Q4 standing manipulation |
+|---|---|---|---|---|---|---|
+| s12 | PASS | QUALIFIED (10/10, 3/3, 6/60) | PASS (0 falls, 11/12) | 1.88-1.93 | FAIL (12/12 falls) | FAIL (12/12 falls) |
+| s13 | FAIL | NOT QUALIFIED (10/10, 0/3, 16/60) | FAIL (7/12) | 1.76-2.01 | FAIL (11/12 falls) | FAIL (11/12 falls) |
+| s14 | FAIL | NOT QUALIFIED (10/10, 2/3, 22/60) | FAIL (4 falls, 7/12) | 0.14-1.88 | FAIL (12/12 falls) | FAIL (12/12 falls) |
+
+- Seed 12 walks and turns as well as s7 (push falls 6/60 against 4/60) and still falls within 0.9-1.1 s of the clock being held, 24 times out of 24. All three seeds do. Phase 1e's design (standing envs without pushes or hand forces, plus the anchor and tilt penalties) produced controllers that cannot stand in MuJoCo with the held clock at all; phase 1d (pushes kept, no penalties) stood without falling but shuffled, and s7 (no stance training) stands without falling and creeps. The sim-to-sim gap for a quiet standing posture is the open problem; removing the standing disturbances made it worse.
+- Because both readings give NEGATIVE, the question of whether to accept the 1.01 log values does not change this phase's outcome. The launcher's check should still be fixed before any later phase (read the clamped std, or accept one optimizer step): noted as an open item, not changed for scoring here.
+- Committed with this entry: the wbc1e gate records, selection.json, the three stamped deploy.yaml files, training JSONs (with `provisional: true`, `std_log_tol: 0.0101`) and gzipped training logs.
