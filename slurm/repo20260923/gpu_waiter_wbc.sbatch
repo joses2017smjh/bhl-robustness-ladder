@@ -106,6 +106,13 @@ TLOG="${TMPDIR:-/tmp}/waiter-wbc-$JOBTAG.log"; : > "$TLOG"
 existing=$(find_run || true)
 if [ "$SMOKE" != 1 ] && [ -n "$existing" ] && [ -f "$existing/$FINAL_CKPT" ]; then
     echo "already trained: $existing (reused)"
+    # WAITER_TLOG_REUSE=<the run's original training log>: the log-based checks below (std bound, curriculum) are
+    # skipped when the log is empty; with this they run on a reused run as well (2026-10-10, phase 1e provisional path)
+    if [ -n "${WAITER_TLOG_REUSE:-}" ]; then
+        grep -aq "| $RUN_NAME | task=$TASK |" "$WAITER_TLOG_REUSE" || { echo "WAITER-WBC RESULT: FAIL ($RUN_NAME: WAITER_TLOG_REUSE is not this run's log)"; exit 1; }
+        cp "$WAITER_TLOG_REUSE" "$TLOG"
+        echo "log-based checks run on $WAITER_TLOG_REUSE"
+    fi
 else
     bhl_exec "$REPO/slurm/inner/train.sh" 2>&1 | tee "$TLOG" || true
     echo "=== training done: $(date) ==="
@@ -117,10 +124,18 @@ grep -q "waiter-wbc id NOT registered" "$TLOG" && why="$why task-not-registered"
 [ "$VARIANT" = 1e ] && grep -q "waiter-wbc-stand id NOT registered" "$TLOG" && why="$why stand-task-not-registered"
 if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
     grep -q "\[overlay\] action-noise std bounded to \[0.001, 1.0\]" "$TLOG" || why="$why std-bound-overlay-missing"
-    "$PYH" - "$TLOG" <<'PY' || why="$why noise-std-above-1.0"
+    # WAITER_STD_LOG_TOL (default 1e-6 = the check as predeclared): the log line shows the std parameter after the
+    # iteration's last optimizer step, before the next clamp, so it can read up to 1.01 while every use is <= 1.0
+    # (SLURM_JOBS.md 2026-10-10 "phase 1e training fails its validity check as written"). A larger tolerance is a
+    # PROVISIONAL reading and is recorded in the run's training JSON.
+    "$PYH" - "$TLOG" "${WAITER_STD_LOG_TOL:-1e-6}" <<'PY' || why="$why noise-std-above-1.0"
 import re, sys
 v = [float(x) for x in re.findall(r"Mean action noise std:\s*([0-9.]+)", open(sys.argv[1], errors="ignore").read())]
-sys.exit(0 if v and max(v) <= 1.0 + 1e-6 else 1)
+tol = float(sys.argv[2])
+over = [i for i, x in enumerate(v) if x > 1.0 + 1e-6]
+print(f"std check: max logged {max(v) if v else None}; {len(over)} of {len(v)} iterations above 1.0 (iterations {over[:8]}); "
+      f"tolerance {tol}{'' if tol <= 1e-6 else ' (PROVISIONAL: above the predeclared 1e-6)'}")
+sys.exit(0 if v and max(v) <= 1.0 + tol else 1)
 PY
 fi
 if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ]; } && [ -n "$run" ] && [ -s "$TLOG" ]; then
@@ -171,12 +186,16 @@ print('stand check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/para
 fi
 if [ -z "$why" ]; then
     "$PYH" - "$RES/training/$RUN_NAME.json" "$RUN_NAME" "$TASK_ID" "$SEED" "$FINAL_CKPT" "$run" "$JOBTAG" "$TLOG" <<'PY'
-import json, re, sys
+import json, os, re, sys
 out, run_name, task, seed, ckpt, run, job, tlog = sys.argv[1:]
 log = open(tlog, errors="ignore").read()
 its = [int(m) for m in re.findall(r"Learning iteration (\d+)/", log)]
+std = [float(x) for x in re.findall(r"Mean action noise std:\s*([0-9.]+)", log)]
+tol = float(os.environ.get("WAITER_STD_LOG_TOL", "1e-6"))
 json.dump({"run": run_name, "task": task, "seed": int(seed), "final_ckpt": ckpt, "run_dir": run, "job": job,
-           "logged_iterations": (max(its) + 1) if its else None}, open(out, "w"), indent=1)
+           "logged_iterations": (max(its) + 1) if its else None, "max_logged_std": max(std) if std else None,
+           "std_log_tol": tol, "provisional": tol > 1e-6, "training_log_reused": os.environ.get("WAITER_TLOG_REUSE")},
+          open(out, "w"), indent=1)
 PY
     cp "$TLOG" "$RES/training/$RUN_NAME.$JOBTAG.log" 2>/dev/null || true
     export RUN_DIR=$(basename "$run")
