@@ -1,0 +1,111 @@
+[vla] host=dgxh-2.hpc.engr.oregonstate.edu job=21772925 root=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
+[vla] git=a6353bc dirty=667
+[vla] gpu: NVIDIA H100 80GB HBM3, 81559 MiB, 610.57.04
+[vla] torch 2.7.0+cu128 cuda 12.8 available True lerobot 0.4.3 transformers 4.57.6 numpy 2.4.6
+[vla] cache=/tmp/waiter-vla-cache-21772925 free= 1.4T
+[render-check] dgxh-2 seed_3000: mean |diff| 0.001, pixels over 8 levels 0.00%, max 1 -> ok
+[render-check] dgxh-2 seed_3001: mean |diff| 0.000, pixels over 8 levels 0.00%, max 1 -> ok
+[render-check] PASS (MUJOCO_GL=egl, CUDA_VISIBLE_DEVICES=0)
+Reducing the number of VLM layers to 16 ...
+Loading weights from local directory
+[rollout] 1/100 seed=7006 iid=5 success=True term=success steps=594 stage<=6
+[rollout] 2/100 seed=7002 iid=5 success=True term=success steps=600 stage<=6
+[rollout] 3/100 seed=7005 iid=5 success=True term=success steps=628 stage<=6
+[rollout] 4/100 seed=7004 iid=5 success=True term=success steps=633 stage<=6
+[rollout] 5/100 seed=7000 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 6/100 seed=7001 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 7/100 seed=7003 iid=5 success=False term=env_done steps=1125 stage<=4
+[rollout] 8/100 seed=7007 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 9/100 seed=7008 iid=5 success=True term=success steps=622 stage<=6
+[rollout] 10/100 seed=7009 iid=5 success=True term=success steps=657 stage<=6
+[rollout] 11/100 seed=7011 iid=5 success=True term=success steps=648 stage<=6
+[rollout] 12/100 seed=7010 iid=5 success=False term=env_done steps=1125 stage<=1
+[rollout] 13/100 seed=7015 iid=5 success=True term=success steps=648 stage<=6
+[rollout] 14/100 seed=7012 iid=5 success=True term=success steps=680 stage<=6
+[rollout] 15/100 seed=7017 iid=5 success=True term=success steps=588 stage<=6
+[rollout] 16/100 seed=7013 iid=5 success=True term=success steps=756 stage<=6
+[rollout] 17/100 seed=7014 iid=5 success=False term=env_done steps=1125 stage<=1
+[rollout] 18/100 seed=7016 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 19/100 seed=7018 iid=5 success=False term=env_done steps=1125 stage<=4
+[rollout] 20/100 seed=7021 iid=5 success=True term=success steps=608 stage<=6
+[rollout] 21/100 seed=7019 iid=5 success=True term=success steps=682 stage<=6
+[rollout] 22/100 seed=7022 iid=5 success=True term=success steps=651 stage<=6
+[rollout] 23/100 seed=7023 iid=5 success=True term=success steps=651 stage<=6
+[rollout] 24/100 seed=7024 iid=5 success=True term=success steps=573 stage<=6
+[rollout] 25/100 seed=7020 iid=5 success=True term=success steps=1051 stage<=6
+[rollout] 26/100 seed=7025 iid=5 success=True term=success steps=573 stage<=6
+[rollout] 27/100 seed=7027 iid=5 success=True term=success steps=624 stage<=6
+[rollout] 28/100 seed=7026 iid=5 success=True term=success steps=669 stage<=6
+[rollout] 29/100 seed=7028 iid=5 success=True term=success steps=650 stage<=6
+[rollout] 30/100 seed=7029 iid=5 success=True term=success steps=665 stage<=6
+[rollout] 31/100 seed=7031 iid=5 success=True term=success steps=615 stage<=6
+[rollout] 32/100 seed=7033 iid=5 success=True term=success steps=681 stage<=6
+[rollout] 33/100 seed=7030 iid=5 success=False term=env_done steps=1125 stage<=1
+[rollout] 34/100 seed=7034 iid=5 success=True term=success steps=646 stage<=6
+[rollout] 35/100 seed=7035 iid=5 success=True term=success steps=633 stage<=6
+[rollout] 36/100 seed=7036 iid=5 success=True term=success steps=647 stage<=6
+[rollout] 37/100 seed=7032 iid=5 success=False term=env_done steps=1125 stage<=1
+[rollout] 38/100 seed=7039 iid=5 success=True term=success steps=586 stage<=6
+[rollout] 39/100 seed=7041 iid=5 success=True term=success steps=580 stage<=6
+[rollout] 40/100 seed=7038 iid=5 success=True term=success steps=837 stage<=6
+[rollout] 41/100 seed=7037 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 42/100 seed=7040 iid=5 success=True term=success steps=672 stage<=6
+[rollout] 43/100 seed=7043 iid=5 success=True term=success steps=623 stage<=6
+[rollout] 44/100 seed=7042 iid=5 success=True term=success steps=878 stage<=6
+[rollout] 45/100 seed=7044 iid=5 success=True term=success steps=676 stage<=6
+[rollout] 46/100 seed=7047 iid=5 success=True term=success steps=605 stage<=6
+[rollout] 47/100 seed=7045 iid=5 success=True term=success steps=728 stage<=6
+[rollout] 48/100 seed=7048 iid=5 success=True term=success steps=678 stage<=6
+[rollout] 49/100 seed=7050 iid=5 success=True term=success steps=644 stage<=6
+[rollout] 50/100 seed=7051 iid=5 success=True term=success steps=613 stage<=6
+[rollout] 51/100 seed=7052 iid=5 success=True term=success steps=620 stage<=6
+[rollout] 52/100 seed=7046 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 53/100 seed=7049 iid=5 success=False term=env_done steps=1125 stage<=4
+[rollout] 54/100 seed=7053 iid=5 success=True term=success steps=603 stage<=6
+[rollout] 55/100 seed=7056 iid=5 success=True term=success steps=659 stage<=6
+[rollout] 56/100 seed=7055 iid=5 success=True term=success steps=723 stage<=6
+[rollout] 57/100 seed=7054 iid=5 success=True term=success steps=784 stage<=6
+[rollout] 58/100 seed=7058 iid=5 success=True term=success steps=637 stage<=6
+[rollout] 59/100 seed=7057 iid=5 success=True term=success steps=792 stage<=6
+[rollout] 60/100 seed=7059 iid=5 success=True term=success steps=628 stage<=6
+[rollout] 61/100 seed=7060 iid=5 success=True term=success steps=623 stage<=6
+[rollout] 62/100 seed=7061 iid=5 success=True term=success steps=610 stage<=6
+[rollout] 63/100 seed=7062 iid=5 success=True term=success steps=636 stage<=6
+[rollout] 64/100 seed=7063 iid=5 success=True term=success steps=656 stage<=6
+[rollout] 65/100 seed=7064 iid=5 success=True term=success steps=657 stage<=6
+[rollout] 66/100 seed=7065 iid=5 success=True term=success steps=623 stage<=6
+[rollout] 67/100 seed=7067 iid=5 success=True term=success steps=612 stage<=6
+[rollout] 68/100 seed=7066 iid=5 success=True term=success steps=639 stage<=6
+[rollout] 69/100 seed=7070 iid=5 success=True term=success steps=611 stage<=6
+[rollout] 70/100 seed=7072 iid=5 success=True term=success steps=635 stage<=6
+[rollout] 71/100 seed=7071 iid=5 success=True term=success steps=653 stage<=6
+[rollout] 72/100 seed=7068 iid=5 success=False term=env_done steps=1125 stage<=1
+[rollout] 73/100 seed=7069 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 74/100 seed=7074 iid=5 success=True term=success steps=607 stage<=6
+[rollout] 75/100 seed=7077 iid=5 success=True term=success steps=601 stage<=6
+[rollout] 76/100 seed=7073 iid=5 success=False term=env_done steps=1125 stage<=1
+[rollout] 77/100 seed=7075 iid=5 success=False term=env_done steps=1125 stage<=1
+[rollout] 78/100 seed=7079 iid=5 success=True term=success steps=616 stage<=6
+[rollout] 79/100 seed=7080 iid=5 success=True term=success steps=609 stage<=6
+[rollout] 80/100 seed=7081 iid=5 success=True term=success steps=609 stage<=6
+[rollout] 81/100 seed=7076 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 82/100 seed=7078 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 83/100 seed=7082 iid=5 success=True term=success steps=608 stage<=6
+[rollout] 84/100 seed=7083 iid=5 success=True term=success steps=635 stage<=6
+[rollout] 85/100 seed=7085 iid=5 success=True term=success steps=648 stage<=6
+[rollout] 86/100 seed=7088 iid=5 success=True term=success steps=657 stage<=6
+[rollout] 87/100 seed=7089 iid=5 success=True term=success steps=646 stage<=6
+[rollout] 88/100 seed=7090 iid=5 success=True term=success steps=650 stage<=6
+[rollout] 89/100 seed=7084 iid=5 success=False term=env_done steps=1125 stage<=1
+[rollout] 90/100 seed=7086 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 91/100 seed=7087 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 92/100 seed=7093 iid=5 success=True term=success steps=683 stage<=6
+[rollout] 93/100 seed=7091 iid=5 success=False term=env_done steps=1125 stage<=3
+[rollout] 94/100 seed=7094 iid=5 success=True term=success steps=647 stage<=6
+[rollout] 95/100 seed=7095 iid=5 success=True term=success steps=631 stage<=6
+[rollout] 96/100 seed=7096 iid=5 success=True term=success steps=639 stage<=6
+[rollout] 97/100 seed=7098 iid=5 success=True term=success steps=620 stage<=6
+[rollout] 98/100 seed=7092 iid=5 success=False term=env_done steps=1125 stage<=4
+[rollout] 99/100 seed=7097 iid=5 success=True term=success steps=730 stage<=6
+[rollout] 100/100 seed=7099 iid=5 success=True term=success steps=635 stage<=6
+[rollout] COMPLETE 76/100 success; latency {'n': 5128, 'mean_ms': 135.04307856106755, 'p50_ms': 131.02028251159936, 'p95_ms': 159.82703871559352, 'max_ms': 497.7769000688568}
