@@ -1,0 +1,45 @@
+{
+  "observed_utc": "2026-10-11T21:40:15.640144+00:00",
+  "scheduler": "21778527|RUNNING|0:0|00:11:16|cn-b01\n21778567|RUNNING|0:0|00:11:16|cn-b01\n21778625|COMPLETED|0:0|00:09:42|cn-gpu5\n21778690|RUNNING|0:0|00:09:35|cn-b01\n21778787|RUNNING|0:0|00:01:15|cn-gpu5\n",
+  "controllers": {
+    "native": {
+      "status": "RUNNING",
+      "updated_utc": "2026-10-11T21:39:58.018742+00:00",
+      "complete_jobs": 6,
+      "active_jobs": 1,
+      "last_submitted": "21778787",
+      "error": null
+    },
+    "terrain": {
+      "status": "RUNNING",
+      "updated_utc": "2026-10-11T21:39:50.469955+00:00",
+      "complete_jobs": 5,
+      "active_jobs": 1,
+      "last_submitted": "21778527",
+      "error": null
+    }
+  },
+  "scope": "First new node-local packaging worker completed and verified publication; native controller autonomously submitted next shard. Full campaign conclusions remain pending.",
+  "files": {
+    "completion.json": {
+      "sha256": "771828bc8f05f32bb0edd43bdddf319ded64ed03036c3e5696b2afae1297fb4d",
+      "bytes": 1005
+    },
+    "remote-result.json": {
+      "sha256": "a98648d1bb33babe2226848debf43f4b16520f76fff45061855891b2c7a2b5d5",
+      "bytes": 1452
+    },
+    "launch.json": {
+      "sha256": "69836fbfd89e5084be5f6179f6979694812be1c61f4b61b143ade74cdea89c94",
+      "bytes": 4550
+    },
+    "campaign_result.json": {
+      "sha256": "1ff9c8b9107913a1f8b30985573be2eedd7e9ff37b76cf4ca1edc161c79e0731",
+      "bytes": 38908
+    },
+    "transport-start.json": {
+      "sha256": "071ce0719ac6e60b29f5259e0f09761eb31a87f9e20a379f4dc1b233f2ec8363",
+      "bytes": 668
+    }
+  }
+}

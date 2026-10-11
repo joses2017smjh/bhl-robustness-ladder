@@ -88,3 +88,18 @@ recovery, transport and report paths. Independent review checked frozen-source
 identity, recovery scope and storage handling. Controller and
 observer launch receipts record their actual scheduler status; queued work is
 not claimed as completed simulation.
+
+## First complete cycle under the replacement controller
+
+At 14:40 PDT, native worker **21778625** had completed all ten visual-blackout
+episodes, finished packaging on node-local storage, and freshly download-verified
+its publication. Slurm recorded `COMPLETED 0:0` in **9 minutes 42 seconds**. Its
+971 source/input files matched the original frozen archive. Controller 21778567
+then autonomously submitted **21778787**, which was running the next condition.
+Native retained progress is now **60/200 cells**; terrain still has **260/480
+archived episodes** with its next shard running. Neither full campaign is complete.
+
+[Worker completion, raw-publication receipt and controller continuation](../results/simulation-completion-20261011/first-transport-completion/verification.json)
+verify the new operational path through execution, publication and the next
+submission. [Full GitHub regression and physics workflow](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/38176721952)
+checks implementation commit `18a95b9`; its current status is available at that link.
