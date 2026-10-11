@@ -132,7 +132,7 @@ def test_split_spec():
 def test_seed_guards_never_admit_scored_ranges():
     wd.check_training_seed(3000, synthetic=False, allow_dev_seeds=False)
     wd.check_training_seed(3999, synthetic=False, allow_dev_seeds=False)
-    for bad in (4000, 4099, 6000, 2000, 5000):
+    for bad in (4000, 4099, 6000, 2000, 5000, 7000, 7099):       # 7000-7099: phase 3b's scored range (2026-10-11)
         with pytest.raises(wd.EpisodeError):
             wd.check_training_seed(bad, synthetic=False, allow_dev_seeds=True)
         with pytest.raises(wd.EpisodeError):
@@ -298,7 +298,7 @@ def test_env_worker_codec_and_subprocess_roundtrip():
         env.close()
 
 
-def test_rollout_helpers():
+def test_rollout_helpers(tmp_path):
     a = np.zeros(15, np.float32)
     a[0], a[1], a[2], a[13], a[14] = 1.0, -1.0, 0.1, 1.5, -0.2
     c, clipped = rollout_vla.clip_action(a)
@@ -315,6 +315,16 @@ def test_rollout_helpers():
         with pytest.raises(SystemExit):
             rollout_vla.check_seeds(seeds, purpose, env)
     rollout_vla.check_seeds([4000, 4099], "scored", "waiter")
+    rollout_vla.check_seeds([7000, 7099], "scored", "waiter")       # phase 3b's range
+    for seeds in ([4000, 7000], [7100], [6000]):                    # mixed ranges, outside, another phase's range
+        with pytest.raises(SystemExit):
+            rollout_vla.check_seeds(seeds, "scored", "waiter")
+    gate = tmp_path / "rule.json"
+    gate.write_text(json.dumps({"seed0": 7000, "seed1": 7099}))
+    rollout_vla.check_gate_seeds(list(range(7000, 7100)), gate)
+    for seeds in (list(range(4000, 4100)), list(range(7000, 7050))):  # the gate file names its own seeds
+        with pytest.raises(SystemExit):
+            rollout_vla.check_gate_seeds(seeds, gate)
     assert rollout_vla.parse_instruction_ids("T0, 3") == ["T0", 3]
     assert rollout_vla.parse_instruction_ids("") == [None]
 

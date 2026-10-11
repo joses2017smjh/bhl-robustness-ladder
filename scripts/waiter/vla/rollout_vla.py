@@ -13,7 +13,8 @@ contract amendment; 60 s before), or ``--max-steps``. The waiter env runs with i
 declared simulation fixture) holds the base whenever the commanded base velocity is ~0; ``--free-base`` turns it off.
 
 Seed hygiene: ``--purpose dev`` only accepts the dev range 1000-1999 (stub env: made-up ids outside every contract
-range). ``--purpose scored`` only accepts 4000-4099, needs ``--gate`` (frozen gate file, sha256 recorded) and never
+range). ``--purpose scored`` only accepts a scored range (4000-4099, or 7000-7099 for phase 3b) and exactly the
+seeds its gate file names, needs ``--gate`` (frozen gate file, sha256 recorded) and never
 overwrites an existing result.
 
 Envs run in-process (``--workers 0``) or one subprocess per env (``vla_env_worker.py``), optionally under another
@@ -176,8 +177,19 @@ def check_seeds(seeds, purpose, env_kind):
             elif name != "dev":
                 raise SystemExit(f"--purpose dev only accepts seeds 1000-1999; {s} is {name}")
         elif purpose == "scored":
-            if env_kind != "waiter" or name != "phase3_scored":
-                raise SystemExit(f"--purpose scored only accepts the waiter env and seeds 4000-4099; {s} is {name}")
+            if env_kind != "waiter" or name not in wd.SCORED_RANGES:
+                raise SystemExit(f"--purpose scored only accepts the waiter env and a scored range "
+                                 f"(4000-4099 or 7000-7099); {s} is {name}")
+    if purpose == "scored" and len({wd.seed_range_name(s) for s in seeds}) != 1:
+        raise SystemExit("--purpose scored: the seeds must come from one scored range")
+
+
+def check_gate_seeds(seeds, gate_path) -> None:
+    """A scored run covers exactly the seeds its frozen gate file names (seed0..seed1)."""
+    rule = json.loads(Path(gate_path).read_text())
+    if "seed0" in rule and "seed1" in rule and list(seeds) != list(range(int(rule["seed0"]), int(rule["seed1"]) + 1)):
+        raise SystemExit(f"--purpose scored: the gate file is for seeds {rule['seed0']}-{rule['seed1']}, "
+                         f"not {seeds[0]}-{seeds[-1]} ({len(seeds)} seeds)")
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -215,6 +227,7 @@ def main(argv=None):
     if args.purpose == "scored":
         if args.gate is None or not args.gate.is_file():
             raise SystemExit("--purpose scored requires an existing --gate file (frozen before evaluation)")
+        check_gate_seeds(seeds, args.gate)
         gate = {"path": str(args.gate.resolve()), "sha256": hashlib.sha256(args.gate.read_bytes()).hexdigest()}
     if args.out.exists():
         raise SystemExit(f"refusing to overwrite {args.out}")

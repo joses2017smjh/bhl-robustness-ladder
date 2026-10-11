@@ -63,6 +63,7 @@ listing episodes with their seeds, success and sha256.
 | 4000-4099 | phase 3 scored evaluation (held-out layouts; plus held-out instruction templates) |
 | 5000-5999 | phase 4 RL training layouts |
 | 6000-6099 | phase 4 scored evaluation (never used before it) |
+| 7000-7099 | phase 3b scored evaluation (range added 2026-10-11 for the retrained phase 3 policy; never used before it) |
 
 ## Amendment 2026-10-09 (before any phase 2 gate run or demonstration; recorded in SLURM_JOBS.md)
 

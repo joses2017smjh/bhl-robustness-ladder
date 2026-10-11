@@ -54,9 +54,11 @@ SEED_RANGES = {
     "phase3_scored": (4000, 4099),
     "phase4_train": (5000, 5999),
     "phase4_scored": (6000, 6099),
+    "phase3b_scored": (7000, 7099),      # added 2026-10-11 (phase 3b; SLURM_JOBS.md), never used before its scored run
 }
 TRAINING_RANGES = ("phase2_demos",)  # + "dev" with allow_dev_seeds
-NEVER_TRAIN_RANGES = ("phase2_gate", "phase3_scored", "phase4_train", "phase4_scored")
+NEVER_TRAIN_RANGES = ("phase2_gate", "phase3_scored", "phase4_train", "phase4_scored", "phase3b_scored")
+SCORED_RANGES = ("phase3_scored", "phase3b_scored")      # what rollout_vla.py --purpose scored may run
 
 
 class EpisodeError(ValueError):
