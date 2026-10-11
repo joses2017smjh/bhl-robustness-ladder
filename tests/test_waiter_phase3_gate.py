@@ -72,3 +72,21 @@ def test_held_out_run_must_use_the_held_out_template(tmp_path):
     with pytest.raises(SystemExit) as e:
         _run(tmp_path, _result(sha, [None], 60), _result(sha, [5], 60, held_out_all=False), rule)
     assert "not template T5" in str(e.value)
+
+
+def test_model_hash_decides_between_runs_that_share_a_step(tmp_path):
+    """Phase 3b: sft2 and sft2_early both have a step_040000 on the same data; only the weights' hash differs."""
+    rule, _ = _rule(tmp_path)
+    r = json.loads(rule.read_text())
+    r.update(checkpoint_model_sha256="good", require_model_sha256=True)
+    rule.write_text(json.dumps(r))
+    sha = hashlib.sha256(rule.read_bytes()).hexdigest()
+    own = _result(sha, [None], 45, checkpoint_model_sha256="good")
+    held = _result(sha, [5], 25, held_out_all=True, checkpoint_model_sha256="good")
+    assert _run(tmp_path, own, held, rule) == 0
+    (tmp_path / "verdict.json").unlink()
+    for bad in ("other", None):                                  # another run's weights, or a result without a hash
+        with pytest.raises(SystemExit, match="model hash"):
+            _run(tmp_path, dict(own, checkpoint_model_sha256=bad), held, rule)
+    assert not (tmp_path / "verdict.json").exists()
+

@@ -39,6 +39,12 @@ def check_run(res: dict, rule: dict, rule_sha: str, name: str, want_ids) -> list
     if Path(str(res.get("checkpoint"))).name != Path(rule["checkpoint"]).name or \
             res.get("checkpoint_data_hash") != rule["checkpoint_data_hash"]:
         p.append(f"{name}: checkpoint {res.get('checkpoint')} is not the frozen one")
+    # phase 3b (2026-10-11): several runs share a step number and the data, so the weights' hash decides. Results
+    # written before the rollout tool recorded it (phase 3) carry none and are accepted unless the rule requires it.
+    sha = res.get("checkpoint_model_sha256")
+    if (sha is not None and rule.get("checkpoint_model_sha256") and sha != rule["checkpoint_model_sha256"]) or \
+            (sha is None and rule.get("require_model_sha256")):
+        p.append(f"{name}: model hash {sha} is not the frozen checkpoint's")
     seeds = list(range(rule["seed0"], rule["seed1"] + 1))
     if list(res.get("seeds", [])) != seeds:
         p.append(f"{name}: seeds are not {rule['seed0']}-{rule['seed1']}")

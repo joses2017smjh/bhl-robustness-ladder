@@ -250,6 +250,10 @@ def main(argv=None):
                                                   n_action_steps=args.n_action_steps, num_steps=args.flow_steps)
     policy.eval()
     k_exec, chunk = cfg.n_action_steps, cfg.chunk_size
+    # a scored run records which weights it ran (two runs can share a step number and a data hash)
+    model_sha = None
+    if args.purpose == "scored" and meta.get("checkpoint"):
+        model_sha = wd.sha256_file(Path(meta["checkpoint"]) / "model.safetensors")
 
     env_kwargs = {"render": True, "fixed_base": args.fixed_base}
     if args.env == "waiter":
@@ -269,6 +273,7 @@ def main(argv=None):
     result = {
         "synthetic": synthetic, "env": args.env, "purpose": args.purpose, "gate": gate,
         "checkpoint": meta.get("checkpoint"), "checkpoint_step": meta.get("step"),
+        "checkpoint_model_sha256": model_sha,
         "checkpoint_data_hash": meta.get("data_hash"), "checkpoint_trained_on_synthetic": meta.get("synthetic"),
         "chunk_size": chunk, "n_action_steps": k_exec, "flow_steps": cfg.num_steps, "control_hz": wd.CONTROL_HZ,
         "seeds": seeds, "instruction_ids": parse_instruction_ids(args.instruction_ids),
