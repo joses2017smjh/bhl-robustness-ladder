@@ -1,0 +1,56 @@
+{
+  "schema": "bhl-fusion-occlusion-design-v1",
+  "families": [
+    "panel_background",
+    "staggered_posts"
+  ],
+  "conditions": [
+    "clear",
+    "partial",
+    "heavy"
+  ],
+  "geometry_seeds": {
+    "smoke": [
+      740000
+    ],
+    "dev": [
+      741000,
+      741001
+    ],
+    "test": [
+      742000,
+      742001
+    ]
+  },
+  "frames": {
+    "smoke": 2,
+    "dev": 12,
+    "test": 12
+  },
+  "occluder_half_width_m": {
+    "clear": 0.0,
+    "partial": 0.08,
+    "heavy": 0.24
+  },
+  "viewpoint_x_m": [
+    0.0,
+    0.2
+  ],
+  "viewpoint_y_m": [
+    -0.12,
+    0.12
+  ],
+  "viewpoint_yaw_rad": 0.0,
+  "image_width": 320,
+  "image_height": 240,
+  "maximum_cell_bytes": 100663296,
+  "maximum_campaign_bytes": 2147483648,
+  "minimum_share_free_bytes": 8589934592,
+  "smoke_gate": {
+    "minimum_occluded_pixels_per_nonclear_cell": 1,
+    "minimum_foundation_cuda_kernel_events": 1
+  },
+  "independence_unit": "geometry_seed shared across families; all families, conditions and viewpoints remain in one seed cluster",
+  "test_policy": "all thresholds and geometry frozen before smoke; no tuning from development or held-out outputs",
+  "scope": "simulation static-viewpoint occlusion controls; no motion, native SLAM or physical performance claim"
+}

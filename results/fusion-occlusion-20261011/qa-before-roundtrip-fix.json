@@ -1,0 +1,21 @@
+{
+  "scientific_protocol_sha256": "8b7199666c4843cab47a3a78f5ccfc282b50b8b71e1e99947376f39c7e689535",
+  "seconds": 0.26,
+  "slurm_allocation": "21767958",
+  "source_sha256": {
+    "protocols/fusion_occlusion_20261011.json": "3b4fa8e1ea6eca590887f2c12034490dfc804b25838a6cbf57993f2b2b226736",
+    "scripts/bench/fusion_occlusion_campaign.py": "ec80332ce0543965e9f8c10f8a00165cd264ba3c821539a71caeba935816ebc1",
+    "scripts/bench/fusion_occlusion_serial.py": "bb25c037de8211d0a64ba6ca34ae46c8adfc5db7a0e47fbca601f5a60349ca18",
+    "scripts/bench/sensor_campaign.py": "103c2dbcf69d0844b327f88c72d0fc24168c2c9954526d12c8397ae7aa1e03fa",
+    "scripts/bench/sensor_capture.py": "d854dc05778fd08ceeb182776da025d1a54f263dae427a7c1364e38950172756",
+    "src/bhl_robust/research/fusion_occlusion.py": "191085a49fde7609c48c6a89fc2b49d0affbf6c947445bcf382836e0c688d840",
+    "src/bhl_robust/research/pose_metrics.py": "de28970a53cda9defac9238f99e2df6648c8d3af76b289042a698a839743b582",
+    "src/bhl_robust/research/stereo_benchmark.py": "0a76bfea4ae3b34af631bc62595a73dccfa9c0cef9435d0a50073f9d82ad73a7",
+    "src/bhl_robust/research/stereo_consistency.py": "1bf4771a946076e7471a1ead6768d79dd15b136bc749c4cc9055688732254e46",
+    "src/bhl_robust/stereo_depth.py": "0941ee24d11f2171b52170c0e4aa031ee691dc20e7546b1bd18005667595c4a3"
+  },
+  "status": "PASS",
+  "test_command": "pytest -q -p no:cacheprovider tests/test_fusion_occlusion.py",
+  "test_scope": "puremetric/geometry/split/gate/sourcepins, noGPUexecutionclaim",
+  "tests": 14
+}

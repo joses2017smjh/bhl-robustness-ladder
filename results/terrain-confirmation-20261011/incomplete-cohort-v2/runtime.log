@@ -1,0 +1,23 @@
+{"actor": "dr-default-s0", "terrain": "small_steps", "seed": 420000, "arm": "regulated", "success": true, "fell": false, "collision": false, "native_tracked_frames": 186}
+{"actor": "dr-default-s0", "terrain": "small_steps", "seed": 420000, "arm": "baseline", "success": false, "fell": false, "collision": false, "native_tracked_frames": 112}
+{"actor": "dr-default-s0", "terrain": "small_steps", "seed": 420000, "arm": "heading", "success": true, "fell": false, "collision": false, "native_tracked_frames": 186}
+{"actor": "dr-default-s0", "terrain": "small_steps", "seed": 420001, "arm": "regulated", "success": true, "fell": false, "collision": false, "native_tracked_frames": 186}
+{"actor": "dr-default-s0", "terrain": "small_steps", "seed": 420001, "arm": "baseline", "success": true, "fell": false, "collision": false, "native_tracked_frames": 112}
+{"actor": "dr-default-s0", "terrain": "small_steps", "seed": 420001, "arm": "heading", "success": true, "fell": false, "collision": false, "native_tracked_frames": 186}
+{"actor": "dr-default-s0", "terrain": "small_steps", "seed": 420002, "arm": "regulated", "success": true, "fell": false, "collision": false, "native_tracked_frames": 186}
+Traceback (most recent call last):
+  File "/tmp/bhl-h34-terrain-confirmation-dr-default-s0-small_steps-20261011-21768408-0i5yfy7s/source/scripts/bench/terrain_confirmation_campaign.py", line 290, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/bhl-h34-terrain-confirmation-dr-default-s0-small_steps-20261011-21768408-0i5yfy7s/source/scripts/bench/terrain_confirmation_campaign.py", line 269, in main
+    row = run_episode(p, actor, runtime, terrain, seed, arm, args.output / stem, seconds)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-terrain-confirmation-dr-default-s0-small_steps-20261011-21768408-0i5yfy7s/source/scripts/bench/terrain_confirmation_campaign.py", line 130, in run_episode
+    row = development.run_episode(p, actor, runtime, terrain, seed, arm, output, seconds)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-terrain-confirmation-dr-default-s0-small_steps-20261011-21768408-0i5yfy7s/source/scripts/bench/terrain_methods_campaign.py", line 256, in run_episode
+    computed = client.track(scan, imu)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-terrain-confirmation-dr-default-s0-small_steps-20261011-21768408-0i5yfy7s/source/src/bhl_robust/research/native_lio.py", line 221, in track
+    raise ValueError("native scan timestamp must be its original tail, after the previous scan")
+ValueError: native scan timestamp must be its original tail, after the previous scan

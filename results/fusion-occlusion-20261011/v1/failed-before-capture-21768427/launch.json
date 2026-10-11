@@ -1,0 +1,56 @@
+{
+  "archive_sha256": "3c2c661cab8148371bd9d1a488246730f632f91aea35776a9a19cb9ca3187b6d",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r:/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r",
+    "--bind",
+    "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/source:/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/protocol.json:/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/work",
+    "--bind",
+    "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/inputs:/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/inputs:ro",
+    "--nv",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/source/scripts/bench/fusion_occlusion_serial.py",
+    "--protocol",
+    "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/protocol.json"
+  ],
+  "host": "cn-gpu6.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}"
+    ],
+    "entrypoint": "scripts/bench/fusion_occlusion_serial.py",
+    "env": {
+      "MUJOCO_GL": "egl"
+    },
+    "kind": "evaluate",
+    "max_output_mb": 2048,
+    "name": "fusion-occlusion-gated-20261011",
+    "resources": {
+      "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+      "cpus": 4,
+      "gpus": 1,
+      "memory_gb": 16,
+      "partition": "gpu,dgxh,ampere",
+      "requeue": false,
+      "time_limit": "02:00:00"
+    }
+  },
+  "job_id": "21768427",
+  "scratch": "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r",
+  "source_files_verified": 955,
+  "started_utc": "2026-10-11T09:51:32.139618+00:00"
+}

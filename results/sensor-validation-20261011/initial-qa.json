@@ -1,0 +1,12 @@
+{
+  "schema": "bhl-local-validation-receipt-v1",
+  "allocated_job": "21767958.13",
+  "scope": "Initial full regression before follow-up smoke fixes and later clock regressions",
+  "passed": 2921,
+  "failed": 4,
+  "skipped": 83,
+  "subtests_passed": 10,
+  "seconds": 709.14,
+  "failures": "Four existing tests used inherited /scratch/sanchej7/tmp, a symlink to /raid; strict path checks correctly rejected it. Retest uses TMPDIR=/tmp; no path-protection changes.",
+  "raw_log": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/qa/pytest-initial.log"
+}

@@ -1,0 +1,2697 @@
+{
+  "additional_source": [
+    "src/bhl_robust/__init__.py",
+    "src/bhl_robust/compat.py",
+    "src/bhl_robust/gripper_asset.py",
+    "src/bhl_robust/latency_history.py",
+    "src/bhl_robust/limb_partition.py",
+    "src/bhl_robust/maze_recovery.py",
+    "src/bhl_robust/quat_order.py",
+    "src/bhl_robust/reach_band.py",
+    "src/bhl_robust/robust_sensing.py",
+    "src/bhl_robust/sensor_io.py",
+    "src/bhl_robust/sensors_rig.py",
+    "src/bhl_robust/stereo_depth.py",
+    "src/bhl_robust/waiter_asset.py",
+    "src/bhl_robust/audit/__init__.py",
+    "src/bhl_robust/audit/asset_consistency.py",
+    "src/bhl_robust/cloth/__init__.py",
+    "src/bhl_robust/cloth/adapt.py",
+    "src/bhl_robust/cloth/arm_fk.py",
+    "src/bhl_robust/cloth/balance.py",
+    "src/bhl_robust/cloth/controller.py",
+    "src/bhl_robust/cloth/cost.py",
+    "src/bhl_robust/cloth/env.py",
+    "src/bhl_robust/cloth/folding_data.py",
+    "src/bhl_robust/cloth/garments.py",
+    "src/bhl_robust/cloth/kinematics.py",
+    "src/bhl_robust/cloth/ladder.py",
+    "src/bhl_robust/cloth/layout.py",
+    "src/bhl_robust/cloth/mesh.py",
+    "src/bhl_robust/cloth/metrics.py",
+    "src/bhl_robust/cloth/observations.py",
+    "src/bhl_robust/cloth/randomization.py",
+    "src/bhl_robust/cloth/reach.py",
+    "src/bhl_robust/cloth/rewards.py",
+    "src/bhl_robust/cloth/robot.py",
+    "src/bhl_robust/cloth/schedule.py",
+    "src/bhl_robust/cloth/scripted.py",
+    "src/bhl_robust/cloth/success.py",
+    "src/bhl_robust/cloth/sweep.py",
+    "src/bhl_robust/curricula/__init__.py",
+    "src/bhl_robust/curricula/push.py",
+    "src/bhl_robust/eval/__init__.py",
+    "src/bhl_robust/eval/cmd_filter.py",
+    "src/bhl_robust/eval/coop_replay.py",
+    "src/bhl_robust/eval/depth.py",
+    "src/bhl_robust/eval/depth_controller.py",
+    "src/bhl_robust/eval/gait_clock.py",
+    "src/bhl_robust/eval/harness.py",
+    "src/bhl_robust/eval/heading_observable.py",
+    "src/bhl_robust/eval/history_latency.py",
+    "src/bhl_robust/eval/imu_sim.py",
+    "src/bhl_robust/eval/inspection_maze.py",
+    "src/bhl_robust/eval/livery.py",
+    "src/bhl_robust/eval/mjcf_assets.py",
+    "src/bhl_robust/eval/multi_robot.py",
+    "src/bhl_robust/eval/panels.py",
+    "src/bhl_robust/eval/random_maze.py",
+    "src/bhl_robust/eval/replay_gate.py",
+    "src/bhl_robust/eval/rig_views.py",
+    "src/bhl_robust/eval/run_eval.py",
+    "src/bhl_robust/eval/scripted_carry.py",
+    "src/bhl_robust/eval/team_airlock.py",
+    "src/bhl_robust/eval/team_sensors.py",
+    "src/bhl_robust/eval/terrain_field.py",
+    "src/bhl_robust/eval/video.py",
+    "src/bhl_robust/eval/waiter_env.py",
+    "src/bhl_robust/eval/waiter_scene.py",
+    "src/bhl_robust/eval/waiter_wbc.py",
+    "src/bhl_robust/eval/er_obs/__init__.py",
+    "src/bhl_robust/eval/er_obs/client.py",
+    "src/bhl_robust/eval/er_obs/labels.py",
+    "src/bhl_robust/eval/er_obs/render.py",
+    "src/bhl_robust/eval/er_obs/verdict.py",
+    "src/bhl_robust/fusion/__init__.py",
+    "src/bhl_robust/fusion/attitude.py",
+    "src/bhl_robust/mission/__init__.py",
+    "src/bhl_robust/mission/approach_debug.py",
+    "src/bhl_robust/mission/env.py",
+    "src/bhl_robust/mission/layout.py",
+    "src/bhl_robust/mission/overnight.py",
+    "src/bhl_robust/mission/policy.py",
+    "src/bhl_robust/mission/sensors.py",
+    "src/bhl_robust/mission/state.py",
+    "src/bhl_robust/navgym/__init__.py",
+    "src/bhl_robust/navgym/env.py",
+    "src/bhl_robust/research/__init__.py",
+    "src/bhl_robust/research/native_lio.py",
+    "src/bhl_robust/research/native_livo.py",
+    "src/bhl_robust/research/native_orb.py",
+    "src/bhl_robust/research/native_orb_inertial.py",
+    "src/bhl_robust/research/perceptive_policy.py",
+    "src/bhl_robust/research/pose_metrics.py",
+    "src/bhl_robust/research/replay_contract.py",
+    "src/bhl_robust/research/sensor_faults.py",
+    "src/bhl_robust/research/sensor_geometry.py",
+    "src/bhl_robust/research/sensor_map_methods.py",
+    "src/bhl_robust/research/stereo_benchmark.py",
+    "src/bhl_robust/research/stereo_consistency.py",
+    "src/bhl_robust/research/stereo_recovery.py",
+    "src/bhl_robust/research/stereo_recovery_metrics.py",
+    "src/bhl_robust/research/terrain_methods.py",
+    "src/bhl_robust/research/terrain_traversal.py",
+    "src/bhl_robust/research/terrain_confirmation.py",
+    "src/bhl_robust/research/navigation_sensor_controls.py",
+    "src/bhl_robust/research/fusion_occlusion.py",
+    "src/bhl_robust/research/sensor_validation.py",
+    "src/bhl_robust/research/outcome_health.py",
+    "src/bhl_robust/tasks/__init__.py",
+    "src/bhl_robust/tasks/arms_env_cfg.py",
+    "src/bhl_robust/tasks/arms_terrain_env_cfg.py",
+    "src/bhl_robust/tasks/cloth_sort_env_cfg.py",
+    "src/bhl_robust/tasks/cloth_sort_mdp.py",
+    "src/bhl_robust/tasks/collision_env_cfg.py",
+    "src/bhl_robust/tasks/coop_crew_env_cfg.py",
+    "src/bhl_robust/tasks/coop_crew_generated.py",
+    "src/bhl_robust/tasks/coop_depth_env_cfg.py",
+    "src/bhl_robust/tasks/coop_hard_env_cfg.py",
+    "src/bhl_robust/tasks/coop_lift_env_cfg.py",
+    "src/bhl_robust/tasks/coop_lift_mdp.py",
+    "src/bhl_robust/tasks/depth_env_cfg.py",
+    "src/bhl_robust/tasks/furniture.py",
+    "src/bhl_robust/tasks/gait_clock_mdp.py",
+    "src/bhl_robust/tasks/heading_observable_env_cfg.py",
+    "src/bhl_robust/tasks/history_latency_env_cfg.py",
+    "src/bhl_robust/tasks/ice_control_env_cfg.py",
+    "src/bhl_robust/tasks/limb_marl.py",
+    "src/bhl_robust/tasks/maze_distill.py",
+    "src/bhl_robust/tasks/maze_env_cfg.py",
+    "src/bhl_robust/tasks/maze_mdp.py",
+    "src/bhl_robust/tasks/maze_recovery_env_cfg.py",
+    "src/bhl_robust/tasks/maze_robust.py",
+    "src/bhl_robust/tasks/perceptive_env_cfg.py",
+    "src/bhl_robust/tasks/platecross_env_cfg.py",
+    "src/bhl_robust/tasks/platecross_terrain.py",
+    "src/bhl_robust/tasks/push_env_cfg.py",
+    "src/bhl_robust/tasks/rgb_env_cfg.py",
+    "src/bhl_robust/tasks/scan_env_cfg.py",
+    "src/bhl_robust/tasks/stand4_mdp.py",
+    "src/bhl_robust/tasks/stand5_mdp.py",
+    "src/bhl_robust/tasks/stand_mdp.py",
+    "src/bhl_robust/tasks/symmetry.py",
+    "src/bhl_robust/tasks/task_v2_env_cfg.py",
+    "src/bhl_robust/tasks/task_v2_mdp.py",
+    "src/bhl_robust/tasks/terrain_env_cfg.py",
+    "src/bhl_robust/tasks/tote_env_cfg.py",
+    "src/bhl_robust/tasks/turn_command.py",
+    "src/bhl_robust/tasks/waiter_env_cfg.py",
+    "src/bhl_robust/tasks/waiter_stand_mdp.py",
+    "src/bhl_robust/tasks/waiter_wbc_mdp.py",
+    "src/bhl_robust/terrains/__init__.py",
+    "src/bhl_robust/terrains/bumpy.py",
+    "src/bhl_robust/terrains/ice.py",
+    "src/bhl_robust/terrains/ice_layout.py",
+    "src/bhl_robust/terrains/maze.py",
+    "src/bhl_robust/terrains/maze_layout.py",
+    "src/bhl_robust/terrains/stairs.py",
+    "src/bhl_robust/usd/__init__.py",
+    "src/bhl_robust/usd/eval_terrain.py",
+    "src/bhl_robust/usd/lab_scene.py",
+    "scripts/bench/arms_tier3_check.py",
+    "scripts/bench/camera_smoke.py",
+    "scripts/bench/cloth_probe.py",
+    "scripts/bench/cloth_sort_bench.py",
+    "scripts/bench/cloth_sort_isaac_bench.py",
+    "scripts/bench/cloth_sort_smoke.py",
+    "scripts/bench/compare_replay_hosts.py",
+    "scripts/bench/compose_panels.py",
+    "scripts/bench/coop_depth_validate.py",
+    "scripts/bench/coop_scripted_carry.py",
+    "scripts/bench/coop_sim2sim.py",
+    "scripts/bench/crew_diagnose.py",
+    "scripts/bench/crew_validate.py",
+    "scripts/bench/depth_bench_summary.py",
+    "scripts/bench/depth_raycast.py",
+    "scripts/bench/depth_validate.py",
+    "scripts/bench/er_obs.py",
+    "scripts/bench/er_obs_local.py",
+    "scripts/bench/h34_campaign.py",
+    "scripts/bench/h34_collect.py",
+    "scripts/bench/h34_finalize.py",
+    "scripts/bench/h3_train.py",
+    "scripts/bench/h4_campaign_summary.py",
+    "scripts/bench/h4_qualification.py",
+    "scripts/bench/h4_train.py",
+    "scripts/bench/history_latency_eval.py",
+    "scripts/bench/ice_depth_freeze.py",
+    "scripts/bench/ice_exposure_probe.py",
+    "scripts/bench/ice_gate.py",
+    "scripts/bench/ice_placement_probe.py",
+    "scripts/bench/inspection_maze.py",
+    "scripts/bench/lab_traverse.py",
+    "scripts/bench/m7_crossing_diag.py",
+    "scripts/bench/marl_gate.py",
+    "scripts/bench/marl_terrain_check.py",
+    "scripts/bench/maze_checkpoint.py",
+    "scripts/bench/maze_explore.py",
+    "scripts/bench/maze_panels.py",
+    "scripts/bench/maze_record.py",
+    "scripts/bench/maze_recovery_probe.py",
+    "scripts/bench/media_provenance.py",
+    "scripts/bench/methods_archive.py",
+    "scripts/bench/methods_dispatch.py",
+    "scripts/bench/methods_finalize.py",
+    "scripts/bench/methods_finalize_bootstrap.py",
+    "scripts/bench/methods_remote_campaign.py",
+    "scripts/bench/methods_sensor_capture.py",
+    "scripts/bench/multi_race_summary.py",
+    "scripts/bench/native_build_campaign.py",
+    "scripts/bench/native_livo_methods_campaign.py",
+    "scripts/bench/native_navigation_campaign.py",
+    "scripts/bench/native_navigation_collect.py",
+    "scripts/bench/native_navigation_observe.py",
+    "scripts/bench/native_navigation_outcome_audit.py",
+    "scripts/bench/native_orb_after_build.py",
+    "scripts/bench/native_orb_relink_campaign.py",
+    "scripts/bench/native_replay_allocation_step.py",
+    "scripts/bench/native_run_audit.py",
+    "scripts/bench/native_run_publish.py",
+    "scripts/bench/native_slam_campaign.py",
+    "scripts/bench/native_slam_collect.py",
+    "scripts/bench/native_slam_plot.py",
+    "scripts/bench/native_stereo_navigation_campaign.py",
+    "scripts/bench/native_stereo_navigation_demo.py",
+    "scripts/bench/native_stereo_navigation_statistics.py",
+    "scripts/bench/navgym_capture_pose.py",
+    "scripts/bench/navgym_cmd_filter.py",
+    "scripts/bench/navgym_diagnose.py",
+    "scripts/bench/navgym_scripted_gate.py",
+    "scripts/bench/navgym_train.py",
+    "scripts/bench/navigation_confirmation.py",
+    "scripts/bench/navigation_development.py",
+    "scripts/bench/perceptive_methods_collect.py",
+    "scripts/bench/perceptive_train.py",
+    "scripts/bench/pick_seed.py",
+    "scripts/bench/platecross_select.py",
+    "scripts/bench/port_audit.py",
+    "scripts/bench/pose_research.py",
+    "scripts/bench/promote_native_runtime_campaign.py",
+    "scripts/bench/render_probe.py",
+    "scripts/bench/rtx60_probe.py",
+    "scripts/bench/rtx_probe.py",
+    "scripts/bench/sensor_campaign.py",
+    "scripts/bench/sensor_capture.py",
+    "scripts/bench/sensor_dataset_audit.py",
+    "scripts/bench/sensor_demo.py",
+    "scripts/bench/sensor_fault_campaign.py",
+    "scripts/bench/sensor_followup_deferred.py",
+    "scripts/bench/sensor_followup_observer.py",
+    "scripts/bench/sensor_geometry_research.py",
+    "scripts/bench/sensor_methods_campaign.py",
+    "scripts/bench/sensor_methods_collect.py",
+    "scripts/bench/sim_regression.py",
+    "scripts/bench/slam_capture_campaign.py",
+    "scripts/bench/stand3_replay.py",
+    "scripts/bench/stereo_consistency_campaign.py",
+    "scripts/bench/stereo_diagnostics.py",
+    "scripts/bench/stereo_diagnostics_plot.py",
+    "scripts/bench/stereo_inertial_navigation_campaign.py",
+    "scripts/bench/stereo_methods_campaign.py",
+    "scripts/bench/stereo_methods_collect.py",
+    "scripts/bench/stereo_pitch_probe.py",
+    "scripts/bench/stereo_research.py",
+    "scripts/bench/submit_navigation_confirmation.py",
+    "scripts/bench/task_gate.py",
+    "scripts/bench/task_v2_smoke.py",
+    "scripts/bench/task_v2_spawn_diag.py",
+    "scripts/bench/team_airlock.py",
+    "scripts/bench/terrain_gate.py",
+    "scripts/bench/turn_clip.py",
+    "scripts/bench/terrain_level.py",
+    "scripts/bench/terrain_methods_campaign.py",
+    "scripts/bench/terrain_traversal_campaign.py",
+    "scripts/bench/torch_cu126.py",
+    "scripts/bench/turn_diagnose.py",
+    "scripts/bench/turn_test.py",
+    "scripts/bench/turngait_hold_verdict.py",
+    "scripts/bench/turngait_r12_verdict.py",
+    "scripts/bench/verify_navigation_confirmation.py",
+    "scripts/bench/verify_replay_bundle.py",
+    "scripts/bench/vision_throughput.py",
+    "scripts/bench/terrain_confirmation_campaign.py",
+    "scripts/bench/native_sensor_controls_campaign.py",
+    "scripts/bench/sensor_validation.py",
+    "scripts/bench/fusion_occlusion_campaign.py",
+    "scripts/bench/terrain_confirmation_dispatch.py",
+    "scripts/bench/outcome_health.py",
+    "scripts/bench/fusion_occlusion_serial.py",
+    "scripts/bench/native_sensor_controls_dispatch.py",
+    "scripts/bench/fusion_occlusion_publish.py",
+    "scripts/native/lio_build.py",
+    "scripts/native/lio_notices.py",
+    "scripts/native/lio_replay.py",
+    "scripts/native/livo_build.py",
+    "scripts/native/livo_replay.py",
+    "scripts/native/orb_build.py",
+    "scripts/native/orb_diagnostics_build.py",
+    "scripts/native/orb_inertial_replay.py",
+    "scripts/native/orb_runtime_repack.py"
+  ],
+  "campaign_id": "native-sensor-controls-v1-20261011",
+  "input_files": {
+    "actors/dr-default-s0/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/deploy.yaml",
+      "sha256": "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71"
+    },
+    "actors/dr-default-s0/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/policy.onnx",
+      "sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1"
+    },
+    "runtime/lio-runtime.tar.gz": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/artifacts/lio-runtime-inference.tar.gz",
+      "sha256": "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4"
+    },
+    "runtime/orb-runtime.tar.gz": {
+      "path": "/tmp/native-controls-runtime-20261011/orb-stereo-inertial-runtime-v1-20261010.tar.gz",
+      "sha256": "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516"
+    },
+    "scientific-protocol.json": {
+      "path": "/tmp/bhl-storage-results-20261011/protocols/native-sensor-controls-20261011.json",
+      "sha256": "8a637200e93618766a2ac259d2d97a410beeeab98f7b7f470d0fcd11036664f0"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "smoke"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "smoke",
+      "max_output_mb": 2048,
+      "name": "native-controls-smoke-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730000",
+        "--condition",
+        "nominal"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730000-c00-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730000",
+        "--condition",
+        "camera_2_5hz"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730000-c01-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730000",
+        "--condition",
+        "camera_10hz"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730000-c02-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730000",
+        "--condition",
+        "dark_exposure_gain"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730000-c03-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730000",
+        "--condition",
+        "causal_40ms_exposure"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730000-c04-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730000",
+        "--condition",
+        "visual_blackout"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730000-c05-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730000",
+        "--condition",
+        "lidar_quarter_returns"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730000-c06-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730000",
+        "--condition",
+        "lidar_extrinsic_error"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730000-c07-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730000",
+        "--condition",
+        "imu_clock_plus80ms"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730000-c08-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730000",
+        "--condition",
+        "gyro_bias"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730000-c09-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730001",
+        "--condition",
+        "nominal"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730001-c00-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730001",
+        "--condition",
+        "camera_2_5hz"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730001-c01-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730001",
+        "--condition",
+        "camera_10hz"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730001-c02-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730001",
+        "--condition",
+        "dark_exposure_gain"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730001-c03-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730001",
+        "--condition",
+        "causal_40ms_exposure"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730001-c04-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730001",
+        "--condition",
+        "visual_blackout"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730001-c05-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730001",
+        "--condition",
+        "lidar_quarter_returns"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730001-c06-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730001",
+        "--condition",
+        "lidar_extrinsic_error"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730001-c07-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730001",
+        "--condition",
+        "imu_clock_plus80ms"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730001-c08-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--orb-runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--orb-runtime-sha256",
+        "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+        "--lio-runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--lio-runtime-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--protocol",
+        "{campaign}/inputs/scientific-protocol.json",
+        "--output",
+        "{output}",
+        "--phase",
+        "development",
+        "--qualified-smoke",
+        "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/qualified-smoke.json",
+        "--seed",
+        "730001",
+        "--condition",
+        "gyro_bias"
+      ],
+      "entrypoint": "scripts/bench/native_sensor_controls_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl",
+        "OMP_NUM_THREADS": "1"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "native-controls-s730001-c09-20261011",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scientific_scope": {
+    "arm_development_gate": "nominal smoke has a native accepted pose, full horizon and no fall/contact/nonfinite; inertial arm additionally actually initializes",
+    "arms": [
+      "stereo",
+      "stereo_inertial",
+      "lidar_inertial",
+      "permanent_stop",
+      "verified_lio_recovery"
+    ],
+    "conditions": {
+      "camera_10hz": {
+        "camera_hz": 10.0
+      },
+      "camera_2_5hz": {
+        "camera_hz": 2.5
+      },
+      "causal_40ms_exposure": {
+        "camera_hz": 5.0,
+        "exposure_s": 0.04,
+        "exposure_samples": 3
+      },
+      "dark_exposure_gain": {
+        "camera_hz": 5.0,
+        "exposure_gain": 0.25
+      },
+      "gyro_bias": {
+        "camera_hz": 5.0,
+        "sensor_fault": "gyro_z_bias_after5s"
+      },
+      "imu_clock_plus80ms": {
+        "camera_hz": 5.0,
+        "sensor_fault": "imu_clock_plus80ms"
+      },
+      "lidar_extrinsic_error": {
+        "camera_hz": 5.0,
+        "sensor_fault": "lidar_extrinsic_yaw2deg_x2cm"
+      },
+      "lidar_quarter_returns": {
+        "camera_hz": 5.0,
+        "sensor_fault": "lidar_keep_quarter"
+      },
+      "nominal": {
+        "camera_hz": 5.0
+      },
+      "visual_blackout": {
+        "blackout_end_s": 16.0,
+        "blackout_start_s": 12.0,
+        "camera_hz": 5.0
+      }
+    },
+    "development": {
+      "cells": [
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "nominal",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "nominal",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "nominal",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "nominal",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "nominal",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "camera_2_5hz",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "camera_2_5hz",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "camera_2_5hz",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "camera_2_5hz",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "camera_2_5hz",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "dark_exposure_gain",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "dark_exposure_gain",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "dark_exposure_gain",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "dark_exposure_gain",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "dark_exposure_gain",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "visual_blackout",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "visual_blackout",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "visual_blackout",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "visual_blackout",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "visual_blackout",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "lidar_quarter_returns",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "lidar_quarter_returns",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "lidar_quarter_returns",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "lidar_quarter_returns",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "lidar_quarter_returns",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "gyro_bias",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "gyro_bias",
+          "seed": 730000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "gyro_bias",
+          "seed": 730000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "gyro_bias",
+          "seed": 730000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "gyro_bias",
+          "seed": 730000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "nominal",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "nominal",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "nominal",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "nominal",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "nominal",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "camera_2_5hz",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "camera_2_5hz",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "camera_2_5hz",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "camera_2_5hz",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "camera_2_5hz",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "dark_exposure_gain",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "dark_exposure_gain",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "dark_exposure_gain",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "dark_exposure_gain",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "dark_exposure_gain",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "visual_blackout",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "visual_blackout",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "visual_blackout",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "visual_blackout",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "visual_blackout",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "lidar_quarter_returns",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "lidar_quarter_returns",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "lidar_quarter_returns",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "lidar_quarter_returns",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "lidar_quarter_returns",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "lidar_extrinsic_error",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "imu_clock_plus80ms",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "gyro_bias",
+          "seed": 730001
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "occluders",
+          "condition": "gyro_bias",
+          "seed": 730001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "gyro_bias",
+          "seed": 730001
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "occluders",
+          "condition": "gyro_bias",
+          "seed": 730001
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "occluders",
+          "condition": "gyro_bias",
+          "seed": 730001
+        }
+      ],
+      "seconds": 40.0
+    },
+    "execution_gate": "all 14 same-source/input smoke cells execute with retained finite sensor/latency evidence; degraded outcomes remain scored",
+    "false_free_metric": "evaluator-only false-clear raw-brake packets against original same-time ray surfaces; no complete occupancy claim",
+    "fault_negative_policy": "do not require tracking/goals under smoke faults; scientific degradation never masquerades as runtime failure",
+    "initialization": {
+      "command": "vx=.10*sin(2*pi*(t-3)/1.5), vy=0, yaw=.30*sin(pi*(t-3)/1.5) during [3,9)",
+      "excitation_until_s": 9.0,
+      "known_start_assumption": "first accepted pose anchored to nominal station, initialization movement not truth-corrected",
+      "native_initialization_thresholds_changed": false,
+      "navigation_begins_s": 10.0,
+      "same_for_all_arms_conditions": true,
+      "stationary_until_s": 3.0
+    },
+    "planner_inputs": "native accepted pose, prescribed route, nominal known start, shared measured raw LiDAR brake",
+    "schema": "bhl-native-sensor-controls-v1-protocol",
+    "scope": "bounded matched development, no hardware or independent confirmation",
+    "sensor_noise": "ideal simulated cameras and IMU; three past-render exposure approximation, no hardware noise/shutter claim",
+    "smoke": {
+      "cells": [
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 720000
+        },
+        {
+          "arm": "stereo_inertial",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 720000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 720000
+        },
+        {
+          "arm": "permanent_stop",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 720000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "nominal",
+          "seed": 720000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "camera_2_5hz",
+          "seed": 720000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "seed": 720000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "dark_exposure_gain",
+          "seed": 720000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "seed": 720000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "visual_blackout",
+          "seed": 720000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "lidar_quarter_returns",
+          "seed": 720000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "lidar_extrinsic_error",
+          "seed": 720000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "imu_clock_plus80ms",
+          "seed": 720000
+        },
+        {
+          "arm": "verified_lio_recovery",
+          "case": "straight",
+          "condition": "gyro_bias",
+          "seed": 720000
+        }
+      ],
+      "seconds": 18.0
+    },
+    "source_change_rule": "new frozen source requires fresh complete smoke; never reuse outcomes from superseded source"
+  }
+}

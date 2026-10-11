@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/source/scripts/bench/fusion_occlusion_serial.py", line 28, in execute
+    inner=inputs/'fusion-protocol.json';plan=CAMPAIGN.read_plan(inner)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768427-iwgf249r/source/scripts/bench/fusion_occlusion_campaign.py", line 66, in read_plan
+    raise ValueError('predeclared geometry/arms/settings changed')
+ValueError: predeclared geometry/arms/settings changed

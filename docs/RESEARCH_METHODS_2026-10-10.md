@@ -17,7 +17,7 @@ This page preserves the October 10 implementation and execution snapshot. First-
 
 ## Remaining original design scope
 
-These items are not part of the queued campaigns and must not be described as implemented or completed:
+The following was the unfinished scope at the October 10 freeze. See the [October 11 follow-up implementation and completion requirements](RESEARCH_SCOPE_2026-10-11.md) for subsequent work; the original campaigns below are unchanged.
 
 - Initialization diagnostics still need quantitative epipolar and calibration-residual analysis.
 - The new stereo–IMU navigation comparison has two arms. A matched LiDAR–IMU arm, camera-rate/exposure/motion-blur conditions and navigation IMU perturbations remain unimplemented. Current cameras are ideal simulated sensors at 5 Hz.

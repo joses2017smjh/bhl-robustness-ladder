@@ -1,0 +1,27 @@
+{
+  "job_id": "21768520",
+  "returncode": 0,
+  "stdout": "21768520\n",
+  "stderr": "",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=native-controls-dispatch-20261011",
+    "--partition=share,eecs",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=24:00:00",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/dispatch-%j.log",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/dispatch-%j.log",
+    "--no-requeue",
+    "--chdir=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1",
+    "--export=NONE",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/run-python311.sbatch"
+  ],
+  "plan_sha256": "354c8596967ab618e181148285f6985919cb607f32829048fc927717158a203e",
+  "correction": "Explicit utility-only retry: original21768472 Python<3.11 failed before plan validation or scientific child submission; use existing pinnedsharedPython3.11. Frozen scientific source, inputs, cohorts, thresholds and source helper hashes unchanged.",
+  "previous_job_id": "21768472",
+  "submitted_utc": "2026-10-11T09:58:40.387005+00:00"
+}

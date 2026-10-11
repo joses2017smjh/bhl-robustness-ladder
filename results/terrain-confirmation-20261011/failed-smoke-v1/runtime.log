@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768302-pyscgmkt/source/scripts/bench/terrain_confirmation_campaign.py", line 289, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768302-pyscgmkt/source/scripts/bench/terrain_confirmation_campaign.py", line 268, in main
+    row = run_episode(p, actor, runtime, terrain, seed, arm, args.output / stem, seconds)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768302-pyscgmkt/source/scripts/bench/terrain_confirmation_campaign.py", line 133, in run_episode
+    write_json(output / "episode.json", row)
+  File "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768302-pyscgmkt/source/scripts/bench/native_navigation_campaign.py", line 60, in write_json
+    with Path(path).open("x") as f: json.dump(data, f, indent=2, allow_nan=False); f.write("\n")
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/nfs/hpc/share/sanchej7/Humanoid_Lite/.uv-python/cpython-3.11.16-linux-x86_64-gnu/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileExistsError: [Errno 17] File exists: '/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768302-pyscgmkt/output/dr-default-s0--flat--s430000--heading/episode.json'
