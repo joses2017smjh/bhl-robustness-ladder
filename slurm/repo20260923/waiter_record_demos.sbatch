@@ -3,6 +3,7 @@
 #SBATCH --account=eecs
 #SBATCH --partition=gpu,dgxh,ampere
 #SBATCH --gres=gpu:1
+#SBATCH --exclude=dgxh-1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=48G
 #SBATCH --time=03:00:00
@@ -11,6 +12,7 @@
 # Waiter phase 2 demonstrations (SLURM_JOBS.md 2026-10-09): scripts/waiter/record_demos.py over DEMO_SEED0..DEMO_SEED1
 # (range 3000-3999) in DEMO_PROCS processes sharing DEMO_OUT (an existing episode is skipped, so a rerun resumes; the
 # manifest is rebuilt from every episode JSON by each process at its end). EGL renders the simulated head camera.
+# dgxh-1 is excluded: its MIG GPU slices have no EGL and MuJoCo would render in software (different images).
 #   sbatch --export=ALL,DEMO_OUT=<dir> slurm/repo20260923/waiter_record_demos.sbatch
 set -uo pipefail
 REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder

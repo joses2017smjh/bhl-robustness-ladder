@@ -3,6 +3,7 @@
 #SBATCH --partition=gpu,dgxh,ampere
 #SBATCH --constraint=a40|rtx8000|l40s|h100|h200|h200-70g
 #SBATCH --gres=gpu:1
+#SBATCH --exclude=dgxh-1
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=48G
 #SBATCH --time=01:00:00
@@ -16,6 +17,9 @@
 #   sbatch dsrl_gpu.sbatch trace <trace_base.py args...>      (dev diagnostic: per-decision object poses)
 #   sbatch dsrl_gpu.sbatch probe <probe_features.py args...>  (dev diagnostic: what the SAC observation encodes)
 # Give --n-envs <= cpus-per-task - 2. --env-python is added automatically for train/eval.
+# dgxh-1 is excluded: its GPUs are MIG slices, which have no EGL, so MuJoCo renders the head camera in software and
+# the image no longer matches the demonstrations. Every job with --env waiter first runs scripts/waiter/render_check.py
+# and stops if this node renders differently (WAITER_SKIP_RENDER_CHECK=1 skips it).
 # For runs longer than the time limit pass --max-wall-min (a few minutes under --time) and resubmit with --resume.
 #
 # Interpreters (no installs into existing venvs):
@@ -44,6 +48,10 @@ echo "[dsrl-sbatch] git=$(git -C "$REPO" rev-parse --short HEAD 2>/dev/null) dir
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader || true
 # The cu128 torch wheel has no SM70 kernels: fail in seconds, not after loading the VLA.
 "$LEARNER_PY" -c "import torch; torch.ones(1, device='cuda').add_(1); torch.cuda.synchronize(); print('[dsrl-sbatch] cuda ok', torch.cuda.get_device_name())"
+
+if [ "${WAITER_SKIP_RENDER_CHECK:-0}" != 1 ] && printf '%s\n' "$@" | grep -qx waiter; then
+  "$ENV_PY" "$REPO/scripts/waiter/render_check.py"
+fi
 
 D=$REPO/scripts/waiter/dsrl
 case "$MODE" in
