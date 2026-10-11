@@ -372,3 +372,28 @@ def test_train_and_eval_smoke(tmp_path):
         subprocess.run([sys.executable, str(_DSRL / "eval_dsrl.py"), "--seeds", "6000-6001", "--arms", "base",
                         "--device", "cpu", "--out", str(tmp_path / "x.json")], check=True, timeout=600,
                        capture_output=True)
+    # the scored path end to end, on the TOY stub (its "layouts" 6000-6003 are not the real scored ones)
+    import hashlib
+    gate = tmp_path / "rule.json"
+    gate.write_text(json.dumps({"rule": "toy"}))
+    scored = tmp_path / "scored.json"
+    scored_cmd = [sys.executable, str(_DSRL / "eval_dsrl.py"), "--run-dir", str(out), "--device", "cpu",
+                  "--seeds", "6000-6003", "--arms", "base,dsrl,dsrl_stoch", "--n-envs", "2", "--scored-phase4-eval",
+                  "--env-kwargs", json.dumps({"time_limit_s": 2.0}), "--out", str(scored)]
+    with pytest.raises(subprocess.CalledProcessError):               # no --gate: refused before anything runs
+        subprocess.run(scored_cmd, check=True, timeout=600, capture_output=True)
+    subprocess.run(scored_cmd + ["--gate", str(gate)], check=True, timeout=600)
+    res = json.loads(scored.read_text())
+    assert res["scored_phase4_eval"] and res["labels"] == ["TOY"] and res["seeds"] == [6000, 6001, 6002, 6003]
+    assert res["gate"]["sha256"] == hashlib.sha256(gate.read_bytes()).hexdigest()
+    assert res["sac_ckpt_sha256"] == hashlib.sha256((out / "ckpt" / "sac.pt").read_bytes()).hexdigest()
+    assert res["env"] == "stub" and res["env_kwargs"] == {"time_limit_s": 2.0} and res["policy_model_sha256"] is None
+    assert [e["seed"] for e in res["episodes"]["dsrl"]] == [6000, 6001, 6002, 6003]
+    before = scored.read_bytes()
+    with pytest.raises(subprocess.CalledProcessError):               # write-once: a second run is refused
+        subprocess.run(scored_cmd + ["--gate", str(gate)], check=True, timeout=600, capture_output=True)
+    assert scored.read_bytes() == before
+    import phase4_gate                                               # and the scorer refuses a TOY evaluation
+    with pytest.raises(SystemExit, match="not a scored waiter evaluation"):
+        phase4_gate.main(["--rule", str(_REPO / "results/waiter-20261005/phase4-gate/rule_dsrl2.json"), "--eval",
+                          str(scored), "--run-dir", str(out), "--out", str(tmp_path / "verdict.json")])
