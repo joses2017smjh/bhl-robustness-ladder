@@ -1,0 +1,113 @@
+{
+  "additional_source": [
+    "scripts/bench/native_navigation_campaign.py",
+    "src/bhl_robust/research/native_lio.py",
+    "tests/test_native_navigation_campaign.py",
+    "docs/NATIVE_NAVIGATION_2026-10-09.md"
+  ],
+  "campaign_id": "native-lio-navigation-20261009-v1",
+  "input_files": {
+    "actors/dr-default-s0/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/deploy.yaml",
+      "sha256": "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71"
+    },
+    "actors/dr-default-s0/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/policy.onnx",
+      "sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1"
+    },
+    "runtime/lio-runtime.tar.gz": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/artifacts/lio-runtime-inference.tar.gz",
+      "sha256": "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--runtime-archive-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--phase",
+        "smoke",
+        "--output",
+        "{output}"
+      ],
+      "entrypoint": "scripts/bench/native_navigation_campaign.py",
+      "kind": "smoke",
+      "max_output_mb": 64,
+      "name": "nav-lio-smoke-20261009-v1",
+      "resources": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "time_limit": "00:20:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--runtime-archive",
+        "{campaign}/inputs/runtime/lio-runtime.tar.gz",
+        "--runtime-archive-sha256",
+        "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+        "--phase",
+        "development",
+        "--output",
+        "{output}"
+      ],
+      "entrypoint": "scripts/bench/native_navigation_campaign.py",
+      "kind": "run",
+      "max_output_mb": 256,
+      "name": "nav-lio-development-20261009-v1",
+      "resources": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "time_limit": "01:30:00"
+      }
+    }
+  ],
+  "navigation": {
+    "cases": [
+      "straight",
+      "dogleg",
+      "occluders"
+    ],
+    "causal_delivery": "computed responses/loss/reset invisible untilceil(clientwall+additional_sensor_compute_seconds / .04s) physics updates; oldavailablepose may become stale and stop",
+    "confirmation_gate": "all9developmentepisodes reachtrueexternalgoalwithin.30m and remainupright/contactfree/nonfinitefree throughfull40s; completefailureisNEGATIVE, no confirmation",
+    "development_horizon_s": 40,
+    "development_seeds": [
+      380000,
+      380001,
+      380002
+    ],
+    "known_start_registration": "once only when firstactualtrackednativepacket arrives; declared modelresetpose andfixedIMUcalibration, no simulatorpose correction",
+    "no_ground_truth_inputs_to_planner_or_estimator": true,
+    "smoke_horizon_s": 8,
+    "smoke_seeds": [
+      370000,
+      370001
+    ]
+  },
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Actual native FAST-LIO2 estimated-pose closed loop; frozen learned12DoF DR gait, fixed scripted external waypoints/start registration, MuJoCo causal IMU/timed3D rays; LIOonly, no physical validation or learnedplanner claim"
+}

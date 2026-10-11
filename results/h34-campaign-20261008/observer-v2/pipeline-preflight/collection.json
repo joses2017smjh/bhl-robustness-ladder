@@ -1,0 +1,37 @@
+{
+  "schema": "h34-durable-collection-v1",
+  "status": "INCOMPLETE",
+  "task": "H4",
+  "campaign_id": "h4-20261008",
+  "collected_utc": "2026-10-09T02:36:54.900808+00:00",
+  "persistent_dir": "/nfs/stak/users/sanchej7/humanoid-h34-20261008/h4-v1",
+  "archive_sha256": "2992604f74e69c6fdad2e267f4fb5e4eb56d0f4618639aedc78d86023cb21001",
+  "protocol_sha256": "1538a528924c6651628e088510c1c1597509858a2730e58e2e3a3c15d48b06e5",
+  "run_job_id": "21711086",
+  "expected_cells": [
+    {
+      "cell": 0,
+      "arm": "R1HO",
+      "seed": 0
+    },
+    {
+      "cell": 1,
+      "arm": "R1HO",
+      "seed": 1
+    },
+    {
+      "cell": 2,
+      "arm": "R1HO",
+      "seed": 2
+    }
+  ],
+  "complete_cells": 0,
+  "cells": [],
+  "scientific_summary": null,
+  "problems": [
+    "missing complete scored cells: [0, 1, 2]"
+  ],
+  "collector_sha256": "c7e9dccfc694b69020a0a9efea7a73e9014a42ca6df78b543ec8693fb50ecb4d",
+  "preservation": "Original archive/receipt/deploy bytes retained. Absolute deployment pointers are provenance, not relocated runnable exports.",
+  "scope": "Whole-array independently recomputed scientific verdict; no scheduler-exit, smoke, Git or publication claim."
+}

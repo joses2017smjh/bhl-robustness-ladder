@@ -1,0 +1,32 @@
+{
+  "scope": {
+    "seed": 119999,
+    "actor": "armV5-s9",
+    "conditions": [
+      "nominal"
+    ],
+    "arms": [
+      "none",
+      "wz-lpf"
+    ],
+    "time_limit_s": 30.0,
+    "episodes": 2,
+    "scope": "Runtime/intake only, excluded from all confirmation statistics; cannot select/tune candidate."
+  },
+  "processes": [
+    {
+      "returncode": 0,
+      "inputs_still_valid": true,
+      "input_problem": null,
+      "wall_s": 24.769
+    },
+    {
+      "returncode": 0,
+      "inputs_still_valid": true,
+      "input_problem": null,
+      "wall_s": 17.651
+    }
+  ],
+  "protocol_sha256": "7b0b404ccac476340550166158b652b3d0eebb4a560aa0b397bf58eb75cd9112",
+  "host": "dgx2-2.hpc.engr.oregonstate.edu"
+}

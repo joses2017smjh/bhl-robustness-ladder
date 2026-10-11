@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "same_native_source": {
+    "scripts/native/orb_build.py": true,
+    "scripts/native/orb_headless.cc": true,
+    "scripts/native/orb_runner.cc": true
+  },
+  "wrapper_change_only": "Unrelated LIO else branch now preserves its licenses directory; ORB invocation and branch are byte-identical",
+  "v4_wrapper_sha256": "443cb498171db6e88205964253e4f1d750afc5e2758c141e3773f29a03490b27",
+  "v5_wrapper_sha256": "1e3443a2a747e767b0b3b52a7ef6c531418f994ce423fc9904d28b7033698025"
+}

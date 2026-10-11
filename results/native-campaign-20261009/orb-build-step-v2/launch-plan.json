@@ -1,0 +1,23 @@
+{
+  "schema": "bhl-native-orb-build-step-v1",
+  "declared_utc": "2026-10-09T21:55:55.579210+00:00",
+  "allocation_id": "21739893",
+  "allocation_resources": "2 CPU, 31800 MiB, dgx2-5, existing allocation ends 16:45:23 PDT; no additional GPU allocation and no GPU compute",
+  "step_resources": "2 CPU, 16 GiB, overlap",
+  "frozen_build_archive_sha256": "af21c73636082252084a84af909c447ee34b7e0004615dd517a64718e3514cb2",
+  "command": [
+    "srun",
+    "--jobid=21739893",
+    "--overlap",
+    "--ntasks=1",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6/step-21739893-v6.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6/step-21739893-v6.out",
+    "/bin/bash",
+    "-c",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python -c 'import os,json,pathlib,datetime; pathlib.Path('\"'\"'/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6/step-environment-21739893-v6.json'\"'\"').write_text(json.dumps({'\"'\"'recorded_utc'\"'\"':datetime.datetime.now(datetime.timezone.utc).isoformat(),'\"'\"'environment'\"'\"':{k:v for k,v in os.environ.items() if k in ['\"'\"'SLURM_JOB_ID'\"'\"','\"'\"'SLURM_STEP_ID'\"'\"','\"'\"'SLURM_STEP_NUM_TASKS'\"'\"','\"'\"'SLURM_CPUS_PER_TASK'\"'\"','\"'\"'SLURM_MEM_PER_NODE'\"'\"','\"'\"'SLURM_JOB_NODELIST'\"'\"']},'\"'\"'host'\"'\"':os.uname().nodename,'\"'\"'scope'\"'\"':'\"'\"'Actual separate Slurm step in existing allocation; backup v6 21743261 is distinct and has not run'\"'\"'},indent=2)+'\"'\"'\\n'\"'\"')'\nexec /bin/bash /nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6/h34_campaign.sbatch /nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6 orb-native-build-v6-20261009 af21c73636082252084a84af909c447ee34b7e0004615dd517a64718e3514cb2"
+  ],
+  "expected_output": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6/orb-native-build-v6-20261009-21739893",
+  "scope": "Actual separate clean frozen v6 C++ build step; missing private multiarch OpenSSL include only, no scientific/algorithm change"
+}

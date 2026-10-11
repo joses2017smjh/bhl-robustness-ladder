@@ -31,8 +31,8 @@ def test_command_scaling_preserves_requested_supported_velocity():
     np.testing.assert_allclose(np.tanh(action[:3])*[.4,.35,.4],command)
 
 
-def test_diagnostic_preserves_original_observations_and_sparse_reward(tmp_path):
-    root=Path(__file__).resolve().parents[1]
+def test_diagnostic_preserves_original_observations_and_sparse_reward(tmp_path, frozen_humanoid_repo):
+    root=frozen_humanoid_repo
     original=StudyEnv(root,tmp_path/'original',stage='approach',seed=1000,approach_distance=.4)
     debug=DebugEnv(root,tmp_path/'debug',stage='approach',seed=1000,approach_distance=.4,dense=True)
     np.testing.assert_array_equal(original.reset(1),debug.reset(1))

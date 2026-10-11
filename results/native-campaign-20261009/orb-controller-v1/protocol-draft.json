@@ -1,0 +1,40 @@
+{
+  "additional_source": [
+    "scripts/bench/native_orb_after_build.py",
+    "scripts/bench/promote_native_runtime_campaign.py"
+  ],
+  "campaign_id": "orb-post-build-controller-20261009-v1",
+  "input_files": {
+    "controller-plan.json": {
+      "path": "/tmp/bhl-native-campaign-20261009/results/native-campaign-20261009/orb-controller-v1/plan.json",
+      "sha256": "b5bb6b8c69eb751b22cfd4c85895354ecd54e4e191409d3c8df6158a38355e36"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--plan",
+        "{campaign}/inputs/controller-plan.json"
+      ],
+      "entrypoint": "scripts/bench/native_orb_after_build.py",
+      "kind": "evaluate",
+      "max_output_mb": 8,
+      "name": "orb-post-build-controller-20261009-v1",
+      "resources": {
+        "cpus": 1,
+        "gpus": 0,
+        "memory_gb": 4,
+        "partition": "preempt",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Host-side immutable submission orchestration only; afterok native build 21741510 then actual verified runtime hashes filled into unchanged frozen offline/stereo templates"
+}

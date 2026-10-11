@@ -1,0 +1,197 @@
+{
+  "command": [
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-lio-native-build-20261009-v4-21740637-rh7v6ypz/source/scripts/native/lio_build.py",
+    "--output",
+    "/tmp/bhl-h34-lio-native-build-20261009-v4-21740637-rh7v6ypz/work/native-runtime"
+  ],
+  "method": "lio",
+  "returncode": 0,
+  "route": "native_runtime_build",
+  "runtime_files": {
+    "IMU_Processing.hpp": {
+      "bytes": 12866,
+      "sha256": "a456016e268680555919f58ae066354fd297a27f49be197292452f4147e1e0f5"
+    },
+    "fastlio_headless": {
+      "bytes": 571792,
+      "sha256": "e2c7791007548b316546aa1ef91a34b6fa611e16f8fb8dfd8195f47f544bd2d3"
+    },
+    "fastlio_headless.cpp": {
+      "bytes": 23219,
+      "sha256": "b55ea344778792075a821afc019b0b5d00de9a6ee350982e2ff6a53db813c6a1"
+    },
+    "lib/libgcc_s.so": {
+      "bytes": 132,
+      "sha256": "69a56a9993b7729b29b274e65016031c81f2397f176ed5ad44d59bd50425e0bd"
+    },
+    "lib/libgcc_s.so.1": {
+      "bytes": 620120,
+      "sha256": "4153a96ff1ff0c79d7bd0bff00ee4ac7851efbe0e0c19e3f33de7b0aa260876c"
+    },
+    "lib/libgomp.so": {
+      "bytes": 1368224,
+      "sha256": "120315b4f52bce1c9af968d218fba992cbcf0956a7ca86a720f248572903c349"
+    },
+    "lib/libgomp.so.1": {
+      "bytes": 1368224,
+      "sha256": "120315b4f52bce1c9af968d218fba992cbcf0956a7ca86a720f248572903c349"
+    },
+    "lib/libgomp.so.1.0.0": {
+      "bytes": 1368224,
+      "sha256": "120315b4f52bce1c9af968d218fba992cbcf0956a7ca86a720f248572903c349"
+    },
+    "lib/liblz4.so": {
+      "bytes": 125152,
+      "sha256": "65f47a3dc2cec5f938379b7b625f0621657bf1254551895d22462c6a204cbad8"
+    },
+    "lib/liblz4.so.1": {
+      "bytes": 125152,
+      "sha256": "65f47a3dc2cec5f938379b7b625f0621657bf1254551895d22462c6a204cbad8"
+    },
+    "lib/liblz4.so.1.9.3": {
+      "bytes": 125152,
+      "sha256": "65f47a3dc2cec5f938379b7b625f0621657bf1254551895d22462c6a204cbad8"
+    },
+    "lib/libpcl_common.so": {
+      "bytes": 624904,
+      "sha256": "3c645c39902bbed068913d3bd809ace8bc8396c1667b24c03d28ab8452e7b715"
+    },
+    "lib/libpcl_common.so.1.12": {
+      "bytes": 624904,
+      "sha256": "3c645c39902bbed068913d3bd809ace8bc8396c1667b24c03d28ab8452e7b715"
+    },
+    "lib/libpcl_common.so.1.12.1": {
+      "bytes": 624904,
+      "sha256": "3c645c39902bbed068913d3bd809ace8bc8396c1667b24c03d28ab8452e7b715"
+    },
+    "lib/libpcl_filters.so": {
+      "bytes": 6940936,
+      "sha256": "9fcb46d6c17474b3c04bdf6f10200507f05c28e196f2a119d65e6cfefd2150ce"
+    },
+    "lib/libpcl_filters.so.1.12": {
+      "bytes": 6940936,
+      "sha256": "9fcb46d6c17474b3c04bdf6f10200507f05c28e196f2a119d65e6cfefd2150ce"
+    },
+    "lib/libpcl_filters.so.1.12.1": {
+      "bytes": 6940936,
+      "sha256": "9fcb46d6c17474b3c04bdf6f10200507f05c28e196f2a119d65e6cfefd2150ce"
+    },
+    "lib/libpcl_kdtree.so": {
+      "bytes": 1132840,
+      "sha256": "416273fa68f19e5b02398c637fed9be2447579c3c3dec18c594ef9b3260ed142"
+    },
+    "lib/libpcl_kdtree.so.1.12": {
+      "bytes": 1132840,
+      "sha256": "416273fa68f19e5b02398c637fed9be2447579c3c3dec18c594ef9b3260ed142"
+    },
+    "lib/libpcl_kdtree.so.1.12.1": {
+      "bytes": 1132840,
+      "sha256": "416273fa68f19e5b02398c637fed9be2447579c3c3dec18c594ef9b3260ed142"
+    },
+    "lib/libpcl_octree.so": {
+      "bytes": 2377960,
+      "sha256": "7b8ca38e24952b4479302c303af62d8da578a9d2b730399a7789cda80507a99e"
+    },
+    "lib/libpcl_octree.so.1.12": {
+      "bytes": 2377960,
+      "sha256": "7b8ca38e24952b4479302c303af62d8da578a9d2b730399a7789cda80507a99e"
+    },
+    "lib/libpcl_octree.so.1.12.1": {
+      "bytes": 2377960,
+      "sha256": "7b8ca38e24952b4479302c303af62d8da578a9d2b730399a7789cda80507a99e"
+    },
+    "lib/libpcl_sample_consensus.so": {
+      "bytes": 12372320,
+      "sha256": "1ab6815e702f35b16950d76fba8516559a4cc355a85463732b0cc9b3284b8af6"
+    },
+    "lib/libpcl_sample_consensus.so.1.12": {
+      "bytes": 12372320,
+      "sha256": "1ab6815e702f35b16950d76fba8516559a4cc355a85463732b0cc9b3284b8af6"
+    },
+    "lib/libpcl_sample_consensus.so.1.12.1": {
+      "bytes": 12372320,
+      "sha256": "1ab6815e702f35b16950d76fba8516559a4cc355a85463732b0cc9b3284b8af6"
+    },
+    "lib/libpcl_search.so": {
+      "bytes": 1988840,
+      "sha256": "172d88b15bc0a3dcf210c3606085e5bcccb7c4a8765396c95dc253674f430d8c"
+    },
+    "lib/libpcl_search.so.1.12": {
+      "bytes": 1988840,
+      "sha256": "172d88b15bc0a3dcf210c3606085e5bcccb7c4a8765396c95dc253674f430d8c"
+    },
+    "lib/libpcl_search.so.1.12.1": {
+      "bytes": 1988840,
+      "sha256": "172d88b15bc0a3dcf210c3606085e5bcccb7c4a8765396c95dc253674f430d8c"
+    },
+    "lib/libstdc++.so": {
+      "bytes": 18622448,
+      "sha256": "352068eed12f10ee46513aa46aa2587302b034da849c2a6eec89ed632fb163f8"
+    },
+    "lib/libstdc++.so.6": {
+      "bytes": 18622448,
+      "sha256": "352068eed12f10ee46513aa46aa2587302b034da849c2a6eec89ed632fb163f8"
+    },
+    "lib/libstdc++.so.6.0.30": {
+      "bytes": 18622448,
+      "sha256": "352068eed12f10ee46513aa46aa2587302b034da849c2a6eec89ed632fb163f8"
+    },
+    "lib/libstdc++.so.6.0.30-gdb.py": {
+      "bytes": 2600,
+      "sha256": "0789645979579f20f84f6ebcb7c8c585789c792f1d40a1614091ea38b59f7657"
+    },
+    "runtime.json": {
+      "bytes": 5452,
+      "sha256": "9d0e1486a6454ad424dcbdefd1407463ca74963b40a49cc5c78ad81023e351ba"
+    },
+    "shim/eigen_conversions/eigen_msg.h": {
+      "bytes": 13,
+      "sha256": "b3adf106d95b8934f690943f2921308b90be5b766c4c8ba250c792de56400201"
+    },
+    "shim/fast_lio/Pose6D.h": {
+      "bytes": 125,
+      "sha256": "c159e81fe7d1eb4a2193906c390f0164242e2adcec6a4f14f507d1b391e68613"
+    },
+    "shim/geometry_msgs/Vector3.h": {
+      "bytes": 42,
+      "sha256": "d03d0faff192fd6591be3ec2ec19d5d7c267bb252dd070f6de82f31b7e4db0e0"
+    },
+    "shim/nav_msgs/Odometry.h": {
+      "bytes": 13,
+      "sha256": "b3adf106d95b8934f690943f2921308b90be5b766c4c8ba250c792de56400201"
+    },
+    "shim/pcl_conversions/pcl_conversions.h": {
+      "bytes": 13,
+      "sha256": "b3adf106d95b8934f690943f2921308b90be5b766c4c8ba250c792de56400201"
+    },
+    "shim/preprocess.h": {
+      "bytes": 57,
+      "sha256": "dac72011e9b3c718129746b1983582b8ae33cb25d6b6128baec5bb8fc0dda93d"
+    },
+    "shim/ros/ros.h": {
+      "bytes": 451,
+      "sha256": "2ea1f5aa8b05bf59cdadedb4ee1a641c37dddc235e7ac5f6c6ab598d494ebf6e"
+    },
+    "shim/sensor_msgs/Imu.h": {
+      "bytes": 355,
+      "sha256": "0ae4dfe9d63c34c70e800804c8e35ec6ab80167fe5fa91972ab2eca3522ecbe3"
+    },
+    "shim/sensor_msgs/PointCloud2.h": {
+      "bytes": 13,
+      "sha256": "b3adf106d95b8934f690943f2921308b90be5b766c4c8ba250c792de56400201"
+    },
+    "shim/tf/transform_broadcaster.h": {
+      "bytes": 13,
+      "sha256": "b3adf106d95b8934f690943f2921308b90be5b766c4c8ba250c792de56400201"
+    },
+    "upstream-source.tar.gz": {
+      "bytes": 132685404,
+      "sha256": "cda483af1ebadd6971faddff6cdf5cb9f36426e17fc5f6956b578916e07ad8ac"
+    }
+  },
+  "runtime_schema": "bhl-native-lio-runtime-v1",
+  "scientific_status": "BUILD_ONLY_NO_ESTIMATED_TRAJECTORIES",
+  "status": "PASS",
+  "wall_seconds": 109.46478519705124
+}

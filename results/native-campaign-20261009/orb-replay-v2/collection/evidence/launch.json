@@ -1,0 +1,55 @@
+{
+  "archive_sha256": "499ede4237b94cba3008da2cb028243c35ac8019cb5fd284ba69c01c21cbf93a",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk:/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk",
+    "--bind",
+    "/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk/source:/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk/protocol.json:/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk/work",
+    "--bind",
+    "/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk/inputs:/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk/inputs:ro",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk/source/scripts/bench/native_slam_campaign.py",
+    "--protocol",
+    "/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk/protocol.json",
+    "--phase",
+    "replay"
+  ],
+  "host": "dgx2-5.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "replay"
+    ],
+    "entrypoint": "scripts/bench/native_slam_campaign.py",
+    "kind": "run",
+    "max_output_mb": 128,
+    "name": "native-orb-replay-20261009-v2",
+    "resources": {
+      "cpus": 2,
+      "gpus": 0,
+      "memory_gb": 16,
+      "partition": "preempt",
+      "requeue": false,
+      "time_limit": "01:00:00"
+    }
+  },
+  "job_id": "21739893",
+  "scratch": "/tmp/bhl-h34-native-orb-replay-20261009-v2-21739893-rm4vesdk",
+  "source_files_verified": 854,
+  "started_utc": "2026-10-09T22:42:37.423517+00:00"
+}

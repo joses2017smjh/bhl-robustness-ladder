@@ -1,0 +1,171 @@
+{
+  "additional_source": [
+    "scripts/bench/native_navigation_campaign.py",
+    "scripts/bench/native_stereo_navigation_campaign.py",
+    "scripts/bench/promote_native_runtime_campaign.py",
+    "src/bhl_robust/research/native_orb.py",
+    "src/bhl_robust/research/native_lio.py",
+    "tests/test_native_stereo_navigation_campaign.py",
+    "tests/test_promote_native_runtime_campaign.py",
+    "docs/NATIVE_STEREO_NAVIGATION_2026-10-09.md"
+  ],
+  "calibration_schema_repair": {
+    "mechanical_reason": "pinned upstream Rectified settings printer dereferenced null Camera2 before READY; supported legacy PinHole schema preserves rectified geometry and feature parameters",
+    "native_startup_pass_step": "21739893.6",
+    "parent_archive_sha256": "3f57cce0976a464329af00f6f7290ab0fc4ca3879cfbb7de826a419cb85c642d",
+    "unchanged_scientific_protocol": true
+  },
+  "campaign_id": "native-stereo-navigation-20261009-v2",
+  "deferred_native_orb_runtime": {
+    "actual_build_provenance": "verified runtime receipt and immutable controller promotion receipt; original requested build IDs are historical",
+    "archive_sha256": "0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704",
+    "input_name": "runtime/orb-runtime.tar.gz",
+    "original_requested_build_archive_sha256": "405c48c4d957f985f08c24fd67eca24869c1b5a62877301a7aa293964cf7bdf7",
+    "original_requested_build_job_id": "21741510",
+    "source_template_archive_sha256": "d3442e2c65be3febf7851a8012f6e497800f015a86083f04a0ada2b126f17302",
+    "status": "VERIFIED_RUNTIME_PROMOTED",
+    "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4"
+  },
+  "input_files": {
+    "actors/dr-default-s0/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/deploy.yaml",
+      "sha256": "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71"
+    },
+    "actors/dr-default-s0/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/policy.onnx",
+      "sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1"
+    },
+    "runtime/orb-runtime.tar.gz": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-runtime-v7/runtime.tar.gz",
+      "sha256": "0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--runtime-archive-sha256",
+        "0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704",
+        "--phase",
+        "smoke",
+        "--output",
+        "{output}"
+      ],
+      "entrypoint": "scripts/bench/native_stereo_navigation_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "smoke",
+      "max_output_mb": 256,
+      "name": "nav-stereo-smoke-20261009-v2",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      }
+    },
+    {
+      "args": [
+        "--upstream",
+        "{source}/external/Berkeley-Humanoid-Lite",
+        "--deploy",
+        "{campaign}/inputs/actors/dr-default-s0/deploy.yaml",
+        "--checkpoint",
+        "{campaign}/inputs/actors/dr-default-s0/policy.onnx",
+        "--runtime-archive",
+        "{campaign}/inputs/runtime/orb-runtime.tar.gz",
+        "--runtime-archive-sha256",
+        "0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704",
+        "--phase",
+        "development",
+        "--output",
+        "{output}"
+      ],
+      "entrypoint": "scripts/bench/native_stereo_navigation_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 2048,
+      "name": "nav-stereo-development-20261009-v2",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 2,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 16,
+        "partition": "gpu,dgxh,ampere",
+        "requeue": false,
+        "time_limit": "02:00:00"
+      }
+    }
+  ],
+  "navigation": {
+    "camera": {
+      "baseline_m": 0.12,
+      "body_positions_m": [
+        [
+          0.1,
+          0.06,
+          0.38
+        ],
+        [
+          0.1,
+          -0.06,
+          0.38
+        ]
+      ],
+      "preserve_full_roll_pitch_yaw": true,
+      "rate_hz": 5,
+      "resolution": [
+        640,
+        480
+      ],
+      "texture_seed_offset": 910000,
+      "vertical_fov_deg": 60
+    },
+    "cases": [
+      "straight",
+      "dogleg",
+      "occluders"
+    ],
+    "causal_delivery": "ceil((client wall + all accumulated render/PNG/hash wall costs including discarded images)/.04 s) physics updates before response/loss/reset visible",
+    "confirmation_gate": "all 9 development episodes reach true external goal within .30 m and remain upright/contact-free/finite through full 40 s; any complete failure is NEGATIVE and no confirmation",
+    "development_horizon_s": 40,
+    "development_seeds": [
+      380000,
+      380001,
+      380002
+    ],
+    "estimator_inputs": "original synchronized stereo RGB PNGs and original timestamps only",
+    "known_start_registration": "once at first tracked native response against declared reset station/fixed IMU calibration; no evaluator-pose correction",
+    "map_change_policy": "permanent planner stop; preserve raw native map ID and T_W_C",
+    "no_ground_truth_inputs_to_estimator_or_planner": true,
+    "planner_sensor_scope": "stereo native pose plus independent raw LiDAR obstacle brake; no IMU/LiDAR to ORB",
+    "smoke_horizon_s": 8,
+    "smoke_seeds": [
+      370000,
+      370001
+    ]
+  },
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Actual native ORB-SLAM3 stereo estimated-pose closed loop plus raw LiDAR obstacle braking; frozen learned 12-DoF biped gait, known nominal start registration/fixed external routes, simulated full-roll body-attached stereo; development only, no hardware or learned-planner claim"
+}

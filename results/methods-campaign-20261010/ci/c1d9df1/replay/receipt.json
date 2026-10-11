@@ -1,0 +1,54 @@
+{
+  "manifest_sha256": "2d23c3fbe5ac218a0690ad70a63478397b2c2e7dab42961e3a66aeb71b1aa2e5",
+  "argv": [
+    "/tmp/bhl-replay-bundle/replay.py",
+    "--bundle",
+    "/tmp/bhl-replay-bundle",
+    "--out",
+    "validation/replay",
+    "--calls",
+    "10000",
+    "--warmup",
+    "500"
+  ],
+  "host": "runnervmmprz5",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "python": "3.11.17 (main, Oct  1 2026, 14:32:31) [GCC 13.3.0]",
+  "cpu": "x86_64",
+  "cpu_count": 4,
+  "slurm_job_id": null,
+  "thread_settings": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "packages": {
+    "numpy": "1.26.0",
+    "mujoco": "3.3.5",
+    "onnxruntime": "1.22.1",
+    "omegaconf": "2.3.0",
+    "torch": "2.7.0"
+  },
+  "installed_packages": {
+    "numpy": "1.26.0",
+    "mujoco": "3.3.5",
+    "onnxruntime": "1.22.1",
+    "omegaconf": "2.3.0",
+    "torch": "2.7.0+cpu"
+  },
+  "source": {
+    "overlay_commit": "33a5eca4567a0bb0d4af162e9ff0d961feaeb9c2",
+    "source_sha256": {
+      "src/bhl_robust/__init__.py": "290f5d6a451d1a1554e2f87b5bf93588fd2c744ee9cef5f0a26a316311bedc8f",
+      "src/bhl_robust/eval/harness.py": "9aa954fa1a0a84ff996b04e97be9a255e3c511e2d8c42305caf28b21d0e40f9a",
+      "src/bhl_robust/eval/terrain_field.py": "27e46389e67ca69966ecde13b8a1508dc6ef6779b582527901dd68e943cee71a",
+      "src/bhl_robust/eval/replay_gate.py": "f8dc1975bc4a41e673fe39290fdb9836f2f1b8f9792706e91f2f5787639fdc8a",
+      "upstream_rl_controller.py": "ab7b8c282e0888ec6cfb74451c60772ade5abcda17362521fb31bc04b8b5203c"
+    },
+    "builder_sha256": "34b63e8b1aeb878a423ac7c7c43134789ce1c038a805435bda023b028b03e88b",
+    "source_deploy_sha256": "dad919ad85cf9677295f5973f2ab6e0671ba809f6c3369136cb999e5de496b9e",
+    "source_checkpoint_sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1",
+    "upstream_credit": "Berkeley Humanoid Lite Project Developers; see LICENSE-upstream.txt"
+  },
+  "unix_time": 1791669206.1283917
+}

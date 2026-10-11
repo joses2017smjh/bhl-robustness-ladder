@@ -1,0 +1,74 @@
+{
+  "status": "NEGATIVE",
+  "scope": "Actual native ORB-SLAM3 simulation replay, zero closed-loop/hardware claims",
+  "actual_step": "21739893.8",
+  "source_archive_sha256": "499ede4237b94cba3008da2cb028243c35ac8019cb5fd284ba69c01c21cbf93a",
+  "native_runtime_archive_sha256": "0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704",
+  "raw_archive_sha256": "f7e5659742e737445c949b255a5abb1a45bbe4b4fac5538fbe8d7c25e15b01e4",
+  "frames": 450,
+  "tracked_frames": 122,
+  "scenes": [
+    {
+      "sequence": "textured_boxes_native",
+      "split": "dev",
+      "frames": 150,
+      "tracked_frames": 0,
+      "native_states": {
+        "1": 150
+      },
+      "all_untracked_poses_are_null": true,
+      "native_map_ids": [],
+      "native_compute_p95_ms": 45.107452,
+      "native_map_changes": 0,
+      "readiness_gate": "NEGATIVE",
+      "post_initialization_tracked_fraction": 0.0,
+      "ate_translation_rmse_m": null,
+      "rpe_translation_rmse_m": null,
+      "ate_rotation_p95_deg": null
+    },
+    {
+      "sequence": "thin_posts_native",
+      "split": "validation",
+      "frames": 150,
+      "tracked_frames": 0,
+      "native_states": {
+        "1": 150
+      },
+      "all_untracked_poses_are_null": true,
+      "native_map_ids": [],
+      "native_compute_p95_ms": 27.01511595,
+      "native_map_changes": 0,
+      "readiness_gate": "NEGATIVE",
+      "post_initialization_tracked_fraction": 0.0,
+      "ate_translation_rmse_m": null,
+      "rpe_translation_rmse_m": null,
+      "ate_rotation_p95_deg": null
+    },
+    {
+      "sequence": "ramp_step_native",
+      "split": "test",
+      "frames": 150,
+      "tracked_frames": 122,
+      "native_states": {
+        "1": 28,
+        "2": 122
+      },
+      "all_untracked_poses_are_null": true,
+      "native_map_ids": [
+        0
+      ],
+      "native_compute_p95_ms": 48.5956993,
+      "native_map_changes": 0,
+      "readiness_gate": "PASS",
+      "post_initialization_tracked_fraction": 0.976,
+      "ate_translation_rmse_m": 0.004388006619718522,
+      "rpe_translation_rmse_m": 0.002839973644269811,
+      "ate_rotation_p95_deg": 0.6399277176340695
+    }
+  ],
+  "ate_rpe": "unscorable when fewer than two actual tracked poses; never fabricated",
+  "gates_or_parameters_tuned_after_observing_outputs": false,
+  "utc": "2026-10-09T22:45:29.280239+00:00",
+  "scene_gates_passed": 1,
+  "scene_groups": 3
+}

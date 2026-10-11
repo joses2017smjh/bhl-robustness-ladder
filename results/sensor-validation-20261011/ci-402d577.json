@@ -1,0 +1,24 @@
+{
+  "schema": "bhl.ci-validation-receipt.v1",
+  "commit": "402d5779c96902d39a3cbfdc62004603c807657c",
+  "run_id": 38130808419,
+  "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/38130808419",
+  "conclusion": "success",
+  "completed_at": "2026-10-11T10:17:38Z",
+  "cpu_regression": {
+    "passed": 2887,
+    "skipped": 132,
+    "subtests_passed": 10,
+    "duration_seconds": 492.15
+  },
+  "trained_asset_and_negative_controls": "success",
+  "seeded_physics_fault_and_timing_replay": "success",
+  "full_downloaded_log_sha256": "e90584820b62bed95f49b2078f4ee0fda84625954973936fbbfaa64c42183ed4",
+  "artifact": {
+    "id": 11698668769,
+    "name": "humanoid-cpu-validation",
+    "zip_bytes": 1837923,
+    "zip_sha256": "059810f05abed19cf28294641ddfdb26f2616cbc75ae11841301e68f781e5a8c"
+  },
+  "scope": "Frozen implementation commit only; subsequent results documents and external-recording tools require their own validation."
+}

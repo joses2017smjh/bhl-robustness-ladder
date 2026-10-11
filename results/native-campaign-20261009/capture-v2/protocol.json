@@ -1,0 +1,95 @@
+{
+  "additional_source": [
+    "scripts/bench/slam_capture_campaign.py"
+  ],
+  "campaign_id": "native-slam-capture-20261009-v2",
+  "capture": {
+    "camera_rate_hz": 5,
+    "imu_rate_hz": 200,
+    "lidar_columns": 128,
+    "lidar_rings": 16,
+    "max_replay_payload_mib": 512,
+    "planned_pairs": 450,
+    "preserve_invalid_depth": true,
+    "resolution": [
+      640,
+      480
+    ],
+    "scan_duration_s": 0.05,
+    "scenes": [
+      [
+        "textured_boxes",
+        "dev"
+      ],
+      [
+        "thin_posts",
+        "validation"
+      ],
+      [
+        "ramp_step",
+        "test"
+      ]
+    ],
+    "seconds_per_scene": 30,
+    "stationary_initialization_s": 5
+  },
+  "jobs": [
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke"
+      ],
+      "entrypoint": "scripts/bench/slam_capture_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "smoke",
+      "max_output_mb": 640,
+      "name": "native-capture-smoke-20261009-v2",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 24,
+        "partition": "gpu,dgxh,ampere",
+        "time_limit": "00:10:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "capture"
+      ],
+      "entrypoint": "scripts/bench/slam_capture_campaign.py",
+      "env": {
+        "MUJOCO_GL": "egl"
+      },
+      "kind": "run",
+      "max_output_mb": 640,
+      "name": "native-capture-capture-20261009-v2",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 24,
+        "partition": "gpu,dgxh,ampere",
+        "time_limit": "00:30:00"
+      }
+    }
+  ],
+  "revision_reason": "v1 full capture exceeded frozen storage cap; preserve failed receipt, reduce cadence to5Hz while retaining full30s path and200Hz IMU. Fresh smoke required.",
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Original rendered stereo and timed3D-LiDAR/IMU capture for native estimators; kinematic rig, not gait/navigation or hardware"
+}

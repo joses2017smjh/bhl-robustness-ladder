@@ -1,0 +1,172 @@
+{
+  "acceptance_meaning": "all actual methods executed; qualification retained per native cell and improvement requires complete paired cohort",
+  "capture": {
+    "frames": 60,
+    "manifest_sha256": "5427c803deede6d7070e1f7aab1041bf3837938c673784d37af2e2a16338c92b"
+  },
+  "cell": {
+    "condition": "nominal",
+    "family": "textured_boxes",
+    "geometry_group": "textured_boxes-g610000",
+    "geometry_seed": 610000,
+    "id": "textured_boxes-g610000-nominal"
+  },
+  "finished_utc": "2026-10-10T21:15:57.910225+00:00",
+  "native": {
+    "all_cells_qualified": true,
+    "closed_loop_episodes": 0,
+    "comparison_scope": "Same calibrated sensor bundle; FAST-LIO2 emits LiDAR-tail poses, FAST-LIVO2 emits camera-time poses. Fixed-scale gravity/yaw/translation alignment and bracketed evaluator truth. Tracking coverage is reported alongside conditional pose error.",
+    "manifest_sha256": "5427c803deede6d7070e1f7aab1041bf3837938c673784d37af2e2a16338c92b",
+    "method_cells": 3,
+    "protocol_sha256": "27255d1cef77473e313598d068d73867c1d71431e93af3ba0a57f6cdb24e27ba",
+    "schema": "bhl-native-livo-method-results-v1",
+    "scientific_status": "MEASURED_NATIVE_REPLAY_COMPARISON",
+    "status": "PASS",
+    "timing_scope": "Native compute only unless explicitly named decode-and-compute or full-process wall; capture cost excluded.",
+    "visual_contribution_ablation": "FAST-LIVO2 camera+LiDAR+IMU versus its same-binary LiDAR+IMU arm; existing FAST-LIO2 has a different native map estimator."
+  },
+  "native_visual_measurement_frames": 57,
+  "phase": "smoke",
+  "protocol_sha256": "2d648f2ebd1632accfca7438347562dead448d0c759b073d1fa6a80ef62be9ac",
+  "schema": "bhl-sensor-methods-cell-v1",
+  "scientific_status": "SMOKE_ONLY",
+  "scope": "simulated sensor replay, no physical or closed-loop improvement claim",
+  "started_utc": "2026-10-10T21:14:30.330563+00:00",
+  "status": "PASS",
+  "stereo_mapping": {
+    "frames": 60,
+    "gpu_execution": {
+      "confidence_kind": "binary_visibility_support_not_calibrated_probability",
+      "cuda_runtime": {
+        "compute_capability": [
+          7,
+          5
+        ],
+        "cudnn_version": 90701,
+        "device_index": 0,
+        "device_name": "Quadro RTX 8000",
+        "documentation": "https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#compatibility-with-pytorch",
+        "loader_strategy": "import_torch_before_onnxruntime_session",
+        "torch_cuda_version": "12.8",
+        "torch_version": "2.7.0+cu128"
+      },
+      "family": "Fast-FoundationStereo",
+      "left_right_consistency": "not_available_from_single_left_disparity_export",
+      "license": "NVIDIA Open Model Agreement",
+      "method": "c_fast_foundationstereo",
+      "model_bytes": 103228473,
+      "model_revision": "53a84e28a368f37e699776250215fcb450d6a109",
+      "model_sha256": "2c79bbb274dc0aef687a8732b987077e9e3aa26ff9dd653141cda48c57dad5d3",
+      "model_url": "https://huggingface.co/nvidia/c-fast-foundationstereo/resolve/53a84e28a368f37e699776250215fcb450d6a109/onnx/c_fast_foundationstereo_bp2_dynbatch_dynhw.onnx",
+      "normalization": "ImageNet_RGB_pixel_domain",
+      "onnxruntime_version": "1.22.0",
+      "padding": "edge_bottom_right_to_32",
+      "provider": "CUDAExecutionProvider",
+      "provider_execution_evidence": {
+        "cpu_shape_control_nodes_allowed": true,
+        "cuda_operator_events": {
+          "Add": 740,
+          "BatchNormalization": 3,
+          "BiasGelu": 35,
+          "Cast": 3,
+          "Clip": 104,
+          "Concat": 269,
+          "ConstantOfShape": 19,
+          "Conv": 218,
+          "ConvTranspose": 8,
+          "Cos": 2,
+          "CumSum": 2,
+          "Div": 156,
+          "Einsum": 1,
+          "Expand": 968,
+          "FusedMatMul": 6,
+          "Gather": 155,
+          "GlobalAveragePool": 1,
+          "GlobalMaxPool": 1,
+          "GridSample": 32,
+          "InstanceNormalization": 11,
+          "LayerNormalization": 27,
+          "LeakyRelu": 25,
+          "MatMul": 82,
+          "MemcpyFromHost": 5,
+          "Mul": 200,
+          "Not": 1,
+          "Pad": 1,
+          "Range": 579,
+          "ReduceL2": 104,
+          "ReduceMax": 1,
+          "ReduceMean": 1,
+          "ReduceSum": 50,
+          "Relu": 90,
+          "Reshape": 749,
+          "Resize": 3,
+          "ScatterND": 144,
+          "Shape": 633,
+          "Sigmoid": 39,
+          "Sin": 2,
+          "Slice": 537,
+          "Softmax": 6,
+          "Split": 35,
+          "Squeeze": 1,
+          "Sub": 65,
+          "Tanh": 17,
+          "Tile": 1,
+          "Transpose": 107,
+          "Unsqueeze": 734
+        },
+        "kernel_events_by_provider": {
+          "CPUExecutionProvider": 1898,
+          "CUDAExecutionProvider": 6973
+        },
+        "profiling_scope": "first_prediction_only_excluded_from_warm_latency",
+        "provider_options": {
+          "CPUExecutionProvider": {},
+          "CUDAExecutionProvider": {
+            "arena_extend_strategy": "kNextPowerOfTwo",
+            "cudnn_conv1d_pad_to_nc1d": "0",
+            "cudnn_conv_algo_search": "EXHAUSTIVE",
+            "cudnn_conv_use_max_workspace": "1",
+            "device_id": "0",
+            "do_copy_in_default_stream": "1",
+            "enable_cuda_graph": "0",
+            "enable_skip_layer_norm_strict_mode": "0",
+            "fuse_conv_bias": "0",
+            "gpu_external_alloc": "0",
+            "gpu_external_empty_cache": "0",
+            "gpu_external_free": "0",
+            "gpu_mem_limit": "18446744073709551615",
+            "has_user_compute_stream": "0",
+            "prefer_nhwc": "0",
+            "sdpa_kernel": "0",
+            "tunable_op_enable": "0",
+            "tunable_op_max_tuning_duration_ms": "0",
+            "tunable_op_tuning_enable": "0",
+            "use_ep_level_unified_stream": "0",
+            "use_tf32": "1",
+            "user_compute_stream": "0"
+          }
+        },
+        "session_providers": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "status": "VERIFIED_CUDA_KERNEL_EXECUTION"
+      },
+      "upstream_code_commit": "476f4249561f7c79ca707326954f9255643412a6"
+    },
+    "mapping_arms": [
+      "lidar",
+      "sgbm",
+      "sgbm_simple_fusion",
+      "sgbm_gated_fusion",
+      "c_fast_foundationstereo",
+      "c_fast_foundationstereo_simple_fusion",
+      "c_fast_foundationstereo_gated_fusion"
+    ],
+    "methods": [
+      "sgbm",
+      "c_fast_foundationstereo"
+    ],
+    "status": "PASS"
+  }
+}

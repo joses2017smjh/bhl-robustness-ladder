@@ -1,0 +1,50 @@
+{
+  "archive_sha256": "3628b95ced285660e27c0b3b0ca92a097415beaeedfa912da751832acc3b8282",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=native-controls-v2-s730000-c01-20261011",
+    "--partition=gpu,dgxh,ampere",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--time=02:00:00",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2/native-controls-v2-s730000-c01-20261011-%j.out",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2/native-controls-v2-s730000-c01-20261011-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--exclude=dgxh-1",
+    "--gres=gpu:1",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2/h34_campaign.sbatch",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2",
+    "native-controls-v2-s730000-c01-20261011",
+    "3628b95ced285660e27c0b3b0ca92a097415beaeedfa912da751832acc3b8282"
+  ],
+  "job_id": "21769305",
+  "qualification_gate": {
+    "policy": "completed same-source native smoke checked from durable scientific evidence and Slurm accounting; no dependency on expired controller record",
+    "scheduler_exit_code": "0:0",
+    "scheduler_state": "COMPLETED",
+    "smoke_completion_sha256": "ddd8d28c700942635a789ad39d53484bf78f62a7ccb9a6b1195a318adeb75c81",
+    "smoke_job_id": "21769132",
+    "smoke_result_sha256": "6641d0aa6925a6553b6b056d6755e71b6fce397d9513ffe00f7522c967952d75",
+    "verified_utc": "2026-10-11T11:07:36.961897+00:00"
+  },
+  "resources": {
+    "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+    "cpus": 2,
+    "exclude": "dgxh-1",
+    "gpus": 1,
+    "memory_gb": 16,
+    "partition": "gpu,dgxh,ampere",
+    "requeue": false,
+    "time_limit": "02:00:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21769305\n",
+  "submitted_utc": "2026-10-11T11:07:37.026561+00:00"
+}

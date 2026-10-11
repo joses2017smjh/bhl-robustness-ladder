@@ -1,0 +1,27 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=terrain-confirmation-dispatch-v3-20261011",
+    "--partition=share,eecs",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=23:00:00",
+    "--no-requeue",
+    "--export=NONE",
+    "--chdir=/tmp",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v3/controller-%j.out",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v3/controller-%j.out",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v3/run.sbatch"
+  ],
+  "returncode": 0,
+  "stdout": "21768672\n",
+  "stderr": "",
+  "job_id": "21768672",
+  "plan_sha256": "9d4b641030da689431bf9aba255ebf7a0479319297fcb2fddb6198b8c5293bdd",
+  "smoke_job_id": "21768612",
+  "smoke_result_sha256": "5eaca3e947ab704ff785662f67ca39104ee343838ca51e99bce94eefd052cac6",
+  "submitted_utc": "2026-10-11T10:12:36.431509+00:00"
+}

@@ -1,0 +1,193 @@
+{
+  "schema": "bhl-tumvi-separate-pose-evaluation-v1",
+  "status": "COMPLETED",
+  "source_sha256": "67cf13545369e8002e66906bd516f6e120317a074f22e38c1c8a7ae06c5d3d51",
+  "replay_result_sha256": "4fe767e1777b8df10335d4dfaef84e5b9dc1c6457d9e6ed2b5ad82d98c052ef9",
+  "reference": "Official calibrated room1 dso/gt_imu.csv; all numeric rows independently match mav0/mocap0/data.csv",
+  "reference_sha256": "33931c1404d911830467d88c94b6ff167803ae2c562306e3353e55014ade843a",
+  "reference_frame_primary_source": "https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset",
+  "reference_frame_evidence": "Publisher states calibrated sequences contain consistent clocks and ground-truth poses in the IMU frame; archive labels this file gt_imu.csv.",
+  "estimated_pose_conversion": "T_nativeworld_rectifiedcamera @ inverse(T_imu_rectifiedcamera)",
+  "association": "Unique nearest original ground-truth sample within5ms, no pose interpolation",
+  "alignment": "Per-native-map SE3, scale fixed1; offline evaluation only",
+  "truth_inputs_to_estimator": false,
+  "own_hardware_validation": false,
+  "arms": [
+    {
+      "mode": "stereo",
+      "input_frames": 1200,
+      "initialized_tracked_frames": 1200,
+      "maps_with_accepted_poses": [
+        0
+      ],
+      "map_scores": [
+        {
+          "map_id": 0,
+          "status": "MEASURED",
+          "schema": "bhl-pose-metrics-v1",
+          "scale": 1.0,
+          "alignment": "se3",
+          "T_truthworld_estimatedworld": [
+            [
+              -0.9962800032540866,
+              0.011730769152428124,
+              -0.08537297096346422,
+              0.9482435432312218
+            ],
+            [
+              0.08594938462683686,
+              0.06360174618685396,
+              -0.9942673288227113,
+              -0.22187194408901315
+            ],
+            [
+              -0.006233650479784699,
+              -0.997906411912997,
+              -0.06437340028785525,
+              1.2591663943953975
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "associated_poses": 1186,
+          "estimate_frames": 1200,
+          "tracked_frames": 1200,
+          "unassociated_tracked_frames": 14,
+          "association_max_error_s": 0.004963373999999021,
+          "ate_translation_m": {
+            "rmse": 0.15886917153763291,
+            "mean": 0.14649301833021097,
+            "p95": 0.2664416998377819,
+            "max": 0.3627684817959739
+          },
+          "ate_rotation_deg": {
+            "rmse": 3.4120564339499198,
+            "mean": 3.1078963295592787,
+            "p95": 4.3602831348119535,
+            "max": 7.511893983568082
+          },
+          "rpe_translation_m": {
+            "rmse": 0.012804593529769622,
+            "mean": 0.009126742783761254,
+            "p95": 0.026675830210393017,
+            "max": 0.07328320151996866
+          },
+          "rpe_rotation_deg": {
+            "rmse": 0.48797595630452445,
+            "mean": 0.3240254552052894,
+            "p95": 0.8512074750181879,
+            "max": 5.510075485044161
+          },
+          "rpe_definition": "consecutive associated tracked pose pairs",
+          "reference_path_length_m": 52.355655248739836,
+          "endpoint_drift_m": 0.3325643822319988,
+          "endpoint_drift_m_per_m": 0.006352024067925372,
+          "tracking_failure_segments": 0,
+          "tracking_lost_frames": 0,
+          "tracking_lost_time_s": 0.0,
+          "tracking_observation_end_s": 59.95267938600001,
+          "rpe_interval_seconds_summary": {
+            "min": 0.048755263000000326,
+            "max": 0.35001100000000207,
+            "mean": 0.05059297838481013
+          }
+        }
+      ],
+      "frames_sha256": "521db8c7290c8b81f730ba9d005797364bb6f5775806ab19285dc966a044167d",
+      "continuous_single_map_trajectory": true,
+      "coverage_warning": "ATE uses associated initialized tracked poses; report tracking coverage separately. Each native map is rigidly aligned independently; no scale correction or cross-map stitching."
+    },
+    {
+      "mode": "stereo_inertial",
+      "input_frames": 1200,
+      "initialized_tracked_frames": 1027,
+      "maps_with_accepted_poses": [
+        0
+      ],
+      "map_scores": [
+        {
+          "map_id": 0,
+          "status": "MEASURED",
+          "schema": "bhl-pose-metrics-v1",
+          "scale": 1.0,
+          "alignment": "se3",
+          "T_truthworld_estimatedworld": [
+            [
+              -0.9983626855598564,
+              0.05186314807092314,
+              0.024128032532399105,
+              0.7144811011479548
+            ],
+            [
+              -0.05185560059880384,
+              -0.9986541520138227,
+              0.00093880354162862,
+              0.8360735282576712
+            ],
+            [
+              0.02414424917549393,
+              -0.0003139071932014822,
+              0.9997084358421835,
+              0.3764156290880456
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "associated_poses": 1013,
+          "estimate_frames": 1027,
+          "tracked_frames": 1027,
+          "unassociated_tracked_frames": 14,
+          "association_max_error_s": 0.004963373999999021,
+          "ate_translation_m": {
+            "rmse": 0.40565663680413583,
+            "mean": 0.35202916716880917,
+            "p95": 0.685846387802414,
+            "max": 1.5186133477644752
+          },
+          "ate_rotation_deg": {
+            "rmse": 1.875569667329383,
+            "mean": 1.81760972325826,
+            "p95": 2.2969238959589853,
+            "max": 6.541184179407849
+          },
+          "rpe_translation_m": {
+            "rmse": 0.04315888474972642,
+            "mean": 0.005224544443752353,
+            "p95": 0.009371662469309865,
+            "max": 0.914103732009237
+          },
+          "rpe_rotation_deg": {
+            "rmse": 0.4453351474677833,
+            "mean": 0.24600898533846244,
+            "p95": 0.6836642567904831,
+            "max": 5.591640598933511
+          },
+          "rpe_definition": "consecutive associated tracked pose pairs",
+          "reference_path_length_m": 50.84625207985219,
+          "endpoint_drift_m": 1.492541332157197,
+          "endpoint_drift_m_per_m": 0.029354008822778423,
+          "tracking_failure_segments": 0,
+          "tracking_lost_frames": 0,
+          "tracking_lost_time_s": 0.0,
+          "tracking_observation_end_s": 59.95267938600001,
+          "rpe_interval_seconds_summary": {
+            "min": 0.048755263000000326,
+            "max": 6.250126035000001,
+            "mean": 0.05682064657411068
+          }
+        }
+      ],
+      "frames_sha256": "d0242afc02e12fb83c3d87d867593f1bb3d9c4864ca1c5d623e9cbc7c5c45d99",
+      "continuous_single_map_trajectory": true,
+      "coverage_warning": "ATE uses associated initialized tracked poses; report tracking coverage separately. Each native map is rigidly aligned independently; no scale correction or cross-map stitching."
+    }
+  ]
+}

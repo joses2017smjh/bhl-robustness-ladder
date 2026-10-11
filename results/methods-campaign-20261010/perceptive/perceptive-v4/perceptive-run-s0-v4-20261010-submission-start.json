@@ -1,0 +1,33 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=perceptive-run-s0-v4-20261010",
+    "--partition=gpu,dgxh,ampere",
+    "--cpus-per-task=8",
+    "--mem=64G",
+    "--time=08:00:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/perceptive-run-s0-v4-20261010-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/perceptive-run-s0-v4-20261010-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--gres=gpu:1",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v4",
+    "perceptive-run-s0-v4-20261010",
+    "aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f"
+  ],
+  "created_utc": "2026-10-10T21:22:24.752471+00:00",
+  "qualification_gate": {
+    "policy": "completed same-source native smoke checked from durable scientific evidence and Slurm accounting; no dependency on expired controller record",
+    "scheduler_exit_code": "0:0",
+    "scheduler_state": "COMPLETED",
+    "smoke_completion_sha256": "b2fad39bcf6510da96266275929e2f76615c4ea27145ac6b51379f86398a570c",
+    "smoke_job_id": "21757582",
+    "smoke_result_sha256": "3098d2ad26faea771082f3b9041a3251de6f94b0af4b9d83369de9da8a541e5c",
+    "verified_utc": "2026-10-10T21:22:24.752444+00:00"
+  }
+}

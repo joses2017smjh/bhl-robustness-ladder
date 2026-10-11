@@ -1,0 +1,38 @@
+{
+  "files_sha256": {
+    "dev-independent-collection.json": "1b11aaef622d83590ef135d9aa3790c76192bc128eb10fe14f5440b59b236c34",
+    "heldout-clear-heavy-demo.png": "cd7175f9eba9e12f1667ee95588671d3043b21364780826c27ddfcdbf61bd938",
+    "heldout-clear-heavy-demo.svg": "a2195c072be3bf3a52e6af1688d711f45b2c3d6d27bbee07d4afe2027e6dc239",
+    "heldout-plot-data.json": "903025646b1ff5500ba26310d8c26854f5bb9e31becdbd1774d4e57c27b913bc",
+    "heldout-tradeoff.png": "af595ed707d6f50a486c2fa5ac96eb20c1e9805e2be3baddc6256b2e4d3429f1",
+    "heldout-tradeoff.svg": "08ec7679bc304b749ac5a9ec8c0694daa2023f01c61694cfd44d86cc2eb7a378",
+    "smoke-independent-collection.json": "71166d5cc3e7f8d0dbb71a705c658b32505151280a0a2e80f9c0bda3f05ae898",
+    "test-independent-collection.json": "335304e72ebad994ec442c51072ca97c3ca13d9b62a96a47d07dd1f0d56cf735"
+  },
+  "fixed_demo": [
+    {
+      "artifact_sha256": "baedfa67001930817f0f5eadb0901d5c69466d212ab16e723621133dc92a0ebd",
+      "cell": "test-panel_background-s742000-clear",
+      "condition": "clear",
+      "frame_index": 6
+    },
+    {
+      "artifact_sha256": "6370af188dcd0cb2f63f828974e58145ab6773caed3666b0951d9cdec8c9f1b7",
+      "cell": "test-panel_background-s742000-heavy",
+      "condition": "heavy",
+      "frame_index": 6
+    }
+  ],
+  "heldout_geometry_groups": 4,
+  "heldout_independent_seed_clusters": 2,
+  "independent_recomputation": "All300frames/30cells: artifactinventory/hashes, geometricvisibility, 9armnative/common/pairwise/stratumdepth-hazardmetrics matched stored collections exactly",
+  "raw_archive_sha256": "a571b6298760128ed2165edf7b342fd1e621cf80d345eaa4b85f679757fa1eef",
+  "schema": "bhl-fusion-independent-report-v1",
+  "scientific_protocol_sha256": "faed4d21ffe608d359bebbb8abcf16d4b5b6b0d121d18100d33b26243af167df",
+  "status": "PASS",
+  "verified_cells": {
+    "dev": 12,
+    "smoke": 6,
+    "test": 12
+  }
+}

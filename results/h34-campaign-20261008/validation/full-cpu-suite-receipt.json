@@ -1,0 +1,148 @@
+{
+  "schema": "h34-full-cpu-suite-validation-v1",
+  "status": "PASS",
+  "scope": "Complete CPU test suite in existing research environment; no fresh-install, Isaac training or hardware claim",
+  "completed_utc": "2026-10-09T02:30:32.152626+00:00",
+  "command": "OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1 PYTHONPATH=src:external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python -m pytest -q tests --junitxml=/tmp/h34-full-suite.xml",
+  "exit_code": 0,
+  "summary": {
+    "passed": 2145,
+    "skipped": 82,
+    "failed": 0,
+    "errors": 0,
+    "subtests_passed": 6,
+    "warnings": 4,
+    "pytest_wall_s": 784.51
+  },
+  "junit_suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "82",
+      "tests": "2233",
+      "time": "784.474",
+      "timestamp": "2026-10-08T19:16:19.882323-07:00",
+      "hostname": "dgx2-1.hpc.engr.oregonstate.edu"
+    }
+  ],
+  "skip_reasons": [
+    {
+      "reason": "R1's qualify JSONs are not here",
+      "count": 1
+    },
+    {
+      "reason": "Stand3 run dirs not present",
+      "count": 10
+    },
+    {
+      "reason": "Stand3 smoke run params not on disk",
+      "count": 1
+    },
+    {
+      "reason": "Stand4 smoke 21506555 params absent",
+      "count": 1
+    },
+    {
+      "reason": "TurnBoth-s0 export not on disk",
+      "count": 3
+    },
+    {
+      "reason": "arms-turngait-clock-s2's env.yaml is not here",
+      "count": 12
+    },
+    {
+      "reason": "checkpoint not present",
+      "count": 1
+    },
+    {
+      "reason": "could not import 'rosbags': No module named 'rosbags'",
+      "count": 1
+    },
+    {
+      "reason": "export not on disk: /tmp/bhl-h34-20261008/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported",
+      "count": 32
+    },
+    {
+      "reason": "exported depth ONNX not present",
+      "count": 1
+    },
+    {
+      "reason": "needs the arms-turngait-clock-s0 run's params/env.yaml",
+      "count": 1
+    },
+    {
+      "reason": "needs the upstream assets and the arms-turn-turnboth-s0 export",
+      "count": 3
+    },
+    {
+      "reason": "no Stand5 smoke run on disk",
+      "count": 1
+    },
+    {
+      "reason": "no saved smoke crossings on disk",
+      "count": 1
+    },
+    {
+      "reason": "raw trace of 21405537 not on disk (untracked): /tmp/bhl-h34-20261008/results/mission7-campaign-20260923/replay-gate-v2-align/episodes.json.gz",
+      "count": 2
+    },
+    {
+      "reason": "raw trace of 21405541 not on disk (untracked): /tmp/bhl-h34-20261008/results/mission7-campaign-20260923/replay-gate-v4-settle080/episodes.json.gz",
+      "count": 2
+    },
+    {
+      "reason": "replay baseline not on disk",
+      "count": 1
+    },
+    {
+      "reason": "the M2 bench crossing records (gitignored) are not on disk",
+      "count": 1
+    },
+    {
+      "reason": "the clocks2 bench-v2 crossing records are gitignored",
+      "count": 1
+    },
+    {
+      "reason": "untracked replay inputs not on disk",
+      "count": 1
+    },
+    {
+      "reason": "untracked replay inputs not on disk (the submitter checks them before planning)",
+      "count": 1
+    },
+    {
+      "reason": "upstream checkout (with logs/) not present",
+      "count": 2
+    },
+    {
+      "reason": "v1 actor not present",
+      "count": 1
+    },
+    {
+      "reason": "v1 run dir or tensorboard not available",
+      "count": 1
+    }
+  ],
+  "artifacts_sha256": {
+    "full-cpu-suite.xml": "31792226c521fe14320c894af25020305eee59b0dda3b207f20edd2bf0326870",
+    "full-cpu-suite.log": "694a852efcc47f83433d7649cc9bcd35a0b5c712eed076676ae1546663644e28"
+  },
+  "tested_source_sha256": {
+    "src/bhl_robust/tasks/__init__.py": "4bd447001c53c6ad8f5e1849a5491a4e9ea6b4527e1c9a7a4f149fcd67acba2c",
+    "src/bhl_robust/latency_history.py": "fe49ec6e733021d2ba9b252c1550a5041420d4d31d8168112a3f0643931fe922",
+    "src/bhl_robust/tasks/history_latency_env_cfg.py": "87596a332eb9505524c323892716f82377abdf29cfe800415abdffd4b10977f1",
+    "src/bhl_robust/eval/history_latency.py": "6a7cb0ee4703d0298f8a38237027760a0f02c9e713ab59fa565e9eead964909f",
+    "scripts/bench/h3_train.py": "17d8a7903c31f4b97c554fadc252f70cf0c434ffbad3997b45a45ea8c956bc0f",
+    "scripts/bench/history_latency_eval.py": "4d14b30e9645bee2d663e553c6e31dd3ca41923615f2c3f965f5e903cd3bf35a",
+    "src/bhl_robust/tasks/heading_observable_env_cfg.py": "5e4b1ac4943d91a4f477729a1012c38b90d02f3801921f7f76d97cb308da5920",
+    "src/bhl_robust/eval/heading_observable.py": "7d2bd6f594581e14af6168e32c2ca4d07763f6eeebf0c13007a83185bc62b4bf",
+    "scripts/bench/h4_train.py": "bb9202959fd4b7b044f62499e48f3107f83c33388dff33dd8d0ce4775a6b92c4",
+    "scripts/bench/h4_qualification.py": "2a838111a67bab1343239f44798caad2c58e33bdd9add461f0ef70f426772b6a",
+    "scripts/bench/h34_campaign.py": "0bba98b7beb7c4f3f8c825834da70c623e679712e65eb9ce6dd22f516fc2cb3b",
+    "tests/test_history_latency.py": "68d40f7cc8576a29ad97f04fe6c48cc08af7c41ccdfa58dc4270d0b8442de7d7",
+    "tests/test_h34_campaign.py": "c12cdbfdef0dbbf453ffe9fb54e638363ce93ff140caae8a0969fee16a0beb27"
+  },
+  "git_head": "ba73008a08c3d67c8870575ac9095ae2cec21354",
+  "note": "Working tree includes reviewed new campaign source; source hashes identify those exact files. MuJoCo emitted instability warnings during the suite; pytest recorded no failures."
+}

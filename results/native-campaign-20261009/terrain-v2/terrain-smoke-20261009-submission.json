@@ -1,0 +1,34 @@
+{
+  "archive_sha256": "31075b009ccf5ca8e0854146972ecdee01031217a89ae8f718bc3038fe848daa",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=terrain-smoke-20261009",
+    "--partition=share,eecs",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=00:20:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/terrain-v2/terrain-smoke-20261009-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/terrain-v2/terrain-smoke-20261009-%j.out",
+    "--export=NONE",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/terrain-v2/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/terrain-v2",
+    "terrain-smoke-20261009",
+    "31075b009ccf5ca8e0854146972ecdee01031217a89ae8f718bc3038fe848daa"
+  ],
+  "job_id": "21740943",
+  "resources": {
+    "cpus": 2,
+    "gpus": 0,
+    "memory_gb": 8,
+    "partition": "share,eecs",
+    "time_limit": "00:20:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21740943\n",
+  "submitted_utc": "2026-10-09T21:30:57.874855+00:00"
+}

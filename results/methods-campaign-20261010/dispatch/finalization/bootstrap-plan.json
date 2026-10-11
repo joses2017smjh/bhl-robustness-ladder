@@ -1,0 +1,30 @@
+{
+  "schema": "bhl-methods-finalization-bootstrap-v1",
+  "bootstrap_sha256": "2e20ec1e1baa4717dc823d8a83ccb40bb1b44162ad531faab452014bf548a3d6",
+  "source_archive": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/finalization/collection-source.tar.gz",
+  "source_archive_sha256": "fa4cfe5a05e75586c41f74e29eb3193d0dcbf05f08918e25c2909dcbf14d6579",
+  "collections": [
+    {
+      "track": "terrain",
+      "plan_path": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/finalization/terrain-plan.json",
+      "plan_sha256": "62748f3d54f82aaf7b54521a81a00e0f6426128249b3dc8ab19a4dcc5df6c5e6"
+    },
+    {
+      "track": "stereo",
+      "plan_path": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/finalization/stereo-plan.json",
+      "plan_sha256": "c223789a53baf9cdf40f75e56cd1266890a78ee253101ce1b55ee7c908262b7f"
+    },
+    {
+      "track": "sensors",
+      "plan_path": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/finalization/sensors-plan.json",
+      "plan_sha256": "4bf321862dba52c36833462d2b885ffe9fbac61404286882fb9616b4c202a3a4"
+    },
+    {
+      "track": "perceptive",
+      "plan_path": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/finalization/perceptive-plan.json",
+      "plan_sha256": "5a1efd6188c79311d18fc992ff688c76d93ba1eccca835cc2d4277fe4784cc06"
+    }
+  ],
+  "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+  "scope": "Post-run read-only independent collection and verified compact release publication. No resubmission, tuning or new physical/simulation episodes. Incomplete or negative results retained."
+}

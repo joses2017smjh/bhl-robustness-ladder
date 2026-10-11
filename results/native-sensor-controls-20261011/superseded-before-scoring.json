@@ -1,0 +1,128 @@
+{
+  "recorded_utc": "2026-10-11T10:42:54.652873+00:00",
+  "action": "Cancel utility dispatcher21768520 before scoring",
+  "reason": "External TUM recording revealed native ID0 reuse after active-map reset; frozenv1 checks map ID only. Will preserve source/smoke and refreeze epoch-aware v2 with fresh smoke.",
+  "scientific_children_submitted": 0,
+  "scientific_episodes_scored": 0,
+  "state_before": {
+    "schema": "bhl-native-sensor-controls-dispatch-state-v1",
+    "plan_sha256": "354c8596967ab618e181148285f6985919cb607f32829048fc927717158a203e",
+    "dispatcher_job_id": "21768520",
+    "jobs": [
+      {
+        "name": "native-controls-s730000-c00-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730000-c01-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730000-c02-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730000-c03-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730000-c04-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730000-c05-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730000-c06-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730000-c07-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730000-c08-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730000-c09-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730001-c00-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730001-c01-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730001-c02-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730001-c03-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730001-c04-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730001-c05-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730001-c06-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730001-c07-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730001-c08-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "native-controls-s730001-c09-20261011",
+        "state": "UNSUBMITTED"
+      }
+    ],
+    "started_utc": "2026-10-11T09:58:46.002977+00:00",
+    "status": "WAITING_FOR_SHARED_SPACE",
+    "updated_utc": "2026-10-11T10:42:34.944957+00:00",
+    "complete_jobs": 0,
+    "active_jobs": 0,
+    "storage": {
+      "actual_free_bytes": 11884847104,
+      "other_outstanding_promises_bytes": 2105624328,
+      "requested_unwritten_bytes": 2147483648,
+      "minimum_free_bytes": 8589934592
+    }
+  },
+  "queue_before": [
+    "21768383|hum4-crowd-gif|PD",
+    "21767958|interactive|R",
+    "21768434|waiter-vla-train-sft2|R",
+    "21768854|terrain-confirmation-dispatch-v5-20261011|R",
+    "21768687|terrain-confirmation-dr-default-s0-flat-20261011|R",
+    "21768688|terrain-confirmation-dr-default-s0-small_steps-20261011|R",
+    "21768520|native-controls-dispatch-20261011|R",
+    "21768062_0|waiter-wbc|R",
+    "21768062_2|waiter-wbc|R",
+    "21768062_1|waiter-wbc|R",
+    "21768382|hum4-report|PD",
+    "21768378_[0-23%3]|hum4-nav-confirm|PD",
+    "21768377|hum4-nav-gate|PD",
+    "21768063_2|waiter-gates-1f|PD",
+    "21768063_1|waiter-gates-1f|PD",
+    "21768063_0|waiter-gates-1f|PD",
+    "21768376_[19-47%3]|hum4-nav-development|PD",
+    "21768376_15|hum4-nav-development|R",
+    "21768376_17|hum4-nav-development|R",
+    "21768376_18|hum4-nav-development|R"
+  ],
+  "cancelled_job_id": "21768520"
+}

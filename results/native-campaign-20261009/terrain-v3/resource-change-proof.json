@@ -1,0 +1,48 @@
+{
+  "archive_sha256": "1f04b186e62a31bfa27547375124b85f7bc8a46b688fc92577ea108d7d6293ed",
+  "manifest_sha256": "91ff3878be45bc64d1775115ad0abf73d1d8fc92b7532c46a7d5d8f3ec0a7040",
+  "parent_archive_sha256": "31075b009ccf5ca8e0854146972ecdee01031217a89ae8f718bc3038fe848daa",
+  "resource_changes": [
+    {
+      "after": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "preempt",
+        "requeue": false,
+        "time_limit": "00:20:00"
+      },
+      "before": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "time_limit": "00:20:00"
+      },
+      "job": "terrain-smoke-20261009"
+    },
+    {
+      "after": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "preempt",
+        "requeue": false,
+        "time_limit": "05:00:00"
+      },
+      "before": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "time_limit": "05:00:00"
+      },
+      "job": "terrain-run-20261009"
+    }
+  ],
+  "scientific_config_unchanged": true,
+  "source_input_members_unchanged": true,
+  "status": "PASS",
+  "submission_launcher": "current verified h34 submit applies resources.requeue=false as --no-requeue; frozen simulation source remains byte-identical",
+  "verified_files": 834
+}

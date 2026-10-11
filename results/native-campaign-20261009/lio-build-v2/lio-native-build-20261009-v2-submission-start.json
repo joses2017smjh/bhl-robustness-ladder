@@ -1,0 +1,21 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=lio-native-build-20261009-v2",
+    "--partition=share,eecs",
+    "--cpus-per-task=8",
+    "--mem=24G",
+    "--time=01:30:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-build-v2/lio-native-build-20261009-v2-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-build-v2/lio-native-build-20261009-v2-%j.out",
+    "--export=NONE",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-build-v2/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-build-v2",
+    "lio-native-build-20261009-v2",
+    "52320d6cd9168680819bb4da0b18035e78029102bb6e36be44d1f9cdc25b5571"
+  ],
+  "created_utc": "2026-10-09T21:09:58.004833+00:00"
+}

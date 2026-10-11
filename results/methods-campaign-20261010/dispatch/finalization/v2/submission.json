@@ -1,0 +1,23 @@
+{
+  "plan_sha256": "5f44f261b68f1dc44eb232d3f44ce726fd119691fa869f21daa136b2b27d5496",
+  "source_archive_sha256": "57815d94108a22dcf6d1ef0f863a3892a22a32a85b1f017ca4ed283fedf08963",
+  "source_archive_bytes": 560344,
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--account=eecs",
+    "--partition=share,eecs",
+    "--ntasks=1",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=02:00:00",
+    "--no-requeue",
+    "--dependency=afterany:21757620:21757621:21757622:21757623",
+    "--job-name=methods-final-collection",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/finalization/v2/finalize-%j.log",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/finalization/v2/finalize.sbatch"
+  ],
+  "returncode": 0,
+  "job_id": "21757776",
+  "stderr": ""
+}

@@ -1,0 +1,1171 @@
+{
+  "status": "PASS",
+  "scientific_status": "MEASURED_DEVELOPMENT_NO_CONFIRMATION",
+  "phase": "development",
+  "episodes": 270,
+  "arms": {
+    "baseline": {
+      "episodes": 90,
+      "goals": 9,
+      "falls": 0,
+      "contacts": 77,
+      "nonfinite": 0,
+      "lateral_path_rmse_m_mean": 0.23316181647788603
+    },
+    "heading": {
+      "episodes": 90,
+      "goals": 90,
+      "falls": 0,
+      "contacts": 0,
+      "nonfinite": 0,
+      "lateral_path_rmse_m_mean": 0.05793328016159557
+    },
+    "regulated": {
+      "episodes": 90,
+      "goals": 86,
+      "falls": 0,
+      "contacts": 0,
+      "nonfinite": 0,
+      "lateral_path_rmse_m_mean": 0.05761798020151911
+    }
+  },
+  "paired_vs_baseline": {
+    "heading": {
+      "matched_pairs": 90,
+      "goal_gain_count": 81,
+      "contact_reduction_count": 77,
+      "uncertainty_scope": "descriptive paired development counts; train-seed and course clustering prevents independent episode safety interpretation",
+      "goal_rate_difference": 0.9,
+      "goal_rate_difference_95_percent_seed_cluster_bootstrap_interval": [
+        0.8666666666666666,
+        0.9333333333333333
+      ],
+      "bootstrap_seed": 900001,
+      "bootstrap_resamples": 10000,
+      "interval_scope": "conditional on three fixed actors and three fixed terrain families;10 reset-seed clusters, no physical/generalized safety interval"
+    },
+    "regulated": {
+      "matched_pairs": 90,
+      "goal_gain_count": 77,
+      "contact_reduction_count": 77,
+      "uncertainty_scope": "descriptive paired development counts; train-seed and course clustering prevents independent episode safety interpretation",
+      "goal_rate_difference": 0.8555555555555555,
+      "goal_rate_difference_95_percent_seed_cluster_bootstrap_interval": [
+        0.8000000000000002,
+        0.9111111111111111
+      ],
+      "bootstrap_seed": 900001,
+      "bootstrap_resamples": 10000,
+      "interval_scope": "conditional on three fixed actors and three fixed terrain families;10 reset-seed clusters, no physical/generalized safety interval"
+    }
+  },
+  "confirmation_executed": false,
+  "scope": "MuJoCo simulation development; three frozen12DoF actors; matched nativeFAST-LIO2 startup/loss/estimated-goal stops; new course/seed cohort; no physical validation, terrain-trained gait or independent confirmation claim",
+  "ground_truth_inputs_to_controller": [],
+  "protocol_sha256": "8060a32ceea75ca29a4eb08444385f71d755e6c7055760790d418b509d858e31",
+  "complete_declared_cells": 270,
+  "episode_sources": [
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410000--regulated/episode.json",
+      "sha256": "0e0c616acbd966b993fcfc0fe6c3c0e45007d9994114f61443cd78230c9a4717"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410000--heading/episode.json",
+      "sha256": "21f0a4653e1b9b5b41ec045066cb89e541acfc2f8aa76a1084439c99b2f2313e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410000--baseline/episode.json",
+      "sha256": "41d1bb8bcb32387e20ffdb8c500e5d316d4674ceeea0b1a3f9b2db7112453f7e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410001--baseline/episode.json",
+      "sha256": "f20c63663e273057bcc31b6baf98a70229d6311d452a16af2d94a5baa53b6a67"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410001--heading/episode.json",
+      "sha256": "5efdff148f5592376dea4185661d5a32016e997655a26c346a687464a19844ca"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410001--regulated/episode.json",
+      "sha256": "9fa704c0876353c91c6bb62ce3c9091dd46f263e30c5571b43707e685cf10227"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410002--heading/episode.json",
+      "sha256": "3e3501aaf56301caee09e40717b662f77487465c890706397fae6acbed3e30f5"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410002--regulated/episode.json",
+      "sha256": "fc5165d53a2cb7b0a9d3d613d9962a5f2b578c572b846b9fb05c577a5182e677"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410002--baseline/episode.json",
+      "sha256": "188d9318058e920fd8ca14b76f5ac57b3ae474ba29f770dda1d6f5c3e93dcf87"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410003--heading/episode.json",
+      "sha256": "940fbda2cb1bee1309a13dabbe48aebb99732ac4601c3463ba0c293bb1923399"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410003--baseline/episode.json",
+      "sha256": "4f48cce5836e3862382d7062c5ccfc6f7052d5b456468f63ac986f110e35da36"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410003--regulated/episode.json",
+      "sha256": "d1cb8f6279ef9a5734d28be31531d4816400442e96d3f42ae920b9a09d782f28"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410004--heading/episode.json",
+      "sha256": "39a5ad08857566b8fc08c95836735bbf6f2009ef89086e075a8f0c0705b776ea"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410004--baseline/episode.json",
+      "sha256": "068b2342bada289a40c11781653cb43528ae536a0453b30d607bdbe255e59e4a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410004--regulated/episode.json",
+      "sha256": "9a2b9e6af6df1eb05af324ec2222f3455f47b8b206c4861ae9ab3ce0d34bafdf"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410005--regulated/episode.json",
+      "sha256": "8382b999210fa98dd7d18ca4ab4f447733617081ed81e562a8f73650435d47cf"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410005--baseline/episode.json",
+      "sha256": "118bcfd3b4b8e71defd83c38235e71a407070fade43dfa9d9d5f3be31d0e5d93"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410005--heading/episode.json",
+      "sha256": "a2a6b33dd2157eeb5849d9d394a20542ff18bc8b436b178100fd5cff69ffa2b5"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410006--heading/episode.json",
+      "sha256": "32c28617ccedc8203491ca944d7e865fc15006a19d7b3feaa6a56dcd571ddee4"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410006--regulated/episode.json",
+      "sha256": "eb0692e5390a887f5b7e8c2541af87d00662e641f8cfc5f36bd99ebe22228e17"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410006--baseline/episode.json",
+      "sha256": "813969f7764129ed2c047f1f3b9a0f074efd62ea89637d927bfa949d66e9e303"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410007--regulated/episode.json",
+      "sha256": "6650fcad4252db2f74cb296e6bb0d55f58cefe43916cc7eebdd4c8e8bca7869e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410007--baseline/episode.json",
+      "sha256": "9b68870c6f1f8c700be7432c47c12225dd45dc3acf8d7bb1c0a791f0838b2bc4"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410007--heading/episode.json",
+      "sha256": "2b8b9263143a4465086e8caa1d794a20438a4f62bf7ebb872afe256dd319c651"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410008--baseline/episode.json",
+      "sha256": "2552a5f5755678712195a959f6c1ecfb3f64d23766c1b35c332fa26fd26c1495"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410008--heading/episode.json",
+      "sha256": "199ea0bc76943ccd312082639e995dff4bd1a4b10d4c4bd2377ceff20534c196"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410008--regulated/episode.json",
+      "sha256": "3789fb2faeb7cc6135195f94770789853d67c11101c600e14ec626e12680bc84"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410009--baseline/episode.json",
+      "sha256": "f113e24e8312b4b9e53a9ff284a36629099f9a58dff7e4716a97b15e3c40e2de"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410009--regulated/episode.json",
+      "sha256": "88a865bf19668dc49bab89d47675963da65ad3b3c19a17fcbb053697e96ab328"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-flat-20261010-21757070/dr-default-s0--flat--s410009--heading/episode.json",
+      "sha256": "f35a23252f68de4877ce0f387670e5c74871a1801f692cf81c1c9367c670c992"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410000--regulated/episode.json",
+      "sha256": "e95344ed348356fc61d2e0007226b95687e4314ecdefd0ebb8522a95d50691a9"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410000--heading/episode.json",
+      "sha256": "0724b891535f1224de184b601d0244fceb98034d61c02cb83e90f2d1c62ef712"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410000--baseline/episode.json",
+      "sha256": "4f25dc77be7d1531a4888e86f9e5ed879f50c188f06c7552df5165fbc1ae5694"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410001--baseline/episode.json",
+      "sha256": "e1fafe756523d27e5153bed3a1c60cf6f39ee10e105df8db3af27963bf30c9df"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410001--heading/episode.json",
+      "sha256": "cb6d05cedb493a4e56852f773d148cbdf746acf80225714ed088319264160f8b"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410001--regulated/episode.json",
+      "sha256": "dadde111b7e8b83b7edf8ebaabd1a413f29a8393e69ef4fc7dc1937965adbcc0"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410002--heading/episode.json",
+      "sha256": "8f2b734034ce2ffc8a321a6e8a834c105f2517d439c1a91ae3983544ec163aff"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410002--regulated/episode.json",
+      "sha256": "418af6233c7d794c94e670fad679f82d5cea61a1e4518d4dfb7e5e3312c0b068"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410002--baseline/episode.json",
+      "sha256": "2fc9063d7838061520d6bf212e90c79455912d62309998f8ddcfa3e55c2dd290"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410003--heading/episode.json",
+      "sha256": "3c27529954fe886f6696e6a01d1f718a1cc0c9d7db74674d0ed20a4777baeb43"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410003--baseline/episode.json",
+      "sha256": "9b6bf820fa7be826f07dd5727f948c80a3f321cbc8e9cf3812034ec6614040cf"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410003--regulated/episode.json",
+      "sha256": "32e5e707e12ac3ca198dba5c0b34b36c90a1799d358ce9f7561374d0c1bb968c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410004--heading/episode.json",
+      "sha256": "b6614bd6cadb61d4f15f3dccd517c19a2b71b2e6511140ee37be9bc09c599eee"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410004--baseline/episode.json",
+      "sha256": "c9bfb531f2f0ca2745d61fadc808255f54496096aca9fcf6be5ee26fefde4a54"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410004--regulated/episode.json",
+      "sha256": "1916283a95d7e233c513005e35c2735d3e8d88ada483c4470a34648866fc011a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410005--regulated/episode.json",
+      "sha256": "4305d692d45fbe7ede45b1fabc58fc2a11ab78d026838ca6069407d7ed1811e0"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410005--baseline/episode.json",
+      "sha256": "791456933a80e6bee869068541aa16e98a553d6f016c29e4fd61389d2469c65a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410005--heading/episode.json",
+      "sha256": "2d832621d96b5bee3c611c6c2d4a25bd445b095aa31ff8b4e2b47c52e00c0d88"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410006--heading/episode.json",
+      "sha256": "5cbb1b347fadc27d2ba0600def87368d5122bd6c7e0daf4f293bafd2a4daaa9e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410006--regulated/episode.json",
+      "sha256": "68934b4b610a89314700aace231bcfcd4df116e8b6bd734e024835cb98f1bfb8"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410006--baseline/episode.json",
+      "sha256": "3929155377a57541f8eb0cf575be7400ee174a209dd506fb48200fef6e1fa096"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410007--regulated/episode.json",
+      "sha256": "08ee121824d4f0092e0b334c38c019bf46fc561610e7f3622a35e2e063f481fc"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410007--baseline/episode.json",
+      "sha256": "64ae1fe9f665f1cc518535754bcad5d1541f144eb46cb8445bbe9ed9aff4b97e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410007--heading/episode.json",
+      "sha256": "8ed02068d81128903c903e0a4e576b3c9a2d96f577859f58ff69dbfcdb479b6f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410008--baseline/episode.json",
+      "sha256": "69ea1265723fd69a9ef933ccadbe891f6f1f40950155e6ca9e181f856994ad43"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410008--heading/episode.json",
+      "sha256": "6384ac6c1b27027e011dc33ec90596d2c0bae1d0289cc1ad76f17ea40d5533cf"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410008--regulated/episode.json",
+      "sha256": "2a809ca3e87b8562bca0c364dbd7f418412b53069bf5ca9fffc87c247d9f72c4"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410009--baseline/episode.json",
+      "sha256": "9993c00d76082d765b595e3d6f8b40a9a67eda49cc0dffd717bb9838d12e7100"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410009--regulated/episode.json",
+      "sha256": "6ecdc48c2b4d3f708adfe9b204760548c8780229e5d4531db7a815f9ca45d1d4"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-small_steps-20261010-21757630/dr-default-s0--small_steps--s410009--heading/episode.json",
+      "sha256": "f4da2006fbb637a26b7c20516338a46e7175ef16c791fe5c498333d5ab6ed2d6"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410000--regulated/episode.json",
+      "sha256": "8d936b31d46fc5cb2318294350a7495121734eb22301e80a4902c37e03169263"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410000--heading/episode.json",
+      "sha256": "0f69e26fb8de3611d729127b400bf1c5f13f24745a3a120245f5a7632ac4e427"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410000--baseline/episode.json",
+      "sha256": "8eaabd7ccf372b6423c019be2d3a30be04ac7dfdb668f9b9f2b8924418185475"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410001--baseline/episode.json",
+      "sha256": "e4ee85d0d200b4ba57da38ffce2cd07d6c8006272fbd1d54f5091327c2189d9b"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410001--heading/episode.json",
+      "sha256": "af97b96c5f9edf066b059c3f5927a96157e437aac637fa3281ade7d2b621eef9"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410001--regulated/episode.json",
+      "sha256": "9ffdfaf35abc76448b989e9c0233ab24d2d12275576be9072e92e163a4beaf5c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410002--heading/episode.json",
+      "sha256": "117f1f4820e962079b82fe0c914c1391a643b1321e1a1c338b2486ff72e1c74c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410002--regulated/episode.json",
+      "sha256": "9f42aaf8b9e408dabc2ad09f26a86b482beb632a74ccb4cef63bb1b29b70f60c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410002--baseline/episode.json",
+      "sha256": "a7f58c1d153e56753fae77143b671a0161f190638a7cd76f96dbc7b8cb815028"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410003--heading/episode.json",
+      "sha256": "9513cb2f8b59cd1fa19702ea88ade3d2801748d8f9d70dadf2724d29f3bc4210"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410003--baseline/episode.json",
+      "sha256": "d100c84656585493266b42e69a25e0d8e870abb6ea6fc5beacfc61c6a34882f6"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410003--regulated/episode.json",
+      "sha256": "2eb38b00a1d90aba6a3d33aa6cdbd8b72a6655f80ef3372cae668508da44612d"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410004--heading/episode.json",
+      "sha256": "cf8af9d1899a606e518a212b7aad33e7d2c28514776c7b2e112a2ea67b90b5e8"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410004--baseline/episode.json",
+      "sha256": "1b85849ad4972c6fdee3439f04ec3a7e78d4d7c1ee93ddf61b8d5e793b09e65b"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410004--regulated/episode.json",
+      "sha256": "fa2f05c1b3490c53dff1fe68c8b948322eabcf437c6e5de2397c3179899c57c3"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410005--regulated/episode.json",
+      "sha256": "afb639ba4b798a46388b7f35282118f093f3349debc9ba0ea19bd2074332b944"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410005--baseline/episode.json",
+      "sha256": "da025fc306e341f7f3e8491a198f17b4d19f3a31ff750c412f2fe0000bb56f07"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410005--heading/episode.json",
+      "sha256": "ee14b9685f59accbd28bc3753b9a13ca7bf172fc544d45d70899b114907243b7"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410006--heading/episode.json",
+      "sha256": "b05d313b514e0ef76796e97a4516187e57d1541ff22376e8654d8a76c13ddf7e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410006--regulated/episode.json",
+      "sha256": "53bdfb4003f19505345dd5af7f50f2293b2c5732ddce1ed4e3ba9c26d0313040"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410006--baseline/episode.json",
+      "sha256": "b27aca245b14871b2547816c0c8ac67d262438a2ea9a8faf93fe3490197e3828"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410007--regulated/episode.json",
+      "sha256": "4d9f627a3e25375b20b21e371356661931c380cf1bd40ed6d0b477172db5347b"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410007--baseline/episode.json",
+      "sha256": "305cdc1a2f9b361f317f515b1d974c4641f652e30e7ae9501f595bbcf5d1dd81"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410007--heading/episode.json",
+      "sha256": "d73280c1e91c7567727de054e8a85abbb3df53fc927c112074911bcf0f92780b"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410008--baseline/episode.json",
+      "sha256": "38df71bbe600244b7f25a698df1cce3a348dbb8a5d98db803dc00da6ff25cc2f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410008--heading/episode.json",
+      "sha256": "cde116c853a1e70ae93372e1d83ed4aa1f674ce7ecbb76062b2645e6839e4aa8"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410008--regulated/episode.json",
+      "sha256": "cf01a87c77810cfc4b6f900752ab095fd83e0ad89b4a705b624653acf31aeecf"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410009--baseline/episode.json",
+      "sha256": "9ba13aeb6e0da575b52faebb8b02864b1242abaabb1c42a0a131a2ce0d95fc5d"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410009--regulated/episode.json",
+      "sha256": "220082c40aa2fbeec9a716be9aba53c0e80441b6e27e3f97579fa6ed1d39b862"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s0-ramp-20261010-21757875/dr-default-s0--ramp--s410009--heading/episode.json",
+      "sha256": "d6ded796b8fd94eb2f7a3462097b323009c63077574b6a279cd3a265c7884a6a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410000--regulated/episode.json",
+      "sha256": "ef09597354aa1b40adc7fc01d1c9ee236dd42dfb0d954443453ab70027a32705"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410000--heading/episode.json",
+      "sha256": "d917f0baee318405f28a17d35b711a7dc78646684f33a6528e4661c238d6aca1"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410000--baseline/episode.json",
+      "sha256": "2e5638dd6033cb2893037bd5b80599224b3a518ed069a74f93d280d174daf86c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410001--baseline/episode.json",
+      "sha256": "aab1e42a38aec70a5198352fa0139998158e98ce96c9232850dde6ad85894791"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410001--heading/episode.json",
+      "sha256": "c1cb32caf10883a4395b44f59009d3200c2adb50f376835ee361c4e048257a5a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410001--regulated/episode.json",
+      "sha256": "a1d88fbb6dd2bb33cb013197f80f998e1e2135755ae6193f00e29636490a8874"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410002--heading/episode.json",
+      "sha256": "c6ae85199b382fd0106116416b65e4c6b6e8716d9b9783059e9c830addc70286"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410002--regulated/episode.json",
+      "sha256": "c404da16f8e62cca374b113e6234ffe5a5d17b15b5e929eed54f934dfc56604e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410002--baseline/episode.json",
+      "sha256": "7187405858895641a5342ce16dab4fd9afef7ccd95af04e158f61b9bcde02fdc"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410003--heading/episode.json",
+      "sha256": "6eaa63fe249fabfc39812af2d762bd295eea495f57d216ac50eeabe59d74ccdf"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410003--baseline/episode.json",
+      "sha256": "49efb7f2d8e684b9ba7e8028fb3b89389b87968fc68854cf783aeabe98bdad85"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410003--regulated/episode.json",
+      "sha256": "8f191b5ca39c99798ade85238325d4f8e03cfcc3c37629dfc15a70a5dd53f4f1"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410004--heading/episode.json",
+      "sha256": "56decdf8dcede2195ca5fe4800b3a4c6f00d79e6db503d23f1f9cebd084b8db3"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410004--baseline/episode.json",
+      "sha256": "5948caad06977ea78779cff8e94ba4f81f7d8f024113ccf978e0f3fc6118ac9e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410004--regulated/episode.json",
+      "sha256": "c4d1be548a9ffae7ec2a38570da4af2fbba1037a71974f9631225a7231843a09"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410005--regulated/episode.json",
+      "sha256": "a44ed2039f2704a2f1577c84c57dce650a5f6608c85d389efdd7420a41bd7ff4"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410005--baseline/episode.json",
+      "sha256": "200e4c6aebc95d67bb4aa4be004a90662d71d3024c2f4632b78d5c5867e12d20"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410005--heading/episode.json",
+      "sha256": "4ee27020ebb26751d6cf424d7c7479b0af74fb8b34d4a012247bfee1ff8c6cc5"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410006--heading/episode.json",
+      "sha256": "b8ba30b845e094bc16fad3d5cdea81dce4fe1f2c6be8bebe84715a5be9acaa9f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410006--regulated/episode.json",
+      "sha256": "bb8750c5efed764ca00ffec10e78decec626e29e4d3fc4493d2cb1d76c2efb38"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410006--baseline/episode.json",
+      "sha256": "000181f574c4ace1f32d8ba6c5d8bfc10b684cc69b16b5650b6f7470b9942245"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410007--regulated/episode.json",
+      "sha256": "be43eaa002a141e8f57e00284289a8fb53ed7cfa0aa4f10bcc37f326be8fdba7"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410007--baseline/episode.json",
+      "sha256": "0994caba4ec6d8541dcc24653fcd3498aedbe06c90d1e39aad07f118d603ab0a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410007--heading/episode.json",
+      "sha256": "c0793c956b36f1418aaf1ad45dd1c3dc3dd62ae7ebb611f0c690ad7b4e9b6fe3"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410008--baseline/episode.json",
+      "sha256": "055710f0339062c502f74b0165f1eeeb122dedfe93b41d9cd65069f69f00b27c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410008--heading/episode.json",
+      "sha256": "0737b7c4f3901d99273ec541e0b3df03c8e4ae9f689399d775848ad2bc7b59d2"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410008--regulated/episode.json",
+      "sha256": "9db7407936ca8d78baa2ca5e0fcb9ea2cb9814fbb276ea8f9568e94d467f4735"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410009--baseline/episode.json",
+      "sha256": "f5a46a0c2752e89d9a0d328bbfb4043a4caa26037b1034b54af25364d0dfbf03"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410009--regulated/episode.json",
+      "sha256": "e1e2de1ed17ac59bec21a57bf22cda466cd685f2a097ec8ac97f4bda19da2622"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-flat-20261010-21759470/dr-default-s1--flat--s410009--heading/episode.json",
+      "sha256": "7b1d04cc465d95f174324019ae87db28dc16bbabbd47670b7352b61994dc25f1"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410000--regulated/episode.json",
+      "sha256": "9a3ee683e5cbbec44953d3a998bd46c0b951c604b8fefd0dd1067065a0bd6266"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410000--heading/episode.json",
+      "sha256": "7f2cb7397156ce8de5d10a6db99bfa5c2229f680374604e81c4711c8061b64fd"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410000--baseline/episode.json",
+      "sha256": "2237fab430b5304f24edb7efe2b485ad7eeac65c5ee27bc56c7e201b82cf9ea0"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410001--baseline/episode.json",
+      "sha256": "b6b7ce5c4838f9d9ab913d0383e3f1e8578470ce09146912a8649ff39617bfbc"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410001--heading/episode.json",
+      "sha256": "b6113ad961e3932f41cb6eeb66977a4d4483c683f51496d9d2f39fb25a18c6d8"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410001--regulated/episode.json",
+      "sha256": "137da431982e5fab342405ee19b7d177c6ddefdfbb3e52f6478653ef41a84a01"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410002--heading/episode.json",
+      "sha256": "e33855301b4ca7c2c4c2bf12a2ee1996a41d102c6c78fc3e9164e0cfbdf027d7"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410002--regulated/episode.json",
+      "sha256": "d671e11cc50c93cd93b09f7d0be7d9b2186791b8bf4fdbf5f9121f9d412f1bed"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410002--baseline/episode.json",
+      "sha256": "35d0dd34b9787d2be5dd81baad8ba58518075631146d32f583458dc78593a544"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410003--heading/episode.json",
+      "sha256": "b18cfa25799d7605d3c7b7db0aad6d95e07bab597e314ecb8f7928955d75e609"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410003--baseline/episode.json",
+      "sha256": "ec1f34134d8630528d8294cefa92ec8e80bd96e109ed22a6bc6c999913ea4129"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410003--regulated/episode.json",
+      "sha256": "0dee58d85a51ea35ea129425c39047db09584d00ed54836081ff07f111fa326f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410004--heading/episode.json",
+      "sha256": "7b14d51e03f428ad5b0cae61ad4221a124966bd44672c214aa059553b09798cf"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410004--baseline/episode.json",
+      "sha256": "0303b21ef48dae2a48dc58d2a140bfb4fd65efe6ddafbad8f3c46845c32c5d8a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410004--regulated/episode.json",
+      "sha256": "141d5a2c9328256622f6fa61496d236295b526a71a57f26ec81e34e1ff05f240"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410005--regulated/episode.json",
+      "sha256": "eddc37e0255111c4dfa9589785405ae3d93c59d79425bfd9d063c8ca052a6248"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410005--baseline/episode.json",
+      "sha256": "6911bc35f0ea1cf5cfa158363eb4c06715894cd3b18287bea62583eabebbed26"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410005--heading/episode.json",
+      "sha256": "8e722fec1dd68c14a6e8ea332c51645a4f2486224c7013ab7664c9c325043097"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410006--heading/episode.json",
+      "sha256": "4b74c255288182f5450de6f4f7d7bae2b213664a59c4190e87f57dea0859eadf"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410006--regulated/episode.json",
+      "sha256": "1088e911cac5446e07c8103e59d6c477ea52c077eacfec302fe1a40f479fd046"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410006--baseline/episode.json",
+      "sha256": "1735dc1f4bd3d91959fc7e857cf61f042346b86ef165fdd54392302b65593ec0"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410007--regulated/episode.json",
+      "sha256": "f26662e1e476f515aede037e6b343603ee51a4aa16db5bf265b5dc2fb3c72997"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410007--baseline/episode.json",
+      "sha256": "5a7c7ff73f574488b1db83c14e2a025c09a84962736ced0383e771cfe11fd942"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410007--heading/episode.json",
+      "sha256": "daef42c5bbf229202739b6bc3e418086f4d08a168ed1bd66f2669cb8ca298c97"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410008--baseline/episode.json",
+      "sha256": "3eb237a7e01c861d6b9d56e3dba377af162f3309a40426b5604517d60324bdc9"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410008--heading/episode.json",
+      "sha256": "ae85818986277106a515e64a96954f91bf23dbe9519287ac1a14d0a8b261d8b5"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410008--regulated/episode.json",
+      "sha256": "445ce4596c88fe92022f47b125935db47beca8d2e60d69dc739bec9cbbb2ecf3"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410009--baseline/episode.json",
+      "sha256": "3dce3e19e60a098a60be89e83e618c5e48181cb715d35027a6b1bd601e7251fe"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410009--regulated/episode.json",
+      "sha256": "ab95601f6a79c89960478c2c69ec24b663ffd83bfc57dd26e083e14dd1177a4c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-small_steps-20261010-21759591/dr-default-s1--small_steps--s410009--heading/episode.json",
+      "sha256": "b17b617b423bcf129a41e9d561cd98b98cad243e808976f20711c989deea3cce"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410000--regulated/episode.json",
+      "sha256": "a2b1508c9a0cbf20d237c55135481886eefbd70a46b9ee0c308e54d637efb84c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410000--heading/episode.json",
+      "sha256": "e2d86908ddb0c1d9203d634144910ecb4907b456fa16bcd1784b1a098fe2cb7f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410000--baseline/episode.json",
+      "sha256": "f34284826f5f2936700ff3b3260b3dbbe597b12469a4e501ccebcb31ee488ac9"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410001--baseline/episode.json",
+      "sha256": "70a0465e5ac3e2effc95ef3dd577e0a5e300c1c96b1b4cd6771842afe0ae1f7f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410001--heading/episode.json",
+      "sha256": "193bfa05cbc9d1c38fa551be1c76ebf3d6db47858b1e166cc18e6fc72a1ee61b"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410001--regulated/episode.json",
+      "sha256": "12b5bb7f463f9068bb7df9896777aa5565a7f718a000b496baafd6b959a6dbfd"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410002--heading/episode.json",
+      "sha256": "902458cc1250496bb15e886adee978f7d4fd49d20d75e42318796a92cd405748"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410002--regulated/episode.json",
+      "sha256": "ac1608631f1145cad4d575bb73dc4314684ec05d386b41ca77f76cbeca1e036c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410002--baseline/episode.json",
+      "sha256": "b8eefc2e62c2459f6c08a16821f2cfee132c395d9783205c17d6b8012533363a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410003--heading/episode.json",
+      "sha256": "514d7da9094fd39139f086d5638ca8ceb53aba06dba9715571c27f2998729bd8"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410003--baseline/episode.json",
+      "sha256": "99c22a1004f65759647f5ce8595e3b307754f50763f63f2691fa61f1037de678"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410003--regulated/episode.json",
+      "sha256": "6906b326ded863e83f13acce144adefdd8e35054971e554b9c560586e5cf28f0"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410004--heading/episode.json",
+      "sha256": "abd36d1e8e0c4ee02de92f3e43a402eb2ff9b2941739057be0798bfe4befc29a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410004--baseline/episode.json",
+      "sha256": "87d44af2e1f8171ae1c04a5597d3616a277902d536aa385c15690eed929f19fe"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410004--regulated/episode.json",
+      "sha256": "cabd29dbc0dacaff8f6d23af197e01e25c35db9c5e2c1ce026d622e1581bb44e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410005--regulated/episode.json",
+      "sha256": "8a86db2efe43085209af021a099da16e3791ddbb45b623c33e1adb0f51e16b8f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410005--baseline/episode.json",
+      "sha256": "1ba2fd2cf6e407ca397328aaf71f41dadf20efdcf3bb36f5f6920a982063ee6d"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410005--heading/episode.json",
+      "sha256": "3115c2500ccccf1c63e493e253dd90dfd5f0dbc1c7aa137a5212c23558db3f29"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410006--heading/episode.json",
+      "sha256": "71af03b8e89c42d09292fbd601d2a103e7b58daa95c2f7dba272ffe80ad480cc"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410006--regulated/episode.json",
+      "sha256": "4816649961780bb1808578c6187fb21552a1193cf789684ee2f5f00f2d941ec7"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410006--baseline/episode.json",
+      "sha256": "45e6e58d048d28780aca437802c8a7ceff59dc3314f232e0e14763e4ddc367a0"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410007--regulated/episode.json",
+      "sha256": "ba7544f9c1c0eeca3580968a0898b1fd963844475f8bf70a162c31be5246dedc"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410007--baseline/episode.json",
+      "sha256": "1fd35697e2f268f7afc36b5cd885fa997b891e7904a3f3659e22950b7bf8b13f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410007--heading/episode.json",
+      "sha256": "08a90ede4983b4b770ed8374b50f0d54657de70ef6e49b4d0fcf5f539c1774fb"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410008--baseline/episode.json",
+      "sha256": "e0be1f1d6eb31123e5be7ab1a500abc7014b8b1cd67300d8b7ac994d59de3e50"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410008--heading/episode.json",
+      "sha256": "4bde0dcae5879e2e88348a2572e7d44e04522e838eb21ec1734b2b02e39f87e0"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410008--regulated/episode.json",
+      "sha256": "8d555e5f2c3ab0ed96b205809d5810991875ee5abe5e38cd4cb81c19cfe12b37"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410009--baseline/episode.json",
+      "sha256": "25e11d05fa4105c26c34a40dbe428ce84a979acfdf6504e89903fd63a5631e45"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410009--regulated/episode.json",
+      "sha256": "68e86429b75c60a645b7a8dca4a5102aff23284d71b8afd5fb5fb2330f106be9"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s1-ramp-20261010-21759767/dr-default-s1--ramp--s410009--heading/episode.json",
+      "sha256": "a066158a1c1b20e8f12b8c345f58db6b9ebaa229ec743fc56a617b36dc7713a0"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410000--regulated/episode.json",
+      "sha256": "6a72f550ce7276d9ee41492012eb924a61491cc924afe13f22c3f1b80caadd5c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410000--heading/episode.json",
+      "sha256": "57d4a52c6fb98a3d3b34d628d19f2c49dbe1ba09c3d7185e9ef45c3fbcc4b9e8"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410000--baseline/episode.json",
+      "sha256": "85df8a6a93075fbad7f050ac9dfdb0ab47972cf89c0fd69284e25c1d1e062e6f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410001--baseline/episode.json",
+      "sha256": "e66832e91968791848fc293587999d291945aa2f1d172108fdf72fff01febf09"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410001--heading/episode.json",
+      "sha256": "00befe326282cdb1aaa10d6f913e435ece72467578500955fcdf5ed6ed205bea"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410001--regulated/episode.json",
+      "sha256": "7be30cd952d6ba8fa96eded5274e1b17b6849127099b7c54c8d322d1111cbc1a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410002--heading/episode.json",
+      "sha256": "adb4be134948cded87d145bec5fb7a9721e96476a3c78d88d597590300bffa00"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410002--regulated/episode.json",
+      "sha256": "5a6e3b5468e428354d80bd8e8fd43ba004047ade04f2fdc9d3edda97ea5fe857"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410002--baseline/episode.json",
+      "sha256": "1dff105d58bc778b85eba37f198f84dcb9e9733a3657d7acb1fecdae16c590ea"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410003--heading/episode.json",
+      "sha256": "2e49cdc641d379fb2d4241d63c89a260d26e87bc00e765d4597f3e060e698429"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410003--baseline/episode.json",
+      "sha256": "8332cfac33f37aa5b90a8611a530d79b728ea5aba1db57e99f61fced5be443cb"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410003--regulated/episode.json",
+      "sha256": "325ed02d4b7f8387f3b0e2a4369256358db70c1e768f18af8f3defe5e105ad80"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410004--heading/episode.json",
+      "sha256": "0a736e88dac43fbb264afd2388f56c5ac55aab7113c38901ac42523e507dd17b"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410004--baseline/episode.json",
+      "sha256": "d2f12e72dac57bbe571c54b6490843165b9ad299538b2e88d8eceed4e9be12f5"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410004--regulated/episode.json",
+      "sha256": "9067b2aca2c43ab579830a73a41b6d5de980a18764bf6917bf4260cac6b1acd7"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410005--regulated/episode.json",
+      "sha256": "3fe4a7c514ef65a8fa004655ba779f47ffad6c48afa882d5266a14b97ffa0941"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410005--baseline/episode.json",
+      "sha256": "b8501270a9bab9ce6d8131fc1d36443fa99c799c876b7fe22df6b663bcdabfd2"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410005--heading/episode.json",
+      "sha256": "40090baf01f68f2084dde742f2f9faeebe091197f616e22c340150375a991554"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410006--heading/episode.json",
+      "sha256": "744d398481425c7c421f27a78f9e5b2908e597349015d7f1987e6cf4333a9545"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410006--regulated/episode.json",
+      "sha256": "4f99da714948f4f28ef7bbf752fb8accc67a7a59351c84e8c6a8f611e4c070fc"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410006--baseline/episode.json",
+      "sha256": "4bb14eec899ffabf8ebb32bc1102e5f51f660c4f65da30b66c63483c2a5aa6a1"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410007--regulated/episode.json",
+      "sha256": "7146c4f2aea0542cab793ca050aee893550dfa94dfe408061332f240c5bf1413"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410007--baseline/episode.json",
+      "sha256": "3428daf72228d92d5db3993c9aaaff651dc457ce2c2ea7b44aec7da8c3ef1ec7"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410007--heading/episode.json",
+      "sha256": "dbee0622d8682baef826b82f8d446d208fa5bd16ab4a73a62673b4d15b933f96"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410008--baseline/episode.json",
+      "sha256": "dfcd1e1e74894ab25e302b15ab280d989238f002a977b6c61af4f0d40eff1672"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410008--heading/episode.json",
+      "sha256": "6bed7bfae411a660dfcfdd3da8cadc8249c7623f84469b7fdee4b33f7cea33ac"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410008--regulated/episode.json",
+      "sha256": "5e9d14ca2aaccfe2233bf042012de9f78dde6fa0cb3cf3744a44ebff1c280313"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410009--baseline/episode.json",
+      "sha256": "0b3f5afaca27fc806fbafd40a27e7b6f6f04ce97392ae58017bedd0bed57ca6c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410009--regulated/episode.json",
+      "sha256": "0bacf2e9ce34d83347abef7e345515ec614e6aa60ae37542b182626e4bb7b7d8"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-flat-20261010-21759959/dr-default-s2--flat--s410009--heading/episode.json",
+      "sha256": "d6e083a20d397ed0adaede01a312d0a62c0b1c528797a410f184f5e064dbe1a5"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410000--regulated/episode.json",
+      "sha256": "3349b5e530ccc51348b0036945cf1d858feadc15e4abb05445961c05f461cd3d"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410000--heading/episode.json",
+      "sha256": "74e2f28ebc20a6d6273e223bf1997c2474aa386c74c4cb60b9bd13889d3295c6"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410000--baseline/episode.json",
+      "sha256": "5691346c308c2b37c6d6f0f33be0214d13480e3a50c676fb39c4ac6357a64c3c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410001--baseline/episode.json",
+      "sha256": "70f99f992ed4f8e583aad721c5ed85902cf81515b3df0703df2bd67467ee1233"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410001--heading/episode.json",
+      "sha256": "be5153f5e9aa0adee69bb6cb18d85b184ee34639cd09b30d1675d49f57556787"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410001--regulated/episode.json",
+      "sha256": "89f2d9c39334e5c107fcb6285fe72fb0e31550b5ce2f1de90d4e3f6deeb1ad9d"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410002--heading/episode.json",
+      "sha256": "3ecd42f177e4bcb4237068e4fe420862a4660e46210569033860aede47b66928"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410002--regulated/episode.json",
+      "sha256": "c5c551019b315694bb896be94cd869f3bba5a836e9949819f41233189d87177e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410002--baseline/episode.json",
+      "sha256": "0eb50a884fa2521d0f92984da0e10f93e1055ae92dcb684cbeb6d938bc7d4d89"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410003--heading/episode.json",
+      "sha256": "cdfdf1cfedead12acd3810b3a7c6c0663906c3e4cde06d5a20873a1114778a16"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410003--baseline/episode.json",
+      "sha256": "241cbbe3fca5abda8199b5cfc53eb1a1cc4890f477ec1fc2cd80eba82ef808ae"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410003--regulated/episode.json",
+      "sha256": "e61b06d2116f4f1a30ba353e0ddc3354d7e3650f46c65a00a4f6d99f8cc87581"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410004--heading/episode.json",
+      "sha256": "fd65449e241d331bb3ae9aa50f97f4122d0287eb4c6476629b001008be0dccaa"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410004--baseline/episode.json",
+      "sha256": "e9d00c74d007144173602f1cce08815577cb0bdaee8c646db0a29ee90e6fe365"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410004--regulated/episode.json",
+      "sha256": "1946b9e577217220cd3eb0f903c11c5d1115fd853c6b7664e8ada414ab4fa167"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410005--regulated/episode.json",
+      "sha256": "8a41b7b17db0262c446f89edadb067eb6bbdaf247b7046be2a5a0841149ddb98"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410005--baseline/episode.json",
+      "sha256": "8b7d31af55822882ea872b7b06c15f5ff2fc9828e4b2803e10f8da790aba19b7"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410005--heading/episode.json",
+      "sha256": "e14a5de43975a075f0d27e0db1332dbb4b4ec0cb05d8a1f78c098896e5974212"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410006--heading/episode.json",
+      "sha256": "7686f0827ef8dc4724a9f3e9ea421d6a6dfc1fb7ca7279cfd73a32be5c8f428f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410006--regulated/episode.json",
+      "sha256": "5e74a1c82030576259f595b7a0ee26ab7745704ab075589b321577d6a629f8ac"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410006--baseline/episode.json",
+      "sha256": "c0676ec820c5a9ef3d58384024bf1878263e90f6edad0e4f1e683f9474585a3d"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410007--regulated/episode.json",
+      "sha256": "fb9fe15aeba8db330efe4b889883e53e12ef7e8c24ed8f104d2e6e6449d24cee"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410007--baseline/episode.json",
+      "sha256": "232801ff5132347ce245f02f2368590b4689dbd05a0e219b272c970d8271fd65"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410007--heading/episode.json",
+      "sha256": "37112723cd7275844b066b8ca690d4d5179158885600a7e0e2d4af0538c1aef1"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410008--baseline/episode.json",
+      "sha256": "c09d5a38a50080e68c53578e799ee805fa0d21b596c5a412f0a7bc456a948add"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410008--heading/episode.json",
+      "sha256": "de373e3240f038c7525ecf1dc33319746b56d64144b55d4052407156d674ba30"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410008--regulated/episode.json",
+      "sha256": "9325a595add0f1c2a0a03b7d4390c1cbdbe2145a029051410c305e9dafc02516"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410009--baseline/episode.json",
+      "sha256": "3a172a94878c769101ec14d3c46246e6adf1afaa2769ee355d8488c4d3e98603"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410009--regulated/episode.json",
+      "sha256": "e5b07175daf9748fb9260dfc2af0fa1caa5dcf375037c38dfd9565fcde43adc1"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-small_steps-20261010-21760036/dr-default-s2--small_steps--s410009--heading/episode.json",
+      "sha256": "1a750dd774a772843b20bcbb757fd9d85bf9be9b244d0e8fc72ef8b79b9e964f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410000--regulated/episode.json",
+      "sha256": "8304a4efea0f58dc4d3f2952faf0de0f14b165e2cadcff02154c4d74ac2d4f9c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410000--heading/episode.json",
+      "sha256": "ad55d2087d7c711792629ddc43d3a412b24b8eaef48ddf78d21e7678ffd3bfc8"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410000--baseline/episode.json",
+      "sha256": "5395bcb0af0e54a3182043cf47eb8ccb644402cc0fe3208afa4e252312bf9086"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410001--baseline/episode.json",
+      "sha256": "e1115c85dd365761442e176a3129f9d9c2070273ad4fb510f259074716cd2f1f"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410001--heading/episode.json",
+      "sha256": "246782aade0c9375a98c9da3c4280c09c608f782a9b03389b5f4c0e2059bf63b"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410001--regulated/episode.json",
+      "sha256": "c132c9bd4a41bf25dcbf5af8d3e35bac60de8cf7ab0b8108fbf27e41eca8786b"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410002--heading/episode.json",
+      "sha256": "45efebf333a046c7a5d11642c0dcfd4c02f7b14348fd1856a047db048842c5eb"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410002--regulated/episode.json",
+      "sha256": "0e29a85a2247f5bd3d79420077a90c7eea6fd0a592d4e65539274c09399ae551"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410002--baseline/episode.json",
+      "sha256": "ac6655d220cda12cb0d39fbee36b0120a8890210af401002e7ad3e88f6658d29"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410003--heading/episode.json",
+      "sha256": "b313f1cfc01a496e26b9b29888a7319359005656b8b25cc02858ccd35cfbaa9e"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410003--baseline/episode.json",
+      "sha256": "f50011f54cda466e83f7a07fd194d093524383dc28e81de801b76c3f81997874"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410003--regulated/episode.json",
+      "sha256": "e40f505f7a5b026fdea2af45bea064819960dfdd450904e19eb72e0066d82bcb"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410004--heading/episode.json",
+      "sha256": "17fe73a2d2c2e22282b3995d73e839c3f927e7074bbaff0ac4dd5c6a57bd7bf5"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410004--baseline/episode.json",
+      "sha256": "6330c75c902e025cd837897acdabffed972ec2674b0c03223c7d3d1e8baed52b"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410004--regulated/episode.json",
+      "sha256": "dcde6620d392472db5db77afb5d715ea28a7444a40665fd2e21ff2e267a222a7"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410005--regulated/episode.json",
+      "sha256": "6ea3468fb9f5e5455d5f8739cfea1d3dd8614b386c5474a752f1501bd878d6f4"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410005--baseline/episode.json",
+      "sha256": "60775553ec363c25b17f94d6d19ed048461f2d62fc97f69e1908d04ed1b125a2"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410005--heading/episode.json",
+      "sha256": "c699f46d581b717af3a30a6ac5b0cf4ced33d795c49cef3ae631ab71978c0036"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410006--heading/episode.json",
+      "sha256": "491b4d810f09cc81d6b947583aa170c0f39fa774712070afe322d417027edf57"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410006--regulated/episode.json",
+      "sha256": "41ebad1a5fba50252c5d850f9258226ec25b7850928d52df8d8230c641b8711c"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410006--baseline/episode.json",
+      "sha256": "778ee57d9ebc39c083fe087f791c8484fe7a9c0c56edaa0b816a4966d4c3d7de"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410007--regulated/episode.json",
+      "sha256": "80e35596b9e0f84e8bb3565643a23c393d2d0e694b41c42883cb4aa8edad6f45"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410007--baseline/episode.json",
+      "sha256": "adea55551536f6ad0235abfd5653b75e39cdfef7e731b9d02d253b704ea8a0b2"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410007--heading/episode.json",
+      "sha256": "47b2cbb451d68d9fd903b699b10417336c0d694ec48688f244347709b5d3ad9a"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410008--baseline/episode.json",
+      "sha256": "21e634ac9be9733592f2c7f71ad0de9559d220567aac32a49937a6f37c60b47d"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410008--heading/episode.json",
+      "sha256": "18cf8a3de4b2f64a7d3861b84e8a332997ea848339afc79d0c5fd590e8f68759"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410008--regulated/episode.json",
+      "sha256": "22e63a33ad8098dcb9ba7e517079753c9d8114185dd934b4c6d4df89f79d5734"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410009--baseline/episode.json",
+      "sha256": "909dfd7f53372336ec929b3e20d51e31b6edb537a6745cc3429b757b0bf1d5df"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410009--regulated/episode.json",
+      "sha256": "87508a40b40f04ef0b5137702c549df4e48755dbd7f72ff2177df60d6e93848d"
+    },
+    {
+      "path": "/tmp/bhl-method-collection-8x4glpt0/terrain-methods-dr-default-s2-ramp-20261010-21760099/dr-default-s2--ramp--s410009--heading/episode.json",
+      "sha256": "c5ca69ad0e0c41e4240dd560ec01f189235319bba1e95f6e3b0147f22bf9f277"
+    }
+  ],
+  "qualified_for_separately_preregistered_confirmation": [
+    {
+      "actor": "dr-default-s0",
+      "arm": "heading"
+    },
+    {
+      "actor": "dr-default-s0",
+      "arm": "regulated"
+    },
+    {
+      "actor": "dr-default-s1",
+      "arm": "heading"
+    },
+    {
+      "actor": "dr-default-s2",
+      "arm": "heading"
+    },
+    {
+      "actor": "dr-default-s2",
+      "arm": "regulated"
+    }
+  ]
+}

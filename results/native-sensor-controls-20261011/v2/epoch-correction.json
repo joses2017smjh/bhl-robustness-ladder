@@ -1,0 +1,32 @@
+{
+  "schema": "bhl-native-epoch-correction-v2",
+  "recorded_utc": "2026-10-11T10:49:37.963167+00:00",
+  "prior_scientific_source": "cad8dda245725ccd87d9f37a38e783b881e110ef4074c826533199e90bb31c41",
+  "prior_smoke_job": "21768425",
+  "prior_smoke_episodes": 14,
+  "prior_scored_children": 0,
+  "new_smoke_required": true,
+  "change": "Conservative causal native coordinate epoch continuity detects reused native IDs and uncertain tracked-point identity/IMU evidence. Non-recovery arms permanently stop after accepted-epoch invalidation; recovery must repeat unchanged3+3SE3 registration/validation with logical token.",
+  "native_binary_or_threshold_change": false,
+  "seeds_routes_faults_initialization_excitation_changed": false,
+  "scientific_metrics": "Logical coordinate_invalidations explicitly distinct from observed native map ID changes and confirmed native resets; confirmed native reset count unmeasured by this shim.",
+  "tests": {
+    "passed": 92,
+    "elapsed_s": 1.0,
+    "modules": [
+      "test_navigation_sensor_controls.py",
+      "test_native_sensor_controls_dispatch.py",
+      "test_stereo_recovery.py",
+      "test_native_orb_inertial.py"
+    ]
+  },
+  "independent_review": "independent_confirmation reviewed causality, same-ID recovery3+3, transient retained-map loss, held-frame deduplication and no GT/LIO fallback; no blocking issue. Staged uncertainty events must not be labelled unique physical resets.",
+  "files_sha256": {
+    "src/bhl_robust/research/navigation_sensor_controls.py": "160f15f02121ff70ff73edc2b1719d6f772c9370e7c9c727d104a5a9f360e35d",
+    "src/bhl_robust/research/native_orb.py": "d608cc1cab119e96990236ab6668494b19a4527fd6939fa7f8d19b3c779efc76",
+    "scripts/bench/native_sensor_controls_campaign.py": "12d3d63143bb65158ec12bfd2f5cca0ae78d331a0ed7bed6f1fd994f6a1e678f",
+    "scripts/bench/native_sensor_controls_dispatch.py": "f55579f20ce132fbad3d78aa3461d5b4d312467655f187bdc11c2878b947116a",
+    "tests/test_navigation_sensor_controls.py": "70b4684f8e164f6ee1c9119062b5dd877d8262f605c46f5c995f5eac49e2cedf",
+    "protocols/native-sensor-controls-20261011.json": "c3bf44858951befa853eb744a557739a4c9def101c0fc68c1bbd6d9f37768bdd"
+  }
+}

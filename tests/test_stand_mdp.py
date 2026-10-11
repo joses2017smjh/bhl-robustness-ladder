@@ -614,7 +614,13 @@ class Stand3WrapperTests(unittest.TestCase):
         self.assertAlmostEqual(float(r[0]), 44 * sm.ACTION_CLIP ** 2, places=1)
 
 
-MJCF = Path("/nfs/hpc/share/sanchej7/Humanoid_Lite/mjcf_cache/mjcf_humanoid/berkeley_humanoid_lite.xml")
+# Read the pinned upstream limits directly; the mesh-path repair in the cache
+# does not change any joint range. The committed historical XML preserves the
+# same test in a checkout whose optional assets submodule is not initialized.
+MJCF = (REPO / "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/"
+        "data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/berkeley_humanoid_lite.xml")
+if not MJCF.is_file():
+    MJCF = REPO / "results/solutions-20260930/coop/mjcf_cache/mjcf_humanoid/berkeley_humanoid_lite.xml"
 
 
 @unittest.skipUnless(MJCF.is_file(), "MJCF cache not available")

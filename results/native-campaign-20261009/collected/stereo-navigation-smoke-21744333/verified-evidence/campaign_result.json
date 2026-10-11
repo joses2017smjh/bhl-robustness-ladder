@@ -1,0 +1,26 @@
+{
+  "collisions": 0,
+  "episode_files": [
+    "straight-s370000/episode.json",
+    "straight-s370001/episode.json"
+  ],
+  "episodes": 2,
+  "falls": 0,
+  "gate_to_confirmation": false,
+  "goals": 0,
+  "ground_truth_inputs_to_estimator_or_planner": [],
+  "input_sha256": {
+    "/tmp/bhl-h34-nav-stereo-smoke-20261009-v3-21744333-ym2q7i_f/inputs/actors/dr-default-s0/deploy.yaml": "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71",
+    "/tmp/bhl-h34-nav-stereo-smoke-20261009-v3-21744333-ym2q7i_f/inputs/actors/dr-default-s0/policy.onnx": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1",
+    "/tmp/bhl-h34-nav-stereo-smoke-20261009-v3-21744333-ym2q7i_f/inputs/runtime/orb-runtime.tar.gz": "0c9659c6214bafbb2e8c9e051358628b2eacef2cede23b0b37cedb6df1901704"
+  },
+  "method": "orb_slam3_stereo_pose_plus_lidar_obstacle_brake",
+  "native_tracked_frames": 57,
+  "phase": "smoke",
+  "problems": [],
+  "route": "native_estimated_pose_navigation",
+  "scientific_status": "SMOKE_ONLY",
+  "scope": "Original body-attached 640x480 stereo with full roll and measured capture/native delay; stereo pose plus LiDAR obstacle sensing; simulation development only",
+  "status": "PASS",
+  "wall_seconds": 34.989117564982735
+}

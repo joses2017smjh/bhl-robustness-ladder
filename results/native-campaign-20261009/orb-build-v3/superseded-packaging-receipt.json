@@ -1,0 +1,20 @@
+{
+  "archive_bytes": 38878463,
+  "archive_sha256": "5c548dda6ecdf9604e3e3c8e820227040bd479f4d432755876445e53f733a5f9",
+  "inventory_file": "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v3/retained-payload-inventory.json",
+  "inventory_sha256": "5079a0c2219fe89f78351b918bdad15101932114a849cde1365e397c2d599eee",
+  "manifest_entries_reused_in_retained_live_packs": 839,
+  "operation": "Remove only superseded frozen SOURCE packaging; preserve all original source/input payload bytes, receipts and scientific/failure outputs",
+  "original_manifest_sha256": "cc751a34eab4b28f1dea6d2bf4f5a6b47b0c30c1ccc36ba2f7837b854d0ba73f",
+  "original_member_count": 842,
+  "outputs_tar_gz_untouched": [],
+  "scope": "Original tar compression/header metadata is not retained. All payload bytes and intake/manifest/protocol/source lineage remain reconstructible through the complete per-member preservation map. No outputs.tar.gz or active source package was deleted.",
+  "unique_payload_preserved": [
+    {
+      "bytes": 13415,
+      "path": "retained-unique-payload/source/scripts/bench/native_slam_campaign.py",
+      "sha256": "6cab552abb95746a77e0a431ccfe9a7b0e2d0fe04c24ffd5cffa552a37266f62"
+    }
+  ],
+  "utc": "2026-10-09T21:57:43.003034+00:00"
+}

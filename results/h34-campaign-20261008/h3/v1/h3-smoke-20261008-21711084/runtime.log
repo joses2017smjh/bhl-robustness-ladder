@@ -1,0 +1,312 @@
+[bhl_robust.tasks] SF-04 distillation id NOT registered: ImportError("cannot import name 'RslRlMLPModelCfg' from 'isaaclab_rl.rsl_rl' (/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/source/isaaclab_rl/isaaclab_rl/rsl_rl/__init__.py)")
+[INFO][AppLauncher]: Using device: cuda:0
+[INFO][AppLauncher]: Loading experience file: /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaaclab/apps/isaaclab.python.headless.kit
+
+[36m==================================================================================================================================[0m
+[36m[1m[INFO][IsaacLab]: Logging to file: /tmp/bhl-h34-h3-smoke-20261008-21711084-lpp80580/work/isaaclab/isaaclab_2026-10-08_19-18-32.log[0m
+[36m==================================================================================================================================[0m
+
+[33m19:18:32 [simulation_context.py] WARNING: The `disable_contact_processing` attribute is deprecated and always set to True to avoid unnecessary overhead. Contact processing is automatically enabled when a contact sensor is created, so manual configuration is no longer required.[0m
+[33m19:18:32 [simulation_context.py] WARNING: The `enable_external_forces_every_iteration` parameter in the PhysxCfg is set to False. If you are experiencing noisy velocities, consider enabling this flag. You may need to slightly increase the number of velocity iterations (setting it to 1 or 2 rather than 0), together with this flag, to improve the accuracy of velocity updates.[0m
+[INFO]: Base environment:
+	Environment device    : cuda:0
+	Environment seed      : 0
+	Physics step-size     : 0.005
+	Rendering step-size   : 0.02
+	Environment step-size : 0.04
+[33m19:18:32 [manager_based_env.py] WARNING: The render interval (4) is smaller than the decimation (8). Multiple render calls will happen for each environment step. If this is not intended, set the render interval to be equal to the decimation.[0m
+[33m19:18:32 [terrain_importer.py] WARNING: Visual material specified for ground plane but no diffuse color found. Using default color: (0.0, 0.0, 0.0)[0m
+[INFO]: Time taken for scene creation : 0.469919 seconds
+[INFO]: Scene manager:  <class InteractiveScene>
+	Number of environments: 64
+	Environment spacing   : 2.5
+	Source prim name      : /World/envs/env_0
+	Global prim paths     : ['/World/ground']
+	Replicate physics     : True
+[INFO]: Starting the simulation. This may take a few seconds. Please wait...
+[33m19:18:33 [actuator_pd.py] WARNING: The <ImplicitActuatorCfg> object has a value for 'effort_limit'. This parameter will be removed in the future. To set the effort limit, please use 'effort_limit_sim' instead.[0m
+[33m19:18:33 [actuator_pd.py] WARNING: The <ImplicitActuatorCfg> object has a value for 'velocity_limit'. Previously, although this value was specified, it was not getting used by implicit actuators. Since this parameter affects the simulation behavior, we continue to not use it. This parameter will be removed in the future. To set the velocity limit, please use 'velocity_limit_sim' instead.[0m
+[Info] [carb] Logging to file: /tmp/bhl-h34-h3-smoke-20261008-21711084-lpp80580/kit/logs/Kit/Isaac-Sim/5.1/kit_20261008_191808.log
+2026-10-09T02:18:11Z [2,928ms] [Warning] [omni.usd_config.extension] Enable omni.materialx.libs extension to use MaterialX
+2026-10-09T02:18:14Z [5,408ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2026-10-09T02:18:15Z [6,858ms] [Warning] [carb] Acquiring non optional plugin interface which is not listed as dependency: [omni::physx::IPhysxBenchmarks v1.0] (plugin: <default plugin>), by client: omni.physics.physx.plugin. Add it to CARB_PLUGIN_IMPL_DEPS() macro of a client.
+2026-10-09T02:18:15Z [6,928ms] [Warning] [omni.isaac.dynamic_control] omni.isaac.dynamic_control is deprecated as of Isaac Sim 4.5. No action is needed from end-users.
+2026-10-09T02:18:23Z [14,861ms] [Warning] [carb.cudainterop.plugin] CUDA_VISIBLE_DEVICES environment variable is set.
+2026-10-09T02:18:23Z [14,861ms] [Warning] [carb.cudainterop.plugin] Note CUDA device enumeration and Omniverse device enumeration are different.
+2026-10-09T02:18:23Z [14,861ms] [Warning] [carb.cudainterop.plugin] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 615.71.09     | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | Quadro RTX 8000                  | Yes: 0 |     | 78838   MB | 10de      | 0          |
+|     |                                  |        |     |            | 1e78      | 73e5e9b4.. |
+|     |                                  |        |     |            | 89        |            |
+|=============================================================================================|
+| OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel: 5.14.0-687.52.1.el9_8.x86_64
+| Processor: Intel(R) Xeon(R) Gold 6248 CPU @ 2.50GHz
+| Cores: 40 | Logical Cores: 40
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 772479 | Free Memory: 533518
+| Total Page/Swap (MB): 0 | Free Page/Swap: 0
+|---------------------------------------------------------------------------------------------|
+2026-10-09T02:18:24Z [15,955ms] [Warning] [gpu.foundation.plugin] ECC is enabled on physical device 0
+2026-10-09T02:18:35Z [26,250ms] [Error] [rtx.neuraylib.plugin] Failed to create directory for the MDL search path for extension content: 'file:/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/extscache/omni.mdl-56.0.3+69cbf6ad.lx64.r.cp311/search_paths/omniverse_exts'
+[INFO]: Time taken for simulation start : 1.169211 seconds
+[INFO] Command Manager:  <CommandManager> contains 1 active terms.
++------------------------------------------------+
+|              Active Command Terms              |
++-------+---------------+------------------------+
+| Index | Name          |          Type          |
++-------+---------------+------------------------+
+|   0   | base_velocity | UniformVelocityCommand |
++-------+---------------+------------------------+
+
+[INFO] Event Manager:  <EventManager> contains 2 active terms.
++--------------------------------------------+
+|   Active Event Terms in Mode: 'startup'    |
++-------+------------------------------------+
+| Index | Name                               |
++-------+------------------------------------+
+|   0   | physics_material                   |
+|   1   | add_base_mass                      |
+|   2   | add_all_joint_default_pos          |
+|   3   | scale_all_actuator_torque_constant |
++-------+------------------------------------+
++---------------------------------------+
+|  Active Event Terms in Mode: 'reset'  |
++--------+------------------------------+
+| Index  | Name                         |
++--------+------------------------------+
+|   0    | reset_base                   |
+|   1    | reset_robot_joints           |
+|   2    | base_external_force_torque   |
+|   3    | h3_imu_reset                 |
++--------+------------------------------+
+
+[INFO] Recorder Manager:  <RecorderManager> contains 0 active terms.
++---------------------+
+| Active Recorder Terms |
++-----------+---------+
+|   Index   | Name    |
++-----------+---------+
++-----------+---------+
+
+[INFO] Action Manager:  <ActionManager> contains 1 active terms.
++------------------------------------+
+|  Active Action Terms (shape: 12)   |
++--------+-------------+-------------+
+| Index  | Name        |   Dimension |
++--------+-------------+-------------+
+|   0    | joint_pos   |          12 |
++--------+-------------+-------------+
+
+[INFO] Observation Manager: <ObservationManager> contains 2 groups.
++---------------------------------------------------------+
+| Active Observation Terms in Group: 'policy' (shape: (63,)) |
++-----------+---------------------------------+-----------+
+|   Index   | Name                            |   Shape   |
++-----------+---------------------------------+-----------+
+|     0     | velocity_commands               |    (3,)   |
+|     1     | base_ang_vel                    |    (3,)   |
+|     2     | projected_gravity               |    (3,)   |
+|     3     | joint_pos                       |   (12,)   |
+|     4     | joint_vel                       |   (12,)   |
+|     5     | actions                         |   (12,)   |
+|     6     | h3_past_imu                     |   (18,)   |
++-----------+---------------------------------+-----------+
++---------------------------------------------------------+
+| Active Observation Terms in Group: 'critic' (shape: (48,)) |
++-----------+---------------------------------+-----------+
+|   Index   | Name                            |   Shape   |
++-----------+---------------------------------+-----------+
+|     0     | velocity_commands               |    (3,)   |
+|     1     | base_ang_vel                    |    (3,)   |
+|     2     | projected_gravity               |    (3,)   |
+|     3     | joint_pos                       |   (12,)   |
+|     4     | joint_vel                       |   (12,)   |
+|     5     | actions                         |   (12,)   |
+|     6     | base_lin_vel                    |    (3,)   |
++-----------+---------------------------------+-----------+
+
+[INFO] Termination Manager:  <TerminationManager> contains 2 active terms.
++-------------------------------------+
+|       Active Termination Terms      |
++-------+------------------+----------+
+| Index | Name             | Time Out |
++-------+------------------+----------+
+|   0   | time_out         |   True   |
+|   1   | base_orientation |  False   |
++-------+------------------+----------+
+
+[INFO] Reward Manager:  <RewardManager> contains 15 active terms.
++---------------------------------------------+
+|             Active Reward Terms             |
++-------+----------------------------+--------+
+| Index | Name                       | Weight |
++-------+----------------------------+--------+
+|   0   | track_lin_vel_xy_exp       |    2.0 |
+|   1   | track_ang_vel_z_exp        |    1.0 |
+|   2   | termination_penalty        |  -10.0 |
+|   3   | lin_vel_z_l2               |   -0.1 |
+|   4   | ang_vel_xy_l2              |  -0.05 |
+|   5   | flat_orientation_l2        |   -2.0 |
+|   6   | action_rate_l2             |  -0.01 |
+|   7   | dof_torques_l2             | -0.002 |
+|   8   | dof_acc_l2                 | -1e-06 |
+|   9   | dof_pos_limits             |   -1.0 |
+|   10  | feet_air_time              |    1.0 |
+|   11  | feet_slide                 |   -0.1 |
+|   12  | undesired_contacts         |   -1.0 |
+|   13  | joint_deviation_hip        |   -0.2 |
+|   14  | joint_deviation_ankle_roll |   -0.2 |
++-------+----------------------------+--------+
+
+[INFO] Curriculum Manager:  <CurriculumManager> contains 0 active terms.
++----------------------+
+| Active Curriculum Terms |
++-----------+----------+
+|   Index   | Name     |
++-----------+----------+
++-----------+----------+
+
+[INFO]: Completed setting up the environment...
+--------------------------------------------------------------------------------
+Resolved observation sets: 
+	 policy :  ['policy']
+	 critic :  ['critic']
+--------------------------------------------------------------------------------
+ActorCritic.__init__ got unexpected arguments, which will be ignored: ['state_dependent_std']
+Actor MLP: MLP(
+  (0): Linear(in_features=63, out_features=256, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Linear(in_features=256, out_features=128, bias=True)
+  (3): ELU(alpha=1.0)
+  (4): Linear(in_features=128, out_features=128, bias=True)
+  (5): ELU(alpha=1.0)
+  (6): Linear(in_features=128, out_features=12, bias=True)
+)
+Critic MLP: MLP(
+  (0): Linear(in_features=48, out_features=256, bias=True)
+  (1): ELU(alpha=1.0)
+  (2): Linear(in_features=256, out_features=128, bias=True)
+  (3): ELU(alpha=1.0)
+  (4): Linear(in_features=128, out_features=128, bias=True)
+  (5): ELU(alpha=1.0)
+  (6): Linear(in_features=128, out_features=1, bias=True)
+)
+[33m19:18:40 [math.py] WARNING: The function 'quat_rotate_inverse' will be deprecated in favor of the faster method 'quat_apply_inverse'. Please use 'quat_apply_inverse' instead....[0m
+################################################################################
+                        [1m Learning iteration 0/3 [0m                        
+
+                       Computation: 395 steps/s (collection: 3.306s, learning 0.577s)
+             Mean action noise std: 0.30
+          Mean value_function loss: 2.2506
+               Mean surrogate loss: 0.1616
+                 Mean entropy loss: 1.6171
+                       Mean reward: -0.91
+               Mean episode length: 16.67
+Episode_Reward/track_lin_vel_xy_exp: 0.0023
+Episode_Reward/track_ang_vel_z_exp: 0.0021
+Episode_Reward/termination_penalty: -0.0042
+       Episode_Reward/lin_vel_z_l2: -0.0001
+      Episode_Reward/ang_vel_xy_l2: -0.0037
+Episode_Reward/flat_orientation_l2: -0.0017
+     Episode_Reward/action_rate_l2: -0.0038
+     Episode_Reward/dof_torques_l2: -0.0039
+         Episode_Reward/dof_acc_l2: -0.0010
+     Episode_Reward/dof_pos_limits: -0.0006
+      Episode_Reward/feet_air_time: 0.0002
+         Episode_Reward/feet_slide: -0.0003
+ Episode_Reward/undesired_contacts: 0.0000
+Episode_Reward/joint_deviation_hip: -0.0015
+Episode_Reward/joint_deviation_ankle_roll: -0.0007
+Metrics/base_velocity/error_vel_xy: 0.0181
+Metrics/base_velocity/error_vel_yaw: 0.0300
+      Episode_Termination/time_out: 0.0117
+Episode_Termination/base_orientation: 0.0046
+--------------------------------------------------------------------------------
+                   Total timesteps: 1536
+                    Iteration time: 3.88s
+                      Time elapsed: 00:00:03
+                               ETA: 00:00:11
+
+Could not find git repository in /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/rsl_rl/__init__.py. Skipping.
+[33m19:18:45 [math.py] WARNING: The function 'quat_rotate_inverse' will be deprecated in favor of the faster method 'quat_apply_inverse'. Please use 'quat_apply_inverse' instead....[0m
+################################################################################
+                        [1m Learning iteration 1/3 [0m                        
+
+                       Computation: 775 steps/s (collection: 1.873s, learning 0.108s)
+             Mean action noise std: 0.30
+          Mean value_function loss: 1.5384
+               Mean surrogate loss: -0.0380
+                 Mean entropy loss: 1.6391
+                       Mean reward: -1.36
+               Mean episode length: 34.35
+Episode_Reward/track_lin_vel_xy_exp: 0.0322
+Episode_Reward/track_ang_vel_z_exp: 0.0112
+Episode_Reward/termination_penalty: -0.0150
+       Episode_Reward/lin_vel_z_l2: -0.0004
+      Episode_Reward/ang_vel_xy_l2: -0.0193
+Episode_Reward/flat_orientation_l2: -0.0105
+     Episode_Reward/action_rate_l2: -0.0242
+     Episode_Reward/dof_torques_l2: -0.0234
+         Episode_Reward/dof_acc_l2: -0.0169
+     Episode_Reward/dof_pos_limits: -0.0049
+      Episode_Reward/feet_air_time: 0.0026
+         Episode_Reward/feet_slide: -0.0016
+ Episode_Reward/undesired_contacts: 0.0000
+Episode_Reward/joint_deviation_hip: -0.0070
+Episode_Reward/joint_deviation_ankle_roll: -0.0030
+Metrics/base_velocity/error_vel_xy: 0.0638
+Metrics/base_velocity/error_vel_yaw: 0.1226
+      Episode_Termination/time_out: 0.0521
+Episode_Termination/base_orientation: 0.0938
+--------------------------------------------------------------------------------
+                   Total timesteps: 3072
+                    Iteration time: 1.98s
+                      Time elapsed: 00:00:05
+                               ETA: 00:00:05
+
+################################################################################
+                        [1m Learning iteration 2/3 [0m                        
+
+                       Computation: 1057 steps/s (collection: 1.349s, learning 0.104s)
+             Mean action noise std: 0.30
+          Mean value_function loss: 2.1039
+               Mean surrogate loss: -0.0428
+                 Mean entropy loss: 1.6462
+                       Mean reward: -1.19
+               Mean episode length: 40.32
+Episode_Reward/track_lin_vel_xy_exp: 0.0631
+Episode_Reward/track_ang_vel_z_exp: 0.0210
+Episode_Reward/termination_penalty: -0.0117
+       Episode_Reward/lin_vel_z_l2: -0.0006
+      Episode_Reward/ang_vel_xy_l2: -0.0202
+Episode_Reward/flat_orientation_l2: -0.0099
+     Episode_Reward/action_rate_l2: -0.0291
+     Episode_Reward/dof_torques_l2: -0.0326
+         Episode_Reward/dof_acc_l2: -0.0207
+     Episode_Reward/dof_pos_limits: -0.0055
+      Episode_Reward/feet_air_time: 0.0039
+         Episode_Reward/feet_slide: -0.0025
+ Episode_Reward/undesired_contacts: 0.0000
+Episode_Reward/joint_deviation_hip: -0.0092
+Episode_Reward/joint_deviation_ankle_roll: -0.0046
+Metrics/base_velocity/error_vel_xy: 0.0810
+Metrics/base_velocity/error_vel_yaw: 0.1752
+      Episode_Termination/time_out: 0.0892
+Episode_Termination/base_orientation: 0.2129
+--------------------------------------------------------------------------------
+                   Total timesteps: 4608
+                    Iteration time: 1.45s
+                      Time elapsed: 00:00:07
+                               ETA: 00:00:02
+
+H3 episode history-s0-d1-c0-r100: fell=False qualified=None
+H3 CELL EXECUTION PASS; scientific result requires all six paired cells
+2026-10-09T02:18:38Z [29,431ms] [Warning] [omni.physx.fabric.plugin] FabricManager::initializePointInstancer mismatched prototypes on point instancer: /Visuals/Command/velocity_goal.
+2026-10-09T02:18:38Z [29,431ms] [Warning] [omni.physx.fabric.plugin] FabricManager::initializePointInstancer mismatched prototypes on point instancer: /Visuals/Command/velocity_current.

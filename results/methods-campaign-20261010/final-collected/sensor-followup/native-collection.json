@@ -1,0 +1,1310 @@
+{
+  "schema": "bhl-sensor-fault-collection-v1",
+  "status": "PASS",
+  "phase": "run",
+  "protocol_sha256": "02195f4a4a62ac07090855f9f72fc0792a36011783963959152343e1dbb3f7b3",
+  "expected_cells": 48,
+  "verified_cells": 48,
+  "missing": [],
+  "problems": [],
+  "paired_group_rows": [
+    {
+      "group": "ramp_step-g610000",
+      "fault": "nominal",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "nominal",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "nominal",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.001917739863345539,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0009646245602886912,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.00020938991198719316,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0011119700606471265,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.001462646596070566,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0010094654260771468,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.012752462360473015,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0037348619984921005,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.009742750480493577,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0032553939704344885,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.004678187246991403,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0005396834490901357,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.017387579597520957,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.001237333774409162,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.001088093991881381,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_half",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.008264067104875737,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.006318379692031223,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.001972789804596111,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 1.2967654064320489,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.07795389148389362,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.1478683942652117,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "nominal",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "nominal",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "nominal",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 2.033921549310716e-05,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0012344202106825321,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 9.345554017328728e-05,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.00025108668395560155,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0021437727846549404,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0001389464173348065,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.002211730786059997,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0031460167394784227,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.011199151712030855,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0023873247496213196,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.00029282954661500986,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0009984095864139612,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.011828985347780561,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0056306753643646686,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0018772587795553956,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_half",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0017628356679498212,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.00011438443844435583,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.08657051971358518,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.18327678266617103,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.05331127501973734,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.08485603605319943,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "nominal",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "nominal",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "nominal",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.00034113441930435674,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.001506773331197503,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0007696174625575342,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 7.386738435130949e-05,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.010214359727698543,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 9.08037432718542e-06,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.003647213472107046,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0040171816238382604,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.02202003815721113,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.001386231976356473,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.01507080193994511,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0035103561513975187,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.00030455412169043405,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.013134101509588688,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.011682821642626927,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_half",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0015688153928676129,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.009799212101732749,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.010698607183197841,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.022942059219549858,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.07913821457267256,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.4220571365352978,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "nominal",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "nominal",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "nominal",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0003217173083212947,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0017019658393276904,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 9.18996759221094e-06,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0012433132988837227,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.007315984454316332,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.00013969689815369543,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.005544127696068888,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.01575342095628996,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.018762349220182977,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0004489360248973104,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0004050005045311972,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.00020316460636803438,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.002541106431526597,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.005257829698567203,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.007312500982184233,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_half",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0026700713856305097,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.021016470829025344,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.006425229080235569,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.020777773908280103,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": -0.3709677419354839,
+      "conditional_ate_rmse_delta_m": 9.25103068195424,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.11375835330888422,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "nominal",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "nominal",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "nominal",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0010068939456067093,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.014738707562536285,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.00017966313074195203,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0013216803383717217,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0022293891802428467,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.00061144616861767,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.009724438672964665,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.015373906627849848,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.00990902866524385,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.007836708406468832,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0020524844321972747,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0011010100980267182,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.02209446669595549,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.010690112190844425,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0019508021345839045,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_half",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.010625907383346608,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.00531369239870029,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0018863621358729786,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.3110901985308723,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": -0.6048387096774194,
+      "conditional_ate_rmse_delta_m": 6.587493013302391,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.06745667027756123,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "nominal",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "nominal",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "nominal",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0009004222773484859,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.00465815646972929,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "imu_clock_plus20ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -6.614101111187404e-06,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.001517186672086425,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.00219037166950585,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "imu_clock_plus80ms",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.0002990937870651078,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.005961237347614046,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.011791493676904019,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.014048355537815376,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.004395805811569276,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0018070517605886342,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "gyro_z_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.00018715462943427047,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.01840065067500814,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.00799016167329502,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "accel_x_bias_after5s",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.004135796354434722,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_half",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": -0.0030288957167447644,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.014552508652071056,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_half",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.005393174908961611,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_lio2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 1.311843482096475,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.28285098250012847,
+      "nominal_gate": "PASS",
+      "fault_gate": "NEGATIVE"
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_quarter",
+      "method": "fast_livo2_no_visual",
+      "tracking_fraction_delta": 0.0,
+      "conditional_ate_rmse_delta_m": 0.04955239823602764,
+      "nominal_gate": "PASS",
+      "fault_gate": "PASS"
+    }
+  ],
+  "scope": "sensor replay, no closed-loop goals, collisions, recovery or calibrated confidence claim",
+  "claim_rule": "Conditional ATE always accompanied by tracking; do not treat untracked or unscorable as zero error. Six development groups, no inferential population claim."
+}

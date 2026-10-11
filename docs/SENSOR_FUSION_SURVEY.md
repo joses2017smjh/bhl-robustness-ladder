@@ -1,5 +1,14 @@
 # Sensor-fusion literature survey: LiDAR + stereo + 10-axis IMU for RL-controlled humanoid indoor navigation
 
+## October 8 experiment follow-up
+
+The [current stereo–lidar research plan](STEREO_LIDAR_RESEARCH_2026-10-08.md)
+adds verified 2025/2026 references and implementable controls, including the
+[RA-L 2025 nonlearning stereo–lidar fusion method](https://arxiv.org/abs/2504.05148)
+and current Fast-FoundationStereo. It updates the earlier search's statement
+that no direct stereo–lidar fusion paper had been found. The dated survey below
+retains its original verification flags and historical search scope.
+
 Compiled 2026-09-23 by a web-research pass for [`SENSOR_FUSION.md`](SENSOR_FUSION.md).
 Every reference carries a verification flag: **[V]** the primary page (arXiv
 abstract, README, docs or PDF) was fetched; **[M]** only bibliographic metadata

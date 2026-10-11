@@ -1,0 +1,13 @@
+{
+  "declared_utc": "2026-10-11T10:24:18.963122+00:00",
+  "before_native_outcomes_inspected": true,
+  "evaluator_source_sha256": "67cf13545369e8002e66906bd516f6e120317a074f22e38c1c8a7ae06c5d3d51",
+  "truth_frame": "publisher-calibrated IMU; independently require archive dso/gt_imu.csv numeric rows equal mocap0/data.csv",
+  "ground_truth_loaded_by_estimator": false,
+  "association_max_difference_s": 0.005,
+  "original_clock": "integer ns subtraction with camera origin; nearest distinct GT samples, no interpolation or clock adjustment",
+  "alignment": "Independent SE3 per native map with scale1; no map stitching",
+  "accepted": "native OK and, for stereo_inertial, actual map IMU initialized",
+  "coverage": "All frame tracking retained; report associated initialized poses and each map separately",
+  "source_primary": "https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset"
+}

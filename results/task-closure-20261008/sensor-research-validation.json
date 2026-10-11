@@ -1,0 +1,29 @@
+{
+  "schema": "bhl-sensor-research-validation-v1",
+  "verified_utc": "2026-10-09T00:13:30.017599+00:00",
+  "scope": "Focused local CPU validation of sensor audit, H1 contracts and existing stereo geometry; no full-suite rerun or fresh install in this receipt",
+  "passed": 54,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "elapsed_seconds": 42.397,
+  "python": "3.11.16",
+  "host": "dgx2-1.hpc.engr.oregonstate.edu",
+  "source_sha256": {
+    "scripts/bench/sensor_dataset_audit.py": "ba4ab94165b9321564cc265eb1fd667744d847cd75b6c83a8f65e46d3cd78461",
+    "tests/test_sensor_dataset_audit.py": "d456e270af450ee5079e93357e676c225e86a6afbde3e4880322ab6cbbd47662",
+    "scripts/bench/verify_navigation_confirmation.py": "ee5f9f4cfa178ef064c78927c5084771eda276af723e7ef61b16ebaaaa0e3f63",
+    "tests/test_navigation_confirmation.py": "6cc3a002a10c6c8ad9f3e82efdba6248d7e580ee541c4f38c0d59f0b8ca70d06",
+    "tests/test_stereo_depth.py": "0fac99a8a18ba97ffed52206cf7497946ee2439d94961c2f8a78f14c15f44899"
+  },
+  "junit_sha256": "b912dc6f4f72f014334827ead686089d7faa6b61f07909054ddcf576ac7f201f",
+  "h1_evidence_files_verified": 34,
+  "h1_raw_records_verified": 576,
+  "root_h1_independent_verification": {
+    "status": "PASS",
+    "problems": 0,
+    "raw_records": 576,
+    "protocol_sha256": "7b0b404ccac476340550166158b652b3d0eebb4a560aa0b397bf58eb75cd9112",
+    "semantic_reanalysis_matches_published": true
+  }
+}

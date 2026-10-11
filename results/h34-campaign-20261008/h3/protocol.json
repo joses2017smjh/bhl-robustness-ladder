@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "campaign_id": "h3-20261008",
+  "designed_utc": "2026-10-09T02:03:05.576606+00:00",
+  "task": "H3",
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "v51"
+  },
+  "input_files": {
+    "h3_teacher.pt": {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-08-17_09-54-10_dr-default-s0/model_5999.pt",
+      "sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df"
+    },
+    "h3_deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-08-17_09-54-10_dr-default-s0/exported/deploy.yaml",
+      "sha256": "79dd22c77687e5359fe99efff00407b65d44284cbf80aca70af188a744c11d1d"
+    },
+    "h3_env.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-08-17_09-54-10_dr-default-s0/params/env.yaml",
+      "sha256": "067f57fcc07c120ffa34d3cb4a564414b8cffd1bf6c1d66a592b608cc393f518"
+    },
+    "h3_agent.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-08-17_09-54-10_dr-default-s0/params/agent.yaml",
+      "sha256": "8a4e2f68f4a694298b79c70d714fed9568cc5be585338c11c8ca78f156214172"
+    }
+  },
+  "additional_source": [
+    "scripts/bench/h34_campaign.py",
+    "slurm/repo20261008/h34_campaign.sbatch",
+    "src/bhl_robust/latency_history.py",
+    "src/bhl_robust/tasks/history_latency_env_cfg.py",
+    "src/bhl_robust/eval/history_latency.py",
+    "scripts/bench/h3_train.py",
+    "scripts/bench/history_latency_eval.py",
+    "src/bhl_robust/tasks/heading_observable_env_cfg.py",
+    "src/bhl_robust/eval/heading_observable.py",
+    "scripts/bench/h4_train.py",
+    "scripts/bench/h4_qualification.py"
+  ],
+  "jobs": [
+    {
+      "name": "h3-smoke-20261008",
+      "kind": "smoke",
+      "entrypoint": "scripts/bench/h3_train.py",
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke",
+        "--cell",
+        "{cell}"
+      ],
+      "resources": {
+        "partition": "gpu,dgxh,ampere",
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "exclude": "dgxh-1",
+        "cpus": 8,
+        "memory_gb": 64,
+        "gpus": 1,
+        "time_limit": "00:45:00",
+        "array": "0,3%1"
+      },
+      "max_output_mb": 512,
+      "env": {}
+    },
+    {
+      "name": "h3-run-20261008",
+      "kind": "run",
+      "entrypoint": "scripts/bench/h3_train.py",
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run",
+        "--cell",
+        "{cell}"
+      ],
+      "resources": {
+        "partition": "gpu,dgxh,ampere",
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "exclude": "dgxh-1",
+        "cpus": 8,
+        "memory_gb": 64,
+        "gpus": 1,
+        "time_limit": "03:00:00",
+        "array": "0-5%1"
+      },
+      "max_output_mb": 512,
+      "env": {}
+    }
+  ],
+  "cells": [
+    {
+      "arm": "history",
+      "seed": 0,
+      "task": "Velocity-BHL-Biped-H3-History-v0",
+      "run_name": "h3-history-s0",
+      "iterations": 500,
+      "final_iteration": 499,
+      "teacher_checkpoint": "inputs/h3_teacher.pt",
+      "teacher_checkpoint_sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df",
+      "teacher_deploy": "inputs/h3_deploy.yaml",
+      "teacher_env": "inputs/h3_env.yaml",
+      "teacher_agent": "inputs/h3_agent.yaml"
+    },
+    {
+      "arm": "history",
+      "seed": 1,
+      "task": "Velocity-BHL-Biped-H3-History-v0",
+      "run_name": "h3-history-s1",
+      "iterations": 500,
+      "final_iteration": 499,
+      "teacher_checkpoint": "inputs/h3_teacher.pt",
+      "teacher_checkpoint_sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df",
+      "teacher_deploy": "inputs/h3_deploy.yaml",
+      "teacher_env": "inputs/h3_env.yaml",
+      "teacher_agent": "inputs/h3_agent.yaml"
+    },
+    {
+      "arm": "history",
+      "seed": 2,
+      "task": "Velocity-BHL-Biped-H3-History-v0",
+      "run_name": "h3-history-s2",
+      "iterations": 500,
+      "final_iteration": 499,
+      "teacher_checkpoint": "inputs/h3_teacher.pt",
+      "teacher_checkpoint_sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df",
+      "teacher_deploy": "inputs/h3_deploy.yaml",
+      "teacher_env": "inputs/h3_env.yaml",
+      "teacher_agent": "inputs/h3_agent.yaml"
+    },
+    {
+      "arm": "repeated_current",
+      "seed": 0,
+      "task": "Velocity-BHL-Biped-H3-Feedforward-v0",
+      "run_name": "h3-repeated_current-s0",
+      "iterations": 500,
+      "final_iteration": 499,
+      "teacher_checkpoint": "inputs/h3_teacher.pt",
+      "teacher_checkpoint_sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df",
+      "teacher_deploy": "inputs/h3_deploy.yaml",
+      "teacher_env": "inputs/h3_env.yaml",
+      "teacher_agent": "inputs/h3_agent.yaml"
+    },
+    {
+      "arm": "repeated_current",
+      "seed": 1,
+      "task": "Velocity-BHL-Biped-H3-Feedforward-v0",
+      "run_name": "h3-repeated_current-s1",
+      "iterations": 500,
+      "final_iteration": 499,
+      "teacher_checkpoint": "inputs/h3_teacher.pt",
+      "teacher_checkpoint_sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df",
+      "teacher_deploy": "inputs/h3_deploy.yaml",
+      "teacher_env": "inputs/h3_env.yaml",
+      "teacher_agent": "inputs/h3_agent.yaml"
+    },
+    {
+      "arm": "repeated_current",
+      "seed": 2,
+      "task": "Velocity-BHL-Biped-H3-Feedforward-v0",
+      "run_name": "h3-repeated_current-s2",
+      "iterations": 500,
+      "final_iteration": 499,
+      "teacher_checkpoint": "inputs/h3_teacher.pt",
+      "teacher_checkpoint_sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df",
+      "teacher_deploy": "inputs/h3_deploy.yaml",
+      "teacher_env": "inputs/h3_env.yaml",
+      "teacher_agent": "inputs/h3_agent.yaml"
+    }
+  ],
+  "scientific_scope": "New bounded fine-tuning campaign; shared declared parent initialization, not three from-scratch replications. No hardware result. Gates and final checkpoints fixed before scored evaluation.",
+  "training_checkpoint_selection": "Fixed final added iteration; no post-score checkpoint selection",
+  "max_global_gpu_concurrency": 2,
+  "h3": {
+    "iterations": 500,
+    "policy_dt_s": 0.04,
+    "physics_dt_s": 0.002,
+    "training_physics_dt_s": 0.005,
+    "num_envs": 4096,
+    "smoke_num_envs": 64,
+    "smoke_iterations": 3,
+    "train_delay_steps": [
+      0,
+      1
+    ],
+    "history_packets": 4,
+    "evaluation_delay_steps": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "evaluation_seeds": [
+      201000,
+      201001,
+      201002,
+      201003,
+      201004
+    ],
+    "episode_s": 10,
+    "warm_s": 1,
+    "qualified_progress_fraction": 0.5,
+    "gate": {
+      "required_paired_seeds": 2,
+      "primary_delay_steps": 2,
+      "min_primary_qualified_gain": 6,
+      "min_nominal_survival": 27,
+      "max_nominal_qualified_loss": 1
+    },
+    "actor_observations": 63,
+    "critic_observations": 48,
+    "joints": 12,
+    "commands": [
+      [
+        0.3,
+        0,
+        0
+      ],
+      [
+        0.5,
+        0,
+        0
+      ],
+      [
+        -0.2,
+        0,
+        0
+      ],
+      [
+        0,
+        0.2,
+        0
+      ],
+      [
+        0,
+        0,
+        0.5
+      ],
+      [
+        0.3,
+        0,
+        0.5
+      ]
+    ],
+    "expected_confirmation_episodes": 720,
+    "control": "Repeated latest delayed packet four times; same architecture and initialization as history arm. Critic receives clean current state.",
+    "delay_scope": "Artificial gyro/projected-gravity packet delivery delay at25Hz; not action/command delay or hardware measurement.",
+    "held_out_conditions": "80ms primary and120ms stress, beyond0/40ms training delays."
+  }
+}

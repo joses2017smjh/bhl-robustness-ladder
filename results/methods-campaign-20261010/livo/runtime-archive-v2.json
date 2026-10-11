@@ -1,0 +1,15 @@
+{
+  "schema": "bhl-native-livo-runtime-archive-v2",
+  "status": "PASS",
+  "runtime_archive": "/tmp/bhl-livo-runtime-v2-20261010.tar.gz",
+  "runtime_archive_bytes": 94567476,
+  "runtime_archive_sha256": "61b3a96e16478b83bacd1c86aa6a3966395379a5d57d2cd4446a855ed2064f5a",
+  "runtime_receipt_sha256": "3a32015a85e4685b07576391caa115c3497c9ae26b761cf853395504e8a2bcea",
+  "build_step": "21756762.10",
+  "transport_tests": {
+    "passed": 10,
+    "seconds": 0.23
+  },
+  "packaging": "regular-file members only for existing strict safe_extract; all runtime payload bytes unchanged from v1 archive",
+  "scientific_status": "NATIVE_BUILD_AND_TRANSPORT_QA_ONLY_NO_TRAJECTORY_CLAIM"
+}

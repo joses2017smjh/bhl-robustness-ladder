@@ -1,0 +1,27 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=fusion-occlusion-publish-20261011",
+    "--partition=share,eecs",
+    "--cpus-per-task=2",
+    "--mem=4G",
+    "--time=01:00:00",
+    "--no-requeue",
+    "--export=NONE",
+    "--dependency=afterany:21768578",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/fusion-occlusion-v3/publish-%j.out",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/fusion-occlusion-v3/publish.sbatch",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/fusion-occlusion-v3",
+    "fusion-occlusion-gated-20261011",
+    "905f85beb60db0f66d7de160617d26c41659c61e0fefff5700a8344e0c0ea50a"
+  ],
+  "job_id": "21768579",
+  "launcher_sha256": "fe6c6a6ceabe2f24208771f32d800c103c55b7e01d9bb529e5818fb12e97c2a8",
+  "returncode": 0,
+  "source_archive_sha256": "905f85beb60db0f66d7de160617d26c41659c61e0fefff5700a8344e0c0ea50a",
+  "stderr": "",
+  "stdout": "21768579\n"
+}

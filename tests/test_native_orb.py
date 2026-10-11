@@ -1,0 +1,245 @@
+"""Native IPC contract tests. Fixture processes are protocol tests, not SLAM results."""
+import importlib.util
+import json
+import os
+from pathlib import Path
+import sys
+import tempfile
+from types import SimpleNamespace
+import unittest
+
+import numpy as np
+
+from bhl_robust.research.native_orb import (
+    NativeOrbClient, UPSTREAM_COMMIT, tracking_summary, validate_response,
+    write_rectified_stereo_settings,
+)
+
+
+def build_module():
+    path = Path(__file__).resolve().parents[1] / "scripts/native/orb_build.py"
+    spec = importlib.util.spec_from_file_location("native_orb_build_test", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def frame(timestamp=1.0, state=2, map_id=7):
+    return {"schema": "bhl-orb-native-frame-v1", "timestamp_s": timestamp,
+            "tracking_state": state, "tracked": state == 2, "map_id": map_id,
+            "compute_seconds": .01, "T_W_C": np.eye(4).tolist() if state == 2 else None}
+
+
+class NativeProtocolTests(unittest.TestCase):
+    def test_legacy_parser_preserves_metric_stereo_and_feature_recipe(self):
+        import cv2
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)/'stereo.yaml'
+            write_rectified_stereo_settings(path, fx=415.69219381653056, fy=415.69219381653056,
+                                            cx=319.5, cy=239.5, width=640, height=480, fps=5, baseline_m=.12)
+            reader = cv2.FileStorage(str(path), cv2.FILE_STORAGE_READ)
+            try:
+                self.assertTrue(reader.getNode('File.version').empty())
+                self.assertEqual(reader.getNode('Camera.type').string(), 'PinHole')
+                self.assertAlmostEqual(reader.getNode('Camera.bf').real()/reader.getNode('Camera.fx').real(), .12)
+                self.assertEqual(reader.getNode('Camera.cx').real(), 319.5)
+                self.assertEqual(reader.getNode('Camera.cy').real(), 239.5)
+                self.assertEqual(reader.getNode('ThDepth').real(), 40.)
+                self.assertEqual(reader.getNode('ORBextractor.nFeatures').real(), 1200)
+                self.assertEqual(reader.getNode('ORBextractor.iniThFAST').real(), 20)
+                self.assertEqual(reader.getNode('ORBextractor.minThFAST').real(), 7)
+            finally:
+                reader.release()
+
+    def test_accepts_metric_pose_and_keeps_lost_pose_null(self):
+        self.assertTrue(validate_response(frame(), 1.)["tracked"])
+        self.assertIsNone(validate_response(frame(state=3), 1.)["T_W_C"])
+
+    def test_rejects_stale_time_and_wrong_tracking_state(self):
+        with self.assertRaisesRegex(ValueError, "different sensor time"):
+            validate_response(frame(), 2.)
+        for state in (-2, 6, True):
+            value = frame(); value["tracking_state"] = state
+            with self.assertRaises(ValueError): validate_response(value, 1.)
+
+    def test_only_ok_is_usable_and_lost_cannot_carry_pose(self):
+        value = frame(state=3); value["tracked"] = True
+        with self.assertRaisesRegex(ValueError, "Only actual ORB OK"):
+            validate_response(value, 1.)
+        value = frame(state=4); value["T_W_C"] = np.eye(4).tolist()
+        with self.assertRaisesRegex(ValueError, "null poses"):
+            validate_response(value, 1.)
+
+    def test_rejects_scaled_nonfinite_pose_and_bad_duration(self):
+        for scale in (2., float("nan")):
+            value = frame(); value["T_W_C"][0][0] = scale
+            with self.assertRaises(ValueError): validate_response(value, 1.)
+        for duration in (-1., True, float("nan")):
+            value = frame(); value["compute_seconds"] = duration
+            with self.assertRaises(ValueError): validate_response(value, 1.)
+
+    def test_map_ids_are_native_integers_or_explicit_unknown(self):
+        validate_response(frame(map_id=None), 1.)
+        for value in (-1, True, "7"):
+            with self.assertRaises(ValueError): validate_response(frame(map_id=value), 1.)
+
+    def test_summary_records_initialization_loss_and_map_changes(self):
+        summary = tracking_summary([frame(0., 1, None), frame(1.), frame(2., map_id=8), frame(3., 4, None)])
+        self.assertEqual(summary["tracked_frames"], 2)
+        self.assertEqual(summary["tracking_states"]["NOT_INITIALIZED"], 1)
+        self.assertEqual(summary["tracking_states"]["LOST"], 1)
+        self.assertEqual(summary["observed_map_changes"], 1)
+        self.assertFalse(summary["metric_scoring_ready"])
+        with self.assertRaises(ValueError): tracking_summary([frame(1.), frame(1.)])
+
+
+class NativeProcessTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.vocab = self.root / "vocab.txt"; self.vocab.write_text("protocol-test-fixture")
+        self.settings = self.root / "settings.yaml"; self.settings.write_text("protocol-test-fixture")
+        self.left = self.root / "left.png"; self.left.write_bytes(b"fixture-image")
+        self.right = self.root / "right.png"; self.right.write_bytes(b"fixture-image")
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def executable(self, body):
+        path = self.root / "fixture-native"
+        path.write_text(f"#!{sys.executable}\n" + body)
+        path.chmod(0o700)
+        return path
+
+    def fixture(self, *, wrong_pin=False, wrong_time=False):
+        pin = "wrong-pin" if wrong_pin else UPSTREAM_COMMIT
+        return self.executable(f'''import json, sys
+with open(sys.argv[3], 'w') as out:
+ out.write(json.dumps({{"schema":"bhl-orb-native-ready-v1","upstream_commit":{pin!r}}})+'\\n'); out.flush()
+ for request in sys.stdin:
+  stamp, left, right = request.rstrip('\\n').split('\\t')
+  value={frame()!r}
+  value['timestamp_s']=float(stamp)+{1. if wrong_time else 0.}
+  out.write(json.dumps(value)+'\\n'); out.flush()
+''')
+
+    def client(self, exe, **kwargs):
+        return NativeOrbClient(exe, self.vocab, self.settings, self.root / "episode", **kwargs)
+
+    def test_streams_original_timestamps_and_rejects_duplicate_requests(self):
+        with self.client(self.fixture()) as client:
+            result = client.track(123.456789, self.left, self.right)
+            self.assertEqual(result["timestamp_s"], 123.456789)
+            with self.assertRaises(ValueError): client.track(123.456789, self.left, self.right)
+            self.assertEqual(len(client.responses), 1)
+        self.assertEqual(client.process.returncode, 0)
+        self.assertFalse(client.fifo.exists())
+
+    def test_refuses_wrong_upstream_and_mismatched_reply(self):
+        with self.assertRaisesRegex(ValueError, "readiness/pin"):
+            with self.client(self.fixture(wrong_pin=True)): pass
+        # Preserve the first failure log; a separate episode owns the next process.
+        other = NativeOrbClient(self.fixture(wrong_time=True), self.vocab, self.settings, self.root / "episode2")
+        with other as client:
+            with self.assertRaisesRegex(ValueError, "different sensor time"):
+                client.track(1., self.left, self.right)
+
+    def test_native_exit_is_visible_and_cleanup_removes_fifo(self):
+        client = self.client(self.executable("import sys\nsys.exit(17)\n"))
+        with self.assertRaisesRegex(RuntimeError, "exited 17"):
+            with client: pass
+        self.assertFalse(client.fifo.exists())
+
+    def test_rejects_missing_and_evaluator_images_before_native_submission(self):
+        forbidden = self.root / "evaluator"; forbidden.mkdir()
+        truth = forbidden / "depth.png"; truth.write_bytes(b"not-inference")
+        with self.client(self.fixture()) as client:
+            for left in (truth, self.root / "missing.png"):
+                with self.assertRaises(ValueError): client.track(1., left, self.right)
+            self.assertEqual(client.responses, [])
+
+    def test_rejects_image_parent_aliases_to_evaluator_namespace(self):
+        evaluator = self.root / "evaluator"; evaluator.mkdir()
+        (evaluator / "truth.png").write_bytes(b"not-inference")
+        alias = self.root / "inference-alias"; alias.symlink_to(evaluator, target_is_directory=True)
+        with self.client(self.fixture()) as client:
+            with self.assertRaisesRegex(ValueError, "symbolic links"):
+                client.track(1., alias / "truth.png", self.right)
+
+    def test_no_ready_response_has_a_bounded_timeout(self):
+        executable = self.executable("import time\ntime.sleep(2)\n")
+        with self.assertRaises(TimeoutError):
+            with self.client(executable, startup_timeout_s=.05): pass
+
+
+class NativeBuildBoundaryTests(unittest.TestCase):
+    def test_resume_refuses_changed_actual_object_or_other_host_before_link(self):
+        module = build_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); output=root/'output'; output.mkdir()
+            obj=root/'fixture.o'; obj.write_bytes(b'UNIT PROVENANCE FIXTURE; NOT NATIVE CODE')
+            receipt={'schema':'bhl-orb-compiled-work-v1','upstream_commit':module.PIN,
+                     'root':str(root),'host':os.uname().nodename,
+                     'files':{'fixture.o':{'sha256':module.sha(obj),'bytes':obj.stat().st_size}}}
+            path=root/'receipt.json'; path.write_text(json.dumps(receipt))
+            args=SimpleNamespace(work=root,output=output,resume_compiled=path)
+            obj.write_bytes(b'tampered object')
+            with self.assertRaisesRegex(ValueError,'Compiled input changed'):
+                module.resume_compiled(args,root)
+            receipt['host']='another-node';path.write_text(json.dumps(receipt))
+            with self.assertRaisesRegex(ValueError,'another host/path'):
+                module.resume_compiled(args,root)
+
+    def test_resume_refuses_adapter_source_different_from_compiled_objects(self):
+        module=build_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);output=root/'output';output.mkdir()
+            adapter=root/'orb_runner.cc';adapter.write_text('UNIT SOURCE FIXTURE')
+            receipt={'schema':'bhl-orb-compiled-work-v1','upstream_commit':module.PIN,
+                     'root':str(root),'host':os.uname().nodename,'files':{},
+                     'adapters_sha256':{'orb_runner.cc':'0'*64}}
+            path=root/'receipt.json';path.write_text(json.dumps(receipt))
+            args=SimpleNamespace(work=root,output=output,resume_compiled=path)
+            with self.assertRaisesRegex(ValueError,'Compiled adapter differs'):
+                module.resume_compiled(args,root)
+
+    def test_headless_patch_preserves_viewer_thumbnail_byte_type(self):
+        module = build_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            inputs = {
+                "include/Map.h": "#include <pangolin/pangolin.h>\nGLubyte* mThumbnail;\n",
+                "include/MapDrawer.h": "#include<pangolin/pangolin.h>\n",
+                "src/System.cc": "#include <pangolin/pangolin.h>\n",
+                "src/Tracking.cc": "actual-algorithm-source-remains-byte-identical\n",
+                "Thirdparty/DBoW2/CMakeLists.txt": "flags -O3 -march=native\n",
+                "Thirdparty/g2o/CMakeLists.txt": "flags -O3 -march=native\n",
+            }
+            for name, value in inputs.items():
+                path = root / name; path.parent.mkdir(parents=True, exist_ok=True); path.write_text(value)
+            changes = module.patch_headless(root)
+            self.assertIn("using GLubyte = unsigned char", (root / "include/Map.h").read_text())
+            self.assertEqual((root / "src/Tracking.cc").read_text(), inputs["src/Tracking.cc"])
+            self.assertEqual(len(changes), 5)
+            self.assertNotIn("-march=native", (root / "Thirdparty/g2o/CMakeLists.txt").read_text())
+            with self.assertRaisesRegex(ValueError, "Expected one pinned"):
+                module.patch_headless(root)
+
+    def test_cmake_keeps_cpp_algorithm_sources_and_excludes_gui_units(self):
+        module = build_module()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); (root / "src/CameraModels").mkdir(parents=True)
+            for name in ("Tracking.cc", "System.cc", "MapDrawer.cc", "Viewer.cc", "MLPnPsolver.cpp", "OptimizableTypes.cpp"):
+                (root / "src" / name).touch()
+            (root / "src/CameraModels/Pinhole.cpp").touch()
+            cmake = module.cmake_text(root, root / "adapter", root / "sysroot")
+            for name in ("Tracking.cc", "MLPnPsolver.cpp", "OptimizableTypes.cpp", "Pinhole.cpp", "orb_headless.cc"):
+                self.assertIn(name, cmake)
+            self.assertNotIn("MapDrawer.cc", cmake)
+            self.assertNotIn("Viewer.cc", cmake)
+            self.assertNotIn("-march=native", cmake)
+            self.assertIn(str(root / "sysroot/usr/include/x86_64-linux-gnu"), cmake)
+
+
+if __name__ == "__main__":
+    unittest.main()

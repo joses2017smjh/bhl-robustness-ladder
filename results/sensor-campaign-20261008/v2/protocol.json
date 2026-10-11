@@ -1,0 +1,178 @@
+{
+  "additional_source": [
+    "src/bhl_robust/research/__init__.py",
+    "src/bhl_robust/research/pose_metrics.py",
+    "src/bhl_robust/research/replay_contract.py",
+    "src/bhl_robust/research/sensor_geometry.py",
+    "src/bhl_robust/research/stereo_benchmark.py",
+    "scripts/bench/sensor_campaign.py",
+    "scripts/bench/sensor_capture.py",
+    "scripts/bench/stereo_research.py",
+    "scripts/bench/sensor_geometry_research.py",
+    "scripts/bench/pose_research.py"
+  ],
+  "campaign_id": "sensor-replay-pilot-20261008",
+  "input_files": {
+    "onnxruntime_gpu-1.22.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-sensors-20261008/inputs/onnxruntime_gpu-1.22.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "sha256": "d30c1512f22b1f01bacb4f177d49cbefd23e0f4bef56066f1282992d133e6ff8"
+    },
+    "stereo_model.onnx": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-sensors-20261008/inputs/c_fast_foundationstereo_bp2_dynbatch_dynhw.onnx",
+      "sha256": "2c79bbb274dc0aef687a8732b987077e9e3aa26ff9dd653141cda48c57dad5d3"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke"
+      ],
+      "entrypoint": "scripts/bench/sensor_campaign.py",
+      "env": {},
+      "kind": "smoke",
+      "max_output_mb": 128,
+      "name": "sensors-smoke-20261008",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "time_limit": "00:20:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "pilot"
+      ],
+      "entrypoint": "scripts/bench/sensor_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 256,
+      "name": "sensors-pilot-20261008",
+      "resources": {
+        "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+        "cpus": 4,
+        "exclude": "dgxh-1",
+        "gpus": 1,
+        "memory_gb": 32,
+        "partition": "gpu,dgxh,ampere",
+        "time_limit": "01:00:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Simulated kinematic sensor replay pilot; all four full research objectives remain OPEN.",
+  "sensor_geometry": {
+    "extrinsic_stresses": [
+      {
+        "name": "nominal",
+        "rotation_y_deg": 0.0,
+        "translation_x_m": 0.0
+      },
+      {
+        "name": "rot1deg_trans1cm",
+        "rotation_y_deg": 1.0,
+        "translation_x_m": 0.01
+      },
+      {
+        "name": "rot3deg_trans3cm",
+        "rotation_y_deg": 3.0,
+        "translation_x_m": 0.03
+      }
+    ],
+    "fusion": {
+      "agreement_abs_m": 0.15,
+      "agreement_relative": 0.05,
+      "confidence_min": 0.6,
+      "near_threshold_m": 3.0
+    },
+    "retentions": [
+      1.0,
+      0.5,
+      0.2
+    ],
+    "terrain": {
+      "min_points": 1,
+      "resolution_m": 0.125,
+      "roughness_hazard_m": 0.05,
+      "slope_hazard_deg": 20.0,
+      "step_hazard_m": 0.12,
+      "x_max_m": 5.0,
+      "x_min_m": 0.25,
+      "y_max_m": 1.5,
+      "y_min_m": -1.5
+    },
+    "threshold_basis": "Predeclared engineering defaults for pilot; no fitted uncertainty and no test-set tuning. Full thresholds must be qualified on development/validation before confirmation.",
+    "threshold_config_split": "development"
+  },
+  "sensor_research": {
+    "advancement_gates": {
+      "fusion": "Confirm >=20% relative false-free reduction under preselected stress with <=2 percentage point nominal recall loss; baseline zero forbids reduction claim.",
+      "pose": "Real ORB3 and FAST-LIO2 trajectories first, then 36 development and 432 fresh matched closed-loop episodes; zero completed now.",
+      "stereo": "Full held-out sequence confirmation requires >=10% lower near RMSE with <=2 percentage point coverage loss, no false-free increase and measured planner deadline. Pilot does not qualify it.",
+      "terrain": "Mapping measurements first, then controller-capability-specific paired traversal."
+    },
+    "capture": {
+      "pilot": {
+        "frames_per_scene": 24
+      },
+      "smoke": {
+        "frames_per_scene": 2
+      }
+    },
+    "frame_rate_hz": 15,
+    "gpu_runtime": {
+      "bytes": 283204403,
+      "input_name": "onnxruntime_gpu-1.22.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl",
+      "package": "onnxruntime-gpu==1.22.0",
+      "sha256": "d30c1512f22b1f01bacb4f177d49cbefd23e0f4bef56066f1282992d133e6ff8",
+      "url": "https://files.pythonhosted.org/packages/4a/10/cd3e7e289f7b46eb93e38b5c90139f735bf1ea7f03d4b17ceb0e998e5bb6/onnxruntime_gpu-1.22.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
+    },
+    "metrics_scope": {
+      "depth": "Optical-axis Z errors, native and paired common-mask coverage, independent non-floor obstacle pixel recall within 3m and 0.15m depth tolerance; not instance detection.",
+      "fusion": "False free space and unknown/missed labeled near-obstacle pixels on independent evaluator geometry. Fixed heuristic scores, not calibrated uncertainty.",
+      "pose": "Replay readiness/exports only. No SLAM trajectory or navigation outcome until real estimator outputs exist.",
+      "terrain": "Independent vertical-ray height labels and geometric hazard labels; no traversal result."
+    },
+    "model": {
+      "bytes": 103228473,
+      "input_name": "stereo_model.onnx",
+      "name": "official C-Fast-FoundationStereo pretrained ONNX",
+      "revision": "53a84e28a368f37e699776250215fcb450d6a109",
+      "sha256": "2c79bbb274dc0aef687a8732b987077e9e3aa26ff9dd653141cda48c57dad5d3",
+      "upstream_commit": "476f4249561f7c79ca707326954f9255643412a6",
+      "url": "https://huggingface.co/nvidia/C-Fast-FoundationStereo/resolve/53a84e28a368f37e699776250215fcb450d6a109/onnx/c_fast_foundationstereo_bp2_dynbatch_dynhw.onnx"
+    },
+    "origin": "simulation",
+    "scene_groups": {
+      "ramp_step": "test",
+      "textured_boxes": "dev",
+      "thin_posts": "validation"
+    },
+    "stage_timeout_s": 2400,
+    "timing": {
+      "pilot": {
+        "timed": 200,
+        "warmup": 30
+      },
+      "smoke": {
+        "timed": 3,
+        "warmup": 2
+      }
+    }
+  }
+}

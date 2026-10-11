@@ -1,0 +1,40 @@
+{
+  "archive_sha256": "65c1c6fc9ccabccc5c3f1eb5b21579552f8c23f7bb22b917c1ca7ed04b9efc10",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=sensors-pilot-20261008",
+    "--partition=gpu,dgxh,ampere",
+    "--cpus-per-task=4",
+    "--mem=32G",
+    "--time=01:00:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-sensors-20261008/pilot-v2/sensors-pilot-20261008-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-sensors-20261008/pilot-v2/sensors-pilot-20261008-%j.out",
+    "--export=NONE",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--exclude=dgxh-1",
+    "--gres=gpu:1",
+    "--dependency=afterok:21714137",
+    "/nfs/stak/users/sanchej7/humanoid-sensors-20261008/pilot-v2/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-sensors-20261008/pilot-v2",
+    "sensors-pilot-20261008",
+    "65c1c6fc9ccabccc5c3f1eb5b21579552f8c23f7bb22b917c1ca7ed04b9efc10"
+  ],
+  "job_id": "21714203",
+  "resources": {
+    "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+    "cpus": 4,
+    "exclude": "dgxh-1",
+    "gpus": 1,
+    "memory_gb": 32,
+    "partition": "gpu,dgxh,ampere",
+    "time_limit": "01:00:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21714203\n",
+  "submitted_utc": "2026-10-09T03:29:12.726928+00:00"
+}

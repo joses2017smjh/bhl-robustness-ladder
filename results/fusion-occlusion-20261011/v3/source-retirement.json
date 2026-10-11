@@ -1,0 +1,25 @@
+{
+  "status": "VERIFIED_LOCAL_SOURCE_DUPLICATE_RETIRED",
+  "source": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/fusion-occlusion-v3/frozen-campaign.tar.gz",
+  "source_before": {
+    "bytes": 377211150,
+    "mode": 432,
+    "mtime_ns": 1791712965000000000,
+    "ctime_ns": 1791712965000000000,
+    "inode": 198166710774155695,
+    "device": 1273255716,
+    "allocated_bytes": 377217024
+  },
+  "bytes": 377211150,
+  "sha256": "905f85beb60db0f66d7de160617d26c41659c61e0fefff5700a8344e0c0ea50a",
+  "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/research-campaign-evidence-20261011/fusion-occlusion-source-v3-905f85beb60db0f6.tar.gz",
+  "verification": "Fresh independent release download SHA256 equals unchanged source, preserved source-publication receipt and completed source-pinned campaign",
+  "completion_sacct": "21768578|COMPLETED|0:0\n21768579|COMPLETED|0:0\n",
+  "independent_collection_sha256": "41527efe42c5cb8c8d1abb066ddfd90c37e7066fbe7dfbe54707879b0a31b8fe",
+  "active_dependency_audit": "No active/pending Slurm command metadata or other new research JSON references this archive",
+  "retained": "Original manifest, source/protocol pins, all compact results/logs and publication receipts",
+  "restore": "Download canonical URL into temporary path, check exact bytes/SHA256, restore absent source path for future replay",
+  "df_before": "Filesystem                                                                                1B-blocks          Used   Available Use% Mounted on\n10.192.45.240@o2ib,10.192.45.241@o2ib:10.192.45.242@o2ib,10.192.45.243@o2ib:/exascale 1649267441664 1637469028352 11798413312 100% /nfs/hpc/share\n",
+  "completed_utc": "2026-10-11T10:29:22.430039+00:00",
+  "df_after": "Filesystem                                                                                1B-blocks          Used   Available Use% Mounted on\n10.192.45.240@o2ib,10.192.45.241@o2ib:10.192.45.242@o2ib,10.192.45.243@o2ib:/exascale 1649267441664 1637477466112 11789975552 100% /nfs/hpc/share\n"
+}

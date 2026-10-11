@@ -663,7 +663,8 @@ def test_clis_accept_stage_gait_in_preflight(tmp_path, script):
     if not (_REPO / "external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-09-25_18-54-44_arms-turn-turnboth-s0"
             "/exported/policy.onnx").is_file():
         pytest.skip("TurnBoth-s0 export not on disk")
-    env = {**os.environ, "PYTHONPATH": f"{_REPO / 'src'}:{_REPO / 'scripts'}"}
+    upstream_python = _REPO / "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel"
+    env = {**os.environ, "PYTHONPATH": os.pathsep.join(map(str, (_REPO / "src", _REPO / "scripts", upstream_python)))}
     if script == "stage":
         args = [str(STAGE), "--repo", str(_REPO), "--campaign", "results/mission7-replay-smoke-20260921",
                 "--baseline", "results/mission7-approach-followup-20260922/replay-diagnose-cn-c22",

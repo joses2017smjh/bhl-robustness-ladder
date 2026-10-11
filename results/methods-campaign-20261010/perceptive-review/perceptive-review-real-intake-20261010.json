@@ -1,0 +1,29 @@
+{
+  "schema": "bhl-perceptive-methods-collection-v1",
+  "status": "INCOMPLETE",
+  "scientific_status": "PARTIAL_EVIDENCE_NO_GLOBAL_VERDICT",
+  "observed_seeds": 0,
+  "expected_seeds": 3,
+  "missing_seeds": [
+    0,
+    1,
+    2
+  ],
+  "qualified_teachers": 0,
+  "evaluated_teachers": 0,
+  "completed_student_arms": 0,
+  "expected_student_arms_if_teachers_qualify": 12,
+  "unrun_student_arms_after_negative_teacher": 0,
+  "paired_student_comparison": "UNAVAILABLE_REQUIRES_THREE_QUALIFIED_TEACHERS_AND_ALL_STUDENTS",
+  "paired_differences": {},
+  "rows": [],
+  "problems": [],
+  "analysis_unit": "three independent training seeds; fixed matched environment identities and four conditions within seed; no episode-level significance claim",
+  "scope": "development Isaac velocity tracking; negative teacher gate is a measured outcome, unrun students are not zero-valued observations; no navigation or hardware claim",
+  "source_archive_sha256": "aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f",
+  "protocol_sha256": "682e659289232a7b39b9fc1e6a6bd3ece8746157b62a63fa9da9b5387f8b4931",
+  "input_sha256": {
+    "perceptive_warmstart.pt": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df"
+  },
+  "collector_sha256": "1e54858a87d6305ef97b02ab45579d0b397281f2f5c254e3569eeeb3411a5ffa"
+}

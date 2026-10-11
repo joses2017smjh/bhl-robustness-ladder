@@ -1,0 +1,3537 @@
+{
+  "status": "PASS",
+  "final": true,
+  "incomplete_actors": [],
+  "protocol_sha256": "0aac4602e557436c9476ef894b1bb80dc406a5f65848aaf26d8f12a534e58578",
+  "per_actor": {
+    "dr-off-s0": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 17,
+          "fall_rate": 0.14166666666666666,
+          "fall_wilson95_descriptive": [
+            0.09036879103483236,
+            0.21519494489857183
+          ],
+          "mean_survival_s": 9.035,
+          "mean_distance_m": 1.5333336055938465,
+          "mean_surviving_linear_tracking_error_m_s": 0.22294108553833517,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.13141446246480862,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 112,
+          "fall_rate": 0.9333333333333333,
+          "fall_wilson95_descriptive": [
+            0.8739486959646967,
+            0.9658346931390938
+          ],
+          "mean_survival_s": 4.934333333333333,
+          "mean_distance_m": 0.7988353226954739,
+          "mean_surviving_linear_tracking_error_m_s": 0.2745741093423403,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.198758820319824,
+          "pushes_applied": 154,
+          "pushes_survived": 58
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.202258348464966,
+            "mean_surviving_linear_tracking_error_m_s": 0.20302756237652567,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.09214423585814034,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.4239174127578735,
+            "mean_surviving_linear_tracking_error_m_s": 0.300308430403471,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.20272641959723034,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 1,
+            "fall_rate": 0.05,
+            "fall_wilson95_descriptive": [
+              0.008881448800795402,
+              0.23613119344674205
+            ],
+            "mean_survival_s": 9.804,
+            "mean_distance_m": 1.4583633214235305,
+            "mean_surviving_linear_tracking_error_m_s": 0.1442688176233618,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.08867613474852334,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 14,
+            "fall_rate": 0.7,
+            "fall_wilson95_descriptive": [
+              0.4810271816464765,
+              0.8545227551323956
+            ],
+            "mean_survival_s": 5.05,
+            "mean_distance_m": 0.20642034150660038,
+            "mean_surviving_linear_tracking_error_m_s": 0.3321343799523452,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.09010891932167026,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.021225164853967728,
+            "mean_surviving_linear_tracking_error_m_s": 0.12368311100856712,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1113489445745945,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 2,
+            "fall_rate": 0.1,
+            "fall_wilson95_descriptive": [
+              0.027866481213768224,
+              0.3010336452284873
+            ],
+            "mean_survival_s": 9.356,
+            "mean_distance_m": 0.8878170445561409,
+            "mean_surviving_linear_tracking_error_m_s": 0.23422421186574022,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.203482120688693,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 5.102,
+            "mean_distance_m": 1.0950630843639373,
+            "mean_surviving_linear_tracking_error_m_s": 0.2510710649981128,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1674519048805278,
+            "pushes_applied": 28,
+            "pushes_survived": 9
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 18,
+            "fall_rate": 0.9,
+            "fall_wilson95_descriptive": [
+              0.6989663547715128,
+              0.9721335187862319
+            ],
+            "mean_survival_s": 5.01,
+            "mean_distance_m": 2.067717170715332,
+            "mean_surviving_linear_tracking_error_m_s": 0.34224867090641886,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2498343297434405,
+            "pushes_applied": 28,
+            "pushes_survived": 10
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 4.378,
+            "mean_distance_m": 0.4574811577796936,
+            "mean_surviving_linear_tracking_error_m_s": 0.21447347050871474,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1580520017371799,
+            "pushes_applied": 23,
+            "pushes_survived": 5
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 3.446,
+            "mean_distance_m": 0.12715975232422352,
+            "mean_surviving_linear_tracking_error_m_s": 0.3296145618333248,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.09842018537913326,
+            "pushes_applied": 12,
+            "pushes_survived": 2
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 14,
+            "fall_rate": 0.7,
+            "fall_wilson95_descriptive": [
+              0.4810271816464765,
+              0.8545227551323956
+            ],
+            "mean_survival_s": 6.886,
+            "mean_distance_m": 0.15560358986258507,
+            "mean_surviving_linear_tracking_error_m_s": 0.17886712065917407,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1807197168960244,
+            "pushes_applied": 39,
+            "pushes_survived": 26
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 4.784,
+            "mean_distance_m": 0.8899871811270714,
+            "mean_surviving_linear_tracking_error_m_s": 0.3311697671482964,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.33807478328263824,
+            "pushes_applied": 24,
+            "pushes_survived": 6
+          }
+        }
+      }
+    },
+    "dr-off-s1": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 28,
+          "fall_rate": 0.23333333333333334,
+          "fall_wilson95_descriptive": [
+            0.16665575133182917,
+            0.31655447075814613
+          ],
+          "mean_survival_s": 8.215333333333334,
+          "mean_distance_m": 1.2611022830552732,
+          "mean_surviving_linear_tracking_error_m_s": 0.26975206193211637,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.25224733688147993,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 112,
+          "fall_rate": 0.9333333333333333,
+          "fall_wilson95_descriptive": [
+            0.8739486959646967,
+            0.9658346931390938
+          ],
+          "mean_survival_s": 4.886333333333333,
+          "mean_distance_m": 0.7231561809157332,
+          "mean_surviving_linear_tracking_error_m_s": 0.31117612497510094,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.2684976886396812,
+          "pushes_applied": 148,
+          "pushes_survived": 69
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.9620184659957887,
+            "mean_surviving_linear_tracking_error_m_s": 0.27300677947741414,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.15177208614548807,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 8,
+            "fall_rate": 0.4,
+            "fall_wilson95_descriptive": [
+              0.21880653237281705,
+              0.6134184992377469
+            ],
+            "mean_survival_s": 6.7,
+            "mean_distance_m": 2.8979918912053106,
+            "mean_surviving_linear_tracking_error_m_s": 0.5140817307879954,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.5077403258918174,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.4544748961925507,
+            "mean_surviving_linear_tracking_error_m_s": 0.1859323293328699,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.09279423155992197,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 2.592,
+            "mean_distance_m": 0.16536744982004165,
+            "mean_surviving_linear_tracking_error_m_s": 0.3187516671237393,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1580163050195014,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.029041365114971997,
+            "mean_surviving_linear_tracking_error_m_s": 0.10190439214270898,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.44017714262698104,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.0577196300029754,
+            "mean_surviving_linear_tracking_error_m_s": 0.22483547272797053,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.16298393004516967,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 19,
+            "fall_rate": 0.95,
+            "fall_wilson95_descriptive": [
+              0.763868806553258,
+              0.9911185511992047
+            ],
+            "mean_survival_s": 4.93,
+            "mean_distance_m": 1.0120700210332871,
+            "mean_surviving_linear_tracking_error_m_s": 0.3181404890121262,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.23050597154265046,
+            "pushes_applied": 27,
+            "pushes_survived": 9
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 3.892,
+            "mean_distance_m": 1.5371505990624428,
+            "mean_surviving_linear_tracking_error_m_s": 0.5591324263568805,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.5694906275782128,
+            "pushes_applied": 17,
+            "pushes_survived": 7
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 4.698,
+            "mean_distance_m": 0.5100412011146546,
+            "mean_surviving_linear_tracking_error_m_s": 0.22800811762856057,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.11860548558174047,
+            "pushes_applied": 25,
+            "pushes_survived": 7
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 2.59,
+            "mean_distance_m": 0.1656482234597206,
+            "mean_surviving_linear_tracking_error_m_s": 0.3193063207226324,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.15810701973435165,
+            "pushes_applied": 5,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 13,
+            "fall_rate": 0.65,
+            "fall_wilson95_descriptive": [
+              0.43285427668523624,
+              0.818808175898918
+            ],
+            "mean_survival_s": 8.274000000000001,
+            "mean_distance_m": 0.156390368565917,
+            "mean_surviving_linear_tracking_error_m_s": 0.15125086323874878,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.26714179290811807,
+            "pushes_applied": 48,
+            "pushes_survived": 38
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 4.934,
+            "mean_distance_m": 0.9576366722583771,
+            "mean_surviving_linear_tracking_error_m_s": 0.2912185328916572,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2671352344930138,
+            "pushes_applied": 26,
+            "pushes_survived": 8
+          }
+        }
+      }
+    },
+    "dr-off-s2": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 32,
+          "fall_rate": 0.26666666666666666,
+          "fall_wilson95_descriptive": [
+            0.19568455046725244,
+            0.352124393861476
+          ],
+          "mean_survival_s": 8.206333333333333,
+          "mean_distance_m": 1.4295547706695895,
+          "mean_surviving_linear_tracking_error_m_s": 0.2646254891400849,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.1581506488252664,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 117,
+          "fall_rate": 0.975,
+          "fall_wilson95_descriptive": [
+            0.9290699666721339,
+            0.9914618252300978
+          ],
+          "mean_survival_s": 4.607666666666667,
+          "mean_distance_m": 0.7132380421894292,
+          "mean_surviving_linear_tracking_error_m_s": 0.30400562498143313,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.20849995007379915,
+          "pushes_applied": 139,
+          "pushes_survived": 45
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.8860510885715485,
+            "mean_surviving_linear_tracking_error_m_s": 0.24878993828325635,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1630334520178484,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.1638432264328005,
+            "mean_surviving_linear_tracking_error_m_s": 0.29979117326873045,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.15254381913028514,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 2,
+            "fall_rate": 0.1,
+            "fall_wilson95_descriptive": [
+              0.027866481213768224,
+              0.3010336452284873
+            ],
+            "mean_survival_s": 9.418,
+            "mean_distance_m": 1.4532238259911536,
+            "mean_surviving_linear_tracking_error_m_s": 0.1704854492948153,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.07329432859271355,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 2.742,
+            "mean_distance_m": 0.1363850086927414,
+            "mean_surviving_linear_tracking_error_m_s": 0.3398492514014118,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.14315623396373522,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.07332359421998262,
+            "mean_surviving_linear_tracking_error_m_s": 0.20411080657628675,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1220512972745928,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 10,
+            "fall_rate": 0.5,
+            "fall_wilson95_descriptive": [
+              0.2992980081982123,
+              0.7007019918017877
+            ],
+            "mean_survival_s": 7.078,
+            "mean_distance_m": 0.8645018801093102,
+            "mean_surviving_linear_tracking_error_m_s": 0.32472631601600854,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2948247619724232,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 4.678,
+            "mean_distance_m": 0.8586075365543365,
+            "mean_surviving_linear_tracking_error_m_s": 0.3142542507030484,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.22715996767281973,
+            "pushes_applied": 25,
+            "pushes_survived": 5
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 4.704,
+            "mean_distance_m": 1.7193495452404022,
+            "mean_surviving_linear_tracking_error_m_s": 0.36952518998233014,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2490210602506802,
+            "pushes_applied": 25,
+            "pushes_survived": 6
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 4.452,
+            "mean_distance_m": 0.5572052381932735,
+            "mean_surviving_linear_tracking_error_m_s": 0.22197917839102438,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.110397391269804,
+            "pushes_applied": 23,
+            "pushes_survived": 5
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 2.73,
+            "mean_distance_m": 0.13501188829541205,
+            "mean_surviving_linear_tracking_error_m_s": 0.3396284934790711,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1429327790187611,
+            "pushes_applied": 7,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 18,
+            "fall_rate": 0.9,
+            "fall_wilson95_descriptive": [
+              0.6989663547715128,
+              0.9721335187862319
+            ],
+            "mean_survival_s": 5.98,
+            "mean_distance_m": 0.191523458622396,
+            "mean_surviving_linear_tracking_error_m_s": 0.2043035156247341,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.17498079862640328,
+            "pushes_applied": 33,
+            "pushes_survived": 17
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 19,
+            "fall_rate": 0.95,
+            "fall_wilson95_descriptive": [
+              0.763868806553258,
+              0.9911185511992047
+            ],
+            "mean_survival_s": 5.102,
+            "mean_distance_m": 0.8177305862307549,
+            "mean_surviving_linear_tracking_error_m_s": 0.3743431217083908,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.3465077036043266,
+            "pushes_applied": 26,
+            "pushes_survived": 12
+          }
+        }
+      }
+    },
+    "dr-s0.5-s0": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 4,
+          "fall_rate": 0.03333333333333333,
+          "fall_wilson95_descriptive": [
+            0.0130375510983506,
+            0.082580337559106
+          ],
+          "mean_survival_s": 9.735,
+          "mean_distance_m": 1.704641876668514,
+          "mean_surviving_linear_tracking_error_m_s": 0.23909158497843894,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.13932701497902428,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 91,
+          "fall_rate": 0.7583333333333333,
+          "fall_wilson95_descriptive": [
+            0.674498509525689,
+            0.8261415878246474
+          ],
+          "mean_survival_s": 6.557,
+          "mean_distance_m": 1.0634559806746742,
+          "mean_surviving_linear_tracking_error_m_s": 0.28392938184972405,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.21903932150085414,
+          "pushes_applied": 220,
+          "pushes_survived": 139
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.456417453289032,
+            "mean_surviving_linear_tracking_error_m_s": 0.18751634771925293,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.08532703720220565,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 4,
+            "fall_rate": 0.2,
+            "fall_wilson95_descriptive": [
+              0.08065766257979806,
+              0.41601743225189364
+            ],
+            "mean_survival_s": 8.41,
+            "mean_distance_m": 3.5293843924999235,
+            "mean_surviving_linear_tracking_error_m_s": 0.3660905774057431,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2968812259476846,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.058321487903595,
+            "mean_surviving_linear_tracking_error_m_s": 0.1938537622085876,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.06233929241292612,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.4100708067417145,
+            "mean_surviving_linear_tracking_error_m_s": 0.31289276868270505,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1193845068208191,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.02398402423132211,
+            "mean_surviving_linear_tracking_error_m_s": 0.14396360356008842,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.07459935381015141,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.7496730953454971,
+            "mean_surviving_linear_tracking_error_m_s": 0.23023245029425662,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.19743067368035877,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 18,
+            "fall_rate": 0.9,
+            "fall_wilson95_descriptive": [
+              0.6989663547715128,
+              0.9721335187862319
+            ],
+            "mean_survival_s": 5.974,
+            "mean_distance_m": 1.315890121459961,
+            "mean_surviving_linear_tracking_error_m_s": 0.2441581143757048,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.18952986046398868,
+            "pushes_applied": 33,
+            "pushes_survived": 15
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 18,
+            "fall_rate": 0.9,
+            "fall_wilson95_descriptive": [
+              0.6989663547715128,
+              0.9721335187862319
+            ],
+            "mean_survival_s": 5.45,
+            "mean_distance_m": 2.0439082860946653,
+            "mean_surviving_linear_tracking_error_m_s": 0.4144222132659335,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.38526990650735277,
+            "pushes_applied": 28,
+            "pushes_survived": 15
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 18,
+            "fall_rate": 0.9,
+            "fall_wilson95_descriptive": [
+              0.6989663547715128,
+              0.9721335187862319
+            ],
+            "mean_survival_s": 6.492,
+            "mean_distance_m": 1.1633943691849709,
+            "mean_surviving_linear_tracking_error_m_s": 0.2624638914095851,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.18448411674046208,
+            "pushes_applied": 36,
+            "pushes_survived": 19
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 15,
+            "fall_rate": 0.75,
+            "fall_wilson95_descriptive": [
+              0.531299122381256,
+              0.8881382985923343
+            ],
+            "mean_survival_s": 6.344,
+            "mean_distance_m": 0.8163667410612107,
+            "mean_surviving_linear_tracking_error_m_s": 0.31078560538537964,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.13902534480960732,
+            "pushes_applied": 37,
+            "pushes_survived": 22
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 8,
+            "fall_rate": 0.4,
+            "fall_wilson95_descriptive": [
+              0.21880653237281705,
+              0.6134184992377469
+            ],
+            "mean_survival_s": 8.174,
+            "mean_distance_m": 0.15449599865823985,
+            "mean_surviving_linear_tracking_error_m_s": 0.19748502273271723,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1467670492717915,
+            "pushes_applied": 47,
+            "pushes_survived": 41
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 14,
+            "fall_rate": 0.7,
+            "fall_wilson95_descriptive": [
+              0.4810271816464765,
+              0.8545227551323956
+            ],
+            "mean_survival_s": 6.908,
+            "mean_distance_m": 0.8866803675889969,
+            "mean_surviving_linear_tracking_error_m_s": 0.27426144392902413,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2691596512119226,
+            "pushes_applied": 39,
+            "pushes_survived": 27
+          }
+        }
+      }
+    },
+    "dr-s0.5-s1": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 1.9608180092647671,
+          "mean_surviving_linear_tracking_error_m_s": 0.2246155758897291,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.08814011751340198,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 87,
+          "fall_rate": 0.725,
+          "fall_wilson95_descriptive": [
+            0.6390703417242319,
+            0.7969710333873515
+          ],
+          "mean_survival_s": 6.876333333333333,
+          "mean_distance_m": 1.2397747199827185,
+          "mean_surviving_linear_tracking_error_m_s": 0.2608424533275511,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.1773540820260382,
+          "pushes_applied": 234,
+          "pushes_survived": 153
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.830842411518097,
+            "mean_surviving_linear_tracking_error_m_s": 0.21269086145982147,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.06907191202913944,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.6644422769546505,
+            "mean_surviving_linear_tracking_error_m_s": 0.2833208168782294,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.08183913741244507,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.0427663564682006,
+            "mean_surviving_linear_tracking_error_m_s": 0.2010707118138671,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.07069261250318394,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.4040525794029235,
+            "mean_surviving_linear_tracking_error_m_s": 0.30573126279645496,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.06782897884662492,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.08939804248511792,
+            "mean_surviving_linear_tracking_error_m_s": 0.14964703925243683,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.077025257938438,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.7334063887596131,
+            "mean_surviving_linear_tracking_error_m_s": 0.19523276313756488,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.16238280635058053,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 18,
+            "fall_rate": 0.9,
+            "fall_wilson95_descriptive": [
+              0.6989663547715128,
+              0.9721335187862319
+            ],
+            "mean_survival_s": 5.854,
+            "mean_distance_m": 1.56062593460083,
+            "mean_surviving_linear_tracking_error_m_s": 0.2511346629486479,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.16270194877880942,
+            "pushes_applied": 32,
+            "pushes_survived": 15
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 19,
+            "fall_rate": 0.95,
+            "fall_wilson95_descriptive": [
+              0.763868806553258,
+              0.9911185511992047
+            ],
+            "mean_survival_s": 5.838,
+            "mean_distance_m": 2.520735669136047,
+            "mean_surviving_linear_tracking_error_m_s": 0.31797150521497153,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.250646245221347,
+            "pushes_applied": 32,
+            "pushes_survived": 15
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 14,
+            "fall_rate": 0.7,
+            "fall_wilson95_descriptive": [
+              0.4810271816464765,
+              0.8545227551323956
+            ],
+            "mean_survival_s": 7.814,
+            "mean_distance_m": 1.3757776290178299,
+            "mean_surviving_linear_tracking_error_m_s": 0.24307499616371758,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1219515154339415,
+            "pushes_applied": 45,
+            "pushes_survived": 32
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 14,
+            "fall_rate": 0.7,
+            "fall_wilson95_descriptive": [
+              0.4810271816464765,
+              0.8545227551323956
+            ],
+            "mean_survival_s": 6.538,
+            "mean_distance_m": 0.8280144780874252,
+            "mean_surviving_linear_tracking_error_m_s": 0.33181337053422316,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.15404223923255433,
+            "pushes_applied": 38,
+            "pushes_survived": 24
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 6,
+            "fall_rate": 0.3,
+            "fall_wilson95_descriptive": [
+              0.1454772448676043,
+              0.5189728183535235
+            ],
+            "mean_survival_s": 8.744,
+            "mean_distance_m": 0.15986787443980574,
+            "mean_surviving_linear_tracking_error_m_s": 0.1731139821362619,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.12390765475077774,
+            "pushes_applied": 51,
+            "pushes_survived": 46
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 16,
+            "fall_rate": 0.8,
+            "fall_wilson95_descriptive": [
+              0.5839825677481064,
+              0.919342337420202
+            ],
+            "mean_survival_s": 6.47,
+            "mean_distance_m": 0.9936267346143722,
+            "mean_surviving_linear_tracking_error_m_s": 0.24794620296748482,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.25087488873879926,
+            "pushes_applied": 36,
+            "pushes_survived": 21
+          }
+        }
+      }
+    },
+    "dr-s0.5-s2": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 1.8802531093436603,
+          "mean_surviving_linear_tracking_error_m_s": 0.2187647382081314,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.08819011019770409,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 90,
+          "fall_rate": 0.75,
+          "fall_wilson95_descriptive": [
+            0.665588633358744,
+            0.8189017834319043
+          ],
+          "mean_survival_s": 6.953,
+          "mean_distance_m": 1.2395104932210719,
+          "mean_surviving_linear_tracking_error_m_s": 0.261670747969107,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.16051343996547404,
+          "pushes_applied": 238,
+          "pushes_survived": 153
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.7067591309547425,
+            "mean_surviving_linear_tracking_error_m_s": 0.22384572514627749,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.07025688087056481,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.574014163017273,
+            "mean_surviving_linear_tracking_error_m_s": 0.2610755996261723,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1047774481492379,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.0009634494781494,
+            "mean_surviving_linear_tracking_error_m_s": 0.2008775589271552,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.07711511150282999,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.1805216133594514,
+            "mean_surviving_linear_tracking_error_m_s": 0.2914388352938824,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.08686205995805196,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.02631256585009396,
+            "mean_surviving_linear_tracking_error_m_s": 0.14190905012966443,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.0675672702093919,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.7929477334022522,
+            "mean_surviving_linear_tracking_error_m_s": 0.19344166012563638,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.122561890496148,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 18,
+            "fall_rate": 0.9,
+            "fall_wilson95_descriptive": [
+              0.6989663547715128,
+              0.9721335187862319
+            ],
+            "mean_survival_s": 6.236,
+            "mean_distance_m": 1.6260236889123916,
+            "mean_surviving_linear_tracking_error_m_s": 0.2651642072290528,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1459436187110487,
+            "pushes_applied": 35,
+            "pushes_survived": 18
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 19,
+            "fall_rate": 0.95,
+            "fall_wilson95_descriptive": [
+              0.763868806553258,
+              0.9911185511992047
+            ],
+            "mean_survival_s": 6.178,
+            "mean_distance_m": 2.7398083329200746,
+            "mean_surviving_linear_tracking_error_m_s": 0.3163387032461043,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.21861378751734617,
+            "pushes_applied": 35,
+            "pushes_survived": 16
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 15,
+            "fall_rate": 0.75,
+            "fall_wilson95_descriptive": [
+              0.531299122381256,
+              0.8881382985923343
+            ],
+            "mean_survival_s": 7.470000000000001,
+            "mean_distance_m": 1.232020092010498,
+            "mean_surviving_linear_tracking_error_m_s": 0.24709051246551902,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.12540157073807057,
+            "pushes_applied": 43,
+            "pushes_survived": 28
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 15,
+            "fall_rate": 0.75,
+            "fall_wilson95_descriptive": [
+              0.531299122381256,
+              0.8881382985923343
+            ],
+            "mean_survival_s": 6.0760000000000005,
+            "mean_distance_m": 0.6566982567310333,
+            "mean_surviving_linear_tracking_error_m_s": 0.31392830986165476,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1140736167775156,
+            "pushes_applied": 34,
+            "pushes_survived": 21
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 6,
+            "fall_rate": 0.3,
+            "fall_wilson95_descriptive": [
+              0.1454772448676043,
+              0.5189728183535235
+            ],
+            "mean_survival_s": 8.7,
+            "mean_distance_m": 0.14965057815425098,
+            "mean_surviving_linear_tracking_error_m_s": 0.1696737341696543,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.11652626339628358,
+            "pushes_applied": 51,
+            "pushes_survived": 46
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 17,
+            "fall_rate": 0.85,
+            "fall_wilson95_descriptive": [
+              0.6395811352592431,
+              0.9476312541037835
+            ],
+            "mean_survival_s": 7.058,
+            "mean_distance_m": 1.0328620105981827,
+            "mean_surviving_linear_tracking_error_m_s": 0.2578290208426568,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.24252178265257976,
+            "pushes_applied": 40,
+            "pushes_survived": 24
+          }
+        }
+      }
+    },
+    "dr-default-s0": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 1.932654523694267,
+          "mean_surviving_linear_tracking_error_m_s": 0.26430403654694695,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.161985989004538,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 7,
+          "fall_rate": 0.058333333333333334,
+          "fall_wilson95_descriptive": [
+            0.028541010000220295,
+            0.11552592033630113
+          ],
+          "mean_survival_s": 9.784666666666666,
+          "mean_distance_m": 1.8959234378455827,
+          "mean_surviving_linear_tracking_error_m_s": 0.2815649131128737,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.18933905288039404,
+          "pushes_applied": 351,
+          "pushes_survived": 345
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 3.0501556992530823,
+            "mean_surviving_linear_tracking_error_m_s": 0.26581274438504543,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.18343379948468808,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.680970215797425,
+            "mean_surviving_linear_tracking_error_m_s": 0.27072702344506977,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.17091105245274835,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.016292268037796,
+            "mean_surviving_linear_tracking_error_m_s": 0.2737280456808706,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.12471384319741376,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.6567852556705476,
+            "mean_surviving_linear_tracking_error_m_s": 0.25185090352843204,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.09797745927264401,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.08675862085074186,
+            "mean_surviving_linear_tracking_error_m_s": 0.2291203312911093,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.18087313048815767,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.1049650825560093,
+            "mean_surviving_linear_tracking_error_m_s": 0.2945851709511545,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.21400664913157622,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.9371458888053894,
+            "mean_surviving_linear_tracking_error_m_s": 0.28791484630977116,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.19914504045170422,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 2,
+            "fall_rate": 0.1,
+            "fall_wilson95_descriptive": [
+              0.027866481213768224,
+              0.3010336452284873
+            ],
+            "mean_survival_s": 9.712,
+            "mean_distance_m": 4.487703812122345,
+            "mean_surviving_linear_tracking_error_m_s": 0.3015528757609505,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.21727734006531213,
+            "pushes_applied": 58,
+            "pushes_survived": 56
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.0367344319820404,
+            "mean_surviving_linear_tracking_error_m_s": 0.2842158151454189,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.14711101708802804,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 5,
+            "fall_rate": 0.25,
+            "fall_wilson95_descriptive": [
+              0.11186170140766569,
+              0.468700877618744
+            ],
+            "mean_survival_s": 8.996,
+            "mean_distance_m": 1.5280474305152894,
+            "mean_surviving_linear_tracking_error_m_s": 0.28488022941492963,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.16125349658877958,
+            "pushes_applied": 53,
+            "pushes_survived": 49
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.09739776691421867,
+            "mean_surviving_linear_tracking_error_m_s": 0.23032896676545755,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.18151653333365297,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.28851129673421383,
+            "mean_surviving_linear_tracking_error_m_s": 0.3004967452807145,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.22973088975488726,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          }
+        }
+      }
+    },
+    "dr-default-s1": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 2.0429472353309395,
+          "mean_surviving_linear_tracking_error_m_s": 0.2687785637597381,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.17291073421862524,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 4,
+          "fall_rate": 0.03333333333333333,
+          "fall_wilson95_descriptive": [
+            0.0130375510983506,
+            0.082580337559106
+          ],
+          "mean_survival_s": 9.796666666666667,
+          "mean_distance_m": 1.996575189412882,
+          "mean_surviving_linear_tracking_error_m_s": 0.2839740149283883,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.1974802309381022,
+          "pushes_applied": 352,
+          "pushes_survived": 348
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 3.0503695368766786,
+            "mean_surviving_linear_tracking_error_m_s": 0.3017290611176027,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.21822190014603418,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.816648554801941,
+            "mean_surviving_linear_tracking_error_m_s": 0.28170727735054163,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1619814951343526,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.130427300930023,
+            "mean_surviving_linear_tracking_error_m_s": 0.2883975790662484,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1573040216972909,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.6911575496196747,
+            "mean_surviving_linear_tracking_error_m_s": 0.24960901534019245,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.13213499325064024,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.15854062363505364,
+            "mean_surviving_linear_tracking_error_m_s": 0.1873940212890092,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.15123715783828973,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.41053984612226485,
+            "mean_surviving_linear_tracking_error_m_s": 0.3038344283948342,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2165848372451437,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.979618549346924,
+            "mean_surviving_linear_tracking_error_m_s": 0.30799496451827385,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.22427580907088768,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.691929292678833,
+            "mean_surviving_linear_tracking_error_m_s": 0.30270274788710394,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.207243521953473,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.1349974155426024,
+            "mean_surviving_linear_tracking_error_m_s": 0.305566427676835,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.17081315938599517,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 4,
+            "fall_rate": 0.2,
+            "fall_wilson95_descriptive": [
+              0.08065766257979806,
+              0.41601743225189364
+            ],
+            "mean_survival_s": 8.78,
+            "mean_distance_m": 1.5034746184945107,
+            "mean_surviving_linear_tracking_error_m_s": 0.2885000743945426,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.19704026984306636,
+            "pushes_applied": 52,
+            "pushes_survived": 48
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.16251673642545938,
+            "mean_surviving_linear_tracking_error_m_s": 0.18706983714509343,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.15877817414320694,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.5069145239889622,
+            "mean_surviving_linear_tracking_error_m_s": 0.3120100379484809,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.22673045123198407,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          }
+        }
+      }
+    },
+    "dr-default-s2": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 1.9757256669923664,
+          "mean_surviving_linear_tracking_error_m_s": 0.2505778766700791,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.16069430298449786,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 2,
+          "fall_rate": 0.016666666666666666,
+          "fall_wilson95_descriptive": [
+            0.004582564565921141,
+            0.0587359629721589
+          ],
+          "mean_survival_s": 9.902666666666667,
+          "mean_distance_m": 1.9644569487621386,
+          "mean_surviving_linear_tracking_error_m_s": 0.2697907083465795,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.1768185203029962,
+          "pushes_applied": 356,
+          "pushes_survived": 354
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 3.02612042427063,
+            "mean_surviving_linear_tracking_error_m_s": 0.2870800014287233,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.18173546171416657,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.751888871192932,
+            "mean_surviving_linear_tracking_error_m_s": 0.2577776430476871,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.17851627740361437,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.2495597124099733,
+            "mean_surviving_linear_tracking_error_m_s": 0.2562807885209719,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.14067878167321518,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.5043453395366668,
+            "mean_surviving_linear_tracking_error_m_s": 0.22829136600169456,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.09801452109420643,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.03709540702402592,
+            "mean_surviving_linear_tracking_error_m_s": 0.19161652820567704,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.14877228971275164,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.28534424751996995,
+            "mean_surviving_linear_tracking_error_m_s": 0.2824209328157206,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.21644848630903288,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.9565051674842833,
+            "mean_surviving_linear_tracking_error_m_s": 0.29387653356061005,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1855995201864021,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 1,
+            "fall_rate": 0.05,
+            "fall_wilson95_descriptive": [
+              0.008881448800795402,
+              0.23613119344674205
+            ],
+            "mean_survival_s": 9.696,
+            "mean_distance_m": 4.496629637479782,
+            "mean_surviving_linear_tracking_error_m_s": 0.2811114307180461,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.20875458533697144,
+            "pushes_applied": 58,
+            "pushes_survived": 57
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.2248269438743593,
+            "mean_surviving_linear_tracking_error_m_s": 0.2735045946341836,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1556731446934096,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 1,
+            "fall_rate": 0.05,
+            "fall_wilson95_descriptive": [
+              0.008881448800795402,
+              0.23613119344674205
+            ],
+            "mean_survival_s": 9.72,
+            "mean_distance_m": 1.5125426173210144,
+            "mean_surviving_linear_tracking_error_m_s": 0.2670736762958524,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1367333383575908,
+            "pushes_applied": 58,
+            "pushes_survived": 57
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.1012731060385704,
+            "mean_surviving_linear_tracking_error_m_s": 0.20295823261245258,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1603271532537118,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.4949642203748226,
+            "mean_surviving_linear_tracking_error_m_s": 0.3002197822583322,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2138233799898913,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          }
+        }
+      }
+    },
+    "dr-s1.5-s0": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 1.786860154134532,
+          "mean_surviving_linear_tracking_error_m_s": 0.25316880462413155,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.3000014586257784,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 1.7949573502875864,
+          "mean_surviving_linear_tracking_error_m_s": 0.26329621616467946,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.317921634687978,
+          "pushes_applied": 360,
+          "pushes_survived": 360
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.642668807506561,
+            "mean_surviving_linear_tracking_error_m_s": 0.35456778659919896,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.20310048002918726,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.386286640167237,
+            "mean_surviving_linear_tracking_error_m_s": 0.38152888396879037,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.32527983181269116,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.7460907101631165,
+            "mean_surviving_linear_tracking_error_m_s": 0.22935216923792742,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1778125158884278,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.2628374874591828,
+            "mean_surviving_linear_tracking_error_m_s": 0.21485656315429758,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.15795819350293136,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.06772013939917088,
+            "mean_surviving_linear_tracking_error_m_s": 0.0011308849510623987,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4978227655394267,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.6155571401119232,
+            "mean_surviving_linear_tracking_error_m_s": 0.33757653983351255,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4380349649820063,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.644175887107849,
+            "mean_surviving_linear_tracking_error_m_s": 0.35052882998767826,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.23329767250409997,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.364041161537171,
+            "mean_surviving_linear_tracking_error_m_s": 0.3859376285262406,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.3368266444525329,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.7575171053409577,
+            "mean_surviving_linear_tracking_error_m_s": 0.24401383206403504,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.21905725388663105,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.3596164286136627,
+            "mean_surviving_linear_tracking_error_m_s": 0.22912719296263662,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.17376016819837808,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.06964770313352346,
+            "mean_surviving_linear_tracking_error_m_s": 0.022652390229163252,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4975446456848015,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.5747458159923553,
+            "mean_surviving_linear_tracking_error_m_s": 0.34751742321832313,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.44704342340142467,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          }
+        }
+      }
+    },
+    "dr-s1.5-s1": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 1.8037719827455778,
+          "mean_surviving_linear_tracking_error_m_s": 0.2550740681396482,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.2581019639751869,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 1.8655498776584865,
+          "mean_surviving_linear_tracking_error_m_s": 0.26563093942653115,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.2817977717757073,
+          "pushes_applied": 360,
+          "pushes_survived": 360
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.965925085544586,
+            "mean_surviving_linear_tracking_error_m_s": 0.363237111084991,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.20947879047597154,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.486811518669128,
+            "mean_surviving_linear_tracking_error_m_s": 0.3951823383486933,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.18611604399770862,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.1586948774755002,
+            "mean_surviving_linear_tracking_error_m_s": 0.21343077368951507,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.10596714593202927,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.579100102186203,
+            "mean_surviving_linear_tracking_error_m_s": 0.20957054569467437,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.14790059198314057,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.05367990005761385,
+            "mean_surviving_linear_tracking_error_m_s": 0.002404197967704224,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.5020769795486651,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.5784204125404357,
+            "mean_surviving_linear_tracking_error_m_s": 0.3466194420523114,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.39707223191360635,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.9440348029136656,
+            "mean_surviving_linear_tracking_error_m_s": 0.36099666287398174,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2302084924044769,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.4837616920471195,
+            "mean_surviving_linear_tracking_error_m_s": 0.3908180342908535,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.22025657781104221,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.5116693258285523,
+            "mean_surviving_linear_tracking_error_m_s": 0.23244603147611229,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.16446774931351255,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.6192863404750824,
+            "mean_surviving_linear_tracking_error_m_s": 0.23460832493229666,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.16750747246334746,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.061104736477136615,
+            "mean_surviving_linear_tracking_error_m_s": 0.025910026012098467,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4941299548478291,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.573442368209362,
+            "mean_surviving_linear_tracking_error_m_s": 0.34900655697384436,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4142163838140356,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          }
+        }
+      }
+    },
+    "dr-s1.5-s2": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 1.710428473042945,
+          "mean_surviving_linear_tracking_error_m_s": 0.2375307274979703,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.2972225358174716,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 0,
+          "fall_rate": 0.0,
+          "fall_wilson95_descriptive": [
+            0.0,
+            0.031019166418703486
+          ],
+          "mean_survival_s": 10.0,
+          "mean_distance_m": 1.7484610543586314,
+          "mean_surviving_linear_tracking_error_m_s": 0.24913781052019976,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.30844960689713335,
+          "pushes_applied": 360,
+          "pushes_survived": 360
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.8546577930450439,
+            "mean_surviving_linear_tracking_error_m_s": 0.3102346142215861,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.18992433904103503,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.369148874282837,
+            "mean_surviving_linear_tracking_error_m_s": 0.3447409087508503,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2917990285123103,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.7526069283485413,
+            "mean_surviving_linear_tracking_error_m_s": 0.2307121426872909,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.14215196802175423,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.654695701599121,
+            "mean_surviving_linear_tracking_error_m_s": 0.2668617230645484,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.19521821404918632,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.040162117406725886,
+            "mean_surviving_linear_tracking_error_m_s": 0.003674965708076747,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.500315329557042,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.5912994235754013,
+            "mean_surviving_linear_tracking_error_m_s": 0.2689600105554693,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4639263357235015,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 2.0590294778347014,
+            "mean_surviving_linear_tracking_error_m_s": 0.3132241006073956,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.2178947350346025,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 4.366155910491943,
+            "mean_surviving_linear_tracking_error_m_s": 0.3523563086164908,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.3058967937402023,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.7344750225543977,
+            "mean_surviving_linear_tracking_error_m_s": 0.24010313989051307,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.17530030143090872,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.7010436952114105,
+            "mean_surviving_linear_tracking_error_m_s": 0.27776229891729437,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.20480525702586802,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.041382060013711454,
+            "mean_surviving_linear_tracking_error_m_s": 0.028102226476504358,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.49479783077800477,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.5886801600456237,
+            "mean_surviving_linear_tracking_error_m_s": 0.28327878861300027,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.452002723373214,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          }
+        }
+      }
+    },
+    "dr-aggressive-s0": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 20,
+          "fall_rate": 0.16666666666666666,
+          "fall_wilson95_descriptive": [
+            0.11055996367984616,
+            0.24345281393262286
+          ],
+          "mean_survival_s": 8.512666666666666,
+          "mean_distance_m": 0.07666479884646833,
+          "mean_surviving_linear_tracking_error_m_s": 0.33012872940533444,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.275937238434191,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 20,
+          "fall_rate": 0.16666666666666666,
+          "fall_wilson95_descriptive": [
+            0.11055996367984616,
+            0.24345281393262286
+          ],
+          "mean_survival_s": 8.512666666666666,
+          "mean_distance_m": 0.12889883971462648,
+          "mean_surviving_linear_tracking_error_m_s": 0.3377861978923661,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.2912415136088909,
+          "pushes_applied": 300,
+          "pushes_survived": 300
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.08421125784516334,
+            "mean_surviving_linear_tracking_error_m_s": 0.2993479166362021,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.001522090998437256,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 1.076,
+            "mean_distance_m": 0.08679096996784211,
+            "mean_surviving_linear_tracking_error_m_s": 1.0968058275825836,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.7105583375064182,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.05457321489229798,
+            "mean_surviving_linear_tracking_error_m_s": 0.19914110345476205,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.005802040488001391,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.09194905981421471,
+            "mean_surviving_linear_tracking_error_m_s": 0.19778931962450347,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.008680306584216042,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.06637226305902004,
+            "mean_surviving_linear_tracking_error_m_s": 0.003347715334397637,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.49566320903321365,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.0760920275002718,
+            "mean_surviving_linear_tracking_error_m_s": 0.2993420585261451,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.49859061085569356,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.1161385502666235,
+            "mean_surviving_linear_tracking_error_m_s": 0.30077824947900245,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.029245996914625164,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 1.076,
+            "mean_distance_m": 0.08679096996784211,
+            "mean_surviving_linear_tracking_error_m_s": 1.0968058275825836,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.7105583375064182,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.2066688159480691,
+            "mean_surviving_linear_tracking_error_m_s": 0.2132347573298547,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.05643135683796067,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.17075107470154763,
+            "mean_surviving_linear_tracking_error_m_s": 0.20287658619352927,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.04726747134032121,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.06747781690210104,
+            "mean_surviving_linear_tracking_error_m_s": 0.026493359157007138,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4952635179321353,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.12556581050157548,
+            "mean_surviving_linear_tracking_error_m_s": 0.30038135206575195,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.47157992470651394,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          }
+        }
+      }
+    },
+    "dr-aggressive-s1": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 20,
+          "fall_rate": 0.16666666666666666,
+          "fall_wilson95_descriptive": [
+            0.11055996367984616,
+            0.24345281393262286
+          ],
+          "mean_survival_s": 8.618333333333334,
+          "mean_distance_m": 0.07849995511739204,
+          "mean_surviving_linear_tracking_error_m_s": 0.28873929402222426,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.20812397469196248,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 20,
+          "fall_rate": 0.16666666666666666,
+          "fall_wilson95_descriptive": [
+            0.11055996367984616,
+            0.24345281393262286
+          ],
+          "mean_survival_s": 8.618333333333334,
+          "mean_distance_m": 0.08767010450246744,
+          "mean_surviving_linear_tracking_error_m_s": 0.29751431433184417,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.2201870722490575,
+          "pushes_applied": 300,
+          "pushes_survived": 300
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.06475265808403492,
+            "mean_surviving_linear_tracking_error_m_s": 0.3002990939683384,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.0015228509409406922,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 1.71,
+            "mean_distance_m": 0.13501956053078173,
+            "mean_surviving_linear_tracking_error_m_s": 0.7254693422065813,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.25187935799105693,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.027523427410051225,
+            "mean_surviving_linear_tracking_error_m_s": 0.20082824004358715,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.0033805920871091077,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.10512102395296097,
+            "mean_surviving_linear_tracking_error_m_s": 0.20053964976138539,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.002000010009965637,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.07036234959959983,
+            "mean_surviving_linear_tracking_error_m_s": 0.005017316435523551,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.49042668244995485,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.06822071112692356,
+            "mean_surviving_linear_tracking_error_m_s": 0.30028212171792984,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4995343546727477,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.07314603868871927,
+            "mean_surviving_linear_tracking_error_m_s": 0.3036310125514865,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.02725870542856968,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 1.71,
+            "mean_distance_m": 0.13501956053078173,
+            "mean_surviving_linear_tracking_error_m_s": 0.7254693422065813,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.25187935799105693,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.03411813575075939,
+            "mean_surviving_linear_tracking_error_m_s": 0.21584401444676848,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.03151489969878412,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.1350347489118576,
+            "mean_surviving_linear_tracking_error_m_s": 0.2048641757087575,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.028885559881004295,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.06615581046789884,
+            "mean_surviving_linear_tracking_error_m_s": 0.031031111216953528,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4850149675601516,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.08254633266478777,
+            "mean_surviving_linear_tracking_error_m_s": 0.3042462298605177,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.49656894293477843,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          }
+        }
+      }
+    },
+    "dr-aggressive-s2": {
+      "complete": true,
+      "per_condition": {
+        "flat": {
+          "episodes": 120,
+          "falls": 20,
+          "fall_rate": 0.16666666666666666,
+          "fall_wilson95_descriptive": [
+            0.11055996367984616,
+            0.24345281393262286
+          ],
+          "mean_survival_s": 8.540666666666667,
+          "mean_distance_m": 0.23190499522412816,
+          "mean_surviving_linear_tracking_error_m_s": 0.3036463611705999,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.22388275472941452,
+          "pushes_applied": 0,
+          "pushes_survived": 0
+        },
+        "push04": {
+          "episodes": 120,
+          "falls": 20,
+          "fall_rate": 0.16666666666666666,
+          "fall_wilson95_descriptive": [
+            0.11055996367984616,
+            0.24345281393262286
+          ],
+          "mean_survival_s": 8.540666666666667,
+          "mean_distance_m": 0.30236928043110917,
+          "mean_surviving_linear_tracking_error_m_s": 0.31243164891994013,
+          "mean_surviving_yaw_tracking_error_rad_s": 0.23637977056656398,
+          "pushes_applied": 300,
+          "pushes_survived": 300
+        }
+      },
+      "per_command": {
+        "flat": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.07103977557271719,
+            "mean_surviving_linear_tracking_error_m_s": 0.2998593776557181,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.0010782977868602959,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 1.244,
+            "mean_distance_m": 0.16496710404753684,
+            "mean_surviving_linear_tracking_error_m_s": 0.7756565998967677,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1570062742976191,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.9694476634263992,
+            "mean_surviving_linear_tracking_error_m_s": 0.24091890296650428,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.18318212994287508,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.08808792904019355,
+            "mean_surviving_linear_tracking_error_m_s": 0.20094638351599375,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.012429781681192657,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.029552305676043035,
+            "mean_surviving_linear_tracking_error_m_s": 0.004891267246269207,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4917031308501998,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.06833519358187914,
+            "mean_surviving_linear_tracking_error_m_s": 0.29960563574234644,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4978969138177402,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          }
+        },
+        "push04": {
+          "0": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.09251457992941141,
+            "mean_surviving_linear_tracking_error_m_s": 0.3021732381491197,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.02300614253450158,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "1": {
+            "episodes": 20,
+            "falls": 20,
+            "fall_rate": 1.0,
+            "fall_wilson95_descriptive": [
+              0.8388748419471806,
+              1.0
+            ],
+            "mean_survival_s": 1.244,
+            "mean_distance_m": 0.16496710404753684,
+            "mean_surviving_linear_tracking_error_m_s": 0.7756565998967677,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.1570062742976191,
+            "pushes_applied": 0,
+            "pushes_survived": 0
+          },
+          "2": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 1.2608145475387573,
+            "mean_surviving_linear_tracking_error_m_s": 0.25643984200453596,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.22772633549994903,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "3": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.1664460353553295,
+            "mean_surviving_linear_tracking_error_m_s": 0.20640322502267858,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.035784424431169956,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "4": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.03782594329677522,
+            "mean_surviving_linear_tracking_error_m_s": 0.032657053580565844,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.488769687920183,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          },
+          "5": {
+            "episodes": 20,
+            "falls": 0,
+            "fall_rate": 0.0,
+            "fall_wilson95_descriptive": [
+              0.0,
+              0.16112515805281938
+            ],
+            "mean_survival_s": 10.0,
+            "mean_distance_m": 0.0916474724188447,
+            "mean_surviving_linear_tracking_error_m_s": 0.3012599348659731,
+            "mean_surviving_yaw_tracking_error_rad_s": 0.4859857587159613,
+            "pushes_applied": 60,
+            "pushes_survived": 60
+          }
+        }
+      }
+    }
+  },
+  "paired_off_vs_default": {
+    "0": {
+      "flat": {
+        "paired_episodes": 120,
+        "both_fall": 0,
+        "off_only_fall": 17,
+        "default_only_fall": 0,
+        "neither_fall": 103
+      },
+      "push04": {
+        "paired_episodes": 120,
+        "both_fall": 7,
+        "off_only_fall": 105,
+        "default_only_fall": 0,
+        "neither_fall": 8
+      }
+    },
+    "1": {
+      "flat": {
+        "paired_episodes": 120,
+        "both_fall": 0,
+        "off_only_fall": 28,
+        "default_only_fall": 0,
+        "neither_fall": 92
+      },
+      "push04": {
+        "paired_episodes": 120,
+        "both_fall": 4,
+        "off_only_fall": 108,
+        "default_only_fall": 0,
+        "neither_fall": 8
+      }
+    },
+    "2": {
+      "flat": {
+        "paired_episodes": 120,
+        "both_fall": 0,
+        "off_only_fall": 32,
+        "default_only_fall": 0,
+        "neither_fall": 88
+      },
+      "push04": {
+        "paired_episodes": 120,
+        "both_fall": 2,
+        "off_only_fall": 115,
+        "default_only_fall": 0,
+        "neither_fall": 3
+      }
+    }
+  },
+  "descriptive_pooled_by_rung": {
+    "dr-aggressive": {
+      "flat": {
+        "episodes": 360,
+        "falls": 60,
+        "fall_rate": 0.16666666666666666,
+        "fall_wilson95_descriptive": [
+          0.13173107609879636,
+          0.20864096182699926
+        ],
+        "mean_survival_s": 8.557222222222222,
+        "mean_distance_m": 0.12902324972932952,
+        "mean_surviving_linear_tracking_error_m_s": 0.3073146777690841,
+        "mean_surviving_yaw_tracking_error_rad_s": 0.23564555862007167,
+        "pushes_applied": 0,
+        "pushes_survived": 0
+      },
+      "push04": {
+        "episodes": 360,
+        "falls": 60,
+        "fall_rate": 0.16666666666666666,
+        "fall_wilson95_descriptive": [
+          0.13173107609879636,
+          0.20864096182699926
+        ],
+        "mean_survival_s": 8.557222222222222,
+        "mean_distance_m": 0.1729794082160677,
+        "mean_surviving_linear_tracking_error_m_s": 0.31572689283927435,
+        "mean_surviving_yaw_tracking_error_rad_s": 0.24891674574261852,
+        "pushes_applied": 900,
+        "pushes_survived": 900
+      }
+    },
+    "dr-default": {
+      "flat": {
+        "episodes": 360,
+        "falls": 0,
+        "fall_rate": 0.0,
+        "fall_wilson95_descriptive": [
+          0.0,
+          0.010558056888693507
+        ],
+        "mean_survival_s": 10.0,
+        "mean_distance_m": 1.9837758086725241,
+        "mean_surviving_linear_tracking_error_m_s": 0.2612201589922547,
+        "mean_surviving_yaw_tracking_error_rad_s": 0.16519700873588702,
+        "pushes_applied": 0,
+        "pushes_survived": 0
+      },
+      "push04": {
+        "episodes": 360,
+        "falls": 13,
+        "fall_rate": 0.03611111111111111,
+        "fall_wilson95_descriptive": [
+          0.021222936088313098,
+          0.06079481669175254
+        ],
+        "mean_survival_s": 9.828,
+        "mean_distance_m": 1.9523185253402011,
+        "mean_surviving_linear_tracking_error_m_s": 0.27844321212928047,
+        "mean_surviving_yaw_tracking_error_rad_s": 0.18787926804049748,
+        "pushes_applied": 1059,
+        "pushes_survived": 1047
+      }
+    },
+    "dr-off": {
+      "flat": {
+        "episodes": 360,
+        "falls": 77,
+        "fall_rate": 0.21388888888888888,
+        "fall_wilson95_descriptive": [
+          0.1746679648025445,
+          0.2591513677504301
+        ],
+        "mean_survival_s": 8.485555555555555,
+        "mean_distance_m": 1.4079968864395698,
+        "mean_surviving_linear_tracking_error_m_s": 0.25243954553684544,
+        "mean_surviving_yaw_tracking_error_rad_s": 0.1806041493905183,
+        "pushes_applied": 0,
+        "pushes_survived": 0
+      },
+      "push04": {
+        "episodes": 360,
+        "falls": 341,
+        "fall_rate": 0.9472222222222222,
+        "fall_wilson95_descriptive": [
+          0.9190458567486823,
+          0.9659549923675417
+        ],
+        "mean_survival_s": 4.809444444444445,
+        "mean_distance_m": 0.7450765152668788,
+        "mean_surviving_linear_tracking_error_m_s": 0.2965852864329581,
+        "mean_surviving_yaw_tracking_error_rad_s": 0.22525215301110146,
+        "pushes_applied": 441,
+        "pushes_survived": 172
+      }
+    },
+    "dr-s0.5": {
+      "flat": {
+        "episodes": 360,
+        "falls": 4,
+        "fall_rate": 0.011111111111111112,
+        "fall_wilson95_descriptive": [
+          0.004329143343163391,
+          0.02821651228133693
+        ],
+        "mean_survival_s": 9.911666666666667,
+        "mean_distance_m": 1.848570998425647,
+        "mean_surviving_linear_tracking_error_m_s": 0.22749063302543315,
+        "mean_surviving_yaw_tracking_error_rad_s": 0.10521908089671012,
+        "pushes_applied": 0,
+        "pushes_survived": 0
+      },
+      "push04": {
+        "episodes": 360,
+        "falls": 268,
+        "fall_rate": 0.7444444444444445,
+        "fall_wilson95_descriptive": [
+          0.6969715092171664,
+          0.7867556629705834
+        ],
+        "mean_survival_s": 6.795444444444445,
+        "mean_distance_m": 1.1809137312928215,
+        "mean_surviving_linear_tracking_error_m_s": 0.2688141943821274,
+        "mean_surviving_yaw_tracking_error_rad_s": 0.18563561449745547,
+        "pushes_applied": 692,
+        "pushes_survived": 445
+      }
+    },
+    "dr-s1.5": {
+      "flat": {
+        "episodes": 360,
+        "falls": 0,
+        "fall_rate": 0.0,
+        "fall_wilson95_descriptive": [
+          0.0,
+          0.010558056888693507
+        ],
+        "mean_survival_s": 10.0,
+        "mean_distance_m": 1.767020203307685,
+        "mean_surviving_linear_tracking_error_m_s": 0.24859120008725002,
+        "mean_surviving_yaw_tracking_error_rad_s": 0.2851086528061456,
+        "pushes_applied": 0,
+        "pushes_survived": 0
+      },
+      "push04": {
+        "episodes": 360,
+        "falls": 0,
+        "fall_rate": 0.0,
+        "fall_wilson95_descriptive": [
+          0.0,
+          0.010558056888693507
+        ],
+        "mean_survival_s": 10.0,
+        "mean_distance_m": 1.8029894274349014,
+        "mean_surviving_linear_tracking_error_m_s": 0.25935498870380347,
+        "mean_surviving_yaw_tracking_error_rad_s": 0.3027230044536062,
+        "pushes_applied": 1080,
+        "pushes_survived": 1080
+      }
+    }
+  },
+  "rule": "Replication target on flat: all three dr-default policies zero falls; each dr-off policy has more falls than its matched default. Tracking, commanded displacement and disturbed outcomes reported for every rung, training seed and command; push04 descriptive, no promised success.",
+  "scope": "Simulation only: frozen Isaac-trained 12-DoF biped policies in MuJoCo. Three training seeds per rung; shared reset seeds/commands are clustered, not 360 independent trained policies. Fall/survival paired with tracking and displacement; conditional surviving-step errors cannot alone rank failed policies."
+}

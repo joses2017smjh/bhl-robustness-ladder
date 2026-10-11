@@ -1,0 +1,89 @@
+{
+  "actor_terms": [
+    "velocity_commands",
+    "base_ang_vel",
+    "projected_gravity",
+    "joint_pos",
+    "joint_vel",
+    "actions",
+    "h3_past_imu"
+  ],
+  "actor_width": 63,
+  "actual_critic_shape": [
+    4096,
+    48
+  ],
+  "actual_policy_shape": [
+    4096,
+    63
+  ],
+  "arm": "repeated_current",
+  "cell": 5,
+  "checkpoint_iteration": 499,
+  "checkpoint_sha256": "46bd425570dfba0bb7059badd1333ae48fb49c9dea6efb6670937d32a7b19d57",
+  "completed_iterations": 500,
+  "critic_terms": [
+    "velocity_commands",
+    "base_ang_vel",
+    "projected_gravity",
+    "joint_pos",
+    "joint_vel",
+    "actions",
+    "base_lin_vel"
+  ],
+  "critic_width": 48,
+  "cuda_guard": {
+    "capability": [
+      7,
+      5
+    ],
+    "gpu_name": "Quadro RTX 8000",
+    "kernel_value": 32.0,
+    "minimum_capability": [
+      7,
+      5
+    ]
+  },
+  "evaluation_episodes": 120,
+  "evaluation_physics_dt": 0.002,
+  "evaluation_sha256": "c6fd8852e9f05930c37e2b7bd40fd1bf2cee9b2567b9cb72e3f2b08cdc419d88",
+  "execution_status": "COMPLETE",
+  "export": {
+    "input_width": 63,
+    "numeric_parity_atol": 1e-05,
+    "numeric_parity_max_abs": 4.76837158203125e-06,
+    "numeric_parity_rtol": 1e-05,
+    "numeric_parity_samples": 256,
+    "output_width": 12,
+    "policy_sha256": "c1f5151162bca2880e3678e6a9fd6785c2869df010ff0a312df4e7231af388e3"
+  },
+  "finished_utc": "2026-10-09T04:20:15Z",
+  "fresh_optimizer": true,
+  "host": "cn-gpu5.hpc.engr.oregonstate.edu",
+  "initial_action_parity_max_abs": 0.0,
+  "job_id": null,
+  "num_envs": 4096,
+  "phase": "run",
+  "policy_dt": 0.04,
+  "protocol_sha256": "3af1d9050797430e910375e1d51ac2ca024dfd908591e7b7f2b1f1181a609ea4",
+  "requested_iterations": 500,
+  "schema": "h3-training-cell-v1",
+  "science_status": "UNPAIRED_PENDING_SUMMARY",
+  "seed": 2,
+  "started_utc": "2026-10-09T04:00:37Z",
+  "status": "PASS",
+  "task": "H3",
+  "teacher_deploy_sha256": "79dd22c77687e5359fe99efff00407b65d44284cbf80aca70af188a744c11d1d",
+  "teacher_sha256": "7fde8dc0ddee142974d9d640feee710496bbb2079e841bf0c7b0abe8fe79e7df",
+  "training_delay_ms": [
+    0,
+    40
+  ],
+  "training_delay_steps": [
+    0,
+    1
+  ],
+  "training_physics_dt": 0.005,
+  "training_wall_s": 1048.1543741710484,
+  "warmstart": "same teacher actor/critic/std; new18 actorweights zero; fresh optimizer"
+}

@@ -1,0 +1,39 @@
+{
+  "archive_sha256": "3c2c661cab8148371bd9d1a488246730f632f91aea35776a9a19cb9ca3187b6d",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=fusion-occlusion-gated-20261011",
+    "--partition=gpu,dgxh,ampere",
+    "--cpus-per-task=4",
+    "--mem=16G",
+    "--time=02:00:00",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/fusion-occlusion-v1/fusion-occlusion-gated-20261011-%j.out",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/fusion-occlusion-v1/fusion-occlusion-gated-20261011-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--gres=gpu:1",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/fusion-occlusion-v1/h34_campaign.sbatch",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/fusion-occlusion-v1",
+    "fusion-occlusion-gated-20261011",
+    "3c2c661cab8148371bd9d1a488246730f632f91aea35776a9a19cb9ca3187b6d"
+  ],
+  "job_id": "21768427",
+  "resources": {
+    "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+    "cpus": 4,
+    "gpus": 1,
+    "memory_gb": 16,
+    "partition": "gpu,dgxh,ampere",
+    "requeue": false,
+    "time_limit": "02:00:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21768427\n",
+  "submitted_utc": "2026-10-11T09:51:04.938817+00:00"
+}

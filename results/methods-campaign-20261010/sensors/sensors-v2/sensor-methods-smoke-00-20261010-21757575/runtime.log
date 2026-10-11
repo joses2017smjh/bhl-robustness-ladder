@@ -1,0 +1,267 @@
+{"capture_frame": 0, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 1, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 2, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 3, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 4, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 5, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 6, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 7, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 8, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 9, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 10, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 11, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 12, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 13, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 14, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 15, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 16, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 17, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 18, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 19, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 20, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 21, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 22, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 23, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 24, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 25, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 26, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 27, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 28, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 29, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 30, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 31, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 32, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 33, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 34, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 35, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 36, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 37, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 38, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 39, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 40, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 41, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 42, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 43, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 44, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 45, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 46, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 47, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 48, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 49, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 50, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 51, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 52, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 53, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 54, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 55, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 56, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 57, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 58, "cell": "textured_boxes-g610000-nominal"}
+{"capture_frame": 59, "cell": "textured_boxes-g610000-nominal"}
+[0;93m2026-10-10 14:14:49.470001949 [W:onnxruntime:, transformer_memcpy.cc:83 ApplyImpl] 5 Memcpy nodes are added to the graph main_graph for CUDAExecutionProvider. It might have negative impact on performance (including unable to run CUDA graph). Set session_options.log_severity_level=1 to see the detail logs before this message.[m
+[0;93m2026-10-10 14:14:49.569044255 [W:onnxruntime:, session_state.cc:1280 VerifyEachNodeIsAssignedToAnEp] Some nodes were not assigned to the preferred execution providers which may or may not have an negative impact on performance. e.g. ORT explicitly assigns shape related ops to CPU to improve perf.[m
+[0;93m2026-10-10 14:14:49.569071510 [W:onnxruntime:, session_state.cc:1282 VerifyEachNodeIsAssignedToAnEp] Rerunning with verbose output on a non-minimal build will show node assignments.[m
+[0;93m2026-10-10 14:14:56.971121193 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971204906 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971260895 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971315450 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971372317 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971426288 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971480090 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971540179 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971594418 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971648227 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971703620 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971755763 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971808212 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971860161 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971922585 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.971980435 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972043288 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972095899 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972162133 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972227580 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972286665 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972342368 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972399986 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972458042 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972512743 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972568882 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972623006 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972677859 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972728751 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972778062 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972824635 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972881289 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972940339 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.972987733 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973039301 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973086389 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973138271 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973186961 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973233762 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973279613 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973322921 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973368060 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973413124 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973462770 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973513791 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973560177 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973605368 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973654478 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973697104 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973719404 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973741517 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973762752 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973785785 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973811157 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973834619 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973859033 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973882151 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973914451 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973941199 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973967074 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.973993244 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974016505 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974040365 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974065114 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974085790 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974110568 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974133546 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974157438 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974183130 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974209483 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974232688 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974260911 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974282524 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974306489 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974330276 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974351589 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974375753 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974400258 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974426616 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974452488 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974476583 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974506084 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974532616 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974557978 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974583228 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974610665 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974634546 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974658918 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974681970 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974708742 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974732483 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974755307 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974780551 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974803228 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974828577 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974855919 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974879654 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974901222 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974932622 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974956016 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.974983396 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975008112 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975029766 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975053706 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975074122 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975099162 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975122977 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975149142 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975171475 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975199883 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975225428 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975253991 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975279303 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975304506 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975329013 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975353872 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975377129 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975401437 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975430434 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975456980 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975481232 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975504568 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975528650 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975556643 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975578898 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975603381 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975627126 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975650692 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975675935 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975698402 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975719627 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975742951 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975767324 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975791529 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975812076 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975837382 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975860606 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975885818 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975916487 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975940279 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975963733 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.975987695 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.976009212 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+[0;93m2026-10-10 14:14:56.976032950 [W:onnxruntime:Default, scatter_nd.h:51 ScatterNDWithAtomicReduction] ScatterND with reduction=='none' only guarantees to be correct if indices are not duplicated.[m
+{"map_frame": "00000"}
+{"map_frame": "00001"}
+{"map_frame": "00002"}
+{"map_frame": "00003"}
+{"map_frame": "00004"}
+{"map_frame": "00005"}
+{"map_frame": "00006"}
+{"map_frame": "00007"}
+{"map_frame": "00008"}
+{"map_frame": "00009"}
+{"map_frame": "00010"}
+{"map_frame": "00011"}
+{"map_frame": "00012"}
+{"map_frame": "00013"}
+{"map_frame": "00014"}
+{"map_frame": "00015"}
+{"map_frame": "00016"}
+{"map_frame": "00017"}
+{"map_frame": "00018"}
+{"map_frame": "00019"}
+{"map_frame": "00020"}
+{"map_frame": "00021"}
+{"map_frame": "00022"}
+{"map_frame": "00023"}
+{"map_frame": "00024"}
+{"map_frame": "00025"}
+{"map_frame": "00026"}
+{"map_frame": "00027"}
+{"map_frame": "00028"}
+{"map_frame": "00029"}
+{"map_frame": "00030"}
+{"map_frame": "00031"}
+{"map_frame": "00032"}
+{"map_frame": "00033"}
+{"map_frame": "00034"}
+{"map_frame": "00035"}
+{"map_frame": "00036"}
+{"map_frame": "00037"}
+{"map_frame": "00038"}
+{"map_frame": "00039"}
+{"map_frame": "00040"}
+{"map_frame": "00041"}
+{"map_frame": "00042"}
+{"map_frame": "00043"}
+{"map_frame": "00044"}
+{"map_frame": "00045"}
+{"map_frame": "00046"}
+{"map_frame": "00047"}
+{"map_frame": "00048"}
+{"map_frame": "00049"}
+{"map_frame": "00050"}
+{"map_frame": "00051"}
+{"map_frame": "00052"}
+{"map_frame": "00053"}
+{"map_frame": "00054"}
+{"map_frame": "00055"}
+{"map_frame": "00056"}
+{"map_frame": "00057"}
+{"map_frame": "00058"}
+{"map_frame": "00059"}

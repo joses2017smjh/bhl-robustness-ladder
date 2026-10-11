@@ -1,0 +1,14 @@
+[2026-10-11T02:57:50.623] error: couldn't chdir to `/tmp/bhl-storage-results-20261011': No such file or directory: going to /tmp instead
+[2026-10-11T02:57:50.625] error: couldn't chdir to `/tmp/bhl-storage-results-20261011': No such file or directory: going to /tmp instead
+[2026-10-11T02:57:50.628] error: Unable to create TMPDIR [/scratch/sanchej7/tmp]: No such file or directory
+[2026-10-11T02:57:50.628] error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/native_sensor_controls_dispatch.py", line 279, in <module>
+    run(args.plan, args.plan_sha256)
+  File "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/native_sensor_controls_dispatch.py", line 152, in run
+    plan = validate_plan(path, expected_sha)
+  File "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/native_sensor_controls_dispatch.py", line 47, in validate_plan
+    if digest(path) != expected_sha or not path.is_relative_to(SHARED_ROOT):
+  File "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v1/native_sensor_controls_dispatch.py", line 31, in digest
+    return hashlib.file_digest(stream, "sha256").hexdigest()
+AttributeError: module 'hashlib' has no attribute 'file_digest'

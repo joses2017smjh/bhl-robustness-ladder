@@ -1,0 +1,1366 @@
+{
+  "schema": "bhl-native-sensor-controls-v2-protocol",
+  "conditions": {
+    "nominal": {
+      "camera_hz": 5.0
+    },
+    "camera_2_5hz": {
+      "camera_hz": 2.5
+    },
+    "camera_10hz": {
+      "camera_hz": 10.0
+    },
+    "dark_exposure_gain": {
+      "camera_hz": 5.0,
+      "exposure_gain": 0.25
+    },
+    "causal_40ms_exposure": {
+      "camera_hz": 5.0,
+      "exposure_s": 0.04,
+      "exposure_samples": 3
+    },
+    "visual_blackout": {
+      "camera_hz": 5.0,
+      "blackout_start_s": 12.0,
+      "blackout_end_s": 16.0
+    },
+    "lidar_quarter_returns": {
+      "camera_hz": 5.0,
+      "sensor_fault": "lidar_keep_quarter"
+    },
+    "lidar_extrinsic_error": {
+      "camera_hz": 5.0,
+      "sensor_fault": "lidar_extrinsic_yaw2deg_x2cm"
+    },
+    "imu_clock_plus80ms": {
+      "camera_hz": 5.0,
+      "sensor_fault": "imu_clock_plus80ms"
+    },
+    "gyro_bias": {
+      "camera_hz": 5.0,
+      "sensor_fault": "gyro_z_bias_after5s"
+    }
+  },
+  "arms": [
+    "stereo",
+    "stereo_inertial",
+    "lidar_inertial",
+    "permanent_stop",
+    "verified_lio_recovery"
+  ],
+  "smoke": {
+    "seconds": 18.0,
+    "cells": [
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "nominal",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "nominal",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "nominal",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "nominal",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "camera_2_5hz",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "camera_10hz",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "dark_exposure_gain",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "causal_40ms_exposure",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "visual_blackout",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "lidar_quarter_returns",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 720000,
+        "condition": "gyro_bias",
+        "arm": "verified_lio_recovery"
+      }
+    ]
+  },
+  "development": {
+    "seconds": 40.0,
+    "cells": [
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "nominal",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "nominal",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "nominal",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "nominal",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "nominal",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "nominal",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "nominal",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "nominal",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "camera_2_5hz",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "camera_2_5hz",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "camera_2_5hz",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "camera_2_5hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "camera_2_5hz",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "camera_2_5hz",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "camera_2_5hz",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "camera_2_5hz",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "camera_2_5hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "camera_2_5hz",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "camera_10hz",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "camera_10hz",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "camera_10hz",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "camera_10hz",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "camera_10hz",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "camera_10hz",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "dark_exposure_gain",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "dark_exposure_gain",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "dark_exposure_gain",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "dark_exposure_gain",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "dark_exposure_gain",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "dark_exposure_gain",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "dark_exposure_gain",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "dark_exposure_gain",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "dark_exposure_gain",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "dark_exposure_gain",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "causal_40ms_exposure",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "causal_40ms_exposure",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "visual_blackout",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "visual_blackout",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "visual_blackout",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "visual_blackout",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "visual_blackout",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "visual_blackout",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "visual_blackout",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "visual_blackout",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "visual_blackout",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "visual_blackout",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "lidar_quarter_returns",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "lidar_quarter_returns",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "lidar_quarter_returns",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "lidar_quarter_returns",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "lidar_quarter_returns",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "lidar_quarter_returns",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "lidar_quarter_returns",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "lidar_quarter_returns",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "lidar_quarter_returns",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "lidar_quarter_returns",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "lidar_extrinsic_error",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "imu_clock_plus80ms",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "gyro_bias",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "gyro_bias",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "gyro_bias",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "gyro_bias",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730000,
+        "condition": "gyro_bias",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "gyro_bias",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "gyro_bias",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "gyro_bias",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "gyro_bias",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730000,
+        "condition": "gyro_bias",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "nominal",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "nominal",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "nominal",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "nominal",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "nominal",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "nominal",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "nominal",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "nominal",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "camera_2_5hz",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "camera_2_5hz",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "camera_2_5hz",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "camera_2_5hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "camera_2_5hz",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "camera_2_5hz",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "camera_2_5hz",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "camera_2_5hz",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "camera_2_5hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "camera_2_5hz",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "camera_10hz",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "camera_10hz",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "camera_10hz",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "camera_10hz",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "camera_10hz",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "camera_10hz",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "dark_exposure_gain",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "dark_exposure_gain",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "dark_exposure_gain",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "dark_exposure_gain",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "dark_exposure_gain",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "dark_exposure_gain",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "dark_exposure_gain",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "dark_exposure_gain",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "dark_exposure_gain",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "dark_exposure_gain",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "causal_40ms_exposure",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "causal_40ms_exposure",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "visual_blackout",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "visual_blackout",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "visual_blackout",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "visual_blackout",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "visual_blackout",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "visual_blackout",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "visual_blackout",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "visual_blackout",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "visual_blackout",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "visual_blackout",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "lidar_quarter_returns",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "lidar_quarter_returns",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "lidar_quarter_returns",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "lidar_quarter_returns",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "lidar_quarter_returns",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "lidar_quarter_returns",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "lidar_quarter_returns",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "lidar_quarter_returns",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "lidar_quarter_returns",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "lidar_quarter_returns",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "lidar_extrinsic_error",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "lidar_extrinsic_error",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "lidar_extrinsic_error",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "lidar_extrinsic_error",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "lidar_extrinsic_error",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "lidar_extrinsic_error",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "lidar_extrinsic_error",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "lidar_extrinsic_error",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "lidar_extrinsic_error",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "lidar_extrinsic_error",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "imu_clock_plus80ms",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "imu_clock_plus80ms",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "imu_clock_plus80ms",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "imu_clock_plus80ms",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "imu_clock_plus80ms",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "imu_clock_plus80ms",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "imu_clock_plus80ms",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "imu_clock_plus80ms",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "imu_clock_plus80ms",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "imu_clock_plus80ms",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "gyro_bias",
+        "arm": "stereo"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "gyro_bias",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "gyro_bias",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "gyro_bias",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 730001,
+        "condition": "gyro_bias",
+        "arm": "verified_lio_recovery"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "gyro_bias",
+        "arm": "stereo"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "gyro_bias",
+        "arm": "stereo_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "gyro_bias",
+        "arm": "lidar_inertial"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "gyro_bias",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 730001,
+        "condition": "gyro_bias",
+        "arm": "verified_lio_recovery"
+      }
+    ]
+  },
+  "initialization": {
+    "stationary_until_s": 3.0,
+    "excitation_until_s": 9.0,
+    "navigation_begins_s": 10.0,
+    "command": "vx=.10*sin(2*pi*(t-3)/1.5), vy=0, yaw=.30*sin(pi*(t-3)/1.5) during [3,9)",
+    "same_for_all_arms_conditions": true,
+    "native_initialization_thresholds_changed": false,
+    "known_start_assumption": "first accepted pose anchored to nominal station, initialization movement not truth-corrected"
+  },
+  "execution_gate": "all 14 same-source/input smoke cells execute with retained finite sensor/latency evidence; degraded outcomes remain scored",
+  "arm_development_gate": "nominal smoke has a native accepted pose, full horizon and no fall/contact/nonfinite; inertial arm additionally actually initializes",
+  "fault_negative_policy": "do not require tracking/goals under smoke faults; scientific degradation never masquerades as runtime failure",
+  "planner_inputs": "native accepted pose, prescribed route, nominal known start, shared measured raw LiDAR brake",
+  "coordinate_epoch_policy": "causal observed map identity unavailability/ID change, previously observed IMU initialization becoming unconfirmed, or return to NOT_INITIALIZED conservatively invalidates registration even if ID is reused; retained-identity transient tracking loss alone is not an invalidation",
+  "epoch_metric_scope": "wrapper observes map identity through usable tracked map points, not direct Atlas state; count logical registration invalidations separately from observed native ID changes, never as confirmed native resets",
+  "permanent_stop_policy": "after first accepted epoch, any observed coordinate-continuity invalidation permanently rejects later poses",
+  "recovery_epoch_policy": "native map ID recorded separately; logical monotone coordinate epoch is registration token; every new epoch requires unchanged three calibration plus three later validation observations, never LIO pose fallback",
+  "false_free_metric": "evaluator-only false-clear raw-brake packets against original same-time ray surfaces; no complete occupancy claim",
+  "sensor_noise": "ideal simulated cameras and IMU; three past-render exposure approximation, no hardware noise/shutter claim",
+  "scope": "bounded matched development, no hardware or independent confirmation",
+  "source_change_rule": "new frozen source requires fresh complete smoke; never reuse outcomes from superseded source"
+}

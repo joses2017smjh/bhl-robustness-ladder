@@ -1,0 +1,22 @@
+{
+  "schema": "bhl-finalizer-source-fallback-review-v1",
+  "passed": 26,
+  "failed": 0,
+  "pytest_seconds": 0.13,
+  "junit": "methods-finalizer-source-fallback-20261010.xml",
+  "source_sha256": {
+    "scripts/bench/methods_finalize.py": "7590f79218d384d1360a17a306f7cb7d855f4cdcfdda45eedb72bcb3524a0928",
+    "tests/test_methods_finalize.py": "bef2a98b11f50a459c9708e72bc6db47589069690bddb4769448bb63c3028894",
+    "scripts/bench/methods_finalize_bootstrap.py": "2e20ec1e1baa4717dc823d8a83ccb40bb1b44162ad531faab452014bf548a3d6",
+    "tests/test_methods_finalize_bootstrap.py": "702dcdc58bfc8dbc33ca34c772da237365b5f558bc6e6f29be676a9d0e5fb32d"
+  },
+  "checks": [
+    "Full SHA-verified release source can restore an absent archive to node-local storage.",
+    "Original campaign metadata and job paths remain unchanged.",
+    "Existing corrupt archives and dangling links cannot silently fall back.",
+    "Restored bytes must match the original intake size and SHA.",
+    "Collectors receive the verified source view, with the original job directories."
+  ],
+  "scope": "Transport and provenance verification only; no reruns or scientific source modification.",
+  "step": "21756762.43"
+}

@@ -1,0 +1,25 @@
+{
+  "archive_bytes": 38843464,
+  "archive_sha256": "1e123b7cf06999d13ede40af90ca18f5ac6d09361be500608664239c919cd0a2",
+  "inventory_file": "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-build-v1/retained-payload-inventory.json",
+  "inventory_sha256": "fc82a7d5150cb845e6327775aa392c8340d712725cc6b82a9066982989638d9f",
+  "manifest_entries_reused_in_retained_live_packs": 829,
+  "operation": "Remove only superseded frozen SOURCE packaging; preserve all original source/input payload bytes, receipts and scientific/failure outputs",
+  "original_manifest_sha256": "58842de95c4f874b7dfc54b5e03190c6b27b37467db8ecff4e3114e0dbf2d8dc",
+  "original_member_count": 833,
+  "outputs_tar_gz_untouched": [],
+  "scope": "Original tar compression/header metadata is not retained. All payload bytes and intake/manifest/protocol/source lineage remain reconstructible through the complete per-member preservation map. No outputs.tar.gz or active source package was deleted.",
+  "unique_payload_preserved": [
+    {
+      "bytes": 10767,
+      "path": "retained-unique-payload/source/scripts/native/lio_build.py",
+      "sha256": "052cbcb42d9a9cab0b85c2ab747b013c0a5cdf2c603e6a2415e8b9ef4a072a14"
+    },
+    {
+      "bytes": 7233,
+      "path": "retained-unique-payload/source/scripts/native/lio_headless_main.cpp",
+      "sha256": "97e1e58105099f849c486791372e678f5ea313a6c540238df4328505e183437a"
+    }
+  ],
+  "utc": "2026-10-09T21:57:49.569315+00:00"
+}

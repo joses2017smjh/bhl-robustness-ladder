@@ -1,0 +1,56 @@
+{
+  "archive_sha256": "1f04b186e62a31bfa27547375124b85f7bc8a46b688fc92577ea108d7d6293ed",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp:/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp",
+    "--bind",
+    "/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp/source:/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp/protocol.json:/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp/work",
+    "--bind",
+    "/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp/inputs:/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp/inputs:ro",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp/source/scripts/bench/terrain_traversal_campaign.py",
+    "--protocol",
+    "/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp/protocol.json",
+    "--phase",
+    "smoke"
+  ],
+  "host": "cn-b09.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "smoke"
+    ],
+    "entrypoint": "scripts/bench/terrain_traversal_campaign.py",
+    "env": {},
+    "kind": "smoke",
+    "max_output_mb": 64,
+    "name": "terrain-smoke-20261009",
+    "resources": {
+      "cpus": 2,
+      "gpus": 0,
+      "memory_gb": 8,
+      "partition": "preempt",
+      "requeue": false,
+      "time_limit": "00:20:00"
+    }
+  },
+  "job_id": "21742782",
+  "scratch": "/tmp/bhl-h34-terrain-smoke-20261009-21742782-dlcqynrp",
+  "source_files_verified": 834,
+  "started_utc": "2026-10-09T22:06:10.611628+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "run_name": "arms-dr1.0-s0",
+  "run_directory": "2026-08-18_20-57-50_arms-dr1.0-s0",
+  "retrieved_date": "2026-10-08",
+  "original_export_directory": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-08-18_20-57-50_arms-dr1.0-s0/exported",
+  "scope": "Existing frozen learned 22-DoF gait for scripted cooperative regression tests; no new training or success claim.",
+  "source_deploy_sha256": "73d65f0abfef27f00d462c5f465952888034d545122dee35e9127bb1b5dcd257",
+  "source_checkpoint_sha256": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b",
+  "portable_deploy_change": "Only policy_checkpoint_path changes from the original absolute path to policy.onnx; all other bytes are unchanged.",
+  "model": {
+    "num_joints": 22,
+    "num_observations": 75,
+    "num_actions": 22,
+    "policy_dt_s": 0.04
+  },
+  "upstream": {
+    "repository": "https://github.com/HybridRobotics/Berkeley-Humanoid-Lite",
+    "commit": "984741a3623c93b0583ccfdc479f1f8b1c4d900e",
+    "assets_commit": "fc90fedd008b1e56a22e3c5221548d6b24f49707",
+    "lowlevel_commit": "652777cc7c49884e7cd7ddfada758dc1979bf627",
+    "copyright_notice": "Berkeley Humanoid Lite Project Developers; LICENSE-upstream.txt preserves their MIT notice."
+  },
+  "files_sha256": {
+    "LICENSE-upstream.txt": "172b35ba01580294ebbbc9fc27bd3f768313c5c0095e3640b96c17a82faec9c7",
+    "README.md": "95f4064ae18301dac12ffb728d3efaa503801296b4841b46c3ccbe0575960b07",
+    "deploy.original.yaml": "73d65f0abfef27f00d462c5f465952888034d545122dee35e9127bb1b5dcd257",
+    "deploy.yaml": "826b6e1aa7a3e78168ada1e3f4e638c46bd4ad6b2ff7604dc637a2ff8bed244b",
+    "policy.onnx": "4f559e08089eb5404a44bf43df9fab2acd48f78e6686e235aefd946adb0cfd4b"
+  },
+  "files_bytes": {
+    "LICENSE-upstream.txt": 1113,
+    "README.md": 774,
+    "deploy.original.yaml": 2007,
+    "deploy.yaml": 1849,
+    "policy.onnx": 288061
+  }
+}

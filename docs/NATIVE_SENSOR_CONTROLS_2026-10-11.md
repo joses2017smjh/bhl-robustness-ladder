@@ -1,0 +1,76 @@
+# Native navigation acquisition and fault controls
+
+This separate campaign adds matched camera, LiDAR and IMU controls to the completed development studies. It preserves their original sources and negative results. The new experiment declares **14 execution-smoke episodes**, followed by **up to 200 development episodes**, with explicit unrun cells for arms that fail nominal readiness. Readiness and execution receipts below are distinct from navigation performance results.
+
+## Matched arms and conditions
+
+The five pose-estimator/controller arms are native ORB stereo, native ORB stereo–IMU, native FAST-LIO2, permanent-stop stereo with FAST-LIO2 running in shadow, and LIO-assisted verified stereo map recovery. The last two charge both native processes. Verified recovery retains three registration observations and three disjoint later validation observations; it never substitutes a LiDAR pose for stereo. All five share the same independent raw LiDAR obstacle brake, frozen locomotion policy, prescribed route, sensor acquisition and compute accounting. Thus “estimator alone” does not mean a camera-only obstacle planner.
+
+| Condition | Fixed intervention |
+|---|---|
+| Nominal | 5 Hz stereo; 5 Hz timed 3D LiDAR; 200 Hz IMU |
+| Camera 2.5 Hz | Camera schedule and native FPS changed together; LiDAR remains 5 Hz |
+| Camera 10 Hz | Camera schedule and native FPS changed together; LiDAR remains 5 Hz |
+| Dark exposure gain | Acquired camera intensities multiplied by 0.25 |
+| Causal 40 ms exposure | Equal-weight integration of three actual rendered poses over the preceding 40 ms |
+| Visual blackout | Both acquired images replaced with zero pixels from 12 through 16 seconds |
+| Quarter LiDAR returns | Stable return subsampling, preserving both temporal endpoints |
+| LiDAR calibration error | Reported extrinsic receives 2° yaw and 2 cm x error; physical sensor mounting remains fixed |
+| IMU clock +80 ms | Timestamp and availability both delayed; no future samples are forwarded |
+| Gyroscope bias | +0.05 rad/s z bias begins at 5 seconds |
+
+Exposure samples use the robot's actual simulated pose at each sub-exposure time and retain their timestamps, hashes and PNGs. The averaging and intensity-gain models approximate acquisition effects; they are not calibrated hardware shutter, shot-noise or read-noise models. The planner's original 0.35-second freshness gate is fixed across camera rates, so low-rate results include the effect of that unchanged gate.
+
+## Initialization and gates
+
+Every arm and condition receives the same declared simulation-only initialization: stationary until 3 seconds, bounded sinusoidal forward and yaw commands during `[3, 9)` seconds, stationary again until navigation starts at 10 seconds. Command bounds are 0.10 m/s and 0.30 rad/s. This produces actual inertial excitation without changing ORB initialization thresholds. It is an explicit open-loop simulation maneuver, not an estimator fallback or physical actuation command.
+
+The original nominal known-start registration assumption is retained: the first accepted native pose is anchored to the nominal start station. Initialization movement can introduce registration error; evaluator truth is retained separately and never used to correct that registration. Results must disclose this limitation.
+
+The smoke cohort uses fresh seed `720000`: five nominal arms and the nine degraded conditions through the complete verified-recovery sensor path, each for 18 seconds. Every cell must execute with finite retained sensor/output evidence. Tracking degradation, failure to initialize, contact and falls under degraded conditions remain scientific outcomes and do not silently turn into runtime errors.
+
+Each arm's full development is separately gated by its **nominal** smoke: an accepted native pose, full horizon and no fall, contact or nonfinite state. The stereo–IMU arm additionally requires actual native inertial initialization. A negative nominal gate leaves that arm's 40 development cells explicitly **unrun**. The cohort is not enlarged, retuned or retried after a scientific negative.
+
+Development uses straight and occluder routes, seeds `730000` and `730001`, all ten conditions, and all five eligible arms for 40 seconds: **200 declared cells**. Twenty serial shards each contain two routes and five arms for one condition/seed. A strict collector requires every declared cell to be measured or explicitly accounted for by a negative nominal gate, verifies retained file hashes, and recomputes clean outcomes from evaluator traces.
+
+## Measurements and inference boundary
+
+- Clean goals, goal time, contacts, falls, full horizon and nonfinite states.
+- Unique native updates, accepted tracking fraction, native map changes, tracking losses, completed recovery durations and right-censored unrecovered losses. Repeated delivery of a held packet does not count as a new native update.
+- Full pipeline wall time: timed-ray generation, rendering, exposure processing, PNG encoding/hashing, native transport and inference, and recovery computation. Its measured delay is advanced through physics before a response becomes visible. Diagnostic sensor bookkeeping is conservatively included. Native initialization/process setup remains visible in total job wall time, not attributed to per-frame latency.
+- Inference-visible ORB diagnostics, LIO effective-point counts, native states and poses, and measured latency per native event. Simulator poses remain in a separate evaluator artifact.
+- Evaluator-only false-clear raw-brake packets: compare the perturbed input with original same-time simulated surface returns inside the actual brake box. Fewer than 20 perturbed returns cause an unknown stop and never count as safe free space. This does **not** measure complete 3D occupancy, unseen hazards, or pixel false-free space.
+
+These are ideal simulated sensors and two reused route families. The cohort supplies development comparisons, not physical safety guarantees or independent terrain confirmation.
+
+## Outcome-calibrated offline screen
+
+The scheduler completes all seed-`730000` conditions first. It extracts only that seed's episode-level features/outcomes, fits the separately declared [offline health screen](../src/bhl_robust/research/outcome_health.py), and publishes the frozen model with independently verified hashes **before submitting any seed-`730001` trial**. The second seed is evaluated with that frozen model. Insufficient positive/negative outcomes remain explicitly unsupported; if every arm is gated, the health analysis is explicitly unavailable.
+
+This screen uses episode-end tracking fraction and is neither an online controller nor a calibrated failure probability. Any use for real-time stopping requires a later closed-loop validation experiment.
+
+## Execution and storage
+
+The scientific runner is [native_sensor_controls_campaign.py](../scripts/bench/native_sensor_controls_campaign.py); its predeclared settings are in [the protocol](../protocols/native-sensor-controls-20261011.json). The source/input snapshot is separate from the [durable dispatcher](../scripts/bench/native_sensor_controls_dispatch.py).
+
+New durable outputs are restricted to `/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2` and its explicitly scoped controller directory. The dispatcher reserves 2 GiB for one active output and preserves an 8 GiB shared-storage floor. Scientific work and rendering caches run in private node-local temporary storage. Completed raw archives are uploaded to the [October 11 evidence release](https://github.com/joses2017smjh/bhl-robustness-ladder/releases/tag/research-campaign-evidence-20261011), freshly downloaded and SHA256-verified before duplicate durable raw packaging is retired. Unique measurements, failed attempts and compact provenance receipts are preserved. There are no automatic retries or hidden source changes.
+
+The frozen same-source smoke must finish before any development submission. Actual job IDs and execution receipts are recorded separately; scheduled counts are not results.
+
+## Continuity correction before scoring
+
+The external [TUM VI recording](TUMVI_EXTERNAL_VALIDATION_2026-10-11.md) exposed an actual native active-map reset that reused map ID `0`. An ID-change-only guard could therefore accept a pose in a new coordinate system with stale registration. Version 2 adds a causal monotone registration epoch before any scored development run. Native estimator thresholds, excitation, routes, seeds, fault interventions and three-plus-three recovery thresholds remain fixed.
+
+The wrapper obtains map identity and the IMU initialization flag from usable tracked map points. Missing identity or an unconfirmed initialization flag is therefore **continuity uncertainty**, not independently a confirmed native reset. Such uncertainty, a changed observed map ID, or a return to `NOT_INITIALIZED` invalidates registration. A transient `RECENTLY_LOST`/`LOST` state with retained identity preserves the epoch. Non-recovery stereo arms latch their declared stop after accepted continuity is invalidated; assisted recovery requires three fresh registration observations followed by three disjoint validation observations, even if the reused ID and reported pose are unchanged. Held camera packets never create new invalidation events. Telemetry retains raw map IDs, reasons and cumulative logical invalidations; confirmed native reset count remains unmeasured unless independently established from native evidence.
+
+Focused tests passed **92/92**. Independent source review found no blocking causality or recovery issue. Applying the new detector to the preserved 1,200-frame real TUM traces, without rerunning native inference or supplying ground truth, produced **one stereo epoch with zero invalidations** and **two stereo–IMU epochs with one invalidation at 2.700206316 seconds**. This matches the independently logged active-map reset. The [trace-check receipt](../results/native-sensor-controls-20261011/v2/tumvi-native-trace-check.json) retains the exact detector and input hashes.
+
+## Execution receipts
+
+The superseded v1 GPU smoke **`21768425` completed 14/14 episodes**, exit `0:0`, on `cn-gpu7` in 6 minutes 26 seconds. All five nominal readiness gates passed; the stereo–IMU arm produced 38 actually initialized/accepted native frames under the declared excitation. All 14 smoke episodes had zero contacts and falls, and zero short-horizon clean goals. These remain actual v1 execution measurements; they do not qualify the corrected v2 source.
+
+The first utility controller (`21768472`) failed before plan validation or any development submission because its system Python lacked `hashlib.file_digest`. Utility-only replacement `21768520` used the existing Python 3.11 runtime and waited for reserved storage. It was deliberately stopped after verifying **zero scored child jobs had been submitted**, so no scored outcomes were inspected or selectively retried before this correction. The [supersession receipt](../results/native-sensor-controls-20261011/superseded-before-scoring.json) preserves that boundary.
+
+Fresh v2 source archive **`3628b95ced285660e27c0b3b0ca92a097415beaeedfa912da751832acc3b8282`** was frozen before submitting the new 14-cell GPU smoke **`21769132`**. Durable dispatcher **`21769146`** is pinned to this archive and its own helper hashes, and depends on successful fresh smoke completion before checking scientific readiness or submitting the 200-cell cohort. Fresh v2 smoke completed **14/14**, `COMPLETED 0:0`, in **6 minutes 29 seconds** on `cn-gpu7`. All five nominal arm gates passed; stereo–IMU produced **36 initialized/accepted native frames**. All 14 cells had zero falls/contacts and no short-horizon clean goal. Camera 10 Hz produced zero accepted poses in its degraded smoke cell, retained as a scientific negative. The [fresh raw smoke](https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/research-campaign-evidence-20261011/native-sensor-controls-v2--native-controls-smoke-v2-20261011-21769132.tar.gz) was uploaded and freshly SHA256-verified before duplicate raw packaging was retired. Dispatcher **`21769146`** then launched the first 10-cell scored shard **`21769166`**, running on `cn-gpu7` with all **971 frozen source/input files verified** against the exact smoke source at 10:57:48 UTC. The [first scored shard](https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/research-campaign-evidence-20261011/native-sensor-controls-v2--native-controls-v2-s730000-c00-20261011-21769166.tar.gz) then completed **10/10 episodes**, `COMPLETED 0:0`, in **8 minutes 9 seconds**; its 762,805,901-byte raw archive was freshly SHA256-verified and duplicate packaging retired at 11:07:32 UTC. The controller automatically started the next condition shard **`21769305`**. This is **10/200** scored development cells completed, not a complete campaign comparison. The held-out second seed remains unsubmitted until first-seed collection and frozen health-model publication finish.
+
+[Source, protocol, smoke and controller receipts](../results/native-sensor-controls-20261011/) preserve both versions. The [original v1 raw smoke archive](https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/research-campaign-evidence-20261011/native-sensor-controls-v1--native-controls-smoke-20261011-21768425.tar.gz) is 562,273,268 bytes, SHA256 `c42646a99467cbe7aca69e6445e059358212d05aa1f10e83f5acce2eac7816fd`; a fresh download verified it before duplicate shared packaging was retired. Corrected source and subsequent raw chunks are published immutably with the same fresh-download verification requirement.

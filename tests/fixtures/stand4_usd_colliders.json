@@ -1,0 +1,314 @@
+{
+ "base_usd": {
+  "file": "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/usd/berkeley_humanoid_lite.usd",
+  "default_prim": "/berkeley_humanoid_lite",
+  "rigid_bodies": [
+   "/berkeley_humanoid_lite/base",
+   "/berkeley_humanoid_lite/arm_left_shoulder_pitch",
+   "/berkeley_humanoid_lite/arm_left_shoulder_roll",
+   "/berkeley_humanoid_lite/arm_left_shoulder_yaw",
+   "/berkeley_humanoid_lite/arm_left_elbow_pitch",
+   "/berkeley_humanoid_lite/arm_left_elbow_roll",
+   "/berkeley_humanoid_lite/arm_left_hand_link",
+   "/berkeley_humanoid_lite/arm_right_shoulder_pitch",
+   "/berkeley_humanoid_lite/arm_right_shoulder_roll",
+   "/berkeley_humanoid_lite/arm_right_shoulder_yaw",
+   "/berkeley_humanoid_lite/arm_right_elbow_pitch",
+   "/berkeley_humanoid_lite/arm_right_elbow_roll",
+   "/berkeley_humanoid_lite/arm_right_hand_link",
+   "/berkeley_humanoid_lite/imu_2",
+   "/berkeley_humanoid_lite/imu",
+   "/berkeley_humanoid_lite/leg_left_hip_roll",
+   "/berkeley_humanoid_lite/leg_left_hip_yaw",
+   "/berkeley_humanoid_lite/leg_left_hip_pitch",
+   "/berkeley_humanoid_lite/leg_left_knee_pitch",
+   "/berkeley_humanoid_lite/leg_left_ankle_pitch",
+   "/berkeley_humanoid_lite/leg_left_ankle_roll",
+   "/berkeley_humanoid_lite/leg_right_hip_roll",
+   "/berkeley_humanoid_lite/leg_right_hip_yaw",
+   "/berkeley_humanoid_lite/leg_right_hip_pitch",
+   "/berkeley_humanoid_lite/leg_right_knee_pitch",
+   "/berkeley_humanoid_lite/leg_right_ankle_pitch",
+   "/berkeley_humanoid_lite/leg_right_ankle_roll"
+  ],
+  "n_rigid_bodies": 27,
+  "bodies_with_colliders": {
+   "/berkeley_humanoid_lite/base": [
+    "/berkeley_humanoid_lite/base/collisions"
+   ],
+   "/berkeley_humanoid_lite/arm_left_shoulder_yaw": [
+    "/berkeley_humanoid_lite/arm_left_shoulder_yaw/collisions"
+   ],
+   "/berkeley_humanoid_lite/arm_left_elbow_roll": [
+    "/berkeley_humanoid_lite/arm_left_elbow_roll/collisions"
+   ],
+   "/berkeley_humanoid_lite/arm_right_shoulder_yaw": [
+    "/berkeley_humanoid_lite/arm_right_shoulder_yaw/collisions"
+   ],
+   "/berkeley_humanoid_lite/arm_right_elbow_roll": [
+    "/berkeley_humanoid_lite/arm_right_elbow_roll/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_left_hip_pitch": [
+    "/berkeley_humanoid_lite/leg_left_hip_pitch/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_left_knee_pitch": [
+    "/berkeley_humanoid_lite/leg_left_knee_pitch/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_left_ankle_roll": [
+    "/berkeley_humanoid_lite/leg_left_ankle_roll/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_right_hip_pitch": [
+    "/berkeley_humanoid_lite/leg_right_hip_pitch/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_right_knee_pitch": [
+    "/berkeley_humanoid_lite/leg_right_knee_pitch/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_right_ankle_roll": [
+    "/berkeley_humanoid_lite/leg_right_ankle_roll/collisions"
+   ]
+  },
+  "arm_bodies": {
+   "/berkeley_humanoid_lite/arm_left_shoulder_pitch": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_left_shoulder_roll": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_left_shoulder_yaw": {
+    "colliders": [
+     {
+      "prim": "/berkeley_humanoid_lite/arm_left_shoulder_yaw/collisions",
+      "type": "Xform",
+      "enabled": true,
+      "approximation": null
+     }
+    ]
+   },
+   "/berkeley_humanoid_lite/arm_left_elbow_pitch": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_left_elbow_roll": {
+    "colliders": [
+     {
+      "prim": "/berkeley_humanoid_lite/arm_left_elbow_roll/collisions",
+      "type": "Xform",
+      "enabled": true,
+      "approximation": null
+     }
+    ]
+   },
+   "/berkeley_humanoid_lite/arm_left_hand_link": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_right_shoulder_pitch": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_right_shoulder_roll": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_right_shoulder_yaw": {
+    "colliders": [
+     {
+      "prim": "/berkeley_humanoid_lite/arm_right_shoulder_yaw/collisions",
+      "type": "Xform",
+      "enabled": true,
+      "approximation": null
+     }
+    ]
+   },
+   "/berkeley_humanoid_lite/arm_right_elbow_pitch": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_right_elbow_roll": {
+    "colliders": [
+     {
+      "prim": "/berkeley_humanoid_lite/arm_right_elbow_roll/collisions",
+      "type": "Xform",
+      "enabled": true,
+      "approximation": null
+     }
+    ]
+   },
+   "/berkeley_humanoid_lite/arm_right_hand_link": {
+    "colliders": []
+   }
+  },
+  "hand_link_colliders": {
+   "/berkeley_humanoid_lite/arm_left_hand_link": [],
+   "/berkeley_humanoid_lite/arm_right_hand_link": []
+  }
+ },
+ "overlay_usd": {
+  "file": "assets/cloth/berkeley_humanoid_lite_hand_colliders.usda",
+  "default_prim": "/berkeley_humanoid_lite",
+  "rigid_bodies": [
+   "/berkeley_humanoid_lite/base",
+   "/berkeley_humanoid_lite/arm_left_shoulder_pitch",
+   "/berkeley_humanoid_lite/arm_left_shoulder_roll",
+   "/berkeley_humanoid_lite/arm_left_shoulder_yaw",
+   "/berkeley_humanoid_lite/arm_left_elbow_pitch",
+   "/berkeley_humanoid_lite/arm_left_elbow_roll",
+   "/berkeley_humanoid_lite/arm_left_hand_link",
+   "/berkeley_humanoid_lite/arm_right_shoulder_pitch",
+   "/berkeley_humanoid_lite/arm_right_shoulder_roll",
+   "/berkeley_humanoid_lite/arm_right_shoulder_yaw",
+   "/berkeley_humanoid_lite/arm_right_elbow_pitch",
+   "/berkeley_humanoid_lite/arm_right_elbow_roll",
+   "/berkeley_humanoid_lite/arm_right_hand_link",
+   "/berkeley_humanoid_lite/imu_2",
+   "/berkeley_humanoid_lite/imu",
+   "/berkeley_humanoid_lite/leg_left_hip_roll",
+   "/berkeley_humanoid_lite/leg_left_hip_yaw",
+   "/berkeley_humanoid_lite/leg_left_hip_pitch",
+   "/berkeley_humanoid_lite/leg_left_knee_pitch",
+   "/berkeley_humanoid_lite/leg_left_ankle_pitch",
+   "/berkeley_humanoid_lite/leg_left_ankle_roll",
+   "/berkeley_humanoid_lite/leg_right_hip_roll",
+   "/berkeley_humanoid_lite/leg_right_hip_yaw",
+   "/berkeley_humanoid_lite/leg_right_hip_pitch",
+   "/berkeley_humanoid_lite/leg_right_knee_pitch",
+   "/berkeley_humanoid_lite/leg_right_ankle_pitch",
+   "/berkeley_humanoid_lite/leg_right_ankle_roll"
+  ],
+  "n_rigid_bodies": 27,
+  "bodies_with_colliders": {
+   "/berkeley_humanoid_lite/base": [
+    "/berkeley_humanoid_lite/base/collisions"
+   ],
+   "/berkeley_humanoid_lite/arm_left_shoulder_yaw": [
+    "/berkeley_humanoid_lite/arm_left_shoulder_yaw/collisions"
+   ],
+   "/berkeley_humanoid_lite/arm_left_elbow_roll": [
+    "/berkeley_humanoid_lite/arm_left_elbow_roll/collisions"
+   ],
+   "/berkeley_humanoid_lite/arm_left_hand_link": [
+    "/berkeley_humanoid_lite/arm_left_hand_link/hand_collider"
+   ],
+   "/berkeley_humanoid_lite/arm_right_shoulder_yaw": [
+    "/berkeley_humanoid_lite/arm_right_shoulder_yaw/collisions"
+   ],
+   "/berkeley_humanoid_lite/arm_right_elbow_roll": [
+    "/berkeley_humanoid_lite/arm_right_elbow_roll/collisions"
+   ],
+   "/berkeley_humanoid_lite/arm_right_hand_link": [
+    "/berkeley_humanoid_lite/arm_right_hand_link/hand_collider"
+   ],
+   "/berkeley_humanoid_lite/leg_left_hip_pitch": [
+    "/berkeley_humanoid_lite/leg_left_hip_pitch/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_left_knee_pitch": [
+    "/berkeley_humanoid_lite/leg_left_knee_pitch/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_left_ankle_roll": [
+    "/berkeley_humanoid_lite/leg_left_ankle_roll/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_right_hip_pitch": [
+    "/berkeley_humanoid_lite/leg_right_hip_pitch/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_right_knee_pitch": [
+    "/berkeley_humanoid_lite/leg_right_knee_pitch/collisions"
+   ],
+   "/berkeley_humanoid_lite/leg_right_ankle_roll": [
+    "/berkeley_humanoid_lite/leg_right_ankle_roll/collisions"
+   ]
+  },
+  "arm_bodies": {
+   "/berkeley_humanoid_lite/arm_left_shoulder_pitch": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_left_shoulder_roll": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_left_shoulder_yaw": {
+    "colliders": [
+     {
+      "prim": "/berkeley_humanoid_lite/arm_left_shoulder_yaw/collisions",
+      "type": "Xform",
+      "enabled": true,
+      "approximation": null
+     }
+    ]
+   },
+   "/berkeley_humanoid_lite/arm_left_elbow_pitch": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_left_elbow_roll": {
+    "colliders": [
+     {
+      "prim": "/berkeley_humanoid_lite/arm_left_elbow_roll/collisions",
+      "type": "Xform",
+      "enabled": true,
+      "approximation": null
+     }
+    ]
+   },
+   "/berkeley_humanoid_lite/arm_left_hand_link": {
+    "colliders": [
+     {
+      "prim": "/berkeley_humanoid_lite/arm_left_hand_link/hand_collider",
+      "type": "Mesh",
+      "enabled": true,
+      "approximation": "convexHull"
+     }
+    ]
+   },
+   "/berkeley_humanoid_lite/arm_right_shoulder_pitch": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_right_shoulder_roll": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_right_shoulder_yaw": {
+    "colliders": [
+     {
+      "prim": "/berkeley_humanoid_lite/arm_right_shoulder_yaw/collisions",
+      "type": "Xform",
+      "enabled": true,
+      "approximation": null
+     }
+    ]
+   },
+   "/berkeley_humanoid_lite/arm_right_elbow_pitch": {
+    "colliders": []
+   },
+   "/berkeley_humanoid_lite/arm_right_elbow_roll": {
+    "colliders": [
+     {
+      "prim": "/berkeley_humanoid_lite/arm_right_elbow_roll/collisions",
+      "type": "Xform",
+      "enabled": true,
+      "approximation": null
+     }
+    ]
+   },
+   "/berkeley_humanoid_lite/arm_right_hand_link": {
+    "colliders": [
+     {
+      "prim": "/berkeley_humanoid_lite/arm_right_hand_link/hand_collider",
+      "type": "Mesh",
+      "enabled": true,
+      "approximation": "convexHull"
+     }
+    ]
+   }
+  },
+  "hand_link_colliders": {
+   "/berkeley_humanoid_lite/arm_left_hand_link": [
+    {
+     "prim": "/berkeley_humanoid_lite/arm_left_hand_link/hand_collider",
+     "type": "Mesh",
+     "enabled": true,
+     "approximation": "convexHull"
+    }
+   ],
+   "/berkeley_humanoid_lite/arm_right_hand_link": [
+    {
+     "prim": "/berkeley_humanoid_lite/arm_right_hand_link/hand_collider",
+     "type": "Mesh",
+     "enabled": true,
+     "approximation": "convexHull"
+    }
+   ]
+  }
+ }
+}

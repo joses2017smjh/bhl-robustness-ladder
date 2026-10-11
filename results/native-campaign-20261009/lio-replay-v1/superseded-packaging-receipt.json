@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-09T21:39:56.202896+00:00",
+  "operation": "Remove superseded never-executed duplicate frozen packaging only; preserve all scientific output and unique payload bytes",
+  "archive_sha256": "f0cd010ebfc2e8f24c1ac2cfaf5e6a67a9cdb3ab6026c5bad983e063e3a796dd",
+  "archive_bytes": 394225488,
+  "replacement_archive": "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v2/frozen-campaign.tar.gz",
+  "replacement_archive_sha256": "7638f0ec4d849848ba3fe3b8d689431937cb2d34cb466b5d15cdd1d64c487579",
+  "manifest_entries_preserved_in_replacement": 841,
+  "unique_payload_preserved": [
+    {
+      "path": "retained-unique-payload/source/scripts/bench/native_slam_campaign.py",
+      "bytes": 13415,
+      "sha256": "6cab552abb95746a77e0a431ccfe9a7b0e2d0fe04c24ffd5cffa552a37266f62"
+    }
+  ],
+  "cancelled_job": "21740787",
+  "scope": "Cancelled pending job produced no estimator outputs. Original tar compression/metadata not retained; all payload bytes and intake/manifest/protocol receipts are retained."
+}

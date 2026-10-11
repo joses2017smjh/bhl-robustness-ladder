@@ -1,0 +1,36 @@
+{
+  "archive_sha256": "af21c73636082252084a84af909c447ee34b7e0004615dd517a64718e3514cb2",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=orb-native-build-v6-20261009",
+    "--partition=preempt",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--time=01:30:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6/orb-native-build-v6-20261009-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6/orb-native-build-v6-20261009-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/orb-build-v6",
+    "orb-native-build-v6-20261009",
+    "af21c73636082252084a84af909c447ee34b7e0004615dd517a64718e3514cb2"
+  ],
+  "job_id": "21743261",
+  "resources": {
+    "cpus": 2,
+    "gpus": 0,
+    "memory_gb": 16,
+    "partition": "preempt",
+    "requeue": false,
+    "time_limit": "01:30:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21743261\n",
+  "submitted_utc": "2026-10-09T21:54:36.511736+00:00"
+}

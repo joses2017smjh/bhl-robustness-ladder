@@ -1,0 +1,247 @@
+{
+  "additional_source": [
+    "scripts/bench/terrain_traversal_campaign.py",
+    "src/bhl_robust/research/terrain_traversal.py"
+  ],
+  "campaign_id": "terrain-traversal-20261009",
+  "execution": "fresh two-episode smoke, then 18-episode controller screen followed immediately by conditional untouched confirmation; stop if no actor qualifies",
+  "input_files": {
+    "actors/dr-default-s0/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/deploy.yaml",
+      "sha256": "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71"
+    },
+    "actors/dr-default-s0/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/policy.onnx",
+      "sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1"
+    },
+    "actors/dr-default-s1/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s1/deploy.yaml",
+      "sha256": "1cfd9e321d13128a91bf2eb4b9cf09b9859d79b6920d29e186ce874250b45985"
+    },
+    "actors/dr-default-s1/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s1/policy.onnx",
+      "sha256": "79a5fd23fde5a6030ceca64e8605fd4a320f96671c8280dd88bb370dacd31ed0"
+    },
+    "actors/dr-default-s2/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s2/deploy.yaml",
+      "sha256": "5c334b52521467a820629066d09d50267564d2c9281edee114037ee7d265241b"
+    },
+    "actors/dr-default-s2/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s2/policy.onnx",
+      "sha256": "904c908b8347a832f698a22c860e14a45ab3ef5b0e2dce81d95acb368ed8ab3a"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke"
+      ],
+      "entrypoint": "scripts/bench/terrain_traversal_campaign.py",
+      "env": {},
+      "kind": "smoke",
+      "max_output_mb": 64,
+      "name": "terrain-smoke-20261009",
+      "resources": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "time_limit": "00:20:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "run"
+      ],
+      "entrypoint": "scripts/bench/terrain_traversal_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 1024,
+      "name": "terrain-run-20261009",
+      "resources": {
+        "cpus": 2,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "time_limit": "05:00:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "MuJoCo learned-gait simulation; instantaneous 3D lidar/IMU terrain governor; no native SLAM, physical data or terrain-adapted gait training",
+  "terrain_traversal": {
+    "actors": [
+      {
+        "checkpoint_input": "actors/dr-default-s0/policy.onnx",
+        "checkpoint_sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1",
+        "deploy_input": "actors/dr-default-s0/deploy.yaml",
+        "name": "dr-default-s0",
+        "variant": "biped"
+      },
+      {
+        "checkpoint_input": "actors/dr-default-s1/policy.onnx",
+        "checkpoint_sha256": "79a5fd23fde5a6030ceca64e8605fd4a320f96671c8280dd88bb370dacd31ed0",
+        "deploy_input": "actors/dr-default-s1/deploy.yaml",
+        "name": "dr-default-s1",
+        "variant": "biped"
+      },
+      {
+        "checkpoint_input": "actors/dr-default-s2/policy.onnx",
+        "checkpoint_sha256": "904c908b8347a832f698a22c860e14a45ab3ef5b0e2dce81d95acb368ed8ab3a",
+        "deploy_input": "actors/dr-default-s2/deploy.yaml",
+        "name": "dr-default-s2",
+        "variant": "biped"
+      }
+    ],
+    "confirmation_arms": [
+      "baseline",
+      "lidar",
+      "lidar50"
+    ],
+    "confirmation_groups": [
+      260000,
+      260001,
+      260002,
+      260003,
+      260004,
+      260005,
+      260006,
+      260007
+    ],
+    "confirmation_rule": "per retained actor/arm >=22/24 clean goals, zero falls/collisions/nonfinite; paired descriptive comparisons, no independent safety claim",
+    "confirmation_terrains": [
+      "flat",
+      "small_steps",
+      "ramp"
+    ],
+    "created_utc": "2026-10-09T21:11:36.275353+00:00",
+    "packages": {
+      "Pillow": "11.3.0",
+      "mujoco": "3.3.5",
+      "numpy": "1.26.0",
+      "omegaconf": "2.3.0",
+      "onnxruntime": "1.22.1"
+    },
+    "schema": "bhl-terrain-traversal-v1",
+    "scope": "MuJoCo learned-gait simulation; instantaneous 3D lidar/IMU terrain governor; no native SLAM, physical data or terrain-adapted gait training",
+    "screen_groups": [
+      250000,
+      250001
+    ],
+    "screen_rule": "each actor 6/6 clean goals, zero falls/collisions/nonfinite; retain every passing actor",
+    "screen_terrains": [
+      "flat",
+      "small_steps",
+      "ramp"
+    ],
+    "settings": {
+      "caution_roughness_m": 0.003,
+      "caution_slope_deg": 2.0,
+      "caution_speed_m_s": 0.2,
+      "caution_step_m": 0.01,
+      "corridor_half_width_m": 0.75,
+      "desired_speed_m_s": 0.3,
+      "fall_local_sink_m": 0.25,
+      "fall_tilt_rad": 0.78,
+      "footprint_half_width_m": 0.18,
+      "goal_distance_m": 5.0,
+      "lidar_columns": 64,
+      "lidar_half_azimuth_deg": 60.0,
+      "lidar_hz": 5.0,
+      "lidar_max_elevation_deg": -12.0,
+      "lidar_max_range_m": 5.0,
+      "lidar_min_elevation_deg": -75.0,
+      "lidar_mount_x_m": 0.1,
+      "lidar_mount_z_m": 0.38,
+      "lidar_rings": 16,
+      "lookahead_max_m": 0.7,
+      "lookahead_min_m": 0.2,
+      "map_resolution_m": 0.1,
+      "minimum_known_fraction": 0.55,
+      "seconds": 40.0,
+      "settle_seconds": 1.0,
+      "stop_roughness_m": 0.015,
+      "stop_slope_deg": 8.0,
+      "stop_step_m": 0.025
+    },
+    "source_sha256": {
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_elbow_pitch_visual.stl": "dcc63a3258fcb2eadf773dac5ae01069c1cd56515903d957351a8c397042c6a5",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_elbow_roll_visual.stl": "149d9aec09328004cd4009f53ddba2e3e76a3cb3a8421b74c5cf4a7a771b7830",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_hand_link_visual.stl": "866509814110736425e6a53fb7ac7259fc6eeb0f6b7391d1a5dfe78192cfaefd",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_shoulder_pitch_visual.stl": "bb7424abee626edfcd38ca55789791fe48ca97c5a1d744d8efee12110e8e68b2",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_shoulder_roll_visual.stl": "a43c68296d04993c1f15663787c32b1b9540ed778bb608de5931ac090260cc86",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_shoulder_yaw_visual.stl": "63330719959b2fc97809af73d4f950b8f2973c11676eefba03b15fc269f36866",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_elbow_pitch_visual.stl": "01928d43bcd163cd8fa9dfc3222857eec0afd0297d449362e6bad5394a145aa0",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_elbow_roll_visual.stl": "c74c94c93b8973879fb4ee5caf125f8ad2cccffb5ca2f8adc9f8ab1277cff46b",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_hand_link_visual.stl": "12551a89279aba71699fa9545d6d6dc815539e2411d3d069b71aea99352c444f",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_shoulder_pitch_visual.stl": "e9b44ad2e5e959303616dd42bdfa32647656d36a54ec7c89b5cbc9a93743be6f",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_shoulder_roll_visual.stl": "2ca18897c48d2e07d11e110ced7ff17925f6212a099281e3c8eb33f1c276d882",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_shoulder_yaw_visual.stl": "76725f6aa833bff0ca29521d2474b0cd695b18ea6b05f141e23c7d1b9c3bd0af",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/base_visual.stl": "d9af91bf06e64d633fbe74f9700c9819952e7bb9d21b22101ef7c25e5e0a601c",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/imu_2_visual.stl": "e06a07bf09851ec0748ba0b77fc1d47c3a17a2f8f6a0b09803514eadac046745",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_ankle_pitch_visual.stl": "eb7216eba3c7af0c64379003d55112556db5e48a603bf99f200caa7f4735e48c",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_ankle_roll_visual.stl": "96ff643402492843119787aa00f8d26412154bfd10e10df3651655853b81775c",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_hip_pitch_visual.stl": "40940519f285ff6f5c1f927c60f0dc30fcedc8d46d0a62f8ce1865169424779f",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_hip_roll_visual.stl": "66ce0cf0153d8710c1c3cac947270e1855cdb62ef3a3e43ba2de20ad5d711356",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_hip_yaw_visual.stl": "ed54b34914b5adf4a963dc266685f0b0d82cae98a0409490432c0199ce4abdaf",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_knee_pitch_visual.stl": "956d76bc1a994c11d8a31ba58c4e510180ef03124d6f24c896449701fd04644e",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_ankle_pitch_visual.stl": "bec4d629b07813d9954c7219d02f51500413d19da10e743b17b966a703e183b1",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_ankle_roll_visual.stl": "6f44c6e5d27b7e7ca78040be74d12134785fbeb20bde66810b5e56188c7df9b5",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_hip_pitch_visual.stl": "8ad842e726a2396de47eca5ebb7feb1b060a440de537211080df3298a22c7d21",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_hip_roll_visual.stl": "cb776ee7a9a016b0c09f5d8bbb2f81c7aa7abed8ad97c5e84ea0c7c4ee4ed3bd",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_hip_yaw_visual.stl": "8502e46e5e22229c7d5e8f54ff37ae8ef2b2f77270cc55df7c9a29fcc1ab3adf",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_knee_pitch_visual.stl": "de9bb40ea6e610c013758037b5b8311d544586d769b59306c29bbe59fd0f13bc",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/berkeley_humanoid_lite.xml": "11180b321229d335b5a5f14fa8adeee101daa12bed84dff33d32f265b5196dbf",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/berkeley_humanoid_lite_biped.xml": "8f768fd140115625627e94cb9ed0f1f89ed556901a4c3e321d222dfb0abf0736",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/bhl_biped_scene.xml": "acf846cb866b41637d6bddf195c1bc9c099e908a7fa11f1b837b1a6bc8daa7d0",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/bhl_scene.xml": "f4a35d213145d575d21d8e3ff53bf7b7cdacce74c24c4fb36c33bc682f4fc262",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/__init__.py": "b0df54307c485e41d1951f0c2a75f55fe22807dcd8ad618978d8c778693ae68b",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/__init__.py": "b0df54307c485e41d1951f0c2a75f55fe22807dcd8ad618978d8c778693ae68b",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/config.py": "6f9118813dcf18c9ee37c48963f887e5cce59fcdf0d0c10549b3550f8fae550d",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/gamepad.py": "517c4119e81758617fbe96db78b7b16b45cab1e0f98d34b3b6957d79d4ed9bdd",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/rl_controller.py": "ab7b8c282e0888ec6cfb74451c60772ade5abcda17362521fb31bc04b8b5203c",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/__init__.py": "0dae04323e06d47a013a5e42017f13b2cbc721607873666dad576c4997c76c1a",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/can.py": "592a192b12807e176934f185f178e03f0c7eb9bc1a838c90caad4e53adbbbc5a",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/core.py": "7111504e3616b20f162ae6e16abd59b76c763424c9a9af843585173bf60a7fc7",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/fixed16.py": "1f8c85c5ce6c8ea314b80043ed805c9089bebc12b8f47ac8c1c17643b0983896",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/util.py": "d2ed67d6c76c1384003735208ba143f92a7ff005ecd584a7a9f615d0e4fab710",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/__init__.py": "78101211089aa1ba82e9d4720f81419fb5055dc9fff8e954aa81eab10e64d843",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/bimanual.py": "fac5b541e63a6d15c1b36a9b5be181413343381d86dffd9be0045e3006c04320",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/humanoid.py": "a8e274a76c53d28489486723dfa0f71cb9e37811185c2fa95a2837df65bb86c3",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/imu.py": "a397c6e6a716b6009f109644c9d7956d43ae62e5c99d540b857297ff7ad48dab",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/calibrate_joints.py": "0442470a004495e7ef87e16afa5b91564a1827ab500954ea7c0015b37145e6e9",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/check_connection.py": "718a28607303caf58b368c645b4ace301eb2245c3546258dbd832c53df3e711a",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/calibrate_electrical_offset.py": "59b5ffc500d9f50737df20050a7967182dfce2d2d83c01e0d3fd98e4db4e7732",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/configure_parameter.py": "80d4bfb6759662500b73cd4aa2e71d4ad5dd402b9c03b4f59840b225157b9e64",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/move_actuator.py": "89bd1594adc4249b11414793fc08f4626e8ae6b94a7c1dcf01f1e1b80d29b974",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/ping.py": "20c0e60babb235a69ed22a8a1d786b302edcf0939919768a971edd11e86fc534",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/read_configurations.py": "7c7b54045c14194e19c3bf202f4fcab2ecc217f9422ecfcf3fd8137850693baa",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/robot/read_configurations.py": "0ccb22d2eb6437af65f0e160b55a0e3fa0b48980194774d3f7742e04bde05019",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/robot/write_configurations.py": "435d968270988b249303e7b6c709315fa2db424ab44668c9ad6e67cf6c5ced09",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/run_idle.py": "4fa82c9357c0bcb38269f63a6b1f689fd68650f8ce9ee521731c73030a058698",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/run_locomotion.py": "5dc41e40b5567a9a4d65181ca2eda24189b816ce2caa56975f6858e40c02775e",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/test_imu.py": "160e7c829346c34e39eb1b8009236ab082396a6d47e53b42229ea09257e9ce32",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/test_inference.py": "a62a12ff91237a52a9c03d74ebe4d6a53b1290aa1012f89b464480dda516ce39",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/test_joystick.py": "1fefbe8cb820f356b27851d88ea6d8e18c94dc8ce4242d6004ab7f25d6e5fe68",
+      "scripts/bench/terrain_traversal_campaign.py": "ed23f99be4b0d7531c9252e280f697453d84bc88e11cfbf0cf194a27e5dc53d2",
+      "src/bhl_robust/eval/gait_clock.py": "eedd6279fd74e9706e8015e4c048900f08570d26f54f9905af3346e54d8f6b98",
+      "src/bhl_robust/eval/harness.py": "aad56f17c1e3b1a8351e557bd36738593801f97c6463d7b27bb83671d33e098d",
+      "src/bhl_robust/eval/mjcf_assets.py": "e34e728312ce822e72188f27d3a2cde9137e9fbf7867e5e1fc5e3b67fecb6322",
+      "src/bhl_robust/research/sensor_geometry.py": "c3410d8e105aa962d16723ffc89f460f98c4eb7399a706db6f96d38b553babc6",
+      "src/bhl_robust/research/terrain_traversal.py": "37bb1a54602cc8f1b36f61e06ab21306b6356c91feba68b3d3b4dbf425a97164"
+    },
+    "upstream_source": "external/Berkeley-Humanoid-Lite"
+  }
+}

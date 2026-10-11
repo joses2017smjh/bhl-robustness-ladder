@@ -1,0 +1,15 @@
+{
+  "schema": "bhl-local-validation-receipt-v1",
+  "allocation_job": "21767958",
+  "environment": {
+    "TMPDIR": "/tmp",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1"
+  },
+  "command": "python -m pytest -q tests/test_native_orb.py tests/test_promote_native_runtime_campaign.py tests/test_terrain_traversal_campaign.py tests/test_sensor_validation.py tests/test_outcome_health.py",
+  "exit_code": 0,
+  "passed": 48,
+  "seconds": 3.15,
+  "scope": "All four inherited temporary-symlink failures rechecked, plus physical-clock negative controls and held-out outcome model tests",
+  "raw_log_sha256": "d637651ee9fe0d4480a008deb9c487ddf494ca006cb92a5bd0550ebdc7823199"
+}

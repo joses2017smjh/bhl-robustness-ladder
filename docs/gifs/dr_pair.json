@@ -1,0 +1,239 @@
+{
+  "schema": "bhl-media-provenance/v1",
+  "output": {
+    "path": "docs/gifs/dr_pair.gif",
+    "bytes": 3085682,
+    "sha256": "96fbebe657758ebadedf87b30c50f730f96b56dc31bc9f15c2343c638ac53ade",
+    "width": 860,
+    "height": 242,
+    "frames": 90,
+    "duration_ms": 9000
+  },
+  "source_selection_script": {
+    "path": "scripts/make_gifs.py",
+    "sha256": "8fc8a4ab5847a44059209586b3f00d4cd0f9ae083bf8fd46ce346e60824634a2"
+  },
+  "panels": [
+    {
+      "policy": "dr-default-s0",
+      "source_clip": {
+        "path": "results/video/dr-default-s0__vx+0.0_vy+0.2_wz+0.0__OK.mp4",
+        "bytes": 631324,
+        "sha256": "58f5b26dc66613b4154be8410a58e7c54aa89b964f511a5ce539c26a7efb4e25"
+      },
+      "csv": {
+        "path": "results/raw/dr-default-s0.csv",
+        "bytes": 4596,
+        "sha256": "bf12a53ec659c610bcbf3bb7f5b802ea0884ec7545479a87ec984e23bb494c95"
+      },
+      "matched_strafe_rows": [
+        {
+          "label": "dr-default-s0",
+          "command_vx": "0.0",
+          "command_vy": "0.2",
+          "command_wz": "0.0",
+          "seed": "0",
+          "fell": "False",
+          "survival_s": "10.0",
+          "lin_vel_err": "0.2522755707386467",
+          "yaw_rate_err": "0.08984726245722009",
+          "distance_m": "1.6683416366577148",
+          "mean_height_m": "-0.04412263932300041",
+          "mean_tilt_rad": "0.03450974309205429",
+          "pushes_applied": "0",
+          "pushes_survived": "0",
+          "terrain_difficulty": "0.0"
+        },
+        {
+          "label": "dr-default-s0",
+          "command_vx": "0.0",
+          "command_vy": "0.2",
+          "command_wz": "0.0",
+          "seed": "1",
+          "fell": "False",
+          "survival_s": "10.0",
+          "lin_vel_err": "0.25370554501811665",
+          "yaw_rate_err": "0.10285898116456034",
+          "distance_m": "1.6461302042007446",
+          "mean_height_m": "-0.04405502796772293",
+          "mean_tilt_rad": "0.03466160161464806",
+          "pushes_applied": "0",
+          "pushes_survived": "0",
+          "terrain_difficulty": "0.0"
+        },
+        {
+          "label": "dr-default-s0",
+          "command_vx": "0.0",
+          "command_vy": "0.2",
+          "command_wz": "0.0",
+          "seed": "2",
+          "fell": "False",
+          "survival_s": "10.0",
+          "lin_vel_err": "0.24655307579992547",
+          "yaw_rate_err": "0.09759432115721413",
+          "distance_m": "1.6140456199645996",
+          "mean_height_m": "-0.04414844631796617",
+          "mean_tilt_rad": "0.034235144834463896",
+          "pushes_applied": "0",
+          "pushes_survived": "0",
+          "terrain_difficulty": "0.0"
+        },
+        {
+          "label": "dr-default-s0",
+          "command_vx": "0.0",
+          "command_vy": "0.2",
+          "command_wz": "0.0",
+          "seed": "3",
+          "fell": "False",
+          "survival_s": "10.0",
+          "lin_vel_err": "0.2454747029228343",
+          "yaw_rate_err": "0.09987289645010605",
+          "distance_m": "1.6344391107559204",
+          "mean_height_m": "-0.04420865445885876",
+          "mean_tilt_rad": "0.03437159132247851",
+          "pushes_applied": "0",
+          "pushes_survived": "0",
+          "terrain_difficulty": "0.0"
+        },
+        {
+          "label": "dr-default-s0",
+          "command_vx": "0.0",
+          "command_vy": "0.2",
+          "command_wz": "0.0",
+          "seed": "4",
+          "fell": "False",
+          "survival_s": "10.0",
+          "lin_vel_err": "0.24852335564378236",
+          "yaw_rate_err": "0.09432262837932083",
+          "distance_m": "1.6541728973388672",
+          "mean_height_m": "-0.04410943444081064",
+          "mean_tilt_rad": "0.034552936851218",
+          "pushes_applied": "0",
+          "pushes_survived": "0",
+          "terrain_difficulty": "0.0"
+        }
+      ],
+      "falls": 0,
+      "episodes": 5
+    },
+    {
+      "policy": "dr-off-s0",
+      "source_clip": {
+        "path": "results/video/dr-off-s0__vx+0.0_vy+0.2_wz+0.0__FELL.mp4",
+        "bytes": 155424,
+        "sha256": "9516093f357f4e9827843f59275b99e070b917a91917f446ab2431f2022b25b3"
+      },
+      "csv": {
+        "path": "results/raw/dr-off-s0.csv",
+        "bytes": 4488,
+        "sha256": "e2ab94a119bf24d1b375c3d6cdd76a76096ff34d18245515ba6a1eb631491a3d"
+      },
+      "matched_strafe_rows": [
+        {
+          "label": "dr-off-s0",
+          "command_vx": "0.0",
+          "command_vy": "0.2",
+          "command_wz": "0.0",
+          "seed": "0",
+          "fell": "True",
+          "survival_s": "2.16",
+          "lin_vel_err": "0.31494913314437045",
+          "yaw_rate_err": "0.1336976658103281",
+          "distance_m": "0.07134034484624863",
+          "mean_height_m": "-0.023802972491973634",
+          "mean_tilt_rad": "0.29007744597496105",
+          "pushes_applied": "0",
+          "pushes_survived": "0",
+          "terrain_difficulty": "0.0"
+        },
+        {
+          "label": "dr-off-s0",
+          "command_vx": "0.0",
+          "command_vy": "0.2",
+          "command_wz": "0.0",
+          "seed": "1",
+          "fell": "False",
+          "survival_s": "10.0",
+          "lin_vel_err": "0.32918004317416083",
+          "yaw_rate_err": "0.08138264846703451",
+          "distance_m": "0.4547995328903198",
+          "mean_height_m": "-0.04065686421359751",
+          "mean_tilt_rad": "0.10707737393948193",
+          "pushes_applied": "0",
+          "pushes_survived": "0",
+          "terrain_difficulty": "0.0"
+        },
+        {
+          "label": "dr-off-s0",
+          "command_vx": "0.0",
+          "command_vy": "0.2",
+          "command_wz": "0.0",
+          "seed": "2",
+          "fell": "False",
+          "survival_s": "10.0",
+          "lin_vel_err": "0.33630416870117186",
+          "yaw_rate_err": "0.08429371918475631",
+          "distance_m": "0.4356526732444763",
+          "mean_height_m": "-0.040816003668009415",
+          "mean_tilt_rad": "0.10869113490751094",
+          "pushes_applied": "0",
+          "pushes_survived": "0",
+          "terrain_difficulty": "0.0"
+        },
+        {
+          "label": "dr-off-s0",
+          "command_vx": "0.0",
+          "command_vy": "0.2",
+          "command_wz": "0.0",
+          "seed": "3",
+          "fell": "True",
+          "survival_s": "2.88",
+          "lin_vel_err": "0.3191151905091519",
+          "yaw_rate_err": "0.08668264933673546",
+          "distance_m": "0.0975620448589325",
+          "mean_height_m": "-0.03812780423297499",
+          "mean_tilt_rad": "0.17809859946124768",
+          "pushes_applied": "0",
+          "pushes_survived": "0",
+          "terrain_difficulty": "0.0"
+        },
+        {
+          "label": "dr-off-s0",
+          "command_vx": "0.0",
+          "command_vy": "0.2",
+          "command_wz": "0.0",
+          "seed": "4",
+          "fell": "True",
+          "survival_s": "3.0",
+          "lin_vel_err": "0.30829048410058024",
+          "yaw_rate_err": "0.08878102405142271",
+          "distance_m": "0.12763242423534393",
+          "mean_height_m": "-0.038089221682348365",
+          "mean_tilt_rad": "0.1731280748217457",
+          "pushes_applied": "0",
+          "pushes_survived": "0",
+          "terrain_difficulty": "0.0"
+        }
+      ],
+      "falls": 3,
+      "episodes": 5
+    }
+  ],
+  "command": {
+    "vx_m_s": 0.0,
+    "vy_m_s": 0.2,
+    "wz_rad_s": 0.0
+  },
+  "scope": "Illustrative 12-DoF learned-policy MuJoCo strafe on flat ground; one filmed rollout per policy. CSV rows are the five matching evaluation seeds, not five filmed trials. The shorter failure panel holds its final frame.",
+  "interrupted_training_seed": {
+    "policy": "dr-default-s1",
+    "job": "20935266_4",
+    "last_logged_iteration": 5494,
+    "logged_iterations": 5495,
+    "scheduled_iterations": 6000,
+    "log_filename": "dr-ladder-20935266_4.out",
+    "log_sha256": "39b2d6ebd703d0387d482ffbb9c8a634d1f3aea40b700dbd96c763e6baf8927d",
+    "note": "One policy in the historical three-seed table stopped early; the shown clip uses seed 0, not this interrupted seed."
+  },
+  "limits": "Hashes identify the surviving source MP4s selected by the committed assembly script. The GIF was not regenerated, and historical renderer/encoder determinism was not tested."
+}

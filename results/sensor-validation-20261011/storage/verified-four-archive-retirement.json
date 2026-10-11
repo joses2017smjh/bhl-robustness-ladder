@@ -1,0 +1,14 @@
+{
+  "status": "COMPLETE",
+  "completed_utc": "2026-10-11T10:46:06.717648+00:00",
+  "retired_archives": 4,
+  "logical_bytes_retired": 1034559391,
+  "allocated_bytes_retired": 1034575872,
+  "protected_direct_inputs_unchanged": true,
+  "df_before": "Filesystem                                                                                1B-blocks          Used   Available Use% Mounted on\n10.192.45.240@o2ib,10.192.45.241@o2ib:10.192.45.242@o2ib,10.192.45.243@o2ib:/exascale 1649267441664 1637615935488 11651506176 100% /nfs/hpc/share\nisi-coe1-depot-nfs.engr.oregonstate.edu:/coe/stak_users                                 26843545600   17752391680  9091153920  67% /nfs/stak/users\n",
+  "df_after": "Filesystem                                                                                1B-blocks          Used   Available Use% Mounted on\n10.192.45.240@o2ib,10.192.45.241@o2ib:10.192.45.242@o2ib,10.192.45.243@o2ib:/exascale 1649267441664 1636781346816 12486094848 100% /nfs/hpc/share\nisi-coe1-depot-nfs.engr.oregonstate.edu:/coe/stak_users                                 26843545600   17752915968  9090629632  67% /nfs/stak/users\n",
+  "durable_receipt": "/nfs/hpc/share/sanchej7/home-overflow/2026-10-11/migration-receipts/four-archive-remote-retirement-20261011/action-receipt.json",
+  "durable_receipt_sha256": "e4d934f883846d72f14dda3f7e916ca2d5535b70d3f1689b8ed7590160dbebed",
+  "verification": "Exactly four immutable archives: full member/provenance audit, original source or completed-build pins, unchanged local SHA/stat, active dependency audit, unique publication, fresh independent GitHub download SHA256, atomic duplicate retirement. Existing license/source material retained; LIO notices bound to original build remain locally and in GitHub.",
+  "previous_audit_stops": "Preserved original checker stop (expected protocol metadata) and resolved upstream configuration/test-vector findings; no original data modified during audit."
+}

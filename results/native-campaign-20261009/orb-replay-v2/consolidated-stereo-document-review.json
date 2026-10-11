@@ -1,0 +1,94 @@
+{
+  "schema": "bhl-native-stereo-document-review-v1",
+  "status": "PASS",
+  "created_utc": "2026-10-09T22:49:35.058682+00:00",
+  "reviewed_git_commit": "6458c5eedd15930f172b7f2d0f9630eb50ff7138",
+  "reviewer": "native_orb_runtime AI agent",
+  "reviewer_role": "AI agent code/artifact review by the native integration implementation author; evidence reconciliation only, not human peer review, an external/blinded review or independent estimator reproduction",
+  "scope": "Read-only reconciliation of consolidated native stereo replay section, original raw frame states/logs, collected metrics, plot script/receipt and rendered figure. No estimator rerun, new experiment, tuning or scientific source edits. Other campaign sections are outside this signoff.",
+  "checks": {
+    "original_state_counts_and_null_poses": true,
+    "original_timestamps_and_450_frame_coverage": true,
+    "post_5_second_tracking_denominator_125_per_scene": true,
+    "native_p95_recomputed_from_original_frame_durations": true,
+    "plot_data_source_and_image_hashes_match_receipt": true,
+    "rendered_plot_visually_checked_failed_errors_explicit": true,
+    "evaluator_only_SE3_alignment_scale_fixed_one": true,
+    "overall_negative_one_of_three_gates": true,
+    "no_matched_accuracy_improvement_claim": true,
+    "no_loop_closure_event_or_long_distance_claim": true,
+    "simulation_and_non_navigation_scope_preserved": true
+  },
+  "scenes": [
+    {
+      "scene": "textured_boxes_native",
+      "frames": 150,
+      "tracked_frames": 0,
+      "native_state_counts": {
+        "1": 150
+      },
+      "post_initialization_denominator": 125,
+      "post_initialization_tracking": 0.0,
+      "first_tracked_time_s": null,
+      "native_compute_p95_ms_recomputed": 45.107452,
+      "observed_native_map_ids": [],
+      "plotted_associated_poses": 0,
+      "gate": "NEGATIVE"
+    },
+    {
+      "scene": "thin_posts_native",
+      "frames": 150,
+      "tracked_frames": 0,
+      "native_state_counts": {
+        "1": 150
+      },
+      "post_initialization_denominator": 125,
+      "post_initialization_tracking": 0.0,
+      "first_tracked_time_s": null,
+      "native_compute_p95_ms_recomputed": 27.01511595,
+      "observed_native_map_ids": [],
+      "plotted_associated_poses": 0,
+      "gate": "NEGATIVE"
+    },
+    {
+      "scene": "ramp_step_native",
+      "frames": 150,
+      "tracked_frames": 122,
+      "native_state_counts": {
+        "1": 28,
+        "2": 122
+      },
+      "post_initialization_denominator": 125,
+      "post_initialization_tracking": 0.976,
+      "first_tracked_time_s": 5.6,
+      "native_compute_p95_ms_recomputed": 48.5956993,
+      "observed_native_map_ids": [
+        0
+      ],
+      "plotted_associated_poses": 122,
+      "gate": "PASS"
+    }
+  ],
+  "minor_wording_note": {
+    "current": "upstream settings-printer null dereference",
+    "suggested": "upstream settings-printer uninitialized camera-pointer dereference",
+    "reason": "Pinned Settings code leaves originalCalib2_ uninitialized; actual signal11/log position do not prove the pointer value was null. No effect on measurements or qualification.",
+    "resolved_in_current_document": true
+  },
+  "sources_sha256": {
+    "docs/NATIVE_CAMPAIGN_RESULTS_2026-10-09.md": "385cbe5ec315a8c919317e1633edbf7539df820f2bf1b7a87bed68f9d7ab2669",
+    "results/native-campaign-20261009/orb-replay-v2/collection/actual-native-replay.receipt.json": "bcd9ffedf1939174697c242e6ecd88d9be329be81b39b6a4f9b007d2c2f97b6d",
+    "results/native-campaign-20261009/orb-replay-v2/collection/report.json": "d3eb43c707ef5eedc690850077757fc4c57bcc9bf01a40736348404d2bf6ba8f",
+    "results/native-campaign-20261009/orb-replay-v2/native-orb-replay-20261009-v2-21739893/completion.json": "b1cf59c03efdb4e3129a0cc657191a977454d8981b5b01c90377bac651ad083d",
+    "results/native-campaign-20261009/orb-replay-v2/scientific-summary.json": "c846d007691f4a540343eaaca153606b10232c72c9405ce51b08e02948c336e7",
+    "scripts/bench/native_slam_plot.py": "fc251c66a40732ea1b269fd2f681b29a1e214bef80347f3ea64eff0da602c379",
+    "results/native-campaign-20261009/orb-replay-v2/native-orb-replay-20261009-v2-21739893/textured_boxes_native/orb/native_frames.jsonl": "3b517bdfe0fd59ae0f7291e7a031673c237e6aa6931fa9fd624de409d76829de",
+    "results/native-campaign-20261009/orb-replay-v2/native-orb-replay-20261009-v2-21739893/textured_boxes_native/orb/process/native-orb.log": "ed6415a78dcbd6a40084987a2e4a84e5efb9f239a09abbcf94c800d71c49c4b5",
+    "results/native-campaign-20261009/orb-replay-v2/native-orb-replay-20261009-v2-21739893/thin_posts_native/orb/native_frames.jsonl": "5abd94a96d7799336698a85e776a2dca09251717aac58b2c77262af20650d93b",
+    "results/native-campaign-20261009/orb-replay-v2/native-orb-replay-20261009-v2-21739893/thin_posts_native/orb/process/native-orb.log": "ed6415a78dcbd6a40084987a2e4a84e5efb9f239a09abbcf94c800d71c49c4b5",
+    "results/native-campaign-20261009/orb-replay-v2/native-orb-replay-20261009-v2-21739893/ramp_step_native/orb/native_frames.jsonl": "405378ddce928bac6ab7a2e901e0f824a40c25ad48f734b5ee651d4bb41dd9db",
+    "results/native-campaign-20261009/orb-replay-v2/native-orb-replay-20261009-v2-21739893/ramp_step_native/orb/process/native-orb.log": "2db8dd93d3c3b04f117acebbdabc85fcef32ecf348380a95d3ec2d39b005a155"
+  },
+  "reviewed_document_snapshot": "results/native-campaign-20261009/orb-replay-v2/reviewed-native-summary-snapshot.md",
+  "reviewed_document_snapshot_sha256": "385cbe5ec315a8c919317e1633edbf7539df820f2bf1b7a87bed68f9d7ab2669"
+}

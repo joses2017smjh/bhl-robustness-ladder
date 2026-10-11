@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4",
+  "identical_wrapper_and_adapters": {
+    "scripts/bench/native_build_campaign.py": true,
+    "scripts/native/orb_headless.cc": true,
+    "scripts/native/orb_runner.cc": true
+  },
+  "build_script_only_change": "Generated CMake adds sysroot/usr/include/x86_64-linux-gnu; exact byte-replacement checked",
+  "native_algorithm_or_camera_threshold_changes": false
+}

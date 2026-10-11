@@ -1,0 +1,22 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=terrain-confirmation-smoke-20261011",
+    "--partition=share,eecs",
+    "--cpus-per-task=4",
+    "--mem=8G",
+    "--time=01:00:00",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v1/terrain-confirmation-smoke-20261011-%j.out",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v1/terrain-confirmation-smoke-20261011-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v1/h34_campaign.sbatch",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v1",
+    "terrain-confirmation-smoke-20261011",
+    "404632c60f0403fd130f735c99440a461d23eff2bee8d12ac8f7421d2dae9400"
+  ],
+  "created_utc": "2026-10-11T09:37:56.315334+00:00"
+}

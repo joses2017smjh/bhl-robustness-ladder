@@ -1,0 +1,188 @@
+{
+  "schema": "bhl-native-sensor-controls-dispatch-v1",
+  "campaign_dir": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v1",
+  "max_concurrency": 1,
+  "reserved_bytes_per_job": 2147483648,
+  "minimum_free_bytes": 8589934592,
+  "poll_seconds": 30,
+  "source_sha256": {
+    "methods_dispatch.py": "87727d6f5bd59c5500519a8c0faab3139ce288f9c9bfc0cd2268b41208442526",
+    "methods_archive.py": "2037a4da6418dec0c3c1e5e0fc7427ff6f736cff15eab6d262a17aa0c092ebe0",
+    "h34_campaign.py": "8264618c648992e6c40f97b36cd73837cf867bffc195ab9c0f065c9c412170a1",
+    "methods_remote_campaign.py": "1d0edea449c15f76d85ca2dd939532aa7072226faa6e70ddb897e76fc012890e",
+    "native_sensor_controls_dispatch.py": "5e3117bb49cbf258b24cc1b8e260615dfd8922233e1229da29a04758b9c7daa4"
+  },
+  "jobs": [
+    {
+      "name": "native-controls-s730000-c00-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730000-c01-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730000-c02-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730000-c03-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730000-c04-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730000-c05-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730000-c06-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730000-c07-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730000-c08-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730000-c09-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730001-c00-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730001-c01-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730001-c02-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730001-c03-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730001-c04-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730001-c05-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730001-c06-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730001-c07-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730001-c08-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-s730001-c09-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    }
+  ],
+  "smoke": {
+    "name": "native-controls-smoke-20261011",
+    "existing_job_id": "21768425",
+    "expected_fields": {
+      "phase": "smoke",
+      "episodes": 14,
+      "execution_gate": true
+    }
+  },
+  "archive_sha256": "cad8dda245725ccd87d9f37a38e783b881e110ef4074c826533199e90bb31c41",
+  "protocol_sha256": "f8e623edfe0d94ae5d7281fdd243889687c4a85dd208e61073d348841e115ad5"
+}

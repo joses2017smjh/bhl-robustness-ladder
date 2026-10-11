@@ -1,0 +1,36 @@
+...................................F...........                          [100%]
+=================================== FAILURES ===================================
+__________ test_new_observer_overlay_preserves_frozen_campaign_bytes ___________
+
+frozen = (PosixPath('/raid/sanchej7/tmp/pytest-of-sanchej7/pytest-32/test_new_observer_overlay_pres0/frozen'), PosixPath('/raid...4_finalize.sbatch': {'bytes': 19, 'sha256': 'd49c53e1cc615d3459a9168363747de41306242f110303e5ebb029ba9536aa78'}}, ...})
+tmp_path = PosixPath('/raid/sanchej7/tmp/pytest-of-sanchej7/pytest-32/test_new_observer_overlay_pres0')
+
+    def test_new_observer_overlay_preserves_frozen_campaign_bytes(frozen, tmp_path):
+        persistent, _, observer, receipt = frozen
+        before = {p.name: finalizer.digest(p) for p in persistent.iterdir() if p.is_file()}
+        scratch = tmp_path / "scratch"
+        scratch.mkdir()
+>       campaign, _, provenance = finalizer.stage(persistent, observer / "observer.tar.gz", receipt["archive_sha256"], scratch)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_h34_finalize.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/bench/h34_finalize.py:113: in stage
+    count = helper.verify_source(campaign)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+scratch = PosixPath('/raid/sanchej7/tmp/pytest-of-sanchej7/pytest-32/test_new_observer_overlay_pres0/scratch/campaign')
+
+    def verify_source(scratch):
+        root = Path(scratch)
+        manifest = json.loads((root / "manifest.json").read_text())
+        actual = {str(x.relative_to(root)) for subtree in ("source", "inputs") for x in (root / subtree).rglob("*") if x.is_file()}
+        if actual != set(manifest):
+>           raise ValueError("frozen source file inventory changed")
+E           ValueError: frozen source file inventory changed
+
+/raid/sanchej7/tmp/pytest-of-sanchej7/pytest-32/test_new_observer_overlay_pres0/scratch/campaign/source/scripts/bench/h34_campaign.py:278: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_h34_finalize.py::test_new_observer_overlay_preserves_frozen_campaign_bytes
+1 failed, 46 passed in 3.11s

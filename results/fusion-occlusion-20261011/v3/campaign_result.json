@@ -1,0 +1,80 @@
+{
+  "acceptance_meaning": "execution and independent collection complete; improvement requires full accuracy/coverage/recall tradeoff analysis",
+  "completed_cells": [
+    "smoke-panel_background-s740000-clear",
+    "smoke-panel_background-s740000-partial",
+    "smoke-panel_background-s740000-heavy",
+    "smoke-staggered_posts-s740000-clear",
+    "smoke-staggered_posts-s740000-partial",
+    "smoke-staggered_posts-s740000-heavy",
+    "dev-panel_background-s741000-clear",
+    "dev-panel_background-s741000-partial",
+    "dev-panel_background-s741000-heavy",
+    "dev-panel_background-s741001-clear",
+    "dev-panel_background-s741001-partial",
+    "dev-panel_background-s741001-heavy",
+    "dev-staggered_posts-s741000-clear",
+    "dev-staggered_posts-s741000-partial",
+    "dev-staggered_posts-s741000-heavy",
+    "dev-staggered_posts-s741001-clear",
+    "dev-staggered_posts-s741001-partial",
+    "dev-staggered_posts-s741001-heavy",
+    "test-panel_background-s742000-clear",
+    "test-panel_background-s742000-partial",
+    "test-panel_background-s742000-heavy",
+    "test-panel_background-s742001-clear",
+    "test-panel_background-s742001-partial",
+    "test-panel_background-s742001-heavy",
+    "test-staggered_posts-s742000-clear",
+    "test-staggered_posts-s742000-partial",
+    "test-staggered_posts-s742000-heavy",
+    "test-staggered_posts-s742001-clear",
+    "test-staggered_posts-s742001-partial",
+    "test-staggered_posts-s742001-heavy"
+  ],
+  "completed_phases": [
+    {
+      "collection": "smoke-collection.json",
+      "phase": "smoke",
+      "readiness_gate": true,
+      "sha256": "71166d5cc3e7f8d0dbb71a705c658b32505151280a0a2e80f9c0bda3f05ae898",
+      "status": "PASS",
+      "verified_cells": 6
+    },
+    {
+      "collection": "dev-collection.json",
+      "phase": "dev",
+      "readiness_gate": true,
+      "sha256": "1b11aaef622d83590ef135d9aa3790c76192bc128eb10fe14f5440b59b236c34",
+      "status": "PASS",
+      "verified_cells": 12
+    },
+    {
+      "collection": "test-collection.json",
+      "phase": "test",
+      "readiness_gate": true,
+      "sha256": "335304e72ebad994ec442c51072ca97c3ca13d9b62a96a47d07dd1f0d56cf735",
+      "status": "PASS",
+      "verified_cells": 12
+    }
+  ],
+  "ground_truth_inputs": [],
+  "onnx_runtime": {
+    "bytes": 283204403,
+    "expanded_bytes": 453222240,
+    "package": "onnxruntime-gpu==1.22.0",
+    "private_path": "/tmp/bhl-h34-fusion-occlusion-gated-20261011-21768578-mww352zi/work/ort",
+    "sha256": "d30c1512f22b1f01bacb4f177d49cbefd23e0f4bef56066f1282992d133e6ff8"
+  },
+  "outer_protocol_sha256": "1a3b72f0f99536719c120fcc32aa287920e897b909e2474e97b5b0143dd8f8fd",
+  "phase_order": [
+    "smoke",
+    "dev",
+    "test"
+  ],
+  "schema": "bhl-fusion-occlusion-gated-campaign-v1",
+  "scientific_protocol_sha256": "faed4d21ffe608d359bebbb8abcf16d4b5b6b0d121d18100d33b26243af167df",
+  "scientific_status": "COMPLETE_PREDECLARED_SIMULATION_COMPARISON",
+  "scored_cells_started": 24,
+  "status": "PASS"
+}

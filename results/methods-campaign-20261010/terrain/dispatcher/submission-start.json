@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=terrain-methods-dispatch-20261010",
+    "--partition=share,eecs",
+    "--cpus-per-task=1",
+    "--mem=1G",
+    "--time=24:00:00",
+    "--no-requeue",
+    "--export=NONE",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-dispatch-v1/dispatcher-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-dispatch-v1/dispatcher-%j.out",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-dispatch-v1/dispatch.sbatch"
+  ],
+  "intake_sha256": "fa5c28204399dccd0eb3b45cf3e2ecdc190cd1926f295eef06cdd39ce1f6bddc",
+  "qa": "18/18 PASS, scheduler21757387"
+}

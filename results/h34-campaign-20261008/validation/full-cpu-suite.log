@@ -1,0 +1,55 @@
+........................................................................ [  3%]
+........................................................................ [  6%]
+........................................................................ [  9%]
+........................................................................ [ 12%]
+........................................................................ [ 16%]
+........................................................................ [ 19%]
+........................................................................ [ 22%]
+..................................sss................................... [ 25%]
+.....................................................................s.. [ 29%]
+....s...............s................................................... [ 32%]
+........................................................................ [ 35%]
+....s................................................................... [ 38%]
+....................ss.................................................. [ 42%]
+.....ssssssssss............................................ss..sss.s.... [ 45%]
+........................................................................ [ 48%]
+.....................................ssss..ss........................... [ 51%]
+......................ssssssssss........................................ [ 54%]
+ssss......................s........................s.................... [ 58%]
+...........s.........ss...s............................................. [ 61%]
+.........s...................................................s.......... [ 64%]
+.............................................s.......................... [ 67%]
+........................................................................ [ 71%]
+.................................................ssssssssssss........... [ 74%]
+.................s...................................................... [ 77%]
+.................................................................. [ 80%]
+........................................................................ [ 83%]
+......................................................ssssssssss........ [ 87%]
+....................................s................................... [ 90%]
+..........................ss............................................ [ 93%]
+.......s................................................................ [ 96%]
+..........................................................s............. [ 99%]
+.                                                                        [100%]
+=============================== warnings summary ===============================
+tests/test_history_latency.py::test_dynamic_batch_onnx_uses_declared_input_name
+tests/test_navgym_v5.py::test_v5_onnx_inputs_and_build_obs_keyed_by_them
+tests/test_platecross.py::test_check_export_matches_only_the_final_checkpoint
+  /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/torch/onnx/utils.py:185: DeprecationWarning: The feature will be removed. Please remove usage of this function
+    setup_onnx_logging(verbose) as log_ctx,
+
+tests/test_quat_order_unpack.py::test_misreading_xyzw_as_wxyz_is_the_spawn_bug
+  /tmp/bhl-h34-20261008/tests/test_quat_order_unpack.py:29: DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+    assert abs(float(np.arccos(np.clip(up_z, -1, 1))) - math.pi/2) < 1e-6
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2145 passed, 82 skipped, 4 warnings, 6 subtests passed in 784.51s (0:13:04)
+WARNING: Nan, Inf or huge value in QVEL at DOF 2. The simulation is unstable. Time = 0.2000.
+
+WARNING: Nan, Inf or huge value in QVEL at DOF 2. The simulation is unstable. Time = 0.2000.
+
+WARNING: Nan, Inf or huge value in QPOS at DOF 2. The simulation is unstable. Time = 0.2000.
+
+WARNING: Nan, Inf or huge value in QVEL at DOF 2. The simulation is unstable. Time = 0.2000.
+
+WARNING: Nan, Inf or huge value in QVEL at DOF 56. The simulation is unstable. Time = 0.4400.
+

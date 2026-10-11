@@ -1,0 +1,24 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=perceptive-smoke-20261010",
+    "--partition=gpu,dgxh,ampere",
+    "--cpus-per-task=8",
+    "--mem=64G",
+    "--time=00:45:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v1/perceptive-smoke-20261010-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v1/perceptive-smoke-20261010-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--gres=gpu:1",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v1/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/perceptive-v1",
+    "perceptive-smoke-20261010",
+    "1fd8ceb1997950147d167216dbac42b57663f4279288d6728ad7846a31970bca"
+  ],
+  "created_utc": "2026-10-10T20:38:06.710570+00:00"
+}

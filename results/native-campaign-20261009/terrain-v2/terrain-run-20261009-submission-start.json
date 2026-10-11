@@ -1,0 +1,22 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=terrain-run-20261009",
+    "--partition=share,eecs",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=05:00:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/terrain-v2/terrain-run-20261009-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/terrain-v2/terrain-run-20261009-%j.out",
+    "--export=NONE",
+    "--dependency=afterok:21740943",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/terrain-v2/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/terrain-v2",
+    "terrain-run-20261009",
+    "31075b009ccf5ca8e0854146972ecdee01031217a89ae8f718bc3038fe848daa"
+  ],
+  "created_utc": "2026-10-09T21:31:12.807326+00:00"
+}

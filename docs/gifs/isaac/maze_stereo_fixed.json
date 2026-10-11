@@ -1,0 +1,182 @@
+{
+  "schema": "bhl-media-provenance/v1",
+  "output": {
+    "path": "docs/gifs/isaac/maze_stereo_fixed.gif",
+    "bytes": 9455482,
+    "sha256": "9d9828f2fa024b3d591935f8562550b9f3350f918980b636a021b88f1482b64b",
+    "width": 560,
+    "height": 390,
+    "frames": 100,
+    "duration_ms": 8000
+  },
+  "recording_job": 21329137,
+  "training_job": "21317023_2",
+  "training_log": {
+    "filename": "maze-ppo-21317023_2.out",
+    "sha256": "8612c2bf7652fd7c3e4cafdd304a01a77064087908fe648aaf39a939df53941d"
+  },
+  "recording_run": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-13_22-58-29_mazefix-stereo-s0",
+  "recording_checkpoint": {
+    "path": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-13_22-58-29_mazefix-stereo-s0/model_5999.pt",
+    "bytes": 4664309,
+    "sha256": "a91c3a80e8561e3946df0ace3d7c189524035423d5dee7c061e67664433ffcb4"
+  },
+  "capture_log": {
+    "filename": "maze-fixclip-21329137.out",
+    "sha256": "3545490a541c2e501e97bbf4e99d3d5764f96b25faefaac5fe3087af311d20b5"
+  },
+  "events": [
+    {
+      "path": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-13_22-58-29_mazefix-stereo-s0/events.out.tfevents.1789365570.cn-gpu7.hpc.engr.oregonstate.edu.3266257.0",
+      "bytes": 12871552,
+      "sha256": "34046318ad2034cc75b93b4affad73cd15dd954632b3ee6f6dfca971ff913288",
+      "family": "mazefix-stereo",
+      "seed": 0,
+      "scalar_tag": "Curriculum/terrain_levels",
+      "samples": 6000,
+      "last_step": 5999,
+      "last_50_mean": 0.8769637250900268
+    },
+    {
+      "path": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-13_23-04-03_mazefix-stereo-s1/events.out.tfevents.1789365881.dgxh-1.hpc.engr.oregonstate.edu.2159238.0",
+      "bytes": 12867758,
+      "sha256": "aae9e72fe6bf03023922ac1826d62d0bee8e6ed744090e5b768218fe26b374d3",
+      "family": "mazefix-stereo",
+      "seed": 1,
+      "scalar_tag": "Curriculum/terrain_levels",
+      "samples": 6000,
+      "last_step": 5999,
+      "last_50_mean": 0.5604549384117127
+    },
+    {
+      "path": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-13_23-01-29_mazefix-stereo-s2/events.out.tfevents.1789365729.dgxh-1.hpc.engr.oregonstate.edu.2148636.0",
+      "bytes": 12867870,
+      "sha256": "92e4fbd17b952d25401aec2bac90351e66fa4610e0a3b7731f44217288f96b05",
+      "family": "mazefix-stereo",
+      "seed": 2,
+      "scalar_tag": "Curriculum/terrain_levels",
+      "samples": 6000,
+      "last_step": 5999,
+      "last_50_mean": 0.8862280476093293
+    },
+    {
+      "path": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-08_19-19-18_maze-stereo-s0/events.out.tfevents.1788920426.cn-gpu6.hpc.engr.oregonstate.edu.357309.0",
+      "bytes": 12871576,
+      "sha256": "aaaed6c14e2b95ae14378f05a3472c27c0cc7c09f4b6304fb00074ae9aee9a60",
+      "family": "maze-stereo",
+      "seed": 0,
+      "scalar_tag": "Curriculum/terrain_levels",
+      "samples": 6000,
+      "last_step": 5999,
+      "last_50_mean": 0.0012223307345993817
+    },
+    {
+      "path": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-11_11-06-53_maze-stereo-s1/events.out.tfevents.1789150073.cn-gpu7.hpc.engr.oregonstate.edu.870000.0",
+      "bytes": 12871144,
+      "sha256": "385114e95b1713c9968c619376e83681eb8ae522251f34aeeb977672085a3234",
+      "family": "maze-stereo",
+      "seed": 1,
+      "scalar_tag": "Curriculum/terrain_levels",
+      "samples": 6000,
+      "last_step": 5999,
+      "last_50_mean": 0.0
+    },
+    {
+      "path": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-11_09-58-31_maze-stereo-s2/events.out.tfevents.1789145962.cn-r-5.hpc.engr.oregonstate.edu.1698413.0",
+      "bytes": 12868940,
+      "sha256": "a68d6f88791ecf8784d3f3f53d59c11a245551e999adfe3ad766f69352416674",
+      "family": "maze-stereo",
+      "seed": 2,
+      "scalar_tag": "Curriculum/terrain_levels",
+      "samples": 6000,
+      "last_step": 5999,
+      "last_50_mean": 0.06060465633869171
+    },
+    {
+      "path": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-08_18-20-27_maze-blind-s0/events.out.tfevents.1788916893.cn-gpu7.hpc.engr.oregonstate.edu.526670.0",
+      "bytes": 12867100,
+      "sha256": "dd7da50e7cc9a3b9f3c6a4e60f13c2db569b7a162c1de34f0eaafebe77cce942",
+      "family": "maze-blind",
+      "seed": 0,
+      "scalar_tag": "Curriculum/terrain_levels",
+      "samples": 6000,
+      "last_step": 5999,
+      "last_50_mean": 0.5445475518703461
+    },
+    {
+      "path": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-11_05-27-29_maze-blind-s1/events.out.tfevents.1789129720.cn-gpu6.hpc.engr.oregonstate.edu.1745840.0",
+      "bytes": 12868928,
+      "sha256": "5710b6aa91e0f079afdfb32c18e6d653b814f88d88a2dd6ad205e246f7acc922",
+      "family": "maze-blind",
+      "seed": 1,
+      "scalar_tag": "Curriculum/terrain_levels",
+      "samples": 6000,
+      "last_step": 5999,
+      "last_50_mean": 0.6337260138988495
+    },
+    {
+      "path": "external/Berkeley-Humanoid-Lite/logs/rsl_rl/biped/2026-09-11_05-34-32_maze-blind-s2/events.out.tfevents.1789130123.cn-r-5.hpc.engr.oregonstate.edu.1689064.0",
+      "bytes": 12865968,
+      "sha256": "6ee4622467b5b370ef03dc710ee4f715fa6fcbfec9fead328fb63c026f92b44a",
+      "family": "maze-blind",
+      "seed": 2,
+      "scalar_tag": "Curriculum/terrain_levels",
+      "samples": 6000,
+      "last_step": 5999,
+      "last_50_mean": 1.0368221449851989
+    }
+  ],
+  "last_50_summary": {
+    "mazefix-stereo": {
+      "per_training_seed": [
+        0.8769637250900268,
+        0.5604549384117127,
+        0.8862280476093293
+      ],
+      "three_seed_mean": 0.7745489037036896
+    },
+    "maze-stereo": {
+      "per_training_seed": [
+        0.0012223307345993817,
+        0.0,
+        0.06060465633869171
+      ],
+      "three_seed_mean": 0.020608995691097032
+    },
+    "maze-blind": {
+      "per_training_seed": [
+        0.5445475518703461,
+        0.6337260138988495,
+        1.0368221449851989
+      ],
+      "three_seed_mean": 0.7383652369181316
+    }
+  },
+  "source_frames": {
+    "directory": "results/clips/frames/maze_stereo_fixed",
+    "counts": {
+      "frame": 200,
+      "stereo_raw": 200,
+      "stereo_l": 200
+    },
+    "tree_sha256": "40f559397bda5bc4d80362f0e67fbe9092a1a81511956a52b1a4f71b834549fc",
+    "manifest": "docs/gifs/isaac/maze_stereo_fixed.inputs.json",
+    "manifest_sha256": "5c34f02967a683d0616366499250fba0ffea211a191fdbce820ea97036c8aa05"
+  },
+  "assembly": {
+    "script": "scripts/gif_maze_stereo_fixed.py",
+    "script_sha256": "a973fdc70be8089efa9841e5b025c9d45fd110c2958617fd475924e37434d35e",
+    "every": 2,
+    "width": 560,
+    "duration_ms_per_frame": 80
+  },
+  "title": "Corrected stereo seed 0: 0.877 (before: 0.001)",
+  "previous_output": {
+    "git_object": "f5fdc84510810b680939182fe9e23c60c01e5889:docs/gifs/isaac/maze_stereo_fixed.gif",
+    "bytes": 9514618,
+    "sha256": "d4afc9d6ee57f3bdaf1cd00841b6887aabb5bbd1252d92da729cbed9393fa12b"
+  },
+  "scope": "Recorded Isaac rollout and paired ray-depth views; terrain level is a training metric, not a success rate. Corrected versus pre-fix values compare seed 0 with seed 0; three-seed means are separate.",
+  "reassembly": "2026-10-08: title corrected using the existing frozen 200-frame recording; no Isaac episode rerun. The old title mixed corrected seed 0 (0.88) with the pre-fix three-seed mean (0.02).",
+  "limits": "Original MP4/frame/event assets live in the research workspace; hashes identify surviving bytes. No renderer determinism or new policy result is claimed."
+}

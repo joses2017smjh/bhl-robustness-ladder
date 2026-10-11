@@ -1,0 +1,30 @@
+{
+  "schema": "bhl-archived-raw-restoration-v1",
+  "records": [
+    {
+      "source": "/nfs/hpc/share/sanchej7/home-overflow/2026-10-11/humanoid-native-20261009/stereo-nav-v3/nav-stereo-development-20261009-v3-21744334/outputs.tar.gz",
+      "sha256": "67e9be06140d443aa87bd38996b1c2947df753de84b5f992e41e548d604dbaca",
+      "bytes": 597093723,
+      "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/native-campaign-evidence-20261009/stereo-navigation-21744334-raw.tar.gz",
+      "status": "VERIFIED_LOCAL_DUPLICATE_RETIRED",
+      "completed_utc": "2026-10-11T10:24:33.396420+00:00"
+    },
+    {
+      "source": "/nfs/hpc/share/sanchej7/home-overflow/2026-10-11/humanoid-native-20261009/capture-v2/native-capture-capture-20261009-v2-21740516/outputs.tar.gz",
+      "sha256": "ec15004ac7be4b58d33f78d6a4b5924d1d4a72b00c9332473d5617818ba08ca1",
+      "bytes": 319616699,
+      "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/native-sensor-replay-20261009/outputs.tar.gz",
+      "status": "VERIFIED_LOCAL_DUPLICATE_RETIRED",
+      "completed_utc": "2026-10-11T10:24:35.085715+00:00"
+    },
+    {
+      "source": "/nfs/hpc/share/sanchej7/home-overflow/2026-10-11/humanoid-native-20261009/navigation-lio-v2/nav-lio-development-20261009-v2-21741509/outputs.tar.gz",
+      "sha256": "98c8e35a146fa98046a9b1973ae388a4939431db2a2ae7fb45b5815a3c279633",
+      "bytes": 91609334,
+      "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/native-campaign-evidence-20261009/native-lio-navigation-development-21741509.tar.gz",
+      "status": "VERIFIED_LOCAL_DUPLICATE_RETIRED",
+      "completed_utc": "2026-10-11T10:24:35.584315+00:00"
+    }
+  ],
+  "instructions": "For a historical rerun, download its canonical URL into a temporary file; verify bytes and SHA256 before restoring the absent source path. All adjacent result, completion, log, source and runtime files remain. The local per-path outputs.tar.gz.remote.json marker contains the same provenance."
+}

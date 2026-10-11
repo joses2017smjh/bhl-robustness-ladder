@@ -1,0 +1,51 @@
+{
+  "schema": "bhl-tumvi-test-receipt-v1",
+  "allocation": "21767958",
+  "cpu": 2,
+  "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+  "environment": {
+    "TMPDIR": "/tmp",
+    "PYTHONPATH": "/tmp/bhl-storage-results-20261011/src"
+  },
+  "runs": [
+    {
+      "phase": "Adapter before native replay",
+      "modules": [
+        "tests/test_tumvi_native_validation.py"
+      ],
+      "passed": 6,
+      "elapsed_s": 0.73
+    },
+    {
+      "phase": "Initial separate evaluator before outcome inspection",
+      "modules": [
+        "tests/test_tumvi_native_validation.py",
+        "tests/test_tumvi_native_evaluate.py"
+      ],
+      "passed": 8,
+      "elapsed_s": 0.41
+    },
+    {
+      "phase": "Corrected evaluator with active-map-reset regression",
+      "modules": [
+        "tests/test_tumvi_native_validation.py",
+        "tests/test_tumvi_native_evaluate.py"
+      ],
+      "passed": 10,
+      "elapsed_s": 0.42
+    },
+    {
+      "phase": "Final current code, including provenance wording clarification",
+      "modules": [
+        "tests/test_tumvi_native_validation.py",
+        "tests/test_tumvi_native_evaluate.py"
+      ],
+      "passed": 10,
+      "elapsed_s": 0.41
+    }
+  ],
+  "test_module_sha256": {
+    "tests/test_tumvi_native_validation.py": "c4a0f4061ad7a5948d967d9a23564890ef840c3751b724563927d66fbd86595c",
+    "tests/test_tumvi_native_evaluate.py": "f711399c903b8be58357512c28d41511d233fe9efb5ada3433df821b6e6e7121"
+  }
+}

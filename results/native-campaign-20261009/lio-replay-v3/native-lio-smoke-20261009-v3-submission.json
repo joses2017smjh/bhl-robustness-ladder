@@ -1,0 +1,36 @@
+{
+  "archive_sha256": "1704e2781ab99ab1eca64523f4d5bc97ceeb5de25eed5a8fc8b49e4660a59a18",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=native-lio-smoke-20261009-v3",
+    "--partition=preempt",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--time=00:20:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3/native-lio-smoke-20261009-v3-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3/native-lio-smoke-20261009-v3-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-native-20261009/lio-replay-v3",
+    "native-lio-smoke-20261009-v3",
+    "1704e2781ab99ab1eca64523f4d5bc97ceeb5de25eed5a8fc8b49e4660a59a18"
+  ],
+  "job_id": "21742453",
+  "resources": {
+    "cpus": 2,
+    "gpus": 0,
+    "memory_gb": 16,
+    "partition": "preempt",
+    "requeue": false,
+    "time_limit": "00:20:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21742453\n",
+  "submitted_utc": "2026-10-09T21:42:28.957875+00:00"
+}

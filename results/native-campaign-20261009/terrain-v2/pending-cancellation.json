@@ -1,0 +1,22 @@
+{
+  "before": {
+    "21740943": "PENDING",
+    "21740946": "PENDING"
+  },
+  "command": [
+    "scancel",
+    "--state=PENDING",
+    "21740943",
+    "21740946"
+  ],
+  "created_utc": "2026-10-09T21:43:18.527992+00:00",
+  "job_ids": [
+    "21740943",
+    "21740946"
+  ],
+  "reason": "root-authorized resource-only v3 moves exact unchanged source/cohort to earlier preempt partition and disables requeue",
+  "returncode": 0,
+  "scientific_episodes_started": 0,
+  "stderr": "",
+  "stdout": ""
+}

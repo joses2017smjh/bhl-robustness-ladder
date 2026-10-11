@@ -1,0 +1,25 @@
+{
+  "schema": "bhl-native-replay-figure-v1",
+  "raw_archive_sha256": "ba1c6d497f54989a798082f9eb9b3f9e2c4d31e415c98f53f8c7c3ddc1c888b2",
+  "capture_archive_sha256": "ec15004ac7be4b58d33f78d6a4b5924d1d4a72b00c9332473d5617818ba08ca1",
+  "collection_report_sha256": "50a7a8b1fcad9712d4a79346553e6d5ce70cf804241cb306ace4468bd6f0ee43",
+  "plot_script_sha256": "86d6be2500d3331cb3088cbab4d3c05505408f2867054eab6253e1e1076457e9",
+  "image_sha256": "7b96d903eb9b99d174cd837dbf4b895c31dcccab259dc884b89c242ff1cf03b6",
+  "counts": [
+    {
+      "sequence": "textured_boxes_native",
+      "plotted_associated_poses": 146
+    },
+    {
+      "sequence": "thin_posts_native",
+      "plotted_associated_poses": 146
+    },
+    {
+      "sequence": "ramp_step_native",
+      "plotted_associated_poses": 146
+    }
+  ],
+  "alignment": "same independent evaluator-only rigid transforms as reported metrics; scale exactly one",
+  "truth_interpolation": "linear body translation at bracketed native timestamps; final uncovered tail excluded by metric association",
+  "lost_states": "retained as gray intervals; never plotted as identity estimates"
+}

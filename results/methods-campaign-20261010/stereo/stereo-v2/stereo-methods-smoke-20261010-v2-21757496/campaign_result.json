@@ -1,0 +1,82 @@
+{
+  "arms": {
+    "permanent_stop": {
+      "contacts": 0,
+      "episodes": 2,
+      "falls": 0,
+      "goals": 0,
+      "verified_recoveries": 0
+    },
+    "verified_lio_recovery": {
+      "contacts": 0,
+      "episodes": 2,
+      "falls": 0,
+      "goals": 0,
+      "verified_recoveries": 1
+    }
+  },
+  "baseline_lio_mode": "shadow_only_computation_charged",
+  "confirmation_required": true,
+  "development_pair_outcomes": [
+    {
+      "arm": "permanent_stop",
+      "case": "straight",
+      "clean_goal": false,
+      "contacts": false,
+      "falls": false,
+      "seed": 470000,
+      "verified_recoveries": 0
+    },
+    {
+      "arm": "verified_lio_recovery",
+      "case": "straight",
+      "clean_goal": false,
+      "contacts": false,
+      "falls": false,
+      "seed": 470000,
+      "verified_recoveries": 1
+    },
+    {
+      "arm": "permanent_stop",
+      "case": "straight",
+      "clean_goal": false,
+      "contacts": false,
+      "falls": false,
+      "seed": 470001,
+      "verified_recoveries": 0
+    },
+    {
+      "arm": "verified_lio_recovery",
+      "case": "straight",
+      "clean_goal": false,
+      "contacts": false,
+      "falls": false,
+      "seed": 470001,
+      "verified_recoveries": 0
+    }
+  ],
+  "episode_files": [
+    "permanent_stop-straight-s470000/episode.json",
+    "verified_lio_recovery-straight-s470000/episode.json",
+    "permanent_stop-straight-s470001/episode.json",
+    "verified_lio_recovery-straight-s470001/episode.json"
+  ],
+  "episodes": 4,
+  "ground_truth_inputs_to_estimator_or_planner": [],
+  "hypothesis": "LIO-verified coordinate recovery increases clean goals without increasing falls or contacts",
+  "input_sha256": {
+    "/tmp/bhl-h34-stereo-methods-smoke-20261010-v2-21757496-xe1d30rx/inputs/actors/dr-default-s0/deploy.yaml": "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71",
+    "/tmp/bhl-h34-stereo-methods-smoke-20261010-v2-21757496-xe1d30rx/inputs/actors/dr-default-s0/policy.onnx": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1",
+    "/tmp/bhl-h34-stereo-methods-smoke-20261010-v2-21757496-xe1d30rx/inputs/runtime/lio-runtime.tar.gz": "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+    "/tmp/bhl-h34-stereo-methods-smoke-20261010-v2-21757496-xe1d30rx/inputs/runtime/orb-runtime.tar.gz": "8ef2f4a0813ff97f457a97b9971e41555241b83f66c68b10c34a4a3986a28c3f"
+  },
+  "measured_development_improvement": null,
+  "paired_shard": null,
+  "phase": "smoke",
+  "problems": [],
+  "recovery_lio_mode": "SE3_registration_and_validation_no_pose_fallback",
+  "schema": "bhl-stereo-methods-campaign-v1",
+  "scientific_status": "SMOKE_ONLY",
+  "status": "PASS",
+  "wall_seconds": 70.22644204692915
+}

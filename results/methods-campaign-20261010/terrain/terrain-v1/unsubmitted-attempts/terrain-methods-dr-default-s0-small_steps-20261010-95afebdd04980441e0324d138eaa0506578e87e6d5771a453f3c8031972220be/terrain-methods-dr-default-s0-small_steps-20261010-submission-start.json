@@ -1,0 +1,24 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=terrain-methods-dr-default-s0-small_steps-20261010",
+    "--partition=share,eecs",
+    "--cpus-per-task=4",
+    "--mem=8G",
+    "--time=04:00:00",
+    "--output=/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/terrain-methods-dr-default-s0-small_steps-20261010-%j.out",
+    "--error=/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/terrain-methods-dr-default-s0-small_steps-20261010-%j.out",
+    "--export=NONE",
+    "--no-requeue",
+    "--dependency=afterok:21757058",
+    "--kill-on-invalid-dep=yes",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1/h34_campaign.sbatch",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/terrain-v1",
+    "terrain-methods-dr-default-s0-small_steps-20261010",
+    "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77"
+  ],
+  "created_utc": "2026-10-10T20:59:23.835752+00:00"
+}

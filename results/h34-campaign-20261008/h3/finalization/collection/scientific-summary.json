@@ -1,0 +1,177 @@
+{
+  "schema": "h3-paired-scientific-verdict-v1",
+  "status": "NEGATIVE",
+  "problems": [],
+  "num_cells": 6,
+  "num_episodes": 720,
+  "paired_seed_passes": 0,
+  "required_paired_seed_passes": 2,
+  "seed_gates": [
+    {
+      "seed": 0,
+      "checks": {
+        "nominal_survival": true,
+        "nominal_qualified_retention": true,
+        "primary_80ms_gain": false
+      },
+      "pass_gate": false,
+      "primary_qualified_delta": 0
+    },
+    {
+      "seed": 1,
+      "checks": {
+        "nominal_survival": true,
+        "nominal_qualified_retention": true,
+        "primary_80ms_gain": false
+      },
+      "pass_gate": false,
+      "primary_qualified_delta": 0
+    },
+    {
+      "seed": 2,
+      "checks": {
+        "nominal_survival": true,
+        "nominal_qualified_retention": true,
+        "primary_80ms_gain": false
+      },
+      "pass_gate": false,
+      "primary_qualified_delta": 0
+    }
+  ],
+  "counts": {
+    "history-s0": {
+      "0": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "40": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "80": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "120": {
+        "n": 30,
+        "qualified": 16,
+        "survived": 21
+      }
+    },
+    "history-s1": {
+      "0": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "40": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "80": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "120": {
+        "n": 30,
+        "qualified": 8,
+        "survived": 13
+      }
+    },
+    "history-s2": {
+      "0": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "40": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "80": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "120": {
+        "n": 30,
+        "qualified": 12,
+        "survived": 17
+      }
+    },
+    "repeated_current-s0": {
+      "0": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "40": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "80": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "120": {
+        "n": 30,
+        "qualified": 17,
+        "survived": 22
+      }
+    },
+    "repeated_current-s1": {
+      "0": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "40": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "80": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "120": {
+        "n": 30,
+        "qualified": 16,
+        "survived": 21
+      }
+    },
+    "repeated_current-s2": {
+      "0": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "40": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "80": {
+        "n": 30,
+        "qualified": 25,
+        "survived": 30
+      },
+      "120": {
+        "n": 30,
+        "qualified": 18,
+        "survived": 23
+      }
+    }
+  },
+  "protocol_sha256": "3af1d9050797430e910375e1d51ac2ca024dfd908591e7b7f2b1f1181a609ea4",
+  "interpretation": "12-DoF simulation; delayed actor IMU packets only; current joints and commands; no hardware claim"
+}

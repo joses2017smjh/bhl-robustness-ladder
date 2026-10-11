@@ -1,0 +1,126 @@
+{
+  "schema": "bhl-perceptive-methods-review-v1",
+  "recorded_utc": "2026-10-10T21:31:17.099864+00:00",
+  "source_sha256": {
+    "scripts/bench/perceptive_train.py": "5f6a494b11974ad60316e03957f844f94ea924e78a3ea31ee7586d8d44341af5",
+    "src/bhl_robust/research/perceptive_policy.py": "6df6b3c96ace8f3e18936df999a5510d437e982ed2a8115e29e1db54c912fe2b",
+    "src/bhl_robust/tasks/perceptive_env_cfg.py": "943a605b7a1a62c999ecea4c79e5e32170a1afab12b8913f6ed3517546ab811b",
+    "scripts/bench/perceptive_methods_collect.py": "1e54858a87d6305ef97b02ab45579d0b397281f2f5c254e3569eeeb3411a5ffa",
+    "tests/test_perceptive_policy.py": "6d03b5911f98bce44fb006a84767dda3ab02c0b12b3f6c53a976b1512ffaa7b5",
+    "tests/test_perceptive_methods_collect.py": "f6f9dbf7c56e1be9ca7a67f56fb07d39989bdf15c4c75880868234f6e1825bf2",
+    "scripts/bench/methods_finalize.py": "00fb842b8dcb98984f5b88eb02095d535c6e96d6d7cda9577d697446aa4d3951",
+    "tests/test_methods_finalize.py": "4a2038d391c8b9c045b1d0e2ba9dd6009693e6be03013607abe93902af99ebc8"
+  },
+  "checks": [
+    {
+      "step": "21756762.24",
+      "name": "direction-sensitive qualification and deployment actor",
+      "passed": 18,
+      "result": "PASS"
+    },
+    {
+      "step": "21756762.25",
+      "name": "full CPU CI command",
+      "passed": 2409,
+      "failed": 8,
+      "skipped": 255,
+      "subtests_passed": 10,
+      "result": "MISSING_HISTORY_FIXTURE",
+      "failure_cause": "shallow checkout lacked historical commits 094797e and 3a67bc2; initial raw logs retained unchanged"
+    },
+    {
+      "step": "21756762.26",
+      "name": "strict perceptive collector adversarial tests",
+      "passed": 10,
+      "result": "PASS"
+    },
+    {
+      "step": "21756762.27",
+      "name": "genuine native ORB diagnostic plot",
+      "result": "PASS",
+      "receipt": "../stereo/native-feature-diagnostics.receipt.json"
+    },
+    {
+      "step": "21756762.33",
+      "name": "exact historical retries and finalizer boundary tests",
+      "historical_retries_passed": 8,
+      "finalizer_tests_passed": 11,
+      "result": "PASS"
+    },
+    {
+      "step": "21756762.33",
+      "name": "actual frozen perceptive-v4 intake with no supplied jobs",
+      "result": "EXPECTED_INCOMPLETE",
+      "expected_exit": 1,
+      "observed_seeds": 0,
+      "expected_seeds": 3
+    }
+  ],
+  "regression_interpretation": "All eight full-suite failures passed unchanged after fetching historical Git fixtures. This is a targeted retry after environment repair, not a second full-suite run. The full suite plus exact successful retries has 2,417 passing tests and 255 skips; additional collector/finalizer checks are reported separately.",
+  "api_review": [
+    "Isaac Lab grid yx indexing yields the 11 by 7 height query geometry.",
+    "Lidar grid yields 8 by 16 = 128 rays.",
+    "RayCaster positional offsets are not counted twice in privileged heights.",
+    "Student actor receives only proprioception and point-history tensors; privileged teacher/critic training observations are separated.",
+    "Seeded environment resets and episode-latched accounting preserve paired evaluation conditions.",
+    "Qualification uses survival and integrated gravity-aligned command tracking, while net displacement is diagnostic only."
+  ],
+  "files": {
+    "perceptive-review-collector-20261010.log": {
+      "sha256": "d5450681e79e3e1458fa9e0c458615e96bd489b3d430e06336f40c43a8ad27af",
+      "bytes": 99
+    },
+    "perceptive-review-collector-20261010.xml": {
+      "sha256": "5c9398a8393934896b3be5447a35cd61737434023b57455cc1b899d7b7642da2",
+      "bytes": 1677
+    },
+    "perceptive-review-final-integration-20261010.xml": {
+      "sha256": "a6c81ed0c40b562318ddf3675e420e6515631022c060cc5c2ce0a2cc7a28b2dd",
+      "bytes": 2922
+    },
+    "perceptive-review-final-integration-driver-20261010.json": {
+      "sha256": "155eefe7a16cc7ae08b8a1625d21c3c5a9c408e23f8143e3c50f5ae452698599",
+      "bytes": 1925
+    },
+    "perceptive-review-final-integration-driver.py": {
+      "sha256": "fc7318df0e973a5fc704836b1f112686ac844b95d0abf1056bf00ad99b2edd9f",
+      "bytes": 1242
+    },
+    "perceptive-review-full-regression-20261010.log": {
+      "sha256": "5b48c5ec10ca1439101bfbdeb6e69ab3da5c0c06607b2060357bef2aa799e513",
+      "bytes": 21858
+    },
+    "perceptive-review-full-regression-20261010.xml": {
+      "sha256": "0ff149ff5296d2ce1f17e03c9f339cc94b15c92b3020b6948f868a7ab43061b4",
+      "bytes": 410990
+    },
+    "perceptive-review-history-and-finalizer-20261010.log": {
+      "sha256": "dd224e3e87663cdcbfcb598ef5e7edddd67c00f0029e8e4b7828ead60024e42e",
+      "bytes": 100
+    },
+    "perceptive-review-history-retry-nodeids.json": {
+      "sha256": "09f53b361d8784e597558741118afa311cbffffc56a70d49b3c9e2dcc515ea7b",
+      "bytes": 1016
+    },
+    "perceptive-review-perceptive-real-intake-20261010.log": {
+      "sha256": "4e20e527de57f2220055985b7a7166c55ea57a233c2e14103e183efb35981efe",
+      "bytes": 128
+    },
+    "perceptive-review-qualification-20261010.log": {
+      "sha256": "8172ffc2fce32ee9e0628239e40e372ce72b1ce07ab03278710818d56094513c",
+      "bytes": 3969
+    },
+    "perceptive-review-qualification-20261010.xml": {
+      "sha256": "2758c81c22366f2555bf9d45c75cdb40e1e17f53c8672fe895c97163c074ed30",
+      "bytes": 2646
+    },
+    "perceptive-review-real-intake-20261010.json": {
+      "sha256": "8fc288b4c5cb900b30878203bbd5194ef77a784d6dcb9f1eac1f46d888780bb0",
+      "bytes": 1313
+    },
+    "slurm-accounting.psv": {
+      "sha256": "4db2c7cbfbd9e20143ac8dab386050f038d7e3c47b71cc6cbecd86369edf635b",
+      "bytes": 243
+    }
+  }
+}

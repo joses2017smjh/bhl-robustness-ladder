@@ -1,0 +1,5538 @@
+{
+  "schema": "h3-latency-evaluation-v1",
+  "arm": "history",
+  "training_seed": 0,
+  "phase": "run",
+  "policy_dt": 0.04,
+  "physics_dt": 0.002,
+  "episode_s": 10.0,
+  "warmup_s": 1.0,
+  "num_episodes": 120,
+  "episodes": [
+    {
+      "episode_id": "history-s0-d0-c0-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5160342767834654,
+        0.019648064353386865,
+        -0.2695269871782511
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2242632362960686,
+        0.22408788106858507,
+        0.21229528561997904
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.5160342767834654,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c0-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.520698299854994,
+        0.01876200360246003,
+        -0.2553196069900877
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.22345627044889146,
+        0.2240304397991204,
+        0.21135387791301588
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.520698299854994,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c0-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5161608740687367,
+        0.016712944004684684,
+        -0.2839414852298795
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.22415608155484393,
+        0.22436546236328897,
+        0.21059781884026
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.5161608740687367,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c0-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.517623410597446,
+        0.018240802841901306,
+        -0.30118862224975584
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2249142191368128,
+        0.22479728452186173,
+        0.21271328830325453
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.517623410597446,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c0-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5179074011743077,
+        0.015409317020676105,
+        -0.2853190076351166
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.22462040630874788,
+        0.22390229386608038,
+        0.2125643949566625
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.5179074011743077,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c1-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        3.9885107249021536,
+        -0.02298779367061798,
+        0.09366026233648883
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2253173404496132,
+        0.2087775320046964,
+        0.27892585852771734
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        3.9885107249021536,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c1-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.019858946800235,
+        -0.030508175939321522,
+        0.10986253464594481
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.22681816579117053,
+        0.20241227990354388,
+        0.2799442311117348
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.019858946800235,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c1-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.0030830955505365,
+        -0.022211671383120128,
+        0.11502954709343609
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.22530346611478108,
+        0.209687178167585,
+        0.2724386545159588
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.0030830955505365,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c1-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        3.986598244309425,
+        -0.02429074380081149,
+        0.16347425457090134
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.22550375808665477,
+        0.2032432693706541,
+        0.28495134749775863
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        3.986598244309425,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c1-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        3.9905775696039187,
+        -0.05069609332364052,
+        0.14341216157656161
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2248897537481548,
+        0.20580647202037158,
+        0.28413241044416165
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        3.9905775696039187,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c2-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.036397649273277,
+        -0.03193234358506744,
+        0.13710466733202337
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.15694830604196577,
+        0.137259786630818,
+        0.16641787567283295
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.036397649273277,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c2-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.042158892137232,
+        -0.03995217794305061,
+        0.1006985838524997
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1590713283720475,
+        0.1385674953896999,
+        0.16543189033186811
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.042158892137232,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c2-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.059218868669123,
+        -0.0399894020083593,
+        0.18673419833183275
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1576432167033766,
+        0.1369449787808318,
+        0.1651817100616658
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.059218868669123,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c2-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.031844753585755,
+        -0.03602871026669165,
+        0.13982272156630643
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.15839389137914464,
+        0.1393512299962308,
+        0.16561054527513872
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.031844753585755,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c2-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.0756654824374725,
+        -0.05127581451204604,
+        0.13077433032041888
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.15687866715274146,
+        0.13362991271946992,
+        0.1447850535948593
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.0756654824374725,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c3-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.041379217813373566,
+        1.5398381298780432,
+        0.0325685499701649
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0579198578688066,
+        0.2675884902946982,
+        0.1207633909453223
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.5398381298780432,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c3-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.049537168197566664,
+        1.5331413368694484,
+        -0.056941811230499295
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.056190822969151746,
+        0.26136608371100256,
+        0.12032983521574321
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.5331413368694484,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c3-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.044186310818768094,
+        1.5179807076603178,
+        -0.06964587951777507
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.058993017613261756,
+        0.26065178822149015,
+        0.11760391104033807
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.5179807076603178,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c3-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.037485640763770804,
+        1.4812199152846006,
+        0.003483924240572377
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.06073841273203372,
+        0.26058202525014196,
+        0.1255474833530244
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4812199152846006,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c3-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.04197005911410086,
+        1.5645167652796954,
+        -0.04555238033179191
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0580791290780389,
+        0.25979521341835227,
+        0.11792361693676909
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.5645167652796954,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c4-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0038070766581222407,
+        0.004118060115256414,
+        0.020501037277281295
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0006112420166025731,
+        0.0010959583491654313,
+        0.4977256718304087
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.020501037277281295
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c4-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0021970117838463923,
+        0.0013283612492296021,
+        0.015246447818426535
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0003369892364569719,
+        0.0007803211075314965,
+        0.4983068602846364
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.015246447818426535
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c4-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.004076897216727959,
+        0.00568271386960987,
+        0.02741892954334617
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0007772057403479239,
+        0.0011460094239989945,
+        0.4969592199338876
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.02741892954334617
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c4-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.002865898659511007,
+        0.003958007698111032,
+        0.022107250196859253
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.00047742087356338167,
+        0.0008024836706778335,
+        0.4975452696564851
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.022107250196859253
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c4-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0009325304961589612,
+        0.006731424782192337,
+        0.023151441477239153
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.00017813702545577676,
+        0.001450449185258699,
+        0.4974340531831169
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.023151441477239153
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c5-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.423476871103048,
+        0.12564060131000593,
+        6.8590795034170124
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.19992077399639005,
+        0.23403614041571746,
+        0.3616015889911903
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.423476871103048,
+        0.0,
+        6.8590795034170124
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c5-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.41991837086156,
+        0.125420851703966,
+        6.812729148864747
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1991297518774964,
+        0.2343865202647938,
+        0.36338392271325154
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.41991837086156,
+        0.0,
+        6.812729148864747
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c5-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.439755507856608,
+        0.10894973094225859,
+        6.81310039162636
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2011281242419048,
+        0.23314238751091046,
+        0.35833896410527283
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.439755507856608,
+        0.0,
+        6.81310039162636
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c5-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4184563237428667,
+        0.0929801734769717,
+        6.749029806852342
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1965941858128704,
+        0.23250131131993665,
+        0.35150457729701867
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.4184563237428667,
+        0.0,
+        6.749029806852342
+      ]
+    },
+    {
+      "episode_id": "history-s0-d0-c5-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 0,
+      "delay_ms": 0,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.423661741167307,
+        0.11739827684126795,
+        6.830118442773818
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1971527755155906,
+        0.2345742616141364,
+        0.35938864787499664
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.423661741167307,
+        0.0,
+        6.830118442773818
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c0-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.465293384595427,
+        -0.004966410633933251,
+        -0.05038707789964974
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.26696067738325385,
+        0.24366316987119013,
+        0.25114315933458825
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.465293384595427,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c0-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.510296706170774,
+        -0.0053705504175741055,
+        -0.017644974263384915
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.26945639127018833,
+        0.242955944814675,
+        0.2603847949918347
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.510296706170774,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c0-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4568008303735405,
+        0.007269006469286974,
+        -0.006165406592190311
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2726912261747658,
+        0.2441790551816227,
+        0.2587298938155543
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.4568008303735405,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c0-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.46214031576179,
+        -0.0052765080856625145,
+        0.008460452957078812
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.271753166463179,
+        0.24337301138326436,
+        0.25211875811485107
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.46214031576179,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c0-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.468223946727812,
+        0.005882625635713334,
+        -0.003733770176768304
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2687803748406186,
+        0.24777653499064103,
+        0.26753726953717816
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.468223946727812,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c1-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        3.979953121244907,
+        -0.07059491050429632,
+        -0.07036782657727597
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2951255666796476,
+        0.20279911629195627,
+        0.301454914522483
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        3.979953121244907,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c1-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        3.969891747534275,
+        -0.07209648936055602,
+        -0.1281850718916393
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2969600569444411,
+        0.1979390262514841,
+        0.30130141583060943
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        3.969891747534275,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c1-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        3.9856230980157865,
+        -0.08754124625425895,
+        -0.060427655878011154
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2922447867279055,
+        0.2006736699313902,
+        0.2911208138207328
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        3.9856230980157865,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c1-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        3.9717472450435145,
+        -0.06450478116748853,
+        0.0734950862824915
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.29409212165965437,
+        0.2090869160982348,
+        0.3411645660457508
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        3.9717472450435145,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c1-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        3.991111061275005,
+        -0.08676684133824901,
+        -0.07271875462029131
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.28986433224420727,
+        0.20094182278506917,
+        0.29032414772993637
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        3.991111061275005,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c2-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -1.929277138770558,
+        0.0483824218064547,
+        0.09241249981685541
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21558056237821213,
+        0.19062398553201976,
+        0.2295329326544881
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.929277138770558,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c2-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -1.9125893880310463,
+        0.05347812397405505,
+        0.07710702342446897
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21017867079575195,
+        0.18827592158471365,
+        0.22193741126591873
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.9125893880310463,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c2-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -1.9288095574174073,
+        0.047721544476225924,
+        0.11370582154719164
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21249363021746773,
+        0.19350135595107623,
+        0.22696567576303486
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.9288095574174073,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c2-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -1.931422578459606,
+        0.014937401785282424,
+        0.07919485549442475
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21166790327402651,
+        0.1932747763168689,
+        0.22075617381364074
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.931422578459606,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c2-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -1.9253727464750414,
+        0.04223059439857028,
+        0.16193905450403687
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21460312755924854,
+        0.19447141434665804,
+        0.22905369413251314
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.9253727464750414,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c3-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0565587614942342,
+        1.4486987485457217,
+        0.07936621323344296
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.05447362538807484,
+        0.2740818660661361,
+        0.12828528751386747
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4486987485457217,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c3-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.05582268795231359,
+        1.4257001775689426,
+        0.1090400438848883
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.05532465835688688,
+        0.27304925001582714,
+        0.11683805978807778
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4257001775689426,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c3-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.043663084784056984,
+        1.395410743150859,
+        0.09742477326828525
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.05537634564493839,
+        0.27035420734947996,
+        0.10901932903574736
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.395410743150859,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c3-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.01419434821931645,
+        1.4200255322968587,
+        0.011950917912763565
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0582383684877838,
+        0.27231973769990686,
+        0.16550460365276656
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4200255322968587,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c3-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.04983545647468417,
+        1.3819305207539572,
+        0.10289656608132647
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.053994856730678956,
+        0.27239362334205686,
+        0.12542052159201156
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.3819305207539572,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c4-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0015860319556668403,
+        0.002629219620973799,
+        0.017054762435145678
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0005040567162110086,
+        0.0009845688839330746,
+        0.4981064080302465
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.017054762435145678
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c4-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0005496184231014927,
+        -0.00016182245149593636,
+        0.011996618616394686
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0009783744258167102,
+        0.0013095737316411436,
+        0.4986684880837637
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.011996618616394686
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c4-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.0019499756366712963,
+        0.005338021081261102,
+        0.024899080796167268
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.00043647619431708975,
+        0.00115011869972032,
+        0.4972388665893414
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.024899080796167268
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c4-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.001966115334653295,
+        0.004444199006338752,
+        0.02047349575906993
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0003954408868552643,
+        0.0010017651838028121,
+        0.4977264747657339
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.02047349575906993
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c4-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.001501774550499704,
+        0.006632710833800958,
+        0.022537101642228656
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0005979960098415007,
+        0.0014973966188994768,
+        0.4975015358190464
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.022537101642228656
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c5-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4229814048204563,
+        0.030099204648286117,
+        6.342291297316549
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2631127475596909,
+        0.23868736645465008,
+        0.37530128634440957
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.4229814048204563,
+        0.0,
+        6.342291297316549
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c5-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4142992934584595,
+        0.05955116655095486,
+        6.416026543378828
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2648727012693089,
+        0.24295426894435934,
+        0.3771223129306519
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.4142992934584595,
+        0.0,
+        6.416026543378828
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c5-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4451633290410975,
+        0.04786877312697469,
+        6.35951276488602
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.25880743898681985,
+        0.24796620792937552,
+        0.36690110349353466
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.4451633290410975,
+        0.0,
+        6.35951276488602
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c5-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4153853703849015,
+        0.058391564106568705,
+        6.460534090399748
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.26235783647156435,
+        0.24099707918339822,
+        0.3689928702363361
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.4153853703849015,
+        0.0,
+        6.460534090399748
+      ]
+    },
+    {
+      "episode_id": "history-s0-d1-c5-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 1,
+      "delay_ms": 40,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.433206624910235,
+        0.060267354138413755,
+        6.396105998754502
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.25862905627108124,
+        0.2449213237304934,
+        0.36900016896896665
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.433206624910235,
+        0.0,
+        6.396105998754502
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c0-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5539193183952005,
+        -0.07828462593024599,
+        0.17061794314533466
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2674083928901264,
+        0.2141477534647045,
+        0.3650346513528946
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.5539193183952005,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c0-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5980807088501763,
+        -0.07608410060405728,
+        -0.2986034525977448
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.257192588832608,
+        0.20580871481111437,
+        0.3494623074644415
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.5980807088501763,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c0-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.596723707746715,
+        -0.16274437633896008,
+        -0.18164580622222273
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2576945737030042,
+        0.2099988258392855,
+        0.3604085139686785
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.596723707746715,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c0-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5999545295210567,
+        -0.09935166809940714,
+        -0.42408178308978656
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2502942698910177,
+        0.20168908838011565,
+        0.34187563953119027
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.5999545295210567,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c0-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.596232910547407,
+        -0.11823911342769858,
+        -0.27181052854284643
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.24837797892862032,
+        0.20864407645289904,
+        0.3556385974233647
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.596232910547407,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c1-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.052037834487853,
+        0.022737021520733796,
+        0.6558479873649775
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.3576731158983646,
+        0.3153204750368675,
+        0.7338848046078081
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.052037834487853,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c1-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.003364464696499,
+        -0.06352107660844922,
+        0.6976664400007575
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.3349497605657492,
+        0.26632736172155713,
+        0.6474082950708245
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.003364464696499,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c1-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.094267067369071,
+        0.12894819011213265,
+        -0.17475339284632344
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.3219461630927039,
+        0.2644642334078503,
+        0.485168463119221
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.094267067369071,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c1-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.074109410247765,
+        0.05144448094011752,
+        1.010188129041344
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.3450427599008659,
+        0.28225734721009876,
+        0.7111020661026002
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.074109410247765,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c1-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        4.028924819771198,
+        -0.07664236640091986,
+        -0.031970506355573934
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.3136130040307209,
+        0.24517348335777767,
+        0.5007113116752503
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        4.028924819771198,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c2-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.0722732596471913,
+        -0.13008224656165107,
+        0.9194134772289547
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.25624993307774574,
+        0.18416663787215556,
+        0.4314825349781958
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.0722732596471913,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c2-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.0496703223139034,
+        -0.0870979109313339,
+        0.79625000901171
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.25077452532148287,
+        0.18564948901993936,
+        0.39930041529383137
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.0496703223139034,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c2-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -1.9904995096102354,
+        -0.11133093209791693,
+        0.6832404223713096
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2637307977169923,
+        0.19627485559589683,
+        0.4134905593765183
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.9904995096102354,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c2-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.046879653669893,
+        -0.11717301118653267,
+        0.787164329313673
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.24509347610254917,
+        0.16691143763401872,
+        0.3717026600876216
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.046879653669893,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c2-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -2.0907918698340655,
+        -0.08064135288354006,
+        0.9384201125154501
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.25028031301340403,
+        0.17847160851716318,
+        0.4020914237001909
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.0907918698340655,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c3-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.03569659842993134,
+        1.4706407777545973,
+        0.0525737310244585
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0707327461533428,
+        0.2653926889289103,
+        0.18267261560116194
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4706407777545973,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c3-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.029383357168408106,
+        1.51186280278489,
+        0.04100346107850783
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.07324708202034519,
+        0.2766580488594681,
+        0.1865090633431161
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.51186280278489,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c3-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.042226265754143275,
+        1.4318867924064391,
+        0.059115394577966086
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0738131154174015,
+        0.26284991153319687,
+        0.16717381361220243
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4318867924064391,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c3-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.027047360909200503,
+        1.4230773923546092,
+        0.028129743919707836
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.07780981195322542,
+        0.2647265306692214,
+        0.17675572018702293
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4230773923546092,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c3-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.017065572184510523,
+        1.400748128347332,
+        -0.021811594594037163
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.07728382081090321,
+        0.2659889084982866,
+        0.16546443539643227
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.400748128347332,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c4-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0010135861934395523,
+        0.0029070294033681464,
+        0.017782671502791336
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0026573749966707803,
+        0.0012170847649632004,
+        0.4980310693674953
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.017782671502791336
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c4-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0010068620252786772,
+        0.0010434968695699348,
+        0.014032005479093636
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0027371530906644655,
+        0.0013772126901680861,
+        0.4984422980780656
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.014032005479093636
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c4-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0010184904068591995,
+        0.004864504165016118,
+        0.024498499161563818
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0024151266867015195,
+        0.001291098968297927,
+        0.49729026832715517
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.024498499161563818
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c4-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        0.00027623294241493576,
+        0.0042927470127324336,
+        0.019939441538881504
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.0015276674427660334,
+        0.0011790367087068643,
+        0.49778745954646664
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.019939441538881504
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c4-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0015959603364024144,
+        0.006079935912857758,
+        0.018405419986229396
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.000990210246139317,
+        0.001449143180043804,
+        0.4979587087837952
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.018405419986229396
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c5-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.477751456601547,
+        -0.0459414878534153,
+        6.42346926636994
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2240189786114481,
+        0.2226307719739869,
+        0.4769139659484816
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.477751456601547,
+        0.0,
+        6.42346926636994
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c5-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4672823158663224,
+        -0.0173134323884733,
+        6.504008230008181
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2124952611709731,
+        0.22156834222575758,
+        0.45524329791901
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.4672823158663224,
+        0.0,
+        6.504008230008181
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c5-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5051702157780524,
+        -0.06336226336017715,
+        6.442583361640571
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21553034120851924,
+        0.21978705753942104,
+        0.4540193909773824
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.5051702157780524,
+        0.0,
+        6.442583361640571
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c5-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4677424961328516,
+        -0.0443571277568117,
+        6.539631174635141
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.21664788567734794,
+        0.22493483140869017,
+        0.45910990199205964
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.4677424961328516,
+        0.0,
+        6.539631174635141
+      ]
+    },
+    {
+      "episode_id": "history-s0-d2-c5-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 2,
+      "delay_ms": 80,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.443837517006324,
+        -0.030047636609524496,
+        6.540340502746403
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.216914583924468,
+        0.2228278729341167,
+        0.4705402992785139
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.443837517006324,
+        0.0,
+        6.540340502746403
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c0-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.583082514576382,
+        -0.12496091894805436,
+        -1.1067303614132113
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.26539582080509033,
+        0.24834927131305132,
+        0.48776479708273457
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.583082514576382,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c0-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.6604631876572955,
+        -0.1735613395820837,
+        -1.1836488815769544
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.25896073588595386,
+        0.2585928461135668,
+        0.5179201826591566
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.6604631876572955,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c0-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.5637999742745916,
+        -0.15212064294202718,
+        -0.6839814763888721
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.23234974993055457,
+        0.24351153866964212,
+        0.3636947037149384
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.5637999742745916,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c0-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.642825930016115,
+        -0.1099900337011786,
+        -0.6305008396203627
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.23398193984250995,
+        0.22450042248365462,
+        0.4158527564468138
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.642825930016115,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c0-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 0,
+      "command": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.502223148271441,
+        -0.14784740677336228,
+        -0.9155326981469987
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2652323393313605,
+        0.2549757065167605,
+        0.45726387652056366
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.502223148271441,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c1-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": true,
+      "completed_steps": 135,
+      "expected_steps": 250,
+      "survival_s": 5.4,
+      "progress": [
+        1.7017924708127978,
+        0.13650620328262458,
+        2.358403420224785
+      ],
+      "active_samples": 110,
+      "tracking_rmse": [
+        0.7203982223788895,
+        0.4990296197939346,
+        1.485271663158843
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        false,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.7017924708127978,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c1-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": true,
+      "completed_steps": 110,
+      "expected_steps": 250,
+      "survival_s": 4.4,
+      "progress": [
+        1.0972424703091388,
+        -0.49239428417757164,
+        0.06474821843206884
+      ],
+      "active_samples": 85,
+      "tracking_rmse": [
+        0.8273051330296167,
+        0.6070994638087454,
+        1.6155360369514788
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        false,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.0972424703091388,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c1-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        3.7677594431117174,
+        -0.2787626579822971,
+        0.44257835571654125
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.3451756919218929,
+        0.3345568075284663,
+        0.6314763449730036
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        3.7677594431117174,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c1-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": true,
+      "completed_steps": 89,
+      "expected_steps": 250,
+      "survival_s": 3.56,
+      "progress": [
+        1.1455211183428764,
+        0.3107101835473441,
+        -0.16635319039225568
+      ],
+      "active_samples": 64,
+      "tracking_rmse": [
+        0.7037098033122146,
+        0.5487795813180356,
+        1.338458732760263
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        false,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.1455211183428764,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c1-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 1,
+      "command": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": true,
+      "completed_steps": 63,
+      "expected_steps": 250,
+      "survival_s": 2.52,
+      "progress": [
+        0.2490480099990963,
+        -0.04652800229378045,
+        -2.1790568168461326
+      ],
+      "active_samples": 38,
+      "tracking_rmse": [
+        0.825053901934416,
+        0.6914932043049843,
+        2.8803248347526638
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        false,
+        true,
+        true
+      ],
+      "required_progress": [
+        2.25,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        0.2490480099990963,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c2-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": true,
+      "completed_steps": 221,
+      "expected_steps": 250,
+      "survival_s": 8.84,
+      "progress": [
+        -1.683803740418516,
+        0.017442418262362522,
+        -0.06912635460495947
+      ],
+      "active_samples": 196,
+      "tracking_rmse": [
+        0.5675360496552326,
+        0.39412791060243385,
+        0.9330099714525778
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.683803740418516,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c2-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": true,
+      "completed_steps": 236,
+      "expected_steps": 250,
+      "survival_s": 9.44,
+      "progress": [
+        -2.1889940849505365,
+        0.28755392841994765,
+        -0.38449654007330525
+      ],
+      "active_samples": 211,
+      "tracking_rmse": [
+        0.5949335810077412,
+        0.40693616376552527,
+        0.9816799376094746
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        2.1889940849505365,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c2-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": true,
+      "completed_steps": 209,
+      "expected_steps": 250,
+      "survival_s": 8.36,
+      "progress": [
+        -1.4968998419214044,
+        0.00871509184129541,
+        0.9962671465799214
+      ],
+      "active_samples": 184,
+      "tracking_rmse": [
+        0.76792666874316,
+        0.5136912942035047,
+        1.2417435625535225
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.4968998419214044,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c2-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": true,
+      "completed_steps": 198,
+      "expected_steps": 250,
+      "survival_s": 7.92,
+      "progress": [
+        -1.3168169929273417,
+        0.2785734788165428,
+        0.8259833143674766
+      ],
+      "active_samples": 173,
+      "tracking_rmse": [
+        0.6780521626774434,
+        0.5430746909823908,
+        1.0696289021706453
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        1.3168169929273417,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c2-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 2,
+      "command": [
+        -0.2,
+        0.0,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": true,
+      "completed_steps": 125,
+      "expected_steps": 250,
+      "survival_s": 5.0,
+      "progress": [
+        -0.8186863832175733,
+        0.12923711366835047,
+        0.19968137872405348
+      ],
+      "active_samples": 100,
+      "tracking_rmse": [
+        0.8332904465453228,
+        0.5200251899821463,
+        0.9914202206073585
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        false,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.9,
+        0.0,
+        0.0
+      ],
+      "aligned_progress": [
+        0.8186863832175733,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c3-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.09895186683017522,
+        1.4786984251416277,
+        0.1418483307329005
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.15037950174282766,
+        0.25761352677157323,
+        0.2890957190495739
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4786984251416277,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c3-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0946677506132983,
+        1.4813102203560982,
+        -0.031243265466764557
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.08769356864771298,
+        0.27211554854619197,
+        0.19055721163761757
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4813102203560982,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c3-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.0704334924451541,
+        1.4759187380876397,
+        0.2266045570606365
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1603843889783638,
+        0.26561560237559223,
+        0.35079707048584247
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4759187380876397,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c3-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.07481732982327233,
+        1.4940096835512675,
+        0.10814130275510246
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.11776806791843435,
+        0.2633896622990591,
+        0.2550126104827465
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.4940096835512675,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c3-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 3,
+      "command": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.07663981771562248,
+        1.3558703753910952,
+        -0.00033054909901696083
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.1379673163953727,
+        0.26659756485161584,
+        0.26048067757110427
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        0.0,
+        0.9,
+        0.0
+      ],
+      "aligned_progress": [
+        0.0,
+        1.3558703753910952,
+        0.0
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c4-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.009975009559420869,
+        0.0026654403489374096,
+        0.01758840654045344
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.01663419720966743,
+        0.004780710545161967,
+        0.4980860796060693
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.01758840654045344
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c4-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.010392301433821551,
+        0.0014121865742345128,
+        0.014891889541177079
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.01750981548607248,
+        0.00538356671570623,
+        0.4983843677724395
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.014891889541177079
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c4-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.010595676361990627,
+        0.005085870910843367,
+        0.026307754625449892
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.017540514375807257,
+        0.004856106078772048,
+        0.4971494645877839
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.026307754625449892
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c4-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.005255408281955167,
+        0.004326149955986696,
+        0.01979077886324375
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.009265694145708844,
+        0.0024224628017052927,
+        0.49781882714367837
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.01979077886324375
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c4-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 4,
+      "command": [
+        0.0,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        -0.003485904979020235,
+        0.005545758619118723,
+        0.016991391775081868
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.005425310328666519,
+        0.0017155955087092354,
+        0.4981200599708523
+      ],
+      "scored": true,
+      "qualified": false,
+      "component_checks": [
+        true,
+        true,
+        false
+      ],
+      "required_progress": [
+        0.0,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        0.0,
+        0.0,
+        0.016991391775081868
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c5-r201000",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201000,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4553962266445155,
+        -0.05064784536269144,
+        6.503222248051313
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.41229195215639636,
+        0.31535183343392864,
+        0.9717198532650282
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.4553962266445155,
+        0.0,
+        6.503222248051313
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c5-r201001",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201001,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.2114402456115925,
+        0.010431652051629514,
+        5.357056917734443
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.39805517878626373,
+        0.2635156903508929,
+        0.752844603058356
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.2114402456115925,
+        0.0,
+        5.357056917734443
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c5-r201002",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201002,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.4315245122136537,
+        0.14485593092162158,
+        6.223849902151853
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.2625994525534296,
+        0.2534230741885372,
+        0.4609079621179454
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.4315245122136537,
+        0.0,
+        6.223849902151853
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c5-r201003",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201003,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.2648654491268094,
+        0.05036190832965071,
+        5.992985433931464
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.46622339970672394,
+        0.3200915497502931,
+        0.8632513274693173
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.2648654491268094,
+        0.0,
+        5.992985433931464
+      ]
+    },
+    {
+      "episode_id": "history-s0-d3-c5-r201004",
+      "arm": "history",
+      "training_seed": 0,
+      "delay_steps": 3,
+      "delay_ms": 120,
+      "command_index": 5,
+      "command": [
+        0.3,
+        0.0,
+        0.5
+      ],
+      "reset_seed": 201004,
+      "fell": false,
+      "completed_steps": 250,
+      "expected_steps": 250,
+      "survival_s": 10.0,
+      "progress": [
+        2.61324251534883,
+        -0.23475490408018218,
+        4.524859534949064
+      ],
+      "active_samples": 225,
+      "tracking_rmse": [
+        0.6666817407317531,
+        0.42074243437342634,
+        1.1226369384754007
+      ],
+      "scored": true,
+      "qualified": true,
+      "component_checks": [
+        true,
+        true,
+        true
+      ],
+      "required_progress": [
+        1.3499999999999999,
+        0.0,
+        2.25
+      ],
+      "aligned_progress": [
+        2.61324251534883,
+        0.0,
+        4.524859534949064
+      ]
+    }
+  ],
+  "deploy_sha256": "819c948ddd0401ca1b2398852998bf30ea8432604ec846ece4a07ac549e3d974",
+  "policy_sha256": "e3a057d8a1c400f9e926ca6caaf7124359205b524f3edbfbb0c8276aae40c1e1",
+  "trace_sha256": "d7cf8a72e82c124452827333829e1426aa6560ddfbf56c03eca13e3e419ae4bb",
+  "trace_path": "latency-traces.jsonl.gz",
+  "mjcf_sha256": "664842bc940e6b4e8d1ad7c6d2515543fe3cddd9adec007763a810ec26f4a037"
+}

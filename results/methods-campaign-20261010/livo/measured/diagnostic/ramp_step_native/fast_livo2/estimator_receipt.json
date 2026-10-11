@@ -1,0 +1,1629 @@
+{
+  "schema": "bhl-pose-estimator-run-v1",
+  "method": "fast_livo2_camera_lidar_imu",
+  "upstream_commit": "0d2c0346107b75b59934975adec9a6eeeb913c64",
+  "runtime_sha256": "f6c43ad3f5372a5965c8241101330b7f93e91f3e7398a48022e67b925fc1c52e",
+  "runtime_receipt_sha256": "3a32015a85e4685b07576391caa115c3497c9ae26b761cf853395504e8a2bcea",
+  "input_manifest_sha256": "0d8250f888ddaf4f1c5049cf9a5af0eaf2346593ce7f774c534b603cddfe791c",
+  "sequence": "ramp_step_native",
+  "native_command": [
+    "/tmp/bhl-livo-runtime-20261010/fastlivo_headless",
+    "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/ramp_step_native/fast_livo2/input.bin",
+    "/tmp/bhl-livo-diagnostic-results-20261010/diagnostic/ramp_step_native/fast_livo2/native_frames.jsonl"
+  ],
+  "transport": {
+    "schema": "bhl-native-livo-transport-v1",
+    "expected_timestamps_s": [
+      0.0,
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1.0,
+      1.2,
+      1.4,
+      1.6,
+      1.8,
+      2.0,
+      2.2,
+      2.4,
+      2.6,
+      2.8,
+      3.0,
+      3.2,
+      3.4,
+      3.6,
+      3.8,
+      4.0,
+      4.2,
+      4.4,
+      4.6,
+      4.8,
+      5.0,
+      5.2,
+      5.4,
+      5.6,
+      5.8,
+      6.0,
+      6.2,
+      6.4,
+      6.6,
+      6.8,
+      7.0,
+      7.2,
+      7.4,
+      7.6,
+      7.8,
+      8.0,
+      8.2,
+      8.4,
+      8.6,
+      8.8,
+      9.0,
+      9.2,
+      9.4,
+      9.6,
+      9.8,
+      10.0,
+      10.2,
+      10.4,
+      10.6,
+      10.8,
+      11.0,
+      11.2,
+      11.4,
+      11.6,
+      11.8,
+      12.0,
+      12.2,
+      12.4,
+      12.6,
+      12.8,
+      13.0,
+      13.2,
+      13.4,
+      13.6,
+      13.8,
+      14.0,
+      14.2,
+      14.4,
+      14.6,
+      14.8,
+      15.0,
+      15.2,
+      15.4,
+      15.6,
+      15.8,
+      16.0,
+      16.2,
+      16.4,
+      16.6,
+      16.8,
+      17.0,
+      17.2,
+      17.4,
+      17.6,
+      17.8,
+      18.0,
+      18.2,
+      18.4,
+      18.6,
+      18.8,
+      19.0,
+      19.2,
+      19.4,
+      19.6,
+      19.8,
+      20.0,
+      20.2,
+      20.4,
+      20.6,
+      20.8,
+      21.0,
+      21.2,
+      21.4,
+      21.6,
+      21.8,
+      22.0,
+      22.2,
+      22.4,
+      22.6,
+      22.8,
+      23.0,
+      23.2,
+      23.4,
+      23.6,
+      23.8,
+      24.0,
+      24.2,
+      24.4,
+      24.6,
+      24.8,
+      25.0,
+      25.2,
+      25.4,
+      25.6,
+      25.8,
+      26.0,
+      26.2,
+      26.4,
+      26.6,
+      26.8,
+      27.0,
+      27.2,
+      27.4,
+      27.6,
+      27.8,
+      28.0,
+      28.2,
+      28.4,
+      28.6,
+      28.8,
+      29.0,
+      29.2,
+      29.4,
+      29.6,
+      29.8
+    ],
+    "image_count": 150,
+    "raw_point_count": 306929,
+    "consumed_point_count": 304887,
+    "unconsumed_lidar_tail_points": 2042,
+    "imu_count": 5961,
+    "T_imu_lidar": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        -1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_camera_lidar": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.06
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "images": [
+      {
+        "timestamp_s": 0.0,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 0.2,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 0.4,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 0.6,
+        "sha256": "84944f5405bcec76f29e9e3c535c89a623db36958e1baad0cbbefbf4f8be64d7",
+        "bytes": 334406
+      },
+      {
+        "timestamp_s": 0.8,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 1.0,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 1.2,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 1.4,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 1.6,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 1.8,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 2.0,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 2.2,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 2.4,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 2.6,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 2.8,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 3.0,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 3.2,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 3.4,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 3.6,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 3.8,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 4.0,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 4.2,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 4.4,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 4.6,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 4.8,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 5.0,
+        "sha256": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+        "bytes": 334399
+      },
+      {
+        "timestamp_s": 5.2,
+        "sha256": "3aaf240f101eddb7859739bc23c3594a8e6b4f973fa1c68640c375d9ff388de4",
+        "bytes": 336089
+      },
+      {
+        "timestamp_s": 5.4,
+        "sha256": "1ac226b59f227d85c908a040aa13134be67ec14604fadf7637fe8da14582d115",
+        "bytes": 336248
+      },
+      {
+        "timestamp_s": 5.6,
+        "sha256": "17000bd755ef12db4cc536fe406416190c758c1ccc49e1c2d4bab8627ae70034",
+        "bytes": 337583
+      },
+      {
+        "timestamp_s": 5.8,
+        "sha256": "c692bc681a27f48f144e52b8091786864acaf979641bc213ad2c536057a2fac1",
+        "bytes": 341316
+      },
+      {
+        "timestamp_s": 6.0,
+        "sha256": "5552ddb29eecc3e410725967903edaccf3ae5ab69c2b6e4df4bdaa255f4b9d44",
+        "bytes": 336388
+      },
+      {
+        "timestamp_s": 6.2,
+        "sha256": "d0a7c7366cc945c0e04516ce45b2e597c7dc2262cbb9afc1652493690dd2b35b",
+        "bytes": 333655
+      },
+      {
+        "timestamp_s": 6.4,
+        "sha256": "bffaa074a8b4bdf9b5a0d1057c82410d83823eeed33c950e4a8a544d5068da59",
+        "bytes": 338182
+      },
+      {
+        "timestamp_s": 6.6,
+        "sha256": "beadf2fce493ab96771a0cf4949358c4d95df23f6389f8b13c61ffcd6b32b73d",
+        "bytes": 336841
+      },
+      {
+        "timestamp_s": 6.8,
+        "sha256": "9caf53badef304506a12b8d480e11f2ce909fc8471095e8da8022201a022fdc9",
+        "bytes": 344902
+      },
+      {
+        "timestamp_s": 7.0,
+        "sha256": "60926b416ecb8cbd66bee6b20ba0f3071a78eb1dc1f5851188a0e492956754cf",
+        "bytes": 344392
+      },
+      {
+        "timestamp_s": 7.2,
+        "sha256": "0b7261b5949a7e02855f2cd2a9c0763914898fa47f89c877ef57ec1ab7a74d94",
+        "bytes": 347553
+      },
+      {
+        "timestamp_s": 7.4,
+        "sha256": "7ea0a6734e43f4f52044a149034056e98a8c6a726077b49b79c3fd928b834335",
+        "bytes": 353862
+      },
+      {
+        "timestamp_s": 7.6,
+        "sha256": "2b04dd8adbff5e1d0638763f553366bf8fdece9b9548fdd911d20b6d5025e785",
+        "bytes": 355890
+      },
+      {
+        "timestamp_s": 7.8,
+        "sha256": "86a2150896bb4209b8a0a22c34fbcc7d0fe4f162a6d5644c260f2f79ead50907",
+        "bytes": 360296
+      },
+      {
+        "timestamp_s": 8.0,
+        "sha256": "5c79070426eaa2b71b08d0febb904820ca1f90026eae67a87b2f1f3e4cc4548a",
+        "bytes": 362622
+      },
+      {
+        "timestamp_s": 8.2,
+        "sha256": "71a3eb74f9d9e77697bbca0b5e9f1784b46bafbb1630e2e1a7f6d350b73034a3",
+        "bytes": 368568
+      },
+      {
+        "timestamp_s": 8.4,
+        "sha256": "007e107daab0630840e93af45d0e886a9aa69490097a40db38564e0520552e6e",
+        "bytes": 372435
+      },
+      {
+        "timestamp_s": 8.6,
+        "sha256": "c17af9988dfdf279f47e383d66864c687c836c90ee99756a7995f04470aa0bed",
+        "bytes": 374763
+      },
+      {
+        "timestamp_s": 8.8,
+        "sha256": "57d4f9cd1f04d4b1b7a830039a1bccae7b5ace081707e488becf0e14a29441c1",
+        "bytes": 379181
+      },
+      {
+        "timestamp_s": 9.0,
+        "sha256": "edbcb013814828b2066d345fb0b35e77e972ebb3fbdde859cfcff1294b996fd0",
+        "bytes": 376659
+      },
+      {
+        "timestamp_s": 9.2,
+        "sha256": "74ef1f0005a3ee39c13bdf5ed48081541da95bfec905f5186262378fbf08a861",
+        "bytes": 382596
+      },
+      {
+        "timestamp_s": 9.4,
+        "sha256": "a9c62ae47c44481de34142dfbd5978dcd8bdf89d0f4a850e71f71fdfd90895e1",
+        "bytes": 383278
+      },
+      {
+        "timestamp_s": 9.6,
+        "sha256": "e9b386b3ac409a5fda8fc976318f48da2a7a74535d4b97f14d4efdb1672972f5",
+        "bytes": 380850
+      },
+      {
+        "timestamp_s": 9.8,
+        "sha256": "0d05d77dcd54359dcaaa2bd7d47fdabbfc0249f3da3f350761f2445016a23cf7",
+        "bytes": 383090
+      },
+      {
+        "timestamp_s": 10.0,
+        "sha256": "4939eee3880fb976ec9beadd86140f527861b0173b0fb53968d8b020b6f1468f",
+        "bytes": 384242
+      },
+      {
+        "timestamp_s": 10.2,
+        "sha256": "c28754dcd1b5d56230c5e5d10eb933f2fecdce0119296ddfaac93a12867df39d",
+        "bytes": 384714
+      },
+      {
+        "timestamp_s": 10.4,
+        "sha256": "27a7997fab47c7f703881706005bcb2701155cdf9e2be3dc8923cfa8019c55b0",
+        "bytes": 382526
+      },
+      {
+        "timestamp_s": 10.6,
+        "sha256": "224098840ecb7c787295fc0426ecd559bb9571395bc3f2b1bd9aa6ef30055b06",
+        "bytes": 383243
+      },
+      {
+        "timestamp_s": 10.8,
+        "sha256": "fad37e17e3a97b147b00751a007b6d98c016b0b9c2e103ac008201b8ee7401c2",
+        "bytes": 384002
+      },
+      {
+        "timestamp_s": 11.0,
+        "sha256": "4a7547260543eadff0ba9ce7480025e1dae12ff79bf7ee9cce5b5b7cc8eae851",
+        "bytes": 385211
+      },
+      {
+        "timestamp_s": 11.2,
+        "sha256": "60446706abe3a87d985c88c9e422be54d05cf8010f78cef3e35ba14d7b9dfd64",
+        "bytes": 384118
+      },
+      {
+        "timestamp_s": 11.4,
+        "sha256": "6e593db6cde323766d72bf41a2f519d45a5477631fb9213b1dc1c37e5c89139d",
+        "bytes": 388771
+      },
+      {
+        "timestamp_s": 11.6,
+        "sha256": "4898405c9c0493c69145760b89c40845716a250ed4c91e0e04bd16a8df6c2715",
+        "bytes": 391190
+      },
+      {
+        "timestamp_s": 11.8,
+        "sha256": "41be3062a553165a13c7dba81d7ae174c7833c7e4c43a711125ff3ab4403848f",
+        "bytes": 396011
+      },
+      {
+        "timestamp_s": 12.0,
+        "sha256": "941c01735a6fb4da460948a68836e13ffdb1328237b3ee8e6a2c2fce337aeed1",
+        "bytes": 396487
+      },
+      {
+        "timestamp_s": 12.2,
+        "sha256": "5b4570732706c2c2b300103f60f16dab17a52c6f5f89c203b6128b002cb805fd",
+        "bytes": 396944
+      },
+      {
+        "timestamp_s": 12.4,
+        "sha256": "6a8611646890ccd9daae3b4d9dce6b20934c83955edb5cdc682330a4596ed1bb",
+        "bytes": 401774
+      },
+      {
+        "timestamp_s": 12.6,
+        "sha256": "0c4d7cb03945019ca3ce588f3f0edbb813d4bd3f691fd596bcdc8462f2f4d553",
+        "bytes": 398367
+      },
+      {
+        "timestamp_s": 12.8,
+        "sha256": "6aa8ca670703a3fa92c37d5b6f1c1edcb849eba88779fb3c1ee475bb89cc546d",
+        "bytes": 397240
+      },
+      {
+        "timestamp_s": 13.0,
+        "sha256": "cda0432da051f431b11695200af50d9573e61de6358605a9666f993ae656ec1f",
+        "bytes": 400470
+      },
+      {
+        "timestamp_s": 13.2,
+        "sha256": "48d97c7f5466f2a18ddea6caa6cfa96c9bc4a0f833de806139ecb2b58f423a04",
+        "bytes": 397165
+      },
+      {
+        "timestamp_s": 13.4,
+        "sha256": "132b9aab082b7d572d1c8d9250b4bac24ef41cf8c23bbb75097f34f22f3b4122",
+        "bytes": 396515
+      },
+      {
+        "timestamp_s": 13.6,
+        "sha256": "9421cc2d6d2c3f37284436f8a5ff28b696e5437bea34b35d66be790b36c60ad1",
+        "bytes": 393789
+      },
+      {
+        "timestamp_s": 13.8,
+        "sha256": "51ec8c1ae76abc9e3d25f5b3bd07797fb526e90e7ea9bcefe825bc88397c8b9f",
+        "bytes": 396059
+      },
+      {
+        "timestamp_s": 14.0,
+        "sha256": "3762c2678564de3d35e41f12586485a51104d991939bb9b446bbf936bed0985f",
+        "bytes": 395109
+      },
+      {
+        "timestamp_s": 14.2,
+        "sha256": "ca3a9371bcff621959286c8464249708b71a1ebd37250a61740dc37557875930",
+        "bytes": 392660
+      },
+      {
+        "timestamp_s": 14.4,
+        "sha256": "6f4e92fe67cc36a64567180da1b28cef67cd1c65a88f7a73b5fe50b4d7f6bd18",
+        "bytes": 393160
+      },
+      {
+        "timestamp_s": 14.6,
+        "sha256": "c6c0a60b1a6dccb9fdb6a3f982aa4817345b1f41a2d6c083a89990c17fac264e",
+        "bytes": 394837
+      },
+      {
+        "timestamp_s": 14.8,
+        "sha256": "1d101399a0427b161e9e953241919014fe9e2b42c809a23f2cd84843308bfd0e",
+        "bytes": 393491
+      },
+      {
+        "timestamp_s": 15.0,
+        "sha256": "186eab5638fbd430dc61010a4cf216e9998946f0c2e68c597696bcb93155f7cb",
+        "bytes": 393571
+      },
+      {
+        "timestamp_s": 15.2,
+        "sha256": "803535e6611cf1669480a66ca2e1168a766174c85ff5ea6725a30a55a7970460",
+        "bytes": 394166
+      },
+      {
+        "timestamp_s": 15.4,
+        "sha256": "4722b001ac193aa97ac1da186b7d4d43468296591dd6a58323e06dec6480391a",
+        "bytes": 392861
+      },
+      {
+        "timestamp_s": 15.6,
+        "sha256": "84665b2d8ac332202ce910925413011ab4bd798240cef8809d23fd8e486b1660",
+        "bytes": 392776
+      },
+      {
+        "timestamp_s": 15.8,
+        "sha256": "8172c9cccb262c26a64e775fa8d6452a550bee2ba32028fe70c843566d2720a7",
+        "bytes": 393196
+      },
+      {
+        "timestamp_s": 16.0,
+        "sha256": "e008d755ea6d7725f3679b1773fd201f44e3d851ea7472ff627704fca15f7dca",
+        "bytes": 391398
+      },
+      {
+        "timestamp_s": 16.2,
+        "sha256": "e728a8077b308a7de56a729b9bbfc2876bc6b2041b9fe7597efd6ff6d8730985",
+        "bytes": 390931
+      },
+      {
+        "timestamp_s": 16.4,
+        "sha256": "143d9a52e4a86297c841df5431fed88e18999f710cf19ae8cb97964c58532a5e",
+        "bytes": 391563
+      },
+      {
+        "timestamp_s": 16.6,
+        "sha256": "3d4e368f8faf88cb74fe682095caa0586ca3187ba447f8363074e47891b057e1",
+        "bytes": 389536
+      },
+      {
+        "timestamp_s": 16.8,
+        "sha256": "f0305275fdb8516deb9278c58c49d2086df0b417e7b20c20fca15dd9d052303c",
+        "bytes": 386251
+      },
+      {
+        "timestamp_s": 17.0,
+        "sha256": "97ebec3d0314e5935ea820f3021bd3390bc6fc62f9b10765b0317465e69ede25",
+        "bytes": 387816
+      },
+      {
+        "timestamp_s": 17.2,
+        "sha256": "d31fb40c8181b88e5b0d61521b7b9afe91e3fe7386b0d4ad7def9668ec0453e5",
+        "bytes": 386715
+      },
+      {
+        "timestamp_s": 17.4,
+        "sha256": "a7e0178df5ad4fa89fda85407508b3d4344b0d394720d4147f952d23fc313d69",
+        "bytes": 385980
+      },
+      {
+        "timestamp_s": 17.6,
+        "sha256": "3bd6651e90cd2775b4176052ae7f4244c660090a2058da44afff886729a14e5b",
+        "bytes": 386211
+      },
+      {
+        "timestamp_s": 17.8,
+        "sha256": "6fba5bb9d0ae922dbc278eee8a53bf2b3e9cd02f2aa9155e180553fb07891e32",
+        "bytes": 389505
+      },
+      {
+        "timestamp_s": 18.0,
+        "sha256": "fdbfaa369c4f08c18d0fd9aae15c8b49fdd0c1ab01a31c245a3b0bfe779f5361",
+        "bytes": 383653
+      },
+      {
+        "timestamp_s": 18.2,
+        "sha256": "2126333e70256150017dfa4192a3ff3597a72591bd40740c5d64e1f2420203a1",
+        "bytes": 387682
+      },
+      {
+        "timestamp_s": 18.4,
+        "sha256": "207f33725b5960d2871acf8e323133bbbe6560261f7db5831044e42b1f642f07",
+        "bytes": 388316
+      },
+      {
+        "timestamp_s": 18.6,
+        "sha256": "cd233b923666d46df90125937c4aa07aedc45dd0ee0f41c0fc341628f3623bfc",
+        "bytes": 386488
+      },
+      {
+        "timestamp_s": 18.8,
+        "sha256": "9185537ebddc06f3e4897da37b8aac3367c037550084b7f060f1185364ba1fef",
+        "bytes": 387734
+      },
+      {
+        "timestamp_s": 19.0,
+        "sha256": "c1ff436c787843ae03269e7a91c94e3a0449bd121c738c2e0fcefc5ecd6084b1",
+        "bytes": 390997
+      },
+      {
+        "timestamp_s": 19.2,
+        "sha256": "b6279116a8dc14ccb2046f9d288db329d8ec8de72ebda928a43f3e3b3c1c3b6d",
+        "bytes": 389838
+      },
+      {
+        "timestamp_s": 19.4,
+        "sha256": "210d3958585a00896be7de8c512f21f4f6cb99f166429ce869a16e35ad438f1b",
+        "bytes": 392861
+      },
+      {
+        "timestamp_s": 19.6,
+        "sha256": "b5412320c59a6b486314d0611d2da2726d07608a3b128b52c37f8f1f0114928b",
+        "bytes": 392414
+      },
+      {
+        "timestamp_s": 19.8,
+        "sha256": "d0516e9aadd3175a4462aaae043478fcf7335a3f2352e5df2dd9da5eb5ab82f0",
+        "bytes": 389712
+      },
+      {
+        "timestamp_s": 20.0,
+        "sha256": "2f841a648f61b8c30c4343e9814fdfb7a70fc8e4e3649c66d6422de010ae960b",
+        "bytes": 391836
+      },
+      {
+        "timestamp_s": 20.2,
+        "sha256": "bd374d9c1d9f76cbaae749cf243439b424c016632476a79aa48d85fbe256128e",
+        "bytes": 390973
+      },
+      {
+        "timestamp_s": 20.4,
+        "sha256": "61452a7c2ea799af76df6d493ac6624ac39216bbcc8ce9ac4f0f8d533cc81191",
+        "bytes": 390836
+      },
+      {
+        "timestamp_s": 20.6,
+        "sha256": "23cc9e06e485ccc17e0da2547350066397b3013a31362bbfad9a257eb8f46774",
+        "bytes": 389581
+      },
+      {
+        "timestamp_s": 20.8,
+        "sha256": "334505d452e61ceb2c75ce6efff8b91e053c92a1eb43afeddfbb810a0505bfa4",
+        "bytes": 389357
+      },
+      {
+        "timestamp_s": 21.0,
+        "sha256": "b808b4a4904b924cf18ef313ee244e088c937b894b318323a8782b42e20ef05a",
+        "bytes": 390052
+      },
+      {
+        "timestamp_s": 21.2,
+        "sha256": "4799f7201d5ce4675c39e0ecb8652c5bc7c04ff48bae81ba2679d993e11c75ce",
+        "bytes": 392407
+      },
+      {
+        "timestamp_s": 21.4,
+        "sha256": "c5be82094d72a8b46a1d39810cbe7238a9836a6f544f73201aec8af28367544e",
+        "bytes": 392529
+      },
+      {
+        "timestamp_s": 21.6,
+        "sha256": "42258fc2e8dbb7fc516b65f9fde7481adf6f7492f054965456b3a32231f99b05",
+        "bytes": 394672
+      },
+      {
+        "timestamp_s": 21.8,
+        "sha256": "6d55eaeadcca971edfefe1531cb08eafe192e4311d77f1092e1d62e8cca94065",
+        "bytes": 396278
+      },
+      {
+        "timestamp_s": 22.0,
+        "sha256": "ff3ee8c5c9907dbe7decc39275dde7322dbc696c94261b0534b0ccadd3ca520f",
+        "bytes": 395940
+      },
+      {
+        "timestamp_s": 22.2,
+        "sha256": "73ea729d87001c78589eb7601d88c6450539693833b2a689761d51a10130139e",
+        "bytes": 391274
+      },
+      {
+        "timestamp_s": 22.4,
+        "sha256": "d40403d5e4bd98bd71dc4ef0ec23187803c950f305c225c8ebfc021f4b48febb",
+        "bytes": 397764
+      },
+      {
+        "timestamp_s": 22.6,
+        "sha256": "1ec6eb676090050ea18fab388edd08129447220defe7fe7a5f1d2e382549140b",
+        "bytes": 394901
+      },
+      {
+        "timestamp_s": 22.8,
+        "sha256": "6fd68714287a0a6c59855198ffd7fa0728ae88a3461464f7093fff2bcb80e66d",
+        "bytes": 395787
+      },
+      {
+        "timestamp_s": 23.0,
+        "sha256": "a3098741dc0d3e1e11b9c8267298e571cc703d27eff8f1f7681ac6fc098d3016",
+        "bytes": 395065
+      },
+      {
+        "timestamp_s": 23.2,
+        "sha256": "0da6d70cda86fc7861810fe652647ebba2f8ce8a56db7bd40e8e435afe4eba09",
+        "bytes": 392726
+      },
+      {
+        "timestamp_s": 23.4,
+        "sha256": "dc3cc152ae60986fab5f80096e4f99f62dd0d7424825fb71979afbe8fcfc9826",
+        "bytes": 393086
+      },
+      {
+        "timestamp_s": 23.6,
+        "sha256": "e3c00c430d23725a02b4776fbe603637e96e89439e053b88c14e59f6709b25fb",
+        "bytes": 389885
+      },
+      {
+        "timestamp_s": 23.8,
+        "sha256": "c48d4f13827c1d848fc0fa9e8daaeeb15382a0da848df5cb74e041b1f4f7b998",
+        "bytes": 387407
+      },
+      {
+        "timestamp_s": 24.0,
+        "sha256": "8b9d333e68f2b69a0322aec5157aa5c9305e526d54908367789fded771aae871",
+        "bytes": 384650
+      },
+      {
+        "timestamp_s": 24.2,
+        "sha256": "1044fb512194e1d4a3e5f1f6fa97fe6a3076c64c111066fe7697418fb5e86de1",
+        "bytes": 385454
+      },
+      {
+        "timestamp_s": 24.4,
+        "sha256": "eca925ee92a382c9c36638fae76e88bfa8a3928f578f49ed217f160b65b0a8ff",
+        "bytes": 381962
+      },
+      {
+        "timestamp_s": 24.6,
+        "sha256": "07a48cc279b9b0790ac0d756095c8a8f6a296200098995d52f018d307bde65eb",
+        "bytes": 386942
+      },
+      {
+        "timestamp_s": 24.8,
+        "sha256": "7f635057d5d863d7ba53890fd67ee3d7a4264eb493e82036bd36fb53df11da8c",
+        "bytes": 387764
+      },
+      {
+        "timestamp_s": 25.0,
+        "sha256": "e35d97f9ce3f8e4fcd52611f571d09348e2f8adcbdc878d9ca783d8d8bd326f0",
+        "bytes": 387777
+      },
+      {
+        "timestamp_s": 25.2,
+        "sha256": "38ec6ea64f0940fef88129f4a50b4658a9f1be913e65c5f5184a4596872e641c",
+        "bytes": 387519
+      },
+      {
+        "timestamp_s": 25.4,
+        "sha256": "a3cc5c2c3b7a174fa820f5e26246d046adc6fb0618cb246640b8eee803d802fc",
+        "bytes": 384993
+      },
+      {
+        "timestamp_s": 25.6,
+        "sha256": "bd950867bdc424a9632ce6fc07d829ca5b426fbb8807efd59d8a1e09d32bd799",
+        "bytes": 383472
+      },
+      {
+        "timestamp_s": 25.8,
+        "sha256": "5a6ad10212438c757c63091db1c9a942c400caf23d59ca4507e6517bbd139325",
+        "bytes": 382412
+      },
+      {
+        "timestamp_s": 26.0,
+        "sha256": "086e5ce723fcc1657a1d7814e0fc3f2605dfefc296051e2b38b865ff74346639",
+        "bytes": 379828
+      },
+      {
+        "timestamp_s": 26.2,
+        "sha256": "8d9f182b82bbec41031cdf79099ac7c9ebdb2a3aad8f1924d367315ef4eb807e",
+        "bytes": 380137
+      },
+      {
+        "timestamp_s": 26.4,
+        "sha256": "d6b6312e37b1d57f2d6c73d98ce84c78321696b74aaae7af5c4389a049117d7a",
+        "bytes": 376584
+      },
+      {
+        "timestamp_s": 26.6,
+        "sha256": "83e347838b45d75f27ca141fba20428e6e4c09572e9061725a0519d3944c35ff",
+        "bytes": 371791
+      },
+      {
+        "timestamp_s": 26.8,
+        "sha256": "26786cdeb7cbdc5469d629d6277460e400d6c2214266efa6195b5e82ef8c0e37",
+        "bytes": 371924
+      },
+      {
+        "timestamp_s": 27.0,
+        "sha256": "8967e1f2c2cad95cfeda231831bf4c0e6aa89475ef8944115279c50920798b7b",
+        "bytes": 365359
+      },
+      {
+        "timestamp_s": 27.2,
+        "sha256": "740343efbc3584945f306601290d0e5cd145bc66d976216b561807411897b703",
+        "bytes": 362595
+      },
+      {
+        "timestamp_s": 27.4,
+        "sha256": "80403f66bc4ec126a80a769aceeef8d6e417eacaafd46231fa4b5b8a51c975c2",
+        "bytes": 354404
+      },
+      {
+        "timestamp_s": 27.6,
+        "sha256": "f56a854f44a0f0c1e0e4d8de46e3e7c2a5883fb8473c8fdcaad5f9f9175eee39",
+        "bytes": 353607
+      },
+      {
+        "timestamp_s": 27.8,
+        "sha256": "0b70bffe9372a4e253a72e64afdb2e70fc66c94e22104b9f155ae1ac71a42619",
+        "bytes": 350933
+      },
+      {
+        "timestamp_s": 28.0,
+        "sha256": "a3d7815541b34f68a83f1810a6d79b537882235fc9526321fe1f6f6ec25b0322",
+        "bytes": 340289
+      },
+      {
+        "timestamp_s": 28.2,
+        "sha256": "eb95829f94309f810d60e5dcb0d01e7a0419f4e0a06b2694196b3360266746ba",
+        "bytes": 344667
+      },
+      {
+        "timestamp_s": 28.4,
+        "sha256": "134dbb821d0a33d3d05ad645f3d3d54c2e66bd8091ab8b4d3821502cc0db9f7a",
+        "bytes": 338069
+      },
+      {
+        "timestamp_s": 28.6,
+        "sha256": "8e26a73bdc03f00c10d4a1caa4674e0e8968ad04e5f4739c264d82e533886987",
+        "bytes": 342454
+      },
+      {
+        "timestamp_s": 28.8,
+        "sha256": "7f084fe1412322dfa922b55e1bee73e082f4d88c97c646aab969f38625386332",
+        "bytes": 331213
+      },
+      {
+        "timestamp_s": 29.0,
+        "sha256": "f479588ae7561f1406fe6f5cbf2c5241806ccdfc2483c830b2f63f5f0d75be7f",
+        "bytes": 342565
+      },
+      {
+        "timestamp_s": 29.2,
+        "sha256": "2d4af51c983574b41db08ce805e0ee2ad8c0fa4ac2b0061f01e07a52f7fb146d",
+        "bytes": 344530
+      },
+      {
+        "timestamp_s": 29.4,
+        "sha256": "621f21601e7e2aca58817c73fc10368f29a14739e2967a1546330d364c845cd5",
+        "bytes": 338044
+      },
+      {
+        "timestamp_s": 29.6,
+        "sha256": "4f428130f83c429eebdbf1855bc3cae9c4c231755f9bc9ed50789e5cd630f97c",
+        "bytes": 333522
+      },
+      {
+        "timestamp_s": 29.8,
+        "sha256": "54979e78f0c4c7e1c018b0bc1b1c2303100d4c033f6a183f04d6ea35be955390",
+        "bytes": 334102
+      }
+    ],
+    "config": {
+      "surface_voxel_m": 0.15,
+      "blind_m": 0.1,
+      "visual_enabled": true,
+      "voxel_size_m": 0.5,
+      "max_layer": 2,
+      "max_iterations": 5,
+      "depth_error_m": 0.02,
+      "beam_error_deg": 0.05,
+      "plane_eigenvalue_threshold": 0.0025,
+      "imu_init_samples": 30,
+      "gyro_covariance": 0.3,
+      "acceleration_covariance": 0.5,
+      "patch_size_px": 8,
+      "pyramid_levels": 4,
+      "exposure_estimation": true
+    },
+    "ground_truth_inputs": [],
+    "right_camera_consumed": false,
+    "transport_sha256": "85ed9271494f7c16d136fbb8bf7b0939bbeadf421eea28268d9eee67e22c97a9",
+    "transport_bytes": 62619598
+  },
+  "sensor_frame": "imu_body",
+  "ground_truth_inputs": [],
+  "calibration": {
+    "T_B_C": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        -1.0,
+        0.0,
+        0.0,
+        0.06
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_B_I": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_B_L": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        -1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_C_L": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.06
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_M_L": [
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        -1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0,
+        0.75
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "baseline_m": 0.12,
+    "body_frame": "B_x_forward_y_left_z_up",
+    "camera_frame": "C_optical_x_right_y_down_z_forward",
+    "cx_left_px": 319.5,
+    "cx_right_px": 319.5,
+    "cy_px": 239.5,
+    "distortion": "none_simulated_pinhole",
+    "fx_px": 415.69219381653056,
+    "fy_px": 415.69219381653056,
+    "image_height": 480,
+    "image_width": 640,
+    "lidar_frame": "L_optical_aligned_rig_center",
+    "map_frame": "M_local_z_up",
+    "map_frame_description": "instantaneous_rig_local_x_forward_y_left_z_up_ground_origin",
+    "rectified": true,
+    "schema": "bhl-rectified-stereo-v1",
+    "stereo_exposure_offset_s": 0.0,
+    "transform_convention": "T_A_B_maps_B_coordinates_into_A"
+  },
+  "config": {
+    "surface_voxel_m": 0.15,
+    "blind_m": 0.1,
+    "visual_enabled": true,
+    "voxel_size_m": 0.5,
+    "max_layer": 2,
+    "max_iterations": 5,
+    "depth_error_m": 0.02,
+    "beam_error_deg": 0.05,
+    "plane_eigenvalue_threshold": 0.0025,
+    "imu_init_samples": 30,
+    "gyro_covariance": 0.3,
+    "acceleration_covariance": 0.5,
+    "patch_size_px": 8,
+    "pyramid_levels": 4,
+    "exposure_estimation": true
+  },
+  "input_files_sha256": {
+    "inference/ramp_step/00000_imu.npz": "c177581d50f35bb02bcbbe42181d31a4755606174acb32d6a358594597bddb8f",
+    "inference/ramp_step/00000_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00000_lidar.npz": "d0332e99e926f4415e6fe56042b32a07431ada23487ad97990dae82fe7498135",
+    "inference/ramp_step/00001_imu.npz": "77a06b4cad65511273e203277de231bd0ffca62bcde8a8083ad76fe569bb1b9f",
+    "inference/ramp_step/00001_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00001_lidar.npz": "82df4dfa18041546dda7e53992c08a63ec9e403a10da8b20bcbe4748f4a8176e",
+    "inference/ramp_step/00002_imu.npz": "ba21541062ea49c391abd981c59fd5fb5ff090d9bec92ebab88e6855b9b4d6e2",
+    "inference/ramp_step/00002_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00002_lidar.npz": "cd282ebfca733b7fbeb9ce033e5a493156aa5242d1608f15314bcc1a2951fdec",
+    "inference/ramp_step/00003_imu.npz": "08fb2f1ad6edd7b0cb80aff171d3937f71a57bfda0601648536d2bdaf5efe1c0",
+    "inference/ramp_step/00003_left.png": "84944f5405bcec76f29e9e3c535c89a623db36958e1baad0cbbefbf4f8be64d7",
+    "inference/ramp_step/00003_lidar.npz": "2d825251a0911cf04ac9791d7ac8be1bf03c2ca0d88b2acd5dea0a14aa90053c",
+    "inference/ramp_step/00004_imu.npz": "e9cc2f8d1417462aac52d59af7e83e0af378b1bdd5505262c3ff253ae162be51",
+    "inference/ramp_step/00004_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00004_lidar.npz": "2efd43d19cecb3443b1a1fd570e713b622f61c83793f223036e6b310990cd22e",
+    "inference/ramp_step/00005_imu.npz": "e783bc1a9ff79abfd2cf05b4a69a28f75932e1875d123bb49d51293ea7b609b2",
+    "inference/ramp_step/00005_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00005_lidar.npz": "5850a95ae79b584fece4e5d295ee21267554c584323a99bcea8a4d27af343e7d",
+    "inference/ramp_step/00006_imu.npz": "0fc0bfb13a4811f6f16aa603adeeec1337c3f18b7593223653843f983063a0fc",
+    "inference/ramp_step/00006_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00006_lidar.npz": "a9b93c994e36907b378931e2051efc468e04d15864f0b1849e12c521205f3623",
+    "inference/ramp_step/00007_imu.npz": "23fd25a87a9850135e79ed36a4d7f83c543e065a1af22f1595b6d29502be734f",
+    "inference/ramp_step/00007_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00007_lidar.npz": "b7f25b9a5536a7d6e60dd65767dd2b037169caf87ef0ef5c88efc1695abd0469",
+    "inference/ramp_step/00008_imu.npz": "730655e6abfcf48084bbbf2b48a2876b4fa8d13dace15428ecb14d004c3cfa37",
+    "inference/ramp_step/00008_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00008_lidar.npz": "366c25eeb4fb22400ae0f029e717036c548a993dfa44f9fc3bff0630fb307733",
+    "inference/ramp_step/00009_imu.npz": "33dd081fe33360457a7d1156760d38a49d276b561928a4c63b9ad68420cd3ce3",
+    "inference/ramp_step/00009_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00009_lidar.npz": "a2c188a39b8bfc21029d419856aa7744061533605ff9ba29f14a289cd94839e4",
+    "inference/ramp_step/00010_imu.npz": "fb9dbb4bfa22e73fb76b14226ed1957b16b3371278cf473ac0d5f0298a1f6981",
+    "inference/ramp_step/00010_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00010_lidar.npz": "f31bd8d784d971cefa189a2c4b16a00323776fed877876455459e4309250b82f",
+    "inference/ramp_step/00011_imu.npz": "70c5f2d3f74db909d92820a8f1d68a5b9674d2a6502e475d021f99760068b8cb",
+    "inference/ramp_step/00011_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00011_lidar.npz": "159dbe21a1e727e6d7064d4dc771ff2f935cee5ea6de5e72b38f089f268e4b4a",
+    "inference/ramp_step/00012_imu.npz": "cbf54f9a0dc219099c9f09e7fe6c422ebefa774ec07f8d1c07fd9a78a950f897",
+    "inference/ramp_step/00012_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00012_lidar.npz": "be5cdaa55ba7fb31549dde3c68253856928fde99387ee213aeded3a2375035b1",
+    "inference/ramp_step/00013_imu.npz": "b484a7ad47fc7fe3ebf844a0dce02a7cd9ac01db24e11f98abc924333959ca1a",
+    "inference/ramp_step/00013_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00013_lidar.npz": "4c70ea60bf8cb5504e857bdcfacbbf4f281bf158aa3aba3a9fe8af664bedcff9",
+    "inference/ramp_step/00014_imu.npz": "3904b53e089e80497668fbf45f3da07e9b8a82d5ebd31769d51fe239bc39ca8d",
+    "inference/ramp_step/00014_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00014_lidar.npz": "22eb5eed8dcdecb57dbf2cc08e95218b027ffc920e45a8c20ffdb313278be72e",
+    "inference/ramp_step/00015_imu.npz": "a0af87086f2b53a42854acae202f3ba5c6741135a35e2dfc7b080f99cf1ea048",
+    "inference/ramp_step/00015_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00015_lidar.npz": "e7c5dc182ff1021a4f0d3f2f4dccb7c5b073e0848dbf40a2c5b4b4f76ca70af4",
+    "inference/ramp_step/00016_imu.npz": "72e5b65ff5c44d75e78dd69d10bae03cff09c382a52b60fa6c694e53f4cb0588",
+    "inference/ramp_step/00016_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00016_lidar.npz": "836110d6559db684ec2d3af9cc87295ac89f8a1f7ec124e0d94e95067e3b761d",
+    "inference/ramp_step/00017_imu.npz": "5ecfaec597b759b7be31c9fcd3039bde3c339ea77c448f864594a27183c412a0",
+    "inference/ramp_step/00017_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00017_lidar.npz": "d05b5097b299be6eb9b04ad157e0acee2060dcca8f53a4e46f968ca7c1418c9f",
+    "inference/ramp_step/00018_imu.npz": "06ae6113972b1e391fa56a1dd1a46f7c52cfc8322900fc61e58c4df188ce891f",
+    "inference/ramp_step/00018_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00018_lidar.npz": "c57a0325048f765ab38259343ea25d5948b8e535fe4d19067eee305fed314218",
+    "inference/ramp_step/00019_imu.npz": "7c820daaf91c751d05380612786050764c020c160ae348d2eb73f937bbbd6132",
+    "inference/ramp_step/00019_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00019_lidar.npz": "36dbaa44748b2e284a9bca4b7253c1bc67838b43fe8187646599f714c5f45702",
+    "inference/ramp_step/00020_imu.npz": "af865e638666e5edbbc40e5ab48f2b2c8212073574e6c68ce905ab147e96ec36",
+    "inference/ramp_step/00020_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00020_lidar.npz": "518f7c30172cc97c0de93d2e2d76b534ba5fa00e022243eaa60f4a9f210cd089",
+    "inference/ramp_step/00021_imu.npz": "3f64b04719c30850298e638590601ee31afb4372890159e12e49b65e63bdb21f",
+    "inference/ramp_step/00021_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00021_lidar.npz": "6a8870efbebc52d4f11576e27b469fcdc0bd3801e12c6770acdb5e3dc75a50bc",
+    "inference/ramp_step/00022_imu.npz": "a15c54d75688c3484155f42bd3dad4943c13b4ac3684cbcc36b1b27bedcc7496",
+    "inference/ramp_step/00022_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00022_lidar.npz": "d0d31782e4d4af61aff38cf572aae52774b409a387cbbd765557d85195a1dc1c",
+    "inference/ramp_step/00023_imu.npz": "925bf1b4ddfc7e73f8c0a9da87183c9f42f7c00aaaf7a8ec161f22b1b49b40b5",
+    "inference/ramp_step/00023_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00023_lidar.npz": "74a565e5405a043b2e085b5310f91898eaf91eda3ec1ce9cffe198edbd154f34",
+    "inference/ramp_step/00024_imu.npz": "a3cd78a5166685ccc14d4e831c9c225202f3ac978e7e5b42c9a7e98e6f0afaa9",
+    "inference/ramp_step/00024_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00024_lidar.npz": "a815a9bd8c73c97488801db7c5f3a95fa74a7a0ad54c8e14a84a77f0a917f645",
+    "inference/ramp_step/00025_imu.npz": "4b4d0c317470898fa42bbb27f2786e5c72254daa86e3250b6e3bc86faf46db17",
+    "inference/ramp_step/00025_left.png": "dceef9c053dcfe3c7d249974a0961fa19d2daa4b4edc25d75624d380d583de1f",
+    "inference/ramp_step/00025_lidar.npz": "6f8e010e7a06a02f0477881035078f0325322b23246f7c9321fd70bea92a3660",
+    "inference/ramp_step/00026_imu.npz": "c9055ea4014c22c06c2105c9a477ebeea7e36008be5e6d1b3617935d0cb4e9c6",
+    "inference/ramp_step/00026_left.png": "3aaf240f101eddb7859739bc23c3594a8e6b4f973fa1c68640c375d9ff388de4",
+    "inference/ramp_step/00026_lidar.npz": "9d07566340026533cde8692bdcc14c8885e2dd80e7415200d60e4d8ebce7d118",
+    "inference/ramp_step/00027_imu.npz": "4b043dbb6791767eb349434648f3aea2b83e7d30a2c74b0c56c4f998d12d6d72",
+    "inference/ramp_step/00027_left.png": "1ac226b59f227d85c908a040aa13134be67ec14604fadf7637fe8da14582d115",
+    "inference/ramp_step/00027_lidar.npz": "dfdec0dd0fe99e8870b2467f2ca9385cd7fd4feefa96a02cbb9b76acdc3219be",
+    "inference/ramp_step/00028_imu.npz": "41b8961bbeef8320128c24f923058e68b103cb90ac199bbc00a8f2bf85db3595",
+    "inference/ramp_step/00028_left.png": "17000bd755ef12db4cc536fe406416190c758c1ccc49e1c2d4bab8627ae70034",
+    "inference/ramp_step/00028_lidar.npz": "98d9f4694412d6896fb18cd1d3d84ec6b736ef3f8949dc9381e544a0f172d8b5",
+    "inference/ramp_step/00029_imu.npz": "217ca3a8ae74c86be46e4392309afbee4f4c241f1fc9dfe4651903ba49f62960",
+    "inference/ramp_step/00029_left.png": "c692bc681a27f48f144e52b8091786864acaf979641bc213ad2c536057a2fac1",
+    "inference/ramp_step/00029_lidar.npz": "1827c605303a747ae732185d9bef22b96f6157aec96719a1101ef13a2a86ea7a",
+    "inference/ramp_step/00030_imu.npz": "275793ead0152a05b33c03b4c5ec75772ced6b1ea06ef678d517333240600a87",
+    "inference/ramp_step/00030_left.png": "5552ddb29eecc3e410725967903edaccf3ae5ab69c2b6e4df4bdaa255f4b9d44",
+    "inference/ramp_step/00030_lidar.npz": "9d074d4abd4ab80964c8f8f2f9a8f2a84fe760b9ce852d379a8558ab820f8120",
+    "inference/ramp_step/00031_imu.npz": "58f0f561ad4fcb1a30d2f53ef45277d9daef8dbd3329362a19d78894d2f14cec",
+    "inference/ramp_step/00031_left.png": "d0a7c7366cc945c0e04516ce45b2e597c7dc2262cbb9afc1652493690dd2b35b",
+    "inference/ramp_step/00031_lidar.npz": "148b6e5f4680cfe023df7432555ebbb14332094c607d66384c0e5b9c0759727f",
+    "inference/ramp_step/00032_imu.npz": "1e7686ad2a472b8f3d724de5976091174c0f8da048ec127024423191ea4cf6d4",
+    "inference/ramp_step/00032_left.png": "bffaa074a8b4bdf9b5a0d1057c82410d83823eeed33c950e4a8a544d5068da59",
+    "inference/ramp_step/00032_lidar.npz": "89ebbbe5363497e96a22c26367cc06a21a3ebce05d9a258bef2fc0e4739d7063",
+    "inference/ramp_step/00033_imu.npz": "6505151fd246b495dc9d44d8f7d8f3a3d12d7a1a96ac4a55d95199de8169081c",
+    "inference/ramp_step/00033_left.png": "beadf2fce493ab96771a0cf4949358c4d95df23f6389f8b13c61ffcd6b32b73d",
+    "inference/ramp_step/00033_lidar.npz": "fd10d43a076ae2cb2572c9ff6a8f4195af4e6ff4925cdfa9b6839ed589d7006a",
+    "inference/ramp_step/00034_imu.npz": "ffda3332019dca4274492bfaf8569793aa9cc9f2ce407ebc6bf245165d979d85",
+    "inference/ramp_step/00034_left.png": "9caf53badef304506a12b8d480e11f2ce909fc8471095e8da8022201a022fdc9",
+    "inference/ramp_step/00034_lidar.npz": "9cb41a7aafa2c760d44e6cae92387ea413b633fed15b1a20edff3c5e77c05e9a",
+    "inference/ramp_step/00035_imu.npz": "a2f3c28cbd9300fe70ff847fc65a6f9dd5120bb407b2eb4bf5d15357a30393ca",
+    "inference/ramp_step/00035_left.png": "60926b416ecb8cbd66bee6b20ba0f3071a78eb1dc1f5851188a0e492956754cf",
+    "inference/ramp_step/00035_lidar.npz": "7efb78bbb15c0aa179e3d06c6349e05467428ca564aa5c80b4d3b8598939504e",
+    "inference/ramp_step/00036_imu.npz": "a7e32cd22290ca3a1de0899d4e19ca1f17d66c43d31ca56b6cff85334788b7fa",
+    "inference/ramp_step/00036_left.png": "0b7261b5949a7e02855f2cd2a9c0763914898fa47f89c877ef57ec1ab7a74d94",
+    "inference/ramp_step/00036_lidar.npz": "5f28592c6825b299614a26f10270f314e8a7c19e7b8cbe766721729af33a0753",
+    "inference/ramp_step/00037_imu.npz": "d3e9f4cf7c819f5ddeef71bb2fa857250adab59519767be2e2f590e268483919",
+    "inference/ramp_step/00037_left.png": "7ea0a6734e43f4f52044a149034056e98a8c6a726077b49b79c3fd928b834335",
+    "inference/ramp_step/00037_lidar.npz": "95ccbd94ac14c02bd319f6108588fa834f33060ead8132d63aa0e3c8fa7693d8",
+    "inference/ramp_step/00038_imu.npz": "ee68e27dd2dd5b20e2cebe4697bfa1282c519342225f91c23b01f2d9f1016890",
+    "inference/ramp_step/00038_left.png": "2b04dd8adbff5e1d0638763f553366bf8fdece9b9548fdd911d20b6d5025e785",
+    "inference/ramp_step/00038_lidar.npz": "d98e3b62dfbc4907a30938155201bc771564c0e316823ecd458e914ab5cc9c89",
+    "inference/ramp_step/00039_imu.npz": "8d3617202bf7008fc0c1f2748b74a94187175c1c053db97baa575628044e459c",
+    "inference/ramp_step/00039_left.png": "86a2150896bb4209b8a0a22c34fbcc7d0fe4f162a6d5644c260f2f79ead50907",
+    "inference/ramp_step/00039_lidar.npz": "23099968ab6961a1bba67fbacab4436b1bd9579555bb8615261e8f3e06f59c98",
+    "inference/ramp_step/00040_imu.npz": "07511a75c0bd22f35233a46d7bc3075679f1eddbd92c6483b205c0160a0854f9",
+    "inference/ramp_step/00040_left.png": "5c79070426eaa2b71b08d0febb904820ca1f90026eae67a87b2f1f3e4cc4548a",
+    "inference/ramp_step/00040_lidar.npz": "d02698292e753382932f305bc4ae29ab531d989e221e7b4c0cc104c63b7e6505",
+    "inference/ramp_step/00041_imu.npz": "4eab91ba7ad2ce11b9aaf9db949165cc5599e75e09c5fc4e62088cf958073601",
+    "inference/ramp_step/00041_left.png": "71a3eb74f9d9e77697bbca0b5e9f1784b46bafbb1630e2e1a7f6d350b73034a3",
+    "inference/ramp_step/00041_lidar.npz": "971bdfe801fd5e43ba30732bbad03f134c4c3c387b1b5c606fafe26886396971",
+    "inference/ramp_step/00042_imu.npz": "c79e1bd80d8663bc988ff5c897ccb77e590eab03a31397509395e02dc95d4404",
+    "inference/ramp_step/00042_left.png": "007e107daab0630840e93af45d0e886a9aa69490097a40db38564e0520552e6e",
+    "inference/ramp_step/00042_lidar.npz": "8944b8dca7660603f4bd2a48e2653ad756c2b992d00862b707170790d9056cba",
+    "inference/ramp_step/00043_imu.npz": "459d5f8fcce10a0ff4a9f6afb6a907f642e0fb940ea3ddbc1542c62cbb842865",
+    "inference/ramp_step/00043_left.png": "c17af9988dfdf279f47e383d66864c687c836c90ee99756a7995f04470aa0bed",
+    "inference/ramp_step/00043_lidar.npz": "a549b84d1228f1ca53f3499ea2984277bf99284f8239882fce89b60ddd64fceb",
+    "inference/ramp_step/00044_imu.npz": "c67dd68dadf592c64b17c337e014131ad58057f5d4f2e38e3693a7b6270a61c5",
+    "inference/ramp_step/00044_left.png": "57d4f9cd1f04d4b1b7a830039a1bccae7b5ace081707e488becf0e14a29441c1",
+    "inference/ramp_step/00044_lidar.npz": "7bc53b5948a57d38f41ba47e6ff6be85a77ac8b209206c4b9b0b772ab085de04",
+    "inference/ramp_step/00045_imu.npz": "5916f89372e08980bc6d116ab7306d349be4de2a6e5c6475e4129798f23bc2fb",
+    "inference/ramp_step/00045_left.png": "edbcb013814828b2066d345fb0b35e77e972ebb3fbdde859cfcff1294b996fd0",
+    "inference/ramp_step/00045_lidar.npz": "e1003067e483c920ef404364683c41c4a3f9caf6cf1f1b6dcf8d9c9e0ce9740e",
+    "inference/ramp_step/00046_imu.npz": "2accefe5bafc0e0dee0141aeaf5454b1f86ac3a204b62e060db256c7ad55abec",
+    "inference/ramp_step/00046_left.png": "74ef1f0005a3ee39c13bdf5ed48081541da95bfec905f5186262378fbf08a861",
+    "inference/ramp_step/00046_lidar.npz": "74a32d973d76c7571c653014578e02bb5d4dd2911576e51db699d99d8c2cee2d",
+    "inference/ramp_step/00047_imu.npz": "182ceef2ae59e27ba620c9768c481e884239378e19a799afb8915b0a5f136d98",
+    "inference/ramp_step/00047_left.png": "a9c62ae47c44481de34142dfbd5978dcd8bdf89d0f4a850e71f71fdfd90895e1",
+    "inference/ramp_step/00047_lidar.npz": "25e49cd50ed2a0128a8be992f780a59eddc70b2ddf4b288517821e87d40130aa",
+    "inference/ramp_step/00048_imu.npz": "146f02b3d2261876dbd63124fffa5298d12b445df21f163b173ba5f8c803fe35",
+    "inference/ramp_step/00048_left.png": "e9b386b3ac409a5fda8fc976318f48da2a7a74535d4b97f14d4efdb1672972f5",
+    "inference/ramp_step/00048_lidar.npz": "ffaf7c5370c321f0e81a4f86377baeea87b6cd2f106ed5abdcaf94e670dc3881",
+    "inference/ramp_step/00049_imu.npz": "3e4e271dd81422b2205b37342e58ae3375f0b97aaaac6f4f74c7b848ddb086ee",
+    "inference/ramp_step/00049_left.png": "0d05d77dcd54359dcaaa2bd7d47fdabbfc0249f3da3f350761f2445016a23cf7",
+    "inference/ramp_step/00049_lidar.npz": "98a98bf120f310f1ba84818c2652789202f3fa35db0d59d6d8eea4d3e149ab6b",
+    "inference/ramp_step/00050_imu.npz": "7aa19c8ea6b223d73a13e0ab82f1695ca3d7ec260e212fbc3d443f2176379e66",
+    "inference/ramp_step/00050_left.png": "4939eee3880fb976ec9beadd86140f527861b0173b0fb53968d8b020b6f1468f",
+    "inference/ramp_step/00050_lidar.npz": "dfe2102d96ff477fa1273c0f87c5861d3402c0058be802486ae8cd583d814ee3",
+    "inference/ramp_step/00051_imu.npz": "36cb21427a5cb2e146e07f4ff08c995f4e4c2a7b4110bfef12d0de47e9fb7ce0",
+    "inference/ramp_step/00051_left.png": "c28754dcd1b5d56230c5e5d10eb933f2fecdce0119296ddfaac93a12867df39d",
+    "inference/ramp_step/00051_lidar.npz": "88467ee777f47ceccd1fd0984b02b06db6e045749de689fe1b68292115c31578",
+    "inference/ramp_step/00052_imu.npz": "b813a6279741d468ffdcc38051a93f1adfbe39ec01e6b2c5091e72ea4fae696e",
+    "inference/ramp_step/00052_left.png": "27a7997fab47c7f703881706005bcb2701155cdf9e2be3dc8923cfa8019c55b0",
+    "inference/ramp_step/00052_lidar.npz": "fca6aea90368e313af921e9b64ac708a8590f950d7a85b4bd67a412f14807cb3",
+    "inference/ramp_step/00053_imu.npz": "24a339501c26812deee1653567433e414ed1d6021f5f458dfe69cc067afb1a27",
+    "inference/ramp_step/00053_left.png": "224098840ecb7c787295fc0426ecd559bb9571395bc3f2b1bd9aa6ef30055b06",
+    "inference/ramp_step/00053_lidar.npz": "29664656241123e3debfc4b54cd6c85078e4c5d31547dbc21dfe102a3a231f47",
+    "inference/ramp_step/00054_imu.npz": "5835b4bb9b51ec3a0ffb6631b1486c697da71c0cdc51cc0e8448e19a4a336911",
+    "inference/ramp_step/00054_left.png": "fad37e17e3a97b147b00751a007b6d98c016b0b9c2e103ac008201b8ee7401c2",
+    "inference/ramp_step/00054_lidar.npz": "7faeac558ca1136844f9d4142eab9a394448e1fbce4f5401b97838728f2b6160",
+    "inference/ramp_step/00055_imu.npz": "624eb20eb73193df1a749ad00b1dfdbda421b7791e0997583e75e764c5bac21f",
+    "inference/ramp_step/00055_left.png": "4a7547260543eadff0ba9ce7480025e1dae12ff79bf7ee9cce5b5b7cc8eae851",
+    "inference/ramp_step/00055_lidar.npz": "b9d3d8b7d6a55fded346b6d138b401acf766694f4356db9cdeb296d021d6dbc8",
+    "inference/ramp_step/00056_imu.npz": "5dd51d2268db7e1790fc2b7378c20aaeb40b3eab520d09463354de27f89fecc2",
+    "inference/ramp_step/00056_left.png": "60446706abe3a87d985c88c9e422be54d05cf8010f78cef3e35ba14d7b9dfd64",
+    "inference/ramp_step/00056_lidar.npz": "47fb6784e5044fd26aed5994a30c5f17c7717bbb6ccc43d4dafe78a3547ed3ff",
+    "inference/ramp_step/00057_imu.npz": "ce1c40a7f5fae144586494e32d3c6f12086fe91de7e22e736c79b7e20208d9cc",
+    "inference/ramp_step/00057_left.png": "6e593db6cde323766d72bf41a2f519d45a5477631fb9213b1dc1c37e5c89139d",
+    "inference/ramp_step/00057_lidar.npz": "15c420216710492ae87a64a035a47acdd71a1e30aa18f3b48a66cb1ff7c8d7b7",
+    "inference/ramp_step/00058_imu.npz": "25de482c71985e111cc4c378f67f890eb1e921f4f24463dba508afcba08e19c3",
+    "inference/ramp_step/00058_left.png": "4898405c9c0493c69145760b89c40845716a250ed4c91e0e04bd16a8df6c2715",
+    "inference/ramp_step/00058_lidar.npz": "5ea4ce3bbaeb12036fc055f3ea9959e087dad5de5ee034d24cc512b7454947a4",
+    "inference/ramp_step/00059_imu.npz": "5a0cc10e3f8ac025dd8d2b80da98ce36d24b148e467de4a3d9cd59a651a9aaab",
+    "inference/ramp_step/00059_left.png": "41be3062a553165a13c7dba81d7ae174c7833c7e4c43a711125ff3ab4403848f",
+    "inference/ramp_step/00059_lidar.npz": "e0320f38a04ab285d39334cf7842640f7d2472c6e2f2fda3cec154f2ed0c61fe",
+    "inference/ramp_step/00060_imu.npz": "dc9ee65f69673159a4a4039b31524ed4aeb57aea3e85c948824b1ad1c6cff736",
+    "inference/ramp_step/00060_left.png": "941c01735a6fb4da460948a68836e13ffdb1328237b3ee8e6a2c2fce337aeed1",
+    "inference/ramp_step/00060_lidar.npz": "de4ce6bcd6964df3d646e73a015404ed2d64925a023b88f0d2a0fc75f2e65e18",
+    "inference/ramp_step/00061_imu.npz": "444177188479d458a2f0212586c1cf1d429251f8bb28decfda35d0edbd120f87",
+    "inference/ramp_step/00061_left.png": "5b4570732706c2c2b300103f60f16dab17a52c6f5f89c203b6128b002cb805fd",
+    "inference/ramp_step/00061_lidar.npz": "759d54d5d36e514201e9d11e1d174fe3d49e6d6aa6bab41077df07a421d475ea",
+    "inference/ramp_step/00062_imu.npz": "0fb88bca246ea79dc469d7532f4e840d52b13236bff70bc0dd768d23ddff5479",
+    "inference/ramp_step/00062_left.png": "6a8611646890ccd9daae3b4d9dce6b20934c83955edb5cdc682330a4596ed1bb",
+    "inference/ramp_step/00062_lidar.npz": "86dbe523e94f8fdded8e7b62df911f61cb3d5578b405c09ed3e3d19713903b67",
+    "inference/ramp_step/00063_imu.npz": "c9d77c7809afcf1dd9b4149522160ab204ca35d242c04bc6e24f083081834c22",
+    "inference/ramp_step/00063_left.png": "0c4d7cb03945019ca3ce588f3f0edbb813d4bd3f691fd596bcdc8462f2f4d553",
+    "inference/ramp_step/00063_lidar.npz": "9bd3e67cee288e1492c77dadf75250ac7f6b6d0083cc347c3b429e2bf5c46656",
+    "inference/ramp_step/00064_imu.npz": "44367d4fb5424ff797c1094903f7eaf96f794e26fe03e3205b50864c24db8325",
+    "inference/ramp_step/00064_left.png": "6aa8ca670703a3fa92c37d5b6f1c1edcb849eba88779fb3c1ee475bb89cc546d",
+    "inference/ramp_step/00064_lidar.npz": "09ff8ebe5f09085f2e9e1df2820281fb750bf5ef568f73e6d3f0a1c4954f20b7",
+    "inference/ramp_step/00065_imu.npz": "984f674b7d5614f70437f8504fd338d34e4c54f8f084ca6272ea9825179e4524",
+    "inference/ramp_step/00065_left.png": "cda0432da051f431b11695200af50d9573e61de6358605a9666f993ae656ec1f",
+    "inference/ramp_step/00065_lidar.npz": "6d630282f9a702bf29bbdb5f1b3dc0aeccd10f299b17d98e128c8f99afb2d026",
+    "inference/ramp_step/00066_imu.npz": "b1c08fd32a1e2c1d1d746d66a1811e8c1d2f9541d5e8c4513d40d89a3162d241",
+    "inference/ramp_step/00066_left.png": "48d97c7f5466f2a18ddea6caa6cfa96c9bc4a0f833de806139ecb2b58f423a04",
+    "inference/ramp_step/00066_lidar.npz": "6026ae618dc88aa36d525130550e59eb007e8927e9b4dbc8c53811f4c7e0d874",
+    "inference/ramp_step/00067_imu.npz": "f5be6b4f72300c8ac659a0eb6271111712267feadbd153d8f01bda57529a195b",
+    "inference/ramp_step/00067_left.png": "132b9aab082b7d572d1c8d9250b4bac24ef41cf8c23bbb75097f34f22f3b4122",
+    "inference/ramp_step/00067_lidar.npz": "c9dc278014323a7c03944f2fd6b45f4c08a15afef378936407933d22be4f2762",
+    "inference/ramp_step/00068_imu.npz": "e17d23c4d2e8f73ff30bdd819bd8cc983ff7549e03d0210eb2c3f71127c4d0f3",
+    "inference/ramp_step/00068_left.png": "9421cc2d6d2c3f37284436f8a5ff28b696e5437bea34b35d66be790b36c60ad1",
+    "inference/ramp_step/00068_lidar.npz": "bc3608e5c93dbb81d7c349e6d708a7bd0e230b27d1785670d4f2b881fef153f0",
+    "inference/ramp_step/00069_imu.npz": "dd8ac3540b892530c063221fbf6f33fdc5ffba0c271860ad61968f5c5e407384",
+    "inference/ramp_step/00069_left.png": "51ec8c1ae76abc9e3d25f5b3bd07797fb526e90e7ea9bcefe825bc88397c8b9f",
+    "inference/ramp_step/00069_lidar.npz": "fffd438ffe8b6053aaee17932f951585d612d73da8c28174dc221e773bf6acf2",
+    "inference/ramp_step/00070_imu.npz": "f70bf19ec993a4971361ea291311acf7d8d41aeace328552cd31221ba3e5ad8a",
+    "inference/ramp_step/00070_left.png": "3762c2678564de3d35e41f12586485a51104d991939bb9b446bbf936bed0985f",
+    "inference/ramp_step/00070_lidar.npz": "1bc2f02240eb4025d76b01e16cd2a1e2fc6cc423910b01d9ffac8c8833c2ac64",
+    "inference/ramp_step/00071_imu.npz": "0a564b72072da00a3f4ab3c8c2e73730b99c9bdfb21b9de175f535779759c388",
+    "inference/ramp_step/00071_left.png": "ca3a9371bcff621959286c8464249708b71a1ebd37250a61740dc37557875930",
+    "inference/ramp_step/00071_lidar.npz": "b27d6a4bd3eac2191b2609845fa3f7b41da53eb7d48c85d01964c01c5298f037",
+    "inference/ramp_step/00072_imu.npz": "60658db3e10556731168c86a29d225f897058367c8e604fab2a2ec4b19df8ab1",
+    "inference/ramp_step/00072_left.png": "6f4e92fe67cc36a64567180da1b28cef67cd1c65a88f7a73b5fe50b4d7f6bd18",
+    "inference/ramp_step/00072_lidar.npz": "d77a47fdcbda7283af08fbe04c62cb3efe538a9310f0be498c5dfc2ff613f126",
+    "inference/ramp_step/00073_imu.npz": "a3efea8a7626470184648c35f088659aef84dc3393aef408009f875db057c45f",
+    "inference/ramp_step/00073_left.png": "c6c0a60b1a6dccb9fdb6a3f982aa4817345b1f41a2d6c083a89990c17fac264e",
+    "inference/ramp_step/00073_lidar.npz": "d6fe9599d8d2063eb1ebe1eec730cd35ddbf64d89de6f7528032d65d711cc9c2",
+    "inference/ramp_step/00074_imu.npz": "45053ed25c4e38aba84db161be287bc3287bd49a4807aaf4e7df5de83b95cc00",
+    "inference/ramp_step/00074_left.png": "1d101399a0427b161e9e953241919014fe9e2b42c809a23f2cd84843308bfd0e",
+    "inference/ramp_step/00074_lidar.npz": "d4b948f0113cc75792fceac8c411ed65c83dfb31982200774e9b30ee94e3c421",
+    "inference/ramp_step/00075_imu.npz": "7c8f4923e3507a843dda2a4f125a90038857b0e82d49fb81f3086a5b4783cd1e",
+    "inference/ramp_step/00075_left.png": "186eab5638fbd430dc61010a4cf216e9998946f0c2e68c597696bcb93155f7cb",
+    "inference/ramp_step/00075_lidar.npz": "f3de1c40ff018eb7a75b01500d29f108aae20afb651c6b1d94133a7c79476d4c",
+    "inference/ramp_step/00076_imu.npz": "52857f2816d1bae596d0399a299aba13ecc2932e586b502781a24507a34754c2",
+    "inference/ramp_step/00076_left.png": "803535e6611cf1669480a66ca2e1168a766174c85ff5ea6725a30a55a7970460",
+    "inference/ramp_step/00076_lidar.npz": "dd64d20a0d38a0fd7104369bca1171867ef109ed3dd6b0ec831c10973a515339",
+    "inference/ramp_step/00077_imu.npz": "fe1741794a86793b4f419d0da148486e328e2a6089a08c0398a918a813a444ec",
+    "inference/ramp_step/00077_left.png": "4722b001ac193aa97ac1da186b7d4d43468296591dd6a58323e06dec6480391a",
+    "inference/ramp_step/00077_lidar.npz": "6afd893c239a878773564a31db667cd46723bb875ea15e9d84a12b1981fdbe7d",
+    "inference/ramp_step/00078_imu.npz": "09c6ddf906d01a91488061dda7aa39f78c8a5b8d136fd252799015a72916b20a",
+    "inference/ramp_step/00078_left.png": "84665b2d8ac332202ce910925413011ab4bd798240cef8809d23fd8e486b1660",
+    "inference/ramp_step/00078_lidar.npz": "324ef9aeb068e4c332aec299655bf6ef5c275952d12639b2035f4003ee091ce2",
+    "inference/ramp_step/00079_imu.npz": "8e66a90ca06792c59bf6b2b3bf790fe45f570ca911db455903c2aada196a9780",
+    "inference/ramp_step/00079_left.png": "8172c9cccb262c26a64e775fa8d6452a550bee2ba32028fe70c843566d2720a7",
+    "inference/ramp_step/00079_lidar.npz": "9ed8d449f033a5a58b12c6fdd52be6c202d38adf5427a9154dd6d9b54a38db15",
+    "inference/ramp_step/00080_imu.npz": "57cea8d098443beaed323f551029a1b7a281ddd5beaec73d8166aad18687950b",
+    "inference/ramp_step/00080_left.png": "e008d755ea6d7725f3679b1773fd201f44e3d851ea7472ff627704fca15f7dca",
+    "inference/ramp_step/00080_lidar.npz": "daf3f524ba820fc4ace59f641ea9a6571069a7f5e8c31ba873d6aa46fc18d92d",
+    "inference/ramp_step/00081_imu.npz": "699e1fcf038d964ee566c25e49eb6e4d67a4be5a7475d7d6303d16c883cce968",
+    "inference/ramp_step/00081_left.png": "e728a8077b308a7de56a729b9bbfc2876bc6b2041b9fe7597efd6ff6d8730985",
+    "inference/ramp_step/00081_lidar.npz": "7ace9d95f2a2f8b2ba08e9beeb0b3c5021c0963313258eed6616d51b40828558",
+    "inference/ramp_step/00082_imu.npz": "2b1b2449de8058dca8042ea7259c02540bdecabc3300ca5f08cc3b1f599083d7",
+    "inference/ramp_step/00082_left.png": "143d9a52e4a86297c841df5431fed88e18999f710cf19ae8cb97964c58532a5e",
+    "inference/ramp_step/00082_lidar.npz": "0b6f3910c6a08bde6e7f1a122aa31062802b741924fa214fec00556a51a6769e",
+    "inference/ramp_step/00083_imu.npz": "069d501add675ada0c09a9cefed7a135cd206275ac450d7140d8009805e30b2f",
+    "inference/ramp_step/00083_left.png": "3d4e368f8faf88cb74fe682095caa0586ca3187ba447f8363074e47891b057e1",
+    "inference/ramp_step/00083_lidar.npz": "87b1e8385986954b0ce281714feb9d6bb0cbfc511c00381e8e2674452b4db8a6",
+    "inference/ramp_step/00084_imu.npz": "7617b0f0afef2c783025cfaa3726354f6b7a12ee859242023b138b49a36c9fb3",
+    "inference/ramp_step/00084_left.png": "f0305275fdb8516deb9278c58c49d2086df0b417e7b20c20fca15dd9d052303c",
+    "inference/ramp_step/00084_lidar.npz": "21e52f19279d6d79f2474f0acf01e98a4969a35cde07802bc4b51614b8f9ace0",
+    "inference/ramp_step/00085_imu.npz": "a684cd36b9b7de15afaa87e559b2c79159599adb41675f9b9e79b3e37fc312d7",
+    "inference/ramp_step/00085_left.png": "97ebec3d0314e5935ea820f3021bd3390bc6fc62f9b10765b0317465e69ede25",
+    "inference/ramp_step/00085_lidar.npz": "2030d1aa684e8566c1675c13ff44dffce35371e1e3d8e673e56bb6b122526d16",
+    "inference/ramp_step/00086_imu.npz": "abfcab04dfbd7a2cda4f73bfd017aebd4fd1b55121bc49ac63a7302f82865151",
+    "inference/ramp_step/00086_left.png": "d31fb40c8181b88e5b0d61521b7b9afe91e3fe7386b0d4ad7def9668ec0453e5",
+    "inference/ramp_step/00086_lidar.npz": "5300d0a769a5dbeb8184a1c47f85623df44785a44513ec5ad2f75f4275c8437f",
+    "inference/ramp_step/00087_imu.npz": "5516a774cfc71118e7a9118570d2967deac65e43fff5270fca3dd709e5317677",
+    "inference/ramp_step/00087_left.png": "a7e0178df5ad4fa89fda85407508b3d4344b0d394720d4147f952d23fc313d69",
+    "inference/ramp_step/00087_lidar.npz": "8466269e36612a4a3dcf276e59da090884665c1af5c177501aaf59c084605721",
+    "inference/ramp_step/00088_imu.npz": "56597cc71857a5966fa0ca9517017024dd799554de1a3faec4be8d76b794cfb6",
+    "inference/ramp_step/00088_left.png": "3bd6651e90cd2775b4176052ae7f4244c660090a2058da44afff886729a14e5b",
+    "inference/ramp_step/00088_lidar.npz": "3fb1c3efbe5b9db6552253a9a5e56e5068629102b1f08f8f880685852f91948c",
+    "inference/ramp_step/00089_imu.npz": "66f2f36dfb7b72e8bd7f64915d8c2dc6133efd5b7b6653f5b5e4fd6870b1bc84",
+    "inference/ramp_step/00089_left.png": "6fba5bb9d0ae922dbc278eee8a53bf2b3e9cd02f2aa9155e180553fb07891e32",
+    "inference/ramp_step/00089_lidar.npz": "82fb64fccf9a7a8b8ca82a6e524a02bf1ab58045170633af4a7ce85a4f117d60",
+    "inference/ramp_step/00090_imu.npz": "119bb26cc8293b7d4f9293a7c452b13f9148b636a069c942c3dec56206b3bb04",
+    "inference/ramp_step/00090_left.png": "fdbfaa369c4f08c18d0fd9aae15c8b49fdd0c1ab01a31c245a3b0bfe779f5361",
+    "inference/ramp_step/00090_lidar.npz": "f38873c4a9962d707640e6f89d958d00d06949473530a9630ff935e5db33fa1e",
+    "inference/ramp_step/00091_imu.npz": "4cc9da1ca76aad1d13643d496e397c4669fb5783e5bebe6b456d0de777dee220",
+    "inference/ramp_step/00091_left.png": "2126333e70256150017dfa4192a3ff3597a72591bd40740c5d64e1f2420203a1",
+    "inference/ramp_step/00091_lidar.npz": "812e0c1d05381c1862055e0d2c74bb96b18f1fde99bd9647a976e0d00c928d83",
+    "inference/ramp_step/00092_imu.npz": "c9173f6849823ba2c0acc8a53ee2803fb2bec553b0c038e9e3d2a681aada718b",
+    "inference/ramp_step/00092_left.png": "207f33725b5960d2871acf8e323133bbbe6560261f7db5831044e42b1f642f07",
+    "inference/ramp_step/00092_lidar.npz": "4d8a823d262622b1117481a9de01ea2877ea8093a49a0ebfd814744a12c5ee99",
+    "inference/ramp_step/00093_imu.npz": "2373bbebb135f78feeab39536f09a736d0d001af4c4184975d977cc43f950ce2",
+    "inference/ramp_step/00093_left.png": "cd233b923666d46df90125937c4aa07aedc45dd0ee0f41c0fc341628f3623bfc",
+    "inference/ramp_step/00093_lidar.npz": "6d46fba179c5793263713b53470d353c7cc81b462ff9fc0df0620c6ce202464b",
+    "inference/ramp_step/00094_imu.npz": "da3b6746b4e81337d9c7ccf71ce690c8f05a58b8152ef2bf945e94be3f17e29f",
+    "inference/ramp_step/00094_left.png": "9185537ebddc06f3e4897da37b8aac3367c037550084b7f060f1185364ba1fef",
+    "inference/ramp_step/00094_lidar.npz": "96b6b8cdb044a4c65fdd67ae0b9f3198e37006035c599a2cbe9a30ce3852157b",
+    "inference/ramp_step/00095_imu.npz": "778d1afbdf2d7cbaed6e407bca4eeeb014339a02bf38115a9697894832bc0fb2",
+    "inference/ramp_step/00095_left.png": "c1ff436c787843ae03269e7a91c94e3a0449bd121c738c2e0fcefc5ecd6084b1",
+    "inference/ramp_step/00095_lidar.npz": "cb72008c1f1c3c3d90b26c088918ac2ca218dcf75d63075f30cc297d8302c3ce",
+    "inference/ramp_step/00096_imu.npz": "480a96a13f81034d1b2fec573c543f73bdc4ad5f32c1e577b6d42efd8e78ef12",
+    "inference/ramp_step/00096_left.png": "b6279116a8dc14ccb2046f9d288db329d8ec8de72ebda928a43f3e3b3c1c3b6d",
+    "inference/ramp_step/00096_lidar.npz": "faa592a5f46ef5e937acdf5b3236e0f2f66c6b8f12b78153f981152a953b6bba",
+    "inference/ramp_step/00097_imu.npz": "e0b5f60b7e20a771cdba91ddc08d2e5ec825254dc52592695c7d73362ab6c1bd",
+    "inference/ramp_step/00097_left.png": "210d3958585a00896be7de8c512f21f4f6cb99f166429ce869a16e35ad438f1b",
+    "inference/ramp_step/00097_lidar.npz": "ed571c2efd589d5d00b1a6920fd152584df5a7645ec73f033ade54d06b6176b9",
+    "inference/ramp_step/00098_imu.npz": "9348e4caeb56df35d0ee237009c18747f54318e9cccfe153431a687ce31141e4",
+    "inference/ramp_step/00098_left.png": "b5412320c59a6b486314d0611d2da2726d07608a3b128b52c37f8f1f0114928b",
+    "inference/ramp_step/00098_lidar.npz": "f397d0b5c923d78c5867f35b704a1e0d54a88ca3f8cf41626f305f0cf1b67a6b",
+    "inference/ramp_step/00099_imu.npz": "62698543a16dfbe16984dc48613e8051d860c5133490088f6bb6a444d93ad0af",
+    "inference/ramp_step/00099_left.png": "d0516e9aadd3175a4462aaae043478fcf7335a3f2352e5df2dd9da5eb5ab82f0",
+    "inference/ramp_step/00099_lidar.npz": "a85c5f23691cb988147d57510e15d7793925b8fabfbed1d3960fad14584ea704",
+    "inference/ramp_step/00100_imu.npz": "377c88f92843b432555639aef734f7ad9447a51f0bc516bef89b08f1d3c4ad94",
+    "inference/ramp_step/00100_left.png": "2f841a648f61b8c30c4343e9814fdfb7a70fc8e4e3649c66d6422de010ae960b",
+    "inference/ramp_step/00100_lidar.npz": "61f5461ca01c86dac5dc511e77c196f391e85ee62b24b11261cfe363fdf91095",
+    "inference/ramp_step/00101_imu.npz": "71e4717be7709328e681666988aa22ec83827548bf1d5170c021bd6f5cb24db1",
+    "inference/ramp_step/00101_left.png": "bd374d9c1d9f76cbaae749cf243439b424c016632476a79aa48d85fbe256128e",
+    "inference/ramp_step/00101_lidar.npz": "9ba8ea01af17320fb7203121b422980fe7f8a2d731f2816af9dd72af651a3318",
+    "inference/ramp_step/00102_imu.npz": "2426b253895c6f62971b0b2e1952e315d13662f623e701d26f5f7295db9095ba",
+    "inference/ramp_step/00102_left.png": "61452a7c2ea799af76df6d493ac6624ac39216bbcc8ce9ac4f0f8d533cc81191",
+    "inference/ramp_step/00102_lidar.npz": "5ed4057524b4d0d252a4d90f130b8ca0a890910eb4f25482cecc4bfe7c0261aa",
+    "inference/ramp_step/00103_imu.npz": "9b41109bb8748359131ed7fa9fb2a8a0f98eceece88f30947b290f9f0a56b180",
+    "inference/ramp_step/00103_left.png": "23cc9e06e485ccc17e0da2547350066397b3013a31362bbfad9a257eb8f46774",
+    "inference/ramp_step/00103_lidar.npz": "6b750c25368c8c0bab87712c5c708a7d71398d846da0972eb95dd4632c6c65e5",
+    "inference/ramp_step/00104_imu.npz": "7f02f26e1d4ee34b6a0cbe3515301e803d564c8e907e93d7df20652dfb885ebc",
+    "inference/ramp_step/00104_left.png": "334505d452e61ceb2c75ce6efff8b91e053c92a1eb43afeddfbb810a0505bfa4",
+    "inference/ramp_step/00104_lidar.npz": "8f9bc822c258aadb80da74d9ae1ebe97f10f27032ffac19b87ef041506e32153",
+    "inference/ramp_step/00105_imu.npz": "ccc27a940ed2392e760998a80024f8bdbe1d08aa187ec032ad6d2b53750a6837",
+    "inference/ramp_step/00105_left.png": "b808b4a4904b924cf18ef313ee244e088c937b894b318323a8782b42e20ef05a",
+    "inference/ramp_step/00105_lidar.npz": "ef896027f30fbed202d8dc0d8e9766ea157617b29e7cd5350630e1798d237745",
+    "inference/ramp_step/00106_imu.npz": "d72b24b7183c69a8a1b40f142c28f606545c430cf76c6ce9fe67f469b3c8df10",
+    "inference/ramp_step/00106_left.png": "4799f7201d5ce4675c39e0ecb8652c5bc7c04ff48bae81ba2679d993e11c75ce",
+    "inference/ramp_step/00106_lidar.npz": "1e8006b644fb5eca0f6ea44e7b65118fa64ae58e522ab6fb6064e862b72e7bbd",
+    "inference/ramp_step/00107_imu.npz": "d2d6fb35e580c1348ced5f70d233283fad167ac33940071169e0773a3a7f2f21",
+    "inference/ramp_step/00107_left.png": "c5be82094d72a8b46a1d39810cbe7238a9836a6f544f73201aec8af28367544e",
+    "inference/ramp_step/00107_lidar.npz": "e30f9bac46613742fcd088960c9288157c7ecaecb0e77cad73b82ff8135123ad",
+    "inference/ramp_step/00108_imu.npz": "528f99c5be3b6fb410127a1e37b4869a096794bd9022e746fca9d2f30aeda672",
+    "inference/ramp_step/00108_left.png": "42258fc2e8dbb7fc516b65f9fde7481adf6f7492f054965456b3a32231f99b05",
+    "inference/ramp_step/00108_lidar.npz": "b3e1de3354a07a1fd9a30e7ca875fe73ed6aa05a03bbb999d4477972f92bdcb0",
+    "inference/ramp_step/00109_imu.npz": "8665780eb315f8ef76d0ec2fb2707e35eb0609b86b75e245313f8368a26e5fb6",
+    "inference/ramp_step/00109_left.png": "6d55eaeadcca971edfefe1531cb08eafe192e4311d77f1092e1d62e8cca94065",
+    "inference/ramp_step/00109_lidar.npz": "c533e00c5f291a3e45381d0d9187fc76d8a3e3790be95735a446e20f27c68c3e",
+    "inference/ramp_step/00110_imu.npz": "7b5cd2823ddc68d5cd0961525281457c610e9c9268cfb2f5515783387b3a8556",
+    "inference/ramp_step/00110_left.png": "ff3ee8c5c9907dbe7decc39275dde7322dbc696c94261b0534b0ccadd3ca520f",
+    "inference/ramp_step/00110_lidar.npz": "ebb0aeeacdf61b98c003803a962194aeadd14cae1c5e1b10ed88e7496fa83d29",
+    "inference/ramp_step/00111_imu.npz": "79ed21f725534e9306ca828e166e30399e93d0893316607722a0f83ae99a76b5",
+    "inference/ramp_step/00111_left.png": "73ea729d87001c78589eb7601d88c6450539693833b2a689761d51a10130139e",
+    "inference/ramp_step/00111_lidar.npz": "9b5b330e18a01033f90425a4e1235f6eef7a5e52ad390093037afe255dd60b7a",
+    "inference/ramp_step/00112_imu.npz": "a05adb32dccbb8a6350208f41815d6cf5d56de5b54d070902aee36878f104bf6",
+    "inference/ramp_step/00112_left.png": "d40403d5e4bd98bd71dc4ef0ec23187803c950f305c225c8ebfc021f4b48febb",
+    "inference/ramp_step/00112_lidar.npz": "c997f1ac28649557b79cf6e479bcc066f5ed4f051ec4d59235f5f46f1ee6a875",
+    "inference/ramp_step/00113_imu.npz": "d255ed6496454ff799e8eb132ce2eb254a11cd44d369cd0d753b259a8189f8e1",
+    "inference/ramp_step/00113_left.png": "1ec6eb676090050ea18fab388edd08129447220defe7fe7a5f1d2e382549140b",
+    "inference/ramp_step/00113_lidar.npz": "b53b1f0ee2faa4af85a7d239f42bf5a83169de3ab48dc9b7b44d48edc8cc1138",
+    "inference/ramp_step/00114_imu.npz": "720ccb276132c06b178c065782cc1bc9543b1547b377963af674c7d855aee793",
+    "inference/ramp_step/00114_left.png": "6fd68714287a0a6c59855198ffd7fa0728ae88a3461464f7093fff2bcb80e66d",
+    "inference/ramp_step/00114_lidar.npz": "7301bab05afb644dd5e6a6fde187181a24a117cb071c552316bf6963d6828c30",
+    "inference/ramp_step/00115_imu.npz": "6c47652a881bdc86e850b9df431df52f90ef2e6b92138bbe1f0283c0f4165dd1",
+    "inference/ramp_step/00115_left.png": "a3098741dc0d3e1e11b9c8267298e571cc703d27eff8f1f7681ac6fc098d3016",
+    "inference/ramp_step/00115_lidar.npz": "7170e447090b8842f71d1532d82a3ed64f66781defbdfcf5fa0f200ec3395b8a",
+    "inference/ramp_step/00116_imu.npz": "489bb7eceba11c78d8a001f1a259915a06522e6dcc761701df08b82a34280be9",
+    "inference/ramp_step/00116_left.png": "0da6d70cda86fc7861810fe652647ebba2f8ce8a56db7bd40e8e435afe4eba09",
+    "inference/ramp_step/00116_lidar.npz": "ca90291fef7e8517fd17b10885d25a93af1d40c5620afba00fcbbf2ed4610440",
+    "inference/ramp_step/00117_imu.npz": "5ff0dcf006a81f38458b2c524d32206fbba9613494f92fbe24fae4474ea96ce1",
+    "inference/ramp_step/00117_left.png": "dc3cc152ae60986fab5f80096e4f99f62dd0d7424825fb71979afbe8fcfc9826",
+    "inference/ramp_step/00117_lidar.npz": "55937e0133d9eb3e22673d83d600c50ba5e9abea9e30352bfc527d297545e04b",
+    "inference/ramp_step/00118_imu.npz": "acfcfd089e434ecbcd4c5383c59d997d56aabca35771ebe122ce8f48298174c0",
+    "inference/ramp_step/00118_left.png": "e3c00c430d23725a02b4776fbe603637e96e89439e053b88c14e59f6709b25fb",
+    "inference/ramp_step/00118_lidar.npz": "86ec2c5220ffa4e5c4a8a1ea70cdc28480b687abe18a2ed6cbf00df0ccb63816",
+    "inference/ramp_step/00119_imu.npz": "5c7eb6087422bcff2715e2613849a5c364e6893961cac5dad54cd338079d50a6",
+    "inference/ramp_step/00119_left.png": "c48d4f13827c1d848fc0fa9e8daaeeb15382a0da848df5cb74e041b1f4f7b998",
+    "inference/ramp_step/00119_lidar.npz": "0ba9104c6c30ff6818e92832bac431bdf2486f8a36ddc6dba7f75cb58435fb97",
+    "inference/ramp_step/00120_imu.npz": "a111c2a0c0efb25d123c14abe5879f27267f6a76a0945bbdc0df3a13d81e3966",
+    "inference/ramp_step/00120_left.png": "8b9d333e68f2b69a0322aec5157aa5c9305e526d54908367789fded771aae871",
+    "inference/ramp_step/00120_lidar.npz": "881394d3f9dd0fe4ecbab708d91d2a553ba42c9f44976f442eecb72de6fb51e3",
+    "inference/ramp_step/00121_imu.npz": "a493344a568711bde931543e81bdce133aeada97aae1f475c70519e7b521860b",
+    "inference/ramp_step/00121_left.png": "1044fb512194e1d4a3e5f1f6fa97fe6a3076c64c111066fe7697418fb5e86de1",
+    "inference/ramp_step/00121_lidar.npz": "31a71dc0ae2eb4f059668b2fd0a0901923b70f722d02e77d4a79087d4afb21d7",
+    "inference/ramp_step/00122_imu.npz": "86adf74c32d8b44f0757c97ddeb6735f4bf9d8986cc3a070d737ac8a72fc2bc6",
+    "inference/ramp_step/00122_left.png": "eca925ee92a382c9c36638fae76e88bfa8a3928f578f49ed217f160b65b0a8ff",
+    "inference/ramp_step/00122_lidar.npz": "ad811bfcefb9a1d3c85f78f6b7df7b71a2f405d20b101b665bd27c23cfa63b72",
+    "inference/ramp_step/00123_imu.npz": "adcefbe29624ed95efcea8cbb25952677a192a994ba4c8875c001e80356fd9f1",
+    "inference/ramp_step/00123_left.png": "07a48cc279b9b0790ac0d756095c8a8f6a296200098995d52f018d307bde65eb",
+    "inference/ramp_step/00123_lidar.npz": "90f39c464d51a9d502a968e68b39fd0c1f07032a8198b5be026494c0a41e7246",
+    "inference/ramp_step/00124_imu.npz": "6cfbdc91733578ffcdc3178b117272f2391b1dbd4e0aa9505cc04fadd3359741",
+    "inference/ramp_step/00124_left.png": "7f635057d5d863d7ba53890fd67ee3d7a4264eb493e82036bd36fb53df11da8c",
+    "inference/ramp_step/00124_lidar.npz": "6952d53e0855db139697627d85a17e8ed6a8c3c5e68456ad8eb4d9df1dc41e47",
+    "inference/ramp_step/00125_imu.npz": "bc8299d3afcb2aee1a2d77639f4803890142f5002615e7ea54a3cfe18f3b2b40",
+    "inference/ramp_step/00125_left.png": "e35d97f9ce3f8e4fcd52611f571d09348e2f8adcbdc878d9ca783d8d8bd326f0",
+    "inference/ramp_step/00125_lidar.npz": "10d2874123efaaaff183edfd860ae6d2f8abace38046ddba32e2752c19d6923c",
+    "inference/ramp_step/00126_imu.npz": "04471e61996baf92d993e6aa2ea840e2067aa3d3f644b60e1afbbccaad9e9687",
+    "inference/ramp_step/00126_left.png": "38ec6ea64f0940fef88129f4a50b4658a9f1be913e65c5f5184a4596872e641c",
+    "inference/ramp_step/00126_lidar.npz": "e4a020a932a9cba62ff60a4aa960c20e3c909ccfd141b3fd8370306012d90e81",
+    "inference/ramp_step/00127_imu.npz": "c99a615a2e521ffc02adc11e3505315fbfd4921eb8314ad90a3ddf1440039a73",
+    "inference/ramp_step/00127_left.png": "a3cc5c2c3b7a174fa820f5e26246d046adc6fb0618cb246640b8eee803d802fc",
+    "inference/ramp_step/00127_lidar.npz": "fad79d0ef054ba591b182a53a2012198d4599acbed5c75df7cc6d4ff82d6d6b3",
+    "inference/ramp_step/00128_imu.npz": "e19c811a3f36107be07cecf8d8d6f9b6c6948ddbe81cef8e4ab6c98a722442eb",
+    "inference/ramp_step/00128_left.png": "bd950867bdc424a9632ce6fc07d829ca5b426fbb8807efd59d8a1e09d32bd799",
+    "inference/ramp_step/00128_lidar.npz": "c6aa67e39a623999293e88eefc0798bd579b4e19bfd5c5505df51794091a515c",
+    "inference/ramp_step/00129_imu.npz": "a45fcd43ae9c6fd8ba90e15fa33252944e504b8f2cf5cb66e481dd60933e9e08",
+    "inference/ramp_step/00129_left.png": "5a6ad10212438c757c63091db1c9a942c400caf23d59ca4507e6517bbd139325",
+    "inference/ramp_step/00129_lidar.npz": "b6ded98fa95271a2a21804a3ed343a46e0d30a7519e8e50d1d2cd16ae959ebe4",
+    "inference/ramp_step/00130_imu.npz": "a2236fea8973dd667c8399b46d28c2c99d898a7fda713e461debcd36a09fc13d",
+    "inference/ramp_step/00130_left.png": "086e5ce723fcc1657a1d7814e0fc3f2605dfefc296051e2b38b865ff74346639",
+    "inference/ramp_step/00130_lidar.npz": "8659291d4e9aead1becce5adb8dac07e013958ca02c5dbf1a381ffe0334d4774",
+    "inference/ramp_step/00131_imu.npz": "b05aaeb300b037aa64958810114730016fbecf4a71931b964c04b80262a7f28f",
+    "inference/ramp_step/00131_left.png": "8d9f182b82bbec41031cdf79099ac7c9ebdb2a3aad8f1924d367315ef4eb807e",
+    "inference/ramp_step/00131_lidar.npz": "692bf42984b64b8aac63c42dc126ca70fbe55205745465b146e7def7e2d08f8e",
+    "inference/ramp_step/00132_imu.npz": "842d4046fbc839575a553a2315d342ac195ddc06cb637d74eb7dc907077779b4",
+    "inference/ramp_step/00132_left.png": "d6b6312e37b1d57f2d6c73d98ce84c78321696b74aaae7af5c4389a049117d7a",
+    "inference/ramp_step/00132_lidar.npz": "5491ddd3371d1d1d6e0a81dd4c2c2891b3220a4ddfd499eb383a45973d357a39",
+    "inference/ramp_step/00133_imu.npz": "5fa4cc049fccd645e9c059b692e334c35d0344885d2a22cf56163fb65721d4cf",
+    "inference/ramp_step/00133_left.png": "83e347838b45d75f27ca141fba20428e6e4c09572e9061725a0519d3944c35ff",
+    "inference/ramp_step/00133_lidar.npz": "de6c70a763048fd0e67f700bb48d0a019295916df90dc9b5b6b791f60fe55ba2",
+    "inference/ramp_step/00134_imu.npz": "3780a0b45e065b297ed6e2f3834bf53ed4ece50529cd0355268eff9f9db3607f",
+    "inference/ramp_step/00134_left.png": "26786cdeb7cbdc5469d629d6277460e400d6c2214266efa6195b5e82ef8c0e37",
+    "inference/ramp_step/00134_lidar.npz": "45d5a4100181e9caade468d500b33c33d9eef2954a3219a8c10e988488a93724",
+    "inference/ramp_step/00135_imu.npz": "d9156bc74c1208c671091e77a83366b83d7a72605b37b3946c84d30351e48daf",
+    "inference/ramp_step/00135_left.png": "8967e1f2c2cad95cfeda231831bf4c0e6aa89475ef8944115279c50920798b7b",
+    "inference/ramp_step/00135_lidar.npz": "6da41caf1d556db27d488f263a589fc509bb3654afdbe9227c58941bf2d286c9",
+    "inference/ramp_step/00136_imu.npz": "29a2aad76be5f50a3c74ac957bd04cee58bb291633126c08bddcd3fce1ae1d12",
+    "inference/ramp_step/00136_left.png": "740343efbc3584945f306601290d0e5cd145bc66d976216b561807411897b703",
+    "inference/ramp_step/00136_lidar.npz": "3520a6a92299b85f58a59a8a47bbe1e93fddfe47d9c325c7e24ddec1164e9447",
+    "inference/ramp_step/00137_imu.npz": "f5331528315439917b3fcaccd4fba13a38cf8fa68e94c2c57c92112c3add1f13",
+    "inference/ramp_step/00137_left.png": "80403f66bc4ec126a80a769aceeef8d6e417eacaafd46231fa4b5b8a51c975c2",
+    "inference/ramp_step/00137_lidar.npz": "c98ed9925c591028c191052b19b5ced216ed9f0100c51565936d9c09d01fcb8f",
+    "inference/ramp_step/00138_imu.npz": "c457d82937b4211b899380041ff0202b55c0395f7ff2938dedf3f9369d88cd06",
+    "inference/ramp_step/00138_left.png": "f56a854f44a0f0c1e0e4d8de46e3e7c2a5883fb8473c8fdcaad5f9f9175eee39",
+    "inference/ramp_step/00138_lidar.npz": "c44898090e98a9bdba15bca3c96e9b1d90cf0ba455a034cf280f3ab29a271ba0",
+    "inference/ramp_step/00139_imu.npz": "09b5cf05fb39fe082fe70ca0de2acc2fa010cf5327f190a368dd3f681d572c89",
+    "inference/ramp_step/00139_left.png": "0b70bffe9372a4e253a72e64afdb2e70fc66c94e22104b9f155ae1ac71a42619",
+    "inference/ramp_step/00139_lidar.npz": "2042efcf7273745727c8da1680c0d920979c35010880c2c93ef2cf13831b469f",
+    "inference/ramp_step/00140_imu.npz": "e6ea6f02b2fdbf31a66d97796f83f7aa6b9f59bf9036ee867c31027c6ecaa3bd",
+    "inference/ramp_step/00140_left.png": "a3d7815541b34f68a83f1810a6d79b537882235fc9526321fe1f6f6ec25b0322",
+    "inference/ramp_step/00140_lidar.npz": "0f167036ae49b61e640d8e6e2a78b0a4a24c03a0fe0f131fee0fd0f1351d5fa6",
+    "inference/ramp_step/00141_imu.npz": "659c297f830f5013394c07c3ecf06c243abc5e92e221c93e79a88251b8e08809",
+    "inference/ramp_step/00141_left.png": "eb95829f94309f810d60e5dcb0d01e7a0419f4e0a06b2694196b3360266746ba",
+    "inference/ramp_step/00141_lidar.npz": "4edf7b19f794b9bd93a5663484f4beaf243a02ab1a66eb62f8b09acaab46b128",
+    "inference/ramp_step/00142_imu.npz": "f3a2e26d66b7b797a7c0f25023114bfd435c914a6683ccb93d9e934fb00e1df1",
+    "inference/ramp_step/00142_left.png": "134dbb821d0a33d3d05ad645f3d3d54c2e66bd8091ab8b4d3821502cc0db9f7a",
+    "inference/ramp_step/00142_lidar.npz": "f2bd2f6e50c9ac69f6e538495fe22e3c390fb8fee70e74e1757fdd2d3f4d178f",
+    "inference/ramp_step/00143_imu.npz": "ed01157c8b2975c2b70f743b037f8ad81a8908c7e258e736a9a25e160f7ad700",
+    "inference/ramp_step/00143_left.png": "8e26a73bdc03f00c10d4a1caa4674e0e8968ad04e5f4739c264d82e533886987",
+    "inference/ramp_step/00143_lidar.npz": "cebda51206e8f306954df2fb42bb7f934dfdda906181dbca9e4b6f122cf65aca",
+    "inference/ramp_step/00144_imu.npz": "cf584a56681d9ff42a7cf960d0cd6c9f4abe5402137ad208b89f1cc1f183eeb1",
+    "inference/ramp_step/00144_left.png": "7f084fe1412322dfa922b55e1bee73e082f4d88c97c646aab969f38625386332",
+    "inference/ramp_step/00144_lidar.npz": "b115df1f62514dfb4050f007454bd4979095c14791bd39d8532b7f1ea8b278c3",
+    "inference/ramp_step/00145_imu.npz": "a0d14b9df5edb9a625b90c48fcf6c87a738705d6a39a6cd78dfae0d3988196d9",
+    "inference/ramp_step/00145_left.png": "f479588ae7561f1406fe6f5cbf2c5241806ccdfc2483c830b2f63f5f0d75be7f",
+    "inference/ramp_step/00145_lidar.npz": "04622e1ece31012cbae90b8c2c708749d0093e1084804ded8ab4ad831d3148a5",
+    "inference/ramp_step/00146_imu.npz": "4d1c4e068b9f8be512b8a565845b837fdd9d0e1c31b9a9ba3ec5ae05bf9e61ea",
+    "inference/ramp_step/00146_left.png": "2d4af51c983574b41db08ce805e0ee2ad8c0fa4ac2b0061f01e07a52f7fb146d",
+    "inference/ramp_step/00146_lidar.npz": "af2677f2b30fba599eb417187ad84cf80da06c6d66ca3fabc3b1355a435c03ce",
+    "inference/ramp_step/00147_imu.npz": "445d4ead5f6ab8b638327b15b65819aa033699a813ab12caf20cad2a7cfd704c",
+    "inference/ramp_step/00147_left.png": "621f21601e7e2aca58817c73fc10368f29a14739e2967a1546330d364c845cd5",
+    "inference/ramp_step/00147_lidar.npz": "c98eb62cc9b677f24239e43440146fa0e94e3be4ad37f529770d456d79e6a2fe",
+    "inference/ramp_step/00148_imu.npz": "3f40785a0f07b3cc95ea2393e744c03e87003fc6cc63720c4235ff1656fa8fc4",
+    "inference/ramp_step/00148_left.png": "4f428130f83c429eebdbf1855bc3cae9c4c231755f9bc9ed50789e5cd630f97c",
+    "inference/ramp_step/00148_lidar.npz": "a24f5f4a72aa00e818141461f712b6ee278bbb74d65d97505d14007d0b274a44",
+    "inference/ramp_step/00149_imu.npz": "c76587a994bb325ea7fa68bb462bfc1f0a463350f1cc084a31d03c3472c4d187",
+    "inference/ramp_step/00149_left.png": "54979e78f0c4c7e1c018b0bc1b1c2303100d4c033f6a183f04d6ea35be955390",
+    "inference/ramp_step/00149_lidar.npz": "86bbc5fe6967cc705846946a2522b98039f6abcebb3e32004351cc46c47830ab"
+  },
+  "trajectory_sha256": "f9ff4944b5618774e5c7a9110d93c860cfe3a8f6b5f44df863846b9204572aaf",
+  "native_frames_sha256": "781815d9aa0a698072935c5d6e70d5d8c8affe67f11b817c6e9d1071d30f785b",
+  "right_camera_consumed": false,
+  "max_imu_gap_s": 0.005000000000002558,
+  "timing_scope": "Native per-camera IMU deskew, voxel LIO, map update and direct photometric VIO. PNG decoding separately retained. Full native process wall includes startup and IO; capture is excluded.",
+  "native_process_wall_seconds": 3.2464705309830606,
+  "tracking_semantics": "At least one native lidar residual or visual patch and finite state; this is not calibrated confidence.",
+  "calibration_sha256": "7b421d03968b4292c1036640848651bd1438ce2e99e16eca11883c83ef24bd4d",
+  "config_sha256": "875502c1cad44238ea458cde706a18d397dfb6f281cc2ef55dd3cd08aff7f521"
+}

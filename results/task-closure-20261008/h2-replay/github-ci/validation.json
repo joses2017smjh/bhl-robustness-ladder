@@ -1,0 +1,133 @@
+{
+  "run_id": 37817975052,
+  "head_sha": "b02b56250dffc62e8f49aedba9754f792e162035",
+  "run_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052",
+  "artifact_id": 11568382295,
+  "artifact_url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052/artifacts/11568382295",
+  "pytest": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "124",
+    "tests": "2127",
+    "time": "435.198",
+    "timestamp": "2026-10-08T17:38:34.694013+00:00",
+    "hostname": "runnervmmprz5"
+  },
+  "integration": {
+    "status": "PASS",
+    "tests_run": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "manifest_sha256": "2d23c3fbe5ac218a0690ad70a63478397b2c2e7dab42961e3a66aeb71b1aa2e5"
+  },
+  "replay": {
+    "status": "PASS",
+    "nominal_repeats_passed": 5,
+    "nominal_cases": 5,
+    "faults_detected": 40,
+    "fault_cases": 40
+  },
+  "receipt": {
+    "manifest_sha256": "2d23c3fbe5ac218a0690ad70a63478397b2c2e7dab42961e3a66aeb71b1aa2e5",
+    "argv": [
+      "/tmp/bhl-replay-bundle/replay.py",
+      "--bundle",
+      "/tmp/bhl-replay-bundle",
+      "--out",
+      "validation/replay",
+      "--calls",
+      "10000",
+      "--warmup",
+      "500"
+    ],
+    "host": "runnervmmprz5",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "python": "3.11.17 (main, Oct  1 2026, 14:32:31) [GCC 13.3.0]",
+    "cpu": "x86_64",
+    "cpu_count": 4,
+    "slurm_job_id": null,
+    "thread_settings": {
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1"
+    },
+    "packages": {
+      "numpy": "1.26.0",
+      "mujoco": "3.3.5",
+      "onnxruntime": "1.22.1",
+      "omegaconf": "2.3.0",
+      "torch": "2.7.0"
+    },
+    "installed_packages": {
+      "numpy": "1.26.0",
+      "mujoco": "3.3.5",
+      "onnxruntime": "1.22.1",
+      "omegaconf": "2.3.0",
+      "torch": "2.7.0+cpu"
+    },
+    "source": {
+      "overlay_commit": "33a5eca4567a0bb0d4af162e9ff0d961feaeb9c2",
+      "source_sha256": {
+        "src/bhl_robust/__init__.py": "290f5d6a451d1a1554e2f87b5bf93588fd2c744ee9cef5f0a26a316311bedc8f",
+        "src/bhl_robust/eval/harness.py": "9aa954fa1a0a84ff996b04e97be9a255e3c511e2d8c42305caf28b21d0e40f9a",
+        "src/bhl_robust/eval/terrain_field.py": "27e46389e67ca69966ecde13b8a1508dc6ef6779b582527901dd68e943cee71a",
+        "src/bhl_robust/eval/replay_gate.py": "f8dc1975bc4a41e673fe39290fdb9836f2f1b8f9792706e91f2f5787639fdc8a",
+        "upstream_rl_controller.py": "ab7b8c282e0888ec6cfb74451c60772ade5abcda17362521fb31bc04b8b5203c"
+      },
+      "builder_sha256": "34b63e8b1aeb878a423ac7c7c43134789ce1c038a805435bda023b028b03e88b",
+      "source_deploy_sha256": "dad919ad85cf9677295f5973f2ab6e0671ba809f6c3369136cb999e5de496b9e",
+      "source_checkpoint_sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1",
+      "upstream_credit": "Berkeley Humanoid Lite Project Developers; see LICENSE-upstream.txt"
+    },
+    "unix_time": 1791481564.3673851
+  },
+  "run": {
+    "conclusion": "success",
+    "createdAt": "2026-10-08T17:37:14Z",
+    "headSha": "b02b56250dffc62e8f49aedba9754f792e162035",
+    "status": "completed",
+    "updatedAt": "2026-10-08T17:46:43Z",
+    "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/37817975052"
+  },
+  "status": "PASS",
+  "pytest_summary": {
+    "passed": 1997,
+    "skipped": 124,
+    "subtests_passed": 6,
+    "duration_s": 435.23,
+    "failures": 0,
+    "errors": 0
+  },
+  "skip_reasons": {
+    "pinned Isaac Lab source tree is not on this interpreter's path (fresh test env)": 15,
+    "needs the upstream assets and the arms-turn-turnboth-s0 export": 3,
+    "exported depth ONNX not present": 1,
+    "checkpoint not present": 1,
+    "could not import 'rosbags': No module named 'rosbags'": 1,
+    "the clocks2 bench-v2 crossing records are gitignored": 1,
+    "upstream checkout (with logs/) not present": 2,
+    "export not on disk: /home/runner/work/bhl-robustness-ladder/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-02_03-58-04_arms-turngait-clock-s2/exported": 32,
+    "raw trace of 21405537 not on disk (untracked): /home/runner/work/bhl-robustness-ladder/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-v2-align/episodes.json.gz": 2,
+    "raw trace of 21405541 not on disk (untracked): /home/runner/work/bhl-robustness-ladder/bhl-robustness-ladder/results/mission7-campaign-20260923/replay-gate-v4-settle080/episodes.json.gz": 2,
+    "replay baseline not on disk": 1,
+    "TurnBoth-s0 export not on disk": 3,
+    "untracked replay inputs not on disk (the submitter checks them before planning)": 1,
+    "no saved smoke crossings on disk": 1,
+    "the M2 bench crossing records (gitignored) are not on disk": 1,
+    "untracked replay inputs not on disk": 1,
+    "v1 actor not present": 1,
+    "the launcher's REPO /nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder is not on this machine": 1,
+    "could not import 'imageio_ffmpeg': No module named 'imageio_ffmpeg'": 1,
+    "arms-turngait-clock-s2's env.yaml is not here": 12,
+    "R1's qualify JSONs are not here": 1,
+    "Stand3 run dirs not present": 10,
+    "Stand3 smoke run params not on disk": 1,
+    "Stand4 smoke 21506555 params absent": 1,
+    "no Stand5 smoke run on disk": 1,
+    "v1 run dir or tensorboard not available": 1,
+    "installed isaaclab source not found": 25,
+    "needs the arms-turngait-clock-s0 run's params/env.yaml": 1
+  }
+}

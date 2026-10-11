@@ -1,0 +1,94 @@
+{
+  "schema": "bhl-sensor-fault-protocol-v1",
+  "phase": "smoke",
+  "inputs": [
+    {
+      "group": "textured_boxes-g610000",
+      "manifest": "/tmp/bhl-sensor-fault-smoke-20261010-input/replay/manifest.json",
+      "manifest_sha256": "5427c803deede6d7070e1f7aab1041bf3837938c673784d37af2e2a16338c92b",
+      "sequence": "textured_boxes-g610000-nominal",
+      "source_frames": 60
+    }
+  ],
+  "methods": [
+    "fast_lio2",
+    "fast_livo2",
+    "fast_livo2_no_visual"
+  ],
+  "faults": {
+    "nominal": {},
+    "imu_clock_plus20ms": {
+      "imu_clock_offset_s": 0.02
+    },
+    "imu_clock_plus80ms": {
+      "imu_clock_offset_s": 0.08
+    },
+    "lidar_extrinsic_yaw2deg_x2cm": {
+      "lidar_yaw_error_deg": 2.0,
+      "lidar_x_error_m": 0.02
+    },
+    "gyro_z_bias_after5s": {
+      "gyro_bias_rad_s": [
+        0.0,
+        0.0,
+        0.05
+      ],
+      "bias_start_s": 5.0
+    },
+    "accel_x_bias_after5s": {
+      "accel_bias_m_s2": [
+        0.3,
+        0.0,
+        0.0
+      ],
+      "bias_start_s": 5.0
+    },
+    "lidar_keep_half": {
+      "keep_every": 2
+    },
+    "lidar_keep_quarter": {
+      "keep_every": 4
+    }
+  },
+  "gate": {
+    "initialization_exclusion_s": 5.0,
+    "maximum_ate_rmse_m": 0.1,
+    "maximum_native_compute_p95_s": 0.1,
+    "maximum_rotation_p95_deg": 5.0,
+    "minimum_tracking_fraction": 0.9
+  },
+  "source_sha256": {
+    "scripts/bench/sensor_fault_campaign.py": "c10b642d9de1973e65e9a01e7317cf268de7d2eee64cea11e067c88db767c952",
+    "src/bhl_robust/research/sensor_faults.py": "0a135e15b95e7779b6a4f6be5d7de8b96236302f4a0fff873c49da24bb9705fa",
+    "scripts/bench/native_livo_methods_campaign.py": "d03a078b4adc2942154b58a93534fb3d263e8c46ca9c42a0f7680dd529673090",
+    "scripts/bench/native_slam_campaign.py": "e0bc5459b106d52d65760211e0063404045953bda4066d121f9d656318c5d6dd",
+    "scripts/native/lio_replay.py": "80f7681850d64ec36788c0481a182249a9de3aab6b89db790dff69bd8dbb6c43",
+    "scripts/native/livo_replay.py": "f5181d47c76dd1d14db8c086206a3f02872efbe2b268347e87441531b0dadd6b",
+    "scripts/bench/pose_research.py": "2cb4ef0571326fd39c3eb98f24690ddc40ee589c44558662263e7ca2b5e7c54c",
+    "src/bhl_robust/research/native_lio.py": "adaedb54dd15e99d0a4d9a999e73e0f2da92af9897a250d9f2b7d90943037d57",
+    "src/bhl_robust/research/native_livo.py": "a496261a14bf2e364d078abe87e3fc10fa0554a6ec399e7c968bd981bf69b953",
+    "src/bhl_robust/research/pose_metrics.py": "de28970a53cda9defac9238f99e2df6648c8d3af76b289042a698a839743b582",
+    "scripts/bench/stereo_consistency_campaign.py": "9d44c2c12f7924edf9bbdfc1af7479693063374390bec17eba5b35afbe12ff2e",
+    "src/bhl_robust/research/stereo_consistency.py": "1bf4771a946076e7471a1ead6768d79dd15b136bc749c4cc9055688732254e46",
+    "src/bhl_robust/research/stereo_benchmark.py": "0a76bfea4ae3b34af631bc62595a73dccfa9c0cef9435d0a50073f9d82ad73a7",
+    "src/bhl_robust/stereo_depth.py": "0941ee24d11f2171b52170c0e4aa031ee691dc20e7546b1bd18005667595c4a3"
+  },
+  "runtimes": {
+    "lio": {
+      "path": "/tmp/bhl-livo-diagnostic-work-20261010/lio/runtime",
+      "receipt_sha256": "9d0e1486a6454ad424dcbdefd1407463ca74963b40a49cc5c78ad81023e351ba",
+      "binary": "fastlio_headless",
+      "binary_sha256": "e2c7791007548b316546aa1ef91a34b6fa611e16f8fb8dfd8195f47f544bd2d3"
+    },
+    "livo": {
+      "path": "/tmp/bhl-livo-runtime-20261010",
+      "receipt_sha256": "3a32015a85e4685b07576391caa115c3497c9ae26b761cf853395504e8a2bcea",
+      "binary": "fastlivo_headless",
+      "binary_sha256": "f6c43ad3f5372a5965c8241101330b7f93e91f3e7398a48022e67b925fc1c52e"
+    }
+  },
+  "frame_selection": "same original interior frames [1:-1] for every arm; all original IMU samples retained",
+  "causality": "positive reported IMU offset delays availability; original acquisition time <= reported time; no future samples or truth inputs",
+  "unit": "paired development geometry group; no frame-level significance",
+  "scientific_scope": "sensor replay, no closed-loop goals, collisions, recovery or calibrated confidence claim"
+}

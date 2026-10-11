@@ -1,0 +1,56 @@
+{
+  "archive_sha256": "8a2ec6a64f4cac0868cbf21fd018dacc2f7179daabc634724c5b38cd3bf8851f",
+  "command": [
+    "apptainer",
+    "exec",
+    "--containall",
+    "--cleanenv",
+    "--home",
+    "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f/home",
+    "--bind",
+    "/nfs/hpc/share/sanchej7:/nfs/hpc/share/sanchej7:ro",
+    "--bind",
+    "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f:/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f",
+    "--bind",
+    "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f/source:/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f/source:ro",
+    "--bind",
+    "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f/protocol.json:/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f/protocol.json:ro",
+    "--pwd",
+    "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f/work",
+    "--bind",
+    "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f/inputs:/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f/inputs:ro",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f/source/scripts/bench/terrain_confirmation_campaign.py",
+    "--protocol",
+    "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f/protocol.json",
+    "--phase",
+    "smoke"
+  ],
+  "host": "cn-gpu3.hpc.engr.oregonstate.edu",
+  "job": {
+    "args": [
+      "--protocol",
+      "{protocol}",
+      "--phase",
+      "smoke"
+    ],
+    "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+    "env": {},
+    "kind": "smoke",
+    "max_output_mb": 512,
+    "name": "terrain-confirmation-smoke-20261011",
+    "resources": {
+      "cpus": 4,
+      "gpus": 0,
+      "memory_gb": 8,
+      "partition": "share,eecs",
+      "requeue": false,
+      "time_limit": "01:00:00"
+    }
+  },
+  "job_id": "21768612",
+  "scratch": "/tmp/bhl-h34-terrain-confirmation-smoke-20261011-21768612-0x7pm16f",
+  "source_files_verified": 958,
+  "started_utc": "2026-10-11T10:07:10.022531+00:00"
+}

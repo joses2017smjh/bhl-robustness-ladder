@@ -1,0 +1,48 @@
+{
+  "acceptance_meaning": "execution complete; improvement requires paired multi-seed summary and independent confirmation",
+  "finished_utc": "2026-10-10T21:16:32.420516+00:00",
+  "job_id": null,
+  "jobs_completed": [
+    "teacher",
+    "dense",
+    "query",
+    "query_memory",
+    "query_memory_trajectory"
+  ],
+  "phase": "smoke",
+  "protocol_sha256": "682e659289232a7b39b9fc1e6a6bd3ece8746157b62a63fa9da9b5387f8b4931",
+  "schema": "bhl-perceptive-training-v1",
+  "scientific_status": "SMOKE_ONLY",
+  "scope": "12-DoF Isaac simulation; ideal ray-LiDAR with explicit noise/dropout/delay; no RGB-stereo or physical sensing claim",
+  "seed": 0,
+  "started_utc": "2026-10-10T21:15:30.511236+00:00",
+  "status": "PASS",
+  "student_results": {
+    "dense": {
+      "checkpoint_sha256": "985403dfcabf8ef247ad1b461771c88829231dad77d919495793ff8fbcc0bad5",
+      "episodes": 64,
+      "qualified": 20,
+      "survivors": 64
+    },
+    "query": {
+      "checkpoint_sha256": "7db988411a2f3a773edb99194d435672b7f87ec4b038deeaf44d87685a8fc35d",
+      "episodes": 64,
+      "qualified": 21,
+      "survivors": 64
+    },
+    "query_memory": {
+      "checkpoint_sha256": "820fb30a2cdb4c774ce41e0215656c1687db4875e0049dd3f8b290c2735a4da5",
+      "episodes": 64,
+      "qualified": 21,
+      "survivors": 64
+    },
+    "query_memory_trajectory": {
+      "checkpoint_sha256": "5f288fedfe95204dfbab03176f930ac941f10bad6ce95a8e40002e00ad0d2f5c",
+      "episodes": 64,
+      "qualified": 21,
+      "survivors": 64
+    }
+  },
+  "teacher_checkpoint_sha256": "fea178ab6cc9ab689cb7e2a7b0eb8533a7b90c0624267d70befcecf21711da85",
+  "teacher_qualified": false
+}

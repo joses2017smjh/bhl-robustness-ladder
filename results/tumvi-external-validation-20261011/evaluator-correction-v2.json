@@ -1,0 +1,12 @@
+{
+  "schema": "bhl-evaluator-correction-v2",
+  "recorded_utc": "2026-10-11T10:29:18.042474+00:00",
+  "evaluator_source_sha256": "d8e0a1c6cb3aaa69a34e856eb281d53255ce497dfd521d973637c93225bb395a",
+  "superseded_source_sha256": "67cf13545369e8002e66906bd516f6e120317a074f22e38c1c8a7ae06c5d3d51",
+  "superseded_result_sha256": "8a9d487bd112a7fd3b365f4326ece16ad9a2d55583ca1e262259a8868e5ba71d",
+  "reason": "Pinned ORB active-map reset reused ID0; v1 wrongly combined disconnected coordinate epochs. Native raw outputs remain unchanged.",
+  "correction": "Split epochs on map disappearance, map ID changes, IMU initialization loss or return to NOT_INITIALIZED; preserve original indices/full coverage; verify frame hashes; score per epoch only.",
+  "new_descriptive_analysis": "Identical accepted original native timestamps within overlapping stereo/inertial epochs, rigid SE3 independently with scale1; not a full-continuity or general improvement claim.",
+  "native_rerun": false,
+  "protocol_or_native_estimator_tuning": false
+}
