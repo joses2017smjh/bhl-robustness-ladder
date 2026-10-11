@@ -22,6 +22,15 @@ envs their disturbances back: `push_and_reanchor` pushes every env as phases 1c/
 take a new anchor REANCHOR_DELAY_S after a push. Without that, a pushed robot (it cannot observe how far it was
 moved) would sit on the clamped part of the anchor penalty for the rest of the episode and the penalty would stop
 rewarding standing still. Hand forces stay on every env (waiter_wbc_mdp.hand_forces, unchanged).
+
+OUTCOME (2026-10-11): phases 1e and 1f are both NEGATIVE, and the transient reading above was wrong. Every 1e and 1f
+checkpoint falls within about a second of being told to stand, from a settled stance too, and in training the share
+of episodes reaching the time limit dropped from 0.56-0.61 (1c, 1d) to 0.28. The likely cause is these two
+penalties themselves: at their clamps they cost 22.5 per second against at most about +4.5 per second of reward for
+standing, while falling costs 0.4 once (termination_penalty, weight -10, times the 0.04 s step). The policy cannot
+observe its distance from the anchor, so ending the episode is the better deal whenever it has drifted. Do not reuse
+`StandAnchor` / `stand_tilt` with negative weights like these; a standing term must not be able to make falling the
+cheaper option (bounded positive terms, or a termination cost that dominates).
 """
 
 from __future__ import annotations
