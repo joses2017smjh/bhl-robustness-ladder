@@ -85,7 +85,14 @@ Every number below has its predeclaration and record in `SLURM_JOBS.md` (section
 | 1e stand still under arm loads | NEGATIVE: all three seeds fall within about a second of standing in MuJoCo (and the training's std check failed as written) | `results/waiter-20261005/wbc1e/selection.json` |
 | 2 scripted expert | PASS 86/100 with the stance lock, a declared simulation fixture; 1/100 with a free base | `results/waiter-20261005/phase2-gate/`, `phase2-gate-freebase/` |
 | 3 SmolVLA fine-tune | FAIL: 28/100 with each layout's own instruction (needed 40); 22/100 on the held-out phrasing (needed 20) | `results/waiter-20261005/phase3-gate/verdict.json` |
+| 3b SmolVLA retrained (2026-10-11) | PASS: 75/100 own instruction and 76/100 held-out phrasing on 100 fresh layouts (same bars: 40 and 20). 3.4x the demonstrations and 30% of each training batch drawn from the first 12 frames of episodes | `results/waiter-20261005/phase3b-gate/verdict.json` |
 | 4 DSRL noise steering | PASS: 63/100 against 23/100 for the same frozen policy with its normal noise, on 100 unseen layouts (exact one-sided McNemar p = 1.1e-8); a first design collapsed and was recorded NEGATIVE without a scored run | `results/waiter-20261005/phase4-gate/verdict_dsrl2.json`, `dsrl1_negative.json` |
+
+Phase 3b in one paragraph: which tumbler to take is an exclusive-or of two things the policy's features already
+hold (the instruction's colour, and which side the red tumbler is on), and it is decided in an episode's first ten
+frames, 1.6% of the data. Uniform frame sampling showed those frames to the model about three times in a whole
+run, so the first policy chose at chance however well it did the rest. More demonstrations alone left the choice at
+chance (95 of 189 pick-ups on dev); oversampling the first frames made it right in 192 of 192.
 
 What the measurements say:
 - The phase 3 policy carries out the task about as well as the scripted expert once it holds the right tumbler
