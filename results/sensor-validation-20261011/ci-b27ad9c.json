@@ -1,0 +1,21 @@
+{
+  "schema": "bhl.ci-validation-receipt.v1",
+  "commit": "b27ad9c54082878ad993ca9df3ed9aa0fd51d0b1",
+  "run_id": 38133889301,
+  "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/38133889301",
+  "conclusion": "success",
+  "cpu_regression": {
+    "passed": 2907,
+    "skipped": 132,
+    "subtests_passed": 10,
+    "duration_seconds": 371.29
+  },
+  "trained_asset_and_negative_controls": "success",
+  "seeded_physics_fault_and_timing_replay": "success",
+  "full_downloaded_log_sha256": "9988a036a86bea35fe63a3b9bafbd4f655ec570ed7838afea971f36d94cbd5ed",
+  "artifact_id": 11700700917,
+  "artifact_zip_bytes": 1767109,
+  "artifact_zip_sha256": "540fba52486a3809e73a6648d57b7264ac93c6820e76c30250adfe45f798fe1d",
+  "artifact_verification": "GitHub advertised digest and actual downloaded ZIP SHA256 match",
+  "scope": "Corrected native coordinate-epoch source and regression tests; experiment performance is measured separately."
+}
