@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --account=eecs
 #SBATCH --partition=share,dgx2
+#SBATCH --constraint=el9
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4G
 #SBATCH --time=00:20:00

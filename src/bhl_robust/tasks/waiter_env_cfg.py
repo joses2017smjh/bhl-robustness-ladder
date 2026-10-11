@@ -256,3 +256,37 @@ class HumanoidWaiterWbcStandPushCfg(HumanoidWaiterWbcStanceCfg):
         self.events.push_robot.func = waiter_stand_mdp.push_and_reanchor
         self.events.push_robot.params["delay_s"] = waiter_stand_mdp.REANCHOR_DELAY_S
 
+
+# ---- phase 1g (2026-10-11; SLURM_JOBS.md "Predeclared now ... Waiter phase 1g") ------------------------------------
+# = phase 1f (HumanoidWaiterWbcStandPushCfg: 1d + pushes and hand forces on every env + a new anchor 1 s after each
+#   push) with ONLY: the two standing penalties replaced by two standing-only BOUNDED POSITIVE rewards of the same
+#   error measures and scales, 1 / (1 + error): stand_anchor_bonus (weight STAND_ANCHOR_BONUS_WEIGHT) and
+#   stand_tilt_bonus (weight STAND_TILT_BONUS_WEIGHT). No stand_anchor / stand_tilt penalty term.
+# Why: every 1e and 1f checkpoint falls within a second of being told to stand; with the penalties a standing env
+# that has drifted earns less by staying up than by ending the episode (waiter_stand_mdp module notes).
+STANDBONUS_TASK_ID = "Velocity-BHL-Waiter-WBC-StandBonus-v0"
+STAND_ANCHOR_BONUS_WEIGHT = 2.0
+STAND_TILT_BONUS_WEIGHT = 1.0
+
+
+@configclass
+class WaiterStandBonusRewardsCfg(TurnGaitRewardsCfg):
+    """R1's rewards (as the waiter tasks edit them in __post_init__) + the two standing-only bonuses, last."""
+
+    stand_anchor_bonus = RewTerm(func=waiter_stand_mdp.StandAnchorBonus, weight=STAND_ANCHOR_BONUS_WEIGHT,
+                                 params={"command_name": "base_velocity", "pos_m": waiter_stand_mdp.ANCHOR_POS_M,
+                                         "yaw_deg": waiter_stand_mdp.ANCHOR_YAW_DEG})
+    stand_tilt_bonus = RewTerm(func=waiter_stand_mdp.stand_tilt_bonus, weight=STAND_TILT_BONUS_WEIGHT,
+                               params={"command_name": "base_velocity", "deg": waiter_stand_mdp.TILT_DEG})
+
+
+@configclass
+class HumanoidWaiterWbcStandBonusCfg(HumanoidWaiterWbcStanceCfg):
+    """Phase 1g: phase 1f with the standing penalties replaced by bounded positive rewards (notes above)."""
+
+    rewards: WaiterStandBonusRewardsCfg = WaiterStandBonusRewardsCfg()
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.events.push_robot.func = waiter_stand_mdp.push_and_reanchor
+        self.events.push_robot.params["delay_s"] = waiter_stand_mdp.REANCHOR_DELAY_S

@@ -67,9 +67,9 @@ def test_task_constants_match_the_frozen_design_and_the_launcher_check():
     assert "1c) PREFIX=waiter-wbc1c; SEED0=6; RES_NAME=wbc1c; export BHL_STD_MAX=1.0" in body
     assert "TASK_ID=Velocity-BHL-Waiter-WBC-Curriculum-v0; FULL_ITERS=10000" in body
     assert "env.curriculum.disturbance.params.start_iter=0 env.curriculum.disturbance.params.end_iter=2" in body
-    assert ('[ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ]; } '
-            '&& [ "$SMOKE" = 1 ]') in body
-    # compressed ramp: smoke only (1d, 2026-10-08, 1e, 2026-10-10, and 1f, 2026-10-11, share 1c's curriculum)
+    assert ('[ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] '
+            '|| [ "$VARIANT" = 1g ]; } && [ "$SMOKE" = 1 ]') in body
+    # compressed ramp: smoke only (1d, 2026-10-08, 1e, 2026-10-10, 1f and 1g, 2026-10-11, share 1c's curriculum)
     assert '--task "$TASK_ID"' in body
     init = TASKS_INIT.read_text()
     assert "_waiter_c.CURRICULUM_TASK_ID" in init and "_waiter_c.HumanoidWaiterWbcCurriculumCfg" in init
@@ -93,7 +93,8 @@ def test_stamp_checks_the_curriculum_and_the_task_id(tmp_path):
     assert ww.TASK_IDS[:2] == ("Velocity-BHL-Waiter-WBC-v0", "Velocity-BHL-Waiter-WBC-Curriculum-v0")
     assert ww.TASK_IDS[2:] == ("Velocity-BHL-Waiter-WBC-Stance-v0",            # phase 1d (2026-10-08), additive
                                "Velocity-BHL-Waiter-WBC-Stand-v0",             # phase 1e (2026-10-10), additive
-                               "Velocity-BHL-Waiter-WBC-StandPush-v0")         # phase 1f (2026-10-11), additive
+                               "Velocity-BHL-Waiter-WBC-StandPush-v0",         # phase 1f (2026-10-11), additive
+                               "Velocity-BHL-Waiter-WBC-StandBonus-v0")        # phase 1g (2026-10-11), additive
     with pytest.raises(ValueError):
         ww.stamp(tmp_path / "deploy.yaml", tmp_path / "env.yaml", task="Velocity-BHL-Waiter-WBC-v9")
 

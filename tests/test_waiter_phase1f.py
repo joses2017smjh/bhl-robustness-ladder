@@ -70,7 +70,7 @@ def test_task_constants_agree():
     from bhl_robust.eval import waiter_wbc as WB
     c = _consts(ENV_CFG, ("STANDPUSH_TASK_ID",))
     assert c["STANDPUSH_TASK_ID"] == WB.STANDPUSH_TASK_ID == "Velocity-BHL-Waiter-WBC-StandPush-v0"
-    assert WB.TASK_IDS[-1] == WB.STANDPUSH_TASK_ID and len(WB.TASK_IDS) == 5
+    assert WB.TASK_IDS[4] == WB.STANDPUSH_TASK_ID and len(WB.TASK_IDS) >= 5      # later phases append (1g is [5])
     init = TASKS_INIT.read_text()
     assert "waiter-wbc-standpush" in init and "HumanoidWaiterWbcStandPushCfg" in init
     cfg = ENV_CFG.read_text()
