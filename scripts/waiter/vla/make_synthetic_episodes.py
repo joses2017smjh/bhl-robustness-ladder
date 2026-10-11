@@ -2,7 +2,7 @@
 """Write SYNTHETIC contract-format episodes (+ manifest.json, templates.json) for phase 3 plumbing tests.
 
 Modes:
-  expert  roll the SYNTHETIC stub env (stub_env.py) with its scripted stub expert and record exactly what the
+  expert  roll the SYNTHETIC stub env (vla_stub_env.py) with its scripted stub expert and record exactly what the
           contract says phase 2 records: image, state, the action applied after observing step t, instruction,
           seed, success, stage. Gives a learnable (if trivial) signal.
   random  random images/state/actions of the right shapes and dtypes (pure shape test).
@@ -22,7 +22,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from stub_env import SYNTHETIC_TEMPLATES, StubExpert, StubWaiterEnv, templates_json  # noqa: E402
+from vla_stub_env import SYNTHETIC_TEMPLATES, StubExpert, StubWaiterEnv, templates_json  # noqa: E402
 from waiter_vla_data import ACTION_DIM, IMAGE_SHAPE, STATE_DIM, seed_range_name  # noqa: E402
 
 

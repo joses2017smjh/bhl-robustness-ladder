@@ -4,7 +4,7 @@
 # Interpreters:
 #   VLA_PY  venv-lehome-train: Python 3.11, lerobot 0.4.3, torch 2.7.0+cu128 (no SM70/V100 kernels), transformers
 #           4.57.6, numpy 2.4. No MuJoCo.
-#   ENV_PY  main venv: MuJoCo 3.3.5, numpy 1.26, torch 2.7.0+cu128. Runs env workers (env_worker.py) for the
+#   ENV_PY  main venv: MuJoCo 3.3.5, numpy 1.26, torch 2.7.0+cu128. Runs env workers (vla_env_worker.py) for the
 #           phase 2 WaiterEnv; rollout_vla.py talks to them over pipes without pickling numpy arrays.
 # Weights: lerobot/smolvla_base + SmolVLM2 tokenizer come from the shared HF cache, strictly offline.
 : "${ROOT:?ROOT must point at the repo/worktree root}"

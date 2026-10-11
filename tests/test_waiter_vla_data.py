@@ -15,10 +15,10 @@ import pytest
 VLA = Path(__file__).resolve().parents[1] / "scripts" / "waiter" / "vla"
 sys.path.insert(0, str(VLA))
 
-import env_worker  # noqa: E402
+import vla_env_worker as env_worker  # noqa: E402
 import rollout_vla  # noqa: E402
 import waiter_vla_data as wd  # noqa: E402
-from stub_env import (SYNTHETIC_HELD_OUT, SYNTHETIC_SLOTS, SYNTHETIC_TEMPLATES, StubExpert,  # noqa: E402
+from vla_stub_env import (SYNTHETIC_HELD_OUT, SYNTHETIC_SLOTS, SYNTHETIC_TEMPLATES, StubExpert,  # noqa: E402
                       StubWaiterEnv, templates_json)
 
 

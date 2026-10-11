@@ -71,7 +71,7 @@ def recv(stream):
 def make_env(kind: str, kwargs: dict):
     if kind == "stub":
         sys.path.insert(0, str(HERE))
-        from stub_env import StubWaiterEnv
+        from vla_stub_env import StubWaiterEnv
 
         return StubWaiterEnv(**kwargs)
     if kind == "waiter":

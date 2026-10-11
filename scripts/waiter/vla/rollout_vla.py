@@ -16,7 +16,7 @@ Seed hygiene: ``--purpose dev`` only accepts the dev range 1000-1999 (stub env: 
 range). ``--purpose scored`` only accepts 4000-4099, needs ``--gate`` (frozen gate file, sha256 recorded) and never
 overwrites an existing result.
 
-Envs run in-process (``--workers 0``) or one subprocess per env (``env_worker.py``), optionally under another
+Envs run in-process (``--workers 0``) or one subprocess per env (``vla_env_worker.py``), optionally under another
 interpreter (``--env-python``: the MuJoCo venv) since venv-lehome-train has no MuJoCo.
 """
 from __future__ import annotations
@@ -36,7 +36,7 @@ import numpy as np
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-import env_worker  # noqa: E402
+import vla_env_worker as env_worker  # noqa: E402
 import waiter_vla_data as wd  # noqa: E402
 
 INFO_KEYS = ("success", "fell", "stage", "tumbler_on_tray", "tray_on_target", "t")
@@ -70,7 +70,7 @@ class SubprocessEnv:
     def __init__(self, kind, kwargs, python, extra_env):
         env = dict(os.environ)
         env.update(extra_env)
-        self.proc = subprocess.Popen([python, str(HERE / "env_worker.py")], stdin=subprocess.PIPE,
+        self.proc = subprocess.Popen([python, str(HERE / "vla_env_worker.py")], stdin=subprocess.PIPE,
                                      stdout=subprocess.PIPE, env=env)
         self._call("make", kind, kwargs)
         self.synthetic = bool(self._last["synthetic"])
