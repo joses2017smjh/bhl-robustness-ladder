@@ -228,6 +228,26 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         _ac.ActorCritic.update_distribution = _bounded_update
         print(f"[overlay] action-noise std bounded to [{_lo}, {_hi}]")
 
+        # 2026-10-11 (Waiter phase 1f): also clamp right after each PPO update. The training log prints
+        # policy.action_std, a view of the parameter, so it showed the value after the iteration's last optimizer
+        # step and before the next clamp (up to one step above the bound: 1.01 in the first iterations of the 1e
+        # runs). Clamping here changes no rollout and no gradient: the same clamp ran before the next use anyway.
+        import rsl_rl.algorithms.ppo as _ppo
+        _orig_ppo_update = _ppo.PPO.update
+
+        def _update_then_clamp(self, *a, _orig=_orig_ppo_update, **k):
+            out = _orig(self, *a, **k)
+            pol = getattr(self, "policy", None) or getattr(self, "actor_critic")
+            with _torch.no_grad():
+                if getattr(pol, "noise_std_type", "scalar") == "scalar":
+                    pol.std.clamp_(_lo, _hi)
+                else:
+                    pol.log_std.clamp_(_math.log(_lo), _math.log(_hi))
+            return out
+
+        _ppo.PPO.update = _update_then_clamp
+        print("[overlay] action-noise std also bounded after each PPO update (the logged value is the bounded one)")
+
     # create isaac environment
     env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
     # wrap for video recording

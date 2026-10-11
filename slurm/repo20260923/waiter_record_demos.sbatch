@@ -26,6 +26,8 @@ export TMPDIR=/tmp MUJOCO_GL=egl PYOPENGL_PLATFORM=egl MUJOCO_EGL_DEVICE_ID=${MU
 cd "$REPO"
 echo "=== waiter demos | $(hostname) | HEAD $(git rev-parse --short HEAD) | seeds $SEED0-$SEED1 | out $OUT | $(date)"
 mkdir -p "$OUT"
+# stop here if this node does not render the head camera like the first demonstrations (render_check.py)
+"$PY" scripts/waiter/render_check.py || { echo "WAITER DEMOS: REFUSED (this node renders differently)"; exit 1; }
 for i in $(seq 0 $((PROCS - 1))); do
   S=$(seq "$SEED0" "$SEED1" | awk -v i="$i" -v n="$PROCS" '(NR - 1) % n == i' | paste -sd, -)
   "$PY" scripts/waiter/record_demos.py --deploy "$DEPLOY" --upstream "$U" --cache-dir "/tmp/waiter-demos-${SLURM_JOB_ID:-$$}-$i" \

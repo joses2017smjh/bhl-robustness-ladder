@@ -61,7 +61,9 @@ def parse_args(argv=None):
     g.add_argument("--limit-episodes", type=int)
     g.add_argument("--cache", type=Path, help="memmap cache dir (default $TMPDIR/waiter-vla-cache)")
     g.add_argument("--std-floor", type=float, default=1e-2)
-    g.add_argument("--sampling", choices=("frame", "episode"), default="frame")
+    g.add_argument("--sampling", default="frame",
+                   help="frame | episode | early:<K>:<P> (a fraction P of each batch from the first K frames of "
+                        "random episodes; see waiter_vla_data.batch_indices)")
     g = p.add_argument_group("model")
     g.add_argument("--base", default="lerobot/smolvla_base", help="HF repo id (offline cache) or local dir")
     g.add_argument("--chunk-size", type=int, default=50, help="actions predicted per call (50 = 4.0 s at 12.5 Hz)")
@@ -86,6 +88,9 @@ def parse_args(argv=None):
     g.add_argument("--save-every", type=int, default=1000)
     g.add_argument("--log-every", type=int, default=50)
     g.add_argument("--keep-last", type=int, default=2)
+    g.add_argument("--no-trainer-state", action="store_true",
+                   help="do not write trainer.pt (optimizer state; 3.6 GB in --train-mode full): the run cannot be "
+                        "resumed, its checkpoints are model-only")
     g.add_argument("--val-per-episode", type=int, default=8)
     g.add_argument("--val-max-samples", type=int, default=512)
     g.add_argument("--openloop-samples", type=int, default=32, help="per split, for sampled-chunk action error")
@@ -97,6 +102,8 @@ def parse_args(argv=None):
         p.error("steps, batch size, intervals, val-per-episode and chunk size must be positive")
     if not 1 <= args.n_action_steps <= args.chunk_size:
         p.error("need 1 <= n-action-steps <= chunk-size")
+    if args.sampling not in ("frame", "episode"):
+        wd.parse_early_mode(args.sampling)          # raises on a malformed mode
     if args.keep_last < 1:
         p.error("--keep-last must be >= 1")
     return args
@@ -233,6 +240,8 @@ def main(argv=None):
                   "seed": args.seed, "batch_size": args.batch_size, "steps": args.steps, "lr": args.lr,
                   "sampling": args.sampling, "amp": args.amp, "fp32_trainable": not args.bf16_trainable}
     if resume_dir is not None:
+        if not (resume_dir / "trainer.pt").is_file():
+            raise SystemExit(f"{resume_dir} has no trainer.pt (a --no-trainer-state run): it cannot be resumed")
         trainer = torch.load(resume_dir / "trainer.pt", map_location="cpu", weights_only=False)
         for key in ("chunk_size", "train_mode", "data_hash", "stats_sha256", "seed", "batch_size", "sampling",
                     "fp32_trainable"):
@@ -387,9 +396,10 @@ def main(argv=None):
             "n_action_steps": args.n_action_steps, "chunk_size": args.chunk_size, "control_hz": wd.CONTROL_HZ,
             "image_key": wd.IMAGE_KEY, "env": env_info,
             "note": "validation losses are not task success; closed-loop rollouts measure success"})
-        torch.save({"step": step, "best": best, "history": history, "optimizer": optimizer.state_dict(),
-                    "torch_rng": torch.get_rng_state(), "cuda_rng": torch.cuda.get_rng_state_all(),
-                    "py_rng": random.getstate(), "run_config": run_config}, staging / "trainer.pt")
+        if not args.no_trainer_state:
+            torch.save({"step": step, "best": best, "history": history, "optimizer": optimizer.state_dict(),
+                        "torch_rng": torch.get_rng_state(), "cuda_rng": torch.cuda.get_rng_state_all(),
+                        "py_rng": random.getstate(), "run_config": run_config}, staging / "trainer.pt")
         os.replace(staging, directory)
         atomic_json(args.out / "latest.json", {"path": str(directory.resolve()), "step": step})
         if is_best:

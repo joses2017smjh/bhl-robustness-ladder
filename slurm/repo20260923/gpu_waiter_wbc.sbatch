@@ -31,6 +31,10 @@
 # Velocity-BHL-Waiter-WBC-Stand-v0 (= 1d + no pushes / hand forces on standing envs + the standing penalties
 # stand_anchor and stand_tilt), seeds 12-14, otherwise as 1d (the same curriculum checks) plus the stand check in
 # params/env.yaml (also done by the stamp); submit with --time=16:00:00.
+# WAITER_VARIANT=1f (2026-10-11; SLURM_JOBS.md 'Predeclared now ... Waiter phase 1f'): task
+# Velocity-BHL-Waiter-WBC-StandPush-v0 (= 1d + the standing penalties; standing envs keep their pushes and hand forces;
+# a new anchor 1 s after each push), seeds 15-17, otherwise as 1d (the same curriculum checks) plus the stand-push
+# check in params/env.yaml (also done by the stamp); submit with --time=16:00:00.
 set -euo pipefail
 export BHL_STACK=v51
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
@@ -50,6 +54,8 @@ case "$VARIANT" in
         TASK_ID=Velocity-BHL-Waiter-WBC-Stance-v0; FULL_ITERS=10000 ;;
     1e) PREFIX=waiter-wbc1e; SEED0=12; RES_NAME=wbc1e; export BHL_STD_MAX=1.0
         TASK_ID=Velocity-BHL-Waiter-WBC-Stand-v0; FULL_ITERS=10000 ;;
+    1f) PREFIX=waiter-wbc1f; SEED0=15; RES_NAME=wbc1f; export BHL_STD_MAX=1.0
+        TASK_ID=Velocity-BHL-Waiter-WBC-StandPush-v0; FULL_ITERS=10000 ;;
     *)  echo "WAITER-WBC RESULT: FAIL (unknown WAITER_VARIANT $VARIANT)"; exit 2 ;;
 esac
 OBS_POLICY=83
@@ -92,7 +98,7 @@ if [ "$SMOKE" = 1 ]; then OVR_DIR="$RES/overrides"; else OVR_DIR="$WORKSPACE/ove
 mkdir -p "$OVR_DIR"
 export OVERRIDE_FILE="$OVR_DIR/${RUN_NAME}.txt"
 dr_overrides_scale 1.0 > "$OVERRIDE_FILE"
-if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ]; } && [ "$SMOKE" = 1 ]; then
+if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ]; } && [ "$SMOKE" = 1 ]; then
     # smoke only: compress the ramp into the smoke's 3 iterations, so its log shows the term move
     printf ' env.curriculum.disturbance.params.start_iter=0 env.curriculum.disturbance.params.end_iter=2' >> "$OVERRIDE_FILE"
 fi
@@ -122,7 +128,8 @@ why=""
 [ -n "$run" ] && [ -f "$run/$FINAL_CKPT" ] || why="$why no-$FINAL_CKPT"
 grep -q "waiter-wbc id NOT registered" "$TLOG" && why="$why task-not-registered"
 [ "$VARIANT" = 1e ] && grep -q "waiter-wbc-stand id NOT registered" "$TLOG" && why="$why stand-task-not-registered"
-if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
+[ "$VARIANT" = 1f ] && grep -q "waiter-wbc-standpush id NOT registered" "$TLOG" && why="$why standpush-task-not-registered"
+if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
     grep -q "\[overlay\] action-noise std bounded to \[0.001, 1.0\]" "$TLOG" || why="$why std-bound-overlay-missing"
     # WAITER_STD_LOG_TOL (default 1e-6 = the check as predeclared): the log line shows the std parameter after the
     # iteration's last optimizer step, before the next clamp, so it can read up to 1.01 while every use is <= 1.0
@@ -138,7 +145,7 @@ print(f"std check: max logged {max(v) if v else None}; {len(over)} of {len(v)} i
 sys.exit(0 if v and max(v) <= 1.0 + tol else 1)
 PY
 fi
-if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ]; } && [ -n "$run" ] && [ -s "$TLOG" ]; then
+if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ]; } && [ -n "$run" ] && [ -s "$TLOG" ]; then
     # phase 1c: the curriculum ran (logged 0 first, and 1.0 last in a full run), the PPO rollout is the 24 steps the
     # iteration count assumes, and a full run carries the frozen ramp values
     (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" - "$TLOG" "$run" "$SMOKE" <<'PY') || why="$why curriculum-check"
@@ -172,6 +179,19 @@ p = check_stance(load_env_yaml(sys.argv[1]))
 print('stance check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/params/env.yaml") 2>&1 | tail -1)
     echo "$s"
     case "$s" in "stance check: OK") ;; *) why="$why stance-check";; esac
+fi
+if [ "$VARIANT" = 1f ] && [ -n "$run" ] && [ -f "$run/params/env.yaml" ]; then
+    # phase 1f: 1d's stance terms + the standing penalties + pushes (push_and_reanchor) and hand forces on every env
+    s=$( (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" -c "
+import sys
+from bhl_robust.eval.gait_clock import load_env_yaml
+from bhl_robust.eval.waiter_wbc import check_stand_push
+p = check_stand_push(load_env_yaml(sys.argv[1]))
+print('stand-push check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/params/env.yaml") 2>&1 | tail -1)
+    echo "$s"
+    case "$s" in "stand-push check: OK") ;; *) why="$why stand-push-check";; esac
+    # the std bound must also show in the log now that the overlay clamps right after each PPO update
+    grep -q "\[overlay\] action-noise std also bounded after each PPO update" "$TLOG" || [ ! -s "$TLOG" ] || why="$why std-clamp-after-update-missing"
 fi
 if [ "$VARIANT" = 1e ] && [ -n "$run" ] && [ -f "$run/params/env.yaml" ]; then
     # phase 1e: 1d's stance terms + no disturbances on standing envs + the standing penalties, in the run's env.yaml

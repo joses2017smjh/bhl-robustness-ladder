@@ -1,0 +1,33 @@
+{
+ "gate": "Waiter phase 3 (SmolVLA supervised fine-tune)",
+ "verdict": "PASS",
+ "rule": "PASS iff >= 40 of 100 successes with each layout's own instruction AND >= 20 of 100 successes with the held-out instruction template T5; seeds 7000-7099, one episode per seed per setting; checkpoint sft2_early/step_040000; WaiterEnv defaults (stance lock on, 90 s limit); 10 executed steps per 50-step chunk",
+ "rule_file": "results/waiter-20261005/phase3b-gate/rule.json",
+ "rule_sha256": "254137e982360fb714cc189b5a078c1cf22827020baa04191a7938d58f210120",
+ "own_instruction": {
+  "successes": 75,
+  "n": 100,
+  "wilson95": [
+   0.657,
+   0.8245
+  ],
+  "falls": 0,
+  "seen_templates_only": {
+   "successes": 62,
+   "n": 81
+  }
+ },
+ "held_out_template": {
+  "successes": 76,
+  "n": 100,
+  "wilson95": [
+   0.6677,
+   0.8331
+  ],
+  "falls": 0
+ },
+ "inputs": {
+  "own": "results/waiter-20261005/phase3b-gate/own.json",
+  "held_out": "results/waiter-20261005/phase3b-gate/held_out.json"
+ }
+}

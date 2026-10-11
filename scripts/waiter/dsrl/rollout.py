@@ -9,7 +9,8 @@ import torch
 
 # Frozen seed ranges (docs/WAITER_INTERFACES.md). Nothing outside its range, ever.
 SEED_RANGES = {"dev": (1000, 1999), "p2_gate": (2000, 2099), "p2_demo": (3000, 3999),
-               "p3_eval": (4000, 4099), "p4_train": (5000, 5999), "p4_eval": (6000, 6099)}
+               "p3_eval": (4000, 4099), "p4_train": (5000, 5999), "p4_eval": (6000, 6099),
+               "p3b_eval": (7000, 7099)}
 
 
 def parse_seeds(text: str) -> list[int]:

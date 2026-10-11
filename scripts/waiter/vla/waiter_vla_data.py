@@ -54,9 +54,11 @@ SEED_RANGES = {
     "phase3_scored": (4000, 4099),
     "phase4_train": (5000, 5999),
     "phase4_scored": (6000, 6099),
+    "phase3b_scored": (7000, 7099),      # added 2026-10-11 (phase 3b; SLURM_JOBS.md), never used before its scored run
 }
 TRAINING_RANGES = ("phase2_demos",)  # + "dev" with allow_dev_seeds
-NEVER_TRAIN_RANGES = ("phase2_gate", "phase3_scored", "phase4_train", "phase4_scored")
+NEVER_TRAIN_RANGES = ("phase2_gate", "phase3_scored", "phase4_train", "phase4_scored", "phase3b_scored")
+SCORED_RANGES = ("phase3_scored", "phase3b_scored")      # what rollout_vla.py --purpose scored may run
 
 
 class EpisodeError(ValueError):
@@ -564,15 +566,42 @@ def action_chunk(actions: np.ndarray, t: int, chunk: int) -> tuple[np.ndarray, n
     return out, is_pad
 
 
+def parse_early_mode(mode: str) -> tuple[int, float]:
+    """'early:K:P' -> (K frames, probability P); raises ValueError on anything else."""
+    parts = mode.split(":")
+    if len(parts) != 3 or parts[0] != "early":
+        raise ValueError(f"sampling mode {mode!r} is not early:<frames>:<fraction>")
+    k, p = int(parts[1]), float(parts[2])
+    if k < 1 or not 0.0 < p < 1.0:
+        raise ValueError(f"sampling mode {mode!r}: need frames >= 1 and 0 < fraction < 1")
+    return k, p
+
+
 def batch_indices(step: int, seed: int, batch_size: int, lengths: Sequence[int], mode: str = "frame") -> list:
     """Training samples for one optimisation step as (episode_index, frame) pairs.
 
     A pure function of (seed, step): resuming at step k reproduces exactly the batches an uninterrupted run would
     have drawn, without saving sampler state, and DataLoader prefetching cannot desynchronise it.
-    mode 'frame' = uniform over all frames; 'episode' = uniform episode, then uniform frame.
+    mode 'frame' = uniform over all frames; 'episode' = uniform episode, then uniform frame;
+    'early:K:P' = each sample comes, with probability P, from the first K frames of a uniformly chosen episode and
+    otherwise from all frames as 'frame' does (the tumbler is chosen in an episode's first second or two, about 2%
+    of its frames; uniform sampling shows those frames to the model only a few times).
     """
     rng = np.random.default_rng([int(seed), int(step), 0x5A17])
     lengths = np.asarray(lengths, dtype=np.int64)
+    if mode.startswith("early:"):
+        k, p = parse_early_mode(mode)
+        offsets = np.concatenate([[0], np.cumsum(lengths)])
+        out = []
+        for early in rng.random(batch_size) < p:
+            if early:
+                e = int(rng.integers(len(lengths)))
+                out.append((e, int(rng.integers(min(k, int(lengths[e]))))))
+            else:
+                f = int(rng.integers(offsets[-1]))
+                e = int(np.searchsorted(offsets, f, side="right") - 1)
+                out.append((e, f - int(offsets[e])))
+        return out
     if mode == "frame":
         offsets = np.concatenate([[0], np.cumsum(lengths)])
         flat = rng.integers(offsets[-1], size=batch_size)

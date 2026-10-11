@@ -1,0 +1,18 @@
+{
+ "gate": "Waiter phase 3b (SmolVLA retrained: more demonstrations and early-frame oversampling), frozen 2026-10-11 07:39 before any seed 7000-7099 was run",
+ "rule": "PASS iff >= 40 of 100 successes with each layout's own instruction AND >= 20 of 100 successes with the held-out instruction template T5; seeds 7000-7099, one episode per seed per setting; checkpoint sft2_early/step_040000; WaiterEnv defaults (stance lock on, 90 s limit); 10 executed steps per 50-step chunk",
+ "checkpoint": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase3/runs/sft2_early/step_040000",
+ "checkpoint_step": 40000,
+ "checkpoint_data_hash": "80d1949057eac015c7af751b06ffe43c4136cb6abcbea0f4ae59057c9f3e1e86",
+ "checkpoint_model_sha256": "c85386ac8bc670921eda04442337ce1669931f703316fc670f37b8067f0a14da",
+ "require_model_sha256": true,
+ "seed0": 7000,
+ "seed1": 7099,
+ "held_out_template": "T5",
+ "held_out_instruction_id": 5,
+ "min_own": 40,
+ "min_held_out": 20,
+ "deploy": "results/waiter-20261005/wbc1c/training/waiter-wbc1c-s7.deploy.yaml",
+ "scorer": "scripts/waiter/vla/phase3_gate.py",
+ "chosen_by": "dev rollouts on seeds 1400-1463 (64 own-instruction + 64 held-out-template episodes per candidate): sft2_early step 40000 48/64 and 45/64 (margin +22.4); sft2 step 40000 30/64 and 23/64 (+4.4); sft2_full step 5000 8/64 and 2/64 (-17.6)"
+}

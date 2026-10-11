@@ -234,3 +234,25 @@ class HumanoidWaiterWbcStandCfg(HumanoidWaiterWbcStanceCfg):
         self.events.push_robot.params["command_name"] = "base_velocity"
         self.events.hand_forces.func = waiter_stand_mdp.hand_forces_moving_only
         self.events.hand_forces.params["command_name"] = "base_velocity"
+
+
+# ---- phase 1f (2026-10-11; SLURM_JOBS.md "Predeclared now ... Waiter phase 1f") ------------------------------------
+# = phase 1d (HumanoidWaiterWbcStanceCfg: pushes and hand forces on every env, standing ones included) with ONLY:
+#   * phase 1e's two standing-only penalties (WaiterStandRewardsCfg, same weights);
+#   * the push event also schedules a new anchor for the anchor penalty 1 s after each push
+#     (waiter_stand_mdp.push_and_reanchor; the push itself is upstream's, with the same velocity range).
+# Why: the 1e seeds (no disturbances while standing) fell within a second of standing in MuJoCo; s7 and 1d did not.
+STANDPUSH_TASK_ID = "Velocity-BHL-Waiter-WBC-StandPush-v0"
+
+
+@configclass
+class HumanoidWaiterWbcStandPushCfg(HumanoidWaiterWbcStanceCfg):
+    """Phase 1f: phase 1d + the standing penalties; standing envs keep their pushes and hand forces (notes above)."""
+
+    rewards: WaiterStandRewardsCfg = WaiterStandRewardsCfg()
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.events.push_robot.func = waiter_stand_mdp.push_and_reanchor
+        self.events.push_robot.params["delay_s"] = waiter_stand_mdp.REANCHOR_DELAY_S
+

@@ -55,6 +55,25 @@ def test_action_chunk_pads_with_last_action_and_flags_padding():
         wd.action_chunk(actions, 5, 3)
 
 
+def test_early_sampling_mode():
+    lengths = [600, 30, 640, 500]
+    assert wd.parse_early_mode("early:40:0.4") == (40, 0.4)
+    for bad in ("early", "early:0:0.5", "early:40:1.0", "early:40:0", "late:40:0.4", "early:x:0.4"):
+        with pytest.raises(ValueError):
+            wd.parse_early_mode(bad)
+    a = wd.batch_indices(7, 0, 64, lengths, "early:40:0.4")
+    assert a == wd.batch_indices(7, 0, 64, lengths, "early:40:0.4") != wd.batch_indices(8, 0, 64, lengths, "early:40:0.4")
+    assert all(0 <= e < 4 and 0 <= f < lengths[e] for e, f in a)
+    many = [s for step in range(400) for s in wd.batch_indices(step, 0, 64, lengths, "early:40:0.4")]
+    early = sum(f < 40 for _, f in many) / len(many)
+    uniform = sum(min(40, n) for n in lengths) / sum(lengths)       # share of first-40 frames under 'frame'
+    assert abs(early - (0.4 + 0.6 * uniform)) < 0.02 and uniform < 0.09
+    short = [f for e, f in many if e == 1]                           # the 30-frame episode never yields frame >= 30
+    assert short and max(short) < 30
+    with pytest.raises(ValueError):
+        wd.batch_indices(0, 0, 4, lengths, "nonsense")
+
+
 def test_batch_indices_are_a_pure_function_of_seed_and_step():
     lengths = [7, 3, 40, 1]
     a = wd.batch_indices(12, 0, 64, lengths)
@@ -132,7 +151,7 @@ def test_split_spec():
 def test_seed_guards_never_admit_scored_ranges():
     wd.check_training_seed(3000, synthetic=False, allow_dev_seeds=False)
     wd.check_training_seed(3999, synthetic=False, allow_dev_seeds=False)
-    for bad in (4000, 4099, 6000, 2000, 5000):
+    for bad in (4000, 4099, 6000, 2000, 5000, 7000, 7099):       # 7000-7099: phase 3b's scored range (2026-10-11)
         with pytest.raises(wd.EpisodeError):
             wd.check_training_seed(bad, synthetic=False, allow_dev_seeds=True)
         with pytest.raises(wd.EpisodeError):
@@ -298,7 +317,7 @@ def test_env_worker_codec_and_subprocess_roundtrip():
         env.close()
 
 
-def test_rollout_helpers():
+def test_rollout_helpers(tmp_path):
     a = np.zeros(15, np.float32)
     a[0], a[1], a[2], a[13], a[14] = 1.0, -1.0, 0.1, 1.5, -0.2
     c, clipped = rollout_vla.clip_action(a)
@@ -315,6 +334,16 @@ def test_rollout_helpers():
         with pytest.raises(SystemExit):
             rollout_vla.check_seeds(seeds, purpose, env)
     rollout_vla.check_seeds([4000, 4099], "scored", "waiter")
+    rollout_vla.check_seeds([7000, 7099], "scored", "waiter")       # phase 3b's range
+    for seeds in ([4000, 7000], [7100], [6000]):                    # mixed ranges, outside, another phase's range
+        with pytest.raises(SystemExit):
+            rollout_vla.check_seeds(seeds, "scored", "waiter")
+    gate = tmp_path / "rule.json"
+    gate.write_text(json.dumps({"seed0": 7000, "seed1": 7099}))
+    rollout_vla.check_gate_seeds(list(range(7000, 7100)), gate)
+    for seeds in (list(range(4000, 4100)), list(range(7000, 7050))):  # the gate file names its own seeds
+        with pytest.raises(SystemExit):
+            rollout_vla.check_gate_seeds(seeds, gate)
     assert rollout_vla.parse_instruction_ids("T0, 3") == ["T0", 3]
     assert rollout_vla.parse_instruction_ids("") == [None]
 

@@ -673,3 +673,19 @@ except Exception as _exc:  # noqa: BLE001
     import sys as _sys
     print(f"[bhl_robust.tasks] waiter-wbc-stand id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
 # --- end waiter-wbc-stand ---
+# --- waiter-wbc-standpush (2026-10-11; phase 1f, SLURM_JOBS.md "Predeclared now ... Waiter phase 1f") ---
+# Velocity-BHL-Waiter-WBC-StandPush-v0: phase 1d + the standing penalties, pushes kept on standing envs
+# (waiter_env_cfg.HumanoidWaiterWbcStandPushCfg). Guarded: a failure is printed and only this id is absent.
+try:
+    from bhl_robust.tasks import waiter_env_cfg as _waiter_f  # noqa: E402
+
+    gym.register(
+        id=_waiter_f.STANDPUSH_TASK_ID,
+        entry_point="isaaclab.envs:ManagerBasedRLEnv",
+        disable_env_checker=True,
+        kwargs={"env_cfg_entry_point": _waiter_f.HumanoidWaiterWbcStandPushCfg, "rsl_rl_cfg_entry_point": _ARM_PPO_CFG},
+    )
+except Exception as _exc:  # noqa: BLE001
+    import sys as _sys
+    print(f"[bhl_robust.tasks] waiter-wbc-standpush id NOT registered: {_exc!r}", file=_sys.stderr, flush=True)
+# --- end waiter-wbc-standpush ---
