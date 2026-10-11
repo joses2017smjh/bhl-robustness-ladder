@@ -1,0 +1,148 @@
+{
+  "schema": "bhl-hardware-intake-plan-v1",
+  "created_date": "2026-10-11",
+  "status": "NEEDS_DEVICE_ACCESS_AND_CALIBRATION",
+  "protocol_frozen": false,
+  "hardware_validation_complete": false,
+  "scope": "planning inventory only; not an executable recording manifest or measured hardware result",
+  "user_declared_devices": {
+    "lidar": {
+      "model": "WayPonDEV RPLIDAR C1",
+      "geometry": "planar_2d",
+      "manufacturer_source": "https://www.slamtec.com/en/c1/spec",
+      "nominal_scan_hz": 10,
+      "serial_baud": 460800,
+      "specification_is_measurement": false,
+      "mounting": "fixed_to_body_front_top_middle_user_reported",
+      "measured_body_extrinsic": null
+    },
+    "camera": {
+      "model": "MMlove USB Stereo Camera",
+      "advertised_modes": [
+        "1200P 60FPS",
+        "600P 120FPS"
+      ],
+      "advertised_global_shutter": true,
+      "advertised_fov_deg": 94,
+      "verified_modes": null,
+      "baseline_m": null,
+      "per_eye_dimensions": null,
+      "exposure_synchronization_verified": false,
+      "usb_layout": "side_by_side_MJPEG_documented_in_quest_repository",
+      "exact_model_revision": null,
+      "documented_usb_id": "32e4:2b10",
+      "repository_default_capture": {
+        "combined_width": 1280,
+        "combined_height": 480,
+        "requested_fps": 30,
+        "per_eye_width": 640,
+        "per_eye_height": 480,
+        "is_measured_delivered_mode": false
+      }
+    },
+    "imu": {
+      "model": "Yahboom 10-axis AHRS module with case",
+      "channels": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer",
+        "barometer",
+        "device_attitude"
+      ],
+      "exact_model_revision": null,
+      "firmware": null,
+      "actual_output_hz": null,
+      "max_documented_output_hz": 200,
+      "manufacturer_source": "https://www.yahboom.net/study/IMU",
+      "mounting": "fixed_to_body_front_top_middle_user_reported",
+      "measured_body_extrinsic": null
+    },
+    "head": {
+      "axes": [
+        "pan",
+        "tilt"
+      ],
+      "servos": 2,
+      "moving_sensor_group": [
+        "camera"
+      ],
+      "joint_feedback_available": null,
+      "command_equals_measured_angle": false,
+      "mounting_evidence": "User confirmation: camera only moves; IMU and LiDAR fixed at front/top/middle of robot body.",
+      "feedback_exposed_by_inspected_firmware": false,
+      "feedback_evidence": "GitHub firmware reports commanded microseconds, not encoder angles; deployed hardware has not been queried.",
+      "controller": "Arduino Nano",
+      "serial_baud": 115200,
+      "pins": {
+        "pan": "D9",
+        "tilt": "D5"
+      }
+    }
+  },
+  "access": {
+    "machine": null,
+    "operating_system": "Linux (repository documented; not remotely verified)",
+    "recording_directory": null,
+    "robot_platform": null,
+    "documented_computer": "Beelink EQ / Intel N150 Linux PC",
+    "documented_os_context": "Ubuntu 22.04 context; as-built notes later report kernel 6.12; current runtime unverified"
+  },
+  "initial_configuration": "head locked at documented pose for first calibration; camera-only moving head is the target active-perception configuration",
+  "estimator_constraints": {
+    "fixed_extrinsic_stereo_inertial_requires": "camera and IMU rigid relative to each other during each replay",
+    "body_navigation_requires": "time-aligned measured head-to-body transform or validated locked-head transform",
+    "fast_lio_3d_route_qualified": false,
+    "existing_physical_3d_intake_applicable": false,
+    "planar_intake_implemented": false,
+    "scan_timing": "preserve original driver timing and uncertainty; no assumed hardware per-point timestamps",
+    "scan_quality": "preserve driver quality semantics; no calibrated reflectivity claim",
+    "moving_head_fixed_extrinsic_stereo_inertial_supported": false,
+    "moving_head_route": "body planar LiDAR/IMU localization plus separate stereo perception; qualified time-aligned head kinematics required before body-frame fusion",
+    "body_fixed_lidar_is_world_horizontal": false,
+    "display_streams_are_raw_synchronized_recordings": false
+  },
+  "tasks": [
+    {
+      "id": "RIG-01",
+      "name": "calibration and data integrity",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-02",
+      "name": "metric stereo",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-03",
+      "name": "planar localization",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-04",
+      "name": "complementary obstacle sensing",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-05",
+      "name": "active camera pointing",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-06",
+      "name": "stereo terrain perception",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-07",
+      "name": "calibration and fault sensitivity",
+      "status": "UNRUN_ON_USER_RIG"
+    }
+  ],
+  "result_policy": "manufacturer specifications, protocol targets and measured results remain separate",
+  "integration_evidence": {
+    "repository": "https://github.com/joses2017smjh/quest-vr-teleop",
+    "commit": "18f658bd6cf19857535f9be593067635501c4b66",
+    "method": "read-only source and firmware review; no hardware services launched",
+    "audit": "docs/QUEST_RIG_INTEGRATION_AUDIT_2026-10-11.md"
+  }
+}

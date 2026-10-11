@@ -80,8 +80,32 @@ horizons and qualification thresholds. Its source archive is
 `8a2ec6a64f4cac0868cbf21fd018dacc2f7179daabc634724c5b38cd3bf8851f`;
 protocol SHA256 is
 `18323a18a3b963e67869de46554513c178ac71037d0caff9a4f68400579fd65c`.
-The new smoke **21768612 passed all 24 episodes** in 259.1 seconds, with native tracking, no rejected scans, and no falls or nonfinite states. Controller **21768854** now schedules the new 480-episode cohort as shared storage reservations allow. Orchestration-only replacements lowered the concurrency cap from three to two, then one as unrelated shared-storage use grew, preserving storage capacity for the parallel camera campaign. Existing scientific jobs 21768687 and 21768688 were adopted without cancellation or repetition. The scientific source, protocol, seeds and gates are unchanged; all orchestration plans and replacement reasons are retained.
+The new smoke **21768612 passed all 24 episodes** in 259.1 seconds, with native tracking, no rejected scans, and no falls or nonfinite states. Controller **21776307** now schedules the new 480-episode cohort as shared storage reservations allow. Orchestration-only replacements lowered the concurrency cap from three to two, then one as unrelated shared-storage use grew, preserving storage capacity for the parallel camera campaign. Existing scientific jobs were adopted without cancellation or repetition. The scientific source, protocol, seeds and gates are unchanged; all orchestration plans and replacement reasons are retained.
 The required fresh same-source smoke gate has passed; no confirmation result is claimed until all 480 episodes are independently collected.
 The failed shard was published and independently downloaded for checksum
 verification; its local durable duplicate and storage reservation were released.
 Observer 21768577 completed the same verified publication and retirement for both original remaining shards. Their raw archives and the inactive v2 source remain downloadable from the release; compact receipts and restore information remain local.
+
+## October 11 controller recovery
+
+At 12:04 PM PDT, **260/480 confirmation episodes** were complete, published and
+independently download-verified: all three `dr-default-s0` shards and the
+`dr-default-s1` flat and steps shards. Four declared shards remained unsubmitted.
+The complete 480-episode collection and all five confirmation gates remain pending.
+
+The prior controller, **21768854**, had stopped updating at 6:00 AM PDT while its
+child process waited on an automount during executable lookup for
+`/nfs/stak/users/sanchej7/.local/bin/sacct`. No terrain scientific worker was active.
+The recovery cancelled only that utility and verified both stuck processes were
+absent before submitting replacement **21776307** on `cn-b04`. The replacement
+uses explicit, checksum-verified Slurm executable paths and removes home-directory
+PATH searches. It retains the exact prior dispatcher plan and helper source,
+adopts all five existing submissions, and rechecks the original successful smoke.
+No scientific episode was cancelled, repeated or retuned.
+
+The replacement's heartbeat resumed normally. Its 1 GiB per-shard reservation and
+shared 8 GiB free-space floor remain enforced, so it may wait while the native
+camera campaign holds its reservation. The
+[recovery receipt and process evidence](../results/terrain-confirmation-20261011/recovery-20261011-afternoon/recovery.json)
+preserve the old state, completed-submission hashes, termination checks, replacement
+plan, scheduler identity and storage snapshot.

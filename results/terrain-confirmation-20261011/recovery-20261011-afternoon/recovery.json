@@ -1,0 +1,95 @@
+{
+  "schema": "bhl-terrain-orchestration-recovery-v1",
+  "observed_utc": "2026-10-11T19:01:26.489044+00:00",
+  "old_dispatcher_job_id": "21768854",
+  "old_plan_sha256": "e2f92da10a0fc161e24e67dc59587365c40df40a8b7749fe3031eddd1fcc64f3",
+  "scientific_archive_sha256": "8a2ec6a64f4cac0868cbf21fd018dacc2f7179daabc634724c5b38cd3bf8851f",
+  "scientific_protocol_sha256": "18323a18a3b963e67869de46554513c178ac71037d0caff9a4f68400579fd65c",
+  "completed_shards": 5,
+  "completed_episodes": 260,
+  "pending_jobs": [
+    "terrain-confirmation-dr-default-s1-ramp-20261011",
+    "terrain-confirmation-dr-default-s2-flat-20261011",
+    "terrain-confirmation-dr-default-s2-small_steps-20261011",
+    "terrain-confirmation-dr-default-s2-ramp-20261011"
+  ],
+  "submission_inventory_before": {
+    "terrain-confirmation-dr-default-s0-flat-20261011": {
+      "exists": true,
+      "sha256": "78461d4426ef6d0551651cf214df67952b6ee870f5a27559038b42bc86aef28b"
+    },
+    "terrain-confirmation-dr-default-s0-small_steps-20261011": {
+      "exists": true,
+      "sha256": "78be1397fbed6e4a786fd268535da1fe614f8404a6b17582185aa326feb4ffbb"
+    },
+    "terrain-confirmation-dr-default-s0-ramp-20261011": {
+      "exists": true,
+      "sha256": "bf03d671817f1f8a98ff9732689a661cfe55281dd2db83972037d6fb0c2adf92"
+    },
+    "terrain-confirmation-dr-default-s1-flat-20261011": {
+      "exists": true,
+      "sha256": "1dd7ca3e78ccc5a8f8abbf9d3f5441b808883e9249f19bd5c2150a5cba28ef42"
+    },
+    "terrain-confirmation-dr-default-s1-small_steps-20261011": {
+      "exists": true,
+      "sha256": "2362df9228a352c719124d5b052c1b66bcb8a8de91b11be13a0b9c05f01a8180"
+    },
+    "terrain-confirmation-dr-default-s1-ramp-20261011": {
+      "exists": false,
+      "sha256": null
+    },
+    "terrain-confirmation-dr-default-s2-flat-20261011": {
+      "exists": false,
+      "sha256": null
+    },
+    "terrain-confirmation-dr-default-s2-small_steps-20261011": {
+      "exists": false,
+      "sha256": null
+    },
+    "terrain-confirmation-dr-default-s2-ramp-20261011": {
+      "exists": false,
+      "sha256": null
+    }
+  },
+  "confirmed_blocked_execve_filename": "/nfs/stak/users/sanchej7/.local/bin/sacct",
+  "blocked_child_pid": 730678,
+  "blocked_parent_pid": 708472,
+  "diagnosis": "Parent in vfork; child execve stuck in autofs_wait while searching home PATH entry for sacct. Filename read only from execve argument pointer in /proc/730678/mem; no environment secrets inspected.",
+  "mutation_scope": "Cancel only hung utility; replacement conditional on no original process able to submit and no scientific active jobs. Scientific protocol/source/seeds/gates and existing job receipts unchanged.",
+  "status": "REPLACEMENT_HEALTHY_STORAGE_GUARD_ACTIVE",
+  "terminated_utc": "2026-10-11T19:02:44.874193+00:00",
+  "termination_actions": [
+    "scancel --signal=KILL --full 21768854",
+    "targeted SIGKILL to owned stuck PIDs730678 and708472 via existing native controller allocation"
+  ],
+  "old_processes_absent": true,
+  "no_active_terrain_scientific_jobs": true,
+  "replacement_root": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v6",
+  "replacement_plan_sha256": "e2f92da10a0fc161e24e67dc59587365c40df40a8b7749fe3031eddd1fcc64f3",
+  "replacement_run_sha256": "699657ff25dbf3a4265563dc0f0830ccb04679cbb3742fd054424d61dbd20da8",
+  "replacement_tool_path": "/apps/slurm/25.11.8/bin:/usr/bin:/bin:/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v6/controller-tools",
+  "controller_changes_only": [
+    "Exclude cn-gpu3",
+    "Fixed tool PATH removes home executable search",
+    "Verified identical copied GitHub CLI executable",
+    "Existing five scientific job receipts adopted by unchanged controller"
+  ],
+  "scientific_smoke_reused": {
+    "job_id": "21768612",
+    "justification": "Source, protocol and all scientific worker code unchanged; actual successful same-source smoke rechecked by unchanged dispatcher before every submission."
+  },
+  "replacement_job_id": "21776307",
+  "replacement_submission_sha256": "4530f70e293269c4f0f38c185c802feece0e2d4ffc5549462270a6097e5edce8",
+  "verified_utc": "2026-10-11T19:04:44.838818+00:00",
+  "replacement_host": "cn-b04",
+  "verified_heartbeat_utc": "2026-10-11T19:04:30.808822+00:00",
+  "five_original_submission_receipts_unchanged": true,
+  "new_scientific_submissions_since_recovery": [],
+  "observed_storage": {
+    "actual_free_bytes": 11305472000,
+    "other_outstanding_promises_bytes": 2147478438,
+    "requested_unwritten_bytes": 1073741824,
+    "minimum_free_bytes": 8589934592
+  },
+  "final_campaign_conclusions_pending": true
+}

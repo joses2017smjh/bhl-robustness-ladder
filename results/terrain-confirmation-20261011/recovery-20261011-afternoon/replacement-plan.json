@@ -1,0 +1,109 @@
+{
+  "schema": "bhl-terrain-confirmation-dispatch-v1",
+  "campaign_dir": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v3",
+  "max_concurrency": 1,
+  "reserved_bytes_per_job": 1073741824,
+  "minimum_free_bytes": 8589934592,
+  "poll_seconds": 30,
+  "source_sha256": {
+    "terrain_confirmation_dispatch.py": "51c7b35f6d52b3965fe843a0397418b4af9975a154fa489f5f64459eaecdbf99",
+    "methods_dispatch.py": "87727d6f5bd59c5500519a8c0faab3139ce288f9c9bfc0cd2268b41208442526",
+    "methods_archive.py": "2037a4da6418dec0c3c1e5e0fc7427ff6f736cff15eab6d262a17aa0c092ebe0",
+    "h34_campaign.py": "8264618c648992e6c40f97b36cd73837cf867bffc195ab9c0f065c9c412170a1",
+    "methods_remote_campaign.py": "1d0edea449c15f76d85ca2dd939532aa7072226faa6e70ddb897e76fc012890e"
+  },
+  "archive_sha256": "8a2ec6a64f4cac0868cbf21fd018dacc2f7179daabc634724c5b38cd3bf8851f",
+  "protocol_sha256": "18323a18a3b963e67869de46554513c178ac71037d0caff9a4f68400579fd65c",
+  "jobs": [
+    {
+      "name": "terrain-confirmation-dr-default-s0-flat-20261011",
+      "expected_fields": {
+        "phase": "confirmation",
+        "episodes": 60,
+        "actor_filter": "dr-default-s0",
+        "terrain_filter": "flat"
+      }
+    },
+    {
+      "name": "terrain-confirmation-dr-default-s0-small_steps-20261011",
+      "expected_fields": {
+        "phase": "confirmation",
+        "episodes": 60,
+        "actor_filter": "dr-default-s0",
+        "terrain_filter": "small_steps"
+      }
+    },
+    {
+      "name": "terrain-confirmation-dr-default-s0-ramp-20261011",
+      "expected_fields": {
+        "phase": "confirmation",
+        "episodes": 60,
+        "actor_filter": "dr-default-s0",
+        "terrain_filter": "ramp"
+      }
+    },
+    {
+      "name": "terrain-confirmation-dr-default-s1-flat-20261011",
+      "expected_fields": {
+        "phase": "confirmation",
+        "episodes": 40,
+        "actor_filter": "dr-default-s1",
+        "terrain_filter": "flat"
+      }
+    },
+    {
+      "name": "terrain-confirmation-dr-default-s1-small_steps-20261011",
+      "expected_fields": {
+        "phase": "confirmation",
+        "episodes": 40,
+        "actor_filter": "dr-default-s1",
+        "terrain_filter": "small_steps"
+      }
+    },
+    {
+      "name": "terrain-confirmation-dr-default-s1-ramp-20261011",
+      "expected_fields": {
+        "phase": "confirmation",
+        "episodes": 40,
+        "actor_filter": "dr-default-s1",
+        "terrain_filter": "ramp"
+      }
+    },
+    {
+      "name": "terrain-confirmation-dr-default-s2-flat-20261011",
+      "expected_fields": {
+        "phase": "confirmation",
+        "episodes": 60,
+        "actor_filter": "dr-default-s2",
+        "terrain_filter": "flat"
+      }
+    },
+    {
+      "name": "terrain-confirmation-dr-default-s2-small_steps-20261011",
+      "expected_fields": {
+        "phase": "confirmation",
+        "episodes": 60,
+        "actor_filter": "dr-default-s2",
+        "terrain_filter": "small_steps"
+      }
+    },
+    {
+      "name": "terrain-confirmation-dr-default-s2-ramp-20261011",
+      "expected_fields": {
+        "phase": "confirmation",
+        "episodes": 60,
+        "actor_filter": "dr-default-s2",
+        "terrain_filter": "ramp"
+      }
+    }
+  ],
+  "smoke": {
+    "name": "terrain-confirmation-smoke-20261011",
+    "existing_job_id": "21768612",
+    "expected_fields": {
+      "phase": "smoke",
+      "episodes": 24,
+      "gate_to_confirmation": true
+    }
+  }
+}

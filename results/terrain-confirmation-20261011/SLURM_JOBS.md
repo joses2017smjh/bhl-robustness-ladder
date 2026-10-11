@@ -91,3 +91,32 @@ Old jobs **21768407** and **21768409** completed their 60-episode shards; with t
 ## Second storage fairness adjustment
 
 After publication released the old cohort reservations, unrelated shared-storage activity still left only about 11.3 GiB free, below the 8 GiB floor plus two 1 GiB terrain reservations and the native-camera 2 GiB reservation. At 10:34 UTC, utility **21768752** was gracefully replaced by **21768854** with orchestration concurrency **one**; both active terrain workers **21768687/21768688** continue untouched. The new controller will submit no replacement until fewer than one terrain shard remains active, allowing native controls to start after the first completes. Current plan SHA256: `e2f92da10a0fc161e24e67dc59587365c40df40a8b7749fe3031eddd1fcc64f3`. Previous cap-two plan/state/reason are retained in `dispatch-v4-superseded-cap2/`. Scientific source, protocol, cohort, gates and reservation sizes are unchanged.
+
+## Utility automount recovery, October 11 at 12:04 PM PDT
+
+Five shards completed and were independently download-verified before the
+controller interruption: jobs **21768687**, **21768688**, **21769143**,
+**21769506**, and **21769689**, totaling **260/480 episodes**. No full-cohort
+qualification claim is made from those partial outcomes.
+
+Utility **21768854** stopped updating at 13:00:34 UTC. Read-only process inspection
+identified its child blocked in `execve`/`autofs_wait` while PATH lookup attempted
+`/nfs/stak/users/sanchej7/.local/bin/sacct`. No scientific terrain worker was active.
+The utility was cancelled; targeted termination cleared its stuck parent and child.
+Both process IDs and the old utility were verified absent before replacement.
+
+Replacement utility **21776307**, submitted at 19:03:18 UTC on a different node
+(`cn-b04`), runs from `terrain-confirmation-dispatch-v6`. Its dispatcher plan has
+the identical SHA256 `e2f92da10a0fc161e24e67dc59587365c40df40a8b7749fe3031eddd1fcc64f3`.
+All helper code, scientific source, protocol, checkpoints, seeds, gates and the
+five original submission receipts are unchanged. Only the utility launch
+environment changes: a fixed Slurm 25.11.8 executable PATH excludes home lookup,
+and the same GitHub CLI binary is copied with its checksum verified. The original
+successful same-source smoke **21768612** is rechecked before any submission.
+The replacement resumed its heartbeat and waits for the unchanged 1 GiB reservation
+and shared 8 GiB free-space floor. It will submit only the four outstanding shards,
+then perform the existing strict 480-episode collection.
+
+All before/after state, process evidence, plan, launch script, scheduler receipt,
+submission hashes and the current storage snapshot are retained in
+[`recovery-20261011-afternoon/`](recovery-20261011-afternoon/recovery.json).

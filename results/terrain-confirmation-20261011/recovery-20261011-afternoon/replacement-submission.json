@@ -1,0 +1,28 @@
+{
+  "submitted_utc": "2026-10-11T19:03:18.940161+00:00",
+  "command": [
+    "/apps/slurm/25.11.8/bin/sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=terrain-confirmation-dispatch-v6-20261011",
+    "--partition=share,eecs",
+    "--exclude=cn-gpu3",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=23:00:00",
+    "--no-requeue",
+    "--export=NONE",
+    "--chdir=/tmp",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v6/controller-%j.out",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v6/controller-%j.out",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v6/run.sbatch"
+  ],
+  "plan_sha256": "e2f92da10a0fc161e24e67dc59587365c40df40a8b7749fe3031eddd1fcc64f3",
+  "old_utility_terminated": true,
+  "all_preexisting_scientific_receipts_unchanged": true,
+  "returncode": 0,
+  "stdout": "21776307\n",
+  "stderr": "",
+  "job_id": "21776307"
+}
