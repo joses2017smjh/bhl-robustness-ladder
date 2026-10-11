@@ -1,0 +1,41 @@
+{
+  "schema": "bhl-external-tumvi-protocol-v1",
+  "declared_utc": "2026-10-11T10:13:02.326582+00:00",
+  "dataset": "TUM VI calibrated room1 512x512 16-bit, EuRoC-format export",
+  "source": "https://cdn3.vision.in.tum.de/tumvi/exported/euroc/512_16/dataset-room1_512_16.tar",
+  "primary_landing": "https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset",
+  "license": "CC BY 4.0",
+  "window": "First 60 seconds from earliest exact-paired original camera timestamp, end exclusive, at most 1200 pairs",
+  "arms": [
+    "native_stereo",
+    "native_stereo_inertial"
+  ],
+  "scope": "External recorded real sensors only; no user hardware, LiDAR or physical navigation validation",
+  "selection_before_native_outcomes": true,
+  "runtime_sha256": "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+  "no_tuning": true,
+  "calibration": "Official 512x512 pinhole-equidistant camera-IMU calibration; cv2.fisheye.stereoRectify zero-disparity balance0 fov_scale1; rotate T_imu_camera into rectified optical frame",
+  "image_conversion": "Fixed uint16 integer right shift8 to uint8, no adaptive contrast/exposure tuning",
+  "imu": "Original publisher-calibrated 200Hz SI rows; first batch only available rows within20ms before first camera, then disjoint original causal rows; integer-ns clock subtraction before float conversion",
+  "imu_noise": {
+    "source": "Official TUM VI published inflated Kalibr noise values, not fitted here",
+    "noise_gyro": 0.00016,
+    "noise_acc": 0.0028,
+    "gyro_walk": 2.2e-05,
+    "acc_walk": 0.00086
+  },
+  "metrics": [
+    "initialisation",
+    "native tracking fraction/states",
+    "map changes",
+    "tracking loss",
+    "native compute latency",
+    "rectification+image I/O+transport native pipeline wall latency"
+  ],
+  "ATE": "Only if actual calibrated ground-truth IMU frame and timestamp association verified; rigid SE3 alignment per native map, no scale fitting, report coverage and split maps; otherwise UNMEASURED",
+  "no_future_or_synthetic_imu": true,
+  "raw_storage": "Node-local /tmp only",
+  "download_cap_bytes": 2147483648,
+  "download_plus_extraction_cap_bytes": 4294967296,
+  "publication": "Own compact derived metrics and calibration/source receipts; original dataset not republished"
+}

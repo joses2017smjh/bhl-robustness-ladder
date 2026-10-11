@@ -1,0 +1,15 @@
+{
+  "schema": "bhl-tumvi-audit-notes-v1",
+  "recorded_utc": "2026-10-11T10:33:03.074072+00:00",
+  "superseded_evaluation": "evaluation-v1 wrongly merged restarted native coordinate epochs because ID0 was reused; use evaluation-v2 only.",
+  "ground_truth_boundary": "Python replay runner hashed all selected files including GT CSV bytes solely for provenance. It did not parse reference poses. Only independent evaluator parses GT; no ground-truth pose is supplied to native C++ inference.",
+  "frozen_result_wording_correction": "The literal v1 result ate.reason says no ground truth is loaded by the replay process. Interpret this only as no reference pose inputs to inference; raw files were read for SHA verification. Current runner wording is corrected without native rerun.",
+  "native_replay_adapter_sha256": "e0b32f1b97b0879733312789051800211a9ab1891df525db8a0cca56ecf59204",
+  "current_adapter_sha256": "a68ddd63f66bf9af0261d201182f318e5dd3b0013e9caa499246dcf2f15b0cd4",
+  "adapter_change_after_run": "Docstring and unmeasured-ATE wording only; no estimator, geometry, timing, metrics or data selection change.",
+  "tests": "10 passed in0.42seconds; fixed conversion, original integer clock, fisheye/IMU geometry, genuine causal IMU, GT quaternion/frame identity, reused-map epoch splitting.",
+  "independent_review": "Direct independent SVD and brute-force nearest GT association reproduced paired ATE to1e-12m.",
+  "public_dataset_attribution": "Schubert, Goll, Demmel, Usenko, Stueckler, Cremers. The TUM VI Benchmark for Evaluating Visual-Inertial Odometry. IROS2018. CC BY4.0. https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset",
+  "raw_dataset_republished": false,
+  "local_work_bytes": 2794317970
+}

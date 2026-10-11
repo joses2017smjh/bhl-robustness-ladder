@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "review_scope": "Read-only independent coordinate/rectification/GT/epoch review and separate direct NumPy SVD plus brute-force nearest timestamp ATE recomputation; no estimator rerun or parameter tuning",
+  "numerical_comparisons": [
+    {
+      "inertial_epoch": 0,
+      "original_index_interval_start_inclusive": 49,
+      "original_index_interval_end_exclusive": 54,
+      "common_native_frames": 5,
+      "matched_reference_poses": 5,
+      "maximum_clock_difference_s": 0.0016395909999999958,
+      "stereo_ate_rmse_m": 0.0022235072453310337,
+      "stereo_inertial_ate_rmse_m": 0.0349308786572408
+    },
+    {
+      "inertial_epoch": 1,
+      "original_index_interval_start_inclusive": 178,
+      "original_index_interval_end_exclusive": 1200,
+      "common_native_frames": 1022,
+      "matched_reference_poses": 1008,
+      "maximum_clock_difference_s": 0.004963373999999021,
+      "stereo_ate_rmse_m": 0.16504768812620396,
+      "stereo_inertial_ate_rmse_m": 0.39525654628624857
+    }
+  ],
+  "evaluation_v2_sha256": "ea0ffdbf499ee4f036f49bfb938198f1694702a534d149326f264e8f0f1db82a",
+  "native_trace_sha256": {
+    "stereo": "521db8c7290c8b81f730ba9d005797364bb6f5775806ab19285dc966a044167d",
+    "stereo_inertial": "d0242afc02e12fb83c3d87d867593f1bb3d9c4864ca1c5d623e9cbc7c5c45d99"
+  },
+  "previous_blocker_resolved": "Explicit ResetActiveMap reused map ID0; evaluation-v2 splits coordinate epochs and retains full frame coverage",
+  "limitations": "One external 60-second recording; no own-hardware, LiDAR, navigation or statistical generalization claim"
+}

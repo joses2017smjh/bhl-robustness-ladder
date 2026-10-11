@@ -1,0 +1,27 @@
+{
+  "status": "VERIFIED_DUPLICATE_RETIRED",
+  "publication": {
+    "asset_name": "terrain-confirmation-source-68ba91a3727ad08ce67cadec8e9b921c5ef6b39d6fc69682ac9fa6bd1a2bd36a.tar.gz",
+    "sha256": "68ba91a3727ad08ce67cadec8e9b921c5ef6b39d6fc69682ac9fa6bd1a2bd36a",
+    "bytes": 75595349,
+    "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/research-campaign-evidence-20261011/terrain-confirmation-source-68ba91a3727ad08ce67cadec8e9b921c5ef6b39d6fc69682ac9fa6bd1a2bd36a.tar.gz",
+    "verified_utc": "2026-10-11T09:47:01.827927+00:00",
+    "verification": "pinned bytes + release identity + fresh independent download SHA256"
+  },
+  "fresh_verified_utc": "2026-10-11T10:32:41.863678+00:00",
+  "local_verified_mirror": "/tmp/terrain-confirmation-incomplete-v2-source-20261011.tar.gz",
+  "inactive_job_accounting": "21768354|COMPLETED|0:0\n21768392|FAILED|1:0\n21768407|COMPLETED|0:0\n21768408|FAILED|1:0\n21768409|COMPLETED|0:0\n",
+  "reason": "Superseded incomplete cohort; all associated science jobs terminal. Independent release download verified before retiring only durable source packaging duplicate. Scientific evidence preserved; v3 active source untouched.",
+  "restore_command": [
+    "gh",
+    "release",
+    "download",
+    "research-campaign-evidence-20261011",
+    "--repo",
+    "joses2017smjh/bhl-robustness-ladder",
+    "--pattern",
+    "terrain-confirmation-source-68ba91a3727ad08ce67cadec8e9b921c5ef6b39d6fc69682ac9fa6bd1a2bd36a.tar.gz",
+    "--dir",
+    "RESTORE_DIRECTORY"
+  ]
+}

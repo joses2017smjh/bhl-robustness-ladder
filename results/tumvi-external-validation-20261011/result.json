@@ -1,0 +1,176 @@
+{
+  "schema": "bhl-external-tumvi-result-v1",
+  "status": "COMPLETED",
+  "scope": "External recorded real sensors only; no user hardware, LiDAR or physical navigation validation",
+  "protocol_sha256": "ef13cc60b09079724d79fcea99d11c4c42a9b191d73a2b847c6ac52846e186f3",
+  "selection_sha256": "54b196f917dc5907e30ee2e34c05ad9e6922986f0a83681e9134c4ace2067035",
+  "calibration_sha256": "3a0c0285f4d0a3a1678053b2e5912e3e250e78ac09bd009f6d7d8bba669d5703",
+  "source_sha256": "e0b32f1b97b0879733312789051800211a9ab1891df525db8a0cca56ecf59204",
+  "clock_origin_ns": 1520530308199447626,
+  "paired_frames_per_arm": 1200,
+  "window_last_sensor_time_s": 59.95267938600001,
+  "runtime_sha256": "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+  "arms": [
+    {
+      "frames": 1200,
+      "tracked_frames": 1200,
+      "tracking_states": {
+        "SYSTEM_NOT_READY": 0,
+        "NO_IMAGES_YET": 0,
+        "NOT_INITIALIZED": 0,
+        "OK": 1200,
+        "RECENTLY_LOST": 0,
+        "LOST": 0,
+        "OK_KLT": 0
+      },
+      "observed_map_ids": [
+        0
+      ],
+      "observed_map_changes": 0,
+      "all_frames_tracked": true,
+      "metric_scoring_ready": true,
+      "native_compute_seconds_total": 43.52796902700005,
+      "pose_source": "native_ORB_SLAM3_TrackStereo_returned_SE3_inverse",
+      "no_truth_inputs": true,
+      "mode": "stereo",
+      "tracked_fraction": 1.0,
+      "accepted_initialized_frames": 1200,
+      "initialization_first_sensor_time_s": 0,
+      "tracking_loss_transitions_after_OK": 0,
+      "native_compute": {
+        "count": 1200,
+        "mean_ms": 36.2733075225,
+        "p50_ms": 33.6874315,
+        "p95_ms": 55.26490185,
+        "max_ms": 85.91326600000001
+      },
+      "pipeline_wall": {
+        "count": 1200,
+        "mean_ms": 60.38470113203705,
+        "p50_ms": 56.20406800881028,
+        "p95_ms": 87.19300371594726,
+        "max_ms": 165.0143669685349
+      },
+      "rectification_image_io_wall": {
+        "count": 1200,
+        "mean_ms": 23.357273736134328,
+        "p50_ms": 21.627360954880714,
+        "p95_ms": 31.14696742268279,
+        "max_ms": 127.48274893965572
+      },
+      "native_client_wall": {
+        "count": 1200,
+        "mean_ms": 37.02742739590273,
+        "p50_ms": 34.44336506072432,
+        "p95_ms": 56.07018193113616,
+        "max_ms": 88.18438299931586
+      },
+      "pipeline_scope": "original PNG read + fixed bit-depth conversion + rectification + PNG write + native client transport, IMU TSV I/O and native TrackStereo",
+      "latency_exclusions": "one-time startup, calibration map construction, evaluator and diagnostic JSON writes; offline unpaced recording replay",
+      "ate": {
+        "status": "UNMEASURED",
+        "reason": "Separate evaluator required; no ground truth is loaded by this replay process."
+      },
+      "startup_wall_seconds": 5.97235726902727,
+      "ready": {
+        "schema": "bhl-orb-native-ready-v1",
+        "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4",
+        "sensor_mode": "stereo"
+      },
+      "pixel_ranges": {
+        "original_uint16_min": 176,
+        "original_uint16_max": 65520,
+        "rectified_uint8_min": 0,
+        "rectified_uint8_max": 255,
+        "conversion": "uint16 >> 8; fixed scale 1/256 with truncation"
+      },
+      "frames_sha256": "521db8c7290c8b81f730ba9d005797364bb6f5775806ab19285dc966a044167d",
+      "settings_sha256": "7f392de7468bf3310ab90fa104b8e4cf4900503c947b638fb47827736d612fef"
+    },
+    {
+      "frames": 1200,
+      "tracked_frames": 1126,
+      "tracking_states": {
+        "SYSTEM_NOT_READY": 0,
+        "NO_IMAGES_YET": 0,
+        "NOT_INITIALIZED": 74,
+        "OK": 1126,
+        "RECENTLY_LOST": 0,
+        "LOST": 0,
+        "OK_KLT": 0
+      },
+      "observed_map_ids": [
+        0
+      ],
+      "observed_map_changes": 0,
+      "all_frames_tracked": false,
+      "metric_scoring_ready": true,
+      "native_compute_seconds_total": 58.54090115599992,
+      "pose_source": "native_ORB_SLAM3_TrackStereo_returned_SE3_inverse",
+      "no_truth_inputs": true,
+      "mode": "stereo_inertial",
+      "tracked_fraction": 0.9383333333333334,
+      "accepted_initialized_frames": 1027,
+      "initialization_first_sensor_time_s": 2.4501850530000002,
+      "tracking_loss_transitions_after_OK": 1,
+      "native_compute": {
+        "count": 1200,
+        "mean_ms": 48.78408429666666,
+        "p50_ms": 48.974048,
+        "p95_ms": 70.02613245,
+        "max_ms": 140.19900099999998
+      },
+      "pipeline_wall": {
+        "count": 1200,
+        "mean_ms": 78.23198236107903,
+        "p50_ms": 80.01012349268422,
+        "p95_ms": 105.67567478283301,
+        "max_ms": 209.6381610026583
+      },
+      "rectification_image_io_wall": {
+        "count": 1200,
+        "mean_ms": 28.10119635493417,
+        "p50_ms": 28.923225007019937,
+        "p95_ms": 33.39113440597429,
+        "max_ms": 102.73943899665028
+      },
+      "native_client_wall": {
+        "count": 1200,
+        "mean_ms": 50.13078600614487,
+        "p50_ms": 50.43238494545221,
+        "p95_ms": 71.51001245947555,
+        "max_ms": 141.81527006439865
+      },
+      "pipeline_scope": "original PNG read + fixed bit-depth conversion + rectification + PNG write + native client transport, IMU TSV I/O and native TrackStereo",
+      "latency_exclusions": "one-time startup, calibration map construction, evaluator and diagnostic JSON writes; offline unpaced recording replay",
+      "ate": {
+        "status": "UNMEASURED",
+        "reason": "Separate evaluator required; no ground truth is loaded by this replay process."
+      },
+      "native_map_imu_initialized_frames": 1027,
+      "original_imu_rows_acknowledged": 11956,
+      "startup_wall_seconds": 5.787463634973392,
+      "ready": {
+        "schema": "bhl-orb-native-ready-v1",
+        "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4",
+        "sensor_mode": "stereo_inertial"
+      },
+      "pixel_ranges": {
+        "original_uint16_min": 176,
+        "original_uint16_max": 65520,
+        "rectified_uint8_min": 0,
+        "rectified_uint8_max": 255,
+        "conversion": "uint16 >> 8; fixed scale 1/256 with truncation"
+      },
+      "frames_sha256": "d0242afc02e12fb83c3d87d867593f1bb3d9c4864ca1c5d623e9cbc7c5c45d99",
+      "settings_sha256": "50a57b3527f94b07ea250b173e674c25e76e7b522f56fb319b36263eb233f935"
+    }
+  ],
+  "simulation": false,
+  "external_recorded_data": true,
+  "own_hardware_validation": false,
+  "lidar_validation": false,
+  "physical_navigation_validation": false,
+  "opencv_version": "4.11.0",
+  "original_data_loaded_by_estimator": "calibrated camera PNGs and genuine IMU only"
+}

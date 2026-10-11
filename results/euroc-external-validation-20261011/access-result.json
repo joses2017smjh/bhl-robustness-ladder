@@ -1,0 +1,36 @@
+{
+  "schema": "bhl-external-data-access-result-v1",
+  "status": "BLOCKED_BEFORE_EVALUATION",
+  "recorded_utc": "2026-10-11T10:11:25.471544+00:00",
+  "sequence": "V1_01_easy",
+  "native_frames_evaluated": 0,
+  "arms_executed": [],
+  "native_init_tracking_latency_ate": "UNMEASURED",
+  "primary_landing": "https://projects.asl.ethz.ch/datasets/euroc-mav/",
+  "official_collection": "https://www.research-collection.ethz.ch/items/bcaf173e-5dac-484b-bc37-faf97a594f1f",
+  "doi": "10.3929/ethz-b-000690084",
+  "official_bitstream": "https://www.research-collection.ethz.ch/server/api/core/bitstreams/02ecda9a-298f-498b-970c-b7c44334d880/content",
+  "official_archive": "vicon_room1.zip",
+  "official_total_bytes": 6042263426,
+  "data_budget_bytes": 4294967296,
+  "license": "In Copyright - Non-Commercial Use Permitted",
+  "rights_url": "http://rightsstatements.org/page/InC-NC/1.0/",
+  "range_probe": {
+    "utc_from_server": "Sun, 11 Oct 2026 10:06:11 GMT",
+    "http_status": 206,
+    "content_range": "bytes 0-127/6042263426",
+    "bytes_read": 128,
+    "zip_magic_prefix_hex": "504b030414000000000073b664470000",
+    "server_etag": "5ce06b405827e453a82523d3ca9c2fd0",
+    "etag_not_verified_as_file_digest": true
+  },
+  "blockers": [
+    "Official ZIP-directory range requests returned HTTP 429 twice; no Retry-After was supplied.",
+    "Legacy official individual-sequence URL timed out after 25 seconds.",
+    "Full new official archive exceeds the authorized 4 GiB download/extraction cap."
+  ],
+  "action": "No further retries; no full download; no scientific outputs fabricated.",
+  "retained_raw_data_bytes": 0,
+  "retained_local_landing_prefix_sha256": "497259004e0c9bbb31c822d6a69433ad6df2ee0551dcd0750de4d6f09f9e491d",
+  "scope": "External recorded-sensor replay would supplement simulation only, without validating user hardware, LiDAR, locomotion or deployment."
+}

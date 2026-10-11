@@ -40,7 +40,7 @@ exclusive write to the already-created base receipt. The corrected wrapper keeps
 that receipt and creates `confirmation-episode.json`; a regression test covers
 the failure. No controller, geometry, seed, horizon or gate was tuned. Failed
 source, raw output and execution receipts remain intact. Fresh smoke job 21768354
-used the corrected source and passed all 24 episodes. However, its scored steps shard 21768408 later failed on a degenerate original scan timestamp. The original 420000-series confirmation remains **INCOMPLETE**; dispatcher 21768392 stopped, and two already-running jobs finish separately without entering the revised cohort.
+used the corrected source and passed all 24 episodes. However, its scored steps shard 21768408 later failed on a degenerate original scan timestamp. The original 420000-series confirmation remains **INCOMPLETE**; dispatcher 21768392 stopped, and the other two jobs completed separately. The incomplete cohort retains 127 completed episodes (60 flat, seven steps and 60 ramp); none enter the revised cohort.
 
 Three dependencies on repository main changed after development. The confirmation
 source archive restores all 71 development-pinned scientific files in an isolated
@@ -50,9 +50,10 @@ and input manifest preserve every hash. Running protocol creation against change
 scientific dependencies fails explicitly; reproduction should start from the
 verified frozen source archive.
 
-All durable output is on HPC share. The dispatcher permits at most two active
-shards with a 1 GiB reservation each and an 8 GiB free-space floor, shared with the
-other October 11 campaigns through a locked reservation registry. Completed raw
+All durable output is on HPC share. The dispatcher now permits one active shard
+for new submissions; two already-running shards were preserved during the cap
+reduction. A locked registry shares the 1 GiB reservation per terrain shard and
+8 GiB free-space floor with the other October 11 campaigns. Completed raw
 archives are published and independently downloaded for checksum verification
 before their local durable packaging duplicates are removed. Compact receipts
 remain. A final collector requires all 480 declared identities and publishes its
@@ -79,8 +80,8 @@ horizons and qualification thresholds. Its source archive is
 `8a2ec6a64f4cac0868cbf21fd018dacc2f7179daabc634724c5b38cd3bf8851f`;
 protocol SHA256 is
 `18323a18a3b963e67869de46554513c178ac71037d0caff9a4f68400579fd65c`.
-The new smoke **21768612 passed all 24 episodes** in 259.1 seconds, with native tracking, no rejected scans, and no falls or nonfinite states. Controller **21768752** now schedules the new 480-episode cohort as shared storage reservations allow. It replaces utility 21768672 solely to lower the concurrency cap from three to two, preserving storage capacity for the parallel camera campaign. Existing scientific jobs 21768687 and 21768688 were adopted without cancellation or repetition. The scientific source, protocol, seeds and gates are unchanged; both orchestration plans and the replacement reason are retained.
+The new smoke **21768612 passed all 24 episodes** in 259.1 seconds, with native tracking, no rejected scans, and no falls or nonfinite states. Controller **21768854** now schedules the new 480-episode cohort as shared storage reservations allow. Orchestration-only replacements lowered the concurrency cap from three to two, then one as unrelated shared-storage use grew, preserving storage capacity for the parallel camera campaign. Existing scientific jobs 21768687 and 21768688 were adopted without cancellation or repetition. The scientific source, protocol, seeds and gates are unchanged; all orchestration plans and replacement reasons are retained.
 The required fresh same-source smoke gate has passed; no confirmation result is claimed until all 480 episodes are independently collected.
 The failed shard was published and independently downloaded for checksum
 verification; its local durable duplicate and storage reservation were released.
-Observer 21768577 will do the same for the two original active shards.
+Observer 21768577 completed the same verified publication and retirement for both original remaining shards. Their raw archives and the inactive v2 source remain downloadable from the release; compact receipts and restore information remain local.

@@ -1,0 +1,32 @@
+{
+  "schema": "bhl-external-euroc-protocol-v1",
+  "declared_utc": "2026-10-11T10:09:09.277089+00:00",
+  "dataset": "ETH EuRoC MAV V1_01_easy",
+  "official_doi": "10.3929/ethz-b-000690084",
+  "scope": "External recorded real sensors, no robot/hardware/LiDAR validation",
+  "window": "First 60 seconds from earliest exact-paired camera timestamp, upper bound exclusive, maximum 1200 pairs",
+  "arms": [
+    "native_stereo",
+    "native_stereo_inertial"
+  ],
+  "selection_before_native_outcomes": true,
+  "no_tuning": true,
+  "runtime_sha256": "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+  "imu": "Original measured SI rows; original clock; no future, synthetic or interpolated samples",
+  "calibration": "Official camera and IMU calibration, cv2.stereoRectify, rectified T_imu_camera",
+  "metrics": [
+    "native initialisation",
+    "tracking states",
+    "map changes",
+    "tracking loss",
+    "native CPU compute latency",
+    "transport plus image I/O wall latency"
+  ],
+  "ATE": "Only if verified body/camera reference and correct synchronized ground truth; otherwise unmeasured",
+  "latency_scope": "Offline CPU replay, no realtime pacing claim; one-time rectification preprocessing reported separately",
+  "raw_storage": "Node-local /tmp only",
+  "disk_budget_bytes": 4294967296,
+  "publication": "Own compact derived metrics/calibration/hash receipts only; no dataset imagery/CSV",
+  "license": "In Copyright - Non-Commercial Use Permitted",
+  "rights": "http://rightsstatements.org/page/InC-NC/1.0/"
+}
