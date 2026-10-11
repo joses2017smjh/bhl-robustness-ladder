@@ -4403,3 +4403,16 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
   Oversampling the first 12 frames fixed the choice of tumbler within 10,000 steps; 3.4 times more demonstrations with uniform sampling left it at chance after 40,000. The diagnosis above holds. sft2_early at 10,000 steps is slower to pick (65 episodes without a pick-up in 16 s); it trains on to 40,000 steps and is probed again.
 - More phase 3b dev results (2026-10-11 06:18): pick probe of **sft2_early at 20,000 steps** (`21770900`): named tumbler **163**, other 0, none 37 of 200 (100% of pick-ups; at 10,000 steps 134, 1, 65). Dev rollouts of sft2 at 40,000 steps, its best-validation and final checkpoint (`21770020`, `21770021`; seeds 1400-1463): own instruction 30/64, held-out template 23/64, margin +4.4: more data alone raised the completion rate (fewer episodes without a pick-up) while the tumbler choice stayed at chance.
 - **sft2_full stopped (2026-10-11 06:40).** Its pick probe at 5,000 steps (`21771076`): named tumbler 50, other 44, none 106 of 200 (53% of pick-ups): unfreezing the vision-language layers, with uniform frame sampling, had not changed the tumbler choice either. At 0.7 steps/s it could not reach 40,000 steps inside its time limit, and the third arm had already fixed the choice, so `21769360` was cancelled at about 5,300 steps to free the GPU. Its only checkpoint (step 5,000) goes through the same dev rollouts as the other candidates, as the checkpoint-choice rule says.
+
+**Phase 3b: training done, checkpoint chosen, rule frozen (2026-10-11 07:40; before any seed 7000-7099 has been run).**
+- sft2_early `21769671` finished 40,000 steps at 07:12 (validation flow loss 0.0509 on held-out layouts, its best and its final checkpoint). Pick probe at 40,000 steps (`21771334`): named tumbler **192**, other 0, none 8 of 200.
+- Dev rollouts (seeds 1400-1463; 64 with the layouts' own instructions, 64 with the held-out template T5; 10 executed steps; render check PASS on every node):
+
+| candidate | own instruction | held-out T5 | margin (predeclared) |
+|---|---|---|---|
+| **sft2_early, step 40,000** (`21771332`, `21771333`) | **48/64** | **45/64** | **+22.4** |
+| sft2, step 40,000 (`21770020`, `21770021`) | 30/64 | 23/64 | +4.4 |
+| sft2_full, step 5,000 (`21771084`, `21771085`) | 8/64 | 2/64 | -17.6 |
+
+- **Chosen by the predeclared rule: sft2_early, step 40,000** (model sha256 c85386ac...; data hash 80d19490...). Its 16 own-instruction failures by furthest stage: tumbler lifted 6, tray lifted 5, tray at the table 2, tray on target 2, tumbler on tray 1; 1 fall.
+- **Rule file frozen: `results/waiter-20261005/phase3b-gate/rule.json`, sha256 254137e9...**: the phase 3 rule on seeds 7000-7099 with this checkpoint (own instruction >= 40/100 AND held-out T5 >= 20/100; 10 executed steps; `WaiterEnv` defaults). The scored rollouts now record the weights' hash and the scorer requires it to match (578cc7d), because sft2 and sft2_early share a step number and a data hash.
