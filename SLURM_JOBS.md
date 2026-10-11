@@ -4694,3 +4694,32 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
 - Committed with this entry: `own.json`, `held_out.json`, `verdict.json` and the two job logs in `results/waiter-20261005/phase3b-gate/`.
 - Dev trace of the phase 3b policy (2026-10-11 08:32; `21773461`, dev seeds 1300-1347, the 48 layouts traced for sft1 and for the phase 4 policy; not scored): **33/48** successes (sft1 20/48). First tumbler picked up: the named one **45** times, the other 0, none 3 (sft1: 23, 17, 8). The 15 failures: 7 lost the tumbler from the tray on the way, 3 reached the table without setting the tray down, 1 set it down without finishing, 1 tipped the tumbler before the tray, 3 picked nothing up. After picking the named tumbler: 33/45. What is left to fix is the carry and the set-down, as it is for the scripted expert (its failures are mostly at "tray lifted" too).
 - Ablation on dev seeds only (not a candidate for any gate): **sft1_early `21773578`** = sft1's recipe on sft1's 187 training episodes (`demos-20261009`, 20,000 steps) with `--sampling early:12:0.3`, to see how much of phase 3b's gain needs the extra demonstrations. Submitted 2026-10-11 08:32.
+- **Pull request #37 opened (2026-10-11 09:25), not merged:** https://github.com/joses2017smjh/bhl-robustness-ladder/pull/37 (`waiter-phase3b-1f` = `mission7-approach-followup` merged with `main` at a9de690 in the separate worktree; the merge was clean). Full suite on that branch `21773673`: 3032 passed, 16 skipped. Phase 1f's results will be added to the same pull request.
+- **Ablation result (2026-10-11 11:08; dev seeds only; not a gate result).** sft1_early `21773578` (the original 187 training episodes, 20,000 steps, `--sampling early:12:0.3`): pick probe `21775929` named tumbler **176**, other 1, none 23 of 200; dev rollouts on seeds 1400-1463 (`21775948`, `21775949`) own instruction **41/64**, held-out T5 **28/64**. Side by side on the same dev seeds:
+
+| training | episodes | sampling | own instruction | held-out T5 | named tumbler among pick-ups |
+|---|---|---|---|---|---|
+| sft2 | 644 | uniform | 30/64 | 23/64 | 95 of 189 |
+| sft1_early | 187 | first 12 frames x 0.3 | 41/64 | 28/64 | 176 of 177 |
+| sft2_early (phase 3b's policy) | 644 | first 12 frames x 0.3 | 48/64 | 45/64 | 192 of 192 |
+
+  The sampling change alone fixes the choice of tumbler on the original demonstrations. The extra demonstrations add on top of it, most on the phrasing never trained on (28 -> 45 of 64).
+
+## 2026-10-11: Waiter phase 1f verdict (NEGATIVE) and the cause shared by 1e and 1f
+
+**Waiter phase 1f (training `21768062`, all three seeds finished by 14:05 and valid: std check max logged 1.00 with the original tolerance, curriculum and stand-push checks OK; gates `21768063` for s17 and `21778374` for s15 and s16, the two that were stuck behind full CPU nodes on `share` and were resubmitted on `dgx2`; recorded 2026-10-11 14:17): NEGATIVE, no seed qualified** (`results/waiter-20261005/wbc1f/selection.json`, sha256 ec9ee414...). Phase 2 keeps s7 and the stance lock; the lock-removal test is not run.
+
+| seed | turn test v2 | qualify (turn / walk / push falls) | Q2 | walk progress (m) | Q3 stance | Q4 standing manipulation |
+|---|---|---|---|---|---|---|
+| s15 | FAIL (walk drift 22 deg) | NOT QUALIFIED (9/10, 0/3, 6/60) | FAIL (0 falls, 1/12) | 1.57-1.95 | FAIL (12/12 falls) | FAIL (12/12 falls) |
+| s16 | FAIL (2 falls) | NOT QUALIFIED (3/10, 0/3, 12/60) | FAIL (3 falls, 7/12) | 0.10-1.94 | FAIL (12/12 falls) | FAIL (12/12 falls) |
+| s17 | FAIL (2 falls) | NOT QUALIFIED (5/10, 0/3, 25/60) | FAIL (5 falls, 6/12) | 0.10-1.81 | FAIL (12/12 falls) | FAIL (12/12 falls) |
+
+- Restoring the pushes on standing envs did not help: every 1f seed still falls 0.6-2.7 s into each standing episode, and the 1f seeds also walk and turn worse than the 1e seed s12 did.
+
+**Correction to "Why the 1e controllers fell" above, and the likely cause (dev measurements, 2026-10-11 14:17).** The earlier reading (they cannot recover from the start-of-episode transient because they were never pushed while standing) is wrong.
+- `solutions-20260930/campaign-waiter/phase2/dev2/t_stand_fall2.py`: the clock runs for 3.6 s so the robot has settled (tilt under 5-6 deg in the second before), then is held. s7 (1c) and 1d s10 keep standing (3.5-7.7 cm of travel afterwards). **1e s12 falls 0.68 and 0.96 s after the hold; 1f s16 and s17 fall 0.52 and 0.68 s after it** (and in two of four runs the 1f seeds fell earlier still, before any hold). These controllers go down within a second of being told to stand, from a settled stance.
+- Training shows the same: at the end of training the share of episodes that reach the time limit is 0.56 (1c s7) and 0.61 (1d s10) but **0.28 (1e s12) and 0.28-0.29 (all three 1f seeds)**, with mean episode length 400-411 steps against 247-278. Adding the standing penalties roughly doubled the rate of falls in training.
+- The reward arithmetic (the 1f run's own `params/env.yaml`; rewards are multiplied by the 0.04 s step): a standing env earns at most about +4.5 per second (velocity tracking 2.0 + 2.0, gait 0.5). The two standing penalties cost up to 18 + 4.5 = 22.5 per second when their clamps are reached, and 4 per second at only 10 cm from the anchor. Falling costs 0.4, once (`termination_penalty` weight -10). The policy cannot observe its distance from the anchor, so it cannot hold the anchor reliably, and **ending the episode is the better deal whenever a standing env has drifted**. A policy that falls when told to stand is what this reward asks for. That is a design error in the penalties I wrote for 1e and kept in 1f, not something specific to the pushes.
+- This is the most likely cause, not a proven one: the direct test is a retrain with a standing reward that cannot make falling attractive (for example bounded positive terms, +w exp(-error), in place of the penalties, or a termination cost that dominates them). Not run: it is a new design and needs the user's go.
+- Committed with this entry: the wbc1f gate records, selection.json, deploy.yaml files, training JSONs and gzipped training logs.
