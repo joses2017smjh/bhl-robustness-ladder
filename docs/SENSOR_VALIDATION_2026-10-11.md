@@ -24,9 +24,9 @@ PYTHONPATH=src python scripts/bench/sensor_validation.py \
 
 ## Physical sensor validation
 
-No accessible physical stereo/LiDAR/IMU rig has been identified. The current compute node has no local video devices or ROS command-line interface. This is a bounded [local access inventory](../results/sensor-validation-20261011/hardware-access.json), not a claim that every remote machine has been searched. The user has been asked for the robot/sensor models, machine address or recording path. Physical validation remains **blocked on access**, and no simulation result is relabeled as hardware evidence.
+The user has now identified a **RPLIDAR C1 2D LiDAR, MMlove USB stereo camera on two pan/tilt servos, and Yahboom 10-axis IMU**. [The hardware-specific plan](HARDWARE_RIG_C1_STEREO_YAHBOOM_2026-10-11.md) records their constraints and seven experiments. Connected machine, recording directory, exact device revisions and which sensors move together are still unknown. Physical validation remains **blocked on access and calibration**. The earlier [local access inventory](../results/sensor-validation-20261011/hardware-access.json) describes the inspected HPC node only.
 
-The executable intake path is ready:
+The existing executable intake below targets **timed 3D LiDAR**. It does not accept the C1 planar rig as equivalent hardware; a separate planar adapter remains to be implemented after device inspection:
 
 ```bash
 PYTHONPATH=src python scripts/bench/sensor_validation.py \

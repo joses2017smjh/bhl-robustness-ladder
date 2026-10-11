@@ -1,0 +1,112 @@
+{
+  "schema": "bhl-hardware-intake-plan-v1",
+  "created_date": "2026-10-11",
+  "status": "NEEDS_DEVICE_ACCESS_AND_CALIBRATION",
+  "protocol_frozen": false,
+  "hardware_validation_complete": false,
+  "scope": "planning inventory only; not an executable recording manifest or measured hardware result",
+  "user_declared_devices": {
+    "lidar": {
+      "model": "WayPonDEV RPLIDAR C1",
+      "geometry": "planar_2d",
+      "manufacturer_source": "https://www.slamtec.com/en/c1/spec",
+      "nominal_scan_hz": 10,
+      "serial_baud": 460800,
+      "specification_is_measurement": false
+    },
+    "camera": {
+      "model": "MMlove USB Stereo Camera",
+      "advertised_modes": [
+        "1200P 60FPS",
+        "600P 120FPS"
+      ],
+      "advertised_global_shutter": true,
+      "advertised_fov_deg": 94,
+      "verified_modes": null,
+      "baseline_m": null,
+      "per_eye_dimensions": null,
+      "exposure_synchronization_verified": false,
+      "usb_layout": null,
+      "exact_model_revision": null
+    },
+    "imu": {
+      "model": "Yahboom 10-axis AHRS module with case",
+      "channels": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer",
+        "barometer",
+        "device_attitude"
+      ],
+      "exact_model_revision": null,
+      "firmware": null,
+      "actual_output_hz": null,
+      "max_documented_output_hz": 200,
+      "manufacturer_source": "https://www.yahboom.net/study/IMU"
+    },
+    "head": {
+      "axes": [
+        "pan",
+        "tilt"
+      ],
+      "servos": 2,
+      "moving_sensor_group": null,
+      "joint_feedback_available": null,
+      "command_equals_measured_angle": false
+    }
+  },
+  "access": {
+    "machine": null,
+    "operating_system": null,
+    "recording_directory": null,
+    "robot_platform": null
+  },
+  "initial_configuration": "head locked at documented pose; mounting must be verified",
+  "estimator_constraints": {
+    "fixed_extrinsic_stereo_inertial_requires": "camera and IMU rigid relative to each other during each replay",
+    "body_navigation_requires": "time-aligned measured head-to-body transform or validated locked-head transform",
+    "fast_lio_3d_route_qualified": false,
+    "existing_physical_3d_intake_applicable": false,
+    "planar_intake_implemented": false,
+    "scan_timing": "preserve original driver timing and uncertainty; no assumed hardware per-point timestamps",
+    "scan_quality": "preserve driver quality semantics; no calibrated reflectivity claim"
+  },
+  "tasks": [
+    {
+      "id": "RIG-01",
+      "name": "calibration and data integrity",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-02",
+      "name": "metric stereo",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-03",
+      "name": "planar localization",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-04",
+      "name": "complementary obstacle sensing",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-05",
+      "name": "active camera pointing",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-06",
+      "name": "stereo terrain perception",
+      "status": "UNRUN_ON_USER_RIG"
+    },
+    {
+      "id": "RIG-07",
+      "name": "calibration and fault sensitivity",
+      "status": "UNRUN_ON_USER_RIG"
+    }
+  ],
+  "result_policy": "manufacturer specifications, protocol targets and measured results remain separate"
+}

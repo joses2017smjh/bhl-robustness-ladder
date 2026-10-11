@@ -1,0 +1,4 @@
+    PID    PPID STAT     ELAPSED     TIME WCHAN                          COMMAND
+ 741328  741318 S          00:00 00:00:00 do_wait                        /bin/bash -c ps -u sanchej7 -o pid,ppid,stat,etime,time,wchan:30,args --forest; test ! -e /proc/708472; test ! -e /proc/730678
+ 741330  741328 R          00:00 00:00:00 -                               \_ ps -u sanchej7 -o pid,ppid,stat,etime,time,wchan:30,args --forest
+ 712998  712989 S       08:06:01 00:11:26 hrtimer_nanosleep              /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python /nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v2/native_sensor_controls_dispatch.py --plan /nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v2/plan.json --plan-sha256 49812ecb6d0d27d472017f8a60f0b5a519b0f1d6c323b0a4833f70b2cd8893a4
