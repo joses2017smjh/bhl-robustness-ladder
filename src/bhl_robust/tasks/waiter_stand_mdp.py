@@ -14,6 +14,14 @@ What (1e = 1d with ONLY these changes):
     standing, normalised by ANCHOR_POS_M and ANCHOR_YAW_DEG, each squared and clamped at ANCHOR_CLAMP) and
     `stand_tilt` (base tilt |g_xy|^2 normalised by sin^2(TILT_DEG), clamped at TILT_CLAMP).
 The pure helpers (`anchor_error`, `tilt_error`, `moving_ids`) take tensors or arrays and are tested without Isaac Lab.
+
+Phase 1f (2026-10-11; SLURM_JOBS.md "Predeclared now ... Waiter phase 1f"). All three 1e seeds fell within about a
+second of standing in MuJoCo: with the clock held they could not recover from the start-of-episode transient, which
+s7 and the 1d seeds (pushed while standing in training) ride out. 1f keeps 1e's two penalties and gives the standing
+envs their disturbances back: `push_and_reanchor` pushes every env as phases 1c/1d did, and tells `StandAnchor` to
+take a new anchor REANCHOR_DELAY_S after a push. Without that, a pushed robot (it cannot observe how far it was
+moved) would sit on the clamped part of the anchor penalty for the rest of the episode and the penalty would stop
+rewarding standing still. Hand forces stay on every env (waiter_wbc_mdp.hand_forces, unchanged).
 """
 
 from __future__ import annotations
@@ -25,6 +33,8 @@ ANCHOR_YAW_DEG = 5.0
 ANCHOR_CLAMP = 9.0
 TILT_DEG = 5.0
 TILT_CLAMP = 9.0
+REANCHOR_DELAY_S = 1.0                 # phase 1f: a pushed standing env takes a new anchor this long after the push
+REANCHOR_ATTR = "_waiter_stand_reanchor_step"   # per-env step (env.common_step_counter) at which to re-anchor; -1 = none
 
 
 def _clamp(x, hi):
@@ -56,6 +66,22 @@ def wrap_to_pi(a):
     return (a + math.pi) % (2.0 * math.pi) - math.pi
 
 
+def reanchor_mask(due, now: int, standing):
+    """Envs that take a new anchor now: standing, with a pending re-anchor step that has been reached."""
+    return standing & (due >= 0) & (due <= now)
+
+
+def new_anchor_mask(standing, prev, due=None, now: int = 0):
+    """Envs whose anchor is (re)set at this step: they just started standing, or (phase 1f) a re-anchor scheduled by a
+    push is due. A due entry that fires is cleared in place (-1)."""
+    new = standing & ~prev
+    if due is not None:
+        again = reanchor_mask(due, now, standing)
+        due[again] = -1
+        new = new | again
+    return new
+
+
 # ---------------------------------------------------------------------------------------------- Isaac Lab terms
 
 def standing_mask(env, command_name: str = "base_velocity"):
@@ -73,6 +99,23 @@ def push_moving_only(env, env_ids, velocity_range: dict, command_name: str = "ba
     ids = moving_ids(env_ids, standing_mask(env, command_name))
     if len(ids) > 0:
         il_mdp.push_by_setting_velocity(env, ids, velocity_range, asset_cfg)
+
+
+def push_and_reanchor(env, env_ids, velocity_range: dict, delay_s: float = REANCHOR_DELAY_S, asset_cfg=None):
+    """Phase 1f: upstream push_by_setting_velocity on every env in `env_ids` (standing ones included), plus the step at
+    which StandAnchor gives each pushed env a new anchor."""
+    import torch
+    from isaaclab.envs import mdp as il_mdp
+    from isaaclab.managers import SceneEntityCfg
+    asset_cfg = asset_cfg or SceneEntityCfg("robot")
+    if env_ids is None:
+        env_ids = torch.arange(env.scene.num_envs, device=env.device)
+    il_mdp.push_by_setting_velocity(env, env_ids, velocity_range, asset_cfg)
+    due = getattr(env, REANCHOR_ATTR, None)
+    if due is None:
+        due = torch.full((env.scene.num_envs,), -1, dtype=torch.long, device=env.device)
+        setattr(env, REANCHOR_ATTR, due)
+    due[env_ids] = int(env.common_step_counter) + max(1, int(round(delay_s / env.step_dt)))
 
 
 def hand_forces_moving_only(env, env_ids, force_range: tuple[float, float], p_zero: float, asset_cfg=None,
@@ -115,7 +158,8 @@ else:  # pragma: no cover
 
 class StandAnchor(_TermBase):
     """Standing envs only: anchor_error of the base's displacement and yaw change since the env started standing (the
-    anchor is reset when an env resets or turns from moving to standing). A penalty: use a negative weight."""
+    anchor is reset when an env resets or turns from moving to standing, and, in phase 1f, REANCHOR_DELAY_S after a
+    push from `push_and_reanchor`). A penalty: use a negative weight."""
 
     def __init__(self, cfg, env):
         import torch
@@ -139,7 +183,8 @@ class StandAnchor(_TermBase):
         standing = standing_mask(env, command_name)
         xy = asset.data.root_pos_w[:, :2]
         yaw = math_utils.euler_xyz_from_quat(asset.data.root_quat_w)[2]
-        new = standing & ~self.prev
+        new = new_anchor_mask(standing, self.prev, getattr(env, REANCHOR_ATTR, None),    # set only by phase 1f's push
+                              int(env.common_step_counter))
         self.anchor_xy[new] = xy[new]
         self.anchor_yaw[new] = yaw[new]
         self.prev = standing.clone()

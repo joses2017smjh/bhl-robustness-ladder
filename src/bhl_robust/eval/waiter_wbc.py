@@ -21,7 +21,8 @@ TASK_ID = "Velocity-BHL-Waiter-WBC-v0"
 CURRICULUM_TASK_ID = "Velocity-BHL-Waiter-WBC-Curriculum-v0"     # phase 1c (2026-10-07)
 STANCE_TASK_ID = "Velocity-BHL-Waiter-WBC-Stance-v0"             # phase 1d (2026-10-08)
 STAND_TASK_ID = "Velocity-BHL-Waiter-WBC-Stand-v0"               # phase 1e (2026-10-10)
-TASK_IDS = (TASK_ID, CURRICULUM_TASK_ID, STANCE_TASK_ID, STAND_TASK_ID)
+STANDPUSH_TASK_ID = "Velocity-BHL-Waiter-WBC-StandPush-v0"       # phase 1f (2026-10-11)
+TASK_IDS = (TASK_ID, CURRICULUM_TASK_ID, STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID)
 STAND_ANCHOR_WEIGHT = -1.0
 STAND_TILT_WEIGHT = -0.5
 STANCE_REL_STANDING_ENVS = 0.25
@@ -105,22 +106,46 @@ def check_stand(env: dict) -> list[str]:
     return p
 
 
+def check_stand_push(env: dict) -> list[str]:
+    """Phase 1f only: 1d's stance terms, the two standing penalties, and disturbances on every env (the push event
+    is push_and_reanchor, the hand forces are the unrestricted ones)."""
+    p = check_stance(env)
+    ev = env.get("events") or {}
+    f = str((ev.get("push_robot") or {}).get("func", ""))
+    if "push_and_reanchor" not in f:
+        p.append(f"push_robot func {f}")
+    f = str((ev.get("hand_forces") or {}).get("func", ""))
+    if not f.endswith("hand_forces"):
+        p.append(f"hand_forces func {f}")
+    rw = env.get("rewards") or {}
+    for name, fn, w in (("stand_anchor", "StandAnchor", STAND_ANCHOR_WEIGHT), ("stand_tilt", "stand_tilt", STAND_TILT_WEIGHT)):
+        term = rw.get(name) or {}
+        if fn not in str(term.get("func", "")):
+            p.append(f"{name} func {term.get('func')}")
+        if term.get("weight") is None or abs(float(term["weight"]) - w) > 1e-9:
+            p.append(f"{name} weight {term.get('weight')}")
+    return p
+
+
 def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
     from omegaconf import OmegaConf
     if task not in TASK_IDS:
         raise ValueError(f"unknown Waiter WBC task {task!r}; expected one of {TASK_IDS}")
     deploy, env_yaml = Path(deploy), Path(env_yaml)
     env = G.load_env_yaml(env_yaml)
-    funcs = ("gait_clock", "gait_clock_stance") if task in (STANCE_TASK_ID, STAND_TASK_ID) else ("gait_clock",)
+    funcs = ("gait_clock", "gait_clock_stance") if task in (STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID) \
+        else ("gait_clock",)
     info = G.check_env(env, "R1", clock_funcs=funcs)  # gait_clock last in actor and critic, period 0.8, offset 0
     cfg = OmegaConf.load(deploy)
     problems = check_layout(cfg, env)
-    if task in (CURRICULUM_TASK_ID, STANCE_TASK_ID, STAND_TASK_ID):
+    if task in (CURRICULUM_TASK_ID, STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID):
         problems += check_curriculum(env)
     if task == STANCE_TASK_ID:
         problems += check_stance(env)
     if task == STAND_TASK_ID:
         problems += check_stand(env)
+    if task == STANDPUSH_TASK_ID:
+        problems += check_stand_push(env)
     if abs(float(cfg.policy_dt) - info["step_dt"]) > 1e-9:
         problems.append(f"policy_dt {cfg.policy_dt} != env step_dt {info['step_dt']}")
     if problems:
