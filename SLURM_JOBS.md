@@ -4430,3 +4430,12 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
 - Dev trace of the phase 3b policy (2026-10-11 08:32; `21773461`, dev seeds 1300-1347, the 48 layouts traced for sft1 and for the phase 4 policy; not scored): **33/48** successes (sft1 20/48). First tumbler picked up: the named one **45** times, the other 0, none 3 (sft1: 23, 17, 8). The 15 failures: 7 lost the tumbler from the tray on the way, 3 reached the table without setting the tray down, 1 set it down without finishing, 1 tipped the tumbler before the tray, 3 picked nothing up. After picking the named tumbler: 33/45. What is left to fix is the carry and the set-down, as it is for the scripted expert (its failures are mostly at "tray lifted" too).
 - Ablation on dev seeds only (not a candidate for any gate): **sft1_early `21773578`** = sft1's recipe on sft1's 187 training episodes (`demos-20261009`, 20,000 steps) with `--sampling early:12:0.3`, to see how much of phase 3b's gain needs the extra demonstrations. Submitted 2026-10-11 08:32.
 - **Pull request #37 opened (2026-10-11 09:25), not merged:** https://github.com/joses2017smjh/bhl-robustness-ladder/pull/37 (`waiter-phase3b-1f` = `mission7-approach-followup` merged with `main` at a9de690 in the separate worktree; the merge was clean). Full suite on that branch `21773673`: 3032 passed, 16 skipped. Phase 1f's results will be added to the same pull request.
+- **Ablation result (2026-10-11 11:08; dev seeds only; not a gate result).** sft1_early `21773578` (the original 187 training episodes, 20,000 steps, `--sampling early:12:0.3`): pick probe `21775929` named tumbler **176**, other 1, none 23 of 200; dev rollouts on seeds 1400-1463 (`21775948`, `21775949`) own instruction **41/64**, held-out T5 **28/64**. Side by side on the same dev seeds:
+
+| training | episodes | sampling | own instruction | held-out T5 | named tumbler among pick-ups |
+|---|---|---|---|---|---|
+| sft2 | 644 | uniform | 30/64 | 23/64 | 95 of 189 |
+| sft1_early | 187 | first 12 frames x 0.3 | 41/64 | 28/64 | 176 of 177 |
+| sft2_early (phase 3b's policy) | 644 | first 12 frames x 0.3 | 48/64 | 45/64 | 192 of 192 |
+
+  The sampling change alone fixes the choice of tumbler on the original demonstrations. The extra demonstrations add on top of it, most on the phrasing never trained on (28 -> 45 of 64).
