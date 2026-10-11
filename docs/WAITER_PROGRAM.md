@@ -84,10 +84,12 @@ Every number below has its predeclaration and record in `SLURM_JOBS.md` (section
 | 1d trained stance | NEGATIVE (stands without falling, shuffles) | `results/waiter-20261005/wbc1d/selection.json` |
 | 1e stand still under arm loads | NEGATIVE: all three seeds fall within about a second of standing in MuJoCo (and the training's std check failed as written) | `results/waiter-20261005/wbc1e/selection.json` |
 | 1f the same with pushes kept on standing envs (2026-10-11) | NEGATIVE: all three seeds fall when told to stand, as in 1e. Likely cause, shared by 1e and 1f: the standing penalties cost far more per second than falling costs once, so the policy learns to end the episode | `results/waiter-20261005/wbc1f/selection.json` |
+| 1g the standing terms as bounded positive rewards (2026-10-11) | RUNNING: 1f with the two penalties replaced by rewards that can only add (training `21779150`, three seeds, then the same gates) | `results/waiter-20261005/wbc1g/` |
 | 2 scripted expert | PASS 86/100 with the stance lock, a declared simulation fixture; 1/100 with a free base | `results/waiter-20261005/phase2-gate/`, `phase2-gate-freebase/` |
 | 3 SmolVLA fine-tune | FAIL: 28/100 with each layout's own instruction (needed 40); 22/100 on the held-out phrasing (needed 20) | `results/waiter-20261005/phase3-gate/verdict.json` |
 | 3b SmolVLA retrained (2026-10-11) | PASS: 75/100 own instruction and 76/100 held-out phrasing on 100 fresh layouts (same bars: 40 and 20). 3.4x the demonstrations and 30% of each training batch drawn from the first 12 frames of episodes | `results/waiter-20261005/phase3b-gate/verdict.json` |
 | 4 DSRL noise steering | PASS: 63/100 against 23/100 for the same frozen policy with its normal noise, on 100 unseen layouts (exact one-sided McNemar p = 1.1e-8); a first design collapsed and was recorded NEGATIVE without a scored run | `results/waiter-20261005/phase4-gate/verdict_dsrl2.json`, `dsrl1_negative.json` |
+| 4b DSRL on the phase 3b policy (2026-10-11) | RUNNING: run dsrl2's design with only the base policy changed (training `21779119`), then one scored run on new seeds 8000-8099 with the phase 4 rule. The base already picks the right tumbler, so a FAIL is a likely outcome | `results/waiter-20261005/phase4b-gate/` |
 
 Phase 3b in one paragraph: which tumbler to take is an exclusive-or of two things the policy's features already
 hold (the instruction's colour, and which side the red tumbler is on), and it is decided in an episode's first ten
