@@ -1,0 +1,205 @@
+{
+  "schema": "bhl-native-sensor-controls-dispatch-v3",
+  "campaign_dir": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2",
+  "max_concurrency": 1,
+  "reserved_bytes_per_job": 16777216,
+  "minimum_free_bytes": 8589934592,
+  "poll_seconds": 30,
+  "source_sha256": {
+    "methods_dispatch.py": "87727d6f5bd59c5500519a8c0faab3139ce288f9c9bfc0cd2268b41208442526",
+    "methods_archive.py": "2037a4da6418dec0c3c1e5e0fc7427ff6f736cff15eab6d262a17aa0c092ebe0",
+    "h34_campaign.py": "8264618c648992e6c40f97b36cd73837cf867bffc195ab9c0f065c9c412170a1",
+    "methods_remote_campaign.py": "1d0edea449c15f76d85ca2dd939532aa7072226faa6e70ddb897e76fc012890e",
+    "native_sensor_controls_dispatch_v3.py": "e59b950907e3ba7b803a3e810367dc4da8921edaf6ba0aef24397f3b135a669b",
+    "native_sensor_controls_transport.py": "d05ef29b8f7877039d7a154237b0ab1d666533b7bf32d522bcfec1b11426cca4",
+    "worker.sbatch": "aae44a70999dc10015e7b3c33d8b7d0ba91c03f55b8090b53bef54368e590d57"
+  },
+  "jobs": [
+    {
+      "name": "native-controls-v2-s730000-c00-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730000-c01-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730000-c02-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730000-c03-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730000-c04-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730000-c05-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730000-c06-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730000-c07-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730000-c08-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730000-c09-20261011",
+      "seed": 730000,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730001-c00-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730001-c01-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730001-c02-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730001-c03-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730001-c04-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730001-c05-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730001-c06-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730001-c07-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730001-c08-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    },
+    {
+      "name": "native-controls-v2-s730001-c09-20261011",
+      "seed": 730001,
+      "expected_fields": {
+        "phase": "development",
+        "expected_declared_cells": 10
+      }
+    }
+  ],
+  "smoke": {
+    "name": "native-controls-smoke-v2-20261011",
+    "existing_job_id": "21769132",
+    "expected_fields": {
+      "phase": "smoke",
+      "episodes": 14,
+      "execution_gate": true
+    }
+  },
+  "archive_sha256": "3628b95ced285660e27c0b3b0ca92a097415beaeedfa912da751832acc3b8282",
+  "protocol_sha256": "08a71ea1dcaad9460ef6f3990af227323e48492442fd3acb675a334a5808caf0",
+  "transport": {
+    "raw_cap_bytes": 8589934592,
+    "shared_receipt_cap_bytes": 16777216,
+    "part_bytes": 1073741824
+  },
+  "recovery": {
+    "job_name": "native-controls-v2-s730000-c04-20261011",
+    "job_id": "21776269",
+    "receipt": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-controls-c04-recovery-20261011/recovery.json",
+    "receipt_sha256": "3c69022e02e1cb8bdfc39ea7546ea8fdff3ff7c98f07bd7af77acd9ce670790c",
+    "result": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-controls-c04-recovery-20261011/original-scientific-result.json",
+    "result_sha256": "a21874ec5bce03d548c580f3fa2a8c378f8cab4bf22785921f9823f0206db1cd",
+    "inventory": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-controls-c04-recovery-20261011/output-inventory.json",
+    "inventory_sha256": "57c528fe8d686978af451eabf45c78a2850c79d17e507521d8f461ca8925361e"
+  }
+}

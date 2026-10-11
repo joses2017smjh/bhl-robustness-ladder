@@ -1,0 +1,19 @@
+{
+  "schema": "bhl-research-completion-observer-v1",
+  "controllers": {
+    "native": {
+      "directory": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v3",
+      "plan_sha256": "08a2d1d4aee45e4cd39fc97536da2f113cb80da181b69692d835fb18c2e1d1ac"
+    },
+    "terrain": {
+      "directory": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v6",
+      "plan_sha256": "e2f92da10a0fc161e24e67dc59587365c40df40a8b7749fe3031eddd1fcc64f3"
+    }
+  },
+  "reporter_sha256": "1a51371fc66f427a56076dc8ac64e93944e8532c9dd20b2aba7c4081861a7ab8",
+  "gh_path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v6/controller-tools/gh",
+  "gh_sha256": "141507c337e8b202ad398550c3b73d72f5af92e86f71665214538a81efd4c409",
+  "output_dir": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/completion-report-observer-v1/outputs",
+  "poll_seconds": 30,
+  "timeout_hours": 44
+}

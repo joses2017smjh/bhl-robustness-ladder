@@ -1,0 +1,18 @@
+{
+  "created_utc": "2026-10-11T21:30:39.845012+00:00",
+  "command": [
+    "/apps/slurm/25.11.8/bin/sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--no-requeue",
+    "--export=NONE",
+    "--chdir=/tmp",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/completion-report-observer-v1/observer.sbatch"
+  ],
+  "plan_sha256": "f7b390e8baca8c0a7871e2c1afc92aacc6efe83f725d6f56819d02df63973a31",
+  "scope": "observe and publish immutable reports only; no simulation changes or retries",
+  "returncode": 0,
+  "stdout": "21778690\n",
+  "stderr": "",
+  "job_id": "21778690"
+}

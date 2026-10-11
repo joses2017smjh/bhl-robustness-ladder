@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/apps/slurm/25.11.8/bin/sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--cpus-per-task=2",
+    "--mem=8G",
+    "--time=23:00:00",
+    "--account=eecs",
+    "--partition=share",
+    "--job-name=native-controls-dispatch-v3",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v3/controller-%j.log",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v3/controller-%j.log",
+    "--export=NONE",
+    "--no-requeue",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-dispatch-v3/run.sbatch"
+  ],
+  "returncode": 0,
+  "stdout": "21778567\n",
+  "stderr": "",
+  "job_id": "21778567",
+  "plan_sha256": "08a2d1d4aee45e4cd39fc97536da2f113cb80da181b69692d835fb18c2e1d1ac",
+  "submitted_utc": "2026-10-11T21:26:01.480742+00:00"
+}

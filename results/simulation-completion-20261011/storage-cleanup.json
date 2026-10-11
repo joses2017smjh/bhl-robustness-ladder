@@ -1,0 +1,228 @@
+{
+  "schema": "bhl-bounded-package-cache-retirement-v1",
+  "created_utc": "2026-10-11T21:21:58.156259+00:00",
+  "status": "complete",
+  "authorization": "Root explicitly authorized only these two wheels under the user's prior storage cleanup request.",
+  "scope": "Compressed cached wheels only; no directories, installed payloads, unpacked archive-v0 files, source code, experiment evidence, or other paths removed.",
+  "rationale": "Both versions remain installed as complete regular-file payloads independently of compressed wheels. Current campaigns use installed runtimes, not these cached wheel archives.",
+  "activity_check_scope": "No local uv/pip/build process seen; listed Slurm jobs were experiment, test, and packaging jobs. Interactive process activity on other nodes was not exhaustively audited.",
+  "files": [
+    {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/.uv-cache/sdists-v9/pypi/isaacsim-extscache-kit/5.1.0.0/bum8moHYZl3zTwMK/isaacsim_extscache_kit-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl",
+      "sha256": "82c0c43a4a8a62a37c82a6c32a489be6ac2fb52baf17041dcccb80295d94721f",
+      "pre_stat": {
+        "size": 3021340845,
+        "allocated_bytes": 3021348864,
+        "mode": 33200,
+        "nlink": 1,
+        "inode": 198166274566531383,
+        "device": 1273255716,
+        "mtime_ns": 1786938194000000000,
+        "ctime_ns": 1786938194000000000
+      },
+      "installed_record": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim_extscache_kit-5.1.0.0.dist-info/RECORD",
+      "installed_matching_manifest_rows": 33379,
+      "installed_all_payloads_regular_present_expected_size": true,
+      "installed_verified_samples": [
+        {
+          "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim_extscache_kit-5.1.0.0.dist-info/METADATA",
+          "sha256": "ecd73330f338ca3cc6f2ec50018cc130d21154de5fae958b0b39576377c1cee6",
+          "stat": {
+            "size": 919,
+            "allocated_bytes": 4096,
+            "mode": 33200,
+            "nlink": 2,
+            "inode": 198166274566531595,
+            "device": 1273255716,
+            "mtime_ns": 1786938198000000000,
+            "ctime_ns": 1786938269000000000
+          }
+        },
+        {
+          "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/extscache/omni.physx.foundation-107.3.26+107.3.3.lx64.r.cp311.u353/bin/libPhysXGpu_64.so",
+          "sha256": "c79411ebb67351828aeb1c48d5ebdcc9fbb5dc9f7dc8c96f8178999a59b9c6a9",
+          "stat": {
+            "size": 361440408,
+            "allocated_bytes": 361447424,
+            "mode": 33200,
+            "nlink": 2,
+            "inode": 162134898419785644,
+            "device": 1273255716,
+            "mtime_ns": 1786938197000000000,
+            "ctime_ns": 1786938266000000000
+          }
+        },
+        {
+          "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/extscache/omni.hydra.rtx-1.0.0+69cbf6ad.lx64.r/bin/deps/libnrend.so",
+          "sha256": "6fd0a32db565e9344d3ce1e4d75b64c5a42ee94ac842a88e2b6dbf17c99f04e0",
+          "stat": {
+            "size": 273837696,
+            "allocated_bytes": 273842176,
+            "mode": 33200,
+            "nlink": 2,
+            "inode": 162134898419780141,
+            "device": 1273255716,
+            "mtime_ns": 1786938197000000000,
+            "ctime_ns": 1786938267000000000
+          }
+        },
+        {
+          "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/extscache/omni.kit.usd.mdl-1.1.5+69cbf6ad.lx64.r.cp311/bin/libnrend.so",
+          "sha256": "6fd0a32db565e9344d3ce1e4d75b64c5a42ee94ac842a88e2b6dbf17c99f04e0",
+          "stat": {
+            "size": 273837696,
+            "allocated_bytes": 273842176,
+            "mode": 33200,
+            "nlink": 2,
+            "inode": 162134898419790802,
+            "device": 1273255716,
+            "mtime_ns": 1786938198000000000,
+            "ctime_ns": 1786938264000000000
+          }
+        }
+      ],
+      "status": "removed",
+      "unlink_started_utc": "2026-10-11T21:22:17.345852+00:00",
+      "unlink_completed_utc": "2026-10-11T21:22:17.943707+00:00",
+      "post_exists": false,
+      "post_lexists": false,
+      "installed_sample_stats_unchanged_after": true
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/.uv-cache/sdists-v9/pypi/isaacsim-extscache-kit-sdk/5.1.0.0/jz6iivCfJHb_8RsC/isaacsim_extscache_kit_sdk-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl",
+      "sha256": "be8cb4520eb9c97c4ddd46e1c92885bb9e5dbc581e407930f186a3808eafc038",
+      "pre_stat": {
+        "size": 1345115764,
+        "allocated_bytes": 1345122304,
+        "mode": 33200,
+        "nlink": 1,
+        "inode": 144133370669016206,
+        "device": 1273255716,
+        "mtime_ns": 1786938173000000000,
+        "ctime_ns": 1786938173000000000
+      },
+      "installed_record": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim_extscache_kit_sdk-5.1.0.0.dist-info/RECORD",
+      "installed_matching_manifest_rows": 1094,
+      "installed_all_payloads_regular_present_expected_size": true,
+      "installed_verified_samples": [
+        {
+          "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim_extscache_kit_sdk-5.1.0.0.dist-info/METADATA",
+          "sha256": "22d20067c0feed341ce90ba8d516cd5f3a7c78c12df82b2c70eed15b5b5ba835",
+          "stat": {
+            "size": 939,
+            "allocated_bytes": 4096,
+            "mode": 33200,
+            "nlink": 2,
+            "inode": 144133370669028791,
+            "device": 1273255716,
+            "mtime_ns": 1786938173000000000,
+            "ctime_ns": 1786938248000000000
+          }
+        },
+        {
+          "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/extscache/omni.sensors.nv.common-3.0.0+69cbf6ad.lx64.r.cp311/bin/libcufft.so",
+          "sha256": "ca5c6f81d584906b4d32b984ad8704dd65bf75bdab4334ed22ce7eef7501a95a",
+          "stat": {
+            "size": 279161544,
+            "allocated_bytes": 279166976,
+            "mode": 33273,
+            "nlink": 2,
+            "inode": 162134898419748904,
+            "device": 1273255716,
+            "mtime_ns": 1786938174000000000,
+            "ctime_ns": 1786938246000000000
+          }
+        },
+        {
+          "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/extscache/omni.sensors.nv.common-3.0.0+69cbf6ad.lx64.r.cp311/bin/libcufft.so.10",
+          "sha256": "ca5c6f81d584906b4d32b984ad8704dd65bf75bdab4334ed22ce7eef7501a95a",
+          "stat": {
+            "size": 279161544,
+            "allocated_bytes": 279166976,
+            "mode": 33273,
+            "nlink": 2,
+            "inode": 162134898419750018,
+            "device": 1273255716,
+            "mtime_ns": 1786938176000000000,
+            "ctime_ns": 1786938246000000000
+          }
+        },
+        {
+          "path": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/isaacsim/extscache/omni.sensors.nv.common-3.0.0+69cbf6ad.lx64.r.cp311/bin/libcufft.so.10.9.0.58",
+          "sha256": "ca5c6f81d584906b4d32b984ad8704dd65bf75bdab4334ed22ce7eef7501a95a",
+          "stat": {
+            "size": 279161544,
+            "allocated_bytes": 279166976,
+            "mode": 33273,
+            "nlink": 2,
+            "inode": 162134898419749160,
+            "device": 1273255716,
+            "mtime_ns": 1786938174000000000,
+            "ctime_ns": 1786938246000000000
+          }
+        }
+      ],
+      "status": "removed",
+      "unlink_started_utc": "2026-10-11T21:22:17.949768+00:00",
+      "unlink_completed_utc": "2026-10-11T21:22:18.204075+00:00",
+      "post_exists": false,
+      "post_lexists": false,
+      "installed_sample_stats_unchanged_after": true
+    }
+  ],
+  "filesystem_before": {
+    "share": {
+      "path": "/nfs/hpc/share/sanchej7",
+      "total_bytes": 1649267441664,
+      "free_bytes": 10415222784,
+      "available_bytes": 10415222784
+    },
+    "home_mount": {
+      "path": "/nfs/stak/users/sanchej7",
+      "total_bytes": 26843545600,
+      "free_bytes": 9111601152,
+      "available_bytes": 9111601152
+    }
+  },
+  "df_before": "Filesystem                                                                                1B-blocks          Used   Available Use% Mounted on\n10.192.45.240@o2ib,10.192.45.241@o2ib:10.192.45.242@o2ib,10.192.45.243@o2ib:/exascale 1649267441664 1638852218880 10415222784 100% /nfs/hpc/share\nisi-coe1-depot-nfs.engr.oregonstate.edu:/coe/stak_users                                 26843545600   17731944448  9111601152  67% /nfs/stak/users\n",
+  "note_home_df": "Filesystem statistics are not per-user home usage or quota. These deletions are on HPC-share and do not change home usage.",
+  "preflight_completed_utc": "2026-10-11T21:22:17.344268+00:00",
+  "completed_utc": "2026-10-11T21:22:18.206839+00:00",
+  "removed_logical_bytes": 4366456609,
+  "removed_allocated_bytes": 4366471168,
+  "filesystem_after": {
+    "share": {
+      "path": "/nfs/hpc/share/sanchej7",
+      "total_bytes": 1649267441664,
+      "free_bytes": 10414268416,
+      "available_bytes": 10414268416
+    },
+    "home_mount": {
+      "path": "/nfs/stak/users/sanchej7",
+      "total_bytes": 26843545600,
+      "free_bytes": 9111601152,
+      "available_bytes": 9111601152
+    }
+  },
+  "df_after": "Filesystem                                                                                1B-blocks          Used   Available Use% Mounted on\n10.192.45.240@o2ib,10.192.45.241@o2ib:10.192.45.242@o2ib,10.192.45.243@o2ib:/exascale 1649267441664 1638853173248 10414268416 100% /nfs/hpc/share\nisi-coe1-depot-nfs.engr.oregonstate.edu:/coe/stak_users                                 26843545600   17731944448  9111601152  67% /nfs/stak/users\n",
+  "post_cleanup_observations": [
+    {
+      "observed_utc": "2026-10-11T21:23:25.655140+00:00",
+      "share_available_bytes": 14773452800,
+      "home_used_bytes": 17732468736,
+      "home_total_bytes": 26843545600,
+      "cache_parent_files": {
+        "/nfs/hpc/share/sanchej7/Humanoid_Lite/.uv-cache/sdists-v9/pypi/isaacsim-extscache-kit/5.1.0.0/bum8moHYZl3zTwMK": [
+          "isaacsim_extscache_kit-5.1.0.0-cp311-none-manylinux_2_35_x86_64",
+          "src",
+          "metadata.msgpack"
+        ],
+        "/nfs/hpc/share/sanchej7/Humanoid_Lite/.uv-cache/sdists-v9/pypi/isaacsim-extscache-kit-sdk/5.1.0.0/jz6iivCfJHb_8RsC": [
+          "src",
+          "isaacsim_extscache_kit_sdk-5.1.0.0-cp311-none-manylinux_2_35_x86_64",
+          "metadata.msgpack"
+        ]
+      }
+    }
+  ]
+}

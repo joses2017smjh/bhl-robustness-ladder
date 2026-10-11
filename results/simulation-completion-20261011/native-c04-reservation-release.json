@@ -1,0 +1,50 @@
+{
+  "schema": "bhl-recovered-reservation-release-v1",
+  "utc": "2026-10-11T21:24:07.332897+00:00",
+  "scheduler_proof": "21776269|FAILED|1:0\n21778472|COMPLETED|0:0\n",
+  "verified_recovery_pins": {
+    "recovery.json": "3c69022e02e1cb8bdfc39ea7546ea8fdff3ff7c98f07bd7af77acd9ce670790c",
+    "original-scientific-result.json": "a21874ec5bce03d548c580f3fa2a8c378f8cab4bf22785921f9823f0206db1cd",
+    "output-inventory.json": "57c528fe8d686978af451eabf45c78a2850c79d17e507521d8f461ca8925361e"
+  },
+  "before": {
+    "schema": "bhl-methods-reservations-v1",
+    "reservations": {
+      "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2/native-controls-v2-s730000-c04-20261011": {
+        "campaign": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2",
+        "job_name": "native-controls-v2-s730000-c04-20261011",
+        "job_id": "21776269",
+        "job_dir": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/native-sensor-controls-v2/native-controls-v2-s730000-c04-20261011-21776269",
+        "reserved_bytes": 2147483648,
+        "registered_utc": "2026-10-11T18:58:48.349033+00:00",
+        "adopted_existing_job": true
+      },
+      "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v3/terrain-confirmation-dr-default-s1-ramp-20261011": {
+        "campaign": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v3",
+        "job_name": "terrain-confirmation-dr-default-s1-ramp-20261011",
+        "job_id": "21778527",
+        "job_dir": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v3/terrain-confirmation-dr-default-s1-ramp-20261011-21778527",
+        "reserved_bytes": 1073741824,
+        "registered_utc": "2026-10-11T21:22:35.106364+00:00",
+        "adopted_existing_job": true
+      }
+    },
+    "updated_utc": "2026-10-11T21:24:06.417652+00:00"
+  },
+  "after": {
+    "schema": "bhl-methods-reservations-v1",
+    "reservations": {
+      "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v3/terrain-confirmation-dr-default-s1-ramp-20261011": {
+        "campaign": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v3",
+        "job_name": "terrain-confirmation-dr-default-s1-ramp-20261011",
+        "job_id": "21778527",
+        "job_dir": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v3/terrain-confirmation-dr-default-s1-ramp-20261011-21778527",
+        "reserved_bytes": 1073741824,
+        "registered_utc": "2026-10-11T21:22:35.106364+00:00",
+        "adopted_existing_job": true
+      }
+    },
+    "updated_utc": "2026-10-11T21:24:07.328683+00:00"
+  },
+  "reason": "Original raw output independently published and fresh-download verified; no active original worker or shared packaging remains."
+}
