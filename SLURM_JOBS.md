@@ -4391,3 +4391,13 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
 - This explains both results so far: sft1 and sft2 pick near chance, and 3.4 times more episodes changed nothing (the share of deciding frames per batch is the same).
 - **Third arm (added to the predeclared candidates; chosen on dev evidence, before any scored seed): sft2_early** = sft2's recipe exactly (same data, action expert trained, vision-language layers frozen, 40,000 steps) with `--sampling early:12:0.3`: each training sample comes with probability 0.3 from the first 12 frames of a random episode, otherwise from all frames as before (code 4b of this entry's commit; test added). The checkpoint-choice rule already covers "each run trained". sft2_full keeps running (0.7 steps/s in fp32 on a MIG slice: its first checkpoint is due about 06:35 and it will not reach 40,000 steps within its 14 h limit; it is probed at its checkpoints and its last saved checkpoint counts as its final one).
 - (Wording fix for the entry above: the sampler's code is commit 30dd332.) **sft2_early `21769671` submitted 2026-10-11 04:48 from c35288f** (`--sampling early:12:0.3 --steps 40000 --save-every 5000 --keep-last 2 --no-trainer-state`; running on dgxh-1, a MIG slice, which is fine for training). Its pick probe runs at 10,000 steps.
+- **Phase 3b dev pick probes (2026-10-11 05:34; dev seeds 1400-1599, first 16 s, 10 executed steps; all on nodes that pass the render check):**
+
+| policy | named tumbler | other tumbler | none in 16 s | share of pick-ups on the named tumbler |
+|---|---|---|---|---|
+| sft1, step 17,000 (`21768173`) | 96 | 79 | 25 | 55% |
+| sft2 (3.4x data), step 20,000 (`21769178`) | 83 | 68 | 49 | 55% |
+| sft2, step 40,000, final (`21769811`) | 95 | 94 | 11 | 50% |
+| **sft2_early, step 10,000 (`21769954`)** | **134** | **1** | 65 | **99%** |
+
+  Oversampling the first 12 frames fixed the choice of tumbler within 10,000 steps; 3.4 times more demonstrations with uniform sampling left it at chance after 40,000. The diagnosis above holds. sft2_early at 10,000 steps is slower to pick (65 episodes without a pick-up in 16 s); it trains on to 40,000 steps and is probed again.
