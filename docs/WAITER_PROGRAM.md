@@ -73,3 +73,31 @@ gait clock 2. Critic: the same plus base linear velocity (86).
 - **Selection**: the seed passing Q1 and Q2 with the lowest push-fall rate (tie: lowest seed). None passes ->
   phase 1 NEGATIVE, and phase 2 falls back to the frozen gait clock-s2 with scripted arm targets (labelled so).
 - Reported, not gated: push falls with 0.5 kg per hand in the carry pose; hand-target tracking error.
+
+## Status, 2026-10-11
+
+Every number below has its predeclaration and record in `SLURM_JOBS.md` (sections dated 2026-10-05 to 2026-10-11).
+
+| Phase | Result | Record |
+|---|---|---|
+| 1c whole-body controller | SELECTED `waiter-wbc1c-s7` (walks 1.90-1.97 m, push falls 4/60) | `results/waiter-20261005/wbc1c/selection.json` |
+| 1d trained stance | NEGATIVE (stands without falling, shuffles) | `results/waiter-20261005/wbc1d/selection.json` |
+| 1e stand still under arm loads | NEGATIVE: all three seeds fall within about a second of standing in MuJoCo (and the training's std check failed as written) | `results/waiter-20261005/wbc1e/selection.json` |
+| 2 scripted expert | PASS 86/100 with the stance lock, a declared simulation fixture; 1/100 with a free base | `results/waiter-20261005/phase2-gate/`, `phase2-gate-freebase/` |
+| 3 SmolVLA fine-tune | FAIL: 28/100 with each layout's own instruction (needed 40); 22/100 on the held-out phrasing (needed 20) | `results/waiter-20261005/phase3-gate/verdict.json` |
+| 4 DSRL noise steering | PASS: 63/100 against 23/100 for the same frozen policy with its normal noise, on 100 unseen layouts (exact one-sided McNemar p = 1.1e-8); a first design collapsed and was recorded NEGATIVE without a scored run | `results/waiter-20261005/phase4-gate/verdict_dsrl2.json`, `dsrl1_negative.json` |
+
+What the measurements say:
+- The phase 3 policy carries out the task about as well as the scripted expert once it holds the right tumbler
+  (20 of 23 on a traced dev run) and picks between the two tumblers close to chance (23 of 40). It follows the
+  table side in the instruction. Its features contain both the instruction's colour and which tumbler is which; the
+  action head did not learn to combine them from 187 demonstrations.
+- Which tumbler the frozen policy takes is decided by two dimensions of its initial noise (the shoulder-roll
+  actions). The phase 4 noise policy learned, from the success reward alone, to set them from the instruction: on
+  dev layouts it took the named tumbler 48 times out of 48. Its remaining failures are in the carry and the
+  set-down, where it does worse than the base policy.
+- Standing is still a fixture. The learned legs walk and turn; with a free base the expert completes 1/100.
+
+Limits that apply to every row: simulation only; the camera is rendered (jobs refuse nodes whose renderer differs
+from the demonstrations', `scripts/waiter/render_check.py`); phases 2-4 use the stance lock; each learned result
+is one checkpoint from one run.
