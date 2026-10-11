@@ -103,3 +103,8 @@ archived episodes** with its next shard running. Neither full campaign is comple
 verify the new operational path through execution, publication and the next
 submission. [Full GitHub regression and physics workflow](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/38176721952)
 checks implementation commit `18a95b9`; its current status is available at that link.
+
+GitHub implementation validation completed successfully: **2,969 tests passed**,
+132 skipped and 10 subtests passed, followed by the trained-asset integration and
+seeded physics/fault replay checks. [Retained CI receipt](../results/simulation-completion-20261011/github-ci.json).
+Later progress commits change documentation/evidence only; the checked implementation remains unchanged.
