@@ -1,0 +1,60 @@
+{
+  "schema": "bhl-methods-finalization-result-v1",
+  "track": "stereo",
+  "plan_sha256": "91c2ee983012b457e8d5a6c4ca4809b74debe80065bebbed82e9a54aaae220e1",
+  "source_archive_sha256": "9d8ed3780f31cb1a78c1b9ac6006aa57b663011120381e499b08f85167c09cf7",
+  "status": "PASS",
+  "started_utc": "2026-10-11T01:56:02.764073+00:00",
+  "observed_jobs": [
+    {
+      "name": "stereo-methods-straight-s480000-20261010-v2",
+      "job_id": "21761936",
+      "result_sha256": "b02cbf102ac3d28f38ae8c7a56c6a06829941d38d3e21d1ed4318659accb5696"
+    },
+    {
+      "name": "stereo-methods-straight-s480001-20261010-v2",
+      "job_id": "21761938",
+      "result_sha256": "8797d6e03890c0517153881b757135f2fde10560bdfc5e0fdcdcb822dc651d3f"
+    },
+    {
+      "name": "stereo-methods-straight-s480002-20261010-v2",
+      "job_id": "21761955",
+      "result_sha256": "22892113b64e8a0ea9490d849cc7ce85bc67cad7c9a6fd8529f651edc66b4e98"
+    },
+    {
+      "name": "stereo-methods-dogleg-s480000-20261010-v2",
+      "job_id": "21761960",
+      "result_sha256": "72a99ac4328217a22bb551b50e05a476082b1b6f051ed4dbedfecfbb989f1df5"
+    },
+    {
+      "name": "stereo-methods-dogleg-s480001-20261010-v2",
+      "job_id": "21761969",
+      "result_sha256": "92660566ba43cd1abfa311081ff4dde26558ff36bb2a92ebf2628342691ccbb4"
+    },
+    {
+      "name": "stereo-methods-dogleg-s480002-20261010-v2",
+      "job_id": "21761979",
+      "result_sha256": "fdcf4f3ca474a8152b62ee1561d39124c8224eaaf8c3974c83c4f882ecf36c32"
+    },
+    {
+      "name": "stereo-methods-occluders-s480000-20261010-v2",
+      "job_id": "21761988",
+      "result_sha256": "1e6fc7b6b409712fd3d4953988a61e9a62f71261ae35d7c8c333eaff01ba2f91"
+    },
+    {
+      "name": "stereo-methods-occluders-s480001-20261010-v2",
+      "job_id": "21762095",
+      "result_sha256": "f0989a6f236eeaa87aaac75d91aa6ba4c54dd45591df9d198bba384cd99df9f8"
+    },
+    {
+      "name": "stereo-methods-occluders-s480002-20261010-v2",
+      "job_id": "21762139",
+      "result_sha256": "8d9a79b4d7c9f0b35cc7384f6319da19fb5632fe82aa5a5bbc706f2da4965e71"
+    }
+  ],
+  "problems": [],
+  "scope": "Complete matched simulation development only; no confirmation or hardware claim",
+  "source_archive_origin": "ORIGINAL_DURABLE_ARCHIVE",
+  "scientific_status": "SIMULATION_DEVELOPMENT_ONLY_CONFIRMATION_REQUIRED",
+  "finished_utc": "2026-10-11T01:56:33.611894+00:00"
+}

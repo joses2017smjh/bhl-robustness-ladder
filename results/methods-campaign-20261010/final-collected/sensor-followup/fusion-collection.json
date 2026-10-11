@@ -1,0 +1,1212 @@
+{
+  "schema": "bhl-stereo-consistency-collection-v1",
+  "status": "PASS",
+  "phase": "run",
+  "expected_cells": 24,
+  "verified_cells": 24,
+  "missing": [],
+  "problems": [],
+  "group_metrics": [
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm",
+      "mae_m": 0.05840154598890439,
+      "coverage": 0.19608222005241263,
+      "near_obstacle_pixel_recall": 0.26178863198621266,
+      "unknown_obstacle_pixels": 8406609,
+      "false_free_obstacle_pixels": 10046
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.020509355562000408,
+      "coverage": 0.10276461501728688,
+      "near_obstacle_pixel_recall": 0.1863455061555393,
+      "unknown_obstacle_pixels": 9274172,
+      "false_free_obstacle_pixels": 1177
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "lidar_sparse",
+      "mae_m": 0.12933432978172593,
+      "coverage": 0.0026921114864884433,
+      "near_obstacle_pixel_recall": 0.0021818780831124483,
+      "unknown_obstacle_pixels": 11509207,
+      "false_free_obstacle_pixels": 2877
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.05927328372251235,
+      "coverage": 0.1981916531070797,
+      "near_obstacle_pixel_recall": 0.2631645371832092,
+      "unknown_obstacle_pixels": 8387948,
+      "false_free_obstacle_pixels": 12780
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.023095634375284113,
+      "coverage": 0.10512068688806085,
+      "near_obstacle_pixel_recall": 0.1879697135688118,
+      "unknown_obstacle_pixels": 9253004,
+      "false_free_obstacle_pixels": 3608
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm",
+      "mae_m": 0.05840154598890439,
+      "coverage": 0.19608222005241263,
+      "near_obstacle_pixel_recall": 0.26178863198621266,
+      "unknown_obstacle_pixels": 8406609,
+      "false_free_obstacle_pixels": 10046
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.020509355562000408,
+      "coverage": 0.10276461501728688,
+      "near_obstacle_pixel_recall": 0.1863455061555393,
+      "unknown_obstacle_pixels": 9274172,
+      "false_free_obstacle_pixels": 1177
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "lidar_sparse",
+      "mae_m": 0.010042681557552391,
+      "coverage": 0.0012972837721583006,
+      "near_obstacle_pixel_recall": 0.001178005426028024,
+      "unknown_obstacle_pixels": 11523879,
+      "false_free_obstacle_pixels": 123
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.05811324852028724,
+      "coverage": 0.1970842495209486,
+      "near_obstacle_pixel_recall": 0.2625694341494508,
+      "unknown_obstacle_pixels": 8397535,
+      "false_free_obstacle_pixels": 10161
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.020374939198708465,
+      "coverage": 0.10390911548941142,
+      "near_obstacle_pixel_recall": 0.18724265745638743,
+      "unknown_obstacle_pixels": 9263922,
+      "false_free_obstacle_pixels": 1252
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm",
+      "mae_m": 0.05840154598890439,
+      "coverage": 0.19608222005241263,
+      "near_obstacle_pixel_recall": 0.26178863198621266,
+      "unknown_obstacle_pixels": 8406609,
+      "false_free_obstacle_pixels": 10046
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.020509355562000408,
+      "coverage": 0.10276461501728688,
+      "near_obstacle_pixel_recall": 0.1863455061555393,
+      "unknown_obstacle_pixels": 9274172,
+      "false_free_obstacle_pixels": 1177
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "lidar_sparse",
+      "mae_m": 0.011976922196275202,
+      "coverage": 0.0006554475357071004,
+      "near_obstacle_pixel_recall": 0.0005841342840930804,
+      "unknown_obstacle_pixels": 11530852,
+      "false_free_obstacle_pixels": 72
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.05826484015840817,
+      "coverage": 0.19655582061657068,
+      "near_obstacle_pixel_recall": 0.26215088344191034,
+      "unknown_obstacle_pixels": 8402598,
+      "false_free_obstacle_pixels": 10112
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.02045634798114628,
+      "coverage": 0.10332528085169303,
+      "near_obstacle_pixel_recall": 0.18676184670891507,
+      "unknown_obstacle_pixels": 9269620,
+      "false_free_obstacle_pixels": 1217
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "nominal",
+      "arm": "sgbm",
+      "mae_m": 0.05840154598890439,
+      "coverage": 0.19608222005241263,
+      "near_obstacle_pixel_recall": 0.26178863198621266,
+      "unknown_obstacle_pixels": 8406609,
+      "false_free_obstacle_pixels": 10046
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "nominal",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.020509355562000408,
+      "coverage": 0.10276461501728688,
+      "near_obstacle_pixel_recall": 0.1863455061555393,
+      "unknown_obstacle_pixels": 9274172,
+      "false_free_obstacle_pixels": 1177
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "nominal",
+      "arm": "lidar_sparse",
+      "mae_m": 0.008915092243295269,
+      "coverage": 0.0026668070957733274,
+      "near_obstacle_pixel_recall": 0.0024160712641060757,
+      "unknown_obstacle_pixels": 11509444,
+      "false_free_obstacle_pixels": 209
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "nominal",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.057800724445400756,
+      "coverage": 0.19815875606500832,
+      "near_obstacle_pixel_recall": 0.26337496996086907,
+      "unknown_obstacle_pixels": 8388278,
+      "false_free_obstacle_pixels": 10242
+    },
+    {
+      "group": "ramp_step-g610000",
+      "fault": "nominal",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.020207863952834033,
+      "coverage": 0.10512067907919445,
+      "near_obstacle_pixel_recall": 0.18819273130305603,
+      "unknown_obstacle_pixels": 9253004,
+      "false_free_obstacle_pixels": 1291
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm",
+      "mae_m": 0.0711285673079288,
+      "coverage": 0.24881114645203622,
+      "near_obstacle_pixel_recall": 0.27978705770957846,
+      "unknown_obstacle_pixels": 8515404,
+      "false_free_obstacle_pixels": 3992
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.02682528689323819,
+      "coverage": 0.11538582897677582,
+      "near_obstacle_pixel_recall": 0.20850912599963223,
+      "unknown_obstacle_pixels": 9371400,
+      "false_free_obstacle_pixels": 181
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "lidar_sparse",
+      "mae_m": 0.12746659207828662,
+      "coverage": 0.0026921114864884433,
+      "near_obstacle_pixel_recall": 0.0022078874432279517,
+      "unknown_obstacle_pixels": 11843917,
+      "false_free_obstacle_pixels": 3073
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.0716713444479516,
+      "coverage": 0.2507587578323979,
+      "near_obstacle_pixel_recall": 0.2811354842987115,
+      "unknown_obstacle_pixels": 8496205,
+      "false_free_obstacle_pixels": 6869
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.029007461816564183,
+      "coverage": 0.11770860286791336,
+      "near_obstacle_pixel_recall": 0.21008849578271116,
+      "unknown_obstacle_pixels": 9349833,
+      "false_free_obstacle_pixels": 2724
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm",
+      "mae_m": 0.0711285673079288,
+      "coverage": 0.24881114645203622,
+      "near_obstacle_pixel_recall": 0.27978705770957846,
+      "unknown_obstacle_pixels": 8515404,
+      "false_free_obstacle_pixels": 3992
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.02682528689323819,
+      "coverage": 0.11538582897677582,
+      "near_obstacle_pixel_recall": 0.20850912599963223,
+      "unknown_obstacle_pixels": 9371400,
+      "false_free_obstacle_pixels": 181
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "lidar_sparse",
+      "mae_m": 0.009874549105616666,
+      "coverage": 0.0012972837721583006,
+      "near_obstacle_pixel_recall": 0.001205417593096673,
+      "unknown_obstacle_pixels": 11859026,
+      "false_free_obstacle_pixels": 134
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.07083952269302857,
+      "coverage": 0.24973290361329747,
+      "near_obstacle_pixel_recall": 0.2805650864164776,
+      "unknown_obstacle_pixels": 8506022,
+      "false_free_obstacle_pixels": 4118
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.02663958446826207,
+      "coverage": 0.11651328564323171,
+      "near_obstacle_pixel_recall": 0.20939998405409282,
+      "unknown_obstacle_pixels": 9360778,
+      "false_free_obstacle_pixels": 279
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm",
+      "mae_m": 0.0711285673079288,
+      "coverage": 0.24881114645203622,
+      "near_obstacle_pixel_recall": 0.27978705770957846,
+      "unknown_obstacle_pixels": 8515404,
+      "false_free_obstacle_pixels": 3992
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.02682528689323819,
+      "coverage": 0.11538582897677582,
+      "near_obstacle_pixel_recall": 0.20850912599963223,
+      "unknown_obstacle_pixels": 9371400,
+      "false_free_obstacle_pixels": 181
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "lidar_sparse",
+      "mae_m": 0.012057888728567744,
+      "coverage": 0.0006554475357071004,
+      "near_obstacle_pixel_recall": 0.0006069637912703607,
+      "unknown_obstacle_pixels": 11866274,
+      "false_free_obstacle_pixels": 86
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.07099072441197202,
+      "coverage": 0.24925135057177625,
+      "near_obstacle_pixel_recall": 0.2801543420523705,
+      "unknown_obstacle_pixels": 8511162,
+      "false_free_obstacle_pixels": 4071
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.02674818560554163,
+      "coverage": 0.1159362679804671,
+      "near_obstacle_pixel_recall": 0.2089293064564693,
+      "unknown_obstacle_pixels": 9366599,
+      "false_free_obstacle_pixels": 243
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "nominal",
+      "arm": "sgbm",
+      "mae_m": 0.0711285673079288,
+      "coverage": 0.24881114645203622,
+      "near_obstacle_pixel_recall": 0.27978705770957846,
+      "unknown_obstacle_pixels": 8515404,
+      "false_free_obstacle_pixels": 3992
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "nominal",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.02682528689323819,
+      "coverage": 0.11538582897677582,
+      "near_obstacle_pixel_recall": 0.20850912599963223,
+      "unknown_obstacle_pixels": 9371400,
+      "false_free_obstacle_pixels": 181
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "nominal",
+      "arm": "lidar_sparse",
+      "mae_m": 0.008726861306078705,
+      "coverage": 0.0026668070957733274,
+      "near_obstacle_pixel_recall": 0.0024446008259351054,
+      "unknown_obstacle_pixels": 11844216,
+      "false_free_obstacle_pixels": 231
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "nominal",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.07052925615392888,
+      "coverage": 0.25073353419463584,
+      "near_obstacle_pixel_recall": 0.28137713251409496,
+      "unknown_obstacle_pixels": 8496290,
+      "false_free_obstacle_pixels": 4207
+    },
+    {
+      "group": "ramp_step-g610001",
+      "fault": "nominal",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.026416025436251798,
+      "coverage": 0.11770985727845167,
+      "near_obstacle_pixel_recall": 0.21033654317378483,
+      "unknown_obstacle_pixels": 9349580,
+      "false_free_obstacle_pixels": 330
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm",
+      "mae_m": 0.06325090116116455,
+      "coverage": 0.2739398034462928,
+      "near_obstacle_pixel_recall": 0.4228013968007573,
+      "unknown_obstacle_pixels": 8621911,
+      "false_free_obstacle_pixels": 9416
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.017806761685106868,
+      "coverage": 0.17354534356329843,
+      "near_obstacle_pixel_recall": 0.32767442021738274,
+      "unknown_obstacle_pixels": 10118920,
+      "false_free_obstacle_pixels": 1589
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "lidar_sparse",
+      "mae_m": 0.22272066885264422,
+      "coverage": 0.0026948430864592705,
+      "near_obstacle_pixel_recall": 0.002291514996083678,
+      "unknown_obstacle_pixels": 15648633,
+      "false_free_obstacle_pixels": 6210
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.06449753495235094,
+      "coverage": 0.27576762084520534,
+      "near_obstacle_pixel_recall": 0.423655841401556,
+      "unknown_obstacle_pixels": 8603038,
+      "false_free_obstacle_pixels": 15196
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.020448472799033755,
+      "coverage": 0.1756220474859091,
+      "near_obstacle_pixel_recall": 0.3288754979732367,
+      "unknown_obstacle_pixels": 10096857,
+      "false_free_obstacle_pixels": 5468
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm",
+      "mae_m": 0.06325090116116455,
+      "coverage": 0.2739398034462928,
+      "near_obstacle_pixel_recall": 0.4228013968007573,
+      "unknown_obstacle_pixels": 8621911,
+      "false_free_obstacle_pixels": 9416
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.017806761685106868,
+      "coverage": 0.17354534356329843,
+      "near_obstacle_pixel_recall": 0.32767442021738274,
+      "unknown_obstacle_pixels": 10118920,
+      "false_free_obstacle_pixels": 1589
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "lidar_sparse",
+      "mae_m": 0.03915095609299565,
+      "coverage": 0.0012985603036040705,
+      "near_obstacle_pixel_recall": 0.0012951079142144262,
+      "unknown_obstacle_pixels": 15670570,
+      "false_free_obstacle_pixels": 538
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.06311663829667713,
+      "coverage": 0.27481682023911025,
+      "near_obstacle_pixel_recall": 0.4234027867299565,
+      "unknown_obstacle_pixels": 8612586,
+      "false_free_obstacle_pixels": 9934
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.01784749673527507,
+      "coverage": 0.17456803235564805,
+      "near_obstacle_pixel_recall": 0.32842778954966206,
+      "unknown_obstacle_pixels": 10107326,
+      "false_free_obstacle_pixels": 1889
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm",
+      "mae_m": 0.06325090116116455,
+      "coverage": 0.2739398034462928,
+      "near_obstacle_pixel_recall": 0.4228013968007573,
+      "unknown_obstacle_pixels": 8621911,
+      "false_free_obstacle_pixels": 9416
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.017806761685106868,
+      "coverage": 0.17354534356329843,
+      "near_obstacle_pixel_recall": 0.32767442021738274,
+      "unknown_obstacle_pixels": 10118920,
+      "false_free_obstacle_pixels": 1589
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "lidar_sparse",
+      "mae_m": 0.043468772454677874,
+      "coverage": 0.0006564430206942366,
+      "near_obstacle_pixel_recall": 0.0006646901669547656,
+      "unknown_obstacle_pixels": 15680771,
+      "false_free_obstacle_pixels": 291
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.06319230000877872,
+      "coverage": 0.2743570538840756,
+      "near_obstacle_pixel_recall": 0.423099517580981,
+      "unknown_obstacle_pixels": 8617301,
+      "false_free_obstacle_pixels": 9700
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.01783546467102659,
+      "coverage": 0.1740464817423147,
+      "near_obstacle_pixel_recall": 0.32804564527628444,
+      "unknown_obstacle_pixels": 10113251,
+      "false_free_obstacle_pixels": 1752
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "nominal",
+      "arm": "sgbm",
+      "mae_m": 0.06325090116116455,
+      "coverage": 0.2739398034462928,
+      "near_obstacle_pixel_recall": 0.4228013968007573,
+      "unknown_obstacle_pixels": 8621911,
+      "false_free_obstacle_pixels": 9416
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "nominal",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.017806761685106868,
+      "coverage": 0.17354534356329843,
+      "near_obstacle_pixel_recall": 0.32767442021738274,
+      "unknown_obstacle_pixels": 10118920,
+      "false_free_obstacle_pixels": 1589
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "nominal",
+      "arm": "lidar_sparse",
+      "mae_m": 0.03616869284048877,
+      "coverage": 0.0026693112652763943,
+      "near_obstacle_pixel_recall": 0.002624606910243512,
+      "unknown_obstacle_pixels": 15649324,
+      "false_free_obstacle_pixels": 1033
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "nominal",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.06296190476147102,
+      "coverage": 0.2757690060622819,
+      "near_obstacle_pixel_recall": 0.42406528086626133,
+      "unknown_obstacle_pixels": 8602488,
+      "false_free_obstacle_pixels": 10412
+    },
+    {
+      "group": "textured_boxes-g610000",
+      "fault": "nominal",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.017875330534508942,
+      "coverage": 0.17565456795688109,
+      "near_obstacle_pixel_recall": 0.32922526060727325,
+      "unknown_obstacle_pixels": 10095215,
+      "false_free_obstacle_pixels": 2165
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm",
+      "mae_m": 0.06798629740153041,
+      "coverage": 0.31485538977716393,
+      "near_obstacle_pixel_recall": 0.4637507583570892,
+      "unknown_obstacle_pixels": 8654708,
+      "false_free_obstacle_pixels": 21415
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.021222069849143283,
+      "coverage": 0.18597092362068277,
+      "near_obstacle_pixel_recall": 0.34836336977936655,
+      "unknown_obstacle_pixels": 10507934,
+      "false_free_obstacle_pixels": 4239
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "lidar_sparse",
+      "mae_m": 0.22515970670156132,
+      "coverage": 0.0026956143748036133,
+      "near_obstacle_pixel_recall": 0.002316974047046918,
+      "unknown_obstacle_pixels": 16399554,
+      "false_free_obstacle_pixels": 6624
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.06906156636584462,
+      "coverage": 0.31656033542755835,
+      "near_obstacle_pixel_recall": 0.46446519852592005,
+      "unknown_obstacle_pixels": 8636092,
+      "false_free_obstacle_pixels": 27569
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.0235655737830791,
+      "coverage": 0.1879884528675595,
+      "near_obstacle_pixel_recall": 0.34946135558112257,
+      "unknown_obstacle_pixels": 10485359,
+      "false_free_obstacle_pixels": 8433
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm",
+      "mae_m": 0.06798629740153041,
+      "coverage": 0.31485538977716393,
+      "near_obstacle_pixel_recall": 0.4637507583570892,
+      "unknown_obstacle_pixels": 8654708,
+      "false_free_obstacle_pixels": 21415
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.021222069849143283,
+      "coverage": 0.18597092362068277,
+      "near_obstacle_pixel_recall": 0.34836336977936655,
+      "unknown_obstacle_pixels": 10507934,
+      "false_free_obstacle_pixels": 4239
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "lidar_sparse",
+      "mae_m": 0.0390886613151098,
+      "coverage": 0.0012986787213741357,
+      "near_obstacle_pixel_recall": 0.0013252740654246622,
+      "unknown_obstacle_pixels": 16422543,
+      "false_free_obstacle_pixels": 629
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.06785605984418921,
+      "coverage": 0.31567285698426406,
+      "near_obstacle_pixel_recall": 0.4642982525855436,
+      "unknown_obstacle_pixels": 8645291,
+      "false_free_obstacle_pixels": 22004
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.02123665123267239,
+      "coverage": 0.18697789489422412,
+      "near_obstacle_pixel_recall": 0.34912166793307714,
+      "unknown_obstacle_pixels": 10495411,
+      "false_free_obstacle_pixels": 4594
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm",
+      "mae_m": 0.06798629740153041,
+      "coverage": 0.31485538977716393,
+      "near_obstacle_pixel_recall": 0.4637507583570892,
+      "unknown_obstacle_pixels": 8654708,
+      "false_free_obstacle_pixels": 21415
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.021222069849143283,
+      "coverage": 0.18597092362068277,
+      "near_obstacle_pixel_recall": 0.34836336977936655,
+      "unknown_obstacle_pixels": 10507934,
+      "false_free_obstacle_pixels": 4239
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "lidar_sparse",
+      "mae_m": 0.042828619781070325,
+      "coverage": 0.0006564900527059387,
+      "near_obstacle_pixel_recall": 0.0006679770846042989,
+      "unknown_obstacle_pixels": 16433631,
+      "false_free_obstacle_pixels": 343
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.06793005107328716,
+      "coverage": 0.31524709466069734,
+      "near_obstacle_pixel_recall": 0.4640216213764819,
+      "unknown_obstacle_pixels": 8650044,
+      "false_free_obstacle_pixels": 21730
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.021244704124941803,
+      "coverage": 0.18646643592700402,
+      "near_obstacle_pixel_recall": 0.34873463371260155,
+      "unknown_obstacle_pixels": 10501834,
+      "false_free_obstacle_pixels": 4429
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "nominal",
+      "arm": "sgbm",
+      "mae_m": 0.06798629740153041,
+      "coverage": 0.31485538977716393,
+      "near_obstacle_pixel_recall": 0.4637507583570892,
+      "unknown_obstacle_pixels": 8654708,
+      "false_free_obstacle_pixels": 21415
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "nominal",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.021222069849143283,
+      "coverage": 0.18597092362068277,
+      "near_obstacle_pixel_recall": 0.34836336977936655,
+      "unknown_obstacle_pixels": 10507934,
+      "false_free_obstacle_pixels": 4239
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "nominal",
+      "arm": "lidar_sparse",
+      "mae_m": 0.03585892376712827,
+      "coverage": 0.00266964282128997,
+      "near_obstacle_pixel_recall": 0.002657151638143405,
+      "unknown_obstacle_pixels": 16400176,
+      "false_free_obstacle_pixels": 1239
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "nominal",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.06771085144220762,
+      "coverage": 0.31656582966880376,
+      "near_obstacle_pixel_recall": 0.46489096460405377,
+      "unknown_obstacle_pixels": 8635240,
+      "false_free_obstacle_pixels": 22544
+    },
+    {
+      "group": "textured_boxes-g610001",
+      "fault": "nominal",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.0212310970836752,
+      "coverage": 0.18805231727756858,
+      "near_obstacle_pixel_recall": 0.34991161955585665,
+      "unknown_obstacle_pixels": 10482519,
+      "false_free_obstacle_pixels": 4949
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm",
+      "mae_m": 0.14048448864678034,
+      "coverage": 0.16072596124627023,
+      "near_obstacle_pixel_recall": 0.2044687349318196,
+      "unknown_obstacle_pixels": 6367190,
+      "false_free_obstacle_pixels": 2691
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.040061050666743335,
+      "coverage": 0.07991989444977686,
+      "near_obstacle_pixel_recall": 0.1873285977603177,
+      "unknown_obstacle_pixels": 6507934,
+      "false_free_obstacle_pixels": 2060
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "lidar_sparse",
+      "mae_m": 0.3080380079582208,
+      "coverage": 0.002687185562673176,
+      "near_obstacle_pixel_recall": 0.0015022888752197628,
+      "unknown_obstacle_pixels": 8006461,
+      "false_free_obstacle_pixels": 6844
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.14223117410840494,
+      "coverage": 0.16289411947792026,
+      "near_obstacle_pixel_recall": 0.2051789341872748,
+      "unknown_obstacle_pixels": 6354719,
+      "false_free_obstacle_pixels": 9301
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.04523211104559529,
+      "coverage": 0.08221496867545253,
+      "near_obstacle_pixel_recall": 0.18809656057740068,
+      "unknown_obstacle_pixels": 6499468,
+      "false_free_obstacle_pixels": 4190
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm",
+      "mae_m": 0.14048448864678034,
+      "coverage": 0.16072596124627023,
+      "near_obstacle_pixel_recall": 0.2044687349318196,
+      "unknown_obstacle_pixels": 6367190,
+      "false_free_obstacle_pixels": 2691
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.040061050666743335,
+      "coverage": 0.07991989444977686,
+      "near_obstacle_pixel_recall": 0.1873285977603177,
+      "unknown_obstacle_pixels": 6507934,
+      "false_free_obstacle_pixels": 2060
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "lidar_sparse",
+      "mae_m": 0.06187411184369414,
+      "coverage": 0.001295478415756876,
+      "near_obstacle_pixel_recall": 0.0010355421057590235,
+      "unknown_obstacle_pixels": 8016328,
+      "false_free_obstacle_pixels": 921
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.13974844363192945,
+      "coverage": 0.161760708772088,
+      "near_obstacle_pixel_recall": 0.2050845523849353,
+      "unknown_obstacle_pixels": 6361328,
+      "false_free_obstacle_pixels": 3607
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_half",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.039724522977290885,
+      "coverage": 0.08106188842683434,
+      "near_obstacle_pixel_recall": 0.1879768552893585,
+      "unknown_obstacle_pixels": 6502627,
+      "false_free_obstacle_pixels": 2155
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm",
+      "mae_m": 0.14048448864678034,
+      "coverage": 0.16072596124627023,
+      "near_obstacle_pixel_recall": 0.2044687349318196,
+      "unknown_obstacle_pixels": 6367190,
+      "false_free_obstacle_pixels": 2691
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.040061050666743335,
+      "coverage": 0.07991989444977686,
+      "near_obstacle_pixel_recall": 0.1873285977603177,
+      "unknown_obstacle_pixels": 6507934,
+      "false_free_obstacle_pixels": 2060
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "lidar_sparse",
+      "mae_m": 0.06920825160133236,
+      "coverage": 0.0006542421442678686,
+      "near_obstacle_pixel_recall": 0.0005077844382024813,
+      "unknown_obstacle_pixels": 8021037,
+      "false_free_obstacle_pixels": 489
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.1401468020724926,
+      "coverage": 0.16121506399560098,
+      "near_obstacle_pixel_recall": 0.2047573649630904,
+      "unknown_obstacle_pixels": 6364417,
+      "false_free_obstacle_pixels": 3176
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "lidar_keep_quarter",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.03989702009087064,
+      "coverage": 0.08048600019861082,
+      "near_obstacle_pixel_recall": 0.1876317765725781,
+      "unknown_obstacle_pixels": 6505484,
+      "false_free_obstacle_pixels": 2102
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "nominal",
+      "arm": "sgbm",
+      "mae_m": 0.14048448864678034,
+      "coverage": 0.16072596124627023,
+      "near_obstacle_pixel_recall": 0.2044687349318196,
+      "unknown_obstacle_pixels": 6367190,
+      "false_free_obstacle_pixels": 2691
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "nominal",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.040061050666743335,
+      "coverage": 0.07991989444977686,
+      "near_obstacle_pixel_recall": 0.1873285977603177,
+      "unknown_obstacle_pixels": 6507934,
+      "false_free_obstacle_pixels": 2060
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "nominal",
+      "arm": "lidar_sparse",
+      "mae_m": 0.059182387368514625,
+      "coverage": 0.002662883896531552,
+      "near_obstacle_pixel_recall": 0.002175100103995781,
+      "unknown_obstacle_pixels": 8006287,
+      "false_free_obstacle_pixels": 1804
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "nominal",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.1389513394005166,
+      "coverage": 0.162866974197337,
+      "near_obstacle_pixel_recall": 0.2058074560652294,
+      "unknown_obstacle_pixels": 6354666,
+      "false_free_obstacle_pixels": 4478
+    },
+    {
+      "group": "thin_posts-g610000",
+      "fault": "nominal",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.039381818209308944,
+      "coverage": 0.08226545603539219,
+      "near_obstacle_pixel_recall": 0.18872957150976827,
+      "unknown_obstacle_pixels": 6496505,
+      "false_free_obstacle_pixels": 2240
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm",
+      "mae_m": 0.15724752605945158,
+      "coverage": 0.1979813754804876,
+      "near_obstacle_pixel_recall": 0.2144637506521664,
+      "unknown_obstacle_pixels": 6387462,
+      "false_free_obstacle_pixels": 1212
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.05008983954053943,
+      "coverage": 0.08804286139925155,
+      "near_obstacle_pixel_recall": 0.19017752110157918,
+      "unknown_obstacle_pixels": 6589238,
+      "false_free_obstacle_pixels": 177
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "lidar_sparse",
+      "mae_m": 0.325878708115342,
+      "coverage": 0.0026831464850805894,
+      "near_obstacle_pixel_recall": 0.0015079345688263285,
+      "unknown_obstacle_pixels": 8136245,
+      "false_free_obstacle_pixels": 7162
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.1587136379388222,
+      "coverage": 0.20004159025825716,
+      "near_obstacle_pixel_recall": 0.21512938278158397,
+      "unknown_obstacle_pixels": 6374870,
+      "false_free_obstacle_pixels": 8207
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_extrinsic_yaw2deg_x2cm",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.05506193990433887,
+      "coverage": 0.09031311217897504,
+      "near_obstacle_pixel_recall": 0.1909455125928237,
+      "unknown_obstacle_pixels": 6580255,
+      "false_free_obstacle_pixels": 2758
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm",
+      "mae_m": 0.15724752605945158,
+      "coverage": 0.1979813754804876,
+      "near_obstacle_pixel_recall": 0.2144637506521664,
+      "unknown_obstacle_pixels": 6387462,
+      "false_free_obstacle_pixels": 1212
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.05008983954053943,
+      "coverage": 0.08804286139925155,
+      "near_obstacle_pixel_recall": 0.19017752110157918,
+      "unknown_obstacle_pixels": 6589238,
+      "false_free_obstacle_pixels": 177
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "lidar_sparse",
+      "mae_m": 0.0619424326885034,
+      "coverage": 0.0012927164505045503,
+      "near_obstacle_pixel_recall": 0.0010547503803298426,
+      "unknown_obstacle_pixels": 8146317,
+      "false_free_obstacle_pixels": 983
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.15660263304617447,
+      "coverage": 0.19895833051517886,
+      "near_obstacle_pixel_recall": 0.21506898385264778,
+      "unknown_obstacle_pixels": 6381546,
+      "false_free_obstacle_pixels": 2189
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_half",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.049621394442620564,
+      "coverage": 0.08916828471976199,
+      "near_obstacle_pixel_recall": 0.1908307132661178,
+      "unknown_obstacle_pixels": 6583785,
+      "false_free_obstacle_pixels": 302
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm",
+      "mae_m": 0.15724752605945158,
+      "coverage": 0.1979813754804876,
+      "near_obstacle_pixel_recall": 0.2144637506521664,
+      "unknown_obstacle_pixels": 6387462,
+      "false_free_obstacle_pixels": 1212
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.05008983954053943,
+      "coverage": 0.08804286139925155,
+      "near_obstacle_pixel_recall": 0.19017752110157918,
+      "unknown_obstacle_pixels": 6589238,
+      "false_free_obstacle_pixels": 177
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "lidar_sparse",
+      "mae_m": 0.06585945411680325,
+      "coverage": 0.000653080790011406,
+      "near_obstacle_pixel_recall": 0.0005117566456969023,
+      "unknown_obstacle_pixels": 8151257,
+      "false_free_obstacle_pixels": 503
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.1569412949284205,
+      "coverage": 0.19844321327806372,
+      "near_obstacle_pixel_recall": 0.21474697693166256,
+      "unknown_obstacle_pixels": 6384679,
+      "false_free_obstacle_pixels": 1710
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "lidar_keep_quarter",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.04984174404712722,
+      "coverage": 0.08859946898097934,
+      "near_obstacle_pixel_recall": 0.19047991059696487,
+      "unknown_obstacle_pixels": 6586742,
+      "false_free_obstacle_pixels": 223
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "nominal",
+      "arm": "sgbm",
+      "mae_m": 0.15724752605945158,
+      "coverage": 0.1979813754804876,
+      "near_obstacle_pixel_recall": 0.2144637506521664,
+      "unknown_obstacle_pixels": 6387462,
+      "false_free_obstacle_pixels": 1212
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "nominal",
+      "arm": "sgbm_local_cost",
+      "mae_m": 0.05008983954053943,
+      "coverage": 0.08804286139925155,
+      "near_obstacle_pixel_recall": 0.19017752110157918,
+      "unknown_obstacle_pixels": 6589238,
+      "false_free_obstacle_pixels": 177
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "nominal",
+      "arm": "lidar_sparse",
+      "mae_m": 0.05977723240857825,
+      "coverage": 0.002657879792334118,
+      "near_obstacle_pixel_recall": 0.0022082307988177327,
+      "unknown_obstacle_pixels": 8135919,
+      "false_free_obstacle_pixels": 1967
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "nominal",
+      "arm": "simple_projected_fusion",
+      "mae_m": 0.15590973057717483,
+      "coverage": 0.20000632822110384,
+      "near_obstacle_pixel_recall": 0.21576982306128636,
+      "unknown_obstacle_pixels": 6374865,
+      "false_free_obstacle_pixels": 3161
+    },
+    {
+      "group": "thin_posts-g610001",
+      "fault": "nominal",
+      "arm": "cost_consistency_fusion",
+      "mae_m": 0.0491022469680704,
+      "coverage": 0.09035088364593183,
+      "near_obstacle_pixel_recall": 0.19157023395569367,
+      "unknown_obstacle_pixels": 6577648,
+      "false_free_obstacle_pixels": 404
+    }
+  ],
+  "scope": "fresh development geometry; no generalization or calibrated-confidence claim"
+}

@@ -1,6 +1,8 @@
 # Humanoid research methods: implementation and campaign status
 
-First-stage executable methods now address all six research themes, with a separate perceptive-learning experiment added. These cover narrower initial experiments than the complete original designs; several matched controls, acquisition/fault conditions and calibrated health gates remain unimplemented. Implementation, successful execution and measured improvement are recorded separately. Remaining development campaigns are queued or running, and some initialization/learning results are already negative. Earlier results in [the native campaign report](NATIVE_CAMPAIGN_RESULTS_2026-10-09.md) remain unchanged.
+**October 11 update:** every queued campaign below completed and its exact cohort was independently collected. The [final results report](METHODS_CAMPAIGN_RESULTS_2026-10-11.md) supersedes the interim execution counts and queue states on this page. It includes 270 terrain episodes, 18 stereo-recovery episodes, 2,700 stereo pairs, 144 native fault cells and 120 additional fusion-arm cells. Perceptive and stereo–IMU qualification negatives remain unchanged; their gated follow-on stages remain unrun.
+
+This page preserves the October 10 implementation and execution snapshot. First-stage executable methods address all six research themes, with a separate perceptive-learning experiment added. These cover narrower initial experiments than the complete original designs; several matched controls, acquisition/fault conditions and calibrated health gates remain unimplemented. Implementation, successful execution and measured improvement are recorded separately. Earlier results in [the native campaign report](NATIVE_CAMPAIGN_RESULTS_2026-10-09.md) remain unchanged.
 
 ## Coverage of the original six follow-ups
 

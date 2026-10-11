@@ -1,0 +1,30 @@
+{
+  "schema": "bhl-methods-finalization-result-v1",
+  "track": "perceptive",
+  "plan_sha256": "16606814f6beda6180b11c4fe19651e43638b30aa4fc8728bc4950d2f13fd439",
+  "source_archive_sha256": "aa2a33f65afcbe1046bab32b63ce4b4f187956e7efa2534d5e99af8b818b648f",
+  "status": "NEGATIVE",
+  "started_utc": "2026-10-11T02:00:23.223065+00:00",
+  "observed_jobs": [
+    {
+      "name": "perceptive-run-s0-v4-20261010",
+      "job_id": "21757635",
+      "result_sha256": "ee82e9e3f2bbcff1b9f77bf26d350daeab2711087b4269476358a182278d4d31"
+    },
+    {
+      "name": "perceptive-run-s1-v4-20261010",
+      "job_id": "21757710",
+      "result_sha256": "34ab4ad838d075701e07b4b9e3840939db8e2597bb2ef7dae0dafa71d73448c6"
+    },
+    {
+      "name": "perceptive-run-s2-v4-20261010",
+      "job_id": "21757754",
+      "result_sha256": "02c663b36d9efd7db290899fc963c6dd625aee17eb6f5946f1979d4ae65c8759"
+    }
+  ],
+  "problems": [],
+  "scope": "Complete matched simulation development only; no confirmation or hardware claim",
+  "source_archive_origin": "SHA_VERIFIED_RELEASE_RESTORED_IN_NODE_TMP",
+  "scientific_status": "COMPLETE_DEVELOPMENT_NO_CONFIRMATION",
+  "finished_utc": "2026-10-11T02:00:46.507470+00:00"
+}

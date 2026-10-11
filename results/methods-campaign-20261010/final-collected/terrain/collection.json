@@ -1,0 +1,60 @@
+{
+  "schema": "bhl-methods-finalization-result-v1",
+  "track": "terrain",
+  "plan_sha256": "9a8a6c4a3cfad8b3efc11baddd0ca59ea0bd2b03f6bfd10d3f22fd73fc77b4f6",
+  "source_archive_sha256": "4a9d31af1de04e0fdd380e8c2dda01a6b0b65a9819b3d394b5829f57c0b90c77",
+  "status": "PASS",
+  "started_utc": "2026-10-11T01:54:08.366560+00:00",
+  "observed_jobs": [
+    {
+      "name": "terrain-methods-dr-default-s0-flat-20261010",
+      "job_id": "21757070",
+      "result_sha256": "d6653c8afbad816ccc709e5615fece3698c87e62408c11f8c4f332a695f4bbb0"
+    },
+    {
+      "name": "terrain-methods-dr-default-s0-small_steps-20261010",
+      "job_id": "21757630",
+      "result_sha256": "73c22ab217af572428bdc056ee8d79250c02a29e92fc08d33b845788d41a230c"
+    },
+    {
+      "name": "terrain-methods-dr-default-s0-ramp-20261010",
+      "job_id": "21757875",
+      "result_sha256": "150dad41dbc129e4bd48fb797f7a4c37d11f99fa3a7320661bc5d6ae8f8e0dd8"
+    },
+    {
+      "name": "terrain-methods-dr-default-s1-flat-20261010",
+      "job_id": "21759470",
+      "result_sha256": "f08b5c55c2aab9160a06d4b5cee1e7dd4ec2abb48e2b5353c855df70ce7222fc"
+    },
+    {
+      "name": "terrain-methods-dr-default-s1-small_steps-20261010",
+      "job_id": "21759591",
+      "result_sha256": "6acec9dd4c3dd8e43ece501144f50c139c60be59cc90bd6500760648d0470ef8"
+    },
+    {
+      "name": "terrain-methods-dr-default-s1-ramp-20261010",
+      "job_id": "21759767",
+      "result_sha256": "57855a0ed6e4da94f78ebf75b67b3cca07373d23c99f13a96b17c2f8f4c55c34"
+    },
+    {
+      "name": "terrain-methods-dr-default-s2-flat-20261010",
+      "job_id": "21759959",
+      "result_sha256": "011e57f298e4f060db40c10f14ec5efd0e2b9ee0dcfeab1df8e1183f129b496e"
+    },
+    {
+      "name": "terrain-methods-dr-default-s2-small_steps-20261010",
+      "job_id": "21760036",
+      "result_sha256": "5ca255654aef54c7d56e0c0893cf14d3a2ac400d942f434377b2a7b09f108ccc"
+    },
+    {
+      "name": "terrain-methods-dr-default-s2-ramp-20261010",
+      "job_id": "21760099",
+      "result_sha256": "8b53645c2b9ea53931e151383ff7a7ad087813e631fe6d0d8fa4bed7d9c9d106"
+    }
+  ],
+  "problems": [],
+  "scope": "Complete matched simulation development only; no confirmation or hardware claim",
+  "source_archive_origin": "ORIGINAL_DURABLE_ARCHIVE",
+  "scientific_status": "MEASURED_DEVELOPMENT_NO_CONFIRMATION",
+  "finished_utc": "2026-10-11T01:56:00.085497+00:00"
+}

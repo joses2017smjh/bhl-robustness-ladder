@@ -1,0 +1,49 @@
+{
+  "schema": "bhl-stereo-recovery-paired-results-v1",
+  "status": "PASS",
+  "scientific_status": "SIMULATION_DEVELOPMENT_ONLY_CONFIRMATION_REQUIRED",
+  "episodes": 18,
+  "pairs": 9,
+  "seed_groups": 3,
+  "arms": {
+    "permanent_stop": {
+      "episodes": 9,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "verified_recoveries": 0
+    },
+    "verified_lio_recovery": {
+      "episodes": 9,
+      "clean_goals": 2,
+      "falls": 0,
+      "contacts": 0,
+      "verified_recoveries": 60
+    }
+  },
+  "clean_goal_rate_difference": 0.2222222222222222,
+  "seed_cluster_bootstrap_percentile_interval_95": [
+    0.07222222222222222,
+    0.3333333333333333
+  ],
+  "uncertainty_scope": "descriptive exact enumeration of 27 resamples of three reset-seed groups; routes remain grouped; only three clusters and one trained actor, no population or hardware inference",
+  "measured_development_improvement": true,
+  "independent_confirmation": "NOT_RUN",
+  "source_results_sha256": {
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-straight-s480000-20261010-v2-21761936/campaign_result.json": "b02cbf102ac3d28f38ae8c7a56c6a06829941d38d3e21d1ed4318659accb5696",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-straight-s480001-20261010-v2-21761938/campaign_result.json": "8797d6e03890c0517153881b757135f2fde10560bdfc5e0fdcdcb822dc651d3f",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-straight-s480002-20261010-v2-21761955/campaign_result.json": "22892113b64e8a0ea9490d849cc7ce85bc67cad7c9a6fd8529f651edc66b4e98",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-dogleg-s480000-20261010-v2-21761960/campaign_result.json": "72a99ac4328217a22bb551b50e05a476082b1b6f051ed4dbedfecfbb989f1df5",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-dogleg-s480001-20261010-v2-21761969/campaign_result.json": "92660566ba43cd1abfa311081ff4dde26558ff36bb2a92ebf2628342691ccbb4",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-dogleg-s480002-20261010-v2-21761979/campaign_result.json": "fdcf4f3ca474a8152b62ee1561d39124c8224eaaf8c3974c83c4f882ecf36c32",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-occluders-s480000-20261010-v2-21761988/campaign_result.json": "1e6fc7b6b409712fd3d4953988a61e9a62f71261ae35d7c8c333eaff01ba2f91",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-occluders-s480001-20261010-v2-21762095/campaign_result.json": "f0989a6f236eeaa87aaac75d91aa6ba4c54dd45591df9d198bba384cd99df9f8",
+    "/nfs/stak/users/sanchej7/humanoid-methods-20261010/stereo-v2/stereo-methods-occluders-s480002-20261010-v2-21762139/campaign_result.json": "8d9a79b4d7c9f0b35cc7384f6319da19fb5632fe82aa5a5bbc706f2da4965e71"
+  },
+  "input_sha256": [
+    "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71",
+    "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4",
+    "8ef2f4a0813ff97f457a97b9971e41555241b83f66c68b10c34a4a3986a28c3f",
+    "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1"
+  ]
+}
