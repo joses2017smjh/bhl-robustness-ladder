@@ -1,0 +1,12 @@
+{
+  "status": "COMPLETE",
+  "deleted_verified_duplicate_files": 3,
+  "logical_bytes_retired": 1008319756,
+  "allocated_bytes_retired": 1008336896,
+  "retained": "All compact result/completion/log/source/runtime files and original migration inventories; per-path remote restore markers and before/after verification receipts",
+  "df_before": "Filesystem                                                                                1B-blocks          Used   Available Use% Mounted on\n10.192.45.240@o2ib,10.192.45.241@o2ib:10.192.45.242@o2ib,10.192.45.243@o2ib:/exascale 1649267441664 1637996412928 11271028736 100% /nfs/hpc/share\nisi-coe1-depot-nfs.engr.oregonstate.edu:/coe/stak_users                                 26843545600   17744527360  9099018240  67% /nfs/stak/users\n",
+  "df_after": "Filesystem                                                                                1B-blocks          Used   Available Use% Mounted on\n10.192.45.240@o2ib,10.192.45.241@o2ib:10.192.45.242@o2ib,10.192.45.243@o2ib:/exascale 1649267441664 1636997210112 12270231552 100% /nfs/hpc/share\nisi-coe1-depot-nfs.engr.oregonstate.edu:/coe/stak_users                                 26843545600   17744527360  9099018240  67% /nfs/stak/users\n",
+  "verification": "All three sources and fresh independent GitHub downloads matched exact bytes/SHA256 and prior migration inventories; unchanged source identity was checked before atomic retirement. Active job metadata, current research manifests and owners showed no dependency.",
+  "original_durable_receipt": "/nfs/hpc/share/sanchej7/home-overflow/2026-10-11/migration-receipts/older-raw-retirement-20261011/action-receipt.json",
+  "measurement_utc": "2026-10-11T10:24:35.584315+00:00"
+}

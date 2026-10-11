@@ -13,6 +13,8 @@ tracks completed deliverables, negative experiments and remaining objectives.
 
 **October 11 follow-up:** [broader controls and confirmation work](docs/RESEARCH_SCOPE_2026-10-11.md) add camera-rate/exposure conditions, five matched native estimator/recovery arms, causal sensor faults, controlled geometric occlusion and fresh terrain trials. The native-control execution smoke completed **14/14 episodes**, including **38 initialized stereo–IMU frames** under the new fixed startup motion. This is a short readiness result; full outcome comparisons remain separately gated. Physical validation awaits sensor-rig or recording access.
 
+The [controlled occlusion benchmark](docs/FUSION_OCCLUSION_CONTROLS_2026-10-11.md) completed **300 simulated stereo pairs across nine inference arms**, including 144 held-out pairs independently reverified from published raw data. Under heavy occlusion, local-cost gating reduced false-free pixels **62.0%**, while depth coverage fell **96.12% → 61.78%** and obstacle recall **91.82% → 69.97%**. The paired losses matter: this is a rejection tradeoff, without an established navigation improvement. [Measured stereo/depth demo](results/fusion-occlusion-20261011/figures/heldout-clear-heavy-demo.png) · [Nine-arm comparison](results/fusion-occlusion-20261011/figures/heldout-tradeoff.png).
+
 **October 8:** [H1 navigation confirmation passes](docs/H1_NAVIGATION_CONFIRMATION_2026-10-08.md)
 all three actors' frozen gates across **576 episodes**: **259/288** candidate
 goals versus **247/288** baseline, **0 versus 9** observed falls, and **51.5%**

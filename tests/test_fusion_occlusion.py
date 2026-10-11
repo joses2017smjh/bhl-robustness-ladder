@@ -2,6 +2,7 @@
 from __future__ import annotations
 import importlib.util
 import json
+import sys
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import numpy as np
@@ -130,6 +131,8 @@ def test_protocol_serialization_cannot_reorder_frozen_cells():
 
 
 def test_serial_negative_smoke_never_starts_scored_cells(tmp_path,monkeypatch):
+    monkeypatch.setattr(sys,'path',list(sys.path))
+    monkeypatch.setenv('FUSION_MODEL_PATH','test-restoration-sentinel')
     serialspec=importlib.util.spec_from_file_location('fusion_serial_test',ROOT/'scripts/bench/fusion_occlusion_serial.py')
     serial=importlib.util.module_from_spec(serialspec);serialspec.loader.exec_module(serial)
     inputs=tmp_path/'inputs';inputs.mkdir();(inputs/'ort.whl').write_bytes(b'fixture')

@@ -1,0 +1,24 @@
+{
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=terrain-original-archive-20261011",
+    "--partition=share,eecs",
+    "--cpus-per-task=1",
+    "--mem=2G",
+    "--time=00:30:00",
+    "--no-requeue",
+    "--export=NONE",
+    "--chdir=/tmp",
+    "--dependency=afterany:21768407:21768409",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v2-terminal-observer/observer-%j.out",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-v2-terminal-observer/run.sbatch"
+  ],
+  "returncode": 0,
+  "stdout": "21768577\n",
+  "stderr": "",
+  "job_id": "21768577",
+  "plan_sha256": "f93aed7e961abb7e4d4f38b223b66f72cd1f73aef1de66285e9d96c5b4832358"
+}

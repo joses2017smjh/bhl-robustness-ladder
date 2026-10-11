@@ -4,7 +4,7 @@
     "--parsable",
     "--ntasks=1",
     "--account=eecs",
-    "--job-name=terrain-confirmation-dispatch-20261011",
+    "--job-name=terrain-confirmation-dispatch-v4-20261011",
     "--partition=share,eecs",
     "--cpus-per-task=2",
     "--mem=8G",
@@ -12,16 +12,23 @@
     "--no-requeue",
     "--export=NONE",
     "--chdir=/tmp",
-    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v2/controller-%j.out",
-    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v2/controller-%j.out",
-    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v2/run.sbatch"
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v4/controller-%j.out",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v4/controller-%j.out",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/terrain-confirmation-dispatch-v4/run.sbatch"
   ],
   "returncode": 0,
-  "stdout": "21768392\n",
+  "stdout": "21768752\n",
   "stderr": "",
-  "job_id": "21768392",
-  "plan_sha256": "9d331dae00ab2e02ec22eb81cb98f7f9c2c15e1315b2793d46570e0dd1b39eda",
-  "smoke_job_id": "21768354",
-  "smoke_result_sha256": "8d008061a437f2e9e123ed0f9b640cbe745155c0780c132ddee771881fec6555",
-  "submitted_utc": "2026-10-11T09:49:26.681250+00:00"
+  "job_id": "21768752",
+  "plan_sha256": "67771d8042087f5a5c5a18c944203f15bb3f5f115f77f6dc115458d286c4d1fd",
+  "smoke_job_id": "21768612",
+  "submitted_utc": "2026-10-11T10:20:52.192182+00:00",
+  "adopted_science_jobs": [
+    "21768687",
+    "21768688"
+  ],
+  "predecessor_utility": "21768672",
+  "scientific_protocol_unchanged": true,
+  "scientific_source_unchanged": true,
+  "reason": "Reduce orchestration concurrency to 2 to share global storage reserve with native sensor campaign; do not rerun or cancel scientific jobs."
 }

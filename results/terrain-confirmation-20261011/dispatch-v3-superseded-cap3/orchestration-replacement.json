@@ -1,0 +1,78 @@
+{
+  "reason": "Orchestration-only concurrency reduction from 3 to 2 preserves storage capacity for parallel native sensor campaign. Scientific source, protocol, cohort and active workers unchanged.",
+  "at_utc": "2026-10-11T10:20:27.679701+00:00",
+  "preserved_science_jobs": [
+    "21768687",
+    "21768688"
+  ],
+  "state_before": {
+    "schema": "bhl-terrain-confirmation-dispatch-state-v1",
+    "plan_sha256": "9d4b641030da689431bf9aba255ebf7a0479319297fcb2fddb6198b8c5293bdd",
+    "dispatcher_job_id": "21768672",
+    "jobs": [
+      {
+        "name": "terrain-confirmation-dr-default-s0-flat-20261011",
+        "job_id": "21768687",
+        "scheduler_state": "RUNNING",
+        "scheduler_exit_code": "0:0",
+        "state": "ACTIVE"
+      },
+      {
+        "name": "terrain-confirmation-dr-default-s0-small_steps-20261011",
+        "job_id": "21768688",
+        "scheduler_state": "RUNNING",
+        "scheduler_exit_code": "0:0",
+        "state": "ACTIVE"
+      },
+      {
+        "name": "terrain-confirmation-dr-default-s0-ramp-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "terrain-confirmation-dr-default-s1-flat-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "terrain-confirmation-dr-default-s1-small_steps-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "terrain-confirmation-dr-default-s1-ramp-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "terrain-confirmation-dr-default-s2-flat-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "terrain-confirmation-dr-default-s2-small_steps-20261011",
+        "state": "UNSUBMITTED"
+      },
+      {
+        "name": "terrain-confirmation-dr-default-s2-ramp-20261011",
+        "state": "UNSUBMITTED"
+      }
+    ],
+    "started_utc": "2026-10-11T10:12:43.540554+00:00",
+    "status": "WAITING_FOR_SHARED_SPACE",
+    "updated_utc": "2026-10-11T10:19:58.776288+00:00",
+    "complete_jobs": 0,
+    "active_jobs": 2,
+    "storage": {
+      "actual_free_bytes": 11707199488,
+      "other_outstanding_promises_bytes": 4294936463,
+      "requested_unwritten_bytes": 1073741824,
+      "minimum_free_bytes": 8589934592
+    },
+    "last_submitted": "21768688"
+  },
+  "squeue_before": "21768672 RUNNING terrain-confirmation-dispatch-v3-20261011\n21768687 RUNNING terrain-confirmation-dr-default-s0-flat-20261011\n21768688 RUNNING terrain-confirmation-dr-default-s0-small_steps-20261011\n",
+  "signal_command": [
+    "scancel",
+    "--full",
+    "--signal=TERM",
+    "21768672"
+  ],
+  "signal_returncode": 0,
+  "signal_stderr": ""
+}

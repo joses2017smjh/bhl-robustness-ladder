@@ -1,0 +1,28 @@
+{
+  "schema": "bhl-terrain-confirmation-dispatch-state-v1",
+  "plan_sha256": "9d331dae00ab2e02ec22eb81cb98f7f9c2c15e1315b2793d46570e0dd1b39eda",
+  "dispatcher_job_id": "21768392",
+  "jobs": [
+    {
+      "name": "terrain-confirmation-dr-default-s0-flat-20261011",
+      "job_id": "21768407",
+      "scheduler_state": "RUNNING",
+      "scheduler_exit_code": "0:0",
+      "state": "ACTIVE"
+    },
+    {
+      "name": "terrain-confirmation-dr-default-s0-small_steps-20261011",
+      "job_id": "21768408",
+      "scheduler_state": "FAILED",
+      "scheduler_exit_code": "1:0",
+      "state": "FAILED_NO_RETRY"
+    }
+  ],
+  "started_utc": "2026-10-11T09:49:34.477560+00:00",
+  "status": "FAILED_NO_RETRY",
+  "updated_utc": "2026-10-11T09:54:19.115961+00:00",
+  "complete_jobs": 0,
+  "active_jobs": 3,
+  "last_submitted": "21768409",
+  "error": "scientific shard execution failed; no retries or new submissions: terrain-confirmation-dr-default-s0-small_steps-20261011"
+}
