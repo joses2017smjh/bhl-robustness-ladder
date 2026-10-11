@@ -3,9 +3,11 @@
 the robot are, so that failed episodes can be sorted by what went wrong (failure_modes.py reads the JSON).
 
 The poses come from the env's oracle() and are used for this log only; the policy sees the head image, the state and
-the instruction as always. Arms: base (i.i.d. N(0, I) noise, the deployed policy), zero (noise = 0), or latent_const
+the instruction as always. Arms: base (i.i.d. N(0, I) noise, the deployed policy), zero (noise = 0), latent_const
 (one random DSRL latent per episode, held for the whole episode and logged: does the latent decide which tumbler is
-taken?). --max-decisions ends every episode early (the pick-up happens in the first seconds).
+taken?), or dsrl / dsrl_stoch (a trained noise policy from --run-dir, deterministic or sampled; the run's noise map,
+magnitude and executed steps are used). --max-decisions ends every episode early (the pick-up happens in the first
+seconds).
 Seeds: dev range 1000-1999 only. Not a scored run.
 
 usage (through dsrl_gpu.sbatch, which adds --env-python):
@@ -28,7 +30,8 @@ import torch
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from chunk_vec_env import ChunkVecEnv  # noqa: E402
-from rollout import check_seeds, choose_noise, parse_seeds  # noqa: E402
+from rollout import ObsBuilder, check_seeds, choose_noise, parse_seeds  # noqa: E402
+from sac_noise import NoiseSAC  # noqa: E402
 from smolvla_noise import NoiseMap  # noqa: E402
 from train_dsrl import add_common_args, atomic_json, build_policy, env_spec  # noqa: E402
 
@@ -55,7 +58,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     add_common_args(ap)
     ap.add_argument("--seeds", required=True)
-    ap.add_argument("--arm", choices=("base", "zero", "latent_const"), default="base")
+    ap.add_argument("--arm", choices=("base", "zero", "latent_const", "dsrl", "dsrl_stoch"), default="base")
+    ap.add_argument("--run-dir", type=Path, help="train_dsrl.py output dir (for the dsrl arms)")
     ap.add_argument("--max-decisions", type=int, default=0, help="end each episode after this many decisions (0 = off)")
     ap.add_argument("--n-envs", type=int, default=8)
     ap.add_argument("--noise-seed", type=int, default=0)
@@ -63,8 +67,21 @@ def main():
     args = ap.parse_args()
     seeds = parse_seeds(args.seeds)
     check_seeds(seeds, {"dev"}, "trace")
+    sac = obs_builder = None
+    if args.arm.startswith("dsrl"):
+        if not args.run_dir:
+            raise SystemExit("the dsrl arms need --run-dir")
+        cfg = json.loads((args.run_dir / "config.json").read_text())
+        nm = cfg["noise_map"]
+        args.exec_horizon = int(cfg["exec_horizon"])
+        args.noise_mode, args.noise_k, args.active_dims = nm["mode"], nm["k"], nm["active_dims"]
+        args.action_magnitude = float(cfg["sac"]["action_magnitude"])
+        args.feature_mode = cfg["args"].get("feature_mode", args.feature_mode)
     torch.manual_seed(args.noise_seed)
     policy = build_policy(args.policy, args.policy_path, args.device, args.feature_mode, args.exec_horizon)
+    if args.arm.startswith("dsrl"):
+        sac = NoiseSAC.load(args.run_dir / "ckpt" / "sac.pt", device=args.device)
+        obs_builder = ObsBuilder("vlm", policy.feature_dim)
     H = int(args.exec_horizon or policy.n_action_steps)
     T, D = policy.noise_shape
     noise_map = NoiseMap(T, D, args.noise_mode, args.noise_k, args.active_dims)
@@ -98,8 +115,9 @@ def main():
         if args.arm == "latent_const":
             noise = noise_map(torch.as_tensor(np.asarray([slot[i]["latent"] for i in active], np.float32) * b))
         else:
+            sac_obs = obs_builder(ol, ctx.features) if sac is not None else None
             noise, _ = choose_noise(args.arm, list(range(len(active))), [slot[i]["seed"] for i in active],
-                                    [len(slot[i]["trace"]) - 1 for i in active], None, policy, noise_map, b, None,
+                                    [len(slot[i]["trace"]) - 1 for i in active], sac_obs, policy, noise_map, b, sac,
                                     args.noise_seed)
         chunks = policy.denoise(ctx, noise.to(args.device))[:, :H].numpy()
         venv.step_async({i: chunks[j] for j, i in enumerate(active)})
@@ -123,6 +141,7 @@ def main():
     venv.close()
     out = {"purpose": "dev", "arm": args.arm, "exec_horizon": H, "noise_seed": args.noise_seed, "seeds": seeds,
            "action_magnitude": b, "noise_map": noise_map.describe(), "max_decisions": args.max_decisions,
+           "run_dir": str(args.run_dir) if args.run_dir else None,
            "policy_path": args.policy_path, "env_kwargs": json.loads(args.env_kwargs),
            "slurm_job": os.environ.get("SLURM_JOB_ID"), "host": os.uname().nodename, "wall_s": time.time() - t0,
            "successes": sum(e["success"] for e in done_eps.values()),
