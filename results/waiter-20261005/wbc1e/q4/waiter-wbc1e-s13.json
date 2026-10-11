@@ -1,0 +1,158 @@
+{
+ "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/external/Berkeley-Humanoid-Lite/logs/rsl_rl/humanoid/2026-10-10_12-21-07_waiter-wbc1e-s13/exported/deploy.yaml",
+ "gate": "Q4 standing manipulation",
+ "rule": "PASS iff 0 falls in 12 (4 expert-pose arm trajectories x seeds 0-2, 0.5 kg per hand, command 0, clock held at phase 0.5, free base) and max displacement <= 0.03 m, max |yaw| <= 3 deg and max |pitch| <= 3 deg (t >= 1 s, relative to t = 1 s) on >= 10 of the 12",
+ "verdict": "FAIL",
+ "falls": 11,
+ "n": 12,
+ "n_ok": 0,
+ "episodes": [
+  {
+   "seed": 0,
+   "fell_at_s": 1.56,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P1_tumbler_left"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": 0.72,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P1_tumbler_left"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": 7.2,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P1_tumbler_left"
+  },
+  {
+   "seed": 0,
+   "fell_at_s": null,
+   "disp_m": 0.0781,
+   "yaw_deg": 7.52,
+   "pitch_deg": 4.5,
+   "ok": false,
+   "trajectory": "P2_tumbler_right"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": 0.72,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P2_tumbler_right"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": 0.8,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P2_tumbler_right"
+  },
+  {
+   "seed": 0,
+   "fell_at_s": 1.56,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P3_tray_hook"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": 0.72,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P3_tray_hook"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": 0.8,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P3_tray_hook"
+  },
+  {
+   "seed": 0,
+   "fell_at_s": 1.56,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P4_pick_then_hook"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": 0.72,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P4_pick_then_hook"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": 7.2,
+   "disp_m": null,
+   "yaw_deg": null,
+   "pitch_deg": null,
+   "ok": false,
+   "trajectory": "P4_pick_then_hook"
+  }
+ ],
+ "payload_kg_per_hand": 0.5,
+ "hold_step": 10,
+ "poses": {
+  "tumbler_ins": [
+   -0.185,
+   0.323,
+   -0.128,
+   1.272,
+   -0.541
+  ],
+  "tumbler_lift": [
+   -0.184,
+   0.583,
+   -0.015,
+   1.416,
+   -0.785
+  ],
+  "tumbler_over_tray": [
+   -0.608,
+   -0.084,
+   0.785,
+   1.447,
+   -0.543
+  ],
+  "hook_ins": [
+   -0.848,
+   0.126,
+   0.59,
+   0.902,
+   -0.675
+  ],
+  "hook_lift": [
+   -0.959,
+   0.219,
+   0.692,
+   1.005,
+   -0.785
+  ]
+ }
+}

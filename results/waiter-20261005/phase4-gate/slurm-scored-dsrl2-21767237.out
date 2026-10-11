@@ -1,0 +1,135 @@
+[dsrl-sbatch] job=21767237 host=cn-gpu6.hpc.engr.oregonstate.edu mode=eval repo=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
+[dsrl-sbatch] git=f4e5de2 dirty_files=665
+Quadro RTX 8000, 46080 MiB
+[dsrl-sbatch] cuda ok Quadro RTX 8000
+[render-check] cn-gpu6 seed_3000: mean |diff| 0.000, pixels over 8 levels 0.00%, max 0 -> ok
+[render-check] cn-gpu6 seed_3001: mean |diff| 0.000, pixels over 8 levels 0.00%, max 0 -> ok
+[render-check] PASS (MUJOCO_GL=egl, CUDA_VISIBLE_DEVICES=0)
+Reducing the number of VLM layers to 16 ...
+Loading weights from local directory
+[eval]  base: {'n': 100, 'success': 23, 'success_rate': 0.23, 'wilson95': [0.15843154746876406, 0.32154564856827694], 'fell': 0, 'mean_steps': 1014.12, 'mean_stage_max': 2.27, 'wall_s': 706.0018928050995}
+[eval]  zero: {'n': 100, 'success': 25, 'success_rate': 0.25, 'wilson95': [0.1754509400372426, 0.3430464637007583], 'fell': 0, 'mean_steps': 1002.32, 'mean_stage_max': 2.48, 'wall_s': 697.9032626152039}
+[eval]  dsrl: {'n': 100, 'success': 63, 'success_rate': 0.63, 'wilson95': [0.5322034757513312, 0.7181778743049083], 'fell': 0, 'mean_steps': 800.29, 'mean_stage_max': 4.85, 'wall_s': 599.9091773033142}
+[eval]  dsrl_stoch: {'n': 100, 'success': 68, 'success_rate': 0.68, 'wilson95': [0.5833719774632081, 0.7633098918454312], 'fell': 0, 'mean_steps': 784.47, 'mean_stage_max': 4.98, 'wall_s': 587.3447966575623}
+{
+  "arms": {
+    "base": {
+      "n": 100,
+      "success": 23,
+      "success_rate": 0.23,
+      "wilson95": [
+        0.15843154746876406,
+        0.32154564856827694
+      ],
+      "fell": 0,
+      "mean_steps": 1014.12,
+      "mean_stage_max": 2.27,
+      "wall_s": 706.0018928050995
+    },
+    "zero": {
+      "n": 100,
+      "success": 25,
+      "success_rate": 0.25,
+      "wilson95": [
+        0.1754509400372426,
+        0.3430464637007583
+      ],
+      "fell": 0,
+      "mean_steps": 1002.32,
+      "mean_stage_max": 2.48,
+      "wall_s": 697.9032626152039
+    },
+    "dsrl": {
+      "n": 100,
+      "success": 63,
+      "success_rate": 0.63,
+      "wilson95": [
+        0.5322034757513312,
+        0.7181778743049083
+      ],
+      "fell": 0,
+      "mean_steps": 800.29,
+      "mean_stage_max": 4.85,
+      "wall_s": 599.9091773033142
+    },
+    "dsrl_stoch": {
+      "n": 100,
+      "success": 68,
+      "success_rate": 0.68,
+      "wilson95": [
+        0.5833719774632081,
+        0.7633098918454312
+      ],
+      "fell": 0,
+      "mean_steps": 784.47,
+      "mean_stage_max": 4.98,
+      "wall_s": 587.3447966575623
+    }
+  },
+  "paired": {
+    "dsrl_vs_base": {
+      "n": 100,
+      "treat_rate": 0.63,
+      "ctrl_rate": 0.23,
+      "diff": 0.4,
+      "diff_ci95_bootstrap": [
+        0.28,
+        0.52
+      ],
+      "both": 16,
+      "treat_only": 47,
+      "ctrl_only": 7,
+      "neither": 30,
+      "mcnemar_p_one_sided": 1.1459321047624371e-08,
+      "mcnemar_p_two_sided": 2.2918642095248742e-08
+    },
+    "dsrl_vs_zero": {
+      "n": 100,
+      "treat_rate": 0.63,
+      "ctrl_rate": 0.25,
+      "diff": 0.38,
+      "diff_ci95_bootstrap": [
+        0.26,
+        0.5
+      ],
+      "both": 19,
+      "treat_only": 44,
+      "ctrl_only": 6,
+      "neither": 31,
+      "mcnemar_p_one_sided": 1.6218702825199216e-08,
+      "mcnemar_p_two_sided": 3.243740565039843e-08
+    },
+    "zero_vs_base": {
+      "n": 100,
+      "treat_rate": 0.25,
+      "ctrl_rate": 0.23,
+      "diff": 0.02,
+      "diff_ci95_bootstrap": [
+        -0.08,
+        0.12
+      ],
+      "both": 11,
+      "treat_only": 14,
+      "ctrl_only": 12,
+      "neither": 63,
+      "mcnemar_p_one_sided": 0.42250949144363403,
+      "mcnemar_p_two_sided": 0.8450189828872681
+    },
+    "dsrl_stoch_vs_base": {
+      "n": 100,
+      "treat_rate": 0.68,
+      "ctrl_rate": 0.23,
+      "diff": 0.45,
+      "diff_ci95_bootstrap": [
+        0.32,
+        0.57
+      ],
+      "both": 15,
+      "treat_only": 53,
+      "ctrl_only": 8,
+      "neither": 24,
+      "mcnemar_p_one_sided": 1.49322082520012e-09,
+      "mcnemar_p_two_sided": 2.98644165040024e-09
+    }
+  }
+}
