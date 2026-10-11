@@ -88,6 +88,9 @@ def check(res: dict, rule: dict, rule_sha: str, run_dir: Path) -> list[str]:
         if args.get("train_seeds") != tr["seeds"] or int(args.get("n_envs", -1)) != tr["n_envs"] or \
                 int(args.get("seed", -1)) != tr["seed"] or cfg.get("exec_horizon") != rule["exec_horizon"]:
             p.append("training seeds / envs / seed / executed steps differ from the rule")
+        for key, want in (tr.get("args") or {}).items():           # the declared design, as train_dsrl.py recorded it
+            if str(args.get(key)) != str(want):
+                p.append(f"training argument {key} = {args.get(key)}, the rule says {want}")
         counters = json.loads((run_dir / "summary.json").read_text())["counters"]
         if counters["decisions"] > tr["max_decisions"] + tr["n_envs"]:
             p.append(f"training ran {counters['decisions']} decisions, over the {tr['max_decisions']} budget")

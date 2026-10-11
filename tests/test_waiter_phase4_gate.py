@@ -113,6 +113,12 @@ def test_episode_lists_and_training_run_are_checked(tmp_path):
         with pytest.raises(SystemExit, match=msg):
             _run(tmp_path, rule, good)
     (run / "config.json").write_text(json.dumps(cfg))
+    ruled = json.loads(rule.read_text())                          # a rule that also pins design arguments
+    ruled["train"]["args"] = {"reward": "sparse", "target_entropy": 0.0}
+    pinned = tmp_path / "rule_pinned.json"
+    pinned.write_text(json.dumps(ruled))
+    with pytest.raises(SystemExit, match="training argument target_entropy = None, the rule says 0.0"):
+        _run(tmp_path, pinned, dict(good, gate={"sha256": hashlib.sha256(pinned.read_bytes()).hexdigest()}))
     (run / "summary.json").write_text(json.dumps({"counters": {"decisions": 5000}}))
     with pytest.raises(SystemExit, match="over the 1000 budget"):
         _run(tmp_path, rule, good)
