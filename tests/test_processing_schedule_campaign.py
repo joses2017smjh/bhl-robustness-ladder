@@ -339,3 +339,15 @@ def test_retained_input_corruption_cannot_produce_passing_profile(campaign, tmp_
     with pytest.raises(ValueError, match="hash mismatch"):
         campaign.profile_retained_sequence(episode, output)
     assert not (output / "campaign_result.json").exists()
+
+
+def test_early_safety_failures_remain_negative_without_fake_stale_fraction(campaign):
+    rows = [dict(method="stereo", pipeline=pipeline, success=False, fell=True,
+                 collision=False, stale_navigation_fraction=None)
+            for pipeline in campaign.PIPELINES]
+    groups = campaign.aggregate_groups(rows)
+    for pipeline in campaign.PIPELINES:
+        group = groups[pipeline + "/stereo"]
+        assert group["episodes"] == 1 and group["falls"] == 1 and group["clean_goals"] == 0
+        assert group["mean_stale_fraction"] is None
+    json.dumps(groups, allow_nan=False)

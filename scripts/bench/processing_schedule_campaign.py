@@ -582,6 +582,18 @@ def validate_schedule_evidence(row, evidence):
     return True
 
 
+def aggregate_groups(rows):
+    groups = {}
+    for pipeline in PIPELINES:
+        for arm in ARMS:
+            values = [r for r in rows if r["method"] == arm and r["pipeline"] == pipeline]
+            available = [r["stale_navigation_fraction"] for r in values if r["stale_navigation_fraction"] is not None]
+            groups[gate_key(pipeline, arm)] = dict(episodes=len(values), clean_goals=sum(r["success"] for r in values),
+                falls=sum(r["fell"] for r in values), contacts=sum(r["collision"] for r in values),
+                mean_stale_fraction=float(np.mean(available)) if available else None)
+    return groups
+
+
 def collect_campaign(root, smoke_path, output):
     """Strict exact-cohort collection; skipped gates remain unrun, never zero."""
     root = Path(root).resolve()
@@ -645,13 +657,7 @@ def collect_campaign(root, smoke_path, output):
     missing = expected - observed - unrun
     if missing:
         raise ValueError(f"incomplete development collection: {len(missing)} undeclared-missing outcomes")
-    groups = {}
-    for pipeline in PIPELINES:
-        for arm in ARMS:
-            values = [r for r in rows if r["method"] == arm and r["pipeline"] == pipeline]
-            groups[gate_key(pipeline, arm)] = dict(episodes=len(values), clean_goals=sum(r["success"] for r in values),
-                falls=sum(r["fell"] for r in values), contacts=sum(r["collision"] for r in values),
-                mean_stale_fraction=float(np.mean([r["stale_navigation_fraction"] for r in values if r["stale_navigation_fraction"] is not None])) if values else None)
+    groups = aggregate_groups(rows)
     result = dict(schema=SCHEMA + "-collection", status="PASS", declared_cells=48, measured_cells=len(observed),
         unrun_after_nominal_gate=len(unrun), missing_cells=[], arm_development_ready=ready, by_pipeline_arm=groups,
         paired=paired_summary(rows), source_results=lineage, qualified_smoke_sha256=sha256(smoke_path),
@@ -822,7 +828,7 @@ def main(argv=None):
             name = f"{cell['pipeline']}-{cell['case']}-s{cell['seed']}-{cell['condition']}-{cell['arm']}"
             row = run_episode(a.upstream.resolve(), actor, {"orb": orb, "lio": lio}, cell["case"], cell["seed"], a.output / name,
                 condition=cell["condition"], arm=cell["arm"], seconds=protocol[a.phase]["seconds"], pipeline=cell["pipeline"])
-            if row["nonfinite"] or row["native_frames"] < 1:
+            if row["nonfinite"] or (row["native_frames"] < 1 and (a.phase == "smoke" or not (row["fell"] or row["collision"]))):
                 raise ValueError("execution smoke/episode requires finite state and actual native input/output")
             row["episode_file"] = name + "/episode.json"
             rows.append(row)
