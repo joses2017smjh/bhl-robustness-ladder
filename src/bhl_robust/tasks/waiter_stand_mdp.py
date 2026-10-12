@@ -37,6 +37,11 @@ Phase 1g (2026-10-11; SLURM_JOBS.md "Predeclared now ... Waiter phase 1g"): the 
 scales: `StandAnchorBonus` and `stand_tilt_bonus` return `bounded_bonus(err)` = 1 / (1 + err) (1 with no error, 0.5
 at 5 cm or 5 deg, never negative; the error is not clamped, the kernel bounds it). A standing env can only gain by
 staying up, so falling can never be the cheaper option; pushes, hand forces and the re-anchor are 1f's.
+
+OUTCOME of 1g (2026-10-12): NEGATIVE. The bonuses removed the incentive to fall (training time-limit share 0.64-0.66,
+above 1c/1d; two of three seeds never fall when told to stand in MuJoCo, and their lean is gone), but all three
+checkpoints march in place when told to walk in MuJoCo (0.10-0.36 m in 6 s at 0.35 m/s). The cause of that was not
+measured. Not a recipe: these terms fix the falling, not the controller.
 """
 
 from __future__ import annotations
