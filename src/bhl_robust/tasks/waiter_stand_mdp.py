@@ -42,6 +42,16 @@ OUTCOME of 1g (2026-10-12): NEGATIVE. The bonuses removed the incentive to fall 
 above 1c/1d; two of three seeds never fall when told to stand in MuJoCo, and their lean is gone), but all three
 checkpoints march in place when told to walk in MuJoCo (0.10-0.36 m in 6 s at 0.35 m/s). The cause of that was not
 measured. Not a recipe: these terms fix the falling, not the controller.
+
+Phase 1h (2026-10-12; SLURM_JOBS.md "Predeclared now ... Waiter phase 1h"): the standing terms the published and
+library humanoid policies use, instead of our own. 1h is 1d (no 1e-1g term) with two changes:
+  * `stand_still_joint_deviation_l1`: Isaac Lab's stand-still term (locomotion/velocity/mdp/rewards.py, used by its
+    Agility Digit task with weight -0.4): the L1 deviation of the leg joints from their default positions, charged
+    only while the command is near zero. Isaac Lab gates on the xy command; here the gate is the whole command
+    (vx, vy, wz), as Isaac Lab's Spot `joint_position_penalty` does, so that turning in place is not charged;
+  * `standing_share_curriculum`: walk first, then stand (the multi-phase curriculum of gait-conditioned humanoid
+    RL, arXiv 2505.20619): the share of standing envs is 1c's 0.02 until the disturbance curriculum starts, then rises
+    with it to 1d's 0.25.
 """
 
 from __future__ import annotations
@@ -55,6 +65,8 @@ TILT_DEG = 5.0
 TILT_CLAMP = 9.0
 REANCHOR_DELAY_S = 1.0                 # phase 1f: a pushed standing env takes a new anchor this long after the push
 REANCHOR_ATTR = "_waiter_stand_reanchor_step"   # per-env step (env.common_step_counter) at which to re-anchor; -1 = none
+STILL_COMMAND_THRESHOLD = 0.06          # phase 1h: Isaac Lab's stand_still_joint_deviation_l1 default
+STAND_SHARE_START, STAND_SHARE_END = 0.02, 0.25     # phase 1h: 1c's and 1d's rel_standing_envs
 
 
 def _clamp(x, hi):
@@ -81,6 +93,21 @@ def bounded_bonus(err):
     """Phase 1g: 1 / (1 + err) for an error >= 0 (anchor_error or tilt_error, unclamped). In (0, 1]: 1 at no error,
     0.5 at err = 1, and it keeps a slope far from the target (0.1 at err = 9)."""
     return 1.0 / (1.0 + err)
+
+
+def command_is_still(command, threshold: float = STILL_COMMAND_THRESHOLD):
+    """Phase 1h: True where the whole command (vx, vy, wz) is below `threshold` in norm (tensors or arrays)."""
+    return ((command[..., :3] ** 2).sum(-1)) ** 0.5 < threshold
+
+
+def standing_share(iteration: float, start_iter: int, end_iter: int, lo: float = STAND_SHARE_START,
+                   hi: float = STAND_SHARE_END) -> float:
+    """Phase 1h: lo until start_iter, linear to hi at end_iter, then hi (waiter_wbc_mdp.disturbance_scale's ramp)."""
+    if end_iter <= start_iter:
+        raise ValueError(f"end_iter {end_iter} must be > start_iter {start_iter}")
+    s = 0.0 if iteration <= start_iter else 1.0 if iteration >= end_iter else \
+        float(iteration - start_iter) / float(end_iter - start_iter)
+    return float(lo) + (float(hi) - float(lo)) * s
 
 
 def moving_ids(env_ids, standing):
@@ -169,6 +196,29 @@ def stand_tilt(env, command_name: str = "base_velocity", deg: float = TILT_DEG, 
     from isaaclab.managers import SceneEntityCfg
     asset = env.scene[(asset_cfg or SceneEntityCfg("robot")).name]
     return tilt_error(asset.data.projected_gravity_b[:, :2], deg, clamp) * standing_mask(env, command_name).float()
+
+
+def stand_still_joint_deviation_l1(env, command_name: str = "base_velocity",
+                                   command_threshold: float = STILL_COMMAND_THRESHOLD, asset_cfg=None):
+    """Phase 1h: Isaac Lab's stand_still_joint_deviation_l1 (joint_deviation_l1 of `asset_cfg`'s joints while the
+    command is near zero), gated on the whole command (vx, vy, wz) instead of its xy part. A penalty: use a negative
+    weight."""
+    from isaaclab.envs import mdp as il_mdp
+    from isaaclab.managers import SceneEntityCfg
+    command = env.command_manager.get_command(command_name)
+    return il_mdp.joint_deviation_l1(env, asset_cfg or SceneEntityCfg("robot")) * \
+        command_is_still(command, command_threshold).float()
+
+
+def standing_share_curriculum(env, env_ids, start_iter: int, end_iter: int, steps_per_iter: int,
+                              lo: float = STAND_SHARE_START, hi: float = STAND_SHARE_END,
+                              command_name: str = "base_velocity") -> float:
+    """Phase 1h: set the velocity command's rel_standing_envs (read at every resample) to standing_share(iteration).
+    The iteration is env.common_step_counter // steps_per_iter, as disturbance_curriculum's. Returns the share, which
+    the CurriculumManager logs as Curriculum/<term>."""
+    v = standing_share(env.common_step_counter // int(steps_per_iter), start_iter, end_iter, lo, hi)
+    env.command_manager.get_term(command_name).cfg.rel_standing_envs = v
+    return v
 
 
 def stand_tilt_bonus(env, command_name: str = "base_velocity", deg: float = TILT_DEG, asset_cfg=None):
