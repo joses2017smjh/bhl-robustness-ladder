@@ -1,0 +1,28 @@
+{
+  "schema": "bhl-native-transport-result-v1",
+  "status": "PASS",
+  "runner_returncode": 0,
+  "runtime_exit_status": 0,
+  "source_archive_sha256": "3628b95ced285660e27c0b3b0ca92a097415beaeedfa912da751832acc3b8282",
+  "protocol_sha256": "08a71ea1dcaad9460ef6f3990af227323e48492442fd3acb675a334a5808caf0",
+  "original_max_output_mb": 2048,
+  "operational_max_output_mb": 8192,
+  "publication": {
+    "schema": "bhl-native-raw-publication-v1",
+    "bytes": 772158964,
+    "sha256": "f9d3d4a4e384186d0de39c1c29cab1434ad2c425913bbe6342acfd3333013902",
+    "parts": [
+      {
+        "asset_name": "native-controls-v3-native-controls-v2-s730001-c08-20261011-21781037-f9d3d4a4e384.tar.gz.part000",
+        "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/research-campaign-evidence-20261011/native-controls-v3-native-controls-v2-s730001-c08-20261011-21781037-f9d3d4a4e384.tar.gz.part000",
+        "bytes": 772158964,
+        "sha256": "f9d3d4a4e384186d0de39c1c29cab1434ad2c425913bbe6342acfd3333013902"
+      }
+    ],
+    "reconstruction": "concatenate parts in listed order; verify whole SHA256 before extraction",
+    "verified_utc": "2026-10-12T00:12:48.813332+00:00",
+    "verification": "each part independently downloaded and SHA256 verified; whole archive SHA256 retained"
+  },
+  "plan_sha256": "08a2d1d4aee45e4cd39fc97536da2f113cb80da181b69692d835fb18c2e1d1ac",
+  "completed_utc": "2026-10-12T00:12:48.813475+00:00"
+}

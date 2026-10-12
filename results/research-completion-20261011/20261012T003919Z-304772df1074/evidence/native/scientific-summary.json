@@ -1,0 +1,820 @@
+{
+  "schema": "bhl-native-sensor-controls-v2-collection",
+  "status": "PASS",
+  "declared_cells": 200,
+  "measured_cells": 200,
+  "unrun_after_nominal_gate": 0,
+  "missing_cells": [],
+  "arm_development_ready": {
+    "lidar_inertial": true,
+    "permanent_stop": true,
+    "stereo": true,
+    "stereo_inertial": true,
+    "verified_lio_recovery": true
+  },
+  "by_arm_condition": {
+    "stereo/nominal": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 280.33447127236286,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo/camera_2_5hz": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 177.678375254618,
+      "tracking_loss_events": 4,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.3999999999997783,
+        0.39999999999906777
+      ],
+      "right_censored_losses": 2,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo/camera_10hz": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 6008.985355583718,
+      "tracking_loss_events": 1,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 1,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo/dark_exposure_gain": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 207.64525671256706,
+      "tracking_loss_events": 4,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.20000000000024443,
+        0.19999999999988916
+      ],
+      "right_censored_losses": 2,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo/causal_40ms_exposure": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 11443.705842096824,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo/visual_blackout": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 331.23270772921387,
+      "tracking_loss_events": 5,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.19999999999989004
+      ],
+      "right_censored_losses": 4,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo/lidar_quarter_returns": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 290.6077631341759,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo/lidar_extrinsic_error": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 283.98862309404643,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo/imu_clock_plus80ms": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 299.1021251189522,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo/gyro_bias": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 306.518148505711,
+      "tracking_loss_events": 2,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.3999999999997783,
+        0.19999999999988916
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo_inertial/nominal": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 307.8363236680161,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo_inertial/camera_2_5hz": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 181.33798447815934,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo_inertial/camera_10hz": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 6118.254264314601,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo_inertial/dark_exposure_gain": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 205.743108173192,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo_inertial/causal_40ms_exposure": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 10792.168538155966,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo_inertial/visual_blackout": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 324.7425797919277,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo_inertial/lidar_quarter_returns": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 283.87706626090215,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo_inertial/lidar_extrinsic_error": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 290.4614050552482,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo_inertial/imu_clock_plus80ms": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 308.34780863078777,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "stereo_inertial/gyro_bias": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 312.17251526541077,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "lidar_inertial/nominal": {
+      "episodes": 4,
+      "clean_goals": 2,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 159.6354345267173,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "lidar_inertial/camera_2_5hz": {
+      "episodes": 4,
+      "clean_goals": 4,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 153.06858578551328,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "lidar_inertial/camera_10hz": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 5780.265781062189,
+      "tracking_loss_events": 4,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 4,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "lidar_inertial/dark_exposure_gain": {
+      "episodes": 4,
+      "clean_goals": 3,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 136.8622902635252,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "lidar_inertial/causal_40ms_exposure": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 14842.728815996088,
+      "tracking_loss_events": 4,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 4,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "lidar_inertial/visual_blackout": {
+      "episodes": 4,
+      "clean_goals": 2,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 193.96649854897987,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "lidar_inertial/lidar_quarter_returns": {
+      "episodes": 4,
+      "clean_goals": 2,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 145.02976189251058,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "lidar_inertial/lidar_extrinsic_error": {
+      "episodes": 4,
+      "clean_goals": 2,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 148.59614378074184,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "lidar_inertial/imu_clock_plus80ms": {
+      "episodes": 4,
+      "clean_goals": 2,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 153.67617017473094,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "lidar_inertial/gyro_bias": {
+      "episodes": 4,
+      "clean_goals": 2,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 152.85470396629535,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "permanent_stop/nominal": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 328.53650765900966,
+      "tracking_loss_events": 1,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.19999999999988916
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "permanent_stop/camera_2_5hz": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 189.75062341924058,
+      "tracking_loss_events": 6,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.3999999999997783,
+        0.39999999999906777,
+        0.39999999999906777,
+        0.40000000000190994,
+        0.39999999999906777
+      ],
+      "right_censored_losses": 1,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "permanent_stop/camera_10hz": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 6348.545833848766,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "permanent_stop/dark_exposure_gain": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 224.46495912154205,
+      "tracking_loss_events": 2,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.19999999999988916
+      ],
+      "right_censored_losses": 1,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "permanent_stop/causal_40ms_exposure": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 11733.026985800825,
+      "tracking_loss_events": 0,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "permanent_stop/visual_blackout": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 366.25393905851524,
+      "tracking_loss_events": 4,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 4,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "permanent_stop/lidar_quarter_returns": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 297.3951459454838,
+      "tracking_loss_events": 1,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 1,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "permanent_stop/lidar_extrinsic_error": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 313.241688774724,
+      "tracking_loss_events": 4,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.3999999999997783,
+        0.3999999999997783,
+        0.3999999999997783
+      ],
+      "right_censored_losses": 1,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "permanent_stop/imu_clock_plus80ms": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 324.79485300718807,
+      "tracking_loss_events": 1,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.3999999999997783
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "permanent_stop/gyro_bias": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 350.8917885483242,
+      "tracking_loss_events": 2,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.40000000000048885
+      ],
+      "right_censored_losses": 1,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "verified_lio_recovery/nominal": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 343.48465673974715,
+      "tracking_loss_events": 1,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        5.400000000001981
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "verified_lio_recovery/camera_2_5hz": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 190.2710189417121,
+      "tracking_loss_events": 6,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.3999999999997783,
+        0.39999999999906777,
+        0.40000000000190994,
+        2.400000000000089,
+        0.39999999999906777,
+        5.60000000000187
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "verified_lio_recovery/camera_10hz": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 6501.165155172928,
+      "tracking_loss_events": 9,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        6.900000000003281,
+        3.8999999999909107,
+        3.099999999998282,
+        6.500000000007944,
+        6.899999999983919
+      ],
+      "right_censored_losses": 4,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "verified_lio_recovery/dark_exposure_gain": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 230.99742821941618,
+      "tracking_loss_events": 4,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        4.399999999998094,
+        1.9999999999992468,
+        1.9999999999988916,
+        5.200000000006355
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "verified_lio_recovery/causal_40ms_exposure": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 12070.69150779862,
+      "tracking_loss_events": 4,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [],
+      "right_censored_losses": 4,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "verified_lio_recovery/visual_blackout": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 351.414753581048,
+      "tracking_loss_events": 5,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        5.400000000000913,
+        0.3999999999997783,
+        5.000000000001846,
+        5.400000000000913,
+        5.400000000000913
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "verified_lio_recovery/lidar_quarter_returns": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 300.1194025215227,
+      "tracking_loss_events": 3,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        4.6000000000052665,
+        0.3999999999997783,
+        6.200000000001182
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "verified_lio_recovery/lidar_extrinsic_error": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 310.40513076877687,
+      "tracking_loss_events": 2,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        0.3999999999997783,
+        6.200000000001182
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "verified_lio_recovery/imu_clock_plus80ms": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 326.1486508883536,
+      "tracking_loss_events": 2,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        7.200000000001161,
+        2.1999999999987807
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    },
+    "verified_lio_recovery/gyro_bias": {
+      "episodes": 4,
+      "clean_goals": 0,
+      "falls": 0,
+      "contacts": 0,
+      "mean_episode_full_pipeline_p95_ms": 341.5274069295265,
+      "tracking_loss_events": 2,
+      "native_map_changes": 0,
+      "completed_recovery_durations_s": [
+        7.4000000000033594,
+        0.3999999999997783
+      ],
+      "right_censored_losses": 0,
+      "measured_brake_false_clear_packets": 0,
+      "measured_brake_unknown_packets": 0
+    }
+  },
+  "source_results": [
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730000-c00-20261011/campaign_result.json",
+      "sha256": "3ce546d3a39c12bd44f4f74ebad9af30e944031387639028fb78c4f68f16e50f"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730000-c01-20261011/campaign_result.json",
+      "sha256": "c00bbcd0459727af48e5060a619fcde907b4295ee5b8fa4a39f87cc04af994a8"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730000-c02-20261011/campaign_result.json",
+      "sha256": "f95c548daf57b2d7a8f7a316e9b93d2256763abfa101a676717111ae107a9ab8"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730000-c03-20261011/campaign_result.json",
+      "sha256": "20d7c7167beba5c819424a6fbeac5e202389400809a6d5f8e70c0a722ff47948"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730000-c04-20261011/campaign_result.json",
+      "sha256": "a21874ec5bce03d548c580f3fa2a8c378f8cab4bf22785921f9823f0206db1cd"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730000-c05-20261011/campaign_result.json",
+      "sha256": "cf8878b9cb63695fb48e07f66affb5edff890e81d24ae471d32693902ab52c1b"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730000-c06-20261011/campaign_result.json",
+      "sha256": "b99a8ee4d79e45a783898f34d3adb4ccdc978bb0d467b9c738a2d1b9c3c283ce"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730000-c07-20261011/campaign_result.json",
+      "sha256": "a73e3fb07257a788ba48262fe747da925e32d729c90f569807e682945f293a4f"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730000-c08-20261011/campaign_result.json",
+      "sha256": "e49519a8af8ec821d9b9f4ad280d19beb56a8e92cbc19fcfe16bdd6942b4c336"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730000-c09-20261011/campaign_result.json",
+      "sha256": "b8d4eda5d508f51375181d7dcd380287bf426a696a6ded8a0d0bd043f0eed9e1"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730001-c00-20261011/campaign_result.json",
+      "sha256": "3ae956401972e3e36a30b4af8673cfc4f1194bf82f048b279c055b93899d67df"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730001-c01-20261011/campaign_result.json",
+      "sha256": "da458bc21bc9e5e5b144189c851c265bbd78cbdef104b362aca9aabf9e28841d"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730001-c02-20261011/campaign_result.json",
+      "sha256": "9796cd2b5b24ee09d0c44f35137feee8ee207e9babdb86b40ce61725f2a97878"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730001-c03-20261011/campaign_result.json",
+      "sha256": "49ba6f3c30f540866c27955520d441e12e593228c8b80ec0aea471fe72f90fc4"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730001-c04-20261011/campaign_result.json",
+      "sha256": "baef4a8fce6acc66220dbdce588455a4a9b7668e772cdbca26dcd0d4b3fb6edc"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730001-c05-20261011/campaign_result.json",
+      "sha256": "963429a6308e2cd1e6e979f5cf6c3e2dd5e77f72a47d94fa0906a90d5f217033"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730001-c06-20261011/campaign_result.json",
+      "sha256": "90f01d3ec4fed84b67c7273bd157566f8cec1fe59de5c38a01b4238f1bdf3985"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730001-c07-20261011/campaign_result.json",
+      "sha256": "df05d5211504c620be89a52b60e7b04281d10f4711b91d1205a19f07fdf9a405"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730001-c08-20261011/campaign_result.json",
+      "sha256": "a970191ebc280bf40f26d25ea26bd2e8a1835c2e74543e2f7cf8fdd263db2a99"
+    },
+    {
+      "path": "/tmp/bhl-native-controls-collect-dbs8tp6e/raw/native-controls-v2-s730001-c09-20261011/campaign_result.json",
+      "sha256": "f7a60ebc1c8d54c1cbb79cdd81a6072cb0747939e0061d64cc70613b3384f139"
+    }
+  ],
+  "qualified_smoke_sha256": "6641d0aa6925a6553b6b056d6755e71b6fce397d9513ffe00f7522c967952d75",
+  "scientific_status": "COMPLETE_BOUNDED_DEVELOPMENT_NO_CONFIRMATION",
+  "scope": "four matched route/seed pairs per condition; camera-rate changes deliberately retain all measured latency and fixed .35s age gate; no population/hardware inference"
+}
