@@ -1,0 +1,135 @@
+[dsrl-sbatch] job=21779120 host=cn-gpu5.hpc.engr.oregonstate.edu mode=eval repo=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
+[dsrl-sbatch] git=a46f040 dirty_files=662
+Quadro RTX 8000, 46080 MiB
+[dsrl-sbatch] cuda ok Quadro RTX 8000
+[render-check] cn-gpu5 seed_3000: mean |diff| 0.000, pixels over 8 levels 0.00%, max 0 -> ok
+[render-check] cn-gpu5 seed_3001: mean |diff| 0.000, pixels over 8 levels 0.00%, max 0 -> ok
+[render-check] PASS (MUJOCO_GL=egl, CUDA_VISIBLE_DEVICES=0)
+Reducing the number of VLM layers to 16 ...
+Loading weights from local directory
+[eval]  base: {'n': 100, 'success': 74, 'success_rate': 0.74, 'wilson95': [0.6462882736813838, 0.8159542187301354], 'fell': 0, 'mean_steps': 768.74, 'mean_stage_max': 5.13, 'wall_s': 573.0191910266876}
+[eval]  zero: {'n': 100, 'success': 82, 'success_rate': 0.82, 'wilson95': [0.7333246397578691, 0.8829986834574896], 'fell': 0, 'mean_steps': 726.58, 'mean_stage_max': 5.47, 'wall_s': 557.0906958580017}
+[eval]  dsrl: {'n': 100, 'success': 80, 'success_rate': 0.8, 'wilson95': [0.7111690380734977, 0.8666340774409013], 'fell': 0, 'mean_steps': 692.57, 'mean_stage_max': 5.46, 'wall_s': 498.6991686820984}
+[eval]  dsrl_stoch: {'n': 100, 'success': 81, 'success_rate': 0.81, 'wilson95': [0.7222097592919214, 0.8748534600729574], 'fell': 0, 'mean_steps': 698.15, 'mean_stage_max': 5.37, 'wall_s': 508.2137041091919}
+{
+  "arms": {
+    "base": {
+      "n": 100,
+      "success": 74,
+      "success_rate": 0.74,
+      "wilson95": [
+        0.6462882736813838,
+        0.8159542187301354
+      ],
+      "fell": 0,
+      "mean_steps": 768.74,
+      "mean_stage_max": 5.13,
+      "wall_s": 573.0191910266876
+    },
+    "zero": {
+      "n": 100,
+      "success": 82,
+      "success_rate": 0.82,
+      "wilson95": [
+        0.7333246397578691,
+        0.8829986834574896
+      ],
+      "fell": 0,
+      "mean_steps": 726.58,
+      "mean_stage_max": 5.47,
+      "wall_s": 557.0906958580017
+    },
+    "dsrl": {
+      "n": 100,
+      "success": 80,
+      "success_rate": 0.8,
+      "wilson95": [
+        0.7111690380734977,
+        0.8666340774409013
+      ],
+      "fell": 0,
+      "mean_steps": 692.57,
+      "mean_stage_max": 5.46,
+      "wall_s": 498.6991686820984
+    },
+    "dsrl_stoch": {
+      "n": 100,
+      "success": 81,
+      "success_rate": 0.81,
+      "wilson95": [
+        0.7222097592919214,
+        0.8748534600729574
+      ],
+      "fell": 0,
+      "mean_steps": 698.15,
+      "mean_stage_max": 5.37,
+      "wall_s": 508.2137041091919
+    }
+  },
+  "paired": {
+    "dsrl_vs_base": {
+      "n": 100,
+      "treat_rate": 0.8,
+      "ctrl_rate": 0.74,
+      "diff": 0.06,
+      "diff_ci95_bootstrap": [
+        -0.06,
+        0.18
+      ],
+      "both": 59,
+      "treat_only": 21,
+      "ctrl_only": 15,
+      "neither": 5,
+      "mcnemar_p_one_sided": 0.20251612307038158,
+      "mcnemar_p_two_sided": 0.40503224614076316
+    },
+    "dsrl_vs_zero": {
+      "n": 100,
+      "treat_rate": 0.8,
+      "ctrl_rate": 0.82,
+      "diff": -0.02,
+      "diff_ci95_bootstrap": [
+        -0.13,
+        0.09
+      ],
+      "both": 65,
+      "treat_only": 15,
+      "ctrl_only": 17,
+      "neither": 3,
+      "mcnemar_p_one_sided": 0.7016925520729274,
+      "mcnemar_p_two_sided": 0.860050065908581
+    },
+    "zero_vs_base": {
+      "n": 100,
+      "treat_rate": 0.82,
+      "ctrl_rate": 0.74,
+      "diff": 0.08,
+      "diff_ci95_bootstrap": [
+        -0.03,
+        0.19
+      ],
+      "both": 62,
+      "treat_only": 20,
+      "ctrl_only": 12,
+      "neither": 6,
+      "mcnemar_p_one_sided": 0.10766357486136258,
+      "mcnemar_p_two_sided": 0.21532714972272515
+    },
+    "dsrl_stoch_vs_base": {
+      "n": 100,
+      "treat_rate": 0.81,
+      "ctrl_rate": 0.74,
+      "diff": 0.07,
+      "diff_ci95_bootstrap": [
+        -0.05,
+        0.19
+      ],
+      "both": 60,
+      "treat_only": 21,
+      "ctrl_only": 14,
+      "neither": 5,
+      "mcnemar_p_one_sided": 0.15525232953950763,
+      "mcnemar_p_two_sided": 0.31050465907901525
+    }
+  }
+}

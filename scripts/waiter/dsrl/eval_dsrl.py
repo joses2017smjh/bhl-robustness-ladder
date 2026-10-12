@@ -10,8 +10,9 @@ Arms (one episode per seed per arm, same layouts, paired by seed):
   dsrl_stoch    a sample from the SAC actor
 Paired statistics: success both / only-A / only-B / neither, exact one-sided McNemar p, bootstrap CI.
 
-Seeds: dev range 1000-1999 only, unless --scored-phase4-eval, which allows ONLY the never-used phase 4
-evaluation range 6000-6099 (to be run once, after the phase 4 gate is frozen). TOY envs/policies are labelled.
+Seeds: dev range 1000-1999 only, unless --scored-phase4-eval, which allows ONLY one of the scored phase 4
+evaluation ranges (6000-6099 for phase 4, 8000-8099 for phase 4b; each run once, after its gate is frozen) and,
+when the rule file names its seeds, exactly those seeds. TOY envs/policies are labelled.
 The scored run needs --gate (the frozen rule file; its hash is recorded) and --run-dir, records the hashes of the
 base model and of the SAC checkpoint it evaluated, and never overwrites its output (phase4_gate.py reads it).
 """
@@ -31,7 +32,8 @@ import torch
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from chunk_vec_env import ChunkVecEnv  # noqa: E402
-from rollout import ARMS, ObsBuilder, arm_summary, check_seeds, paired_summary, parse_seeds, run_episodes  # noqa: E402
+from rollout import (ARMS, SCORED_P4_RANGES, ObsBuilder, arm_summary, check_seeds, paired_summary,  # noqa: E402
+                     parse_seeds, range_of, run_episodes)
 from sac_noise import NoiseSAC  # noqa: E402
 from smolvla_noise import NoiseMap  # noqa: E402
 from train_dsrl import add_common_args, atomic_json, build_policy, env_spec  # noqa: E402
@@ -58,17 +60,23 @@ def main():
     ap.add_argument("--noise-seed", type=int, default=0)
     ap.add_argument("--obs-encoder", choices=("vlm", "cnn"), default="vlm")
     ap.add_argument("--scored-phase4-eval", action="store_true",
-                    help="allow ONLY seeds 6000-6099 (the single scored phase 4 evaluation)")
+                    help="allow ONLY one scored phase 4 range (6000-6099, or 8000-8099 for phase 4b)")
     ap.add_argument("--gate", type=Path, help="frozen phase 4 rule file (required with --scored-phase4-eval)")
     ap.add_argument("--out", required=True, type=Path)
     args = ap.parse_args()
 
     seeds = parse_seeds(args.seeds)
-    check_seeds(seeds, {"p4_eval"} if args.scored_phase4_eval else {"dev"}, "evaluation")
+    check_seeds(seeds, set(SCORED_P4_RANGES) if args.scored_phase4_eval else {"dev"}, "evaluation")
     gate = None
     if args.scored_phase4_eval:
         if not args.gate or not args.run_dir:
             raise SystemExit("--scored-phase4-eval needs --gate <frozen rule file> and --run-dir")
+        if len({range_of(s) for s in seeds}) != 1:
+            raise SystemExit("a scored phase 4 evaluation runs seeds from one scored range only")
+        rule = json.loads(args.gate.read_text())
+        if "seed0" in rule and seeds != list(range(int(rule["seed0"]), int(rule["seed1"]) + 1)):
+            raise SystemExit(f"the rule file names seeds {rule['seed0']}-{rule['seed1']}; the scored evaluation "
+                             f"must run exactly those")
         if args.out.exists():
             raise SystemExit(f"{args.out} exists; the scored phase 4 evaluation is never overwritten")
         gate = {"path": str(args.gate.resolve()), "sha256": sha256_file(args.gate)}

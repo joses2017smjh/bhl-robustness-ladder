@@ -151,7 +151,7 @@ def test_split_spec():
 def test_seed_guards_never_admit_scored_ranges():
     wd.check_training_seed(3000, synthetic=False, allow_dev_seeds=False)
     wd.check_training_seed(3999, synthetic=False, allow_dev_seeds=False)
-    for bad in (4000, 4099, 6000, 2000, 5000, 7000, 7099):       # 7000-7099: phase 3b's scored range (2026-10-11)
+    for bad in (4000, 4099, 6000, 2000, 5000, 7000, 7099, 8000, 8099):   # 7000-7099, 8000-8099: added 2026-10-11
         with pytest.raises(wd.EpisodeError):
             wd.check_training_seed(bad, synthetic=False, allow_dev_seeds=True)
         with pytest.raises(wd.EpisodeError):

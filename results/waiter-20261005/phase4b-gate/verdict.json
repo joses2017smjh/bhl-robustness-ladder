@@ -1,0 +1,47 @@
+{
+ "gate": "Waiter phase 4 (DSRL: SAC over the frozen VLA's initial noise)",
+ "verdict": "FAIL",
+ "rule": "PASS iff the DSRL arm (the training run's final SAC checkpoint, deterministic latent) has more successes than the base arm (the same frozen VLA with i.i.d. N(0, I) noise, noise seed 0) AND the exact one-sided McNemar p <= 0.05; seeds 8000-8099, one episode per seed per arm, paired by seed; each layout's own instruction; 20 executed steps per 50-step chunk; WaiterEnv defaults (stance lock on, 90 s limit)",
+ "rule_file": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/phase4b-gate/rule.json",
+ "rule_sha256": "042cf635f37decf2d1c514af3aff6c1fb15c8e9ec5d8cfd3dd574eab2ebd2dc9",
+ "base": {
+  "successes": 74,
+  "n": 100,
+  "wilson95": [
+   0.6463,
+   0.816
+  ],
+  "falls": 0
+ },
+ "dsrl": {
+  "successes": 80,
+  "n": 100,
+  "wilson95": [
+   0.7112,
+   0.8666
+  ],
+  "falls": 0
+ },
+ "paired": {
+  "both": 59,
+  "dsrl_only": 21,
+  "base_only": 15,
+  "neither": 5,
+  "mcnemar_p_one_sided": 0.20251612307038158,
+  "alpha": 0.05
+ },
+ "reported_not_gated": {
+  "zero": {
+   "successes": 82,
+   "n": 100
+  },
+  "dsrl_stoch": {
+   "successes": 81,
+   "n": 100
+  }
+ },
+ "sac_ckpt_sha256": "070eb3e6b08df7b821c7855054e507eb384ca347cba98d366dc3492647be5537",
+ "inputs": {
+  "eval": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/phase4b-gate/scored.json"
+ }
+}
