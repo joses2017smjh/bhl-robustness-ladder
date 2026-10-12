@@ -1,5 +1,11 @@
 # External EuRoC recorded-sensor replay: access blocked
 
+October 12 follow-up: [the adapter and native replay handoff are implemented
+and software-tested](EUROC_FOLLOWUP_2026-10-12.md). Shared-storage authorization
+removes the old capacity blocker; official access still returns HTTP 429 or
+times out. The original attempt below is preserved. Actual EuRoC replay remains
+unrun.
+
 **No native replay ran, and no real-sensor performance result is claimed.** On
 2026-10-11 we attempted to obtain the official ETH EuRoC `V1_01_easy` sequence
 as an external recorded-sensor supplement to the simulation experiments.

@@ -1,0 +1,33 @@
+{
+  "schema": "bhl-euroc-operational-amendment-v1",
+  "recorded_utc": "2026-10-12T08:11:29.490605+00:00",
+  "original_protocol_sha256": "3d74629b2876a359e9a2657b178ca632eaf6c31858e6af58dcedf8fa4432cf38",
+  "scientific_window_unchanged": "Earliest exact stereo pair through <60 seconds, at most1200 pairs",
+  "original_arms_unchanged": [
+    "native_stereo",
+    "native_stereo_inertial"
+  ],
+  "runtime_sha256": "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516",
+  "operational_storage_change": {
+    "previous_download_plus_extraction_cap_bytes": 4294967296,
+    "new_shared_data_download_plus_extraction_cap_bytes": 12884901888,
+    "bulk_location": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/euroc-followup-20261012/data",
+    "user_authorization": "Shared storage has 2 T limit and okay to tap into it",
+    "home_quota_bytes": 26843545600,
+    "actual_dataset_bytes_downloaded": 0
+  },
+  "smoke_requirement": {
+    "pairs": 40,
+    "each_native_arm": true,
+    "same_source_protocol_selection_runtime": true,
+    "scored": false,
+    "gate": "Execution and evidence integrity; estimator noninitialization remains recorded, not retuned or rejected as an inconvenient result"
+  },
+  "state": "SOFTWARE_TESTED_REAL_INPUT_BLOCKED",
+  "native_smoke_executed": false,
+  "full_replay_executed": false,
+  "ATE": "UNMEASURED; no independently verified EuRoC reference-frame adapter implemented",
+  "no_tuning": true,
+  "old_access_failures_preserved": true,
+  "no_further_automatic_access_attempts": true
+}

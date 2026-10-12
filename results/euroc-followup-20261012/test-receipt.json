@@ -1,0 +1,44 @@
+{
+  "schema": "bhl-euroc-software-test-receipt-v1",
+  "recorded_utc": "2026-10-12T08:11:29.493801+00:00",
+  "status": "PASS",
+  "tests_passed": 61,
+  "elapsed_seconds": 6.74,
+  "execution": "srun --jobid=21787654 --overlap -n1 -c2 --mem=4G on allocated dgx2-4",
+  "command": [
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_euroc_native_validation.py",
+    "tests/test_tumvi_native_validation.py",
+    "tests/test_tumvi_native_evaluate.py",
+    "tests/test_native_orb.py",
+    "tests/test_native_orb_inertial.py"
+  ],
+  "native_runtime_executed": false,
+  "actual_dataset_validation": false,
+  "fixture_scope": "Synthetic geometry and source-format files; mocked native IPC integration plus existing protocol/reset regressions",
+  "initial_tests": {
+    "job_id": "21788981",
+    "passed": 22
+  },
+  "queued_only_test_attempt": {
+    "job_id": "21789223",
+    "status": "CANCELLED_WHILE_PENDING",
+    "reason": "Moved bounded test run to existing CPU allocation; no test/native/scientific episodes executed by this queued job"
+  },
+  "files_sha256": {
+    "scripts/bench/euroc_native_validation.py": "6d1755eec224d2ac8c125132aba580b2693c47bb460b6b32d9938d480ab097de",
+    "tests/test_euroc_native_validation.py": "19de4c7ae85e17c0185bcf7d37db506db9776552c70b9fb3d1381edb6fc4a103",
+    "results/euroc-followup-20261012/adapter-tests-allocation.log": "6c2ac1e7ebdf82e1a68a96c48e6471e7a75076083a51f4fa8904f8f7bc128da8",
+    "results/euroc-followup-20261012/adapter-tests-reviewed.log": "0e6a4f5af08491196561618acc3e4032388672cf27180a455ea55c1d9fbe7362"
+  },
+  "reviewed_retest": {
+    "exit_code": 0,
+    "utc": "2026-10-12T08:29:54.822806+00:00",
+    "fix": "EuRoC ATE remains explicitly unmeasured; no inherited TUM reference-file hash claim",
+    "log": "results/euroc-followup-20261012/adapter-tests-reviewed.log",
+    "tests_passed": 61
+  }
+}
