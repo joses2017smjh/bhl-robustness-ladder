@@ -43,6 +43,10 @@ study with oracle pose/goal.
 
 *The same robot told to stand still while its arms do the scripted expert's pick-and-hook motions with 0.5 kg in each hand (free base, no stance lock). Left, the phase 1f retrain (standing penalties) falls at 1.0 s; right, the phase 1g retrain (bounded standing rewards) stays up but drifts 4.7 cm and turns 7.1°, outside the gate's 3 cm / 3° limits. Both re-simulate scored gate episodes; GIF at 2×.*
 
+[![The phase 3b vision-language policy picks the blue tumbler, sets it on the tray, carries the tray to the right table and sets it down](docs/gifs/waiter-3b-task-seed1300.gif)](docs/WAITER_PROGRAM.md)
+
+*The whole Waiter task driven by the fine-tuned SmolVLA policy (phase 3b) from the head camera (inset) and the instruction alone: it picks the named tumbler, sets it on the tray, lifts the tray with both hands, walks to the named table and sets it down, succeeding at 52.3 s. One recorded run on a development layout; on 100 held-out layouts the policy succeeds 75/100 (76/100 with instruction wording it never saw). Learned legs, simulated camera, base held while standing (stance lock, a declared simulation fixture); GIF at 3×.*
+
 ## Problem and approach
 
 Training reward can improve while transfer or task completion gets worse. I train locomotion policies in Isaac Lab, export ONNX, and score selected checkpoints in headless MuJoCo using upstream's deployment controller. Versioned tasks, sensor validity checks, physics-step contact scoring, and predeclared gates separate a successful experiment from a job that merely completed.
