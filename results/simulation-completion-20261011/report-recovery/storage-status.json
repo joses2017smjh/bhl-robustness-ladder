@@ -1,0 +1,18 @@
+{
+  "observed_utc": "2026-10-12T08:20:01.431109+00:00",
+  "home": {
+    "used_bytes": 22565322752,
+    "limit_bytes": 26843545600,
+    "used_gib": 21.015594482421875,
+    "measurement": "du -sx --block-size=1 /nfs/stak/users/sanchej7; excludes symlink targets"
+  },
+  "shared_project": {
+    "project_id": 30762,
+    "used_kib": 1584318664,
+    "soft_kib": 1610612736,
+    "hard_kib": 2147483648,
+    "hard_headroom_gib": 537.0759811401367,
+    "grace_active": false
+  },
+  "new_task_bulk_storage": "HPC share and node-local /tmp; no bulk experiment downloads to home"
+}
