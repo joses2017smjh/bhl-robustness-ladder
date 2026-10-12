@@ -1,0 +1,2070 @@
+{
+  "status": "PASS",
+  "phase": "confirmation",
+  "episodes": 480,
+  "scope": "Independent held-out MuJoCo confirmation of five development-qualified actor/controller combinations on new procedural geometry and reserved reset seeds; fixed actors and simulator, not independent hardware or general robot safety validation",
+  "scientific_status": "MEASURED_HELD_OUT_SIMULATION_CONFIRMATION",
+  "qualified_comparisons": [
+    {
+      "actor": "dr-default-s0",
+      "arm": "heading",
+      "candidate": {
+        "episodes": 60,
+        "clean_goals": 60,
+        "falls": 0,
+        "contacts": 0,
+        "nonfinite": 0
+      },
+      "matched_baseline": {
+        "episodes": 60,
+        "clean_goals": 17,
+        "falls": 0,
+        "contacts": 32,
+        "nonfinite": 0
+      },
+      "paired_goal_rate_difference": 0.7166666666666666,
+      "paired_goal_rate_difference_95_percent_seed_cluster_interval": [
+        0.6333333333333332,
+        0.7999999999999999
+      ],
+      "bootstrap_seed": 900011,
+      "bootstrap_resamples": 10000,
+      "confirmed": true
+    },
+    {
+      "actor": "dr-default-s0",
+      "arm": "regulated",
+      "candidate": {
+        "episodes": 60,
+        "clean_goals": 60,
+        "falls": 0,
+        "contacts": 0,
+        "nonfinite": 0
+      },
+      "matched_baseline": {
+        "episodes": 60,
+        "clean_goals": 17,
+        "falls": 0,
+        "contacts": 32,
+        "nonfinite": 0
+      },
+      "paired_goal_rate_difference": 0.7166666666666666,
+      "paired_goal_rate_difference_95_percent_seed_cluster_interval": [
+        0.6333333333333332,
+        0.7999999999999999
+      ],
+      "bootstrap_seed": 900011,
+      "bootstrap_resamples": 10000,
+      "confirmed": true
+    },
+    {
+      "actor": "dr-default-s1",
+      "arm": "heading",
+      "candidate": {
+        "episodes": 60,
+        "clean_goals": 60,
+        "falls": 0,
+        "contacts": 0,
+        "nonfinite": 0
+      },
+      "matched_baseline": {
+        "episodes": 60,
+        "clean_goals": 1,
+        "falls": 2,
+        "contacts": 57,
+        "nonfinite": 0
+      },
+      "paired_goal_rate_difference": 0.9833333333333332,
+      "paired_goal_rate_difference_95_percent_seed_cluster_interval": [
+        0.95,
+        1.0
+      ],
+      "bootstrap_seed": 900011,
+      "bootstrap_resamples": 10000,
+      "confirmed": true
+    },
+    {
+      "actor": "dr-default-s2",
+      "arm": "heading",
+      "candidate": {
+        "episodes": 60,
+        "clean_goals": 60,
+        "falls": 0,
+        "contacts": 0,
+        "nonfinite": 0
+      },
+      "matched_baseline": {
+        "episodes": 60,
+        "clean_goals": 1,
+        "falls": 3,
+        "contacts": 56,
+        "nonfinite": 0
+      },
+      "paired_goal_rate_difference": 0.9833333333333332,
+      "paired_goal_rate_difference_95_percent_seed_cluster_interval": [
+        0.95,
+        1.0
+      ],
+      "bootstrap_seed": 900011,
+      "bootstrap_resamples": 10000,
+      "confirmed": true
+    },
+    {
+      "actor": "dr-default-s2",
+      "arm": "regulated",
+      "candidate": {
+        "episodes": 60,
+        "clean_goals": 60,
+        "falls": 0,
+        "contacts": 0,
+        "nonfinite": 0
+      },
+      "matched_baseline": {
+        "episodes": 60,
+        "clean_goals": 1,
+        "falls": 3,
+        "contacts": 56,
+        "nonfinite": 0
+      },
+      "paired_goal_rate_difference": 0.9833333333333332,
+      "paired_goal_rate_difference_95_percent_seed_cluster_interval": [
+        0.95,
+        1.0
+      ],
+      "bootstrap_seed": 900011,
+      "bootstrap_resamples": 10000,
+      "confirmed": true
+    }
+  ],
+  "confirmation_criteria": "at least54/60 clean goals; zero falls, contacts, nonfinite; positive paired gain",
+  "uncertainty_scope": "20 shared geometry/reset-seed clusters conditional on fixed actors and terrain families; not hardware or population reliability",
+  "rejected_original_scan_count": 44,
+  "confirmed_combinations": 5,
+  "baseline_unique_episodes": 180,
+  "candidate_unique_episodes": 300,
+  "multiple_comparisons": "five prespecified engineering gates; descriptive marginal intervals, no family-wise statistical discovery claim",
+  "protocol_sha256": "18323a18a3b963e67869de46554513c178ac71037d0caff9a4f68400579fd65c",
+  "episode_sources": [
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440000--regulated/confirmation-episode.json",
+      "sha256": "6e76e88064624ca4fe06c4fb8f37521eb2a3d51b86e9dc718f912fc7f9ff10eb"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440000--heading/confirmation-episode.json",
+      "sha256": "3ead007f7603b89a6b2da5fde44111fac189188e179665edfacf008fc68647ae"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440000--baseline/confirmation-episode.json",
+      "sha256": "513a13866d5c94ed0447eb25f5d3a8982beac1e5312c47327e058a11d587539f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440001--heading/confirmation-episode.json",
+      "sha256": "2bd8b7d9db8188d452ea139ccd0ee15915181482b125c565963e9bca2452677c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440001--baseline/confirmation-episode.json",
+      "sha256": "bb2526138a9cfb411a9912fe1f34aae4b53d8ea54e219018e26fc0cc716a4025"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440001--regulated/confirmation-episode.json",
+      "sha256": "735ee80b1664962a635b835c86cfdbc48f647c99cb3465a260789e6c56bcf30a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440002--baseline/confirmation-episode.json",
+      "sha256": "d3ff3fe3091b30319845afa6b1f6460bff89600c0f37e4b4bbc41a49b37d18b0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440002--heading/confirmation-episode.json",
+      "sha256": "1bf205b25ee43061734d12c2a13476ebb30a6640bce5d6df7b55865c084bb2c5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440002--regulated/confirmation-episode.json",
+      "sha256": "85d6487eea553a7fb02f7e0d15d4e2a0fc14af2f449541d6e924f0e610634a5e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440003--regulated/confirmation-episode.json",
+      "sha256": "7646f31008b0011108c961d78831a7d32de7ebc4f56fb43e895ebe765cb70b60"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440003--heading/confirmation-episode.json",
+      "sha256": "ad87bd3dd8b2bd98e28b1c329b17590bf445d4a96076f76bd1b76e6f68b96c6d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440003--baseline/confirmation-episode.json",
+      "sha256": "1bc811aa8b6c63f7df78f82678a9b02b2f82f10b393935dd98f240aeafe9129f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440004--baseline/confirmation-episode.json",
+      "sha256": "54e2d7fb48b34074d826d03a827954f12fcaf329062b7eda11fa080ae1436ead"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440004--regulated/confirmation-episode.json",
+      "sha256": "f41ac70796d10c84a9f7b798565e51bac7986fa8baf7acdaaa49eb5a45da3773"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440004--heading/confirmation-episode.json",
+      "sha256": "b433985db81fc17f1aac78336a23ba7c9dbca4dd50efbdd6809e342d32d8d959"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440005--regulated/confirmation-episode.json",
+      "sha256": "1ca3b53948bde738ddb0a8793802764155507fc1fd97967d59417e6d498771d6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440005--baseline/confirmation-episode.json",
+      "sha256": "ae1e3c8af6375e7949f13be9c8c149bd43ed1a917115c63a174d8c072d628f3c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440005--heading/confirmation-episode.json",
+      "sha256": "ff45a2b00793a6769ca1ebe366889882110c23b3ab266218839fd4c94db39050"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440006--heading/confirmation-episode.json",
+      "sha256": "2678ec69dc3290d28c522d746ea6cfb6cc2e9768673cbca5a77a1f79035246b4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440006--regulated/confirmation-episode.json",
+      "sha256": "9e6af95a0a92d6f7b616adbfc6d73c1593da4f8cb21873335142c18ed79079f4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440006--baseline/confirmation-episode.json",
+      "sha256": "33ef4414c56b049542c3984442705526a2ca54b7c228a5a56e22045217625b15"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440007--regulated/confirmation-episode.json",
+      "sha256": "52a799480e3a36c7eee26748217b6245db337e515a9889f154644c57b08d40f5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440007--baseline/confirmation-episode.json",
+      "sha256": "c59b49d1c6870f4576ced636c4ee4035e772fcb64d02da8e9bbc1a8d57333f6c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440007--heading/confirmation-episode.json",
+      "sha256": "6f4e1ca4d6e758f810f04fe34c1c023ea6015586893b01bda8ba774cbde1f929"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440008--regulated/confirmation-episode.json",
+      "sha256": "4d26664ebf09e26b63696fe419afe5c37613ef5321e20f24c12597677ec214d9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440008--baseline/confirmation-episode.json",
+      "sha256": "c926b9fe703484c6ef805cb8a8a20f7b59844ffcf839d83d0c698a87f998424b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440008--heading/confirmation-episode.json",
+      "sha256": "4e21a95e99230ffd141feb74d32a0246b013a6710b6b1e8876a83de45ee53333"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440009--heading/confirmation-episode.json",
+      "sha256": "ae27af2a33dda98782d6f4f40732557543e758c320db474226f04c3af1c96946"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440009--baseline/confirmation-episode.json",
+      "sha256": "bfda9a7846e9532ea312ccf9282343b92d40c89b21662034d19d774a76373020"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440009--regulated/confirmation-episode.json",
+      "sha256": "c4c49e5bd5414e36cee9aae46c1ecc1ae7a913888325732e0398cc526f75772f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440010--baseline/confirmation-episode.json",
+      "sha256": "dd9edd54e06d1e1937523dad7e277c753ee522f162a5cb7ef356c9b22bc15c56"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440010--regulated/confirmation-episode.json",
+      "sha256": "ff4ff8b84b4b9fe81df8fa06f37378b4b7a85b05d0e22c6b025373f052547c23"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440010--heading/confirmation-episode.json",
+      "sha256": "28633c63ee8c795f03d77c32b4fc58b417a7873c6ba27d2f2e21eac6f575a383"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440011--baseline/confirmation-episode.json",
+      "sha256": "7fac066d231941441d80511cae7081ff826a0289a775783f030a2cca18854247"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440011--heading/confirmation-episode.json",
+      "sha256": "ba319e81bbb4f8923c3f0e9df9047a79de4b7b1378b1af2ab9d787502dbd5049"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440011--regulated/confirmation-episode.json",
+      "sha256": "b07e0b5167e4c7de139a131ce90f28abbe18bc0f671307c3ea7d4b0e9b457e3c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440012--regulated/confirmation-episode.json",
+      "sha256": "a4f3c321db7fc41995d05bbb34fd23c26a33880598a1b717ef22a6bd2079098c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440012--baseline/confirmation-episode.json",
+      "sha256": "920b6f9c89d09bbe7ea3cec99137c900e052a9abaadcb742c192c28ac2e338f8"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440012--heading/confirmation-episode.json",
+      "sha256": "b570a362f830052c28a8c420f12b940d81e20df98f368b47afd783eadaa00d9d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440013--baseline/confirmation-episode.json",
+      "sha256": "ad99b2928e97ff301c915ccf8c0d36267eb0e3a1ef3c33e323e8a5a234bdff89"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440013--heading/confirmation-episode.json",
+      "sha256": "3218ddc88b78301478609927f1d6e4dd83281e76b2b82f8fe4ed67ceb4483ace"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440013--regulated/confirmation-episode.json",
+      "sha256": "98217ce93a79e87ec1bc9eecc4e6b0cd32602f82209e38d03de7e90383441abb"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440014--regulated/confirmation-episode.json",
+      "sha256": "c44551f6edf616b3662ae2af8a5261136d21f65f79adf9cd306aaba69dde691d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440014--baseline/confirmation-episode.json",
+      "sha256": "588111ee1b2b8d4d3d99ebe22adee8e870fdefd4fb29583e0fc0bca3dd756150"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440014--heading/confirmation-episode.json",
+      "sha256": "afaa1549cee3186e1cc447ab7573252d17287efa92cf2d3783170c31830532a5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440015--baseline/confirmation-episode.json",
+      "sha256": "e2241137b126d2992cafc89abd5d5e9acdbcea3ef1f0f8f8a8b48b318e77927d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440015--regulated/confirmation-episode.json",
+      "sha256": "3581786454c7be9bc470a6a0ecdbdb5ca376fd27cd99deb7e7e17ac86612ea2d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440015--heading/confirmation-episode.json",
+      "sha256": "53c192d2e850b2686b6b00c5a36eb1282155e2b761af6a85bec645a7e674c1e3"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440016--regulated/confirmation-episode.json",
+      "sha256": "0aced23f45f486e9f3f8f8b49775bea7e8707a803664924aafb6264509a978e5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440016--baseline/confirmation-episode.json",
+      "sha256": "dc308914c51f2cffe597e473e0e3198438c1e078ae66daa9987efdc09ff43fc2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440016--heading/confirmation-episode.json",
+      "sha256": "c7b7eec3eb2b710bf859e2ab4967c8d2fae39f898ee0336e867816311413ea8a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440017--regulated/confirmation-episode.json",
+      "sha256": "7491a9957db3e52e1f3176496c7692b1fc6cc3de31fadacbcb549212c0647242"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440017--baseline/confirmation-episode.json",
+      "sha256": "1b66951742daddd7b90ac746a9a9ea7682a6eb872dcf56be0d62b533aae69d43"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440017--heading/confirmation-episode.json",
+      "sha256": "8d03636d7172d81ea179ce7cec9983d5979225f62247f5e50d8038b06422ce9f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440018--heading/confirmation-episode.json",
+      "sha256": "e7433ab5d60628a150a89f1ef8bc8af363e2fdf179fe6daef1816e4e35644a7e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440018--baseline/confirmation-episode.json",
+      "sha256": "cddc63fc8f4aa5b65c49cbe9619eddfeb880750e31ff4bbcd0b4a6bbaa5226f0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440018--regulated/confirmation-episode.json",
+      "sha256": "ec1e2923c99b1d6d16df49cae8db6d972e4762dd811f8bbfcdb53c8ab1df4ca1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440019--heading/confirmation-episode.json",
+      "sha256": "0046bfba8b5c92804771fb447bf8f02e77325cdf7b2b9f04c7b711d12602131c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440019--regulated/confirmation-episode.json",
+      "sha256": "3f5653650409519618259cb4c867c61a83be7e27bbfb16c16cccee4360a55f82"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-flat-20261011/dr-default-s0--flat--s440019--baseline/confirmation-episode.json",
+      "sha256": "ce2ce15128965fae68c8871005d1413115ccb2b1f8bbe269f1f7642f9f44d7e1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440000--regulated/confirmation-episode.json",
+      "sha256": "fc1a7bf0fea34655ce3953c79eb8760f8214e01107bccc72123d11734d8c8022"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440000--heading/confirmation-episode.json",
+      "sha256": "aa9bcd2c8ca53e159d3b47e5199b3a530997e780a17432d999273bd7f986f05a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440000--baseline/confirmation-episode.json",
+      "sha256": "1fdd2e084b511d45a65b9d83a5645bd2f9cc8bdc26e9b3bac6dc0fee133a46f0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440001--heading/confirmation-episode.json",
+      "sha256": "d03cf71dc4f6c028a8eb1e08f2ec069b727ec7e4cd9f83759b73481f32645c7a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440001--baseline/confirmation-episode.json",
+      "sha256": "5955438e2b9c32f11ae2eda97b7fd161f274f9a32cf348548b9f55cabbff3540"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440001--regulated/confirmation-episode.json",
+      "sha256": "7b51cf8dba873f1fabb7a2e35e9a286fcf966c07e2e9fc3089fbd63294dc2864"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440002--baseline/confirmation-episode.json",
+      "sha256": "71363defa75f5f7ab8a39e991061e569e87c9d95d858c95bc38524ccdda3a739"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440002--heading/confirmation-episode.json",
+      "sha256": "e651ce898f5a69fd62d37d134e5590dd4b3ba424e6e43efafbbb1092cf678db6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440002--regulated/confirmation-episode.json",
+      "sha256": "6241d89ec841084fdbf3d5ef6e7cbb8313e8f5faf0f4f6f883632fa2ff98dbf2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440003--regulated/confirmation-episode.json",
+      "sha256": "4b9ed09f8dc5030437780003bd280453829a2c5194cf68855a025dc8bff9f746"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440003--heading/confirmation-episode.json",
+      "sha256": "98fa7cad646812fb215b8cdd6189e0812f43eb694f51057411c3cce1194012ed"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440003--baseline/confirmation-episode.json",
+      "sha256": "88853a760afe0026fe05799d2576b8d5b811211a0593d9af84eca141b40978c2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440004--baseline/confirmation-episode.json",
+      "sha256": "5de4000bf772ae7a2643f0a0f83154b05043edcafc18e9a818fa4f26caf68532"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440004--regulated/confirmation-episode.json",
+      "sha256": "1f854373616f3fd27e3632524a8aabfc9735347156083ddacac5a10e1e4fc2ad"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440004--heading/confirmation-episode.json",
+      "sha256": "26e000f69ddf4dc8f1789beaadb8e20eac0b66b379087bfd320a41e8e8d974a8"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440005--regulated/confirmation-episode.json",
+      "sha256": "c45d92c3472bc6c23f1324353b2438d055e0568da58f55600da432e8a468aa19"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440005--baseline/confirmation-episode.json",
+      "sha256": "f6264217516720caec0cd94b09dc9b958f11913824d73e78fa362a24489c6832"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440005--heading/confirmation-episode.json",
+      "sha256": "00d56a9ccc430c3704cb1af1550f250ca1c123bf1d70ee7389863bb5faea61f7"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440006--heading/confirmation-episode.json",
+      "sha256": "8c986f52251dfa2fabaae864ade98fb330397982a0793a7d97cae6cddc43487b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440006--regulated/confirmation-episode.json",
+      "sha256": "7a5c0d496cf12a80c4c0f81ed5360cfe36bc06dcaa2a72141d3c48f65278c40b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440006--baseline/confirmation-episode.json",
+      "sha256": "4c407c2a6221f83fdf6fb8fc960407df93a15969249bcd35f2626c102787de7f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440007--regulated/confirmation-episode.json",
+      "sha256": "e5725aeb776688a9b198855b4e331582a151cf852d1d8ff1ed665cfef18d66fc"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440007--baseline/confirmation-episode.json",
+      "sha256": "30261a9b9d86f35640fdf8efdc22ae71323a143713beb3f25d5af90249f508e3"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440007--heading/confirmation-episode.json",
+      "sha256": "a6f1e6dcffd46e94f27557a904f0a7e26c5afde2dbfd41e1b7dfa38d8153971b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440008--regulated/confirmation-episode.json",
+      "sha256": "7b8cb4390ca71b2e72bb8247e64a442c10b73d2c19d5cf39ed5f2fe723d2cc55"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440008--baseline/confirmation-episode.json",
+      "sha256": "42956fa6e74e7a0bcbbae2f0d0461de2a2d749ad8cc3845ea933e93351fef3d4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440008--heading/confirmation-episode.json",
+      "sha256": "a1ddcb1c37dcee0c3a4e4c0479cd32a546ed9cecffa892ec728962212d32cb09"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440009--heading/confirmation-episode.json",
+      "sha256": "ba1a7c0cd1f1e9fcc66a9b0c102216adacb0249f980dcaeadbb7c4d171696c01"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440009--baseline/confirmation-episode.json",
+      "sha256": "37f1b9ac2fb01db27f806011d3cac3dcd5dc8a8dd0b5d256a29594f7304b9ffc"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440009--regulated/confirmation-episode.json",
+      "sha256": "20d13715da470391dd8421910185b92a5f0bdd5d304d383de27d4a04f3741431"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440010--baseline/confirmation-episode.json",
+      "sha256": "6f0391712c116ac4c3b73123430b39ae413fda9ad5fd6b000488c1faeec2cd55"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440010--regulated/confirmation-episode.json",
+      "sha256": "cb03122ec43155e6cce44899d822f99e2562154b279809420c591463cb7ec513"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440010--heading/confirmation-episode.json",
+      "sha256": "21983cc5f536f0aa3273d32db4c96b154e1a9ff9312ab62e596497c5cde9184a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440011--baseline/confirmation-episode.json",
+      "sha256": "f49d7a7e9453c46cd45331ecb8c60e9db9892d0dbb2b03d5fd3c59cfb42097c2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440011--heading/confirmation-episode.json",
+      "sha256": "bcb48e72b3c85f24382154c61857621900ef1cc46eaac29fc224072e7b1d2ae5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440011--regulated/confirmation-episode.json",
+      "sha256": "136e5f4c92ed2649294050c42559282b22bf66eab9106cc2d7dab8ea20b50599"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440012--regulated/confirmation-episode.json",
+      "sha256": "fc6aed60e14d1837aaafae8e24d736c291b6888319e57c10366428ef90ef667b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440012--baseline/confirmation-episode.json",
+      "sha256": "0a336739db96fa79a0799e75e7b29b4eb45766c6c6e1cf7dba278fc1fa42e8c4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440012--heading/confirmation-episode.json",
+      "sha256": "d49391bdbab59c8f056420aee82cb9df480ffaa30bbe3bec623d534410af2dcc"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440013--baseline/confirmation-episode.json",
+      "sha256": "7e3849312677e0f72fa99eb01856ba33b311e806184508554ef9bbe58af79a62"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440013--heading/confirmation-episode.json",
+      "sha256": "64f1fca175d9a78af7741dba3851e9a93e574ba389dcaa4f1ac8e28f529dbb9f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440013--regulated/confirmation-episode.json",
+      "sha256": "999ecffe3410bb2260b8579649cef9bdb8002bf87c9ef6184de67c06b7624903"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440014--regulated/confirmation-episode.json",
+      "sha256": "023fa8ee160f246b184b2197e856aadda28ba189f36d50090e57fc5226aa4346"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440014--baseline/confirmation-episode.json",
+      "sha256": "236f825770216551bde664c5bb30ebee1941439478a09d95c1fce1b5d82387ff"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440014--heading/confirmation-episode.json",
+      "sha256": "166710f0af0cf6dc0cbc7645249dda81b7644b9e3135791a2a735f5020f8ada2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440015--baseline/confirmation-episode.json",
+      "sha256": "08f1f8c4fb737d2a6edabf27a2bd045358dc39fcf3db7bbeb4b5f02c6aa59ba7"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440015--regulated/confirmation-episode.json",
+      "sha256": "57272d2fb94f1a8e6294fcd635952e46789dfae25e6344352098159cff9afd06"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440015--heading/confirmation-episode.json",
+      "sha256": "65d8ae728739901e83c02b35d8ee943bd5a8c354d6a58744d7da56dd155e9387"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440016--regulated/confirmation-episode.json",
+      "sha256": "246b8593664ed8a3774d17531045cbbcfacb78c792f7eb6a84917ec885291556"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440016--baseline/confirmation-episode.json",
+      "sha256": "029275642ed3990bc2d8731b6c1ff019adf5b11a2dfaa394483096156959cd30"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440016--heading/confirmation-episode.json",
+      "sha256": "af5d75da674b07f7470f900f065b2bfd0c95cc4fc5d726309aaaf06a00b06acd"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440017--regulated/confirmation-episode.json",
+      "sha256": "284dec98cf547cf4ee42e133c01426c5d0211c1be8265cd5e5e7efec986950cf"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440017--baseline/confirmation-episode.json",
+      "sha256": "cf6d5d4e60c3f907307b0999d522c555aac22796524256c1962cab66fe2de657"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440017--heading/confirmation-episode.json",
+      "sha256": "2d05d959298c4f5634747546beb6a04337dca0e98f2657fe6800d19183aedc75"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440018--heading/confirmation-episode.json",
+      "sha256": "1333486fab05a7acdb3a62173446be14ff87b2e5293ba293a497d6d616beb18b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440018--baseline/confirmation-episode.json",
+      "sha256": "b3a64736c4d0d43b55a5bf41221a88663900fa2af484a636bff8467f847e3d30"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440018--regulated/confirmation-episode.json",
+      "sha256": "2b325dd0b58889e50b99995c34d4c421c3365b028a49643f5ba19a62435a0fce"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440019--heading/confirmation-episode.json",
+      "sha256": "86f19c19ff0b62c2651793ebdeeca6f90c7948984cd365d008fbe0f41d6de7e6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440019--regulated/confirmation-episode.json",
+      "sha256": "89187a6b39a46797cb72ba41b4158c93aa9e21d0dbf9aead0effbf06cf187120"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-small_steps-20261011/dr-default-s0--small_steps--s440019--baseline/confirmation-episode.json",
+      "sha256": "5ef38d9b9316a0d384a33e0ed73c13bac0b241cb19780aa54c9a33bc4928e956"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440000--regulated/confirmation-episode.json",
+      "sha256": "6e791d90f6798e0277cbd3166937af8bfeb158f1ab900406e43577a7f80da368"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440000--heading/confirmation-episode.json",
+      "sha256": "16731338369adde969e928ca7af703472351346cfadecbd0594e93598f173ba4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440000--baseline/confirmation-episode.json",
+      "sha256": "7d5cbf60d5f174ce0f2d781eb8452c18d70ac5ed6bd922bb2eef67c5d48ee1c7"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440001--heading/confirmation-episode.json",
+      "sha256": "bb2514375ea4568943fb06b57eb6a6b4e25e00ad23234cfe6c42688f86342dc8"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440001--baseline/confirmation-episode.json",
+      "sha256": "b1b42e642994d92d17d514eb84840968ec13e66928cbdf517c7b878f2641b97a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440001--regulated/confirmation-episode.json",
+      "sha256": "f8dc2047ae803ae05d03d9048fa8ed06383b4459f441093f810d57b34a91eeb4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440002--baseline/confirmation-episode.json",
+      "sha256": "2da45de30c137e2a8a29df79fff579d8f8a8c4df777c6c59929a4e97cf1ff5f4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440002--heading/confirmation-episode.json",
+      "sha256": "90bc52399065ac960733fcdd1622d4c062800eb6dcb14acb9bb820dd8568fa63"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440002--regulated/confirmation-episode.json",
+      "sha256": "46269760fe91d09175a467f7d4fc17a633b32424be0a8df35794856887be4173"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440003--regulated/confirmation-episode.json",
+      "sha256": "0f429026d8bc748818959545f708508b1849e7bb420a47136cc24806d4432040"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440003--heading/confirmation-episode.json",
+      "sha256": "c6e758b8a3eda0ceab2877ae50f9562799518428da4b6990fc321deae8c05859"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440003--baseline/confirmation-episode.json",
+      "sha256": "8b63c32fb8ce4b0c4cc7e028897f24dcbd9e3049cca5a6a1e0b13d4123704628"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440004--baseline/confirmation-episode.json",
+      "sha256": "a47e60ac8cf0d0c9fc3240d1ccbfced7d14958dd80febc8792726447b85fb59e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440004--regulated/confirmation-episode.json",
+      "sha256": "7a7cf569343557b5715b81e7d26d2af7353df0d1e39d5915bffba854129e7053"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440004--heading/confirmation-episode.json",
+      "sha256": "0b42a81d1edc6671bd7c733c3b32cbd6aa500a00f9ee4c43ad314e10f0460ade"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440005--regulated/confirmation-episode.json",
+      "sha256": "c4cafcc14320a9ea76a1e1551b6a43ed3c034aaa1111ed79757e0bcd243b93c1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440005--baseline/confirmation-episode.json",
+      "sha256": "1163d3940de610a73ff0a36829eb44a29fb43a12fe402494c7eea9f6b4b82dda"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440005--heading/confirmation-episode.json",
+      "sha256": "6223dbe1635ba795902fe183b142f8ad51ee042363a7303a9f4ad027099ba47f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440006--heading/confirmation-episode.json",
+      "sha256": "971240a35e05fed3c0cb80fb31e9f4c358d37fcb39bc0a99db4de21a580bbb21"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440006--regulated/confirmation-episode.json",
+      "sha256": "4bf99741e11f3cd932dd85f3a8b7cc169d7fc3f70bc99237d783d3b94e7a69f9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440006--baseline/confirmation-episode.json",
+      "sha256": "4bdb062498f106f171d8918df16825ec84aacb8d98766d889b687abf65794e0e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440007--regulated/confirmation-episode.json",
+      "sha256": "da03dc26c604759b7cabbb7eb25b99ed282b12348bfdfdd9fea62e7b13982c86"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440007--baseline/confirmation-episode.json",
+      "sha256": "4f85b7319e39f1e7f787ebfd56e4cb029207a66c2caeaf0b151d30357a9d8b81"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440007--heading/confirmation-episode.json",
+      "sha256": "a2fb551982654158bc02863e5596c997ed5be1d8bb6ec5f4f11c4370c9e8c8c4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440008--regulated/confirmation-episode.json",
+      "sha256": "c8cb9fd8c260cf4e8e27d952c82665b99f704baeec0ee28bdb65a794a817c6fd"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440008--baseline/confirmation-episode.json",
+      "sha256": "79896e25b4f88339e5cdf49e468c3761a18f46468662b1b15c82d7e74c5048b8"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440008--heading/confirmation-episode.json",
+      "sha256": "94e5af5d958f4e8c7e6babb441203836410ef98b6db955e68d3b317579e695d7"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440009--heading/confirmation-episode.json",
+      "sha256": "d2209d10cfaecceb3b99ab9325c9e8e3d7700b1c79fd5380feb354a4df53e10d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440009--baseline/confirmation-episode.json",
+      "sha256": "2955681448b1888583c9b80b7b02083f2f7d06ecf782170bbb949bd64df26574"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440009--regulated/confirmation-episode.json",
+      "sha256": "278df35722c5fe5fa282fbf6d2cac7ebc447cec9d92d2c9ccaea02821ee18a9d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440010--baseline/confirmation-episode.json",
+      "sha256": "47d29898b08be9a90035ee938733baee9e9949c86a7116c2d219cfb7cc66a49f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440010--regulated/confirmation-episode.json",
+      "sha256": "8028cda35181cec0e05277a8eb2c94019e1d811ff0d878e7b5e9a371ebd4be3b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440010--heading/confirmation-episode.json",
+      "sha256": "a8d7bd5b7d6c25d7ea833394f53504d749067ee56d631197cfa56f79e17e4806"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440011--baseline/confirmation-episode.json",
+      "sha256": "b7f6a5404d5aeaa922b26aa410d05ef43ef4c6aaf3f4ad1150e74b3026737052"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440011--heading/confirmation-episode.json",
+      "sha256": "cf4e6fd3a9e3a499c37fb34740c32865280cc70e1186723afa104e9a5f64427e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440011--regulated/confirmation-episode.json",
+      "sha256": "578fd443f7977491ab5019ac75586d19a7691b2c15866551287125b17edfac28"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440012--regulated/confirmation-episode.json",
+      "sha256": "f0908dd94a393021b4aadcbc8867cc53e9d799aa489d3d130243ca4dad0ded27"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440012--baseline/confirmation-episode.json",
+      "sha256": "8787b5dbbcb36fb2ed498688934f911243a2f26e68b438084559321ca43c0d15"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440012--heading/confirmation-episode.json",
+      "sha256": "0aa89b0b43cbf7b5d23b036ab3fa1ee37b6ffcaacc2e29f1291a1464eebb9dad"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440013--baseline/confirmation-episode.json",
+      "sha256": "ead651015e45d20caf9706ccbc908261e63a52cfad4604ca2f15201dad11da36"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440013--heading/confirmation-episode.json",
+      "sha256": "b5a00b91fd722768f32e734dbd9138d417116efb40c695ebe858a3912c933235"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440013--regulated/confirmation-episode.json",
+      "sha256": "35a21720fbb21186ec4a5e1ddfc8a74573b1a23e1151d67d8b55af299bd13bd6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440014--regulated/confirmation-episode.json",
+      "sha256": "ddd8ad8e66b21a5cbc3547963d961f32946022bd87b96b809a16963029be1fb7"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440014--baseline/confirmation-episode.json",
+      "sha256": "1f5cf7700c3602c603d753d2a69aa773761401c0f43afb22201ff550f9dd6843"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440014--heading/confirmation-episode.json",
+      "sha256": "e88a53001abe6540cea1a642f371fd3fca8db6de14c6d101af9143a93e3af51f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440015--baseline/confirmation-episode.json",
+      "sha256": "903bab8d348730e44c040bb4bc786b200b47e5ba8d192bdceb3845be5e09c521"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440015--regulated/confirmation-episode.json",
+      "sha256": "f6db82e2699af3c41b680cd8101a94b4ad637cd0df73651a0d0743cdc8d1cec0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440015--heading/confirmation-episode.json",
+      "sha256": "32155766e652072f95523d7927122555ff115d18d2b4c6a53ccc3220bf234193"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440016--regulated/confirmation-episode.json",
+      "sha256": "72a7047250f775a81a760229a2bcdc90b8d7577cbe11c974683a876d336d99cc"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440016--baseline/confirmation-episode.json",
+      "sha256": "1014c15d39aaf7b24feaccf3131dfbaa0052ca878e9844a8517aee73b4d7d413"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440016--heading/confirmation-episode.json",
+      "sha256": "9c069d8f1384a1e24de59e41cde91e349bffeee677286a1e0d56bd529acf3f25"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440017--regulated/confirmation-episode.json",
+      "sha256": "1cdf929695d87bfc08d6b77eeae5821516edcc1cfe28668f1f07e8ebce1aef13"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440017--baseline/confirmation-episode.json",
+      "sha256": "23dddef8775c5176704b0cb50203ff027beaaf97662d02fa4e038c49e439f014"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440017--heading/confirmation-episode.json",
+      "sha256": "a8bc915dae647dcabf647ae868fae0573b33cba2c6254d036fc54c110b7f24f1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440018--heading/confirmation-episode.json",
+      "sha256": "c004206454c2da5e844971df52270b4779db57f3e43517c4a6bd3ccd37296e47"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440018--baseline/confirmation-episode.json",
+      "sha256": "b621ddf3613ee1e708a4d315180bae6801bf21107889536fd039c375dcd9048e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440018--regulated/confirmation-episode.json",
+      "sha256": "619e103fddd78993e53d17b8b1de42cefff7443b996e064446b9171837dfe6dd"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440019--heading/confirmation-episode.json",
+      "sha256": "9e4b85771f3802163515bf573427cee7551362cb725edfe6945abd221bdd3f40"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440019--regulated/confirmation-episode.json",
+      "sha256": "72eced6e79408124925aadd41042174dc9657d242d76ff4cd3437a8dd7d4ffac"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s0-ramp-20261011/dr-default-s0--ramp--s440019--baseline/confirmation-episode.json",
+      "sha256": "4b3073664bb2b30ab15b7831e9d868b08a9a8b15dc7b821a624aaeb28bf02ffb"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440000--baseline/confirmation-episode.json",
+      "sha256": "a41acbe257bfb15c9990dc7138d16ca7712bb48ebaa46cdba63d01c27c5c37e2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440000--heading/confirmation-episode.json",
+      "sha256": "f1c720fe3da89515073793b774cb2754c5fa6f6c1600c18d2b6d002de73faa27"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440001--baseline/confirmation-episode.json",
+      "sha256": "71626d7f7d9ce86cba7e84784f032c3ffd5a947d16e5720d6fd9192f39d88c14"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440001--heading/confirmation-episode.json",
+      "sha256": "219c9d5134f7972a88471e691516cfc92e9bcb051a81e022efea24c06f782950"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440002--heading/confirmation-episode.json",
+      "sha256": "f7921a800c37614dfbae4ce0a1bb984856467411fee462cb038550a1626d1d3f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440002--baseline/confirmation-episode.json",
+      "sha256": "e76358619c22d82dd68808994447cab3324d08f1808b1aa4149b144daf9a73ac"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440003--heading/confirmation-episode.json",
+      "sha256": "47f0514b7a3f4aaead15020e6c906ae49c06cec8d95124289ff24d911710374b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440003--baseline/confirmation-episode.json",
+      "sha256": "0eb9d4588bd5052157f0db6f201e4816eaecbc231bb9393e20f4e6e49629c545"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440004--baseline/confirmation-episode.json",
+      "sha256": "538f4871cef8e71ac86cd9da3723d4a79e6ac0908c463ac7560743632749397d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440004--heading/confirmation-episode.json",
+      "sha256": "71925643b132038162f5a1c3eb43288357d15d4bb87e94a57f7c3b7ca592c273"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440005--baseline/confirmation-episode.json",
+      "sha256": "cc2f2b78f39fe99ccbb0f54efb8c440d31b413e14f9ede6f55250ac7c8dbfe19"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440005--heading/confirmation-episode.json",
+      "sha256": "3bbcfb3ab4258db7c273c2df347768fa340e26118d1c8de079e743330bcb51f2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440006--heading/confirmation-episode.json",
+      "sha256": "d9c5716a062664223b07fd5cb8da9a7b97c8e703368c9ed13eb12d6eb65a0beb"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440006--baseline/confirmation-episode.json",
+      "sha256": "f8598536a635187b968cd6af32b0d3de513d51cf222227421e5bc1d997d1d940"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440007--baseline/confirmation-episode.json",
+      "sha256": "e5aab164cae150f3be5b22fba257be2df712b050f4749ff045e5cc3cac02c3bd"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440007--heading/confirmation-episode.json",
+      "sha256": "e9f0c3c9c01a66e0833ceffeffcb34ca85919a00f7a17357fd9c69f612c4e03e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440008--baseline/confirmation-episode.json",
+      "sha256": "5049a66e8a5cf6531adcf2a3ac0d07cec0505e6d1eff13366550d11d875ae9c1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440008--heading/confirmation-episode.json",
+      "sha256": "153db63087f099bb7346eb76b41b9d636affeb53a4b402aab1ac062c9557824c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440009--heading/confirmation-episode.json",
+      "sha256": "6031e0273fccc4077d09338e808b6c0e0090a5343d53889b051f549b995fa6c4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440009--baseline/confirmation-episode.json",
+      "sha256": "08021f4ec7ff0799330a47430ab758612df4ccb44bab17cda2a1014d31ad7f82"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440010--baseline/confirmation-episode.json",
+      "sha256": "8462d823b13dd8bade1db058c7bcb8a84d4bd67b3677ccd2ba3cb5a517915cf5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440010--heading/confirmation-episode.json",
+      "sha256": "aeecd2c1279828e9c9092f1fda24306174d2520484c43eb8eecfd371fbda51f1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440011--heading/confirmation-episode.json",
+      "sha256": "fa1646b7bae19123f7a3f58ac41a6849cc2c7a0ba8f263107bf8910dddaae0fe"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440011--baseline/confirmation-episode.json",
+      "sha256": "f3a553ff9844873ad8b6e3e5f41f83ccc2efd7443a786c77aedec7d41e52824c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440012--baseline/confirmation-episode.json",
+      "sha256": "313d6ee8b599a59523a6afa1eeb56063f1f4d3ac03cb79108cc2f9f44a690a47"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440012--heading/confirmation-episode.json",
+      "sha256": "fb3d35855be0370ebd8c9579a71a44a822f726a4af4f592fd623f25a42146d75"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440013--heading/confirmation-episode.json",
+      "sha256": "39b0920783b0858074e95badb844f7dc780da6941832ba5e415028a3883ed7d4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440013--baseline/confirmation-episode.json",
+      "sha256": "6cc97e60358e7af56c205694138c6152b75f73a2debc607f14a999448c567d08"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440014--baseline/confirmation-episode.json",
+      "sha256": "a06257e1f208c60149b1af68d12b1fc64f6090666293289f8098bbe851494ae8"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440014--heading/confirmation-episode.json",
+      "sha256": "330a4f9d6321c7242b48f3f1a38ea306c39525350ae4713dab880249d9d85f52"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440015--baseline/confirmation-episode.json",
+      "sha256": "44418ea082b5e73dac4150fe2abe35700bf8e4a42fe3d7d8ad92aaed06f190cd"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440015--heading/confirmation-episode.json",
+      "sha256": "d23b14daa3eb5498d24e436fff14880978c56796fa8f10884a112cd698bd6c22"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440016--baseline/confirmation-episode.json",
+      "sha256": "e742badfbce536cbe86b5fe3b548ec7b6278daa835ae927fd08053f9f90bc843"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440016--heading/confirmation-episode.json",
+      "sha256": "0bece4c7aa651afc0f838552a86520d8ace8139f07e3087071ebc6fbb88ee27a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440017--baseline/confirmation-episode.json",
+      "sha256": "7efc3cf0d50bc46d0b72d710a909f06bd7bd02496a949eec4fdbb1ea25530789"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440017--heading/confirmation-episode.json",
+      "sha256": "ec67d41772640345446f9c8c9069b2e71f4c4c67c28bb95ea0bd57f8b20bfd1c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440018--baseline/confirmation-episode.json",
+      "sha256": "6b43a0e4e9a7e982252f96aa24a79d1bfe02e91fb540290386f980c93bb2785a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440018--heading/confirmation-episode.json",
+      "sha256": "f8c300c7a98442c95773c887fe70a8e576e8a76015da001aca08ed88baa0472d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440019--baseline/confirmation-episode.json",
+      "sha256": "3ae3686e93d42fd34935aeb767fe1fc3a2635a844d110762a77e96c8367880e0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-flat-20261011/dr-default-s1--flat--s440019--heading/confirmation-episode.json",
+      "sha256": "e328e7faee40c0191ee9578868aa540bce31ab76b0caddac1c860518b2a41f2f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440000--baseline/confirmation-episode.json",
+      "sha256": "1c9559104c75470ccdfd6f846b1b6d027ce279a46b4e6b4d5d794ac39ba171c0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440000--heading/confirmation-episode.json",
+      "sha256": "0a537acc425c521d8816c3c556ed8adc7f1f5cef643714371268917635147b2c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440001--baseline/confirmation-episode.json",
+      "sha256": "bb3a42805c4662d49e058330d65556b8308f72ddf61cf0bfb2b5c85a2a90c87f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440001--heading/confirmation-episode.json",
+      "sha256": "a74710a20fc1d31fe3e72720c9b43af0b6301ead9e7b0679c93d1d8cc24f59e5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440002--heading/confirmation-episode.json",
+      "sha256": "40eeb028cf6c899e89387ba5e3cb573e7b34add9b446b58ed23b4fc959e8aad6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440002--baseline/confirmation-episode.json",
+      "sha256": "37f836b3ac4f2b257be196209dd16c982f01778e6b463c43db12092d03d370b2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440003--heading/confirmation-episode.json",
+      "sha256": "3bcd2f3d05672fc312c0952e52f7529ae2522f1aeeff6537670413de65282399"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440003--baseline/confirmation-episode.json",
+      "sha256": "3ab5041358abe73d5a04a3b7164c225550dbdbdd345fc7964f19781370c055e9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440004--baseline/confirmation-episode.json",
+      "sha256": "2c39b5517503475b07ab85199a900a6c0ece947373b3a8266253fbe3aa9909eb"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440004--heading/confirmation-episode.json",
+      "sha256": "6cf410fd3c919463c8e6e44daf1538724221cd5cd40e49a19c3445d599973f91"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440005--baseline/confirmation-episode.json",
+      "sha256": "5311252806c9e1e6fe162314a6c2b1191974558d9d0652b71f3456ec1a158a47"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440005--heading/confirmation-episode.json",
+      "sha256": "1cc96e9e8be4a9a256bff41d8eb65e65b40c6ce9699bbec263a303b98b12f6a8"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440006--heading/confirmation-episode.json",
+      "sha256": "55b2d5b7703f82894559c468e8f35a0e7d23983e36ee8d8117b6d9584cd67b38"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440006--baseline/confirmation-episode.json",
+      "sha256": "21e04337255ffe0a95943274cf29c408cc6ac709dcb5cdabc9c180f5a2c45a56"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440007--baseline/confirmation-episode.json",
+      "sha256": "94a41f744a71f2013f42a5c7751faecde0eb5c39ee7029c6b4c41d8943308f9b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440007--heading/confirmation-episode.json",
+      "sha256": "aa1ad6815237bc195fa81a64a89f47dff19d91b62ad4c0c5c81a519a74f023c8"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440008--baseline/confirmation-episode.json",
+      "sha256": "617747d4452c407421e7472a853bfb7aa09aea9a20a85f1baec5abccc8b097e7"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440008--heading/confirmation-episode.json",
+      "sha256": "775ecdc9d1ab233b5ea5737a39617010426fe5cdc9fa9a86dc4a7ae8c4c0ce21"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440009--heading/confirmation-episode.json",
+      "sha256": "ad987eed0ece2f8baac5ec551144fc3526657547444cc32cc73bbebfc9e6c382"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440009--baseline/confirmation-episode.json",
+      "sha256": "b228d456bb51940327a830eb15611fa84623163d7a067517865bc40573c59c1d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440010--baseline/confirmation-episode.json",
+      "sha256": "f78a3517e1844ae2f4cc39c815225bef8f10ef0cc873fe93b3c236e6d5551574"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440010--heading/confirmation-episode.json",
+      "sha256": "116690b0ab286ba77cf75869a827e701df828ca3dd23de1655b51325a9eee9f9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440011--heading/confirmation-episode.json",
+      "sha256": "ccf5dd1cde7cc80803ae1d2667bb8fb198accc0879d0f9b09fab2ec265a86142"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440011--baseline/confirmation-episode.json",
+      "sha256": "8901f59b44a1668df8b9d7447dfbaea830943ab1620fb1f86a3d0c51cc00f636"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440012--baseline/confirmation-episode.json",
+      "sha256": "0e7a8fa1918baef23d4986fbf3f94ad13d12e08f328680628f11c389078d3330"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440012--heading/confirmation-episode.json",
+      "sha256": "cf4dba313c9b0aa8477cd4e27a4082affe038c39cf6f93d6b4c84c9db09517ca"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440013--heading/confirmation-episode.json",
+      "sha256": "e3fa5b160fe6604f2a231e7742d7894af3c18f4ed518512d29a181f72dcdf9aa"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440013--baseline/confirmation-episode.json",
+      "sha256": "616d9882de4437108b5207a8b86be638bac62078755e2ece6bc408a7a26fcb5d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440014--baseline/confirmation-episode.json",
+      "sha256": "814ca82d4432b72fd94ea88a9b6060e889b5c810e7dff10ef216a2922891762d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440014--heading/confirmation-episode.json",
+      "sha256": "cc1c6eb0cb5c0c14cdddcedf2e21823be38aa2983ef70ccab52a84c90eb980b0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440015--baseline/confirmation-episode.json",
+      "sha256": "5183cd14d44f50df02d122a1cbd66ae665880a2680df8031fd1ebeb435ece052"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440015--heading/confirmation-episode.json",
+      "sha256": "8cbc5c86e22f1901dae9bf7af2e9c2e23d1ca2722a5357e9c56b5dfeded887fa"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440016--baseline/confirmation-episode.json",
+      "sha256": "bd9796d781cd9f1b5c8271d1862030ecb216b31934d32a2d89d95191d359cbd0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440016--heading/confirmation-episode.json",
+      "sha256": "2d9e25cc3fde840a5d37429596ecb6d4c5a313841ef7dca23cc62fbfda54a18a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440017--baseline/confirmation-episode.json",
+      "sha256": "ea4772f5aa6801f9b8b841a28ed17024805f920354af9086181facdf19c59280"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440017--heading/confirmation-episode.json",
+      "sha256": "683464f6b7be4820073ecc5f4ca614cfa909af02180a6e374729a587be0bfcde"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440018--baseline/confirmation-episode.json",
+      "sha256": "09a1b33fae03600e433c629ab63d7a39a5e7c26499c714cef0f3f38d6fce5d70"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440018--heading/confirmation-episode.json",
+      "sha256": "67eb5681dd792ee0ac71aef869016aca381d10a4ceb22a6caf4ab913e9f70ccd"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440019--baseline/confirmation-episode.json",
+      "sha256": "278ad59aa9d3055d8226b5043b47dc17adead076935a8c9022b2078048335973"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-small_steps-20261011/dr-default-s1--small_steps--s440019--heading/confirmation-episode.json",
+      "sha256": "60b65a287f909e69b13201f0099628f0ca6662f2f46187f3252719f3416e61e4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440000--baseline/confirmation-episode.json",
+      "sha256": "c0f0977cff1418e1bd0202e666adb655342c75a475d8554030eb82a4115330a2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440000--heading/confirmation-episode.json",
+      "sha256": "ae9613705eb4dbf9587db6e4441c2a67c13aac6a7a3c0fc8e4ba7fb3cf944e1f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440001--baseline/confirmation-episode.json",
+      "sha256": "c001b791df9af1a09eb233094322ea22f90f211fb3083e61e27f7a1856c667da"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440001--heading/confirmation-episode.json",
+      "sha256": "8e860ffa43aa96ca4f248be0346e63efe1a2d0cfea1c20a060773a1a1d488707"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440002--heading/confirmation-episode.json",
+      "sha256": "34a788af7cbbd9d8186d43f066928a66f8230f706b0166e39160a0a68bfa4396"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440002--baseline/confirmation-episode.json",
+      "sha256": "9a5a690e4fd7756a5d0fa42d4f318f09f80daf0e54013cd73da2c684f5160b2d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440003--heading/confirmation-episode.json",
+      "sha256": "6b30f80dca06b416c05ef32a3dd3abd508c4256f6bd075f61d186ac75af8653c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440003--baseline/confirmation-episode.json",
+      "sha256": "5d16e6d7c6819530ebec0ea014c35d544470543b349865d16d2f37f194a256b1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440004--baseline/confirmation-episode.json",
+      "sha256": "5b342757ea4291668047370c4d421ee60bc254d3985b3d45e843838abee37d84"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440004--heading/confirmation-episode.json",
+      "sha256": "d31fc61a4959a5e31ea8c9a5c50b3c9d8267d1388c6a69655969662f68b3f248"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440005--baseline/confirmation-episode.json",
+      "sha256": "e63e86a5e8a585871cc19d70ed93c4ab75dbd29d54ed5031f31d8b6954e2cc29"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440005--heading/confirmation-episode.json",
+      "sha256": "5247f22a65de0cb4ff6f2e84270c4c94a4cf7a65a719a526f9aa3b847f93a5c3"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440006--heading/confirmation-episode.json",
+      "sha256": "8e54675643e42c2b413ae57fe9f93f896da0acccde2dffbbeb8872f9b02f2f3d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440006--baseline/confirmation-episode.json",
+      "sha256": "00ba32b7a8d045f3cf84aa689d12e881acb7f2e89e707b6c5b1b7a3b403befce"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440007--baseline/confirmation-episode.json",
+      "sha256": "79d156eed0bdff4d4cb4a78fb761affc5bc20aad3d81dc1b884ae71a9130e177"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440007--heading/confirmation-episode.json",
+      "sha256": "46b31c0817818233c2cdb6e257c886b8e7430783e9460966a960fb4c98b87e8d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440008--baseline/confirmation-episode.json",
+      "sha256": "2a215cb741d6582be2a990fac540ead7630899931390747d1531c7d3f88018c9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440008--heading/confirmation-episode.json",
+      "sha256": "5a6f5ce60b3ac2c6ddfe52b025446ac6bb77d980fae98ea6f04ff044b43f25b0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440009--heading/confirmation-episode.json",
+      "sha256": "a793680633d0b7c59336cb342d6fb52569f0181265a4ebca7a58e4297305f133"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440009--baseline/confirmation-episode.json",
+      "sha256": "3dd01341e04111e486e89139917bc3b540bf9ce05857ab2bb62f144eece6050c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440010--baseline/confirmation-episode.json",
+      "sha256": "6069901f6aaed7a8ba5a981984645bffc06ab36a5abcb880b5dfe68a6b60af52"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440010--heading/confirmation-episode.json",
+      "sha256": "9a2794e13b0617c55153bbd8791d15af776a8b3aa4daf71c2841342ad103963e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440011--heading/confirmation-episode.json",
+      "sha256": "982ed5028f9a0406fdc7373dd3534cfbbb2f8806849f18970790026d95e1f269"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440011--baseline/confirmation-episode.json",
+      "sha256": "ff54cd391297ab0ba398f89947358c2f4c83c9914fb17dc0d4ad110e700d92db"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440012--baseline/confirmation-episode.json",
+      "sha256": "f567e74285855583b7c39469f82573dcc82d09f89fd9b5c90056de95bad47757"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440012--heading/confirmation-episode.json",
+      "sha256": "7a0dd5eb9750f3031362af35277aeec0bb26d9bd67212d8da8931f1d707384c9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440013--heading/confirmation-episode.json",
+      "sha256": "766d0d87924f71f0ba7645b14be861995d13af0dfdde4bbe81c80c8b15c526a7"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440013--baseline/confirmation-episode.json",
+      "sha256": "069da793409bdf3ae5d166d22dfe0439b849bc70a7f6f7a5e95ca972daf86a30"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440014--baseline/confirmation-episode.json",
+      "sha256": "8dfd19bbc2029c5b4e915f983bd8bb825bdd3c102d47d9a2d5b0a17f770037a1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440014--heading/confirmation-episode.json",
+      "sha256": "6e3013cc67eb9b29174070eef5d4fa347a94b33ed916effea135f8f4bbba6b0a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440015--baseline/confirmation-episode.json",
+      "sha256": "9697c23a849afa1e928a163837137e70f427e1e51bfa431247929d4bc088db4e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440015--heading/confirmation-episode.json",
+      "sha256": "955bf866a279868a7431809721e6e0f01fb8e47a9778e6eb9aafdf873e7627ae"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440016--baseline/confirmation-episode.json",
+      "sha256": "279a7c1b09a5fd26a56ff644e92a4816bad1078e9455fa7da6945fa1569536b6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440016--heading/confirmation-episode.json",
+      "sha256": "7e527faced8315f25179a177d50d23a66bb249812d53fb7180962e2174b64eb3"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440017--baseline/confirmation-episode.json",
+      "sha256": "19e0877c153a7b849d2ad3662719738bfc3e5d0eea5f026e95508d6ffe523049"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440017--heading/confirmation-episode.json",
+      "sha256": "6dbc27d45c615060f42cb39ad8c67d361e622c99bc5a04950e15b3664e296683"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440018--baseline/confirmation-episode.json",
+      "sha256": "7fe4a1e11746f1be8e53c5337eed48bd8384068b3c540b34196d9ae3dac7d955"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440018--heading/confirmation-episode.json",
+      "sha256": "af3ff53cdd3a81276a64981aaac90377ca22317a3b48abf64204e28265e74208"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440019--baseline/confirmation-episode.json",
+      "sha256": "dfe63b3eab0aa74c854b1a48718227e8d4e2c4a6fa977b02da2e22f1c302f120"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s1-ramp-20261011/dr-default-s1--ramp--s440019--heading/confirmation-episode.json",
+      "sha256": "f09f3bf9a94633b8cd45ada7808dd4db340d8c27430772163015b239b8cfba5d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440000--regulated/confirmation-episode.json",
+      "sha256": "6f0b5be11f4c05e1fe83afea37e2718ec444b47ca20359a196415e0e6c366f1b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440000--heading/confirmation-episode.json",
+      "sha256": "a2103820e751b439fa121ed4bbe2a3ad3152ce38998e5ee9f4b2bd43f086cd6a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440000--baseline/confirmation-episode.json",
+      "sha256": "fe3109ed538609bd18f34273eeb76fef215ef801e1232e3f36459c2564f4e5f9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440001--heading/confirmation-episode.json",
+      "sha256": "1556f57efedc60f25bef699d44682d61fb87c3163beea1c27e156e85d05b14db"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440001--baseline/confirmation-episode.json",
+      "sha256": "ec7a1e829ddadf5e88d73164ea1a34a3fa39b6e215a15c81e7733790f201ad4e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440001--regulated/confirmation-episode.json",
+      "sha256": "980ed9e6f699dff60ca738bf0f209edbb63182e387488bdf57d676efa8856fa2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440002--baseline/confirmation-episode.json",
+      "sha256": "5ec670ac1ec63fe1b424b953d84093f354dac482a76b6e84f6883259f78ebf45"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440002--heading/confirmation-episode.json",
+      "sha256": "0e8f082872f509e4f583e487c34e76f33a455a3d62cb6a5728c9708c4706a419"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440002--regulated/confirmation-episode.json",
+      "sha256": "56e7d96f6ce64e2b941ac7d6000597c2cbba842e86cffd1072524e6ce074de3f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440003--regulated/confirmation-episode.json",
+      "sha256": "1f53d20ab85ada831edd302381b532f089ac4a3d9aa37b5786af2867ce825cdc"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440003--heading/confirmation-episode.json",
+      "sha256": "f3f8633ab38d22ea73cd9f0106ef5b5f1cf9b20fe865f417e234691aa8b60dc3"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440003--baseline/confirmation-episode.json",
+      "sha256": "84878fc229e72a9302f43261f6d9f2c81fea7a6852346d0afa0fc6539a06a675"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440004--baseline/confirmation-episode.json",
+      "sha256": "04314fad7b6b11d1c9a6d264a21b758351ba82c5561d9238a308542225e56d21"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440004--regulated/confirmation-episode.json",
+      "sha256": "3a3ac63224158f26506a0125ecf515d2d0359d192f85d23c0b6e262fb7da3ebd"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440004--heading/confirmation-episode.json",
+      "sha256": "71dd39cf1b797d1c3607d262ea3468ba23a36cfa0f316b18a645607a4195f14c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440005--regulated/confirmation-episode.json",
+      "sha256": "99636f5e97b03b4af6aeb02de308a3cbdc21bf4cfc66e20af30e122a3f2c9224"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440005--baseline/confirmation-episode.json",
+      "sha256": "175ce089d0f58c2e20e58012b85528d02215373321176b4ad627eb73ef12cb4e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440005--heading/confirmation-episode.json",
+      "sha256": "d53d67956e71f69184d937af9ac1b3793ca74657f6c9edca567f015f8fe13fb1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440006--heading/confirmation-episode.json",
+      "sha256": "7a17adbed3646307066aa37921dd77dd079a5b071df978fb12d75ca0a775cf5b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440006--regulated/confirmation-episode.json",
+      "sha256": "cfc9827c930076c14a03806a23eae1d979bd90d3333ef6b9276a524791fb2be1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440006--baseline/confirmation-episode.json",
+      "sha256": "10f05aa63e19203cb67962eb7afd05028a2e184bbc3c8a4bd520ec1f8ccf3249"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440007--regulated/confirmation-episode.json",
+      "sha256": "20b8bb4c5aaaa3cbfc1d99be87b78bc88c5ed34fa9ff43970884335ff68b2519"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440007--baseline/confirmation-episode.json",
+      "sha256": "21d3f8d2729d188e8dfde4143c3decc78011dad197eb89d298d6721b40f5c9e9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440007--heading/confirmation-episode.json",
+      "sha256": "49e9bebc8d85da2c7d845c728e9b38124609119c4f59f505ab4d1b0c186d3ce4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440008--regulated/confirmation-episode.json",
+      "sha256": "08fe024233013cac83f4c42e4e1c233f84bef0b93e514b3ef7cd54db629f6830"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440008--baseline/confirmation-episode.json",
+      "sha256": "12235872f0ce8adb7a342eea9dfc1f80002b2bfb2d8da8bf76360aafaa960d71"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440008--heading/confirmation-episode.json",
+      "sha256": "213863c709943607f3f9c54e558e134c621619786a95954ef732923675567c49"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440009--heading/confirmation-episode.json",
+      "sha256": "54e6ca4b767489ee51f9c3afebebc4f1e6d19257fde39e917018f24e49880d1a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440009--baseline/confirmation-episode.json",
+      "sha256": "6d215d54ae0f8397f24020ce7beaf4bf72dfb198d1e8e486793003b6d1cbaa6a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440009--regulated/confirmation-episode.json",
+      "sha256": "44aa844227a1ef67dc27064ac327817a1f73337c778ac1c8ae782b20a008bb4c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440010--baseline/confirmation-episode.json",
+      "sha256": "9a1d040f91750fcf42f2cbd63f070e4db521825379508aa64d6b375acb8f2475"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440010--regulated/confirmation-episode.json",
+      "sha256": "3bc4d030c95951e3e57040b339d235c323d6f9083f693e7663129bdb1ba37efd"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440010--heading/confirmation-episode.json",
+      "sha256": "3eb9d968b931f7649a38aea72d34a97ba7831cebb3f7f6ebbfad26d8b660aad7"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440011--baseline/confirmation-episode.json",
+      "sha256": "128641d744036b1ed0e9e3d0511db2ae46bd1c5b62f07e541cd86ace61e7616d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440011--heading/confirmation-episode.json",
+      "sha256": "39d9cf71a11c070eeb82bc7225c5c44e88254d3be6d45fc0add8b1d1e24de81b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440011--regulated/confirmation-episode.json",
+      "sha256": "c95ffa05c9798df731dc1feaa26df2c53073129706433ce48c80c6c9e61add99"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440012--regulated/confirmation-episode.json",
+      "sha256": "c49f28143233c8cbb920744c6f82584d2d555533888214ca9603008c726869f5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440012--baseline/confirmation-episode.json",
+      "sha256": "ad538a9f8f135cd9b379426cab1d428d1d5a759b3e070e79a66b0b8be3dd377d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440012--heading/confirmation-episode.json",
+      "sha256": "7752606091d45b6a8da52cd3c40915a4e2be1d6dc0cb748b771cce4771e01b95"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440013--baseline/confirmation-episode.json",
+      "sha256": "1bdde54a08007e6d9090879528f9a354042ea82711442db75247712b8255fd1e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440013--heading/confirmation-episode.json",
+      "sha256": "75a82dfd93c3c94bb54aa27d6a1d2a8fad6af5f711ad7eb3305196204b9c04ba"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440013--regulated/confirmation-episode.json",
+      "sha256": "7afcddaa2c8ed7bcb51fbed5cb9866bb105438ba36ff898a9f5803f6d3577edd"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440014--regulated/confirmation-episode.json",
+      "sha256": "01a2703360717064132110fb2cd0f1e7def6a789a5cc212241981a17569766a6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440014--baseline/confirmation-episode.json",
+      "sha256": "338f82f9d9e084a9898e6bd1a80457c4c701c36df230d51efd8b5d815f5c54e6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440014--heading/confirmation-episode.json",
+      "sha256": "a907a4b44667886214f43317c7760626698f6ad113dbc608d16c0035086d3b9e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440015--baseline/confirmation-episode.json",
+      "sha256": "b255e9ea5fc2f2889b7131b9c417196a72bbf81d2805bcf5d2a926592793ff1a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440015--regulated/confirmation-episode.json",
+      "sha256": "808184f14291b9fb0446176bc113ee28782fccc0f7ff9531d909e165c6e47af2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440015--heading/confirmation-episode.json",
+      "sha256": "504b0938dcc942716351d721c32c1712676d473384011ae88d7367cd83190b4f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440016--regulated/confirmation-episode.json",
+      "sha256": "0c7d8afbef554240ba9cfd772fba83d74c046223f3a55b3db88ce3aab5edc4ea"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440016--baseline/confirmation-episode.json",
+      "sha256": "4315d18c1b91039426aeb27b32dd161d199168c5635adbaacfb74b19455728ca"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440016--heading/confirmation-episode.json",
+      "sha256": "f9c00627e41f23f3d40011a8ab9ae23c39f40e8e2d3570333bc4cc959a278aca"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440017--regulated/confirmation-episode.json",
+      "sha256": "10b63f3f1f8c94063ceee8ea704ed6f48fdc9eb74db938492077e0ccbde99e3d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440017--baseline/confirmation-episode.json",
+      "sha256": "cfd6892d0b9195c4df72419afac93f61c1fd66e51f50da5f0255ecae46928b45"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440017--heading/confirmation-episode.json",
+      "sha256": "dfa58f947d9df0fec33f7570d8d4fe6be2142fc7ecbd7112f2cf2e419ad48502"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440018--heading/confirmation-episode.json",
+      "sha256": "73ce2e1306895edf28104096eed976f6d77ac075d84dab8384e3d332a27118d1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440018--baseline/confirmation-episode.json",
+      "sha256": "ae2f7e65ea3f6b588c0a86b98448feb299d1d8975d466c12838eb17134e0a533"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440018--regulated/confirmation-episode.json",
+      "sha256": "8b3b557610ddcbc5e1d1c3a93a08de281bd588a2f115ae27f234d3c6e6c5cb1b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440019--heading/confirmation-episode.json",
+      "sha256": "c77f23be308df7566b6254ee7eb9e4c7636a75d95437a0e13b6f270f732a159c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440019--regulated/confirmation-episode.json",
+      "sha256": "e16bd288261f6caac4d8e81e8a3f63f57d3787276357d07e84b21183bd9d996b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-flat-20261011/dr-default-s2--flat--s440019--baseline/confirmation-episode.json",
+      "sha256": "f8068c8d2e7f6436fed09d8738caee1ea595fab06c45ac37f4cc65e5027d4b28"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440000--regulated/confirmation-episode.json",
+      "sha256": "6e6c09d16aacf47947fba51bb019398c837573f58c9554c46a0d9acdc4934407"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440000--heading/confirmation-episode.json",
+      "sha256": "ca604de72a2d15fcb8c605e4576325e68f3f2b43ae482cd7f1c8d4635281318b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440000--baseline/confirmation-episode.json",
+      "sha256": "80037abdc0009a630236ffe5325be72188954c79dea7bebc3d8685e147a23567"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440001--heading/confirmation-episode.json",
+      "sha256": "1e78ec9374c1c6f85d2951efac6839bff633e28a9a9c945d5b64be914043c7b4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440001--baseline/confirmation-episode.json",
+      "sha256": "60592ae2c9d04fdf6c24b76d95f9dddbe65f05104f839ee7c8c4f5c947220e3a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440001--regulated/confirmation-episode.json",
+      "sha256": "2b36b7998c9aa2954dfb297e3d31c30d8f085853555e7af76abd2cd37258c104"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440002--baseline/confirmation-episode.json",
+      "sha256": "782c073f7f14a6589aa57acb4133ffde8e3040789c65903fd2c2f8802e704500"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440002--heading/confirmation-episode.json",
+      "sha256": "3512b93c057adcd22aa3620b79b4ae7e5e4f2046f7e79141d1ee1b87c35bac07"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440002--regulated/confirmation-episode.json",
+      "sha256": "4c11c21c619ea2a0f09ba936e76ee8a834fef06a7d4a59ff39280fba5b4b745a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440003--regulated/confirmation-episode.json",
+      "sha256": "90054a072b8258c5442ef406d35c3ada264597bcec2f2681b644ad50987754de"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440003--heading/confirmation-episode.json",
+      "sha256": "53629393fda288b5d74838d9818f1054df94db765f1583f6b2c138dd189543dd"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440003--baseline/confirmation-episode.json",
+      "sha256": "878b59a02f5afa0f414f853f6f35e32ac8c2502735b7e8fd7ac074b02c3cccd8"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440004--baseline/confirmation-episode.json",
+      "sha256": "c2f43c508b922851ac2efff378a336c8e597d49d5ebe1e6d261dc3bbde78aae0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440004--regulated/confirmation-episode.json",
+      "sha256": "9306ab121f84203dce547004d3b77ae58c5b6e35e12b9016d3b2b24b395b2e5f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440004--heading/confirmation-episode.json",
+      "sha256": "1a04edd8c3f121d9c70d0c31323e08b3caf844ba55113f9a38ca7afbc139f063"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440005--regulated/confirmation-episode.json",
+      "sha256": "4881f5de0449264d99c4977e712c2ea31ed279d0e7d4ceeb0a361a9af8bcbf51"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440005--baseline/confirmation-episode.json",
+      "sha256": "f5d507f525236e1a3828eade7435e8888105349287c79b45ca8cfc5137bb7098"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440005--heading/confirmation-episode.json",
+      "sha256": "62b17ce2d2e758454d6da500a79e0480ba8f7d14371d510c3b5deeb850ade6e6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440006--heading/confirmation-episode.json",
+      "sha256": "89c28d0c84275214c3a1bc0903f2e21e1bdc2c057e2587eb0611c85331e8b891"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440006--regulated/confirmation-episode.json",
+      "sha256": "8339c4d7c3051592e4c2ff813db87cef5908a6edbd980a52a80165a08a0f7b30"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440006--baseline/confirmation-episode.json",
+      "sha256": "7693226ad8b793db622b664467e4391b6351766998fdf0b4adbc3622285ae291"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440007--regulated/confirmation-episode.json",
+      "sha256": "e9ddc580083361ddd0385373efe62dbeddef0d91134b9af24b4daae36b780abb"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440007--baseline/confirmation-episode.json",
+      "sha256": "d65945762f34b798f2ec9b2783fa076ce4cd60df42e5a50611e6e53a77ae1db9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440007--heading/confirmation-episode.json",
+      "sha256": "bf0948f7773ac17d21a2362804144790eb2ffa65c2f8a80a28bdf92ea9f7f465"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440008--regulated/confirmation-episode.json",
+      "sha256": "e14af0538b77d5b3dd9fdc74591874e6202b21a8849146896466e0ec1bc7b4f5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440008--baseline/confirmation-episode.json",
+      "sha256": "2f9539954cff7405a8a1d397b2b91d211228376a943d6e67f612ceb6fb80b662"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440008--heading/confirmation-episode.json",
+      "sha256": "0e7ac3e25d90ac014b3106a6c33da3e930f55b6fe510011d9413dc158e3f0e32"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440009--heading/confirmation-episode.json",
+      "sha256": "babf78c71b096e3ead0d927bbc2faa9b1b99e9a6fd210828ee294b6c277f3313"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440009--baseline/confirmation-episode.json",
+      "sha256": "348d118495a5e76f45bdcce2b762e299e3ade2d9e9a407738662a578fe8c2ea5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440009--regulated/confirmation-episode.json",
+      "sha256": "2335486c1edf6e67ee72fb9fab235aa8e8b9a8f9074aaccc129f636567714763"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440010--baseline/confirmation-episode.json",
+      "sha256": "5ea10e5d1dd25e367d242e3c10a24e688620fa75c8034c05e7ee853c5dab3d75"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440010--regulated/confirmation-episode.json",
+      "sha256": "8f2e1e00a7d26355e35a55008ee4d7bdb32d30318e85808845120aff85d05f02"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440010--heading/confirmation-episode.json",
+      "sha256": "78ee812eca1e4bd7eab461467087321a513176b2856c423f0d9a95ef7ed89138"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440011--baseline/confirmation-episode.json",
+      "sha256": "e45786b006241b7bd0a69f7ffd227c70012eeca36d5b45b3e28a0e547ce46864"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440011--heading/confirmation-episode.json",
+      "sha256": "41673e08e2f6f5bceef861c29553754c1c31e5761b26336cef80e03a6ae4acc9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440011--regulated/confirmation-episode.json",
+      "sha256": "807cb99d681002622326928316b1099c80bd7fa59d95be7151ca52d799962ef1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440012--regulated/confirmation-episode.json",
+      "sha256": "f0224a5c202172676fca74897f38e4506c138c410bef0354976ebaf708e6afd3"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440012--baseline/confirmation-episode.json",
+      "sha256": "a706e9d1d3e710d0089ee1f480a386dcade51bb66c42494237210db67a010e75"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440012--heading/confirmation-episode.json",
+      "sha256": "0625a42ef4adcf5ab8e29f0dc5329ae45c613c433a1f5011ad28b71281590c28"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440013--baseline/confirmation-episode.json",
+      "sha256": "f89c8d53fe68c31409e7784b999cd320ee8d6564035526c52b57f27028d1c91f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440013--heading/confirmation-episode.json",
+      "sha256": "cee7234042f03e2cb7897a0e1baa51989edeb74d967962c23f955e6a56d1b16d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440013--regulated/confirmation-episode.json",
+      "sha256": "179519c7976bb5d6c63e78f9e852bb67b2344d3fd5b4551cc08f7bb6591f81ab"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440014--regulated/confirmation-episode.json",
+      "sha256": "27a7f2033c00b6f0dd91384faafcc93224a4c5582cc91cb80ef420fd3bca65f4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440014--baseline/confirmation-episode.json",
+      "sha256": "a1bb5622307b9b36e98aa87421c1610c6b0efd9b6605424407ec0286f2c6b47f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440014--heading/confirmation-episode.json",
+      "sha256": "9d1599d47df8f7710355e8787ee5e9ce2c128b5e8c38b35c153c6efa6e34a2aa"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440015--baseline/confirmation-episode.json",
+      "sha256": "c4aa6fe53a14de116c95a055fef82a12ad7f7580754931230aea7463afcf27db"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440015--regulated/confirmation-episode.json",
+      "sha256": "35420f55ab4c7a43b65777bc9d78dc9fe29cfb198a108d60eb7ab59c11d1ad5a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440015--heading/confirmation-episode.json",
+      "sha256": "4245aad1cf50629c023144b1af1fafd40040d01d1a8fe29e687e66b4dd74ba7e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440016--regulated/confirmation-episode.json",
+      "sha256": "01677c8bf1390c478c5fe72471a555b2c7852c804811f9c769aa2c65ceab8e0e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440016--baseline/confirmation-episode.json",
+      "sha256": "e93de1a8050508ce86ec07dabf0ae62eab55b6b576bc2ba2e5ca7b6ca189f5d4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440016--heading/confirmation-episode.json",
+      "sha256": "fa77fbb5340ea2590d3ce86429109d1bad3cac3898cae1f03973ac7a81c76607"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440017--regulated/confirmation-episode.json",
+      "sha256": "61739e54216152c019d7bd1f54fc21ad024624b6f1a4b9838ac0626a72403805"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440017--baseline/confirmation-episode.json",
+      "sha256": "d5cd775cd690893c6501b2a9b222190ab3f8b7ba01bcbac53a874c4a6c974638"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440017--heading/confirmation-episode.json",
+      "sha256": "c6b3d42a3d292a01b916de5567f557989033f61ee3e840d7fa52015719d69ca4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440018--heading/confirmation-episode.json",
+      "sha256": "0c7d635f624c58e009c02bcac2f2c2ee4cc92f259e907a094f41149403d3414a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440018--baseline/confirmation-episode.json",
+      "sha256": "a415df758c1fb7bfd5cc2831c7fc989310111a7ba0e6eb15745442d55dd70d7f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440018--regulated/confirmation-episode.json",
+      "sha256": "d724e9d0d88cee995098b8bbf6c6786d0ce38b0bc40b278ab4779192d1a677c4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440019--heading/confirmation-episode.json",
+      "sha256": "2bf8dcfa9c7d5b445b90f25af96fb5ad27ee0b1479eb317d78da830d1091f3ef"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440019--regulated/confirmation-episode.json",
+      "sha256": "9cda6cb0321fbd3ec79d4239d47e9c7a85fb60c60d4993f9395579bc28f4a83b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-small_steps-20261011/dr-default-s2--small_steps--s440019--baseline/confirmation-episode.json",
+      "sha256": "45829932e027f001df88150728f3e31561c04e0a4b8fc38a7cff003cd553412e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440000--regulated/confirmation-episode.json",
+      "sha256": "45896facba40656c60039ad3b1f1698cf571ed004421e32439fc23d6086b898b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440000--heading/confirmation-episode.json",
+      "sha256": "402db93f31d4c3b118d9d4b1b69e1fd4cebae46b88590f53b4eedef9d560c328"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440000--baseline/confirmation-episode.json",
+      "sha256": "d50f90c7527ca7694a8c3128be2c6f042bb12bae3ae62fd8ff96cb3ed86d2474"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440001--heading/confirmation-episode.json",
+      "sha256": "8741c68c72885a807d953dcebcbb4f983c3eb04a362c1439cab17c42fc2052ee"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440001--baseline/confirmation-episode.json",
+      "sha256": "b362a1d838efda7aed3c5f46fa1acaeea0bafb8c4dc5ce12c2a333cf61aba310"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440001--regulated/confirmation-episode.json",
+      "sha256": "9b3bc2d0a2f0a54af241068aeafa94df8381391ce21e11f43810d5fff491237b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440002--baseline/confirmation-episode.json",
+      "sha256": "941cb39cc74522c5d345777a68e80cde98ecc7f98b0997b404d971091f7df331"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440002--heading/confirmation-episode.json",
+      "sha256": "55dad4ce00da356d15506fa8268f5631c7ccc356ff7f11d23d2121fb1da811b4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440002--regulated/confirmation-episode.json",
+      "sha256": "a92c390b52b437ea1df8ebf45102092786e878e37dd3e66c3828e7dbe4039cff"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440003--regulated/confirmation-episode.json",
+      "sha256": "8367bf194cea53f97a4f6bb745f63b2616bd2d5f4e44b80c2e13410e75816760"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440003--heading/confirmation-episode.json",
+      "sha256": "c8c1421757845085c179d710d4d98a7418826315b827428cb8ee32b79fca6520"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440003--baseline/confirmation-episode.json",
+      "sha256": "7c90165a65fc0c802251ec2ceb0986d60ac6468e1a2aa272354548c3766e6f04"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440004--baseline/confirmation-episode.json",
+      "sha256": "cb1d66a2ac69ac8e96bae157efc234c322380343cd2fae2b1cab3e337708b73b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440004--regulated/confirmation-episode.json",
+      "sha256": "56308211abd534bf40e773c0ea30659f1d6da141acb66ee2c25b52dce6aa5d1d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440004--heading/confirmation-episode.json",
+      "sha256": "df036f98b374f890dbebfc56b15365e76cdd3a70fd38451c1f82475089c782ec"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440005--regulated/confirmation-episode.json",
+      "sha256": "4add015c66094b2ad02008a8379096774a6d2a864f2a847f476ca7f4e491b343"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440005--baseline/confirmation-episode.json",
+      "sha256": "e5827f933118d4e377a1725fc180a5658303c1afd22f02a64925bd61e152a083"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440005--heading/confirmation-episode.json",
+      "sha256": "bbab3f1b932eb336878f5543a5cc64bb8d5c96514f72178651ea06b20d3bedda"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440006--heading/confirmation-episode.json",
+      "sha256": "80c38d827e0f41e910f4e71a69df10c7c7c247b01688eecdccf126a8e78655e0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440006--regulated/confirmation-episode.json",
+      "sha256": "7afa11b8227e0db05ee07d9eb030202b7c031ed42d176fb7a6e56624184fbb7b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440006--baseline/confirmation-episode.json",
+      "sha256": "716089ccdbeb5d24da2cc4d7a8dcb52c67ce676c2cad656ff180f84fa64a6c2a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440007--regulated/confirmation-episode.json",
+      "sha256": "a660207c1da14302bdd25826af9db22fa7197a07c1da451d5a50b4ca9f2a44f6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440007--baseline/confirmation-episode.json",
+      "sha256": "6c3f4e7b782ffff872aef0fd5af748f3fc73fd31db839e69fcb470552dd7bd05"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440007--heading/confirmation-episode.json",
+      "sha256": "3a514a1bf6711957612d75e91984d5a9586f0ea23742f08308367e3a1b6d4b04"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440008--regulated/confirmation-episode.json",
+      "sha256": "71eb8309506bf02c8a8457d3c92cd50d07b882e04fb9ece2384f4b6b90e607c0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440008--baseline/confirmation-episode.json",
+      "sha256": "8222c0064224c469a1021c91bf9d7d2ea4fb6e584ea0813bc34edfaedd41fa2f"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440008--heading/confirmation-episode.json",
+      "sha256": "000f7291380ffe828de62e0b0812a30444d0f80d0e06bf3901a10eb604b734a6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440009--heading/confirmation-episode.json",
+      "sha256": "a719fd97d57e82252be40ecc8da52febc46b172e2047e53d749651242db36f05"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440009--baseline/confirmation-episode.json",
+      "sha256": "14cb1d6c3ec011a1b1f13924b3febfdc3d987495a90ebed14ed10c93545d92e4"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440009--regulated/confirmation-episode.json",
+      "sha256": "b42a8e8f8c18eac052bfd5eec0427a050b312774b72a69c30ad6f19d4851f6b9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440010--baseline/confirmation-episode.json",
+      "sha256": "735ee2f98b858dafd290576fb588efd4413a71de6b5d8502dc33fb373523ecf5"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440010--regulated/confirmation-episode.json",
+      "sha256": "5bc484ddf0a4391dc2b89aae092ad6e45b85ff93cd05dc6c01ab0a76398da337"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440010--heading/confirmation-episode.json",
+      "sha256": "4d462c3fabd812dd43a261bb6b4bb488446b37a69ffd1f81375802aef2caed4a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440011--baseline/confirmation-episode.json",
+      "sha256": "524c143a9abc655293227836b501d58a1af1a7813369d9abf0866039d867295c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440011--heading/confirmation-episode.json",
+      "sha256": "81ea678131dfee45882947c63ea8f6863b60b5e00b5a3178aeb923dbabe2b421"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440011--regulated/confirmation-episode.json",
+      "sha256": "68ec6a75e60334aa38b8b5d614d02bbd8260386786158b3c6897f1c579b3dc3d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440012--regulated/confirmation-episode.json",
+      "sha256": "15c0c660975550732ec20c6c4c69b12a7954557859a27addf1a0a07bc822aca2"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440012--baseline/confirmation-episode.json",
+      "sha256": "c2bf3512ae37061734f42f6010f426d9355722955255751ada70568628ce7bef"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440012--heading/confirmation-episode.json",
+      "sha256": "f57131b94d3454f13b52daf597c91b45204bb82a3d409a2f578055101894307d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440013--baseline/confirmation-episode.json",
+      "sha256": "05032033f654f9ef6cf80c76f4ff9f884cfcb0850dd8e45915f46831ecb22fab"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440013--heading/confirmation-episode.json",
+      "sha256": "0ebd7ae9a46bff20107cbd4ca32333a82c621a3a45f0c2edfb637bd43dda24f0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440013--regulated/confirmation-episode.json",
+      "sha256": "78d56c264d9002930fa3375f8a4d3809c26c53c85b7ccfda4e669f161c420bb9"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440014--regulated/confirmation-episode.json",
+      "sha256": "58179e72b3b1c2c278f3f0becee9750c1ba4314843c44b047bfaaf4024d0d2d8"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440014--baseline/confirmation-episode.json",
+      "sha256": "1b8edfbe80a8b2a2617e769301fac12fd2895e9d4c1272289144e48b8ce6f177"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440014--heading/confirmation-episode.json",
+      "sha256": "aa01c97ed16ff92086c58fe58f20500fdbf9e217f51b668ba11e5c6242c7322d"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440015--baseline/confirmation-episode.json",
+      "sha256": "c0d43b5685de7954e9d0ecca9c63d78695a85812ac1cbac8748925f34a8c5d1e"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440015--regulated/confirmation-episode.json",
+      "sha256": "cda6adeb41c4a92b5f2961c7163b9e155f0e6160c7cbc337c7096d54e25876f1"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440015--heading/confirmation-episode.json",
+      "sha256": "2ebdd66c9c2e7655f9d0896573a634e665131b4bf30b6086caf7c45640c9dfa3"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440016--regulated/confirmation-episode.json",
+      "sha256": "1c04ad9aff36552155e4e6c63571fbaa865bec3e0605d50e80db36710770f99a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440016--baseline/confirmation-episode.json",
+      "sha256": "a7a6468a07cb54f2aa94e4dad8f3ad5dee493dd3f883d910c679b18772929c2c"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440016--heading/confirmation-episode.json",
+      "sha256": "75d968dd1d29b8971fef666c5ad6d8dd5df87d189127939c2201ad45e18eb665"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440017--regulated/confirmation-episode.json",
+      "sha256": "a6a9cc5502c44c9c0bdceb870a19351741c7123b290b1c41b06bccfb7040c98b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440017--baseline/confirmation-episode.json",
+      "sha256": "11dcfc5d3cdc805d2dc21fdd558fbff7944f207d54db01c2a37155c87c5677e6"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440017--heading/confirmation-episode.json",
+      "sha256": "1f4c108a8b1b4a90d5a877e708c9deefca884ee1b3dcfa3260c079de81fd2893"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440018--heading/confirmation-episode.json",
+      "sha256": "94cf2c6380a2209d6378c91bc2371fec5734a292589a3369a9ffef01de11ca2a"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440018--baseline/confirmation-episode.json",
+      "sha256": "94415d309eac1dba48a350126b7db0235c60923300a2351c75fe04b9404ee67b"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440018--regulated/confirmation-episode.json",
+      "sha256": "e81e49064ddb7fa9d8620b41a745a238e76cbee55ec3ad51f47215b447d80b34"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440019--heading/confirmation-episode.json",
+      "sha256": "93412f890edeb077a4c8e3a9e2aaaa8a3daa99a51a512f3a9d393538d1aa8354"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440019--regulated/confirmation-episode.json",
+      "sha256": "b9e35f8f2e7032a682276bbbc1798de94fc9189a0a8d5f2c1c19ee14900f00d0"
+    },
+    {
+      "path": "/tmp/bhl-confirmation-collect-uv8bgdl0/raw/terrain-confirmation-dr-default-s2-ramp-20261011/dr-default-s2--ramp--s440019--baseline/confirmation-episode.json",
+      "sha256": "059d55e1ca2c0053aead70eeed80c19a1098c3187445c08904e4cdcee93a2ebc"
+    }
+  ],
+  "development_summary_sha256": "21b687cfbb85a004e084d422b296f02417e91a81c70a199f200af35532f7a0ce"
+}

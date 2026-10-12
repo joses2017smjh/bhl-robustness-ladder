@@ -1,0 +1,34 @@
+{
+  "schema": "bhl-native-transport-result-v1",
+  "status": "PASS",
+  "runner_returncode": 0,
+  "runtime_exit_status": 0,
+  "source_archive_sha256": "3628b95ced285660e27c0b3b0ca92a097415beaeedfa912da751832acc3b8282",
+  "protocol_sha256": "08a71ea1dcaad9460ef6f3990af227323e48492442fd3acb675a334a5808caf0",
+  "original_max_output_mb": 2048,
+  "operational_max_output_mb": 8192,
+  "publication": {
+    "schema": "bhl-native-raw-publication-v1",
+    "bytes": 1528566484,
+    "sha256": "b3d1f4a8f73a334490fc8022ce12d8f32cc61e529201d85e543663fb14dfbb68",
+    "parts": [
+      {
+        "asset_name": "native-controls-v3-native-controls-v2-s730001-c02-20261011-21779748-b3d1f4a8f73a.tar.gz.part000",
+        "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/research-campaign-evidence-20261011/native-controls-v3-native-controls-v2-s730001-c02-20261011-21779748-b3d1f4a8f73a.tar.gz.part000",
+        "bytes": 1073741824,
+        "sha256": "1318b6e90f105520bbe5c1dd0bec5cc4669efd6c77d26f1c44880156f6c87843"
+      },
+      {
+        "asset_name": "native-controls-v3-native-controls-v2-s730001-c02-20261011-21779748-b3d1f4a8f73a.tar.gz.part001",
+        "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/research-campaign-evidence-20261011/native-controls-v3-native-controls-v2-s730001-c02-20261011-21779748-b3d1f4a8f73a.tar.gz.part001",
+        "bytes": 454824660,
+        "sha256": "0c20e11c470ff9418ef8f40c1f146ec58cf05839e3c57772ea60930341315fc3"
+      }
+    ],
+    "reconstruction": "concatenate parts in listed order; verify whole SHA256 before extraction",
+    "verified_utc": "2026-10-11T22:59:03.164637+00:00",
+    "verification": "each part independently downloaded and SHA256 verified; whole archive SHA256 retained"
+  },
+  "plan_sha256": "08a2d1d4aee45e4cd39fc97536da2f113cb80da181b69692d835fb18c2e1d1ac",
+  "completed_utc": "2026-10-11T22:59:03.164711+00:00"
+}

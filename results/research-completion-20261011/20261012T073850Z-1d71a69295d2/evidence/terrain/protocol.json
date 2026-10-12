@@ -1,0 +1,3918 @@
+{
+  "additional_source": [
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_elbow_pitch_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_elbow_roll_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_hand_link_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_shoulder_pitch_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_shoulder_roll_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_shoulder_yaw_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_elbow_pitch_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_elbow_roll_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_hand_link_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_shoulder_pitch_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_shoulder_roll_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_shoulder_yaw_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/base_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/imu_2_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_ankle_pitch_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_ankle_roll_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_hip_pitch_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_hip_roll_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_hip_yaw_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_knee_pitch_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_ankle_pitch_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_ankle_roll_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_hip_pitch_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_hip_roll_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_hip_yaw_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_knee_pitch_visual.stl",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/berkeley_humanoid_lite.xml",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/berkeley_humanoid_lite_biped.xml",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/bhl_biped_scene.xml",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/bhl_scene.xml",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/__init__.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/__init__.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/config.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/gamepad.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/rl_controller.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/__init__.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/can.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/core.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/fixed16.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/util.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/__init__.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/bimanual.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/humanoid.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/imu.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/calibrate_joints.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/check_connection.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/calibrate_electrical_offset.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/configure_parameter.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/move_actuator.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/ping.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/read_configurations.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/robot/read_configurations.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/robot/write_configurations.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/run_idle.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/run_locomotion.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/test_imu.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/test_inference.py",
+    "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/test_joystick.py",
+    "scripts/bench/native_navigation_campaign.py",
+    "scripts/bench/team_airlock.py",
+    "scripts/bench/terrain_confirmation_campaign.py",
+    "scripts/bench/terrain_methods_campaign.py",
+    "scripts/bench/terrain_traversal_campaign.py",
+    "src/bhl_robust/eval/gait_clock.py",
+    "src/bhl_robust/eval/harness.py",
+    "src/bhl_robust/eval/mjcf_assets.py",
+    "src/bhl_robust/eval/multi_robot.py",
+    "src/bhl_robust/research/native_lio.py",
+    "src/bhl_robust/research/pose_metrics.py",
+    "src/bhl_robust/research/sensor_geometry.py",
+    "src/bhl_robust/research/terrain_confirmation.py",
+    "src/bhl_robust/research/terrain_confirmation_acquisition.py",
+    "src/bhl_robust/research/terrain_methods.py",
+    "src/bhl_robust/research/terrain_traversal.py"
+  ],
+  "campaign_id": "terrain-confirmation-20261011",
+  "execution": "fresh same-source24-episode smoke then9shards/480held-out confirmation episodes; no retries or scientific tuning",
+  "input_files": {
+    "actors/dr-default-s0/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/deploy.yaml",
+      "sha256": "2101ef430a198b06347b148fb77e7171d81ced467e3944f494d6681e02f98c71"
+    },
+    "actors/dr-default-s0/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s0/policy.onnx",
+      "sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1"
+    },
+    "actors/dr-default-s1/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s1/deploy.yaml",
+      "sha256": "1cfd9e321d13128a91bf2eb4b9cf09b9859d79b6920d29e186ce874250b45985"
+    },
+    "actors/dr-default-s1/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s1/policy.onnx",
+      "sha256": "79a5fd23fde5a6030ceca64e8605fd4a320f96671c8280dd88bb370dacd31ed0"
+    },
+    "actors/dr-default-s2/deploy.yaml": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s2/deploy.yaml",
+      "sha256": "5c334b52521467a820629066d09d50267564d2c9281edee114037ee7d265241b"
+    },
+    "actors/dr-default-s2/policy.onnx": {
+      "path": "/nfs/hpc/share/sanchej7/Computer_Vision/project_results_upgrade/humanoid_upgrade_20261008/models/dr-default-s2/policy.onnx",
+      "sha256": "904c908b8347a832f698a22c860e14a45ab3ef5b0e2dce81d95acb368ed8ab3a"
+    },
+    "confirmation/development-summary.json": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-methods-20261010/finalization/v2/result-terrain/scientific-summary.json",
+      "sha256": "21b687cfbb85a004e084d422b296f02417e91a81c70a199f200af35532f7a0ce"
+    },
+    "runtime/lio-runtime.tar.gz": {
+      "path": "/nfs/stak/users/sanchej7/humanoid-native-20261009/artifacts/lio-runtime-inference.tar.gz",
+      "sha256": "6fc66e9318be7e8f5d2ee545652928b071ccbe949f1abc21f1247170f0e6b6f4"
+    }
+  },
+  "jobs": [
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "smoke"
+      ],
+      "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+      "env": {},
+      "kind": "smoke",
+      "max_output_mb": 512,
+      "name": "terrain-confirmation-smoke-20261011",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "01:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "confirmation",
+        "--actor",
+        "dr-default-s0",
+        "--terrain",
+        "flat"
+      ],
+      "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 1024,
+      "name": "terrain-confirmation-dr-default-s0-flat-20261011",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "04:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "confirmation",
+        "--actor",
+        "dr-default-s0",
+        "--terrain",
+        "small_steps"
+      ],
+      "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 1024,
+      "name": "terrain-confirmation-dr-default-s0-small_steps-20261011",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "04:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "confirmation",
+        "--actor",
+        "dr-default-s0",
+        "--terrain",
+        "ramp"
+      ],
+      "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 1024,
+      "name": "terrain-confirmation-dr-default-s0-ramp-20261011",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "04:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "confirmation",
+        "--actor",
+        "dr-default-s1",
+        "--terrain",
+        "flat"
+      ],
+      "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 1024,
+      "name": "terrain-confirmation-dr-default-s1-flat-20261011",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "04:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "confirmation",
+        "--actor",
+        "dr-default-s1",
+        "--terrain",
+        "small_steps"
+      ],
+      "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 1024,
+      "name": "terrain-confirmation-dr-default-s1-small_steps-20261011",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "04:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "confirmation",
+        "--actor",
+        "dr-default-s1",
+        "--terrain",
+        "ramp"
+      ],
+      "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 1024,
+      "name": "terrain-confirmation-dr-default-s1-ramp-20261011",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "04:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "confirmation",
+        "--actor",
+        "dr-default-s2",
+        "--terrain",
+        "flat"
+      ],
+      "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 1024,
+      "name": "terrain-confirmation-dr-default-s2-flat-20261011",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "04:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "confirmation",
+        "--actor",
+        "dr-default-s2",
+        "--terrain",
+        "small_steps"
+      ],
+      "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 1024,
+      "name": "terrain-confirmation-dr-default-s2-small_steps-20261011",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "04:00:00"
+      }
+    },
+    {
+      "args": [
+        "--protocol",
+        "{protocol}",
+        "--phase",
+        "confirmation",
+        "--actor",
+        "dr-default-s2",
+        "--terrain",
+        "ramp"
+      ],
+      "entrypoint": "scripts/bench/terrain_confirmation_campaign.py",
+      "env": {},
+      "kind": "run",
+      "max_output_mb": 1024,
+      "name": "terrain-confirmation-dr-default-s2-ramp-20261011",
+      "resources": {
+        "cpus": 4,
+        "gpus": 0,
+        "memory_gb": 8,
+        "partition": "share,eecs",
+        "requeue": false,
+        "time_limit": "04:00:00"
+      }
+    }
+  ],
+  "runtime": {
+    "python": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "share_root": "/nfs/hpc/share/sanchej7",
+    "sif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/container/bhl.sif",
+    "stack": "cpu"
+  },
+  "schema_version": 1,
+  "scope": "Independent held-out MuJoCo confirmation of five development-qualified actor/controller combinations on new procedural geometry and reserved reset seeds; fixed actors and simulator, not independent hardware or general robot safety validation",
+  "terrain_confirmation": {
+    "acquisition_contract": "Drop and retain original invalid-time scans, never fabricate points/times; keep all unconsumed IMU; existing350ms pose-age stop unchanged",
+    "arm_order": "RNG(seed+500000) permutation of baseline plus only qualified arms for that actor",
+    "confirmation_gate": "Per qualified actor/controller: >=54/60 clean goals, zero falls/contacts/nonfinite, positive paired clean-goal rate difference",
+    "confirmation_seconds": 40.0,
+    "confirmation_seeds": [
+      440000,
+      440001,
+      440002,
+      440003,
+      440004,
+      440005,
+      440006,
+      440007,
+      440008,
+      440009,
+      440010,
+      440011,
+      440012,
+      440013,
+      440014,
+      440015,
+      440016,
+      440017,
+      440018,
+      440019
+    ],
+    "created_utc": "2026-10-11T10:04:21.071078+00:00",
+    "development_protocol_sha256": "8060a32ceea75ca29a4eb08444385f71d755e6c7055760790d418b509d858e31",
+    "development_summary_input": "confirmation/development-summary.json",
+    "development_summary_sha256": "21b687cfbb85a004e084d422b296f02417e91a81c70a199f200af35532f7a0ce",
+    "excluded_consumed_confirmation_seeds": [
+      420000,
+      420001,
+      420002,
+      420003,
+      420004,
+      420005,
+      420006,
+      420007,
+      420008,
+      420009,
+      420010,
+      420011,
+      420012,
+      420013,
+      420014,
+      420015,
+      420016,
+      420017,
+      420018,
+      420019
+    ],
+    "expected_confirmation_episodes": 480,
+    "expected_smoke_episodes": 24,
+    "geometric_parameters": {
+      "flat:440000": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5664812165724662,
+            -0.9764468483052744,
+            1.0136564910125578
+          ],
+          [
+            1.502066597330197,
+            1.0644631264418443,
+            1.0854491016524452
+          ],
+          [
+            2.471263931321962,
+            -0.9800232108211462,
+            0.8702448053596623
+          ],
+          [
+            3.2533543607475637,
+            0.9997199605414709,
+            1.0849905189137798
+          ],
+          [
+            4.376797175203825,
+            -0.9547474998993868,
+            0.8739842528554407
+          ],
+          [
+            5.441131493795759,
+            1.0428398761112,
+            1.0291152442162188
+          ]
+        ],
+        "friction": 0.8089415971712461,
+        "geometry_sha256": "e8106e595e6a14598d4356a0f0227014522b78b1a1e3bc07f78f8ee1a3507433",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.1292916802241058,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440000,
+        "terrain": "flat"
+      },
+      "flat:440001": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4678966753589172,
+            -0.9804997810782807,
+            1.0512227686245619
+          ],
+          [
+            1.5707115727139962,
+            1.037279156276675,
+            1.0938259238841226
+          ],
+          [
+            2.3647121544601317,
+            -1.0325838566000052,
+            0.9830287762866213
+          ],
+          [
+            3.3342965732811964,
+            0.9471345332585223,
+            1.0616834429377076
+          ],
+          [
+            4.442744407658838,
+            -1.0491566628363873,
+            0.819978613076266
+          ],
+          [
+            5.268829589146649,
+            0.989505379875868,
+            1.0759527813678034
+          ]
+        ],
+        "friction": 0.8115449110392707,
+        "geometry_sha256": "95e528021da394ecbe8200c3f30e4801c48ba730c98e6050c7165b7bedd9235f",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0417554663260615,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440001,
+        "terrain": "flat"
+      },
+      "flat:440002": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4821009484888167,
+            -1.0143743548505932,
+            1.0053843407771972
+          ],
+          [
+            1.5416402385777375,
+            0.9448671975403611,
+            1.0501782714513357
+          ],
+          [
+            2.3973577071563468,
+            -1.0480879862881651,
+            1.00804344470997
+          ],
+          [
+            3.311317155491238,
+            1.0471978088691196,
+            1.086754468863465
+          ],
+          [
+            4.272171992343779,
+            -0.9388783310818839,
+            1.0347156248712186
+          ],
+          [
+            5.293765733083262,
+            0.9594684635186029,
+            0.8414568171923792
+          ]
+        ],
+        "friction": 0.7963383297464354,
+        "geometry_sha256": "8ead4dcb8f5ad356bd7b81746e2ed68c2ecbf0cab2d074ee957990129bf92a45",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0886237879200247,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440002,
+        "terrain": "flat"
+      },
+      "flat:440003": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4610895162773432,
+            -1.0186512731624804,
+            0.9824754030287512
+          ],
+          [
+            1.4754925311170213,
+            1.0351363446510142,
+            0.8022805094470142
+          ],
+          [
+            2.3746808824676213,
+            -0.9306279264984181,
+            0.9636087772455274
+          ],
+          [
+            3.4231031113908914,
+            0.9511103399875601,
+            0.8744699564225051
+          ],
+          [
+            4.3169697131967295,
+            -0.923753887785849,
+            0.937856687437753
+          ],
+          [
+            5.384415133345679,
+            0.9837407920071409,
+            1.0382785578646456
+          ]
+        ],
+        "friction": 0.8071422812018317,
+        "geometry_sha256": "efc9aed696e15a5406337acd60351f28f80bffdc9a143f31236805375e22cb17",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9872283783556377,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440003,
+        "terrain": "flat"
+      },
+      "flat:440004": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.49604451512631187,
+            -1.0315821251690698,
+            1.067570516251267
+          ],
+          [
+            1.4417500461200494,
+            0.97135048800064,
+            0.8140769288787604
+          ],
+          [
+            2.3329497259494474,
+            -0.9651463275739434,
+            0.9757041214023456
+          ],
+          [
+            3.3698364329081185,
+            0.9496546264746979,
+            0.8726674232456059
+          ],
+          [
+            4.3875755092910245,
+            -0.942087498544017,
+            1.0002559443126704
+          ],
+          [
+            5.339552560218081,
+            0.9871281240021476,
+            0.827097106980313
+          ]
+        ],
+        "friction": 0.7956038240190878,
+        "geometry_sha256": "a18f68e31173ff5b9ad8e93f17272bddc700c9831710b6cf21b6b2a8e6551a8d",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.1191632678941565,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440004,
+        "terrain": "flat"
+      },
+      "flat:440005": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5849811523426356,
+            -0.9450869513823288,
+            0.9686902834122465
+          ],
+          [
+            1.595329740335527,
+            0.946124239332744,
+            1.095593809282608
+          ],
+          [
+            2.475544366305282,
+            -1.0771685979929233,
+            1.0641419515583683
+          ],
+          [
+            3.394094404765989,
+            0.9386684267845757,
+            1.0860649971074006
+          ],
+          [
+            4.379976634058557,
+            -0.9355714717110839,
+            0.8782247835577887
+          ],
+          [
+            5.276579767506358,
+            0.9712888540750094,
+            0.9607521727001056
+          ]
+        ],
+        "friction": 0.811918709599464,
+        "geometry_sha256": "7a5f113e9120cc9c6efe3182a6ceef18eb774b52d2ff095d3c73b36e48811832",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9829850811007759,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440005,
+        "terrain": "flat"
+      },
+      "flat:440006": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5144038794935947,
+            -0.955085770548335,
+            1.0305658378052762
+          ],
+          [
+            1.4577139893497926,
+            1.03332794125788,
+            0.8758113691692863
+          ],
+          [
+            2.3074143932091147,
+            -1.02978843643969,
+            0.8644924201667445
+          ],
+          [
+            3.3708345924722365,
+            0.9527562618531067,
+            0.898563169010241
+          ],
+          [
+            4.316189838659666,
+            -0.9504252392646486,
+            0.8854330237085849
+          ],
+          [
+            5.432302966774068,
+            0.9667324046802641,
+            1.0972232531917374
+          ]
+        ],
+        "friction": 0.8104615831151043,
+        "geometry_sha256": "69f2232b462d4fb9049764d630b4176f353b39d7c9c112464a71408679635230",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0498770228716803,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440006,
+        "terrain": "flat"
+      },
+      "flat:440007": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.562658099348428,
+            -0.9482602381937584,
+            1.0709284853661392
+          ],
+          [
+            1.5664429268290276,
+            1.0430133593631064,
+            1.0091018702474328
+          ],
+          [
+            2.485108727868337,
+            -1.0120751176807667,
+            0.8853759660267865
+          ],
+          [
+            3.4277355289945763,
+            0.9629694070672674,
+            0.8281060321827401
+          ],
+          [
+            4.39156053975918,
+            -0.9719125226160718,
+            1.0628214078589426
+          ],
+          [
+            5.338540478013552,
+            1.0005238003355,
+            1.0016191422345702
+          ]
+        ],
+        "friction": 0.8119531221637936,
+        "geometry_sha256": "6663a3dec92843d071852831181be10369965e79ab5c624414047b539746390b",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.028967201507999,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440007,
+        "terrain": "flat"
+      },
+      "flat:440008": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6498416104804436,
+            -1.0292909433825137,
+            0.8552082372898088
+          ],
+          [
+            1.571836135342432,
+            1.0426895246825647,
+            0.8024845884178684
+          ],
+          [
+            2.4984289626917953,
+            -1.0585525740011401,
+            0.9860987744426422
+          ],
+          [
+            3.269490102264691,
+            1.0625956738951199,
+            1.0315039787977438
+          ],
+          [
+            4.4363476143187155,
+            -0.94218403079736,
+            0.9840952698957663
+          ],
+          [
+            5.280639387866263,
+            1.039964682987517,
+            1.077808025096898
+          ]
+        ],
+        "friction": 0.8112811361862668,
+        "geometry_sha256": "6c49de8a587b7c18f3561b52afa490a790bf8d2f3d739c3e13c613afc2c15e09",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0276575160098074,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440008,
+        "terrain": "flat"
+      },
+      "flat:440009": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5189141299163256,
+            -0.9277118540084888,
+            0.8618365550829052
+          ],
+          [
+            1.5273873653745824,
+            1.0373207800582251,
+            1.0694791829384114
+          ],
+          [
+            2.4463403296586366,
+            -0.9544357588830054,
+            0.9768051357349563
+          ],
+          [
+            3.3541376918699273,
+            0.9286785821249991,
+            0.9708224436648708
+          ],
+          [
+            4.272633564560961,
+            -1.0512884851839543,
+            1.0526550981971952
+          ],
+          [
+            5.281068490939999,
+            1.0049573427862337,
+            1.0164902746700664
+          ]
+        ],
+        "friction": 0.7827261056895409,
+        "geometry_sha256": "92911f0d802965eeedfa3a31d6a35d62bcef82a636a012e1061ee308e7492254",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9625146978369322,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440009,
+        "terrain": "flat"
+      },
+      "flat:440010": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5345504922902017,
+            -1.0398416719581118,
+            0.9542386240422143
+          ],
+          [
+            1.4881689200749153,
+            0.971865754719792,
+            0.8480643493041443
+          ],
+          [
+            2.30308392548809,
+            -0.9767163449214763,
+            1.0635473592930307
+          ],
+          [
+            3.373523586916291,
+            0.9635387760341212,
+            1.0017851936673843
+          ],
+          [
+            4.344295020605974,
+            -0.9521364194803068,
+            0.8739673181596477
+          ],
+          [
+            5.362368219257237,
+            0.9818484194642392,
+            0.9467169644667026
+          ]
+        ],
+        "friction": 0.8123727479023309,
+        "geometry_sha256": "795c234108f9a70789101ad0b87558d7d8e021d4f81b04ae7c6b7764a4c15b48",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0091815746135395,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440010,
+        "terrain": "flat"
+      },
+      "flat:440011": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6052897026115428,
+            -0.9379940798986359,
+            0.867035725512429
+          ],
+          [
+            1.4268932925722935,
+            0.9473683291303818,
+            0.8255694614467586
+          ],
+          [
+            2.347375689998584,
+            -1.0787598582882332,
+            0.9225382352806166
+          ],
+          [
+            3.4216013578976083,
+            0.949925996466366,
+            0.9404881406374448
+          ],
+          [
+            4.2767922429279706,
+            -1.0215744821066008,
+            0.9743353361515209
+          ],
+          [
+            5.254780231151955,
+            1.0285485741179698,
+            1.025032636811315
+          ]
+        ],
+        "friction": 0.7803301846203995,
+        "geometry_sha256": "c58b0c3141d9541101c7daa30809e1a8922fc7fe898830e41bcd60da12062349",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.143244143475511,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440011,
+        "terrain": "flat"
+      },
+      "flat:440012": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6495450628407284,
+            -0.9584195085760879,
+            1.0924821478944877
+          ],
+          [
+            1.5533718408411468,
+            0.9794206092945034,
+            0.9053618885289236
+          ],
+          [
+            2.468730697796225,
+            -0.9960314583009453,
+            0.8163464856841562
+          ],
+          [
+            3.3221808931873476,
+            0.9247707089675153,
+            0.8993688171346368
+          ],
+          [
+            4.407536060734894,
+            -0.9267806999729683,
+            0.8640927799300697
+          ],
+          [
+            5.427486224097645,
+            1.0699434770556473,
+            1.0045990652080643
+          ]
+        ],
+        "friction": 0.7894887134721658,
+        "geometry_sha256": "c019992b0e4f79971e184a082669bc35608dbcfb16cb6ed4ea38754ce66b8e8a",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0126340183132119,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440012,
+        "terrain": "flat"
+      },
+      "flat:440013": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.572033897475586,
+            -0.9734370582179616,
+            0.9008392746618817
+          ],
+          [
+            1.5605017902311227,
+            1.023938282893735,
+            0.8609894130243567
+          ],
+          [
+            2.421227284781432,
+            -1.0014792322647508,
+            0.8217993492102148
+          ],
+          [
+            3.4431899212394894,
+            1.0328715146719707,
+            1.075282495185854
+          ],
+          [
+            4.348645873473348,
+            -1.0474187083188595,
+            0.9721120420739029
+          ],
+          [
+            5.341088270123544,
+            0.9874244026125757,
+            0.9136204674992034
+          ]
+        ],
+        "friction": 0.8140848055741845,
+        "geometry_sha256": "751bb394e32246d2ba05f036acf34d421d100b5b81acd2bf79e0030eb1d5554b",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9660041258370485,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440013,
+        "terrain": "flat"
+      },
+      "flat:440014": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4505756219417908,
+            -0.9440370873423171,
+            1.0163906497705368
+          ],
+          [
+            1.51751211116164,
+            0.9810756235686079,
+            1.063131014494985
+          ],
+          [
+            2.409071634254603,
+            -0.9297623437064485,
+            1.0192461379669413
+          ],
+          [
+            3.3351904203527583,
+            0.992592197146307,
+            0.9473870348906063
+          ],
+          [
+            4.256873660140402,
+            -0.9582402329698638,
+            1.0569034749696078
+          ],
+          [
+            5.329183073764093,
+            0.997997405125507,
+            0.9661713060628367
+          ]
+        ],
+        "friction": 0.80038221387666,
+        "geometry_sha256": "27b7fa369d19b21d877d74ad7b58de395f2cc22e7c53f98ce335a3e8cfda4d2a",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0176238209441217,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440014,
+        "terrain": "flat"
+      },
+      "flat:440015": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5860194401303976,
+            -0.9813662946048871,
+            1.0377170033310825
+          ],
+          [
+            1.4529666399468832,
+            0.9881906981042539,
+            0.9788828869547804
+          ],
+          [
+            2.464976326377479,
+            -0.9234956219742325,
+            1.0685961295246273
+          ],
+          [
+            3.295368219266128,
+            1.0422708204942905,
+            1.063572544709416
+          ],
+          [
+            4.330839875464352,
+            -0.9849971496425546,
+            1.02035391997139
+          ],
+          [
+            5.350134410499114,
+            0.9339611671767069,
+            1.008381858977831
+          ]
+        ],
+        "friction": 0.7840696924455238,
+        "geometry_sha256": "9bf0d1665dafe38576dfa4b65edf74e114b1efea4f5f027adb69558f96468bc6",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0659755904870662,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440015,
+        "terrain": "flat"
+      },
+      "flat:440016": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6364236863222473,
+            -1.074441337204466,
+            0.8152827450169144
+          ],
+          [
+            1.5514215726895182,
+            0.9525294742671934,
+            1.0918879397796328
+          ],
+          [
+            2.443758106635814,
+            -1.0022042370297182,
+            0.9799606485936885
+          ],
+          [
+            3.337927654979728,
+            1.0278999906394746,
+            0.8452103461293605
+          ],
+          [
+            4.277889503863994,
+            -0.9406275432065997,
+            1.0052017143589118
+          ],
+          [
+            5.270593990873942,
+            0.9653355178928789,
+            0.8317229028762197
+          ]
+        ],
+        "friction": 0.8073593071135179,
+        "geometry_sha256": "efd2d691daf458a5c67e9f38b0a6efcb1ef8f6cf08ba72720e8bbbaa84410d8b",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.1366152875744389,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440016,
+        "terrain": "flat"
+      },
+      "flat:440017": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6207372659699651,
+            -1.0568333216214945,
+            0.8582430462733958
+          ],
+          [
+            1.4758231208484291,
+            0.9427020900483051,
+            0.8445469463783202
+          ],
+          [
+            2.3798298404838323,
+            -0.993508513169177,
+            0.8203484425429146
+          ],
+          [
+            3.383365616862408,
+            1.039439587121172,
+            0.9707787758586142
+          ],
+          [
+            4.257452339369403,
+            -1.0223481319475332,
+            0.8421309220052554
+          ],
+          [
+            5.268245880416172,
+            0.9963093673774359,
+            0.9599706519390372
+          ]
+        ],
+        "friction": 0.7886658330974942,
+        "geometry_sha256": "324906862a40465af934aff1708d65298502ed3e85c2318703ee6f64717a8377",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0815483918804951,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440017,
+        "terrain": "flat"
+      },
+      "flat:440018": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5935441389835232,
+            -1.042639633054602,
+            0.8781760631671581
+          ],
+          [
+            1.4295932959413418,
+            0.9638380406078482,
+            0.9033637958682323
+          ],
+          [
+            2.3178849356911924,
+            -0.9218982291521731,
+            1.0572691974471762
+          ],
+          [
+            3.2775172303090634,
+            0.95119763672199,
+            0.9939648473217726
+          ],
+          [
+            4.398280058062807,
+            -0.9950396391272316,
+            1.0136152215931051
+          ],
+          [
+            5.276614794057598,
+            1.070199060042917,
+            1.0331635274182494
+          ]
+        ],
+        "friction": 0.8065442559954855,
+        "geometry_sha256": "ea9e47219c0f38ee30aeae6af928c12847c03fd2fee62efa007aff715cb6033b",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9891710874507251,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440018,
+        "terrain": "flat"
+      },
+      "flat:440019": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.49949730439325635,
+            -1.0291813828550491,
+            0.8499816614898364
+          ],
+          [
+            1.4398331518534122,
+            1.0083151231912983,
+            0.9672349213822081
+          ],
+          [
+            2.4272091718209583,
+            -1.0769947219347362,
+            1.015673606364971
+          ],
+          [
+            3.2711160336656757,
+            0.9247466122629576,
+            0.8651462365325581
+          ],
+          [
+            4.421119434117703,
+            -0.9687582432185198,
+            0.9664854616588303
+          ],
+          [
+            5.363142910325152,
+            1.0396912038217,
+            1.0674441508904664
+          ]
+        ],
+        "friction": 0.8123021033314355,
+        "geometry_sha256": "897d9a30f6407df15ac7f434935b6358a25cdc340cbdd0668e96efad65d69008",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0294863335546498,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440019,
+        "terrain": "flat"
+      },
+      "flat:450000": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4923815188929106,
+            -0.9827066564015943,
+            0.9908996535167155
+          ],
+          [
+            1.4701235365632173,
+            0.9766015940232212,
+            0.8834886256090363
+          ],
+          [
+            2.3326751828173893,
+            -1.0468651007294518,
+            0.8105990197991582
+          ],
+          [
+            3.35832866822006,
+            0.9536289909667188,
+            1.0521220300667085
+          ],
+          [
+            4.435330613660465,
+            -0.9525177215380511,
+            0.9582720516488331
+          ],
+          [
+            5.370551670262987,
+            0.9303179455489748,
+            1.092911573584469
+          ]
+        ],
+        "friction": 0.8024458384121463,
+        "geometry_sha256": "805760a36880df4f48045127013325b3ac2fb7de4133a970109bb7006cfe81e2",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9765860821239252,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 450000,
+        "terrain": "flat"
+      },
+      "ramp:440000": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5664812165724662,
+            -0.9764468483052744,
+            1.0136564910125578
+          ],
+          [
+            1.502066597330197,
+            1.0644631264418443,
+            1.0854491016524452
+          ],
+          [
+            2.471263931321962,
+            -0.9800232108211462,
+            0.8702448053596623
+          ],
+          [
+            3.2533543607475637,
+            0.9997199605414709,
+            1.0849905189137798
+          ],
+          [
+            4.376797175203825,
+            -0.9547474998993868,
+            0.8739842528554407
+          ],
+          [
+            5.441131493795759,
+            1.0428398761112,
+            1.0291152442162188
+          ]
+        ],
+        "friction": 0.8089415971712461,
+        "geometry_sha256": "36e75da00f0c8127b7384b77feb3fdf9752cbf3072550c07cea1e822ac66d0a0",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.1292916802241058,
+        "plateau_length_m": 0.38982831430967513,
+        "rise_length_m": 1.4191807005836727,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440000,
+        "terrain": "ramp"
+      },
+      "ramp:440001": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4678966753589172,
+            -0.9804997810782807,
+            1.0512227686245619
+          ],
+          [
+            1.5707115727139962,
+            1.037279156276675,
+            1.0938259238841226
+          ],
+          [
+            2.3647121544601317,
+            -1.0325838566000052,
+            0.9830287762866213
+          ],
+          [
+            3.3342965732811964,
+            0.9471345332585223,
+            1.0616834429377076
+          ],
+          [
+            4.442744407658838,
+            -1.0491566628363873,
+            0.819978613076266
+          ],
+          [
+            5.268829589146649,
+            0.989505379875868,
+            1.0759527813678034
+          ]
+        ],
+        "friction": 0.8115449110392707,
+        "geometry_sha256": "dfe74cae2df6bf198083e11d750bb506f852bae881a550e5c0fb60551a5b483b",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.0417554663260615,
+        "plateau_length_m": 0.36064860494813633,
+        "rise_length_m": 1.564269123390976,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440001,
+        "terrain": "ramp"
+      },
+      "ramp:440002": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4821009484888167,
+            -1.0143743548505932,
+            1.0053843407771972
+          ],
+          [
+            1.5416402385777375,
+            0.9448671975403611,
+            1.0501782714513357
+          ],
+          [
+            2.3973577071563468,
+            -1.0480879862881651,
+            1.00804344470997
+          ],
+          [
+            3.311317155491238,
+            1.0471978088691196,
+            1.086754468863465
+          ],
+          [
+            4.272171992343779,
+            -0.9388783310818839,
+            1.0347156248712186
+          ],
+          [
+            5.293765733083262,
+            0.9594684635186029,
+            0.8414568171923792
+          ]
+        ],
+        "friction": 0.7963383297464354,
+        "geometry_sha256": "77c2b845717092f0c2cc101e4e48adfb15e8996c0cbcd460c5247c11adaef626",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.0886237879200247,
+        "plateau_length_m": 0.29054550226383197,
+        "rise_length_m": 1.5796268710843244,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440002,
+        "terrain": "ramp"
+      },
+      "ramp:440003": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4610895162773432,
+            -1.0186512731624804,
+            0.9824754030287512
+          ],
+          [
+            1.4754925311170213,
+            1.0351363446510142,
+            0.8022805094470142
+          ],
+          [
+            2.3746808824676213,
+            -0.9306279264984181,
+            0.9636087772455274
+          ],
+          [
+            3.4231031113908914,
+            0.9511103399875601,
+            0.8744699564225051
+          ],
+          [
+            4.3169697131967295,
+            -0.923753887785849,
+            0.937856687437753
+          ],
+          [
+            5.384415133345679,
+            0.9837407920071409,
+            1.0382785578646456
+          ]
+        ],
+        "friction": 0.8071422812018317,
+        "geometry_sha256": "ba4912ee97720516fbe043422af48c13068420bafe107a0d192909d653b2bb13",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 0.9872283783556377,
+        "plateau_length_m": 0.3616343981459878,
+        "rise_length_m": 1.407976886585298,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440003,
+        "terrain": "ramp"
+      },
+      "ramp:440004": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.49604451512631187,
+            -1.0315821251690698,
+            1.067570516251267
+          ],
+          [
+            1.4417500461200494,
+            0.97135048800064,
+            0.8140769288787604
+          ],
+          [
+            2.3329497259494474,
+            -0.9651463275739434,
+            0.9757041214023456
+          ],
+          [
+            3.3698364329081185,
+            0.9496546264746979,
+            0.8726674232456059
+          ],
+          [
+            4.3875755092910245,
+            -0.942087498544017,
+            1.0002559443126704
+          ],
+          [
+            5.339552560218081,
+            0.9871281240021476,
+            0.827097106980313
+          ]
+        ],
+        "friction": 0.7956038240190878,
+        "geometry_sha256": "9a78f504259072ef54fac4c3c3c8bc1456999e254a51e0af5030ec4f3e479fe5",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.1191632678941565,
+        "plateau_length_m": 0.37139149022631074,
+        "rise_length_m": 1.5516517874626048,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440004,
+        "terrain": "ramp"
+      },
+      "ramp:440005": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5849811523426356,
+            -0.9450869513823288,
+            0.9686902834122465
+          ],
+          [
+            1.595329740335527,
+            0.946124239332744,
+            1.095593809282608
+          ],
+          [
+            2.475544366305282,
+            -1.0771685979929233,
+            1.0641419515583683
+          ],
+          [
+            3.394094404765989,
+            0.9386684267845757,
+            1.0860649971074006
+          ],
+          [
+            4.379976634058557,
+            -0.9355714717110839,
+            0.8782247835577887
+          ],
+          [
+            5.276579767506358,
+            0.9712888540750094,
+            0.9607521727001056
+          ]
+        ],
+        "friction": 0.811918709599464,
+        "geometry_sha256": "7d6463382000b705318d9da6bb32b196386372b88dfcf9abd70db6024f7ac202",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 0.9829850811007759,
+        "plateau_length_m": 0.3407900572128282,
+        "rise_length_m": 1.628271021286404,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440005,
+        "terrain": "ramp"
+      },
+      "ramp:440006": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5144038794935947,
+            -0.955085770548335,
+            1.0305658378052762
+          ],
+          [
+            1.4577139893497926,
+            1.03332794125788,
+            0.8758113691692863
+          ],
+          [
+            2.3074143932091147,
+            -1.02978843643969,
+            0.8644924201667445
+          ],
+          [
+            3.3708345924722365,
+            0.9527562618531067,
+            0.898563169010241
+          ],
+          [
+            4.316189838659666,
+            -0.9504252392646486,
+            0.8854330237085849
+          ],
+          [
+            5.432302966774068,
+            0.9667324046802641,
+            1.0972232531917374
+          ]
+        ],
+        "friction": 0.8104615831151043,
+        "geometry_sha256": "f2787d0c53b37a670c1b1b068c7bf2d0f1b9aecb18c09f845dd8caac5d2ff774",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.0498770228716803,
+        "plateau_length_m": 0.3150032074431742,
+        "rise_length_m": 1.5623849075535996,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440006,
+        "terrain": "ramp"
+      },
+      "ramp:440007": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.562658099348428,
+            -0.9482602381937584,
+            1.0709284853661392
+          ],
+          [
+            1.5664429268290276,
+            1.0430133593631064,
+            1.0091018702474328
+          ],
+          [
+            2.485108727868337,
+            -1.0120751176807667,
+            0.8853759660267865
+          ],
+          [
+            3.4277355289945763,
+            0.9629694070672674,
+            0.8281060321827401
+          ],
+          [
+            4.39156053975918,
+            -0.9719125226160718,
+            1.0628214078589426
+          ],
+          [
+            5.338540478013552,
+            1.0005238003355,
+            1.0016191422345702
+          ]
+        ],
+        "friction": 0.8119531221637936,
+        "geometry_sha256": "0407b91202620b039823092d1918385b006dac0343a6211a0ad097d6c0b6ab98",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.028967201507999,
+        "plateau_length_m": 0.35875656758091945,
+        "rise_length_m": 1.5324194121610517,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440007,
+        "terrain": "ramp"
+      },
+      "ramp:440008": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6498416104804436,
+            -1.0292909433825137,
+            0.8552082372898088
+          ],
+          [
+            1.571836135342432,
+            1.0426895246825647,
+            0.8024845884178684
+          ],
+          [
+            2.4984289626917953,
+            -1.0585525740011401,
+            0.9860987744426422
+          ],
+          [
+            3.269490102264691,
+            1.0625956738951199,
+            1.0315039787977438
+          ],
+          [
+            4.4363476143187155,
+            -0.94218403079736,
+            0.9840952698957663
+          ],
+          [
+            5.280639387866263,
+            1.039964682987517,
+            1.077808025096898
+          ]
+        ],
+        "friction": 0.8112811361862668,
+        "geometry_sha256": "87f245cd863373b74f41d60ba6d35b5c8ba88ef239766f357be6bd446b89bdae",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.0276575160098074,
+        "plateau_length_m": 0.4372024284189455,
+        "rise_length_m": 1.458042453714909,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440008,
+        "terrain": "ramp"
+      },
+      "ramp:440009": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5189141299163256,
+            -0.9277118540084888,
+            0.8618365550829052
+          ],
+          [
+            1.5273873653745824,
+            1.0373207800582251,
+            1.0694791829384114
+          ],
+          [
+            2.4463403296586366,
+            -0.9544357588830054,
+            0.9768051357349563
+          ],
+          [
+            3.3541376918699273,
+            0.9286785821249991,
+            0.9708224436648708
+          ],
+          [
+            4.272633564560961,
+            -1.0512884851839543,
+            1.0526550981971952
+          ],
+          [
+            5.281068490939999,
+            1.0049573427862337,
+            1.0164902746700664
+          ]
+        ],
+        "friction": 0.7827261056895409,
+        "geometry_sha256": "1cdb32c51b06f340f5a6dc0cd20127d2e7f704e10335e1239a78e446f9b6e5a2",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 0.9625146978369322,
+        "plateau_length_m": 0.43645845781258796,
+        "rise_length_m": 1.5727343965151541,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440009,
+        "terrain": "ramp"
+      },
+      "ramp:440010": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5345504922902017,
+            -1.0398416719581118,
+            0.9542386240422143
+          ],
+          [
+            1.4881689200749153,
+            0.971865754719792,
+            0.8480643493041443
+          ],
+          [
+            2.30308392548809,
+            -0.9767163449214763,
+            1.0635473592930307
+          ],
+          [
+            3.373523586916291,
+            0.9635387760341212,
+            1.0017851936673843
+          ],
+          [
+            4.344295020605974,
+            -0.9521364194803068,
+            0.8739673181596477
+          ],
+          [
+            5.362368219257237,
+            0.9818484194642392,
+            0.9467169644667026
+          ]
+        ],
+        "friction": 0.8123727479023309,
+        "geometry_sha256": "19f137103ed24795ab40d7a4fbcd8e95bf88100e707275896412393f54866e42",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.0091815746135395,
+        "plateau_length_m": 0.34091906257950233,
+        "rise_length_m": 1.5937905920758215,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440010,
+        "terrain": "ramp"
+      },
+      "ramp:440011": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6052897026115428,
+            -0.9379940798986359,
+            0.867035725512429
+          ],
+          [
+            1.4268932925722935,
+            0.9473683291303818,
+            0.8255694614467586
+          ],
+          [
+            2.347375689998584,
+            -1.0787598582882332,
+            0.9225382352806166
+          ],
+          [
+            3.4216013578976083,
+            0.949925996466366,
+            0.9404881406374448
+          ],
+          [
+            4.2767922429279706,
+            -1.0215744821066008,
+            0.9743353361515209
+          ],
+          [
+            5.254780231151955,
+            1.0285485741179698,
+            1.025032636811315
+          ]
+        ],
+        "friction": 0.7803301846203995,
+        "geometry_sha256": "729869cf34208b58467446b76e0bfe649f0008f4a279c42171a392712e445016",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.143244143475511,
+        "plateau_length_m": 0.4085233763979725,
+        "rise_length_m": 1.4266465001319708,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440011,
+        "terrain": "ramp"
+      },
+      "ramp:440012": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6495450628407284,
+            -0.9584195085760879,
+            1.0924821478944877
+          ],
+          [
+            1.5533718408411468,
+            0.9794206092945034,
+            0.9053618885289236
+          ],
+          [
+            2.468730697796225,
+            -0.9960314583009453,
+            0.8163464856841562
+          ],
+          [
+            3.3221808931873476,
+            0.9247707089675153,
+            0.8993688171346368
+          ],
+          [
+            4.407536060734894,
+            -0.9267806999729683,
+            0.8640927799300697
+          ],
+          [
+            5.427486224097645,
+            1.0699434770556473,
+            1.0045990652080643
+          ]
+        ],
+        "friction": 0.7894887134721658,
+        "geometry_sha256": "f07aa06b58dd4ab948a531bdf8587a16de926d0c4f174bb228315bd348b658c8",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.0126340183132119,
+        "plateau_length_m": 0.33679568401004156,
+        "rise_length_m": 1.4354883087341352,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440012,
+        "terrain": "ramp"
+      },
+      "ramp:440013": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.572033897475586,
+            -0.9734370582179616,
+            0.9008392746618817
+          ],
+          [
+            1.5605017902311227,
+            1.023938282893735,
+            0.8609894130243567
+          ],
+          [
+            2.421227284781432,
+            -1.0014792322647508,
+            0.8217993492102148
+          ],
+          [
+            3.4431899212394894,
+            1.0328715146719707,
+            1.075282495185854
+          ],
+          [
+            4.348645873473348,
+            -1.0474187083188595,
+            0.9721120420739029
+          ],
+          [
+            5.341088270123544,
+            0.9874244026125757,
+            0.9136204674992034
+          ]
+        ],
+        "friction": 0.8140848055741845,
+        "geometry_sha256": "ad8d07db8c34dd2542045388b4abcf2f8b54db0e99ef3059a0a93febf89ff11c",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 0.9660041258370485,
+        "plateau_length_m": 0.26211056288883244,
+        "rise_length_m": 1.5326061164841485,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440013,
+        "terrain": "ramp"
+      },
+      "ramp:440014": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4505756219417908,
+            -0.9440370873423171,
+            1.0163906497705368
+          ],
+          [
+            1.51751211116164,
+            0.9810756235686079,
+            1.063131014494985
+          ],
+          [
+            2.409071634254603,
+            -0.9297623437064485,
+            1.0192461379669413
+          ],
+          [
+            3.3351904203527583,
+            0.992592197146307,
+            0.9473870348906063
+          ],
+          [
+            4.256873660140402,
+            -0.9582402329698638,
+            1.0569034749696078
+          ],
+          [
+            5.329183073764093,
+            0.997997405125507,
+            0.9661713060628367
+          ]
+        ],
+        "friction": 0.80038221387666,
+        "geometry_sha256": "a35f67fa9cc34acbd740247b478f4ae853304eeeda38025ce84b669aea783a75",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.0176238209441217,
+        "plateau_length_m": 0.4490209302468361,
+        "rise_length_m": 1.3847569889961335,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440014,
+        "terrain": "ramp"
+      },
+      "ramp:440015": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5860194401303976,
+            -0.9813662946048871,
+            1.0377170033310825
+          ],
+          [
+            1.4529666399468832,
+            0.9881906981042539,
+            0.9788828869547804
+          ],
+          [
+            2.464976326377479,
+            -0.9234956219742325,
+            1.0685961295246273
+          ],
+          [
+            3.295368219266128,
+            1.0422708204942905,
+            1.063572544709416
+          ],
+          [
+            4.330839875464352,
+            -0.9849971496425546,
+            1.02035391997139
+          ],
+          [
+            5.350134410499114,
+            0.9339611671767069,
+            1.008381858977831
+          ]
+        ],
+        "friction": 0.7840696924455238,
+        "geometry_sha256": "9abdced8dfb35e6e7ec788c92d21105fb9106c979f9d4c07153d450d68cddc49",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.0659755904870662,
+        "plateau_length_m": 0.3055033909783656,
+        "rise_length_m": 1.464016696838169,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440015,
+        "terrain": "ramp"
+      },
+      "ramp:440016": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6364236863222473,
+            -1.074441337204466,
+            0.8152827450169144
+          ],
+          [
+            1.5514215726895182,
+            0.9525294742671934,
+            1.0918879397796328
+          ],
+          [
+            2.443758106635814,
+            -1.0022042370297182,
+            0.9799606485936885
+          ],
+          [
+            3.337927654979728,
+            1.0278999906394746,
+            0.8452103461293605
+          ],
+          [
+            4.277889503863994,
+            -0.9406275432065997,
+            1.0052017143589118
+          ],
+          [
+            5.270593990873942,
+            0.9653355178928789,
+            0.8317229028762197
+          ]
+        ],
+        "friction": 0.8073593071135179,
+        "geometry_sha256": "79d7729630451d6fa6df31e75e426a0535781c22f7ff6765441579c4c02274a9",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.1366152875744389,
+        "plateau_length_m": 0.37756681574036166,
+        "rise_length_m": 1.6204781433304778,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440016,
+        "terrain": "ramp"
+      },
+      "ramp:440017": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6207372659699651,
+            -1.0568333216214945,
+            0.8582430462733958
+          ],
+          [
+            1.4758231208484291,
+            0.9427020900483051,
+            0.8445469463783202
+          ],
+          [
+            2.3798298404838323,
+            -0.993508513169177,
+            0.8203484425429146
+          ],
+          [
+            3.383365616862408,
+            1.039439587121172,
+            0.9707787758586142
+          ],
+          [
+            4.257452339369403,
+            -1.0223481319475332,
+            0.8421309220052554
+          ],
+          [
+            5.268245880416172,
+            0.9963093673774359,
+            0.9599706519390372
+          ]
+        ],
+        "friction": 0.7886658330974942,
+        "geometry_sha256": "cb00b2a671598075187f7d40f7abdae9a0cc1b1eef0d638698d991e8ed0eec96",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.0815483918804951,
+        "plateau_length_m": 0.41271661039662455,
+        "rise_length_m": 1.4628451014077741,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440017,
+        "terrain": "ramp"
+      },
+      "ramp:440018": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5935441389835232,
+            -1.042639633054602,
+            0.8781760631671581
+          ],
+          [
+            1.4295932959413418,
+            0.9638380406078482,
+            0.9033637958682323
+          ],
+          [
+            2.3178849356911924,
+            -0.9218982291521731,
+            1.0572691974471762
+          ],
+          [
+            3.2775172303090634,
+            0.95119763672199,
+            0.9939648473217726
+          ],
+          [
+            4.398280058062807,
+            -0.9950396391272316,
+            1.0136152215931051
+          ],
+          [
+            5.276614794057598,
+            1.070199060042917,
+            1.0331635274182494
+          ]
+        ],
+        "friction": 0.8065442559954855,
+        "geometry_sha256": "a29f1eacc8c16180bb55db0225f8b4562bb51b475e5a77441a97707da3a18bf8",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 0.9891710874507251,
+        "plateau_length_m": 0.3690972258282001,
+        "rise_length_m": 1.515919714587743,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440018,
+        "terrain": "ramp"
+      },
+      "ramp:440019": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.49949730439325635,
+            -1.0291813828550491,
+            0.8499816614898364
+          ],
+          [
+            1.4398331518534122,
+            1.0083151231912983,
+            0.9672349213822081
+          ],
+          [
+            2.4272091718209583,
+            -1.0769947219347362,
+            1.015673606364971
+          ],
+          [
+            3.2711160336656757,
+            0.9247466122629576,
+            0.8651462365325581
+          ],
+          [
+            4.421119434117703,
+            -0.9687582432185198,
+            0.9664854616588303
+          ],
+          [
+            5.363142910325152,
+            1.0396912038217,
+            1.0674441508904664
+          ]
+        ],
+        "friction": 0.8123021033314355,
+        "geometry_sha256": "d2f2ed8b1c75ab39fec57ffbae32ed24a2d90f740ed4e38ab07df7fb3a677935",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 1.0294863335546498,
+        "plateau_length_m": 0.3433253765598491,
+        "rise_length_m": 1.5886484250739739,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440019,
+        "terrain": "ramp"
+      },
+      "ramp:450000": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4923815188929106,
+            -0.9827066564015943,
+            0.9908996535167155
+          ],
+          [
+            1.4701235365632173,
+            0.9766015940232212,
+            0.8834886256090363
+          ],
+          [
+            2.3326751828173893,
+            -1.0468651007294518,
+            0.8105990197991582
+          ],
+          [
+            3.35832866822006,
+            0.9536289909667188,
+            1.0521220300667085
+          ],
+          [
+            4.435330613660465,
+            -0.9525177215380511,
+            0.9582720516488331
+          ],
+          [
+            5.370551670262987,
+            0.9303179455489748,
+            1.092911573584469
+          ]
+        ],
+        "friction": 0.8024458384121463,
+        "geometry_sha256": "2b8850924377136dd979cc7f177872c7b1e6c3a0d7f451d4413b23fc0c570363",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "grade_deg": 3.0,
+        "onset_m": 0.9765860821239252,
+        "plateau_length_m": 0.26664423522224856,
+        "rise_length_m": 1.5344645581406706,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 450000,
+        "terrain": "ramp"
+      },
+      "small_steps:440000": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5664812165724662,
+            -0.9764468483052744,
+            1.0136564910125578
+          ],
+          [
+            1.502066597330197,
+            1.0644631264418443,
+            1.0854491016524452
+          ],
+          [
+            2.471263931321962,
+            -0.9800232108211462,
+            0.8702448053596623
+          ],
+          [
+            3.2533543607475637,
+            0.9997199605414709,
+            1.0849905189137798
+          ],
+          [
+            4.376797175203825,
+            -0.9547474998993868,
+            0.8739842528554407
+          ],
+          [
+            5.441131493795759,
+            1.0428398761112,
+            1.0291152442162188
+          ]
+        ],
+        "friction": 0.8089415971712461,
+        "geometry_sha256": "76a68042e9af31e1acd2a83e816415501a39b1ff0c44fbe9411465b36033a682",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.1292916802241058,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440000,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.3777454577467309,
+          0.2940696513004272,
+          0.3371749087596411,
+          0.4088143708501113,
+          0.38602794812066465,
+          0.4019507212643281
+        ]
+      },
+      "small_steps:440001": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4678966753589172,
+            -0.9804997810782807,
+            1.0512227686245619
+          ],
+          [
+            1.5707115727139962,
+            1.037279156276675,
+            1.0938259238841226
+          ],
+          [
+            2.3647121544601317,
+            -1.0325838566000052,
+            0.9830287762866213
+          ],
+          [
+            3.3342965732811964,
+            0.9471345332585223,
+            1.0616834429377076
+          ],
+          [
+            4.442744407658838,
+            -1.0491566628363873,
+            0.819978613076266
+          ],
+          [
+            5.268829589146649,
+            0.989505379875868,
+            1.0759527813678034
+          ]
+        ],
+        "friction": 0.8115449110392707,
+        "geometry_sha256": "aba06baf99552117dc7382302f99aa35f8ea0279e388e5518df16557045b8c4a",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0417554663260615,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440001,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.39614167861030736,
+          0.3138978998414577,
+          0.3967653634420106,
+          0.3209479759242545,
+          0.40043679254290543,
+          0.3277759301322086
+        ]
+      },
+      "small_steps:440002": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4821009484888167,
+            -1.0143743548505932,
+            1.0053843407771972
+          ],
+          [
+            1.5416402385777375,
+            0.9448671975403611,
+            1.0501782714513357
+          ],
+          [
+            2.3973577071563468,
+            -1.0480879862881651,
+            1.00804344470997
+          ],
+          [
+            3.311317155491238,
+            1.0471978088691196,
+            1.086754468863465
+          ],
+          [
+            4.272171992343779,
+            -0.9388783310818839,
+            1.0347156248712186
+          ],
+          [
+            5.293765733083262,
+            0.9594684635186029,
+            0.8414568171923792
+          ]
+        ],
+        "friction": 0.7963383297464354,
+        "geometry_sha256": "2dff2d7f197f87ab7f8f1ba53845c5b69aa8d29c9c4698e6b50e2507e2eaa6b4",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0886237879200247,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440002,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.3498039071800832,
+          0.30638967618377755,
+          0.3717198706135624,
+          0.3155788872340656,
+          0.3366204661744381,
+          0.34792811796010403
+        ]
+      },
+      "small_steps:440003": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4610895162773432,
+            -1.0186512731624804,
+            0.9824754030287512
+          ],
+          [
+            1.4754925311170213,
+            1.0351363446510142,
+            0.8022805094470142
+          ],
+          [
+            2.3746808824676213,
+            -0.9306279264984181,
+            0.9636087772455274
+          ],
+          [
+            3.4231031113908914,
+            0.9511103399875601,
+            0.8744699564225051
+          ],
+          [
+            4.3169697131967295,
+            -0.923753887785849,
+            0.937856687437753
+          ],
+          [
+            5.384415133345679,
+            0.9837407920071409,
+            1.0382785578646456
+          ]
+        ],
+        "friction": 0.8071422812018317,
+        "geometry_sha256": "86dacf5106298137985c2e302191e4041cfa2b1bb86c1183f8739fda97152eaf",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9872283783556377,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440003,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.36488966899184844,
+          0.3458426921084358,
+          0.363636495875312,
+          0.3711526382720135,
+          0.36032466133117785,
+          0.3138424235187646
+        ]
+      },
+      "small_steps:440004": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.49604451512631187,
+            -1.0315821251690698,
+            1.067570516251267
+          ],
+          [
+            1.4417500461200494,
+            0.97135048800064,
+            0.8140769288787604
+          ],
+          [
+            2.3329497259494474,
+            -0.9651463275739434,
+            0.9757041214023456
+          ],
+          [
+            3.3698364329081185,
+            0.9496546264746979,
+            0.8726674232456059
+          ],
+          [
+            4.3875755092910245,
+            -0.942087498544017,
+            1.0002559443126704
+          ],
+          [
+            5.339552560218081,
+            0.9871281240021476,
+            0.827097106980313
+          ]
+        ],
+        "friction": 0.7956038240190878,
+        "geometry_sha256": "f710cd2e19a539aaab02d74d6edfa9955656f8ace13c615bd6ce85bb453819b8",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.1191632678941565,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440004,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.2938328815729659,
+          0.3004213440409291,
+          0.3765307409673349,
+          0.3284720267730234,
+          0.31280682109433366,
+          0.36487254819350917
+        ]
+      },
+      "small_steps:440005": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5849811523426356,
+            -0.9450869513823288,
+            0.9686902834122465
+          ],
+          [
+            1.595329740335527,
+            0.946124239332744,
+            1.095593809282608
+          ],
+          [
+            2.475544366305282,
+            -1.0771685979929233,
+            1.0641419515583683
+          ],
+          [
+            3.394094404765989,
+            0.9386684267845757,
+            1.0860649971074006
+          ],
+          [
+            4.379976634058557,
+            -0.9355714717110839,
+            0.8782247835577887
+          ],
+          [
+            5.276579767506358,
+            0.9712888540750094,
+            0.9607521727001056
+          ]
+        ],
+        "friction": 0.811918709599464,
+        "geometry_sha256": "62d4337177d2fa8b65793a84bd277d24531d11bb6d2d58af1ec9c3626a24b388",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9829850811007759,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440005,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.3904930418048884,
+          0.3928632169175291,
+          0.3367021659611552,
+          0.3013937846431986,
+          0.3578548928574009,
+          0.3598739578755006
+        ]
+      },
+      "small_steps:440006": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5144038794935947,
+            -0.955085770548335,
+            1.0305658378052762
+          ],
+          [
+            1.4577139893497926,
+            1.03332794125788,
+            0.8758113691692863
+          ],
+          [
+            2.3074143932091147,
+            -1.02978843643969,
+            0.8644924201667445
+          ],
+          [
+            3.3708345924722365,
+            0.9527562618531067,
+            0.898563169010241
+          ],
+          [
+            4.316189838659666,
+            -0.9504252392646486,
+            0.8854330237085849
+          ],
+          [
+            5.432302966774068,
+            0.9667324046802641,
+            1.0972232531917374
+          ]
+        ],
+        "friction": 0.8104615831151043,
+        "geometry_sha256": "e254fc3842e39e4a4295215ca58cde8867e5356a9bb94c5386ae38889ad62f8b",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0498770228716803,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440006,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.3475987965842819,
+          0.30512881549380483,
+          0.3298684103111158,
+          0.3165221440899661,
+          0.340183487780594,
+          0.35842058128384857
+        ]
+      },
+      "small_steps:440007": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.562658099348428,
+            -0.9482602381937584,
+            1.0709284853661392
+          ],
+          [
+            1.5664429268290276,
+            1.0430133593631064,
+            1.0091018702474328
+          ],
+          [
+            2.485108727868337,
+            -1.0120751176807667,
+            0.8853759660267865
+          ],
+          [
+            3.4277355289945763,
+            0.9629694070672674,
+            0.8281060321827401
+          ],
+          [
+            4.39156053975918,
+            -0.9719125226160718,
+            1.0628214078589426
+          ],
+          [
+            5.338540478013552,
+            1.0005238003355,
+            1.0016191422345702
+          ]
+        ],
+        "friction": 0.8119531221637936,
+        "geometry_sha256": "d725ec36ed92447a3d05e3b5f609fbafea8803a453d6b79e937c497035d332dd",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.028967201507999,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440007,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.40723241352701395,
+          0.3573228310645979,
+          0.30231663711997664,
+          0.3469391610174513,
+          0.37179308269814015,
+          0.3521046133659482
+        ]
+      },
+      "small_steps:440008": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6498416104804436,
+            -1.0292909433825137,
+            0.8552082372898088
+          ],
+          [
+            1.571836135342432,
+            1.0426895246825647,
+            0.8024845884178684
+          ],
+          [
+            2.4984289626917953,
+            -1.0585525740011401,
+            0.9860987744426422
+          ],
+          [
+            3.269490102264691,
+            1.0625956738951199,
+            1.0315039787977438
+          ],
+          [
+            4.4363476143187155,
+            -0.94218403079736,
+            0.9840952698957663
+          ],
+          [
+            5.280639387866263,
+            1.039964682987517,
+            1.077808025096898
+          ]
+        ],
+        "friction": 0.8112811361862668,
+        "geometry_sha256": "707b0c9daa832244ab24c7ee0d2b4fe94a153d0931c8e46dc17d3ffa8466743a",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0276575160098074,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440008,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.4003456977496483,
+          0.36076045744008656,
+          0.2924508591908634,
+          0.29035175882418657,
+          0.3692314905835228,
+          0.3781758617446985
+        ]
+      },
+      "small_steps:440009": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5189141299163256,
+            -0.9277118540084888,
+            0.8618365550829052
+          ],
+          [
+            1.5273873653745824,
+            1.0373207800582251,
+            1.0694791829384114
+          ],
+          [
+            2.4463403296586366,
+            -0.9544357588830054,
+            0.9768051357349563
+          ],
+          [
+            3.3541376918699273,
+            0.9286785821249991,
+            0.9708224436648708
+          ],
+          [
+            4.272633564560961,
+            -1.0512884851839543,
+            1.0526550981971952
+          ],
+          [
+            5.281068490939999,
+            1.0049573427862337,
+            1.0164902746700664
+          ]
+        ],
+        "friction": 0.7827261056895409,
+        "geometry_sha256": "ffb0328fd085049986d8a5513a569706b19fea46410af4b5d8128fbc6b089526",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9625146978369322,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440009,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.31312429731336333,
+          0.31659198406858136,
+          0.4035393221535671,
+          0.3310706214209995,
+          0.38276971842737156,
+          0.29111825623211934
+        ]
+      },
+      "small_steps:440010": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5345504922902017,
+            -1.0398416719581118,
+            0.9542386240422143
+          ],
+          [
+            1.4881689200749153,
+            0.971865754719792,
+            0.8480643493041443
+          ],
+          [
+            2.30308392548809,
+            -0.9767163449214763,
+            1.0635473592930307
+          ],
+          [
+            3.373523586916291,
+            0.9635387760341212,
+            1.0017851936673843
+          ],
+          [
+            4.344295020605974,
+            -0.9521364194803068,
+            0.8739673181596477
+          ],
+          [
+            5.362368219257237,
+            0.9818484194642392,
+            0.9467169644667026
+          ]
+        ],
+        "friction": 0.8123727479023309,
+        "geometry_sha256": "1f1ff5097a14866822870da108ef6b17fd6b311914a1f6c914c1fe3d844097eb",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0091815746135395,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440010,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.30807792950241103,
+          0.29873046446502693,
+          0.3839783462869549,
+          0.2957393194712059,
+          0.3501204608008698,
+          0.3473091403761508
+        ]
+      },
+      "small_steps:440011": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6052897026115428,
+            -0.9379940798986359,
+            0.867035725512429
+          ],
+          [
+            1.4268932925722935,
+            0.9473683291303818,
+            0.8255694614467586
+          ],
+          [
+            2.347375689998584,
+            -1.0787598582882332,
+            0.9225382352806166
+          ],
+          [
+            3.4216013578976083,
+            0.949925996466366,
+            0.9404881406374448
+          ],
+          [
+            4.2767922429279706,
+            -1.0215744821066008,
+            0.9743353361515209
+          ],
+          [
+            5.254780231151955,
+            1.0285485741179698,
+            1.025032636811315
+          ]
+        ],
+        "friction": 0.7803301846203995,
+        "geometry_sha256": "0cb929e2ef683faa4597bf98185238072c7ca11349bebc96f4bb07d615412995",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.143244143475511,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440011,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.298351841150833,
+          0.4032914605703536,
+          0.36066339393807073,
+          0.3037537690372955,
+          0.3963328327052243,
+          0.3497346249029911
+        ]
+      },
+      "small_steps:440012": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6495450628407284,
+            -0.9584195085760879,
+            1.0924821478944877
+          ],
+          [
+            1.5533718408411468,
+            0.9794206092945034,
+            0.9053618885289236
+          ],
+          [
+            2.468730697796225,
+            -0.9960314583009453,
+            0.8163464856841562
+          ],
+          [
+            3.3221808931873476,
+            0.9247707089675153,
+            0.8993688171346368
+          ],
+          [
+            4.407536060734894,
+            -0.9267806999729683,
+            0.8640927799300697
+          ],
+          [
+            5.427486224097645,
+            1.0699434770556473,
+            1.0045990652080643
+          ]
+        ],
+        "friction": 0.7894887134721658,
+        "geometry_sha256": "a25e7c119d4218cc1ffe0bd0f190028c8085365a99288535ec85bd3498f40728",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0126340183132119,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440012,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.32718323201704563,
+          0.3749268530521637,
+          0.3474637770641773,
+          0.4012279560504736,
+          0.3623202480010762,
+          0.34387077523517207
+        ]
+      },
+      "small_steps:440013": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.572033897475586,
+            -0.9734370582179616,
+            0.9008392746618817
+          ],
+          [
+            1.5605017902311227,
+            1.023938282893735,
+            0.8609894130243567
+          ],
+          [
+            2.421227284781432,
+            -1.0014792322647508,
+            0.8217993492102148
+          ],
+          [
+            3.4431899212394894,
+            1.0328715146719707,
+            1.075282495185854
+          ],
+          [
+            4.348645873473348,
+            -1.0474187083188595,
+            0.9721120420739029
+          ],
+          [
+            5.341088270123544,
+            0.9874244026125757,
+            0.9136204674992034
+          ]
+        ],
+        "friction": 0.8140848055741845,
+        "geometry_sha256": "0cf71733cdc075688390bd13e2b2831ed1aeb8ab0d0bd95c5bc1b910f7dadd1e",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9660041258370485,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440013,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.3316593908999641,
+          0.4093732199491732,
+          0.3790917332709744,
+          0.3088701523427441,
+          0.31733654795777727,
+          0.3902974352172648
+        ]
+      },
+      "small_steps:440014": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4505756219417908,
+            -0.9440370873423171,
+            1.0163906497705368
+          ],
+          [
+            1.51751211116164,
+            0.9810756235686079,
+            1.063131014494985
+          ],
+          [
+            2.409071634254603,
+            -0.9297623437064485,
+            1.0192461379669413
+          ],
+          [
+            3.3351904203527583,
+            0.992592197146307,
+            0.9473870348906063
+          ],
+          [
+            4.256873660140402,
+            -0.9582402329698638,
+            1.0569034749696078
+          ],
+          [
+            5.329183073764093,
+            0.997997405125507,
+            0.9661713060628367
+          ]
+        ],
+        "friction": 0.80038221387666,
+        "geometry_sha256": "a3c5974a9a8a4d2a4293a953aab78204533b01c69a8f9e753fc6c273dc30fbfd",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0176238209441217,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440014,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.4051271547712416,
+          0.36663925897663363,
+          0.3980414538001078,
+          0.29202771628654256,
+          0.3416007966134136,
+          0.30475591959834325
+        ]
+      },
+      "small_steps:440015": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5860194401303976,
+            -0.9813662946048871,
+            1.0377170033310825
+          ],
+          [
+            1.4529666399468832,
+            0.9881906981042539,
+            0.9788828869547804
+          ],
+          [
+            2.464976326377479,
+            -0.9234956219742325,
+            1.0685961295246273
+          ],
+          [
+            3.295368219266128,
+            1.0422708204942905,
+            1.063572544709416
+          ],
+          [
+            4.330839875464352,
+            -0.9849971496425546,
+            1.02035391997139
+          ],
+          [
+            5.350134410499114,
+            0.9339611671767069,
+            1.008381858977831
+          ]
+        ],
+        "friction": 0.7840696924455238,
+        "geometry_sha256": "cc6a9a8383b9ccebae1581b51361772faac06e17934b75a663fb2074ca18978d",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0659755904870662,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440015,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.3830106043699553,
+          0.3161231797084285,
+          0.35906466477138416,
+          0.406046399241456,
+          0.3185481871816271,
+          0.350095912775034
+        ]
+      },
+      "small_steps:440016": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6364236863222473,
+            -1.074441337204466,
+            0.8152827450169144
+          ],
+          [
+            1.5514215726895182,
+            0.9525294742671934,
+            1.0918879397796328
+          ],
+          [
+            2.443758106635814,
+            -1.0022042370297182,
+            0.9799606485936885
+          ],
+          [
+            3.337927654979728,
+            1.0278999906394746,
+            0.8452103461293605
+          ],
+          [
+            4.277889503863994,
+            -0.9406275432065997,
+            1.0052017143589118
+          ],
+          [
+            5.270593990873942,
+            0.9653355178928789,
+            0.8317229028762197
+          ]
+        ],
+        "friction": 0.8073593071135179,
+        "geometry_sha256": "51cd0c122a4d733db5248ef87e16f715e6a1926a5baa7db4a1fe6fb2b443d011",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.1366152875744389,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440016,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.3796560437308403,
+          0.37712004753846745,
+          0.3900727290925592,
+          0.40145223432554633,
+          0.31857835621715863,
+          0.3738699457538711
+        ]
+      },
+      "small_steps:440017": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.6207372659699651,
+            -1.0568333216214945,
+            0.8582430462733958
+          ],
+          [
+            1.4758231208484291,
+            0.9427020900483051,
+            0.8445469463783202
+          ],
+          [
+            2.3798298404838323,
+            -0.993508513169177,
+            0.8203484425429146
+          ],
+          [
+            3.383365616862408,
+            1.039439587121172,
+            0.9707787758586142
+          ],
+          [
+            4.257452339369403,
+            -1.0223481319475332,
+            0.8421309220052554
+          ],
+          [
+            5.268245880416172,
+            0.9963093673774359,
+            0.9599706519390372
+          ]
+        ],
+        "friction": 0.7886658330974942,
+        "geometry_sha256": "add051800f1b598b4a1b88f68c8b190b1eddd5a63a1e5e4d6b371ea80478b0a9",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0815483918804951,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440017,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.38192453585400565,
+          0.4026123474563218,
+          0.4052454588600445,
+          0.3786849604588872,
+          0.29780478999832943,
+          0.3776855452443594
+        ]
+      },
+      "small_steps:440018": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.5935441389835232,
+            -1.042639633054602,
+            0.8781760631671581
+          ],
+          [
+            1.4295932959413418,
+            0.9638380406078482,
+            0.9033637958682323
+          ],
+          [
+            2.3178849356911924,
+            -0.9218982291521731,
+            1.0572691974471762
+          ],
+          [
+            3.2775172303090634,
+            0.95119763672199,
+            0.9939648473217726
+          ],
+          [
+            4.398280058062807,
+            -0.9950396391272316,
+            1.0136152215931051
+          ],
+          [
+            5.276614794057598,
+            1.070199060042917,
+            1.0331635274182494
+          ]
+        ],
+        "friction": 0.8065442559954855,
+        "geometry_sha256": "2f68c2f7b01e5d494f9fb6a12551db55ca5c60b8bf13a4fd699f494960d05b54",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9891710874507251,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440018,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.3976746689498407,
+          0.30152402282369223,
+          0.4044565552459597,
+          0.3297334720844829,
+          0.32893346705518894,
+          0.3160338003168303
+        ]
+      },
+      "small_steps:440019": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.49949730439325635,
+            -1.0291813828550491,
+            0.8499816614898364
+          ],
+          [
+            1.4398331518534122,
+            1.0083151231912983,
+            0.9672349213822081
+          ],
+          [
+            2.4272091718209583,
+            -1.0769947219347362,
+            1.015673606364971
+          ],
+          [
+            3.2711160336656757,
+            0.9247466122629576,
+            0.8651462365325581
+          ],
+          [
+            4.421119434117703,
+            -0.9687582432185198,
+            0.9664854616588303
+          ],
+          [
+            5.363142910325152,
+            1.0396912038217,
+            1.0674441508904664
+          ]
+        ],
+        "friction": 0.8123021033314355,
+        "geometry_sha256": "b8d93c0dd6fd5a1519426f1218c661fff5338c8845bd111ab573c96af33ab956",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 1.0294863335546498,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 440019,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.3129829343123416,
+          0.36517969733542927,
+          0.391401391528167,
+          0.34567056854632294,
+          0.2946829655142073,
+          0.369317158096791
+        ]
+      },
+      "small_steps:450000": {
+        "corridor_half_width_m": 0.75,
+        "exterior_landmark_centers_m": [
+          [
+            0.4923815188929106,
+            -0.9827066564015943,
+            0.9908996535167155
+          ],
+          [
+            1.4701235365632173,
+            0.9766015940232212,
+            0.8834886256090363
+          ],
+          [
+            2.3326751828173893,
+            -1.0468651007294518,
+            0.8105990197991582
+          ],
+          [
+            3.35832866822006,
+            0.9536289909667188,
+            1.0521220300667085
+          ],
+          [
+            4.435330613660465,
+            -0.9525177215380511,
+            0.9582720516488331
+          ],
+          [
+            5.370551670262987,
+            0.9303179455489748,
+            1.092911573584469
+          ]
+        ],
+        "friction": 0.8024458384121463,
+        "geometry_sha256": "31b34ac7bdf66b0cdaff02a465380c4517e45c30e72335a82cca7c2e87165397",
+        "goal_xy_m": [
+          5.0,
+          0.0
+        ],
+        "onset_m": 0.9765860821239252,
+        "schema": "bhl-confirmation-course-v1",
+        "seed": 450000,
+        "step_levels": [
+          1,
+          2,
+          2,
+          3,
+          2,
+          1
+        ],
+        "step_rise_m": 0.01,
+        "terrain": "small_steps",
+        "treads_m": [
+          0.335982087068396,
+          0.3083392728176202,
+          0.3926038496566021,
+          0.34584315895287177,
+          0.3234667793281464,
+          0.4026389425057783
+        ]
+      }
+    },
+    "no_adaptation": "Freeze before smoke; no geometry/gain/gate/seed/actor edits after outcomes; preserve negative outcomes; confirmation failures require new development cohort",
+    "primary_metric": "Matched candidate-minus-baseline clean-goal difference, 20 shared geometry/reset seed clusters",
+    "qualified": [
+      {
+        "actor": "dr-default-s0",
+        "arm": "heading"
+      },
+      {
+        "actor": "dr-default-s0",
+        "arm": "regulated"
+      },
+      {
+        "actor": "dr-default-s1",
+        "arm": "heading"
+      },
+      {
+        "actor": "dr-default-s2",
+        "arm": "heading"
+      },
+      {
+        "actor": "dr-default-s2",
+        "arm": "regulated"
+      }
+    ],
+    "schema": "bhl-terrain-confirmation-v2",
+    "scope": "Independent held-out MuJoCo confirmation of five development-qualified actor/controller combinations on new procedural geometry and reserved reset seeds; fixed actors and simulator, not independent hardware or general robot safety validation",
+    "smoke_gate": "24/24 declared actor/terrain/controller episodes, full12s horizon, finite state, no falls, native tracked frames>0; no gain tuning",
+    "smoke_seconds": 12.0,
+    "smoke_seed": 450000,
+    "source_files": [
+      "scripts/bench/terrain_confirmation_campaign.py",
+      "src/bhl_robust/research/terrain_confirmation.py",
+      "src/bhl_robust/research/terrain_confirmation_acquisition.py"
+    ],
+    "terrains": [
+      "flat",
+      "small_steps",
+      "ramp"
+    ],
+    "uncertainty": "10000 percentile bootstrap samples of20 seed clusters, fixed seed900011; intervals conditional on fixed actors/families; five marginal descriptive comparisons"
+  },
+  "terrain_methods": {
+    "actors": [
+      {
+        "checkpoint_input": "actors/dr-default-s0/policy.onnx",
+        "checkpoint_sha256": "e62f4c242ad6ff89e4108aecca18f960255c58e5d045baddc0da8cb16e7a22b1",
+        "deploy_input": "actors/dr-default-s0/deploy.yaml",
+        "name": "dr-default-s0",
+        "variant": "biped"
+      },
+      {
+        "checkpoint_input": "actors/dr-default-s1/policy.onnx",
+        "checkpoint_sha256": "79a5fd23fde5a6030ceca64e8605fd4a320f96671c8280dd88bb370dacd31ed0",
+        "deploy_input": "actors/dr-default-s1/deploy.yaml",
+        "name": "dr-default-s1",
+        "variant": "biped"
+      },
+      {
+        "checkpoint_input": "actors/dr-default-s2/policy.onnx",
+        "checkpoint_sha256": "904c908b8347a832f698a22c860e14a45ab3ef5b0e2dce81d95acb368ed8ab3a",
+        "deploy_input": "actors/dr-default-s2/deploy.yaml",
+        "name": "dr-default-s2",
+        "variant": "biped"
+      }
+    ],
+    "arm_order": "deterministic permutation RNG(seed+500000) for each matched reset-seed group",
+    "arms": [
+      "baseline",
+      "heading",
+      "regulated"
+    ],
+    "confirmation_gate": "For an actor/arm: >=27/30 clean goals and zero falls/contacts/nonfinite; reserve confirmation seeds and require separately frozen new geometry before use",
+    "confirmation_seeds_reserved": [
+      420000,
+      420001,
+      420002,
+      420003,
+      420004,
+      420005,
+      420006,
+      420007,
+      420008,
+      420009,
+      420010,
+      420011,
+      420012,
+      420013,
+      420014,
+      420015,
+      420016,
+      420017,
+      420018,
+      420019
+    ],
+    "control_settings": {
+      "curvature_speed_gain": 0.6,
+      "desired_speed_m_s": 0.3,
+      "footprint_half_width_m": 0.18,
+      "goal_tolerance_m": 0.2,
+      "lateral_clearance_slow_m": 0.5,
+      "lookahead_m": 0.6,
+      "maximum_pose_age_s": 0.35,
+      "maximum_yaw_rate_rad_s": 0.5,
+      "minimum_speed_m_s": 0.08,
+      "obstacle_stop_m": 0.3
+    },
+    "created_utc": "2026-10-10T20:20:28.749676+00:00",
+    "development_seeds": [
+      410000,
+      410001,
+      410002,
+      410003,
+      410004,
+      410005,
+      410006,
+      410007,
+      410008,
+      410009
+    ],
+    "ground_truth_inputs_to_controller": [],
+    "initialization_seconds": 5.0,
+    "map_settings": {
+      "attitude_sigma_rad": 0.008726646259971648,
+      "hazard_slope_deg": 8.0,
+      "hazard_step_m": 0.025,
+      "max_height_above_low_envelope_m": 0.18,
+      "maximum_age_s": 2.0,
+      "minimum_scan_points": 2,
+      "process_variance_m2_s": 2.5e-05,
+      "range_sigma_m": 0.005,
+      "resolution_m": 0.1,
+      "scan_motion_sigma_m": 0.01,
+      "translation_sigma_m": 0.005,
+      "vertical_span_rejection_m": 0.08,
+      "x_max_m": 5.8,
+      "x_min_m": -0.5,
+      "y_max_m": 1.1,
+      "y_min_m": -1.1
+    },
+    "old_campaign_unchanged": "18-episode20261009 qualification remains negative; no rescoring or replacing those episodes",
+    "packages": {
+      "Pillow": "11.3.0",
+      "mujoco": "3.3.5",
+      "numpy": "1.26.0",
+      "omegaconf": "2.3.0",
+      "onnxruntime": "1.22.1"
+    },
+    "primary_metric": "paired clean-goal success differences by actor/terrain/reset seed; full40s horizon, zero wall contacts/falls/nonfinite",
+    "runtime_input": "runtime/lio-runtime.tar.gz",
+    "schema": "bhl-terrain-methods-v1",
+    "scope": "MuJoCo simulation development; three frozen12DoF actors; matched nativeFAST-LIO2 startup/loss/estimated-goal stops; new course/seed cohort; no physical validation, terrain-trained gait or independent confirmation claim",
+    "seconds": 40.0,
+    "source_sha256": {
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_elbow_pitch_visual.stl": "dcc63a3258fcb2eadf773dac5ae01069c1cd56515903d957351a8c397042c6a5",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_elbow_roll_visual.stl": "149d9aec09328004cd4009f53ddba2e3e76a3cb3a8421b74c5cf4a7a771b7830",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_hand_link_visual.stl": "866509814110736425e6a53fb7ac7259fc6eeb0f6b7391d1a5dfe78192cfaefd",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_shoulder_pitch_visual.stl": "bb7424abee626edfcd38ca55789791fe48ca97c5a1d744d8efee12110e8e68b2",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_shoulder_roll_visual.stl": "a43c68296d04993c1f15663787c32b1b9540ed778bb608de5931ac090260cc86",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_left_shoulder_yaw_visual.stl": "63330719959b2fc97809af73d4f950b8f2973c11676eefba03b15fc269f36866",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_elbow_pitch_visual.stl": "01928d43bcd163cd8fa9dfc3222857eec0afd0297d449362e6bad5394a145aa0",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_elbow_roll_visual.stl": "c74c94c93b8973879fb4ee5caf125f8ad2cccffb5ca2f8adc9f8ab1277cff46b",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_hand_link_visual.stl": "12551a89279aba71699fa9545d6d6dc815539e2411d3d069b71aea99352c444f",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_shoulder_pitch_visual.stl": "e9b44ad2e5e959303616dd42bdfa32647656d36a54ec7c89b5cbc9a93743be6f",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_shoulder_roll_visual.stl": "2ca18897c48d2e07d11e110ced7ff17925f6212a099281e3c8eb33f1c276d882",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/arm_right_shoulder_yaw_visual.stl": "76725f6aa833bff0ca29521d2474b0cd695b18ea6b05f141e23c7d1b9c3bd0af",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/base_visual.stl": "d9af91bf06e64d633fbe74f9700c9819952e7bb9d21b22101ef7c25e5e0a601c",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/imu_2_visual.stl": "e06a07bf09851ec0748ba0b77fc1d47c3a17a2f8f6a0b09803514eadac046745",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_ankle_pitch_visual.stl": "eb7216eba3c7af0c64379003d55112556db5e48a603bf99f200caa7f4735e48c",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_ankle_roll_visual.stl": "96ff643402492843119787aa00f8d26412154bfd10e10df3651655853b81775c",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_hip_pitch_visual.stl": "40940519f285ff6f5c1f927c60f0dc30fcedc8d46d0a62f8ce1865169424779f",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_hip_roll_visual.stl": "66ce0cf0153d8710c1c3cac947270e1855cdb62ef3a3e43ba2de20ad5d711356",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_hip_yaw_visual.stl": "ed54b34914b5adf4a963dc266685f0b0d82cae98a0409490432c0199ce4abdaf",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_left_knee_pitch_visual.stl": "956d76bc1a994c11d8a31ba58c4e510180ef03124d6f24c896449701fd04644e",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_ankle_pitch_visual.stl": "bec4d629b07813d9954c7219d02f51500413d19da10e743b17b966a703e183b1",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_ankle_roll_visual.stl": "6f44c6e5d27b7e7ca78040be74d12134785fbeb20bde66810b5e56188c7df9b5",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_hip_pitch_visual.stl": "8ad842e726a2396de47eca5ebb7feb1b060a440de537211080df3298a22c7d21",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_hip_roll_visual.stl": "cb776ee7a9a016b0c09f5d8bbb2f81c7aa7abed8ad97c5e84ea0c7c4ee4ed3bd",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_hip_yaw_visual.stl": "8502e46e5e22229c7d5e8f54ff37ae8ef2b2f77270cc55df7c9a29fcc1ab3adf",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/meshes/leg_right_knee_pitch_visual.stl": "de9bb40ea6e610c013758037b5b8311d544586d769b59306c29bbe59fd0f13bc",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/berkeley_humanoid_lite.xml": "11180b321229d335b5a5f14fa8adeee101daa12bed84dff33d32f265b5196dbf",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/berkeley_humanoid_lite_biped.xml": "8f768fd140115625627e94cb9ed0f1f89ed556901a4c3e321d222dfb0abf0736",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/bhl_biped_scene.xml": "acf846cb866b41637d6bddf195c1bc9c099e908a7fa11f1b837b1a6bc8daa7d0",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/bhl_scene.xml": "f4a35d213145d575d21d8e3ff53bf7b7cdacce74c24c4fb36c33bc682f4fc262",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/__init__.py": "b0df54307c485e41d1951f0c2a75f55fe22807dcd8ad618978d8c778693ae68b",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/__init__.py": "b0df54307c485e41d1951f0c2a75f55fe22807dcd8ad618978d8c778693ae68b",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/config.py": "6f9118813dcf18c9ee37c48963f887e5cce59fcdf0d0c10549b3550f8fae550d",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/gamepad.py": "517c4119e81758617fbe96db78b7b16b45cab1e0f98d34b3b6957d79d4ed9bdd",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/policy/rl_controller.py": "ab7b8c282e0888ec6cfb74451c60772ade5abcda17362521fb31bc04b8b5203c",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/__init__.py": "0dae04323e06d47a013a5e42017f13b2cbc721607873666dad576c4997c76c1a",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/can.py": "592a192b12807e176934f185f178e03f0c7eb9bc1a838c90caad4e53adbbbc5a",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/core.py": "7111504e3616b20f162ae6e16abd59b76c763424c9a9af843585173bf60a7fc7",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/fixed16.py": "1f8c85c5ce6c8ea314b80043ed805c9089bebc12b8f47ac8c1c17643b0983896",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/recoil/util.py": "d2ed67d6c76c1384003735208ba143f92a7ff005ecd584a7a9f615d0e4fab710",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/__init__.py": "78101211089aa1ba82e9d4720f81419fb5055dc9fff8e954aa81eab10e64d843",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/bimanual.py": "fac5b541e63a6d15c1b36a9b5be181413343381d86dffd9be0045e3006c04320",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/humanoid.py": "a8e274a76c53d28489486723dfa0f71cb9e37811185c2fa95a2837df65bb86c3",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/berkeley_humanoid_lite_lowlevel/robot/imu.py": "a397c6e6a716b6009f109644c9d7956d43ae62e5c99d540b857297ff7ad48dab",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/calibrate_joints.py": "0442470a004495e7ef87e16afa5b91564a1827ab500954ea7c0015b37145e6e9",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/check_connection.py": "718a28607303caf58b368c645b4ace301eb2245c3546258dbd832c53df3e711a",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/calibrate_electrical_offset.py": "59b5ffc500d9f50737df20050a7967182dfce2d2d83c01e0d3fd98e4db4e7732",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/configure_parameter.py": "80d4bfb6759662500b73cd4aa2e71d4ad5dd402b9c03b4f59840b225157b9e64",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/move_actuator.py": "89bd1594adc4249b11414793fc08f4626e8ae6b94a7c1dcf01f1e1b80d29b974",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/ping.py": "20c0e60babb235a69ed22a8a1d786b302edcf0939919768a971edd11e86fc534",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/motor/read_configurations.py": "7c7b54045c14194e19c3bf202f4fcab2ecc217f9422ecfcf3fd8137850693baa",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/robot/read_configurations.py": "0ccb22d2eb6437af65f0e160b55a0e3fa0b48980194774d3f7742e04bde05019",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/robot/write_configurations.py": "435d968270988b249303e7b6c709315fa2db424ab44668c9ad6e67cf6c5ced09",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/run_idle.py": "4fa82c9357c0bcb38269f63a6b1f689fd68650f8ce9ee521731c73030a058698",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/run_locomotion.py": "5dc41e40b5567a9a4d65181ca2eda24189b816ce2caa56975f6858e40c02775e",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/test_imu.py": "160e7c829346c34e39eb1b8009236ab082396a6d47e53b42229ea09257e9ce32",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/test_inference.py": "a62a12ff91237a52a9c03d74ebe4d6a53b1290aa1012f89b464480dda516ce39",
+      "external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel/scripts/test_joystick.py": "1fefbe8cb820f356b27851d88ea6d8e18c94dc8ce4242d6004ab7f25d6e5fe68",
+      "scripts/bench/native_navigation_campaign.py": "1fa632c22482c2cbfb74babdd1d281182228fd3a83b337883edc26538a8d268a",
+      "scripts/bench/team_airlock.py": "2c009fe0315e02598a86966849cf3f1568041c135f2efacbaaf678a0d7255170",
+      "scripts/bench/terrain_confirmation_campaign.py": "8095db1a8ded94ef009a0a3b314507b54e7a3b8bb3f4d6231979ff9d58ccdc42",
+      "scripts/bench/terrain_methods_campaign.py": "ab535950360d2cf096a6cef5abed7bc4380a42cfe455a1ff4b60409bb55afb31",
+      "scripts/bench/terrain_traversal_campaign.py": "ed23f99be4b0d7531c9252e280f697453d84bc88e11cfbf0cf194a27e5dc53d2",
+      "src/bhl_robust/eval/gait_clock.py": "eedd6279fd74e9706e8015e4c048900f08570d26f54f9905af3346e54d8f6b98",
+      "src/bhl_robust/eval/harness.py": "aad56f17c1e3b1a8351e557bd36738593801f97c6463d7b27bb83671d33e098d",
+      "src/bhl_robust/eval/mjcf_assets.py": "e34e728312ce822e72188f27d3a2cde9137e9fbf7867e5e1fc5e3b67fecb6322",
+      "src/bhl_robust/eval/multi_robot.py": "66f314961d4963462d6c6727994a14087f5cbba08a4ae018cb746dba68627d5a",
+      "src/bhl_robust/research/native_lio.py": "adaedb54dd15e99d0a4d9a999e73e0f2da92af9897a250d9f2b7d90943037d57",
+      "src/bhl_robust/research/pose_metrics.py": "de28970a53cda9defac9238f99e2df6648c8d3af76b289042a698a839743b582",
+      "src/bhl_robust/research/sensor_geometry.py": "c3410d8e105aa962d16723ffc89f460f98c4eb7399a706db6f96d38b553babc6",
+      "src/bhl_robust/research/terrain_confirmation.py": "25d564f19c9d66f38b9c1ea678c889b58656126d2cc26e2df90a528d99b7c682",
+      "src/bhl_robust/research/terrain_confirmation_acquisition.py": "78cf7a724cfba7183c7c8b28bedbfe0fd14d36cfb88f469498206f31917635b0",
+      "src/bhl_robust/research/terrain_methods.py": "f26f5a9badbd6be19b2e73cf2f7dfe330d5e706cfd3c8437af08129ff8c6d820",
+      "src/bhl_robust/research/terrain_traversal.py": "37bb1a54602cc8f1b36f61e06ab21306b6356c91feba68b3d3b4dbf425a97164"
+    },
+    "terrains": [
+      "flat",
+      "small_steps",
+      "ramp"
+    ],
+    "uncertainty": "seed-paired development summaries; three training seeds are not independent robot safety evidence",
+    "upstream_source": "external/Berkeley-Humanoid-Lite"
+  }
+}
