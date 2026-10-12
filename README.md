@@ -39,6 +39,10 @@ study with oracle pose/goal.
 
 *Waiter program, 24-DoF humanoid with grippers: two learned leg controllers given the same command, 0.35 m/s forward for 6 s, in MuJoCo. Left, the selected controller walks 1.97 m; right, a retrain with standing rewards stays up when told to stand but marches in place here (0.32 m; the gate needs 1.5 m). Both re-simulate scored gate episodes. [Waiter program status](docs/WAITER_PROGRAM.md).*
 
+[![Two Waiter whole-body controllers told to stand while the arms do the expert's motions: the phase 1f retrain falls, the phase 1g retrain stays up](docs/gifs/waiter-1g-stand.gif)](docs/WAITER_PROGRAM.md)
+
+*The same robot told to stand still while its arms do the scripted expert's pick-and-hook motions with 0.5 kg in each hand (free base, no stance lock). Left, the phase 1f retrain (standing penalties) falls at 1.0 s; right, the phase 1g retrain (bounded standing rewards) stays up but drifts 4.7 cm and turns 7.1°, outside the gate's 3 cm / 3° limits. Both re-simulate scored gate episodes; GIF at 2×.*
+
 ## Problem and approach
 
 Training reward can improve while transfer or task completion gets worse. I train locomotion policies in Isaac Lab, export ONNX, and score selected checkpoints in headless MuJoCo using upstream's deployment controller. Versioned tasks, sensor validity checks, physics-step contact scoring, and predeclared gates separate a successful experiment from a job that merely completed.
