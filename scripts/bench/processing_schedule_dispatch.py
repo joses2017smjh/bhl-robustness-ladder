@@ -382,6 +382,9 @@ def execute(campaign, expected_sha):
         raise ValueError('allocation differs from the unique submission')
     write(campaign / 'execution-start.json', dict(started_utc=now(), job_id=job_id,
         host=os.uname().nodename, archive_sha256=expected_sha,
+        allocated_gpu_mask=os.environ.get('CUDA_VISIBLE_DEVICES'),
+        slurm_job_gpus=os.environ.get('SLURM_JOB_GPUS'),
+        slurm_cpus_per_task=os.environ.get('SLURM_CPUS_PER_TASK'),
         gpu_query=subprocess.run(['nvidia-smi', '--query-gpu=uuid,name,driver_version', '--format=csv,noheader'],
                                  capture_output=True, text=True).stdout))
     results = []
