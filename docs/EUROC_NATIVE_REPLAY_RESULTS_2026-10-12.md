@@ -129,7 +129,7 @@ A supported résumé bullet is:
 > Built and verified a reproducible native stereo/IMU replay pipeline over 2,400
 > EuRoC frame observations, preserving causal sensor timing and provenance;
 > stereo maintained 100% tracking over the fixed 60-second window with zero
-> map resets, while profiling native and complete pipeline latency separately.
+> observed map discontinuities, while profiling native and complete pipeline latency separately.
 
 Do not convert this into a metric-accuracy, real-time, hardware-deployment or
 sensor-fusion superiority claim.
