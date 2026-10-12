@@ -1,5 +1,14 @@
 # Held-out terrain confirmation — October 11, 2026
 
+**Final outcome: 480/480 episodes independently collected; all five prespecified
+actor/controller combinations confirmed.** All 300 candidate trials achieved
+clean goals with zero falls, contacts or nonfinite states. The 180 unique baseline
+trials produced 19 clean goals, 145 contact episodes and five falls. Heading alone
+achieved **180/180 versus 19/180** clean goals. These use native FAST-LIO2 pose
+feedback, not evaluator ground truth. [Scientific closeout and inference limits](HPC_SIMULATION_CLOSEOUT_2026-10-11.md)
+and the [verified final archive](https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/research-campaign-evidence-20261011/terrain-confirmation-final-20261011-5f09ee6f77d7.tar.gz)
+supersede the explicitly historical progress snapshots below.
+
 The complete 270-episode development campaign qualified five actor/controller
 combinations for a new experiment. This confirmation evaluates those five using
 **480 fresh episodes** on newly generated physical courses and the
@@ -63,7 +72,7 @@ Focused allocated-node verification passed **40 tests**, including reserved-coho
 leakage, new physical geometry, qualification provenance, trace rescoring,
 exclusive receipt writing, source tampering, storage bounds and dispatcher scope.
 
-## New acquisition contract and current status
+## New acquisition contract and historical execution status
 
 A new confirmation-only adapter retains each invalid-time raw packet verbatim,
 with its rejection reason, and withholds it from the unchanged native client.
@@ -80,8 +89,8 @@ horizons and qualification thresholds. Its source archive is
 `8a2ec6a64f4cac0868cbf21fd018dacc2f7179daabc634724c5b38cd3bf8851f`;
 protocol SHA256 is
 `18323a18a3b963e67869de46554513c178ac71037d0caff9a4f68400579fd65c`.
-The new smoke **21768612 passed all 24 episodes** in 259.1 seconds, with native tracking, no rejected scans, and no falls or nonfinite states. Controller **21776307** now schedules the new 480-episode cohort as shared storage reservations allow. Orchestration-only replacements lowered the concurrency cap from three to two, then one as unrelated shared-storage use grew, preserving storage capacity for the parallel camera campaign. Existing scientific jobs were adopted without cancellation or repetition. The scientific source, protocol, seeds and gates are unchanged; all orchestration plans and replacement reasons are retained.
-The required fresh same-source smoke gate has passed; no confirmation result is claimed until all 480 episodes are independently collected.
+The new smoke **21768612 passed all 24 episodes** in 259.1 seconds, with native tracking, no rejected scans, and no falls or nonfinite states. Controller **21776307** subsequently scheduled the new 480-episode cohort as shared storage reservations allowed. Orchestration-only replacements lowered the concurrency cap from three to two, then one as unrelated shared-storage use grew, preserving storage capacity for the parallel camera campaign. Existing scientific jobs were adopted without cancellation or repetition. The scientific source, protocol, seeds and gates were unchanged; all orchestration plans and replacement reasons are retained.
+The final collector independently validated all 480 episodes and retained 44 rejected original scans. No superseded-cohort episode was included.
 The failed shard was published and independently downloaded for checksum
 verification; its local durable duplicate and storage reservation were released.
 Observer 21768577 completed the same verified publication and retirement for both original remaining shards. Their raw archives and the inactive v2 source remain downloadable from the release; compact receipts and restore information remain local.
@@ -91,7 +100,8 @@ Observer 21768577 completed the same verified publication and retirement for bot
 At 12:04 PM PDT, **260/480 confirmation episodes** were complete, published and
 independently download-verified: all three `dr-default-s0` shards and the
 `dr-default-s1` flat and steps shards. Four declared shards remained unsubmitted.
-The complete 480-episode collection and all five confirmation gates remain pending.
+The complete collection and five confirmation gates were still pending at that
+snapshot; all subsequently completed, as reported at the top of this page.
 
 The prior controller, **21768854**, had stopped updating at 6:00 AM PDT while its
 child process waited on an automount during executable lookup for

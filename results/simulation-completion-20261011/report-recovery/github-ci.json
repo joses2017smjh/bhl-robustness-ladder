@@ -1,0 +1,120 @@
+{
+  "schema": "bhl-closeout-ci-v1",
+  "implementation_commit": "2b56cf1aca70ae567ef03eb7c0bd91eae2ecca0f",
+  "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/38218284616",
+  "status": "completed",
+  "conclusion": "success",
+  "tests_passed": 2997,
+  "tests_skipped": 132,
+  "subtests_passed": 10,
+  "log_sha256": "c485ee245499c89d1d389cd670c238b8dc565145008b9eda3be794f7e1fe0b81",
+  "jobs": [
+    {
+      "completedAt": "2026-10-12T07:42:42Z",
+      "conclusion": "success",
+      "databaseId": 114708084152,
+      "name": "replay",
+      "startedAt": "2026-10-12T07:32:12Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-12T07:32:14Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-12T07:32:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:32:35Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v7",
+          "number": 2,
+          "startedAt": "2026-10-12T07:32:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:32:35Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v7",
+          "number": 3,
+          "startedAt": "2026-10-12T07:32:35Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:32:36Z",
+          "conclusion": "success",
+          "name": "Verify and extract the committed trained bundle",
+          "number": 4,
+          "startedAt": "2026-10-12T07:32:35Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:33:32Z",
+          "conclusion": "success",
+          "name": "Install a fresh pinned CPU runtime",
+          "number": 5,
+          "startedAt": "2026-10-12T07:32:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:41:50Z",
+          "conclusion": "success",
+          "name": "Full CPU regression suite",
+          "number": 6,
+          "startedAt": "2026-10-12T07:33:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:41:59Z",
+          "conclusion": "success",
+          "name": "Actual trained-asset integration and negative controls",
+          "number": 7,
+          "startedAt": "2026-10-12T07:41:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:42:37Z",
+          "conclusion": "success",
+          "name": "Seeded physics replay, injected faults and timing",
+          "number": 8,
+          "startedAt": "2026-10-12T07:41:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:42:39Z",
+          "conclusion": "success",
+          "name": "Retain per-run evidence and hardware receipt",
+          "number": 9,
+          "startedAt": "2026-10-12T07:42:37Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:42:39Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v7",
+          "number": 17,
+          "startedAt": "2026-10-12T07:42:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:42:39Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v7",
+          "number": 18,
+          "startedAt": "2026-10-12T07:42:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-12T07:42:39Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 19,
+          "startedAt": "2026-10-12T07:42:39Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/38218284616/job/114708084152"
+    }
+  ]
+}

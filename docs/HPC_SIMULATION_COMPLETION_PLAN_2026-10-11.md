@@ -1,5 +1,7 @@
 # Completing the October 11 HPC simulation campaigns
 
+**Final status, October 12, 00:38 PDT:** both campaigns completed: **200/200 native-control episodes and 480/480 terrain-confirmation episodes**. All five terrain combinations confirmed; native stereo navigation and the offline health screen retained negative results. [Scientific closeout](HPC_SIMULATION_CLOSEOUT_2026-10-11.md) and [verified final report](research-completion-20261011/20261012T073850Z-1d71a69295d2.md). The chronology below preserves recovery-time observations.
+
 At 14:27 PDT, physical rig access is still unavailable, but it is **not a
 prerequisite** for the two remaining campaigns in the
 [October 11 research scope](RESEARCH_SCOPE_2026-10-11.md). These are the current

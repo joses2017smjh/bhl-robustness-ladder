@@ -1,5 +1,15 @@
 # Native navigation acquisition and fault controls
 
+**Final outcome: all 200/200 development cells measured and independently
+collected, with no missing or gated-unrun cells.** FAST-LIO2 achieved **19/40 clean
+goals**; each of the four other arms achieved **0/40**. All 200 episodes had zero
+falls and contacts. The held-out LIO health screen showed **no improvement over
+the fixed 0.9 baseline**; the other arms lacked outcome variation for fitting.
+Execution `PASS` is not a navigation-improvement result.
+[Scientific closeout and condition-level results](HPC_SIMULATION_CLOSEOUT_2026-10-11.md)
+and the [verified final archive](https://github.com/joses2017smjh/bhl-robustness-ladder/releases/download/research-campaign-evidence-20261011/native-controls-final-20261011-b48294ac61fb.tar.gz)
+supersede the historical progress snapshots below.
+
 This separate campaign adds matched camera, LiDAR and IMU controls to the completed development studies. It preserves their original sources and negative results. The new experiment declares **14 execution-smoke episodes**, followed by **up to 200 development episodes**, with explicit unrun cells for arms that fail nominal readiness. Readiness and execution receipts below are distinct from navigation performance results.
 
 ## Matched arms and conditions
@@ -65,7 +75,7 @@ The wrapper obtains map identity and the IMU initialization flag from usable tra
 
 Focused tests passed **92/92**. Independent source review found no blocking causality or recovery issue. Applying the new detector to the preserved 1,200-frame real TUM traces, without rerunning native inference or supplying ground truth, produced **one stereo epoch with zero invalidations** and **two stereo–IMU epochs with one invalidation at 2.700206316 seconds**. This matches the independently logged active-map reset. The [trace-check receipt](../results/native-sensor-controls-20261011/v2/tumvi-native-trace-check.json) retains the exact detector and input hashes.
 
-## Execution receipts
+## Historical execution receipts
 
 The superseded v1 GPU smoke **`21768425` completed 14/14 episodes**, exit `0:0`, on `cn-gpu7` in 6 minutes 26 seconds. All five nominal readiness gates passed; the stereo–IMU arm produced 38 actually initialized/accepted native frames under the declared excitation. All 14 smoke episodes had zero contacts and falls, and zero short-horizon clean goals. These remain actual v1 execution measurements; they do not qualify the corrected v2 source.
 
@@ -77,4 +87,4 @@ Fresh v2 source archive **`3628b95ced285660e27c0b3b0ca92a097415beaeedfa912da7518
 
 ## Packaging recovery and unattended continuation
 
-A later size-cap failure occurred after the fifth shard completed its ten scientific episodes. Its original 15,273 raw files were recovered and independently published without a rerun, bringing retained evidence to **50/200 cells**. The original failed wrapper receipt remains unchanged. Replacement controller **21778567** adopts these five shards and schedules the remaining fifteen under the same frozen scientific source, protocol and smoke. Raw output packaging now uses bounded node-local storage and verified release parts. [Recovery evidence, storage accounting and final-report automation](HPC_SIMULATION_COMPLETION_PLAN_2026-10-11.md).
+A later size-cap failure occurred after the fifth shard completed its ten scientific episodes. Its original 15,273 raw files were recovered and independently published without a rerun, bringing retained evidence to **50/200 cells** at that snapshot. The original failed wrapper receipt remains unchanged. Replacement controller **21778567** adopted these five shards and completed the remaining fifteen under the same frozen scientific source, protocol and smoke. Raw output packaging used bounded node-local storage and verified release parts. The final collection accounts for all **200 measured cells**, including the recovered ten, and reports `COMPLETE_BOUNDED_DEVELOPMENT_NO_CONFIRMATION`. [Recovery evidence, storage accounting and final-report automation](HPC_SIMULATION_COMPLETION_PLAN_2026-10-11.md).
