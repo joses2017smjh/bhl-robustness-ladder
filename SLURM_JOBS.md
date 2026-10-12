@@ -4808,3 +4808,43 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
   - `panels.write_gif` has a new opt-in `stats_mode`: "full" keeps the colour of static result cards, which the default "diff" palette dropped. The default is unchanged.
 - **Pull request #38 updated (2026-10-12 08:17), still not merged:** the status clips are on `waiter-phase1g-4b` and shown in the pull request; full suite on that branch at 826a0fb (`21796431`): 3138 passed, 16 skipped.
 - **Correction (2026-10-12 08:19) to the interim line "Phase 1g, first seed in" (2026-10-11 23:59):** it left out seed 20's walk-progress clause, which already failed then (0.19-0.36 m against 1.5 m). The verdict table above has it; the interim reading "does what the reading predicted" was about falling only.
+
+## Processing schedule comparison — 2026-10-12 (predeclared before submission)
+
+User authorized the robot-independent follow-up to the completed native controls
+campaign. This new cohort preserves all earlier results and their frozen source.
+`processing_schedule_campaign.py` declares 12 fresh 18-second smoke episodes and
+48 new 40-second development episodes: two processing schedules, native stereo
+and native LiDAR–IMU, nominal 5 Hz / 10 Hz / causal 40 ms exposure, straight and
+occluder routes, seeds 750000–750001. Smoke uses seed 749000. Pipeline order
+alternates by declared pair index; both episodes of each pair run sequentially
+on the same GPU. One allocation runs the entire cohort, preceded by a verified
+first-40-pair preprocessing/evidence profile from the retained nominal sequence.
+
+Reference: cumulative sensor callback cost plus native service. Candidate: one
+latest joined camera/LiDAR input slot, causal retained IMU, measured selected PNG
+transport plus native service, bounded asynchronous evidence recorder (8 tasks).
+Simulator generation, evidence work and recorder backpressure remain separately
+measured. This is a modeled scheduling intervention, not concurrent robot timing.
+Native thresholds, actor, routes, initialization, raw brake, coordinate-reset
+handling, 350 ms capture-age cutoff, delivery quantization and arrival-step
+submission hold remain fixed. The recorder must join and decoded evidence must
+match before an episode passes its execution checks.
+
+All 12 smoke cells must execute with finite physics and native I/O. Each
+pipeline/estimator has a separate nominal accepted-pose/full-horizon/no-fall-or-
+contact gate. Failed gates retain development cells as explicitly unrun; no
+outcome-driven tuning or scientific reruns. Primary metrics are paired stale-stop
+fraction (pre-step navigation decisions after 10 s) and clean goals; early safety
+terminations remain negative outcomes, with unavailable stale metrics explicit.
+Collection verifies source/input lineage and independently recomputes outcomes,
+queue conservation and delivery timing. Two seed clusters support descriptive
+simulation development only.
+
+Operational plan: one GPU, 2 CPUs, 16 GiB, 12-hour limit on
+`gpu,dgxh,ampere`, permitted GPU constraints matching the previous native run,
+27 sequential stages (profile, smoke, 24 two-episode shards and collector). Same-source smoke
+is required after any code correction. No requeue or implicit retry. All files
+use dedicated HPC-share/node-local directories, with a 100 GiB campaign cap,
+2 GiB per-shard raw-output cap and an 8 GiB margin below the authorized shared
+2 TiB hard quota. Final immutable collection and original failures are retained.
