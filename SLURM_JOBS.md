@@ -4848,3 +4848,29 @@ is required after any code correction. No requeue or implicit retry. All files
 use dedicated HPC-share/node-local directories, with a 100 GiB campaign cap,
 2 GiB per-shard raw-output cap and an 8 GiB margin below the authorized shared
 2 TiB hard quota. Final immutable collection and original failures are retained.
+## EuRoC recorded-data native replay — October 12, 2026
+
+The original first-60-second, at-most-1,200-pair V1_01_easy protocol is unchanged:
+`results/euroc-external-validation-20261011/protocol.json`, SHA256
+`3d74629b2876a359e9a2657b178ca632eaf6c31858e6af58dcedf8fa4432cf38`.
+The frozen native source archive is
+`3a6dbfe33afe4871df1e7ef1d2ecb6fcd77c6c9bd2cab30a86f81bcdafca5beb`;
+runtime `91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516`.
+Official ETH access again returned HTTP 429; the exact public V1_01_easy mirror
+was verified against its published LFS SHA, ZIP CRCs, and all 2,912 upstream
+camera timestamps and calibration. ETH master image-byte identity is unverified.
+Only source sensor inputs are staged for inference; no ground truth is mounted.
+Data plus extraction is 3.15 GiB within the authorized 12 GiB supplement budget.
+
+| Job | Experiment | State | Gate / resources |
+| --- | --- | --- | --- |
+| 21801765 | Fresh 40-pair native execution smoke in each of stereo and stereo–IMU | done, execution/integrity PASS | share/eecs, 4 CPUs, 8 GiB; execution/integrity gate, no estimator-success tuning |
+| 21801792 | First 60 seconds, 1,200 pairs in each native arm | done, 2,400/2,400 frames | Same frozen source, protocol, selected inputs and runtime; submit only after smoke verifies |
+
+ATE remains unmeasured pending separate reference-frame and known EuRoC ground
+truth issue review. Replay results cannot validate the user's physical rig,
+LiDAR, locomotion or navigation. No original dataset imagery or CSV is published.
+
+Independent trace verification/report job **21801837** completed with exit 0.
+Both scored arms retained one continuous map and zero tracking-loss transitions.
+[Full results, measured latency, provenance limits and figure](docs/EUROC_NATIVE_REPLAY_RESULTS_2026-10-12.md).

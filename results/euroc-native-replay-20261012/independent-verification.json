@@ -1,0 +1,44 @@
+{
+  "schema": "bhl-euroc-independent-trace-check-v1",
+  "status": "PASS",
+  "verified_utc": "2026-10-12T19:05:07.944827+00:00",
+  "source_sha256": "dc80e787db4f07669fcec4f9cfdf7b5447e51c66a24d09ae67b98f621e71e660",
+  "result_sha256": "6b1d905b023f99d3d56201afe875d0fa16c3260221ab47c6d11f081ee8f089ab",
+  "exact_frozen_smoke_full_identity": true,
+  "compact_manifests_verified": true,
+  "arms": [
+    {
+      "coordinate_epochs": 1,
+      "epoch_boundaries_recomputed": true,
+      "mode": "stereo",
+      "rows": 1200,
+      "tracked_frames": 1200,
+      "initialized_tracked_frames": 1200,
+      "native_states": {
+        "OK": 1200
+      },
+      "latency_recomputed": true,
+      "exact_original_timestamps": true,
+      "IMU_causality_checked": false,
+      "source_trace_sha256": "951708dea95e194c510bec01ec58704a1fa8957ddef6875f2c37c0caeb28555c"
+    },
+    {
+      "coordinate_epochs": 1,
+      "epoch_boundaries_recomputed": true,
+      "mode": "stereo_inertial",
+      "rows": 1200,
+      "tracked_frames": 1097,
+      "initialized_tracked_frames": 1041,
+      "native_states": {
+        "NOT_INITIALIZED": 103,
+        "OK": 1097
+      },
+      "latency_recomputed": true,
+      "exact_original_timestamps": true,
+      "IMU_causality_checked": true,
+      "source_trace_sha256": "d9b851b5cb94fcfe47de4ea679a7c30acffce06c5ba68c30447c7b6e25ab7797"
+    }
+  ],
+  "ATE": "UNMEASURED; full pose accuracy was not independently established",
+  "hardware_validation": false
+}

@@ -1,5 +1,10 @@
 # EuRoC follow-up: software prepared, external recording still unavailable
 
+**October 12 completion update:** [Both native arms now completed the unchanged
+60-second, 1,200-pair replay](EUROC_NATIVE_REPLAY_RESULTS_2026-10-12.md), using
+a pinned, integrity-checked public mirror after official access remained blocked.
+The prior access and software-preparation record below is preserved.
+
 The previously attempted EuRoC supplement now has an implemented input adapter
 and native stereo/stereo–IMU runner. **61 focused software tests passed. No
 EuRoC recording, actual native smoke, or scored replay ran.** The separately

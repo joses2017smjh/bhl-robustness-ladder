@@ -1,0 +1,21 @@
+{
+  "utc": "2026-10-12T19:01:28.441524+00:00",
+  "command": [
+    "/apps/slurm/25.11.8/bin/sbatch",
+    "--parsable",
+    "--partition=share",
+    "--account=eecs",
+    "--nodes=1",
+    "--ntasks=1",
+    "--cpus-per-task=4",
+    "--mem=8G",
+    "--time=02:00:00",
+    "--job-name=euroc-native-full",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/euroc-actual-20261012/full-%j.log",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/euroc-actual-20261012/worker.sbatch",
+    "full"
+  ],
+  "job_id": "21801792",
+  "scored": true,
+  "smoke_verification_sha256": "b4f03907dd8bccff74e782982bb1bf2b72244d38e9838545d0b552fc685bd60f"
+}

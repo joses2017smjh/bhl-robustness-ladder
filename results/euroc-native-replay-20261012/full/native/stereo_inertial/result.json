@@ -1,0 +1,81 @@
+{
+  "frames": 1200,
+  "tracked_frames": 1097,
+  "tracking_states": {
+    "SYSTEM_NOT_READY": 0,
+    "NO_IMAGES_YET": 0,
+    "NOT_INITIALIZED": 103,
+    "OK": 1097,
+    "RECENTLY_LOST": 0,
+    "LOST": 0,
+    "OK_KLT": 0
+  },
+  "observed_map_ids": [
+    0
+  ],
+  "observed_map_changes": 0,
+  "all_frames_tracked": false,
+  "metric_scoring_ready": true,
+  "native_compute_seconds_total": 53.92162125499994,
+  "pose_source": "native_ORB_SLAM3_TrackStereo_returned_SE3_inverse",
+  "no_truth_inputs": true,
+  "mode": "stereo_inertial",
+  "tracked_fraction": 0.9141666666666667,
+  "accepted_initialized_frames": 1041,
+  "initialization_first_sensor_time_s": 7.950000128,
+  "tracking_loss_transitions_after_OK": 0,
+  "native_compute": {
+    "count": 1200,
+    "mean_ms": 44.934684379166676,
+    "p50_ms": 46.0134975,
+    "p95_ms": 49.801025349999996,
+    "max_ms": 55.961531
+  },
+  "pipeline_wall": {
+    "count": 1200,
+    "mean_ms": 69.64709857886191,
+    "p50_ms": 70.57031395379454,
+    "p95_ms": 75.58383962605149,
+    "max_ms": 192.00409995391965
+  },
+  "rectification_image_io_wall": {
+    "count": 1200,
+    "mean_ms": 23.371775877894834,
+    "p50_ms": 23.119377554394305,
+    "p95_ms": 24.67528274282813,
+    "max_ms": 145.0370301026851
+  },
+  "native_client_wall": {
+    "count": 1200,
+    "mean_ms": 46.27532270096708,
+    "p50_ms": 47.41932509932667,
+    "p95_ms": 51.25485515454784,
+    "max_ms": 57.53706791438162
+  },
+  "pipeline_scope": "Original uint8 PNG read + fixed radtan rectification + PNG write + native client transport, IMU TSV I/O and native TrackStereo",
+  "latency_exclusions": "one-time startup, calibration map construction, evaluator and diagnostic JSON writes; offline unpaced recording replay",
+  "ate": {
+    "status": "UNMEASURED",
+    "reason": "No independently verified EuRoC reference-frame and synchronized ground-truth evaluator supplied; reference data is neither read nor hashed by this runner."
+  },
+  "native_map_imu_initialized_frames": 1041,
+  "original_imu_rows_acknowledged": 11991,
+  "coordinate_epochs": 1,
+  "observed_epoch_boundaries": [],
+  "continuous_single_map_trajectory": true,
+  "startup_wall_seconds": 6.954671700950712,
+  "ready": {
+    "schema": "bhl-orb-native-ready-v1",
+    "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4",
+    "sensor_mode": "stereo_inertial"
+  },
+  "pixel_ranges": {
+    "original_uint8_min": 2,
+    "original_uint8_max": 255,
+    "rectified_uint8_min": 4,
+    "rectified_uint8_max": 255,
+    "conversion": "Original uint8 preserved; no intensity rescaling"
+  },
+  "frames_sha256": "d9b851b5cb94fcfe47de4ea679a7c30acffce06c5ba68c30447c7b6e25ab7797",
+  "settings_sha256": "373fef7825796e39a1233c94849662e57c7037882212bb95701b27c80549d3ef"
+}

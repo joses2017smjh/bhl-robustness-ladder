@@ -1,0 +1,28 @@
+{
+  "schema": "bhl-euroc-native-launch-plan-v1",
+  "declared_utc": "2026-10-12T18:59:29.125489+00:00",
+  "source_git_commit": "1e973fb",
+  "scientific_protocol_sha256": "3d74629b2876a359e9a2657b178ca632eaf6c31858e6af58dcedf8fa4432cf38",
+  "frozen_files": {
+    "source.tar": "3a6dbfe33afe4871df1e7ef1d2ecb6fcd77c6c9bd2cab30a86f81bcdafca5beb",
+    "worker.py": "1529c105a81dd88c9f24aea7aee0560001ca3fad6e63a07552c94cf2ba1eff40",
+    "worker.sbatch": "99f55706ba4b9238fc92e191d26e7f1cfac412d4f1081fff7ac9d574aed606ae",
+    "intake.json": "0aa98c72fb24d2113d63ff3652cc5dd28db3f9ed987d61414a015ca569d428d3",
+    "reference-identity.json": "2d99089e7314260233d64bb382450b70554ea7c2e5304f77287ad9fd3c98a53e",
+    "orb-stereo-inertial-runtime-v1-20261010.tar.gz": "91ca4b6e4ea8f318998f400d4f7dfcd6fe8ae88b375399c79d5d633c39d71516"
+  },
+  "native_arms": [
+    "stereo",
+    "stereo_inertial"
+  ],
+  "smoke_pairs_each": 40,
+  "full_pairs_each_max": 1200,
+  "full_sensor_window_seconds": 60,
+  "selection": "Earliest exact pair, original frozen protocol",
+  "mirror_provenance_limit": "LFS integrity plus independent upstream timestamps/calibration; ETH master byte identity unavailable",
+  "gate": "40/40 execution per native arm and same source/protocol/selection/runtime, independent of estimator success",
+  "ATE": "UNMEASURED pending independent convention/known-GT-issue review",
+  "no_tuning": true,
+  "output_budget_bytes": 104857600,
+  "original_data_not_published": true
+}

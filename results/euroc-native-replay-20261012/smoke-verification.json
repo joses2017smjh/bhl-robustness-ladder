@@ -1,0 +1,28 @@
+{
+  "status": "PASS_EXECUTION_AND_INTEGRITY",
+  "checked_utc": "2026-10-12T19:01:28.352431+00:00",
+  "job_id": "21801765",
+  "slurm_state": "COMPLETED",
+  "slurm_exit_code": "0:0",
+  "same_source_identity_sha256": "151d943a1a68632120664dc66126fefb1294f52eef8ca16fd565bea5783ecbbf",
+  "smoke_result_sha256": "db92e71176959dc5ca17cb748965f56fecba47f02a37a28a11c4773cd68473ae",
+  "arms": [
+    {
+      "mode": "stereo",
+      "frames": 40,
+      "tracked_frames": 40,
+      "accepted_initialized_frames": 40,
+      "frames_sha256": "a7b061e9e07119b5ce46a8710790f4a4b0de5b693c911126a9d525b64158ce41",
+      "settings_sha256": "9793a23311d79afe8a3958f956148e35a89b6bd34c80283f26b2d9316350eee1"
+    },
+    {
+      "mode": "stereo_inertial",
+      "frames": 40,
+      "tracked_frames": 0,
+      "accepted_initialized_frames": 0,
+      "frames_sha256": "cdb43dc45a63a50886fd2f39f4cdf019153c05b03ec2ef756a26a57f13b13769",
+      "settings_sha256": "373fef7825796e39a1233c94849662e57c7037882212bb95701b27c80549d3ef"
+    }
+  ],
+  "gate_independent_of_estimator_initialization": true
+}

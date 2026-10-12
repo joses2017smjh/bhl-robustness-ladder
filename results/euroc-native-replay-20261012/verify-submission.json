@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-12T19:05:03.139248+00:00",
+  "command": [
+    "/apps/slurm/25.11.8/bin/sbatch",
+    "--parsable",
+    "--dependency=afterok:21801792",
+    "--partition=share",
+    "--account=eecs",
+    "--nodes=1",
+    "--ntasks=1",
+    "--cpus-per-task=2",
+    "--mem=4G",
+    "--time=00:15:00",
+    "--job-name=euroc-verify-report",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/euroc-actual-20261012/verify-%j.log",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/euroc-actual-20261012/verify.sbatch"
+  ],
+  "job_id": "21801837",
+  "scored": false
+}

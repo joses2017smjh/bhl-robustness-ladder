@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-12T18:59:39.855836+00:00",
+  "command": [
+    "/apps/slurm/25.11.8/bin/sbatch",
+    "--parsable",
+    "--partition=share",
+    "--account=eecs",
+    "--nodes=1",
+    "--ntasks=1",
+    "--cpus-per-task=4",
+    "--mem=8G",
+    "--time=00:30:00",
+    "--job-name=euroc-native-smoke",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/euroc-actual-20261012/smoke-%j.log",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/euroc-actual-20261012/worker.sbatch",
+    "smoke"
+  ],
+  "job_id": "21801765",
+  "scored": false
+}

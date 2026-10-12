@@ -1,5 +1,10 @@
 # External EuRoC recorded-sensor replay: access blocked
 
+**October 12 completion update:** [Both native arms now completed the unchanged
+60-second, 1,200-pair replay](EUROC_NATIVE_REPLAY_RESULTS_2026-10-12.md), using
+a pinned, integrity-checked public mirror after official access remained blocked.
+The prior access and software-preparation record below is preserved.
+
 October 12 follow-up: [the adapter and native replay handoff are implemented
 and software-tested](EUROC_FOLLOWUP_2026-10-12.md). Shared-storage authorization
 removes the old capacity blocker; official access still returns HTTP 429 or

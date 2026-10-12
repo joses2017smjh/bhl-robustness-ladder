@@ -1,0 +1,79 @@
+{
+  "frames": 40,
+  "tracked_frames": 40,
+  "tracking_states": {
+    "SYSTEM_NOT_READY": 0,
+    "NO_IMAGES_YET": 0,
+    "NOT_INITIALIZED": 0,
+    "OK": 40,
+    "RECENTLY_LOST": 0,
+    "LOST": 0,
+    "OK_KLT": 0
+  },
+  "observed_map_ids": [
+    0
+  ],
+  "observed_map_changes": 0,
+  "all_frames_tracked": true,
+  "metric_scoring_ready": true,
+  "native_compute_seconds_total": 1.524170621,
+  "pose_source": "native_ORB_SLAM3_TrackStereo_returned_SE3_inverse",
+  "no_truth_inputs": true,
+  "mode": "stereo",
+  "tracked_fraction": 1.0,
+  "accepted_initialized_frames": 40,
+  "initialization_first_sensor_time_s": 0,
+  "tracking_loss_transitions_after_OK": 0,
+  "native_compute": {
+    "count": 40,
+    "mean_ms": 38.104265525,
+    "p50_ms": 37.748923500000004,
+    "p95_ms": 39.7666088,
+    "max_ms": 45.959734000000005
+  },
+  "pipeline_wall": {
+    "count": 40,
+    "mean_ms": 60.99138976424001,
+    "p50_ms": 60.34441594965756,
+    "p95_ms": 63.10928805032745,
+    "max_ms": 70.80411398783326
+  },
+  "rectification_image_io_wall": {
+    "count": 40,
+    "mean_ms": 22.059986158274114,
+    "p50_ms": 21.80308452807367,
+    "p95_ms": 22.90295789716765,
+    "max_ms": 25.915458099916577
+  },
+  "native_client_wall": {
+    "count": 40,
+    "mean_ms": 38.9314036059659,
+    "p50_ms": 38.55853492859751,
+    "p95_ms": 40.671565849334,
+    "max_ms": 46.95408116094768
+  },
+  "pipeline_scope": "Original uint8 PNG read + fixed radtan rectification + PNG write + native client transport, IMU TSV I/O and native TrackStereo",
+  "latency_exclusions": "one-time startup, calibration map construction, evaluator and diagnostic JSON writes; offline unpaced recording replay",
+  "ate": {
+    "status": "UNMEASURED",
+    "reason": "No independently verified EuRoC reference-frame and synchronized ground-truth evaluator supplied; reference data is neither read nor hashed by this runner."
+  },
+  "coordinate_epochs": 1,
+  "observed_epoch_boundaries": [],
+  "continuous_single_map_trajectory": true,
+  "startup_wall_seconds": 6.961785794002935,
+  "ready": {
+    "schema": "bhl-orb-native-ready-v1",
+    "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4",
+    "sensor_mode": "stereo"
+  },
+  "pixel_ranges": {
+    "original_uint8_min": 8,
+    "original_uint8_max": 255,
+    "rectified_uint8_min": 22,
+    "rectified_uint8_max": 255,
+    "conversion": "Original uint8 preserved; no intensity rescaling"
+  },
+  "frames_sha256": "a7b061e9e07119b5ce46a8710790f4a4b0de5b693c911126a9d525b64158ce41",
+  "settings_sha256": "9793a23311d79afe8a3958f956148e35a89b6bd34c80283f26b2d9316350eee1"
+}

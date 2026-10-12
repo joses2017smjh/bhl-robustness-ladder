@@ -1,0 +1,31 @@
+{
+  "schema": "bhl-euroc-reference-identity-v1",
+  "status": "PASS",
+  "all_camera_timestamps_match_ORB_SLAM3_V101": true,
+  "timestamps": 2912,
+  "first_timestamp_ns": 1403715273262142976,
+  "last_timestamp_ns": 1403715418812143104,
+  "both_camera_intrinsics_and_distortion_match_upstream": true,
+  "camera_extrinsics_match_upstream": true,
+  "upstream_reference_receipts": {
+    "EuRoC-inertial.yaml.receipt.json": {
+      "url": "https://raw.githubusercontent.com/UZ-SLAMLab/ORB_SLAM3/4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4/Examples_old/Stereo-Inertial/EuRoC.yaml",
+      "bytes": 4624,
+      "sha256": "1aaf1d1722634a4ef179e15445bc98583f647f2d8c8de6cde4fc99227852c6ad",
+      "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4"
+    },
+    "EuRoC.yaml.receipt.json": {
+      "url": "https://raw.githubusercontent.com/UZ-SLAMLab/ORB_SLAM3/4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4/Examples/Stereo/EuRoC.yaml",
+      "bytes": 3176,
+      "sha256": "721602964ef5ffd5b5d594900ed6ee52069bafa32ea2482e5c7987fdad2ab442",
+      "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4"
+    },
+    "V101.txt.receipt.json": {
+      "url": "https://raw.githubusercontent.com/UZ-SLAMLab/ORB_SLAM3/4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4/Examples/Stereo/EuRoC_TimeStamps/V101.txt",
+      "bytes": 58240,
+      "sha256": "da79e209000d3db1cec733c2eebce528ff789b823d8326b84c1178fecf148b71",
+      "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4"
+    }
+  },
+  "limitation": "Independent metadata and timestamp identity established; image bytes authenticated to public mirror LFS hash, not inaccessible ETH master."
+}
