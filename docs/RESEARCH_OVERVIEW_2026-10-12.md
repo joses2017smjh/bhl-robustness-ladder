@@ -2,6 +2,8 @@
 
 This is the detailed overview preserved during the README readability refresh. Counts and study status below belong to their named reports and dates; they are not a live job monitor. [Start with the project README](../README.md).
 
+Latest closeouts: [October 11 native controls and terrain confirmation](HPC_SIMULATION_CLOSEOUT_2026-10-11.md), [48/48 processing-schedule simulations](PROCESSING_SCHEDULE_RESULTS_2026-10-12.md), and [EuRoC replay in both native modes](EUROC_NATIVE_REPLAY_RESULTS_2026-10-12.md). These supersede the intermediate execution counts retained below.
+
 # Humanoid Robustness Ladder
 
 **Train in Isaac Lab. Measure task success in MuJoCo. Keep the controls and failures visible.**

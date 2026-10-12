@@ -26,6 +26,8 @@ These are saved study results, not new measurements from this documentation refr
 
 Negative findings remain part of the project: the matched IMU-history ablation did not qualify, and stereo-pose navigation remained limited. [H3/H4 report](docs/H3_H4_CAMPAIGN_2026-10-08.md) · [Native sensor report](docs/NATIVE_CAMPAIGN_RESULTS_2026-10-09.md).
 
+October 12 follow-ups: [48 native scheduling simulations completed](docs/PROCESSING_SCHEDULE_RESULTS_2026-10-12.md), with LiDAR–IMU clean goals **0/12 → 11/12** and stereo **0/12 in both schedules**. [EuRoC replay completed](docs/EUROC_NATIVE_REPLAY_RESULTS_2026-10-12.md) on **1,200 stereo pairs per native mode**. Both reports retain timing, order and validation limits.
+
 ## How it works
 
 ```mermaid

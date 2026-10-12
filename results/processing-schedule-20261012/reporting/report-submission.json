@@ -1,0 +1,29 @@
+{
+  "command": [
+    "/apps/slurm/25.11.8/bin/sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--cpus-per-task=4",
+    "--mem=8G",
+    "--time=00:15:00",
+    "--partition=share",
+    "--account=eecs",
+    "--dependency=afterok:21801949",
+    "--job-name=schedule-report",
+    "--export=NONE",
+    "--no-requeue",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-report-20261012/report-%j.out",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-report-20261012/report-%j.out",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-report-20261012/run-report.sbatch",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-report-20261012",
+    "ee0a3cdf981406acc788b3c8c9c72de71748cf2a0f781b678a17a1dd301af4db",
+    "d23a637e256aeacf3b0b9695e59391b07f3cf4ec71a28514d44f378081ce9852"
+  ],
+  "job_id": "21802046",
+  "parent_job_id": "21801949",
+  "report_plan_sha256": "98e898eee3b996e5e169599a00cdaedf01f67a6c633b9b016ef785245ef9bcc2",
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21802046\n"
+}

@@ -1,0 +1,492 @@
+{
+  "arm_development_ready": {
+    "bounded_latest/lidar_inertial": true,
+    "bounded_latest/stereo": true,
+    "legacy_cumulative/lidar_inertial": true,
+    "legacy_cumulative/stereo": true
+  },
+  "by_pipeline_arm": {
+    "bounded_latest/lidar_inertial": {
+      "clean_goals": 11,
+      "contacts": 0,
+      "episodes": 12,
+      "falls": 0,
+      "mean_stale_fraction": 0.14155555555555557
+    },
+    "bounded_latest/stereo": {
+      "clean_goals": 0,
+      "contacts": 0,
+      "episodes": 12,
+      "falls": 0,
+      "mean_stale_fraction": 0.10833333333333334
+    },
+    "legacy_cumulative/lidar_inertial": {
+      "clean_goals": 0,
+      "contacts": 0,
+      "episodes": 12,
+      "falls": 0,
+      "mean_stale_fraction": 0.8666666666666667
+    },
+    "legacy_cumulative/stereo": {
+      "clean_goals": 0,
+      "contacts": 0,
+      "episodes": 12,
+      "falls": 0,
+      "mean_stale_fraction": 0.991111111111111
+    }
+  },
+  "declared_cells": 48,
+  "measured_cells": 48,
+  "missing_cells": [],
+  "paired": {
+    "clean_goal_count_difference": 11,
+    "complete_pairs": 24,
+    "incomplete_pairs": [],
+    "mean_paired_stale_fraction_difference": -0.8039444444444444,
+    "negative_difference_means": "candidate fewer stale stops; positive clean-goal difference means candidate more goals",
+    "pairs": [
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.17066666666666666,
+        "case": "occluders",
+        "clean_goal_difference": 1,
+        "condition": "camera_10hz",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "lidar_inertial",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.8293333333333334
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.048,
+        "case": "occluders",
+        "clean_goal_difference": 0,
+        "condition": "camera_10hz",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "stereo",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.952
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.058666666666666666,
+        "case": "occluders",
+        "clean_goal_difference": 1,
+        "condition": "causal_40ms_exposure",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "lidar_inertial",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.9413333333333334
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.08266666666666667,
+        "case": "occluders",
+        "clean_goal_difference": 0,
+        "condition": "causal_40ms_exposure",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "stereo",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.9173333333333333
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.0,
+        "case": "occluders",
+        "clean_goal_difference": 1,
+        "condition": "nominal",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 0.6,
+        "method": "lidar_inertial",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.6
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.0013333333333333333,
+        "case": "occluders",
+        "clean_goal_difference": 0,
+        "condition": "nominal",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 0.9493333333333334,
+        "method": "stereo",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.9480000000000001
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.15333333333333332,
+        "case": "occluders",
+        "clean_goal_difference": 1,
+        "condition": "camera_10hz",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "lidar_inertial",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.8466666666666667
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.052,
+        "case": "occluders",
+        "clean_goal_difference": 0,
+        "condition": "camera_10hz",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "stereo",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.948
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.02266666666666667,
+        "case": "occluders",
+        "clean_goal_difference": 1,
+        "condition": "causal_40ms_exposure",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "lidar_inertial",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.9773333333333334
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.16,
+        "case": "occluders",
+        "clean_goal_difference": 0,
+        "condition": "causal_40ms_exposure",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "stereo",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.84
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.08,
+        "case": "occluders",
+        "clean_goal_difference": 1,
+        "condition": "nominal",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 0.4,
+        "method": "lidar_inertial",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.32
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.034666666666666665,
+        "case": "occluders",
+        "clean_goal_difference": 0,
+        "condition": "nominal",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 0.9586666666666667,
+        "method": "stereo",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.924
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.22533333333333333,
+        "case": "straight",
+        "clean_goal_difference": 1,
+        "condition": "camera_10hz",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "lidar_inertial",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.7746666666666666
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.050666666666666665,
+        "case": "straight",
+        "clean_goal_difference": 0,
+        "condition": "camera_10hz",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "stereo",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.9493333333333334
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.26266666666666666,
+        "case": "straight",
+        "clean_goal_difference": 1,
+        "condition": "causal_40ms_exposure",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "lidar_inertial",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.7373333333333334
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.15866666666666668,
+        "case": "straight",
+        "clean_goal_difference": 0,
+        "condition": "causal_40ms_exposure",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "stereo",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.8413333333333333
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.04133333333333333,
+        "case": "straight",
+        "clean_goal_difference": 1,
+        "condition": "nominal",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 0.6,
+        "method": "lidar_inertial",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.5586666666666666
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.048,
+        "case": "straight",
+        "clean_goal_difference": 0,
+        "condition": "nominal",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 0.9853333333333333,
+        "method": "stereo",
+        "seed": 750000,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.9373333333333332
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.20266666666666666,
+        "case": "straight",
+        "clean_goal_difference": 1,
+        "condition": "camera_10hz",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "lidar_inertial",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.7973333333333333
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.168,
+        "case": "straight",
+        "clean_goal_difference": 0,
+        "condition": "camera_10hz",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "stereo",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.832
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.48133333333333334,
+        "case": "straight",
+        "clean_goal_difference": 0,
+        "condition": "causal_40ms_exposure",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "lidar_inertial",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.5186666666666666
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.412,
+        "case": "straight",
+        "clean_goal_difference": 0,
+        "condition": "causal_40ms_exposure",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "stereo",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.5880000000000001
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": true,
+        "candidate_stale_fraction": 0.0,
+        "case": "straight",
+        "clean_goal_difference": 1,
+        "condition": "nominal",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 0.8,
+        "method": "lidar_inertial",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.8
+      },
+      {
+        "both_full_horizon": true,
+        "candidate_clean_goal": false,
+        "candidate_stale_fraction": 0.084,
+        "case": "straight",
+        "clean_goal_difference": 0,
+        "condition": "nominal",
+        "legacy_clean_goal": false,
+        "legacy_stale_fraction": 1.0,
+        "method": "stereo",
+        "seed": 750001,
+        "stale_comparison_available": true,
+        "stale_fraction_difference": -0.916
+      }
+    ],
+    "stale_comparable_pairs": 24,
+    "uncertainty": "two seed clusters, descriptive paired outcomes only; no population confidence interval"
+  },
+  "qualified_smoke_sha256": "01f8db9441597c2c9060fdbc28c4add6986459c90fb50f7c028c148cfdeeb209",
+  "schema": "bhl-processing-schedule-v1-collection",
+  "scientific_status": "COMPLETE_BOUNDED_DEVELOPMENT_NO_CONFIRMATION",
+  "scope": "two-seed bounded schedule-model development; ideal simulated sensing, no concurrent hardware timing or population/confirmation claims",
+  "source_results": [
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/campaign_result.json",
+      "sha256": "0c3b972ec108365ce9f2893d9f12396f2a0f9b9bb39fd7f80a05c5383c8cf766"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/campaign_result.json",
+      "sha256": "b2f4b48e30d21f31462bc4acc3c28dda39bc3dfce0171cccc2af9f3779b5bb88"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/campaign_result.json",
+      "sha256": "0ef787d35eb77520fef66ccae28dc50701150447f3a6ec0b3da0040c538be081"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-camera_10hz-straight-stereo/campaign_result.json",
+      "sha256": "60341d2d926264b5c43c977d03e9600ae875120146c41c4230ac82ffb0c85898"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/campaign_result.json",
+      "sha256": "debce871dde539e6cd5aa4c82ae562c6d4e1016d979e9eed2e48eea76930b52b"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/campaign_result.json",
+      "sha256": "0b41fd9473a9e61f377561bc8b828379f1d1d70b9e29688f6280bd42369af356"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/campaign_result.json",
+      "sha256": "237483a2c53b5516ee235ae1b41bea7fbfb177f74382c653504dd0acea9e134a"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/campaign_result.json",
+      "sha256": "a0bb6314c655d0bde50d1daaaca29216d8d78762af23c6d0b479d9753316620f"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/campaign_result.json",
+      "sha256": "8c6c9edbbcbd4ffea36b7bcf9f300959046919ea3dfc2bfaae081771539f73b0"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-nominal-occluders-stereo/campaign_result.json",
+      "sha256": "ff62b482c76b34e29c261513da57ef797e8361ec93f95c9c7281e3510ccc5ca4"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/campaign_result.json",
+      "sha256": "9435756a133ddbccf6f8def8e7fba49983545878c8cb4a12e2db880c17359cc6"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750000-nominal-straight-stereo/campaign_result.json",
+      "sha256": "6d1889e3f7884bcf701937aa1d3356b55f67dd4947a5b1b68d70332133f6e786"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/campaign_result.json",
+      "sha256": "69158081f6df5ad413e4e8e3fd1d915416642f28ca324f2b69b0c627d277d848"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/campaign_result.json",
+      "sha256": "5c979ea87c4f5b6ea488fa979c7e4f30030f315a26cafa1c222cce9ca69daa1a"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/campaign_result.json",
+      "sha256": "8f259b506ec8ab8bfba380c42e829f5395eba65aeb7588f7daa7adead3a4084c"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-camera_10hz-straight-stereo/campaign_result.json",
+      "sha256": "c083469f37cd3c492aeb04a63d72b03e368234e715d7b37d1b0ec3634c2fea62"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/campaign_result.json",
+      "sha256": "47f3ef32182fe9ff37aac2a7b17ad34b53aacc06253a0ad443defe6757f7bc3f"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/campaign_result.json",
+      "sha256": "471e9b237d32d82d492e2b9acb3f803365aa54787cabc56fb30197ef9d5431c0"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/campaign_result.json",
+      "sha256": "4190164c1fce96598da9a68a6371b36df69170d727f4528193315f0da58b0e9f"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/campaign_result.json",
+      "sha256": "dfcc9d3b13d8fd2b5b28d744cf2f8a41038eb7e739dd97a448498091d43914c4"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/campaign_result.json",
+      "sha256": "97502e5ae28f1e673587a804baeb427dba23e6fedc913e0a86e4a7f70de92be0"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-nominal-occluders-stereo/campaign_result.json",
+      "sha256": "ca5b531f54b58186b01d209c60d13c1703bac8565699defbaa289fcb83938a6f"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/campaign_result.json",
+      "sha256": "19d386ce3c6e3f05b888a4513d78f86dff00e973daa49f6479b648bba72bca58"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/collector-inputs/schedule-s750001-nominal-straight-stereo/campaign_result.json",
+      "sha256": "dc3ae07ee1244675ec2c55ceec4ac591813a90c459af73c0333c8f5c9b076935"
+    }
+  ],
+  "status": "PASS",
+  "unrun_after_nominal_gate": 0
+}

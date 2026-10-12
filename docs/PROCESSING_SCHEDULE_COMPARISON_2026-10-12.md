@@ -1,8 +1,11 @@
 # Native processing-schedule comparison
 
-The 48-episode comparison requested on 2026-10-12 is implemented as a new,
-robot-independent simulation campaign. It does not overwrite the completed
-200-episode native sensor-control campaign or tune its negative outcomes.
+The 48-episode comparison requested on 2026-10-12 is implemented and complete.
+[Verified results](PROCESSING_SCHEDULE_RESULTS_2026-10-12.md): LiDAR–IMU clean
+goals changed from 0/12 to 11/12; stereo remained 0/12 in both schedules.
+All 48 episodes had zero falls/contacts. This robot-independent simulation
+campaign preserves the completed 200-episode native sensor-control campaign and
+its negative outcomes.
 
 ## Fixed comparison
 
@@ -16,8 +19,12 @@ robot-independent simulation campaign. It does not overwrite the completed
 | Horizon | 40 s, including the unchanged 10 s initialization |
 | Same-source smoke | 12 cells, 18 s, separate seed 749000 |
 
-The two schedules run in alternating order within matched pairs on the same
-GPU allocation. The native algorithms, settings, learned gait, route, known-start
+The two schedules run sequentially in matched pairs on the same GPU allocation.
+First position alternates across the full pair list, but is fixed within each
+estimator: all 12 stereo pairs run the reference first, and all 12 LiDAR–IMU
+pairs run the candidate first. Order and warm-cache effects are therefore not
+controlled within either estimator; measured differences cannot establish an
+order-independent causal speedup. The native algorithms, settings, learned gait, route, known-start
 registration, raw LiDAR brake and 350 ms capture-age cutoff remain fixed.
 Untracked, unregistered, reset and stale poses retain the same stop behavior.
 
@@ -40,6 +47,8 @@ calls and archival work. It is not proof of a concurrently executing robot
 pipeline or measured physical sensor latency. Both stages' wall-clock costs and
 their distinct simulated availability times are retained; no discarded frame is
 silently counted as processed. Pre-join captures are listed separately.
+The LiDAR stream retains the original simulated 16-ring geometry; these results
+do not validate the user's planar RPLIDAR C1 configuration.
 
 Before smoke, the same first 40 stereo pairs from the retained nominal sequence
 are decoded and transported through both evidence/PNG paths. Original PNG and
@@ -74,11 +83,13 @@ reserved seeds support bounded simulation development, not independent
 confirmation, hardware validation or population performance claims.
 
 GPU job **21801949** started on `cn-gpu6` (Quadro RTX 8000) on October 12.
-The retained 40-frame preprocessing/input profile passed. The 12-cell native
-smoke and subsequent 48-cell cohort are pending completion; no improvement
-result is claimed yet. The source is frozen at `152ccf4`, archive SHA256
+The retained 40-frame preprocessing/input profile and all 12 native smoke cells
+passed, including all four pipeline/estimator nominal gates. The complete
+48-cell cohort and strict collector passed, with zero unrun cells. Report job
+**21802046** independently verified the outcomes. The source is frozen at `152ccf4`, archive SHA256
 `46eb5d49361cb64f4f18dc8290a7bcb002c21b01aa035e3fe8c8e049949a0dda`.
 Allocated CPU validation **21801920** passed 306 tests and 11 subtests.
 [Protocols, frozen intake, submission, GPU receipt and passing profile](../results/processing-schedule-20261012/).
-The one-allocation dispatcher automatically runs the strict collector after
-all declared pairs; runtime errors preserve evidence and stop dependent work.
+The one-allocation dispatcher completed all 27 declared stages without an
+execution error or scientific rerun. Timing and clean-goal outcomes remain
+separate, with the within-estimator order limitation explicit in the final report.

@@ -1,0 +1,21 @@
+{
+  "campaign": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012",
+  "created_utc": "2026-10-12T19:20:57.464325+00:00",
+  "failure_policy": "afterok dependency; failed parent leaves report unrun, no implicit retries",
+  "helper_sha256": {
+    "report.py": "ee0a3cdf981406acc788b3c8c9c72de71748cf2a0f781b678a17a1dd301af4db",
+    "run-report.sbatch": "f808a26816cb82b892fbee82570a52ae24f5f86a1b3e13624c3f54dfeee63ead",
+    "run_report.py": "d23a637e256aeacf3b0b9695e59391b07f3cf4ec71a28514d44f378081ce9852"
+  },
+  "parent_job_id": "21801949",
+  "publication": "shared outputs only; no GitHub writes",
+  "resources": {
+    "account": "eecs",
+    "cpus": 4,
+    "memory_gb": 8,
+    "partition": "share",
+    "time_limit": "00:15:00"
+  },
+  "schema": "bhl-processing-schedule-report-plan-v1",
+  "validation": "11 targeted reporter tests PASS; synthetic figure export checked"
+}

@@ -1,5 +1,10 @@
 # Native navigation pipeline diagnosis — October 12, 2026
 
+Follow-up completed: the proposed [48-episode schedule comparison](PROCESSING_SCHEDULE_RESULTS_2026-10-12.md)
+finished after its separate input profile and 12-cell smoke passed. LiDAR–IMU
+goals changed from 0/12 to 11/12; stereo remained 0/12 in both schedules.
+The diagnosis below retains the evidence and scope of the earlier audit.
+
 The completed sensor campaign contains 200 measured development episodes. A read-only audit of **60 original episodes** found that stale-pose stops, including accumulated acquisition/recording overhead, are a concrete obstacle to navigation. This is a diagnosis of the existing pipeline. An asynchronous alternative has **not been implemented or evaluated** by this audit, and no improved result is claimed.
 
 ## Evidence and coverage

@@ -72,7 +72,7 @@ own derived outputs and integrity receipts.
 The [original protocol](../results/euroc-external-validation-20261011/protocol.json)
 remains unchanged: earliest exact stereo pair through less than 60 seconds,
 at most 1,200 pairs, original nanosecond clock, original genuine causal IMU,
-o tuning, and both native arms. The selected last timestamp is 59.950000128 s.
+no tuning, and both native arms. The selected last timestamp is 59.950000128 s.
 The stereo–IMU arm acknowledged **11,991** measured IMU rows without future,
 repeated, synthetic or interpolated samples.
 

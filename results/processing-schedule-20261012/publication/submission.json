@@ -1,0 +1,19 @@
+{
+  "schema": "bhl-processing-schedule-publisher-submission-v1",
+  "status": "SUBMITTED",
+  "job_id": "21802129",
+  "submitted_utc": "2026-10-12T19:27:45.618406+00:00",
+  "scientific_job_id": "21801949",
+  "source_archive_sha256": "46eb5d49361cb64f4f18dc8290a7bcb002c21b01aa035e3fe8c8e049949a0dda",
+  "publisher_manifest_sha256": "832ce113a8a585e4473d654779bc59e77c3bfb1fd8c57e9a6f73c290c0373a79",
+  "resources": {
+    "partition": "share",
+    "cpus": 1,
+    "memory_gb": 2,
+    "time_limit": "16:00:00",
+    "gpus": 0,
+    "requeue": false
+  },
+  "release": "https://github.com/joses2017smjh/bhl-robustness-ladder/releases/tag/research-campaign-evidence-20261011",
+  "scope": "verify and publish completed immutable simulation artifacts only; no scientific execution, no EuRoC raw data"
+}

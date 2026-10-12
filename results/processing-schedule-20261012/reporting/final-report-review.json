@@ -1,0 +1,59 @@
+{
+  "artifact_hashes_verified": 8,
+  "artifact_manifest_sha256": "83453fe7129f6cb5837b86ee3d01d7f304a43bb4635a55e9ed688d8d20ee66f8",
+  "conclusions": "Observed clean-goal gains occur only in LiDAR\u2013IMU (11/12 versus0/12). Stereo remains0/12 in both pipelines, despite reduced stale stops. Zero falls/contacts in48 bounded simulation episodes is not hardware safety qualification.",
+  "figures_readable": true,
+  "figures_visually_reviewed": [
+    "groups.png",
+    "pairs.png"
+  ],
+  "issues": [
+    {
+      "location": "REPORT.md reproducibility paragraph: Pair order alternates in the frozen protocol.",
+      "required_qualification": "Execution order was balanced only across the combined cohort: every stereo pair ran legacy first, while every LiDAR\u2013IMU pair ran bounded first. Within each estimator, scheduling differences are therefore confounded with execution order (including possible warm-up/cache effects); these are descriptive development outcomes, not an order-controlled causal estimate.",
+      "severity": "REPORTING_LIMITATION"
+    }
+  ],
+  "order_audit_sha256": "7f56dd825890410810ea2f7238d2e5fecdf2006fea4de429b49d847a15797595",
+  "per_estimator": {
+    "lidar_inertial": {
+      "bounded_latest": {
+        "clean_goals": 11,
+        "contacts": 0,
+        "falls": 0,
+        "mean_episode_stale_fraction": 0.14155555555555555,
+        "measured": 12
+      },
+      "legacy_cumulative": {
+        "clean_goals": 0,
+        "contacts": 0,
+        "falls": 0,
+        "mean_episode_stale_fraction": 0.8666666666666667,
+        "measured": 12
+      }
+    },
+    "stereo": {
+      "bounded_latest": {
+        "clean_goals": 0,
+        "contacts": 0,
+        "falls": 0,
+        "mean_episode_stale_fraction": 0.10833333333333334,
+        "measured": 12
+      },
+      "legacy_cumulative": {
+        "clean_goals": 0,
+        "contacts": 0,
+        "falls": 0,
+        "mean_episode_stale_fraction": 0.9911111111111112,
+        "measured": 12
+      }
+    }
+  },
+  "report_evidence_sha256": "750926fca953f75f5e980900ce90fe3efa1de7f6b5b8c465eeb37e87d1b603bf",
+  "report_job_id": "21802046",
+  "report_markdown_sha256": "75e99265ef0e5e76bf5f5af7cc5f50450aeb3337790b04803d0b5ca91f0051a5",
+  "reviewed_utc": "2026-10-12T20:28:51.995775+00:00",
+  "schema": "bhl-processing-schedule-final-report-review-v1",
+  "scope": "Independent frozen report review only; no changes to scientific cohort, source, generated artifacts, frozen reporter or Slurm jobs",
+  "status": "VERIFIED_WITH_REQUIRED_ORDER_QUALIFICATION"
+}

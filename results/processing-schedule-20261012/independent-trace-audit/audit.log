@@ -1,0 +1,285 @@
+{
+  "status": "PASS",
+  "verified_files": 240,
+  "groups": {
+    "legacy_cumulative/stereo": {
+      "clean_goal": 0,
+      "fall": 0,
+      "contact": 0,
+      "policy_decisions": 12000,
+      "navigation_decisions": 9000,
+      "stale_decisions": 8920,
+      "nonzero_command_decisions": 80,
+      "fresh_accepted_pose_decisions": 80,
+      "logical_coordinate_invalidation_events": 1,
+      "observed_map_id_changes": 0,
+      "pending_responses": 11,
+      "evidence_writer_backpressure_wall_s": 0,
+      "episodes": 12,
+      "full_horizon_episodes": 12,
+      "stale_fraction": 0.9911111111111112,
+      "episodes_with_coordinate_invalidation": 1,
+      "episodes_with_observed_map_id_change": 0,
+      "episodes_with_invalidation_but_no_observed_map_id_change": 1,
+      "reasons": {
+        "native_stale_stop": 8920,
+        "estimated_route": 80
+      },
+      "nonzero_command_by_reason": {
+        "estimated_route": 80
+      },
+      "final_goal_distance_m": {
+        "min": 4.956980259617878,
+        "median": 4.957383331203699,
+        "max": 5.030101812346789
+      },
+      "minimum_goal_distance_m": {
+        "min": 4.948608860259329,
+        "median": 4.950937431185578,
+        "max": 4.952108764750985
+      },
+      "client_p95_ms": {
+        "min": 44.181334611494094,
+        "median": 48.03864557761699,
+        "max": 49.14081005845219
+      },
+      "delivered_modeled_service_p95_ms": {
+        "min": 293.1209870963358,
+        "median": 5908.911291329421,
+        "max": 16062.536520767026
+      }
+    },
+    "legacy_cumulative/lidar_inertial": {
+      "clean_goal": 0,
+      "fall": 0,
+      "contact": 0,
+      "policy_decisions": 12000,
+      "navigation_decisions": 9000,
+      "stale_decisions": 7800,
+      "nonzero_command_decisions": 1200,
+      "fresh_accepted_pose_decisions": 1200,
+      "logical_coordinate_invalidation_events": 0,
+      "observed_map_id_changes": 0,
+      "pending_responses": 12,
+      "evidence_writer_backpressure_wall_s": 0,
+      "episodes": 12,
+      "full_horizon_episodes": 12,
+      "stale_fraction": 0.8666666666666667,
+      "episodes_with_coordinate_invalidation": 0,
+      "episodes_with_observed_map_id_change": 0,
+      "episodes_with_invalidation_but_no_observed_map_id_change": 0,
+      "reasons": {
+        "native_stale_stop": 7800,
+        "estimated_route": 600,
+        "measured_native_latency_hold": 600
+      },
+      "nonzero_command_by_reason": {
+        "estimated_route": 600,
+        "measured_native_latency_hold": 600
+      },
+      "final_goal_distance_m": {
+        "min": 0.8936883825366001,
+        "median": 4.956980259617878,
+        "max": 5.238673609631721
+      },
+      "minimum_goal_distance_m": {
+        "min": 0.8936883825366001,
+        "median": 4.949766097620169,
+        "max": 4.952108764750985
+      },
+      "client_p95_ms": {
+        "min": 9.976751124486327,
+        "median": 41.43124143010937,
+        "max": 58.741117897443445
+      },
+      "delivered_modeled_service_p95_ms": {
+        "min": 147.93643741868436,
+        "median": 5962.566172564401,
+        "max": 12989.401925704442
+      }
+    },
+    "bounded_latest/stereo": {
+      "clean_goal": 0,
+      "fall": 0,
+      "contact": 0,
+      "policy_decisions": 12000,
+      "navigation_decisions": 9000,
+      "stale_decisions": 975,
+      "nonzero_command_decisions": 1372,
+      "fresh_accepted_pose_decisions": 1379,
+      "logical_coordinate_invalidation_events": 14,
+      "observed_map_id_changes": 5,
+      "pending_responses": 6,
+      "evidence_writer_backpressure_wall_s": 51.99903784599155,
+      "episodes": 12,
+      "full_horizon_episodes": 12,
+      "stale_fraction": 0.10833333333333334,
+      "episodes_with_coordinate_invalidation": 12,
+      "episodes_with_observed_map_id_change": 5,
+      "episodes_with_invalidation_but_no_observed_map_id_change": 7,
+      "reasons": {
+        "measured_native_latency_hold": 5442,
+        "estimated_route": 415,
+        "native_stale_stop": 975,
+        "native_untracked_stop": 2168
+      },
+      "nonzero_command_by_reason": {
+        "estimated_route": 415,
+        "measured_native_latency_hold": 957
+      },
+      "final_goal_distance_m": {
+        "min": 1.9194056115270703,
+        "median": 4.260679256911899,
+        "max": 4.841340894970186
+      },
+      "minimum_goal_distance_m": {
+        "min": 1.9104496145935923,
+        "median": 4.227997607284916,
+        "max": 4.809613295368869
+      },
+      "client_p95_ms": {
+        "min": 41.893636621534824,
+        "median": 54.84638958005233,
+        "max": 61.53210182674229
+      },
+      "delivered_modeled_service_p95_ms": {
+        "min": 121.91295176744461,
+        "median": 136.42492419457992,
+        "max": 155.04758990136907
+      }
+    },
+    "bounded_latest/lidar_inertial": {
+      "clean_goal": 11,
+      "fall": 0,
+      "contact": 0,
+      "policy_decisions": 12000,
+      "navigation_decisions": 9000,
+      "stale_decisions": 1274,
+      "nonzero_command_decisions": 5104,
+      "fresh_accepted_pose_decisions": 7726,
+      "logical_coordinate_invalidation_events": 0,
+      "observed_map_id_changes": 0,
+      "pending_responses": 2,
+      "evidence_writer_backpressure_wall_s": 76.61415006103925,
+      "episodes": 12,
+      "full_horizon_episodes": 12,
+      "stale_fraction": 0.14155555555555555,
+      "episodes_with_coordinate_invalidation": 0,
+      "episodes_with_observed_map_id_change": 0,
+      "episodes_with_invalidation_but_no_observed_map_id_change": 0,
+      "reasons": {
+        "estimated_route": 1964,
+        "measured_native_latency_hold": 4290,
+        "native_stale_stop": 1274,
+        "estimated_goal_stop": 1472
+      },
+      "nonzero_command_by_reason": {
+        "estimated_route": 1964,
+        "measured_native_latency_hold": 3140
+      },
+      "final_goal_distance_m": {
+        "min": 0.10220440617705141,
+        "median": 0.20733985813993538,
+        "max": 1.2816656938470992
+      },
+      "minimum_goal_distance_m": {
+        "min": 0.07359136093967389,
+        "median": 0.1722833239749414,
+        "max": 1.280931706956618
+      },
+      "client_p95_ms": {
+        "min": 10.104270279407501,
+        "median": 10.629090596921742,
+        "max": 16.905101714655757
+      },
+      "delivered_modeled_service_p95_ms": {
+        "min": 97.8098567575216,
+        "median": 133.95276212831956,
+        "max": 220.5571449827402
+      }
+    }
+  },
+  "per_seed": {
+    "750000/legacy_cumulative/stereo": {
+      "episodes": 6,
+      "clean_goal": 0,
+      "stale_decisions": 4451,
+      "stale_fraction": 0.9891111111111112,
+      "nonzero_command_decisions": 49,
+      "fresh_accepted_pose_decisions": 49,
+      "logical_coordinate_invalidation_events": 0,
+      "observed_map_id_changes": 0
+    },
+    "750000/legacy_cumulative/lidar_inertial": {
+      "episodes": 6,
+      "clean_goal": 0,
+      "stale_decisions": 3900,
+      "stale_fraction": 0.8666666666666667,
+      "nonzero_command_decisions": 600,
+      "fresh_accepted_pose_decisions": 600,
+      "logical_coordinate_invalidation_events": 0,
+      "observed_map_id_changes": 0
+    },
+    "750000/bounded_latest/stereo": {
+      "episodes": 6,
+      "clean_goal": 0,
+      "stale_decisions": 292,
+      "stale_fraction": 0.06488888888888888,
+      "nonzero_command_decisions": 680,
+      "fresh_accepted_pose_decisions": 685,
+      "logical_coordinate_invalidation_events": 8,
+      "observed_map_id_changes": 2
+    },
+    "750000/bounded_latest/lidar_inertial": {
+      "episodes": 6,
+      "clean_goal": 6,
+      "stale_decisions": 569,
+      "stale_fraction": 0.12644444444444444,
+      "nonzero_command_decisions": 2585,
+      "fresh_accepted_pose_decisions": 3931,
+      "logical_coordinate_invalidation_events": 0,
+      "observed_map_id_changes": 0
+    },
+    "750001/legacy_cumulative/stereo": {
+      "episodes": 6,
+      "clean_goal": 0,
+      "stale_decisions": 4469,
+      "stale_fraction": 0.9931111111111111,
+      "nonzero_command_decisions": 31,
+      "fresh_accepted_pose_decisions": 31,
+      "logical_coordinate_invalidation_events": 1,
+      "observed_map_id_changes": 0
+    },
+    "750001/legacy_cumulative/lidar_inertial": {
+      "episodes": 6,
+      "clean_goal": 0,
+      "stale_decisions": 3900,
+      "stale_fraction": 0.8666666666666667,
+      "nonzero_command_decisions": 600,
+      "fresh_accepted_pose_decisions": 600,
+      "logical_coordinate_invalidation_events": 0,
+      "observed_map_id_changes": 0
+    },
+    "750001/bounded_latest/stereo": {
+      "episodes": 6,
+      "clean_goal": 0,
+      "stale_decisions": 683,
+      "stale_fraction": 0.1517777777777778,
+      "nonzero_command_decisions": 692,
+      "fresh_accepted_pose_decisions": 694,
+      "logical_coordinate_invalidation_events": 6,
+      "observed_map_id_changes": 3
+    },
+    "750001/bounded_latest/lidar_inertial": {
+      "episodes": 6,
+      "clean_goal": 5,
+      "stale_decisions": 705,
+      "stale_fraction": 0.15666666666666668,
+      "nonzero_command_decisions": 2519,
+      "fresh_accepted_pose_decisions": 3795,
+      "logical_coordinate_invalidation_events": 0,
+      "observed_map_id_changes": 0
+    }
+  },
+  "audit_json": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-independent-audit-20261012/audit.json"
+}

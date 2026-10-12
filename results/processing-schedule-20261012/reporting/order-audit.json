@@ -1,0 +1,395 @@
+{
+  "audited_utc": "2026-10-12T20:04:19.699484+00:00",
+  "follow_up": "A separately predeclared counterbalanced order within each estimator would address this confound; do not retune or alter the active frozen cohort.",
+  "frozen_archive_sha256": "46eb5d49361cb64f4f18dc8290a7bcb002c21b01aa035e3fe8c8e049949a0dda",
+  "limitation": "Execution order was balanced only across the combined cohort: every stereo pair ran legacy first, while every LiDAR\u2013IMU pair ran bounded first. Within each estimator, scheduling differences are therefore confounded with execution order (including possible warm-up/cache effects); these are descriptive development outcomes, not an order-controlled causal estimate.",
+  "parent_job_id": "21801949",
+  "permitted_claims": [
+    "Observed paired changes with route, reset seed, condition, frozen policy and allocated hardware matched",
+    "Separate stale-stop, clean-goal, fall and contact measurements",
+    "Global order alternation with the explicit within-estimator order limitation"
+  ],
+  "phases": {
+    "development": {
+      "first_pipeline_counts": {
+        "bounded_latest": 12,
+        "legacy_cumulative": 12
+      },
+      "globally_alternating": true,
+      "orders_by_arm": {
+        "lidar_inertial": {
+          "bounded_latest -> legacy_cumulative": 12
+        },
+        "stereo": {
+          "legacy_cumulative -> bounded_latest": 12
+        }
+      },
+      "pair_count": 24,
+      "pairs": [
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "nominal",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 0,
+          "seed": 750000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "nominal",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 1,
+          "seed": 750000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "nominal",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 2,
+          "seed": 750000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "nominal",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 3,
+          "seed": 750000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 4,
+          "seed": 750000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 5,
+          "seed": 750000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 6,
+          "seed": 750000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 7,
+          "seed": 750000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 8,
+          "seed": 750000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 9,
+          "seed": 750000
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 10,
+          "seed": 750000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 11,
+          "seed": 750000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "nominal",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 12,
+          "seed": 750001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "nominal",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 13,
+          "seed": 750001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "nominal",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 14,
+          "seed": 750001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "nominal",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 15,
+          "seed": 750001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 16,
+          "seed": 750001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 17,
+          "seed": 750001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 18,
+          "seed": 750001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "camera_10hz",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 19,
+          "seed": 750001
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 20,
+          "seed": 750001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 21,
+          "seed": 750001
+        },
+        {
+          "arm": "stereo",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 22,
+          "seed": 750001
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "occluders",
+          "condition": "causal_40ms_exposure",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 23,
+          "seed": 750001
+        }
+      ],
+      "within_arm_counterbalanced": false
+    },
+    "smoke": {
+      "first_pipeline_counts": {
+        "bounded_latest": 3,
+        "legacy_cumulative": 3
+      },
+      "globally_alternating": true,
+      "orders_by_arm": {
+        "lidar_inertial": {
+          "bounded_latest -> legacy_cumulative": 3
+        },
+        "stereo": {
+          "legacy_cumulative -> bounded_latest": 3
+        }
+      },
+      "pair_count": 6,
+      "pairs": [
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "nominal",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 0,
+          "seed": 749000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "nominal",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 1,
+          "seed": 749000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 2,
+          "seed": 749000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "camera_10hz",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 3,
+          "seed": 749000
+        },
+        {
+          "arm": "stereo",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "execution_order": [
+            "legacy_cumulative",
+            "bounded_latest"
+          ],
+          "pair_index": 4,
+          "seed": 749000
+        },
+        {
+          "arm": "lidar_inertial",
+          "case": "straight",
+          "condition": "causal_40ms_exposure",
+          "execution_order": [
+            "bounded_latest",
+            "legacy_cumulative"
+          ],
+          "pair_index": 5,
+          "seed": 749000
+        }
+      ],
+      "within_arm_counterbalanced": false
+    }
+  },
+  "report_job_id": "21802046",
+  "report_language_to_qualify": "Pair order alternates in the frozen protocol.",
+  "schema": "bhl-processing-schedule-order-audit-v1",
+  "scientific_campaign_source_sha256": "571baab2bd2836fd2da08bc1604680ee7ea0cd56a918aa59e746e5db86f65df0",
+  "scientific_protocol_sha256": "b41d516b7810fa851deea4c160c1efa2eff0d75e39037bb7bb24f265d2e5d34d",
+  "scope": "Read-only audit of already-frozen design; no scientific files, report helpers, gates, parameters or jobs changed",
+  "source_commit": "152ccf4d8a616c5725bfb0c44ac838818e028ee3",
+  "status": "VERIFIED_PROTOCOL_ORDER_CONFOUND",
+  "unsupported_claims": [
+    "Order-controlled per-estimator causal scheduling effect",
+    "Within-estimator counterbalancing",
+    "Hardware performance or independent confirmation"
+  ]
+}

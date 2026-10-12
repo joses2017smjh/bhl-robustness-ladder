@@ -1,0 +1,1728 @@
+{
+  "created_utc": "2026-10-12T20:28:57.249126+00:00",
+  "files": {
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/bounded_latest-occluders-s750000-camera_10hz-lidar_inertial/episode.json": {
+      "bytes": 1256058,
+      "sha256": "260249cda12dec1589d03984111c971b9c067a7db0661460809bcaf11a59f363"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/bounded_latest-occluders-s750000-camera_10hz-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 96040,
+      "sha256": "88aa8802a0818ae478d061599f153afc4d34e2b90b9aa2fcb715b1ffc96094d8"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/bounded_latest-occluders-s750000-camera_10hz-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4495240,
+      "sha256": "fb4b180676c86008a09fb03b7e51acd8400443f15838ec7c78587969aaa505e1"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/bounded_latest-occluders-s750000-camera_10hz-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/bounded_latest-occluders-s750000-camera_10hz-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 173292,
+      "sha256": "84c0b108f50188621b66e8bc4a0a657e2c75121056ffcebb01cd6c54beb73fc9"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/campaign_result.json": {
+      "bytes": 36910,
+      "sha256": "0c3b972ec108365ce9f2893d9f12396f2a0f9b9bb39fd7f80a05c5383c8cf766"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-camera_10hz-lidar_inertial/episode.json": {
+      "bytes": 808441,
+      "sha256": "27a3402421e71d983bdfbf0fe1ab3fd4d81dd35fa1da2caf1aba181d440c1f0c"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-camera_10hz-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 91786,
+      "sha256": "9a480d26ff1ab76e36d0d39377f86c64129329ec30ad0c19b622ffad0eb36890"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-camera_10hz-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4366201,
+      "sha256": "b8e1276d3265b58f18a6ee806214fed65f6912560c1d5481ac995d9725592781"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-camera_10hz-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1746,
+      "sha256": "846761bc012c83ed627c2937c1714dcc81a1e60345d6196fc361a211dc12bfd7"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-camera_10hz-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 11054,
+      "sha256": "479e5e035edc1191361ab7cf4e2f4a8a0d3b869ca2e08194074cb6a2145937e5"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/bounded_latest-occluders-s750000-camera_10hz-stereo/episode.json": {
+      "bytes": 1164518,
+      "sha256": "ea67a947808e383a0fe86e8730b4953700abb73eeb2e0fab1e225905aa8d7e2c"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/bounded_latest-occluders-s750000-camera_10hz-stereo/evaluator_truth.npz": {
+      "bytes": 94104,
+      "sha256": "94f5dcd520fbc3eb4338eb79e789d2030a235967ee988f70c2c0010d3aa53832"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/bounded_latest-occluders-s750000-camera_10hz-stereo/inference_sensors.npz": {
+      "bytes": 4392896,
+      "sha256": "ba2d6d596b9b36ea6876bf4cb3abcc1b40e06c411cdf73eb0044bfb6b079241f"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/bounded_latest-occluders-s750000-camera_10hz-stereo/native/stream_receipt.json": {
+      "bytes": 2062,
+      "sha256": "9db5e4fde587b97004bb6c3c0ee3c2c950977648b781d1744c0c663d271b966e"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/bounded_latest-occluders-s750000-camera_10hz-stereo/sensors/processing_schedule.json": {
+      "bytes": 140734,
+      "sha256": "d6dfc4957e8e3e6168e27dbf872c073f66b1fcf19b6b6321ed1ee8a00eedf541"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/campaign_result.json": {
+      "bytes": 36862,
+      "sha256": "b2f4b48e30d21f31462bc4acc3c28dda39bc3dfce0171cccc2af9f3779b5bb88"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/legacy_cumulative-occluders-s750000-camera_10hz-stereo/episode.json": {
+      "bytes": 800358,
+      "sha256": "79ac91a70256178d4b0149c828d0bdc9494b37458505f88e86afad7d78a0460a"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/legacy_cumulative-occluders-s750000-camera_10hz-stereo/evaluator_truth.npz": {
+      "bytes": 91786,
+      "sha256": "9a480d26ff1ab76e36d0d39377f86c64129329ec30ad0c19b622ffad0eb36890"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/legacy_cumulative-occluders-s750000-camera_10hz-stereo/inference_sensors.npz": {
+      "bytes": 4366201,
+      "sha256": "b8e1276d3265b58f18a6ee806214fed65f6912560c1d5481ac995d9725592781"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/legacy_cumulative-occluders-s750000-camera_10hz-stereo/native/stream_receipt.json": {
+      "bytes": 1800,
+      "sha256": "7180862b54675524141c99f3f5eea9e2fe73d2b80c6429f85bcdade47d0f1b04"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-occluders-stereo/legacy_cumulative-occluders-s750000-camera_10hz-stereo/sensors/processing_schedule.json": {
+      "bytes": 10420,
+      "sha256": "3c4c1dc2022f615ef7c5530525109b42a1e451bf9af7b6983a7526583494f85b"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/bounded_latest-straight-s750000-camera_10hz-lidar_inertial/episode.json": {
+      "bytes": 1231910,
+      "sha256": "0078fc6fc180ece037675c437e6c45f51cc2504df4803126fb2407eb6b11dfaa"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/bounded_latest-straight-s750000-camera_10hz-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 96242,
+      "sha256": "d002c2e8f520d949e0e60b0fae4422f5d663fed76d514463fa2462ebe77993dc"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/bounded_latest-straight-s750000-camera_10hz-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4460917,
+      "sha256": "da842bb7fe04699e283c4dcf961abb94c81a7d0dd523f240b3f993c0a0828cac"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/bounded_latest-straight-s750000-camera_10hz-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/bounded_latest-straight-s750000-camera_10hz-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 164123,
+      "sha256": "86108d4b0b5ae12264afa4300fcc94fc8517e69433e1d4179afdaea0d16baace"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/campaign_result.json": {
+      "bytes": 36904,
+      "sha256": "0ef787d35eb77520fef66ccae28dc50701150447f3a6ec0b3da0040c538be081"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/legacy_cumulative-straight-s750000-camera_10hz-lidar_inertial/episode.json": {
+      "bytes": 806359,
+      "sha256": "d4b2464f3013bdcab7c7a7c91c0fdfc558bffb5598ae7d7238951dfbcf05322e"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/legacy_cumulative-straight-s750000-camera_10hz-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 91786,
+      "sha256": "9a480d26ff1ab76e36d0d39377f86c64129329ec30ad0c19b622ffad0eb36890"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/legacy_cumulative-straight-s750000-camera_10hz-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4367071,
+      "sha256": "0b1ffd9044d3fff4e40c65c5f7cd565ef06649032e37686ba75e61fa77cbf8a1"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/legacy_cumulative-straight-s750000-camera_10hz-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1746,
+      "sha256": "6dcb36f2684d8f9c680086ca4eba76874250d37be9a5d0d153de9c8dbf4aee31"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-lidar_inertial/legacy_cumulative-straight-s750000-camera_10hz-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 11658,
+      "sha256": "703624aa6e87cfe861e5f39d5db68aa9a5b97c8ef8afe1350699623c8d125bcb"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/bounded_latest-straight-s750000-camera_10hz-stereo/episode.json": {
+      "bytes": 1149285,
+      "sha256": "aac22cc2d605f9f580d8ef24f4219aaaecfd0d93522c9d9bd445ff7ffe4b8d3c"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/bounded_latest-straight-s750000-camera_10hz-stereo/evaluator_truth.npz": {
+      "bytes": 91835,
+      "sha256": "c8953dcd6d840138ba65c6d27554ff186eac3f29c1a448076e26851e5b9db2fe"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/bounded_latest-straight-s750000-camera_10hz-stereo/inference_sensors.npz": {
+      "bytes": 4355260,
+      "sha256": "ccf9206ec4b46636ff77ecab9a23e885401d4cfb4649a32188f66b441af8cea5"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/bounded_latest-straight-s750000-camera_10hz-stereo/native/stream_receipt.json": {
+      "bytes": 2062,
+      "sha256": "3b1f0c8dc3259791dba6a487c2734150cec4efe8881d107579420791a9181882"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/bounded_latest-straight-s750000-camera_10hz-stereo/sensors/processing_schedule.json": {
+      "bytes": 136974,
+      "sha256": "52b9130bcbbc516a02c47929f0a5af23fefc18e99190885fa853580dd9e1876c"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/campaign_result.json": {
+      "bytes": 36855,
+      "sha256": "60341d2d926264b5c43c977d03e9600ae875120146c41c4230ac82ffb0c85898"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/legacy_cumulative-straight-s750000-camera_10hz-stereo/episode.json": {
+      "bytes": 807853,
+      "sha256": "f337b2c3265021b6ba6a4d8fcd4eaa68b0c7392a6e7edb3113c30b214f747d06"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/legacy_cumulative-straight-s750000-camera_10hz-stereo/evaluator_truth.npz": {
+      "bytes": 91786,
+      "sha256": "9a480d26ff1ab76e36d0d39377f86c64129329ec30ad0c19b622ffad0eb36890"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/legacy_cumulative-straight-s750000-camera_10hz-stereo/inference_sensors.npz": {
+      "bytes": 4367071,
+      "sha256": "0b1ffd9044d3fff4e40c65c5f7cd565ef06649032e37686ba75e61fa77cbf8a1"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/legacy_cumulative-straight-s750000-camera_10hz-stereo/native/stream_receipt.json": {
+      "bytes": 1800,
+      "sha256": "7180862b54675524141c99f3f5eea9e2fe73d2b80c6429f85bcdade47d0f1b04"
+    },
+    "collector-inputs/schedule-s750000-camera_10hz-straight-stereo/legacy_cumulative-straight-s750000-camera_10hz-stereo/sensors/processing_schedule.json": {
+      "bytes": 10439,
+      "sha256": "d1fd969995e76902f3ca56a1edd12f61f3ed15f5d30b35558658fe1e71bbcd86"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/bounded_latest-occluders-s750000-causal_40ms_exposure-lidar_inertial/episode.json": {
+      "bytes": 1104119,
+      "sha256": "b6e405779e858e6dd0313b6ce65b29d1a8eb3f69113f212929fe05dd880beaa4"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/bounded_latest-occluders-s750000-causal_40ms_exposure-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 95653,
+      "sha256": "a801dab8dba5238e3d139a9b82be7495a28337a09995cee583d5ecc43755a605"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/bounded_latest-occluders-s750000-causal_40ms_exposure-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4519540,
+      "sha256": "7395fb415726d0e3b76c83121deca64831b4f82ed9ed7c91c5afe7539bf1c42c"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/bounded_latest-occluders-s750000-causal_40ms_exposure-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/bounded_latest-occluders-s750000-causal_40ms_exposure-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 118237,
+      "sha256": "ac8e1c77994e6a3c2848e1897840e9cb466822e9e035f95ca8bb8c3986940679"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/campaign_result.json": {
+      "bytes": 36964,
+      "sha256": "debce871dde539e6cd5aa4c82ae562c6d4e1016d979e9eed2e48eea76930b52b"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-causal_40ms_exposure-lidar_inertial/episode.json": {
+      "bytes": 799175,
+      "sha256": "869be0a081e9bb5b0d6aab5b65e52ddf65c913cbfb082d3e9f99cd0dfeeca50e"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-causal_40ms_exposure-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 91786,
+      "sha256": "9a480d26ff1ab76e36d0d39377f86c64129329ec30ad0c19b622ffad0eb36890"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-causal_40ms_exposure-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4366201,
+      "sha256": "b8e1276d3265b58f18a6ee806214fed65f6912560c1d5481ac995d9725592781"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-causal_40ms_exposure-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1745,
+      "sha256": "7de2f42ca52ea0eed13c1e65272fad158fbbf706e0aa79a284416538142c61bc"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-causal_40ms_exposure-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 6145,
+      "sha256": "cf1a7547a154832f8fcf30c7561b952a3ef45355e446ae8c21e4ba874c1630fb"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/bounded_latest-occluders-s750000-causal_40ms_exposure-stereo/episode.json": {
+      "bytes": 1095903,
+      "sha256": "907160d2c5df49e53054d21b385795748ab4006cdb4fb17454101690fa3995e3"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/bounded_latest-occluders-s750000-causal_40ms_exposure-stereo/evaluator_truth.npz": {
+      "bytes": 92842,
+      "sha256": "a3c46e3cbcb39ba14674f9895ebdadae6e3e2781d9876ee6d18caedda6cdece4"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/bounded_latest-occluders-s750000-causal_40ms_exposure-stereo/inference_sensors.npz": {
+      "bytes": 4369478,
+      "sha256": "ac17965290dcd6075ac43b127fe1232a5b86bf80fd49718ac52cb9841def6baa"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/bounded_latest-occluders-s750000-causal_40ms_exposure-stereo/native/stream_receipt.json": {
+      "bytes": 2062,
+      "sha256": "7ebcbaab9f1020cb9dec2e403ea5f71e6cf67fe3071c44c8c68527b88c28f167"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/bounded_latest-occluders-s750000-causal_40ms_exposure-stereo/sensors/processing_schedule.json": {
+      "bytes": 117602,
+      "sha256": "7381ac70c9d7797870f6efbf469d1dedbc466c0ce33ed00e5d3afc5938e0a047"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/campaign_result.json": {
+      "bytes": 36916,
+      "sha256": "0b41fd9473a9e61f377561bc8b828379f1d1d70b9e29688f6280bd42369af356"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/legacy_cumulative-occluders-s750000-causal_40ms_exposure-stereo/episode.json": {
+      "bytes": 788903,
+      "sha256": "66910500162bdb1cf37c6fe07b2deefeb6fc990a856b9663f10d6406a4440d6f"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/legacy_cumulative-occluders-s750000-causal_40ms_exposure-stereo/evaluator_truth.npz": {
+      "bytes": 91786,
+      "sha256": "9a480d26ff1ab76e36d0d39377f86c64129329ec30ad0c19b622ffad0eb36890"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/legacy_cumulative-occluders-s750000-causal_40ms_exposure-stereo/inference_sensors.npz": {
+      "bytes": 4366201,
+      "sha256": "b8e1276d3265b58f18a6ee806214fed65f6912560c1d5481ac995d9725592781"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/legacy_cumulative-occluders-s750000-causal_40ms_exposure-stereo/native/stream_receipt.json": {
+      "bytes": 1799,
+      "sha256": "bd97c3f308c8c07b3825e4e5cc5c88c402a607bc0826a28e678a53462c829dae"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-occluders-stereo/legacy_cumulative-occluders-s750000-causal_40ms_exposure-stereo/sensors/processing_schedule.json": {
+      "bytes": 6141,
+      "sha256": "e7dcb798fe696602e41833551d568acb82143e6cf9209f4bca3d230e9aeb785f"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/bounded_latest-straight-s750000-causal_40ms_exposure-lidar_inertial/episode.json": {
+      "bytes": 1091564,
+      "sha256": "25b263205e44d83f98d4ff09cdc258a2a472a582771542a7df2a5652eeddf553"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/bounded_latest-straight-s750000-causal_40ms_exposure-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 96414,
+      "sha256": "80d23540c17b423de137499ed02e5d6e06e2475a1657557339d5ae9665b41a21"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/bounded_latest-straight-s750000-causal_40ms_exposure-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4447239,
+      "sha256": "f31dbf89a0fd9688ee76ae38408f54e586a55de260dd052d3c33430beaf20aa1"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/bounded_latest-straight-s750000-causal_40ms_exposure-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "8037efd6ae59a44c1d5d48b29c96943569a1b1933df166b2effbad8ad8f6b230"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/bounded_latest-straight-s750000-causal_40ms_exposure-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 112063,
+      "sha256": "2aa34d4f1fe50450bd43c5f04760209eba9b6aa762dd4685ca76f9040c1365e4"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/campaign_result.json": {
+      "bytes": 36958,
+      "sha256": "237483a2c53b5516ee235ae1b41bea7fbfb177f74382c653504dd0acea9e134a"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/legacy_cumulative-straight-s750000-causal_40ms_exposure-lidar_inertial/episode.json": {
+      "bytes": 789701,
+      "sha256": "e0e26a73c9020cdabece9be1fc7f3f872be86a54307ed9749a6cfc7f86a2f182"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/legacy_cumulative-straight-s750000-causal_40ms_exposure-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 91786,
+      "sha256": "9a480d26ff1ab76e36d0d39377f86c64129329ec30ad0c19b622ffad0eb36890"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/legacy_cumulative-straight-s750000-causal_40ms_exposure-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4367071,
+      "sha256": "0b1ffd9044d3fff4e40c65c5f7cd565ef06649032e37686ba75e61fa77cbf8a1"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/legacy_cumulative-straight-s750000-causal_40ms_exposure-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1745,
+      "sha256": "7de2f42ca52ea0eed13c1e65272fad158fbbf706e0aa79a284416538142c61bc"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-lidar_inertial/legacy_cumulative-straight-s750000-causal_40ms_exposure-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 6149,
+      "sha256": "106c7e1dc2e16b3d3d63bf97cc1a2d788b71e9092e1fb7e7ee082d8314e0af3f"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/bounded_latest-straight-s750000-causal_40ms_exposure-stereo/episode.json": {
+      "bytes": 1097490,
+      "sha256": "94f0e500cb492d975e8452e4d25aaf334adef1e1e918aa76b09e5df96fa08936"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/bounded_latest-straight-s750000-causal_40ms_exposure-stereo/evaluator_truth.npz": {
+      "bytes": 87705,
+      "sha256": "489dbd686e069706c23941f1be4dcd13529d612ec765d600c4f0634336179d90"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/bounded_latest-straight-s750000-causal_40ms_exposure-stereo/inference_sensors.npz": {
+      "bytes": 4313540,
+      "sha256": "97cf82bbf1fd87cf290241bf25f791d48f52f6d35b7535c0f3f9b172b01ab1b4"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/bounded_latest-straight-s750000-causal_40ms_exposure-stereo/native/stream_receipt.json": {
+      "bytes": 2575,
+      "sha256": "e2c4880de2620b52502f0df4d58d3f83ec09a65eec7c11ff6bdc64b48d86db58"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/bounded_latest-straight-s750000-causal_40ms_exposure-stereo/sensors/processing_schedule.json": {
+      "bytes": 118195,
+      "sha256": "5117921700e78f0268287e31511dfc0f1d4bbfa9cd39bbe517b6a1e00827e76c"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/campaign_result.json": {
+      "bytes": 36910,
+      "sha256": "a0bb6314c655d0bde50d1daaaca29216d8d78762af23c6d0b479d9753316620f"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/legacy_cumulative-straight-s750000-causal_40ms_exposure-stereo/episode.json": {
+      "bytes": 802757,
+      "sha256": "fbda9b52b2476e697e550877234a1e182745213d36147ae9ad9be6522286f310"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/legacy_cumulative-straight-s750000-causal_40ms_exposure-stereo/evaluator_truth.npz": {
+      "bytes": 91786,
+      "sha256": "9a480d26ff1ab76e36d0d39377f86c64129329ec30ad0c19b622ffad0eb36890"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/legacy_cumulative-straight-s750000-causal_40ms_exposure-stereo/inference_sensors.npz": {
+      "bytes": 4367071,
+      "sha256": "0b1ffd9044d3fff4e40c65c5f7cd565ef06649032e37686ba75e61fa77cbf8a1"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/legacy_cumulative-straight-s750000-causal_40ms_exposure-stereo/native/stream_receipt.json": {
+      "bytes": 1799,
+      "sha256": "bd97c3f308c8c07b3825e4e5cc5c88c402a607bc0826a28e678a53462c829dae"
+    },
+    "collector-inputs/schedule-s750000-causal_40ms_exposure-straight-stereo/legacy_cumulative-straight-s750000-causal_40ms_exposure-stereo/sensors/processing_schedule.json": {
+      "bytes": 6140,
+      "sha256": "be76de9babf29886446f38c2b21205a222406b97c6b62d1319dca61d4f30ac76"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/bounded_latest-occluders-s750000-nominal-lidar_inertial/episode.json": {
+      "bytes": 1101992,
+      "sha256": "49e2fd33ae6ca72d069c7c2cac251bb4f6d74936084dde63e3b2ec58220bacab"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/bounded_latest-occluders-s750000-nominal-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 94260,
+      "sha256": "ab8adb0a7876355388e9b4c807c8668c39b506a93a23d51250dce75b37872e15"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/bounded_latest-occluders-s750000-nominal-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4538296,
+      "sha256": "2de4fedf456117548f6f52a8232cc94c2cfddd504be9546e4794befc7c317528"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/bounded_latest-occluders-s750000-nominal-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/bounded_latest-occluders-s750000-nominal-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 118242,
+      "sha256": "46c14599ce770258f4ce4c302e50e32795fc1d37988e215794b40b4804bed636"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/campaign_result.json": {
+      "bytes": 36885,
+      "sha256": "8c6c9edbbcbd4ffea36b7bcf9f300959046919ea3dfc2bfaae081771539f73b0"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-nominal-lidar_inertial/episode.json": {
+      "bytes": 1107571,
+      "sha256": "3bc8ba279486c210727966a0ec0ba20410672668e937f1c2d4bdb6934c2b6a73"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-nominal-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 95668,
+      "sha256": "9b853d0e49d85451867b5a780a562371e014539dcae3bf85546400c12e497fb1"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-nominal-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4393673,
+      "sha256": "a9b54556486cc0d222463e84f55a5cf44d117453b065a9cea4864bc5fdbaea6e"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-nominal-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-lidar_inertial/legacy_cumulative-occluders-s750000-nominal-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 118001,
+      "sha256": "8ae4e13db2f4fdad520b0158fe2cc8ff3d15409c00b0e7391fb18748c49186f0"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/bounded_latest-occluders-s750000-nominal-stereo/episode.json": {
+      "bytes": 1096217,
+      "sha256": "11bc580dfbe7dc7d49fc39a607a1de63d905b269dbebdb03ff3a40d93b60cb05"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/bounded_latest-occluders-s750000-nominal-stereo/evaluator_truth.npz": {
+      "bytes": 90647,
+      "sha256": "e4f50ae976eb04c8076c03ee4a2d374361eb3d1f62cd71324a986ae080331adf"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/bounded_latest-occluders-s750000-nominal-stereo/inference_sensors.npz": {
+      "bytes": 4374643,
+      "sha256": "75ec2d8e7d0cd00c2f3fc8559a84f2ae1279ce2830488b2ef73c73e928f01f90"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/bounded_latest-occluders-s750000-nominal-stereo/native/stream_receipt.json": {
+      "bytes": 2062,
+      "sha256": "b0548f5c087bf88563913e3b21324d2107c7393e2e79474a0e41d2012f937865"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/bounded_latest-occluders-s750000-nominal-stereo/sensors/processing_schedule.json": {
+      "bytes": 118202,
+      "sha256": "aca3adaa682bde3a70a0c1fbcae0f8d47bb24aa2ff3e5a9043d6e58ed795fb04"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/campaign_result.json": {
+      "bytes": 36838,
+      "sha256": "ff62b482c76b34e29c261513da57ef797e8361ec93f95c9c7281e3510ccc5ca4"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/legacy_cumulative-occluders-s750000-nominal-stereo/episode.json": {
+      "bytes": 1012582,
+      "sha256": "71eb1e13c3cf6376908bfbc1b35a3a8edc1f81ecce477144d9022e8e209ed0ce"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/legacy_cumulative-occluders-s750000-nominal-stereo/evaluator_truth.npz": {
+      "bytes": 95177,
+      "sha256": "74668c7b002d2d5f23e7969d95bedce5cfc6af1e06db9ebc767ebafb47168378"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/legacy_cumulative-occluders-s750000-nominal-stereo/inference_sensors.npz": {
+      "bytes": 4400196,
+      "sha256": "e1a9fb9aa83d28a3879625fb8d6bdb52d8b82e7bd0b8b52b2189575217083dea"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/legacy_cumulative-occluders-s750000-nominal-stereo/native/stream_receipt.json": {
+      "bytes": 1801,
+      "sha256": "48022a58e63d7944ac566749ce02d9945e61e54819d8ed9181460cae3f1c4887"
+    },
+    "collector-inputs/schedule-s750000-nominal-occluders-stereo/legacy_cumulative-occluders-s750000-nominal-stereo/sensors/processing_schedule.json": {
+      "bytes": 86656,
+      "sha256": "4c86f324ca12c3ace39e10867a2f4394220a5b41b7c1c2792aba808f68a2c837"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/bounded_latest-straight-s750000-nominal-lidar_inertial/episode.json": {
+      "bytes": 1104425,
+      "sha256": "4aea843946ab17bbd1a9fcdf04a9f410b3a907c008c5e12d2413150c2736d64e"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/bounded_latest-straight-s750000-nominal-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 94409,
+      "sha256": "035745748105c702679b450f75b12abf544a16f06ca52b17113fec06ad899b78"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/bounded_latest-straight-s750000-nominal-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4508332,
+      "sha256": "1bf9917484f57bb0ac77dc25b20aec042e4439b384f77b47a456b4a2fdd47055"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/bounded_latest-straight-s750000-nominal-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/bounded_latest-straight-s750000-nominal-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 118235,
+      "sha256": "e2548d695e9ee6baadcffeb0eb3504efdedb566b080234931925b284ae0c51e1"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/campaign_result.json": {
+      "bytes": 36879,
+      "sha256": "9435756a133ddbccf6f8def8e7fba49983545878c8cb4a12e2db880c17359cc6"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/legacy_cumulative-straight-s750000-nominal-lidar_inertial/episode.json": {
+      "bytes": 1108070,
+      "sha256": "ea10575aa4595e4056d56175e93395daf77207dbd39525de44267d1882f8755b"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/legacy_cumulative-straight-s750000-nominal-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 94964,
+      "sha256": "89934ada4253594189d89127e5d150bba18a8fe42790f7e21d1076ffadc5dd6f"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/legacy_cumulative-straight-s750000-nominal-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4377974,
+      "sha256": "e7abffac7a66dac7c1162f76c3429fdbfc25d1555c349851922e076222f6bd51"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/legacy_cumulative-straight-s750000-nominal-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-lidar_inertial/legacy_cumulative-straight-s750000-nominal-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 118006,
+      "sha256": "6b7451aacd5344f9306a228fcb792f70f61b326cdd1d4a7ba6a7c1c784608943"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/bounded_latest-straight-s750000-nominal-stereo/episode.json": {
+      "bytes": 1104002,
+      "sha256": "4689ec1d6bd5de75f78bc38939e1a36a51026812efaa078541e0b5b897c1d2f6"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/bounded_latest-straight-s750000-nominal-stereo/evaluator_truth.npz": {
+      "bytes": 93095,
+      "sha256": "092c6d3d35532b881ffdb9658fd9dabdf00addd9eaee1458740f1ff8582cf4a3"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/bounded_latest-straight-s750000-nominal-stereo/inference_sensors.npz": {
+      "bytes": 4391343,
+      "sha256": "6840132dba7b237534fb42b2ef5503ca438cc4d6803cc1a8e62862608c64cfd2"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/bounded_latest-straight-s750000-nominal-stereo/native/stream_receipt.json": {
+      "bytes": 2062,
+      "sha256": "c8d3ed8b83911bb4cad0aec9899e634cc295c07c0acd79a0bfb8fd711ba8ed95"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/bounded_latest-straight-s750000-nominal-stereo/sensors/processing_schedule.json": {
+      "bytes": 118202,
+      "sha256": "d08435129499a2f3979124587de1f77bb80dc6ac01c95c8865d543aa02a377ba"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/campaign_result.json": {
+      "bytes": 36832,
+      "sha256": "6d1889e3f7884bcf701937aa1d3356b55f67dd4947a5b1b68d70332133f6e786"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/legacy_cumulative-straight-s750000-nominal-stereo/episode.json": {
+      "bytes": 986296,
+      "sha256": "4b625e447fcda36aaa7193b2b7094e55b083af49b948225521c8ea43e5bd7f61"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/legacy_cumulative-straight-s750000-nominal-stereo/evaluator_truth.npz": {
+      "bytes": 93199,
+      "sha256": "8e49904a42d9f56259e64f92fb4e732e27d77a21ff6f36795704b8be9cc6174e"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/legacy_cumulative-straight-s750000-nominal-stereo/inference_sensors.npz": {
+      "bytes": 4378408,
+      "sha256": "50323fcc826cf4c0bdbf0153c75c489c2219a6e6dec47948abe2b04057f0f3cc"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/legacy_cumulative-straight-s750000-nominal-stereo/native/stream_receipt.json": {
+      "bytes": 1801,
+      "sha256": "833f19ec060e820e9a1a0589095eeaf82f6631a4f345fe8249c1450b351848ac"
+    },
+    "collector-inputs/schedule-s750000-nominal-straight-stereo/legacy_cumulative-straight-s750000-nominal-stereo/sensors/processing_schedule.json": {
+      "bytes": 77441,
+      "sha256": "a86391804dfefe54b9eecdb8bb75f7969d4d0c2ce14f999d5976a07d264e8cb2"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/bounded_latest-occluders-s750001-camera_10hz-lidar_inertial/episode.json": {
+      "bytes": 1272592,
+      "sha256": "c4172e5ba28330fb24e9fd36a14c557071f5687d8f8f45d390ef14bd2e9bbd1c"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/bounded_latest-occluders-s750001-camera_10hz-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 96227,
+      "sha256": "69c23d171594f9e8ad0e85e03ff6be15b3a405afbe01166ea25035edc7bc7d7c"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/bounded_latest-occluders-s750001-camera_10hz-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4491976,
+      "sha256": "811643abe2f41994260ced6f9d329bb50d37ad83382575f6bafdd146b93bb9f9"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/bounded_latest-occluders-s750001-camera_10hz-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/bounded_latest-occluders-s750001-camera_10hz-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 179475,
+      "sha256": "4b6cde08a0bd9c6bb67037408f02918cc4312950bffd8b5d39689bd5d161d1a4"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/campaign_result.json": {
+      "bytes": 36909,
+      "sha256": "69158081f6df5ad413e4e8e3fd1d915416642f28ca324f2b69b0c627d277d848"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-camera_10hz-lidar_inertial/episode.json": {
+      "bytes": 819124,
+      "sha256": "b373e63e8e09eb2711084e64dba92ffb6e9a26a927308a1459bddda8ce0efa9a"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-camera_10hz-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 92337,
+      "sha256": "2ad07ffeadce477547ddc2e02a311ed3d17cb9adca306e8a881fc9870f1e5024"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-camera_10hz-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4361053,
+      "sha256": "7a1efb3e9fefcd7c18d35ec44365e616bdae7708d6d6109341417212f4639801"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-camera_10hz-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1746,
+      "sha256": "8ed5e629b7e433bd965e938c340a8567326f05a0b63e65e5a47f43b4cd491472"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-camera_10hz-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 12284,
+      "sha256": "bd4344cda8ad663e0367906ef4355afaf4a7ec0a0f2c220a1c29536c3f705bc9"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/bounded_latest-occluders-s750001-camera_10hz-stereo/episode.json": {
+      "bytes": 1156288,
+      "sha256": "67758e16e6285164144f01d191cee93c657a80a373d8c338d700742fe2149943"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/bounded_latest-occluders-s750001-camera_10hz-stereo/evaluator_truth.npz": {
+      "bytes": 90714,
+      "sha256": "90eff4c7d89e8d07ca5b8be202fa485f1a4cf28f156350cc546f7cb9f05ff1c6"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/bounded_latest-occluders-s750001-camera_10hz-stereo/inference_sensors.npz": {
+      "bytes": 4359091,
+      "sha256": "1a85bdbc7261c1564f1bd52a134181a2879cad275cd945aaeb83c16d2eb62cbc"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/bounded_latest-occluders-s750001-camera_10hz-stereo/native/stream_receipt.json": {
+      "bytes": 2061,
+      "sha256": "0e0e2ddb281d0ee5a5afd35dedbf04ec5b3d5dc17cb755346c0acad6f6cb2ac1"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/bounded_latest-occluders-s750001-camera_10hz-stereo/sensors/processing_schedule.json": {
+      "bytes": 139420,
+      "sha256": "4b402426bd15cae9087ea45724d7e2268dda53fde4c7163e9af3179e5352e297"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/campaign_result.json": {
+      "bytes": 36862,
+      "sha256": "5c979ea87c4f5b6ea488fa979c7e4f30030f315a26cafa1c222cce9ca69daa1a"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/legacy_cumulative-occluders-s750001-camera_10hz-stereo/episode.json": {
+      "bytes": 805887,
+      "sha256": "b8a2457b5bc816e268706ff57d42d91011f97f4cdfedec777562710e12e159e0"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/legacy_cumulative-occluders-s750001-camera_10hz-stereo/evaluator_truth.npz": {
+      "bytes": 92337,
+      "sha256": "2ad07ffeadce477547ddc2e02a311ed3d17cb9adca306e8a881fc9870f1e5024"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/legacy_cumulative-occluders-s750001-camera_10hz-stereo/inference_sensors.npz": {
+      "bytes": 4361053,
+      "sha256": "7a1efb3e9fefcd7c18d35ec44365e616bdae7708d6d6109341417212f4639801"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/legacy_cumulative-occluders-s750001-camera_10hz-stereo/native/stream_receipt.json": {
+      "bytes": 1800,
+      "sha256": "4d4ccd7b20d508dc71ba3363c128795bda6b634b2bdf6375c519093add30dda1"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-occluders-stereo/legacy_cumulative-occluders-s750001-camera_10hz-stereo/sensors/processing_schedule.json": {
+      "bytes": 11069,
+      "sha256": "4a4bae9407300da91c8ee7effde99c8581150b466ca2cffd3cd470576c3072ed"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/bounded_latest-straight-s750001-camera_10hz-lidar_inertial/episode.json": {
+      "bytes": 1250173,
+      "sha256": "f2793be43609f305b98a751c42fbacb67f0a3ee35a43293978f2b74f92b47d48"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/bounded_latest-straight-s750001-camera_10hz-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 96190,
+      "sha256": "a6b09a157f0eff37f9665297474c0cd44ac4b168153ab93d46f8870c4b798145"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/bounded_latest-straight-s750001-camera_10hz-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4455696,
+      "sha256": "981c3399c328ce95a5146ccbdbfb0738d0c2f75ee487785c8f15e14b54d956c0"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/bounded_latest-straight-s750001-camera_10hz-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/bounded_latest-straight-s750001-camera_10hz-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 170807,
+      "sha256": "86c73aff955c703e8b693e2cf0b77653954243c9cbea5ff9d1ba33de83dda076"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/campaign_result.json": {
+      "bytes": 36904,
+      "sha256": "8f259b506ec8ab8bfba380c42e829f5395eba65aeb7588f7daa7adead3a4084c"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/legacy_cumulative-straight-s750001-camera_10hz-lidar_inertial/episode.json": {
+      "bytes": 805972,
+      "sha256": "e84e4fdf6134f6c195f1e8cc8fb888b5347e22312c595bc5025a358732d826f5"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/legacy_cumulative-straight-s750001-camera_10hz-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 92337,
+      "sha256": "2ad07ffeadce477547ddc2e02a311ed3d17cb9adca306e8a881fc9870f1e5024"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/legacy_cumulative-straight-s750001-camera_10hz-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4361887,
+      "sha256": "973300b7658378cfd70ef25ca19049b9a280b109223db1fcac1d83f57a2b7fb2"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/legacy_cumulative-straight-s750001-camera_10hz-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1746,
+      "sha256": "846761bc012c83ed627c2937c1714dcc81a1e60345d6196fc361a211dc12bfd7"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-lidar_inertial/legacy_cumulative-straight-s750001-camera_10hz-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 11047,
+      "sha256": "44485e7b8648c45141ff339c5516526a2dd447368318714b40339cbdd2fe2265"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/bounded_latest-straight-s750001-camera_10hz-stereo/episode.json": {
+      "bytes": 1126838,
+      "sha256": "fd355d8462d34bb9dd0b174d91988cf7824ae7afe85eed9eaf35107d05544a04"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/bounded_latest-straight-s750001-camera_10hz-stereo/evaluator_truth.npz": {
+      "bytes": 92754,
+      "sha256": "5b506865e439edfbd206b32d0a5b218a1e7820104bedea8a88de359107c50a48"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/bounded_latest-straight-s750001-camera_10hz-stereo/inference_sensors.npz": {
+      "bytes": 4340394,
+      "sha256": "1df1cb3adcaea1f6946c23a2f79b1e8285bbfbc190c3502156735da2c3ec4a37"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/bounded_latest-straight-s750001-camera_10hz-stereo/native/stream_receipt.json": {
+      "bytes": 2062,
+      "sha256": "002a5970b8a9191e3aa9df4e8c275c0c0b48793cd13be6900b1681f86cbdea14"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/bounded_latest-straight-s750001-camera_10hz-stereo/sensors/processing_schedule.json": {
+      "bytes": 128319,
+      "sha256": "1ef07be48710e00bc9a1e4d064c0571a677840b160ce64b12dbd4ac35997a168"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/campaign_result.json": {
+      "bytes": 36856,
+      "sha256": "c083469f37cd3c492aeb04a63d72b03e368234e715d7b37d1b0ec3634c2fea62"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/legacy_cumulative-straight-s750001-camera_10hz-stereo/episode.json": {
+      "bytes": 804286,
+      "sha256": "7c083d07518194b46603ab63da952cf7769934d1b26953eee3853f625b279ad0"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/legacy_cumulative-straight-s750001-camera_10hz-stereo/evaluator_truth.npz": {
+      "bytes": 92337,
+      "sha256": "2ad07ffeadce477547ddc2e02a311ed3d17cb9adca306e8a881fc9870f1e5024"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/legacy_cumulative-straight-s750001-camera_10hz-stereo/inference_sensors.npz": {
+      "bytes": 4361887,
+      "sha256": "973300b7658378cfd70ef25ca19049b9a280b109223db1fcac1d83f57a2b7fb2"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/legacy_cumulative-straight-s750001-camera_10hz-stereo/native/stream_receipt.json": {
+      "bytes": 1800,
+      "sha256": "7180862b54675524141c99f3f5eea9e2fe73d2b80c6429f85bcdade47d0f1b04"
+    },
+    "collector-inputs/schedule-s750001-camera_10hz-straight-stereo/legacy_cumulative-straight-s750001-camera_10hz-stereo/sensors/processing_schedule.json": {
+      "bytes": 10458,
+      "sha256": "34b769a93593830e6169ae567531779e16218a39773fdb76ef8523ec460a71f9"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/bounded_latest-occluders-s750001-causal_40ms_exposure-lidar_inertial/episode.json": {
+      "bytes": 1096350,
+      "sha256": "d6441c57eac190d9574dac2ef5a201d55f8516fcbea84bf6bdbeed21eda349fd"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/bounded_latest-occluders-s750001-causal_40ms_exposure-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 95172,
+      "sha256": "95dc259699435f296e09d6f25492e420a6f227ad7f2a8028f008c9c2c8b1d630"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/bounded_latest-occluders-s750001-causal_40ms_exposure-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4523211,
+      "sha256": "0a5bd09dd6b1d8746931410c9aab32a5421337f69888eb4bd2329c421aa5c5c0"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/bounded_latest-occluders-s750001-causal_40ms_exposure-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "c66c8b495743cc6d8a21024bc3e121b6d3fc0e2270b3a59b386455d57e21c44c"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/bounded_latest-occluders-s750001-causal_40ms_exposure-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 115200,
+      "sha256": "0b570a3c7dd6c9c8180e6b020ae1b58c75d829d83aadd58c1f909230aca1b808"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/campaign_result.json": {
+      "bytes": 36964,
+      "sha256": "47f3ef32182fe9ff37aac2a7b17ad34b53aacc06253a0ad443defe6757f7bc3f"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-causal_40ms_exposure-lidar_inertial/episode.json": {
+      "bytes": 791504,
+      "sha256": "bf1fbc3de380fd19e3fac3db6e96ac52483b12bae7c46af1025874d5f783197b"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-causal_40ms_exposure-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 92337,
+      "sha256": "2ad07ffeadce477547ddc2e02a311ed3d17cb9adca306e8a881fc9870f1e5024"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-causal_40ms_exposure-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4361053,
+      "sha256": "7a1efb3e9fefcd7c18d35ec44365e616bdae7708d6d6109341417212f4639801"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-causal_40ms_exposure-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1745,
+      "sha256": "7de2f42ca52ea0eed13c1e65272fad158fbbf706e0aa79a284416538142c61bc"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-causal_40ms_exposure-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 6141,
+      "sha256": "a7fcc6f5b312144dcc0e9a6659fc88e5f754f40a7e333c09c8c14375c0c64b0c"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/bounded_latest-occluders-s750001-causal_40ms_exposure-stereo/episode.json": {
+      "bytes": 1098023,
+      "sha256": "afcf795c3c655a1fbb366c253b03541f953c47670f71be2f2af9156b6a1abf9f"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/bounded_latest-occluders-s750001-causal_40ms_exposure-stereo/evaluator_truth.npz": {
+      "bytes": 92401,
+      "sha256": "b84eb68cb69301e2dfa97103b52589937b68df0f5341e762dc1d4f5cd4a6ed60"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/bounded_latest-occluders-s750001-causal_40ms_exposure-stereo/inference_sensors.npz": {
+      "bytes": 4333617,
+      "sha256": "03bbc508eeeeff0ea739b7b3fc0e896775f6a3321b197a7cc3a815b22979c52a"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/bounded_latest-occluders-s750001-causal_40ms_exposure-stereo/native/stream_receipt.json": {
+      "bytes": 2062,
+      "sha256": "df03cc49baba080390b43a4145a3c1728ad6a5945a4d5b447de7af5f9435932f"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/bounded_latest-occluders-s750001-causal_40ms_exposure-stereo/sensors/processing_schedule.json": {
+      "bytes": 118212,
+      "sha256": "cf7e610bab7ec9e19c5a398c544222f94c1a177c81026101231c081c8db868f4"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/campaign_result.json": {
+      "bytes": 36916,
+      "sha256": "471e9b237d32d82d492e2b9acb3f803365aa54787cabc56fb30197ef9d5431c0"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/legacy_cumulative-occluders-s750001-causal_40ms_exposure-stereo/episode.json": {
+      "bytes": 801199,
+      "sha256": "87c4c240cedc4fb30b9dea4fcb66c62f24f836038e59ba0d4c11f20691d90bbd"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/legacy_cumulative-occluders-s750001-causal_40ms_exposure-stereo/evaluator_truth.npz": {
+      "bytes": 92337,
+      "sha256": "2ad07ffeadce477547ddc2e02a311ed3d17cb9adca306e8a881fc9870f1e5024"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/legacy_cumulative-occluders-s750001-causal_40ms_exposure-stereo/inference_sensors.npz": {
+      "bytes": 4361053,
+      "sha256": "7a1efb3e9fefcd7c18d35ec44365e616bdae7708d6d6109341417212f4639801"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/legacy_cumulative-occluders-s750001-causal_40ms_exposure-stereo/native/stream_receipt.json": {
+      "bytes": 1799,
+      "sha256": "bd97c3f308c8c07b3825e4e5cc5c88c402a607bc0826a28e678a53462c829dae"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-occluders-stereo/legacy_cumulative-occluders-s750001-causal_40ms_exposure-stereo/sensors/processing_schedule.json": {
+      "bytes": 6138,
+      "sha256": "95a24946ba4443398cfc5878ddbc7171cd68dd9abcdba53a173edb2517a5d109"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/bounded_latest-straight-s750001-causal_40ms_exposure-lidar_inertial/episode.json": {
+      "bytes": 1069363,
+      "sha256": "1ab4c6901d58af0ad7f867f53173fb0f113893513169e93a005106d47fad15bb"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/bounded_latest-straight-s750001-causal_40ms_exposure-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 96709,
+      "sha256": "b8911bb36bb266f62c15d693d7b8eae0eafa4fd8866cd14c729111fe53a9971b"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/bounded_latest-straight-s750001-causal_40ms_exposure-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4376677,
+      "sha256": "d4f8479cedc95d08965c1494aaffa0df28908d8452422b5d24a8ab19de96ee63"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/bounded_latest-straight-s750001-causal_40ms_exposure-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "9dd34b3c7571c97e937625a3f6c6bf1c69244d7fd0b07575ac5112c621c71250"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/bounded_latest-straight-s750001-causal_40ms_exposure-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 104049,
+      "sha256": "3db1f74cebc3cb838c483743430711352967496a7a4c8ab1dc4e88771f58115f"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/campaign_result.json": {
+      "bytes": 36958,
+      "sha256": "4190164c1fce96598da9a68a6371b36df69170d727f4528193315f0da58b0e9f"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/legacy_cumulative-straight-s750001-causal_40ms_exposure-lidar_inertial/episode.json": {
+      "bytes": 792533,
+      "sha256": "62c8fab2ac1a00d2d0c41f6561692ef4c646968fbeb5b2b3903200a43a504a51"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/legacy_cumulative-straight-s750001-causal_40ms_exposure-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 92337,
+      "sha256": "2ad07ffeadce477547ddc2e02a311ed3d17cb9adca306e8a881fc9870f1e5024"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/legacy_cumulative-straight-s750001-causal_40ms_exposure-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4361887,
+      "sha256": "973300b7658378cfd70ef25ca19049b9a280b109223db1fcac1d83f57a2b7fb2"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/legacy_cumulative-straight-s750001-causal_40ms_exposure-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1745,
+      "sha256": "7de2f42ca52ea0eed13c1e65272fad158fbbf706e0aa79a284416538142c61bc"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-lidar_inertial/legacy_cumulative-straight-s750001-causal_40ms_exposure-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 6145,
+      "sha256": "db0ca7db178bf5590a944fff808488da418d7acda95f9506b8a5aaae1ab0436e"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/bounded_latest-straight-s750001-causal_40ms_exposure-stereo/episode.json": {
+      "bytes": 1099338,
+      "sha256": "93817cd56b8662d838b9c5b7d30526a270148ce346dd5136722e733ce3f2e62f"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/bounded_latest-straight-s750001-causal_40ms_exposure-stereo/evaluator_truth.npz": {
+      "bytes": 90791,
+      "sha256": "df718d6f6f75d731e671b6ae5a2ef0b16e78d2d1fa527f0cc4d314e1590901e7"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/bounded_latest-straight-s750001-causal_40ms_exposure-stereo/inference_sensors.npz": {
+      "bytes": 4347718,
+      "sha256": "44170673cc014f5bdeec0324cade22bb63dd931b4e0b7ea05609578c2ccb37a7"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/bounded_latest-straight-s750001-causal_40ms_exposure-stereo/native/stream_receipt.json": {
+      "bytes": 2062,
+      "sha256": "1212a03093ea0b961d2a77d33f19b65f3194b9b3c8bafc537886d8e009f79061"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/bounded_latest-straight-s750001-causal_40ms_exposure-stereo/sensors/processing_schedule.json": {
+      "bytes": 118181,
+      "sha256": "9dc409ce2fd0a0d168619de9eda9dbd97d2d267f1262f1b1830a7ac96aefeafe"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/campaign_result.json": {
+      "bytes": 36910,
+      "sha256": "dfcc9d3b13d8fd2b5b28d744cf2f8a41038eb7e739dd97a448498091d43914c4"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/legacy_cumulative-straight-s750001-causal_40ms_exposure-stereo/episode.json": {
+      "bytes": 797167,
+      "sha256": "44eeec05597f0476808c821e173e3fb3aa332f021800a5eb578a1e28d84489c0"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/legacy_cumulative-straight-s750001-causal_40ms_exposure-stereo/evaluator_truth.npz": {
+      "bytes": 92337,
+      "sha256": "2ad07ffeadce477547ddc2e02a311ed3d17cb9adca306e8a881fc9870f1e5024"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/legacy_cumulative-straight-s750001-causal_40ms_exposure-stereo/inference_sensors.npz": {
+      "bytes": 4361887,
+      "sha256": "973300b7658378cfd70ef25ca19049b9a280b109223db1fcac1d83f57a2b7fb2"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/legacy_cumulative-straight-s750001-causal_40ms_exposure-stereo/native/stream_receipt.json": {
+      "bytes": 2060,
+      "sha256": "2b1306292b4108880641faa156bda2d93f3c33435173bd68ef80b44b24bd247d"
+    },
+    "collector-inputs/schedule-s750001-causal_40ms_exposure-straight-stereo/legacy_cumulative-straight-s750001-causal_40ms_exposure-stereo/sensors/processing_schedule.json": {
+      "bytes": 6143,
+      "sha256": "aae003f9f4f49497ec32d38a7909890e7bdd931762b78b7bb6dc252d74432f2d"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/bounded_latest-occluders-s750001-nominal-lidar_inertial/episode.json": {
+      "bytes": 1104397,
+      "sha256": "0b27fda91d30844f2a835409dd86f20dfaf26b270827b0c37ba066d89e894969"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/bounded_latest-occluders-s750001-nominal-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 95551,
+      "sha256": "d8a2a3e78f29f91f4ed0ca666393079b06a49f0d13d097abdb817b99a0a560a7"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/bounded_latest-occluders-s750001-nominal-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4507135,
+      "sha256": "28c13bef2da719d8ac74e1c315666c22923c46034837a14d0436554622ef4869"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/bounded_latest-occluders-s750001-nominal-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/bounded_latest-occluders-s750001-nominal-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 118194,
+      "sha256": "c91ef6c06a42712423583994ec37e4a28fb81a3d4f6e9369a4d6315766f6af9c"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/campaign_result.json": {
+      "bytes": 36885,
+      "sha256": "97502e5ae28f1e673587a804baeb427dba23e6fedc913e0a86e4a7f70de92be0"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-nominal-lidar_inertial/episode.json": {
+      "bytes": 1112157,
+      "sha256": "53e63ff81c6b99bb68209d8e123a93b7ac88f1bf54b7fab5edaf3f752fa68445"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-nominal-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 96863,
+      "sha256": "a94ca6de711d39c5230272aec78da2bfdd8fda4b331d084e62a89c59817b4ef4"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-nominal-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4419137,
+      "sha256": "9405e61a02d63f31a5e1f498ca6ed1fe600d0a73ce64391fab4da7a32c66f4ad"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-nominal-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-lidar_inertial/legacy_cumulative-occluders-s750001-nominal-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 118020,
+      "sha256": "0f6fb3defa415c3126d9bec3442447bcfa28924de78d940bcb5c4a4cd5db838a"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/bounded_latest-occluders-s750001-nominal-stereo/episode.json": {
+      "bytes": 1099094,
+      "sha256": "5fccfb7b9e934f5581d3250767e1fb0fd01d52a01b42d69f0c2ed5be05ec533e"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/bounded_latest-occluders-s750001-nominal-stereo/evaluator_truth.npz": {
+      "bytes": 91758,
+      "sha256": "0460098d23bbcb8c44e96a99e3473d367cc5a17dee518b2abfa1a70bf6d99ed5"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/bounded_latest-occluders-s750001-nominal-stereo/inference_sensors.npz": {
+      "bytes": 4352838,
+      "sha256": "39fcd0b36b0f07f8ec6bf5d682e3564145708a9279eaa7d16b67aaf79274d43f"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/bounded_latest-occluders-s750001-nominal-stereo/native/stream_receipt.json": {
+      "bytes": 2061,
+      "sha256": "c645d4c1181f1fe3a4b08e83c99025c68f4b17a3ec3cff4262fb252bfc1b0df6"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/bounded_latest-occluders-s750001-nominal-stereo/sensors/processing_schedule.json": {
+      "bytes": 118209,
+      "sha256": "5dfdee05572bab6a86d929eefe1db1a3ac5cdd7dcead8969e88be4e1bfc56467"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/campaign_result.json": {
+      "bytes": 36838,
+      "sha256": "ca5b531f54b58186b01d209c60d13c1703bac8565699defbaa289fcb83938a6f"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/legacy_cumulative-occluders-s750001-nominal-stereo/episode.json": {
+      "bytes": 1007612,
+      "sha256": "906d87de5db97dd3e43869f05dd0e1147eea137b4328cbf1c1c4ebe338767176"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/legacy_cumulative-occluders-s750001-nominal-stereo/evaluator_truth.npz": {
+      "bytes": 94961,
+      "sha256": "d40f6fc5bb71a1a1aa9c6b4a5745301c99d0d817d9ee388d09eed004155c23e2"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/legacy_cumulative-occluders-s750001-nominal-stereo/inference_sensors.npz": {
+      "bytes": 4389537,
+      "sha256": "daffc80d2ceb94bc93905945761ca9524c5c98dbc7da8b96f5df3cb9e5864a71"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/legacy_cumulative-occluders-s750001-nominal-stereo/native/stream_receipt.json": {
+      "bytes": 1801,
+      "sha256": "97db43755047f6759f7e9b1d42d963075cc7bf5031ff5b4c589d9a56973f110b"
+    },
+    "collector-inputs/schedule-s750001-nominal-occluders-stereo/legacy_cumulative-occluders-s750001-nominal-stereo/sensors/processing_schedule.json": {
+      "bytes": 85397,
+      "sha256": "ea03fb0a8d674dd244f58a1a3ea4c41a6f96f5cab62779538cf34621f38a979d"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/bounded_latest-straight-s750001-nominal-lidar_inertial/episode.json": {
+      "bytes": 1102189,
+      "sha256": "442001a2b3b9246f276e12ffd283e3dc1876decbb2ebd9a602a2246ef98e026b"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/bounded_latest-straight-s750001-nominal-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 94316,
+      "sha256": "80ed10ecb12954e157e5faa997d5dd898b894df137b1fc1af518dd56ee84ffae"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/bounded_latest-straight-s750001-nominal-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4520624,
+      "sha256": "f3152210a057c8746c822bada581f32c350760e55b6a480cd4a1f5f64abc5888"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/bounded_latest-straight-s750001-nominal-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "4022027e219da02535e3b937a6c72cd8ad8f9c8dc82c99ab3c18efe9aa3b59cd"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/bounded_latest-straight-s750001-nominal-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 118238,
+      "sha256": "e416f54e32e5959a9ded07689feeb4ee70f3ef8fdaf5ecb932382046d75cadac"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/campaign_result.json": {
+      "bytes": 36879,
+      "sha256": "19d386ce3c6e3f05b888a4513d78f86dff00e973daa49f6479b648bba72bca58"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/legacy_cumulative-straight-s750001-nominal-lidar_inertial/episode.json": {
+      "bytes": 1096189,
+      "sha256": "530ea76ea426edd04658ee05c1e0a1de42617bee1947ebb060f85c7730730d4e"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/legacy_cumulative-straight-s750001-nominal-lidar_inertial/evaluator_truth.npz": {
+      "bytes": 95184,
+      "sha256": "ecdaca462fa54fdc754e2f15cb0d6fd3d6598a93998f751d591683edf6961e7a"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/legacy_cumulative-straight-s750001-nominal-lidar_inertial/inference_sensors.npz": {
+      "bytes": 4367398,
+      "sha256": "d6b2ec2a0ea95f54b1c60b77c4a01bafa3abc6c77fa24dc649d897f3b37be340"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/legacy_cumulative-straight-s750001-nominal-lidar_inertial/native/stream_receipt.json": {
+      "bytes": 1747,
+      "sha256": "b2444b0e6fd6b0e60a58bc54aacd0382c39ad8b96b53d477651f8eb22f18579a"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-lidar_inertial/legacy_cumulative-straight-s750001-nominal-lidar_inertial/sensors/processing_schedule.json": {
+      "bytes": 116693,
+      "sha256": "e69a0fb105b908fba7846af8e699b4c3de59f5f3a0c30234336406fc26135a90"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/bounded_latest-straight-s750001-nominal-stereo/episode.json": {
+      "bytes": 1105160,
+      "sha256": "a348b75475ea9e5d42b53b6d539ca15f21be3f9f947a1cc119a50e3f048b20e6"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/bounded_latest-straight-s750001-nominal-stereo/evaluator_truth.npz": {
+      "bytes": 94899,
+      "sha256": "a7e2a9d2dad90a3e48077c040d5029cd4eb2c2f60575779edc954b8d4be31cbb"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/bounded_latest-straight-s750001-nominal-stereo/inference_sensors.npz": {
+      "bytes": 4385695,
+      "sha256": "952de05bd5b29181893c47965668d5a007a1dd7d4e579a4facc410964bbe0167"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/bounded_latest-straight-s750001-nominal-stereo/native/stream_receipt.json": {
+      "bytes": 2062,
+      "sha256": "b3c16f16c68e4185af5bf5d5761d3538ac3a3e0049613ba84f320e56a408834e"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/bounded_latest-straight-s750001-nominal-stereo/sensors/processing_schedule.json": {
+      "bytes": 118206,
+      "sha256": "9bb91db30cd2ff2ed8a7e4524a0b8a5b3c8424143b4fe4656d4de5d5edc248a2"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/campaign_result.json": {
+      "bytes": 36832,
+      "sha256": "dc3ae07ee1244675ec2c55ceec4ac591813a90c459af73c0333c8f5c9b076935"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/legacy_cumulative-straight-s750001-nominal-stereo/episode.json": {
+      "bytes": 977596,
+      "sha256": "8aad96eb179a2f9523ab35bbd806620a8559c70558a7a73461a92b8aa3aa4844"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/legacy_cumulative-straight-s750001-nominal-stereo/evaluator_truth.npz": {
+      "bytes": 92337,
+      "sha256": "2ad07ffeadce477547ddc2e02a311ed3d17cb9adca306e8a881fc9870f1e5024"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/legacy_cumulative-straight-s750001-nominal-stereo/inference_sensors.npz": {
+      "bytes": 4361887,
+      "sha256": "973300b7658378cfd70ef25ca19049b9a280b109223db1fcac1d83f57a2b7fb2"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/legacy_cumulative-straight-s750001-nominal-stereo/native/stream_receipt.json": {
+      "bytes": 1801,
+      "sha256": "62ee05868b852d1576216f769546195a5a50f73b6ac080c5490f5b0bf755e9a7"
+    },
+    "collector-inputs/schedule-s750001-nominal-straight-stereo/legacy_cumulative-straight-s750001-nominal-stereo/sensors/processing_schedule.json": {
+      "bytes": 74957,
+      "sha256": "83c3a7d50867e817bc13e5c28302232bbc7a06337fb20d5c210ca20c0827c454"
+    },
+    "dispatch-result.json": {
+      "bytes": 10598,
+      "sha256": "e11dc4900b34ab2d331ad68b48f09242bd573ad7e4396234b02c32dfd1638e23"
+    },
+    "execution-start.json": {
+      "bytes": 387,
+      "sha256": "cef12497f200ab235dd603c448e87529881dbb543b55547994c4e000237b0cc6"
+    },
+    "intake.json": {
+      "bytes": 2138,
+      "sha256": "2515da21cc6409892bc77c6bed467695b5e8fe0ed1f87358d8060a84156aaf4c"
+    },
+    "manifest.json": {
+      "bytes": 227138,
+      "sha256": "a11ea268d253086b84c24caea971f06ae1b7c9562ad9cea58f65023f9136ad45"
+    },
+    "processing-schedule-collection-20261012-21801949/campaign_result.json": {
+      "bytes": 20077,
+      "sha256": "42fee54f42288941a5820aa90de66f4dcdb0ea80b7f304b36ad80d8eb0d2cdad"
+    },
+    "processing-schedule-collection-20261012-21801949/completion.json": {
+      "bytes": 993,
+      "sha256": "33fb4a7b8b3daa7c9caccaad97b40fd0f58cbf1af6a4bb0e78b0a6ca9aa77cd6"
+    },
+    "processing-schedule-collection-20261012-21801949/launch.json": {
+      "bytes": 2949,
+      "sha256": "fd84e3ff6ee9cf4d1a1ffbdad8e843aab602ad5e972da5382fc37723441b53f2"
+    },
+    "processing-schedule-collection-20261012-21801949/scratch-retirement.json": {
+      "bytes": 340,
+      "sha256": "f6ab9f6baa45288e638193faba81c0dcf472ee9a61221ff8f2f43f69aae4f2f1"
+    },
+    "processing-schedule-profile-20261012-21801949/campaign_result.json": {
+      "bytes": 127391,
+      "sha256": "0f7d8ef34d0701f056949a773e440f00fc9f96f12eb8228e1112532b0fa00ac9"
+    },
+    "processing-schedule-profile-20261012-21801949/completion.json": {
+      "bytes": 1001,
+      "sha256": "4e4282e3447891ed77f12f25529ed062a23450c1488288046018ea34feb323b2"
+    },
+    "processing-schedule-profile-20261012-21801949/launch.json": {
+      "bytes": 2510,
+      "sha256": "f3ccb7057d820dd2dae4680644c1a73d3b01ddd272616e13e46566ed9d663c0f"
+    },
+    "processing-schedule-profile-20261012-21801949/scratch-retirement.json": {
+      "bytes": 342,
+      "sha256": "5daf6da197149a2af6c4af2852b9a05d8994c1da8000d44b67fbbaaa48e87073"
+    },
+    "processing-schedule-smoke-20261012-21801949/campaign_result.json": {
+      "bytes": 40748,
+      "sha256": "01f8db9441597c2c9060fdbc28c4add6986459c90fb50f7c028c148cfdeeb209"
+    },
+    "processing-schedule-smoke-20261012-21801949/completion.json": {
+      "bytes": 1007,
+      "sha256": "24b8eb95b587d0499c1105620dd2bd43a2e3e999a798d573fd52ed3bd61571bf"
+    },
+    "processing-schedule-smoke-20261012-21801949/launch.json": {
+      "bytes": 4005,
+      "sha256": "34ff790f2874a639a2e7cc4e3c9958c3eda4f26911c1571830bc30997e32ad19"
+    },
+    "processing-schedule-smoke-20261012-21801949/scratch-retirement.json": {
+      "bytes": 343,
+      "sha256": "b7e0d5554518d531e80ed84c34034cd4b9e7fe10ad48f00059ad8c8fd3b81a66"
+    },
+    "progress-00.json": {
+      "bytes": 375,
+      "sha256": "8a1008d82000ebb9cc9624c827fbdd863f8d6aabb039fd91195614eeda33a15b"
+    },
+    "progress-01.json": {
+      "bytes": 672,
+      "sha256": "f867cd9232764102b752261a54c7a73b18366ecffb03239cedc055698b075cf3"
+    },
+    "progress-02.json": {
+      "bytes": 974,
+      "sha256": "a8f573bec6135b4e39f79b3d6158cb735b5bc7d7ae02b995bc2ffe7031de9a47"
+    },
+    "progress-03.json": {
+      "bytes": 1284,
+      "sha256": "59e8f11fb5c45832b2222fb2a86484b0f095a3ddf237dcd1dd95f189f6fe3360"
+    },
+    "progress-04.json": {
+      "bytes": 1587,
+      "sha256": "17f62ba36c8452c933b25aebb34252d2587b387303a8bbe43d930165ee0c6f5f"
+    },
+    "progress-05.json": {
+      "bytes": 1898,
+      "sha256": "b06fe2e8305aafa295bd1977f41f467d12873db65c3b8f38d794ff7fcf71d724"
+    },
+    "progress-06.json": {
+      "bytes": 2204,
+      "sha256": "3bb5a91dfec68ba376cad94e67bf2ebdcce974ebcb24d509dd6efd998823cc8f"
+    },
+    "progress-07.json": {
+      "bytes": 2518,
+      "sha256": "ea4eb9ab51b22f55875d2ce9b1e7d54a68131c9e7f18cb5cd6b44225861ed48a"
+    },
+    "progress-08.json": {
+      "bytes": 2825,
+      "sha256": "ea80a1fdfb291aef64f65a6844c06b366416a3d487b850ddc1b59fc3cc435d35"
+    },
+    "progress-09.json": {
+      "bytes": 3140,
+      "sha256": "2628719ff80d2085ceda990c61b1dbf811321d76d375822c291ea3747f79efbe"
+    },
+    "progress-10.json": {
+      "bytes": 3455,
+      "sha256": "35a592707093fbe296b27444086d4dc319813802577086f0f7d682828347df26"
+    },
+    "progress-11.json": {
+      "bytes": 3778,
+      "sha256": "f9c39961d1c74e2215099593327b6b53e843ff64e7f95468c35e4660e50bfde1"
+    },
+    "progress-12.json": {
+      "bytes": 4094,
+      "sha256": "29f977be3afbe587a1b661fe5b4970f2da926cd85bc506eab19227aae4c4400a"
+    },
+    "progress-13.json": {
+      "bytes": 4418,
+      "sha256": "bd1e82da044730d02e0415ac52b69b9f5ea9a425990e35f2657ddfd6ae73575c"
+    },
+    "progress-14.json": {
+      "bytes": 4720,
+      "sha256": "de9e6aaa2cbf97210610fd1aaadb53c1ae3efb716e22f28948fa92d194e08e12"
+    },
+    "progress-15.json": {
+      "bytes": 5030,
+      "sha256": "fef16d6367416546de349da25f0364355d3504bed7e9837880f640486b5b1e43"
+    },
+    "progress-16.json": {
+      "bytes": 5333,
+      "sha256": "2179994897cdd0cbbcf75b8133d1d43a1540a428697310c5d45f3bea506c0a71"
+    },
+    "progress-17.json": {
+      "bytes": 5644,
+      "sha256": "07ac4cf43054722e5c59568678f918ba2334871ad7bb0c5f45c8a832554e19cc"
+    },
+    "progress-18.json": {
+      "bytes": 5950,
+      "sha256": "0649f3b02f5f6ba3cbe8802f737a5ed0d5d451a18fb158b1e7596269f115fe06"
+    },
+    "progress-19.json": {
+      "bytes": 6264,
+      "sha256": "cf4f9b689fef552089d7fa4d67f4caba155ba2e320ce2e83662fa79807085e12"
+    },
+    "progress-20.json": {
+      "bytes": 6571,
+      "sha256": "ad5946e97a3fc15fa5610c025136f050770a586e85c2b16bf63e84cd8b63eaaa"
+    },
+    "progress-21.json": {
+      "bytes": 6886,
+      "sha256": "f4ee6a046dd8e2a39869e7adfc5fa3fef1b84ede36f37209d7440175a5bec8f2"
+    },
+    "progress-22.json": {
+      "bytes": 7201,
+      "sha256": "70ae9657ccb00e33a3509d9b6f3560a83fc21261a055b3784a1d58f18877af6e"
+    },
+    "progress-23.json": {
+      "bytes": 7524,
+      "sha256": "cf3fea02a83e3e827b38822222a38ea284ce9f228bdeeefceea601f5baa4f790"
+    },
+    "progress-24.json": {
+      "bytes": 7840,
+      "sha256": "00c0e0fb536a2593173ed696f719ddb9194538f33d07646d77a07e486d325a63"
+    },
+    "progress-25.json": {
+      "bytes": 8164,
+      "sha256": "c6a7cc8ee63c2fe8473596a4fb415dc85345b9999f4b6efb87ae5a3ae39949de"
+    },
+    "progress-26.json": {
+      "bytes": 8465,
+      "sha256": "3bcde71043d4a86b6fb7411494dd3d69400c36893769569997c38254af4b061d"
+    },
+    "protocol.json": {
+      "bytes": 43956,
+      "sha256": "3a83b9652e9cf4a222107a9b864dbd9a8b2f365863cd55a58f04f6b0010a5a63"
+    },
+    "qualified-smoke.json": {
+      "bytes": 40748,
+      "sha256": "01f8db9441597c2c9060fdbc28c4add6986459c90fb50f7c028c148cfdeeb209"
+    },
+    "schedule-s750000-camera_10hz-occluders-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36910,
+      "sha256": "f1c196a03413d9fecd7702fdf5d39df3703016d2b7a1f4d2e266d4e2486ef028"
+    },
+    "schedule-s750000-camera_10hz-occluders-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2118,
+      "sha256": "b467aba81e351f69b13aef8109a2c05f89566341cab696ff39312d7734b9218e"
+    },
+    "schedule-s750000-camera_10hz-occluders-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "152dcb4c724e515f6f5c4b3fb4d8c401722afd2fa8ab6f0ae0cdf8b492823046"
+    },
+    "schedule-s750000-camera_10hz-occluders-lidar_inertial-21801949/launch.json": {
+      "bytes": 4951,
+      "sha256": "82de9bf60d47fb7adaf5f442b4c608946a7e370672578cf0d08908c0021fbcd2"
+    },
+    "schedule-s750000-camera_10hz-occluders-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 361,
+      "sha256": "c188ef21f6284e0e6ca7f16870e22b609ca8b81e5bedc05272b7efeab2207253"
+    },
+    "schedule-s750000-camera_10hz-occluders-stereo-21801949/campaign_result.json": {
+      "bytes": 36862,
+      "sha256": "56d2e5708e53a369e8e7d72bfe8cbafcd6f211a1c467581e66b3abe4a0ce0dab"
+    },
+    "schedule-s750000-camera_10hz-occluders-stereo-21801949/collector-inputs.json": {
+      "bytes": 2038,
+      "sha256": "a2357aee98de90deb6421c3a74fc01a0d056665871a5f1b08645290f03e3582e"
+    },
+    "schedule-s750000-camera_10hz-occluders-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "a899c52680a1fccd6acb2a4b53486e742f863e7c46b4661899e026df6ed48477"
+    },
+    "schedule-s750000-camera_10hz-occluders-stereo-21801949/launch.json": {
+      "bytes": 4775,
+      "sha256": "0f44e93854649ce90a897186bbf0886bd22f12f6ca641e435fbe6c01c6011857"
+    },
+    "schedule-s750000-camera_10hz-occluders-stereo-21801949/scratch-retirement.json": {
+      "bytes": 353,
+      "sha256": "af6c9a24dcd38024be89c4875ecac6261ceb9f2eaf60ccde0763a82283b2e083"
+    },
+    "schedule-s750000-camera_10hz-straight-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36904,
+      "sha256": "09a55fc6146aac02b70ab95463bcd7d77aa382531253dac690e46b975cd5f8cc"
+    },
+    "schedule-s750000-camera_10hz-straight-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2108,
+      "sha256": "e5052bd98a6484eaa93a1ac3e97d9ec78531038371c6a8553ce7951872ab82bb"
+    },
+    "schedule-s750000-camera_10hz-straight-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "4d792e5534b45fc90701eb9bb3fa1ff0d6a3f520f15dbcf5c48e68d12ffb5ec5"
+    },
+    "schedule-s750000-camera_10hz-straight-lidar_inertial-21801949/launch.json": {
+      "bytes": 4929,
+      "sha256": "0b07d254945016139f8f6428c5a122faeacb98b262a281eaa94a99eb45db2886"
+    },
+    "schedule-s750000-camera_10hz-straight-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 360,
+      "sha256": "52624b78567a7207f7518d6f93d5dd1638be5c2615acd1ec3108af65b0037f66"
+    },
+    "schedule-s750000-camera_10hz-straight-stereo-21801949/campaign_result.json": {
+      "bytes": 36855,
+      "sha256": "ceee399a00fd32c57abd72fdb86ddc0af95fe68db42d086c774e77c57590ad92"
+    },
+    "schedule-s750000-camera_10hz-straight-stereo-21801949/collector-inputs.json": {
+      "bytes": 2028,
+      "sha256": "0c4f79f9ad5ddf924a9aadf4ac2ac2eb36c3f879663d2a367c359feea7f18ed6"
+    },
+    "schedule-s750000-camera_10hz-straight-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "7378c1455578d9380d84a256dc1163d1e3f3c8430d0e98c598c61d8a8b114877"
+    },
+    "schedule-s750000-camera_10hz-straight-stereo-21801949/launch.json": {
+      "bytes": 4753,
+      "sha256": "ff009dfad1c9b78008e34e1846d3ff2642b298bc6f71a9ff2a92bdc5a7011484"
+    },
+    "schedule-s750000-camera_10hz-straight-stereo-21801949/scratch-retirement.json": {
+      "bytes": 352,
+      "sha256": "4d4ac9c7556d43d9d354abbadb066a2ba63c968d861dcea552493d953dcfb8c9"
+    },
+    "schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36964,
+      "sha256": "2843d8026780b7b7cbf7c7047b7492b91c6732ae172767145181278bd4dd348a"
+    },
+    "schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2207,
+      "sha256": "4401e93dc258a5a0cde4b27352fcea1c79d352b01c7fb8a0b95afea827d173d5"
+    },
+    "schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "ec113955d03b2837a892ff5884430b280c0494fc9492dc8124d95012ffb6a50c"
+    },
+    "schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial-21801949/launch.json": {
+      "bytes": 5149,
+      "sha256": "27345d00c6733bcab4efe1fb86fe07b480de0cfeb6eb802efc3df913cd4050c0"
+    },
+    "schedule-s750000-causal_40ms_exposure-occluders-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 370,
+      "sha256": "4768587193bd583bf065d99c67a8e79b31702276e1b974d182922c07185b7754"
+    },
+    "schedule-s750000-causal_40ms_exposure-occluders-stereo-21801949/campaign_result.json": {
+      "bytes": 36916,
+      "sha256": "e16b17b5564bd3f2dba1ba2e7e08dc3c5c66173de50afa4e746ab3e96bed6738"
+    },
+    "schedule-s750000-causal_40ms_exposure-occluders-stereo-21801949/collector-inputs.json": {
+      "bytes": 2127,
+      "sha256": "3a648a5d02102d3749770f84d5cbb04b79236b21b1a54e05f6d56357a5be92f8"
+    },
+    "schedule-s750000-causal_40ms_exposure-occluders-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "1f280230dbb7ab602bb024b3fe5624cf709d56113ea2a03721bebf46a4951173"
+    },
+    "schedule-s750000-causal_40ms_exposure-occluders-stereo-21801949/launch.json": {
+      "bytes": 4973,
+      "sha256": "561297a612dd3bea9ed2a7ad13321e55ea9526c0d14602547e7daef713e4d5cd"
+    },
+    "schedule-s750000-causal_40ms_exposure-occluders-stereo-21801949/scratch-retirement.json": {
+      "bytes": 362,
+      "sha256": "7c1eb8f16f261de0b17bc7f686bc510004867b98cc88b1693e097d43ba1708d2"
+    },
+    "schedule-s750000-causal_40ms_exposure-straight-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36958,
+      "sha256": "7af1b7116535e3e832f910315e699d25671cd53ce5486a1f31d20c98ff0d5933"
+    },
+    "schedule-s750000-causal_40ms_exposure-straight-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2197,
+      "sha256": "0189cfcd4d0e1d1026c6acb17aacd39c62a25215911736d41bbfe826b2c42e43"
+    },
+    "schedule-s750000-causal_40ms_exposure-straight-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "e9f743cd889e20e74a739d9f343965dbb57dc7e0be45df1da9d6cc2dd9b71c79"
+    },
+    "schedule-s750000-causal_40ms_exposure-straight-lidar_inertial-21801949/launch.json": {
+      "bytes": 5127,
+      "sha256": "2bbc0a112bb3c68ab188c4312ad12ecb23145b35910ffc05d34eabef0c2efc7c"
+    },
+    "schedule-s750000-causal_40ms_exposure-straight-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 369,
+      "sha256": "2e5d28e582a37d21d4a691c175256692f900a4b063c54e58a8a39e7a42dbf82a"
+    },
+    "schedule-s750000-causal_40ms_exposure-straight-stereo-21801949/campaign_result.json": {
+      "bytes": 36910,
+      "sha256": "701bc54903d39f7ee1984858af7b9f1de7212167c707ec5ac06caba7227eeb58"
+    },
+    "schedule-s750000-causal_40ms_exposure-straight-stereo-21801949/collector-inputs.json": {
+      "bytes": 2117,
+      "sha256": "693d962991f725e1df22d1988e36585fde50ed1af1486af99c7308eb464fc3ed"
+    },
+    "schedule-s750000-causal_40ms_exposure-straight-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "c85db127a33e5493b6a0fbf35afe259a325a05f5ed21fba24415ebe129a9217a"
+    },
+    "schedule-s750000-causal_40ms_exposure-straight-stereo-21801949/launch.json": {
+      "bytes": 4951,
+      "sha256": "e826e472427ead3be44896878e2371781499e7f58162b7581f8f98f198767d2f"
+    },
+    "schedule-s750000-causal_40ms_exposure-straight-stereo-21801949/scratch-retirement.json": {
+      "bytes": 361,
+      "sha256": "44ed7e9385d92ac4720dcc1865ed70d651007b5a8a283cdcdadbb0ffb653a954"
+    },
+    "schedule-s750000-nominal-occluders-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36885,
+      "sha256": "60dad75fc685cbda854bc1885d24e624c76eec4a8cf03fcf82f948c5856a33e8"
+    },
+    "schedule-s750000-nominal-occluders-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2080,
+      "sha256": "a1a37b960dd02abc33568c369c15e48fa68d579bd49491f88b60027636b2716c"
+    },
+    "schedule-s750000-nominal-occluders-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "c0ff47811877ec6d1bf27dfb6920ddaa462964ee90a23dec9c8fd484d6b119be"
+    },
+    "schedule-s750000-nominal-occluders-lidar_inertial-21801949/launch.json": {
+      "bytes": 4863,
+      "sha256": "810f4307eedac15860b417086258050c86e7340fd0a345572163663ed3650115"
+    },
+    "schedule-s750000-nominal-occluders-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 357,
+      "sha256": "039a6ab944af8bcd5eeb2da7c346c79e600d14ae38ccdc6d93056d4aa6ff19fc"
+    },
+    "schedule-s750000-nominal-occluders-stereo-21801949/campaign_result.json": {
+      "bytes": 36838,
+      "sha256": "c198c351106297c38176d2b3aa0a7c6c0356c6776ace76f092a56dce2dc97b83"
+    },
+    "schedule-s750000-nominal-occluders-stereo-21801949/collector-inputs.json": {
+      "bytes": 1999,
+      "sha256": "f21172fdfd60b0d44a5d7d0937fa37bf3e254536767ad60111649d860db7d366"
+    },
+    "schedule-s750000-nominal-occluders-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "ba46c09eadb851d91f80db8910517eec4c3f00247cf0de04e8898cb6aef7d210"
+    },
+    "schedule-s750000-nominal-occluders-stereo-21801949/launch.json": {
+      "bytes": 4687,
+      "sha256": "9981b449ea05ef399b23c617aa845bf4573b3f18c9aba29a7756ad9899a0d350"
+    },
+    "schedule-s750000-nominal-occluders-stereo-21801949/scratch-retirement.json": {
+      "bytes": 349,
+      "sha256": "87b050a570ae96f0c37267b2d447520ec151fc1104fa089d42d4971b19df38e1"
+    },
+    "schedule-s750000-nominal-straight-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36879,
+      "sha256": "a2541f64d27023b910de4d63bf184e05170b5c1d3d583f8665282218e840e441"
+    },
+    "schedule-s750000-nominal-straight-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2070,
+      "sha256": "2344b71cd21f3f04d081b9ac0147ba3e2caeffb763b976455658ec7a08900fd0"
+    },
+    "schedule-s750000-nominal-straight-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "27f33f2204b39997163322bb908e6968ca066655cc0c9c600489c63d2e114bf9"
+    },
+    "schedule-s750000-nominal-straight-lidar_inertial-21801949/launch.json": {
+      "bytes": 4841,
+      "sha256": "2ca5351c93a1e08c7e99775348b2f0e8c3aadad4e50458b783f8de853058dd71"
+    },
+    "schedule-s750000-nominal-straight-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 356,
+      "sha256": "4dea33a4f52a9a5f18fd7d817b222b552c09ed2956bb266e5368cc6a835678ce"
+    },
+    "schedule-s750000-nominal-straight-stereo-21801949/campaign_result.json": {
+      "bytes": 36832,
+      "sha256": "de93d2d6ce827526833051a2f4e918431f26a0ff4c2818a50317b33a96b61dbd"
+    },
+    "schedule-s750000-nominal-straight-stereo-21801949/collector-inputs.json": {
+      "bytes": 1988,
+      "sha256": "08ec343ab6f79a20f02b14556b5f4069579f000aeeeed4ec5466692c6ea916e6"
+    },
+    "schedule-s750000-nominal-straight-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "b6172ed46a5927d83bc2cc4de2f99799118c3f25f4d7207a98bc00a2273abc8d"
+    },
+    "schedule-s750000-nominal-straight-stereo-21801949/launch.json": {
+      "bytes": 4665,
+      "sha256": "0e70cb2defe5d3d8f7842a1bf5874507507b2683e63a8607866065c94a4e70b1"
+    },
+    "schedule-s750000-nominal-straight-stereo-21801949/scratch-retirement.json": {
+      "bytes": 348,
+      "sha256": "5c3fbe63d9bd46f5d28c790cf532c10a6d9e94c58b8fb2ca14a05fa40f8eeb25"
+    },
+    "schedule-s750001-camera_10hz-occluders-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36909,
+      "sha256": "3ec7bf46f7061077c0981d541072e607a088f5f2dc3ea494b77f9ecf6c2f5537"
+    },
+    "schedule-s750001-camera_10hz-occluders-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2118,
+      "sha256": "8f1f615306b9013d24d97704f645006f0a3846e9b6c51709b08a90462b63b251"
+    },
+    "schedule-s750001-camera_10hz-occluders-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "d27dd15b0ea104ca239fbd399e4093eeaff6530389a0343a068ba6f1878c1329"
+    },
+    "schedule-s750001-camera_10hz-occluders-lidar_inertial-21801949/launch.json": {
+      "bytes": 4951,
+      "sha256": "c946a2e12b7471f89cfdd4da12bebe429170f7f40692c4b7f64e61467d27bf83"
+    },
+    "schedule-s750001-camera_10hz-occluders-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 361,
+      "sha256": "e6d9575fb99e07644c2fbc595e7870dc3a6dff1ec4bf76c6385245e0b04db788"
+    },
+    "schedule-s750001-camera_10hz-occluders-stereo-21801949/campaign_result.json": {
+      "bytes": 36862,
+      "sha256": "fc65459bbbfeb9fc87786d6827962b0012bb3507fd03ddf78b185bb1ce70db9d"
+    },
+    "schedule-s750001-camera_10hz-occluders-stereo-21801949/collector-inputs.json": {
+      "bytes": 2038,
+      "sha256": "057e7851a95dbb58f012dffda064c66119f314571aa799af8e6a57d0517c4430"
+    },
+    "schedule-s750001-camera_10hz-occluders-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "a6264d7a5c1a048f033527eb3661211dedb4fa4787e5f4ac492780e010415ef5"
+    },
+    "schedule-s750001-camera_10hz-occluders-stereo-21801949/launch.json": {
+      "bytes": 4775,
+      "sha256": "19fa192f687da7e3af445196076e98be8a26a705f1951ea0a0d6799480458fd1"
+    },
+    "schedule-s750001-camera_10hz-occluders-stereo-21801949/scratch-retirement.json": {
+      "bytes": 353,
+      "sha256": "76355f753a4a0c014833a080507caa1b7057ab278f27e37cc2fae807eb4b212b"
+    },
+    "schedule-s750001-camera_10hz-straight-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36904,
+      "sha256": "dec810e1369b782b8dab40db3fd9a5281eab8acd33e1cc73dd101bc93e4a1203"
+    },
+    "schedule-s750001-camera_10hz-straight-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2108,
+      "sha256": "4fb0a161996bfcfa70be131d373b15919faeea02b0acb2ccca1742fd3cf8e94d"
+    },
+    "schedule-s750001-camera_10hz-straight-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "55ea2514b241d52bcbf593d588d142ba8aea73d1d9045430512cf2eecb29ca3a"
+    },
+    "schedule-s750001-camera_10hz-straight-lidar_inertial-21801949/launch.json": {
+      "bytes": 4929,
+      "sha256": "9a875a734b06b0b569a6b5a1e60ff8bbf812255e2efb51b9dba785496be44cc1"
+    },
+    "schedule-s750001-camera_10hz-straight-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 360,
+      "sha256": "573b30fa54bab14a9d9670d13680447b3cb170c07dee23e2e6ce4869b21f11c8"
+    },
+    "schedule-s750001-camera_10hz-straight-stereo-21801949/campaign_result.json": {
+      "bytes": 36856,
+      "sha256": "8f314fca418d5236c0c91e97e712600e2249b7083041914597d0f93903d9315d"
+    },
+    "schedule-s750001-camera_10hz-straight-stereo-21801949/collector-inputs.json": {
+      "bytes": 2028,
+      "sha256": "7879ce7e8c33d21349a7d9c066b7770038281546e002b4222534b7f5a1f58d14"
+    },
+    "schedule-s750001-camera_10hz-straight-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "8fe3b3d8d29940be993c807d01ab1c36c45133021eed40988d5851c0a4073950"
+    },
+    "schedule-s750001-camera_10hz-straight-stereo-21801949/launch.json": {
+      "bytes": 4753,
+      "sha256": "797f6231064727c8568606478d50a9cea964801fa21c03cc5176c9f50709ae0a"
+    },
+    "schedule-s750001-camera_10hz-straight-stereo-21801949/scratch-retirement.json": {
+      "bytes": 352,
+      "sha256": "eb25459e3634f30e65b7d20a03f9ac89ea06640c4f3ba735fae4c294fbf52b25"
+    },
+    "schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36964,
+      "sha256": "a534f3ad022fa04c19f4fe3e6029f1ccf0c39536bff6502207aede559ae5e320"
+    },
+    "schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2207,
+      "sha256": "3cf2730cfce2535988e0e3e0fb995e8cc19d6268d1bc311eaf1f52a949673cd7"
+    },
+    "schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "4997f513926aed461579adc11553067ca294e135893dd6e5d92f047c709efadb"
+    },
+    "schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial-21801949/launch.json": {
+      "bytes": 5149,
+      "sha256": "45485fc66eec1f7700ee717a4e7b46039671c27ed0a01536e48f4d756378dee9"
+    },
+    "schedule-s750001-causal_40ms_exposure-occluders-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 370,
+      "sha256": "5ee6fdf8a29d21b6e57599d75f44cec1f559a0435009a9363dcf11543b9e974f"
+    },
+    "schedule-s750001-causal_40ms_exposure-occluders-stereo-21801949/campaign_result.json": {
+      "bytes": 36916,
+      "sha256": "20651bfb203078069a8e29cd2404f3f5973702020a53477411d0eb361bdd5570"
+    },
+    "schedule-s750001-causal_40ms_exposure-occluders-stereo-21801949/collector-inputs.json": {
+      "bytes": 2127,
+      "sha256": "c21056deea1ff6d7d1617f366ff821e9a88d68b5d8266afe51228d2d373ad76c"
+    },
+    "schedule-s750001-causal_40ms_exposure-occluders-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "6b2ef5a69cec984e052dc58a171cd097c0e1b91aed64359e91a0ca16a3fa8ca0"
+    },
+    "schedule-s750001-causal_40ms_exposure-occluders-stereo-21801949/launch.json": {
+      "bytes": 4973,
+      "sha256": "519018a91226c08f1a28445fd39f38508c244b74e42d9b20829e0b014c2d6218"
+    },
+    "schedule-s750001-causal_40ms_exposure-occluders-stereo-21801949/scratch-retirement.json": {
+      "bytes": 362,
+      "sha256": "08b381aaa84f4b08af5d4d11c0330c7c78cf36f55303474546dbadbe149057ec"
+    },
+    "schedule-s750001-causal_40ms_exposure-straight-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36958,
+      "sha256": "d40764aaac6e52f4f157b4912979c035046390ad48ba522588c2414071024ab1"
+    },
+    "schedule-s750001-causal_40ms_exposure-straight-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2197,
+      "sha256": "06199a6fb5414dbe14196c5927c43cacaa7853aa83ea21c4fbbfd8d8ffdebd9d"
+    },
+    "schedule-s750001-causal_40ms_exposure-straight-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "4805d601a94d517e12cf8302389df286c82cd3d25df30e88ae84b1c8ddded700"
+    },
+    "schedule-s750001-causal_40ms_exposure-straight-lidar_inertial-21801949/launch.json": {
+      "bytes": 5127,
+      "sha256": "6868ff3b84bcc190a00cecfc0cbc374f122ed3b3f1bb15f546928869f32fda7b"
+    },
+    "schedule-s750001-causal_40ms_exposure-straight-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 369,
+      "sha256": "c656e43ee43918e958b298dc8ce66aebe6367129a0c5c41878a42fa99f727921"
+    },
+    "schedule-s750001-causal_40ms_exposure-straight-stereo-21801949/campaign_result.json": {
+      "bytes": 36910,
+      "sha256": "921b7f7ac89f493eded4eef7edaed057aca4c9ea8b45a56d46cba744554ba842"
+    },
+    "schedule-s750001-causal_40ms_exposure-straight-stereo-21801949/collector-inputs.json": {
+      "bytes": 2117,
+      "sha256": "bf04ab94821ec7c04423db10854fcfa707371a68db3dcbb46880756f0daa2faf"
+    },
+    "schedule-s750001-causal_40ms_exposure-straight-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "35e4a42cc79acb6eea89993ef9b6b758a6278dc5d9a9aa68c7160ae4432b180c"
+    },
+    "schedule-s750001-causal_40ms_exposure-straight-stereo-21801949/launch.json": {
+      "bytes": 4951,
+      "sha256": "7263475a34685d346e7268ce083bce2fd03277a94da7a08e14a513ed152923f0"
+    },
+    "schedule-s750001-causal_40ms_exposure-straight-stereo-21801949/scratch-retirement.json": {
+      "bytes": 361,
+      "sha256": "3e2d9832f3dd60e9de46f49d1d5192a2c6d2576a53ca9a1391e32d652ec8fb5a"
+    },
+    "schedule-s750001-nominal-occluders-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36885,
+      "sha256": "d2b4033766b9825d03bcdf275ea6175d05f3db974201f716af387e24451adcf2"
+    },
+    "schedule-s750001-nominal-occluders-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2080,
+      "sha256": "303498c92e09e20890a5f580251ba98e48ac41406008957b0ff13701aee77aee"
+    },
+    "schedule-s750001-nominal-occluders-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "3f5956cf6923703b5909073ff3fa9a8ce5f4ec6211b434bb2691010aae6bc74b"
+    },
+    "schedule-s750001-nominal-occluders-lidar_inertial-21801949/launch.json": {
+      "bytes": 4863,
+      "sha256": "5ef0655f05a0a243a05680cf1c153704ea1f7ed3982b7b93d3a9d668a1843258"
+    },
+    "schedule-s750001-nominal-occluders-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 357,
+      "sha256": "cff396213db58d4d8ba2adca950f549052225aa5b6ce569fc0871314b760afb2"
+    },
+    "schedule-s750001-nominal-occluders-stereo-21801949/campaign_result.json": {
+      "bytes": 36838,
+      "sha256": "e42eaea3eeda6700ac4766ac0a085b613afdc591aca31ad7e34ce1268c778821"
+    },
+    "schedule-s750001-nominal-occluders-stereo-21801949/collector-inputs.json": {
+      "bytes": 1999,
+      "sha256": "3e36212c05bcbdcb7655668a3c118abcb8644d195d9231358bc68326ed08bb7c"
+    },
+    "schedule-s750001-nominal-occluders-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "ec0d8d86f28c6ca94f7fe3e3d2cccf96f52e47c21c784c10e1bb568e48bd6a22"
+    },
+    "schedule-s750001-nominal-occluders-stereo-21801949/launch.json": {
+      "bytes": 4687,
+      "sha256": "70aceab02c19227483c01adfa13670c9998e74bef1da4ca68eda65debb62374e"
+    },
+    "schedule-s750001-nominal-occluders-stereo-21801949/scratch-retirement.json": {
+      "bytes": 349,
+      "sha256": "35f0987dd31a7bc19d99e0df9a0fc5d46c8f6c839d0d900343e13185e0cd799e"
+    },
+    "schedule-s750001-nominal-straight-lidar_inertial-21801949/campaign_result.json": {
+      "bytes": 36879,
+      "sha256": "a16856771a0e62b003830f57ad168478ea71c100cad9e0fed54bc77676da13dd"
+    },
+    "schedule-s750001-nominal-straight-lidar_inertial-21801949/collector-inputs.json": {
+      "bytes": 2070,
+      "sha256": "a42a928a97c2c7564d79dd766ff3476a5c6ffc61e93f982d0c07a139d86fc06f"
+    },
+    "schedule-s750001-nominal-straight-lidar_inertial-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "e05eb51cff604105fb5bb68fee0b0c3b9a9cb1a2273cfdabde2ab21603063f73"
+    },
+    "schedule-s750001-nominal-straight-lidar_inertial-21801949/launch.json": {
+      "bytes": 4841,
+      "sha256": "cb715a2a567d0eee0714ccab320e9d08f8e3424dca496103f2d034362cce435e"
+    },
+    "schedule-s750001-nominal-straight-lidar_inertial-21801949/scratch-retirement.json": {
+      "bytes": 356,
+      "sha256": "36483f7e65d47a2df53e88f15e2cf0b4b90d6edccdea057ab73ac6caa27a6023"
+    },
+    "schedule-s750001-nominal-straight-stereo-21801949/campaign_result.json": {
+      "bytes": 36832,
+      "sha256": "b15fc9650974b8e0d89da4e3cd0050865a8d4026eab2dba0b0a674c39458af42"
+    },
+    "schedule-s750001-nominal-straight-stereo-21801949/collector-inputs.json": {
+      "bytes": 1988,
+      "sha256": "ee21f232168da9dbcccd0e5739f17c44ba1011770a66a676172a13c521b30ae2"
+    },
+    "schedule-s750001-nominal-straight-stereo-21801949/completion.json": {
+      "bytes": 1004,
+      "sha256": "4507a39a4bce9595d4bf4c016e77117eba6acd08a2ac5e9bf57e977df392592e"
+    },
+    "schedule-s750001-nominal-straight-stereo-21801949/launch.json": {
+      "bytes": 4665,
+      "sha256": "b078ab23d236fff788f4ef8f0b9f098c1bbca48ada9f852e0985bae4b5a2f00c"
+    },
+    "schedule-s750001-nominal-straight-stereo-21801949/scratch-retirement.json": {
+      "bytes": 348,
+      "sha256": "778945f9a74e52ccbeab5c1230dd06d3f44b50ee023dc86268648a41809bc3d4"
+    },
+    "submission.json": {
+      "bytes": 1425,
+      "sha256": "3e0c4d3bec99e2b2e5582dd19706b52f299b16079687ff3585289c74f391ffd5"
+    }
+  },
+  "raw_input_bytes": 270703420,
+  "schema": "bhl-processing-schedule-compact-files-v1",
+  "source_archive_sha256": "46eb5d49361cb64f4f18dc8290a7bcb002c21b01aa035e3fe8c8e049949a0dda"
+}

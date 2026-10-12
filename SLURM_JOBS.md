@@ -4874,3 +4874,32 @@ LiDAR, locomotion or navigation. No original dataset imagery or CSV is published
 Independent trace verification/report job **21801837** completed with exit 0.
 Both scored arms retained one continuous map and zero tracking-loss transitions.
 [Full results, measured latency, provenance limits and figure](docs/EUROC_NATIVE_REPLAY_RESULTS_2026-10-12.md).
+
+## Processing-schedule comparison — completed October 12, 2026
+
+The predeclared 48-cell development cohort completed without scientific retries,
+after the 40-pair input profile and all 12 fresh smoke cells passed. All four
+pipeline/estimator nominal gates passed. Source commit `152ccf4`, archive SHA256
+`46eb5d49361cb64f4f18dc8290a7bcb002c21b01aa035e3fe8c8e049949a0dda` remained frozen.
+
+| Job | Purpose | Terminal state / elapsed |
+| --- | --- | --- |
+| 21801920 | Allocated source validation: 306 tests, 11 subtests | COMPLETED, 0:0 / 50s |
+| 21801949 | One GPU: profile, smoke, 24 matched pairs, strict collector | COMPLETED, 0:0 / 1h13m45s |
+| 21802046 | Independent numerical verification and report/figures | COMPLETED, 0:0 / 14s |
+| 21802129 | Incremental immutable evidence publication | COMPLETED, 0:0 / 1h01m23s |
+| 21802627 | Independent archive and fresh remote-asset digest audit | COMPLETED, 0:0 / 57s |
+
+LiDAR–IMU clean goals: **0/12 reference → 11/12 candidate**; stereo: **0/12 in
+both schedules**. Stereo mean stale fractions changed **99.11% → 10.83%**;
+LiDAR–IMU **86.67% → 14.16%**. All 48 episodes had zero falls/contacts and full
+horizons. These are descriptive, two-seed simulation results, with modeled
+processing-stage separation. Order alternated globally but was fixed within
+each estimator; cache/order effects remain confounded. No physical timing or
+general stereo-navigation improvement is claimed.
+
+Publication completed with 30 verified assets. The independent audit rehashed
+27 original stage archives, checked 431 compact members and compared every
+remote asset's identity/digest/size against fresh GitHub API responses.
+[Reviewed results](docs/PROCESSING_SCHEDULE_RESULTS_2026-10-12.md),
+[all completion and publication receipts](results/processing-schedule-20261012/).
