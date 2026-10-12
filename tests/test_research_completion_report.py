@@ -99,6 +99,111 @@ def test_native_invalid_cohort_rejected(mutation):
         reporter.validate_native(summary, rows, protocol)
 
 
+def raw_binding_fixture(tmp_path, monkeypatch):
+    monkeypatch.setattr(reporter, "SHARED_ROOT", tmp_path)
+    summary, rows, protocol = native_fixture()
+    bindings, sources, evidence = [], [], {}
+    for name, result, compact_sha in rows:
+        # This reproduces the frozen runner: archive unsorted raw JSON, then
+        # retain a compact receipt with sorted keys and identical values.
+        raw_path = tmp_path / "raw" / (name + ".json")
+        raw_path.parent.mkdir(exist_ok=True)
+        raw_path.write_text(json.dumps(result, indent=2) + "\n")
+        raw_sha = reporter.digest(raw_path)
+        assert raw_sha != compact_sha
+        bindings.append({"name": name, "raw_result_path": str(raw_path), "raw_result_sha256": raw_sha,
+                         "compact_result_sha256": compact_sha})
+        sources.append({"path": "/collector/raw/" + name + "/campaign_result.json", "sha256": raw_sha})
+        evidence["native/shards/" + name + "/campaign_result.json"] = encoded(result)
+    summary["source_results"] = sources
+    evidence["native/scientific-summary.json"] = encoded(summary)
+    manifest = {"schema": "bhl-native-result-serialization-bindings-v1", "controller_plan_sha256": "c" * 64,
+                "scientific_summary_sha256": reporter.digest_bytes(encoded(summary)), "shards": bindings}
+    path = write(tmp_path / "bindings.json", manifest)
+    spec = {"plan_sha256": "c" * 64, "raw_result_bindings": {"path": str(path), "sha256": reporter.digest(path)}}
+    return spec, summary, rows, protocol, evidence, manifest
+
+
+def test_native_raw_serialization_bridge_keeps_both_byte_identities(tmp_path, monkeypatch):
+    spec, summary, rows, protocol, evidence, manifest = raw_binding_fixture(tmp_path, monkeypatch)
+    with pytest.raises(ValueError, match="bind every shard"):
+        reporter.validate_native(summary, rows, protocol)
+    rebound = reporter.bind_native_raw_results(spec, summary, rows, evidence)
+    assert reporter.validate_native(summary, rebound, protocol)["measured"] == 200
+    assert all(before[1] == after[1] and before[2] != after[2] for before, after in zip(rows, rebound))
+    assert len([key for key in evidence if key.startswith("native/raw-results/")]) == 20
+    for row in manifest["shards"]:
+        assert evidence["native/raw-results/" + row["name"] + "/campaign_result.json"] == Path(row["raw_result_path"]).read_bytes()
+    assert evidence["native/raw-result-bindings.json"] == Path(spec["raw_result_bindings"]["path"]).read_bytes()
+
+
+@pytest.mark.parametrize("mutation", ["missing", "duplicate", "extra", "wrong-plan", "wrong-summary",
+                                      "wrong-compact", "wrong-raw", "missing-file", "changed-file",
+                                      "wrong-source", "duplicate-source", "wrong-source-name", "unpinned-manifest"])
+def test_native_raw_binding_rejects_incomplete_or_changed_provenance(tmp_path, monkeypatch, mutation):
+    spec, summary, rows, protocol, evidence, manifest = raw_binding_fixture(tmp_path, monkeypatch)
+    if mutation == "missing":
+        manifest["shards"].pop()
+    elif mutation == "duplicate":
+        manifest["shards"][1] = manifest["shards"][0]
+    elif mutation == "extra":
+        manifest["shards"].append(dict(manifest["shards"][0], name="extra"))
+    elif mutation == "wrong-plan":
+        manifest["controller_plan_sha256"] = "d" * 64
+    elif mutation == "wrong-summary":
+        manifest["scientific_summary_sha256"] = "d" * 64
+    elif mutation == "wrong-compact":
+        manifest["shards"][0]["compact_result_sha256"] = "d" * 64
+    elif mutation == "wrong-raw":
+        manifest["shards"][0]["raw_result_sha256"] = "d" * 64
+    elif mutation == "missing-file":
+        Path(manifest["shards"][0]["raw_result_path"]).unlink()
+    elif mutation == "changed-file":
+        Path(manifest["shards"][0]["raw_result_path"]).write_text("{}")
+    elif mutation == "wrong-source":
+        summary["source_results"][0]["sha256"] = "d" * 64
+    elif mutation == "duplicate-source":
+        summary["source_results"][1] = summary["source_results"][0]
+    elif mutation == "wrong-source-name":
+        summary["source_results"][0]["path"] = "/other/name.json"
+    else:
+        manifest["schema"] = "changed"
+    path = write(Path(spec["raw_result_bindings"]["path"]), manifest)
+    if mutation != "unpinned-manifest":
+        spec["raw_result_bindings"]["sha256"] = reporter.digest(path)
+    with pytest.raises(ValueError):
+        reporter.bind_native_raw_results(spec, summary, rows, evidence)
+
+
+@pytest.mark.parametrize("mutation", ["outcome", "boolean-as-integer", "integer-as-float", "duplicate-key", "nonfinite"])
+def test_native_raw_binding_never_accepts_semantic_change_even_with_rehashed_manifest(tmp_path, monkeypatch, mutation):
+    spec, summary, rows, protocol, evidence, manifest = raw_binding_fixture(tmp_path, monkeypatch)
+    pin = manifest["shards"][0]
+    raw_path = Path(pin["raw_result_path"])
+    raw = json.loads(raw_path.read_text())
+    if mutation == "outcome":
+        raw["episodes"] = 9
+    elif mutation == "boolean-as-integer":
+        raw["arm_development_ready"]["stereo"] = 1
+    elif mutation == "integer-as-float":
+        raw["episodes"] = 10.0
+    if mutation == "duplicate-key":
+        raw_path.write_text(raw_path.read_text().replace('"status": "PASS"', '"status": "FAIL", "status": "PASS"'))
+    elif mutation == "nonfinite":
+        raw["episodes"] = float("nan")
+        raw_path.write_text(json.dumps(raw))
+    else:
+        raw_path.write_text(json.dumps(raw))
+    pin["raw_result_sha256"] = reporter.digest(raw_path)
+    summary["source_results"][0]["sha256"] = pin["raw_result_sha256"]
+    evidence["native/scientific-summary.json"] = encoded(summary)
+    manifest["scientific_summary_sha256"] = reporter.digest_bytes(encoded(summary))
+    path = write(Path(spec["raw_result_bindings"]["path"]), manifest)
+    spec["raw_result_bindings"]["sha256"] = reporter.digest(path)
+    with pytest.raises(ValueError, match="semantically|duplicate JSON|nonfinite JSON"):
+        reporter.bind_native_raw_results(spec, summary, rows, evidence)
+
+
 def test_terrain_collection_pass_keeps_negative_science():
     result = reporter.validate_terrain(*terrain_fixture())
     assert result["measured"] == 480

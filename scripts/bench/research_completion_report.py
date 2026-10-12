@@ -276,6 +276,74 @@ def native_id(cell):
     return tuple(cell[key] for key in ("case", "seed", "condition", "arm"))
 
 
+def strict_json(data):
+    """Require unambiguous JSON before comparing two result serializations."""
+    def unique_object(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError("duplicate JSON key in result binding")
+            value[key] = item
+        return value
+
+    def finite_constant(value):
+        raise ValueError("nonfinite JSON constant in result binding: " + value)
+
+    return json.loads(data, object_pairs_hook=unique_object, parse_constant=finite_constant)
+
+
+def bind_native_raw_results(spec, summary, rows, evidence):
+    """Reconcile only serialization, retaining both original byte identities.
+
+    The frozen runner archives the raw result before writing a sorted compact
+    receipt. The collector hashes raw bytes, whereas completion pins the compact
+    bytes. A separately pinned manifest may bridge these two representations;
+    every scientific value and every declared shard must still agree exactly.
+    """
+    binding = spec["raw_result_bindings"]
+    path = scoped(binding["path"])
+    data = bounded_bytes(path)
+    if digest_bytes(data) != check_hash(binding["sha256"]):
+        raise ValueError("native raw result binding manifest changed")
+    manifest = strict_json(data)
+    if (manifest.get("schema") != "bhl-native-result-serialization-bindings-v1"
+            or manifest.get("controller_plan_sha256") != spec["plan_sha256"]
+            or manifest.get("scientific_summary_sha256") != digest_bytes(evidence["native/scientific-summary.json"])):
+        raise ValueError("native raw result binding belongs to different collection")
+    names = [row[0] for row in rows]
+    bindings = manifest.get("shards", [])
+    bound_names = [row["name"] for row in bindings]
+    if (len(names) != 20 or len(set(names)) != 20 or len(bound_names) != 20
+            or len(set(bound_names)) != 20 or set(bound_names) != set(names)):
+        raise ValueError("native raw result bindings require exactly every unique shard")
+    sources = summary["source_results"]
+    source_names = [Path(row["path"]).parent.name for row in sources]
+    if (len(sources) != 20 or len(set(source_names)) != 20 or set(source_names) != set(names)
+            or any(Path(row["path"]).name != "campaign_result.json" for row in sources)):
+        raise ValueError("native summary raw source identities differ")
+    source_hashes = {name: row["sha256"] for name, row in zip(source_names, sources)}
+    by_name = {row["name"]: row for row in bindings}
+    evidence["native/raw-result-bindings.json"] = data
+    rebound = []
+    for name, result, compact_sha in rows:
+        pin = by_name[name]
+        raw_sha = check_hash(pin["raw_result_sha256"])
+        compact = evidence["native/shards/" + name + "/campaign_result.json"]
+        raw = bounded_bytes(scoped(pin["raw_result_path"]))
+        if (pin["compact_result_sha256"] != compact_sha or digest_bytes(compact) != compact_sha
+                or digest_bytes(raw) != raw_sha or source_hashes[name] != raw_sha):
+            raise ValueError("native raw and compact result byte bindings disagree")
+        raw_result, compact_result = strict_json(raw), strict_json(compact)
+        # JSON equality alone treats true as 1 and 1.0 as 1. Canonical encoding
+        # additionally preserves these types; ordering and whitespace may vary.
+        canonical = lambda value: json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+        if canonical(raw_result) != canonical(compact_result) or canonical(compact_result) != canonical(result):
+            raise ValueError("native raw result differs semantically from completed result")
+        evidence["native/raw-results/" + name + "/campaign_result.json"] = raw
+        rebound.append((name, result, raw_sha))
+    return rebound
+
+
 def validate_native(summary, rows, protocol):
     settings = []
     for job in protocol["jobs"]:
@@ -416,6 +484,8 @@ def inspect_controller(kind, spec, evidence, work, gh, environment, downloader=d
         for _, shard, _ in rows:
             if any(shard.get(field) != smoke.get(field) for field in ("source_sha256", "input_sha256")):
                 raise ValueError("native shard scientific identity differs from its qualified smoke")
+        if "raw_result_bindings" in spec:
+            rows = bind_native_raw_results(spec, summary, rows, evidence)
     counts = validate_native(summary, rows, protocol) if kind == "native" else validate_terrain(summary, rows, protocol)
     if kind == "terrain" and summary.get("protocol_sha256") != plan["protocol_sha256"]:
         raise ValueError("terrain summary protocol differs")
