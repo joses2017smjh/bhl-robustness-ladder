@@ -1,0 +1,90 @@
+{
+ "kind": "walk",
+ "seed": 10,
+ "display_only": true,
+ "host": "cn-gpu5.hpc.engr.oregonstate.edu",
+ "slurm_job": "21796382",
+ "sides": [
+  {
+   "title": "1c seed 7 (selected controller)",
+   "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1c/training/waiter-wbc1c-s7.deploy.yaml",
+   "scored_json": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1c/qualify/waiter-wbc1c-s7__v2x.json",
+   "scored": {
+    "name": "walk_s10",
+    "seed": 10,
+    "warm_s": 1.0,
+    "cmd": [
+     0.35,
+     0.0,
+     0.0
+    ],
+    "fell_at_s": null,
+    "yaw_deg": 8.6,
+    "displacement_m": 1.971,
+    "seconds": 6.0,
+    "ok": true
+   },
+   "clip": {
+    "cmd": [
+     0.35,
+     0.0,
+     0.0
+    ],
+    "fell_at_s": null,
+    "yaw_deg": 8.6,
+    "displacement_m": 1.971,
+    "seconds": 6.0
+   },
+   "matches_scored_run": true
+  },
+  {
+   "title": "1g seed 18 (bounded standing rewards)",
+   "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1g/training/waiter-wbc1g-s18.deploy.yaml",
+   "scored_json": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1g/qualify/waiter-wbc1g-s18__v2x.json",
+   "scored": {
+    "name": "walk_s10",
+    "seed": 10,
+    "warm_s": 1.0,
+    "cmd": [
+     0.35,
+     0.0,
+     0.0
+    ],
+    "fell_at_s": null,
+    "yaw_deg": -8.1,
+    "displacement_m": 0.322,
+    "seconds": 6.0,
+    "ok": true
+   },
+   "clip": {
+    "cmd": [
+     0.35,
+     0.0,
+     0.0
+    ],
+    "fell_at_s": null,
+    "yaw_deg": -8.1,
+    "displacement_m": 0.322,
+    "seconds": 6.0
+   },
+   "matches_scored_run": true
+  }
+ ],
+ "mp4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run2/waiter-1g-walk.mp4",
+ "codec": "libx264",
+ "fps": 12.5,
+ "frames": 113,
+ "gif": {
+  "gif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run2/waiter-1g-walk.gif",
+  "bytes": 1439708,
+  "mb": 1.44,
+  "fps": 12,
+  "width": 820,
+  "ffmpeg": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
+  "max_colors": 128,
+  "speed": 1.0,
+  "badge": null,
+  "stats_mode": "full",
+  "within_budget": true
+ }
+}
