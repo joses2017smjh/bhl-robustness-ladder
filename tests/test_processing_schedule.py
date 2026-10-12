@@ -6,7 +6,7 @@ import pytest
 
 from bhl_robust.research.navigation_sensor_controls import AvailableImu
 from bhl_robust.research.processing_schedule import (
-    LatestJoinedQueue, compare_replay_inputs, decoded_frame_identity, service_timing,
+    LatestJoinedQueue, compare_replay_inputs, decoded_frame_identity, service_timing, replay_transport_queue,
 )
 
 
@@ -204,3 +204,54 @@ def test_empty_profiles_cannot_qualify():
 def test_decoded_identity_rejects_unmeasured_or_invalid_pixel_shapes(pixels):
     with pytest.raises(ValueError, match="decoded pixels"):
         decoded_frame_identity(pixels, pixels)
+
+
+def test_recorded_queue_preserves_arrival_step_hold_and_all_offered_identities():
+    rows = [{"timestamp_s": i * .04} for i in range(5)]
+    result = replay_transport_queue(rows, [0.] * 5)
+    assert result["offered_input_indices"] == [0, 1, 2, 3, 4]
+    assert result["selected_input_indices"] == [0, 2, 4]
+    assert result["superseded_input_indices"] == [1, 3]
+    assert result["delivered_input_indices"] == [0, 2, 4]
+    assert result["pending"] == result["in_flight"] == 0
+    assert result["conservation_pass"] and result["native_service_seconds"] == 0.
+
+
+def test_recorded_queue_keeps_inflight_horizon_response_and_legacy_accumulation():
+    stamps, costs = [i * .04 for i in range(5)], [.081] * 5
+    selected = replay_transport_queue(stamps, costs)
+    legacy = replay_transport_queue(stamps, costs, cumulative=True)
+    for result in (selected, legacy):
+        assert result["selected_input_indices"] == [0, 4]
+        assert result["superseded_input_indices"] == [1, 2, 3]
+        assert result["delivered_input_indices"] == [0]
+        assert result["in_flight_input_indices"] == [4]
+        assert result["conservation_pass"]
+        assert result["services"][-1]["delivered_within_horizon"] is False
+    assert selected["charged_service_total_s"] == pytest.approx(.162)
+    assert selected["unselected_profiled_service_s"] == pytest.approx(.243)
+    assert legacy["charged_service_total_s"] == pytest.approx(.405)
+    assert legacy["services"][-1]["preprocessing_s"] == pytest.approx(.324)
+    assert legacy["unbilled_cumulative_s"] == 0
+
+
+def test_recorded_queue_never_silently_drains_waiting_frames_past_horizon():
+    result = replay_transport_queue([1.01, 1.05], [10., 10.])
+    assert result["start_s"] == pytest.approx(1.)
+    assert result["services"][0]["request_s"] == pytest.approx(1.04)
+    assert result["services"][0]["queue_residence_s"] == pytest.approx(.03)
+    assert result["horizon_s"] == pytest.approx(1.12)
+    assert result["pending_input_indices"] == [1]
+    assert result["in_flight_input_indices"] == [0]
+    assert result["delivered"] == 0 and result["conservation_pass"]
+    assert result["available_capture_age_p95_s"] is None
+
+
+@pytest.mark.parametrize("rows,costs,kwargs", [
+    ([], [], {}), ([1.], [], {}), ([1., .9], [0., 0.], {}),
+    ([1.], [-.1], {}), ([1.], [0.], {"policy_dt": 0.}),
+    ([1.], [0.], {"cumulative": 1}), ([0., 10000.], [0., 0.], {}),
+])
+def test_recorded_queue_rejects_unordered_unbounded_or_invalid_profiles(rows, costs, kwargs):
+    with pytest.raises(ValueError):
+        replay_transport_queue(rows, costs, **kwargs)

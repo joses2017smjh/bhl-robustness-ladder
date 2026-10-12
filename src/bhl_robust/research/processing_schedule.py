@@ -211,3 +211,89 @@ def compare_replay_inputs(first, second):
     encoded = json.dumps(normalized[0], sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
     return {"status": "PASS", "frames": len(normalized[0]), "ordered_inputs_sha256": hashlib.sha256(encoded).hexdigest(),
         "scope": "identical offered decoded frames and timestamps; selected subsets may differ"}
+
+
+def replay_transport_queue(rows, service_seconds, policy_dt=.04, *, cumulative=False):
+    """Replay ordered frame arrivals using measured per-frame transport costs.
+
+    Native service is explicitly zero: this checks transport queue behavior,
+    not native inference speed or navigation. ``cumulative=True`` models the
+    legacy charge of every callback since the previous request, including
+    superseded frames. Otherwise only selected-frame transport is charged.
+    There is one waiting frame and one active response. Delivery occupies its
+    policy step, preserving the campaign's no-submission-on-arrival rule.
+    The bounded horizon is one policy step after the last offered capture;
+    unfinished responses/queued frames remain visible, never silently drained.
+    """
+    rows, costs = list(rows), list(service_seconds)
+    dt = _seconds(policy_dt, "policy_dt")
+    if dt <= 0 or type(cumulative) is not bool or not rows or len(rows) != len(costs):
+        raise ValueError("nonempty matched inputs, positive policy period and boolean cumulative mode required")
+    stamps = [_seconds(row["timestamp_s"] if isinstance(row, dict) else row, "timestamp_s") for row in rows]
+    costs = [_seconds(value, "transport service") for value in costs]
+    if not math.isfinite(sum(costs)):
+        raise ValueError("total profiled transport service must remain finite")
+    if any(a >= b for a, b in zip(stamps, stamps[1:])):
+        raise ValueError("transport replay must preserve strictly ordered input timestamps")
+    ratios = [stamps[0] / dt, stamps[-1] / dt]
+    if not all(math.isfinite(value) for value in ratios):
+        raise ValueError("transport replay timestamps exceed finite policy clock")
+    first_step = int(math.floor(ratios[0] + 1e-9))
+    last_step = int(math.ceil(ratios[1] - 1e-9)) + 1
+    if last_step - first_step > 100000:
+        raise ValueError("transport replay exceeds bounded policy-step horizon")
+    offered, superseded, services, deliveries = [], [], [], []
+    cursor, waiting, active, available = 0, None, None, None
+    cumulative_cost = 0.
+    ages = []
+    for step in range(first_step, last_step + 1):
+        now = step * dt
+        while cursor < len(stamps) and stamps[cursor] <= now + 1e-9:
+            if waiting is not None:
+                superseded.append(waiting)
+            waiting = cursor
+            offered.append(cursor)
+            cumulative_cost += costs[cursor]
+            cursor += 1
+        arrived = active is not None and step >= active["arrival_step"]
+        if arrived:
+            deliveries.append(active["input_index"])
+            available = stamps[active["input_index"]]
+            active = None
+        if available is not None:
+            ages.append(now - available)
+        if active is not None or arrived or waiting is None:
+            continue
+        index, waiting = waiting, None
+        service = cumulative_cost if cumulative else costs[index]
+        cumulative_cost = 0.
+        timing = service_timing(request_s=now, capture_s=stamps[index],
+            preprocessing_s=service, native_client_s=0., policy_dt=dt)
+        active = {"input_index": index, "arrival_step": step + timing["delivery_ticks"]}
+        services.append(dict(timing, input_index=index, queue_residence_s=max(0., now - stamps[index])))
+    selected = [row["input_index"] for row in services]
+    delivered = set(deliveries)
+    for row in services:
+        row["delivered_within_horizon"] = row["input_index"] in delivered
+    pending = [] if waiting is None else [waiting]
+    in_flight = [] if active is None else [active["input_index"]]
+    return {"schema": "bhl-recorded-transport-queue-profile-v1", "status": "PASS",
+        "mode": "cumulative_callbacks" if cumulative else "selected_transport_only",
+        "native_service_seconds": 0., "policy_dt": dt,
+        "start_s": first_step * dt, "horizon_s": last_step * dt,
+        "offered_input_indices": offered, "selected_input_indices": selected,
+        "superseded_input_indices": superseded, "pending_input_indices": pending,
+        "delivered_input_indices": deliveries, "in_flight_input_indices": in_flight,
+        "produced": len(offered), "selected": len(selected), "superseded": len(superseded),
+        "pending": len(pending), "delivered": len(deliveries), "in_flight": len(in_flight),
+        "conservation_pass": len(offered) == len(selected) + len(superseded) + len(pending)
+            and len(selected) == len(deliveries) + len(in_flight) and len(offered) == len(rows),
+        "profiled_service_total_s": float(sum(costs)),
+        "charged_service_total_s": float(sum(row["service_s"] for row in services)),
+        "unbilled_cumulative_s": cumulative_cost if cumulative else None,
+        "unselected_profiled_service_s": None if cumulative else float(sum(costs[i] for i in superseded + pending)),
+        "services": services,
+        "available_response_decisions": len(ages),
+        "stale_available_response_decisions": sum(age > .35 for age in ages),
+        "available_capture_age_p95_s": float(np.quantile(ages, .95)) if ages else None,
+        "scope": "transport-only recorded-input queue model; no native service, generated sensor cost, pose estimate, navigation score or hardware concurrency claim"}
