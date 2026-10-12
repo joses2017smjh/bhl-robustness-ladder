@@ -1,0 +1,64 @@
+{
+ "label": "phase 3b SmolVLA policy",
+ "seed": 1300,
+ "instruction": "load the blue tumbler onto the tray, then deliver the tray to the right table",
+ "template": "T3",
+ "layout": {
+  "seed": 1300,
+  "target_colour": "blue",
+  "target_side": "right",
+  "instruction_template": 3,
+  "tumblers": {
+   "red": [
+    0.30409424463402784,
+    -0.3369218721602898,
+    0.028877601486740876
+   ],
+   "blue": [
+    0.2999345659856989,
+    0.33787045666740073,
+    -0.056835642518635536
+   ]
+  },
+  "tray": [
+   0.3601887753049531,
+   0.0010705869563904123,
+   -0.03226625519958356
+  ],
+  "delivery": {
+   "left": [
+    -0.3005075111531149,
+    2.4701946768921035
+   ],
+   "right": [
+    -0.2960235459431694,
+    -2.538573319607894
+   ]
+  }
+ },
+ "mp4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run1/task/phase 3b SmolVLA policy_seed1300.mp4",
+ "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1c/training/waiter-wbc1c-s7.deploy.yaml",
+ "host": "cn-gpu5.hpc.engr.oregonstate.edu",
+ "slurm_job": "21796327",
+ "frames": 655,
+ "display_only": true,
+ "success": true,
+ "fell": false,
+ "stage": 6,
+ "stage_name": "success",
+ "t_end": 52.32,
+ "result_card": "SUCCESS at 52.3 s",
+ "gif": {
+  "gif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run2/waiter-3b-task-seed1300.gif",
+  "bytes": 5014675,
+  "mb": 5.01,
+  "fps": 6,
+  "width": 810,
+  "ffmpeg": "ffmpeg",
+  "max_colors": 64,
+  "speed": 3.0,
+  "badge": "GIF 3x",
+  "stats_mode": "full",
+  "within_budget": true
+ }
+}

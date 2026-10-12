@@ -91,6 +91,8 @@ Every number below has its predeclaration and record in `SLURM_JOBS.md` (section
 | 4 DSRL noise steering | PASS: 63/100 against 23/100 for the same frozen policy with its normal noise, on 100 unseen layouts (exact one-sided McNemar p = 1.1e-8); a first design collapsed and was recorded NEGATIVE without a scored run | `results/waiter-20261005/phase4-gate/verdict_dsrl2.json`, `dsrl1_negative.json` |
 | 4b DSRL on the phase 3b policy (2026-10-11) | FAIL: 80/100 against 74/100 for the same frozen policy with its normal noise, on 100 unseen layouts (p = 0.20; needed 0.05). Setting the noise to zero scores 82/100, so the trained noise policy shows nothing a constant would not. Phase 4's design, only the base policy changed | `results/waiter-20261005/phase4b-gate/verdict.json` |
 
+Clips (display only, 2026-10-12): [1g standing, against 1f](gifs/waiter-1g-stand.gif), [1g walking, against 1c s7](gifs/waiter-1g-walk.gif), [phase 3b policy, one task episode](gifs/waiter-3b-task-seed1300.gif), [phase 4b noise policy, the same layout](gifs/waiter-4b-task-seed1300.gif). The 1g clips re-simulate scored gate episodes; the task clips are dev-layout runs, not measurements.
+
 Phase 3b in one paragraph: which tumbler to take is an exclusive-or of two things the policy's features already
 hold (the instruction's colour, and which side the red tumbler is on), and it is decided in an episode's first ten
 frames, 1.6% of the data. Uniform frame sampling showed those frames to the model about three times in a whole
