@@ -103,3 +103,7 @@ The replay runner intentionally leaves **ATE unmeasured** until the EuRoC
 reference frame, timestamp association and separate evaluator are independently
 verified. No physical-rig calibration, LiDAR validation, locomotion, navigation
 or hardware claim follows from this supplement.
+
+## Final implementation validation
+
+[GitHub CI](https://github.com/joses2017smjh/bhl-robustness-ladder/actions/runs/38224054482) passed **3,012 tests**, with 132 skips and 10 subtests passed, plus actual trained-asset integration and seeded physics/fault replay. [Retained CI receipt](../results/euroc-followup-20261012/github-ci.json). This verifies the software change; actual EuRoC native smoke, replay and ATE remain unrun or unmeasured while recording access is blocked.
