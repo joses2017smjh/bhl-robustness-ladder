@@ -1,0 +1,40 @@
+{
+  "archive_sha256": "46eb5d49361cb64f4f18dc8290a7bcb002c21b01aa035e3fe8c8e049949a0dda",
+  "command": [
+    "/apps/slurm/25.11.8/bin/sbatch",
+    "--parsable",
+    "--ntasks=1",
+    "--account=eecs",
+    "--job-name=processing-schedule-48",
+    "--partition=gpu,dgxh,ampere",
+    "--cpus-per-task=2",
+    "--mem=16G",
+    "--time=12:00:00",
+    "--gres=gpu:1",
+    "--constraint=a40|rtx8000|l40s|h100|h200|h200-70g",
+    "--exclude=dgxh-1",
+    "--export=NONE",
+    "--no-requeue",
+    "--output=/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/processing-schedule-%j.out",
+    "--error=/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/processing-schedule-%j.out",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/processing_schedule.sbatch",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012",
+    "46eb5d49361cb64f4f18dc8290a7bcb002c21b01aa035e3fe8c8e049949a0dda"
+  ],
+  "job_id": "21801949",
+  "resources": {
+    "constraint": "a40|rtx8000|l40s|h100|h200|h200-70g",
+    "cpus": 2,
+    "exclude": "dgxh-1",
+    "gpus": 1,
+    "memory_gb": 16,
+    "partition": "gpu,dgxh,ampere",
+    "requeue": false,
+    "time_limit": "12:00:00"
+  },
+  "returncode": 0,
+  "status": "SUBMITTED",
+  "stderr": "",
+  "stdout": "21801949\n",
+  "submitted_utc": "2026-10-12T19:13:23.436247+00:00"
+}

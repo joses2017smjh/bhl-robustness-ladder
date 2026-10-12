@@ -73,4 +73,12 @@ All bulk evidence uses HPC share or allocation-local scratch. The campaign has a
 reserved seeds support bounded simulation development, not independent
 confirmation, hardware validation or population performance claims.
 
-Execution receipts and measured results will be added after the frozen run.
+GPU job **21801949** started on `cn-gpu6` (Quadro RTX 8000) on October 12.
+The retained 40-frame preprocessing/input profile passed. The 12-cell native
+smoke and subsequent 48-cell cohort are pending completion; no improvement
+result is claimed yet. The source is frozen at `152ccf4`, archive SHA256
+`46eb5d49361cb64f4f18dc8290a7bcb002c21b01aa035e3fe8c8e049949a0dda`.
+Allocated CPU validation **21801920** passed 306 tests and 11 subtests.
+[Protocols, frozen intake, submission, GPU receipt and passing profile](../results/processing-schedule-20261012/).
+The one-allocation dispatcher automatically runs the strict collector after
+all declared pairs; runtime errors preserve evidence and stop dependent work.

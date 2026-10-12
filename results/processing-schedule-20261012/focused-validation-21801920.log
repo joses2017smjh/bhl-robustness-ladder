@@ -1,0 +1,51 @@
+[2026-10-12T12:11:56.283] error: Unable to create TMPDIR [/scratch/sanchej7/tmp]: No such file or directory
+[2026-10-12T12:11:56.283] error: Setting TMPDIR to /tmp
+........................................................................ [ 23%]
+............................................................. [ 43%]
+........................................................................ [ 66%]
+........................................................................ [ 90%]
+.............................                                            [100%]
+=============================== warnings summary ===============================
+tests/test_native_lio.py:86
+  /nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-source-20261012/tests/test_native_lio.py:86: DeprecationWarning: invalid escape sequence '\('
+    with self.assertRaisesRegex(ValueError, "SO\(3\)"):
+
+tests/test_native_lio.py:130
+  /nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-source-20261012/tests/test_native_lio.py:130: DeprecationWarning: invalid escape sequence '\('
+    with self.assertRaisesRegex(ValueError, "SO\(3\)"): self.validate()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+306 passed, 2 warnings, 11 subtests passed in 13.54s
+{
+  "status": "FROZEN_NOT_SUBMITTED",
+  "created_utc": "2026-10-12T19:12:39.994102+00:00",
+  "archive_sha256": "46eb5d49361cb64f4f18dc8290a7bcb002c21b01aa035e3fe8c8e049949a0dda",
+  "protocol_sha256": "3a83b9652e9cf4a222107a9b864dbd9a8b2f365863cd55a58f04f6b0010a5a63",
+  "launcher_sha256": "d1ed87d378c599a22ddc2fee86dd3cc5354e76973870d81485603a833159a85b",
+  "coordinator_launcher_sha256": "d149774b88816267d5fd2a528d3168f699df1737c5b2f7d1b427ac0f5ec14608",
+  "sif_sha256": "d427d9c32d23134493be3fe9721a790d71f3134f6cad847725537009f9bcac29",
+  "source_files": 1372,
+  "archive_bytes": 262938344,
+  "uncompressed_input_bytes": 376783141,
+  "source_commit": "152ccf4d8a616c5725bfb0c44ac838818e028ee3",
+  "source_status": "",
+  "base_archive_sha256": "3628b95ced285660e27c0b3b0ca92a097415beaeedfa912da751832acc3b8282",
+  "base_protocol_sha256": "08a71ea1dcaad9460ef6f3990af227323e48492442fd3acb675a334a5808caf0",
+  "upstream_provenance": "984741a3623c93b0583ccfdc479f1f8b1c4d900e external/Berkeley-Humanoid-Lite (v1.1.0-4-g984741a)\n fc90fedd008b1e56a22e3c5221548d6b24f49707 external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets (v2025.09.03-1-gfc90fed)\n 652777cc7c49884e7cd7ddfada758dc1979bf627 external/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_lowlevel (heads/main)",
+  "scientific_protocol_sha256": "b41d516b7810fa851deea4c160c1efa2eff0d75e39037bb7bb24f265d2e5d34d",
+  "max_campaign_bytes": 107374182400,
+  "max_output_bytes_per_shard": 2147483648,
+  "new_scored_episodes": 48,
+  "fresh_smoke_episodes": 12,
+  "quota_before_freeze": {
+    "project": 30762,
+    "used_bytes": 1633004990464,
+    "soft_limit_bytes": 1649267441664,
+    "hard_limit_bytes": 2199023255552,
+    "grace": "-",
+    "reserve_bytes": 107374182400,
+    "measured_utc": "2026-10-12T19:12:12.546488+00:00",
+    "raw": "Disk quotas for prj 30762 (pid 30762):\n      Filesystem  kbytes   bquota  blimit  bgrace   files   iquota  ilimit  igrace\n  /nfs/hpc/share 1594731436  1610612736 2147483648       - 2512367        0       0       -\n"
+  },
+  "profile_episode_sha256": "b2528d9ac58e51ea9ee2d5b96f163622bd69107497cb1b557b833cd78d72f690"
+}

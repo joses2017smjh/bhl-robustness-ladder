@@ -1,0 +1,486 @@
+{
+  "schema": "bhl-processing-schedule-v1-protocol",
+  "pipelines": [
+    "legacy_cumulative",
+    "bounded_latest"
+  ],
+  "arms": [
+    "stereo",
+    "lidar_inertial"
+  ],
+  "conditions": {
+    "nominal": {
+      "camera_hz": 5.0
+    },
+    "camera_10hz": {
+      "camera_hz": 10.0
+    },
+    "causal_40ms_exposure": {
+      "camera_hz": 5.0,
+      "exposure_s": 0.04,
+      "exposure_samples": 3
+    }
+  },
+  "smoke": {
+    "seconds": 18.0,
+    "cells": [
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "nominal",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "nominal",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "camera_10hz",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "camera_10hz",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      }
+    ]
+  },
+  "development": {
+    "seconds": 40.0,
+    "cells": [
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "nominal",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "nominal",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "nominal",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "nominal",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "camera_10hz",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "camera_10hz",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "camera_10hz",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "camera_10hz",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "nominal",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "nominal",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "nominal",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "nominal",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "camera_10hz",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "camera_10hz",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "camera_10hz",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "camera_10hz",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "straight",
+        "seed": 750001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo",
+        "pipeline": "legacy_cumulative"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "causal_40ms_exposure",
+        "arm": "stereo",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest"
+      },
+      {
+        "case": "occluders",
+        "seed": 750001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative"
+      }
+    ]
+  },
+  "pairing": "same seed/condition/route/arm; pipeline order alternates deterministically by declared pair index; each pair in same GPU allocation",
+  "initialization": {
+    "stationary_until_s": 3.0,
+    "excitation_until_s": 9.0,
+    "navigation_begins_s": 10.0,
+    "command": "vx=.10*sin(2*pi*(t-3)/1.5), vy=0, yaw=.30*sin(pi*(t-3)/1.5) during [3,9)",
+    "same_for_all_arms_conditions": true,
+    "native_initialization_thresholds_changed": false,
+    "known_start_assumption": "first accepted pose anchored to nominal station, initialization movement not truth-corrected"
+  },
+  "unchanged": "frozen actor, routes, native settings/thresholds, .35s capture-age cutoff, known-start registration, raw LiDAR brake, delivery quantization and no submission on arrival step",
+  "candidate": "one pending latest joined camera/LiDAR event (one latest identity per stream), one in-service estimator request; all causal intervening IMU retained; selected PNG IPC plus native measured service, simulator generation and evidence separate",
+  "reference": "current cumulative acquisition callback charging plus native client service; measured again in this new source with timing/identity instrumentation",
+  "evidence": "candidate real single-worker queue capacity8, immutable buffers, backpressure/errors reported and joined before PASS; archive clock wall-time separate from modeled simulation time",
+  "profile": "before native smoke, first40 retained stereo pairs and original cloud/IMU arrays: required PNG transport and evidence recording microbenchmark with exact decoded values/timestamp checks, no new navigation score",
+  "smoke_execution_gate": "all12 same-source/input cells execute with finite physics, native I/O and verified evidence",
+  "nominal_readiness_gate": "per pipeline/arm: nominal18s full horizon, accepted native pose, zero falls/contacts/nonfinite; scientific negative gates retain declared development cells as UNRUN",
+  "primary_metrics": [
+    "paired navigation stale-stop fraction difference",
+    "paired clean-goal difference"
+  ],
+  "secondary_metrics": [
+    "capture age p95",
+    "modeled pipeline p95",
+    "queue/supersession",
+    "initialization/tracking",
+    "falls/contacts"
+  ],
+  "navigation_denominator": "pre-step decision timestamps >=10s, actual decision count; shortened horizons explicit",
+  "scope": "two-seed bounded schedule-model development; ideal simulated sensing, no concurrent hardware timing or population/confirmation claims",
+  "no_retuning_after_outcomes": true,
+  "source_change_requires_fresh_smoke": true
+}
