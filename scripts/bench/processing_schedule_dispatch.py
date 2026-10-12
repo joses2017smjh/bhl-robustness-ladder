@@ -116,6 +116,13 @@ def declared_jobs(campaign):
                     result.append(job(name, 'run', ['--phase', 'development', '--seed', str(seed),
                         '--condition', condition, '--case', case, '--arm', arm,
                         '--qualified-smoke', str(campaign / 'qualified-smoke.json')]))
+    result.append(dict(name='processing-schedule-collection-20261012', kind='evaluate',
+        entrypoint='scripts/bench/processing_schedule_campaign.py',
+        args=['--collect', str(campaign / 'collector-inputs'),
+              '--qualified-smoke', str(campaign / 'qualified-smoke.json'),
+              '--output', '{output}/collection.json'],
+        result_path='collection.json', resources=dict(RESOURCES), max_output_mb=2048,
+        env={'MUJOCO_GL': 'egl', 'OMP_NUM_THREADS': '1'}))
     return result
 
 
@@ -303,6 +310,40 @@ def smoke_gate(result):
         raise ValueError('complete fresh 12-episode nominal-readiness smoke required')
 
 
+def retain_collector_inputs(output, destination, result):
+    """Keep exact hash-linked numerical evidence, with PNGs in verified raw archives."""
+    output, destination = Path(output).resolve(), Path(destination)
+    files = {'campaign_result.json': output / 'campaign_result.json'}
+    for relative in result['episode_files']:
+        episode = (output / relative).resolve()
+        if not episode.is_relative_to(output) or episode.is_symlink():
+            raise ValueError('collector input escapes raw episode output')
+        if digest(episode) != result['episode_sha256'][relative]:
+            raise ValueError('collector episode differs from scientific result')
+        row = read(episode)
+        files[relative] = episode
+        for name, field in (('inference_sensors.npz', 'inference_sensors_sha256'),
+                            ('evaluator_truth.npz', 'evaluator_truth_sha256'),
+                            ('native/stream_receipt.json', 'stream_receipt_sha256'),
+                            ('sensors/processing_schedule.json', 'processing_schedule_sha256')):
+            source = episode.parent / name
+            if source.is_symlink() or not source.resolve().is_relative_to(output) or digest(source) != row[field]:
+                raise ValueError('collector raw evidence differs from episode lineage')
+            files[str(source.relative_to(output))] = source
+    if sum(path.stat().st_size for path in files.values()) > 256 * 1024**2:
+        raise ValueError('compact numerical evidence exceeds 256 MiB per pair')
+    destination.mkdir(parents=True, exist_ok=False)
+    inventory = {}
+    for name, source in files.items():
+        target = destination / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
+        inventory[name] = dict(bytes=target.stat().st_size, sha256=digest(target))
+        if inventory[name]['sha256'] != digest(source):
+            raise ValueError('collector evidence changed while copying')
+    return inventory
+
+
 def retain_and_retire_scratch(directory, launch, completion):
     """Delete only this attempt's scratch after its full archive verifies."""
     scratch = Path(launch['scratch'])
@@ -371,8 +412,17 @@ def execute(campaign, expected_sha):
             elif index == 1:
                 smoke_gate(result)
                 write(campaign / 'qualified-smoke.json', result)
-            elif result.get('phase') != 'development' or result.get('episodes') != 2:
-                raise ValueError('matched pair did not contain exactly 2 completed episodes')
+            elif job['kind'] == 'run':
+                if (result.get('phase') != 'development' or result.get('expected_declared_cells') != 2 or
+                        result.get('episodes', -1) + len(result.get('unrun_cells', [])) != 2):
+                    raise ValueError('matched pair requires two completed or explicitly gated cells')
+                inventory = retain_collector_inputs(Path(launch['scratch']) / 'output',
+                    campaign / 'collector-inputs' / job['name'], result)
+                write(directory / 'collector-inputs.json', inventory)
+            elif (result.get('schema') != 'bhl-processing-schedule-v1-collection' or
+                  result.get('declared_cells') != 48 or
+                  result.get('measured_cells', -1) + result.get('unrun_after_nominal_gate', -1) != 48):
+                raise ValueError('final strict collector did not account for all 48 declared cells')
             results.append(dict(name=job['name'], status=result['status'], episodes=result.get('episodes', 0),
                                 result_sha256=digest(directory / 'campaign_result.json'),
                                 raw_archive_sha256=digest(directory / 'outputs.tar.gz')))
@@ -385,7 +435,8 @@ def execute(campaign, expected_sha):
         archive_sha256=expected_sha, job_id=job_id, host=os.uname().nodename,
         completed=list(results), attempted=attempted,
         unrun=[job['name'] for job in protocol['jobs'] if job['name'] not in attempted],
-        scope='execution completeness only; clean goals and schedule comparisons require the scientific collector')
+        scientific_collection=str(campaign / ('processing-schedule-collection-20261012-' + job_id) / 'campaign_result.json') if not error else None,
+        scope='execution completeness; paired outcomes and explicit unrun gates are in the final strict scientific collector')
     write(campaign / 'dispatch-result.json', final)
     return 0 if not error else 1
 

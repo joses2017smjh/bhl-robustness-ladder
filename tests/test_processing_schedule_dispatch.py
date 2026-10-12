@@ -15,11 +15,11 @@ SPEC.loader.exec_module(D)
 class ProcessingScheduleDispatchTests(unittest.TestCase):
     def test_pair_inventory_contains_every_cell_exactly_once(self):
         jobs = D.declared_jobs(D.SHARED_ROOT / 'unit-campaign')
-        self.assertEqual(len(jobs), 26)
+        self.assertEqual(len(jobs), 27)
         self.assertEqual(jobs[0]['kind'], 'evaluate')
         self.assertEqual(jobs[1]['kind'], 'smoke')
         identities = set()
-        for job in jobs[2:]:
+        for job in jobs[2:-1]:
             a = job['args']
             identity = tuple(a[a.index(k) + 1] for k in ('--seed', '--condition', '--case', '--arm'))
             self.assertNotIn(identity, identities)
@@ -71,6 +71,46 @@ class ProcessingScheduleDispatchTests(unittest.TestCase):
             (p / 'campaign_result.json').write_text(json.dumps({'status': 'PASS', 'episodes': 48}))
             with self.assertRaises(ValueError):
                 D.checked_completion(p, 'frozen')
+
+    def test_compact_collector_evidence_keeps_hash_chain_and_excludes_images(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            output, destination = root / 'output', root / 'compact'
+            episode = output / 'test-episode'
+            episode.mkdir(parents=True)
+            fields = {}
+            for name, field in (('inference_sensors.npz', 'inference_sensors_sha256'),
+                    ('evaluator_truth.npz', 'evaluator_truth_sha256'),
+                    ('native/stream_receipt.json', 'stream_receipt_sha256'),
+                    ('sensors/processing_schedule.json', 'processing_schedule_sha256')):
+                path = episode / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b'retained raw data')
+                fields[field] = D.digest(path)
+            (episode / 'sensors' / 'unneeded.png').write_bytes(b'image bytes')
+            D.write(episode / 'episode.json', fields)
+            result = dict(episode_files=['test-episode/episode.json'],
+                          episode_sha256={'test-episode/episode.json': D.digest(episode / 'episode.json')})
+            D.write(output / 'campaign_result.json', result)
+            inventory = D.retain_collector_inputs(output, destination, result)
+            self.assertEqual(len(inventory), 6)
+            self.assertFalse((destination / 'test-episode/sensors/unneeded.png').exists())
+            self.assertEqual(D.digest(destination / 'test-episode/inference_sensors.npz'), fields['inference_sensors_sha256'])
+            (episode / 'inference_sensors.npz').write_bytes(b'changed raw data')
+            with self.assertRaises(ValueError):
+                D.retain_collector_inputs(output, root / 'corrupt-copy', result)
+
+    def test_all_gated_pair_retains_declared_unrun_receipt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            output = root / 'output'
+            output.mkdir()
+            result = dict(episode_files=[], episode_sha256={}, episodes=0,
+                          unrun_cells=[{'pipeline': 'legacy_cumulative'}, {'pipeline': 'bounded_latest'}])
+            D.write(output / 'campaign_result.json', result)
+            inventory = D.retain_collector_inputs(output, root / 'compact', result)
+            self.assertEqual(set(inventory), {'campaign_result.json'})
+            self.assertEqual(D.read(root / 'compact/campaign_result.json'), result)
 
     def test_scratch_retirement_preserves_evidence_on_archive_mismatch(self):
         with tempfile.TemporaryDirectory(prefix='bhl-h34-test-') as tmp:
