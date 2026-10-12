@@ -46,7 +46,9 @@ are decoded and transported through both evidence/PNG paths. Original PNG and
 sensor-array hashes, decoded values and timestamp order are checked. This is a
 preprocessing/input-integrity profile, not another native trajectory or closed-
 loop navigation result. File-cache effects prevent inferential speedup claims
-from this small profile.
+from this small profile. A transport-only queue replay uses those measured
+costs with the unchanged 25 Hz delivery quantization and arrival-step hold;
+native service is explicitly zero in this input-profile model.
 
 ## Gates and outcomes
 

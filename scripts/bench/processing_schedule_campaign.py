@@ -39,7 +39,7 @@ from bhl_robust.research.sensor_faults import fault_spec, perturb_cloud
 from bhl_robust.research.stereo_recovery import VerifiedMapRecovery
 
 import native_sensor_controls_campaign as BASE
-from bhl_robust.research.processing_schedule import LatestJoinedQueue, service_timing, decoded_frame_identity, compare_replay_inputs
+from bhl_robust.research.processing_schedule import LatestJoinedQueue, service_timing, decoded_frame_identity, compare_replay_inputs, replay_transport_queue
 from concurrent.futures import ThreadPoolExecutor
 from collections import deque
 
@@ -741,6 +741,9 @@ def profile_retained_sequence(episode, output):
         timings[pipeline] = dict(selected_transport_and_charged_evidence_s=timings[pipeline],
             total_wall_s=time.monotonic()-fake.wall_origin, archive_worker_s=fake.stage_costs["evidence_worker_s"],
             recorder=recorder.receipt() if recorder else dict(mode="synchronous", joined=True))
+    for pipeline in PIPELINES:
+        timings[pipeline]["transport_queue_model"] = replay_transport_queue(offered[pipeline],
+            timings[pipeline]["selected_transport_and_charged_evidence_s"], cumulative=pipeline == "legacy_cumulative")
     if source_hashes() != sources:
         raise ValueError("source changed during same-input profile")
     result = dict(schema=SCHEMA + "-profile", status="PASS", input_equivalence=compare_replay_inputs(*(offered[p] for p in PIPELINES)),
