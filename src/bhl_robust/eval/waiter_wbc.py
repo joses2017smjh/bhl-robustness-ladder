@@ -160,10 +160,11 @@ def check_stand_bonus(env: dict) -> list[str]:
     return p
 
 
-def check_stand_still(env: dict) -> list[str]:
-    """Phase 1h only: 1d's held-clock stance terms; the standing share starting at 0.02 and its curriculum to 0.25 on
-    the disturbance window; disturbances on every env as 1d (upstream push, unrestricted hand forces); the stand-still
-    term on the 12 leg joints with its weight and threshold; and none of the 1e-1g standing terms."""
+def check_stand_still(env: dict, window: bool = True) -> list[str]:
+    """Phase 1h only: 1d's held-clock stance terms; the standing share starting at 0.02 and its curriculum to 0.25
+    (with window=True also on the frozen 4000-7000 window; a smoke run compresses it, as it does the disturbance ramp);
+    disturbances on every env as 1d (upstream push, unrestricted hand forces); the stand-still term on the 12 leg joints
+    with its weight and threshold; and none of the 1e-1g standing terms."""
     p = []
     rel = ((env.get("commands") or {}).get("base_velocity") or {}).get("rel_standing_envs")
     if rel is None or abs(float(rel) - STAND_SHARE[0]) > 1e-9:
@@ -178,7 +179,7 @@ def check_stand_still(env: dict) -> list[str]:
     cur = ((env.get("curriculum") or {}).get("standing_share") or {})
     cp = cur.get("params") or {}
     if not str(cur.get("func", "")).endswith("standing_share_curriculum") or \
-            (cp.get("start_iter"), cp.get("end_iter"), cp.get("steps_per_iter")) != (4000, 7000, 24) or \
+            cp.get("steps_per_iter") != 24 or (window and (cp.get("start_iter"), cp.get("end_iter")) != (4000, 7000)) or \
             cp.get("lo") is None or abs(float(cp["lo"]) - STAND_SHARE[0]) > 1e-9 or \
             cp.get("hi") is None or abs(float(cp["hi"]) - STAND_SHARE[1]) > 1e-9:
         p.append(f"standing_share curriculum {cur}")
@@ -229,7 +230,7 @@ def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
     if task == STANDBONUS_TASK_ID:
         problems += check_stand_bonus(env)
     if task == STANDSTILL_TASK_ID:
-        problems += check_stand_still(env)
+        problems += check_stand_still(env, window=False)  # the launcher checks the window on full runs
     if abs(float(cfg.policy_dt) - info["step_dt"]) > 1e-9:
         problems.append(f"policy_dt {cfg.policy_dt} != env step_dt {info['step_dt']}")
     if problems:

@@ -231,8 +231,8 @@ if [ "$VARIANT" = 1h ] && [ -n "$run" ] && [ -f "$run/params/env.yaml" ]; then
 import sys
 from bhl_robust.eval.gait_clock import load_env_yaml
 from bhl_robust.eval.waiter_wbc import check_stand_still
-p = check_stand_still(load_env_yaml(sys.argv[1]))
-print('stand-still check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/params/env.yaml") 2>&1 | tail -1)
+p = check_stand_still(load_env_yaml(sys.argv[1]), window=sys.argv[2] != '1')   # a smoke compresses the window
+print('stand-still check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/params/env.yaml" "$SMOKE") 2>&1 | tail -1)
     echo "$s"
     case "$s" in "stand-still check: OK") ;; *) why="$why stand-still-check";; esac
     grep -q "\[overlay\] action-noise std also bounded after each PPO update" "$TLOG" || [ ! -s "$TLOG" ] || why="$why std-clamp-after-update-missing"

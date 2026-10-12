@@ -126,6 +126,9 @@ def test_check_stand_still():
     bad["rewards"]["stand_still"]["params"]["asset_cfg"]["joint_names"] = ["leg_left_hip_roll_joint"]
     bad["curriculum"]["standing_share"]["params"]["hi"] = 0.5
     assert len(check_stand_still(bad)) == 3
+    smoke = _good_env()                                          # a smoke's compressed window passes only with window=False
+    smoke["curriculum"]["standing_share"]["params"].update(start_iter=0, end_iter=2)
+    assert len(check_stand_still(smoke)) == 1 and check_stand_still(smoke, window=False) == []
 
 
 def test_launcher_variant_1h():
@@ -133,6 +136,7 @@ def test_launcher_variant_1h():
     assert "1h) PREFIX=waiter-wbc1h; SEED0=21; RES_NAME=wbc1h; export BHL_STD_MAX=1.0" in s
     assert "TASK_ID=Velocity-BHL-Waiter-WBC-StandStill-v0; FULL_ITERS=10000" in s
     assert "stand-still check" in s and "check_stand_still" in s and "standstill-task-not-registered" in s
+    assert "window=sys.argv[2] != '1'" in s and '"$run/params/env.yaml" "$SMOKE"' in s
     assert s.count('[ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ]; }') == 3   # smoke ramp, std check, curriculum check
     assert "env.curriculum.standing_share.params.start_iter=0 env.curriculum.standing_share.params.end_iter=2" in s
     assert "Curriculum/standing_share" in s and "standing-share-check" in s
