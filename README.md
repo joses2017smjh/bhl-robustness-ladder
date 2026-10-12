@@ -35,6 +35,10 @@ study with oracle pose/goal.
 
 *Learned gait, scripted A* on a lidar-built map, oracle pose and goal. Stereo, optical-flow, and IMU overlays in this clip are display only. Playback is accelerated; aggregate results are linked below.*
 
+[![Two Waiter whole-body controllers given the same 0.35 m/s walk command: the selected controller walks 1.97 m, a retrain with standing rewards marches in place](docs/gifs/waiter-1g-walk.gif)](docs/WAITER_PROGRAM.md)
+
+*Waiter program, 24-DoF humanoid with grippers: two learned leg controllers given the same command, 0.35 m/s forward for 6 s, in MuJoCo. Left, the selected controller walks 1.97 m; right, a retrain with standing rewards stays up when told to stand but marches in place here (0.32 m; the gate needs 1.5 m). Both re-simulate scored gate episodes. [Waiter program status](docs/WAITER_PROGRAM.md).*
+
 ## Problem and approach
 
 Training reward can improve while transfer or task completion gets worse. I train locomotion policies in Isaac Lab, export ONNX, and score selected checkpoints in headless MuJoCo using upstream's deployment controller. Versioned tasks, sensor validity checks, physics-step contact scoring, and predeclared gates separate a successful experiment from a job that merely completed.
