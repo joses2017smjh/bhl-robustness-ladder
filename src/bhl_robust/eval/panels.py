@@ -238,10 +238,14 @@ def compose_frame(main_rgb, panels: list[Image.Image], header: str, footer: str,
 
 
 def write_gif(src_mp4: Path, out_gif: Path, *, fps: int = 8, speed: float = 1.0, width: int = 860,
-              max_colors: int = 128, max_bytes: int = MAX_GIF_BYTES, badge: str | None = None) -> dict:
+              max_colors: int = 128, max_bytes: int = MAX_GIF_BYTES, badge: str | None = None,
+              stats_mode: str = "diff") -> dict:
     """ffmpeg palette GIF from an mp4; shrinks (colours, fps, width) until it
     fits the committable budget. `badge` (default: the playback speed when it
     is not 1x) is drawn bottom-right so a sped-up GIF says so on its face.
+    `stats_mode` is palettegen's: "diff" builds the palette from what changes
+    between frames, so a colour that only appears on a static card can be lost;
+    "full" counts every pixel (the Waiter clips' red result cards, 2026-10-12).
     Returns what it ended up using."""
     out_gif = Path(out_gif)
     out_gif.parent.mkdir(parents=True, exist_ok=True)
@@ -265,12 +269,13 @@ def write_gif(src_mp4: Path, out_gif: Path, *, fps: int = 8, speed: float = 1.0,
     for colors, f, wpx in attempts:
         rate = "" if speed == 1.0 else f"setpts=PTS/{speed:g},"
         vf = f"[0:v]{rate}fps={f},scale={wpx}:-2:flags=lanczos[v];{badge_f}{tail}split[a][b];" \
-             f"[a]palettegen=max_colors={colors}:stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle"
+             f"[a]palettegen=max_colors={colors}:stats_mode={stats_mode}[p];[b][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle"
         subprocess.run([ffmpeg_exe(), "-y", "-loglevel", "error", "-i", str(src_mp4), *badge_in, "-filter_complex", vf,
                         "-loop", "0", str(out_gif)], check=True)
         size = out_gif.stat().st_size
         last = {"gif": str(out_gif), "bytes": size, "mb": round(size / 1e6, 2), "fps": f, "width": wpx, "ffmpeg": ffmpeg_exe(),
-                "max_colors": colors, "speed": speed, "badge": badge, "within_budget": size <= max_bytes}
+                "max_colors": colors, "speed": speed, "badge": badge, "stats_mode": stats_mode,
+                "within_budget": size <= max_bytes}
         if size <= max_bytes:
             break
     tmp.cleanup()

@@ -312,6 +312,10 @@ def test_seed_parsing_and_guards():
         with pytest.raises(SystemExit):
             check_seeds(bad, {"dev"}, "x")
     check_seeds([6000, 6099], {"p4_eval"}, "x")
+    check_seeds([8000, 8099], {"p4b_eval"}, "x")                # phase 4b's scored range (2026-10-11)
+    for bad, allowed in (([8000], {"dev"}), ([8000], {"p4_eval"}), ([8100], {"p4b_eval"})):
+        with pytest.raises(SystemExit):
+            check_seeds(bad, allowed, "x")
 
 
 def test_mcnemar_and_paired_summary():
@@ -393,6 +397,14 @@ def test_train_and_eval_smoke(tmp_path):
     with pytest.raises(subprocess.CalledProcessError):               # write-once: a second run is refused
         subprocess.run(scored_cmd + ["--gate", str(gate)], check=True, timeout=600, capture_output=True)
     assert scored.read_bytes() == before
+    # a rule file that names its seeds: any other seed list is refused; so are seeds from two scored ranges
+    named = tmp_path / "rule_named.json"
+    named.write_text(json.dumps({"rule": "toy", "seed0": 8000, "seed1": 8003}))
+    other = scored_cmd[:-1] + [str(tmp_path / "scored_named.json"), "--gate"]
+    for cmd_bad in (other + [str(named)], [("6000,8000" if c == "6000-6003" else c) for c in other] + [str(gate)]):
+        with pytest.raises(subprocess.CalledProcessError):
+            subprocess.run(cmd_bad, check=True, timeout=600, capture_output=True)
+    assert not (tmp_path / "scored_named.json").exists()
     import phase4_gate                                               # and the scorer refuses a TOY evaluation
     with pytest.raises(SystemExit, match="not a scored waiter evaluation"):
         phase4_gate.main(["--rule", str(_REPO / "results/waiter-20261005/phase4-gate/rule_dsrl2.json"), "--eval",

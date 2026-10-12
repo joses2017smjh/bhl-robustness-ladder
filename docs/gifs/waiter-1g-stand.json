@@ -1,0 +1,72 @@
+{
+ "kind": "stand",
+ "seed": 0,
+ "display_only": true,
+ "host": "cn-gpu5.hpc.engr.oregonstate.edu",
+ "slurm_job": "21796382",
+ "sides": [
+  {
+   "title": "1f seed 16 (standing penalties)",
+   "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1f/training/waiter-wbc1f-s16.deploy.yaml",
+   "scored_json": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1f/q4/waiter-wbc1f-s16.json",
+   "scored": {
+    "seed": 0,
+    "fell_at_s": 1.04,
+    "disp_m": null,
+    "yaw_deg": null,
+    "pitch_deg": null,
+    "ok": false,
+    "trajectory": "P4_pick_then_hook"
+   },
+   "clip": {
+    "seed": 0,
+    "fell_at_s": 1.04,
+    "disp_m": null,
+    "yaw_deg": null,
+    "pitch_deg": null,
+    "ok": false
+   },
+   "matches_scored_run": true
+  },
+  {
+   "title": "1g seed 18 (bounded standing rewards)",
+   "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1g/training/waiter-wbc1g-s18.deploy.yaml",
+   "scored_json": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1g/q4/waiter-wbc1g-s18.json",
+   "scored": {
+    "seed": 0,
+    "fell_at_s": null,
+    "disp_m": 0.0467,
+    "yaw_deg": 7.06,
+    "pitch_deg": 3.13,
+    "ok": false,
+    "trajectory": "P4_pick_then_hook"
+   },
+   "clip": {
+    "seed": 0,
+    "fell_at_s": null,
+    "disp_m": 0.0467,
+    "yaw_deg": 7.06,
+    "pitch_deg": 3.13,
+    "ok": false
+   },
+   "matches_scored_run": true
+  }
+ ],
+ "mp4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run2/waiter-1g-stand.mp4",
+ "codec": "libx264",
+ "fps": 12.5,
+ "frames": 226,
+ "gif": {
+  "gif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run2/waiter-1g-stand.gif",
+  "bytes": 1128288,
+  "mb": 1.13,
+  "fps": 12,
+  "width": 820,
+  "ffmpeg": "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/lib/python3.11/site-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
+  "max_colors": 128,
+  "speed": 2.0,
+  "badge": "GIF 2x",
+  "stats_mode": "full",
+  "within_budget": true
+ }
+}

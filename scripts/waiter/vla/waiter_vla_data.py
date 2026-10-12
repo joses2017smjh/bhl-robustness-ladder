@@ -55,9 +55,11 @@ SEED_RANGES = {
     "phase4_train": (5000, 5999),
     "phase4_scored": (6000, 6099),
     "phase3b_scored": (7000, 7099),      # added 2026-10-11 (phase 3b; SLURM_JOBS.md), never used before its scored run
+    "phase4b_scored": (8000, 8099),      # added 2026-10-11 (phase 4b: DSRL on the phase 3b policy), as above
 }
 TRAINING_RANGES = ("phase2_demos",)  # + "dev" with allow_dev_seeds
-NEVER_TRAIN_RANGES = ("phase2_gate", "phase3_scored", "phase4_train", "phase4_scored", "phase3b_scored")
+NEVER_TRAIN_RANGES = ("phase2_gate", "phase3_scored", "phase4_train", "phase4_scored", "phase3b_scored",
+                      "phase4b_scored")
 SCORED_RANGES = ("phase3_scored", "phase3b_scored")      # what rollout_vla.py --purpose scored may run
 
 

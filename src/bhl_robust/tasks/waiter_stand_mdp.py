@@ -31,6 +31,17 @@ standing, while falling costs 0.4 once (termination_penalty, weight -10, times t
 observe its distance from the anchor, so ending the episode is the better deal whenever it has drifted. Do not reuse
 `StandAnchor` / `stand_tilt` with negative weights like these; a standing term must not be able to make falling the
 cheaper option (bounded positive terms, or a termination cost that dominates).
+
+Phase 1g (2026-10-11; SLURM_JOBS.md "Predeclared now ... Waiter phase 1g"): the direct test of that reading. 1g is
+1f with the two penalties replaced by two standing-only BOUNDED POSITIVE rewards of the same error measures and
+scales: `StandAnchorBonus` and `stand_tilt_bonus` return `bounded_bonus(err)` = 1 / (1 + err) (1 with no error, 0.5
+at 5 cm or 5 deg, never negative; the error is not clamped, the kernel bounds it). A standing env can only gain by
+staying up, so falling can never be the cheaper option; pushes, hand forces and the re-anchor are 1f's.
+
+OUTCOME of 1g (2026-10-12): NEGATIVE. The bonuses removed the incentive to fall (training time-limit share 0.64-0.66,
+above 1c/1d; two of three seeds never fall when told to stand in MuJoCo, and their lean is gone), but all three
+checkpoints march in place when told to walk in MuJoCo (0.10-0.36 m in 6 s at 0.35 m/s). The cause of that was not
+measured. Not a recipe: these terms fix the falling, not the controller.
 """
 
 from __future__ import annotations
@@ -64,6 +75,12 @@ def anchor_error(dxy, dyaw, pos_m: float = ANCHOR_POS_M, yaw_deg: float = ANCHOR
 def tilt_error(g_xy, deg: float = TILT_DEG, clamp: float = TILT_CLAMP):
     """|g_xy|^2 / sin^2(deg), clamped: 1 at a `deg` tilt (g = projected gravity, unit length)."""
     return _clamp((g_xy ** 2).sum(-1) / math.sin(math.radians(deg)) ** 2, clamp)
+
+
+def bounded_bonus(err):
+    """Phase 1g: 1 / (1 + err) for an error >= 0 (anchor_error or tilt_error, unclamped). In (0, 1]: 1 at no error,
+    0.5 at err = 1, and it keeps a slope far from the target (0.1 at err = 9)."""
+    return 1.0 / (1.0 + err)
 
 
 def moving_ids(env_ids, standing):
@@ -154,6 +171,15 @@ def stand_tilt(env, command_name: str = "base_velocity", deg: float = TILT_DEG, 
     return tilt_error(asset.data.projected_gravity_b[:, :2], deg, clamp) * standing_mask(env, command_name).float()
 
 
+def stand_tilt_bonus(env, command_name: str = "base_velocity", deg: float = TILT_DEG, asset_cfg=None):
+    """Phase 1g, standing envs only: bounded_bonus of the unclamped tilt_error (a reward: use a positive weight);
+    0 on moving envs."""
+    from isaaclab.managers import SceneEntityCfg
+    asset = env.scene[(asset_cfg or SceneEntityCfg("robot")).name]
+    err = tilt_error(asset.data.projected_gravity_b[:, :2], deg, float("inf"))
+    return bounded_bonus(err) * standing_mask(env, command_name).float()
+
+
 import sys as _sys
 
 # Inside the simulation app `isaaclab` is already imported (waiter_env_cfg imports it before this module). Outside it
@@ -199,3 +225,13 @@ class StandAnchor(_TermBase):
         self.prev = standing.clone()
         err = anchor_error(xy - self.anchor_xy, wrap_to_pi(yaw - self.anchor_yaw), pos_m, yaw_deg, clamp)
         return err * standing.float()
+
+
+class StandAnchorBonus(StandAnchor):
+    """Phase 1g, standing envs only: bounded_bonus of StandAnchor's error, unclamped (the same anchor bookkeeping:
+    reset, start of standing, re-anchor after a push). A reward: use a positive weight; 0 on moving envs."""
+
+    def __call__(self, env, command_name: str = "base_velocity", pos_m: float = ANCHOR_POS_M,
+                 yaw_deg: float = ANCHOR_YAW_DEG, asset_cfg=None):
+        err = super().__call__(env, command_name, pos_m, yaw_deg, float("inf"), asset_cfg)
+        return bounded_bonus(err) * standing_mask(env, command_name).float()
