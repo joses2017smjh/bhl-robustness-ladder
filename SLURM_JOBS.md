@@ -4543,3 +4543,9 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
   - `panels.write_gif` has a new opt-in `stats_mode`: "full" keeps the colour of static result cards, which the default "diff" palette dropped. The default is unchanged.
 - **Pull request #38 updated (2026-10-12 08:17), still not merged:** the status clips are on `waiter-phase1g-4b` and shown in the pull request; full suite on that branch at 826a0fb (`21796431`): 3138 passed, 16 skipped.
 - **Correction (2026-10-12 08:19) to the interim line "Phase 1g, first seed in" (2026-10-11 23:59):** it left out seed 20's walk-progress clause, which already failed then (0.19-0.36 m against 1.5 m). The verdict table above has it; the interim reading "does what the reading predicted" was about falling only.
+
+## 2026-10-12: PR #38 merged; a standing design taken from published practice authorized
+
+**The user's decisions (2026-10-12), verbatim: "merge look online see how people design these policy and implement a similar stragey"** (after the 1g verdict and the question whether standing work continues).
+- **PR #38 merged** (2026-10-12 08:28; main `b4865f4`): phase 4b FAIL, phase 1g NEGATIVE, the status clips.
+- Standing work continues with a design taken from how published and library humanoid policies handle standing (predeclaration below).
