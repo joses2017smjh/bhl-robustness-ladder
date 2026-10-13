@@ -52,6 +52,11 @@ library humanoid policies use, instead of our own. 1h is 1d (no 1e-1g term) with
   * `standing_share_curriculum`: walk first, then stand (the multi-phase curriculum of gait-conditioned humanoid
     RL, arXiv 2505.20619): the share of standing envs is 1c's 0.02 until the disturbance curriculum starts, then rises
     with it to 1d's 0.25.
+
+OUTCOME of 1h (2026-10-13): NEGATIVE. Two of three seeds walk (1.55-1.95 m) and never fall when told to stand, the
+first standing design to keep 1c's walking; but they turn (one seed's left turns 63-109 deg) and hold heading (24-46 deg
+of drift on every walk) worse in MuJoCo, standing is no stiller (Q4 0/12 on every seed), and the third seed falls in
+the start transient. Not a recipe; the turning loss is not attributed to either change.
 """
 
 from __future__ import annotations
