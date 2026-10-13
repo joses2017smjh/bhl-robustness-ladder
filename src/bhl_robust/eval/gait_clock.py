@@ -77,6 +77,9 @@ def make_controller(cfg):
     from berkeley_humanoid_lite_lowlevel.policy.rl_controller import RlController
     if not has_clock(cfg):
         return RlController(cfg)
+    if "waiter_stand_policy" in cfg:   # Waiter phase 1i: a walking and a standing-only WBC behind one switch
+        from bhl_robust.eval.waiter_wbc import DualWaiterController
+        return DualWaiterController(cfg)
     if "waiter_wbc" in cfg:      # Waiter phase 1 WBC (bhl_robust.eval.waiter_wbc): legs from the policy, arms commanded
         from bhl_robust.eval.waiter_wbc import WaiterWbcController
         return WaiterWbcController(cfg)

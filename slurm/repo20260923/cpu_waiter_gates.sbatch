@@ -21,6 +21,9 @@
 # (wbc_select.py --stance).
 # Phase 1e (2026-10-10): WAITER_GATES_STANDMANIP=1 also runs Q4 (scripts/waiter/stand_manip_gate.py: the phase 2
 # expert's arm poses on a free standing base) and requires it to PASS (wbc_select.py --stand-manip).
+# Phase 1i (2026-10-13): WAITER_GATES_DUAL_WALK=<walking deploy.yaml> gates the PAIR instead of the run alone: the
+# run's standing-only WBC and that walking WBC behind eval/waiter_wbc.DualWaiterController's switch. The pair's deploy
+# config is written to $RES/training/<run>.dual.deploy.yaml and every gate (qualify included) uses it.
 # usage: sbatch --dependency=aftercorr:<training array> slurm/repo20260923/cpu_waiter_gates.sbatch
 set -uo pipefail
 REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
@@ -40,13 +43,21 @@ mapfile -t dirs < <(ls -d "$U"/logs/rsl_rl/humanoid/*_"$RUN" 2>/dev/null | sort)
 DEPLOY=${dirs[0]}/exported/deploy.yaml
 grep -q "^waiter_wbc:" "$DEPLOY" 2>/dev/null || { echo "WAITER-GATES RESULT: INCOMPLETE (no stamped deploy.yaml: $DEPLOY)"; exit 1; }
 echo "deploy: $DEPLOY"
+if [ -n "${WAITER_GATES_DUAL_WALK:-}" ]; then
+    DUAL=$RES/training/$RUN.dual.deploy.yaml
+    mkdir -p "$RES/training"
+    "$PY" -m bhl_robust.eval.waiter_wbc dual --walk "$WAITER_GATES_DUAL_WALK" --stand "$DEPLOY" --out "$DUAL" | tail -1
+    grep -q "^waiter_stand_policy:" "$DUAL" 2>/dev/null || { echo "WAITER-GATES RESULT: INCOMPLETE (no dual deploy: $DUAL)"; exit 1; }
+    DEPLOY=$DUAL
+    echo "dual deploy (phase 1i): $DEPLOY"
+fi
 V2=$RES/turn-test-v2/$RUN.json
 if [ ! -f "$V2" ]; then
     "$PY" scripts/bench/turn_test.py --protocol v2 --deploy "$DEPLOY" --upstream "$U" --cache-dir "$CACHE" \
         --variant waiter --out "$CACHE/v2.json" 2>&1 | grep -v "^\[" | tail -8
     [ -f "$CACHE/v2.json" ] && cp -n "$CACHE/v2.json" "$V2"
 fi
-TURNQ_RUN="$RUN" TURNQ_OUT_DIR="$RES/qualify" TURNQ_VARIANT=waiter bash slurm/repo20260923/cpu_turn_qualify.sbatch 2>&1 | tail -6
+TURNQ_RUN="$RUN" TURNQ_OUT_DIR="$RES/qualify" TURNQ_VARIANT=waiter TURNQ_DEPLOY="${WAITER_GATES_DUAL_WALK:+$DEPLOY}" bash slurm/repo20260923/cpu_turn_qualify.sbatch 2>&1 | tail -6
 Q2=$RES/q2/$RUN.json
 [ -f "$Q2" ] || "$PY" scripts/waiter/q2_gate.py --deploy "$DEPLOY" --upstream "$U" --cache-dir "$CACHE" --out "$Q2" 2>&1 | tail -3
 STANCE=()
