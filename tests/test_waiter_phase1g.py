@@ -132,6 +132,6 @@ def test_launcher_variant_1g():
     assert "1g) PREFIX=waiter-wbc1g; SEED0=18; RES_NAME=wbc1g; export BHL_STD_MAX=1.0" in s
     assert "TASK_ID=Velocity-BHL-Waiter-WBC-StandBonus-v0; FULL_ITERS=10000" in s
     assert "stand-bonus check" in s and "check_stand_bonus" in s and "standbonus-task-not-registered" in s
-    assert s.count('[ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ]; }') == 3   # smoke ramp, std check, curriculum check
-    assert s.count("std-clamp-after-update-missing") == 2       # 1f and 1g both require the overlay's second line
+    assert s.count('[ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ]') == 3     # smoke ramp, std check, curriculum check
+    assert s.count("std-clamp-after-update-missing") == 3       # 1f, 1g and (2026-10-12) 1h require the overlay's second line
     assert '"${WAITER_STD_LOG_TOL:-1e-6}"' in s                # the std check is the predeclared one by default

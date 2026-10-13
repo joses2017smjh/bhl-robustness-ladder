@@ -23,11 +23,16 @@ STANCE_TASK_ID = "Velocity-BHL-Waiter-WBC-Stance-v0"             # phase 1d (202
 STAND_TASK_ID = "Velocity-BHL-Waiter-WBC-Stand-v0"               # phase 1e (2026-10-10)
 STANDPUSH_TASK_ID = "Velocity-BHL-Waiter-WBC-StandPush-v0"       # phase 1f (2026-10-11)
 STANDBONUS_TASK_ID = "Velocity-BHL-Waiter-WBC-StandBonus-v0"     # phase 1g (2026-10-11)
-TASK_IDS = (TASK_ID, CURRICULUM_TASK_ID, STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID, STANDBONUS_TASK_ID)
+STANDSTILL_TASK_ID = "Velocity-BHL-Waiter-WBC-StandStill-v0"     # phase 1h (2026-10-12)
+TASK_IDS = (TASK_ID, CURRICULUM_TASK_ID, STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID, STANDBONUS_TASK_ID,
+            STANDSTILL_TASK_ID)
 STAND_ANCHOR_WEIGHT = -1.0
 STAND_TILT_WEIGHT = -0.5
 STAND_ANCHOR_BONUS_WEIGHT = 2.0          # phase 1g: positive, bounded (waiter_stand_mdp.bounded_bonus)
 STAND_TILT_BONUS_WEIGHT = 1.0
+STAND_STILL_WEIGHT = -0.4                # phase 1h: Isaac Lab's Digit stand_still weight
+STILL_COMMAND_THRESHOLD = 0.06
+STAND_SHARE = (0.02, 0.25)               # phase 1h: rel_standing_envs at the start and the end of its curriculum
 STANCE_REL_STANDING_ENVS = 0.25
 POLICY_TERMS = ["velocity_commands", "base_ang_vel", "projected_gravity", "joint_pos", "joint_vel", "actions",
                 "upper_body", "gait_clock"]
@@ -155,6 +160,52 @@ def check_stand_bonus(env: dict) -> list[str]:
     return p
 
 
+def check_stand_still(env: dict, window: bool = True) -> list[str]:
+    """Phase 1h only: 1d's held-clock stance terms; the standing share starting at 0.02 and its curriculum to 0.25
+    (with window=True also on the frozen 4000-7000 window; a smoke run compresses it, as it does the disturbance ramp);
+    disturbances on every env as 1d (upstream push, unrestricted hand forces); the stand-still term on the 12 leg joints
+    with its weight and threshold; and none of the 1e-1g standing terms."""
+    p = []
+    rel = ((env.get("commands") or {}).get("base_velocity") or {}).get("rel_standing_envs")
+    if rel is None or abs(float(rel) - STAND_SHARE[0]) > 1e-9:
+        p.append(f"rel_standing_envs {rel}")
+    for group in ("policy", "critic"):
+        f = str(((env["observations"].get(group) or {}).get("gait_clock") or {}).get("func", ""))
+        if "gait_clock_stance" not in f:
+            p.append(f"{group} gait_clock func {f}")
+    rw = env.get("rewards") or {}
+    if "feet_gait_stance" not in str((rw.get("feet_gait") or {}).get("func", "")):
+        p.append(f"feet_gait func {(rw.get('feet_gait') or {}).get('func')}")
+    cur = ((env.get("curriculum") or {}).get("standing_share") or {})
+    cp = cur.get("params") or {}
+    if not str(cur.get("func", "")).endswith("standing_share_curriculum") or \
+            cp.get("steps_per_iter") != 24 or (window and (cp.get("start_iter"), cp.get("end_iter")) != (4000, 7000)) or \
+            cp.get("lo") is None or abs(float(cp["lo"]) - STAND_SHARE[0]) > 1e-9 or \
+            cp.get("hi") is None or abs(float(cp["hi"]) - STAND_SHARE[1]) > 1e-9:
+        p.append(f"standing_share curriculum {cur}")
+    ev = env.get("events") or {}
+    f = str((ev.get("push_robot") or {}).get("func", ""))
+    if "moving_only" in f or "reanchor" in f or "push_by_setting_velocity" not in f:
+        p.append(f"push_robot func {f}")
+    f = str((ev.get("hand_forces") or {}).get("func", ""))
+    if not f.endswith("hand_forces"):
+        p.append(f"hand_forces func {f}")
+    term = rw.get("stand_still") or {}
+    tp = term.get("params") or {}
+    if not str(term.get("func", "")).endswith("stand_still_joint_deviation_l1"):
+        p.append(f"stand_still func {term.get('func')}")
+    if term.get("weight") is None or abs(float(term["weight"]) - STAND_STILL_WEIGHT) > 1e-9:
+        p.append(f"stand_still weight {term.get('weight')}")
+    if tp.get("command_threshold") is None or abs(float(tp["command_threshold"]) - STILL_COMMAND_THRESHOLD) > 1e-9:
+        p.append(f"stand_still command_threshold {tp.get('command_threshold')}")
+    if list((tp.get("asset_cfg") or {}).get("joint_names") or []) != list(W.LEG_JOINTS):
+        p.append(f"stand_still joints {(tp.get('asset_cfg') or {}).get('joint_names')}")
+    for name in ("stand_anchor", "stand_tilt", "stand_anchor_bonus", "stand_tilt_bonus"):
+        if rw.get(name) is not None:
+            p.append(f"{name} present")
+    return p
+
+
 def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
     from omegaconf import OmegaConf
     if task not in TASK_IDS:
@@ -162,11 +213,13 @@ def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
     deploy, env_yaml = Path(deploy), Path(env_yaml)
     env = G.load_env_yaml(env_yaml)
     funcs = ("gait_clock", "gait_clock_stance") \
-        if task in (STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID, STANDBONUS_TASK_ID) else ("gait_clock",)
+        if task in (STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID, STANDBONUS_TASK_ID, STANDSTILL_TASK_ID) \
+        else ("gait_clock",)
     info = G.check_env(env, "R1", clock_funcs=funcs)  # gait_clock last in actor and critic, period 0.8, offset 0
     cfg = OmegaConf.load(deploy)
     problems = check_layout(cfg, env)
-    if task in (CURRICULUM_TASK_ID, STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID, STANDBONUS_TASK_ID):
+    if task in (CURRICULUM_TASK_ID, STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID, STANDBONUS_TASK_ID,
+                STANDSTILL_TASK_ID):
         problems += check_curriculum(env)
     if task == STANCE_TASK_ID:
         problems += check_stance(env)
@@ -176,6 +229,8 @@ def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
         problems += check_stand_push(env)
     if task == STANDBONUS_TASK_ID:
         problems += check_stand_bonus(env)
+    if task == STANDSTILL_TASK_ID:
+        problems += check_stand_still(env, window=False)  # the launcher checks the window on full runs
     if abs(float(cfg.policy_dt) - info["step_dt"]) > 1e-9:
         problems.append(f"policy_dt {cfg.policy_dt} != env step_dt {info['step_dt']}")
     if problems:
