@@ -4950,3 +4950,4 @@ remote asset's identity/digest/size against fresh GitHub API responses.
 | 1f pushes kept + penalties + re-anchor | 0.10-1.95 | 12 of 12, every seed | 0 | 0 | the same |
 | 1g bounded positive standing rewards | 0.10-0.36 | 0 (s18, s20), 3-4 (s19) | 6-8 | 0-5 | marches in place when told to walk |
 | 1h Isaac Lab stand-still term + walk-first curriculum | 1.55-1.95 (s21, s22), 0.30 (s23) | 0 (s21, s22), 5-8 (s23) | 0-5 | 0 | turns and holds heading worse |
+- **Pull request #42 opened (2026-10-13 12:00), not merged:** branch `waiter-phase1h` = `origin/main` (348ae61) with `mission7-approach-followup` merged in (SLURM_JOBS.md: both sides appended, main's lines kept first), built in the worktree `solutions-20260930/wt-pr-waiter`. Full suite on that branch `21810098`: 3231 passed, 16 skipped.
