@@ -40,6 +40,11 @@
 # the same error measures: stand_anchor_bonus +2.0, stand_tilt_bonus +1.0), seeds 18-20, otherwise as 1f (the same
 # curriculum and std checks) plus the stand-bonus check in params/env.yaml (also done by the stamp); submit with
 # --time=16:00:00.
+# WAITER_VARIANT=1h (2026-10-12; SLURM_JOBS.md 'Predeclared now ... Waiter phase 1h'): task
+# Velocity-BHL-Waiter-WBC-StandStill-v0 (= 1d + Isaac Lab's stand-still term on the leg joints, weight -0.4, while the
+# whole command is near zero + a walk-first curriculum on the standing share, 0.02 -> 0.25 over iterations 4000-7000),
+# seeds 21-23, otherwise as 1d (the same curriculum and std checks) plus the stand-still check in params/env.yaml (also
+# done by the stamp) and the standing-share log check; submit with --time=16:00:00.
 set -euo pipefail
 export BHL_STACK=v51
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
@@ -63,6 +68,8 @@ case "$VARIANT" in
         TASK_ID=Velocity-BHL-Waiter-WBC-StandPush-v0; FULL_ITERS=10000 ;;
     1g) PREFIX=waiter-wbc1g; SEED0=18; RES_NAME=wbc1g; export BHL_STD_MAX=1.0
         TASK_ID=Velocity-BHL-Waiter-WBC-StandBonus-v0; FULL_ITERS=10000 ;;
+    1h) PREFIX=waiter-wbc1h; SEED0=21; RES_NAME=wbc1h; export BHL_STD_MAX=1.0
+        TASK_ID=Velocity-BHL-Waiter-WBC-StandStill-v0; FULL_ITERS=10000 ;;
     *)  echo "WAITER-WBC RESULT: FAIL (unknown WAITER_VARIANT $VARIANT)"; exit 2 ;;
 esac
 OBS_POLICY=83
@@ -105,9 +112,11 @@ if [ "$SMOKE" = 1 ]; then OVR_DIR="$RES/overrides"; else OVR_DIR="$WORKSPACE/ove
 mkdir -p "$OVR_DIR"
 export OVERRIDE_FILE="$OVR_DIR/${RUN_NAME}.txt"
 dr_overrides_scale 1.0 > "$OVERRIDE_FILE"
-if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ]; } && [ "$SMOKE" = 1 ]; then
+if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ]; } && [ "$SMOKE" = 1 ]; then
     # smoke only: compress the ramp into the smoke's 3 iterations, so its log shows the term move
     printf ' env.curriculum.disturbance.params.start_iter=0 env.curriculum.disturbance.params.end_iter=2' >> "$OVERRIDE_FILE"
+    # phase 1h: its standing-share ramp is compressed the same way
+    [ "$VARIANT" = 1h ] && printf ' env.curriculum.standing_share.params.start_iter=0 env.curriculum.standing_share.params.end_iter=2' >> "$OVERRIDE_FILE"
 fi
 export BHL_FORWARD_VARS="$BHL_FORWARD_VARS RUN_DIR BHL_STD_MAX"
 find_run() { ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | sort | tail -1; }
@@ -137,7 +146,8 @@ grep -q "waiter-wbc id NOT registered" "$TLOG" && why="$why task-not-registered"
 [ "$VARIANT" = 1e ] && grep -q "waiter-wbc-stand id NOT registered" "$TLOG" && why="$why stand-task-not-registered"
 [ "$VARIANT" = 1f ] && grep -q "waiter-wbc-standpush id NOT registered" "$TLOG" && why="$why standpush-task-not-registered"
 [ "$VARIANT" = 1g ] && grep -q "waiter-wbc-standbonus id NOT registered" "$TLOG" && why="$why standbonus-task-not-registered"
-if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
+[ "$VARIANT" = 1h ] && grep -q "waiter-wbc-standstill id NOT registered" "$TLOG" && why="$why standstill-task-not-registered"
+if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
     grep -q "\[overlay\] action-noise std bounded to \[0.001, 1.0\]" "$TLOG" || why="$why std-bound-overlay-missing"
     # WAITER_STD_LOG_TOL (default 1e-6 = the check as predeclared): the log line shows the std parameter after the
     # iteration's last optimizer step, before the next clamp, so it can read up to 1.01 while every use is <= 1.0
@@ -153,7 +163,7 @@ print(f"std check: max logged {max(v) if v else None}; {len(over)} of {len(v)} i
 sys.exit(0 if v and max(v) <= 1.0 + tol else 1)
 PY
 fi
-if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ]; } && [ -n "$run" ] && [ -s "$TLOG" ]; then
+if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ]; } && [ -n "$run" ] && [ -s "$TLOG" ]; then
     # phase 1c: the curriculum ran (logged 0 first, and 1.0 last in a full run), the PPO rollout is the 24 steps the
     # iteration count assumes, and a full run carries the frozen ramp values
     (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" - "$TLOG" "$run" "$SMOKE" <<'PY') || why="$why curriculum-check"
@@ -214,6 +224,28 @@ print('stand-bonus check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$ru
     case "$s" in "stand-bonus check: OK") ;; *) why="$why stand-bonus-check";; esac
     # as in 1f: the logged std is the bounded one only if the overlay clamps right after each PPO update
     grep -q "\[overlay\] action-noise std also bounded after each PPO update" "$TLOG" || [ ! -s "$TLOG" ] || why="$why std-clamp-after-update-missing"
+fi
+if [ "$VARIANT" = 1h ] && [ -n "$run" ] && [ -f "$run/params/env.yaml" ]; then
+    # phase 1h: the held-clock stance terms, the stand-still term, the standing-share curriculum and no 1e-1g term
+    s=$( (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" -c "
+import sys
+from bhl_robust.eval.gait_clock import load_env_yaml
+from bhl_robust.eval.waiter_wbc import check_stand_still
+p = check_stand_still(load_env_yaml(sys.argv[1]), window=sys.argv[2] != '1')   # a smoke compresses the window
+print('stand-still check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/params/env.yaml" "$SMOKE") 2>&1 | tail -1)
+    echo "$s"
+    case "$s" in "stand-still check: OK") ;; *) why="$why stand-still-check";; esac
+    grep -q "\[overlay\] action-noise std also bounded after each PPO update" "$TLOG" || [ ! -s "$TLOG" ] || why="$why std-clamp-after-update-missing"
+    if [ -s "$TLOG" ]; then
+        # the standing share was logged rising from 0.02 to 0.25 (a smoke: within its 3 iterations)
+        "$PYH" - "$TLOG" <<'PY' || why="$why standing-share-check"
+import re, sys
+v = [float(x) for x in re.findall(r"Curriculum/standing_share:\s*([0-9.]+)", open(sys.argv[1], errors="ignore").read())]
+ok = bool(v) and v == sorted(v) and v[0] < 0.25 and abs(max(v) - 0.25) < 1e-6 and min(v) >= 0.02 - 1e-6
+print(f"standing-share check: {'OK' if ok else 'FAIL'} (logged {len(v)} values, first {v[0] if v else None}, last {v[-1] if v else None})")
+sys.exit(0 if ok else 1)
+PY
+    fi
 fi
 if [ "$VARIANT" = 1e ] && [ -n "$run" ] && [ -f "$run/params/env.yaml" ]; then
     # phase 1e: 1d's stance terms + no disturbances on standing envs + the standing penalties, in the run's env.yaml

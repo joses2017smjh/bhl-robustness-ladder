@@ -290,3 +290,47 @@ class HumanoidWaiterWbcStandBonusCfg(HumanoidWaiterWbcStanceCfg):
         super().__post_init__()
         self.events.push_robot.func = waiter_stand_mdp.push_and_reanchor
         self.events.push_robot.params["delay_s"] = waiter_stand_mdp.REANCHOR_DELAY_S
+
+
+# ---- phase 1h (2026-10-12; SLURM_JOBS.md "Predeclared now ... Waiter phase 1h") ------------------------------------
+# = phase 1d (HumanoidWaiterWbcStanceCfg: the held stance clock; pushes and hand forces on every env) with ONLY:
+#   * stand_still: Isaac Lab's stand-still term on the 12 leg joints, weight STAND_STILL_WEIGHT (its Digit task's),
+#     charged while the whole command is below waiter_stand_mdp.STILL_COMMAND_THRESHOLD;
+#   * a walk-first curriculum on the share of standing envs: STAND_SHARE_START (1c) until CURRICULUM_START_ITER, linear
+#     to STAND_SHARE_END (1d) at CURRICULUM_END_ITER, the disturbance curriculum's window and keying.
+# No 1e/1f/1g term. Why: waiter_stand_mdp module notes (1d shuffled; 1e/1f fell; 1g stood but marched in place).
+STANDSTILL_TASK_ID = "Velocity-BHL-Waiter-WBC-StandStill-v0"
+STAND_STILL_WEIGHT = -0.4
+
+
+@configclass
+class WaiterStandStillRewardsCfg(TurnGaitRewardsCfg):
+    """R1's rewards (as the waiter tasks edit them in __post_init__) + the stand-still term, last."""
+
+    stand_still = RewTerm(func=waiter_stand_mdp.stand_still_joint_deviation_l1, weight=STAND_STILL_WEIGHT,
+                          params={"command_name": "base_velocity",
+                                  "command_threshold": waiter_stand_mdp.STILL_COMMAND_THRESHOLD,
+                                  "asset_cfg": SceneEntityCfg("robot", joint_names=W.LEG_JOINTS, preserve_order=True)})
+
+
+@configclass
+class WaiterStandStillCurriculumCfg(WaiterCurriculumCfg):
+    """Phase 1c's disturbance curriculum + the standing-share curriculum on the same window."""
+
+    standing_share = CurrTerm(
+        func=waiter_stand_mdp.standing_share_curriculum,
+        params={"start_iter": CURRICULUM_START_ITER, "end_iter": CURRICULUM_END_ITER, "steps_per_iter": STEPS_PER_ITER,
+                "lo": waiter_stand_mdp.STAND_SHARE_START, "hi": waiter_stand_mdp.STAND_SHARE_END},
+    )
+
+
+@configclass
+class HumanoidWaiterWbcStandStillCfg(HumanoidWaiterWbcStanceCfg):
+    """Phase 1h: phase 1d + Isaac Lab's stand-still term + the walk-first standing-share curriculum (notes above)."""
+
+    rewards: WaiterStandStillRewardsCfg = WaiterStandStillRewardsCfg()
+    curriculum: WaiterStandStillCurriculumCfg = WaiterStandStillCurriculumCfg()
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.commands.base_velocity.rel_standing_envs = waiter_stand_mdp.STAND_SHARE_START   # the curriculum raises it
