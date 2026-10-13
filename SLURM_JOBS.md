@@ -4591,3 +4591,8 @@ Reported, not gated: push-with-load (T1 carry, 0.5 kg per hand) falls 0/20, 1/20
 | 1g bounded positive standing rewards | 0.10-0.36 | 0 (s18, s20), 3-4 (s19) | 6-8 | 0-5 | marches in place when told to walk |
 | 1h Isaac Lab stand-still term + walk-first curriculum | 1.55-1.95 (s21, s22), 0.30 (s23) | 0 (s21, s22), 5-8 (s23) | 0-5 | 0 | turns and holds heading worse |
 - **Pull request #42 opened (2026-10-13 12:00), not merged:** branch `waiter-phase1h` = `origin/main` (348ae61) with `mission7-approach-followup` merged in (SLURM_JOBS.md: both sides appended, main's lines kept first), built in the worktree `solutions-20260930/wt-pr-waiter`. Full suite on that branch `21810098`: 3231 passed, 16 skipped.
+
+## 2026-10-13: the user chose B and C ("do b and c")
+
+**The user's decision (2026-10-13), verbatim: "do b and c"** (B: a dev check of the lock-removal test with the standing candidates that did not qualify; C: a separate standing policy with a switch).
+- **B, submitted 13:13 (2026-10-13 13:16 recorded; dev measurement, not gated, no selection-rule change):** the lock-removal test's own protocol (the scripted expert's held-base plan, `lock_start_only`: base held through the reset settle, free from t = 0, 90 s) on dev seeds 1000-1031 with 1g s18 (`21810602`), 1h s21 (`21810603`) and 1h s22 (`21810604`); outputs `solutions-20260930/campaign-waiter/phase2/dev2/startonly_{1g_s18,1h_s21,1h_s22}_dev/`. Reference: s7 on the same seeds 0/32 (31 failed at the two-hand tray hook). It asks whether Q4's strict bound matters for the actual task. A dev result cannot select a checkpoint; if one clears 26/32 the scored test on it is offered to the user (it would bypass the selection rule, so it needs a go), and C's rule is not changed by it.
