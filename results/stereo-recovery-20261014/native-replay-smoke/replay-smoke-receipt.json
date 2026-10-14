@@ -1,0 +1,138 @@
+{
+  "schema": "bhl-stereo-recovery-replay-smoke-receipt-v1",
+  "job_id": "21825648",
+  "host": "cn-b09.hpc.engr.oregonstate.edu",
+  "source_commit": "685ca3c974c487d94acda410a495fb85704fe527",
+  "finished_utc": "2026-10-14T23:21:14.264099+00:00",
+  "episodes": {
+    "active_map_reset_same_id": {
+      "episode": "bounded_latest-occluders-s750000-nominal-stereo",
+      "frames": 189,
+      "original": {
+        "log_relocalized": 0,
+        "log_new_maps": 0,
+        "log_active_map_resets": 1
+      },
+      "runs": {
+        "atlas_telemetry": {
+          "responses": 189,
+          "responses_with_atlas_telemetry": 189,
+          "log_relocalized": 6,
+          "log_new_maps": 0,
+          "log_active_map_resets": 0,
+          "wrapper_reset_flags": 0,
+          "map_changed_flags": 0,
+          "inconsistent_snapshots": 0,
+          "legacy_vs_atlas_map_disagreements": 0,
+          "native_compute_p95_ms": 46.764344,
+          "legacy_invalidations": 1,
+          "atlas_invalidations": [],
+          "tracked_frames": 181
+        },
+        "previous": {
+          "responses": 189,
+          "responses_with_atlas_telemetry": 0,
+          "log_relocalized": 1,
+          "log_new_maps": 0,
+          "log_active_map_resets": 0,
+          "wrapper_reset_flags": 0,
+          "map_changed_flags": 0,
+          "inconsistent_snapshots": 0,
+          "legacy_vs_atlas_map_disagreements": 0,
+          "native_compute_p95_ms": 42.280599,
+          "legacy_invalidations": 0,
+          "atlas_invalidations": null,
+          "tracked_frames": 188
+        }
+      }
+    },
+    "new_atlas_map": {
+      "episode": "bounded_latest-straight-s750000-nominal-stereo",
+      "frames": 189,
+      "original": {
+        "log_relocalized": 1,
+        "log_new_maps": 1,
+        "log_active_map_resets": 0
+      },
+      "runs": {
+        "atlas_telemetry": {
+          "responses": 189,
+          "responses_with_atlas_telemetry": 189,
+          "log_relocalized": 0,
+          "log_new_maps": 1,
+          "log_active_map_resets": 0,
+          "wrapper_reset_flags": 0,
+          "map_changed_flags": 0,
+          "inconsistent_snapshots": 0,
+          "legacy_vs_atlas_map_disagreements": 0,
+          "native_compute_p95_ms": 44.253417000000006,
+          "legacy_invalidations": 1,
+          "atlas_invalidations": [
+            [
+              "atlas_map_id_changed",
+              "atlas_map_count_changed",
+              "native_returned_to_initialization"
+            ]
+          ],
+          "tracked_frames": 172
+        },
+        "previous": {
+          "responses": 189,
+          "responses_with_atlas_telemetry": 0,
+          "log_relocalized": 0,
+          "log_new_maps": 1,
+          "log_active_map_resets": 0,
+          "wrapper_reset_flags": 0,
+          "map_changed_flags": 0,
+          "inconsistent_snapshots": 0,
+          "legacy_vs_atlas_map_disagreements": 0,
+          "native_compute_p95_ms": 44.765998,
+          "legacy_invalidations": 1,
+          "atlas_invalidations": null,
+          "tracked_frames": 172
+        }
+      }
+    },
+    "same_map_relocalization": {
+      "episode": "bounded_latest-straight-s750000-camera_10hz-stereo",
+      "frames": 219,
+      "original": {
+        "log_relocalized": 3,
+        "log_new_maps": 0,
+        "log_active_map_resets": 0
+      },
+      "runs": {
+        "atlas_telemetry": {
+          "responses": 219,
+          "responses_with_atlas_telemetry": 219,
+          "log_relocalized": 1,
+          "log_new_maps": 0,
+          "log_active_map_resets": 0,
+          "wrapper_reset_flags": 0,
+          "map_changed_flags": 0,
+          "inconsistent_snapshots": 0,
+          "legacy_vs_atlas_map_disagreements": 0,
+          "native_compute_p95_ms": 41.729873,
+          "legacy_invalidations": 1,
+          "atlas_invalidations": [],
+          "tracked_frames": 211
+        },
+        "previous": {
+          "responses": 219,
+          "responses_with_atlas_telemetry": 0,
+          "log_relocalized": 8,
+          "log_new_maps": 0,
+          "log_active_map_resets": 0,
+          "wrapper_reset_flags": 0,
+          "map_changed_flags": 0,
+          "inconsistent_snapshots": 0,
+          "legacy_vs_atlas_map_disagreements": 0,
+          "native_compute_p95_ms": 44.680617999999996,
+          "legacy_invalidations": 1,
+          "atlas_invalidations": null,
+          "tracked_frames": 208
+        }
+      }
+    }
+  }
+}

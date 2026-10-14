@@ -4929,6 +4929,7 @@ paired campaign plus dispatcher. `libORB_SLAM3.so` is byte-identical to v1.
 | 21825648 | Open-loop native smoke: 3 recorded v1 episodes through the new and previous runtimes | COMPLETED, 0:0 / 7m14s; Atlas block on 597/597 responses; same-map relocalizations raised no Atlas invalidation while the legacy tracker invalidated them; a genuine new map was invalidated |
 | 21825704 | CPU closed-loop plumbing check of `run_episode`, both arms, engineering seed 4242, 16 s | COMPLETED, 0:0 / 1m52s; not a scored episode |
 | 21825705 | Deterministic blackout replays of one recorded v1 episode (early reset, short and long late losses) | COMPLETED, 0:0 / 3m38s; wrapper reset flags equalled ORB-SLAM3's logged active-map resets (2 and 1); Atlas epochs flagged both same-id resets (one, LOST→OK on map 0 with init keyframe 1→9, was missed by the legacy tracker) and the new map, and raised nothing on relocalization |
+| 21825799 | Allocated validation of frozen commit `434181c` (16 test files) + protocol + `stereo_recovery_dispatch.py prepare` | COMPLETED, 0:0 / 59s (cn-a11); 361 passed, 11 subtests; `FROZEN_NOT_SUBMITTED` |
 
 Design: arms `permanent_stop` (unchanged v1 logic) and
 `resume_verified_relocalization` × nominal / 10 Hz / causal 40 ms exposure ×
@@ -4949,3 +4950,5 @@ Operational plan: one RTX 8000 (`gpu`, `--constraint=rtx8000`), 2 CPUs,
 16 GiB, 6-hour limit, 26 sequential stages, no requeue; ~1.25 GPU-hours and
 ~13 GB raw expected, 40 GiB campaign cap and an 8 GiB margin under the 2 TiB
 hard quota (the project is already above its soft limit, in grace).
+
+Frozen intake (not submitted): campaign `followups-20261014-stereo/stereo-recovery-v1-20261014`, archive SHA256 `a27fda57cd08dba9960550c9c34a02ae3bb387d5ff955f00dc4d0e5e1d8e8677`, protocol `e7c033ea…`, scientific protocol `e041d2b4…`, ORB runtime input `df8f9279…` replacing `91ca4b6e…`. The GPU attempt is launched only with `stereo_recovery_dispatch.py submit` (one attempt; `submission-start.json` blocks retries). Compact receipts: `results/stereo-recovery-20261014/`.

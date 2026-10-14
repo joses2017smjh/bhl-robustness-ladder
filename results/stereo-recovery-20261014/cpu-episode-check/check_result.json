@@ -1,0 +1,68 @@
+{
+  "schema": "bhl-stereo-recovery-cpu-episode-check-v1",
+  "status": "PASS",
+  "seed": 4242,
+  "seconds": 16.0,
+  "mujoco_gl": "egl",
+  "arms": {
+    "permanent_stop": {
+      "success": false,
+      "fell": false,
+      "collision": false,
+      "native_camera_frames": 69,
+      "native_raw_ok_frames": 66,
+      "native_tracked_frames": 66,
+      "atlas_telemetry_frames": 69,
+      "verified_resumes": 0,
+      "shadow_verified_resumes": 3,
+      "atlas_coordinate_invalidations": 0,
+      "native_coordinate_invalidations": 0,
+      "stopped_navigation_time_s": 2.64,
+      "navigation_decisions": 150,
+      "client_wall_p95_ms": 51.86334881000221,
+      "accepted_pose_error_p95_m": 0.1721379957997173,
+      "elapsed_simulation_s": 16.00000000000806,
+      "permanent_stop": null,
+      "loss_mechanisms": {
+        "same_map_relocalization": 3,
+        "active_map_reset": 0,
+        "new_atlas_map": 0,
+        "other_invalidation": 0,
+        "no_native_recovery": 0
+      },
+      "gate_final_state": "TRACKING",
+      "wall_s": 54.576899437000975,
+      "episode_bytes": 58909349
+    },
+    "resume_verified_relocalization": {
+      "success": false,
+      "fell": false,
+      "collision": false,
+      "native_camera_frames": 69,
+      "native_raw_ok_frames": 60,
+      "native_tracked_frames": 60,
+      "atlas_telemetry_frames": 69,
+      "verified_resumes": 0,
+      "shadow_verified_resumes": 0,
+      "atlas_coordinate_invalidations": 0,
+      "native_coordinate_invalidations": 1,
+      "stopped_navigation_time_s": 3.36,
+      "navigation_decisions": 150,
+      "client_wall_p95_ms": 46.96373236365616,
+      "accepted_pose_error_p95_m": 0.05658345099393379,
+      "elapsed_simulation_s": 16.00000000000806,
+      "permanent_stop": null,
+      "loss_mechanisms": {
+        "same_map_relocalization": 0,
+        "active_map_reset": 0,
+        "new_atlas_map": 0,
+        "other_invalidation": 0,
+        "no_native_recovery": 1
+      },
+      "gate_final_state": "LOSS_STOP",
+      "wall_s": 40.234153433004394,
+      "episode_bytes": 59078498
+    }
+  },
+  "scope": "engineering plumbing check on CPU software rendering; not a scored or predeclared episode"
+}
