@@ -4903,3 +4903,49 @@ Publication completed with 30 verified assets. The independent audit rehashed
 remote asset's identity/digest/size against fresh GitHub API responses.
 [Reviewed results](docs/PROCESSING_SCHEDULE_RESULTS_2026-10-12.md),
 [all completion and publication receipts](results/processing-schedule-20261012/).
+
+## Stereo recovery comparison — 2026-10-14 (predeclared before submission)
+
+User asked to improve stereo navigation after stereo reached 0/12 goals in the
+processing-schedule study. Every bounded-latest stereo episode there invalidated
+coordinates with `native_map_identity_unavailable`: the wrapper read map
+identity only from tracked map points, which vanish during RECENTLY_LOST, and
+the client then stopped for good. ORB-SLAM3 itself relocalized in the same map
+in 6/12, reset the active map reusing id 0 in 1/12, and created a new Atlas map
+in 5/12. Raw poses after an invalidation were not saved.
+
+Changes on branch `stereo-recovery-20261014`: an opt-in read-only Atlas
+telemetry relink of the ORB wrapper (per frame: current map id, init keyframe
+id, keyframes, big-change index, map count, `MapChanged()`, and a same-id
+active-map-reset flag); Atlas-aware coordinate epochs, under which a transient
+loss in the same map incarnation is no longer an invalidation while id changes,
+same-id resets and big changes still are; a fail-closed resume gate; and a
+paired campaign plus dispatcher. `libORB_SLAM3.so` is byte-identical to v1.
+
+| Job | Purpose | State |
+| --- | --- | --- |
+| 21825568 | `share` node network probe for the relink's pinned header packages | COMPLETED, 0:0 (cn-b03) |
+| 21825619 | CPU relink with Atlas telemetry from commit `8f7ddb0` | COMPLETED, 0:0 / 3m05s (cn-b05); runtime `df8f9279…c72c`, wrapper `b84aed21…`, library `c4f09d2d…` unchanged |
+| 21825648 | Open-loop native smoke: 3 recorded v1 episodes through the new and previous runtimes | COMPLETED, 0:0 / 7m14s; Atlas block on 597/597 responses; same-map relocalizations raised no Atlas invalidation while the legacy tracker invalidated them; a genuine new map was invalidated |
+| 21825704 | CPU closed-loop plumbing check of `run_episode`, both arms, engineering seed 4242, 16 s | COMPLETED, 0:0 / 1m52s; not a scored episode |
+| 21825705 | Deterministic blackout replays of one recorded v1 episode (early reset, short and long late losses) | COMPLETED, 0:0 / 3m38s; wrapper reset flags equalled ORB-SLAM3's logged active-map resets (2 and 1); Atlas epochs flagged both same-id resets (one, LOST→OK on map 0 with init keyframe 1→9, was missed by the legacy tracker) and the new map, and raised nothing on relocalization |
+
+Design: arms `permanent_stop` (unchanged v1 logic) and
+`resume_verified_relocalization` × nominal / 10 Hz / causal 40 ms exposure ×
+straight / occluder routes × new seeds 760000–760003 = 48 bounded-latest
+40-second episodes, paired by seed/condition/route, arm order counterbalanced
+(each arm first in 12 pairs). Fresh 6-cell 18-second smoke on seed 759000. The
+gate resumes only after two tracked frames agree with the last accepted pose
+dead-reckoned through the applied commands: 0.15 m + 0.6 × commanded path,
+10° + 0.4 × commanded rotation, 0.10 m height and 10° tilt change. Calibrated
+before this campaign on v1 truth; any failure stops permanently. Primary:
+clean goals, exact two-sided McNemar on 24 pairs (p < 0.05 with more
+resume-only goals; with no control goals, at least 6). Secondary: stopped
+navigation time, recovery times, falls/collisions, loss mechanisms. Safety:
+no excess falls or collisions. No interim analyses, exclusions, reruns or
+retuning. stereo_inertial deferred (0/40 earlier, needs its own epoch rules).
+
+Operational plan: one RTX 8000 (`gpu`, `--constraint=rtx8000`), 2 CPUs,
+16 GiB, 6-hour limit, 26 sequential stages, no requeue; ~1.25 GPU-hours and
+~13 GB raw expected, 40 GiB campaign cap and an 8 GiB margin under the 2 TiB
+hard quota (the project is already above its soft limit, in grace).

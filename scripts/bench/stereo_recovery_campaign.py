@@ -175,7 +175,8 @@ def accepted_pose_errors(native_records, truth_imu, registration, t_body_imu):
         truth = truth_imu[index][1] @ np.linalg.inv(transform(t_body_imu))
         error = float(np.linalg.norm(estimate[:2, 3] - truth[:2, 3]))
         errors.append(error)
-        if (record.get("relocalization_gate") or {}).get("gate_reason") == "VERIFIED_RELOCALIZATION_RESUME":
+        if (record.get("recovery_policy") == "resume_verified_relocalization"
+                and (record.get("relocalization_gate") or {}).get("gate_reason") == "VERIFIED_RELOCALIZATION_RESUME"):
             resumed.append({"timestamp_s": record["timestamp_s"], "position_error_m": error})
     return {"accepted_pose_errors_m": errors, "resumed_pose_errors_m": resumed,
             "accepted_pose_error_p95_m": float(np.quantile(errors, .95)) if errors else None,
