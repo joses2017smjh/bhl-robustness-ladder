@@ -69,9 +69,13 @@ if [ -f "$VERDICT" ]; then
     exit 0
 fi
 
+if [ -n "${TURNQ_DEPLOY:-}" ]; then
+    DEPLOY=$TURNQ_DEPLOY          # 2026-10-13 (Waiter phase 1i): a given deploy config, e.g. a dual one; RUN names the outputs
+else
 mapfile -t dirs < <(ls -d "$U"/logs/rsl_rl/humanoid/*_"$RUN" 2>/dev/null | sort)
 if [ "${#dirs[@]}" -ne 1 ]; then echo "TURN-QUALIFY RESULT: INCOMPLETE -- expected exactly one run dir for $RUN, found ${#dirs[@]}"; exit 1; fi
 DEPLOY=${dirs[0]}/exported/deploy.yaml
+fi
 [ -f "$DEPLOY" ] || { echo "TURN-QUALIFY RESULT: INCOMPLETE -- no exported deploy.yaml: $DEPLOY"; exit 1; }
 echo "deploy: $DEPLOY"
 
