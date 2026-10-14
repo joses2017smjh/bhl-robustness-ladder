@@ -1,0 +1,158 @@
+{
+ "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1i/training/waiter-wbc1i-s25.dual.deploy.yaml",
+ "gate": "Q4 standing manipulation",
+ "rule": "PASS iff 0 falls in 12 (4 expert-pose arm trajectories x seeds 0-2, 0.5 kg per hand, command 0, clock held at phase 0.5, free base) and max displacement <= 0.03 m, max |yaw| <= 3 deg and max |pitch| <= 3 deg (t >= 1 s, relative to t = 1 s) on >= 10 of the 12",
+ "verdict": "FAIL",
+ "falls": 0,
+ "n": 12,
+ "n_ok": 0,
+ "episodes": [
+  {
+   "seed": 0,
+   "fell_at_s": null,
+   "disp_m": 0.0989,
+   "yaw_deg": 4.87,
+   "pitch_deg": 1.23,
+   "ok": false,
+   "trajectory": "P1_tumbler_left"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": null,
+   "disp_m": 0.0862,
+   "yaw_deg": 4.27,
+   "pitch_deg": 1.24,
+   "ok": false,
+   "trajectory": "P1_tumbler_left"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": null,
+   "disp_m": 0.1034,
+   "yaw_deg": 3.57,
+   "pitch_deg": 1.46,
+   "ok": false,
+   "trajectory": "P1_tumbler_left"
+  },
+  {
+   "seed": 0,
+   "fell_at_s": null,
+   "disp_m": 0.1016,
+   "yaw_deg": 2.72,
+   "pitch_deg": 1.35,
+   "ok": false,
+   "trajectory": "P2_tumbler_right"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": null,
+   "disp_m": 0.0984,
+   "yaw_deg": 2.29,
+   "pitch_deg": 1.37,
+   "ok": false,
+   "trajectory": "P2_tumbler_right"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": null,
+   "disp_m": 0.0836,
+   "yaw_deg": 2.2,
+   "pitch_deg": 1.55,
+   "ok": false,
+   "trajectory": "P2_tumbler_right"
+  },
+  {
+   "seed": 0,
+   "fell_at_s": null,
+   "disp_m": 0.1015,
+   "yaw_deg": 4.08,
+   "pitch_deg": 1.63,
+   "ok": false,
+   "trajectory": "P3_tray_hook"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": null,
+   "disp_m": 0.0919,
+   "yaw_deg": 3.29,
+   "pitch_deg": 1.6,
+   "ok": false,
+   "trajectory": "P3_tray_hook"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": null,
+   "disp_m": 0.0961,
+   "yaw_deg": 2.86,
+   "pitch_deg": 2.16,
+   "ok": false,
+   "trajectory": "P3_tray_hook"
+  },
+  {
+   "seed": 0,
+   "fell_at_s": null,
+   "disp_m": 0.0989,
+   "yaw_deg": 4.87,
+   "pitch_deg": 2.52,
+   "ok": false,
+   "trajectory": "P4_pick_then_hook"
+  },
+  {
+   "seed": 1,
+   "fell_at_s": null,
+   "disp_m": 0.0862,
+   "yaw_deg": 4.63,
+   "pitch_deg": 2.55,
+   "ok": false,
+   "trajectory": "P4_pick_then_hook"
+  },
+  {
+   "seed": 2,
+   "fell_at_s": null,
+   "disp_m": 0.1034,
+   "yaw_deg": 5.03,
+   "pitch_deg": 2.69,
+   "ok": false,
+   "trajectory": "P4_pick_then_hook"
+  }
+ ],
+ "payload_kg_per_hand": 0.5,
+ "hold_step": 10,
+ "poses": {
+  "tumbler_ins": [
+   -0.185,
+   0.323,
+   -0.128,
+   1.272,
+   -0.541
+  ],
+  "tumbler_lift": [
+   -0.184,
+   0.583,
+   -0.015,
+   1.416,
+   -0.785
+  ],
+  "tumbler_over_tray": [
+   -0.608,
+   -0.084,
+   0.785,
+   1.447,
+   -0.543
+  ],
+  "hook_ins": [
+   -0.848,
+   0.126,
+   0.59,
+   0.902,
+   -0.675
+  ],
+  "hook_lift": [
+   -0.959,
+   0.219,
+   0.692,
+   1.005,
+   -0.785
+  ]
+ }
+}

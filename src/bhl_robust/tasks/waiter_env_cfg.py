@@ -343,6 +343,8 @@ class HumanoidWaiterWbcStandStillCfg(HumanoidWaiterWbcStanceCfg):
 #   * every env standing (rel_standing_envs STANDONLY_REL_STANDING_ENVS): the command is always zero, the clock held;
 #   * the standing rewards: 1g's two bounded bonuses (with 1f's re-anchoring push) and 1h's stand-still term.
 # Why: six single-policy designs (1d-1h) traded walking or turning for standing; here no network has to do both.
+# OUTCOME (2026-10-14): NEGATIVE. Paired with s7 the walking gates are s7's exactly and no seed falls or leans when
+# standing (0 falls in 72 episodes), but the standing-only policies slide 3-10 cm and turn 2-8 deg (Q4 0/12).
 STANDONLY_TASK_ID = "Velocity-BHL-Waiter-WBC-StandOnly-v0"
 STANDONLY_REL_STANDING_ENVS = 1.0
 
