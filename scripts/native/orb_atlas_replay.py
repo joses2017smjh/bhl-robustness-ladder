@@ -11,7 +11,12 @@ are evaluated on the same responses.
 
 This is an instrumentation/execution smoke, not navigation: the camera motion is
 fixed by the recording and ORB-SLAM3 threading is nondeterministic, so a loss or
-relocalization observed in closed loop need not recur. Run inside the Ubuntu SIF.
+relocalization observed in closed loop need not recur. ``--blackout START END``
+replaces the recorded pairs captured in [START, END) with all-black images of the
+same size (the predeclared visual-blackout acquisition fault), which forces a
+deterministic tracking loss: early (few keyframes) it triggers ORB-SLAM3's
+same-id active-map reset, briefly later a relocalization, and for more than 3 s
+later a new Atlas map. Run inside the Ubuntu SIF.
 """
 from __future__ import annotations
 
@@ -57,6 +62,26 @@ def extract_episode(shard_archive, episode, destination):
         if not (Path(destination) / name).is_file():
             raise ValueError("recorded episode lacks " + name)
     return root
+
+
+def black_out(frames, start_s, end_s, directory):
+    """Replace pairs captured in [start_s, end_s) with same-size all-black PNGs."""
+    from PIL import Image
+    directory.mkdir(parents=True, exist_ok=False)
+    replaced = []
+    for frame in frames:
+        if start_s <= frame["timestamp_s"] < end_s:
+            for side in ("left", "right"):
+                with Image.open(frame[side]) as image:
+                    size, mode = image.size, image.mode
+                target = directory / f'{frame["camera_id"]:05d}-{side}.png'
+                Image.new(mode, size).save(target)
+                frame[side] = target
+            frame["blackout"] = True
+            replaced.append(frame["camera_id"])
+    if not replaced:
+        raise ValueError("blackout window contains no recorded frame")
+    return replaced
 
 
 def recorded_frames(root):
@@ -147,11 +172,13 @@ def main(argv=None):
     parser.add_argument("--runtime", action="append", nargs=3, metavar=("LABEL", "ARCHIVE", "SHA256"), required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--pace", type=float, default=1.5, help="wall seconds per recorded sensor second")
+    parser.add_argument("--blackout", type=float, nargs=2, metavar=("START_S", "END_S"))
     args = parser.parse_args(argv)
     args.output.mkdir(parents=True, exist_ok=False)
     work = args.output / "work"
     root = extract_episode(args.shard_archive, args.episode, work / "recorded")
     frames, original = recorded_frames(root)
+    blackout = black_out(frames, *args.blackout, work / "blackout") if args.blackout else []
     original_log = (root / "native/orb/native-orb.log").read_text(errors="replace")
     original_rows = [{"tracking_state": r["native_ORB_tracking_state"], "map_id": r["native_ORB_map_id"],
                       "timestamp_s": r["timestamp_s"]} for r in original]
@@ -161,6 +188,7 @@ def main(argv=None):
     result = {"schema": "bhl-orb-atlas-recorded-replay-v1", "status": "INCOMPLETE",
               "shard_archive": str(args.shard_archive), "shard_archive_sha256": sha256(args.shard_archive),
               "episode": args.episode, "frames": len(frames), "pace_wall_per_sensor_second": args.pace,
+              "blackout_window_s": args.blackout, "blackout_camera_ids": blackout,
               "original_closed_loop": {"timeline": timeline(original_rows),
                                        "legacy_invalidations": legacy.receipt()["events"],
                                        "log_relocalized": original_log.count("Relocalized!!"),
