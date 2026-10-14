@@ -16,8 +16,8 @@ squeeze friction. Squeezing a cube between welded hands rolled it in every coope
 ## Closing summary, 2026-10-14
 
 **The program is complete in simulation: all four phases passed a predeclared gate.** Standing in phases 2-4 relies on
-a declared simulation fixture, the stance lock. Seven leg-controller designs and three task-level tests have not
-removed it; one more attempt is running (option 3, below). Closed on the user's decision ("do 2").
+a declared simulation fixture, the stance lock. Six leg-controller designs (1d-1i) and four task-level checks (three on dev
+layouts, one scored) have not removed it; one more attempt is running (option 3, below). Closed on the user's decision ("do 2").
 
 | Phase | Final result | Record |
 |---|---|---|
@@ -28,8 +28,7 @@ removed it; one more attempt is running (option 3, below). Closed on the user's 
 
 The caveats:
 - **The stance lock.** While the robot stands, the simulator holds its base where it is (a weld that softens away
-  when a walk command arrives). With the lock taken away, the expert completes 1/100 with s7. Removal attempts: seven
-  designs (1d-1i, table below), none passing the standing gates; the closest, s7 paired with a standing-only policy
+  when a walk command arrives). With the lock taken away, the expert completes 1/100 with s7. Removal attempts: six designs (1d-1i, table below), none passing the standing gates; the closest, s7 paired with a standing-only policy
   (pair s24), completes **76/100 on a free base** (bar 80; 0 falls; every episode that lifted the tray finished the
   carry), and the expert's own free-base mode with that pair 2/32 on dev layouts. Option 3 (six more standing-only
   seeds; the best on dev layouts is tested once on fresh layouts 9000-9099) is running and will be added here.
@@ -142,7 +141,7 @@ What the measurements say:
   dev layouts it took the named tumbler 48 times out of 48. Its remaining failures are in the carry and the
   set-down, where it does worse than the base policy.
 - Standing is still a fixture. The learned legs walk and turn; with a free base the expert completes 1/100 with s7.
-  Six single-policy standing designs (1d-1h) each traded walking, turning or staying up for standing still; a
+  Five single-policy standing designs (1d-1h) each traded walking, turning or staying up for standing still; a
   standing-only policy paired with s7 (1i) keeps s7's walking and never falls or leans, but slides 3-10 cm while
   the arms work. The best such pair completes 76/100 on a free base, four short of the bar.
 
