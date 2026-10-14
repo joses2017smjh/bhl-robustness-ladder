@@ -65,6 +65,7 @@ listing episodes with their seeds, success and sha256.
 | 6000-6099 | phase 4 scored evaluation (never used before it) |
 | 7000-7099 | phase 3b scored evaluation (range added 2026-10-11 for the retrained phase 3 policy; never used before it) |
 | 8000-8099 | phase 4b scored evaluation (range added 2026-10-11 for the noise-policy fine-tune on the phase 3b policy; never used before it) |
+| 9000-9099 | second scored stance-lock removal test (range added 2026-10-14 for the standing-only seeds of option 3; never used before it) |
 
 ## Amendment 2026-10-09 (before any phase 2 gate run or demonstration; recorded in SLURM_JOBS.md)
 

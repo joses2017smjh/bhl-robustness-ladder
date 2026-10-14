@@ -9,7 +9,8 @@ overwrite it.
   episodes:  expert_gate.py --deploy D --upstream U --cache-dir C --out DIR --seeds 2000-2049 [--free-base]
   verdict:   expert_gate.py --out DIR --summarize --seeds 2000-2099 --min-success 80
 
-Seeds are guarded to the gate range 2000-2099 (`--range dev` allows 1000-1999 for development runs).
+Seeds are guarded to the gate range 2000-2099 (`--range dev` allows 1000-1999 for development runs; `--range lock2`
+allows 9000-9099, the second scored lock-removal range, 2026-10-14).
 """
 from __future__ import annotations
 
@@ -24,7 +25,8 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parents[1] / "src"))
 sys.path.insert(0, str(HERE))
 
-RANGES = {"gate": (2000, 2099), "dev": (1000, 1999)}
+RANGES = {"gate": (2000, 2099), "dev": (1000, 1999),
+          "lock2": (9000, 9099)}     # 2026-10-14: the second scored lock-removal range (option 3), never run before it
 
 
 def parse_seeds(text):
