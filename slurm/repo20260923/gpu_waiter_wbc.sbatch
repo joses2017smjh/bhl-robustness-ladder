@@ -79,6 +79,9 @@ case "$VARIANT" in
         TASK_ID=Velocity-BHL-Waiter-WBC-StandOnly-v0; FULL_ITERS=10000 ;;
     *)  echo "WAITER-WBC RESULT: FAIL (unknown WAITER_VARIANT $VARIANT)"; exit 2 ;;
 esac
+# 2026-10-14 (option 3; SLURM_JOBS.md "Predeclared now ... more standing-only seeds"): more seeds of 1i's task with all
+# of 1i's checks. WAITER_1I_SEED0 sets the first seed and WAITER_1I_RES the results directory (defaults: 1i's 24, wbc1i).
+if [ "$VARIANT" = 1i ]; then SEED0=${WAITER_1I_SEED0:-$SEED0}; RES_NAME=${WAITER_1I_RES:-$RES_NAME}; fi
 OBS_POLICY=83
 if [ "$SMOKE" = 1 ]; then
     RES=${WAITER_OUT_DIR:-/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/$RES_NAME-smoke}
