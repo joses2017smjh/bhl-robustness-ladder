@@ -4952,3 +4952,13 @@ Operational plan: one RTX 8000 (`gpu`, `--constraint=rtx8000`), 2 CPUs,
 hard quota (the project is already above its soft limit, in grace).
 
 Frozen intake (not submitted): campaign `followups-20261014-stereo/stereo-recovery-v1-20261014`, archive SHA256 `a27fda57cd08dba9960550c9c34a02ae3bb387d5ff955f00dc4d0e5e1d8e8677`, protocol `e7c033ea…`, scientific protocol `e041d2b4…`, ORB runtime input `df8f9279…` replacing `91ca4b6e…`. The GPU attempt is launched only with `stereo_recovery_dispatch.py submit` (one attempt; `submission-start.json` blocks retries). Compact receipts: `results/stereo-recovery-20261014/`.
+
+Seed reservation (2026-10-14, lead): the balanced-order confirmation campaign
+(`processing-schedule-order-v1-20261014`, branch `order-confirmation-20261014`,
+commit `f86d753`) claims seeds 749000, 749900 and 751000–751007. The stereo
+recovery seeds (smoke 759000, development 760000–760003) were already disjoint;
+the protocol now records all reserved seeds explicitly, which changes its
+bytes. The unsubmitted freeze `a27fda57…` (`stereo-recovery-v1-20261014`) is
+therefore superseded before submission and re-frozen as
+`stereo-recovery-v2-20261014` from the next commit; no design or code path
+changed.

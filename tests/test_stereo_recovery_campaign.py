@@ -40,7 +40,10 @@ def test_protocol_declares_new_seeds_paired_cells_and_counterbalanced_order(camp
     assert len({tuple(sorted(c.items())) for c in development}) == 48
     seeds = {c["seed"] for c in development}
     assert seeds == {760000, 760001, 760002, 760003} and {c["seed"] for c in smoke} == {759000}
-    assert seeds.isdisjoint({749000, 750000, 750001, 750002, 751000, 752000})
+    excluded = {seed for claimed in p["seeds"]["excluded_reserved_seeds"].values() for seed in claimed}
+    assert {749000, 749900, *range(751000, 751008), 750000, 750001, 720000, 730000, 730001} <= excluded
+    assert excluded.isdisjoint(seeds | {c["seed"] for c in smoke})
+    assert any("order-confirmation-20261014" in name and "f86d753" in name for name in p["seeds"]["excluded_reserved_seeds"])
     pairs = [development[i:i + 2] for i in range(0, 48, 2)]
     for a, b in pairs:  # each consecutive pair is one matched (seed, condition, route)
         assert {k: a[k] for k in ("case", "seed", "condition")} == {k: b[k] for k in ("case", "seed", "condition")}

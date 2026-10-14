@@ -58,6 +58,13 @@ ARMS = ("permanent_stop", "resume_verified_relocalization")
 CONDITIONS = ("nominal", "camera_10hz", "causal_40ms_exposure")
 CASES = ("straight", "occluders")
 SMOKE_SEED, DEVELOPMENT_SEEDS = 759000, (760000, 760001, 760002, 760003)
+# Reset seeds already claimed by other cohorts; ours must stay disjoint from all.
+EXCLUDED_SEEDS = {
+    "processing-schedule-order-v1-20261014 (branch order-confirmation-20261014, commit f86d753; lead reservation)":
+        [749000, 749900, *range(751000, 751008)],
+    "processing-schedule-v1-20261012 (frozen 152ccf4)": [749000, 750000, 750001],
+    "native-sensor-controls-v2 (frozen f881a0b)": [720000, 730000, 730001],
+}
 SMOKE_SECONDS, DEVELOPMENT_SECONDS = 18., 40.
 NAVIGATION_BEGINS_S = 10.
 ATLAS_TELEMETRY = "bhl-orb-atlas-telemetry-v1"
@@ -355,7 +362,8 @@ def declared_protocol():
         smoke=dict(seconds=SMOKE_SECONDS, cells=declared_cells([SMOKE_SEED], ["straight"])),
         development=dict(seconds=DEVELOPMENT_SECONDS, cells=declared_cells(DEVELOPMENT_SEEDS, CASES)),
         seeds={"smoke": SMOKE_SEED, "development": list(DEVELOPMENT_SEEDS),
-               "novelty": "absent from earlier campaigns (v1 used 749000/750000/750001); disjoint from the parallel order-confirmation candidates"},
+               "excluded_reserved_seeds": EXCLUDED_SEEDS,
+               "novelty": "disjoint from every excluded seed above; smoke and development seeds are disjoint"},
         pairing="same seed/condition/route; one pair per shard in one GPU allocation; within-pair arm order counterbalanced by (seed index + condition index + route index) mod 2, 12 first positions per arm",
         initialization=BASE.declared_protocol()["initialization"],
         unchanged=("frozen actor, routes, native ORB settings/thresholds, bounded_latest schedule, PNG transport, 0.35 s capture-age stop, "
