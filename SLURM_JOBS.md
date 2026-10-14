@@ -4962,3 +4962,10 @@ bytes. The unsubmitted freeze `a27fda57…` (`stereo-recovery-v1-20261014`) is
 therefore superseded before submission and re-frozen as
 `stereo-recovery-v2-20261014` from the next commit; no design or code path
 changed.
+
+| Job | Purpose | State |
+| --- | --- | --- |
+| 21825799 | Validation and freeze of `434181c` (v1 intake `a27fda57…`) | COMPLETED, 0:0; superseded before submission (seed-reservation protocol text); archive and coordinator removed, JSON records kept |
+| 21825847 | Allocated validation of frozen commit `7638a64` (16 test files) + protocol + `stereo_recovery_dispatch.py prepare` | COMPLETED, 0:0 / 54s (cn-b11); 361 passed, 11 subtests; `FROZEN_NOT_SUBMITTED` |
+
+Frozen intake to launch (not submitted): campaign `followups-20261014-stereo/stereo-recovery-v2-20261014`, archive SHA256 `19337226d6b7ed5cf242bab4650cb7b18a8753ae57f59b473bb0028148d7e31e`, source `7638a64`, ORB runtime input `df8f9279…`. Launch only with that freeze's `stereo_recovery_dispatch.py submit` (one attempt; `submission-start.json` blocks retries). Receipts: `results/stereo-recovery-20261014/`.

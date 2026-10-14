@@ -1,0 +1,440 @@
+{
+  "schema": "bhl-stereo-recovery-v1-protocol",
+  "estimator": "stereo",
+  "pipeline": "bounded_latest",
+  "arms": [
+    "permanent_stop",
+    "resume_verified_relocalization"
+  ],
+  "conditions": {
+    "nominal": {
+      "camera_hz": 5.0
+    },
+    "camera_10hz": {
+      "camera_hz": 10.0
+    },
+    "causal_40ms_exposure": {
+      "camera_hz": 5.0,
+      "exposure_s": 0.04,
+      "exposure_samples": 3
+    }
+  },
+  "routes": [
+    "straight",
+    "occluders"
+  ],
+  "smoke": {
+    "seconds": 18.0,
+    "cells": [
+      {
+        "case": "straight",
+        "seed": 759000,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 759000,
+        "condition": "nominal",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 759000,
+        "condition": "camera_10hz",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 759000,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 759000,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 759000,
+        "condition": "causal_40ms_exposure",
+        "arm": "resume_verified_relocalization"
+      }
+    ]
+  },
+  "development": {
+    "seconds": 40.0,
+    "cells": [
+      {
+        "case": "straight",
+        "seed": 760000,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760000,
+        "condition": "nominal",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760000,
+        "condition": "nominal",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760000,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760000,
+        "condition": "camera_10hz",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760000,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760000,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760000,
+        "condition": "camera_10hz",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760000,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760000,
+        "condition": "causal_40ms_exposure",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760000,
+        "condition": "causal_40ms_exposure",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760000,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760001,
+        "condition": "nominal",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760001,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760001,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760001,
+        "condition": "nominal",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760001,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760001,
+        "condition": "camera_10hz",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760001,
+        "condition": "camera_10hz",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760001,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760001,
+        "condition": "causal_40ms_exposure",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760001,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760001,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760001,
+        "condition": "causal_40ms_exposure",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760002,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760002,
+        "condition": "nominal",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760002,
+        "condition": "nominal",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760002,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760002,
+        "condition": "camera_10hz",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760002,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760002,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760002,
+        "condition": "camera_10hz",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760002,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760002,
+        "condition": "causal_40ms_exposure",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760002,
+        "condition": "causal_40ms_exposure",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760002,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760003,
+        "condition": "nominal",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760003,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760003,
+        "condition": "nominal",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760003,
+        "condition": "nominal",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760003,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760003,
+        "condition": "camera_10hz",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760003,
+        "condition": "camera_10hz",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "occluders",
+        "seed": 760003,
+        "condition": "camera_10hz",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "straight",
+        "seed": 760003,
+        "condition": "causal_40ms_exposure",
+        "arm": "resume_verified_relocalization"
+      },
+      {
+        "case": "straight",
+        "seed": 760003,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760003,
+        "condition": "causal_40ms_exposure",
+        "arm": "permanent_stop"
+      },
+      {
+        "case": "occluders",
+        "seed": 760003,
+        "condition": "causal_40ms_exposure",
+        "arm": "resume_verified_relocalization"
+      }
+    ]
+  },
+  "seeds": {
+    "smoke": 759000,
+    "development": [
+      760000,
+      760001,
+      760002,
+      760003
+    ],
+    "novelty": "absent from earlier campaigns (v1 used 749000/750000/750001); disjoint from the parallel order-confirmation candidates"
+  },
+  "pairing": "same seed/condition/route; one pair per shard in one GPU allocation; within-pair arm order counterbalanced by (seed index + condition index + route index) mod 2, 12 first positions per arm",
+  "initialization": {
+    "stationary_until_s": 3.0,
+    "excitation_until_s": 9.0,
+    "navigation_begins_s": 10.0,
+    "command": "vx=.10*sin(2*pi*(t-3)/1.5), vy=0, yaw=.30*sin(pi*(t-3)/1.5) during [3,9)",
+    "same_for_all_arms_conditions": true,
+    "native_initialization_thresholds_changed": false,
+    "known_start_assumption": "first accepted pose anchored to nominal station, initialization movement not truth-corrected"
+  },
+  "unchanged": "frozen actor, routes, native ORB settings/thresholds, bounded_latest schedule, PNG transport, 0.35 s capture-age stop, known-start registration, raw LiDAR brake, delivery quantization, 40 s horizon, 0.30 m evaluator goal radius",
+  "native_runtime": "ORB-SLAM3 4452a3c wrapper relinked with read-only Atlas telemetry; libORB_SLAM3.so byte-identical to v1; one runtime for both arms",
+  "arm_definitions": {
+    "permanent_stop": "control = v1 behaviour: legacy tracked-map-point epochs; after the first accepted epoch any invalidation (including native_map_identity_unavailable during RECENTLY_LOST) stops for the rest of the episode",
+    "resume_verified_relocalization": "Atlas epochs + verified relocalization gate; transient loss in the same Atlas map incarnation is not an invalidation; map id change, same-id active-map reset, big change, map count change, return to initialization, map-point conflict, inconsistent snapshot or missing telemetry stop permanently"
+  },
+  "coordinate_epoch_rule": "AtlasCoordinateEpochTracker: reference = Atlas current map id, init keyframe id, big-change index, map count, inertial stage at the first tracked frame on an initialized map",
+  "resume_rule": {
+    "reference": "last accepted registered body pose P0 at its capture time t0",
+    "prediction": "P0 dead-reckoned (first-order unicycle, 0.04 s policy steps) through the commands actually applied at decision times in [t0, t)",
+    "translation_bound_m": "0.15 + 0.6 * commanded path length",
+    "yaw_bound_rad": "0.174533 + 0.4 * commanded absolute rotation",
+    "vertical_bound_m": 0.1,
+    "tilt_change_bound_rad": 0.174533,
+    "confirmation_frames": 2,
+    "on_failure": "one inconsistent tracked frame stops permanently; an untracked frame during confirmation restarts confirmation",
+    "calibration": "fixed before this campaign from processing-schedule v1 bounded episodes (seeds 750000/750001; evaluator truth versus applied commands, 61,944 windows 0.04-5 s): joint bound exceeded in 0.29% of windows, 0.008% of windows <= 3 s, 0% of zero-command windows; body height/tilt changes <= 2.2 cm / 6.7 deg",
+    "parameters": {
+      "base_translation_m": 0.15,
+      "translation_per_commanded_path": 0.6,
+      "base_yaw_rad": 0.17453292519943295,
+      "yaw_per_commanded_rotation": 0.4,
+      "max_vertical_m": 0.1,
+      "max_tilt_change_rad": 0.17453292519943295,
+      "confirmation_frames": 2
+    }
+  },
+  "hypotheses": {
+    "H1_primary": "resume_verified_relocalization completes more clean goals than permanent_stop",
+    "H2_secondary": "resume_verified_relocalization reduces stopped navigation time",
+    "H3_safety": "resume_verified_relocalization does not increase falls or collisions",
+    "H4_mechanism_descriptive": "same-map relocalization losses resume and resumed poses agree with evaluator truth within the bound"
+  },
+  "primary_outcome": "clean goal (success): evaluator goal within 0.30 m, full 40 s horizon, no fall/collision/nonfinite state",
+  "primary_analysis": "exact two-sided McNemar test on the 24 pairs: scipy.stats.binomtest(b, b+c, 0.5), b = resume-only goals, c = control-only goals; alpha 0.05; supported iff p < 0.05 and b > c (with c = 0, b >= 6 is required)",
+  "effect_estimate": "paired difference in clean-goal proportion with a seed-cluster percentile bootstrap by exact enumeration of all 4^4 = 256 seed resamples (6 pairs per seed cluster); Wilson 95% intervals per arm",
+  "secondary_outcomes": [
+    "stopped navigation time (zero applied command at decisions >= 10 s, estimated goal stops excluded): mean paired difference, seed-cluster bootstrap interval, exact sign test",
+    "navigation recovery time per loss (loss start to next accepted pose; unresumed losses right-censored at the horizon) and raw native relocalization time",
+    "falls and collisions per arm",
+    "loss mechanisms from Atlas telemetry (same-map relocalization, active-map reset, new Atlas map, other invalidation, no native recovery)",
+    "evaluator-only position error of accepted and resumed poses"
+  ],
+  "safety_rule": "H1 support counts as an improvement only if resume falls <= control falls and resume collisions <= control collisions",
+  "negative_result": "NEGATIVE if p >= 0.05 or b <= c (no detectable goal improvement); NEGATIVE_SAFETY if resume has more falls or collisions than control; mechanism-negative if the gate rejects most same-map relocalizations or resumed poses exceed the bound against truth",
+  "equivocal_result": "UNAVAILABLE if any declared development cell is unrun (failed smoke gate or execution stop); no partial verdict",
+  "stopping_rules": [
+    "no interim efficacy, futility or safety analyses; all declared cells are analysed",
+    "the dispatcher stops at the first execution failure without retries; remaining cells stay UNRUN and the cohort is incomplete",
+    "a failed 6-cell smoke execution gate prevents all development; a failed per-arm nominal readiness gate leaves that arm's cells UNRUN"
+  ],
+  "exclusion_rules": "none after outcomes: falls, collisions and early terminations remain failed episodes; no reruns, replacement seeds or retuning",
+  "smoke_execution_gate": "all 6 smoke cells execute with finite physics, native I/O, verified evidence and Atlas telemetry on every native camera frame",
+  "nominal_readiness_gate": "per arm: nominal 18 s smoke reaches full horizon with an accepted native pose, Atlas telemetry on every frame, zero falls/contacts/nonfinite",
+  "deferred_arms": {
+    "stereo_inertial": "not run: adds ~1 GPU-hour, scored 0/40 in native-sensor-controls-v2 and never initialized in the earlier stereo-IMU smoke; would also need IMU-refinement epoch rules"
+  },
+  "scope": "four-seed bounded simulation development; ideal simulated sensing; no hardware, population or confirmation claims",
+  "no_retuning_after_outcomes": true,
+  "source_change_requires_fresh_smoke": true
+}

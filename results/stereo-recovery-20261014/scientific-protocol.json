@@ -365,7 +365,31 @@
       760002,
       760003
     ],
-    "novelty": "absent from earlier campaigns (v1 used 749000/750000/750001); disjoint from the parallel order-confirmation candidates"
+    "excluded_reserved_seeds": {
+      "processing-schedule-order-v1-20261014 (branch order-confirmation-20261014, commit f86d753; lead reservation)": [
+        749000,
+        749900,
+        751000,
+        751001,
+        751002,
+        751003,
+        751004,
+        751005,
+        751006,
+        751007
+      ],
+      "processing-schedule-v1-20261012 (frozen 152ccf4)": [
+        749000,
+        750000,
+        750001
+      ],
+      "native-sensor-controls-v2 (frozen f881a0b)": [
+        720000,
+        730000,
+        730001
+      ]
+    },
+    "novelty": "disjoint from every excluded seed above; smoke and development seeds are disjoint"
   },
   "pairing": "same seed/condition/route; one pair per shard in one GPU allocation; within-pair arm order counterbalanced by (seed index + condition index + route index) mod 2, 12 first positions per arm",
   "initialization": {
