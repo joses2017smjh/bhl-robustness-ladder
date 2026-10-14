@@ -107,7 +107,39 @@ def validate_response(value, timestamp_s):
                            "OTHER_NATIVE_INITIALIZATION_CONDITION")
         if diagnostic.get("initialization_reason") != expected_reason:
             raise ValueError("Native initialization reason contradicts state or feature count")
+    if value.get("atlas") is not None:
+        validate_atlas_telemetry(value["atlas"])
     return dict(value)
+
+
+ATLAS_TELEMETRY_SCHEMA = "bhl-orb-atlas-telemetry-v1"
+_ATLAS_COUNTS = ("atlas_map_count", "atlas_last_big_change_idx", "current_map_id", "current_map_init_kf_id",
+                 "current_map_max_kf_id", "current_map_keyframes", "current_map_big_change_idx",
+                 "active_map_resets_total")
+_ATLAS_FLAGS = ("system_map_changed", "current_map_imu_initialized", "current_map_inertial_ba1",
+                "current_map_inertial_ba2", "snapshot_consistent", "active_map_reset")
+
+
+def validate_atlas_telemetry(atlas):
+    """Structural check of the wrapper's read-only Atlas snapshot.
+
+    Semantic disagreements (for example a tracked map point in another map, or a
+    snapshot taken while a background thread swapped maps) are not rejected here;
+    the coordinate-epoch logic must treat them as fail-closed invalidations.
+    """
+    if not isinstance(atlas, dict) or atlas.get("schema") != ATLAS_TELEMETRY_SCHEMA:
+        raise ValueError("Invalid native Atlas telemetry schema")
+    for name in _ATLAS_COUNTS:
+        if type(atlas.get(name)) is not int or atlas[name] < 0:
+            raise ValueError("Native Atlas counts and identities must be nonnegative integers")
+    for name in _ATLAS_FLAGS:
+        if type(atlas.get(name)) is not bool:
+            raise ValueError("Native Atlas flags must be explicit booleans")
+    if atlas["atlas_map_count"] < 1 or atlas.get("read_only_getters_after_synchronous_track") is not True:
+        raise ValueError("Read-only Atlas snapshot of at least one native map required")
+    if atlas["active_map_reset"] and atlas["active_map_resets_total"] < 1:
+        raise ValueError("Native active-map reset flag contradicts its cumulative count")
+    return dict(atlas)
 
 
 def _image_path(value):
