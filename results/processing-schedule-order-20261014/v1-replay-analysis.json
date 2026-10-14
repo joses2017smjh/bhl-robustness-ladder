@@ -1,0 +1,1030 @@
+{
+  "schema": "bhl-processing-schedule-order-analysis-v1",
+  "design": "v1-20261012",
+  "verdict": {
+    "status": "NOT_CONFIRMATORY_DESIGN",
+    "design": "v1-20261012",
+    "reason": "design without within-arm counterbalanced order; descriptive analysis only"
+  },
+  "collection": {
+    "declared_cells": 48,
+    "measured_cells": 48,
+    "unrun_after_nominal_gate": 0,
+    "complete_pairs": 24,
+    "incomplete_pairs": 0,
+    "order_audit": {
+      "by_arm": {
+        "stereo": {
+          "pairs": 12,
+          "first_pipeline_counts": {
+            "legacy_cumulative": 12,
+            "bounded_latest": 0
+          },
+          "counterbalanced": false
+        },
+        "lidar_inertial": {
+          "pairs": 12,
+          "first_pipeline_counts": {
+            "legacy_cumulative": 0,
+            "bounded_latest": 12
+          },
+          "counterbalanced": false
+        }
+      },
+      "within_arm_counterbalanced": false,
+      "scope": "declared order verified against recorded execution order of every scored episode"
+    }
+  },
+  "arms": {
+    "lidar_inertial": {
+      "pairs": 12,
+      "seeds": [
+        750000,
+        750001
+      ],
+      "goals": {
+        "pairs": 12,
+        "legacy_goals": 0,
+        "bounded_goals": 11,
+        "legacy_rate": 0.0,
+        "bounded_rate": 0.9166666666666666,
+        "legacy_wilson95": [
+          0.0,
+          0.24249400665524085
+        ],
+        "bounded_wilson95": [
+          0.6461200888588831,
+          0.985134905595083
+        ],
+        "rate_difference": 0.9166666666666666,
+        "mcnemar": {
+          "bounded_only": 11,
+          "legacy_only": 0,
+          "discordant": 11,
+          "p_value": 0.0009765625,
+          "discordant_share_bounded": 1.0,
+          "discordant_share_interval": [
+            0.7150858470818456,
+            1.0
+          ]
+        },
+        "seed_cluster_bootstrap95": {
+          "estimate": 0.9166666666666666,
+          "interval": [
+            0.8333333333333334,
+            1.0
+          ],
+          "level": 0.95,
+          "clusters": 2,
+          "method": "exact enumeration of 3 cluster multisets with multinomial weights",
+          "percentile": "inverted CDF"
+        },
+        "seed_sign_test": {
+          "positive_seeds": 2,
+          "negative_seeds": 0,
+          "zero_seeds": 0,
+          "p_value": 0.5
+        },
+        "per_pair_differences": [
+          {
+            "seed": 750000,
+            "condition": "camera_10hz",
+            "case": "occluders",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          },
+          {
+            "seed": 750000,
+            "condition": "causal_40ms_exposure",
+            "case": "occluders",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          },
+          {
+            "seed": 750000,
+            "condition": "nominal",
+            "case": "occluders",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          },
+          {
+            "seed": 750001,
+            "condition": "camera_10hz",
+            "case": "occluders",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          },
+          {
+            "seed": 750001,
+            "condition": "causal_40ms_exposure",
+            "case": "occluders",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          },
+          {
+            "seed": 750001,
+            "condition": "nominal",
+            "case": "occluders",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          },
+          {
+            "seed": 750000,
+            "condition": "camera_10hz",
+            "case": "straight",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          },
+          {
+            "seed": 750000,
+            "condition": "causal_40ms_exposure",
+            "case": "straight",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          },
+          {
+            "seed": 750000,
+            "condition": "nominal",
+            "case": "straight",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          },
+          {
+            "seed": 750001,
+            "condition": "camera_10hz",
+            "case": "straight",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          },
+          {
+            "seed": 750001,
+            "condition": "causal_40ms_exposure",
+            "case": "straight",
+            "first_pipeline": "bounded_latest",
+            "difference": 0
+          },
+          {
+            "seed": 750001,
+            "condition": "nominal",
+            "case": "straight",
+            "first_pipeline": "bounded_latest",
+            "difference": 1
+          }
+        ]
+      },
+      "continuous": {
+        "modeled_pipeline_p95_ms": {
+          "field": "full_pipeline_p95_ms",
+          "available_pairs": 12,
+          "excluded_pairs": 0,
+          "legacy_mean": 5732.668500996078,
+          "bounded_mean": 140.5255246218682,
+          "difference": {
+            "n": 12,
+            "mean": -5592.14297637421,
+            "median": -5858.060494699747,
+            "sd": 4743.487729732744,
+            "minimum": -12788.338945410214,
+            "maximum": 3.902083472348721
+          },
+          "seed_cluster_bootstrap95": {
+            "estimate": -5592.14297637421,
+            "interval": [
+              -5854.459018048753,
+              -5329.826934699668
+            ],
+            "level": 0.95,
+            "clusters": 2,
+            "method": "exact enumeration of 3 cluster multisets with multinomial weights",
+            "percentile": "inverted CDF"
+          },
+          "direction": "bounded_latest minus legacy_cumulative; negative is lower for the candidate"
+        },
+        "navigation_pose_age_p95_ms": {
+          "field": "navigation_pose_age_p95_ms",
+          "available_pairs": 12,
+          "excluded_pairs": 0,
+          "legacy_mean": 12184.66666666956,
+          "bounded_mean": 389.9999999997779,
+          "difference": {
+            "n": 12,
+            "mean": -11794.66666666978,
+            "median": -11342.000000004413,
+            "sd": 10180.948387088347,
+            "minimum": -24701.999999997573,
+            "maximum": -40.00000000082855
+          },
+          "seed_cluster_bootstrap95": {
+            "estimate": -11794.66666666978,
+            "interval": [
+              -11961.333333339093,
+              -11628.000000000471
+            ],
+            "level": 0.95,
+            "clusters": 2,
+            "method": "exact enumeration of 3 cluster multisets with multinomial weights",
+            "percentile": "inverted CDF"
+          },
+          "direction": "bounded_latest minus legacy_cumulative; negative is lower for the candidate"
+        },
+        "native_client_p95_ms": {
+          "field": "client_wall_p95_ms",
+          "available_pairs": 12,
+          "excluded_pairs": 0,
+          "legacy_mean": 35.20075858201986,
+          "bounded_mean": 11.98204087850172,
+          "difference": {
+            "n": 12,
+            "mean": -23.218717703518138,
+            "median": -30.881796532776207,
+            "sd": 18.36884210303572,
+            "minimum": -42.39206697093323,
+            "maximum": 0.4578026942908764
+          },
+          "seed_cluster_bootstrap95": {
+            "estimate": -23.218717703518138,
+            "interval": [
+              -25.162422218515218,
+              -21.275013188521054
+            ],
+            "level": 0.95,
+            "clusters": 2,
+            "method": "exact enumeration of 3 cluster multisets with multinomial weights",
+            "percentile": "inverted CDF"
+          },
+          "direction": "bounded_latest minus legacy_cumulative; negative is lower for the candidate"
+        },
+        "stale_fraction": {
+          "field": "stale_fraction",
+          "available_pairs": 12,
+          "excluded_pairs": 0,
+          "legacy_mean": 0.8666666666666667,
+          "bounded_mean": 0.14155555555555557,
+          "difference": {
+            "n": 12,
+            "mean": -0.7251111111111112,
+            "median": -0.786,
+            "sd": 0.19057962271080453,
+            "minimum": -0.9773333333333334,
+            "maximum": -0.32
+          },
+          "seed_cluster_bootstrap95": {
+            "estimate": -0.7251111111111112,
+            "interval": [
+              -0.7402222222222222,
+              -0.71
+            ],
+            "level": 0.95,
+            "clusters": 2,
+            "method": "exact enumeration of 3 cluster multisets with multinomial weights",
+            "percentile": "inverted CDF"
+          },
+          "direction": "bounded_latest minus legacy_cumulative; negative is lower for the candidate"
+        }
+      },
+      "seed_variability": {
+        "per_seed": [
+          {
+            "seed": 750000,
+            "pairs": 6,
+            "legacy_goals": 0,
+            "bounded_goals": 6,
+            "goal_difference": 1.0,
+            "modeled_pipeline_p95_ms_difference": -5854.459018048753,
+            "navigation_pose_age_p95_ms_difference": -11628.000000000471,
+            "native_client_p95_ms_difference": -25.162422218515218,
+            "stale_fraction_difference": -0.7402222222222222
+          },
+          {
+            "seed": 750001,
+            "pairs": 6,
+            "legacy_goals": 0,
+            "bounded_goals": 5,
+            "goal_difference": 0.8333333333333334,
+            "modeled_pipeline_p95_ms_difference": -5329.826934699668,
+            "navigation_pose_age_p95_ms_difference": -11961.333333339093,
+            "native_client_p95_ms_difference": -21.275013188521054,
+            "stale_fraction_difference": -0.71
+          }
+        ],
+        "across_seeds": {
+          "goal_difference": {
+            "n": 2,
+            "mean": 0.9166666666666667,
+            "median": 0.9166666666666667,
+            "sd": 0.11785113019775789,
+            "minimum": 0.8333333333333334,
+            "maximum": 1.0
+          },
+          "modeled_pipeline_p95_ms_difference": {
+            "n": 2,
+            "mean": -5592.142976374211,
+            "median": -5592.142976374211,
+            "sd": 370.97090376416435,
+            "minimum": -5854.459018048753,
+            "maximum": -5329.826934699668
+          },
+          "navigation_pose_age_p95_ms_difference": {
+            "n": 2,
+            "mean": -11794.666666669782,
+            "median": -11794.666666669782,
+            "sd": 235.70226039925532,
+            "minimum": -11961.333333339093,
+            "maximum": -11628.000000000471
+          },
+          "native_client_p95_ms_difference": {
+            "n": 2,
+            "mean": -23.218717703518138,
+            "median": -23.218717703518138,
+            "sd": 2.748813286354692,
+            "minimum": -25.162422218515218,
+            "maximum": -21.275013188521054
+          },
+          "stale_fraction_difference": {
+            "n": 2,
+            "mean": -0.725111111111111,
+            "median": -0.725111111111111,
+            "sd": 0.02137033827586013,
+            "minimum": -0.7402222222222222,
+            "maximum": -0.71
+          }
+        }
+      },
+      "order": {
+        "sequence_pairs": {
+          "legacy_first": 0,
+          "bounded_first": 12
+        },
+        "goal_by_sequence": {
+          "legacy_first": {
+            "pairs": 0,
+            "bounded_goals": 0,
+            "legacy_goals": 0,
+            "mcnemar": {
+              "bounded_only": 0,
+              "legacy_only": 0,
+              "discordant": 0,
+              "p_value": 1.0,
+              "discordant_share_bounded": null,
+              "discordant_share_interval": null,
+              "note": "no discordant pairs; exact test undefined, reported as p = 1"
+            }
+          },
+          "bounded_first": {
+            "pairs": 12,
+            "bounded_goals": 11,
+            "legacy_goals": 0,
+            "mcnemar": {
+              "bounded_only": 11,
+              "legacy_only": 0,
+              "discordant": 11,
+              "p_value": 0.0009765625,
+              "discordant_share_bounded": 1.0,
+              "discordant_share_interval": [
+                0.7150858470818456,
+                1.0
+              ]
+            }
+          }
+        },
+        "goal_rate_by_position": {
+          "legacy_cumulative": {
+            "first_position": {
+              "episodes": 0,
+              "goals": 0,
+              "wilson95": null
+            },
+            "second_position": {
+              "episodes": 12,
+              "goals": 0,
+              "wilson95": [
+                0.0,
+                0.24249400665524085
+              ]
+            }
+          },
+          "bounded_latest": {
+            "first_position": {
+              "episodes": 12,
+              "goals": 11,
+              "wilson95": [
+                0.6461200888588831,
+                0.985134905595083
+              ]
+            },
+            "second_position": {
+              "episodes": 0,
+              "goals": 0,
+              "wilson95": null
+            }
+          }
+        },
+        "status": "NOT_ESTIMABLE_SINGLE_SEQUENCE",
+        "note": "every pair of this arm ran in one order; schedule and order effects are confounded"
+      },
+      "per_condition": {
+        "camera_10hz": {
+          "pairs": 4,
+          "legacy_goals": 0,
+          "bounded_goals": 4,
+          "legacy_rate": 0.0,
+          "bounded_rate": 1.0,
+          "legacy_wilson95": [
+            0.0,
+            0.4898908364545973
+          ],
+          "bounded_wilson95": [
+            0.5101091635454027,
+            1.0
+          ],
+          "rate_difference": 1.0,
+          "mcnemar": {
+            "bounded_only": 4,
+            "legacy_only": 0,
+            "discordant": 4,
+            "p_value": 0.125,
+            "discordant_share_bounded": 1.0,
+            "discordant_share_interval": [
+              0.3976353643835142,
+              1.0
+            ]
+          }
+        },
+        "causal_40ms_exposure": {
+          "pairs": 4,
+          "legacy_goals": 0,
+          "bounded_goals": 3,
+          "legacy_rate": 0.0,
+          "bounded_rate": 0.75,
+          "legacy_wilson95": [
+            0.0,
+            0.4898908364545973
+          ],
+          "bounded_wilson95": [
+            0.30064184258240184,
+            0.9544127391902995
+          ],
+          "rate_difference": 0.75,
+          "mcnemar": {
+            "bounded_only": 3,
+            "legacy_only": 0,
+            "discordant": 3,
+            "p_value": 0.25,
+            "discordant_share_bounded": 1.0,
+            "discordant_share_interval": [
+              0.2924017738212867,
+              1.0
+            ]
+          }
+        },
+        "nominal": {
+          "pairs": 4,
+          "legacy_goals": 0,
+          "bounded_goals": 4,
+          "legacy_rate": 0.0,
+          "bounded_rate": 1.0,
+          "legacy_wilson95": [
+            0.0,
+            0.4898908364545973
+          ],
+          "bounded_wilson95": [
+            0.5101091635454027,
+            1.0
+          ],
+          "rate_difference": 1.0,
+          "mcnemar": {
+            "bounded_only": 4,
+            "legacy_only": 0,
+            "discordant": 4,
+            "p_value": 0.125,
+            "discordant_share_bounded": 1.0,
+            "discordant_share_interval": [
+              0.3976353643835142,
+              1.0
+            ]
+          }
+        }
+      },
+      "safety": {
+        "legacy": {
+          "falls": 0,
+          "contacts": 0,
+          "recorded": true
+        },
+        "candidate": {
+          "falls": 0,
+          "contacts": 0,
+          "recorded": true
+        }
+      }
+    },
+    "stereo": {
+      "pairs": 12,
+      "seeds": [
+        750000,
+        750001
+      ],
+      "goals": {
+        "pairs": 12,
+        "legacy_goals": 0,
+        "bounded_goals": 0,
+        "legacy_rate": 0.0,
+        "bounded_rate": 0.0,
+        "legacy_wilson95": [
+          0.0,
+          0.24249400665524085
+        ],
+        "bounded_wilson95": [
+          0.0,
+          0.24249400665524085
+        ],
+        "rate_difference": 0.0,
+        "mcnemar": {
+          "bounded_only": 0,
+          "legacy_only": 0,
+          "discordant": 0,
+          "p_value": 1.0,
+          "discordant_share_bounded": null,
+          "discordant_share_interval": null,
+          "note": "no discordant pairs; exact test undefined, reported as p = 1"
+        },
+        "seed_cluster_bootstrap95": {
+          "estimate": 0.0,
+          "interval": [
+            0.0,
+            0.0
+          ],
+          "level": 0.95,
+          "clusters": 2,
+          "method": "exact enumeration of 3 cluster multisets with multinomial weights",
+          "percentile": "inverted CDF"
+        },
+        "seed_sign_test": {
+          "positive_seeds": 0,
+          "negative_seeds": 0,
+          "zero_seeds": 2,
+          "p_value": 1.0
+        },
+        "per_pair_differences": [
+          {
+            "seed": 750000,
+            "condition": "camera_10hz",
+            "case": "occluders",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750000,
+            "condition": "causal_40ms_exposure",
+            "case": "occluders",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750000,
+            "condition": "nominal",
+            "case": "occluders",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750001,
+            "condition": "camera_10hz",
+            "case": "occluders",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750001,
+            "condition": "causal_40ms_exposure",
+            "case": "occluders",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750001,
+            "condition": "nominal",
+            "case": "occluders",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750000,
+            "condition": "camera_10hz",
+            "case": "straight",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750000,
+            "condition": "causal_40ms_exposure",
+            "case": "straight",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750000,
+            "condition": "nominal",
+            "case": "straight",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750001,
+            "condition": "camera_10hz",
+            "case": "straight",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750001,
+            "condition": "causal_40ms_exposure",
+            "case": "straight",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          },
+          {
+            "seed": 750001,
+            "condition": "nominal",
+            "case": "straight",
+            "first_pipeline": "legacy_cumulative",
+            "difference": 0
+          }
+        ]
+      },
+      "continuous": {
+        "modeled_pipeline_p95_ms": {
+          "field": "full_pipeline_p95_ms",
+          "available_pairs": 12,
+          "excluded_pairs": 0,
+          "legacy_mean": 6657.215924136108,
+          "bounded_mean": 138.41728463303298,
+          "difference": {
+            "n": 12,
+            "mean": -6518.798639503075,
+            "median": -5772.486367134841,
+            "sd": 5812.888684635588,
+            "minimum": -15915.405756153632,
+            "maximum": -171.20803532889119
+          },
+          "seed_cluster_bootstrap95": {
+            "estimate": -6518.798639503075,
+            "interval": [
+              -7091.19449184315,
+              -5946.402787163
+            ],
+            "level": 0.95,
+            "clusters": 2,
+            "method": "exact enumeration of 3 cluster multisets with multinomial weights",
+            "percentile": "inverted CDF"
+          },
+          "direction": "bounded_latest minus legacy_cumulative; negative is lower for the candidate"
+        },
+        "navigation_pose_age_p95_ms": {
+          "field": "navigation_pose_age_p95_ms",
+          "available_pairs": 12,
+          "excluded_pairs": 0,
+          "legacy_mean": 12113.916666665871,
+          "bounded_mean": 355.9166666675619,
+          "difference": {
+            "n": 12,
+            "mean": -11757.99999999831,
+            "median": -11106.500000003922,
+            "sd": 10046.64621561471,
+            "minimum": -25781.99999998809,
+            "maximum": -341.99999999897375
+          },
+          "seed_cluster_bootstrap95": {
+            "estimate": -11757.999999998312,
+            "interval": [
+              -11991.333333328532,
+              -11524.66666666809
+            ],
+            "level": 0.95,
+            "clusters": 2,
+            "method": "exact enumeration of 3 cluster multisets with multinomial weights",
+            "percentile": "inverted CDF"
+          },
+          "direction": "bounded_latest minus legacy_cumulative; negative is lower for the candidate"
+        },
+        "native_client_p95_ms": {
+          "field": "client_wall_p95_ms",
+          "available_pairs": 12,
+          "excluded_pairs": 0,
+          "legacy_mean": 47.60716566524934,
+          "bounded_mean": 52.36912929200722,
+          "difference": {
+            "n": 12,
+            "mean": 4.761963626757881,
+            "median": 6.835865939501662,
+            "sd": 6.34682689980069,
+            "minimum": -5.2132134791463685,
+            "maximum": 13.560420367866755
+          },
+          "seed_cluster_bootstrap95": {
+            "estimate": 4.761963626757881,
+            "interval": [
+              3.1966352195013292,
+              6.327292034014433
+            ],
+            "level": 0.95,
+            "clusters": 2,
+            "method": "exact enumeration of 3 cluster multisets with multinomial weights",
+            "percentile": "inverted CDF"
+          },
+          "direction": "bounded_latest minus legacy_cumulative; negative is lower for the candidate"
+        },
+        "stale_fraction": {
+          "field": "stale_fraction",
+          "available_pairs": 12,
+          "excluded_pairs": 0,
+          "legacy_mean": 0.9911111111111112,
+          "bounded_mean": 0.10833333333333335,
+          "difference": {
+            "n": 12,
+            "mean": -0.8827777777777778,
+            "median": -0.9206666666666667,
+            "sd": 0.10345069906988129,
+            "minimum": -0.952,
+            "maximum": -0.5880000000000001
+          },
+          "seed_cluster_bootstrap95": {
+            "estimate": -0.8827777777777778,
+            "interval": [
+              -0.9242222222222222,
+              -0.8413333333333334
+            ],
+            "level": 0.95,
+            "clusters": 2,
+            "method": "exact enumeration of 3 cluster multisets with multinomial weights",
+            "percentile": "inverted CDF"
+          },
+          "direction": "bounded_latest minus legacy_cumulative; negative is lower for the candidate"
+        }
+      },
+      "seed_variability": {
+        "per_seed": [
+          {
+            "seed": 750000,
+            "pairs": 6,
+            "legacy_goals": 0,
+            "bounded_goals": 0,
+            "goal_difference": 0.0,
+            "modeled_pipeline_p95_ms_difference": -7091.19449184315,
+            "navigation_pose_age_p95_ms_difference": -11991.333333328532,
+            "native_client_p95_ms_difference": 3.1966352195013292,
+            "stale_fraction_difference": -0.9242222222222222
+          },
+          {
+            "seed": 750001,
+            "pairs": 6,
+            "legacy_goals": 0,
+            "bounded_goals": 0,
+            "goal_difference": 0.0,
+            "modeled_pipeline_p95_ms_difference": -5946.402787163,
+            "navigation_pose_age_p95_ms_difference": -11524.66666666809,
+            "native_client_p95_ms_difference": 6.327292034014433,
+            "stale_fraction_difference": -0.8413333333333334
+          }
+        ],
+        "across_seeds": {
+          "goal_difference": {
+            "n": 2,
+            "mean": 0.0,
+            "median": 0.0,
+            "sd": 0.0,
+            "minimum": 0.0,
+            "maximum": 0.0
+          },
+          "modeled_pipeline_p95_ms_difference": {
+            "n": 2,
+            "mean": -6518.798639503075,
+            "median": -6518.798639503075,
+            "sd": 809.4899774254418,
+            "minimum": -7091.19449184315,
+            "maximum": -5946.402787163
+          },
+          "navigation_pose_age_p95_ms_difference": {
+            "n": 2,
+            "mean": -11757.999999998312,
+            "median": -11757.999999998312,
+            "sd": 329.9831645493203,
+            "minimum": -11991.333333328532,
+            "maximum": -11524.66666666809
+          },
+          "native_client_p95_ms_difference": {
+            "n": 2,
+            "mean": 4.761963626757881,
+            "median": 4.761963626757881,
+            "sd": 2.2137086631100913,
+            "minimum": 3.1966352195013292,
+            "maximum": 6.327292034014433
+          },
+          "stale_fraction_difference": {
+            "n": 2,
+            "mean": -0.8827777777777778,
+            "median": -0.8827777777777778,
+            "sd": 0.058611295418351535,
+            "minimum": -0.9242222222222222,
+            "maximum": -0.8413333333333334
+          }
+        }
+      },
+      "order": {
+        "sequence_pairs": {
+          "legacy_first": 12,
+          "bounded_first": 0
+        },
+        "goal_by_sequence": {
+          "legacy_first": {
+            "pairs": 12,
+            "bounded_goals": 0,
+            "legacy_goals": 0,
+            "mcnemar": {
+              "bounded_only": 0,
+              "legacy_only": 0,
+              "discordant": 0,
+              "p_value": 1.0,
+              "discordant_share_bounded": null,
+              "discordant_share_interval": null,
+              "note": "no discordant pairs; exact test undefined, reported as p = 1"
+            }
+          },
+          "bounded_first": {
+            "pairs": 0,
+            "bounded_goals": 0,
+            "legacy_goals": 0,
+            "mcnemar": {
+              "bounded_only": 0,
+              "legacy_only": 0,
+              "discordant": 0,
+              "p_value": 1.0,
+              "discordant_share_bounded": null,
+              "discordant_share_interval": null,
+              "note": "no discordant pairs; exact test undefined, reported as p = 1"
+            }
+          }
+        },
+        "goal_rate_by_position": {
+          "legacy_cumulative": {
+            "first_position": {
+              "episodes": 12,
+              "goals": 0,
+              "wilson95": [
+                0.0,
+                0.24249400665524085
+              ]
+            },
+            "second_position": {
+              "episodes": 0,
+              "goals": 0,
+              "wilson95": null
+            }
+          },
+          "bounded_latest": {
+            "first_position": {
+              "episodes": 0,
+              "goals": 0,
+              "wilson95": null
+            },
+            "second_position": {
+              "episodes": 12,
+              "goals": 0,
+              "wilson95": [
+                0.0,
+                0.24249400665524085
+              ]
+            }
+          }
+        },
+        "status": "NOT_ESTIMABLE_SINGLE_SEQUENCE",
+        "note": "every pair of this arm ran in one order; schedule and order effects are confounded"
+      },
+      "per_condition": {
+        "camera_10hz": {
+          "pairs": 4,
+          "legacy_goals": 0,
+          "bounded_goals": 0,
+          "legacy_rate": 0.0,
+          "bounded_rate": 0.0,
+          "legacy_wilson95": [
+            0.0,
+            0.4898908364545973
+          ],
+          "bounded_wilson95": [
+            0.0,
+            0.4898908364545973
+          ],
+          "rate_difference": 0.0,
+          "mcnemar": {
+            "bounded_only": 0,
+            "legacy_only": 0,
+            "discordant": 0,
+            "p_value": 1.0,
+            "discordant_share_bounded": null,
+            "discordant_share_interval": null,
+            "note": "no discordant pairs; exact test undefined, reported as p = 1"
+          }
+        },
+        "causal_40ms_exposure": {
+          "pairs": 4,
+          "legacy_goals": 0,
+          "bounded_goals": 0,
+          "legacy_rate": 0.0,
+          "bounded_rate": 0.0,
+          "legacy_wilson95": [
+            0.0,
+            0.4898908364545973
+          ],
+          "bounded_wilson95": [
+            0.0,
+            0.4898908364545973
+          ],
+          "rate_difference": 0.0,
+          "mcnemar": {
+            "bounded_only": 0,
+            "legacy_only": 0,
+            "discordant": 0,
+            "p_value": 1.0,
+            "discordant_share_bounded": null,
+            "discordant_share_interval": null,
+            "note": "no discordant pairs; exact test undefined, reported as p = 1"
+          }
+        },
+        "nominal": {
+          "pairs": 4,
+          "legacy_goals": 0,
+          "bounded_goals": 0,
+          "legacy_rate": 0.0,
+          "bounded_rate": 0.0,
+          "legacy_wilson95": [
+            0.0,
+            0.4898908364545973
+          ],
+          "bounded_wilson95": [
+            0.0,
+            0.4898908364545973
+          ],
+          "rate_difference": 0.0,
+          "mcnemar": {
+            "bounded_only": 0,
+            "legacy_only": 0,
+            "discordant": 0,
+            "p_value": 1.0,
+            "discordant_share_bounded": null,
+            "discordant_share_interval": null,
+            "note": "no discordant pairs; exact test undefined, reported as p = 1"
+          }
+        }
+      },
+      "safety": {
+        "legacy": {
+          "falls": 0,
+          "contacts": 0,
+          "recorded": true
+        },
+        "candidate": {
+          "falls": 0,
+          "contacts": 0,
+          "recorded": true
+        }
+      }
+    }
+  },
+  "warmups": {
+    "episodes": 0,
+    "scored": false,
+    "by_pipeline": {
+      "legacy_cumulative": {
+        "episodes": 0,
+        "clean_goals": 0,
+        "falls": 0,
+        "contacts": 0,
+        "mean_client_wall_p95_ms": null,
+        "mean_full_pipeline_p95_ms": null,
+        "mean_navigation_pose_age_p95_ms": null,
+        "mean_wall_seconds": null
+      },
+      "bounded_latest": {
+        "episodes": 0,
+        "clean_goals": 0,
+        "falls": 0,
+        "contacts": 0,
+        "mean_client_wall_p95_ms": null,
+        "mean_full_pipeline_p95_ms": null,
+        "mean_navigation_pose_age_p95_ms": null,
+        "mean_wall_seconds": null
+      }
+    }
+  },
+  "settings": {
+    "alpha": 0.05,
+    "level": 0.95,
+    "exact_limit": 200000,
+    "monte_carlo_resamples": 20000,
+    "rng_seed": 20261014,
+    "wilson": "scipy.stats.binomtest(k, n).proportion_ci(method='wilson')",
+    "mcnemar": "scipy.stats.binomtest(bounded_only, discordant, 0.5), two-sided"
+  },
+  "scope": "simulation schedule-model statistics over reset-seed clusters; no hardware, population or stereo claims"
+}

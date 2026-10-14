@@ -4903,3 +4903,18 @@ Publication completed with 30 verified assets. The independent audit rehashed
 remote asset's identity/digest/size against fresh GitHub API responses.
 [Reviewed results](docs/PROCESSING_SCHEDULE_RESULTS_2026-10-12.md),
 [all completion and publication receipts](results/processing-schedule-20261012/).
+
+## Processing-schedule order confirmation — frozen October 14, 2026
+
+This frozen campaign tests whether the v1 LiDAR–IMU clean-goal gain (0/12 → 11/12)
+survives within-estimator counterbalanced order. It has 48 pairs on eight new reset seeds:
+each schedule runs first in 24 pairs, and every shard starts with two unscored
+warm-ups. Source commit `f86d753` and archive SHA256
+`3be0441de4f74182d87a0664b4d8430da72bbc42d93197f90e3ad83d3b2e573b` are frozen.
+Status is FROZEN_NOT_SUBMITTED: the RTX 8000 GPU launch is awaiting lead review.
+
+| Job | Purpose | Terminal state / elapsed |
+| --- | --- | --- |
+| 21825716 | Allocated validation and freeze: 345 tests, 22 subtests; v1 collector replay reproduced; prepare | COMPLETED, 0:0 / 1m05s |
+
+[Predeclared design, launch commands and receipts](docs/PROCESSING_SCHEDULE_ORDER_CONFIRMATION_2026-10-14.md).

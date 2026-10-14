@@ -1,0 +1,17 @@
+........................................................................ [ 20%]
+.................................................. [ 35%]
+........................................................................ [ 56%]
+........................................................................ [ 77%]
+........................................................................ [ 97%]
+.......                                                                  [100%]
+=============================== warnings summary ===============================
+tests/test_native_lio.py:86
+  /nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-order/repo/tests/test_native_lio.py:86: DeprecationWarning: invalid escape sequence '\('
+    with self.assertRaisesRegex(ValueError, "SO\(3\)"):
+
+tests/test_native_lio.py:130
+  /nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-order/repo/tests/test_native_lio.py:130: DeprecationWarning: invalid escape sequence '\('
+    with self.assertRaisesRegex(ValueError, "SO\(3\)"): self.validate()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+345 passed, 2 warnings, 22 subtests passed in 27.64s

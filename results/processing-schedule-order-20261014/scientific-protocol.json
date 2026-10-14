@@ -1,0 +1,2448 @@
+{
+  "schema": "bhl-processing-schedule-v1-counterbalanced-protocol",
+  "design": "order-confirmation-20261014",
+  "parent": {
+    "design": "v1-20261012",
+    "scientific_protocol_sha256": "b41d516b7810fa851deea4c160c1efa2eff0d75e39037bb7bb24f265d2e5d34d",
+    "source_commit": "152ccf4d8a616c5725bfb0c44ac838818e028ee3",
+    "campaign_job": "21801949",
+    "result": "LiDAR-IMU clean goals 0/12 legacy_cumulative vs 11/12 bounded_latest; stereo 0/12 in both",
+    "order_audit": "within_arm_counterbalanced=false: stereo always ran legacy first, LiDAR-IMU always bounded first"
+  },
+  "pipelines": [
+    "legacy_cumulative",
+    "bounded_latest"
+  ],
+  "arms": [
+    "lidar_inertial"
+  ],
+  "conditions": {
+    "nominal": {
+      "camera_hz": 5.0
+    },
+    "camera_10hz": {
+      "camera_hz": 10.0
+    },
+    "causal_40ms_exposure": {
+      "camera_hz": 5.0,
+      "exposure_s": 0.04,
+      "exposure_samples": 3
+    }
+  },
+  "smoke": {
+    "seconds": 18.0,
+    "warmup_cells": [
+      {
+        "case": "straight",
+        "seed": 749900,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "warmup",
+        "shard": "smoke",
+        "shard_execution_index": 0
+      },
+      {
+        "case": "straight",
+        "seed": 749900,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "warmup",
+        "shard": "smoke",
+        "shard_execution_index": 1
+      }
+    ],
+    "cells": [
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "smoke",
+        "pair_index": 0,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "smoke",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "smoke",
+        "pair_index": 0,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "smoke",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "smoke",
+        "pair_index": 1,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "smoke",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "smoke",
+        "pair_index": 1,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "smoke",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "smoke",
+        "pair_index": 2,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "smoke",
+        "shard_execution_index": 6
+      },
+      {
+        "case": "straight",
+        "seed": 749000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "smoke",
+        "pair_index": 2,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "smoke",
+        "shard_execution_index": 7
+      }
+    ]
+  },
+  "development": {
+    "seconds": 40.0,
+    "seeds": [
+      751000,
+      751001,
+      751002,
+      751003,
+      751004,
+      751005,
+      751006,
+      751007
+    ],
+    "cells": [
+      {
+        "case": "straight",
+        "seed": 751000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 0,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751000-nominal-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 0,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751000-nominal-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 1,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751000-nominal-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 1,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751000-nominal-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 2,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751000-camera_10hz-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 2,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751000-camera_10hz-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 3,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751000-camera_10hz-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 3,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751000-camera_10hz-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 4,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751000-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 4,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751000-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 5,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751000-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 5,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751000-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751001,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 6,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751001-nominal-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751001,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 6,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751001-nominal-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751001,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 7,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751001-nominal-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751001,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 7,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751001-nominal-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 8,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751001-camera_10hz-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 8,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751001-camera_10hz-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 9,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751001-camera_10hz-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 9,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751001-camera_10hz-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 10,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751001-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 10,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751001-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 11,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751001-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 11,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751001-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751002,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 12,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751002-nominal-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751002,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 12,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751002-nominal-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751002,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 13,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751002-nominal-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751002,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 13,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751002-nominal-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751002,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 14,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751002-camera_10hz-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751002,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 14,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751002-camera_10hz-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751002,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 15,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751002-camera_10hz-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751002,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 15,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751002-camera_10hz-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751002,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 16,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751002-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751002,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 16,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751002-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751002,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 17,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751002-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751002,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 17,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751002-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751003,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 18,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751003-nominal-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751003,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 18,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751003-nominal-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751003,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 19,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751003-nominal-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751003,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 19,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751003-nominal-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751003,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 20,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751003-camera_10hz-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751003,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 20,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751003-camera_10hz-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751003,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 21,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751003-camera_10hz-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751003,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 21,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751003-camera_10hz-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751003,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 22,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751003-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751003,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 22,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751003-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751003,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 23,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751003-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751003,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 23,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751003-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751004,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 24,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751004-nominal-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751004,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 24,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751004-nominal-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751004,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 25,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751004-nominal-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751004,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 25,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751004-nominal-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751004,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 26,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751004-camera_10hz-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751004,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 26,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751004-camera_10hz-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751004,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 27,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751004-camera_10hz-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751004,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 27,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751004-camera_10hz-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751004,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 28,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751004-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751004,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 28,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751004-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751004,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 29,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751004-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751004,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 29,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751004-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751005,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 30,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751005-nominal-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751005,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 30,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751005-nominal-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751005,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 31,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751005-nominal-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751005,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 31,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751005-nominal-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751005,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 32,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751005-camera_10hz-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751005,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 32,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751005-camera_10hz-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751005,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 33,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751005-camera_10hz-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751005,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 33,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751005-camera_10hz-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751005,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 34,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751005-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751005,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 34,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751005-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751005,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 35,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751005-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751005,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 35,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751005-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751006,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 36,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751006-nominal-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751006,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 36,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751006-nominal-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751006,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 37,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751006-nominal-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751006,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 37,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751006-nominal-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751006,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 38,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751006-camera_10hz-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751006,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 38,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751006-camera_10hz-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751006,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 39,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751006-camera_10hz-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751006,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 39,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751006-camera_10hz-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751006,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 40,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751006-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751006,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 40,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751006-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751006,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 41,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751006-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751006,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 41,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751006-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751007,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 42,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751007-nominal-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751007,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 42,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751007-nominal-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751007,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 43,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751007-nominal-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751007,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 43,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751007-nominal-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751007,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 44,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751007-camera_10hz-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751007,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 44,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751007-camera_10hz-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751007,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 45,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751007-camera_10hz-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751007,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 45,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751007-camera_10hz-lidar_inertial",
+        "shard_execution_index": 5
+      },
+      {
+        "case": "straight",
+        "seed": 751007,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 46,
+        "position": 1,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751007-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 2
+      },
+      {
+        "case": "straight",
+        "seed": 751007,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 46,
+        "position": 2,
+        "first_pipeline": "bounded_latest",
+        "shard": "s751007-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 3
+      },
+      {
+        "case": "occluders",
+        "seed": 751007,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "legacy_cumulative",
+        "role": "scored",
+        "pair_index": 47,
+        "position": 1,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751007-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 4
+      },
+      {
+        "case": "occluders",
+        "seed": 751007,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "pipeline": "bounded_latest",
+        "role": "scored",
+        "pair_index": 47,
+        "position": 2,
+        "first_pipeline": "legacy_cumulative",
+        "shard": "s751007-causal_40ms_exposure-lidar_inertial",
+        "shard_execution_index": 5
+      }
+    ],
+    "shards": [
+      {
+        "name": "s751000-nominal-lidar_inertial",
+        "seed": 751000,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751000-nominal-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751000-nominal-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "s751000-camera_10hz-lidar_inertial",
+        "seed": 751000,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751000-camera_10hz-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751000-camera_10hz-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          2,
+          3
+        ]
+      },
+      {
+        "name": "s751000-causal_40ms_exposure-lidar_inertial",
+        "seed": 751000,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751000-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751000-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          4,
+          5
+        ]
+      },
+      {
+        "name": "s751001-nominal-lidar_inertial",
+        "seed": 751001,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751001-nominal-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751001-nominal-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          6,
+          7
+        ]
+      },
+      {
+        "name": "s751001-camera_10hz-lidar_inertial",
+        "seed": 751001,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751001-camera_10hz-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751001-camera_10hz-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          8,
+          9
+        ]
+      },
+      {
+        "name": "s751001-causal_40ms_exposure-lidar_inertial",
+        "seed": 751001,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751001-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751001-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          10,
+          11
+        ]
+      },
+      {
+        "name": "s751002-nominal-lidar_inertial",
+        "seed": 751002,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751002-nominal-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751002-nominal-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          12,
+          13
+        ]
+      },
+      {
+        "name": "s751002-camera_10hz-lidar_inertial",
+        "seed": 751002,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751002-camera_10hz-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751002-camera_10hz-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          14,
+          15
+        ]
+      },
+      {
+        "name": "s751002-causal_40ms_exposure-lidar_inertial",
+        "seed": 751002,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751002-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751002-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          16,
+          17
+        ]
+      },
+      {
+        "name": "s751003-nominal-lidar_inertial",
+        "seed": 751003,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751003-nominal-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751003-nominal-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          18,
+          19
+        ]
+      },
+      {
+        "name": "s751003-camera_10hz-lidar_inertial",
+        "seed": 751003,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751003-camera_10hz-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751003-camera_10hz-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          20,
+          21
+        ]
+      },
+      {
+        "name": "s751003-causal_40ms_exposure-lidar_inertial",
+        "seed": 751003,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751003-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751003-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          22,
+          23
+        ]
+      },
+      {
+        "name": "s751004-nominal-lidar_inertial",
+        "seed": 751004,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751004-nominal-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751004-nominal-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          24,
+          25
+        ]
+      },
+      {
+        "name": "s751004-camera_10hz-lidar_inertial",
+        "seed": 751004,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751004-camera_10hz-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751004-camera_10hz-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          26,
+          27
+        ]
+      },
+      {
+        "name": "s751004-causal_40ms_exposure-lidar_inertial",
+        "seed": 751004,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751004-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751004-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          28,
+          29
+        ]
+      },
+      {
+        "name": "s751005-nominal-lidar_inertial",
+        "seed": 751005,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751005-nominal-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751005-nominal-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          30,
+          31
+        ]
+      },
+      {
+        "name": "s751005-camera_10hz-lidar_inertial",
+        "seed": 751005,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751005-camera_10hz-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751005-camera_10hz-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          32,
+          33
+        ]
+      },
+      {
+        "name": "s751005-causal_40ms_exposure-lidar_inertial",
+        "seed": 751005,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751005-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751005-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          34,
+          35
+        ]
+      },
+      {
+        "name": "s751006-nominal-lidar_inertial",
+        "seed": 751006,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751006-nominal-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751006-nominal-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          36,
+          37
+        ]
+      },
+      {
+        "name": "s751006-camera_10hz-lidar_inertial",
+        "seed": 751006,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751006-camera_10hz-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751006-camera_10hz-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          38,
+          39
+        ]
+      },
+      {
+        "name": "s751006-causal_40ms_exposure-lidar_inertial",
+        "seed": 751006,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751006-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751006-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          40,
+          41
+        ]
+      },
+      {
+        "name": "s751007-nominal-lidar_inertial",
+        "seed": 751007,
+        "condition": "nominal",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751007-nominal-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "nominal",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751007-nominal-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          42,
+          43
+        ]
+      },
+      {
+        "name": "s751007-camera_10hz-lidar_inertial",
+        "seed": 751007,
+        "condition": "camera_10hz",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751007-camera_10hz-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "camera_10hz",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751007-camera_10hz-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          44,
+          45
+        ]
+      },
+      {
+        "name": "s751007-causal_40ms_exposure-lidar_inertial",
+        "seed": 751007,
+        "condition": "causal_40ms_exposure",
+        "arm": "lidar_inertial",
+        "cases": [
+          "straight",
+          "occluders"
+        ],
+        "warmup_cells": [
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "bounded_latest",
+            "role": "warmup",
+            "shard": "s751007-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 0
+          },
+          {
+            "case": "straight",
+            "seed": 749900,
+            "condition": "causal_40ms_exposure",
+            "arm": "lidar_inertial",
+            "pipeline": "legacy_cumulative",
+            "role": "warmup",
+            "shard": "s751007-causal_40ms_exposure-lidar_inertial",
+            "shard_execution_index": 1
+          }
+        ],
+        "pair_indices": [
+          46,
+          47
+        ]
+      }
+    ]
+  },
+  "warmup": {
+    "seconds": 18.0,
+    "seed": 749900,
+    "case": "straight",
+    "scored": false,
+    "per": "every shard (smoke and development), one per pipeline, same arm and condition as the shard (smoke: nominal)",
+    "order": "same as the shard's first pair, before any smoke or scored cell",
+    "raw_images_archived": false,
+    "retained_receipts": [
+      "episode.json",
+      "sensors/processing_schedule.json",
+      "native/stream_receipt.json"
+    ],
+    "reason": "each shard re-extracts scratch and starts a fresh Python process and every episode starts fresh native processes; warm-ups bring imports, EGL/GPU, page cache, recorder threads and CPU/GPU clocks to a running state on both code paths before any scored cell",
+    "exclusion": "reserved seed, role=warmup, separate output tree, never in completed cells, gates, groups or pairs; collector rejects any scored row that is a warm-up"
+  },
+  "counterbalance": {
+    "rule": "pair(seed index i, condition index c, route index r) runs PIPELINES[(i+c+r)%2] first; shard order: warm-ups, straight pair, occluders pair",
+    "within_shard": "ABBA or BAAB",
+    "first_pipeline_counts_by_arm": {
+      "lidar_inertial": {
+        "legacy_cumulative": 24,
+        "bounded_latest": 24
+      }
+    },
+    "balanced_within": [
+      "arm",
+      "condition",
+      "route",
+      "condition x route (4/4)",
+      "seed (3/3)",
+      "shard position (12/12)"
+    ]
+  },
+  "pairing": "same seed/condition/route/arm; both routes of one seed/condition in one fresh shard; every pair in the same GPU allocation and process",
+  "initialization": {
+    "stationary_until_s": 3.0,
+    "excitation_until_s": 9.0,
+    "navigation_begins_s": 10.0,
+    "command": "vx=.10*sin(2*pi*(t-3)/1.5), vy=0, yaw=.30*sin(pi*(t-3)/1.5) during [3,9)",
+    "same_for_all_arms_conditions": true,
+    "native_initialization_thresholds_changed": false,
+    "known_start_assumption": "first accepted pose anchored to nominal station, initialization movement not truth-corrected"
+  },
+  "unchanged": "frozen actor, routes, native settings/thresholds, .35s capture-age cutoff, known-start registration, raw LiDAR brake, delivery quantization and no submission on arrival step",
+  "candidate": "one pending latest joined camera/LiDAR event (one latest identity per stream), one in-service estimator request; all causal intervening IMU retained; selected PNG IPC plus native measured service, simulator generation and evidence separate",
+  "reference": "current cumulative acquisition callback charging plus native client service; measured again in this new source with timing/identity instrumentation",
+  "evidence": "candidate real single-worker queue capacity8, immutable buffers, backpressure/errors reported and joined before PASS; archive clock wall-time separate from modeled simulation time",
+  "profile": "before native smoke, first40 retained stereo pairs and original cloud/IMU arrays: required PNG transport and evidence recording microbenchmark with exact decoded values/timestamp checks, no new navigation score",
+  "smoke_execution_gate": "all 6 same-source/input smoke cells and 2 warm-ups execute with finite physics, native I/O and verified evidence",
+  "nominal_readiness_gate": "per pipeline/arm: nominal 18 s smoke cell (warm-ups excluded) full horizon, accepted native pose, zero falls/contacts/nonfinite; scientific negative gates retain declared development cells as UNRUN",
+  "arms_decision": "LiDAR-IMU only. The 48-pair budget of both arms x 4 seeds is spent on 8 seed clusters of the one estimator with a goal gain to confirm. Stereo was 0/12 in both schedules (every bounded stereo episode latched a permanent stop after native map identity was lost), so it has no goal gain to order-test, and its wrapper is being changed in a separate follow-up. Cost: the stereo stale-fraction and latency differences keep their v1 order qualification. Both arms x 8 seeds would need 51 launcher jobs, above the 32-job cap.",
+  "hypotheses": {
+    "H1_primary": "In LiDAR-IMU, bounded_latest yields more clean goals than legacy_cumulative in matched pairs when each schedule runs first in exactly half of the pairs and both pipelines are warmed up in every shard.",
+    "H2_order": "Execution position within a pair (first or second) does not change clean goals or latency (secondary period-effect test).",
+    "H3_latency": "bounded_latest lowers per-episode p95 modeled pipeline service and p95 navigation pose age relative to legacy_cumulative (secondary estimation)."
+  },
+  "primary_outcome": {
+    "arm": "lidar_inertial",
+    "pairs": 48,
+    "metric": "paired clean-goal difference, bounded_latest minus legacy_cumulative, over all declared LiDAR-IMU pairs",
+    "clean_goal": "evaluator-trace goal within 0.30 m, full 40 s horizon, no fall, contact or nonfinite state (unchanged from v1)",
+    "test": "exact two-sided McNemar: scipy.stats.binomtest(bounded_only, bounded_only + legacy_only, 0.5); zero discordant pairs reported as p = 1",
+    "alpha": 0.05
+  },
+  "decision_rule": {
+    "CONFIRMED": "all 48 pairs measured AND McNemar p < 0.05 AND bounded_only > legacy_only AND seed-cluster bootstrap 95% interval of the goal-rate difference has lower bound > 0 AND bounded clean goals exceed legacy clean goals within each execution sequence (legacy-first pairs and bounded-first pairs separately)",
+    "NOT_CONFIRMED": "complete cohort but any CONFIRMED condition fails; the predeclared negative result",
+    "INCOMPLETE_NO_VERDICT": "any execution error, missing, duplicated or gate-UNRUN primary cell; no primary verdict is computed",
+    "ORDER_EFFECT_DETECTED": "flag: first-position test or sequence-by-winner Fisher test p < 0.05 for clean goals, reported regardless of the primary verdict",
+    "ATTENUATED": "flag: CONFIRMED but the bootstrap interval upper bound is below the v1 LiDAR-IMU difference 11/12"
+  },
+  "negative_result": "NOT_CONFIRMED means the v1 0/12 -> 11/12 LiDAR-IMU gain did not survive balanced order and warm-up. An order artifact would show bounded wins concentrated in bounded-first pairs, no bounded advantage in legacy-first pairs and a significant order test. A significant excess of legacy-only pairs is reported as a reversal. Every outcome is reported beside v1; none replaces it.",
+  "statistics": {
+    "per_pair": "difference bounded_latest minus legacy_cumulative for clean goal, stale fraction and each latency metric",
+    "goal_rates": "Wilson 95% interval per pipeline, scipy.stats.binomtest(k, n).proportion_ci(method='wilson'); episodes treated as independent",
+    "discordant_share": "exact Clopper-Pearson 95% interval of bounded_only / discordant",
+    "goal_difference_interval": "seed-cluster bootstrap percentile 95% interval: resample seeds with replacement keeping all pairs of a seed together; statistic is the pooled mean paired difference; exact enumeration of all multisets with multinomial weights (6435 for 8 seeds), inverted-CDF percentiles; Monte Carlo (20000 resamples, numpy seed 20261014) only above 200000 multisets",
+    "cluster_robustness": "seed-level sign test on per-seed mean goal difference (binomtest, zero seeds dropped)",
+    "latency": "per-pair differences of per-episode p95 modeled pipeline service (full_pipeline_p95_ms), p95 navigation pose age (navigation_pose_age_p95_ms) and p95 native client wall time (client_wall_p95_ms): mean and median with seed-cluster bootstrap 95% intervals; a pair missing a value is excluded from that metric only and counted",
+    "stale": "paired stale-stop fraction difference (v1 co-primary, secondary here) with a seed-cluster bootstrap 95% interval",
+    "seed_variability": "per-seed goal rates, goal difference and mean latency differences; SD (ddof=1), minimum and maximum across seeds",
+    "order_effect": "first versus second position within arm: (a) discordant pairs won by the first-run pipeline, binomtest against 0.5; (b) Fisher exact test of sequence (legacy-first, bounded-first) by winner (bounded, legacy) among discordant pairs; (c) goal rate by position for each pipeline with Wilson intervals; (d) latency period effect (mean difference in bounded-first pairs minus legacy-first pairs)/2, two-sided permutation test (exact up to 200000 assignments, else 20000 resamples, numpy seed 20261014)",
+    "per_condition": "goal rates and differences by condition, descriptive",
+    "multiplicity": "one primary test; all other p-values are secondary and unadjusted",
+    "implementation": "scripts/bench/processing_schedule_order_analysis.py on the strict collector campaign_result.json; scipy 1.15.3, numpy 1.26.0"
+  },
+  "exclusion_rules": [
+    "warm-up cells are excluded by construction: reserved seed, role=warmup, raw images not archived, compact receipts in a separate output tree, never in completed cells, readiness gates, groups or pairs",
+    "smoke cells are never scored",
+    "no scored episode is excluded after execution; falls, contacts, early termination or nonfinite physics count as no clean goal",
+    "a pair missing a continuous metric stays in the goal analysis and is excluded from that metric only, with counts reported",
+    "cells left UNRUN by a negative nominal smoke gate are retained as UNRUN, never zero; any UNRUN primary cell gives INCOMPLETE_NO_VERDICT"
+  ],
+  "stopping_rules": [
+    "one allocation and one attempt: the dispatcher refuses a second submission in the campaign directory",
+    "no interim look at outcomes, no optional stopping and no seeds added after outcomes",
+    "an execution error (runner exception, evidence or hash mismatch, archive cap, quota or wall time) stops all remaining shards without retry; the campaign is INCOMPLETE and no primary verdict is computed; completed shards stay descriptive",
+    "a rerun needs a new campaign directory, a fresh smoke and this unchanged protocol",
+    "the analysis runs once, after strict collection, with the frozen analysis script"
+  ],
+  "power": {
+    "test": "exact two-sided McNemar, alpha 0.05",
+    "pairs_per_seed": 6,
+    "scenarios": {
+      "v1_like": {
+        "bounded_only": 0.9,
+        "legacy_only": 0.0,
+        "power": {
+          "12": 1.0,
+          "24": 1.0,
+          "48": 1.0
+        }
+      },
+      "half_v1_effect": {
+        "bounded_only": 0.48,
+        "legacy_only": 0.02,
+        "power": {
+          "12": 0.478,
+          "24": 0.951,
+          "48": 1.0
+        }
+      },
+      "third_v1_effect": {
+        "bounded_only": 0.32,
+        "legacy_only": 0.02,
+        "power": {
+          "12": 0.13,
+          "24": 0.68,
+          "48": 0.978
+        }
+      },
+      "pure_order_artifact": {
+        "bounded_only": 0.4,
+        "legacy_only": 0.4,
+        "power": {
+          "12": 0.023,
+          "24": 0.03,
+          "48": 0.034
+        }
+      }
+    },
+    "design_effect": "seed clustering with design effect 1.5-2 lowers effective pairs: 24 -> 12-16 (half-effect power 0.48-0.75), 48 -> 24-32 (half-effect power 0.95-0.99)",
+    "choice": "8 new seeds (48 pairs) keep power >= 0.95 for half the v1 effect under design effect 2 and give 8 bootstrap clusters (6435 multisets) instead of 4 (35)"
+  },
+  "resources": {
+    "partition": "gpu",
+    "constraint": "rtx8000",
+    "cpus": 2,
+    "memory_gb": 16,
+    "gpus": 1,
+    "time_limit": "12:00:00",
+    "reason": "v1 ran on cn-gpu6 (Quadro RTX 8000, cascadelake); legacy modeled latency charges measured wall-clock callback cost, so hardware is pinned"
+  },
+  "budget": {
+    "scored_episodes": 96,
+    "pairs": 48,
+    "development_shards": 24,
+    "warmup_episodes": 50,
+    "smoke_episodes": 6,
+    "estimated_wall_hours": "2.3-3.0",
+    "estimated_raw_gib": "18-22",
+    "campaign_cap_gib": 48,
+    "estimate_basis": "v1 job 21801949 LiDAR-IMU runner time per episode 46/60/87 s (nominal/10 Hz/exposure), 18 s warm-ups 25-45 s, per-shard archive and dispatcher verification about 50 s; v1 LiDAR-IMU raw output 2.2 GiB per seed (4 pairs per condition x 3); warm-up images not archived"
+  },
+  "primary_metrics": [
+    "paired clean-goal difference (LiDAR-IMU)"
+  ],
+  "secondary_metrics": [
+    "paired navigation stale-stop fraction difference",
+    "p95 modeled pipeline service",
+    "p95 navigation pose age",
+    "p95 native client",
+    "order (period) effect",
+    "variability across seeds",
+    "falls/contacts",
+    "warm-up episodes (reported separately)"
+  ],
+  "navigation_denominator": "pre-step decision timestamps >=10s, actual decision count; shortened horizons explicit",
+  "scope": "eight-seed within-arm counterbalanced LiDAR-IMU schedule-model confirmation in simulation; ideal simulated sensing; no hardware timing, population or stereo claims",
+  "no_retuning_after_outcomes": true,
+  "source_change_requires_fresh_smoke": true
+}
