@@ -574,9 +574,13 @@ def collect_campaign(root, smoke_path, output):
     missing = expected - observed - unrun
     if missing:
         raise ValueError(f"incomplete development collection: {len(missing)} undeclared-missing outcomes")
+    try:
+        analysis = analyze(rows)
+    except Exception as error:  # accounting stays valid; the frozen analysis can be rerun on retained evidence
+        analysis = {"status": "ERROR", "verdict": "UNAVAILABLE_ANALYSIS_ERROR", "error": type(error).__name__ + ": " + str(error)}
     result = dict(schema=SCHEMA + "-collection", status="PASS", declared_cells=len(expected), measured_cells=len(observed),
         unrun_after_nominal_gate=len(unrun), missing_cells=[], arm_development_ready=ready,
-        analysis=analyze(rows), source_results=lineage, qualified_smoke_sha256=sha256(smoke_path),
+        analysis=analysis, source_results=lineage, qualified_smoke_sha256=sha256(smoke_path),
         scientific_status="COMPLETE_BOUNDED_DEVELOPMENT_NO_CONFIRMATION", scope=protocol["scope"])
     NAV.write_json(output, result)
     return result

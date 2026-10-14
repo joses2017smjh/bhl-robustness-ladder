@@ -286,3 +286,27 @@ def test_dispatch_retains_native_frames_and_recovery_receipt(dispatch, tmp_path)
     inventory = dispatch.retain_collector_inputs(output, tmp_path / "compact", result)
     assert {"ep/native/native_frames.jsonl", "ep/native/recovery_receipt.json"} <= set(inventory)
     assert len(inventory) == 8 and not (tmp_path / "compact/ep/sensors/00001-left.png").exists()
+
+
+def test_collector_keeps_accounting_when_analysis_raises(campaign, tmp_path, monkeypatch):
+    smoke = {"schema": campaign.SCHEMA, "phase": "smoke", "status": "PASS", "execution_gate": True,
+             "source_sha256": {"a": "b"}, "input_sha256": {"c": "d"}, "problems": [], "unrun_cells": [],
+             "completed_cells": campaign.declared_protocol()["smoke"]["cells"], "episodes": 6,
+             "arm_development_ready": {arm: False for arm in campaign.ARMS}}
+    (tmp_path / "smoke.json").write_text(json.dumps(smoke))
+    shard = tmp_path / "pairs"
+    shard.mkdir()
+    cells = campaign.declared_protocol()["development"]["cells"]
+    result = {"schema": campaign.SCHEMA, "phase": "development", "status": "PASS", "problems": [],
+              "source_sha256": {"a": "b"}, "input_sha256": {"c": "d"}, "arm_development_ready": smoke["arm_development_ready"],
+              "completed_cells": [], "episode_files": [], "episodes": 0,
+              "unrun_cells": [dict(c, reason="UNRUN_AFTER_NEGATIVE_NOMINAL_ARM_SMOKE") for c in cells]}
+    (shard / "campaign_result.json").write_text(json.dumps(result))
+    def broken(rows):
+        raise ZeroDivisionError("unit")
+    monkeypatch.setattr(campaign, "analyze", broken)
+    collected = campaign.collect_campaign(tmp_path, tmp_path / "smoke.json", tmp_path / "collection.json")
+    assert collected["status"] == "PASS" and collected["unrun_after_nominal_gate"] == 48
+    assert collected["analysis"]["verdict"] == "UNAVAILABLE_ANALYSIS_ERROR" and "unit" in collected["analysis"]["error"]
+    monkeypatch.undo()
+    assert campaign.analyze([])["verdict"] == "UNAVAILABLE_INCOMPLETE_COHORT"
