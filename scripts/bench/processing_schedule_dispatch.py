@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Freeze and execute the 48-cell processing schedule comparison on one GPU.
+"""Freeze and execute a predeclared processing-schedule design on one GPU.
 
-A single allocation runs a new 12-cell smoke then 24 matched two-episode shards.
-Every pair uses the same source, node, GPU, resources and allocation. Scientific
+v1 (2026-10-12, job 21801949): a 12-cell smoke then 24 matched two-episode
+shards. order-confirmation-20261014: a 6-cell smoke then 24 shards of two
+unscored warm-ups and two within-arm counterbalanced LiDAR-IMU pairs. Every
+pair uses the same source, node, GPU, resources and allocation. Scientific
 negatives are retained; execution errors stop subsequent shards without retries.
 The old campaign contributes only hash-verified actor/runtime/upstream assets.
 """
@@ -38,6 +40,37 @@ PYTHON = '/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python'
 RESOURCES = dict(partition='gpu,dgxh,ampere', cpus=2, memory_gb=16, gpus=1,
     time_limit='12:00:00', constraint='a40|rtx8000|l40s|h100|h200|h200-70g',
     exclude='dgxh-1', requeue=False)
+V1_DESIGN = 'v1-20261012'
+ORDER_DESIGN = 'order-confirmation-20261014'
+ORDER_SEEDS = (751000, 751001, 751002, 751003, 751004, 751005, 751006, 751007)
+ORDER_ARMS = ('lidar_inertial',)
+# Same CPU/GPU/memory as v1, pinned to the RTX 8000 class it ran on (cn-gpu6).
+ORDER_RESOURCES = dict(partition='gpu', cpus=2, memory_gb=16, gpus=1, time_limit='12:00:00',
+    constraint='rtx8000', requeue=False)
+DESIGNS = {
+    V1_DESIGN: dict(seeds=SEEDS, arms=ARMS, routes_per_shard=1, warmups_per_shard=0, smoke_cells=12, smoke_warmups=0,
+        resources=RESOURCES, cap_bytes=CAP_BYTES, sbatch_name='processing-schedule-48',
+        profile='processing-schedule-profile-20261012', smoke='processing-schedule-smoke-20261012',
+        collection='processing-schedule-collection-20261012', shard='schedule-s{seed}-{condition}-{case}-{arm}',
+        scope='48 new paired closed-loop simulation episodes; same allocation,12-cell fresh smoke; no hardware claims'),
+    ORDER_DESIGN: dict(seeds=ORDER_SEEDS, arms=ORDER_ARMS, routes_per_shard=len(CASES), warmups_per_shard=2,
+        smoke_cells=6, smoke_warmups=2, resources=ORDER_RESOURCES, cap_bytes=48 * GIB, sbatch_name='schedule-order-96',
+        profile='order-profile-20261014', smoke='order-smoke-20261014', collection='order-collection-20261014',
+        shard='order-s{seed}-{condition}-{arm}',
+        scope='96 new within-arm counterbalanced LiDAR-IMU closed-loop simulation episodes in 48 pairs; 24 shards each with 2 unscored warm-ups; same allocation, 6-cell fresh smoke; no hardware claims'),
+}
+
+
+def design_spec(design=V1_DESIGN):
+    """Counts, names and resources derived from one declared design."""
+    if design not in DESIGNS:
+        raise ValueError(f'unknown processing-schedule design: {design!r}')
+    spec = dict(DESIGNS[design], design=design)
+    shards = len(spec['seeds']) * len(CONDITIONS) * len(spec['arms']) * (len(CASES) // spec['routes_per_shard'])
+    spec.update(shards=shards, cells_per_shard=2 * spec['routes_per_shard'],
+                development_cells=2 * spec['routes_per_shard'] * shards,
+                warmup_episodes=spec['smoke_warmups'] + spec['warmups_per_shard'] * shards)
+    return spec
 
 
 def digest(path):
@@ -89,7 +122,9 @@ def quota_receipt(reserve_bytes):
                 measured_utc=now(), raw=proc.stdout)
 
 
-def declared_jobs(campaign):
+def declared_jobs(campaign, design=V1_DESIGN):
+    spec = design_spec(design)
+    resources = spec['resources']
     common = ['--upstream', '{source}/external/Berkeley-Humanoid-Lite',
         '--deploy', '{campaign}/inputs/actors/dr-default-s0/deploy.yaml',
         '--checkpoint', '{campaign}/inputs/actors/dr-default-s0/policy.onnx',
@@ -100,30 +135,42 @@ def declared_jobs(campaign):
         '--protocol', '{campaign}/inputs/scientific-protocol.json', '--output', '{output}']
     def job(name, kind, args):
         return dict(name=name, kind=kind, entrypoint='scripts/bench/processing_schedule_campaign.py',
-                    args=common + args, resources=dict(RESOURCES), max_output_mb=2048,
+                    args=common + args, resources=dict(resources), max_output_mb=2048,
                     env={'MUJOCO_GL': 'egl', 'OMP_NUM_THREADS': '1'})
-    result = [dict(name='processing-schedule-profile-20261012', kind='evaluate',
+    result = [dict(name=spec['profile'], kind='evaluate',
         entrypoint='scripts/bench/processing_schedule_campaign.py',
         args=['--profile-acquisition', '{campaign}/inputs/profile-episode', '--output', '{output}'],
-        resources=dict(RESOURCES), max_output_mb=2048,
+        resources=dict(resources), max_output_mb=2048,
         env={'MUJOCO_GL': 'egl', 'OMP_NUM_THREADS': '1'}),
-        job('processing-schedule-smoke-20261012', 'smoke', ['--phase', 'smoke'])]
-    for seed in SEEDS:
+        job(spec['smoke'], 'smoke', ['--phase', 'smoke'])]
+    smoke = ['--qualified-smoke', str(campaign / 'qualified-smoke.json')]
+    for seed in spec['seeds']:
         for condition in CONDITIONS:
-            for case in CASES:
-                for arm in ARMS:
-                    name = f'schedule-s{seed}-{condition}-{case}-{arm}'
-                    result.append(job(name, 'run', ['--phase', 'development', '--seed', str(seed),
-                        '--condition', condition, '--case', case, '--arm', arm,
-                        '--qualified-smoke', str(campaign / 'qualified-smoke.json')]))
-    result.append(dict(name='processing-schedule-collection-20261012', kind='evaluate',
+            if spec['routes_per_shard'] == 1:
+                for case in CASES:
+                    for arm in spec['arms']:
+                        result.append(job(spec['shard'].format(seed=seed, condition=condition, case=case, arm=arm), 'run',
+                            ['--phase', 'development', '--seed', str(seed), '--condition', condition,
+                             '--case', case, '--arm', arm] + smoke))
+            else:
+                # Both routes in one fresh shard: warm-ups, then ABBA/BAAB pairs.
+                for arm in spec['arms']:
+                    result.append(job(spec['shard'].format(seed=seed, condition=condition, arm=arm), 'run',
+                        ['--phase', 'development', '--seed', str(seed), '--condition', condition, '--arm', arm] + smoke))
+    result.append(dict(name=spec['collection'], kind='evaluate',
         entrypoint='scripts/bench/processing_schedule_campaign.py',
         args=['--collect', str(campaign / 'collector-inputs'),
               '--qualified-smoke', str(campaign / 'qualified-smoke.json'),
               '--output', '{output}/collection.json'],
-        result_path='collection.json', resources=dict(RESOURCES), max_output_mb=2048,
+        result_path='collection.json', resources=dict(resources), max_output_mb=2048,
         env={'MUJOCO_GL': 'egl', 'OMP_NUM_THREADS': '1'}))
     return result
+
+
+def protocol_design(protocol):
+    design = protocol.get('design', V1_DESIGN)
+    design_spec(design)
+    return design
 
 
 def source_overlay(repo, destination):
@@ -182,11 +229,13 @@ exec /nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python "$BOOT/processing_sch
 
 def prepare(repo, scientific_protocol, base, campaign, profile_episode):
     repo, base, campaign = Path(repo).resolve(), Path(base).resolve(), bounded_directory(campaign)
+    design = protocol_design(read(scientific_protocol))
+    spec = design_spec(design)
     launcher = helper(repo / 'scripts/bench/h34_campaign.py')
     _, original, old_protocol = launcher.load_intake(base)
     if original['archive_sha256'] != BASE_ARCHIVE_SHA or original['protocol_sha256'] != BASE_PROTOCOL_SHA:
         raise ValueError('base must be the untouched native controls v2 snapshot')
-    quota = quota_receipt(CAP_BYTES)
+    quota = quota_receipt(spec['cap_bytes'])
     campaign.mkdir(parents=True, exist_ok=False)
     with tempfile.TemporaryDirectory(prefix='bhl-schedule-freeze-', dir='/tmp') as temporary:
         frozen = Path(temporary)
@@ -210,8 +259,9 @@ def prepare(repo, scientific_protocol, base, campaign, profile_episode):
         shutil.copytree(profile_episode, frozen / 'inputs/profile-episode')
         shutil.copyfile(profile_receipt, frozen / 'inputs/profile-source-receipt.json')
         protocol = dict(schema_version=1, campaign_id=campaign.name, runtime=old_protocol['runtime'],
-            scientific_scope='48 new paired closed-loop simulation episodes; same allocation,12-cell fresh smoke; no hardware claims',
-            jobs=declared_jobs(campaign))
+            scientific_scope=spec['scope'], jobs=declared_jobs(campaign, design))
+        if design != V1_DESIGN:
+            protocol['design'] = design
         launcher.validate_protocol(protocol)
         (frozen / 'protocol.json').unlink()
         (frozen / 'manifest.json').unlink()
@@ -241,9 +291,10 @@ def prepare(repo, scientific_protocol, base, campaign, profile_episode):
             source_status=launcher.git_output(repo, 'status', '--porcelain'),
             base_archive_sha256=BASE_ARCHIVE_SHA, base_protocol_sha256=BASE_PROTOCOL_SHA,
             upstream_provenance=original['submodules'], scientific_protocol_sha256=digest(scientific_protocol),
-            max_campaign_bytes=CAP_BYTES, max_output_bytes_per_shard=2 * GIB,
-            new_scored_episodes=48, fresh_smoke_episodes=12, quota_before_freeze=quota,
-            profile_episode_sha256=digest(profile_episode / 'episode.json'))
+            max_campaign_bytes=spec['cap_bytes'], max_output_bytes_per_shard=2 * GIB, design=design,
+            new_scored_episodes=spec['development_cells'], fresh_smoke_episodes=spec['smoke_cells'],
+            unscored_warmup_episodes=spec['warmup_episodes'], declared_jobs=len(protocol['jobs']),
+            quota_before_freeze=quota, profile_episode_sha256=digest(profile_episode / 'episode.json'))
         write(campaign / 'intake.json', intake)
     return intake
 
@@ -254,26 +305,37 @@ def verified_intake(campaign, expected=None):
     _, intake, protocol = launcher.load_intake(campaign)
     if expected is not None and expected != intake['archive_sha256']:
         raise ValueError('submitted archive differs from intake')
+    design = protocol_design(protocol)
     if (intake.get('coordinator_launcher_sha256') != digest(campaign / 'processing_schedule.sbatch') or
-            intake.get('max_campaign_bytes') != CAP_BYTES or protocol['jobs'] != declared_jobs(campaign)):
+            intake.get('max_campaign_bytes') != design_spec(design)['cap_bytes'] or
+            intake.get('design', V1_DESIGN) != design or protocol['jobs'] != declared_jobs(campaign, design)):
         raise ValueError('launch resources, declared pair inventory or coordinator changed')
     return launcher, intake, protocol
 
 
-def submit(campaign):
-    campaign = bounded_directory(campaign)
-    _, intake, _ = verified_intake(campaign)
-    quota = quota_receipt(CAP_BYTES)
-    if (campaign / 'submission-start.json').exists():
-        raise ValueError('an attempt was already submitted; no implicit retry')
-    r = RESOURCES
+def sbatch_command(campaign, archive_sha, design=V1_DESIGN):
+    spec = design_spec(design)
+    r = spec['resources']
     command = ['/apps/slurm/25.11.8/bin/sbatch', '--parsable', '--ntasks=1', '--account=eecs',
-        '--job-name=processing-schedule-48', '--partition=' + r['partition'], '--cpus-per-task=2',
-        '--mem=16G', '--time=' + r['time_limit'], '--gres=gpu:1', '--constraint=' + r['constraint'],
-        '--exclude=' + r['exclude'], '--export=NONE', '--no-requeue',
+        '--job-name=' + spec['sbatch_name'], '--partition=' + r['partition'], '--cpus-per-task=' + str(r['cpus']),
+        '--mem=' + str(r['memory_gb']) + 'G', '--time=' + r['time_limit'], '--gres=gpu:1', '--constraint=' + r['constraint']]
+    if r.get('exclude'):
+        command.append('--exclude=' + r['exclude'])
+    return command + ['--export=NONE', '--no-requeue',
         '--output=' + str(campaign / 'processing-schedule-%j.out'),
         '--error=' + str(campaign / 'processing-schedule-%j.out'),
-        str(campaign / 'processing_schedule.sbatch'), str(campaign), intake['archive_sha256']]
+        str(campaign / 'processing_schedule.sbatch'), str(campaign), archive_sha]
+
+
+def submit(campaign):
+    campaign = bounded_directory(campaign)
+    _, intake, protocol = verified_intake(campaign)
+    design = protocol_design(protocol)
+    r = design_spec(design)['resources']
+    quota = quota_receipt(design_spec(design)['cap_bytes'])
+    if (campaign / 'submission-start.json').exists():
+        raise ValueError('an attempt was already submitted; no implicit retry')
+    command = sbatch_command(campaign, intake['archive_sha256'], design)
     write(campaign / 'submission-start.json', dict(created_utc=now(), command=command, quota=quota))
     env = {k: v for k, v in os.environ.items() if not k.startswith(('SLURM_', 'APPTAINERENV_'))}
     env['TMPDIR'] = '/tmp'
@@ -304,10 +366,12 @@ def checked_completion(directory, archive_sha):
     return result, completion, launch
 
 
-def smoke_gate(result):
+def smoke_gate(result, design=V1_DESIGN):
+    spec = design_spec(design)
     if (result.get('status') != 'PASS' or result.get('phase') != 'smoke' or
-            result.get('episodes') != 12 or result.get('execution_gate') is not True):
-        raise ValueError('complete fresh 12-episode nominal-readiness smoke required')
+            result.get('episodes') != spec['smoke_cells'] or result.get('execution_gate') is not True or
+            result.get('design', V1_DESIGN) != design or len(result.get('warmup_cells', [])) != spec['smoke_warmups']):
+        raise ValueError('complete fresh nominal-readiness smoke of the declared design required')
 
 
 def retain_collector_inputs(output, destination, result):
@@ -329,6 +393,21 @@ def retain_collector_inputs(output, destination, result):
             source = episode.parent / name
             if source.is_symlink() or not source.resolve().is_relative_to(output) or digest(source) != row[field]:
                 raise ValueError('collector raw evidence differs from episode lineage')
+            files[str(source.relative_to(output))] = source
+    # Unscored warm-ups: compact timing receipts only (raw images never archived).
+    for relative in result.get('warmup_episode_files', []):
+        episode = (output / relative).resolve()
+        if not episode.is_relative_to(output / 'warmup') or episode.is_symlink():
+            raise ValueError('warm-up receipt escapes its output tree')
+        if digest(episode) != result['warmup_episode_sha256'][relative]:
+            raise ValueError('warm-up episode differs from scientific result')
+        row = read(episode)
+        files[relative] = episode
+        for name, field in (('native/stream_receipt.json', 'stream_receipt_sha256'),
+                            ('sensors/processing_schedule.json', 'processing_schedule_sha256')):
+            source = episode.parent / name
+            if source.is_symlink() or not source.resolve().is_relative_to(output) or digest(source) != row[field]:
+                raise ValueError('warm-up receipt differs from its episode lineage')
             files[str(source.relative_to(output))] = source
     if sum(path.stat().st_size for path in files.values()) > 256 * 1024**2:
         raise ValueError('compact numerical evidence exceeds 256 MiB per pair')
@@ -372,9 +451,31 @@ def retain_and_retire_scratch(directory, launch, completion):
     shutil.rmtree(scratch)
 
 
+def check_stage_result(index, job, result, design=V1_DESIGN):
+    """Design-derived acceptance of one completed stage; raises on any mismatch."""
+    spec = design_spec(design)
+    if index == 0:
+        if result.get('status') != 'PASS' or result.get('schema') != 'bhl-processing-schedule-v1-profile':
+            raise ValueError('retained identical-input profiling did not pass')
+    elif index == 1:
+        smoke_gate(result, design)
+    elif job['kind'] == 'run':
+        cells = spec['cells_per_shard']
+        if (result.get('phase') != 'development' or result.get('expected_declared_cells') != cells or
+                result.get('episodes', -1) + len(result.get('unrun_cells', [])) != cells or
+                result.get('design', V1_DESIGN) != design or len(result.get('warmup_cells', [])) != spec['warmups_per_shard']):
+            raise ValueError('shard requires its declared warm-ups and every declared cell completed or explicitly gated')
+    elif (result.get('schema') != 'bhl-processing-schedule-v1-collection' or
+          result.get('declared_cells') != spec['development_cells'] or result.get('design', V1_DESIGN) != design or
+          result.get('measured_cells', -1) + result.get('unrun_after_nominal_gate', -1) != spec['development_cells']):
+        raise ValueError('final strict collector did not account for every declared cell')
+
+
 def execute(campaign, expected_sha):
     campaign = bounded_directory(campaign)
     launcher, intake, protocol = verified_intake(campaign, expected_sha)
+    design = protocol_design(protocol)
+    cap_bytes = design_spec(design)['cap_bytes']
     job_id = os.environ.get('SLURM_JOB_ID')
     if not job_id or not os.environ.get('SLURM_JOB_GPUS', os.environ.get('CUDA_VISIBLE_DEVICES')):
         raise ValueError('new execution requires an allocated Slurm GPU')
@@ -393,12 +494,12 @@ def execute(campaign, expected_sha):
     try:
         for index, job in enumerate(protocol['jobs']):
             used = sum(path.stat().st_size for path in campaign.rglob('*') if path.is_file())
-            if used + 2 * GIB > CAP_BYTES:
-                raise ValueError('bounded 100 GiB campaign output reserve exhausted')
+            if used + 2 * GIB > cap_bytes:
+                raise ValueError(f'bounded {cap_bytes // GIB} GiB campaign output reserve exhausted')
             quota_receipt(2 * GIB)
             if index >= 2:
                 qualified = read(campaign / 'qualified-smoke.json')
-                smoke_gate(qualified)
+                smoke_gate(qualified, design)
                 smoke_dir = campaign / (protocol['jobs'][1]['name'] + '-' + job_id)
                 original_smoke, _, _ = checked_completion(smoke_dir, expected_sha)
                 if qualified != original_smoke:
@@ -409,23 +510,13 @@ def execute(campaign, expected_sha):
             result, completion, launch = checked_completion(directory, expected_sha)
             if rc:
                 raise ValueError('native runner failed its execution gate')
-            if index == 0:
-                if result.get('status') != 'PASS' or result.get('schema') != 'bhl-processing-schedule-v1-profile':
-                    raise ValueError('retained identical-input profiling did not pass')
-            elif index == 1:
-                smoke_gate(result)
+            check_stage_result(index, job, result, design)
+            if index == 1:
                 write(campaign / 'qualified-smoke.json', result)
-            elif job['kind'] == 'run':
-                if (result.get('phase') != 'development' or result.get('expected_declared_cells') != 2 or
-                        result.get('episodes', -1) + len(result.get('unrun_cells', [])) != 2):
-                    raise ValueError('matched pair requires two completed or explicitly gated cells')
+            elif index >= 2 and job['kind'] == 'run':
                 inventory = retain_collector_inputs(Path(launch['scratch']) / 'output',
                     campaign / 'collector-inputs' / job['name'], result)
                 write(directory / 'collector-inputs.json', inventory)
-            elif (result.get('schema') != 'bhl-processing-schedule-v1-collection' or
-                  result.get('declared_cells') != 48 or
-                  result.get('measured_cells', -1) + result.get('unrun_after_nominal_gate', -1) != 48):
-                raise ValueError('final strict collector did not account for all 48 declared cells')
             results.append(dict(name=job['name'], status=result['status'], episodes=result.get('episodes', 0),
                                 result_sha256=digest(directory / 'campaign_result.json'),
                                 raw_archive_sha256=digest(directory / 'outputs.tar.gz')))
@@ -438,7 +529,7 @@ def execute(campaign, expected_sha):
         archive_sha256=expected_sha, job_id=job_id, host=os.uname().nodename,
         completed=list(results), attempted=attempted,
         unrun=[job['name'] for job in protocol['jobs'] if job['name'] not in attempted],
-        scientific_collection=str(campaign / ('processing-schedule-collection-20261012-' + job_id) / 'campaign_result.json') if not error else None,
+        scientific_collection=str(campaign / (protocol['jobs'][-1]['name'] + '-' + job_id) / 'campaign_result.json') if not error else None,
         scope='execution completeness; paired outcomes and explicit unrun gates are in the final strict scientific collector')
     write(campaign / 'dispatch-result.json', final)
     return 0 if not error else 1

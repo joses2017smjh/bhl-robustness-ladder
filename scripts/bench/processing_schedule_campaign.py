@@ -10,11 +10,13 @@ from __future__ import annotations
 
 import argparse
 from contextlib import ExitStack
+from datetime import datetime, timezone
 import hashlib
 import json
 import math
 import os
 from pathlib import Path
+import shutil
 import sys
 import tempfile
 import time
@@ -49,6 +51,15 @@ ARMS = ("stereo", "lidar_inertial")
 CONDITIONS = ("nominal", "camera_10hz", "causal_40ms_exposure")
 CASES = ("straight", "occluders")
 SMOKE_SEED, DEVELOPMENT_SEEDS = 749000, (750000, 750001)
+# Frozen designs. A protocol without a "design" key is the completed v1
+# protocol (job 21801949), which must stay byte-for-byte reproducible.
+V1_DESIGN = "v1-20261012"
+ORDER_DESIGN = "order-confirmation-20261014"
+DESIGNS = (V1_DESIGN, ORDER_DESIGN)
+ORDER_ARMS = ("lidar_inertial",)
+ORDER_SEEDS = (751000, 751001, 751002, 751003, 751004, 751005, 751006, 751007)
+WARMUP_SEED, WARMUP_CASE, WARMUP_SECONDS = 749900, "straight", 18.
+WARMUP_RETAINED = ("episode.json", "sensors/processing_schedule.json", "native/stream_receipt.json")
 initialization_command = BASE.initialization_command
 MatchedNativeClient = BASE.MatchedNativeClient
 
@@ -303,7 +314,8 @@ class ScheduledSensors(BASE.ControlledSensors):
             super().close()
 
 
-def run_episode(upstream, actor, runtime, case, seed, output, *, condition, arm, seconds, pipeline):
+def run_episode(upstream, actor, runtime, case, seed, output, *, condition, arm, seconds, pipeline, execution=None):
+    started_utc, started_wall = datetime.now(timezone.utc).isoformat(), time.monotonic()
     import mujoco
     from bhl_robust.eval.multi_robot import _WORLDS,build_multi
     from team_airlock import ContactRunner
@@ -437,12 +449,189 @@ def run_episode(upstream, actor, runtime, case, seed, output, *, condition, arm,
     result["acquisition_schedule"] = sensors.schedule_receipt
     validate_schedule_evidence(result, sensors.schedule_receipt)
     result["latency_semantics"] = "same DelayedNativeState quantization and arrival-step hold; legacy cumulative callbacks+native, candidate selected PNG IPC+native; simulation generation/evidence archival separately measured"
+    if execution is not None:
+        # Durable per-episode order evidence: declared position in the shard,
+        # actual position in this process and wall-clock bounds.
+        result["execution"] = dict(execution, started_utc=started_utc,
+            finished_utc=datetime.now(timezone.utc).isoformat(), wall_seconds=time.monotonic() - started_wall)
     NAV.write_json(output/"episode.json",result)
     import shutil
     shutil.rmtree(cache)
     return result
 
-def declared_protocol():
+def declared_protocol(design=V1_DESIGN):
+    """Exact predeclared protocol for one frozen design (default: completed v1)."""
+    if design == V1_DESIGN:
+        return _v1_protocol()
+    if design == ORDER_DESIGN:
+        return _order_protocol()
+    raise ValueError(f"unknown processing-schedule design: {design!r}")
+
+
+def protocol_design(protocol):
+    design = protocol.get("design", V1_DESIGN) if isinstance(protocol, dict) else None
+    if design not in DESIGNS:
+        raise ValueError("unknown processing-schedule design")
+    return design
+
+
+def other_pipeline(pipeline):
+    return PIPELINES[1 - PIPELINES.index(pipeline)]
+
+
+def counterbalanced_development(seeds=ORDER_SEEDS, arms=ORDER_ARMS):
+    """Within-arm ABBA/BAAB order with one fresh shard per seed x condition x arm.
+
+    Pair (seed index i, condition index c, route index r) runs
+    PIPELINES[(i + c + r) % 2] first. Each shard runs one unscored warm-up per
+    pipeline, then the straight pair, then the occluders pair in the opposite
+    order. Each pipeline therefore runs first in exactly half of the pairs of
+    every arm, condition and route, and in half of every seed's pairs.
+    """
+    cells, shards, pair_index = [], [], 0
+    for i, seed in enumerate(seeds):
+        for c, condition in enumerate(CONDITIONS):
+            for arm in arms:
+                name = f"s{seed}-{condition}-{arm}"
+                lead = PIPELINES[(i + c) % 2]
+                warmups = [dict(case=WARMUP_CASE, seed=WARMUP_SEED, condition=condition, arm=arm, pipeline=pipeline,
+                                role="warmup", shard=name, shard_execution_index=k)
+                           for k, pipeline in enumerate((lead, other_pipeline(lead)))]
+                index, pairs = len(warmups), []
+                for r, case in enumerate(CASES):
+                    first = PIPELINES[(i + c + r) % 2]
+                    for position, pipeline in enumerate((first, other_pipeline(first)), 1):
+                        cells.append(dict(case=case, seed=seed, condition=condition, arm=arm, pipeline=pipeline,
+                            role="scored", pair_index=pair_index, position=position, first_pipeline=first,
+                            shard=name, shard_execution_index=index))
+                        index += 1
+                    pairs.append(pair_index)
+                    pair_index += 1
+                shards.append(dict(name=name, seed=seed, condition=condition, arm=arm, cases=list(CASES),
+                                   warmup_cells=warmups, pair_indices=pairs))
+    return cells, shards
+
+
+def counterbalanced_smoke(arms=ORDER_ARMS):
+    """One smoke shard: nominal warm-ups, then alternating-order condition pairs."""
+    warmups = [dict(case=WARMUP_CASE, seed=WARMUP_SEED, condition="nominal", arm=arm, pipeline=pipeline,
+                    role="warmup", shard="smoke", shard_execution_index=2 * a + k)
+               for a, arm in enumerate(arms)
+               for k, pipeline in enumerate((PIPELINES[a % 2], other_pipeline(PIPELINES[a % 2])))]
+    cells, index, pair_index = [], len(warmups), 0
+    for c, condition in enumerate(CONDITIONS):
+        for a, arm in enumerate(arms):
+            first = PIPELINES[(c + a) % 2]
+            for position, pipeline in enumerate((first, other_pipeline(first)), 1):
+                cells.append(dict(case="straight", seed=SMOKE_SEED, condition=condition, arm=arm, pipeline=pipeline,
+                    role="smoke", pair_index=pair_index, position=position, first_pipeline=first,
+                    shard="smoke", shard_execution_index=index))
+                index += 1
+            pair_index += 1
+    return warmups, cells
+
+
+# Exact two-sided McNemar power (alpha .05) for 6 pairs per seed, recomputed
+# by tests/test_processing_schedule_campaign.py from scipy.stats.binomtest.
+ORDER_POWER_SCENARIOS = {
+    "v1_like": dict(bounded_only=.90, legacy_only=0., power={"12": 1.0, "24": 1.0, "48": 1.0}),
+    "half_v1_effect": dict(bounded_only=.48, legacy_only=.02, power={"12": .478, "24": .951, "48": 1.0}),
+    "third_v1_effect": dict(bounded_only=.32, legacy_only=.02, power={"12": .130, "24": .680, "48": .978}),
+    "pure_order_artifact": dict(bounded_only=.40, legacy_only=.40, power={"12": .023, "24": .030, "48": .034}),
+}
+
+
+def _order_protocol():
+    cells, shards = counterbalanced_development()
+    smoke_warmups, smoke_cells = counterbalanced_smoke()
+    v1 = _v1_protocol()
+    pairs = len(cells) // 2
+    warmups = len(smoke_warmups) + sum(len(s["warmup_cells"]) for s in shards)
+    first = {arm: {p: sum(c["position"] == 1 and c["pipeline"] == p for c in cells if c["arm"] == arm) for p in PIPELINES}
+             for arm in ORDER_ARMS}
+    return dict(schema=SCHEMA + "-counterbalanced-protocol", design=ORDER_DESIGN,
+        parent=dict(design=V1_DESIGN, scientific_protocol_sha256="b41d516b7810fa851deea4c160c1efa2eff0d75e39037bb7bb24f265d2e5d34d",
+            source_commit="152ccf4d8a616c5725bfb0c44ac838818e028ee3", campaign_job="21801949",
+            result="LiDAR-IMU clean goals 0/12 legacy_cumulative vs 11/12 bounded_latest; stereo 0/12 in both",
+            order_audit="within_arm_counterbalanced=false: stereo always ran legacy first, LiDAR-IMU always bounded first"),
+        pipelines=list(PIPELINES), arms=list(ORDER_ARMS),
+        conditions={c: condition_spec(c) for c in CONDITIONS},
+        smoke=dict(seconds=18., warmup_cells=smoke_warmups, cells=smoke_cells),
+        development=dict(seconds=40., seeds=list(ORDER_SEEDS), cells=cells, shards=shards),
+        warmup=dict(seconds=WARMUP_SECONDS, seed=WARMUP_SEED, case=WARMUP_CASE, scored=False,
+            per="every shard (smoke and development), one per pipeline, same arm and condition as the shard (smoke: nominal)",
+            order="same as the shard's first pair, before any smoke or scored cell",
+            raw_images_archived=False, retained_receipts=list(WARMUP_RETAINED),
+            reason="each shard re-extracts scratch and starts a fresh Python process and every episode starts fresh native processes; warm-ups bring imports, EGL/GPU, page cache, recorder threads and CPU/GPU clocks to a running state on both code paths before any scored cell",
+            exclusion="reserved seed, role=warmup, separate output tree, never in completed cells, gates, groups or pairs; collector rejects any scored row that is a warm-up"),
+        counterbalance=dict(rule="pair(seed index i, condition index c, route index r) runs PIPELINES[(i+c+r)%2] first; shard order: warm-ups, straight pair, occluders pair",
+            within_shard="ABBA or BAAB", first_pipeline_counts_by_arm=first,
+            balanced_within=["arm", "condition", "route", "condition x route (4/4)", "seed (3/3)", "shard position (12/12)"]),
+        pairing="same seed/condition/route/arm; both routes of one seed/condition in one fresh shard; every pair in the same GPU allocation and process",
+        initialization=v1["initialization"], unchanged=v1["unchanged"], candidate=v1["candidate"], reference=v1["reference"],
+        evidence=v1["evidence"], profile=v1["profile"],
+        smoke_execution_gate=f"all {len(smoke_cells)} same-source/input smoke cells and {len(smoke_warmups)} warm-ups execute with finite physics, native I/O and verified evidence",
+        nominal_readiness_gate="per pipeline/arm: nominal 18 s smoke cell (warm-ups excluded) full horizon, accepted native pose, zero falls/contacts/nonfinite; scientific negative gates retain declared development cells as UNRUN",
+        arms_decision="LiDAR-IMU only. The 48-pair budget of both arms x 4 seeds is spent on 8 seed clusters of the one estimator with a goal gain to confirm. Stereo was 0/12 in both schedules (every bounded stereo episode latched a permanent stop after native map identity was lost), so it has no goal gain to order-test, and its wrapper is being changed in a separate follow-up. Cost: the stereo stale-fraction and latency differences keep their v1 order qualification. Both arms x 8 seeds would need 51 launcher jobs, above the 32-job cap.",
+        hypotheses=dict(
+            H1_primary="In LiDAR-IMU, bounded_latest yields more clean goals than legacy_cumulative in matched pairs when each schedule runs first in exactly half of the pairs and both pipelines are warmed up in every shard.",
+            H2_order="Execution position within a pair (first or second) does not change clean goals or latency (secondary period-effect test).",
+            H3_latency="bounded_latest lowers per-episode p95 modeled pipeline service and p95 navigation pose age relative to legacy_cumulative (secondary estimation)."),
+        primary_outcome=dict(arm="lidar_inertial", pairs=pairs,
+            metric="paired clean-goal difference, bounded_latest minus legacy_cumulative, over all declared LiDAR-IMU pairs",
+            clean_goal="evaluator-trace goal within 0.30 m, full 40 s horizon, no fall, contact or nonfinite state (unchanged from v1)",
+            test="exact two-sided McNemar: scipy.stats.binomtest(bounded_only, bounded_only + legacy_only, 0.5); zero discordant pairs reported as p = 1",
+            alpha=.05),
+        decision_rule=dict(
+            CONFIRMED=f"all {pairs} pairs measured AND McNemar p < 0.05 AND bounded_only > legacy_only AND seed-cluster bootstrap 95% interval of the goal-rate difference has lower bound > 0 AND bounded clean goals exceed legacy clean goals within each execution sequence (legacy-first pairs and bounded-first pairs separately)",
+            NOT_CONFIRMED="complete cohort but any CONFIRMED condition fails; the predeclared negative result",
+            INCOMPLETE_NO_VERDICT="any execution error, missing, duplicated or gate-UNRUN primary cell; no primary verdict is computed",
+            ORDER_EFFECT_DETECTED="flag: first-position test or sequence-by-winner Fisher test p < 0.05 for clean goals, reported regardless of the primary verdict",
+            ATTENUATED="flag: CONFIRMED but the bootstrap interval upper bound is below the v1 LiDAR-IMU difference 11/12"),
+        negative_result="NOT_CONFIRMED means the v1 0/12 -> 11/12 LiDAR-IMU gain did not survive balanced order and warm-up. An order artifact would show bounded wins concentrated in bounded-first pairs, no bounded advantage in legacy-first pairs and a significant order test. A significant excess of legacy-only pairs is reported as a reversal. Every outcome is reported beside v1; none replaces it.",
+        statistics=dict(
+            per_pair="difference bounded_latest minus legacy_cumulative for clean goal, stale fraction and each latency metric",
+            goal_rates="Wilson 95% interval per pipeline, scipy.stats.binomtest(k, n).proportion_ci(method='wilson'); episodes treated as independent",
+            discordant_share="exact Clopper-Pearson 95% interval of bounded_only / discordant",
+            goal_difference_interval="seed-cluster bootstrap percentile 95% interval: resample seeds with replacement keeping all pairs of a seed together; statistic is the pooled mean paired difference; exact enumeration of all multisets with multinomial weights (6435 for 8 seeds), inverted-CDF percentiles; Monte Carlo (20000 resamples, numpy seed 20261014) only above 200000 multisets",
+            cluster_robustness="seed-level sign test on per-seed mean goal difference (binomtest, zero seeds dropped)",
+            latency="per-pair differences of per-episode p95 modeled pipeline service (full_pipeline_p95_ms), p95 navigation pose age (navigation_pose_age_p95_ms) and p95 native client wall time (client_wall_p95_ms): mean and median with seed-cluster bootstrap 95% intervals; a pair missing a value is excluded from that metric only and counted",
+            stale="paired stale-stop fraction difference (v1 co-primary, secondary here) with a seed-cluster bootstrap 95% interval",
+            seed_variability="per-seed goal rates, goal difference and mean latency differences; SD (ddof=1), minimum and maximum across seeds",
+            order_effect="first versus second position within arm: (a) discordant pairs won by the first-run pipeline, binomtest against 0.5; (b) Fisher exact test of sequence (legacy-first, bounded-first) by winner (bounded, legacy) among discordant pairs; (c) goal rate by position for each pipeline with Wilson intervals; (d) latency period effect (mean difference in bounded-first pairs minus legacy-first pairs)/2, two-sided permutation test (exact up to 200000 assignments, else 20000 resamples, numpy seed 20261014)",
+            per_condition="goal rates and differences by condition, descriptive",
+            multiplicity="one primary test; all other p-values are secondary and unadjusted",
+            implementation="scripts/bench/processing_schedule_order_analysis.py on the strict collector campaign_result.json; scipy 1.15.3, numpy 1.26.0"),
+        exclusion_rules=[
+            "warm-up cells are excluded by construction: reserved seed, role=warmup, raw images not archived, compact receipts in a separate output tree, never in completed cells, readiness gates, groups or pairs",
+            "smoke cells are never scored",
+            "no scored episode is excluded after execution; falls, contacts, early termination or nonfinite physics count as no clean goal",
+            "a pair missing a continuous metric stays in the goal analysis and is excluded from that metric only, with counts reported",
+            "cells left UNRUN by a negative nominal smoke gate are retained as UNRUN, never zero; any UNRUN primary cell gives INCOMPLETE_NO_VERDICT"],
+        stopping_rules=[
+            "one allocation and one attempt: the dispatcher refuses a second submission in the campaign directory",
+            "no interim look at outcomes, no optional stopping and no seeds added after outcomes",
+            "an execution error (runner exception, evidence or hash mismatch, archive cap, quota or wall time) stops all remaining shards without retry; the campaign is INCOMPLETE and no primary verdict is computed; completed shards stay descriptive",
+            "a rerun needs a new campaign directory, a fresh smoke and this unchanged protocol",
+            "the analysis runs once, after strict collection, with the frozen analysis script"],
+        power=dict(test="exact two-sided McNemar, alpha 0.05", pairs_per_seed=6,
+            scenarios=ORDER_POWER_SCENARIOS,
+            design_effect="seed clustering with design effect 1.5-2 lowers effective pairs: 24 -> 12-16 (half-effect power 0.48-0.75), 48 -> 24-32 (half-effect power 0.95-0.99)",
+            choice="8 new seeds (48 pairs) keep power >= 0.95 for half the v1 effect under design effect 2 and give 8 bootstrap clusters (6435 multisets) instead of 4 (35)"),
+        resources=dict(partition="gpu", constraint="rtx8000", cpus=2, memory_gb=16, gpus=1, time_limit="12:00:00",
+            reason="v1 ran on cn-gpu6 (Quadro RTX 8000, cascadelake); legacy modeled latency charges measured wall-clock callback cost, so hardware is pinned"),
+        budget=dict(scored_episodes=len(cells), pairs=pairs, development_shards=len(shards), warmup_episodes=warmups,
+            smoke_episodes=len(smoke_cells), estimated_wall_hours="2.3-3.0", estimated_raw_gib="18-22", campaign_cap_gib=48,
+            estimate_basis="v1 job 21801949 LiDAR-IMU runner time per episode 46/60/87 s (nominal/10 Hz/exposure), 18 s warm-ups 25-45 s, per-shard archive and dispatcher verification about 50 s; v1 LiDAR-IMU raw output 2.2 GiB per seed (4 pairs per condition x 3); warm-up images not archived"),
+        primary_metrics=["paired clean-goal difference (LiDAR-IMU)"],
+        secondary_metrics=["paired navigation stale-stop fraction difference", "p95 modeled pipeline service", "p95 navigation pose age",
+            "p95 native client", "order (period) effect", "variability across seeds", "falls/contacts", "warm-up episodes (reported separately)"],
+        navigation_denominator=v1["navigation_denominator"],
+        scope="eight-seed within-arm counterbalanced LiDAR-IMU schedule-model confirmation in simulation; ideal simulated sensing; no hardware timing, population or stereo claims",
+        no_retuning_after_outcomes=True, source_change_requires_fresh_smoke=True)
+
+
+def _v1_protocol():
     def cells(seeds, cases):
         result, pair_index = [], 0
         for seed in seeds:
@@ -482,30 +671,37 @@ def gate_key(pipeline, arm):
     return pipeline + "/" + arm
 
 
-def nominal_arm_readiness(rows):
+def nominal_arm_readiness(rows, arms=ARMS):
     readiness = {}
     for pipeline in PIPELINES:
-        for arm in ARMS:
+        for arm in arms:
             candidates = [r for r in rows if r["pipeline"] == pipeline and r["method"] == arm and r["condition"] == "nominal"]
             readiness[gate_key(pipeline, arm)] = bool(len(candidates) == 1 and candidates[0]["native_tracked_frames"] > 0
                 and candidates[0]["full_horizon"] and not any(candidates[0][k] for k in ("fell", "collision", "nonfinite")))
     return readiness
 
 
-def validate_smoke(smoke, *, sources, inputs):
+def validate_smoke(smoke, *, sources, inputs, design=V1_DESIGN):
+    protocol = declared_protocol(design)
+    cells, warmups = protocol["smoke"]["cells"], protocol["smoke"].get("warmup_cells", [])
     if (smoke.get("schema") != SCHEMA or smoke.get("phase") != "smoke" or smoke.get("status") != "PASS"
             or smoke.get("execution_gate") is not True or smoke.get("source_sha256") != sources
-            or smoke.get("input_sha256") != inputs or smoke.get("completed_cells") != declared_protocol()["smoke"]["cells"]
-            or smoke.get("problems") or smoke.get("unrun_cells") or smoke.get("episodes") != 12):
-        raise ValueError("complete matching-source/input twelve-cell smoke required")
+            or smoke.get("input_sha256") != inputs or smoke.get("completed_cells") != cells
+            or smoke.get("problems") or smoke.get("unrun_cells") or smoke.get("episodes") != len(cells)
+            or smoke.get("design", V1_DESIGN) != design or smoke.get("warmup_cells", []) != warmups
+            or len(smoke.get("warmup_episode_files", [])) != len(warmups)):
+        raise ValueError("complete matching-source/input smoke of the declared design required")
     readiness = smoke.get("arm_development_ready")
-    expected = {gate_key(p, a) for p in PIPELINES for a in ARMS}
+    expected = {gate_key(p, a) for p in PIPELINES for a in protocol["arms"]}
     if not isinstance(readiness, dict) or set(readiness) != expected or any(type(x) is not bool for x in readiness.values()):
         raise ValueError("explicit pipeline/arm readiness required")
     return readiness
 
 
-def paired_summary(rows):
+PAIR_METRICS = ("full_pipeline_p95_ms", "navigation_pose_age_p95_ms", "client_wall_p95_ms", "fell", "collision")
+
+
+def paired_summary(rows, orders=None, uncertainty="two seed clusters, descriptive paired outcomes only; no population confidence interval"):
     keys = ("case", "seed", "condition", "method")
     grouped = {}
     for row in rows:
@@ -520,18 +716,48 @@ def paired_summary(rows):
             continue
         legacy, candidate = (pair[p] for p in PIPELINES)
         comparable = legacy["stale_navigation_fraction"] is not None and candidate["stale_navigation_fraction"] is not None
-        pairs.append(dict(zip(keys, key), clean_goal_difference=int(candidate["success"])-int(legacy["success"]),
+        entry = dict(zip(keys, key), clean_goal_difference=int(candidate["success"])-int(legacy["success"]),
             stale_fraction_difference=candidate["stale_navigation_fraction"]-legacy["stale_navigation_fraction"] if comparable else None,
             stale_comparison_available=comparable,
             legacy_stale_fraction=legacy["stale_navigation_fraction"], candidate_stale_fraction=candidate["stale_navigation_fraction"],
             legacy_clean_goal=legacy["success"], candidate_clean_goal=candidate["success"],
-            both_full_horizon=legacy["full_horizon"] and candidate["full_horizon"]))
+            both_full_horizon=legacy["full_horizon"] and candidate["full_horizon"])
+        if orders is not None:
+            # Retained per-pair metrics and the verified execution order feed
+            # the predeclared order-confirmation analysis.
+            for metric in PAIR_METRICS:
+                entry["legacy_" + metric], entry["candidate_" + metric] = legacy.get(metric), candidate.get(metric)
+            order = orders[key]
+            entry.update(execution_order=list(order), first_pipeline=order[0],
+                         sequence="legacy_first" if order[0] == PIPELINES[0] else "bounded_first")
+        pairs.append(entry)
     stale_pairs = [p for p in pairs if p["stale_comparison_available"]]
     return dict(complete_pairs=len(pairs), stale_comparable_pairs=len(stale_pairs), incomplete_pairs=incomplete, pairs=pairs,
         mean_paired_stale_fraction_difference=float(np.mean([p["stale_fraction_difference"] for p in stale_pairs])) if stale_pairs else None,
         clean_goal_count_difference=sum(p["clean_goal_difference"] for p in pairs) if pairs else None,
         negative_difference_means="candidate fewer stale stops; positive clean-goal difference means candidate more goals",
-        uncertainty="two seed clusters, descriptive paired outcomes only; no population confidence interval")
+        uncertainty=uncertainty)
+
+
+def declared_pair_orders(protocol):
+    """Pair key (case, seed, condition, arm) -> declared pipeline execution order."""
+    orders = {}
+    for cell in protocol["development"]["cells"]:
+        orders.setdefault((cell["case"], cell["seed"], cell["condition"], cell["arm"]), []).append(cell["pipeline"])
+    if any(sorted(order) != sorted(PIPELINES) for order in orders.values()):
+        raise ValueError("every declared pair needs each pipeline exactly once")
+    return {key: tuple(order) for key, order in orders.items()}
+
+
+def order_audit(pairs, arms):
+    by_arm = {}
+    for arm in arms:
+        rows = [p for p in pairs if p["method"] == arm]
+        counts = {p: sum(row.get("first_pipeline") == p for row in rows) for p in PIPELINES}
+        by_arm[arm] = dict(pairs=len(rows), first_pipeline_counts=counts,
+            counterbalanced=bool(rows) and counts[PIPELINES[0]] == counts[PIPELINES[1]] == len(rows) / 2)
+    return dict(by_arm=by_arm, within_arm_counterbalanced=bool(by_arm) and all(v["counterbalanced"] for v in by_arm.values()),
+                scope="declared order verified against recorded execution order of every scored episode")
 
 
 def validate_schedule_evidence(row, evidence):
@@ -582,10 +808,10 @@ def validate_schedule_evidence(row, evidence):
     return True
 
 
-def aggregate_groups(rows):
+def aggregate_groups(rows, arms=ARMS):
     groups = {}
     for pipeline in PIPELINES:
-        for arm in ARMS:
+        for arm in arms:
             values = [r for r in rows if r["method"] == arm and r["pipeline"] == pipeline]
             available = [r["stale_navigation_fraction"] for r in values if r["stale_navigation_fraction"] is not None]
             groups[gate_key(pipeline, arm)] = dict(episodes=len(values), clean_goals=sum(r["success"] for r in values),
@@ -594,61 +820,148 @@ def aggregate_groups(rows):
     return groups
 
 
+def cell_key(cell):
+    return tuple(cell[k] for k in ("case", "seed", "condition", "arm", "pipeline"))
+
+
+def verified_episode_row(directory, relative, expected_sha, key, seconds, *, raw=True):
+    """Load one retained episode; re-derive outcome and stale stops from its trace.
+
+    ``raw=False`` is only for unscored warm-ups, whose sensor/evaluator arrays
+    are deliberately not archived; their timing receipts are still verified.
+    """
+    episode_path = (Path(directory) / relative).resolve()
+    if not episode_path.is_relative_to(Path(directory).resolve()):
+        raise ValueError("episode file leaves its result directory")
+    if expected_sha is None or sha256(episode_path) != expected_sha:
+        raise ValueError("retained episode differs from result hash")
+    row = json.loads(episode_path.read_text())
+    if (row.get("case"), row.get("seed"), row.get("condition"), row.get("method"), row.get("pipeline")) != key:
+        raise ValueError("episode identities differ from declared cell")
+    lineage = (("inference_sensors.npz", "inference_sensors_sha256"), ("evaluator_truth.npz", "evaluator_truth_sha256")) if raw else ()
+    for name, field in lineage + (("native/stream_receipt.json", "stream_receipt_sha256"),
+                                  ("sensors/processing_schedule.json", "processing_schedule_sha256")):
+        if sha256(episode_path.parent / name) != row[field]:
+            raise ValueError("retained raw/evaluator lineage differs")
+    validate_schedule_evidence(row, json.loads((episode_path.parent / "sensors/processing_schedule.json").read_text()))
+    trace = row["trace"]
+    if not trace or any(not math.isfinite(r["evaluator_goal_distance_m"]) for r in trace):
+        raise ValueError("finite retained evaluator trace required")
+    reached = any(r["evaluator_goal_distance_m"] <= .30 for r in trace)
+    contact = any(r["evaluator_contact"] for r in trace)
+    fell = any(r["evaluator_tilt_rad"] >= .78 or r["evaluator_height_m"] < row["evaluator_initial_height_m"] - .25 for r in trace)
+    full = row["elapsed_simulation_s"] >= seconds - 1e-6
+    success = reached and full and not (contact or fell or row["nonfinite"])
+    if any(bool(row[k]) != actual for k, actual in (("goal_reached_evaluator", reached), ("collision", contact),
+            ("fell", fell), ("full_horizon", full), ("success", success))):
+        raise ValueError("reported outcome differs from retained evaluator trace")
+    nav = [r for r in trace if r["decision_timestamp_s"] >= 10.-1e-9]
+    stale = sum(r["reason"] == "native_stale_stop" for r in nav)
+    fraction = stale/len(nav) if nav else None
+    if row["navigation_decisions"] != len(nav) or row["stale_navigation_decisions"] != stale or row["stale_navigation_fraction"] != fraction:
+        raise ValueError("reported stale stops differ from decision trace")
+    return row
+
+
+WARMUP_SUMMARY_FIELDS = ("success", "goal_reached_evaluator", "fell", "collision", "full_horizon", "native_frames",
+    "native_tracked_frames", "client_wall_p95_ms", "full_pipeline_p95_ms", "navigation_pose_age_p95_ms",
+    "stale_navigation_fraction", "elapsed_simulation_s")
+
+
+def warmup_summary(row, cell):
+    return dict({k: cell[k] for k in ("shard", "shard_execution_index", "case", "seed", "condition", "arm", "pipeline")},
+                wall_seconds=(row.get("execution") or {}).get("wall_seconds"), **{k: row.get(k) for k in WARMUP_SUMMARY_FIELDS})
+
+
+def warmup_report(warmups):
+    def mean(values, field):
+        present = [v[field] for v in values if v[field] is not None]
+        return float(np.mean(present)) if present else None
+    by_pipeline = {}
+    for pipeline in PIPELINES:
+        values = [w for w in warmups if w["pipeline"] == pipeline]
+        by_pipeline[pipeline] = dict(episodes=len(values), clean_goals=sum(bool(w["success"]) for w in values),
+            falls=sum(bool(w["fell"]) for w in values), contacts=sum(bool(w["collision"]) for w in values),
+            mean_client_wall_p95_ms=mean(values, "client_wall_p95_ms"), mean_full_pipeline_p95_ms=mean(values, "full_pipeline_p95_ms"),
+            mean_navigation_pose_age_p95_ms=mean(values, "navigation_pose_age_p95_ms"), mean_wall_seconds=mean(values, "wall_seconds"))
+    return dict(episodes=len(warmups), scored=False, by_pipeline=by_pipeline, episodes_detail=warmups,
+                scope="unscored warm-ups reported separately; never in readiness gates, groups, pairs or the primary analysis")
+
+
+def verify_counterbalanced_shard(result, protocol, path, seen):
+    """Warm-ups ran first and scored cells ran in declared order, once per shard."""
+    shards = {s["name"]: s for s in protocol["development"]["shards"]}
+    names = {c.get("shard") for c in result["completed_cells"] + result["unrun_cells"]}
+    shard = shards.get(next(iter(names))) if len(names) == 1 else None
+    if shard is None or shard["name"] in seen:
+        raise ValueError("each development result must hold exactly one declared, unduplicated shard")
+    seen.add(shard["name"])
+    declared = [c for c in protocol["development"]["cells"] if c["shard"] == shard["name"]]
+    ran = result["completed_cells"]
+    unran = [{k: v for k, v in c.items() if k != "reason"} for c in result["unrun_cells"]]
+    if (len(ran) + len(unran) != len(declared) or any(c not in ran and c not in unran for c in declared)
+            or [c for c in declared if c in ran] != ran):
+        raise ValueError("shard cells differ from the declared execution order")
+    if result.get("warmup_cells") != shard["warmup_cells"] or len(result.get("warmup_episode_files", [])) != len(shard["warmup_cells"]):
+        raise ValueError("declared shard warm-ups did not run")
+    scored_seeds = {c["seed"] for c in protocol["development"]["cells"]}
+    summaries = []
+    for k, (cell, relative) in enumerate(zip(result["warmup_cells"], result["warmup_episode_files"])):
+        if cell["role"] != "warmup" or cell["seed"] in scored_seeds:
+            raise ValueError("warm-up cell collides with the scored cohort")
+        row = verified_episode_row(path.parent, relative, result.get("warmup_episode_sha256", {}).get(relative), cell_key(cell),
+                                   protocol["warmup"]["seconds"], raw=False)
+        execution = row.get("execution") or {}
+        if (execution.get("role") != "warmup" or execution.get("shard") != shard["name"]
+                or execution.get("shard_execution_index") != cell["shard_execution_index"] or execution.get("process_episode_index") != k):
+            raise ValueError("warm-up execution record differs from its declared position")
+        summaries.append(warmup_summary(row, cell))
+    return shard, summaries
+
+
 def collect_campaign(root, smoke_path, output):
     """Strict exact-cohort collection; skipped gates remain unrun, never zero."""
     root = Path(root).resolve()
     smoke = json.loads(Path(smoke_path).read_text())
-    ready = validate_smoke(smoke, sources=smoke.get("source_sha256"), inputs=smoke.get("input_sha256"))
-    expected = {tuple(c[k] for k in ("case", "seed", "condition", "arm", "pipeline")) for c in declared_protocol()["development"]["cells"]}
-    observed, unrun, rows, lineage = set(), set(), [], []
+    design = protocol_design(smoke)
+    protocol = declared_protocol(design)
+    arms, seconds, counterbalanced = tuple(protocol["arms"]), protocol["development"]["seconds"], design != V1_DESIGN
+    ready = validate_smoke(smoke, sources=smoke.get("source_sha256"), inputs=smoke.get("input_sha256"), design=design)
+    declared = {cell_key(c): c for c in protocol["development"]["cells"]}
+    expected = set(declared)
+    observed, unrun, rows, lineage, warmups, seen_shards, positions = set(), set(), [], [], [], set(), {}
     for path in sorted(root.rglob("campaign_result.json")):
         result = json.loads(path.read_text())
         if result.get("schema") != SCHEMA or result.get("phase") != "development":
             continue
         if (result.get("status") != "PASS" or result.get("problems") or result.get("source_sha256") != smoke["source_sha256"]
-                or result.get("input_sha256") != smoke["input_sha256"] or result.get("arm_development_ready") != ready):
-            raise ValueError("incomplete or mixed-source development result")
+                or result.get("input_sha256") != smoke["input_sha256"] or result.get("arm_development_ready") != ready
+                or result.get("design", V1_DESIGN) != design):
+            raise ValueError("incomplete, mixed-source or mixed-design development result")
         if len(result["completed_cells"]) != len(result["episode_files"]) or result["episodes"] != len(result["completed_cells"]):
             raise ValueError("episode list differs from completed cells")
-        for cell, relative in zip(result["completed_cells"], result["episode_files"]):
-            key = tuple(cell[k] for k in ("case", "seed", "condition", "arm", "pipeline"))
+        shard = None
+        if counterbalanced:
+            shard, summaries = verify_counterbalanced_shard(result, protocol, path, seen_shards)
+            warmups.extend(summaries)
+        for position, (cell, relative) in enumerate(zip(result["completed_cells"], result["episode_files"])):
+            key = cell_key(cell)
             if key not in expected or key in observed or key in unrun or not ready[gate_key(cell["pipeline"], cell["arm"])]:
                 raise ValueError("undeclared, duplicate or gated development cell")
-            episode_path = (path.parent / relative).resolve()
-            if not episode_path.is_relative_to(path.parent.resolve()):
-                raise ValueError("episode file leaves its result directory")
-            if sha256(episode_path) != result["episode_sha256"].get(relative):
-                raise ValueError("retained episode differs from result hash")
-            row = json.loads(episode_path.read_text())
-            if (row.get("case"), row.get("seed"), row.get("condition"), row.get("method"), row.get("pipeline")) != key:
-                raise ValueError("episode identities differ from declared cell")
-            for name, field in (("inference_sensors.npz", "inference_sensors_sha256"),
-                                ("evaluator_truth.npz", "evaluator_truth_sha256"),
-                                ("native/stream_receipt.json", "stream_receipt_sha256"),
-                                ("sensors/processing_schedule.json", "processing_schedule_sha256")):
-                if sha256(episode_path.parent / name) != row[field]:
-                    raise ValueError("retained raw/evaluator lineage differs")
-            validate_schedule_evidence(row, json.loads((episode_path.parent / "sensors/processing_schedule.json").read_text()))
-            trace = row["trace"]
-            if not trace or any(not math.isfinite(r["evaluator_goal_distance_m"]) for r in trace):
-                raise ValueError("finite retained evaluator trace required")
-            reached = any(r["evaluator_goal_distance_m"] <= .30 for r in trace)
-            contact = any(r["evaluator_contact"] for r in trace)
-            fell = any(r["evaluator_tilt_rad"] >= .78 or r["evaluator_height_m"] < row["evaluator_initial_height_m"] - .25 for r in trace)
-            full = row["elapsed_simulation_s"] >= 40. - 1e-6
-            success = reached and full and not (contact or fell or row["nonfinite"])
-            if any(bool(row[k]) != actual for k, actual in (("goal_reached_evaluator", reached), ("collision", contact),
-                    ("fell", fell), ("full_horizon", full), ("success", success))):
-                raise ValueError("reported outcome differs from retained evaluator trace")
-            nav = [r for r in trace if r["decision_timestamp_s"] >= 10.-1e-9]
-            stale = sum(r["reason"] == "native_stale_stop" for r in nav)
-            fraction = stale/len(nav) if nav else None
-            if row["navigation_decisions"] != len(nav) or row["stale_navigation_decisions"] != stale or row["stale_navigation_fraction"] != fraction:
-                raise ValueError("reported stale stops differ from decision trace")
+            if counterbalanced and cell != declared[key]:
+                raise ValueError("completed cell differs from its declaration")
+            row = verified_episode_row(path.parent, relative, result["episode_sha256"].get(relative), key, seconds)
+            if counterbalanced:
+                execution = row.get("execution") or {}
+                if (execution.get("role") != "scored" or execution.get("shard") != shard["name"]
+                        or execution.get("shard_execution_index") != cell["shard_execution_index"]
+                        or execution.get("process_episode_index") != len(shard["warmup_cells"]) + position):
+                    raise ValueError("scored execution record differs from its declared position")
+            positions[key] = (str(path), position)
             rows.append(row)
             observed.add(key)
         for cell in result["unrun_cells"]:
-            key = tuple(cell[k] for k in ("case", "seed", "condition", "arm", "pipeline"))
+            key = cell_key(cell)
             if (key not in expected or key in observed or key in unrun or ready[gate_key(cell["pipeline"], cell["arm"])]
                     or cell["reason"] != "UNRUN_AFTER_NEGATIVE_NOMINAL_ARM_SMOKE"):
                 raise ValueError("invalid unrun cell or gate")
@@ -657,12 +970,23 @@ def collect_campaign(root, smoke_path, output):
     missing = expected - observed - unrun
     if missing:
         raise ValueError(f"incomplete development collection: {len(missing)} undeclared-missing outcomes")
-    groups = aggregate_groups(rows)
-    result = dict(schema=SCHEMA + "-collection", status="PASS", declared_cells=48, measured_cells=len(observed),
+    if counterbalanced and seen_shards != {s["name"] for s in protocol["development"]["shards"]}:
+        raise ValueError("every declared shard must report its warm-ups")
+    orders = declared_pair_orders(protocol)
+    for pair, order in orders.items():
+        places = [positions.get(pair + (pipeline,)) for pipeline in order]
+        if None not in places and (places[0][0] != places[1][0] or places[0][1] >= places[1][1]):
+            raise ValueError("observed pair execution order differs from the declaration")
+    groups = aggregate_groups(rows, arms)
+    paired = paired_summary(rows, orders=orders, uncertainty=(
+        "eight reset-seed clusters; predeclared inference by processing_schedule_order_analysis.py" if counterbalanced else
+        "two seed clusters, descriptive paired outcomes only; no population confidence interval"))
+    result = dict(schema=SCHEMA + "-collection", status="PASS", declared_cells=len(expected), measured_cells=len(observed),
         unrun_after_nominal_gate=len(unrun), missing_cells=[], arm_development_ready=ready, by_pipeline_arm=groups,
-        paired=paired_summary(rows), source_results=lineage, qualified_smoke_sha256=sha256(smoke_path),
-        scientific_status="COMPLETE_BOUNDED_DEVELOPMENT_NO_CONFIRMATION",
-        scope=declared_protocol()["scope"])
+        paired=paired, source_results=lineage, qualified_smoke_sha256=sha256(smoke_path),
+        scientific_status="COMPLETE_COUNTERBALANCED_COLLECTION_ANALYSIS_PENDING" if counterbalanced else "COMPLETE_BOUNDED_DEVELOPMENT_NO_CONFIRMATION",
+        scope=protocol["scope"], design=design, development_seconds=seconds,
+        order_audit=order_audit(paired["pairs"], arms), warmups=warmup_report(warmups))
     NAV.write_json(output, result)
     return result
 
@@ -762,9 +1086,47 @@ def profile_retained_sequence(episode, output):
     return result
 
 
+def shard_plan(protocol, phase, *, seed=None, condition=None, case=None, arm=None):
+    """Cells for one process in declared execution order: (warm-up cells, cells)."""
+    design = protocol_design(protocol)
+    section = protocol[phase]
+    selected = any(x is not None for x in (seed, condition, case, arm))
+    if design == V1_DESIGN:
+        cells = section["cells"]
+        if selected:
+            cells = [c for c in cells if (case is None or c["case"] == case) and c["seed"] == seed
+                     and c["condition"] == condition and (arm is None or c["arm"] == arm)]
+        if not cells:
+            raise ValueError("no declared cells match this shard")
+        return [], cells
+    if phase == "smoke":
+        if selected:
+            raise ValueError("the counterbalanced smoke is one declared shard")
+        return section["warmup_cells"], section["cells"]
+    if case is not None or None in (seed, condition, arm):
+        raise ValueError("counterbalanced shards require --seed, --condition and --arm and keep both routes together")
+    matches = [s for s in section["shards"] if (s["seed"], s["condition"], s["arm"]) == (seed, condition, arm)]
+    if len(matches) != 1:
+        raise ValueError("undeclared counterbalanced development shard")
+    return matches[0]["warmup_cells"], [c for c in section["cells"] if c["shard"] == matches[0]["name"]]
+
+
+def retain_warmup(raw, destination):
+    """Archive compact numerical warm-up receipts; raw warm-up images stay in scratch."""
+    for name in WARMUP_RETAINED:
+        source, target = Path(raw) / name, Path(destination) / name
+        if target.exists():
+            raise ValueError("warm-up receipt already exists")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
+        if sha256(target) != sha256(source):
+            raise ValueError("warm-up receipt changed while copying")
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(__doc__)
     p.add_argument("--write-protocol", type=Path)
+    p.add_argument("--design", choices=DESIGNS, default=V1_DESIGN, help="protocol written by --write-protocol")
     p.add_argument("--collect", type=Path)
     p.add_argument("--profile-acquisition", type=Path)
     p.add_argument("--phase", choices=("smoke", "development"))
@@ -773,7 +1135,7 @@ def main(argv=None):
     p.add_argument("--orb-runtime-sha256")
     p.add_argument("--lio-runtime-sha256")
     p.add_argument("--case", choices=CASES)
-    p.add_argument("--seed", type=int, choices=DEVELOPMENT_SEEDS)
+    p.add_argument("--seed", type=int, help="validated against the loaded protocol's declared cells")
     p.add_argument("--condition", choices=CONDITIONS)
     p.add_argument("--arm", choices=ARMS)
     a = p.parse_args(argv)
@@ -783,7 +1145,7 @@ def main(argv=None):
         profile_retained_sequence(a.profile_acquisition, a.output)
         return 0
     if a.write_protocol:
-        NAV.write_json(a.write_protocol, declared_protocol())
+        NAV.write_json(a.write_protocol, declared_protocol(a.design))
         return 0
     if a.collect:
         if a.qualified_smoke is None or a.output is None:
@@ -800,34 +1162,60 @@ def main(argv=None):
     if (a.output / "campaign_result.json").exists():
         raise ValueError("refuse to overwrite a prior campaign result")
     result = {"schema": SCHEMA, "phase": a.phase, "status": "INCOMPLETE", "episodes": 0, "problems": [],
-              "completed_cells": [], "unrun_cells": [], "ground_truth_inputs_to_estimator_or_planner": []}
+              "completed_cells": [], "unrun_cells": [], "warmup_cells": [], "warmup_episode_files": [],
+              "warmup_episode_sha256": {}, "warmup_summaries": [], "ground_truth_inputs_to_estimator_or_planner": []}
     started = time.monotonic()
     try:
         protocol = json.loads(a.protocol.read_text())
-        if protocol != declared_protocol():
+        design = protocol_design(protocol)
+        if protocol != declared_protocol(design):
             raise ValueError("exact predeclared protocol required")
+        result["design"] = design
+        arms = tuple(protocol["arms"])
+        warmups, cells = shard_plan(protocol, a.phase, seed=a.seed, condition=a.condition, case=a.case, arm=a.arm)
         sources = source_hashes()
         inputs = {key: sha256(getattr(a, key)) for key in ("deploy", "checkpoint", "orb_runtime_archive", "lio_runtime_archive", "protocol")}
-        readiness = {gate_key(p, arm): True for p in PIPELINES for arm in ARMS}
+        readiness = {gate_key(p, arm): True for p in PIPELINES for arm in arms}
         if a.phase == "development":
             if a.qualified_smoke is None:
                 raise ValueError("complete same-source/input smoke is required")
-            readiness = validate_smoke(json.loads(a.qualified_smoke.read_text()), sources=sources, inputs=inputs)
+            readiness = validate_smoke(json.loads(a.qualified_smoke.read_text()), sources=sources, inputs=inputs, design=design)
         work = Path(os.getenv("H34_WORK_DIR", tempfile.mkdtemp(prefix="bhl-native-sensor-controls-")))
         orb = STEREO.unpack_runtime(a.orb_runtime_archive, a.orb_runtime_sha256, work / "schedule-orb")
         lio = HYBRID.unpack_lio(a.lio_runtime_archive, a.lio_runtime_sha256, work / "schedule-lio")
         actor = {"name": "frozen_dr_default_s0", "deploy": str(a.deploy.resolve()), "checkpoint": str(a.checkpoint.resolve())}
-        cells = protocol[a.phase]["cells"]
-        if shard:
-            cells = [c for c in cells if (a.case is None or c["case"] == a.case) and c["seed"] == a.seed and c["condition"] == a.condition and (a.arm is None or c["arm"] == a.arm)]
+        runtimes, executed = {"orb": orb, "lio": lio}, 0
+        for cell in warmups:
+            # Unscored by construction: reserved seed, separate raw tree under
+            # work/ (not archived) and compact receipts under output/warmup/.
+            name = f"warmup-{cell['pipeline']}-{cell['case']}-s{cell['seed']}-{cell['condition']}-{cell['arm']}"
+            raw = work / "warmup-raw" / name
+            row = run_episode(a.upstream.resolve(), actor, runtimes, cell["case"], cell["seed"], raw,
+                condition=cell["condition"], arm=cell["arm"], seconds=protocol["warmup"]["seconds"], pipeline=cell["pipeline"],
+                execution=dict(design=design, role="warmup", shard=cell["shard"],
+                               shard_execution_index=cell["shard_execution_index"], process_episode_index=executed))
+            executed += 1
+            if row["nonfinite"] or row["native_frames"] < 1:
+                raise ValueError("warm-up requires finite state and actual native input/output")
+            retain_warmup(raw, a.output / "warmup" / name)
+            relative = f"warmup/{name}/episode.json"
+            result["warmup_cells"].append(cell)
+            result["warmup_episode_files"].append(relative)
+            result["warmup_episode_sha256"][relative] = sha256(a.output / relative)
+            result["warmup_summaries"].append(warmup_summary(row, cell))
+            print(json.dumps(dict(role="warmup", **{k: row[k] for k in ("pipeline", "method", "condition", "case", "seed", "native_frames")})), flush=True)
         rows = []
         for cell in cells:
             if not readiness[gate_key(cell["pipeline"], cell["arm"])]:
                 result["unrun_cells"].append(dict(cell, reason="UNRUN_AFTER_NEGATIVE_NOMINAL_ARM_SMOKE"))
                 continue
             name = f"{cell['pipeline']}-{cell['case']}-s{cell['seed']}-{cell['condition']}-{cell['arm']}"
-            row = run_episode(a.upstream.resolve(), actor, {"orb": orb, "lio": lio}, cell["case"], cell["seed"], a.output / name,
-                condition=cell["condition"], arm=cell["arm"], seconds=protocol[a.phase]["seconds"], pipeline=cell["pipeline"])
+            row = run_episode(a.upstream.resolve(), actor, runtimes, cell["case"], cell["seed"], a.output / name,
+                condition=cell["condition"], arm=cell["arm"], seconds=protocol[a.phase]["seconds"], pipeline=cell["pipeline"],
+                execution=dict(design=design, role=cell.get("role", "smoke" if a.phase == "smoke" else "scored"),
+                               shard=cell.get("shard"), shard_execution_index=cell.get("shard_execution_index"),
+                               process_episode_index=executed))
+            executed += 1
             if row["nonfinite"] or (row["native_frames"] < 1 and (a.phase == "smoke" or not (row["fell"] or row["collision"]))):
                 raise ValueError("execution smoke/episode requires finite state and actual native input/output")
             row["episode_file"] = name + "/episode.json"
@@ -840,11 +1228,12 @@ def main(argv=None):
             execution_gate=True, source_sha256=sources, input_sha256=inputs, episodes=len(rows),
             episode_files=[r["episode_file"] for r in rows], expected_declared_cells=len(cells),
             episode_sha256={r["episode_file"]: sha256(a.output / r["episode_file"]) for r in rows},
-            total_declared_development_cells=48, arm_development_ready=nominal_arm_readiness(rows) if a.phase == "smoke" else readiness,
+            total_declared_development_cells=len(protocol["development"]["cells"]), warmup_episodes=len(result["warmup_cells"]),
+            arm_development_ready=nominal_arm_readiness(rows, arms) if a.phase == "smoke" else readiness,
             arms={arm: {"episodes": sum(r["method"] == arm for r in rows),
                 "clean_goals": sum(r["success"] for r in rows if r["method"] == arm),
                 "falls": sum(r["fell"] for r in rows if r["method"] == arm),
-                "contacts": sum(r["collision"] for r in rows if r["method"] == arm)} for arm in ARMS},
+                "contacts": sum(r["collision"] for r in rows if r["method"] == arm)} for arm in arms},
             aggregate_improvement_verdict="UNAVAILABLE_UNTIL_COMPLETE_STRICT_PAIRED_COLLECTION",
             scope=protocol["scope"])
     except Exception as error:
