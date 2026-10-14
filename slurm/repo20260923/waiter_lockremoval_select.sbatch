@@ -12,15 +12,17 @@
 # candidate pair from the dev lock-removal checks (scripts/waiter/lockremoval_select.py) and, iff it reached
 # SEL_MIN_DEV/32, run the scored lock-removal test on it right here: waiter_expert_gate.sbatch's protocol
 # (GATE_START_ONLY=1) on the fresh seeds 9000-9099 (expert_gate.py --range lock2), PASS iff >= 80/100.
-#   sbatch --dependency=afterany:<dev checks> --export=ALL,SEL_CANDIDATES="RUN=DEPLOY=Q4=DEVGATE ...",SEL_OUT=<dir> \
+#   sbatch --dependency=afterany:<dev checks> --export=ALL,SEL_CANDIDATES_FILE=<file>,SEL_OUT=<dir> \
 #       slurm/repo20260923/waiter_lockremoval_select.sbatch
+# (the file holds one RUN=DEPLOY=Q4_JSON=DEV_GATE_JSON per line; sbatch's argument handling splits a long list)
 set -uo pipefail
 REPO=/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder
 PY=/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python
 OUT=${SEL_OUT:?set SEL_OUT}
 cd "$REPO"
 echo "=== lock-removal select | $(hostname) | HEAD $(git rev-parse --short HEAD) | $(date)"
-ARGS=(); for c in ${SEL_CANDIDATES:?set SEL_CANDIDATES}; do ARGS+=(--candidate "$c"); done
+mapfile -t CANDS < "${SEL_CANDIDATES_FILE:?set SEL_CANDIDATES_FILE}"
+ARGS=(); for c in "${CANDS[@]}"; do [ -n "$c" ] && ARGS+=(--candidate "$c"); done
 line=$("$PY" scripts/waiter/lockremoval_select.py "${ARGS[@]}" --min-dev "${SEL_MIN_DEV:-26}" --out "$OUT/selection.json" | tee /dev/stderr | tail -1)
 case "$line" in
   "SELECT: none"*) echo "LOCK-REMOVAL (option 3): no candidate reached the dev bar; no scored run"; exit 0 ;;
