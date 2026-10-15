@@ -1,0 +1,67 @@
+{
+  "schema": "bhl-processing-schedule-order-validation-v1",
+  "job_id": "21825716",
+  "host": "cn-c24.hpc.engr.oregonstate.edu",
+  "source_commit": "f86d753b1eca73bc0dbbefdcac72411d0460a1d1",
+  "source_status": "",
+  "pytest_exit_code": 0,
+  "pytest_summary": "345 passed, 2 warnings, 22 subtests passed in 27.64s",
+  "v1_replay_exit_code": 0,
+  "v1_replay": {
+    "top_level_fields_equal": {
+      "arm_development_ready": true,
+      "by_pipeline_arm": true,
+      "declared_cells": true,
+      "measured_cells": true,
+      "missing_cells": true,
+      "qualified_smoke_sha256": true,
+      "schema": true,
+      "scientific_status": true,
+      "scope": true,
+      "status": true,
+      "unrun_after_nominal_gate": true
+    },
+    "paired_summary_equal": {
+      "clean_goal_count_difference": true,
+      "complete_pairs": true,
+      "incomplete_pairs": true,
+      "mean_paired_stale_fraction_difference": true,
+      "negative_difference_means": true,
+      "stale_comparable_pairs": true,
+      "uncertainty": true
+    },
+    "pair_fields_equal": true,
+    "source_result_hashes_equal": true,
+    "order_audit": {
+      "by_arm": {
+        "stereo": {
+          "pairs": 12,
+          "first_pipeline_counts": {
+            "legacy_cumulative": 12,
+            "bounded_latest": 0
+          },
+          "counterbalanced": false
+        },
+        "lidar_inertial": {
+          "pairs": 12,
+          "first_pipeline_counts": {
+            "legacy_cumulative": 0,
+            "bounded_latest": 12
+          },
+          "counterbalanced": false
+        }
+      },
+      "within_arm_counterbalanced": false,
+      "scope": "declared order verified against recorded execution order of every scored episode"
+    },
+    "analysis_verdict": "NOT_CONFIRMATORY_DESIGN",
+    "lidar_goals": {
+      "legacy": 0,
+      "bounded": 11,
+      "pairs": 12,
+      "mcnemar_p": 0.0009765625
+    },
+    "status": "REPRODUCED"
+  },
+  "finished_utc": "2026-10-14T23:26:42.730126+00:00"
+}

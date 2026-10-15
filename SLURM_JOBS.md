@@ -5052,3 +5052,28 @@ remote asset's identity/digest/size against fresh GitHub API responses.
 - 0 falls in every standing gate episode (216) and every dev task episode (192) of the six new pairs.
 - Committed with this entry: the wbc1j and wbc1k gate records and selection files, training JSONs, deploy files, the gated pair configs and gzipped training logs, and the option 3 selection record. The dev gate files stay in `solutions-20260930/campaign-waiter/phase2/dev2/startonly_1i_s{27..32}_pair_dev/`.
 - **The Waiter program stays closed as recorded on 2026-10-14:** all four phases passed in simulation, standing relies on the declared stance lock, and no attempt removed it (closest: pair s24, 76/100 on a free base).
+
+## Processing-schedule order confirmation — frozen October 14, 2026
+
+This frozen campaign tests whether the v1 LiDAR–IMU clean-goal gain (0/12 → 11/12)
+survives within-estimator counterbalanced order. It has 48 pairs on eight new reset seeds:
+each schedule runs first in 24 pairs, and every shard starts with two unscored
+warm-ups. Source commit `f86d753` and archive SHA256
+`3be0441de4f74182d87a0664b4d8430da72bbc42d93197f90e3ad83d3b2e573b` are frozen.
+Status is FROZEN_NOT_SUBMITTED: the RTX 8000 GPU launch is awaiting lead review.
+
+| Job | Purpose | Terminal state / elapsed |
+| --- | --- | --- |
+| 21825716 | Allocated validation and freeze: 345 tests, 22 subtests; v1 collector replay reproduced; prepare | COMPLETED, 0:0 / 1m05s |
+
+[Predeclared design, launch commands and receipts](docs/PROCESSING_SCHEDULE_ORDER_CONFIRMATION_2026-10-14.md).
+
+## 2026-10-14 — processing-schedule order confirmation: result (lead)
+
+| Job | Purpose | State |
+| --- | --- | --- |
+| 21825832 | Order-confirmation campaign (`processing-schedule-order-v1-20261014`, archive `3be0441d…`, 48 LiDAR–IMU pairs, ABBA/BAAB, warm-ups) | COMPLETED, 0:0 / 2h33m (cn-gpu5); dispatch COMPLETE, 27/27 stages |
+
+Frozen analysis, run once: CONFIRMED, flags none. Bounded 48/48 vs legacy 0/48, McNemar p < 1e-6, bootstrap
+[1.0, 1.0], gain in both execution orders, first-run wins 24/48. Files:
+`results/processing-schedule-order-20261014/analysis-21825832.{json,md}`.

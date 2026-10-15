@@ -1,0 +1,52 @@
+{
+  "schema": "bhl-slurm-accounting-v1",
+  "purpose": "processing-schedule order-confirmation CPU validation and freeze",
+  "source_commit": "f86d753b1eca73bc0dbbefdcac72411d0460a1d1",
+  "rows": [
+    {
+      "JobID": "21825716",
+      "JobName": "schedule-order-freeze",
+      "Partition": "share",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Elapsed": "00:01:05",
+      "MaxRSS": "",
+      "AllocCPUS": "2",
+      "ReqMem": "8G",
+      "NodeList": "cn-c24",
+      "Submit": "2026-10-14T16:25:47",
+      "Start": "2026-10-14T16:26:06",
+      "End": "2026-10-14T16:27:11"
+    },
+    {
+      "JobID": "21825716.batch",
+      "JobName": "batch",
+      "Partition": "",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Elapsed": "00:01:05",
+      "MaxRSS": "2466372K",
+      "AllocCPUS": "2",
+      "ReqMem": "",
+      "NodeList": "cn-c24",
+      "Submit": "2026-10-14T16:26:06",
+      "Start": "2026-10-14T16:26:06",
+      "End": "2026-10-14T16:27:11"
+    },
+    {
+      "JobID": "21825716.extern",
+      "JobName": "extern",
+      "Partition": "",
+      "State": "COMPLETED",
+      "ExitCode": "0:0",
+      "Elapsed": "00:01:05",
+      "MaxRSS": "",
+      "AllocCPUS": "2",
+      "ReqMem": "",
+      "NodeList": "cn-c24",
+      "Submit": "2026-10-14T16:26:06",
+      "Start": "2026-10-14T16:26:06",
+      "End": "2026-10-14T16:27:11"
+    }
+  ]
+}

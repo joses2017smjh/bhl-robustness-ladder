@@ -1,0 +1,39 @@
+{
+  "schema": "bhl-processing-schedule-order-freeze-v1",
+  "checks": {
+    "status": true,
+    "commit": true,
+    "clean": true,
+    "design": true,
+    "protocol_hash": true,
+    "counts": true,
+    "archive": true,
+    "not_submitted": true
+  },
+  "campaign": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-order-v1-20261014",
+  "design": "order-confirmation-20261014",
+  "archive_sha256": "3be0441de4f74182d87a0664b4d8430da72bbc42d93197f90e3ad83d3b2e573b",
+  "archive_bytes": 262963004,
+  "scientific_protocol": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-order-protocol-v1-20261014/scientific-protocol.json",
+  "scientific_protocol_sha256": "a3f4a9343a7bf68428656fbe6fed09dc3f867cd8a329ad4e66aadc713fbbae35",
+  "launch_protocol_sha256": "650229ae5ece8e7dc5577fa58308193823bbf35c2bffe43886cea6e7f50d66db",
+  "source_commit": "f86d753b1eca73bc0dbbefdcac72411d0460a1d1",
+  "quota_before_freeze": {
+    "grace": "4w1d12h47m20s",
+    "hard_limit_bytes": 2199023255552,
+    "measured_utc": "2026-10-14T23:26:44.476781+00:00",
+    "project": 30762,
+    "raw": "Disk quotas for prj 30762 (pid 30762):\n      Filesystem  kbytes   bquota  blimit  bgrace   files   iquota  ilimit  igrace\n  /nfs/hpc/share 1614736404* 1610612736 2147483648 4w1d12h47m20s 2574125*       0       0       -\n",
+    "reserve_bytes": 51539607552,
+    "soft_limit_bytes": 1649267441664,
+    "used_bytes": 1653490077696
+  },
+  "submit_command": [
+    "/nfs/hpc/share/sanchej7/Humanoid_Lite/venv/bin/python",
+    "scripts/bench/processing_schedule_dispatch.py",
+    "submit",
+    "--campaign",
+    "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-order-v1-20261014"
+  ],
+  "frozen_utc": "2026-10-14T23:27:11.546575+00:00"
+}
