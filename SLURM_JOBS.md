@@ -4918,3 +4918,13 @@ Status is FROZEN_NOT_SUBMITTED: the RTX 8000 GPU launch is awaiting lead review.
 | 21825716 | Allocated validation and freeze: 345 tests, 22 subtests; v1 collector replay reproduced; prepare | COMPLETED, 0:0 / 1m05s |
 
 [Predeclared design, launch commands and receipts](docs/PROCESSING_SCHEDULE_ORDER_CONFIRMATION_2026-10-14.md).
+
+## 2026-10-14 — processing-schedule order confirmation: result (lead)
+
+| Job | Purpose | State |
+| --- | --- | --- |
+| 21825832 | Order-confirmation campaign (`processing-schedule-order-v1-20261014`, archive `3be0441d…`, 48 LiDAR–IMU pairs, ABBA/BAAB, warm-ups) | COMPLETED, 0:0 / 2h33m (cn-gpu5); dispatch COMPLETE, 27/27 stages |
+
+Frozen analysis, run once: CONFIRMED, flags none. Bounded 48/48 vs legacy 0/48, McNemar p < 1e-6, bootstrap
+[1.0, 1.0], gain in both execution orders, first-run wins 24/48. Files:
+`results/processing-schedule-order-20261014/analysis-21825832.{json,md}`.

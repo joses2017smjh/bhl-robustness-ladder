@@ -1,6 +1,24 @@
-# Processing-schedule order confirmation (predeclared, frozen, not yet run)
+# Processing-schedule order confirmation (predeclared, frozen, run 2026-10-14)
 
-**Status: FROZEN_NOT_SUBMITTED.** Source commit `f86d753b1eca73bc0dbbefdcac72411d0460a1d1`, frozen archive
+**Result: CONFIRMED** (job 21825832, COMPLETED 0:0 in 2h33m on cn-gpu5; all 27 stages complete; frozen analysis run
+once).
+- **Goals:** FAST-LIO2 LiDAR–IMU clean goals were 48/48 with the bounded latest-input schedule versus 0/48 with the
+  cumulative reference, over eight new seeds.
+- **Statistics:** exact McNemar 48 vs 0, p < 1e-6. Seed-cluster bootstrap of the goal-rate difference 1.000, 95 %
+  interval [1.000, 1.000]. Seed sign test p = 0.0078.
+- **Order:** the gain holds in legacy-first and in bounded-first pairs. First-run wins among discordant pairs were
+  24/48 (p = 1.0), and the period effect is 0. The v1 order confound does not explain the v1 gain.
+- **Latency (bounded minus legacy, paired):**
+  - modeled pipeline p95 −6.9 s;
+  - navigation pose age p95 −13.7 s;
+  - stale fraction −0.82.
+- **Scope:** simulation schedule model over reset-seed clusters. No hardware, population or stereo claim.
+- **Analysis files:** `results/processing-schedule-order-20261014/analysis-21825832.{json,md}`.
+
+The design and protocol below are unchanged from the freeze.
+
+
+**Status at freeze: FROZEN_NOT_SUBMITTED** (since run, see the result above). Source commit `f86d753b1eca73bc0dbbefdcac72411d0460a1d1`, frozen archive
 SHA256 `3be0441de4f74182d87a0664b4d8430da72bbc42d93197f90e3ad83d3b2e573b`, CPU validation and freeze job **21825716**. No GPU job has
 been submitted. The [v1 results](PROCESSING_SCHEDULE_RESULTS_2026-10-12.md) stand
 unchanged; this campaign can confirm or fail to confirm them, never replace them.
