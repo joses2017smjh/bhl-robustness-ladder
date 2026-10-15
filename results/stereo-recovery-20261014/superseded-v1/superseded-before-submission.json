@@ -1,0 +1,26 @@
+{
+  "schema": "bhl-stereo-recovery-superseded-freeze-v1",
+  "status": "SUPERSEDED_BEFORE_SUBMISSION",
+  "superseded_archive_sha256": "a27fda57cd08dba9960550c9c34a02ae3bb387d5ff955f00dc4d0e5e1d8e8677",
+  "superseded_source_commit": "434181c027dcc8d761ceb063feb8db009e6bd192",
+  "superseded_scientific_protocol_sha256": "e041d2b4d9a0504c39415621e8f881aaa4b01953822cac8b99b2a97db8b24284",
+  "submitted": false,
+  "episodes_run": 0,
+  "reason": "lead seed reservation: the protocol must record the order-confirmation campaign's seeds (749000, 749900, 751000-751007) as excluded; seeds and design unchanged",
+  "replacement": {
+    "campaign": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014",
+    "source_commit": "7638a6479d4e5487c54ab359f92a698777784626",
+    "archive_sha256": "19337226d6b7ed5cf242bab4650cb7b18a8753ae57f59b473bb0028148d7e31e"
+  },
+  "removed_to_prevent_launch": {
+    "frozen-campaign.tar.gz": "a27fda57cd08dba9960550c9c34a02ae3bb387d5ff955f00dc4d0e5e1d8e8677",
+    "stereo_recovery.sbatch": "82e6645452865b86117fedb8c48badb6d25987b83ca1b7c1752e3b3904cb9ae2"
+  },
+  "retained": [
+    "intake.json",
+    "manifest.json",
+    "protocol.json",
+    "h34_campaign.sbatch"
+  ],
+  "recorded_utc": "2026-10-14T23:42:53.428095+00:00"
+}

@@ -17,9 +17,16 @@
 #include <vector>
 #include <array>
 
+#ifdef BHL_ORB_ATLAS_TELEMETRY
+#define BHL_ORB_VERSION_SUFFIX " atlas-telemetry-v1"
+#else
+#define BHL_ORB_VERSION_SUFFIX ""
+#endif
+
 int main(int argc, char** argv) {
   if (argc == 2 && std::string(argv[1]) == "--version") {
-    std::cout << "bhl-orb-native-v1 ORB_SLAM3 4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4 headless stereo stereo-inertial-v1\n";
+    std::cout << "bhl-orb-native-v1 ORB_SLAM3 4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4 headless stereo stereo-inertial-v1"
+              << BHL_ORB_VERSION_SUFFIX << "\n";
     return 0;
   }
   const bool inertial = argc == 5 && std::string(argv[4]) == "--stereo-inertial";
@@ -34,10 +41,23 @@ int main(int argc, char** argv) {
     replies << std::setprecision(17);
     cv::setNumThreads(1);
     ORB_SLAM3::System slam(argv[1], argv[2], inertial ? ORB_SLAM3::System::IMU_STEREO : ORB_SLAM3::System::STEREO, false);
-    replies << "{\"schema\":\"bhl-orb-native-ready-v1\",\"upstream_commit\":\"4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4\",\"sensor_mode\":\"" << (inertial ? "stereo_inertial" : "stereo") << "\"}\n" << std::flush;
+    replies << "{\"schema\":\"bhl-orb-native-ready-v1\",\"upstream_commit\":\"4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4\",\"sensor_mode\":\"" << (inertial ? "stereo_inertial" : "stereo") << "\"";
+#ifdef BHL_ORB_ATLAS_TELEMETRY
+    replies << ",\"atlas_telemetry\":\"bhl-orb-atlas-telemetry-v1\"";
+#endif
+    replies << "}\n" << std::flush;
     std::string request;
     double previous = -std::numeric_limits<double>::infinity();
     double previous_imu = -std::numeric_limits<double>::infinity();
+#ifdef BHL_ORB_ATLAS_TELEMETRY
+    // Wrapper-side memory of the previous Atlas snapshot. Only used to flag an
+    // active-map reset that reuses the same native map id (Map::clear keeps
+    // mnId; the next first keyframe replaces the map's init keyframe id).
+    long previous_atlas_map = -1;
+    unsigned long previous_init_kf = 0;
+    long previous_keyframes = -1;
+    long active_map_resets = 0;
+#endif
     while (std::getline(std::cin, request)) {
       std::istringstream fields(request);
       std::string stamp_text, left_path, right_path, imu_path, extra;
@@ -106,6 +126,39 @@ int main(int argc, char** argv) {
       const char* initialization = state != ORB_SLAM3::Tracking::NOT_INITIALIZED ? "NOT_IN_INITIALIZATION" :
           frame.N <= 500 ? "FEATURE_COUNT_NOT_ABOVE_500" : "OTHER_NATIVE_INITIALIZATION_CONDITION";
 #endif
+#ifdef BHL_ORB_ATLAS_TELEMETRY
+      // Wrapper-only Atlas snapshot after synchronous TrackStereo returns. Only
+      // upstream getters are called (each takes the upstream mutex); upstream
+      // Tracking::Track itself calls Atlas::GetCurrentMap on every frame. No
+      // estimator state, threshold or library code is modified.
+      // System::MapChanged keeps a function-static counter compared against the
+      // CURRENT map's big-change index, so it is recorded but not relied upon.
+      const bool system_map_changed = slam.MapChanged();
+      ORB_SLAM3::Atlas* atlas = slam.BhlTelemetryAtlas();
+      ORB_SLAM3::Map* active = atlas->GetCurrentMap();
+      const int atlas_map_count = atlas->CountMaps();
+      const int atlas_big_change = atlas->GetLastBigChangeIdx();
+      const long atlas_map_id = static_cast<long>(active->GetId());
+      const unsigned long init_kf_id = active->GetInitKFid();
+      const unsigned long max_kf_id = active->GetMaxKFid();
+      const long keyframes = static_cast<long>(active->KeyFramesInMap());
+      const int map_big_change = active->GetLastBigChangeIdx();
+      const bool map_imu_initialized = active->isImuInitialized();
+      const bool map_inertial_ba1 = active->GetIniertialBA1();
+      const bool map_inertial_ba2 = active->GetIniertialBA2();
+      // Concurrent LoopClosing could swap the current map during the snapshot.
+      const bool snapshot_consistent = atlas->GetCurrentMap() == active && map_big_change == atlas_big_change;
+      // Unambiguous same-id reset: Tracking::ResetActiveMap -> Atlas::clearMap ->
+      // Map::clear keeps the id but empties the keyframes; Map::AddKeyFrame then
+      // replaces the init keyframe id. KeyFrameCulling/SetBadFlag never remove
+      // the init keyframe, and KeyFrame::nNextId is not reset by ResetActiveMap.
+      const bool active_map_reset = atlas_map_id == previous_atlas_map && previous_keyframes > 0 &&
+          (keyframes == 0 || init_kf_id != previous_init_kf);
+      if (active_map_reset) ++active_map_resets;
+      previous_atlas_map = atlas_map_id;
+      previous_init_kf = init_kf_id;
+      previous_keyframes = keyframes;
+#endif
       const double seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
       replies << "{\"schema\":\"bhl-orb-native-frame-v1\",\"timestamp_s\":" << stamp
               << ",\"tracking_state\":" << state << ",\"tracked\":" << (tracked ? "true" : "false")
@@ -117,6 +170,21 @@ int main(int argc, char** argv) {
               << ",\"positive_stereo_depth_matches\":" << stereo_depth_matches
               << ",\"initialization_feature_threshold_exclusive\":500,\"initialization_reason\":\"" << initialization
               << "\",\"read_only_native_frame\":true}";
+#endif
+#ifdef BHL_ORB_ATLAS_TELEMETRY
+      replies << ",\"atlas\":{\"schema\":\"bhl-orb-atlas-telemetry-v1\",\"system_map_changed\":"
+              << (system_map_changed ? "true" : "false") << ",\"atlas_map_count\":" << atlas_map_count
+              << ",\"atlas_last_big_change_idx\":" << atlas_big_change
+              << ",\"current_map_id\":" << atlas_map_id << ",\"current_map_init_kf_id\":" << init_kf_id
+              << ",\"current_map_max_kf_id\":" << max_kf_id << ",\"current_map_keyframes\":" << keyframes
+              << ",\"current_map_big_change_idx\":" << map_big_change
+              << ",\"current_map_imu_initialized\":" << (map_imu_initialized ? "true" : "false")
+              << ",\"current_map_inertial_ba1\":" << (map_inertial_ba1 ? "true" : "false")
+              << ",\"current_map_inertial_ba2\":" << (map_inertial_ba2 ? "true" : "false")
+              << ",\"snapshot_consistent\":" << (snapshot_consistent ? "true" : "false")
+              << ",\"active_map_reset\":" << (active_map_reset ? "true" : "false")
+              << ",\"active_map_resets_total\":" << active_map_resets
+              << ",\"read_only_getters_after_synchronous_track\":true}";
 #endif
       if (inertial) {
         replies << ",\"inertial\":{\"schema\":\"bhl-orb-inertial-frame-v1\",\"imu_samples\":" << imu.size()

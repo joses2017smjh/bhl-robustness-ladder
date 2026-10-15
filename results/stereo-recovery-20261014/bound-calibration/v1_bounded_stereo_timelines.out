@@ -1,0 +1,125 @@
+====================================================================================================
+bounded_latest-occluders-s750000-camera_10hz-stereo success False final dist 2.40 min dist 2.38
+ invalidations: [(20.8, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 537 points | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Creation of new map with id: 1 | New Map created with 622 points
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t= 20.60 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 20.80 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 23.70 state=0 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 23.80 state=2 map=1 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-straight-s750000-camera_10hz-stereo success False final dist 4.14 min dist 4.11
+ invalidations: [(14.3, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 545 points | Fail to track local map! | Relocalized!! | Fail to track local map! | Relocalized!! | Fail to track local map! | Fail to track local map! | Relocalized!!
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t= 11.30 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 11.50 state=2 map=0 tracked=True pkt=OK
+   t= 12.90 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 13.10 state=2 map=0 tracked=True pkt=OK
+   t= 14.20 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 14.30 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 14.50 state=2 map=0 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-occluders-s750000-causal_40ms_exposure-stereo success False final dist 4.43 min dist 4.41
+ invalidations: [(13.8, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 530 points | Fail to track local map! | Fail to track local map! | Relocalized!! | Fail to track local map! | Fail to track local map! | Relocalized!!
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t=  5.80 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t=  6.20 state=2 map=0 tracked=True pkt=OK
+   t= 13.60 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 13.80 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 14.00 state=2 map=0 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-straight-s750000-causal_40ms_exposure-stereo success False final dist 4.78 min dist 4.75
+ invalidations: [(11.2, ['native_map_identity_unavailable']), (11.8, ['native_map_identity_unavailable']), (13.4, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 530 points | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Relocalized!!
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t= 11.00 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 11.20 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 11.60 state=3 map=0 tracked=False pkt=MAP_CHANGED_STOP
+   t= 11.80 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 13.20 state=3 map=0 tracked=False pkt=MAP_CHANGED_STOP
+   t= 13.40 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 13.60 state=3 map=0 tracked=False pkt=MAP_CHANGED_STOP
+   t= 14.00 state=2 map=0 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-occluders-s750000-nominal-stereo success False final dist 4.58 min dist 4.56
+ invalidations: [(11.4, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 537 points | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | LM: Active map reset recieved | LM: Active map reset, waiting... | LM: Reseting current map in Local Mappin | LM: Active map reset, Done!!! | New Map created with 543 points
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t= 11.20 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 11.40 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 14.20 state=4 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 14.40 state=2 map=0 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-straight-s750000-nominal-stereo success False final dist 1.92 min dist 1.91
+ invalidations: [(22.0, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 545 points | Fail to track local map! | Relocalized!! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Creation of new map with id: 1 | New Map created with 522 points
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t=  8.60 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t=  8.80 state=2 map=0 tracked=True pkt=OK
+   t= 21.80 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 22.00 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 25.00 state=0 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 25.20 state=2 map=1 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-occluders-s750001-camera_10hz-stereo success False final dist 4.38 min dist 4.35
+ invalidations: [(12.7, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 561 points | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Creation of new map with id: 1 | New Map created with 569 points
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t= 12.50 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 12.70 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 15.50 state=0 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 15.70 state=2 map=1 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-straight-s750001-camera_10hz-stereo success False final dist 3.60 min dist 3.59
+ invalidations: [(17.1, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 559 points | Fail to track local map! | Relocalized!! | Fail to track local map! | Relocalized!! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Creation of new map with id: 1 | New Map created with 527 points
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t= 10.90 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 11.00 state=2 map=0 tracked=True pkt=OK
+   t= 12.00 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 12.20 state=2 map=0 tracked=True pkt=OK
+   t= 16.90 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 17.10 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 20.10 state=0 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 20.30 state=2 map=1 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-occluders-s750001-causal_40ms_exposure-stereo success False final dist 4.82 min dist 4.80
+ invalidations: [(12.0, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 566 points | Fail to track local map! | Fail to track local map! | Fail to track local map! | Relocalized!!
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t= 11.80 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 12.00 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 12.40 state=2 map=0 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-straight-s750001-causal_40ms_exposure-stereo success False final dist 4.84 min dist 4.81
+ invalidations: [(21.0, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 554 points | Fail to track local map! | Fail to track local map! | Relocalized!!
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t= 20.80 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 21.00 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 21.20 state=2 map=0 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-occluders-s750001-nominal-stereo success False final dist 3.78 min dist 3.74
+ invalidations: [(15.0, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 561 points | Fail to track local map! | Relocalized!! | Fail to track local map! | Relocalized!! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Creation of new map with id: 1 | New Map created with 558 points
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t=  8.80 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t=  9.00 state=2 map=0 tracked=True pkt=OK
+   t= 10.80 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 11.00 state=2 map=0 tracked=True pkt=OK
+   t= 14.80 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 15.00 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 18.00 state=0 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 18.20 state=2 map=1 tracked=False pkt=MAP_CHANGED_STOP
+====================================================================================================
+bounded_latest-straight-s750001-nominal-stereo success False final dist 1.94 min dist 1.92
+ invalidations: [(22.8, ['native_map_identity_unavailable'])]
+ log events: Creation of new map with id: 0 | New Map created with 559 points | Fail to track local map! | Relocalized!! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Fail to track local map! | Relocalized!!
+   t=  2.20 state=2 map=0 tracked=True pkt=OK
+   t= 11.20 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 11.40 state=2 map=0 tracked=True pkt=OK
+   t= 22.60 state=3 map=0 tracked=False pkt=RECENTLY_LOST
+   t= 22.80 state=3 map=None tracked=False pkt=MAP_CHANGED_STOP
+   t= 25.20 state=2 map=0 tracked=False pkt=MAP_CHANGED_STOP

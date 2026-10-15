@@ -5052,3 +5052,80 @@ remote asset's identity/digest/size against fresh GitHub API responses.
 - 0 falls in every standing gate episode (216) and every dev task episode (192) of the six new pairs.
 - Committed with this entry: the wbc1j and wbc1k gate records and selection files, training JSONs, deploy files, the gated pair configs and gzipped training logs, and the option 3 selection record. The dev gate files stay in `solutions-20260930/campaign-waiter/phase2/dev2/startonly_1i_s{27..32}_pair_dev/`.
 - **The Waiter program stays closed as recorded on 2026-10-14:** all four phases passed in simulation, standing relies on the declared stance lock, and no attempt removed it (closest: pair s24, 76/100 on a free base).
+
+## Stereo recovery comparison — 2026-10-14 (predeclared before submission)
+
+User asked to improve stereo navigation after stereo reached 0/12 goals in the
+processing-schedule study. Every bounded-latest stereo episode there invalidated
+coordinates with `native_map_identity_unavailable`: the wrapper read map
+identity only from tracked map points, which vanish during RECENTLY_LOST, and
+the client then stopped for good. ORB-SLAM3 itself relocalized in the same map
+in 6/12, reset the active map reusing id 0 in 1/12, and created a new Atlas map
+in 5/12. Raw poses after an invalidation were not saved.
+
+Changes on branch `stereo-recovery-20261014`: an opt-in read-only Atlas
+telemetry relink of the ORB wrapper (per frame: current map id, init keyframe
+id, keyframes, big-change index, map count, `MapChanged()`, and a same-id
+active-map-reset flag); Atlas-aware coordinate epochs, under which a transient
+loss in the same map incarnation is no longer an invalidation while id changes,
+same-id resets and big changes still are; a fail-closed resume gate; and a
+paired campaign plus dispatcher. `libORB_SLAM3.so` is byte-identical to v1.
+
+| Job | Purpose | State |
+| --- | --- | --- |
+| 21825568 | `share` node network probe for the relink's pinned header packages | COMPLETED, 0:0 (cn-b03) |
+| 21825619 | CPU relink with Atlas telemetry from commit `8f7ddb0` | COMPLETED, 0:0 / 3m05s (cn-b05); runtime `df8f9279…c72c`, wrapper `b84aed21…`, library `c4f09d2d…` unchanged |
+| 21825648 | Open-loop native smoke: 3 recorded v1 episodes through the new and previous runtimes | COMPLETED, 0:0 / 7m14s; Atlas block on 597/597 responses; same-map relocalizations raised no Atlas invalidation while the legacy tracker invalidated them; a genuine new map was invalidated |
+| 21825704 | CPU closed-loop plumbing check of `run_episode`, both arms, engineering seed 4242, 16 s | COMPLETED, 0:0 / 1m52s; not a scored episode |
+| 21825705 | Deterministic blackout replays of one recorded v1 episode (early reset, short and long late losses) | COMPLETED, 0:0 / 3m38s; wrapper reset flags equalled ORB-SLAM3's logged active-map resets (2 and 1); Atlas epochs flagged both same-id resets (one, LOST→OK on map 0 with init keyframe 1→9, was missed by the legacy tracker) and the new map, and raised nothing on relocalization |
+| 21825799 | Allocated validation of frozen commit `434181c` (16 test files) + protocol + `stereo_recovery_dispatch.py prepare` | COMPLETED, 0:0 / 59s (cn-a11); 361 passed, 11 subtests; `FROZEN_NOT_SUBMITTED` |
+
+Design: arms `permanent_stop` (unchanged v1 logic) and
+`resume_verified_relocalization` × nominal / 10 Hz / causal 40 ms exposure ×
+straight / occluder routes × new seeds 760000–760003 = 48 bounded-latest
+40-second episodes, paired by seed/condition/route, arm order counterbalanced
+(each arm first in 12 pairs). Fresh 6-cell 18-second smoke on seed 759000. The
+gate resumes only after two tracked frames agree with the last accepted pose
+dead-reckoned through the applied commands: 0.15 m + 0.6 × commanded path,
+10° + 0.4 × commanded rotation, 0.10 m height and 10° tilt change. Calibrated
+before this campaign on v1 truth; any failure stops permanently. Primary:
+clean goals, exact two-sided McNemar on 24 pairs (p < 0.05 with more
+resume-only goals; with no control goals, at least 6). Secondary: stopped
+navigation time, recovery times, falls/collisions, loss mechanisms. Safety:
+no excess falls or collisions. No interim analyses, exclusions, reruns or
+retuning. stereo_inertial deferred (0/40 earlier, needs its own epoch rules).
+
+Operational plan: one RTX 8000 (`gpu`, `--constraint=rtx8000`), 2 CPUs,
+16 GiB, 6-hour limit, 26 sequential stages, no requeue; ~1.25 GPU-hours and
+~13 GB raw expected, 40 GiB campaign cap and an 8 GiB margin under the 2 TiB
+hard quota (the project is already above its soft limit, in grace).
+
+Frozen intake (not submitted): campaign `followups-20261014-stereo/stereo-recovery-v1-20261014`, archive SHA256 `a27fda57cd08dba9960550c9c34a02ae3bb387d5ff955f00dc4d0e5e1d8e8677`, protocol `e7c033ea…`, scientific protocol `e041d2b4…`, ORB runtime input `df8f9279…` replacing `91ca4b6e…`. The GPU attempt is launched only with `stereo_recovery_dispatch.py submit` (one attempt; `submission-start.json` blocks retries). Compact receipts: `results/stereo-recovery-20261014/`.
+
+Seed reservation (2026-10-14, lead): the balanced-order confirmation campaign
+(`processing-schedule-order-v1-20261014`, branch `order-confirmation-20261014`,
+commit `f86d753`) claims seeds 749000, 749900 and 751000–751007. The stereo
+recovery seeds (smoke 759000, development 760000–760003) were already disjoint;
+the protocol now records all reserved seeds explicitly, which changes its
+bytes. The unsubmitted freeze `a27fda57…` (`stereo-recovery-v1-20261014`) is
+therefore superseded before submission and re-frozen as
+`stereo-recovery-v2-20261014` from the next commit; no design or code path
+changed.
+
+| Job | Purpose | State |
+| --- | --- | --- |
+| 21825799 | Validation and freeze of `434181c` (v1 intake `a27fda57…`) | COMPLETED, 0:0; superseded before submission (seed-reservation protocol text); archive and coordinator removed, JSON records kept |
+| 21825847 | Allocated validation of frozen commit `7638a64` (16 test files) + protocol + `stereo_recovery_dispatch.py prepare` | COMPLETED, 0:0 / 54s (cn-b11); 361 passed, 11 subtests; `FROZEN_NOT_SUBMITTED` |
+
+Frozen intake to launch (not submitted): campaign `followups-20261014-stereo/stereo-recovery-v2-20261014`, archive SHA256 `19337226d6b7ed5cf242bab4650cb7b18a8753ae57f59b473bb0028148d7e31e`, source `7638a64`, ORB runtime input `df8f9279…`. Launch only with that freeze's `stereo_recovery_dispatch.py submit` (one attempt; `submission-start.json` blocks retries). Receipts: `results/stereo-recovery-20261014/`.
+
+## 2026-10-14 — stereo recovery v2: result (lead)
+
+| Job | Purpose | State |
+| --- | --- | --- |
+| 21825868 | Stereo recovery campaign v2 (`stereo-recovery-v2-20261014`, archive `19337226…`, 24 pairs + 6-episode smoke) | COMPLETED, 0:0 / 1h14m (cn-gpu5); collector PASS, all 24 pairs measured |
+
+Verdict NEGATIVE as predeclared: clean goals 0/24 vs 0/24, McNemar p = 1.0, no safety regression. The resume arm made
+21 verified resumes but stopped as long as the control (24.7 vs 24.8 s of 40 s). Summary in
+`docs/STEREO_RECOVERY_RESULTS_2026-10-14.md`; compact result in
+`results/stereo-recovery-20261014/campaign-v2-result-21825868.json`.

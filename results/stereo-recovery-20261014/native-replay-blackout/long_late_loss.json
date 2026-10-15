@@ -1,0 +1,438 @@
+{
+  "schema": "bhl-orb-atlas-recorded-replay-v1",
+  "status": "PASS",
+  "shard_archive": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/processing-schedule-v1-20261012/schedule-s750000-nominal-straight-stereo-21801949/outputs.tar.gz",
+  "shard_archive_sha256": "ce9b8e2f2db94d6d1984949a5c334630bc362898923aef4d7b2073cfb68e2f15",
+  "episode": "bounded_latest-straight-s750000-nominal-stereo",
+  "frames": 189,
+  "pace_wall_per_sensor_second": 1.5,
+  "blackout_window_s": [
+    16.0,
+    19.6
+  ],
+  "blackout_camera_ids": [
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87
+  ],
+  "original_closed_loop": {
+    "timeline": [
+      {
+        "timestamp_s": 2.199999999999902,
+        "state": "OK",
+        "legacy_map_id": 0,
+        "atlas_map_id": null,
+        "init_kf_id": null,
+        "map_count": null,
+        "big_change_idx": null,
+        "resets_total": null,
+        "keyframes": null
+      },
+      {
+        "timestamp_s": 8.599999999999019,
+        "state": "RECENTLY_LOST",
+        "legacy_map_id": 0,
+        "atlas_map_id": null,
+        "init_kf_id": null,
+        "map_count": null,
+        "big_change_idx": null,
+        "resets_total": null,
+        "keyframes": null
+      },
+      {
+        "timestamp_s": 8.799999999999264,
+        "state": "OK",
+        "legacy_map_id": 0,
+        "atlas_map_id": null,
+        "init_kf_id": null,
+        "map_count": null,
+        "big_change_idx": null,
+        "resets_total": null,
+        "keyframes": null
+      },
+      {
+        "timestamp_s": 21.799999999994544,
+        "state": "RECENTLY_LOST",
+        "legacy_map_id": 0,
+        "atlas_map_id": null,
+        "init_kf_id": null,
+        "map_count": null,
+        "big_change_idx": null,
+        "resets_total": null,
+        "keyframes": null
+      },
+      {
+        "timestamp_s": 21.999999999994078,
+        "state": "RECENTLY_LOST",
+        "legacy_map_id": null,
+        "atlas_map_id": null,
+        "init_kf_id": null,
+        "map_count": null,
+        "big_change_idx": null,
+        "resets_total": null,
+        "keyframes": null
+      },
+      {
+        "timestamp_s": 24.999999999987086,
+        "state": "NO_IMAGES_YET",
+        "legacy_map_id": null,
+        "atlas_map_id": null,
+        "init_kf_id": null,
+        "map_count": null,
+        "big_change_idx": null,
+        "resets_total": null,
+        "keyframes": null
+      },
+      {
+        "timestamp_s": 25.19999999998662,
+        "state": "OK",
+        "legacy_map_id": 1,
+        "atlas_map_id": null,
+        "init_kf_id": null,
+        "map_count": null,
+        "big_change_idx": null,
+        "resets_total": null,
+        "keyframes": null
+      }
+    ],
+    "legacy_invalidations": [
+      {
+        "timestamp_s": 21.999999999994078,
+        "previous_native_map_id": 0,
+        "native_map_id": null,
+        "previous_epoch": 0,
+        "next_epoch": 1,
+        "reasons": [
+          "native_map_identity_unavailable"
+        ]
+      }
+    ],
+    "log_relocalized": 1,
+    "log_new_maps": 1,
+    "log_active_map_resets": 0
+  },
+  "runs": {
+    "atlas_telemetry": {
+      "runtime_archive_sha256": "df8f927939837cde5edc7c81d75b41c94d27be06f44636e5aa362cb48a37c72c",
+      "binary_sha256": "d701238ea43eb2e30e5c2a5dc9b00d1eb07a8165cc4323b5ded5de62cf6594be",
+      "native_library_sha256": "c4f09d2dc42571310f4324b8d5cc460158d6bc34d9fe63affbc009cdabc80ffa",
+      "ready": {
+        "schema": "bhl-orb-native-ready-v1",
+        "upstream_commit": "4452a3c4ab75b1cde34e5505a36ec3f9edcdc4c4",
+        "sensor_mode": "stereo",
+        "atlas_telemetry": "bhl-orb-atlas-telemetry-v1"
+      },
+      "responses": 189,
+      "responses_with_atlas_telemetry": 189,
+      "tracking": {
+        "frames": 189,
+        "tracked_frames": 146,
+        "tracking_states": {
+          "SYSTEM_NOT_READY": 0,
+          "NO_IMAGES_YET": 1,
+          "NOT_INITIALIZED": 5,
+          "OK": 146,
+          "RECENTLY_LOST": 36,
+          "LOST": 1,
+          "OK_KLT": 0
+        },
+        "observed_map_ids": [
+          0,
+          1
+        ],
+        "observed_map_changes": 1,
+        "all_frames_tracked": false,
+        "metric_scoring_ready": false,
+        "native_compute_seconds_total": 6.805379238,
+        "pose_source": "native_ORB_SLAM3_TrackStereo_returned_SE3_inverse",
+        "no_truth_inputs": true
+      },
+      "timeline": [
+        {
+          "timestamp_s": 2.199999999999902,
+          "state": "OK",
+          "legacy_map_id": 0,
+          "atlas_map_id": 0,
+          "init_kf_id": 0,
+          "map_count": 1,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 1
+        },
+        {
+          "timestamp_s": 14.400000000006107,
+          "state": "RECENTLY_LOST",
+          "legacy_map_id": 0,
+          "atlas_map_id": 0,
+          "init_kf_id": 0,
+          "map_count": 1,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 17
+        },
+        {
+          "timestamp_s": 14.600000000006352,
+          "state": "RECENTLY_LOST",
+          "legacy_map_id": null,
+          "atlas_map_id": 0,
+          "init_kf_id": 0,
+          "map_count": 1,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 17
+        },
+        {
+          "timestamp_s": 15.200000000007085,
+          "state": "OK",
+          "legacy_map_id": 0,
+          "atlas_map_id": 0,
+          "init_kf_id": 0,
+          "map_count": 1,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 17
+        },
+        {
+          "timestamp_s": 15.40000000000733,
+          "state": "RECENTLY_LOST",
+          "legacy_map_id": 0,
+          "atlas_map_id": 0,
+          "init_kf_id": 0,
+          "map_count": 1,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 17
+        },
+        {
+          "timestamp_s": 15.800000000007818,
+          "state": "RECENTLY_LOST",
+          "legacy_map_id": null,
+          "atlas_map_id": 0,
+          "init_kf_id": 0,
+          "map_count": 1,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 17
+        },
+        {
+          "timestamp_s": 18.600000000002,
+          "state": "NO_IMAGES_YET",
+          "legacy_map_id": null,
+          "atlas_map_id": 1,
+          "init_kf_id": 17,
+          "map_count": 2,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 0
+        },
+        {
+          "timestamp_s": 18.800000000001535,
+          "state": "NOT_INITIALIZED",
+          "legacy_map_id": null,
+          "atlas_map_id": 1,
+          "init_kf_id": 17,
+          "map_count": 2,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 0
+        },
+        {
+          "timestamp_s": 19.799999999999205,
+          "state": "OK",
+          "legacy_map_id": 1,
+          "atlas_map_id": 1,
+          "init_kf_id": 17,
+          "map_count": 2,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 1
+        },
+        {
+          "timestamp_s": 20.59999999999734,
+          "state": "RECENTLY_LOST",
+          "legacy_map_id": 1,
+          "atlas_map_id": 1,
+          "init_kf_id": 17,
+          "map_count": 2,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 1
+        },
+        {
+          "timestamp_s": 20.799999999996874,
+          "state": "RECENTLY_LOST",
+          "legacy_map_id": null,
+          "atlas_map_id": 1,
+          "init_kf_id": 17,
+          "map_count": 2,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 1
+        },
+        {
+          "timestamp_s": 23.799999999989883,
+          "state": "LOST",
+          "legacy_map_id": null,
+          "atlas_map_id": 1,
+          "init_kf_id": 17,
+          "map_count": 2,
+          "big_change_idx": 0,
+          "resets_total": 0,
+          "keyframes": 1
+        },
+        {
+          "timestamp_s": 23.999999999989416,
+          "state": "OK",
+          "legacy_map_id": 1,
+          "atlas_map_id": 1,
+          "init_kf_id": 18,
+          "map_count": 2,
+          "big_change_idx": 0,
+          "resets_total": 1,
+          "keyframes": 1
+        }
+      ],
+      "legacy_epochs": {
+        "schema": "bhl-native-coordinate-epochs-v1",
+        "epochs_observed": 4,
+        "coordinate_invalidations": 3,
+        "events": [
+          {
+            "timestamp_s": 14.600000000006352,
+            "previous_native_map_id": 0,
+            "native_map_id": null,
+            "previous_epoch": 0,
+            "next_epoch": 1,
+            "reasons": [
+              "native_map_identity_unavailable"
+            ]
+          },
+          {
+            "timestamp_s": 15.800000000007818,
+            "previous_native_map_id": 0,
+            "native_map_id": null,
+            "previous_epoch": 1,
+            "next_epoch": 2,
+            "reasons": [
+              "native_map_identity_unavailable"
+            ]
+          },
+          {
+            "timestamp_s": 20.799999999996874,
+            "previous_native_map_id": 1,
+            "native_map_id": null,
+            "previous_epoch": 2,
+            "next_epoch": 3,
+            "reasons": [
+              "native_map_identity_unavailable"
+            ]
+          }
+        ],
+        "uses_native_diagnostics_only": true,
+        "confirmed_native_reset_count": null,
+        "observation_scope": "pinned wrapper observes map identity/IMU initialization through usable tracked map points; missing evidence conservatively invalidates registration, not proof of a native reset",
+        "transient_tracking_loss_with_retained_map_is_not_reset": true
+      },
+      "atlas_epochs": {
+        "schema": "bhl-atlas-coordinate-epochs-v1",
+        "epochs_observed": 3,
+        "coordinate_invalidations": 2,
+        "events": [
+          {
+            "timestamp_s": 18.600000000002,
+            "previous_epoch": 0,
+            "reasons": [
+              "atlas_map_id_changed",
+              "atlas_map_count_changed",
+              "native_returned_to_initialization"
+            ],
+            "reference": {
+              "current_map_id": 0,
+              "current_map_init_kf_id": 0,
+              "current_map_big_change_idx": 0,
+              "atlas_map_count": 1,
+              "current_map_imu_initialized": false,
+              "current_map_inertial_ba1": false,
+              "current_map_inertial_ba2": false
+            },
+            "observed": {
+              "current_map_id": 1,
+              "current_map_init_kf_id": 17,
+              "current_map_big_change_idx": 0,
+              "atlas_map_count": 2,
+              "current_map_imu_initialized": false,
+              "current_map_inertial_ba1": false,
+              "current_map_inertial_ba2": false
+            }
+          },
+          {
+            "timestamp_s": 23.999999999989416,
+            "previous_epoch": 1,
+            "reasons": [
+              "atlas_active_map_reset"
+            ],
+            "reference": {
+              "current_map_id": 1,
+              "current_map_init_kf_id": 17,
+              "current_map_big_change_idx": 0,
+              "atlas_map_count": 2,
+              "current_map_imu_initialized": false,
+              "current_map_inertial_ba1": false,
+              "current_map_inertial_ba2": false
+            },
+            "observed": {
+              "current_map_id": 1,
+              "current_map_init_kf_id": 18,
+              "current_map_big_change_idx": 0,
+              "atlas_map_count": 2,
+              "current_map_imu_initialized": false,
+              "current_map_inertial_ba1": false,
+              "current_map_inertial_ba2": false
+            }
+          }
+        ],
+        "uses_read_only_atlas_telemetry": true,
+        "fail_closed_reasons": [
+          "atlas_telemetry_missing",
+          "atlas_snapshot_inconsistent",
+          "atlas_map_id_changed",
+          "atlas_active_map_reset",
+          "atlas_big_change",
+          "atlas_map_count_changed",
+          "atlas_inertial_stage_changed",
+          "native_returned_to_initialization",
+          "map_point_identity_conflict"
+        ],
+        "transient_loss_in_same_map_incarnation_is_not_invalidation": true,
+        "incarnation": "Atlas current map id + init keyframe id + big-change index + map count + inertial stage"
+      },
+      "wrapper_reset_flags": 1,
+      "map_changed_flags": 0,
+      "inconsistent_snapshots": 0,
+      "legacy_vs_atlas_map_disagreements": 0,
+      "log_relocalized": 1,
+      "log_new_maps": 1,
+      "log_active_map_resets": 1,
+      "native_compute_p95_ms": 42.068576,
+      "elapsed_wall_s": 63.733762403950095,
+      "frames_sha256": "ddfff01a5a5378a79924a966feea725c1f3dbe0513733dbb5b34b5ba57795d4b"
+    }
+  },
+  "scope": "Open-loop native smoke of the Atlas-telemetry ORB wrapper on recorded v1 frames."
+}
