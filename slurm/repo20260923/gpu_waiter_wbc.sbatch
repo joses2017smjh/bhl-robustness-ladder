@@ -50,6 +50,9 @@
 # stand-still term; pushes with re-anchoring), seeds 24-26, otherwise as 1d (the same curriculum and std checks) plus
 # the stand-only check in params/env.yaml (also done by the stamp). It is gated as a pair with s7
 # (cpu_waiter_gates.sbatch WAITER_GATES_DUAL_WALK); submit with --time=16:00:00.
+# WAITER_VARIANT=1l (2026-10-15; SLURM_JOBS.md 'Predeclared now ... Waiter phase 1l'): task
+# Velocity-BHL-Waiter-WBC-StandDrift-v0, 1i's standing-only WBC that also reads its drift since the anchor (actor 86),
+# seeds 33-35 (WAITER_1L_SEED0 / WAITER_1L_RES for more), 1i's checks with the stand-drift check; export 86 -> 12.
 set -euo pipefail
 export BHL_STACK=v51
 source /nfs/hpc/share/$USER/Humanoid_Lite/bhl-robustness-ladder/slurm/_env.sh
@@ -77,12 +80,16 @@ case "$VARIANT" in
         TASK_ID=Velocity-BHL-Waiter-WBC-StandStill-v0; FULL_ITERS=10000 ;;
     1i) PREFIX=waiter-wbc1i; SEED0=24; RES_NAME=wbc1i; export BHL_STD_MAX=1.0
         TASK_ID=Velocity-BHL-Waiter-WBC-StandOnly-v0; FULL_ITERS=10000 ;;
+    1l) PREFIX=waiter-wbc1l; SEED0=33; RES_NAME=wbc1l; export BHL_STD_MAX=1.0
+        TASK_ID=Velocity-BHL-Waiter-WBC-StandDrift-v0; FULL_ITERS=10000 ;;
     *)  echo "WAITER-WBC RESULT: FAIL (unknown WAITER_VARIANT $VARIANT)"; exit 2 ;;
 esac
 # 2026-10-14 (option 3; SLURM_JOBS.md "Predeclared now ... more standing-only seeds"): more seeds of 1i's task with all
 # of 1i's checks. WAITER_1I_SEED0 sets the first seed and WAITER_1I_RES the results directory (defaults: 1i's 24, wbc1i).
 if [ "$VARIANT" = 1i ]; then SEED0=${WAITER_1I_SEED0:-$SEED0}; RES_NAME=${WAITER_1I_RES:-$RES_NAME}; fi
+if [ "$VARIANT" = 1l ]; then SEED0=${WAITER_1L_SEED0:-$SEED0}; RES_NAME=${WAITER_1L_RES:-$RES_NAME}; fi
 OBS_POLICY=83
+[ "$VARIANT" = 1l ] && OBS_POLICY=86     # phase 1l: the 83 inputs + the drift since the anchor (3)
 if [ "$SMOKE" = 1 ]; then
     RES=${WAITER_OUT_DIR:-/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/$RES_NAME-smoke}
     case "$RES" in *-smoke) ;; *) echo "SMOKE: FAIL (smoke outputs must go to a directory ending in -smoke)"; exit 1;; esac
@@ -122,7 +129,7 @@ if [ "$SMOKE" = 1 ]; then OVR_DIR="$RES/overrides"; else OVR_DIR="$WORKSPACE/ove
 mkdir -p "$OVR_DIR"
 export OVERRIDE_FILE="$OVR_DIR/${RUN_NAME}.txt"
 dr_overrides_scale 1.0 > "$OVERRIDE_FILE"
-if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ] || [ "$VARIANT" = 1i ]; } && [ "$SMOKE" = 1 ]; then
+if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ] || [ "$VARIANT" = 1i ] || [ "$VARIANT" = 1l ]; } && [ "$SMOKE" = 1 ]; then
     # smoke only: compress the ramp into the smoke's 3 iterations, so its log shows the term move
     printf ' env.curriculum.disturbance.params.start_iter=0 env.curriculum.disturbance.params.end_iter=2' >> "$OVERRIDE_FILE"
     # phase 1h: its standing-share ramp is compressed the same way
@@ -158,7 +165,8 @@ grep -q "waiter-wbc id NOT registered" "$TLOG" && why="$why task-not-registered"
 [ "$VARIANT" = 1g ] && grep -q "waiter-wbc-standbonus id NOT registered" "$TLOG" && why="$why standbonus-task-not-registered"
 [ "$VARIANT" = 1h ] && grep -q "waiter-wbc-standstill id NOT registered" "$TLOG" && why="$why standstill-task-not-registered"
 [ "$VARIANT" = 1i ] && grep -q "waiter-wbc-standonly id NOT registered" "$TLOG" && why="$why standonly-task-not-registered"
-if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ] || [ "$VARIANT" = 1i ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
+[ "$VARIANT" = 1l ] && grep -q "waiter-wbc-standdrift id NOT registered" "$TLOG" && why="$why standdrift-task-not-registered"
+if { [ "$VARIANT" = 1b ] || [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ] || [ "$VARIANT" = 1i ] || [ "$VARIANT" = 1l ]; } && [ "$(ls -d "$LOGROOT"/*_"$RUN_NAME" 2>/dev/null | wc -l)" -ge 1 ] && [ -s "$TLOG" ]; then
     grep -q "\[overlay\] action-noise std bounded to \[0.001, 1.0\]" "$TLOG" || why="$why std-bound-overlay-missing"
     # WAITER_STD_LOG_TOL (default 1e-6 = the check as predeclared): the log line shows the std parameter after the
     # iteration's last optimizer step, before the next clamp, so it can read up to 1.01 while every use is <= 1.0
@@ -174,7 +182,7 @@ print(f"std check: max logged {max(v) if v else None}; {len(over)} of {len(v)} i
 sys.exit(0 if v and max(v) <= 1.0 + tol else 1)
 PY
 fi
-if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ] || [ "$VARIANT" = 1i ]; } && [ -n "$run" ] && [ -s "$TLOG" ]; then
+if { [ "$VARIANT" = 1c ] || [ "$VARIANT" = 1d ] || [ "$VARIANT" = 1e ] || [ "$VARIANT" = 1f ] || [ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ] || [ "$VARIANT" = 1i ] || [ "$VARIANT" = 1l ]; } && [ -n "$run" ] && [ -s "$TLOG" ]; then
     # phase 1c: the curriculum ran (logged 0 first, and 1.0 last in a full run), the PPO rollout is the 24 steps the
     # iteration count assumes, and a full run carries the frozen ramp values
     (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" - "$TLOG" "$run" "$SMOKE" <<'PY') || why="$why curriculum-check"
@@ -268,6 +276,18 @@ p = check_stand_only(load_env_yaml(sys.argv[1]))
 print('stand-only check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/params/env.yaml") 2>&1 | tail -1)
     echo "$s"
     case "$s" in "stand-only check: OK") ;; *) why="$why stand-only-check";; esac
+    grep -q "\[overlay\] action-noise std also bounded after each PPO update" "$TLOG" || [ ! -s "$TLOG" ] || why="$why std-clamp-after-update-missing"
+fi
+if [ "$VARIANT" = 1l ] && [ -n "$run" ] && [ -f "$run/params/env.yaml" ]; then
+    # phase 1l: 1i's standing-only checks + the drift input in the actor (noisy) and the critic, before the clock
+    s=$( (cd "$REPO" && PYTHONPATH="$REPO/src" "$PYH" -c "
+import sys
+from bhl_robust.eval.gait_clock import load_env_yaml
+from bhl_robust.eval.waiter_wbc import check_stand_drift
+p = check_stand_drift(load_env_yaml(sys.argv[1]))
+print('stand-drift check: ' + ('OK' if not p else 'FAIL ' + '; '.join(p)))" "$run/params/env.yaml") 2>&1 | tail -1)
+    echo "$s"
+    case "$s" in "stand-drift check: OK") ;; *) why="$why stand-drift-check";; esac
     grep -q "\[overlay\] action-noise std also bounded after each PPO update" "$TLOG" || [ ! -s "$TLOG" ] || why="$why std-clamp-after-update-missing"
 fi
 if [ "$VARIANT" = 1e ] && [ -n "$run" ] && [ -f "$run/params/env.yaml" ]; then

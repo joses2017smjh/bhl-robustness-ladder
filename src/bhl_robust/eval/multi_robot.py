@@ -253,6 +253,11 @@ class MultiRunner:
         self._depth_r = None
         self._depth_dim: dict[int, int] = {}
         self._depth_pool: dict[int, int] = {}
+        # 2026-10-15 (Waiter phase 1l): a controller that needs the simulator state (the drift input of the
+        # standing-only WBC, eval/waiter_wbc.DualWaiterController) gets it here; every other controller is untouched.
+        for ctrl, slot in zip(controllers, slots):
+            if callable(getattr(ctrl, "attach_sim", None)):
+                ctrl.attach_sim(self.d, slot)
 
     def reset(self, rng):
         mujoco.mj_resetData(self.m, self.d)

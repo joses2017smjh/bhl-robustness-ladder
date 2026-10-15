@@ -25,8 +25,12 @@ STANDPUSH_TASK_ID = "Velocity-BHL-Waiter-WBC-StandPush-v0"       # phase 1f (202
 STANDBONUS_TASK_ID = "Velocity-BHL-Waiter-WBC-StandBonus-v0"     # phase 1g (2026-10-11)
 STANDSTILL_TASK_ID = "Velocity-BHL-Waiter-WBC-StandStill-v0"     # phase 1h (2026-10-12)
 STANDONLY_TASK_ID = "Velocity-BHL-Waiter-WBC-StandOnly-v0"       # phase 1i (2026-10-13): the standing half of a pair
+STANDDRIFT_TASK_ID = "Velocity-BHL-Waiter-WBC-StandDrift-v0"     # phase 1l (2026-10-15): standing half with a drift input
 TASK_IDS = (TASK_ID, CURRICULUM_TASK_ID, STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID, STANDBONUS_TASK_ID,
-            STANDSTILL_TASK_ID, STANDONLY_TASK_ID)
+            STANDSTILL_TASK_ID, STANDONLY_TASK_ID, STANDDRIFT_TASK_ID)
+STAND_HALF_TASKS = (STANDONLY_TASK_ID, STANDDRIFT_TASK_ID)
+DRIFT_OBS = 3                            # phase 1l: [dx, dy, dyaw] inserted just before the gait clock
+DRIFT_NOISE = 0.2                        # waiter_stand_mdp.DRIFT_NOISE
 STAND_KEY = "waiter_stand_policy"        # phase 1i: the block a dual deploy.yaml adds (DualWaiterController)
 STANDONLY_REL_STANDING_ENVS = 1.0
 STANCE_PHASE = 0.5                       # gait_clock_mdp.STANCE_PHASE: the phase standing envs are trained at
@@ -48,19 +52,23 @@ N_ACTIONS = 12
 LEG_INDICES = list(range(10, 22))
 
 
-def check_layout(cfg, env: dict) -> list[str]:
+def check_layout(cfg, env: dict, drift: bool = False) -> list[str]:
     """Problems with an exported deploy config + env.yaml against the frozen phase 1 layout ([] = none)."""
     p = []
     obs = env["observations"]
-    if G._terms(obs["policy"]) != POLICY_TERMS:
+    pol_terms, cri_terms, n_obs = POLICY_TERMS, CRITIC_TERMS, OBS_POLICY
+    if drift:                                    # phase 1l: the drift input sits just before the gait clock
+        pol_terms, cri_terms, n_obs = (POLICY_TERMS[:-1] + ["stand_drift", "gait_clock"],
+                                       CRITIC_TERMS[:-1] + ["stand_drift", "gait_clock"], OBS_POLICY + DRIFT_OBS)
+    if G._terms(obs["policy"]) != pol_terms:
         p.append(f"actor terms {G._terms(obs['policy'])}")
-    if G._terms(obs["critic"]) != CRITIC_TERMS:
+    if G._terms(obs["critic"]) != cri_terms:
         p.append(f"critic terms {G._terms(obs['critic'])}")
     if int(cfg.num_joints) != N_JOINTS or list(cfg.joints) != W.JOINT_ORDER:
         p.append(f"joints {cfg.num_joints} {list(cfg.joints)}")
     if int(cfg.num_actions) != N_ACTIONS or list(cfg.action_indices) != LEG_INDICES:
         p.append(f"actions {cfg.num_actions} {list(cfg.action_indices)}")
-    if int(cfg.num_observations) != OBS_POLICY or int(cfg.history_length) != 0:
+    if int(cfg.num_observations) != n_obs or int(cfg.history_length) != 0:
         p.append(f"observations {cfg.num_observations} history {cfg.history_length}")
     eff = list(cfg.effort_limits)
     if any(abs(eff[i] - W.ARM_EFFORT_NM) > 1e-6 for i in range(10)) or any(abs(eff[i] - W.GRIPPER_EFFORT_NM) > 1e-6
@@ -251,6 +259,25 @@ def check_stand_only(env: dict) -> list[str]:
     return p
 
 
+def check_stand_drift(env: dict) -> list[str]:
+    """Phase 1l only: 1i's standing-only checks plus the drift input in the actor and the critic (the anchor reward's
+    drift, just before the gait clock), with +-DRIFT_NOISE uniform noise on the actor's copy only."""
+    p = check_stand_only(env)
+    for group, noisy in (("policy", True), ("critic", False)):
+        term = (env["observations"].get(group) or {}).get("stand_drift") or {}
+        if not str(term.get("func", "")).endswith("stand_drift"):
+            p.append(f"{group} stand_drift func {term.get('func')}")
+            continue
+        if (term.get("params") or {}).get("reward_term") != "stand_anchor_bonus":
+            p.append(f"{group} stand_drift reward_term {(term.get('params') or {}).get('reward_term')}")
+        nz = term.get("noise") or {}
+        ok = (nz.get("n_min") is not None and abs(float(nz["n_min"]) + DRIFT_NOISE) < 1e-9 and
+              abs(float(nz.get("n_max", 0.0)) - DRIFT_NOISE) < 1e-9) if noisy else not nz
+        if not ok:
+            p.append(f"{group} stand_drift noise {nz}")
+    return p
+
+
 DUAL_MATCH_KEYS = ("joints", "num_joints", "num_actions", "action_indices", "default_joint_positions", "action_scale",
                    "num_observations", "history_length", "policy_dt", "action_limit_lower", "action_limit_upper")
 
@@ -266,9 +293,12 @@ def dual_problems(walk_cfg, stand_cfg) -> list[str]:
         return p
     if STAND_KEY in walk_cfg or STAND_KEY in stand_cfg:
         p.append("a dual deploy config cannot be one half of another")
+    stand_task = str(stand_cfg[KEY].get("task"))
     for k in DUAL_MATCH_KEYS:
         a = OmegaConf.to_container(walk_cfg[k]) if OmegaConf.is_config(walk_cfg.get(k)) else walk_cfg.get(k)
         b = OmegaConf.to_container(stand_cfg[k]) if OmegaConf.is_config(stand_cfg.get(k)) else stand_cfg.get(k)
+        if k == "num_observations" and stand_task == STANDDRIFT_TASK_ID:
+            a = int(a) + DRIFT_OBS                   # phase 1l: the standing half also reads the drift input
         if a != b:
             p.append(f"{k} differs")
     for k in ("period_s", "phase_offset"):
@@ -280,8 +310,8 @@ def dual_problems(walk_cfg, stand_cfg) -> list[str]:
             a, b = list(a), list(b)
         if a != b:
             p.append(f"{KEY}.{k} differs")
-    if str(stand_cfg[KEY].get("task")) != STANDONLY_TASK_ID:
-        p.append(f"the standing half is task {stand_cfg[KEY].get('task')}, not {STANDONLY_TASK_ID}")
+    if stand_task not in STAND_HALF_TASKS:
+        p.append(f"the standing half is task {stand_task}, not one of {STAND_HALF_TASKS}")
     return p
 
 
@@ -301,6 +331,7 @@ def stamp_dual(walk: Path, stand: Path, out: Path) -> str:
              f"  task: {sc[KEY]['task']}\n"
              f"  switch: clock_held\n"
              f"  stance_phase: {STANCE_PHASE}\n"
+             f"  drift_noise: {DRIFT_NOISE}\n"
              f"  walk_deploy: {walk}\n")
     if out.exists():
         if out.read_text() == text + block:
@@ -321,12 +352,12 @@ def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
     env = G.load_env_yaml(env_yaml)
     funcs = ("gait_clock", "gait_clock_stance") \
         if task in (STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID, STANDBONUS_TASK_ID, STANDSTILL_TASK_ID,
-                    STANDONLY_TASK_ID) else ("gait_clock",)
+                    STANDONLY_TASK_ID, STANDDRIFT_TASK_ID) else ("gait_clock",)
     info = G.check_env(env, "R1", clock_funcs=funcs)  # gait_clock last in actor and critic, period 0.8, offset 0
     cfg = OmegaConf.load(deploy)
-    problems = check_layout(cfg, env)
+    problems = check_layout(cfg, env, drift=(task == STANDDRIFT_TASK_ID))
     if task in (CURRICULUM_TASK_ID, STANCE_TASK_ID, STAND_TASK_ID, STANDPUSH_TASK_ID, STANDBONUS_TASK_ID,
-                STANDSTILL_TASK_ID, STANDONLY_TASK_ID):
+                STANDSTILL_TASK_ID, STANDONLY_TASK_ID, STANDDRIFT_TASK_ID):
         problems += check_curriculum(env)
     if task == STANCE_TASK_ID:
         problems += check_stance(env)
@@ -340,6 +371,8 @@ def stamp(deploy: Path, env_yaml: Path, task: str = TASK_ID) -> str:
         problems += check_stand_still(env, window=False)  # the launcher checks the window on full runs
     if task == STANDONLY_TASK_ID:
         problems += check_stand_only(env)
+    if task == STANDDRIFT_TASK_ID:
+        problems += check_stand_drift(env)
     if abs(float(cfg.policy_dt) - info["step_dt"]) > 1e-9:
         problems.append(f"policy_dt {cfg.policy_dt} != env step_dt {info['step_dt']}")
     if problems:
@@ -477,6 +510,36 @@ class _StandOnnx:
         return self.session.run(None, {self.key: observation})[0]
 
 
+class _DriftInput:
+    """Phase 1l: the standing policy reads the 83 inputs of the walking layout plus the drift since its anchor, inserted
+    just before the gait clock (86); `feat` is set by DualWaiterController before each standing update."""
+
+    def __init__(self, policy):
+        self.policy, self.feat = policy, None
+
+    def forward(self, observation):
+        import numpy as np
+        o = np.asarray(observation, dtype=np.float32)
+        return self.policy.forward(np.concatenate([o[:, :-2], np.asarray(self.feat, np.float32).reshape(1, -1),
+                                                   o[:, -2:]], axis=1).astype(np.float32))
+
+
+def _stand_mdp():
+    """tasks/waiter_stand_mdp.py loaded by path: importing it through bhl_robust.tasks would run that package's
+    __init__, which registers the Isaac tasks and boots the Isaac Sim kernel. The module itself imports only math at
+    module scope, so the MuJoCo deploy side can use its pure helpers (drift_features)."""
+    import importlib.util
+    name = "bhl_robust_waiter_stand_mdp_pure"
+    mod = sys.modules.get(name)
+    if mod is None:
+        path = Path(__file__).resolve().parents[1] / "tasks" / "waiter_stand_mdp.py"
+        spec = importlib.util.spec_from_file_location(name, path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        sys.modules[name] = mod
+    return mod
+
+
 class DualWaiterController(WaiterWbcController):
     """Phase 1i: the walking WBC and a standing-only WBC behind one switch (deploy config stamped by `stamp_dual`).
 
@@ -486,40 +549,86 @@ class DualWaiterController(WaiterWbcController):
     update, i.e. the env or a gate is holding it (WaiterEnv's stance hold; the Q3/Q4 gates); the first held update
     still goes to the walking policy (one 0.04 s step of delay). While standing, the policy sees what it was trained on:
     a zero command and the clock at the training stance phase (STANCE_PHASE, 0.5), whatever step is held. The clock
-    itself is left as the caller set it. `standing_steps` counts the updates the standing policy made."""
+    itself is left as the caller set it. `standing_steps` counts the updates the standing policy made.
+
+    Phase 1l (a standing half of task STANDDRIFT_TASK_ID): the standing policy also reads its drift since the anchor,
+    the base pose at its first standing update (waiter_stand_mdp.drift_features, ORACLE: from the simulator's base pose,
+    which the runner hands over through `attach_sim`), plus uniform noise of +-drift_noise as in training. The anchor
+    is reset whenever standing begins again. `drift_log` keeps the first inputs of each standing period."""
 
     def __init__(self, cfg):
+        import numpy as np
         super().__init__(cfg)
         if STAND_KEY not in cfg:
             raise ValueError("not a dual Waiter WBC deploy config")
         self.stand_checkpoint = str(cfg[STAND_KEY]["checkpoint"])
         self.stance_phase = float(cfg[STAND_KEY].get("stance_phase", STANCE_PHASE))
         self.stance_step = int(round(self.stance_phase * self.clock_period / self.clock_step_dt))
+        self.stand_task = str(cfg[STAND_KEY].get("task", STANDONLY_TASK_ID))
+        self.drift = self.stand_task == STANDDRIFT_TASK_ID
+        self.drift_noise = float(cfg[STAND_KEY].get("drift_noise", DRIFT_NOISE))
         self.stand_policy = None
         self.standing = False
         self.standing_steps = 0
         self._prev_clock = None
+        self._sim = None
+        self._anchor = None
+        self._rng = np.random.default_rng(0)
+        self.drift_log = []
+
+    def attach_sim(self, data, slot) -> None:
+        """Called by the MuJoCo runner (eval/multi_robot.MultiRunner) with its MjData and this robot's slot."""
+        self._sim = (data, int(slot.qpos_adr))
 
     def reset_phase(self) -> None:
+        import numpy as np
         super().reset_phase()
         self._prev_clock = None
         self.standing = False
+        self._anchor = None
+        self._rng = np.random.default_rng(0)
+        self.drift_log = []
+
+    def _base_pose(self):
+        import math
+        if self._sim is None:
+            raise RuntimeError("the drift input needs the simulator's base pose: no runner called attach_sim")
+        d, a = self._sim
+        w, x, y, z = (float(v) for v in d.qpos[a + 3:a + 7])
+        return d.qpos[a:a + 2].copy(), math.atan2(2.0 * (w * z + x * y), 1.0 - 2.0 * (y * y + z * z))
 
     def update(self, robot_observations):
         import numpy as np
+        if not self.policy_observations.any():                # a harness reset (MultiRunner.reset): a new episode
+            self.standing, self._anchor = False, None
         held = self._prev_clock is not None and self.clock_step == self._prev_clock
-        self.standing = bool(held)
+        starting = held and not self.standing
         if not held:
+            self.standing = False
             targets = super().update(robot_observations)
             self._prev_clock = self.clock_step - 1               # the step this update used
             return targets
         if self.stand_policy is None:
             self.stand_policy = _StandOnnx(self.stand_checkpoint)
+        policy = self.stand_policy
+        if self.drift:
+            drift_features = _stand_mdp().drift_features
+            xy, yaw = self._base_pose()
+            if starting or self._anchor is None:
+                self._anchor = (xy.copy(), yaw)
+            clean = drift_features(xy, np.float64(yaw), self._anchor[0], np.float64(self._anchor[1]))
+            fed = clean + self._rng.uniform(-self.drift_noise, self.drift_noise, size=3)
+            if starting or len(self.drift_log) < 5:
+                self.drift_log.append({"starting": bool(starting), "clean": [float(v) for v in clean],
+                                       "fed": [float(v) for v in fed]})
+            policy = _DriftInput(self.stand_policy)
+            policy.feat = fed
+        self.standing = True                                     # after the drift input: a failed update changes nothing
         obs = np.array(robot_observations, dtype=np.float64, copy=True)
         n = self.n_j
         obs[7 + 2 * n + 1:7 + 2 * n + 4] = 0.0                   # the standing policy is trained on a zero command
         step, walk = self.clock_step, self.policy
-        self.clock_step, self.policy = self.stance_step, self.stand_policy
+        self.clock_step, self.policy = self.stance_step, policy
         try:
             targets = super().update(obs)
         finally:

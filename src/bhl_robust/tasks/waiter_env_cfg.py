@@ -370,3 +370,54 @@ class HumanoidWaiterWbcStandOnlyCfg(HumanoidWaiterWbcStanceCfg):
         self.commands.base_velocity.rel_standing_envs = STANDONLY_REL_STANDING_ENVS
         self.events.push_robot.func = waiter_stand_mdp.push_and_reanchor
         self.events.push_robot.params["delay_s"] = waiter_stand_mdp.REANCHOR_DELAY_S
+
+
+# ---- phase 1l (2026-10-15; SLURM_JOBS.md "Predeclared now ... Waiter phase 1l") ------------------------------------
+# = phase 1i (HumanoidWaiterWbcStandOnlyCfg: the standing-only task paired with s7) with ONLY: the standing policy (and
+# its critic) observe the drift since the anchor (waiter_stand_mdp.stand_drift, 3 values, placed just before the gait
+# clock so the clock stays last), with uniform noise of +-DRIFT_NOISE on the actor's copy. Actor 86, critic 89.
+# Why: 1i's standing-only seeds slide 3-10 cm while the arms work and cannot see it; the task's success follows that drift.
+from isaaclab.utils.noise import AdditiveUniformNoiseCfg as _Unoise  # noqa: E402
+
+STANDDRIFT_TASK_ID = "Velocity-BHL-Waiter-WBC-StandDrift-v0"
+DRIFT_OBS = 3
+_DRIFT_PARAMS = {"reward_term": "stand_anchor_bonus", "pos_m": waiter_stand_mdp.ANCHOR_POS_M,
+                 "yaw_deg": waiter_stand_mdp.ANCHOR_YAW_DEG, "clip": waiter_stand_mdp.DRIFT_CLIP}
+
+
+@configclass
+class _WaiterDriftPolicyObsCfg(_UpstreamObservationsCfg.PolicyCfg):
+    def __post_init__(self):
+        super().__post_init__()
+        self.joint_pos.params = {"asset_cfg": SceneEntityCfg("robot", **_ALL)}
+        self.joint_vel.params = {"asset_cfg": SceneEntityCfg("robot", **_ALL)}
+
+    upper_body = ObsTerm(func=mdp.generated_commands, params={"command_name": "upper_body"})
+    stand_drift = ObsTerm(func=waiter_stand_mdp.stand_drift, params=dict(_DRIFT_PARAMS),
+                          noise=_Unoise(n_min=-waiter_stand_mdp.DRIFT_NOISE, n_max=waiter_stand_mdp.DRIFT_NOISE))
+    gait_clock = ObsTerm(func=gait_clock_mdp.gait_clock, params={"period": gait_clock_mdp.GAIT_PERIOD_S})
+
+
+@configclass
+class _WaiterDriftCriticObsCfg(_UpstreamObservationsCfg.CriticCfg):
+    def __post_init__(self):
+        super().__post_init__()
+        self.joint_pos.params = {"asset_cfg": SceneEntityCfg("robot", **_ALL)}
+        self.joint_vel.params = {"asset_cfg": SceneEntityCfg("robot", **_ALL)}
+
+    upper_body = ObsTerm(func=mdp.generated_commands, params={"command_name": "upper_body"})
+    stand_drift = ObsTerm(func=waiter_stand_mdp.stand_drift, params=dict(_DRIFT_PARAMS))
+    gait_clock = ObsTerm(func=gait_clock_mdp.gait_clock, params={"period": gait_clock_mdp.GAIT_PERIOD_S})
+
+
+@configclass
+class WaiterDriftObservationsCfg(_UpstreamObservationsCfg):
+    policy: _WaiterDriftPolicyObsCfg = _WaiterDriftPolicyObsCfg()
+    critic: _WaiterDriftCriticObsCfg = _WaiterDriftCriticObsCfg()
+
+
+@configclass
+class HumanoidWaiterWbcStandDriftCfg(HumanoidWaiterWbcStandOnlyCfg):
+    """Phase 1l: phase 1i's standing-only task with the drift since the anchor as an input (notes above)."""
+
+    observations: WaiterDriftObservationsCfg = WaiterDriftObservationsCfg()

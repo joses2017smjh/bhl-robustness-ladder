@@ -163,7 +163,7 @@ def test_launchers():
     assert "1i) PREFIX=waiter-wbc1i; SEED0=24; RES_NAME=wbc1i; export BHL_STD_MAX=1.0" in s
     assert "TASK_ID=Velocity-BHL-Waiter-WBC-StandOnly-v0; FULL_ITERS=10000" in s
     assert "stand-only check" in s and "check_stand_only" in s and "standonly-task-not-registered" in s
-    assert s.count('[ "$VARIANT" = 1h ] || [ "$VARIANT" = 1i ]; }') == 3
+    assert s.count('[ "$VARIANT" = 1h ] || [ "$VARIANT" = 1i ]') == 3       # later variants append (1l, 10-15)
     g = GATES.read_text()
     assert 'if [ -n "${WAITER_GATES_DUAL_WALK:-}" ]; then' in g and "-m bhl_robust.eval.waiter_wbc dual --walk" in g
     assert 'TURNQ_DEPLOY="${WAITER_GATES_DUAL_WALK:+$DEPLOY}"' in g

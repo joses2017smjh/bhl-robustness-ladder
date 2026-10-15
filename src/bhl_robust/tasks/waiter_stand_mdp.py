@@ -57,6 +57,14 @@ OUTCOME of 1h (2026-10-13): NEGATIVE. Two of three seeds walk (1.55-1.95 m) and 
 first standing design to keep 1c's walking; but they turn (one seed's left turns 63-109 deg) and hold heading (24-46 deg
 of drift on every walk) worse in MuJoCo, standing is no stiller (Q4 0/12 on every seed), and the third seed falls in
 the start transient. Not a recipe; the turning loss is not attributed to either change.
+
+Phase 1l (2026-10-15; SLURM_JOBS.md "Predeclared now ... Waiter phase 1l"): the standing-only policy of 1i is rewarded
+for staying at its anchor but cannot observe how far it is from it, so it cannot correct the slow drift that limits the
+task. 1l gives it that drift as an input: `stand_drift` = `drift_features` of the base since the anchor the anchor reward
+uses (displacement in the base's yaw frame / ANCHOR_POS_M, yaw change / ANCHOR_YAW_DEG, clipped at DRIFT_CLIP, zero
+until the anchor is set), with uniform noise of +-DRIFT_NOISE on the policy's copy. In simulation the input comes from
+the simulator's base pose (an ORACLE odometry, with the same noise at deploy); on hardware it would come from a state
+estimator.
 """
 
 from __future__ import annotations
@@ -71,6 +79,8 @@ TILT_CLAMP = 9.0
 REANCHOR_DELAY_S = 1.0                 # phase 1f: a pushed standing env takes a new anchor this long after the push
 REANCHOR_ATTR = "_waiter_stand_reanchor_step"   # per-env step (env.common_step_counter) at which to re-anchor; -1 = none
 STILL_COMMAND_THRESHOLD = 0.06          # phase 1h: Isaac Lab's stand_still_joint_deviation_l1 default
+DRIFT_CLIP = 10.0                       # phase 1l: drift input clipped to +-10 units (50 cm, 50 deg)
+DRIFT_NOISE = 0.2                       # phase 1l: uniform noise on the policy's drift input, +-0.2 units (1 cm, 1 deg)
 STAND_SHARE_START, STAND_SHARE_END = 0.02, 0.25     # phase 1h: 1c's and 1d's rel_standing_envs
 
 
@@ -113,6 +123,29 @@ def standing_share(iteration: float, start_iter: int, end_iter: int, lo: float =
     s = 0.0 if iteration <= start_iter else 1.0 if iteration >= end_iter else \
         float(iteration - start_iter) / float(end_iter - start_iter)
     return float(lo) + (float(hi) - float(lo)) * s
+
+
+def drift_features(xy, yaw, anchor_xy, anchor_yaw, pos_m: float = ANCHOR_POS_M, yaw_deg: float = ANCHOR_YAW_DEG,
+                   clip: float = DRIFT_CLIP):
+    """Phase 1l: [dx, dy, dyaw] of the base since the anchor: the displacement rotated into the base's current yaw
+    frame and divided by pos_m, the wrapped yaw change divided by yaw_deg, each clipped to +-clip. xy (..., 2), yaw (...)
+    in rad; torch tensors or numpy arrays."""
+    if hasattr(xy, "clamp"):
+        import torch
+        c, s = torch.cos(yaw), torch.sin(yaw)
+        stack = lambda parts: torch.stack(parts, dim=-1)                                  # noqa: E731
+    else:
+        import numpy as np
+        c, s = np.cos(yaw), np.sin(yaw)
+        stack = lambda parts: np.stack(parts, axis=-1)                                    # noqa: E731
+    d0 = xy[..., 0] - anchor_xy[..., 0]
+    d1 = xy[..., 1] - anchor_xy[..., 1]
+    out = stack([(c * d0 + s * d1) / pos_m, (-s * d0 + c * d1) / pos_m,
+                 wrap_to_pi(yaw - anchor_yaw) / math.radians(yaw_deg)])
+    if hasattr(out, "clamp"):
+        return out.clamp(-clip, clip)
+    import numpy as np
+    return np.clip(out, -clip, clip)
 
 
 def moving_ids(env_ids, standing):
@@ -213,6 +246,24 @@ def stand_still_joint_deviation_l1(env, command_name: str = "base_velocity",
     command = env.command_manager.get_command(command_name)
     return il_mdp.joint_deviation_l1(env, asset_cfg or SceneEntityCfg("robot")) * \
         command_is_still(command, command_threshold).float()
+
+
+def stand_drift(env, reward_term: str = "stand_anchor_bonus", pos_m: float = ANCHOR_POS_M,
+                yaw_deg: float = ANCHOR_YAW_DEG, clip: float = DRIFT_CLIP, asset_cfg=None):
+    """Phase 1l observation: drift_features of the base since the anchor kept by the anchor reward term (zero until
+    that term has set the anchor). The observation manager sizes its terms before the reward manager exists; zeros
+    then."""
+    import torch
+    rm = getattr(env, "reward_manager", None)
+    if rm is None:
+        return torch.zeros(env.num_envs, 3, device=env.device)
+    import isaaclab.utils.math as math_utils
+    from isaaclab.managers import SceneEntityCfg
+    term = rm.get_term_cfg(reward_term).func                    # Isaac Lab keeps the class term's instance here
+    asset = env.scene[(asset_cfg or SceneEntityCfg("robot")).name]
+    yaw = math_utils.euler_xyz_from_quat(asset.data.root_quat_w)[2]
+    f = drift_features(asset.data.root_pos_w[:, :2], yaw, term.anchor_xy, term.anchor_yaw, pos_m, yaw_deg, clip)
+    return f * term.prev.unsqueeze(-1).float()
 
 
 def standing_share_curriculum(env, env_ids, start_iter: int, end_iter: int, steps_per_iter: int,
