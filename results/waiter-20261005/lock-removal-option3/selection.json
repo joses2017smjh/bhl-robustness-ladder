@@ -1,0 +1,65 @@
+{
+ "rule": "most dev successes (lock_start_only, dev 1000-1031); ties: smaller mean Q4 displacement, then lower seed; scored test iff >= 26/32",
+ "min_dev": 26,
+ "candidates": [
+  {
+   "run": "waiter-wbc1i-s27",
+   "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1j/training/waiter-wbc1i-s27.dual.deploy.yaml",
+   "dev_gate": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase2/dev2/startonly_1i_s27_pair_dev/gate.json",
+   "q4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1j/q4/waiter-wbc1i-s27.json",
+   "dev_successes": 21,
+   "dev_n": 32,
+   "q4_mean_disp_m": 0.03415000000000001
+  },
+  {
+   "run": "waiter-wbc1i-s28",
+   "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1j/training/waiter-wbc1i-s28.dual.deploy.yaml",
+   "dev_gate": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase2/dev2/startonly_1i_s28_pair_dev/gate.json",
+   "q4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1j/q4/waiter-wbc1i-s28.json",
+   "dev_successes": 5,
+   "dev_n": 32,
+   "q4_mean_disp_m": 0.08140833333333333
+  },
+  {
+   "run": "waiter-wbc1i-s29",
+   "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1j/training/waiter-wbc1i-s29.dual.deploy.yaml",
+   "dev_gate": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase2/dev2/startonly_1i_s29_pair_dev/gate.json",
+   "q4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1j/q4/waiter-wbc1i-s29.json",
+   "dev_successes": 5,
+   "dev_n": 32,
+   "q4_mean_disp_m": 0.06741666666666667
+  },
+  {
+   "run": "waiter-wbc1i-s30",
+   "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1k/training/waiter-wbc1i-s30.dual.deploy.yaml",
+   "dev_gate": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase2/dev2/startonly_1i_s30_pair_dev/gate.json",
+   "q4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1k/q4/waiter-wbc1i-s30.json",
+   "dev_successes": 15,
+   "dev_n": 32,
+   "q4_mean_disp_m": 0.06785833333333334
+  },
+  {
+   "run": "waiter-wbc1i-s31",
+   "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1k/training/waiter-wbc1i-s31.dual.deploy.yaml",
+   "dev_gate": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase2/dev2/startonly_1i_s31_pair_dev/gate.json",
+   "q4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1k/q4/waiter-wbc1i-s31.json",
+   "dev_successes": 5,
+   "dev_n": 32,
+   "q4_mean_disp_m": 0.08475833333333334
+  },
+  {
+   "run": "waiter-wbc1i-s32",
+   "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1k/training/waiter-wbc1i-s32.dual.deploy.yaml",
+   "dev_gate": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/phase2/dev2/startonly_1i_s32_pair_dev/gate.json",
+   "q4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1k/q4/waiter-wbc1i-s32.json",
+   "dev_successes": 15,
+   "dev_n": 32,
+   "q4_mean_disp_m": 0.07556666666666667
+  }
+ ],
+ "candidate": "waiter-wbc1i-s27",
+ "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1j/training/waiter-wbc1i-s27.dual.deploy.yaml",
+ "dev_successes": 21,
+ "scored": false,
+ "slurm_job": "21817232"
+}
