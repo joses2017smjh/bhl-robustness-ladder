@@ -1,5 +1,12 @@
 # EuRoC V1_01_easy: recorded-data replay completed
 
+**October 14 accuracy update:** [ATE is now
+measured](EUROC_POSE_ACCURACY_2026-10-14.md) on the same 60-second, 1,200-pair
+segment. Stereo reaches 0.020 m ATE RMSE against the recomputed reference (0.036
+m against the original). The stereo–IMU output jumps 0.8 m at 20.6 s, which
+tracking coverage alone did not show. The "Unmeasured" entries below record the
+state on October 12.
+
 Both predeclared native arms completed **1,200/1,200 original stereo pairs**
 from the first 60 seconds of EuRoC V1_01_easy. **Stereo tracked 1,200/1,200
 frames; stereo–IMU tracked 1,097/1,200, including 1,041 frames after native IMU
