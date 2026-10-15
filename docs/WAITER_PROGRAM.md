@@ -13,6 +13,36 @@ model (phase 3) has something to ground.
 **Why handles.** The finger closes against the palm, so a handle is held by geometry (form closure), not by
 squeeze friction. Squeezing a cube between welded hands rolled it in every cooperative-lift run (Stand3/4/5).
 
+## Closing summary, 2026-10-14
+
+**The program is complete in simulation: all four phases passed a predeclared gate.** Standing in phases 2-4 relies on
+a declared simulation fixture, the stance lock. Six leg-controller designs (1d-1i) and five task-level checks (four on dev
+layouts, one scored) have not removed it, including option 3's six more seeds (below). Closed on the user's decision ("do 2").
+
+| Phase | Final result | Record |
+|---|---|---|
+| 1 whole-body controller (learned legs; arms and grippers follow commanded targets) | `waiter-wbc1c-s7` SELECTED: walks 1.90-1.97 m in 6 s at 0.35 m/s, turns in place, push falls 4/60 | `results/waiter-20261005/wbc1c/selection.json` |
+| 2 scripted expert with oracle object poses | PASS: 86/100 with the stance lock; 1,000 demonstrations recorded (842 successes) | `results/waiter-20261005/phase2-gate/gate.json` |
+| 3 vision-language policy (SmolVLA: head camera + instruction + joint state) | PASS on the retrain (3b): 75/100 with each layout's instruction and 76/100 with a phrasing it never saw (bars 40 and 20); the first fine-tune failed at 28/100 | `results/waiter-20261005/phase3b-gate/verdict.json` |
+| 4 RL fine-tune of the policy's initial noise (DSRL) | PASS on the first policy: 63/100 against 23/100 (one-sided p = 1.1e-8); on the retrained 3b policy no significant gain (80 against 74/100, p = 0.20) | `results/waiter-20261005/phase4-gate/verdict_dsrl2.json`, `phase4b-gate/verdict.json` |
+
+The caveats:
+- **The stance lock.** While the robot stands, the simulator holds its base where it is (a weld that softens away
+  when a walk command arrives). With the lock taken away, the expert completes 1/100 with s7. Removal attempts: six designs (1d-1i, table below), none passing the standing gates; the closest, s7 paired with a standing-only policy
+  (pair s24), completes **76/100 on a free base** (bar 80; 0 falls; every episode that lifted the tray finished the
+  carry), and the expert's own free-base mode with that pair 2/32 on dev layouts. Option 3 (six more standing-only
+  seeds, 2026-10-15) found none still enough: the best new pair, s27, is the first controller to pass the plain
+  standing gate (12/12) but completes 21/32 dev layouts on a free base (bar 26), so no scored test ran.
+- The demonstrations come from a scripted expert that reads object poses from the simulator; the learned policy sees
+  only the simulated head camera, its joint state and the instruction.
+- Phase 4's gain holds for the first policy, not for the retrained one.
+- Every learned result is one checkpoint from one training run. Training in Isaac Lab, evaluation in MuJoCo;
+  hardware untested.
+
+Where everything is: predeclarations and verdicts in `SLURM_JOBS.md` (sections dated 2026-10-05 to 2026-10-14),
+records under `results/waiter-20261005/`, interfaces and seed ranges in `docs/WAITER_INTERFACES.md`, clips in
+`docs/GALLERY.md`.
+
 ## Phases
 
 | Phase | What | Gate (frozen before that phase's scored run) |
@@ -74,9 +104,9 @@ gait clock 2. Critic: the same plus base linear velocity (86).
   phase 1 NEGATIVE, and phase 2 falls back to the frozen gait clock-s2 with scripted arm targets (labelled so).
 - Reported, not gated: push falls with 0.5 kg per hand in the carry pose; hand-target tracking error.
 
-## Status, 2026-10-11
+## Status (2026-10-11, updated 2026-10-14)
 
-Every number below has its predeclaration and record in `SLURM_JOBS.md` (sections dated 2026-10-05 to 2026-10-11).
+Every number below has its predeclaration and record in `SLURM_JOBS.md` (sections dated 2026-10-05 to 2026-10-14).
 
 | Phase | Result | Record |
 |---|---|---|
@@ -85,6 +115,10 @@ Every number below has its predeclaration and record in `SLURM_JOBS.md` (section
 | 1e stand still under arm loads | NEGATIVE: all three seeds fall within about a second of standing in MuJoCo (and the training's std check failed as written) | `results/waiter-20261005/wbc1e/selection.json` |
 | 1f the same with pushes kept on standing envs (2026-10-11) | NEGATIVE: all three seeds fall when told to stand, as in 1e. Likely cause, shared by 1e and 1f: the standing penalties cost far more per second than falling costs once, so the policy learns to end the episode | `results/waiter-20261005/wbc1f/selection.json` |
 | 1g the standing terms as bounded positive rewards (2026-10-11) | NEGATIVE: two of three seeds no longer fall when told to stand (the 1e/1f falls were the reward's doing), but all three march in place when told to walk in MuJoCo (0.10-0.36 m in 6 s; bar 1.5 m) | `results/waiter-20261005/wbc1g/selection.json` |
+| 1h the standing terms published humanoid policies use (2026-10-12) | NEGATIVE: two of three seeds walk (1.55-1.95 m) and never fall when told to stand, but they turn and hold heading worse (left turns 63-109 deg on one seed, 24-46 deg of walk drift on the other) and stand no stiller (Q4 0/12); the third seed falls at the start | `results/waiter-20261005/wbc1h/selection.json` |
+| 1i a standing-only policy paired with s7 (2026-10-13) | NEGATIVE: the pair walks and turns exactly as s7 and never falls or leans when told to stand (0 falls in 72 standing episodes), but it slides 3-10 cm and turns 2-8 deg while the arms work (Q4 0/12; Q3 2-7/12, below s7's 9/12) | `results/waiter-20261005/wbc1i/selection.json` |
+| Lock-removal test, pair s24 = s7 + 1i's standing-only seed 24 (2026-10-14) | FAIL: 76/100 on a free base (bar 80; 86/100 with the lock on the same layouts; s7 alone on a free base 1/100), 0 falls. Every failure is in the manipulation at the first table; every episode that lifted the tray finished the carry. The stance lock stays | `results/waiter-20261005/lock-removal-1i-s24/gate.json` |
+| Option 3: six more standing-only seeds paired with s7 (2026-10-15) | NEGATIVE: every pair walks as s7 and never falls; s27 passes the plain standing gate (12/12, a first) but no pair passes Q4, and the best completes 21/32 dev layouts on a free base (bar 26), so no scored test ran | `results/waiter-20261005/lock-removal-option3/selection.json` |
 | 2 scripted expert | PASS 86/100 with the stance lock, a declared simulation fixture; 1/100 with a free base | `results/waiter-20261005/phase2-gate/`, `phase2-gate-freebase/` |
 | 3 SmolVLA fine-tune | FAIL: 28/100 with each layout's own instruction (needed 40); 22/100 on the held-out phrasing (needed 20) | `results/waiter-20261005/phase3-gate/verdict.json` |
 | 3b SmolVLA retrained (2026-10-11) | PASS: 75/100 own instruction and 76/100 held-out phrasing on 100 fresh layouts (same bars: 40 and 20). 3.4x the demonstrations and 30% of each training batch drawn from the first 12 frames of episodes | `results/waiter-20261005/phase3b-gate/verdict.json` |
@@ -108,9 +142,10 @@ What the measurements say:
   actions). The phase 4 noise policy learned, from the success reward alone, to set them from the instruction: on
   dev layouts it took the named tumbler 48 times out of 48. Its remaining failures are in the carry and the
   set-down, where it does worse than the base policy.
-- Standing is still a fixture. The learned legs walk and turn; with a free base the expert completes 1/100. Two
-  retrains with standing penalties (1e, 1f) produced controllers that fall when told to stand; the next attempt
-  needs a standing reward that cannot make falling the cheaper option.
+- Standing is still a fixture. The learned legs walk and turn; with a free base the expert completes 1/100 with s7.
+  Five single-policy standing designs (1d-1h) each traded walking, turning or staying up for standing still; a
+  standing-only policy paired with s7 (1i) keeps s7's walking and never falls or leans, but slides 3-10 cm while
+  the arms work. The best such pair completes 76/100 on a free base, four short of the bar.
 
 Limits that apply to every row: simulation only; the camera is rendered (jobs refuse nodes whose renderer differs
 from the demonstrations', `scripts/waiter/render_check.py`); phases 2-4 use the stance lock; each learned result
