@@ -14,9 +14,9 @@ Walking, navigation, and language-guided carrying with Berkeley Humanoid Lite. I
 
 ## Locomotion & Control
 
-[![Simulated biped crossing an eleven-degree rust-red ramp](docs/gifs/terrain-ramp-20261014.gif)](https://jose-sanchez-portfolio-com.vercel.app/projects/bhl-robustness-ladder/)
+[![Simulated humanoid descending a stepped pit with stereo views, lidar hits, and IMU traces](docs/gifs/terrain-descent-sensors-20261014.gif)](https://jose-sanchez-portfolio-com.vercel.app/projects/bhl-robustness-ladder/)
 
-*October 14 visual demonstration, real-time playback: frozen 12-DoF gait plus guarded terrain adapters; scripted routes use oracle simulated pose. The 24-robot source capture includes eight falls. This selected 11° ramp clip is separate from the scored 3° terrain study below. Stereo and lidar panels are display-only. [Media provenance](docs/gifs/humanoid-media-20261014.json).*
+*Eight-second step descent at real time: frozen 12-DoF gait plus guarded terrain adapters; scripted routes use oracle simulated pose. Stereo and lidar are display-only; native IMU orientation and gyro feed the gait. The full 24-robot source capture includes eight falls. This selected demonstration is separate from the scored terrain study below. [Media provenance](docs/gifs/humanoid-media-20261014.json).*
 
 [![Full 22-joint humanoid walking with physical arms in MuJoCo](docs/gifs/full-body-arms-20261014.gif)](https://jose-sanchez-portfolio-com.vercel.app/projects/bhl-robustness-ladder/)
 

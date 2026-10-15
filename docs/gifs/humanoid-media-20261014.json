@@ -4,15 +4,27 @@
   "source_collection": "humanoid_relief_arms_20261014",
   "gifs": [
     {
-      "file": "terrain-ramp-20261014.gif",
-      "bytes": 4363406,
-      "sha256": "1eabb80cb9e740dfae2ac1a6b015c1f3f2e9aaeda0a73792c6673b7d70fe74cb",
-      "frames": 64,
+      "file": "terrain-descent-sensors-20261014.gif",
+      "bytes": 4681093,
+      "sha256": "8daa475f35822c45e8a5fe1e00ba28ce5839f87ccb64922178a4c1a2ed03511a",
+      "frames": 48,
+      "width": 768,
+      "height": 432,
+      "fps": 6,
       "decode_out_time": "00:00:08.000000",
       "full_decode_passed": true,
-      "source_mp4": "film/detail_ramp_traverse.mp4",
-      "source_mp4_sha256": "5efc0b9e58877ad29b40ecdf3c338d64ba36aed240ad66c9000e92fc7879aa15",
-      "playback_speed": 1.0
+      "source_mp4": "film/focus_pit_descent.mp4",
+      "source_mp4_sha256": "c3f1d7d102e5147917d5b665c2617dcb45b6ee25e51afa29609892de7e5bb776",
+      "source_shot_index": 2,
+      "full_film_offset_s": 7.0,
+      "simulation_time_s": [
+        0,
+        8
+      ],
+      "robot": 1,
+      "playback_speed": 1.0,
+      "crop": false,
+      "sensor_panels": "Both stereo views, lidar ray hits, and IMU traces; unchanged source framing."
     },
     {
       "file": "full-body-arms-20261014.gif",
@@ -91,6 +103,20 @@
   "editing": "Palette reduction, spatial downsampling, and frame-rate reduction only; source speed unchanged. Existing maze and waiter GIFs are byte-for-byte unchanged.",
   "encode_filters": {
     "terrain-ramp-20261014.gif": "fps=8,scale=640:-1:flags=lanczos; palettegen max_colors=96; bayer dither scale3",
-    "full-body-arms-20261014.gif": "fps=6,scale=600:-2:flags=lanczos; palettegen max_colors=64; bayer dither scale3"
-  }
+    "full-body-arms-20261014.gif": "fps=6,scale=600:-2:flags=lanczos; palettegen max_colors=64; bayer dither scale3",
+    "terrain-descent-sensors-20261014.gif": "fps=6,scale=768:-2:flags=lanczos; palettegen max_colors=64 stats_mode=diff; bayer dither scale3"
+  },
+  "archived_previews": [
+    {
+      "file": "terrain-ramp-20261014.gif",
+      "bytes": 4363406,
+      "sha256": "1eabb80cb9e740dfae2ac1a6b015c1f3f2e9aaeda0a73792c6673b7d70fe74cb",
+      "frames": 64,
+      "decode_out_time": "00:00:08.000000",
+      "full_decode_passed": true,
+      "source_mp4": "film/detail_ramp_traverse.mp4",
+      "source_mp4_sha256": "5efc0b9e58877ad29b40ecdf3c338d64ba36aed240ad66c9000e92fc7879aa15",
+      "playback_speed": 1.0
+    }
+  ]
 }
