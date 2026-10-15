@@ -1,0 +1,122 @@
+{
+  "schema": "readme-humanoid-media-20261014-v1",
+  "audit_date": "2026-10-14",
+  "source_collection": "humanoid_relief_arms_20261014",
+  "gifs": [
+    {
+      "file": "terrain-descent-sensors-20261014.gif",
+      "bytes": 4681093,
+      "sha256": "8daa475f35822c45e8a5fe1e00ba28ce5839f87ccb64922178a4c1a2ed03511a",
+      "frames": 48,
+      "width": 768,
+      "height": 432,
+      "fps": 6,
+      "decode_out_time": "00:00:08.000000",
+      "full_decode_passed": true,
+      "source_mp4": "film/focus_pit_descent.mp4",
+      "source_mp4_sha256": "c3f1d7d102e5147917d5b665c2617dcb45b6ee25e51afa29609892de7e5bb776",
+      "source_shot_index": 2,
+      "full_film_offset_s": 7.0,
+      "simulation_time_s": [
+        0,
+        8
+      ],
+      "robot": 1,
+      "playback_speed": 1.0,
+      "crop": false,
+      "sensor_panels": "Both stereo views, lidar ray hits, and IMU traces; unchanged source framing."
+    },
+    {
+      "file": "full-body-arms-20261014.gif",
+      "bytes": 4611672,
+      "sha256": "e8d0325b3e509c4e86536f3bdf64748fd3641a4be1eee1a58c6c730913de3621",
+      "frames": 96,
+      "decode_out_time": "00:00:16.000000",
+      "full_decode_passed": true,
+      "source_mp4": "arms_film/full_body_arms.mp4",
+      "source_mp4_sha256": "e7c1bb31da8ca1898547d35886503150b5c6d2b466426aa58cf0634f8d5b6b9c",
+      "playback_speed": 1.0
+    },
+    {
+      "file": "random-maze-humanoid-sensors.gif",
+      "bytes": 4396785,
+      "sha256": "a40e839dd0b9ee423207e3e61bdc47cd6c18462c2b7bea98e11ee292576e3fbd",
+      "frames": 90,
+      "decode_out_time": "00:00:15.000000",
+      "full_decode_passed": true
+    },
+    {
+      "file": "waiter-3b-task-seed1300.gif",
+      "bytes": 5014675,
+      "sha256": "3063ba70f85dd399131116b5c105711b9350fbbd90f15fc6488f9aba66bf6ce8",
+      "frames": 109,
+      "decode_out_time": "00:00:18.166667",
+      "full_decode_passed": true
+    }
+  ],
+  "terrain": {
+    "controller": "Frozen DR gait plus independent guarded initial terrain adapters; scripted routes use oracle simulated pose. Stereo and LiDAR are display-only; native orientation and gyro feed the gait. IMU is evaluated on an independent exact-state snapshot for frame synchronization.",
+    "seed": 3600014,
+    "robots": 24,
+    "falls": 8,
+    "seconds": 30,
+    "staged_starts": 4,
+    "random_starts": 20,
+    "changes": {
+      "dirt_relief_peak_to_peak_m": 0.0779,
+      "gravel_physical_stones": 100,
+      "gravel_heightfield_relief_m": 0.018,
+      "contact_impressions": 226,
+      "impressions": "Contact-triggered display compaction and displaced rim grains; collision geometry is unchanged by marks.",
+      "ramp_grade_degrees": 11.0,
+      "ramp_crest_height_m": 0.347940753356516,
+      "ramp_material": "rust-red concrete"
+    },
+    "limits": "These are simulated visual demonstrations. Full navigation reliability and learned-model improvement remain unconfirmed.",
+    "source_capture_receipt_sha256": "b69d52543c389a12a2a999adf91670903660dc93cf400859f2a5f796b2b5979e",
+    "source_summary_sha256": "348a82ca90e707c87dbf0307ab310ecb576fee0df5d350b8190dade747675b6f",
+    "source_audit_sha256": "930f3ac0d1cfe3cdfb225c06c29d1c0f533cbedb12703d48b279f44885a81420",
+    "source_audit_passed": true
+  },
+  "arms": {
+    "controller_scope": "Existing upstream checkpoint; no new training or reliability claim.",
+    "policy_actions": 22,
+    "arm_joints": 10,
+    "route": {
+      "start_xy": [
+        -5.7,
+        -2.65
+      ],
+      "goal_xy": [
+        -0.7,
+        -2.65
+      ],
+      "terrain": "gentle connecting terrain beside the central pit",
+      "note": "One predeclared route, without selecting a successful take."
+    },
+    "source_checkpoint_sha256": "d3f096eda1b2444afce193fed82b9e1fa6d0421cc9ec1d450c549c30163c3a36",
+    "source_capture_receipt_sha256": "66aaece5dbfcd1c6acf2540c988f4cde6f899abccc5d0c55272b2d78431ca99c",
+    "source_audit_sha256": "89af4ba69675379f6d63484081d293c0b85cb8f1dd92a982c0d639d026795342",
+    "source_audit_passed": true,
+    "inherits_12dof_benchmarks": false
+  },
+  "editing": "Palette reduction, spatial downsampling, and frame-rate reduction only; source speed unchanged. Existing maze and waiter GIFs are byte-for-byte unchanged.",
+  "encode_filters": {
+    "terrain-ramp-20261014.gif": "fps=8,scale=640:-1:flags=lanczos; palettegen max_colors=96; bayer dither scale3",
+    "full-body-arms-20261014.gif": "fps=6,scale=600:-2:flags=lanczos; palettegen max_colors=64; bayer dither scale3",
+    "terrain-descent-sensors-20261014.gif": "fps=6,scale=768:-2:flags=lanczos; palettegen max_colors=64 stats_mode=diff; bayer dither scale3"
+  },
+  "archived_previews": [
+    {
+      "file": "terrain-ramp-20261014.gif",
+      "bytes": 4363406,
+      "sha256": "1eabb80cb9e740dfae2ac1a6b015c1f3f2e9aaeda0a73792c6673b7d70fe74cb",
+      "frames": 64,
+      "decode_out_time": "00:00:08.000000",
+      "full_decode_passed": true,
+      "source_mp4": "film/detail_ramp_traverse.mp4",
+      "source_mp4_sha256": "5efc0b9e58877ad29b40ecdf3c338d64ba36aed240ad66c9000e92fc7879aa15",
+      "playback_speed": 1.0
+    }
+  ]
+}

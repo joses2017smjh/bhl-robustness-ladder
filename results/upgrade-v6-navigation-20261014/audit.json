@@ -1,0 +1,73 @@
+{
+  "audit_date": "2026-10-14",
+  "counts": {
+    "baseline": {
+      "clean_goals": 206,
+      "episodes": 288,
+      "falls": 57,
+      "goals": 218,
+      "invalid": 0,
+      "model_influence_steps": 0,
+      "recovery_episodes": 0,
+      "timeouts": 13,
+      "wall_contact_episodes": 53
+    },
+    "budget_adaptive": {
+      "clean_goals": 276,
+      "episodes": 288,
+      "falls": 0,
+      "goals": 288,
+      "invalid": 0,
+      "model_influence_steps": 0,
+      "recovery_episodes": 183,
+      "timeouts": 0,
+      "wall_contact_episodes": 12
+    },
+    "hybrid_adaptive": {
+      "clean_goals": 282,
+      "episodes": 288,
+      "falls": 0,
+      "goals": 286,
+      "invalid": 0,
+      "model_influence_steps": 0,
+      "recovery_episodes": 26,
+      "timeouts": 2,
+      "wall_contact_episodes": 5
+    },
+    "yaw_only": {
+      "clean_goals": 250,
+      "episodes": 288,
+      "falls": 13,
+      "goals": 256,
+      "invalid": 0,
+      "model_influence_steps": 0,
+      "recovery_episodes": 0,
+      "timeouts": 19,
+      "wall_contact_episodes": 21
+    }
+  },
+  "layout_clusters": 48,
+  "navigation_evidence_sha256": "67ed01ff651f947eef79ac3bf4dfd9abd58eac11eecdad9b5b573e3421f206af",
+  "original_gate_sha256": "90a863b92a8a89c9bb304a93f1d1756f03d9a97596bc8ec633643b83be8537ec",
+  "original_protocol_sha256": "73509292a604300f14206ed7165eec476a642715ecd3667b8ff974bc6fab790a",
+  "original_report_sha256": "b40be67031c7374f199b078755b0c74668c59e65286c3da5a9cc9bd2ded775af",
+  "overall_v6_problems": [
+    "Unmatched physical terrain assets for ('ramp', 2250406, 2250406)",
+    "Unmatched physical terrain assets for ('ramp', 2250406, 2250406)",
+    "Unmatched physical terrain assets for ('ramp', 2250406, 2250406)"
+  ],
+  "overall_v6_status": "INCOMPLETE",
+  "publication_scope": "Compact outcome extracts, original raw-record hashes, protocol/verdict snapshots, and frozen scientific source. Absolute runtime paths normalized. common.py is represented by its original hash because it contains deployment-specific paths. Full traces, model binaries, and environment assets are external; this supports independent outcome recounting, not a self-contained physics rerun.",
+  "source_campaign": "humanoid_upgrade_v6_20261011",
+  "v8_incremental_student_passed": false,
+  "v8_optional_learning_problems": [
+    "FileNotFoundError: [Errno 2] No such file or directory: 'campaigns/humanoid_upgrade_v8_20261013/terrain_learning/fit_complete.json'"
+  ],
+  "v8_status": "INCOMPLETE",
+  "v8_terrain_primary_passed": false,
+  "verified_completion_receipts": 24,
+  "verified_confirmation_binding_files": 48,
+  "verified_development_binding_files": 84,
+  "verified_raw_records": 1152,
+  "verified_source_and_model_files": 17
+}
