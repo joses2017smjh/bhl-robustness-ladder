@@ -79,7 +79,8 @@ def test_task_constants_agree():
     init = TASKS_INIT.read_text()
     assert "waiter-wbc-standstill" in init and "HumanoidWaiterWbcStandStillCfg" in init
     cfg = ENV_CFG.read_text()
-    block = cfg[cfg.index("# ---- phase 1h"):]
+    end = cfg.find("# ---- phase 1i")                            # later phases append after 1h (2026-10-13)
+    block = cfg[cfg.index("# ---- phase 1h"):end if end > 0 else None]
     assert "func=waiter_stand_mdp.stand_still_joint_deviation_l1, weight=STAND_STILL_WEIGHT" in block
     assert 'SceneEntityCfg("robot", joint_names=W.LEG_JOINTS, preserve_order=True)' in block
     assert "func=waiter_stand_mdp.standing_share_curriculum" in block and "class WaiterStandStillCurriculumCfg(WaiterCurriculumCfg)" in block
@@ -137,7 +138,7 @@ def test_launcher_variant_1h():
     assert "TASK_ID=Velocity-BHL-Waiter-WBC-StandStill-v0; FULL_ITERS=10000" in s
     assert "stand-still check" in s and "check_stand_still" in s and "standstill-task-not-registered" in s
     assert "window=sys.argv[2] != '1'" in s and '"$run/params/env.yaml" "$SMOKE"' in s
-    assert s.count('[ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ]; }') == 3   # smoke ramp, std check, curriculum check
+    assert s.count('[ "$VARIANT" = 1g ] || [ "$VARIANT" = 1h ]') == 3     # smoke ramp, std check, curriculum check
     assert "env.curriculum.standing_share.params.start_iter=0 env.curriculum.standing_share.params.end_iter=2" in s
     assert "Curriculum/standing_share" in s and "standing-share-check" in s
     assert '"${WAITER_STD_LOG_TOL:-1e-6}"' in s                # the std check is the predeclared one by default
