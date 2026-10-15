@@ -25,9 +25,9 @@ mapfile -t CANDS < "${SEL_CANDIDATES_FILE:?set SEL_CANDIDATES_FILE}"
 ARGS=(); for c in "${CANDS[@]}"; do [ -n "$c" ] && ARGS+=(--candidate "$c"); done
 line=$("$PY" scripts/waiter/lockremoval_select.py "${ARGS[@]}" --min-dev "${SEL_MIN_DEV:-26}" --out "$OUT/selection.json" | tee /dev/stderr | tail -1)
 case "$line" in
-  "SELECT: none"*) echo "LOCK-REMOVAL (option 3): no candidate reached the dev bar; no scored run"; exit 0 ;;
+  "SELECT: none"*) echo "LOCK-REMOVAL (${SEL_LABEL:-option 3}): no candidate reached the dev bar; no scored run"; exit 0 ;;
   "SELECT: "*) set -- $line; RUN=$2; DEPLOY=$3 ;;
-  *) echo "LOCK-REMOVAL (option 3): selection failed"; exit 1 ;;
+  *) echo "LOCK-REMOVAL (${SEL_LABEL:-option 3}): selection failed"; exit 1 ;;
 esac
 echo "scored lock-removal test on $RUN ($DEPLOY), seeds 9000-9099"
 GATE_OUT="$OUT/scored" GATE_DEPLOY="$DEPLOY" GATE_START_ONLY=1 GATE_SEED0=9000 GATE_SEED1=9099 GATE_RANGE=lock2 \
