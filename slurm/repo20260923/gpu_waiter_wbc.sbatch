@@ -341,5 +341,5 @@ if [ -n "$why" ]; then
     exit 1
 fi
 echo "WAITER-WBC RESULT: TRAINED + EXPORTED ($RUN_NAME, $run)"
-[ "$SMOKE" = 1 ] && echo "WAITER-WBC SMOKE: PASS ($RUN_NAME: $MAX_ITER iterations, export 83 -> 12, stamped)"
+[ "$SMOKE" = 1 ] && echo "WAITER-WBC SMOKE: PASS ($RUN_NAME: $MAX_ITER iterations, export $OBS_POLICY -> 12, stamped)"
 echo "=== done $(date) ==="
