@@ -16,7 +16,7 @@ squeeze friction. Squeezing a cube between welded hands rolled it in every coope
 ## Closing summary, 2026-10-14
 
 **The program is complete in simulation: all four phases passed a predeclared gate.** Standing in phases 2-4 relies on
-a declared simulation fixture, the stance lock. Six leg-controller designs (1d-1i) and four task-level checks (three on dev
+a declared simulation fixture, the stance lock. Six leg-controller designs (1d-1i) and five task-level checks (four on dev
 layouts, one scored) have not removed it, including option 3's six more seeds (below). Closed on the user's decision ("do 2").
 
 | Phase | Final result | Record |
