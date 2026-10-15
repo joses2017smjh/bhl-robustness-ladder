@@ -16,8 +16,8 @@ squeeze friction. Squeezing a cube between welded hands rolled it in every coope
 ## Closing summary, 2026-10-14
 
 **The program is complete in simulation: all four phases passed a predeclared gate.** Standing in phases 2-4 relies on
-a declared simulation fixture, the stance lock. Six leg-controller designs (1d-1i) and four task-level checks (three on dev
-layouts, one scored) have not removed it; one more attempt is running (option 3, below). Closed on the user's decision ("do 2").
+a declared simulation fixture, the stance lock. Six leg-controller designs (1d-1i) and five task-level checks (four on dev
+layouts, one scored) have not removed it, including option 3's six more seeds (below). Closed on the user's decision ("do 2").
 
 | Phase | Final result | Record |
 |---|---|---|
@@ -31,7 +31,8 @@ The caveats:
   when a walk command arrives). With the lock taken away, the expert completes 1/100 with s7. Removal attempts: six designs (1d-1i, table below), none passing the standing gates; the closest, s7 paired with a standing-only policy
   (pair s24), completes **76/100 on a free base** (bar 80; 0 falls; every episode that lifted the tray finished the
   carry), and the expert's own free-base mode with that pair 2/32 on dev layouts. Option 3 (six more standing-only
-  seeds; the best on dev layouts is tested once on fresh layouts 9000-9099) is running and will be added here.
+  seeds, 2026-10-15) found none still enough: the best new pair, s27, is the first controller to pass the plain
+  standing gate (12/12) but completes 21/32 dev layouts on a free base (bar 26), so no scored test ran.
 - The demonstrations come from a scripted expert that reads object poses from the simulator; the learned policy sees
   only the simulated head camera, its joint state and the instruction.
 - Phase 4's gain holds for the first policy, not for the retrained one.
@@ -117,6 +118,7 @@ Every number below has its predeclaration and record in `SLURM_JOBS.md` (section
 | 1h the standing terms published humanoid policies use (2026-10-12) | NEGATIVE: two of three seeds walk (1.55-1.95 m) and never fall when told to stand, but they turn and hold heading worse (left turns 63-109 deg on one seed, 24-46 deg of walk drift on the other) and stand no stiller (Q4 0/12); the third seed falls at the start | `results/waiter-20261005/wbc1h/selection.json` |
 | 1i a standing-only policy paired with s7 (2026-10-13) | NEGATIVE: the pair walks and turns exactly as s7 and never falls or leans when told to stand (0 falls in 72 standing episodes), but it slides 3-10 cm and turns 2-8 deg while the arms work (Q4 0/12; Q3 2-7/12, below s7's 9/12) | `results/waiter-20261005/wbc1i/selection.json` |
 | Lock-removal test, pair s24 = s7 + 1i's standing-only seed 24 (2026-10-14) | FAIL: 76/100 on a free base (bar 80; 86/100 with the lock on the same layouts; s7 alone on a free base 1/100), 0 falls. Every failure is in the manipulation at the first table; every episode that lifted the tray finished the carry. The stance lock stays | `results/waiter-20261005/lock-removal-1i-s24/gate.json` |
+| Option 3: six more standing-only seeds paired with s7 (2026-10-15) | NEGATIVE: every pair walks as s7 and never falls; s27 passes the plain standing gate (12/12, a first) but no pair passes Q4, and the best completes 21/32 dev layouts on a free base (bar 26), so no scored test ran | `results/waiter-20261005/lock-removal-option3/selection.json` |
 | 2 scripted expert | PASS 86/100 with the stance lock, a declared simulation fixture; 1/100 with a free base | `results/waiter-20261005/phase2-gate/`, `phase2-gate-freebase/` |
 | 3 SmolVLA fine-tune | FAIL: 28/100 with each layout's own instruction (needed 40); 22/100 on the held-out phrasing (needed 20) | `results/waiter-20261005/phase3-gate/verdict.json` |
 | 3b SmolVLA retrained (2026-10-11) | PASS: 75/100 own instruction and 76/100 held-out phrasing on 100 fresh layouts (same bars: 40 and 20). 3.4x the demonstrations and 30% of each training batch drawn from the first 12 frames of episodes | `results/waiter-20261005/phase3b-gate/verdict.json` |

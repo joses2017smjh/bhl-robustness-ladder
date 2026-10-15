@@ -5033,3 +5033,22 @@ remote asset's identity/digest/size against fresh GitHub API responses.
 - **Option 3 smoke `21817185` (seed 27 through the new seed override): PASS** (stand-only check OK, export 83 -> 12, stamped; run name `waiter-wbc1i-s27-smoke-21817185`). **Chain submitted (2026-10-14 01:52) from 7324849:** training `21817202` (seeds 27-29 -> `results/waiter-20261005/wbc1j`) -> gates `21817203` (aftercorr, on the pairs); training `21817207` (seeds 30-32 -> `wbc1k`) -> gates `21817208`; dev lock-removal checks `21817204`-`21817206` (s27-s29) and `21817209`-`21817211` (s30-s32), each afterany on its seed's gates task; selection and the conditional scored test `21817232` (afterany on the six dev checks; candidates in `solutions-20260930/campaign-waiter/lockremoval_option3_candidates.txt`; output `results/waiter-20261005/lock-removal-option3/`). The selection job's first submission failed before it was queued (sbatch split the inline candidate list); it now reads the list from that file (7324849).
 - **Correction (2026-10-14 01:53) to the design counts in the entries since 2026-10-13:** the standing designs are 1d, 1e, 1f, 1g and 1h (five single-policy designs) and 1i (six in all). "The six standing designs together" (2026-10-13) counted s7's reference row as a design; "six single-policy designs (1d-1h)" in the phase 1i predeclaration should read five; "Seven designs, none passes" (2026-10-14) should read six. No result changes. The program doc and the 1i code comment are corrected.
 - **Pull request #43 updated (2026-10-14 02:08), not merged:** now also carries the closing summary, option 1's dev result, option 3's machinery and the count correction; full suite on the branch (`21817245`): 3239 passed, 16 skipped.
+
+## 2026-10-15: option 3 verdict (NEGATIVE: no new pair reaches the dev bar; no scored run); the Waiter program stays closed with the stance lock
+
+**Option 3 (training `21817202` seeds 27-29 and `21817207` seeds 30-32, all valid: std check max logged 1.00 at tolerance 1e-6, stand-only check OK, export 83 -> 12, stamped; pair gates `21817203` / `21817208`; dev lock-removal checks `21817204`-`21817206`, `21817209`-`21817211`; selection `21817232`; all finished 2026-10-14; recorded 2026-10-15 16:13): NEGATIVE by the predeclared rule.** The best new pair on dev layouts is s27 with **21/32** (bar 26), so the selection job wrote `results/waiter-20261005/lock-removal-option3/selection.json` (sha256 944f5c8f...) with `scored: false` and ran no scored test; **seeds 9000-9099 stay unused.** The stance lock stays.
+
+| pair (s7 + standing-only seed) | walking gates (s7's) | Q3 stance (falls, still /12) | Q4 standing manipulation (falls, ok /12; displacement, abs yaw) | dev lock-removal (/32) |
+|---|---|---|---|---|
+| s27 | all PASS | **0, 12 (PASS)** | 0, 2 (1.6-4.7 cm, 0.4-4.9 deg) | **21** |
+| s28 | all PASS | 0, 3 | 0, 0 (7.0-9.3 cm, 1.8-5.9 deg) | 5 |
+| s29 | all PASS | 0, 11 (PASS) | 0, 0 (4.0-8.7 cm, 1.4-7.4 deg) | 5 |
+| s30 | all PASS | 0, 4 | 0, 1 (2.6-9.5 cm, 2.2-13.1 deg) | 15 |
+| s31 | all PASS | 0, 2 | 0, 0 (7.1-9.3 cm, 1.8-5.2 deg) | 5 |
+| s32 | all PASS | 0, 7 | 0, 0 (2.9-10.8 cm, 4.3-9.9 deg) | 15 |
+
+- Batch selections (1i's rule): `results/waiter-20261005/wbc1j/selection.json` NEGATIVE (sha256 b8cfebb4...), `wbc1k/selection.json` NEGATIVE (sha256 45fdd0a1...); every pair fails Q4. **Pair s27 is the first controller of any phase to pass Q3** (0 falls, still 12/12; s7 9/12) and the stillest in Q4 by displacement (1.6-4.7 cm), but Q4 needs 10/12 within 3 cm and 3 deg and it has 2.
+- Across all nine standing-only seeds (24-32), the dev task count follows the Q4 drift again: the two stillest (s27, s24) are the only ones above 15/32. No seed was still enough: the best dev counts are 26 (s24, scored 76/100) and 21 (s27).
+- 0 falls in every standing gate episode (216) and every dev task episode (192) of the six new pairs.
+- Committed with this entry: the wbc1j and wbc1k gate records and selection files, training JSONs, deploy files, the gated pair configs and gzipped training logs, and the option 3 selection record. The dev gate files stay in `solutions-20260930/campaign-waiter/phase2/dev2/startonly_1i_s{27..32}_pair_dev/`.
+- **The Waiter program stays closed as recorded on 2026-10-14:** all four phases passed in simulation, standing relies on the declared stance lock, and no attempt removed it (closest: pair s24, 76/100 on a free base).
