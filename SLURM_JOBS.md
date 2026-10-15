@@ -4969,3 +4969,14 @@ changed.
 | 21825847 | Allocated validation of frozen commit `7638a64` (16 test files) + protocol + `stereo_recovery_dispatch.py prepare` | COMPLETED, 0:0 / 54s (cn-b11); 361 passed, 11 subtests; `FROZEN_NOT_SUBMITTED` |
 
 Frozen intake to launch (not submitted): campaign `followups-20261014-stereo/stereo-recovery-v2-20261014`, archive SHA256 `19337226d6b7ed5cf242bab4650cb7b18a8753ae57f59b473bb0028148d7e31e`, source `7638a64`, ORB runtime input `df8f9279…`. Launch only with that freeze's `stereo_recovery_dispatch.py submit` (one attempt; `submission-start.json` blocks retries). Receipts: `results/stereo-recovery-20261014/`.
+
+## 2026-10-14 — stereo recovery v2: result (lead)
+
+| Job | Purpose | State |
+| --- | --- | --- |
+| 21825868 | Stereo recovery campaign v2 (`stereo-recovery-v2-20261014`, archive `19337226…`, 24 pairs + 6-episode smoke) | COMPLETED, 0:0 / 1h14m (cn-gpu5); collector PASS, all 24 pairs measured |
+
+Verdict NEGATIVE as predeclared: clean goals 0/24 vs 0/24, McNemar p = 1.0, no safety regression. The resume arm made
+21 verified resumes but stopped as long as the control (24.7 vs 24.8 s of 40 s). Summary in
+`docs/STEREO_RECOVERY_RESULTS_2026-10-14.md`; compact result in
+`results/stereo-recovery-20261014/campaign-v2-result-21825868.json`.

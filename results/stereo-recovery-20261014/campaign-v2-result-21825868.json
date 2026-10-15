@@ -1,0 +1,478 @@
+{
+  "analysis": {
+    "arms": {
+      "permanent_stop": {
+        "clean_goal_rate": 0.0,
+        "clean_goal_wilson_95": [
+          0.0,
+          0.13797620467498017
+        ],
+        "clean_goals": 0,
+        "collisions": 0,
+        "completed_navigation_recoveries": 17,
+        "episodes": 24,
+        "falls": 0,
+        "loss_mechanisms": {
+          "active_map_reset": 4,
+          "new_atlas_map": 4,
+          "no_native_recovery": 0,
+          "other_invalidation": 0,
+          "same_map_relocalization": 25
+        },
+        "mean_stopped_navigation_time_s": 24.826666666666668,
+        "native_relocalization_median_s": 0.20000000000024443,
+        "navigation_recovery_median_s": 0.20000000000024443,
+        "resumed_pose_error_max_m": null,
+        "right_censored_losses": 16,
+        "tracking_losses": 33,
+        "verified_resumes": 0
+      },
+      "resume_verified_relocalization": {
+        "clean_goal_rate": 0.0,
+        "clean_goal_wilson_95": [
+          0.0,
+          0.13797620467498017
+        ],
+        "clean_goals": 0,
+        "collisions": 0,
+        "completed_navigation_recoveries": 21,
+        "episodes": 24,
+        "falls": 0,
+        "loss_mechanisms": {
+          "active_map_reset": 4,
+          "new_atlas_map": 8,
+          "no_native_recovery": 0,
+          "other_invalidation": 0,
+          "same_map_relocalization": 24
+        },
+        "mean_stopped_navigation_time_s": 24.706666666666667,
+        "native_relocalization_median_s": 0.40000000000048885,
+        "navigation_recovery_median_s": 0.40000000000048885,
+        "resumed_pose_error_max_m": 0.40603038073918624,
+        "right_censored_losses": 15,
+        "tracking_losses": 36,
+        "verified_resumes": 21
+      }
+    },
+    "goal_difference": {
+      "estimate": 0.0,
+      "percentile_interval_95": [
+        0.0,
+        0.0
+      ],
+      "resamples": 256,
+      "seed_cluster_means": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "pairs": [
+      {
+        "case": "occluders",
+        "condition": "camera_10hz",
+        "control_goal": false,
+        "control_stopped_s": 21.12,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 26.0,
+        "seed": 760000,
+        "stopped_time_difference_s": 4.879999999999999
+      },
+      {
+        "case": "occluders",
+        "condition": "causal_40ms_exposure",
+        "control_goal": false,
+        "control_stopped_s": 29.72,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 30.0,
+        "seed": 760000,
+        "stopped_time_difference_s": 0.28000000000000114
+      },
+      {
+        "case": "occluders",
+        "condition": "nominal",
+        "control_goal": false,
+        "control_stopped_s": 23.88,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 19.36,
+        "seed": 760000,
+        "stopped_time_difference_s": -4.52
+      },
+      {
+        "case": "occluders",
+        "condition": "camera_10hz",
+        "control_goal": false,
+        "control_stopped_s": 28.2,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 26.36,
+        "seed": 760001,
+        "stopped_time_difference_s": -1.8399999999999999
+      },
+      {
+        "case": "occluders",
+        "condition": "causal_40ms_exposure",
+        "control_goal": false,
+        "control_stopped_s": 30.0,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 29.12,
+        "seed": 760001,
+        "stopped_time_difference_s": -0.879999999999999
+      },
+      {
+        "case": "occluders",
+        "condition": "nominal",
+        "control_goal": false,
+        "control_stopped_s": 28.2,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 24.36,
+        "seed": 760001,
+        "stopped_time_difference_s": -3.84
+      },
+      {
+        "case": "occluders",
+        "condition": "camera_10hz",
+        "control_goal": false,
+        "control_stopped_s": 25.76,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 30.0,
+        "seed": 760002,
+        "stopped_time_difference_s": 4.239999999999998
+      },
+      {
+        "case": "occluders",
+        "condition": "causal_40ms_exposure",
+        "control_goal": false,
+        "control_stopped_s": 18.0,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 30.0,
+        "seed": 760002,
+        "stopped_time_difference_s": 12.0
+      },
+      {
+        "case": "occluders",
+        "condition": "nominal",
+        "control_goal": false,
+        "control_stopped_s": 24.2,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 23.68,
+        "seed": 760002,
+        "stopped_time_difference_s": -0.5199999999999996
+      },
+      {
+        "case": "occluders",
+        "condition": "camera_10hz",
+        "control_goal": false,
+        "control_stopped_s": 30.0,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 30.0,
+        "seed": 760003,
+        "stopped_time_difference_s": 0.0
+      },
+      {
+        "case": "occluders",
+        "condition": "causal_40ms_exposure",
+        "control_goal": false,
+        "control_stopped_s": 28.8,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 22.84,
+        "seed": 760003,
+        "stopped_time_difference_s": -5.960000000000001
+      },
+      {
+        "case": "occluders",
+        "condition": "nominal",
+        "control_goal": false,
+        "control_stopped_s": 22.04,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 22.76,
+        "seed": 760003,
+        "stopped_time_difference_s": 0.7200000000000024
+      },
+      {
+        "case": "straight",
+        "condition": "camera_10hz",
+        "control_goal": false,
+        "control_stopped_s": 29.28,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 26.0,
+        "seed": 760000,
+        "stopped_time_difference_s": -3.280000000000001
+      },
+      {
+        "case": "straight",
+        "condition": "causal_40ms_exposure",
+        "control_goal": false,
+        "control_stopped_s": 30.0,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 29.04,
+        "seed": 760000,
+        "stopped_time_difference_s": -0.9600000000000009
+      },
+      {
+        "case": "straight",
+        "condition": "nominal",
+        "control_goal": false,
+        "control_stopped_s": 18.28,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 21.52,
+        "seed": 760000,
+        "stopped_time_difference_s": 3.2399999999999984
+      },
+      {
+        "case": "straight",
+        "condition": "camera_10hz",
+        "control_goal": false,
+        "control_stopped_s": 16.56,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 13.08,
+        "seed": 760001,
+        "stopped_time_difference_s": -3.4799999999999986
+      },
+      {
+        "case": "straight",
+        "condition": "causal_40ms_exposure",
+        "control_goal": false,
+        "control_stopped_s": 29.72,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 29.72,
+        "seed": 760001,
+        "stopped_time_difference_s": 0.0
+      },
+      {
+        "case": "straight",
+        "condition": "nominal",
+        "control_goal": false,
+        "control_stopped_s": 17.0,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 19.96,
+        "seed": 760001,
+        "stopped_time_difference_s": 2.960000000000001
+      },
+      {
+        "case": "straight",
+        "condition": "camera_10hz",
+        "control_goal": false,
+        "control_stopped_s": 28.32,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 16.240000000000002,
+        "seed": 760002,
+        "stopped_time_difference_s": -12.079999999999998
+      },
+      {
+        "case": "straight",
+        "condition": "causal_40ms_exposure",
+        "control_goal": false,
+        "control_stopped_s": 18.0,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 18.0,
+        "seed": 760002,
+        "stopped_time_difference_s": 0.0
+      },
+      {
+        "case": "straight",
+        "condition": "nominal",
+        "control_goal": false,
+        "control_stopped_s": 15.72,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 18.6,
+        "seed": 760002,
+        "stopped_time_difference_s": 2.880000000000001
+      },
+      {
+        "case": "straight",
+        "condition": "camera_10hz",
+        "control_goal": false,
+        "control_stopped_s": 30.0,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 30.0,
+        "seed": 760003,
+        "stopped_time_difference_s": 0.0
+      },
+      {
+        "case": "straight",
+        "condition": "causal_40ms_exposure",
+        "control_goal": false,
+        "control_stopped_s": 30.0,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 29.2,
+        "seed": 760003,
+        "stopped_time_difference_s": -0.8000000000000007
+      },
+      {
+        "case": "straight",
+        "condition": "nominal",
+        "control_goal": false,
+        "control_stopped_s": 23.04,
+        "goal_difference": 0,
+        "resume_goal": false,
+        "resume_stopped_s": 27.12,
+        "seed": 760003,
+        "stopped_time_difference_s": 4.080000000000002
+      }
+    ],
+    "primary": {
+      "alpha": 0.05,
+      "control_only_goals_c": 0,
+      "discordant_pairs": 0,
+      "p_value": 1.0,
+      "resume_only_goals_b": 0,
+      "supported": false,
+      "test": "exact two-sided McNemar (binomial on discordant pairs)"
+    },
+    "safety_regression": false,
+    "status": "PASS",
+    "stopped_time_difference_s": {
+      "estimate": -0.11999999999999983,
+      "exact_sign_test_p": 0.8238029479980469,
+      "nonzero_pairs": 20,
+      "percentile_interval_95": [
+        -0.8999999999999997,
+        0.7333333333333336
+      ],
+      "resamples": 256,
+      "seed_cluster_means": [
+        -0.0600000000000005,
+        -1.1799999999999995,
+        1.086666666666667,
+        -0.3266666666666662
+      ]
+    },
+    "uncertainty_scope": "four seed clusters, one frozen actor, ideal simulated sensors; development evidence, not confirmation",
+    "verdict": "NEGATIVE"
+  },
+  "arm_development_ready": {
+    "permanent_stop": true,
+    "resume_verified_relocalization": true
+  },
+  "declared_cells": 48,
+  "measured_cells": 48,
+  "missing_cells": [],
+  "qualified_smoke_sha256": "8353262e3ad77b457a4ce277f0cdef2ff4e9c64eb900b312eef8e47829829422",
+  "schema": "bhl-stereo-recovery-v1-collection",
+  "scientific_status": "COMPLETE_BOUNDED_DEVELOPMENT_NO_CONFIRMATION",
+  "scope": "four-seed bounded simulation development; ideal simulated sensing; no hardware, population or confirmation claims",
+  "source_results": [
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760000-camera_10hz-occluders/campaign_result.json",
+      "sha256": "9d049806d62ec69d7c79f10f7b1d804c071c0ed2f7f263ed7c1c38437884f72a"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760000-camera_10hz-straight/campaign_result.json",
+      "sha256": "2024d85c6175e441eb3348184f5287f950b4200eb71f367b04e72c99a0acf1f3"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760000-causal_40ms_exposure-occluders/campaign_result.json",
+      "sha256": "080eefc89a34c67287bd630a5b042c37f355a45142e5785c46084293be4c6e15"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760000-causal_40ms_exposure-straight/campaign_result.json",
+      "sha256": "27c8d95db05f73b2681139dd30c6a1affa517cc3fd45f405fb2ad5f00e96d62b"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760000-nominal-occluders/campaign_result.json",
+      "sha256": "c1d3958a71b414073ec2db0b49c836a0bb2f33dcc3dc07cbb0bbd3605ec5dc7e"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760000-nominal-straight/campaign_result.json",
+      "sha256": "c0d344decea5e9ef666492011c906d7b4741d60a813b73b65d2e3f4f19d99ebe"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760001-camera_10hz-occluders/campaign_result.json",
+      "sha256": "b9b14492b64fc6dd3a0a47e3ce02bf864bdd3f40562edf3f0dfe39c5e596f192"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760001-camera_10hz-straight/campaign_result.json",
+      "sha256": "829313e388b24429839b9bb7ff0a9b0d68331420aad61ecc2cb398369c5ddcd4"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760001-causal_40ms_exposure-occluders/campaign_result.json",
+      "sha256": "4a6f9b4ab3204b8e520c460015a05ed3ba100a6021743c6f6c444ea50875962b"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760001-causal_40ms_exposure-straight/campaign_result.json",
+      "sha256": "9afbdb57d2404f06483f9f3df988a359eb246ae5e36753d1f4a8af9f77c91c75"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760001-nominal-occluders/campaign_result.json",
+      "sha256": "8f4ce27995603b59730cbf9b7a67d346757322632317b71e7ba8813bbb2f16a3"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760001-nominal-straight/campaign_result.json",
+      "sha256": "3c483e102febfd55dc4a56ac267a81ecf13c8ef4be6f4ce746905f37cfa788e2"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760002-camera_10hz-occluders/campaign_result.json",
+      "sha256": "6f99776a795a06779d3ddb4ae3ed879a26dbab32eb8a287f547fc9b3a6c202c1"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760002-camera_10hz-straight/campaign_result.json",
+      "sha256": "8c090b662cc4ac4b70289177ac9302a096f1c0fc8cc9f4774ea4d6d32aa61dc6"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760002-causal_40ms_exposure-occluders/campaign_result.json",
+      "sha256": "20f433c071e24966eb2e2f5a9bf660550bd7e5689dff7be8b0fde820a4afedd2"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760002-causal_40ms_exposure-straight/campaign_result.json",
+      "sha256": "0fb515c19efa562d548887fac64934671faeccf0020b0d601e2c45e7c50b1922"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760002-nominal-occluders/campaign_result.json",
+      "sha256": "a181ca03a36e0688c1e6fbab7aad3fed110712fee7c9996f344c9c6a21c6bd16"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760002-nominal-straight/campaign_result.json",
+      "sha256": "aecd9ab794fadd5f518ad0e2047a197c5720f41aab616ff27130cfe207dc33f9"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760003-camera_10hz-occluders/campaign_result.json",
+      "sha256": "9cc6fa172ba3d5a5e626c1a5ade655d70d62436226156cecbd890aa0cbc83e85"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760003-camera_10hz-straight/campaign_result.json",
+      "sha256": "e938830395e9c4c960d1dd7c988b052670304fe37ffa5369eff7ce5c70b0cf75"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760003-causal_40ms_exposure-occluders/campaign_result.json",
+      "sha256": "503c6810f69a61db7ff7aeec89fef98aa7077813ceb50d796c632a308a54f999"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760003-causal_40ms_exposure-straight/campaign_result.json",
+      "sha256": "7185e850fe0969807a6bcdc5c7934af1398d875ae53c7c06b872d6c2e4f15a6f"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760003-nominal-occluders/campaign_result.json",
+      "sha256": "65cb24f13aafb204bc9e7d930d1f4832eac140627db1d1e3d15d6fc299e33365"
+    },
+    {
+      "path": "/nfs/hpc/share/sanchej7/humanoid-research-20261011/followups-20261014-stereo/stereo-recovery-v2-20261014/collector-inputs/recovery-s760003-nominal-straight/campaign_result.json",
+      "sha256": "ca851cef2467e25ef41d4cc040418966f9b35d1fd1086db99df73cc97e4f3128"
+    }
+  ],
+  "status": "PASS",
+  "unrun_after_nominal_gate": 0
+}
