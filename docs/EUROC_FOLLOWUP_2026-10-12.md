@@ -1,5 +1,11 @@
 # EuRoC follow-up: software prepared, external recording still unavailable
 
+**October 14 accuracy update:** [ATE is now
+measured](EUROC_POSE_ACCURACY_2026-10-14.md) on the same 60-second, 1,200-pair
+segment. Stereo reaches 0.020 m ATE RMSE against the recomputed reference (0.036
+m against the original). The stereo–IMU output jumps 0.8 m at 20.6 s, which
+tracking coverage alone did not show.
+
 **October 12 completion update:** [Both native arms now completed the unchanged
 60-second, 1,200-pair replay](EUROC_NATIVE_REPLAY_RESULTS_2026-10-12.md), using
 a pinned, integrity-checked public mirror after official access remained blocked.
