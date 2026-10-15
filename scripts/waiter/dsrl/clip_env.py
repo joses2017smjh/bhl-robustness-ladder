@@ -7,9 +7,16 @@ Every env step (0.08 s) it renders a third-person view that follows the robot an
 and writes them with the instruction, the time and the stages reached to <record_dir>/<label>_seed<seed>.mp4, plus a
 .json with the episode's outcome. The renderers only read the simulation state, so the episode is the one the policy
 runs without the recording.
+
+swap_target=True (2026-10-15, the two-instruction clip): after the reset, the episode's target colour and target table
+are both swapped to the other ones on the SAME physical layout, and the instruction is rewritten with the same
+template. Every colour/table combination occurs in the layout distribution, and success is scored against the swapped
+target (WaiterEnv.evaluate reads self.layout). The tables carry no marking of the target, so only the instruction
+says which tumbler and which table.
 """
 from __future__ import annotations
 
+import dataclasses
 import json
 import os
 import socket
@@ -21,7 +28,8 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 from bhl_robust.eval.panels import BG, DIM, PANEL_BG, TEXT, load_font
-from bhl_robust.eval.waiter_env import IMAGE_HW, STAGES, STEP_DT, WaiterEnv
+from bhl_robust.eval import waiter_scene as W
+from bhl_robust.eval.waiter_env import IMAGE_HW, STAGES, STEP_DT, WaiterEnv, instruction_text
 
 STAGE_TEXT = ("tumbler lifted", "tumbler on the tray", "tray lifted", "tray at the table", "tray on the target",
               "held 1 s: success")
@@ -30,8 +38,10 @@ SIDE_W, BAR_H = 250, 32
 
 
 class RecordingWaiterEnv(WaiterEnv):
-    def __init__(self, record_dir, label="policy", view=(560, 420), cam=(2.4, -30.0, 200.0), **kwargs):
+    def __init__(self, record_dir, label="policy", view=(560, 420), cam=(2.4, -30.0, 200.0), swap_target=False,
+                 **kwargs):
         super().__init__(**kwargs)
+        self.swap_target = bool(swap_target)
         self.record_dir = Path(record_dir)
         self.record_dir.mkdir(parents=True, exist_ok=True)
         self.label = str(label)
@@ -44,6 +54,14 @@ class RecordingWaiterEnv(WaiterEnv):
     def reset(self, seed, instruction_id=None):
         self._finish(None)
         obs = super().reset(seed, instruction_id=instruction_id)
+        original = {"target_colour": self.layout.target_colour, "target_side": self.layout.target_side}
+        if self.swap_target:
+            other = lambda v, pool: [x for x in pool if x != v][0]                      # noqa: E731
+            self.layout = dataclasses.replace(self.layout,
+                                              target_colour=other(self.layout.target_colour, W.COLOURS),
+                                              target_side=other(self.layout.target_side, W.SIDES))
+            self.instruction, self.template_id = instruction_text(self.layout, self.template_id)
+            obs = self._obs()
         import imageio.v2 as imageio
         path = self.record_dir / f"{self.label}_seed{int(seed)}.mp4"
         self._writer = imageio.get_writer(str(path), fps=1.0 / STEP_DT, codec="libx264", quality=8,
@@ -51,7 +69,8 @@ class RecordingWaiterEnv(WaiterEnv):
         self._rec = {"label": self.label, "seed": int(seed), "instruction": self.instruction,
                      "template": self.template_id, "layout": self.layout.as_dict(), "mp4": str(path),
                      "deploy": str(self.deploy), "host": socket.gethostname(), "slurm_job": os.environ.get("SLURM_JOB_ID"),
-                     "frames": 0, "display_only": True}
+                     "frames": 0, "display_only": True, "swap_target": self.swap_target,
+                     "layout_target": original}
         a = self._sl.qpos_adr
         self._look = np.array([0.5 * float(self.d.qpos[a]) + 0.2, float(self.d.qpos[a + 1])])
         self._frame({"stage": 0, "t": 0.0})
