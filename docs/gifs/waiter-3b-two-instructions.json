@@ -137,5 +137,9 @@
   "stats_mode": "full",
   "within_budget": true
  },
- "selection_rule": "stated in SLURM_JOBS.md (2026-10-15, 'Presentation clip') before the swapped runs finished: layout 1300 if both instructions succeed there, otherwise the lowest dev seed where both succeed; the caption reports both counts over the six layouts. 1300: own SUCCESS, swapped stopped at 'tray lifted' -> 1302."
+ "selection_rule": "stated in SLURM_JOBS.md (2026-10-15, 'Presentation clip') before the swapped runs finished: layout 1300 if both instructions succeed there, otherwise the lowest dev seed where both succeed; the caption reports both counts over the six layouts. 1300: own SUCCESS, swapped stopped at 'tray lifted' -> 1302.",
+ "earlier_recording": {
+  "note": "the same policy on the same six dev layouts with their own instructions, recorded 2026-10-12 (job 21796327, cn-gpu5): 5/6 (failed 1304); here (job 21836827, cn-gpu6): 3/6 (failed 1301, 1303, 1304). The runs are not bit-identical across nodes; with six layouts these counts are noisy and the scored 75/100 and 76/100 are the measure.",
+  "trace": "solutions-20260930/campaign-waiter/clips/run1/task/trace_base.json"
+ }
 }
