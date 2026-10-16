@@ -69,3 +69,28 @@ def test_recording_env_only_adds_rendering():
     assert "self._renderer" not in src and "render_enabled" not in src.split('"""', 2)[2]
     for line in src.splitlines():
         assert not line.strip().startswith(("self.d.", "self.model.")) or "=" not in line, line
+
+
+def test_swap_target_is_opt_in_and_only_rewrites_the_target():
+    # 2026-10-15, the two-instruction clip: same physical layout, colour and table swapped, scored against the swap
+    src = (REPO / "scripts/waiter/dsrl/clip_env.py").read_text()
+    assert "swap_target=False" in src and "if self.swap_target:" in src
+    body = src[src.index("if self.swap_target:"):src.index("import imageio.v2 as imageio")]
+    assert "dataclasses.replace(self.layout," in body and "target_colour=" in body and "target_side=" in body
+    assert "instruction_text(self.layout, self.template_id)" in body and "obs = self._obs()" in body
+    assert "apply_layout" not in body and "tumblers" not in body and "delivery" not in body
+
+
+def test_two_instruction_clip_refuses_different_layouts(tmp_path):
+    import json
+    import pytest
+    import two_instruction_clip as T
+    lay = {"seed": 1302, "target_colour": "red", "target_side": "right", "tumblers": {"red": [0.3, -0.33, 0.0]},
+           "tray": [0.36, 0.0, 0.0], "delivery": {"left": [-0.3, 2.5], "right": [-0.3, -2.5]}}
+    for name, extra in (("a", {}), ("b", {"seed": 1303})):
+        (tmp_path / f"{name}.json").write_text(json.dumps({"instruction": "x", "layout": {**lay, **extra}}))
+    with pytest.raises(SystemExit, match="different layouts"):
+        T.main(["--left", str(tmp_path / "a.mp4"), "--right", str(tmp_path / "b.mp4"), "--out", str(tmp_path / "o")])
+    (tmp_path / "b.json").write_text(json.dumps({"instruction": "x", "layout": {**lay, "tray": [0.4, 0.0, 0.0]}}))
+    with pytest.raises(SystemExit, match="physical layout"):
+        T.main(["--left", str(tmp_path / "a.mp4"), "--right", str(tmp_path / "b.mp4"), "--out", str(tmp_path / "o")])

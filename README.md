@@ -40,6 +40,10 @@ Estimated-pose work is a separate experiment. Native FAST-LIO2 terrain control c
 
 *Phase 3b SmolVLA, one development-layout episode at 3× playback. The sentence selects the tumbler and destination. This demonstration is separate from the scored evaluation. A stance lock holds the base while standing and releases it for walking. [Clip provenance](docs/gifs/waiter-3b-task-seed1300.json).*
 
+[![The same table layout run twice by the phase 3b policy: left, the layout's own instruction (red tumbler, right table); right, the colour and table swapped (blue tumbler, left table)](docs/gifs/waiter-3b-two-instructions.gif)](docs/WAITER_FINDINGS.md)
+
+*Same layout, two sentences, 4× playback. Only the instruction differs: the tables carry no marking of the target, and success is scored against the instruction given. On the six development layouts recorded, the policy completed 3/6 with each layout's own instruction (5/6 in an earlier recording of the same layouts) and 4/6 with the colour and table both swapped; the clip shows the first layout where both succeeded (rule fixed before the swapped runs finished). Display runs, not a gate. [What made the language work](docs/WAITER_FINDINGS.md) · [Clip provenance](docs/gifs/waiter-3b-two-instructions.json).*
+
 The 24-joint robot adds two grippers. SmolVLA turns rendered head-camera images, text, and proprioception into base-velocity, arm, and gripper commands. Retraining with more demonstrations and more early-episode samples improves object selection; the final gate scores **75/100** original instructions and **76/100** held-out phrasing.
 
 - Demonstrations come from a scripted expert with **oracle object positions**.
@@ -47,7 +51,7 @@ The 24-joint robot adds two grippers. SmolVLA turns rendered head-camera images,
 - **Standing assistance remains necessary.** The expert scores 86/100 with the stance lock and 1/100 with a free base. The latest 1h controller selects no qualified seed.
 - DSRL on phase 3b fails its improvement gate: **80/100 versus 74/100**, p = 0.20; constant zero noise scores 82/100.
 
-[Program and results](docs/WAITER_PROGRAM.md) · [Task/control interfaces](docs/WAITER_INTERFACES.md) · [Latest standing-controller verdict](results/waiter-20261005/wbc1h/selection.json)
+[Program and results](docs/WAITER_PROGRAM.md) · [Task/control interfaces](docs/WAITER_INTERFACES.md) · [Two findings](docs/WAITER_FINDINGS.md) · [Latest standing-controller verdict](results/waiter-20261005/wbc1h/selection.json)
 
 ## Selected results
 

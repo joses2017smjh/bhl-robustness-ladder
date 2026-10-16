@@ -1,0 +1,145 @@
+{
+ "display_only": true,
+ "made": "scripts/waiter/two_instruction_clip.py",
+ "frames": 679,
+ "fps": 12.5,
+ "left": {
+  "label": "3b-layout",
+  "seed": 1302,
+  "instruction": "take the tray with the red tumbler to the right table",
+  "template": "T5",
+  "layout": {
+   "seed": 1302,
+   "target_colour": "red",
+   "target_side": "right",
+   "instruction_template": 5,
+   "tumblers": {
+    "blue": [
+     0.2973450457725801,
+     -0.32890069890808715,
+     0.050026996496431005
+    ],
+    "red": [
+     0.2974360926409374,
+     0.3242973283475632,
+     -0.07127949207807702
+    ]
+   },
+   "tray": [
+    0.35560093193403675,
+    -0.0016826667025159024,
+    0.03358492958736772
+   ],
+   "delivery": {
+    "left": [
+     -0.3389780070462758,
+     2.4829928798474104
+    ],
+    "right": [
+     -0.2507881684951074,
+     -2.522763744531253
+    ]
+   }
+  },
+  "mp4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run3/task/3b-layout_seed1302.mp4",
+  "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1c/training/waiter-wbc1c-s7.deploy.yaml",
+  "host": "cn-gpu6.hpc.engr.oregonstate.edu",
+  "slurm_job": "21836827",
+  "frames": 654,
+  "display_only": true,
+  "swap_target": false,
+  "layout_target": {
+   "target_colour": "red",
+   "target_side": "right"
+  },
+  "success": true,
+  "fell": false,
+  "stage": 6,
+  "stage_name": "success",
+  "t_end": 52.24,
+  "result_card": "SUCCESS at 52.2 s"
+ },
+ "right": {
+  "label": "3b-swapped",
+  "seed": 1302,
+  "instruction": "take the tray with the blue tumbler to the left table",
+  "template": "T5",
+  "layout": {
+   "seed": 1302,
+   "target_colour": "blue",
+   "target_side": "left",
+   "instruction_template": 5,
+   "tumblers": {
+    "blue": [
+     0.2973450457725801,
+     -0.32890069890808715,
+     0.050026996496431005
+    ],
+    "red": [
+     0.2974360926409374,
+     0.3242973283475632,
+     -0.07127949207807702
+    ]
+   },
+   "tray": [
+    0.35560093193403675,
+    -0.0016826667025159024,
+    0.03358492958736772
+   ],
+   "delivery": {
+    "left": [
+     -0.3389780070462758,
+     2.4829928798474104
+    ],
+    "right": [
+     -0.2507881684951074,
+     -2.522763744531253
+    ]
+   }
+  },
+  "mp4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run3/task/3b-swapped_seed1302.mp4",
+  "deploy": "/nfs/hpc/share/sanchej7/Humanoid_Lite/bhl-robustness-ladder/results/waiter-20261005/wbc1c/training/waiter-wbc1c-s7.deploy.yaml",
+  "host": "cn-gpu6.hpc.engr.oregonstate.edu",
+  "slurm_job": "21836827",
+  "frames": 623,
+  "display_only": true,
+  "swap_target": true,
+  "layout_target": {
+   "target_colour": "red",
+   "target_side": "right"
+  },
+  "success": true,
+  "fell": false,
+  "stage": 6,
+  "stage_name": "success",
+  "t_end": 49.76,
+  "result_card": "SUCCESS at 49.8 s"
+ },
+ "dev_counts": {
+  "layout_instruction": "3/6",
+  "swapped_instruction": "4/6"
+ },
+ "traces": [
+  "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run3/task/trace_layout.json",
+  "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run3/task/trace_swapped.json"
+ ],
+ "mp4": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run3/waiter-3b-two-instructions.mp4",
+ "gif": {
+  "gif": "/nfs/hpc/share/sanchej7/Humanoid_Lite/solutions-20260930/campaign-waiter/clips/run3/waiter-3b-two-instructions.gif",
+  "bytes": 3305550,
+  "mb": 3.31,
+  "fps": 6,
+  "width": 830,
+  "ffmpeg": "ffmpeg",
+  "max_colors": 64,
+  "speed": 4.0,
+  "badge": "GIF 4x",
+  "stats_mode": "full",
+  "within_budget": true
+ },
+ "selection_rule": "stated in SLURM_JOBS.md (2026-10-15, 'Presentation clip') before the swapped runs finished: layout 1300 if both instructions succeed there, otherwise the lowest dev seed where both succeed; the caption reports both counts over the six layouts. 1300: own SUCCESS, swapped stopped at 'tray lifted' -> 1302.",
+ "earlier_recording": {
+  "note": "the same policy on the same six dev layouts with their own instructions, recorded 2026-10-12 (job 21796327, cn-gpu5): 5/6 (failed 1304); here (job 21836827, cn-gpu6): 3/6 (failed 1301, 1303, 1304). The runs are not bit-identical across nodes; with six layouts these counts are noisy and the scored 75/100 and 76/100 are the measure.",
+  "trace": "solutions-20260930/campaign-waiter/clips/run1/task/trace_base.json"
+ }
+}
